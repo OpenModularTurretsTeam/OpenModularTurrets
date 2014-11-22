@@ -3,12 +3,15 @@ package modularTurrets.tileentity.turretBase;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.common.FMLLog;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
@@ -76,13 +79,6 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
     }
 
     @Override
-    public void updateEntity() {
-        if (!worldObj.isRemote) {
-            PacketDispatcher.sendPacketToAllPlayers(getDescriptionPacket());
-        }
-    }
-
-    @Override
     public Packet getDescriptionPacket() {
         NBTTagCompound var1 = new NBTTagCompound();
         if (this.storage != null) {
@@ -116,7 +112,10 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
         }
 
         this.writeToNBT(var1);
-        return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 2, var1);
+
+        FMLLog.info("getDescriptionPacket");
+
+        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
     }
 
     @Override
@@ -189,82 +188,74 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
         }
     }
 
-    @Override
-    public void onDataPacket(INetworkManager netManager, Packet132TileEntityData packet) {
-        readFromNBT(packet.data);
-        this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-    }
-
     public int getBaseTier() {
-	return baseTier;
+	    return baseTier;
     }
 
     public void setBaseTier(int baseTier) {
-	this.baseTier = baseTier;
+	    this.baseTier = baseTier;
     }
 
     public boolean isAttacksMobs() {
-	return attacksMobs;
+	    return attacksMobs;
     }
 
     public void setAttacksMobs(boolean attacksMobs) {
-	this.attacksMobs = attacksMobs;
+	    this.attacksMobs = attacksMobs;
     }
 
     public boolean isAttacksNeutrals() {
-	return attacksNeutrals;
+	    return attacksNeutrals;
     }
 
     public void setAttacksNeutrals(boolean attacksNeutrals) {
-	this.attacksNeutrals = attacksNeutrals;
+	    this.attacksNeutrals = attacksNeutrals;
     }
 
     public boolean isAttacksPlayers() {
-	return attacksPlayers;
+	    return attacksPlayers;
     }
 
     public void setAttacksPlayers(boolean attacksPlayers) {
-	this.attacksPlayers = attacksPlayers;
+	    this.attacksPlayers = attacksPlayers;
     }
 
     public String getOwner() {
-	return owner;
+	    return owner;
     }
 
     public void setOwner(String owner) {
-	this.owner = owner;
+	    this.owner = owner;
     }
 
     @Override
-    public int receiveEnergy(ForgeDirection from, int maxReceive,
-	    boolean simulate) {
-	return storage.receiveEnergy(maxReceive, simulate);
+    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+	    return storage.receiveEnergy(maxReceive, simulate);
     }
 
     @Override
-    public int extractEnergy(ForgeDirection from, int maxExtract,
-	    boolean simulate) {
-	return 0;
+    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+	    return 0;
     }
 
     @Override
     public int getEnergyStored(ForgeDirection from) {
-	return storage.getEnergyStored();
+	    return storage.getEnergyStored();
     }
 
     @Override
     public int getMaxEnergyStored(ForgeDirection from) {
-	return storage.getMaxEnergyStored();
+	    return storage.getMaxEnergyStored();
     }
 
     @Override
     public int getSizeInventory() {
-	return inv.length;
+	    return inv.length;
     }
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-	return inv[slot];
+	    return inv[slot];
     }
 
     @Override
@@ -365,5 +356,13 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
     @Override
     public boolean canConnectEnergy(ForgeDirection from) {
         return true;
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+        super.onDataPacket(net, packet);
+
+        readFromNBT(packet.func_148857_g());
+        this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 }

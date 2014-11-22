@@ -1,11 +1,9 @@
 package modularTurrets.gui;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-
 import modularTurrets.ModInfo;
+import modularTurrets.ModularTurrets;
 import modularTurrets.gui.containers.ConfigContainer;
-import modularTurrets.misc.PacketHandler;
+import modularTurrets.network.*;
 import modularTurrets.tileentity.turretBase.TurretBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -148,108 +146,32 @@ public class ConfigureGui extends GuiContainer {
     }
 
     public void sendChangeToServerMobs() {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-        DataOutputStream outputStream = new DataOutputStream(bos);
-        try {
-            outputStream.writeInt(PacketHandler.CHANGE_TURRETBASE_ATTACKS_MOBS);
-            outputStream.writeInt(base.xCoord);
-            outputStream.writeInt(base.yCoord);
-            outputStream.writeInt(base.zCoord);
-            outputStream.writeInt(base.attacksMobs ? 0 : 1);
+        ToggleAttackMobsMessage message = new ToggleAttackMobsMessage(base.xCoord, base.yCoord, base.zCoord, base.attacksMobs);
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        Packet250CustomPayload packet = new Packet250CustomPayload();
-        packet.channel = ModInfo.CHANNEL;
-        packet.data = bos.toByteArray();
-        packet.length = bos.size();
-        PacketDispatcher.sendPacketToServer(packet);
+        ModularTurrets.networking.sendToServer(message);
     }
 
     public void sendChangeToServerNeutrals() {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-        DataOutputStream outputStream = new DataOutputStream(bos);
-        try {
-            outputStream.writeInt(PacketHandler.CHANGE_TURRETBASE_ATTACKS_NEUTRALS);
-            outputStream.writeInt(base.xCoord);
-            outputStream.writeInt(base.yCoord);
-            outputStream.writeInt(base.zCoord);
-            outputStream.writeInt(base.isAttacksNeutrals() ? 0 : 1);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        ToggleAttackNeutralMobsMessage message = new ToggleAttackNeutralMobsMessage(base.xCoord, base.yCoord, base.zCoord, base.isAttacksNeutrals());
 
-        Packet250CustomPayload packet = new Packet250CustomPayload();
-        packet.channel = ModInfo.CHANNEL;
-        packet.data = bos.toByteArray();
-        packet.length = bos.size();
-        PacketDispatcher.sendPacketToServer(packet);
+        ModularTurrets.networking.sendToServer(message);
     }
 
     public void sendChangeToServerPlayers() {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-        DataOutputStream outputStream = new DataOutputStream(bos);
-        try {
-            outputStream.writeInt(PacketHandler.CHANGE_TURRETBASE_ATTACKS_PLAYERS);
-            outputStream.writeInt(base.xCoord);
-            outputStream.writeInt(base.yCoord);
-            outputStream.writeInt(base.zCoord);
-            outputStream.writeInt(base.isAttacksPlayers() ? 0 : 1);
+        ToggleAttackPlayersMessage message = new ToggleAttackPlayersMessage(base.xCoord, base.yCoord, base.zCoord, base.isAttacksPlayers());
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        Packet250CustomPayload packet = new Packet250CustomPayload();
-        packet.channel = ModInfo.CHANNEL;
-        packet.data = bos.toByteArray();
-        packet.length = bos.size();
-        PacketDispatcher.sendPacketToServer(packet);
+        ModularTurrets.networking.sendToServer(message);
     }
 
     public void sendChangeToServerAddTrusted() {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-        DataOutputStream outputStream = new DataOutputStream(bos);
-        try {
-            outputStream.writeInt(PacketHandler.BASE_ADD_TRUSTED_PLAYER);
-            outputStream.writeInt(base.xCoord);
-            outputStream.writeInt(base.yCoord);
-            outputStream.writeInt(base.zCoord);
-            outputStream.writeInt(0);
-            outputStream.writeUTF(textFieldName.getText());
+        AddTrustedPlayerMessage message = new AddTrustedPlayerMessage(base.xCoord, base.yCoord, base.zCoord, textFieldName.getText());
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        Packet250CustomPayload packet = new Packet250CustomPayload();
-        packet.channel = ModInfo.CHANNEL;
-        packet.data = bos.toByteArray();
-        packet.length = bos.size();
-        PacketDispatcher.sendPacketToServer(packet);
+        ModularTurrets.networking.sendToServer(message);
     }
 
     public void sendChangeToServerRemoveTrusted() {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-        DataOutputStream outputStream = new DataOutputStream(bos);
-        try {
-            outputStream.writeInt(PacketHandler.BASE_REMOVE_TRUSTED_PLAYER);
-            outputStream.writeInt(base.xCoord);
-            outputStream.writeInt(base.yCoord);
-            outputStream.writeInt(base.zCoord);
-            outputStream.writeInt(0);
-            outputStream.writeUTF(textFieldName.getText());
+        RemoveTrustedPlayerMessage message = new RemoveTrustedPlayerMessage(base.xCoord, base.yCoord, base.zCoord, textFieldName.getText());
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        Packet250CustomPayload packet = new Packet250CustomPayload();
-        packet.channel = ModInfo.CHANNEL;
-        packet.data = bos.toByteArray();
-        packet.length = bos.size();
-        PacketDispatcher.sendPacketToServer(packet);
+        ModularTurrets.networking.sendToServer(message);
     }
 }

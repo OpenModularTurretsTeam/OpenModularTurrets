@@ -7,13 +7,16 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.relauncher.Side;
 import modularTurrets.blocks.Blocks;
 import modularTurrets.gui.GuiHandler;
 import modularTurrets.items.Items;
 import modularTurrets.misc.ConfigHandler;
 import modularTurrets.misc.ModularTurretsTab;
 import modularTurrets.misc.Recipes;
+import modularTurrets.network.*;
 import modularTurrets.projectiles.BulletProjectile;
 import modularTurrets.projectiles.GrenadeProjectile;
 import modularTurrets.projectiles.LaserProjectile;
@@ -30,6 +33,9 @@ public class ModularTurrets {
 
     @Instance("ModularTurrets")
     public static ModularTurrets instance;
+
+    public static SimpleNetworkWrapper networking;
+
     public GuiHandler gui = new GuiHandler();
 
     public static CreativeTabs modularTurretsTab = new ModularTurretsTab(ModInfo.NAME);
@@ -40,6 +46,15 @@ public class ModularTurrets {
 
         Items.init();
         Blocks.init();
+
+        networking = new SimpleNetworkWrapper("vending-machines");
+
+        networking.registerMessage(AddTrustedPlayerMessage.class, AddTrustedPlayerMessage.class, 0, Side.SERVER);
+        networking.registerMessage(RemoveTrustedPlayerMessage.class, RemoveTrustedPlayerMessage.class, 1, Side.SERVER);
+        networking.registerMessage(ToggleAttackMobsMessage.class, ToggleAttackMobsMessage.class, 1, Side.SERVER);
+        networking.registerMessage(ToggleAttackNeutralMobsMessage.class, ToggleAttackNeutralMobsMessage.class, 1, Side.SERVER);
+        networking.registerMessage(ToggleAttackPlayersMessage.class, ToggleAttackPlayersMessage.class, 1, Side.SERVER);
+        networking.registerMessage(SetTurretOwnerMessage.class, SetTurretOwnerMessage.class, 1, Side.SERVER);
     }
 
     @EventHandler

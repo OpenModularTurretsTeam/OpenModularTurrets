@@ -1,12 +1,9 @@
 package modularTurrets.blocks;
 
-import net.minecraft.block.Block;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
+import net.minecraft.block.Block;
 
 public class Blocks {
-	
-	public static Block genericBlock;
 	public static Block turretBaseTierWood;
 	public static Block turretBaseTierOne;
 	public static Block turretBaseTierTwo;
@@ -18,12 +15,8 @@ public class Blocks {
 	public static Block grenadeLauncherTurret;
 	public static Block laserTurret;
 	public static Block leverBlock;
-	
-	
-	
+
 	public static void init() {
-		
-	
 		turretBaseTierWood = new TurretBaseTierWood();
 		GameRegistry.registerBlock(turretBaseTierWood, BlockNames.turretBaseTierWood);
 		

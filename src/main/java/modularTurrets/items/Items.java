@@ -1,10 +1,10 @@
 package modularTurrets.items;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class Items {
-
     public static Item bulletThrowable;
     public static Item grenadeThrowable;
     public static Item bulletCraftable;
@@ -29,28 +29,70 @@ public class Items {
     public static Item containmentChamber;
 
     public static void init() {
-
         bulletThrowable = new BulletThrowableItem();
+        GameRegistry.registerItem(bulletThrowable, "bulletThrowable");
+
         grenadeThrowable = new GrenadeThrowableItem();
+        GameRegistry.registerItem(grenadeThrowable, "grenadeThrowable");
+
         accuraccyUpgradeItem = new AccuraccyUpgradeItem();
+        GameRegistry.registerItem(accuraccyUpgradeItem, "accuraccyUpgradeItem");
+
         efficiencyUpgradeItem = new EfficiencyUpgradeItem();
+        GameRegistry.registerItem(efficiencyUpgradeItem, "efficiencyUpgradeItem");
+
         fireRateUpgradeItem = new FireRateUpgradeItem();
+        GameRegistry.registerItem(fireRateUpgradeItem, "fireRateUpgradeItem");
+
         rangeUpgradeItem = new RangeUpgradeItem();
+        GameRegistry.registerItem(rangeUpgradeItem, "rangeUpgradeItem");
+
         redstoneReactorAddon = new RedstoneReactorAddonItem();
+        GameRegistry.registerItem(redstoneReactorAddon, "redstoneReactorAddon");
+
         damageAmpAddon = new DamageAmpAddonItem();
+        GameRegistry.registerItem(damageAmpAddon, "damageAmpAddon");
+
         solarPanelAddon = new SolarPanelAddonItem();
+        GameRegistry.registerItem(solarPanelAddon, "solarPanelAddon");
+
         configTab = new ConfigTabItem();
+        GameRegistry.registerItem(configTab, "configTab");
+
         bulletCraftable = new BulletCraftableItem();
+        GameRegistry.registerItem(bulletCraftable, "bulletCraftable");
+
         grenadeCraftable = new GrenadeCraftableItem();
+        GameRegistry.registerItem(grenadeCraftable, "grenadeCraftable");
+
         rocketCraftable = new RocketCraftableItem();
+        GameRegistry.registerItem(rocketCraftable, "rocketCraftable");
+
         sensorTierOneItem = new SensorTierOneItem();
+        GameRegistry.registerItem(sensorTierOneItem, "sensorTierOneItem");
+
         sensorTierTwoItem = new SensorTierTwoItem();
+        GameRegistry.registerItem(sensorTierTwoItem, "sensorTierTwoItem");
+
         sensorTierThreeItem = new SensorTierThreeItem();
+        GameRegistry.registerItem(sensorTierThreeItem, "sensorTierThreeItem");
+
         sensorTierFourItem = new SensorTierFourItem();
+        GameRegistry.registerItem(sensorTierFourItem, "sensorTierFourItem");
+
         barrel = new BarrelItem();
+        GameRegistry.registerItem(barrel, "barrel");
+
         chamber = new ChamberItem();
+        GameRegistry.registerItem(chamber, "chamber");
+
         ioBus = new IOBusItem();
+        GameRegistry.registerItem(ioBus, "ioBus");
+
         energeticBarrel = new EnergeticBarrelItem();
+        GameRegistry.registerItem(energeticBarrel, "energeticBarrel");
+
         containmentChamber = new ContainmentChamberItem();
+        GameRegistry.registerItem(containmentChamber, "containmentChamber");
     }
 }

@@ -3,6 +3,7 @@ package modularTurrets.tileentity.turrets;
 import modularTurrets.tileentity.turretBase.TurretBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 public class TurretHead extends TileEntity {
@@ -24,13 +25,7 @@ public class TurretHead extends TileEntity {
     public net.minecraft.network.Packet getDescriptionPacket() {
         NBTTagCompound var1 = new NBTTagCompound();
         this.writeToNBT(var1);
-        return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 2, var1);
-    }
-
-    @Override
-    public void onDataPacket(INetworkManager netManager, Packet132TileEntityData packet) {
-	    readFromNBT(packet.data);
-	    this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
     }
 
     @Override

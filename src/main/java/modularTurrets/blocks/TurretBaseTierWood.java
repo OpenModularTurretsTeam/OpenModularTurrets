@@ -1,13 +1,11 @@
 package modularTurrets.blocks;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import modularTurrets.ModInfo;
 import modularTurrets.ModularTurrets;
 import modularTurrets.misc.ConfigHandler;
-import modularTurrets.misc.PacketHandler;
+import modularTurrets.network.SetTurretOwnerMessage;
 import modularTurrets.tileentity.turretBase.TurretBase;
 import modularTurrets.tileentity.turretBase.TurretWoodBase;
 import net.minecraft.block.Block;
@@ -23,8 +21,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class TurretBaseTierWood extends BlockContainer {
 
@@ -32,49 +30,31 @@ public class TurretBaseTierWood extends BlockContainer {
     public final int MaxIO = ConfigHandler.getBaseTierWoodMaxIo();
 
     public TurretBaseTierWood() {
-	super(Material.rock);
-	this.setBlockName(BlockNames.unlocalisedTurretBaseTierWood);
-	this.setCreativeTab(ModularTurrets.modularTurretsTab);
-	this.setHardness(-1F);
-	this.setResistance(20F);
-	this.setStepSound(Block.soundTypeStone);
+        super(Material.rock);
+        this.setBlockName(BlockNames.unlocalisedTurretBaseTierWood);
+        this.setCreativeTab(ModularTurrets.modularTurretsTab);
+        this.setHardness(-1F);
+        this.setResistance(20F);
+        this.setStepSound(Block.soundTypeStone);
     }
 
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister icon) {
-	    blockIcon = icon.registerIcon(ModInfo.ID.toLowerCase()
-		+ ":turretBaseTierWood");
+	    blockIcon = icon.registerIcon(ModInfo.ID.toLowerCase() + ":turretBaseTierWood");
     }
 
     @Override
     public TileEntity createNewTileEntity(World world, int par2) {
 	    return new TurretWoodBase(this.MaxCharge, this.MaxIO);
     }
-    
 
     @Override
     public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
         if (par1World.isRemote) {
+            SetTurretOwnerMessage message = new SetTurretOwnerMessage(par2, par3, par4, Minecraft.getMinecraft().getSession()
+                    .getUsername());
 
-            ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-            DataOutputStream outputStream = new DataOutputStream(bos);
-            try {
-                outputStream.writeInt(PacketHandler.SET_BASE_OWNER);
-                outputStream.writeInt(par2);
-                outputStream.writeInt(par3);
-                outputStream.writeInt(par4);
-                outputStream.writeInt(0);
-                outputStream.writeUTF(Minecraft.getMinecraft().getSession().getUsername());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-            Packet250CustomPayload packet = new Packet250CustomPayload();
-            packet.channel = ModInfo.CHANNEL;
-            packet.data = bos.toByteArray();
-            packet.length = bos.size();
-
-            PacketDispatcher.sendPacketToServer(packet);
+            ModularTurrets.networking.sendToServer(message);
         }
     }
 

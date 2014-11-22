@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import modularTurrets.ModInfo;
 import modularTurrets.gui.containers.TurretBaseTierFourContainer;
-import modularTurrets.misc.PacketHandler;
 import modularTurrets.tileentity.turretBase.TurretBaseTierFourTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -130,7 +129,7 @@ public class TurretBaseTierFourGui extends GuiContainer {
         ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
         DataOutputStream outputStream = new DataOutputStream(bos);
         try {
-            outputStream.writeInt(PacketHandler.UPDATE_YAXISDETECT_ON_SERVER);
+            //outputStream.writeInt(PacketHandler.UPDATE_YAXISDETECT_ON_SERVER);
             outputStream.writeInt(base.xCoord);
             outputStream.writeInt(base.yCoord);
             outputStream.writeInt(base.zCoord);
@@ -140,12 +139,12 @@ public class TurretBaseTierFourGui extends GuiContainer {
             ex.printStackTrace();
         }
 
-        Packet250CustomPayload packet = new Packet250CustomPayload();
+        /*Packet250CustomPayload packet = new Packet250CustomPayload();
         packet.channel = ModInfo.CHANNEL;
         packet.data = bos.toByteArray();
         packet.length = bos.size();
 
-        PacketDispatcher.sendPacketToServer(packet);
+        PacketDispatcher.sendPacketToServer(packet);*/
         change = 0;
     }
 
@@ -153,7 +152,7 @@ public class TurretBaseTierFourGui extends GuiContainer {
         ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
         DataOutputStream outputStream = new DataOutputStream(bos);
         try {
-            outputStream.writeInt(PacketHandler.DROP_ALL_TURRETS_ATTACHED_TO_BASE);
+            //outputStream.writeInt(PacketHandler.DROP_ALL_TURRETS_ATTACHED_TO_BASE);
             outputStream.writeInt(base.xCoord);
             outputStream.writeInt(base.yCoord);
             outputStream.writeInt(base.zCoord);
@@ -163,19 +162,19 @@ public class TurretBaseTierFourGui extends GuiContainer {
             ex.printStackTrace();
         }
 
-        Packet250CustomPayload packet = new Packet250CustomPayload();
+        /*Packet250CustomPayload packet = new Packet250CustomPayload();
         packet.channel = ModInfo.CHANNEL;
         packet.data = bos.toByteArray();
         packet.length = bos.size();
 
-        PacketDispatcher.sendPacketToServer(packet);
+        PacketDispatcher.sendPacketToServer(packet);*/
     }
 
     public void sendChangeToServerDropBase() {
         ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
         DataOutputStream outputStream = new DataOutputStream(bos);
         try {
-            outputStream.writeInt(PacketHandler.DROP_BASE_ON_SERVER);
+            //outputStream.writeInt(PacketHandler.DROP_BASE_ON_SERVER);
             outputStream.writeInt(base.xCoord);
             outputStream.writeInt(base.yCoord);
             outputStream.writeInt(base.zCoord);
@@ -185,11 +184,11 @@ public class TurretBaseTierFourGui extends GuiContainer {
             ex.printStackTrace();
         }
 
-        Packet250CustomPayload packet = new Packet250CustomPayload();
+        /*Packet250CustomPayload packet = new Packet250CustomPayload();
         packet.channel = ModInfo.CHANNEL;
         packet.data = bos.toByteArray();
         packet.length = bos.size();
 
-        PacketDispatcher.sendPacketToServer(packet);
+        PacketDispatcher.sendPacketToServer(packet);*/
     }
 }

@@ -5,7 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import modularTurrets.ModInfo;
 import modularTurrets.ModularTurrets;
 import modularTurrets.misc.ConfigHandler;
-import modularTurrets.misc.PacketHandler;
+import modularTurrets.network.SetTurretOwnerMessage;
 import modularTurrets.tileentity.turretBase.TurretBase;
 import modularTurrets.tileentity.turretBase.TurretBaseTierFourTileEntity;
 import net.minecraft.block.Block;
@@ -22,8 +22,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.util.Random;
 
 public class TurretBaseTierFour extends BlockContainer {
@@ -70,26 +68,11 @@ public class TurretBaseTierFour extends BlockContainer {
 	    EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
         if (par1World.isRemote) {
 
-            ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-            DataOutputStream outputStream = new DataOutputStream(bos);
-            try {
-                outputStream.writeInt(PacketHandler.SET_BASE_OWNER);
-                outputStream.writeInt(par2);
-                outputStream.writeInt(par3);
-                outputStream.writeInt(par4);
-                outputStream.writeInt(0);
-                outputStream.writeUTF(Minecraft.getMinecraft().getSession()
+
+            SetTurretOwnerMessage message = new SetTurretOwnerMessage(par2, par3, par4, Minecraft.getMinecraft().getSession()
                     .getUsername());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
 
-            Packet250CustomPayload packet = new Packet250CustomPayload();
-            packet.channel = ModInfo.CHANNEL;
-            packet.data = bos.toByteArray();
-            packet.length = bos.size();
-
-            PacketDispatcher.sendPacketToServer(packet);
+            ModularTurrets.networking.sendToServer(message);
         }
     }
 

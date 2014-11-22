@@ -1,7 +1,7 @@
 package modularTurrets.items;
 
 public class ItemNames {
-	
+
 	//Unlocalised
 	public static final String unlocalisedBulletThrowableItem = "bulletThrowable";
 	public static final String unlocalisedGrenadeThrowableItem = "grenadeThrowable";
@@ -25,7 +25,7 @@ public class ItemNames {
 	public static final String unlocalisedIOBus = "ioBus";
 	public static final String unlocalisedContainmentChamber = "containmentChamber";
 	public static final String unlocalisedEnergeticBarrel = "energeticBarrel";
-	
+
 	//normal
 	public static final String bulletThrowableItem = "bulletThrowable";
 	public static final String grenadeThrowableItem = "grenadeThrowable";
@@ -44,7 +44,7 @@ public class ItemNames {
 	public static final String sensorTierTwo = "Reinforced Sensor";
 	public static final String sensorTierThree = "Hardened Sensor";
 	public static final String sensorTierFour = "Resonant Sensor";
-	
+
 	public static final String chamber = "Turret Chamber";
 	public static final String barrel = "Turret Barrel";
 	public static final String ioBus = "Base IO Bus";

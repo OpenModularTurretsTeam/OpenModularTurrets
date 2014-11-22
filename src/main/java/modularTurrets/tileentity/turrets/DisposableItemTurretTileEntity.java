@@ -92,7 +92,7 @@ public class DisposableItemTurretTileEntity extends TurretHead {
 
             // UPDATE CLIENTS
             if (!worldObj.isRemote && ticks % 5 == 0) {
-                PacketDispatcher.sendPacketToAllPlayers(getDescriptionPacket());
+                //PacketDispatcher.sendPacketToAllPlayers(getDescriptionPacket());
             }
 
             // BASE IS OKAY
