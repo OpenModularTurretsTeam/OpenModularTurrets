@@ -1,0 +1,12 @@
+# Created by .gitignore support plugin (hsz.mobi)
+### Gradle template
+.gradle
+build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+eclipse
+OpenModularTurrets.iws
+OpenModularTurrets.ipr
+OpenModularTurrets.iml
