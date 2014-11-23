@@ -11,14 +11,13 @@ public class EnergeticBarrelItem extends Item {
 
 	public EnergeticBarrelItem() {
 		super();
+
 		this.setUnlocalizedName(ItemNames.unlocalisedEnergeticBarrel);
 		this.setCreativeTab(ModularTurrets.modularTurretsTab);
-		
 	}
 
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {
 		this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":energeticBarrel");
 	}
-
 }

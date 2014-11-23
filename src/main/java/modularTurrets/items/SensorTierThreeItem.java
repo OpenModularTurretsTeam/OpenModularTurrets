@@ -11,6 +11,7 @@ public class SensorTierThreeItem extends Item {
 
 	public SensorTierThreeItem() {
 		super();
+
 		this.setUnlocalizedName(ItemNames.unlocalisedSensorTierThree);
 		this.setCreativeTab(ModularTurrets.modularTurretsTab);
 	}
@@ -19,5 +20,4 @@ public class SensorTierThreeItem extends Item {
 	public void registerIcons(IIconRegister par1IconRegister) {
 		this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":sensorItemTierThree");
 	}
-
 }

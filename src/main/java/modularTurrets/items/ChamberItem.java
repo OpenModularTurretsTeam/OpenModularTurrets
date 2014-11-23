@@ -11,6 +11,7 @@ public class ChamberItem extends Item {
 
 	public ChamberItem() {
 		super();
+
 		this.setUnlocalizedName(ItemNames.unlocalisedChamber);
 		this.setCreativeTab(ModularTurrets.modularTurretsTab);
 	}
@@ -19,5 +20,4 @@ public class ChamberItem extends Item {
 	public void registerIcons(IIconRegister par1IconRegister) {
 		this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":chamber");
 	}
-
 }

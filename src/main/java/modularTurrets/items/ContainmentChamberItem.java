@@ -11,6 +11,7 @@ public class ContainmentChamberItem extends Item {
 
 	public ContainmentChamberItem() {
 		super();
+
 		this.setUnlocalizedName(ItemNames.unlocalisedContainmentChamber);
 		this.setCreativeTab(ModularTurrets.modularTurretsTab);
 	}
@@ -19,5 +20,4 @@ public class ContainmentChamberItem extends Item {
 	public void registerIcons(IIconRegister par1IconRegister) {
 		this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":containmentChamber");
 	}
-
 }

@@ -221,6 +221,10 @@ public class TurretHeadUtils {
         int value = 0;
         int tier = base.getBaseTier();
 
+        if (tier == 0) {
+            return value;
+        }
+
         if (tier == 4) {
             if (base.getStackInSlot(12) != null) {
                 if (base.getStackInSlot(12).getItem() instanceof RangeUpgradeItem) {
@@ -242,6 +246,10 @@ public class TurretHeadUtils {
 
         float value = 0.0F;
         int tier = base.getBaseTier();
+
+        if (tier == 0) {
+            return value;
+        }
 
         if (tier == 4) {
             if (base.getStackInSlot(12) != null) {
@@ -266,6 +274,10 @@ public class TurretHeadUtils {
         float value = 0.0F;
         int tier = base.getBaseTier();
 
+        if (tier == 0) {
+            return value;
+        }
+
         if (tier == 4) {
             if (base.getStackInSlot(12) != null) {
                 if (base.getStackInSlot(12).getItem() instanceof EfficiencyUpgradeItem) {
@@ -288,6 +300,10 @@ public class TurretHeadUtils {
     public static float getFireRateUpgrades(TurretBase base) {
         float value = 0.0F;
         int tier = base.getBaseTier();
+
+        if (tier == 0) {
+            return value;
+        }
 
         if (tier == 4) {
             if (base.getStackInSlot(12) != null) {

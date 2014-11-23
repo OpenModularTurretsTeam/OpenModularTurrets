@@ -11,6 +11,7 @@ public class BarrelItem extends Item {
 
 	public BarrelItem() {
 		super();
+
 		this.setUnlocalizedName(ItemNames.unlocalisedBarrel);
 		this.setCreativeTab(ModularTurrets.modularTurretsTab);
 	}
@@ -19,5 +20,4 @@ public class BarrelItem extends Item {
 	public void registerIcons(IIconRegister par1IconRegister) {
 		this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":barrel");
 	}
-
 }

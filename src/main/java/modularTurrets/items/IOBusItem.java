@@ -11,6 +11,7 @@ public class IOBusItem extends Item {
 
 	public IOBusItem() {
 		super();
+
 		this.setUnlocalizedName(ItemNames.unlocalisedIOBus);
 		this.setCreativeTab(ModularTurrets.modularTurretsTab);
 	}
@@ -19,5 +20,4 @@ public class IOBusItem extends Item {
 	public void registerIcons(IIconRegister par1IconRegister) {
 		this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":ioBus");
 	}
-
 }
