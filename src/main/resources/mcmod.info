@@ -1,0 +1,23 @@
+[{
+  "modid": "OpenModularTurrets",
+  "name": "Open Modular Turrets",
+  "description": "Adds Modular Turrets to TE/CofhCore",
+  "version": "1.0.1",
+  "mcversion": "1.6.4",
+  "url": "",
+  "updateUrl": "",
+  "authors": [ "Poenjabiesous,Keridos" ],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [ ],
+  "parent": "",
+  "requiredMods": [ 
+    "Forge",
+    "CofhCore"
+  ],
+  "dependencies": [
+    "IC2"
+  ],
+  "dependants": [  ],
+  "useDependencyInformation": "true"
+}]
