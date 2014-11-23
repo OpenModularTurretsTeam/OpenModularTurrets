@@ -13,8 +13,7 @@ public class TurretBaseTierFourContainer extends Container {
 
 	protected TurretBase tileEntity;
 
-	public TurretBaseTierFourContainer(InventoryPlayer inventoryPlayer,
-			TurretBase te) {
+	public TurretBaseTierFourContainer(InventoryPlayer inventoryPlayer, TurretBase te) {
 		this.tileEntity = te;
 		int i;
 		int j;

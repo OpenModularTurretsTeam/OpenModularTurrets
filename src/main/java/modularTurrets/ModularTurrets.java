@@ -31,7 +31,7 @@ public class ModularTurrets {
     @SidedProxy(clientSide = "modularTurrets.proxies.ClientProxy", serverSide = "modularTurrets.proxies.CommonProxy")
     public static CommonProxy proxy;
 
-    @Instance("ModularTurrets")
+    @Instance("modularturrets")
     public static ModularTurrets instance;
 
     public static SimpleNetworkWrapper networking;

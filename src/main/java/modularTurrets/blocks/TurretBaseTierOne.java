@@ -38,10 +38,9 @@ public class TurretBaseTierOne extends BlockContainer {
         this.setStepSound(Block.soundTypeStone);
     }
 
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) {
-        blockIcon = icon.registerIcon(ModInfo.ID.toLowerCase()
-            + ":turretBaseTierOne");
+    @Override
+    public void registerBlockIcons(IIconRegister p_149651_1_) {
+        blockIcon = p_149651_1_.registerIcon(ModInfo.ID.toLowerCase() + ":turretBaseTierOne");
     }
 
     @Override

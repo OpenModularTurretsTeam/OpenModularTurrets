@@ -24,8 +24,8 @@ public class LaserTurretBlock extends BlockContainer {
 		this.setStepSound(Block.soundTypeStone);
 	}
 
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister icon) {
+    @Override
+    public void registerBlockIcons(IIconRegister icon) {
 		blockIcon = icon.registerIcon(ModInfo.ID.toLowerCase() + ":turretBaseTierTwo");
 	}
 

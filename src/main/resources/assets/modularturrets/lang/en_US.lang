@@ -21,7 +21,7 @@ item.ioBus.name=IO Bus
 item.containmentChamber.name=Containment Chamber
 item.energeticBarrel.name=Energetic Barrel
 
-tile.baseTierWood.name=Basic Turret Base
+tile.baseTierWood.name=Wood Turret Base
 tile.baseTierOneBlock.name=Leadstone Turret Base
 tile.baseTierTwoBlock.name=Reinforced Turret Base
 tile.baseTierThreeBlock.name=Hardened Turret Base

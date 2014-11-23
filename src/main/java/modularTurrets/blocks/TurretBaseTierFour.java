@@ -1,5 +1,6 @@
 package modularTurrets.blocks;
 
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import modularTurrets.ModInfo;
@@ -38,10 +39,9 @@ public class TurretBaseTierFour extends BlockContainer {
 	this.setStepSound(Block.soundTypeStone);
     }
 
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) {
-	    blockIcon = icon.registerIcon(ModInfo.ID.toLowerCase()
-		+ ":turretBaseTierFour");
+    @Override
+    public void registerBlockIcons(IIconRegister p_149651_1_) {
+	    blockIcon = p_149651_1_.registerIcon(ModInfo.ID.toLowerCase() + ":turretBaseTierFour");
     }
 
     @Override
@@ -64,13 +64,9 @@ public class TurretBaseTierFour extends BlockContainer {
     }
 
     @Override
-    public void onBlockPlacedBy(World par1World, int par2, int par3, int par4,
-	    EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
+    public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
         if (par1World.isRemote) {
-
-
-            SetTurretOwnerMessage message = new SetTurretOwnerMessage(par2, par3, par4, Minecraft.getMinecraft().getSession()
-                    .getUsername());
+            SetTurretOwnerMessage message = new SetTurretOwnerMessage(par2, par3, par4, Minecraft.getMinecraft().getSession().getUsername());
 
             ModularTurrets.networking.sendToServer(message);
         }

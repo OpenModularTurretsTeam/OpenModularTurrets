@@ -9,6 +9,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
@@ -28,7 +29,6 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
     public boolean attacksPlayers;
     public String owner;
     public List<String> trustedPlayers;
-    public String splitter = "saisBlah";
 
     public TurretBase() {
 	    super();
@@ -56,26 +56,24 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
         return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
     }
 
-    private String getStringedTrustedPlayers() {
-        String sendBack = "";
-        for (Object trustedPlayer : trustedPlayers) {
-            sendBack = sendBack + splitter + trustedPlayer;
+    private NBTTagList getTrustedPlayers() {
+        NBTTagList nbt = new NBTTagList();
+
+        for (String trustedPlayer : trustedPlayers) {
+            nbt.appendTag(new NBTTagString(trustedPlayer));
         }
-        return sendBack;
+
+        return nbt;
     }
 
-    private List<String> buildTrustedPlayersFromString(String trustedString) {
+    private List<String> buildTrustedPlayersFromNBT(NBTTagList nbt) {
+        List<String> trusted_players = new ArrayList<String>();
 
-        String[] stringArray = trustedString.split(splitter);
-        List<String> newList = new ArrayList<String>();
-
-        for (String aStringArray : stringArray) {
-            if (!aStringArray.equals(" ") || !aStringArray.equals("")) {
-                newList.add(aStringArray);
-            }
+        for (int i = 0; i < nbt.tagCount(); i++) {
+            trusted_players.add(nbt.getStringTagAt(i));
         }
 
-        return newList;
+        return trusted_players;
     }
 
     @Override
@@ -93,7 +91,7 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
         var1.setBoolean("attacksNeutrals", attacksNeutrals);
         var1.setBoolean("attacksPlayers", attacksPlayers);
         var1.setString("owner", owner);
-        var1.setString("trustedPlayers", getStringedTrustedPlayers());
+        var1.setTag("trustedPlayers", getTrustedPlayers());
 
         if (this.inv != null) {
             NBTTagList itemList = new NBTTagList();
@@ -113,8 +111,6 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
 
         this.writeToNBT(var1);
 
-        FMLLog.info("getDescriptionPacket");
-
         return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
     }
 
@@ -133,7 +129,7 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
         par1.setBoolean("attacksNeutrals", attacksNeutrals);
         par1.setBoolean("attacksPlayers", attacksPlayers);
         par1.setString("owner", owner);
-        par1.setString("trustedPlayers", getStringedTrustedPlayers());
+        par1.setTag("trustedPlayers", getTrustedPlayers());
 
         if (this.inv != null) {
             NBTTagList itemList = new NBTTagList();
@@ -172,7 +168,7 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
         this.attacksNeutrals = par1.getBoolean("attacksNeutrals");
         this.attacksPlayers = par1.getBoolean("attacksPlayers");
         this.owner = par1.getString("owner");
-        this.trustedPlayers = buildTrustedPlayersFromString(par1.getString("trustedPlayers"));
+        this.trustedPlayers = buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 0));
 
         if (this.inv != null) {
             NBTTagList tagList = par1.getTagList("Inventory", 0);

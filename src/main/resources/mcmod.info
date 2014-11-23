@@ -1,22 +1,24 @@
 [
-{
-  "modid": "ModularTurrets",
-  "name": "Modular Turrets",
-  "description": "All a man needs are meat ingots, and big ass turrets. Adds a heap of new turrets and upgrades!",
-  "version": "1.1.0",
-  "credits": "Poenjabiesous",
-  "logoFile": "/mods/thermalexpansion/textures/logo.png",
-  "mcversion": "1.6.4",
-  "url": "",
-  "updateUrl": "",
-  "authors": [ "Poenjabiesous", "UntouchedWagons" ],
-  "parent":"",
-  "screenshots": [],
-  "requiredMods": [
-     "MinecraftForge,ThermalExpansion"
-  ],
-  "dependencies": [
-     "MinecraftForge,ThermalExpansion"
-  ]
-}
+    {
+        "modid": "ModularTurrets",
+        "name": "Modular Turrets",
+        "description": "All a man needs are meat ingots, and big ass turrets. Adds a heap of new turrets and upgrades!",
+        "version": "1.1.2",
+        "credits": "Poenjabiesous",
+        "logoFile": "/mods/thermalexpansion/textures/logo.png",
+        "mcversion": "1.7.10",
+        "url": "",
+        "updateUrl": "",
+        "authors": [
+            "Poenjabiesous", "UntouchedWagons"
+        ],
+        "parent":"",
+        "screenshots": [],
+        "requiredMods": [
+            "MinecraftForge,ThermalExpansion"
+        ],
+        "dependencies": [
+            "MinecraftForge,ThermalExpansion"
+        ]
+    }
 ]

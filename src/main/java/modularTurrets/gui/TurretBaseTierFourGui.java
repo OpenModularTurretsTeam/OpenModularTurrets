@@ -117,10 +117,14 @@ public class TurretBaseTierFourGui extends GuiContainer {
         ResourceLocation texture = (new ResourceLocation(ModInfo.ID + ":textures/gui/baseInvTier4.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
+
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
+
         this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+
         int expression = (base.getEnergyStored(ForgeDirection.UNKNOWN) * 51) / base.getMaxEnergyStored(ForgeDirection.UNKNOWN);
+
         drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
         drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 17, 14, expression);
     }
