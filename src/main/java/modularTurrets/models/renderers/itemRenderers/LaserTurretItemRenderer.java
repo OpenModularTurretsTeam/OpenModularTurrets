@@ -1,18 +1,22 @@
 package modularTurrets.models.renderers.itemRenderers;
 
 import modularTurrets.models.ModelLaserTurret;
-import modularTurrets.tileEntities.turrets.LaserTurretTileEntity;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import modularTurrets.models.renderers.LaserTurretRenderer;
+import modularTurrets.tileentity.turrets.LaserTurretTileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 public class LaserTurretItemRenderer implements IItemRenderer {
 
-	private ModelLaserTurret model;
+    private final LaserTurretRenderer laserTurretRenderer;
+    private final LaserTurretTileEntity laserTurretTileEntity;
+    private ModelLaserTurret model;
 
-	public LaserTurretItemRenderer() {
+	public LaserTurretItemRenderer(LaserTurretRenderer laserTurretRenderer, LaserTurretTileEntity laserTurretTileEntity) {
+        this.laserTurretRenderer = laserTurretRenderer;
+        this.laserTurretTileEntity = laserTurretTileEntity;
 
-		model = new ModelLaserTurret();
+        this.model = new ModelLaserTurret();
 	}
 
 	@Override
@@ -28,7 +32,7 @@ public class LaserTurretItemRenderer implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-	TileEntityRenderer.instance.renderTileEntityAt(new LaserTurretTileEntity(), 0.0D, 0.0D, 0.0D, 0.0F);
+        this.laserTurretRenderer.renderTileEntityAt(this.laserTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
 	}
 
 }

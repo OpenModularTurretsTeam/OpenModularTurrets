@@ -1,10 +1,19 @@
 package modularTurrets.items;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import modularTurrets.items.addons.DamageAmpAddonItem;
+import modularTurrets.items.addons.RedstoneReactorAddonItem;
+import modularTurrets.items.addons.SolarPanelAddonItem;
+import modularTurrets.items.ammo.BulletAmmoItem;
+import modularTurrets.items.ammo.GrenadeAmmoItem;
+import modularTurrets.items.ammo.RocketAmmoItem;
+import modularTurrets.items.upgrades.AccuraccyUpgradeItem;
+import modularTurrets.items.upgrades.EfficiencyUpgradeItem;
+import modularTurrets.items.upgrades.FireRateUpgradeItem;
+import modularTurrets.items.upgrades.RangeUpgradeItem;
 import net.minecraft.item.Item;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class Items {
-
     public static Item bulletThrowable;
     public static Item grenadeThrowable;
     public static Item bulletCraftable;
@@ -29,72 +38,70 @@ public class Items {
     public static Item containmentChamber;
 
     public static void init() {
+        bulletThrowable = new BulletThrowableItem();
+        GameRegistry.registerItem(bulletThrowable, "bulletThrowable");
 
-	bulletThrowable = new BulletThrowableItem(ItemIDs.bulletThrowableItem);
-	grenadeThrowable = new GrenadeThrowableItem(
-		ItemIDs.grenadeThrowableItem);
-	accuraccyUpgradeItem = new AccuraccyUpgradeItem(
-		ItemIDs.accuraccyUpgrade);
-	efficiencyUpgradeItem = new EfficiencyUpgradeItem(
-		ItemIDs.efficiencyUpgrade);
-	fireRateUpgradeItem = new FireRateUpgradeItem(ItemIDs.fireRateUpgrade);
-	rangeUpgradeItem = new RangeUpgradeItem(ItemIDs.rangeUpgrade);
-	redstoneReactorAddon = new RedstoneReactorAddonItem(
-		ItemIDs.redstoneReactorAddon);
-	damageAmpAddon = new DamageAmpAddonItem(ItemIDs.damageAmpAddon);
-	solarPanelAddon = new SolarPanelAddonItem(ItemIDs.solarPanelAddon);
-	configTab = new ConfigTabItem(ItemIDs.configTab);
-	bulletCraftable = new BulletCraftableItem(ItemIDs.bulletCraftItem);
-	grenadeCraftable = new GrenadeCraftableItem(ItemIDs.grenadeCraftItem);
-	rocketCraftable = new RocketCraftableItem(ItemIDs.rocketCraftItem);
-	sensorTierOneItem = new SensorTierOneItem(ItemIDs.sensorTierOne);
-	sensorTierTwoItem = new SensorTierTwoItem(ItemIDs.sensorTierTwo);
-	sensorTierThreeItem = new SensorTierThreeItem(ItemIDs.sensorTierThree);
-	sensorTierFourItem = new SensorTierFourItem(ItemIDs.sensorTierFour);
-	barrel = new BarrelItem(ItemIDs.barrel);
-	chamber = new ChamberItem(ItemIDs.chamber);
-	ioBus = new IOBusItem(ItemIDs.ioBus);
-	energeticBarrel = new EnergeticBarrelItem(ItemIDs.energeticBarrel);
-	containmentChamber = new ContainmentChamberItem(
-		ItemIDs.containmentChamber);
+        grenadeThrowable = new GrenadeThrowableItem();
+        GameRegistry.registerItem(grenadeThrowable, "grenadeThrowable");
+
+        accuraccyUpgradeItem = new AccuraccyUpgradeItem();
+        GameRegistry.registerItem(accuraccyUpgradeItem, "accuraccyUpgradeItem");
+
+        efficiencyUpgradeItem = new EfficiencyUpgradeItem();
+        GameRegistry.registerItem(efficiencyUpgradeItem, "efficiencyUpgradeItem");
+
+        fireRateUpgradeItem = new FireRateUpgradeItem();
+        GameRegistry.registerItem(fireRateUpgradeItem, "fireRateUpgradeItem");
+
+        rangeUpgradeItem = new RangeUpgradeItem();
+        GameRegistry.registerItem(rangeUpgradeItem, "rangeUpgradeItem");
+
+        redstoneReactorAddon = new RedstoneReactorAddonItem();
+        GameRegistry.registerItem(redstoneReactorAddon, "redstoneReactorAddon");
+
+        damageAmpAddon = new DamageAmpAddonItem();
+        GameRegistry.registerItem(damageAmpAddon, "damageAmpAddon");
+
+        solarPanelAddon = new SolarPanelAddonItem();
+        GameRegistry.registerItem(solarPanelAddon, "solarPanelAddon");
+
+        configTab = new ConfigTabItem();
+        GameRegistry.registerItem(configTab, "configTab");
+
+        bulletCraftable = new BulletAmmoItem();
+        GameRegistry.registerItem(bulletCraftable, "bulletCraftable");
+
+        grenadeCraftable = new GrenadeAmmoItem();
+        GameRegistry.registerItem(grenadeCraftable, "grenadeCraftable");
+
+        rocketCraftable = new RocketAmmoItem();
+        GameRegistry.registerItem(rocketCraftable, "rocketCraftable");
+
+        sensorTierOneItem = new SensorTierOneItem();
+        GameRegistry.registerItem(sensorTierOneItem, "sensorTierOneItem");
+
+        sensorTierTwoItem = new SensorTierTwoItem();
+        GameRegistry.registerItem(sensorTierTwoItem, "sensorTierTwoItem");
+
+        sensorTierThreeItem = new SensorTierThreeItem();
+        GameRegistry.registerItem(sensorTierThreeItem, "sensorTierThreeItem");
+
+        sensorTierFourItem = new SensorTierFourItem();
+        GameRegistry.registerItem(sensorTierFourItem, "sensorTierFourItem");
+
+        barrel = new BarrelItem();
+        GameRegistry.registerItem(barrel, "barrel");
+
+        chamber = new ChamberItem();
+        GameRegistry.registerItem(chamber, "chamber");
+
+        ioBus = new IOBusItem();
+        GameRegistry.registerItem(ioBus, "ioBus");
+
+        energeticBarrel = new EnergeticBarrelItem();
+        GameRegistry.registerItem(energeticBarrel, "energeticBarrel");
+
+        containmentChamber = new ContainmentChamberItem();
+        GameRegistry.registerItem(containmentChamber, "containmentChamber");
     }
-
-    public static void addNames() {
-
-	LanguageRegistry
-		.addName(bulletThrowable, ItemNames.bulletThrowableItem);
-	LanguageRegistry.addName(grenadeThrowable,
-		ItemNames.grenadeThrowableItem);
-	LanguageRegistry
-		.addName(bulletCraftable, ItemNames.bulletCraftableItem);
-	LanguageRegistry.addName(grenadeCraftable,
-		ItemNames.grenadeCraftableItem);
-	LanguageRegistry
-		.addName(rocketCraftable, ItemNames.rocketCraftableItem);
-	LanguageRegistry.addName(accuraccyUpgradeItem,
-		ItemNames.accuraccyUpgrade);
-	LanguageRegistry.addName(efficiencyUpgradeItem,
-		ItemNames.efficiencyUpgrade);
-	LanguageRegistry
-		.addName(fireRateUpgradeItem, ItemNames.fireRateUpgrade);
-	LanguageRegistry.addName(rangeUpgradeItem, ItemNames.rangeUpgrade);
-	LanguageRegistry.addName(redstoneReactorAddon,
-		ItemNames.redReactorAddon);
-	LanguageRegistry.addName(damageAmpAddon, ItemNames.damageAmpAddon);
-	LanguageRegistry.addName(solarPanelAddon, ItemNames.solarPanelAddon);
-	LanguageRegistry.addName(configTab, ItemNames.configTablet);
-	LanguageRegistry.addName(sensorTierOneItem, ItemNames.sensorTierOne);
-	LanguageRegistry.addName(sensorTierTwoItem, ItemNames.sensorTierTwo);
-	LanguageRegistry
-		.addName(sensorTierThreeItem, ItemNames.sensorTierThree);
-	LanguageRegistry.addName(sensorTierFourItem, ItemNames.sensorTierFour);
-	LanguageRegistry.addName(barrel, ItemNames.barrel);
-	LanguageRegistry.addName(chamber, ItemNames.chamber);
-	LanguageRegistry.addName(ioBus, ItemNames.ioBus);
-	LanguageRegistry.addName(energeticBarrel, ItemNames.energeticBarrel);
-	LanguageRegistry.addName(containmentChamber,
-		ItemNames.containmentChamber);
-
-    }
-
 }

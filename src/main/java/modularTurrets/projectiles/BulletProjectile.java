@@ -31,7 +31,6 @@ public class BulletProjectile extends EntityThrowable {
 
 	@Override
 	protected void onImpact(MovingObjectPosition movingobjectposition) {
-		// TODO Auto-generated method stub
 		if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
 			if (isAmped) {
 				movingobjectposition.entityHit.attackEntityFrom(
@@ -48,7 +47,7 @@ public class BulletProjectile extends EntityThrowable {
 
 		if (movingobjectposition.entityHit == null && !worldObj.isRemote) {
 			worldObj.playSoundEffect(posX, posY, posZ,
-					"modularturrets:bulletHit", 1.0F, 1.0F);
+					"openmodularturrets:bulletHit", 1.0F, 1.0F);
 		}
 		this.setDead();
 	}

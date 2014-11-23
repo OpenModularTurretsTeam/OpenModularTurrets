@@ -21,11 +21,10 @@ public class LaserProjectile extends EntityThrowable {
 	super(par1World);
     }
 
-    public LaserProjectile(World par1World, double par2, double par4,
-	    double par6, EntityLivingBase entity) {
-	super(par1World, par2, par4, par6);
-	this.entity = entity;
-	posY = posY - 0.2;
+    public LaserProjectile(World par1World, double par2, double par4, double par6, EntityLivingBase entity) {
+        super(par1World, par2, par4, par6);
+        this.entity = entity;
+        posY -= 0.2;
     }
 
     @Override
@@ -35,32 +34,30 @@ public class LaserProjectile extends EntityThrowable {
 
     @Override
     public void onEntityUpdate() {
+        this.posY = posY + (fallDistance * -1);
 
-	this.posY = posY + (fallDistance * -1);
-
-	ticksAlive++;
-	if (ticksAlive >= 50) {
-	    this.setDead();
-	}
+        ticksAlive++;
+        if (ticksAlive >= 50) {
+            this.setDead();
+        }
     }
 
     @Override
     protected void onImpact(MovingObjectPosition movingobjectposition) {
-	worldObj.playSoundEffect(posX, posY, posZ, "modularturrets:laserHit",
-		1.0F, 1.0F);
-	if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
-	    if (isAmped) {
-		movingobjectposition.entityHit.attackEntityFrom(
-			DamageSource.generic, Constants.laserTurretDamage
-				+ Constants.damageAmpDmgBonus);
-		movingobjectposition.entityHit.hurtResistantTime = 0;
-	    } else {
-		movingobjectposition.entityHit.attackEntityFrom(
-			DamageSource.generic, Constants.laserTurretDamage);
-		movingobjectposition.entityHit.hurtResistantTime = 0;
-	    }
-	}
-	this.setDead();
+        worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:laserHit", 1.0F, 1.0F);
+
+        if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
+            if (isAmped) {
+                movingobjectposition.entityHit.attackEntityFrom(
+                    DamageSource.generic, Constants.laserTurretDamage + Constants.damageAmpDmgBonus);
+                movingobjectposition.entityHit.hurtResistantTime = 0;
+            } else {
+                movingobjectposition.entityHit.attackEntityFrom(
+                    DamageSource.generic, Constants.laserTurretDamage);
+                movingobjectposition.entityHit.hurtResistantTime = 0;
+            }
+        }
+        this.setDead();
     }
 
     @Override
