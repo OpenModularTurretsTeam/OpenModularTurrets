@@ -5,7 +5,9 @@ import java.io.DataOutputStream;
 import java.util.ArrayList;
 
 import modularTurrets.ModInfo;
+import modularTurrets.ModularTurrets;
 import modularTurrets.gui.containers.TurretBaseTierWoodContainer;
+import modularTurrets.network.AdjustYAxisDetectMessage;
 import modularTurrets.tileentity.turretBase.TurretWoodBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -20,7 +22,6 @@ import org.lwjgl.opengl.GL11;
 public class TurretBaseTierWoodGui extends GuiContainer {
 
     TurretWoodBase base;
-    int change = 0;
     private int mouseX;
     private int mouseY;
 
@@ -44,12 +45,14 @@ public class TurretBaseTierWoodGui extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 1) {
-            change = -1;
+            this.base.setyAxisDetect(this.base.getyAxisDetect() - 1);
+
             sendChangeToServer();
         }
 
         if (guibutton.id == 2) {
-            change = 1;
+            this.base.setyAxisDetect(this.base.getyAxisDetect() + 1);
+
             sendChangeToServer();
         }
 
@@ -123,26 +126,9 @@ public class TurretBaseTierWoodGui extends GuiContainer {
     }
 
     public void sendChangeToServer() {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-        DataOutputStream outputStream = new DataOutputStream(bos);
-        try {
-            //outputStream.writeInt(PacketHandler.UPDATE_YAXISDETECT_ON_SERVER);
-            outputStream.writeInt(base.xCoord);
-            outputStream.writeInt(base.yCoord);
-            outputStream.writeInt(base.zCoord);
-            outputStream.writeInt(change);
+        AdjustYAxisDetectMessage message = new AdjustYAxisDetectMessage(base.xCoord, base.yCoord, base.zCoord, base.getyAxisDetect());
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        /*Packet250CustomPayload packet = new Packet250CustomPayload();
-        packet.channel = ModInfo.CHANNEL;
-        packet.data = bos.toByteArray();
-        packet.length = bos.size();
-
-        PacketDispatcher.sendPacketToServer(packet);*/
-        change = 0;
+        ModularTurrets.networking.sendToServer(message);
     }
 
     public void sendChangeToServerDropTurrets() {

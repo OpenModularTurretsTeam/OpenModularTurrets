@@ -5,7 +5,9 @@ import java.io.DataOutputStream;
 import java.util.ArrayList;
 
 import modularTurrets.ModInfo;
+import modularTurrets.ModularTurrets;
 import modularTurrets.gui.containers.TurretBaseTierOneContainer;
+import modularTurrets.network.AdjustYAxisDetectMessage;
 import modularTurrets.tileentity.turretBase.TurretBaseTierOneTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -20,7 +22,6 @@ import org.lwjgl.opengl.GL11;
 public class TurretBaseTierOneGui extends GuiContainer {
 
     TurretBaseTierOneTileEntity base;
-    int change;
     private int mouseX;
     private int mouseY;
 
@@ -44,14 +45,17 @@ public class TurretBaseTierOneGui extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 1) {
-            change = -1;
+            this.base.setyAxisDetect(this.base.getyAxisDetect() - 1);
+
             sendChangeToServer();
         }
 
         if (guibutton.id == 2) {
-            change = 1;
+            this.base.setyAxisDetect(this.base.getyAxisDetect() + 1);
+
             sendChangeToServer();
         }
+
         if (guibutton.id == 3) {
             sendChangeToServerDropTurrets();
         }
@@ -123,27 +127,9 @@ public class TurretBaseTierOneGui extends GuiContainer {
     }
 
     public void sendChangeToServer() {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-        DataOutputStream outputStream = new DataOutputStream(bos);
+        AdjustYAxisDetectMessage message = new AdjustYAxisDetectMessage(base.xCoord, base.yCoord, base.zCoord, base.getyAxisDetect());
 
-        try {
-            //outputStream.writeInt(PacketHandler.UPDATE_YAXISDETECT_ON_SERVER);
-            outputStream.writeInt(base.xCoord);
-            outputStream.writeInt(base.yCoord);
-            outputStream.writeInt(base.zCoord);
-            outputStream.writeInt(change);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        /*Packet250CustomPayload packet = new Packet250CustomPayload();
-        packet.channel = ModInfo.CHANNEL;
-        packet.data = bos.toByteArray();
-        packet.length = bos.size();
-
-        PacketDispatcher.sendPacketToServer(packet);*/
-        change = 0;
+        ModularTurrets.networking.sendToServer(message);
     }
 
     public void sendChangeToServerDropTurrets() {

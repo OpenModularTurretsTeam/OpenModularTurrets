@@ -294,8 +294,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
 	    return yAxisDetect;
     }
 
-    public void setyAxisDetect(int incoming) {
-        this.yAxisDetect = this.yAxisDetect + incoming;
+    public void setyAxisDetect(int yAxisDetect) {
+        this.yAxisDetect = yAxisDetect;
 
         if (this.yAxisDetect > 9) {
             this.yAxisDetect = 9;

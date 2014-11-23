@@ -18,12 +18,6 @@ import org.lwjgl.opengl.GL11;
 public class ConfigureGui extends GuiContainer {
 
     TurretBase base;
-    private int mouseX;
-    private int mouseY;
-
-    private String mobsButton;
-    private String neutralsButton;
-    private String playersButton;
 
     GuiTextField textFieldName;
 
@@ -39,9 +33,9 @@ public class ConfigureGui extends GuiContainer {
 
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 
-        mobsButton = "Attack Mobs: " + base.isAttacksMobs();
-        neutralsButton = "Attack Neutrals: " + base.isAttacksNeutrals();
-        playersButton = "Attack Players: " + base.isAttacksPlayers();
+        String mobsButton = "Attack Mobs: " + base.isAttacksMobs();
+        String neutralsButton = "Attack Neutrals: " + base.isAttacksNeutrals();
+        String playersButton = "Attack Players: " + base.isAttacksPlayers();
 
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
@@ -80,8 +74,8 @@ public class ConfigureGui extends GuiContainer {
                 guibutton.displayString = "Attack Mobs: true";
             }
 
+            base.setAttacksMobs(!base.isAttacksMobs());
             sendChangeToServerMobs();
-
         }
 
         if (guibutton.id == 2) {
@@ -91,8 +85,8 @@ public class ConfigureGui extends GuiContainer {
                 guibutton.displayString = "Attack Neutrals: true";
             }
 
+            base.setAttacksNeutrals(!base.isAttacksNeutrals());
             sendChangeToServerNeutrals();
-
         }
 
         if (guibutton.id == 3) {
@@ -102,9 +96,10 @@ public class ConfigureGui extends GuiContainer {
                 guibutton.displayString = "Attack Players: true";
             }
 
+            base.setAttacksPlayers(!base.isAttacksPlayers());
             sendChangeToServerPlayers();
-
         }
+
         if (guibutton.id == 4) {
             sendChangeToServerAddTrusted();
             textFieldName.setText("");
@@ -120,18 +115,9 @@ public class ConfigureGui extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int param1, int param2) {
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 
-        int x = (width - xSize) / 2;
-        int y = (height - ySize) / 2;
         fontRenderer.drawString("Turret Target Setup Menu", 21, 25, 0);
         fontRenderer.drawString("Add/Remove trusted players:", 16, 115, 0);
         textFieldName.drawTextBox();
-    }
-
-    @Override
-    public void drawScreen(int par1, int par2, float par3) {
-        this.mouseX = par1;
-        this.mouseY = par2;
-        super.drawScreen(par1, par2, par3);
     }
 
     @Override
