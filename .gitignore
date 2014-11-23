@@ -3,7 +3,6 @@
 *.iws
 CREDITS-fml*
 forge-*-changelog.txt
-gradlew*
 LICENSE*
 MinecraftForge-Credits.txt
 MinecraftForge-License.txt
