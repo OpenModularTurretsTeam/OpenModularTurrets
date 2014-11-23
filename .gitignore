@@ -1,13 +1,12 @@
-*.iml
-*.ipr
-*.iws
-CREDITS-fml*
-forge-*-changelog.txt
-LICENSE*
-MinecraftForge-Credits.txt
-MinecraftForge-License.txt
+# Created by .gitignore support plugin (hsz.mobi)
+### Gradle template
+.gradle
 build/
-.gradle/
-eclipse/
-libs/
-out/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+eclipse
+OpenModularTurrets.iws
+OpenModularTurrets.ipr
+OpenModularTurrets.iml

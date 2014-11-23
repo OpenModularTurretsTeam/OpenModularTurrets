@@ -1,0 +1,36 @@
+item.bulletThrowable.name=Throwable Bullet
+item.grenadeThrowable.name=Throwable Grenade
+item.bulletCraftable.name=Ammo - Bullet
+item.grenadeCraftable.name=Ammo - Grenade
+item.rocketCraftable.name=Ammo - Rocket
+item.upgFire.name=Upgrade - Fire Rate
+item.upgEff.name=Upgrade - Efficiency
+item.upgRan.name=Upgrade - Range
+item.upgAcc.name=Upgrade - Accuracy
+item.addonReactor.name=Addon - Redstone Reactor
+item.addonDam.name=Addon - Damage Boost
+item.addonSolar.name=Addon - Solar Generator
+item.configTablet.name=Turret Target Configuration Device
+item.sensorOne.name=Sensor (Tier 1)
+item.sensorTwo.name=Sensor (Tier 2)
+item.sensorThree.name=Sensor (Tier 3)
+item.sensorFour.name=Sensor (Tier 4)
+item.chamber.name=Chamber
+item.barrel.name=Barrel
+item.ioBus.name=IO Bus
+item.containmentChamber.name=Containment Chamber
+item.energeticBarrel.name=Energetic Barrel
+
+tile.baseTierWood.name=Wood Turret Base
+tile.baseTierOneBlock.name=Leadstone Turret Base
+tile.baseTierTwoBlock.name=Reinforced Turret Base
+tile.baseTierThreeBlock.name=Hardened Turret Base
+tile.baseTierFourBlock.name=Resonant Turret Base
+tile.disposeItemTurret.name=Disposable Item Turret
+tile.rocketTurret.name=Rocket Launcher Turret
+tile.machineGunTurret.name=Machine Gun Turret
+tile.grenadeTurret.name=Grenade Launcher Turret
+tile.laserTurret.name=Laser Turret
+tile.leverBlock.name=Basic Turret Base Crank
+
+itemGroup.openmodularturrets=Open Modular Turrets

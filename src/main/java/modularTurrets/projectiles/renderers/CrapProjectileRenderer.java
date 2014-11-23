@@ -4,9 +4,7 @@ import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 
-
 public class CrapProjectileRenderer extends RenderSnowball {
-	
 	public CrapProjectileRenderer(Item par1Item) {
 		super(par1Item);
 	}
@@ -16,5 +14,4 @@ public class CrapProjectileRenderer extends RenderSnowball {
 			double par6, float par8, float par9) {
 		
 	}
-
 }

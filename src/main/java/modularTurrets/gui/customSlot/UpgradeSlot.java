@@ -1,6 +1,6 @@
 package modularTurrets.gui.customSlot;
 
-import modularTurrets.items.UpgradeItem;
+import modularTurrets.items.upgrades.UpgradeItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;

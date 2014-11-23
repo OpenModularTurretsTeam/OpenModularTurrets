@@ -2,7 +2,7 @@ package modularTurrets.gui.containers;
 
 import modularTurrets.gui.customSlot.AddonSlot;
 import modularTurrets.gui.customSlot.UpgradeSlot;
-import modularTurrets.tileEntities.turretBase.TurretBase;
+import modularTurrets.tileentity.turretBase.TurretBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -13,8 +13,7 @@ public class TurretBaseTierFourContainer extends Container {
 
 	protected TurretBase tileEntity;
 
-	public TurretBaseTierFourContainer(InventoryPlayer inventoryPlayer,
-			TurretBase te) {
+	public TurretBaseTierFourContainer(InventoryPlayer inventoryPlayer, TurretBase te) {
 		this.tileEntity = te;
 		int i;
 		int j;

@@ -17,12 +17,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RocketRenderer extends Render
 {
-    private static final ResourceLocation rocketTextures = new ResourceLocation(ModInfo.ID.toLowerCase()+":textures/blocks/rocket.png");
+    private static final ResourceLocation rocketTextures = new ResourceLocation(ModInfo.ID.toLowerCase() + ":textures/blocks/rocket.png");
 
-    public void renderRocket(RocketProjectile par1EntityRocket, double par2, double par4, double par6, float par8, float par9)
-    {
-  
-    	
+    public void renderRocket(RocketProjectile par1EntityRocket, double par2, double par4, double par6, float par8, float par9) {
         this.bindEntityTexture(par1EntityRocket);
         GL11.glPushMatrix();
         GL11.glTranslatef((float)par2, (float)par4, (float)par6);

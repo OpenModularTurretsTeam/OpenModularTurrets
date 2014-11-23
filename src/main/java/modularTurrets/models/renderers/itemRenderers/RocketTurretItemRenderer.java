@@ -1,18 +1,22 @@
 package modularTurrets.models.renderers.itemRenderers;
 
 import modularTurrets.models.ModelRocketTurret;
-import modularTurrets.tileEntities.turrets.RocketTurretTileEntity;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import modularTurrets.models.renderers.RocketTurretRenderer;
+import modularTurrets.tileentity.turrets.RocketTurretTileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 public class RocketTurretItemRenderer implements IItemRenderer {
 
-	private ModelRocketTurret model;
+    private final RocketTurretRenderer rocketTurretRenderer;
+    private final RocketTurretTileEntity rocketTurretTileEntity;
+    private final ModelRocketTurret model;
 
-	public RocketTurretItemRenderer() {
+    public RocketTurretItemRenderer(RocketTurretRenderer rocketTurretRenderer, RocketTurretTileEntity rocketTurretTileEntity) {
+        this.rocketTurretRenderer = rocketTurretRenderer;
+        this.rocketTurretTileEntity = rocketTurretTileEntity;
 
-		model = new ModelRocketTurret();
+		this.model = new ModelRocketTurret();
 	}
 
 	@Override
@@ -28,7 +32,6 @@ public class RocketTurretItemRenderer implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-	TileEntityRenderer.instance.renderTileEntityAt(new RocketTurretTileEntity(), 0.0D, 0.0D, 0.0D, 0.0F);
+        this.rocketTurretRenderer.renderTileEntityAt(this.rocketTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
 	}
-
 }
