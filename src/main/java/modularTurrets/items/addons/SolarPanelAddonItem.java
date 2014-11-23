@@ -11,14 +11,12 @@ public class SolarPanelAddonItem extends AddonItem {
 
 	public SolarPanelAddonItem() {
 		super();
+
 		this.setUnlocalizedName(ItemNames.unlocalisedSolarPanelAddon);
-		this.setCreativeTab(ModularTurrets.modularTurretsTab);
-		this.setMaxStackSize(1);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {
 		this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":solarPanelAddon");
 	}
-
 }

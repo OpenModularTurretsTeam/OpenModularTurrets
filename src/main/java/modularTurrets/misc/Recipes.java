@@ -67,11 +67,10 @@ public class Recipes {
             new Object[] { "   ", "DCD", "ADA", 'A', "dustElectrum", 'D',
                 "ingotInvar", 'C', net.minecraft.init.Items.diamond }));
     
-        GameRegistry
-            .addRecipe(new ShapedOreRecipe(Items.solarPanelAddon,
-                new Object[] { "BBB", "DDD", "ACA", 'A',
-                    "dustElectrum", 'D', net.minecraft.init.Blocks.lapis_block, 'C',
-                        net.minecraft.init.Items.redstone, 'B', net.minecraft.init.Blocks.glass }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(Items.solarPanelAddon,
+            new Object[] { "BBB", "DDD", "ACA", 'A',
+                "dustElectrum", 'D', net.minecraft.init.Blocks.lapis_block, 'C',
+                    net.minecraft.init.Items.redstone, 'B', net.minecraft.init.Blocks.glass }));
     
         GameRegistry.addRecipe(new ShapedOreRecipe(Items.redstoneReactorAddon,
             new Object[] { "DDD", "DCD", "DAD", 'A', net.minecraft.init.Items.redstone, 'D',
@@ -81,17 +80,18 @@ public class Recipes {
             new Object[] { "   ", "CCC", "ADA", 'A', "ingotElectrum", 'D',
                 "ingotElectrum", 'C', net.minecraft.init.Items.diamond }));
     
-        GameRegistry.addRecipe(new ShapedOreRecipe(Items.barrel, new Object[] {
+        GameRegistry.addRecipe(new ShapedOreRecipe(Items.barrel,
+                new Object[] {
             "CCC", "   ", "CCC", 'C', "ingotInvar" }));
     
-        GameRegistry.addRecipe(new ShapedOreRecipe(Items.chamber, new Object[] {
+        GameRegistry.addRecipe(new ShapedOreRecipe(Items.chamber,
+                new Object[] {
             "CCC", "  C", "CCC", 'C', "ingotInvar" }));
-    
-        GameRegistry
-            .addRecipe(new ShapedOreRecipe(Items.ioBus, new Object[] {
-                " A ", "BBB", " A ", 'A', net.minecraft.init.Items.gold_ingot, 'B',
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(Items.ioBus,
+                new Object[] { " A ", "BBB", " A ", 'A', net.minecraft.init.Items.gold_ingot, 'B',
                     net.minecraft.init.Items.redstone }));
-    
+
         GameRegistry.addRecipe(new ShapedOreRecipe(Items.energeticBarrel,
             new Object[] { "CCC", "D D", "CCC", 'C', "ingotInvar", 'D',
                 net.minecraft.init.Items.diamond }));
@@ -115,13 +115,11 @@ public class Recipes {
             new Object[] { " B ", "BAB", " C ", 'C', Items.barrel, 'B',
                 "ingotLead", 'A', Items.chamber }));
     
-        GameRegistry.addRecipe(new ShapedOreRecipe(
-            Blocks.grenadeLauncherTurret, new Object[] { "DBD", "BAB",
+        GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.grenadeLauncherTurret, new Object[] { "DBD", "BAB",
                 " C ", 'C', Items.barrel, 'B', "ingotInvar", 'A',
                 Items.chamber, 'D', "dustLead" }));
     
-        GameRegistry
-            .addRecipe(new ShapedOreRecipe(Blocks.rocketTurret,
+        GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.rocketTurret,
                 new Object[] { "BDB", "BAB", " C ", 'C', Items.barrel,
                     'B', "ingotElectrum", 'A', Items.chamber, 'D',
                     "dustInvar" }));

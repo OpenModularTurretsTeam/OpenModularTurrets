@@ -1,6 +1,9 @@
 package modularTurrets.blocks;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import modularTurrets.blocks.turretbases.*;
+import modularTurrets.blocks.turretheads.*;
+import modularTurrets.items.blocks.*;
 import net.minecraft.block.Block;
 
 public class Blocks {
@@ -17,37 +20,37 @@ public class Blocks {
 	public static Block leverBlock;
 
 	public static void init() {
-		turretBaseTierWood = new TurretBaseTierWood();
-		GameRegistry.registerBlock(turretBaseTierWood, BlockNames.turretBaseTierWood);
+		turretBaseTierWood = new BlockTurretBaseTierWood();
+		GameRegistry.registerBlock(turretBaseTierWood, ItemBlockTurretBaseTierWood.class, BlockNames.unlocalisedTurretBaseTierWood);
 		
-		turretBaseTierOne = new TurretBaseTierOne();
-		GameRegistry.registerBlock(turretBaseTierOne, BlockNames.turretBaseTierOne);
+		turretBaseTierOne = new BlockTurretBaseTierOne();
+		GameRegistry.registerBlock(turretBaseTierOne, ItemBlockTurretBaseTierOne.class, BlockNames.unlocalisedTurretBaseTierOne);
 		
-		turretBaseTierTwo = new TurretBaseTierTwo();
-		GameRegistry.registerBlock(turretBaseTierTwo, BlockNames.turretBaseTierTwo);
+		turretBaseTierTwo = new BlockTurretBaseTierTwo();
+		GameRegistry.registerBlock(turretBaseTierTwo, ItemBlockTurretBaseTierTwo.class, BlockNames.unlocalisedTurretBaseTierTwo);
 		
-		turretBaseTierThree = new TurretBaseTierThree();
-		GameRegistry.registerBlock(turretBaseTierThree, BlockNames.turretBaseTierThree);
+		turretBaseTierThree = new BlockTurretBaseTierThree();
+		GameRegistry.registerBlock(turretBaseTierThree, ItemBlockTurretBaseTierThree.class, BlockNames.unlocalisedTurretBaseTierThree);
 		
-		turretBaseTierFour = new TurretBaseTierFour();
-		GameRegistry.registerBlock(turretBaseTierFour, BlockNames.turretBaseTierFour);
+		turretBaseTierFour = new BlockTurretBaseTierFour();
+		GameRegistry.registerBlock(turretBaseTierFour, ItemBlockTurretBaseTierFour.class, BlockNames.unlocalisedTurretBaseTierFour);
 		
-		disposableItemTurret = new DisposableTurretBlock();
-		GameRegistry.registerBlock(disposableItemTurret, BlockNames.disposableItemTurret);
+		disposableItemTurret = new BlockDisposableTurret();
+		GameRegistry.registerBlock(disposableItemTurret, ItemBlockDisposableTurret.class, BlockNames.unlocalisedDisposableItemTurret);
 		
-		rocketTurret = new RocketTurretBlock();
-		GameRegistry.registerBlock(rocketTurret, BlockNames.rocketTurret);
+		rocketTurret = new BlockRocketTurret();
+		GameRegistry.registerBlock(rocketTurret, ItemBlockRocketTurret.class, BlockNames.unlocalisedRocketTurret);
 		
-		machineGunTurret = new MachineGunTurretBlock();
-		GameRegistry.registerBlock(machineGunTurret, BlockNames.machineGunTurret);
+		machineGunTurret = new BlockMachineGunTurret();
+		GameRegistry.registerBlock(machineGunTurret, ItemBlockMachineGunTurret.class, BlockNames.unlocalisedMachineGunTurret);
 		
-		grenadeLauncherTurret = new GrenadeLauncherTurretBlock();
-		GameRegistry.registerBlock(grenadeLauncherTurret, BlockNames.grenadeTurret);
+		grenadeLauncherTurret = new BlockGrenadeLauncherTurret();
+		GameRegistry.registerBlock(grenadeLauncherTurret, ItemBlockGrenadeLauncherTurret.class, BlockNames.unlocalisedGrenadeTurret);
 		
-		laserTurret = new LaserTurretBlock();
-		GameRegistry.registerBlock(laserTurret, BlockNames.laserTurret);
+		laserTurret = new BlockLaserTurret();
+		GameRegistry.registerBlock(laserTurret, ItemBlockLaserTurret.class, BlockNames.unlocalisedLaserTurret);
 		
 		leverBlock = new LeverBlock();
-		GameRegistry.registerBlock(leverBlock, BlockNames.lever);
+		GameRegistry.registerBlock(leverBlock, BlockNames.unlocalisedLever);
 	}
 }

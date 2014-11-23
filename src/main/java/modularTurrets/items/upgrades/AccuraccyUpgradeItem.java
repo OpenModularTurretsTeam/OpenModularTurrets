@@ -1,19 +1,17 @@
 package modularTurrets.items.upgrades;
 
-import modularTurrets.ModInfo;
-import modularTurrets.ModularTurrets;
-import modularTurrets.items.ItemNames;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import modularTurrets.ModInfo;
+import modularTurrets.items.ItemNames;
+import net.minecraft.client.renderer.texture.IIconRegister;
 
 public class AccuraccyUpgradeItem extends UpgradeItem {
 
 	public AccuraccyUpgradeItem() {
 		super();
+
 		this.setUnlocalizedName(ItemNames.unlocalisedAccuraccyUpgrade);
-		this.setCreativeTab(ModularTurrets.modularTurretsTab);
-		this.setMaxStackSize(4);
 	}
 
 	@SideOnly(Side.CLIENT)

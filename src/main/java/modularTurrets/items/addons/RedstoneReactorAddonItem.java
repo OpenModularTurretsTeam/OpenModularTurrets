@@ -11,14 +11,12 @@ public class RedstoneReactorAddonItem extends AddonItem {
 
 	public RedstoneReactorAddonItem() {
 		super();
+
 		this.setUnlocalizedName(ItemNames.unlocalisedRedReactorAddon);
-		this.setCreativeTab(ModularTurrets.modularTurretsTab);
-		this.setMaxStackSize(1);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {
 		this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":ammoProductionAddon");
 	}
-
 }
