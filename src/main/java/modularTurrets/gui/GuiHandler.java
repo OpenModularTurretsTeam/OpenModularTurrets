@@ -1,6 +1,5 @@
 package modularTurrets.gui;
 
-import cpw.mods.fml.common.FMLLog;
 import modularTurrets.gui.containers.ConfigContainer;
 import modularTurrets.gui.containers.TurretBaseTierFourContainer;
 import modularTurrets.gui.containers.TurretBaseTierOneContainer;
@@ -75,8 +74,6 @@ public class GuiHandler implements IGuiHandler {
 		if (id == 5) {
 			return new ConfigureGui(player.inventory, (TurretBase) tileEntity);
 		}
-
-        FMLLog.info("returning null");
 
 		return null;
 	}

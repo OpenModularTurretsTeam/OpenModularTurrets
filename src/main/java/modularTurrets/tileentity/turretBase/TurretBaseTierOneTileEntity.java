@@ -1,23 +1,25 @@
 package modularTurrets.tileentity.turretBase;
 
-import net.minecraft.item.ItemStack;
+import modularTurrets.misc.ConfigHandler;
 
 public class TurretBaseTierOneTileEntity extends TurretBase {
 
 	public TurretBaseTierOneTileEntity() {
-		super();
-		inv = new ItemStack[12];
+        this(ConfigHandler.getBaseTierOneMaxCharge(), ConfigHandler.getBaseTierOneMaxIo());
 	}
 
 	public TurretBaseTierOneTileEntity(int MaxEnergyStorage, int MaxIO) {
 		super(MaxEnergyStorage, MaxIO);
-		inv = new ItemStack[12];
-		baseTier = 1;
 	}
+
+    @Override
+    public int getBaseTier() {
+        return 1;
+    }
 
 	@Override
 	public int getSizeInventory() {
-		return inv.length;
+		return 12;
 	}
 
     @Override

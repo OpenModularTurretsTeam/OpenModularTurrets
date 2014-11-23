@@ -80,27 +80,25 @@ public class TurretBaseTierFourGui extends GuiContainer {
         if (mouseX > k + 153 && mouseX < k + 153 + 14) {
             if (mouseY > l + 17 && mouseY < l + 17 + 51) {
                 ArrayList list = new ArrayList();
-                list.add(base.storage.getEnergyStored() + "/" + base.storage.getMaxEnergyStored());
+                list.add(base.getEnergyStored(ForgeDirection.UNKNOWN) + "/" + base.getMaxEnergyStored(ForgeDirection.UNKNOWN));
                 this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
             }
         }
 
         ArrayList targetInfo = new ArrayList();
 
-        targetInfo.add("\u00A76Owner: \u00A7f" + base.owner);
+        targetInfo.add("\u00A76Owner: \u00A7f" + base.getOwner());
         targetInfo.add("");
         targetInfo.add("\u00A75-Trusted Players-");
 
-        for (int i = 0; i < base.trustedPlayers.size(); i++) {
-            if (!base.trustedPlayers.get(i).equals("") || !base.trustedPlayers.get(i).equals(" ")) {
-                targetInfo.add("\u00A7b" + base.trustedPlayers.get(i));
-            }
+        for (String trusted_player : base.getTrustedPlayers()) {
+            targetInfo.add("\u00A7b" + trusted_player);
         }
 
         targetInfo.add("");
-        targetInfo.add("\u00A77Attack Mobs: \u00A7b" + base.attacksMobs);
-        targetInfo.add("\u00A77Attack Neutrals: \u00A7b" + base.attacksNeutrals);
-        targetInfo.add("\u00A77Attack Players: \u00A7b" + base.attacksPlayers);
+        targetInfo.add("\u00A77Attack Mobs: \u00A7b" + base.isAttacksMobs());
+        targetInfo.add("\u00A77Attack Neutrals: \u00A7b" + base.isAttacksNeutrals());
+        targetInfo.add("\u00A77Attack Players: \u00A7b" + base.isAttacksPlayers());
 
         this.drawHoveringText(targetInfo, -128, 17, fontRenderer);
     }

@@ -19,7 +19,7 @@ public class RocketTurretBlock extends BlockContainer {
         this.setBlockName(BlockNames.unlocalisedRocketTurret);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setHardness(-1F);
-        this.setBlockBounds(0, 0, 0, 0.0F, 0.0F, 0.0F);
+        this.setBlockBounds(1F, 1F, 1F, 1F, 1F, 1F);
         this.setResistance(20F);
         this.setStepSound(Block.soundTypeStone);
     }
@@ -41,10 +41,6 @@ public class RocketTurretBlock extends BlockContainer {
 
     @Override
     public boolean isOpaqueCube() {
-	return false;
-    }
-
-    public boolean renderAsNormalBlock() {
 	return false;
     }
 }

@@ -25,20 +25,20 @@ import modularTurrets.proxies.CommonProxy;
 import modularTurrets.tileentity.TileEntities;
 import net.minecraft.creativetab.CreativeTabs;
 
-@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = "1.7.10")
+@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = "required-after:ThermalFoundation")
 public class ModularTurrets {
 
     @SidedProxy(clientSide = "modularTurrets.proxies.ClientProxy", serverSide = "modularTurrets.proxies.CommonProxy")
     public static CommonProxy proxy;
 
-    @Instance("modularturrets")
+    @Instance(ModInfo.ID)
     public static ModularTurrets instance;
 
     public static SimpleNetworkWrapper networking;
 
     public GuiHandler gui = new GuiHandler();
 
-    public static CreativeTabs modularTurretsTab = new ModularTurretsTab(ModInfo.NAME);
+    public static CreativeTabs modularTurretsTab = new ModularTurretsTab(ModInfo.ID);
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -51,10 +51,11 @@ public class ModularTurrets {
 
         networking.registerMessage(AddTrustedPlayerMessage.class, AddTrustedPlayerMessage.class, 0, Side.SERVER);
         networking.registerMessage(RemoveTrustedPlayerMessage.class, RemoveTrustedPlayerMessage.class, 1, Side.SERVER);
-        networking.registerMessage(ToggleAttackMobsMessage.class, ToggleAttackMobsMessage.class, 1, Side.SERVER);
-        networking.registerMessage(ToggleAttackNeutralMobsMessage.class, ToggleAttackNeutralMobsMessage.class, 1, Side.SERVER);
-        networking.registerMessage(ToggleAttackPlayersMessage.class, ToggleAttackPlayersMessage.class, 1, Side.SERVER);
-        networking.registerMessage(SetTurretOwnerMessage.class, SetTurretOwnerMessage.class, 1, Side.SERVER);
+        networking.registerMessage(ToggleAttackMobsMessage.class, ToggleAttackMobsMessage.class, 2, Side.SERVER);
+        networking.registerMessage(ToggleAttackNeutralMobsMessage.class, ToggleAttackNeutralMobsMessage.class, 3, Side.SERVER);
+        networking.registerMessage(ToggleAttackPlayersMessage.class, ToggleAttackPlayersMessage.class, 4, Side.SERVER);
+        networking.registerMessage(SetTurretOwnerMessage.class, SetTurretOwnerMessage.class, 5, Side.SERVER);
+        networking.registerMessage(EnergyStatusUpdateMessage.class, EnergyStatusUpdateMessage.class, 6, Side.CLIENT);
     }
 
     @EventHandler

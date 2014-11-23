@@ -3,13 +3,14 @@ package modularTurrets.tileentity.turrets;
 import modularTurrets.tileentity.turretBase.TurretBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 public class TurretHead extends TileEntity {
 
     public Entity target;
-    int ticks;
+    public int ticks;
     public float rotationXY;
     public float rotationXZ;
     public float baseFitRotationX;
@@ -17,12 +18,8 @@ public class TurretHead extends TileEntity {
     public int turretTier;
     public TurretBase base;
     public boolean hasSetSide = false;
-    
-    public TurretHead() {
-	super();
-    }
 
-    public net.minecraft.network.Packet getDescriptionPacket() {
+    public Packet getDescriptionPacket() {
         NBTTagCompound var1 = new NBTTagCompound();
         this.writeToNBT(var1);
         return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);

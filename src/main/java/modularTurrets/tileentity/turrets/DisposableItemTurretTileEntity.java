@@ -1,11 +1,12 @@
 package modularTurrets.tileentity.turrets;
 
+import modularTurrets.blocks.Blocks;
 import modularTurrets.misc.Constants;
 import modularTurrets.tileentity.turretBase.TurretBase;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class DisposableItemTurretTileEntity extends TurretHead {
@@ -90,14 +91,12 @@ public class DisposableItemTurretTileEntity extends TurretHead {
         if (!worldObj.isRemote) {
             ticks++;
 
-            // UPDATE CLIENTS
-            if (!worldObj.isRemote && ticks % 5 == 0) {
-                //PacketDispatcher.sendPacketToAllPlayers(getDescriptionPacket());
-            }
-
             // BASE IS OKAY
-            if (base == null || base.baseTier < this.turretTier) {
-                worldObj.setBlock(xCoord, yCoord, zCoord, Blocks.air);
+            if (base == null || base.getBaseTier() < this.turretTier) {
+                EntityItem turret_item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, new ItemStack(Blocks.disposableItemTurret));
+                worldObj.spawnEntityInWorld(turret_item);
+
+                worldObj.setBlockToAir(xCoord, yCoord, zCoord);
             } else {
                 TurretHeadUtils.updateSolarPanelAddon(base);
                 TurretHeadUtils.updateRedstoneReactor(base);
@@ -105,7 +104,7 @@ public class DisposableItemTurretTileEntity extends TurretHead {
                 this.target = getTarget();
 
                 // POWER IS OKAY
-                if (!base.isGettingRedstoneSignal() && base.storage != null
+                if (!base.isGettingRedstoneSignal()
                     && base.getEnergyStored(ForgeDirection.UNKNOWN) >= Math
                         .round(Constants.disposableItemTurretPowerUse
                                 * (1 - TurretHeadUtils
@@ -124,12 +123,13 @@ public class DisposableItemTurretTileEntity extends TurretHead {
                             EntityLivingBase livingBase = (EntityLivingBase) target;
                             loadAmmoIntoEntity();
                             if (entity.stack != null) {
-                                base.storage
-                                    .setEnergyStored(base.storage
-                                            .getEnergyStored()
-                                            - (Math.round(Constants.disposableItemTurretPowerUse
-                                            * (1 - TurretHeadUtils
-                                            .getEfficiencyUpgrades(base)))));
+                                base.setEnergyStored(
+                                        base.getEnergyStored(ForgeDirection.UNKNOWN) -
+                                                (Math.round(Constants.disposableItemTurretPowerUse *
+                                                        (1 - TurretHeadUtils.getEfficiencyUpgrades(base))
+                                                )
+                                        )
+                                );
 
                                 getShootingEntity()
                                     .attackEntityWithRangedAttack(

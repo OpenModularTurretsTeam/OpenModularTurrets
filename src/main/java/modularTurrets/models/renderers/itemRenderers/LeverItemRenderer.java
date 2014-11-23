@@ -1,16 +1,22 @@
 package modularTurrets.models.renderers.itemRenderers;
 
 import modularTurrets.models.ModelLever;
+import modularTurrets.models.renderers.LeverRenderer;
+import modularTurrets.tileentity.LeverTileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 public class LeverItemRenderer implements IItemRenderer {
 
-	private ModelLever model;
+    private final LeverRenderer leverRenderer;
+    private final LeverTileEntity leverTileEntity;
+    private ModelLever model;
 
-	public LeverItemRenderer() {
+	public LeverItemRenderer(LeverRenderer leverRenderer, LeverTileEntity leverTileEntity) {
+        this.leverRenderer = leverRenderer;
+        this.leverTileEntity = leverTileEntity;
 
-		model = new ModelLever();
+		this.model = new ModelLever();
 	}
 
 	@Override
@@ -26,7 +32,7 @@ public class LeverItemRenderer implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-	    //TileEntityRenderer.instance.renderTileEntityAt(new LeverTileEntity(), 0.0D, 0.0D, 0.0D, 0.0F);
+        this.leverRenderer.renderTileEntityAt(this.leverTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
 	}
 
 }

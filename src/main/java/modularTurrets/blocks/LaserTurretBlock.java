@@ -19,7 +19,7 @@ public class LaserTurretBlock extends BlockContainer {
 		this.setBlockName(BlockNames.unlocalisedLaserTurret);
 		this.setCreativeTab(ModularTurrets.modularTurretsTab);
 		this.setHardness(-1F);
-		this.setBlockBounds(0, 0, 0, 0.0F, 0.0F, 0.0F);
+        this.setBlockBounds(1F, 1F, 1F, 1F, 1F, 1F);
 		this.setResistance(20F);
 		this.setStepSound(Block.soundTypeStone);
 	}
@@ -34,17 +34,13 @@ public class LaserTurretBlock extends BlockContainer {
 		return new LaserTurretTileEntity();
 	}
 
-	@Override
-	public int getRenderType() {
-		return -1;
-	}
+    @Override
+    public int getRenderType() {
+        return -1;
+    }
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	public boolean renderAsNormalBlock() {
 		return false;
 	}
 }

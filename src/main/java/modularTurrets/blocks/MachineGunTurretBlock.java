@@ -14,12 +14,14 @@ import net.minecraft.world.World;
 
 public class MachineGunTurretBlock extends BlockContainer {
 
+    public static int RENDER_ID;
+
 	public MachineGunTurretBlock() {
 		super(Material.rock);
 		this.setBlockName(BlockNames.unlocalisedMachineGunTurret);
 		this.setCreativeTab(ModularTurrets.modularTurretsTab);
 		this.setHardness(-1F);
-		this.setBlockBounds(0, 0, 0, 0.0F, 0.0F, 0.0F);
+        this.setBlockBounds(1F, 1F, 1F, 1F, 1F, 1F);
 		this.setResistance(-1F);
 		this.setStepSound(Block.soundTypeStone);
 	}
@@ -36,15 +38,11 @@ public class MachineGunTurretBlock extends BlockContainer {
 
 	@Override
 	public int getRenderType() {
-		return -1;
+		return RENDER_ID;
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	public boolean renderAsNormalBlock() {
 		return false;
 	}
 }

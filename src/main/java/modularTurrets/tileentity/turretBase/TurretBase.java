@@ -3,7 +3,8 @@ package modularTurrets.tileentity.turretBase;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.FMLLog;
+import modularTurrets.ModularTurrets;
+import modularTurrets.network.EnergyStatusUpdateMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -18,21 +19,15 @@ import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TurretBase extends TileEntity implements IEnergyHandler, IInventory {
-
-    public EnergyStorage storage;
-    public ItemStack[] inv;
-    public int yAxisDetect;
-    public int baseTier;
-    public boolean attacksMobs;
-    public boolean attacksNeutrals;
-    public boolean attacksPlayers;
-    public String owner;
-    public List<String> trustedPlayers;
-
-    public TurretBase() {
-	    super();
-    }
+public abstract class TurretBase extends TileEntity implements IEnergyHandler, IInventory {
+    protected EnergyStorage storage;
+    protected ItemStack[] inv;
+    protected int yAxisDetect;
+    protected boolean attacksMobs;
+    protected boolean attacksNeutrals;
+    protected boolean attacksPlayers;
+    protected String owner;
+    protected List<String> trustedPlayers;
 
     public TurretBase(int MaxEnergyStorage, int MaxIO) {
         super();
@@ -42,6 +37,7 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
         attacksNeutrals = true;
         attacksPlayers = false;
         trustedPlayers = new ArrayList<String>();
+        this.inv = new ItemStack[this.getSizeInventory()];
     }
 
     public void addTrustedPlayer(String name) {
@@ -56,7 +52,11 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
         return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
     }
 
-    private NBTTagList getTrustedPlayers() {
+    public List<String> getTrustedPlayers() {
+        return trustedPlayers;
+    }
+
+    private NBTTagList getTrustedPlayersAsNBT() {
         NBTTagList nbt = new NBTTagList();
 
         for (String trustedPlayer : trustedPlayers) {
@@ -79,35 +79,6 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
     @Override
     public Packet getDescriptionPacket() {
         NBTTagCompound var1 = new NBTTagCompound();
-        if (this.storage != null) {
-            var1.setInteger("energyStored", this.getEnergyStored(ForgeDirection.UNKNOWN));
-            var1.setInteger("maxStorage", this.storage.getMaxEnergyStored());
-            var1.setInteger("maxIO", storage.getMaxReceive());
-        }
-
-        var1.setInteger("yAxisDetect", this.yAxisDetect);
-        var1.setInteger("tier", baseTier);
-        var1.setBoolean("attacksMobs", attacksMobs);
-        var1.setBoolean("attacksNeutrals", attacksNeutrals);
-        var1.setBoolean("attacksPlayers", attacksPlayers);
-        var1.setString("owner", owner);
-        var1.setTag("trustedPlayers", getTrustedPlayers());
-
-        if (this.inv != null) {
-            NBTTagList itemList = new NBTTagList();
-            for (int i = 0; i < this.inv.length; i++) {
-                ItemStack stack = this.inv[i];
-
-                if (stack != null) {
-                    NBTTagCompound tag = new NBTTagCompound();
-                    tag.setByte("Slot", (byte) i);
-                    stack.writeToNBT(tag);
-                    itemList.appendTag(tag);
-                }
-            }
-
-            var1.setTag("Inventory", itemList);
-        }
 
         this.writeToNBT(var1);
 
@@ -117,80 +88,62 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
     @Override
     public void writeToNBT(NBTTagCompound par1) {
         super.writeToNBT(par1);
-        if (this.storage != null) {
-            par1.setInteger("energyStored", this.getEnergyStored(ForgeDirection.UNKNOWN));
-            par1.setInteger("maxStorage", this.storage.getMaxEnergyStored());
-            par1.setInteger("maxIO", this.storage.getMaxReceive());
-        }
+
+        par1.setInteger("maxStorage", this.storage.getMaxEnergyStored());
+        par1.setInteger("energyStored", this.getEnergyStored(ForgeDirection.UNKNOWN));
+        par1.setInteger("maxIO", this.storage.getMaxReceive());
 
         par1.setInteger("yAxisDetect", this.yAxisDetect);
-        par1.setInteger("tier", this.baseTier);
         par1.setBoolean("attacksMobs", attacksMobs);
         par1.setBoolean("attacksNeutrals", attacksNeutrals);
         par1.setBoolean("attacksPlayers", attacksPlayers);
         par1.setString("owner", owner);
-        par1.setTag("trustedPlayers", getTrustedPlayers());
+        par1.setTag("trustedPlayers", getTrustedPlayersAsNBT());
 
-        if (this.inv != null) {
-            NBTTagList itemList = new NBTTagList();
+        NBTTagList itemList = new NBTTagList();
 
-            for (int i = 0; i < this.inv.length; i++) {
-                ItemStack stack = this.inv[i];
+        for (int i = 0; i < this.inv.length; i++) {
+            ItemStack stack = this.getStackInSlot(i);
 
-                if (stack != null) {
-                    NBTTagCompound tag = new NBTTagCompound();
-                    tag.setByte("Slot", (byte) i);
-                    stack.writeToNBT(tag);
-                    itemList.appendTag(tag);
-                }
+            if (stack != null) {
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setByte("Slot", (byte) i);
+                stack.writeToNBT(tag);
+                itemList.appendTag(tag);
             }
-
-            par1.setTag("Inventory", itemList);
         }
+
+        par1.setTag("Inventory", itemList);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound par1) {
         super.readFromNBT(par1);
 
-        if (this.storage != null) {
-            this.storage.setCapacity(par1.getInteger("maxStorage"));
-            this.storage.setEnergyStored(par1.getInteger("energyStored"));
-            this.storage.setMaxReceive(par1.getInteger("maxIO"));
-        } else {
-            this.storage = new EnergyStorage(par1.getInteger("maxStorage"), par1.getInteger("maxIO"));
-            this.storage.setEnergyStored(par1.getInteger("energyStored"));
-        }
+        this.storage.setCapacity(par1.getInteger("maxStorage"));
+        this.storage.setEnergyStored(par1.getInteger("energyStored"));
+        this.storage.setMaxReceive(par1.getInteger("maxIO"));
 
         this.yAxisDetect = par1.getInteger("yAxisDetect");
-        this.baseTier = par1.getInteger("tier");
         this.attacksMobs = par1.getBoolean("attacksMobs");
         this.attacksNeutrals = par1.getBoolean("attacksNeutrals");
         this.attacksPlayers = par1.getBoolean("attacksPlayers");
         this.owner = par1.getString("owner");
         this.trustedPlayers = buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 0));
 
-        if (this.inv != null) {
-            NBTTagList tagList = par1.getTagList("Inventory", 0);
+        NBTTagList tagList = par1.getTagList("Inventory", 10);
 
-            for (int i = 0; i < tagList.tagCount(); i++) {
-                NBTTagCompound tag = tagList.getCompoundTagAt(i);
-                byte slot = tag.getByte("Slot");
+        for (int i = 0; i < tagList.tagCount(); i++) {
+            NBTTagCompound tag = tagList.getCompoundTagAt(i);
+            byte slot = tag.getByte("Slot");
 
-                if (slot >= 0 && slot < inv.length) {
-                    inv[slot] = ItemStack.loadItemStackFromNBT(tag);
-                }
+            if (slot >= 0 && slot < inv.length) {
+                inv[slot] = ItemStack.loadItemStackFromNBT(tag);
             }
         }
     }
 
-    public int getBaseTier() {
-	    return baseTier;
-    }
-
-    public void setBaseTier(int baseTier) {
-	    this.baseTier = baseTier;
-    }
+    public abstract int getBaseTier();
 
     public boolean isAttacksMobs() {
 	    return attacksMobs;
@@ -242,6 +195,10 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
     @Override
     public int getMaxEnergyStored(ForgeDirection from) {
 	    return storage.getMaxEnergyStored();
+    }
+
+    public void setEnergyStored(int energy) {
+        storage.setEnergyStored(energy);
     }
 
     @Override
@@ -360,5 +317,18 @@ public class TurretBase extends TileEntity implements IEnergyHandler, IInventory
 
         readFromNBT(packet.func_148857_g());
         this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
+
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+
+        if (this.worldObj.isRemote) {
+            return;
+        }
+
+        EnergyStatusUpdateMessage message = new EnergyStatusUpdateMessage(this.xCoord, this.yCoord, this.zCoord, this.getEnergyStored(ForgeDirection.UNKNOWN));
+
+        ModularTurrets.networking.sendToAll(message);
     }
 }

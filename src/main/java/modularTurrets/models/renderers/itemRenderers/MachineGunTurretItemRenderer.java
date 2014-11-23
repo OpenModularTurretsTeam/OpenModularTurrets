@@ -1,16 +1,22 @@
 package modularTurrets.models.renderers.itemRenderers;
 
 import modularTurrets.models.ModelMachineGun;
+import modularTurrets.models.renderers.MachineGunTurretRenderer;
+import modularTurrets.tileentity.turrets.MachineGunTurretTileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 public class MachineGunTurretItemRenderer implements IItemRenderer {
 
-	private ModelMachineGun model;
+    private final MachineGunTurretRenderer machineGunTurretRenderer;
+    private final MachineGunTurretTileEntity machineGunTurretTileEntity;
+    private final ModelMachineGun model;
 
-	public MachineGunTurretItemRenderer() {
+	public MachineGunTurretItemRenderer(MachineGunTurretRenderer machineGunTurretRenderer, MachineGunTurretTileEntity machineGunTurretTileEntity) {
+        this.machineGunTurretRenderer = machineGunTurretRenderer;
+        this.machineGunTurretTileEntity = machineGunTurretTileEntity;
 
-		model = new ModelMachineGun();
+		this.model = new ModelMachineGun();
 	}
 
 	@Override
@@ -26,7 +32,7 @@ public class MachineGunTurretItemRenderer implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		//TileEntityRenderer.instance.renderTileEntityAt(new MachineGunTurretTileEntity(), 0.0D, 0.0D, 0.0D, 0.0F);
+        this.machineGunTurretRenderer.renderTileEntityAt(this.machineGunTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
 	}
 
 }

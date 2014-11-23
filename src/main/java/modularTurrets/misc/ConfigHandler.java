@@ -38,16 +38,14 @@ public class ConfigHandler {
 		baseTierOneMaxIo = config.get("TurretBaseConstants",
 				"baseTierOneMaxIo", 100).getInt();
 		baseTierTwoMaxIo = config.get("TurretBaseConstants",
-				"baseTierTwoMaxIo", 550).getInt();
+				"baseTierTwoMaxIo", 500).getInt();
 		baseTierThreeMaxIo = config.get("TurretBaseConstants",
 				"baseTierThreeMaxIo", 1500).getInt();
 		baseTierFourMaxIo = config.get("TurretBaseConstants",
-				"baseTierFourMaxIo", 12500).getInt();
-		baseTierFourMaxIo = config.get("TurretBaseConstants",
-			"warningDistance", 10).getInt();
+				"baseTierFourMaxIo", 5000).getInt();
 
         turretWarningDistance = config.get("TurretBaseConstants",
-                "warningDistance", 10).getInt();
+			"warningDistance", 10).getInt();
 
         if (config.hasChanged()) {
             config.save();

@@ -3,13 +3,13 @@ package modularTurrets.tileentity.turrets;
 import java.util.ArrayList;
 import java.util.List;
 
-import modularTurrets.items.AccuraccyUpgradeItem;
-import modularTurrets.items.RedstoneReactorAddonItem;
-import modularTurrets.items.DamageAmpAddonItem;
-import modularTurrets.items.EfficiencyUpgradeItem;
-import modularTurrets.items.FireRateUpgradeItem;
-import modularTurrets.items.RangeUpgradeItem;
-import modularTurrets.items.SolarPanelAddonItem;
+import modularTurrets.items.upgrades.AccuraccyUpgradeItem;
+import modularTurrets.items.addons.RedstoneReactorAddonItem;
+import modularTurrets.items.addons.DamageAmpAddonItem;
+import modularTurrets.items.upgrades.EfficiencyUpgradeItem;
+import modularTurrets.items.upgrades.FireRateUpgradeItem;
+import modularTurrets.items.upgrades.RangeUpgradeItem;
+import modularTurrets.items.addons.SolarPanelAddonItem;
 import modularTurrets.misc.ConfigHandler;
 import modularTurrets.misc.Constants;
 import modularTurrets.tileentity.turretBase.TurretBase;
@@ -34,32 +34,29 @@ public class TurretHeadUtils {
 
     private static List<EntityPlayerMP> warnList = new ArrayList<EntityPlayerMP>();
 
-    public static void warnPlayers(TurretBase base, World worldObj,
-	    int downLowAmount, int xCoord, int yCoord, int zCoord,
-	    int turretRange) {
+    public static void warnPlayers(TurretBase base, World worldObj, int downLowAmount, int xCoord, int yCoord, int zCoord, int turretRange) {
+        if (base.isAttacksPlayers()) {
+            if (worldObj.getTotalWorldTime() % 160 == 0) {
+                warnList.clear();
+            }
 
-	if (base.attacksPlayers) {
-	    if (worldObj.getTotalWorldTime() % 160 == 0) {
-		    warnList.clear();
-	    }
+            int warnDistance = ConfigHandler.getTurretWarningDistance();
+            AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(
+                    xCoord - turretRange - warnDistance, yCoord - downLowAmount - warnDistance,
+                    zCoord - turretRange - warnDistance, xCoord + turretRange + warnDistance,
+                    yCoord + turretRange + warnDistance, zCoord + turretRange + warnDistance
+            );
 
-	    int warnDistance = ConfigHandler.getTurretWarningDistance();
-	    AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(
-                xCoord - turretRange - warnDistance, yCoord - downLowAmount - warnDistance,
-                zCoord - turretRange - warnDistance, xCoord + turretRange + warnDistance,
-                yCoord + turretRange + warnDistance, zCoord + turretRange + warnDistance
-        );
+            List<Entity> targets = worldObj.getEntitiesWithinAABB(EntityPlayerMP.class, axis);
 
-	    List<Entity> targets = worldObj.getEntitiesWithinAABB(EntityPlayerMP.class, axis);
-
-        for (Entity target : targets) {
-            EntityPlayerMP entity = (EntityPlayerMP) target;
-            if (!entity.getDisplayName().equals(base.getOwner())
-                    && !isTrustedPlayer(entity.getDisplayName(), base)) {
-                dispatchWarnMessage(entity, worldObj);
+            for (Entity target : targets) {
+                EntityPlayerMP entity = (EntityPlayerMP) target;
+                if (!entity.getDisplayName().equals(base.getOwner())
+                        && !isTrustedPlayer(entity.getDisplayName(), base)) {
+                    dispatchWarnMessage(entity, worldObj);
+                }
             }
         }
-	}
     }
 
     public static void dispatchWarnMessage(EntityPlayerMP player, World worldObj) {
@@ -139,38 +136,39 @@ public class TurretHeadUtils {
     }
 
     public static boolean isTrustedPlayer(String name, TurretBase base) {
-        for (int i = 0; i < base.trustedPlayers.size(); i++) {
-            if (base.trustedPlayers.get(i).equals(name)) {
+        for (String trusted_player : base.getTrustedPlayers()) {
+            if (trusted_player.equals(name)) {
                 return true;
             }
         }
+
         return false;
     }
 
     public static TurretBase getTurretBase(World world, int x, int y, int z) {
         if (world != null) {
             if (world.getTileEntity(x + 1, y, z) instanceof TurretBase) {
-            return (TurretBase) world.getTileEntity(x + 1, y, z);
+                return (TurretBase) world.getTileEntity(x + 1, y, z);
             }
 
             if (world.getTileEntity(x - 1, y, z) instanceof TurretBase) {
-            return (TurretBase) world.getTileEntity(x - 1, y, z);
+                return (TurretBase) world.getTileEntity(x - 1, y, z);
             }
 
             if (world.getTileEntity(x, y, z + 1) instanceof TurretBase) {
-            return (TurretBase) world.getTileEntity(x, y, z + 1);
+                return (TurretBase) world.getTileEntity(x, y, z + 1);
             }
 
             if (world.getTileEntity(x, y, z - 1) instanceof TurretBase) {
-            return (TurretBase) world.getTileEntity(x, y, z - 1);
+                return (TurretBase) world.getTileEntity(x, y, z - 1);
             }
 
             if (world.getTileEntity(x, y + 1, z) instanceof TurretBase) {
-            return (TurretBase) world.getTileEntity(x, y + 1, z);
+                return (TurretBase) world.getTileEntity(x, y + 1, z);
             }
 
             if (world.getTileEntity(x, y - 1, z) instanceof TurretBase) {
-            return (TurretBase) world.getTileEntity(x, y - 1, z);
+                return (TurretBase) world.getTileEntity(x, y - 1, z);
             }
         }
 
@@ -196,7 +194,7 @@ public class TurretHeadUtils {
 
     public static ItemStack useAnyItemStackFromBase(TurretBase base) {
         for (int i = 0; i <= 8; i++) {
-            ItemStack ammoCheck = base.inv[i];
+            ItemStack ammoCheck = base.getStackInSlot(i);
             if (ammoCheck != null && ammoCheck.stackSize > 0 && ammoCheck.getItem() != null) {
                 base.decrStackSize(i, 1);
                 return new ItemStack(ammoCheck.getItem());
@@ -207,7 +205,7 @@ public class TurretHeadUtils {
 
     public static ItemStack useSpecificItemStackItemFromBase(TurretBase base, Item item) {
         for (int i = 0; i <= 8; i++) {
-            ItemStack ammoCheck = base.inv[i];
+            ItemStack ammoCheck = base.getStackInSlot(i);
 
             if (ammoCheck != null && ammoCheck.stackSize > 0 && ammoCheck.getItem() != null) {
                 base.decrStackSize(i, 1);
@@ -218,11 +216,11 @@ public class TurretHeadUtils {
     }
 
     public static int getRangeUpgrades(TurretBase base) {
-
         int value = 0;
-        int tier = base.baseTier;
+        int tier = base.getBaseTier();
+
         if (tier == 1) {
-            if (base.inv != null && base.getStackInSlot(11) != null) {
+            if (base.getStackInSlot(11) != null) {
                 if (base.getStackInSlot(11).getItem() instanceof RangeUpgradeItem) {
                     value = value
                         + (Constants.rangeUpgradeBoost * base
@@ -231,7 +229,7 @@ public class TurretHeadUtils {
             }
         }
         if (tier == 2) {
-            if (base.inv != null && base.getStackInSlot(11) != null) {
+            if (base.getStackInSlot(11) != null) {
                 if (base.getStackInSlot(11).getItem() instanceof RangeUpgradeItem) {
                     value = value
                         + (Constants.rangeUpgradeBoost * base
@@ -241,7 +239,7 @@ public class TurretHeadUtils {
         }
 
         if (tier == 3) {
-            if (base.inv != null && base.getStackInSlot(11) != null) {
+            if (base.getStackInSlot(11) != null) {
                 if (base.getStackInSlot(11).getItem() instanceof RangeUpgradeItem) {
                     value = value
                         + (Constants.rangeUpgradeBoost * base
@@ -252,11 +250,9 @@ public class TurretHeadUtils {
 
         if (tier == 4) {
             for (int i = 11; i <= 12; i++) {
-                if (base.inv != null && base.getStackInSlot(i) != null) {
+                if (base.getStackInSlot(i) != null) {
                     if (base.getStackInSlot(i).getItem() instanceof RangeUpgradeItem) {
-                    value = value
-                        + (Constants.rangeUpgradeBoost * base
-                            .getStackInSlot(i).stackSize);
+                        value += (Constants.rangeUpgradeBoost * base.getStackInSlot(i).stackSize);
                     }
                 }
             }
@@ -268,10 +264,10 @@ public class TurretHeadUtils {
     public static float getAccuraccyUpgrades(TurretBase base) {
 
         float value = 0.0F;
-        int tier = base.baseTier;
+        int tier = base.getBaseTier();
 
         if (tier == 1) {
-            if (base.inv != null && base.getStackInSlot(11) != null) {
+            if (base.getStackInSlot(11) != null) {
                 if (base.getStackInSlot(11).getItem() instanceof AccuraccyUpgradeItem) {
                     value = value
                         + (Constants.accuraccyUpgradeBoost * base
@@ -280,7 +276,7 @@ public class TurretHeadUtils {
             }
         }
         if (tier == 2) {
-            if (base.inv != null && base.getStackInSlot(11) != null) {
+            if (base.getStackInSlot(11) != null) {
                 if (base.getStackInSlot(11).getItem() instanceof AccuraccyUpgradeItem) {
                     value = value
                         + (Constants.accuraccyUpgradeBoost * base
@@ -290,7 +286,7 @@ public class TurretHeadUtils {
         }
 
         if (tier == 3) {
-            if (base.inv != null && base.getStackInSlot(11) != null) {
+            if (base.getStackInSlot(11) != null) {
                 if (base.getStackInSlot(11).getItem() instanceof AccuraccyUpgradeItem) {
                     value = value
                         + (Constants.accuraccyUpgradeBoost * base
@@ -301,7 +297,7 @@ public class TurretHeadUtils {
 
         if (tier == 4) {
             for (int i = 11; i <= 12; i++) {
-                if (base.inv != null && base.getStackInSlot(i) != null) {
+                if (base.getStackInSlot(i) != null) {
                     if (base.getStackInSlot(i).getItem() instanceof AccuraccyUpgradeItem) {
                     value = value
                         + (Constants.accuraccyUpgradeBoost * base
@@ -317,10 +313,10 @@ public class TurretHeadUtils {
     public static float getEfficiencyUpgrades(TurretBase base) {
 
         float value = 0.0F;
-        int tier = base.baseTier;
+        int tier = base.getBaseTier();
 
         if (tier == 1) {
-            if (base.inv != null && base.getStackInSlot(11) != null) {
+            if (base.getStackInSlot(11) != null) {
                 if (base.getStackInSlot(11).getItem() instanceof EfficiencyUpgradeItem) {
                     value = value
                         + (Constants.efficiencyUpgradeBoostPercentage * base
@@ -329,7 +325,7 @@ public class TurretHeadUtils {
             }
         }
         if (tier == 2) {
-            if (base.inv != null && base.getStackInSlot(11) != null) {
+            if (base.getStackInSlot(11) != null) {
                 if (base.getStackInSlot(11).getItem() instanceof EfficiencyUpgradeItem) {
                     value = value
                         + (Constants.efficiencyUpgradeBoostPercentage * base
@@ -339,7 +335,7 @@ public class TurretHeadUtils {
         }
 
         if (tier == 3) {
-            if (base.inv != null && base.getStackInSlot(11) != null) {
+            if (base.getStackInSlot(11) != null) {
                 if (base.getStackInSlot(11).getItem() instanceof EfficiencyUpgradeItem) {
                     value = value
                         + (Constants.efficiencyUpgradeBoostPercentage * base
@@ -350,7 +346,7 @@ public class TurretHeadUtils {
 
         if (tier == 4) {
             for (int i = 11; i <= 12; i++) {
-                if (base.inv != null && base.getStackInSlot(i) != null) {
+                if (base.getStackInSlot(i) != null) {
                     if (base.getStackInSlot(i).getItem() instanceof EfficiencyUpgradeItem) {
                     value = value
                         + (Constants.efficiencyUpgradeBoostPercentage * base
@@ -365,9 +361,9 @@ public class TurretHeadUtils {
 
     public static float getFireRateUpgrades(TurretBase base) {
         float value = 0.0F;
-        int tier = base.baseTier;
+        int tier = base.getBaseTier();
         if (tier == 1) {
-            if (base.inv != null && base.getStackInSlot(11) != null) {
+            if (base.getStackInSlot(11) != null) {
                 if (base.getStackInSlot(11).getItem() instanceof FireRateUpgradeItem) {
                     value = value
                         + (Constants.fireRateUpgradeBoostPercentage * base
@@ -376,7 +372,7 @@ public class TurretHeadUtils {
             }
         }
         if (tier == 2) {
-            if (base.inv != null && base.getStackInSlot(11) != null) {
+            if (base.getStackInSlot(11) != null) {
                 if (base.getStackInSlot(11).getItem() instanceof FireRateUpgradeItem) {
                     value = value
                         + (Constants.fireRateUpgradeBoostPercentage * base
@@ -386,7 +382,7 @@ public class TurretHeadUtils {
         }
 
         if (tier == 3) {
-            if (base.inv != null && base.getStackInSlot(11) != null) {
+            if (base.getStackInSlot(11) != null) {
                 if (base.getStackInSlot(11).getItem() instanceof FireRateUpgradeItem) {
                     value = value
                         + (Constants.fireRateUpgradeBoostPercentage * base
@@ -397,7 +393,7 @@ public class TurretHeadUtils {
 
         if (tier == 4) {
             for (int i = 11; i <= 12; i++) {
-                if (base.inv != null && base.getStackInSlot(i) != null) {
+                if (base.getStackInSlot(i) != null) {
                     if (base.getStackInSlot(i).getItem() instanceof FireRateUpgradeItem) {
                     value = value
                         + (Constants.fireRateUpgradeBoostPercentage * base
@@ -414,7 +410,7 @@ public class TurretHeadUtils {
         boolean value = false;
         if (!(base instanceof TurretWoodBase)) {
             for (int i = 9; i <= 10; i++) {
-                if (base.inv != null && base.getStackInSlot(i) != null) {
+                if (base.getStackInSlot(i) != null) {
                     if (base.getStackInSlot(i).getItem() instanceof RedstoneReactorAddonItem) {
                         value = true;
                     }
@@ -429,7 +425,7 @@ public class TurretHeadUtils {
         boolean value = false;
         if (!(base instanceof TurretWoodBase)) {
             for (int i = 9; i <= 10; i++) {
-                if (base.inv != null && base.getStackInSlot(i) != null) {
+                if (base.getStackInSlot(i) != null) {
                     if (base.getStackInSlot(i).getItem() instanceof DamageAmpAddonItem) {
                         value = true;
                     }
@@ -444,7 +440,7 @@ public class TurretHeadUtils {
         boolean value = false;
         if (!(base instanceof TurretWoodBase)) {
             for (int i = 9; i <= 10; i++) {
-                if (base.inv != null && base.getStackInSlot(i) != null) {
+                if (base.getStackInSlot(i) != null) {
                     if (base.getStackInSlot(i).getItem() instanceof SolarPanelAddonItem) {
                         value = true;
                     }
@@ -468,13 +464,11 @@ public class TurretHeadUtils {
 
     public static void updateRedstoneReactor(TurretBase base) {
         if (hasRedstoneReactor(base)
-            && Constants.redstoneReactorAddonGen < (base.storage
-                .getMaxEnergyStored() - base.storage.getEnergyStored())) {
+            && Constants.redstoneReactorAddonGen < (base.getMaxEnergyStored(ForgeDirection.UNKNOWN) - base.getEnergyStored(ForgeDirection.UNKNOWN))) {
             ItemStack redstone = useSpecificItemStackItemFromBase(base,
                     Items.redstone);
             if (redstone != null) {
-                base.storage.setEnergyStored(base.storage.getEnergyStored()
-                    + Constants.redstoneReactorAddonGen);
+                base.receiveEnergy(ForgeDirection.UNKNOWN, Constants.redstoneReactorAddonGen, false);
             }
         }
     }

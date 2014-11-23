@@ -1,7 +1,8 @@
-package modularTurrets.items;
+package modularTurrets.items.addons;
 
 import modularTurrets.ModInfo;
 import modularTurrets.ModularTurrets;
+import modularTurrets.items.ItemNames;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

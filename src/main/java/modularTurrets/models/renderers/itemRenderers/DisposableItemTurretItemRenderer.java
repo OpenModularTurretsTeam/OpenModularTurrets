@@ -1,16 +1,22 @@
 package modularTurrets.models.renderers.itemRenderers;
 
 import modularTurrets.models.ModelDisposableItemTurret;
+import modularTurrets.models.renderers.DisposableItemTurretRenderer;
+import modularTurrets.tileentity.turrets.DisposableItemTurretTileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 public class DisposableItemTurretItemRenderer implements IItemRenderer {
 
-	private ModelDisposableItemTurret model;
+    private final DisposableItemTurretRenderer disposableItemTurretRenderer;
+    private final DisposableItemTurretTileEntity disposableItemTurretTileEntity;
+    private final ModelDisposableItemTurret model;
 
-	public DisposableItemTurretItemRenderer() {
+	public DisposableItemTurretItemRenderer(DisposableItemTurretRenderer disposableItemTurretRenderer, DisposableItemTurretTileEntity disposableItemTurretTileEntity) {
+        this.disposableItemTurretRenderer = disposableItemTurretRenderer;
+        this.disposableItemTurretTileEntity = disposableItemTurretTileEntity;
 
-		model = new ModelDisposableItemTurret();
+		this.model = new ModelDisposableItemTurret();
 	}
 
 	@Override
@@ -26,7 +32,7 @@ public class DisposableItemTurretItemRenderer implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-	    //TileEntityRenderer.instance.renderTileEntityAt(new DisposableItemTurretTileEntity(), 0.0D, 0.0D, 0.0D, 0.0F);
+	    this.disposableItemTurretRenderer.renderTileEntityAt(this.disposableItemTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
 	}
 
 }

@@ -1,23 +1,25 @@
 package modularTurrets.tileentity.turretBase;
 
-import net.minecraft.item.ItemStack;
+import modularTurrets.misc.ConfigHandler;
 
 public class TurretWoodBase extends TurretBase {
 
 	public TurretWoodBase() {
-		super();
-		inv = new ItemStack[9];
+        this(ConfigHandler.getBaseTierWoodMaxCharge(), ConfigHandler.getBaseTierWoodMaxIo());
 	}
 
 	public TurretWoodBase(int MaxEnergyStorage, int MaxIO) {
 		super(MaxEnergyStorage, MaxIO);
-		inv = new ItemStack[9];
-		baseTier = 0;
 	}
 
     @Override
+    public int getBaseTier() {
+        return 0;
+    }
+
+    @Override
     public int getSizeInventory() {
-        return inv.length;
+        return 9;
     }
 
     @Override

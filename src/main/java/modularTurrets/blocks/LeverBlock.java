@@ -135,15 +135,11 @@ public class LeverBlock extends BlockContainer {
 
     @Override
     public int getRenderType() {
-	return -1;
+        return -1;
     }
 
     @Override
     public boolean isOpaqueCube() {
-	return false;
-    }
-
-    public boolean renderAsNormalBlock() {
 	return false;
     }
 }

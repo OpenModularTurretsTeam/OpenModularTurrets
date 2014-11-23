@@ -1,4 +1,4 @@
-package modularTurrets.items;
+package modularTurrets.items.upgrades;
 
 import net.minecraft.item.Item;
 

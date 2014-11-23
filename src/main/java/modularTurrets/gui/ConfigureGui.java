@@ -146,7 +146,7 @@ public class ConfigureGui extends GuiContainer {
     }
 
     public void sendChangeToServerMobs() {
-        ToggleAttackMobsMessage message = new ToggleAttackMobsMessage(base.xCoord, base.yCoord, base.zCoord, base.attacksMobs);
+        ToggleAttackMobsMessage message = new ToggleAttackMobsMessage(base.xCoord, base.yCoord, base.zCoord, base.isAttacksMobs());
 
         ModularTurrets.networking.sendToServer(message);
     }

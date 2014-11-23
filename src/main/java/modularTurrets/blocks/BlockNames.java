@@ -3,7 +3,10 @@ package modularTurrets.blocks;
 
 public class BlockNames {
 
-	// Unlocalized
+    private BlockNames() {
+    }
+
+    // Unlocalized
 	public static final String unlocalisedTurretBaseTierWood = "baseTierWood";
 	public static final String unlocalisedTurretBaseTierOne = "baseTierOneBlock";
 	public static final String unlocalisedTurretBaseTierTwo = "baseTierTwoBlock";

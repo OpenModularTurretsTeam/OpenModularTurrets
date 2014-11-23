@@ -1,8 +1,5 @@
 package modularTurrets.blocks;
 
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import modularTurrets.ModInfo;
 import modularTurrets.ModularTurrets;
 import modularTurrets.misc.ConfigHandler;
@@ -31,12 +28,12 @@ public class TurretBaseTierFour extends BlockContainer {
     public final int MaxIO = ConfigHandler.getBaseTierFourMaxIo();
 
     public TurretBaseTierFour() {
-	super(Material.rock);
-	this.setBlockName(BlockNames.unlocalisedTurretBaseTierFour);
-	this.setCreativeTab(ModularTurrets.modularTurretsTab);
-	this.setHardness(-1F);
-	this.setResistance(20F);
-	this.setStepSound(Block.soundTypeStone);
+        super(Material.rock);
+        this.setBlockName(BlockNames.unlocalisedTurretBaseTierFour);
+        this.setCreativeTab(ModularTurrets.modularTurretsTab);
+        this.setHardness(-1F);
+        this.setResistance(20F);
+        this.setStepSound(Block.soundTypeStone);
     }
 
     @Override

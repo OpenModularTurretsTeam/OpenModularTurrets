@@ -1,8 +1,14 @@
 package modularTurrets.items;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import modularTurrets.items.addons.DamageAmpAddonItem;
+import modularTurrets.items.addons.RedstoneReactorAddonItem;
+import modularTurrets.items.addons.SolarPanelAddonItem;
+import modularTurrets.items.upgrades.AccuraccyUpgradeItem;
+import modularTurrets.items.upgrades.EfficiencyUpgradeItem;
+import modularTurrets.items.upgrades.FireRateUpgradeItem;
+import modularTurrets.items.upgrades.RangeUpgradeItem;
 import net.minecraft.item.Item;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class Items {
     public static Item bulletThrowable;

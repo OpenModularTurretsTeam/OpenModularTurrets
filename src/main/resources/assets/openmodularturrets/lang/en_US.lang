@@ -32,3 +32,5 @@ tile.machineGunTurret.name=Machine Gun Turret
 tile.grenadeTurret.name=Grenade Launcher Turret
 tile.laserTurret.name=Laser Turret
 tile.leverBlock.name=Basic Turret Base Crank
+
+itemGroup.openmodularturrets=Open Modular Turrets
