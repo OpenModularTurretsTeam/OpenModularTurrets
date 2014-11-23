@@ -2,11 +2,6 @@ package modularTurrets.misc;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-
-import modularTurrets.blocks.Blocks;
-import modularTurrets.items.Items;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 public class ToolTips {
 	

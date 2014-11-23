@@ -4,6 +4,9 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import modularTurrets.items.addons.DamageAmpAddonItem;
 import modularTurrets.items.addons.RedstoneReactorAddonItem;
 import modularTurrets.items.addons.SolarPanelAddonItem;
+import modularTurrets.items.ammo.BulletAmmoItem;
+import modularTurrets.items.ammo.GrenadeAmmoItem;
+import modularTurrets.items.ammo.RocketAmmoItem;
 import modularTurrets.items.upgrades.AccuraccyUpgradeItem;
 import modularTurrets.items.upgrades.EfficiencyUpgradeItem;
 import modularTurrets.items.upgrades.FireRateUpgradeItem;
@@ -65,13 +68,13 @@ public class Items {
         configTab = new ConfigTabItem();
         GameRegistry.registerItem(configTab, "configTab");
 
-        bulletCraftable = new BulletCraftableItem();
+        bulletCraftable = new BulletAmmoItem();
         GameRegistry.registerItem(bulletCraftable, "bulletCraftable");
 
-        grenadeCraftable = new GrenadeCraftableItem();
+        grenadeCraftable = new GrenadeAmmoItem();
         GameRegistry.registerItem(grenadeCraftable, "grenadeCraftable");
 
-        rocketCraftable = new RocketCraftableItem();
+        rocketCraftable = new RocketAmmoItem();
         GameRegistry.registerItem(rocketCraftable, "rocketCraftable");
 
         sensorTierOneItem = new SensorTierOneItem();

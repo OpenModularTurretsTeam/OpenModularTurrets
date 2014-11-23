@@ -22,7 +22,7 @@ public class ShootingEntityMachineGun extends EntityLiving implements IRangedAtt
             BulletProjectile entityCrap = new BulletProjectile(worldObj, posX, posY + 1.5F, posZ);
 
             if (TurretHeadUtils.hasDamageAmpAddon(base)) {
-                worldObj.playSoundEffect(posX, posY, posZ, "modularturrets:amped", 1.0F, 1.0F);
+                worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:amped", 1.0F, 1.0F);
                 entityCrap.isAmped = true;
             }
 
@@ -32,7 +32,7 @@ public class ShootingEntityMachineGun extends EntityLiving implements IRangedAtt
             float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2) * 0.2F;
 
             entityCrap.setThrowableHeading(d0, d1, d2, 2.0F, accuracy);
-            worldObj.playSoundEffect(posX, posY, posZ, "modularturrets:machinegun", 1.0F, 1.0F);
+            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:machinegun", 1.0F, 1.0F);
 
             if (!worldObj.isRemote) {
                 this.worldObj.spawnEntityInWorld(entityCrap);

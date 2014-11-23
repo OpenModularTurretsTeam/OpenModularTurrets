@@ -44,7 +44,7 @@ public class LaserProjectile extends EntityThrowable {
 
     @Override
     protected void onImpact(MovingObjectPosition movingobjectposition) {
-        worldObj.playSoundEffect(posX, posY, posZ, "modularturrets:laserHit", 1.0F, 1.0F);
+        worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:laserHit", 1.0F, 1.0F);
 
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
             if (isAmped) {

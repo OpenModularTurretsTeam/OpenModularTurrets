@@ -55,7 +55,6 @@ public class DisposableTurretProjectile extends EntityThrowable {
 
 	@Override
 	protected void onImpact(MovingObjectPosition movingobjectposition) {
-		// TODO Auto-generated method stub
 		if (movingobjectposition.entityHit != null) {
 			if (isAmped) {
 				movingobjectposition.entityHit.attackEntityFrom(

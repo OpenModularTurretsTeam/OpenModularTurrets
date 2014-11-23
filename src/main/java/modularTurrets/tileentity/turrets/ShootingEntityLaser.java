@@ -18,7 +18,7 @@ public class ShootingEntityLaser extends EntityLiving implements IRangedAttackMo
         LaserProjectile entityCrap = new LaserProjectile(worldObj, posX, posY + 1.8F, posZ, entitylivingbase);
 
         if (TurretHeadUtils.hasDamageAmpAddon(base)) {
-            worldObj.playSoundEffect(posX, posY, posZ, "modularturrets:amped", 1.0F, 1.0F);
+            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:amped", 1.0F, 1.0F);
             entityCrap.isAmped = true;
         }
 
@@ -27,7 +27,7 @@ public class ShootingEntityLaser extends EntityLiving implements IRangedAttackMo
         double d2 = entitylivingbase.posZ - this.posZ;
         float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2) * 0.2F;
         entityCrap.setThrowableHeading(d0, d1, d2, 5.0F, accuraccy);
-        worldObj.playSoundEffect(posX, posY, posZ, "modularturrets:laser", 0.5F, 1.0F);
+        worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:laser", 0.5F, 1.0F);
         this.worldObj.spawnEntityInWorld(entityCrap);
     }
 

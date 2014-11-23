@@ -62,8 +62,7 @@ public class MachineGunTurretTileEntity extends TurretHead {
     public ShootingEntityMachineGun getShootingEntity() {
         if (entity == null) {
             entity = new ShootingEntityMachineGun(worldObj, null);
-            entity.setPosition(this.xCoord + 0.5F, this.yCoord - 1,
-                this.zCoord + 0.5F);
+            entity.setPosition(this.xCoord + 0.5F, this.yCoord - 1, this.zCoord + 0.5F);
         }
         return entity;
     }

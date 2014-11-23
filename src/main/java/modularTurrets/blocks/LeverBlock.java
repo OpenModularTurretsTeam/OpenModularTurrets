@@ -82,7 +82,7 @@ public class LeverBlock extends BlockContainer {
             lever.isTurning = true;
             if (lever.rotation == 0F) {
                 par1World.playSoundEffect(par2, par3, par4,
-                    "modularturrets:windup", 1.0F, 1.0F);
+                    "openmodularturrets:windup", 1.0F, 1.0F);
                 base.receiveEnergy(ForgeDirection.UNKNOWN, 50, false);
             }
             }
@@ -96,7 +96,7 @@ public class LeverBlock extends BlockContainer {
             lever.isTurning = true;
             if (lever.rotation == 0F) {
                 par1World.playSoundEffect(par2, par3, par4,
-                    "modularturrets:windup", 1.0F, 1.0F);
+                    "openmodularturrets:windup", 1.0F, 1.0F);
                 base.receiveEnergy(ForgeDirection.UNKNOWN, 50, false);
             }
             }
@@ -111,7 +111,7 @@ public class LeverBlock extends BlockContainer {
             lever.isTurning = true;
             if (lever.rotation == 0F) {
                 par1World.playSoundEffect(par2, par3, par4,
-                    "modularturrets:windup", 1.0F, 1.0F);
+                    "openmodularturrets:windup", 1.0F, 1.0F);
                 base.receiveEnergy(ForgeDirection.UNKNOWN, 50, false);
             }
             }
@@ -125,7 +125,7 @@ public class LeverBlock extends BlockContainer {
             lever.isTurning = true;
                 if (lever.rotation == 0F) {
                     par1World.playSoundEffect(par2, par3, par4,
-                        "modularturrets:windup", 1.0F, 1.0F);
+                        "openmodularturrets:windup", 1.0F, 1.0F);
                     base.receiveEnergy(ForgeDirection.UNKNOWN, 50, false);
                 }
             }

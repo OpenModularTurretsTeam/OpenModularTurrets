@@ -23,7 +23,7 @@ public class ShootingEntityRocket extends EntityLiving implements IRangedAttackM
 
             if (TurretHeadUtils.hasDamageAmpAddon(base)) {
                 worldObj.playSoundEffect(posX, posY, posZ,
-                    "modularturrets:amped", 1.0F, 1.0F);
+                    "openmodularturrets:amped", 1.0F, 1.0F);
                 entityCrap.isAmped = true;
             }
 
@@ -33,7 +33,7 @@ public class ShootingEntityRocket extends EntityLiving implements IRangedAttackM
             float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2) * 0.2F;
             entityCrap.setThrowableHeading(d0, d1 + (double) f1, d2, 1.6F, accuraccy);
             entityCrap.accuraccy = accuraccy;
-            worldObj.playSoundEffect(posX, posY, posZ, "modularturrets:rocket",
+            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:rocket",
                 2.0F, 1.0F);
             this.worldObj.spawnEntityInWorld(entityCrap);
         }

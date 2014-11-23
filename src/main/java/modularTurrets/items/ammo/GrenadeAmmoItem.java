@@ -1,15 +1,15 @@
-package modularTurrets.items;
+package modularTurrets.items.ammo;
 
-import modularTurrets.ModInfo;
-import modularTurrets.ModularTurrets;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.Item;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import modularTurrets.ModInfo;
+import modularTurrets.ModularTurrets;
+import modularTurrets.items.ItemNames;
+import net.minecraft.client.renderer.texture.IIconRegister;
 
-public class GrenadeCraftableItem extends Item {
+public class GrenadeAmmoItem extends AmmoItem {
 
-	public GrenadeCraftableItem() {
+	public GrenadeAmmoItem() {
 		super();
 		this.setUnlocalizedName(ItemNames.unlocalisedGrenadeCraftableItem);
 		this.setCreativeTab(ModularTurrets.modularTurretsTab);
