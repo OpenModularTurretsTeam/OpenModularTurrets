@@ -14,6 +14,8 @@ import modularTurrets.items.upgrades.RangeUpgradeItem;
 import net.minecraft.item.Item;
 
 public class Items {
+    public static Item bulletThrowable;
+    public static Item grenadeThrowable;
     public static Item bulletCraftable;
     public static Item grenadeCraftable;
     public static Item rocketCraftable;
@@ -36,6 +38,12 @@ public class Items {
     public static Item containmentChamber;
 
     public static void init() {
+        bulletThrowable = new BulletThrowableItem();
+        GameRegistry.registerItem(bulletThrowable, "bulletThrowable");
+
+        grenadeThrowable = new GrenadeThrowableItem();
+        GameRegistry.registerItem(grenadeThrowable, "grenadeThrowable");
+
         accuraccyUpgradeItem = new AccuraccyUpgradeItem();
         GameRegistry.registerItem(accuraccyUpgradeItem, "accuraccyUpgradeItem");
 
