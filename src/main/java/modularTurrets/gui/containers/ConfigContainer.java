@@ -1,12 +1,9 @@
 package modularTurrets.gui.containers;
 
-import modularTurrets.tileEntities.turretBase.TurretBase;
-import modularTurrets.tileEntities.turretBase.TurretWoodBase;
+import modularTurrets.tileentity.turretBase.TurretBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
 public class ConfigContainer extends Container {
 

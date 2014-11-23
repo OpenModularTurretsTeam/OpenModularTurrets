@@ -25,42 +25,49 @@ public class ModelMachineGun extends ModelBase {
 		Base.setTextureSize(64, 32);
 		Base.mirror = true;
 		setRotation(Base, 0F, 0F, 0F);
+
 		Pole = new ModelRenderer(this, 0, 28);
 		Pole.addBox(-2F, 4F, -2F, 4, 4, 4);
 		Pole.setRotationPoint(0F, 16F, 0F);
 		Pole.setTextureSize(64, 32);
 		Pole.mirror = true;
 		setRotation(Pole, 0F, 0F, 0F);
+
 		BoxUnder = new ModelRenderer(this, 0, 15);
 		BoxUnder.addBox(-4F, 3F, -4F, 8, 1, 8);
 		BoxUnder.setRotationPoint(0F, 16F, 0F);
 		BoxUnder.setTextureSize(64, 32);
 		BoxUnder.mirror = true;
 		setRotation(BoxUnder, 0F, 0F, 0F);
+
 		BoxLeft = new ModelRenderer(this, 0, 15);
 		BoxLeft.addBox(-4F, 4F, -4F, 8, 1, 8);
 		BoxLeft.setRotationPoint(0F, 16F, 0F);
 		BoxLeft.setTextureSize(64, 64);
 		BoxLeft.mirror = true;
 		setRotation(BoxLeft, 0F, 0F, 1.570796F);
+
 		BoxRight = new ModelRenderer(this, 0, 15);
 		BoxRight.addBox(-4F, -5F, -4F, 8, 1, 8);
 		BoxRight.setRotationPoint(0F, 16F, 0F);
 		BoxRight.setTextureSize(64, 64);
 		BoxRight.mirror = true;
 		setRotation(BoxRight, 0F, 0F, 1.570796F);
+
 		CrossBar = new ModelRenderer(this, 0, 0);
 		CrossBar.addBox(-4F, -2F, 0F, 8, 1, 1);
 		CrossBar.setRotationPoint(0F, 16F, 0F);
 		CrossBar.setTextureSize(64, 64);
 		CrossBar.mirror = true;
 		setRotation(CrossBar, 0F, 0F, 0F);
+
 		GunStock = new ModelRenderer(this, 36, 0);
 		GunStock.addBox(-2F, -5F, -2F, 4, 8, 8);
 		GunStock.setRotationPoint(0F, 15F, 0F);
 		GunStock.setTextureSize(64, 64);
 		GunStock.mirror = true;
 		setRotation(GunStock, 0F, 0F, 0F);
+
 		Shape1 = new ModelRenderer(this, 32, 21);
 		Shape1.addBox(-1F, -2F, -15F, 2, 2, 14);
 		Shape1.setRotationPoint(0F, 17F, 0F);
@@ -69,10 +76,10 @@ public class ModelMachineGun extends ModelBase {
 		setRotation(Shape1, 0F, 0F, 0F);
 	}
 
-	public void render(Entity entity, float f, float f1, float f2, float f3,
-			float f4, float f5) {
+    @Override
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
-		setRotationAngles(f, f1, f2, f3, f4, f5);
+		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 		Base.render(f5);
 		Pole.render(f5);
 		BoxUnder.render(f5);
@@ -89,13 +96,7 @@ public class ModelMachineGun extends ModelBase {
 		model.rotateAngleZ = z;
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3,
-			float f4, float f5) {
-		setRotationAngles(f, f1, f2, f3, f4, f5);
-	}
-
 	public void setRotationForTarget(float y, float z) {
-
 		BoxUnder.rotateAngleY = z;
 		BoxLeft.rotateAngleX = z;
 		BoxRight.rotateAngleX = z;
@@ -109,7 +110,6 @@ public class ModelMachineGun extends ModelBase {
 	}
 
 	public void renderAll() {
-
 		Base.render(0.0625F);
 		Pole.render(0.0625F);
 		BoxUnder.render(0.0625F);
@@ -119,5 +119,4 @@ public class ModelMachineGun extends ModelBase {
 		GunStock.render(0.0625F);
 		Shape1.render(0.0625F);
 	}
-
 }

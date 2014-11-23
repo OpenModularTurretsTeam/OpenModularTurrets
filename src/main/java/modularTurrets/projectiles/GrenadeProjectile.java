@@ -27,16 +27,13 @@ public class GrenadeProjectile extends EntityThrowable {
 
 	@Override
 	public void onEntityUpdate() {
-
 		if (ticksAlive >= 100) {
 			this.setDead();
 		}
 
 		for (int i = 0; i <= 20; i++) {
-			worldObj.spawnParticle("reddust", posX, posY, posZ, 1.0D, 1.0D,
-					1.0D);
+			worldObj.spawnParticle("reddust", posX, posY, posZ, 1.0D, 1.0D, 1.0D);
 		}
-
 	}
 
 	@Override
@@ -46,8 +43,7 @@ public class GrenadeProjectile extends EntityThrowable {
 		AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 3,
 				this.posY - 3, this.posZ - 3, this.posX + 3, this.posY + 3,
 				this.posZ + 3);
-		List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class,
-				axis);
+		List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
 
 		for (Entity mob : targets) {
 			if (isAmped) {

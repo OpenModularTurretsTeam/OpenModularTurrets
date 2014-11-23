@@ -1,7 +1,7 @@
 package modularTurrets.gui.containers;
 
-import modularTurrets.tileEntities.turretBase.TurretBase;
-import modularTurrets.tileEntities.turretBase.TurretWoodBase;
+import modularTurrets.tileentity.turretBase.TurretBase;
+import modularTurrets.tileentity.turretBase.TurretWoodBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

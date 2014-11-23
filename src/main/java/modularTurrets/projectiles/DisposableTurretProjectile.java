@@ -10,7 +10,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class DisposableTurretProjectile extends EntityThrowable {
-
 	World world;
 	double par2;
 	double par4;
@@ -56,7 +55,6 @@ public class DisposableTurretProjectile extends EntityThrowable {
 
 	@Override
 	protected void onImpact(MovingObjectPosition movingobjectposition) {
-		// TODO Auto-generated method stub
 		if (movingobjectposition.entityHit != null) {
 			if (isAmped) {
 				movingobjectposition.entityHit.attackEntityFrom(
