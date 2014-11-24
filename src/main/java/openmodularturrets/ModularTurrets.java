@@ -48,7 +48,6 @@ public class ModularTurrets {
         Blocks.init();
 
         networking = new SimpleNetworkWrapper("vending-machines");
-
         networking.registerMessage(AddTrustedPlayerMessage.class, AddTrustedPlayerMessage.class, 0, Side.SERVER);
         networking.registerMessage(RemoveTrustedPlayerMessage.class, RemoveTrustedPlayerMessage.class, 1, Side.SERVER);
         networking.registerMessage(ToggleAttackMobsMessage.class, ToggleAttackMobsMessage.class, 2, Side.SERVER);
@@ -57,6 +56,8 @@ public class ModularTurrets {
         networking.registerMessage(SetTurretOwnerMessage.class, SetTurretOwnerMessage.class, 5, Side.SERVER);
         networking.registerMessage(EnergyStatusUpdateMessage.class, EnergyStatusUpdateMessage.class, 6, Side.CLIENT);
         networking.registerMessage(AdjustYAxisDetectMessage.class, AdjustYAxisDetectMessage.class, 7, Side.SERVER);
+        networking.registerMessage(DropTurretsMessage.class, DropTurretsMessage.class, 8, Side.SERVER);
+        networking.registerMessage(DropBaseMessage.class, DropBaseMessage.class, 9, Side.SERVER);
     }
 
     @EventHandler
