@@ -8,6 +8,8 @@ import openmodularturrets.ModInfo;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.gui.containers.TurretBaseTierOneContainer;
 import openmodularturrets.network.AdjustYAxisDetectMessage;
+import openmodularturrets.network.DropBaseMessage;
+import openmodularturrets.network.DropTurretsMessage;
 import openmodularturrets.tileentity.turretBase.TurretBaseTierOneTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -15,8 +17,8 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
 
 public class TurretBaseTierOneGui extends GuiContainer {
@@ -57,12 +59,12 @@ public class TurretBaseTierOneGui extends GuiContainer {
         }
 
         if (guibutton.id == 3) {
-            sendChangeToServerDropTurrets();
-        }
+            sendDropTurretsToServer();
+         }
 
-        if (guibutton.id == 4) {
-            sendChangeToServerDropBase();
-        }
+         if (guibutton.id == 4) {
+         	sendDropBaseToServer();
+         }
     }
 
     @Override
@@ -132,47 +134,15 @@ public class TurretBaseTierOneGui extends GuiContainer {
         ModularTurrets.networking.sendToServer(message);
     }
 
-    public void sendChangeToServerDropTurrets() {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-        DataOutputStream outputStream = new DataOutputStream(bos);
-        try {
-            //outputStream.writeInt(PacketHandler.DROP_ALL_TURRETS_ATTACHED_TO_BASE);
-            outputStream.writeInt(base.xCoord);
-            outputStream.writeInt(base.yCoord);
-            outputStream.writeInt(base.zCoord);
-            outputStream.writeInt(0);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        /*Packet250CustomPayload packet = new Packet250CustomPayload();
-        packet.channel = ModInfo.CHANNEL;
-        packet.data = bos.toByteArray();
-        packet.length = bos.size();
-
-        PacketDispatcher.sendPacketToServer(packet);*/
+    public void sendDropTurretsToServer()
+    {
+    	DropTurretsMessage message = new DropTurretsMessage(base.xCoord, base.yCoord, base.zCoord);
+    	ModularTurrets.networking.sendToServer(message);
     }
-
-    public void sendChangeToServerDropBase() {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-        DataOutputStream outputStream = new DataOutputStream(bos);
-        try {
-            //outputStream.writeInt(PacketHandler.DROP_BASE_ON_SERVER);
-            outputStream.writeInt(base.xCoord);
-            outputStream.writeInt(base.yCoord);
-            outputStream.writeInt(base.zCoord);
-            outputStream.writeInt(0);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        /*Packet250CustomPayload packet = new Packet250CustomPayload();
-        packet.channel = ModInfo.CHANNEL;
-        packet.data = bos.toByteArray();
-        packet.length = bos.size();
-
-        PacketDispatcher.sendPacketToServer(packet);*/
+    
+    public void sendDropBaseToServer()
+    {
+    	DropBaseMessage message = new DropBaseMessage(base.xCoord, base.yCoord, base.zCoord);
+    	ModularTurrets.networking.sendToServer(message);
     }
 }
