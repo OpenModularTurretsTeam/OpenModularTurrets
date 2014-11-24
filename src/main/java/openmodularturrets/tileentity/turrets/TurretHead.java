@@ -1,17 +1,22 @@
 package openmodularturrets.tileentity.turrets;
 
-import openmodularturrets.tileentity.turretBase.TurretBase;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import openmodularturrets.ModInfo;
+import openmodularturrets.projectiles.TurretProjectile;
+import openmodularturrets.tileentity.turretBase.TurretBase;
 
 public abstract class TurretHead extends TileEntity {
-
-    public Entity target;
     public int ticks;
     public float rotationXY;
     public float rotationXZ;
@@ -116,18 +121,6 @@ public abstract class TurretHead extends TileEntity {
         return TurretHeadUtils.getTurretBase(worldObj, xCoord, yCoord, zCoord);
     }
 
-    public void setTarget(Entity target) {
-	this.target = target;
-    }
-
-    public int getTicks() {
-	return ticks;
-    }
-
-    public void setTicks(int ticks) {
-	this.ticks = ticks;
-    }
-
     public float getRotationXY() {
 	return rotationXY;
     }
@@ -150,5 +143,110 @@ public abstract class TurretHead extends TileEntity {
         float f1 = (float)(this.yCoord - p_70032_1_.posY);
         float f2 = (float)(this.zCoord - p_70032_1_.posZ);
         return MathHelper.sqrt_float(f * f + f1 * f1 + f2 * f2);
+    }
+
+    public abstract Block getTurretBlock();
+
+    public abstract int getTurretPowerUsage();
+
+    public abstract int getTurretFireRate();
+
+    public abstract float getTurretAccuracy();
+
+    public abstract boolean requiresAmmo();
+
+    public abstract boolean requiresSpecificAmmo();
+
+    public abstract Item getAmmo();
+
+    public abstract TurretProjectile createProjectile(World world, Entity target, ItemStack ammo);
+
+    public abstract String getLaunchSoundEffect();
+
+    @Override
+    public void updateEntity() {
+
+        setSide();
+        this.base = getBase();
+
+        if (worldObj.isRemote) {
+            return;
+        }
+
+        if(ticks%5==0)
+        {
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        }
+
+        ticks++;
+
+        // BASE IS OKAY
+        if (base == null || base.getBaseTier() < this.turretTier) {
+            this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);
+        } else {
+            TurretHeadUtils.updateSolarPanelAddon(base);
+            TurretHeadUtils.updateRedstoneReactor(base);
+
+            int power_required = Math.round(this.getTurretPowerUsage() * (1 - TurretHeadUtils.getEfficiencyUpgrades(base)));
+
+            // power check
+            if (!base.isGettingRedstoneSignal() && base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required) {
+                return;
+            }
+
+            // has cooldown passed?
+            if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtils.getFireRateUpgrades(base)))) {
+                return;
+            }
+
+            Entity target = getTarget();
+
+            // is there a target?
+            if (target == null) {
+                return;
+            }
+
+            this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord, zCoord) + 3.2F;
+            this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord, yCoord, zCoord);
+
+            ItemStack ammo = null;
+
+            if (this.requiresAmmo()) {
+                if (this.requiresSpecificAmmo()) {
+                    ammo = TurretHeadUtils.useSpecificItemStackItemFromBase(base, this.getAmmo());
+                } else {
+                    ammo = TurretHeadUtils.useAnyItemStackFromBase(base);
+                }
+
+                // Is there ammo?
+                if (ammo == null) {
+                    return;
+                }
+            }
+
+            // Consume energy
+            base.setEnergyStored(base.getEnergyStored(ForgeDirection.UNKNOWN) - power_required);
+
+            TurretProjectile projectile = this.createProjectile(this.getWorldObj(), target, ammo);
+            projectile.setPosition(this.xCoord + 0.5, this.yCoord + 1.5, this.zCoord + 0.5);
+
+            if (TurretHeadUtils.hasDamageAmpAddon(base)) {
+                worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":amped", 1.0F, 1.0F);
+                projectile.isAmped = true;
+            }
+
+            double d0 = target.posX - this.xCoord;
+            double d1 = target.posY + (double) target.getEyeHeight() - 2.5F - this.yCoord;
+            double d2 = target.posZ - this.zCoord;
+            float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2) * (0.2F * (getDistanceToEntity(target) * 0.04F));
+            float accuraccy = this.getTurretAccuracy() * (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
+
+            projectile.setThrowableHeading(d0, d1 + (double) f1, d2, 1.6F, accuraccy);
+
+            this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":" + this.getLaunchSoundEffect(), 1.0F, 1.0F);
+            this.getWorldObj().spawnEntityInWorld(projectile);
+
+            ticks = 0;
+        }
     }
 }

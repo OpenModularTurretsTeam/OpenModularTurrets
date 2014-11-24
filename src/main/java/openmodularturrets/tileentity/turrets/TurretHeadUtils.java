@@ -1,19 +1,5 @@
 package openmodularturrets.tileentity.turrets;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import openmodularturrets.items.upgrades.AccuraccyUpgradeItem;
-import openmodularturrets.items.addons.RedstoneReactorAddonItem;
-import openmodularturrets.items.addons.DamageAmpAddonItem;
-import openmodularturrets.items.upgrades.EfficiencyUpgradeItem;
-import openmodularturrets.items.upgrades.FireRateUpgradeItem;
-import openmodularturrets.items.upgrades.RangeUpgradeItem;
-import openmodularturrets.items.addons.SolarPanelAddonItem;
-import openmodularturrets.misc.ConfigHandler;
-import openmodularturrets.misc.Constants;
-import openmodularturrets.tileentity.turretBase.TurretBase;
-import openmodularturrets.tileentity.turretBase.TurretWoodBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,6 +16,20 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmodularturrets.items.addons.DamageAmpAddonItem;
+import openmodularturrets.items.addons.RedstoneReactorAddonItem;
+import openmodularturrets.items.addons.SolarPanelAddonItem;
+import openmodularturrets.items.upgrades.AccuraccyUpgradeItem;
+import openmodularturrets.items.upgrades.EfficiencyUpgradeItem;
+import openmodularturrets.items.upgrades.FireRateUpgradeItem;
+import openmodularturrets.items.upgrades.RangeUpgradeItem;
+import openmodularturrets.misc.ConfigHandler;
+import openmodularturrets.misc.Constants;
+import openmodularturrets.tileentity.turretBase.TurretBase;
+import openmodularturrets.tileentity.turretBase.TurretWoodBase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TurretHeadUtils {
 
