@@ -1,8 +1,5 @@
 package openmodularturrets.blocks.turretbases;
 
-import openmodularturrets.ModularTurrets;
-import openmodularturrets.network.SetTurretOwnerMessage;
-import openmodularturrets.tileentity.turretBase.TurretBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -13,7 +10,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import openmodularturrets.ModularTurrets;
+import openmodularturrets.network.SetTurretOwnerMessage;
+import openmodularturrets.tileentity.turretBase.TurretBase;
 
 import java.util.Random;
 
@@ -35,9 +36,10 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
             if (player.getDisplayName().equals(base.getOwner())) {
                 player.openGui(ModularTurrets.instance, base.getBaseTier(), world, x, y, z);
             } else {
-                player.addChatMessage(new ChatComponentText("You do not own this turret."));
+                player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
             }
         }
+
         return true;
     }
 

@@ -1,14 +1,10 @@
 package openmodularturrets.models.renderers;
 
-import openmodularturrets.tileentity.LeverTileEntity;
-import openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
-import openmodularturrets.tileentity.turrets.GrenadeLauncherTurretTileEntity;
-import openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
-import openmodularturrets.tileentity.turrets.MachineGunTurretTileEntity;
-import openmodularturrets.tileentity.turrets.RocketTurretTileEntity;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import openmodularturrets.tileentity.LeverTileEntity;
+import openmodularturrets.tileentity.turrets.*;
 
 public class TileEntityRenderers {
     public static DisposableItemTurretRenderer disposableItemTurretRenderer = new DisposableItemTurretRenderer();

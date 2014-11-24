@@ -1,10 +1,9 @@
 package openmodularturrets.blocks.turretheads;
 
-import openmodularturrets.ModularTurrets;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.world.IBlockAccess;
+import openmodularturrets.ModularTurrets;
 
 public abstract class BlockAbstractTurretHead extends BlockContainer {
     public BlockAbstractTurretHead() {

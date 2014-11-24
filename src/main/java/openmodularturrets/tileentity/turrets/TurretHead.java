@@ -1,6 +1,5 @@
 package openmodularturrets.tileentity.turrets;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -145,13 +144,11 @@ public abstract class TurretHead extends TileEntity {
         return MathHelper.sqrt_float(f * f + f1 * f1 + f2 * f2);
     }
 
-    public abstract Block getTurretBlock();
-
     public abstract int getTurretPowerUsage();
 
     public abstract int getTurretFireRate();
 
-    public abstract float getTurretAccuracy();
+    public abstract double getTurretAccuracy();
 
     public abstract boolean requiresAmmo();
 
@@ -230,7 +227,7 @@ public abstract class TurretHead extends TileEntity {
             TurretProjectile projectile = this.createProjectile(this.getWorldObj(), target, ammo);
             projectile.setPosition(this.xCoord + 0.5, this.yCoord + 1.5, this.zCoord + 0.5);
 
-            if (TurretHeadUtils.hasDamageAmpAddon(base)) {
+            if ((projectile.amp_level = TurretHeadUtils.getAmpLevel(base)) != 0) {
                 worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":amped", 1.0F, 1.0F);
                 projectile.isAmped = true;
             }
@@ -239,9 +236,9 @@ public abstract class TurretHead extends TileEntity {
             double d1 = target.posY + (double) target.getEyeHeight() - 2.5F - this.yCoord;
             double d2 = target.posZ - this.zCoord;
             float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2) * (0.2F * (getDistanceToEntity(target) * 0.04F));
-            float accuraccy = this.getTurretAccuracy() * (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
+            double accuraccy = this.getTurretAccuracy() * (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
 
-            projectile.setThrowableHeading(d0, d1 + (double) f1, d2, 1.6F, accuraccy);
+            projectile.setThrowableHeading(d0, d1 + (double) f1, d2, 1.6F, (float) accuraccy);
 
             this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":" + this.getLaunchSoundEffect(), 1.0F, 1.0F);
             this.getWorldObj().spawnEntityInWorld(projectile);
