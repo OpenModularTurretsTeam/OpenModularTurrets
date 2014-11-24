@@ -1,13 +1,15 @@
 package modularTurrets.tileentity.turrets;
 
+import modularTurrets.misc.Constants;
 import modularTurrets.tileentity.turretBase.TurretBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 
-public class TurretHead extends TileEntity {
+public abstract class TurretHead extends TileEntity {
 
     public Entity target;
     public int ticks;
@@ -88,12 +90,23 @@ public class TurretHead extends TileEntity {
         }
     }
 
-    public TurretBase getBase() {
-        return TurretHeadUtils.getTurretBase(worldObj, xCoord, yCoord, zCoord);
+    public Entity getTarget() {
+        return TurretHeadUtils.getTarget(
+                base,
+                worldObj,
+                base.getyAxisDetect(),
+                xCoord,
+                yCoord,
+                zCoord,
+                getTurretRange() + TurretHeadUtils.getRangeUpgrades(base),
+                this
+        );
     }
 
-    public Entity getTarget() {
-	return target;
+    public abstract int getTurretRange();
+
+    public TurretBase getBase() {
+        return TurretHeadUtils.getTurretBase(worldObj, xCoord, yCoord, zCoord);
     }
 
     public void setTarget(Entity target) {
@@ -124,4 +137,11 @@ public class TurretHead extends TileEntity {
 	this.rotationXZ = rotationXZ;
     }
 
+    public float getDistanceToEntity(Entity p_70032_1_)
+    {
+        float f = (float)(this.xCoord - p_70032_1_.posX);
+        float f1 = (float)(this.yCoord - p_70032_1_.posY);
+        float f2 = (float)(this.zCoord - p_70032_1_.posZ);
+        return MathHelper.sqrt_float(f * f + f1 * f1 + f2 * f2);
+    }
 }

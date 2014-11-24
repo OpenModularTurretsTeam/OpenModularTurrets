@@ -2,40 +2,21 @@ package modularTurrets.tileentity.turrets;
 
 import modularTurrets.blocks.Blocks;
 import modularTurrets.misc.Constants;
-import modularTurrets.tileentity.turretBase.TurretBase;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import modularTurrets.projectiles.DisposableTurretProjectile;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class DisposableItemTurretTileEntity extends TurretHead {
-    ShootingEntityDisposableItem entity;
-
     public DisposableItemTurretTileEntity() {
         super();
         this.turretTier = 0;
     }
 
-    public ShootingEntityDisposableItem getShootingEntity() {
-        if (entity == null) {
-            entity = new ShootingEntityDisposableItem(worldObj);
-            entity.setPosition(this.xCoord + 0.5F, this.yCoord - 1,
-                this.zCoord + 0.5F);
-        }
-        return entity;
-    }
-
-    public Entity getTarget() {
-        return TurretHeadUtils.getTarget(base, worldObj, base.getyAxisDetect(),
-            xCoord, yCoord, zCoord, Constants.disposableItemTurretRange
-                + TurretHeadUtils.getRangeUpgrades(base),
-            getShootingEntity());
-    }
-
-    public void loadAmmoIntoEntity() {
-	    getShootingEntity().stack = TurretHeadUtils
-		    .useAnyItemStackFromBase(base);
+    @Override
+    public int getTurretRange() {
+        return Constants.disposableItemTurretRange;
     }
 
     @Override
@@ -60,49 +41,67 @@ public class DisposableItemTurretTileEntity extends TurretHead {
             TurretHeadUtils.updateSolarPanelAddon(base);
             TurretHeadUtils.updateRedstoneReactor(base);
 
-            this.target = getTarget();
-
-            // POWER IS OKAY
+            // power check
             if (!base.isGettingRedstoneSignal()
-                && base.getEnergyStored(ForgeDirection.UNKNOWN) >= Math
+                && base.getEnergyStored(ForgeDirection.UNKNOWN) < Math
                     .round(Constants.disposableItemTurretPowerUse
                             * (1 - TurretHeadUtils
                             .getEfficiencyUpgrades(base)))) {
-                // TICK TO SHOOT BASED ON FIRE RATE
-                if (ticks >= (Constants.disposableItemTurretFireRate * (1 - TurretHeadUtils
-                    .getFireRateUpgrades(base)))) {
-                    // TARGET IS NOT NULL
-                    if (target != null) {
-
-                        this.rotationXZ = TurretHeadUtils.getAimYaw(target,
-                            xCoord, yCoord, zCoord) + 3.2F;
-                        this.rotationXY = TurretHeadUtils.getAimPitch(
-                            target, xCoord, yCoord, zCoord);
-
-                        EntityLivingBase livingBase = (EntityLivingBase) target;
-                        loadAmmoIntoEntity();
-                        if (entity.stack != null) {
-                            base.setEnergyStored(
-                                    base.getEnergyStored(ForgeDirection.UNKNOWN) -
-                                            (Math.round(Constants.disposableItemTurretPowerUse *
-                                                    (1 - TurretHeadUtils.getEfficiencyUpgrades(base))
-                                            )
-                                    )
-                            );
-
-                            getShootingEntity()
-                                .attackEntityWithRangedAttack(
-                                        livingBase,
-                                        5.5F,
-                                        Constants.disposableItemTurretAccurraccy
-                                                * (1 - TurretHeadUtils
-                                                .getAccuraccyUpgrades(base)),
-                                        base);
-                        }
-                        ticks = 0;
-                    }
-                }
+                return;
             }
+
+            // has cooldown passed?
+            if (ticks < (Constants.disposableItemTurretFireRate * (1 - TurretHeadUtils
+                .getFireRateUpgrades(base)))) {
+
+                return;
+            }
+
+            this.target = getTarget();
+
+            // is there a target?
+            if (target == null) {
+                return;
+            }
+
+            this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord, zCoord) + 3.2F;
+            this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord, yCoord, zCoord);
+
+            ItemStack ammo = TurretHeadUtils.useAnyItemStackFromBase(base);
+
+            // Is there ammo?
+            if (ammo == null) {
+                return;
+            }
+
+            // Consume energy
+            base.setEnergyStored(
+                    base.getEnergyStored(ForgeDirection.UNKNOWN) -
+                            (Math.round(Constants.disposableItemTurretPowerUse *
+                                    (1 - TurretHeadUtils.getEfficiencyUpgrades(base))
+                            )
+                    )
+            );
+
+            DisposableTurretProjectile projectile = new DisposableTurretProjectile(worldObj, this.xCoord + 0.5, this.yCoord, this.zCoord + 0.5, ammo);
+
+            if (TurretHeadUtils.hasDamageAmpAddon(base)) {
+                worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:amped", 1.0F, 1.0F);
+                projectile.isAmped = true;
+            }
+
+            double d0 = target.posX - this.xCoord;
+            double d1 = target.posY + (double) target.getEyeHeight() - 2.5F - this.yCoord;
+            double d2 = target.posZ - this.zCoord;
+            float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2) * (0.2F * (getDistanceToEntity(target) * 0.04F));
+            float accuraccy = Constants.disposableItemTurretAccurraccy * (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
+
+            projectile.setThrowableHeading(d0, d1 + (double) f1, d2, 1.6F, accuraccy);
+
+            this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:disposable", 1.0F, 1.0F);
+            this.getWorldObj().spawnEntityInWorld(projectile);
+
+            ticks = 0;
         }
     }
 }

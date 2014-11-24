@@ -12,8 +12,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class GrenadeProjectile extends EntityThrowable {
-
-	private int ticksAlive;
 	public boolean isAmped;
 
 	public GrenadeProjectile(World world) {
@@ -27,7 +25,7 @@ public class GrenadeProjectile extends EntityThrowable {
 
 	@Override
 	public void onEntityUpdate() {
-		if (ticksAlive >= 100) {
+		if (ticksExisted >= 100) {
 			this.setDead();
 		}
 

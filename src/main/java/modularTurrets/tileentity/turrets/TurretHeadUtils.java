@@ -3,6 +3,7 @@ package modularTurrets.tileentity.turrets;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.common.FMLLog;
 import modularTurrets.items.upgrades.AccuraccyUpgradeItem;
 import modularTurrets.items.addons.RedstoneReactorAddonItem;
 import modularTurrets.items.addons.DamageAmpAddonItem;
@@ -27,6 +28,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -67,7 +69,7 @@ public class TurretHeadUtils {
         }
     }
 
-    public static Entity getTarget(TurretBase base, World worldObj, int downLowAmount, int xCoord, int yCoord, int zCoord, int turretRange, EntityLivingBase turret) {
+    public static Entity getTarget(TurretBase base, World worldObj, int downLowAmount, int xCoord, int yCoord, int zCoord, int turretRange, TurretHead turret) {
         warnPlayers(base, worldObj, downLowAmount, xCoord, yCoord, zCoord, turretRange);
 
         Entity target = null;
@@ -117,8 +119,7 @@ public class TurretHeadUtils {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
-                        if (!entity.getDisplayName().equals(base.getOwner())
-                                && !isTrustedPlayer(entity.getDisplayName(), base)) {
+                        if (!entity.getDisplayName().equals(base.getOwner()) && !isTrustedPlayer(entity.getDisplayName(), base)) {
                             target = target1;
                         }
                     }
@@ -126,7 +127,7 @@ public class TurretHeadUtils {
 
                 if (target != null && turret != null) {
                     EntityLivingBase targetELB = (EntityLivingBase) target;
-                    if (canTurretSeeTarget(turret, targetELB)) {
+                    if (canTurretSeeTarget(turret, targetELB) || true) {
                         return target;
                     }
                 }
@@ -391,7 +392,17 @@ public class TurretHeadUtils {
         }
     }
 
-    public static boolean canTurretSeeTarget(EntityLivingBase turret, EntityLivingBase target) {
-        return turret.canEntityBeSeen(target);
+    public static boolean canTurretSeeTarget(TurretHead turret, EntityLivingBase target) {
+        return turret.getWorldObj().rayTraceBlocks(
+                Vec3.createVectorHelper(
+                        turret.xCoord,
+                        turret.yCoord,
+                        turret.zCoord
+                ),
+                Vec3.createVectorHelper(
+                        target.posX,
+                        target.posY + (double)target.getEyeHeight(),
+                        target.posZ)
+        ) == null;
     }
 }

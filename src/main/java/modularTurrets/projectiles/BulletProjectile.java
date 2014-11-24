@@ -8,23 +8,19 @@ import net.minecraft.world.World;
 
 public class BulletProjectile extends EntityThrowable {
 
-	private int ticksAlive;
 	public boolean isAmped = false;
 
 	public BulletProjectile(World par1World) {
 		super(par1World);
 	}
 
-	public BulletProjectile(World par1World, double par2, double par4,
-			double par6) {
+	public BulletProjectile(World par1World, double par2, double par4, double par6) {
 		super(par1World, par2, par4, par6);
-
 	}
 
 	@Override
 	public void onEntityUpdate() {
-
-		if (ticksAlive >= 50) {
+		if (ticksExisted >= 50) {
 			this.setDead();
 		}
 	}

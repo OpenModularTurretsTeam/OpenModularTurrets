@@ -1,6 +1,7 @@
 package modularTurrets.projectiles;
 
 import modularTurrets.misc.Constants;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
@@ -9,11 +10,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class LaserProjectile extends EntityThrowable {
-
-    private int ticksAlive = 0;
-    private EntityLivingBase entity;
-    public float speed = 0.0F;
-    public float yaw;
     public int arrowShake;
     public boolean isAmped = false;
 
@@ -21,10 +17,8 @@ public class LaserProjectile extends EntityThrowable {
 	super(par1World);
     }
 
-    public LaserProjectile(World par1World, double par2, double par4, double par6, EntityLivingBase entity) {
+    public LaserProjectile(World par1World, double par2, double par4, double par6, Entity entity) {
         super(par1World, par2, par4, par6);
-        this.entity = entity;
-        posY -= 0.2;
     }
 
     @Override
@@ -36,8 +30,7 @@ public class LaserProjectile extends EntityThrowable {
     public void onEntityUpdate() {
         this.posY = posY + (fallDistance * -1);
 
-        ticksAlive++;
-        if (ticksAlive >= 50) {
+        if (ticksExisted >= 50) {
             this.setDead();
         }
     }

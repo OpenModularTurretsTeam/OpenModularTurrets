@@ -5,8 +5,6 @@ import java.util.Random;
 
 import modularTurrets.misc.Constants;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.AxisAlignedBB;
@@ -18,20 +16,19 @@ import net.minecraft.world.World;
 public class RocketProjectile extends EntityThrowable {
 
 	private int ticksAlive = 0;
-	private EntityLivingBase entity;
+	private Entity entity;
 	public float speed = 0.1F;
 	public int upwardsFirst = 15;
 	public float yaw;
 	public int arrowShake;
-	public float accuraccy;
+	public float accuracy;
 	public boolean isAmped = false;
 
 	public RocketProjectile(World par1World) {
 		super(par1World);
 	}
 
-	public RocketProjectile(World par1World, double par2, double par4,
-			double par6, EntityLivingBase entity) {
+	public RocketProjectile(World par1World, double par2, double par4, double par6, Entity entity) {
 		super(par1World, par2, par4, par6);
 		this.entity = entity;
 		posY = posY - 0.2;
@@ -51,12 +48,10 @@ public class RocketProjectile extends EntityThrowable {
 			double d1 = entity.posY + (double) entity.getEyeHeight() - 1.1F - this.posY;
 			double d2 = entity.posZ - this.posZ;
 
-			float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2) * 0.2F;
-
 			if (ticksAlive >= upwardsFirst) {
 				this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
 			} else {
-				this.setThrowableHeading(d0 / 5, 2.0F, d2 / 5, speed, accuraccy);
+				this.setThrowableHeading(d0 / 5, 2.0F, d2 / 5, speed, accuracy);
 				speed = speed + 0.3F;
 			}
 
@@ -89,6 +84,7 @@ public class RocketProjectile extends EntityThrowable {
 			AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 3,
 					this.posY - 5, this.posZ - 5, this.posX + 5, this.posY + 5,
 					this.posZ + 5);
+
 			List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
 
 			for (Entity mob : targets) {

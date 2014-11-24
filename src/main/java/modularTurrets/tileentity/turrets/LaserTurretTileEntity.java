@@ -2,37 +2,21 @@ package modularTurrets.tileentity.turrets;
 
 import modularTurrets.blocks.Blocks;
 import modularTurrets.misc.Constants;
-import modularTurrets.tileentity.turretBase.TurretBase;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import modularTurrets.projectiles.LaserProjectile;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class LaserTurretTileEntity extends TurretHead {
-    ShootingEntityLaser entity;
 
     public LaserTurretTileEntity() {
         super();
         this.turretTier = 4;
     }
 
-    public ShootingEntityLaser getShootingEntity() {
-
-        if (entity == null) {
-            entity = new ShootingEntityLaser(worldObj);
-            entity.setPosition(this.xCoord + 0.5F, this.yCoord - 1,
-                this.zCoord + 0.5F);
-        }
-        return entity;
-    }
-
-    public Entity getTarget() {
-
-        return TurretHeadUtils.getTarget(base, worldObj, base.getyAxisDetect(),
-            xCoord, yCoord, zCoord, Constants.laserTurretRange
-                + TurretHeadUtils.getRangeUpgrades(base),
-            getShootingEntity());
+    @Override
+    public int getTurretRange() {
+        return Constants.laserTurretRange;
     }
 
     @Override
@@ -58,44 +42,55 @@ public class LaserTurretTileEntity extends TurretHead {
             TurretHeadUtils.updateSolarPanelAddon(base);
             TurretHeadUtils.updateRedstoneReactor(base);
 
-            this.target = getTarget();
-
-            // POWER IS OKAY
+            // power check
             if (!base.isGettingRedstoneSignal()
-                && base.getEnergyStored(ForgeDirection.UNKNOWN) >= Math
+                && base.getEnergyStored(ForgeDirection.UNKNOWN) < Math
                     .round(Constants.laserTurretPowerUse
                             * (1 - TurretHeadUtils
                             .getEfficiencyUpgrades(base)))) {
-                // TICK TO SHOOT BASED ON FIRE RATE
-                if (ticks >= (Constants.laserTurretFireRate * (1 - TurretHeadUtils
-                    .getFireRateUpgrades(base)))) {
-                    // TARGET IS NOT NULL
-                    if (target != null) {
-
-                        this.rotationXZ = TurretHeadUtils.getAimYaw(target,
-                            xCoord, yCoord, zCoord) + 3.2F;
-                        this.rotationXY = TurretHeadUtils.getAimPitch(
-                            target, xCoord, yCoord, zCoord);
-                        EntityLivingBase livingBase = (EntityLivingBase) target;
-                        base
-                        .setEnergyStored(base
-                                .getEnergyStored(ForgeDirection.UNKNOWN)
-                                - (Math.round(Constants.laserTurretPowerUse
-                                * (1 - TurretHeadUtils
-                                .getEfficiencyUpgrades(base)))));
-                        getShootingEntity()
-                            .attackEntityWithRangedAttack(
-                                    livingBase,
-                                    5.5F,
-                                    Constants.laserTurretAccurraccy
-                                            * (1 - TurretHeadUtils
-                                            .getAccuraccyUpgrades(base)),
-                                    base);
-                    }
-                    ticks = 0;
-
-                }
+               return;
             }
+
+            // has cooldown passed?
+            if (ticks < (Constants.laserTurretFireRate * (1 - TurretHeadUtils.getFireRateUpgrades(base)))) {
+                return;
+            }
+
+            target = getTarget();
+
+            // Target found?
+            if (target == null) {
+                return;
+            }
+
+            this.rotationXZ = TurretHeadUtils.getAimYaw(target,xCoord, yCoord, zCoord) + 3.2F;
+            this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord, yCoord, zCoord);
+
+            base.setEnergyStored(
+                    base.getEnergyStored(ForgeDirection.UNKNOWN) -
+                            (Math.round(Constants.laserTurretPowerUse *
+                                    (1 - TurretHeadUtils.getEfficiencyUpgrades(base)))
+                            )
+            );
+
+            LaserProjectile projectile = new LaserProjectile(worldObj, this.xCoord + 0.5, this.yCoord, this.zCoord + 0.5, target);
+
+            if (TurretHeadUtils.hasDamageAmpAddon(base)) {
+                worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:amped", 1.0F, 1.0F);
+                projectile.isAmped = true;
+            }
+
+            double d0 = target.posX - this.xCoord;
+            double d1 = target.posY - this.yCoord;
+            double d2 = target.posZ - this.zCoord;
+            float accuraccy = Constants.laserTurretAccurraccy * (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
+
+            projectile.setThrowableHeading(d0, d1, d2, 5.0F, accuraccy);
+
+            this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:laser", 0.5F, 1.0F);
+            this.getWorldObj().spawnEntityInWorld(projectile);
+
+            ticks = 0;
         }
     }
 }

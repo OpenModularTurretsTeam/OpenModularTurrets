@@ -1,41 +1,23 @@
 package modularTurrets.tileentity.turrets;
 
+import cpw.mods.fml.common.FMLLog;
 import modularTurrets.blocks.Blocks;
 import modularTurrets.items.Items;
 import modularTurrets.misc.Constants;
-import modularTurrets.tileentity.turretBase.TurretBase;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import modularTurrets.projectiles.BulletProjectile;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class MachineGunTurretTileEntity extends TurretHead {
-    ShootingEntityMachineGun entity;
-
     public MachineGunTurretTileEntity() {
         super();
         this.turretTier = 1;
     }
 
-    public ShootingEntityMachineGun getShootingEntity() {
-        if (entity == null) {
-            entity = new ShootingEntityMachineGun(worldObj);
-            entity.setPosition(this.xCoord + 0.5F, this.yCoord - 1, this.zCoord + 0.5F);
-        }
-        return entity;
-    }
-
-    public Entity getTarget() {
-        return TurretHeadUtils.getTarget(base, worldObj, base.getyAxisDetect(),
-            xCoord, yCoord, zCoord, Constants.machineGunTurretRange
-                + TurretHeadUtils.getRangeUpgrades(base),
-            getShootingEntity());
-    }
-
-    public void loadAmmoIntoEntity() {
-        getShootingEntity().stack = TurretHeadUtils
-            .useSpecificItemStackItemFromBase(base, Items.bulletCraftable);
+    @Override
+    public int getTurretRange() {
+        return Constants.machineGunTurretRange;
     }
 
     @Override
@@ -60,46 +42,63 @@ public class MachineGunTurretTileEntity extends TurretHead {
             TurretHeadUtils.updateSolarPanelAddon(base);
             TurretHeadUtils.updateRedstoneReactor(base);
 
-            this.target = getTarget();
-
-            // POWER IS OKAY
+            // power check
             if (!base.isGettingRedstoneSignal()
-                && base.getEnergyStored(ForgeDirection.UNKNOWN) >= Math
+                && base.getEnergyStored(ForgeDirection.UNKNOWN) < Math
                     .round(Constants.machineGunTurretPowerUse
                             * (1 - TurretHeadUtils
                             .getEfficiencyUpgrades(base)))) {
-                // TICK TO SHOOT BASED ON FIRE RATE
-                if (ticks >= (Constants.machineGunTurretFireRate * (1 - TurretHeadUtils
-                    .getFireRateUpgrades(base)))) {
-                // TARGET IS NOT NULL
-                    if (target != null) {
-
-                        this.rotationXZ = TurretHeadUtils.getAimYaw(target,
-                            xCoord, yCoord, zCoord) + 3.2F;
-                        this.rotationXY = TurretHeadUtils.getAimPitch(
-                            target, xCoord, yCoord, zCoord);
-                        EntityLivingBase livingBase = (EntityLivingBase) target;
-                        loadAmmoIntoEntity();
-                        if (entity.stack != null) {
-                        base
-                            .setEnergyStored(base
-                                    .getEnergyStored(ForgeDirection.UNKNOWN)
-                                    - (Math.round(Constants.machineGunTurretPowerUse
-                                    * (1 - TurretHeadUtils
-                                    .getEfficiencyUpgrades(base)))));
-                        getShootingEntity()
-                            .attackEntityWithRangedAttack(
-                                    livingBase,
-                                    5.5F,
-                                    Constants.machineGunTurretAccurraccy
-                                            * (1 - TurretHeadUtils
-                                            .getAccuraccyUpgrades(base)),
-                                    base);
-                        }
-                        ticks = 0;
-                    }
-                }
+                return;
             }
+
+            // TICK TO SHOOT BASED ON FIRE RATE
+            if (ticks < (Constants.machineGunTurretFireRate * (1 - TurretHeadUtils.getFireRateUpgrades(base)))) {
+                return;
+            }
+
+            target = getTarget();
+
+            // TARGET IS NOT NULL
+            if (target == null) {
+                return;
+            }
+
+            this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord, zCoord) + 3.2F;
+            this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord, yCoord, zCoord);
+
+            ItemStack ammo = TurretHeadUtils.useSpecificItemStackItemFromBase(base, Items.bulletCraftable);
+
+            // Is there ammo?
+            if (ammo == null) {
+                return;
+            }
+
+            base.setEnergyStored(
+                    base.getEnergyStored(ForgeDirection.UNKNOWN) -
+                            (Math.round(Constants.machineGunTurretPowerUse *
+                                            (1 - TurretHeadUtils.getEfficiencyUpgrades(base))
+                            )
+                    )
+            );
+
+            BulletProjectile projectile = new BulletProjectile(worldObj, this.xCoord + 0.5, this.yCoord, this.zCoord + 0.5);
+
+            if (TurretHeadUtils.hasDamageAmpAddon(base)) {
+                worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:amped", 1.0F, 1.0F);
+                projectile.isAmped = true;
+            }
+
+            double d0 = target.posX - this.xCoord;
+            double d1 = target.posY + (double) target.getEyeHeight() - 2.5F - this.yCoord;
+            double d2 = target.posZ - this.zCoord;
+            float accuracy = Constants.machineGunTurretAccurraccy * (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
+
+            projectile.setThrowableHeading(d0, d1, d2, 2.0F, accuracy);
+
+            this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:machinegun", 1.0F, 1.0F);
+            this.getWorldObj().spawnEntityInWorld(projectile);
+
+            ticks = 0;
         }
     }
 }
