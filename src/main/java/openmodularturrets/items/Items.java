@@ -1,6 +1,7 @@
 package openmodularturrets.items;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.Item;
 import openmodularturrets.items.addons.DamageAmpAddonItem;
 import openmodularturrets.items.addons.RedstoneReactorAddonItem;
 import openmodularturrets.items.addons.SolarPanelAddonItem;
@@ -11,7 +12,6 @@ import openmodularturrets.items.upgrades.AccuraccyUpgradeItem;
 import openmodularturrets.items.upgrades.EfficiencyUpgradeItem;
 import openmodularturrets.items.upgrades.FireRateUpgradeItem;
 import openmodularturrets.items.upgrades.RangeUpgradeItem;
-import net.minecraft.item.Item;
 
 public class Items {
     public static Item bulletThrowable;

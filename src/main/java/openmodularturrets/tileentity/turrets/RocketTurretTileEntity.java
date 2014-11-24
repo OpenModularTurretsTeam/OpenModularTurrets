@@ -1,13 +1,11 @@
 package openmodularturrets.tileentity.turrets;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import openmodularturrets.blocks.Blocks;
 import openmodularturrets.items.Items;
-import openmodularturrets.misc.Constants;
+import openmodularturrets.misc.ConfigHandler;
 import openmodularturrets.projectiles.RocketProjectile;
 import openmodularturrets.projectiles.TurretProjectile;
 
@@ -20,27 +18,22 @@ public class RocketTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return Constants.rocketTurretRange;
-    }
-
-    @Override
-    public Block getTurretBlock() {
-        return Blocks.rocketTurret;
+        return ConfigHandler.getRocketTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return Constants.rocketTurretPowerUse;
+        return ConfigHandler.getRocketTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return Constants.rocketTurretFireRate;
+        return ConfigHandler.getRocketTurretSettings().getFireRate();
     }
 
     @Override
-    public float getTurretAccuracy() {
-        return Constants.rocketTurretAccurraccy;
+    public double getTurretAccuracy() {
+        return ConfigHandler.getRocketTurretSettings().getAccuracy();
     }
 
     @Override

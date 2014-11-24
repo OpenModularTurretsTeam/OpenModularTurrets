@@ -1,13 +1,11 @@
 package openmodularturrets.tileentity.turrets;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import openmodularturrets.blocks.Blocks;
 import openmodularturrets.items.Items;
-import openmodularturrets.misc.Constants;
+import openmodularturrets.misc.ConfigHandler;
 import openmodularturrets.projectiles.GrenadeProjectile;
 import openmodularturrets.projectiles.TurretProjectile;
 
@@ -20,27 +18,22 @@ public class GrenadeLauncherTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return Constants.grenadeTurretRange;
-    }
-
-    @Override
-    public Block getTurretBlock() {
-        return Blocks.grenadeLauncherTurret;
+        return ConfigHandler.getGrenadeTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return Constants.grenadeTurretPowerUse;
+        return ConfigHandler.getGrenadeTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return Constants.grenadeTurretFireRate;
+        return ConfigHandler.getGrenadeTurretSettings().getFireRate();
     }
 
     @Override
-    public float getTurretAccuracy() {
-        return Constants.grenadeTurretAccurraccy;
+    public double getTurretAccuracy() {
+        return ConfigHandler.getGrenadeTurretSettings().getAccuracy();
     }
 
     @Override

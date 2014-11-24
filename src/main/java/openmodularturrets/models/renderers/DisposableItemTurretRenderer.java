@@ -1,5 +1,11 @@
 package openmodularturrets.models.renderers;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import openmodularturrets.ModInfo;
 import openmodularturrets.models.ModelDamageAmp;
 import openmodularturrets.models.ModelDisposableItemTurret;
@@ -7,15 +13,7 @@ import openmodularturrets.models.ModelRedstoneReactor;
 import openmodularturrets.models.SolarPanelAddon;
 import openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
 import openmodularturrets.tileentity.turrets.TurretHeadUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
 

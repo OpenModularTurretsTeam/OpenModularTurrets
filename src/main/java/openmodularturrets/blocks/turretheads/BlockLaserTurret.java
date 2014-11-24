@@ -1,10 +1,10 @@
 package openmodularturrets.blocks.turretheads;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import openmodularturrets.ModInfo;
 import openmodularturrets.blocks.BlockNames;
 import openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
 public class BlockLaserTurret extends BlockAbstractTurretHead {
 

@@ -6,7 +6,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import openmodularturrets.misc.Constants;
+import openmodularturrets.misc.ConfigHandler;
 
 import java.util.List;
 
@@ -42,16 +42,14 @@ public class GrenadeProjectile extends TurretProjectile {
 		List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
 
 		for (Entity mob : targets) {
-			if (isAmped) {
-				mob.attackEntityFrom(DamageSource.generic,
-						Constants.grenadeTurretDamage
-								+ Constants.damageAmpDmgBonus);
-				mob.hurtResistantTime = 0;
-			} else {
-				mob.attackEntityFrom(DamageSource.generic,
-						Constants.grenadeTurretDamage);
-				mob.hurtResistantTime = 0;
-			}
+            int damage =  ConfigHandler.getGrenadeTurretSettings().getDamage();
+
+            if (isAmped) {
+                damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
+            }
+
+            movingobjectposition.entityHit.attackEntityFrom(DamageSource.generic, damage);
+            movingobjectposition.entityHit.hurtResistantTime = 0;
 		}
 
 		this.setDead();

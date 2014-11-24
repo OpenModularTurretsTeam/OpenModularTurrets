@@ -1,13 +1,13 @@
 package openmodularturrets.gui.containers;
 
-import openmodularturrets.gui.customSlot.AddonSlot;
-import openmodularturrets.gui.customSlot.UpgradeSlot;
-import openmodularturrets.tileentity.turretBase.TurretBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import openmodularturrets.gui.customSlot.AddonSlot;
+import openmodularturrets.gui.customSlot.UpgradeSlot;
+import openmodularturrets.tileentity.turretBase.TurretBase;
 
 public class TurretBaseTierTwoContainer extends Container {
 

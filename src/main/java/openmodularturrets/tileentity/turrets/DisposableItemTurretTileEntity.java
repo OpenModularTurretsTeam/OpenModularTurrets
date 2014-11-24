@@ -1,12 +1,10 @@
 package openmodularturrets.tileentity.turrets;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import openmodularturrets.blocks.Blocks;
-import openmodularturrets.misc.Constants;
+import openmodularturrets.misc.ConfigHandler;
 import openmodularturrets.projectiles.DisposableTurretProjectile;
 import openmodularturrets.projectiles.TurretProjectile;
 
@@ -18,27 +16,22 @@ public class DisposableItemTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return Constants.disposableItemTurretRange;
-    }
-
-    @Override
-    public Block getTurretBlock() {
-        return Blocks.disposableItemTurret;
+        return ConfigHandler.getDisposableTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return Constants.disposableItemTurretPowerUse;
+        return ConfigHandler.getDisposableTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return Constants.disposableItemTurretFireRate;
+        return ConfigHandler.getDisposableTurretSettings().getFireRate();
     }
 
     @Override
-    public float getTurretAccuracy() {
-        return Constants.disposableItemTurretAccurraccy;
+    public double getTurretAccuracy() {
+        return ConfigHandler.getDisposableTurretSettings().getAccuracy();
     }
 
     @Override

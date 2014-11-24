@@ -1,10 +1,10 @@
 package openmodularturrets.models.renderers.itemRenderers;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer;
 import openmodularturrets.models.ModelLaserTurret;
 import openmodularturrets.models.renderers.LaserTurretRenderer;
 import openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 
 public class LaserTurretItemRenderer implements IItemRenderer {
 
