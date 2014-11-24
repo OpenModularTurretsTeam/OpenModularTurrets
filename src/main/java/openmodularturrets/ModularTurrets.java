@@ -28,7 +28,7 @@ import net.minecraft.creativetab.CreativeTabs;
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = "required-after:ThermalFoundation")
 public class ModularTurrets {
 
-    @SidedProxy(clientSide = "modularTurrets.proxies.ClientProxy", serverSide = "modularTurrets.proxies.CommonProxy")
+    @SidedProxy(clientSide = "openmodularturrets.proxies.ClientProxy", serverSide = "openmodularturrets.proxies.CommonProxy")
     public static CommonProxy proxy;
 
     @Instance(ModInfo.ID)
