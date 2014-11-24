@@ -11,3 +11,5 @@ eclipse
 OpenModularTurrets.iws
 OpenModularTurrets.ipr
 OpenModularTurrets.iml
+.classpath
+.project
