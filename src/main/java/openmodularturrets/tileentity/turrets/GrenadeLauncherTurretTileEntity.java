@@ -83,7 +83,7 @@ public class GrenadeLauncherTurretTileEntity extends TurretHead {
                     )
             );
 
-            GrenadeProjectile projectile = new GrenadeProjectile(worldObj, this.xCoord + 0.5, this.yCoord, this.zCoord + 0.5);
+            GrenadeProjectile projectile = new GrenadeProjectile(worldObj, this.xCoord + 0.5, this.yCoord + 1.5, this.zCoord + 0.5);
 
             if (TurretHeadUtils.hasDamageAmpAddon(base)) {
                 worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:amped", 1.0F, 1.0F);

@@ -80,7 +80,7 @@ public class MachineGunTurretTileEntity extends TurretHead {
                     )
             );
 
-            BulletProjectile projectile = new BulletProjectile(worldObj, this.xCoord + 0.5, this.yCoord, this.zCoord + 0.5);
+            BulletProjectile projectile = new BulletProjectile(worldObj, this.xCoord + 0.5, this.yCoord + 1.5, this.zCoord + 0.5);
 
             if (TurretHeadUtils.hasDamageAmpAddon(base)) {
                 worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:amped", 1.0F, 1.0F);
