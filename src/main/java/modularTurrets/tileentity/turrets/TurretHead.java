@@ -41,6 +41,57 @@ public class TurretHead extends TileEntity {
         this.ticks = par1.getInteger("ticksBeforeFire");
     }
 
+    public void setSide() {
+        if (hasSetSide) {
+            return;
+        }
+
+        if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TurretBase) {
+            this.baseFitRotationX = 1.56F;
+            this.baseFitRotationZ = 1.565F;
+            this.hasSetSide = true;
+            return;
+        }
+
+        if (worldObj.getTileEntity(xCoord - 1, yCoord, zCoord) instanceof TurretBase) {
+            this.baseFitRotationX = 1.56F;
+            this.baseFitRotationZ = 4.705F;
+            this.hasSetSide = true;
+            return;
+        }
+
+        if (worldObj.getTileEntity(xCoord, yCoord, zCoord + 1) instanceof TurretBase) {
+            this.baseFitRotationX = 1.56F;
+            this.baseFitRotationZ = 3.145F;
+            this.hasSetSide = true;
+            return;
+        }
+
+        if (worldObj.getTileEntity(xCoord, yCoord, zCoord - 1) instanceof TurretBase) {
+            this.baseFitRotationX = 1.56F;
+            this.baseFitRotationZ = 0F;
+            this.hasSetSide = true;
+            return;
+        }
+
+        if (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof TurretBase) {
+            this.baseFitRotationX = 3.145F;
+            this.baseFitRotationZ = 0F;
+            this.hasSetSide = true;
+            return;
+        }
+
+        if (worldObj.getTileEntity(xCoord, yCoord - 1, zCoord) instanceof TurretBase) {
+            this.baseFitRotationX = 0F;
+            this.baseFitRotationZ = 0F;
+            this.hasSetSide = true;
+        }
+    }
+
+    public TurretBase getBase() {
+        return TurretHeadUtils.getTurretBase(worldObj, xCoord, yCoord, zCoord);
+    }
+
     public Entity getTarget() {
 	return target;
     }

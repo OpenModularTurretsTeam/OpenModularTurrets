@@ -12,8 +12,8 @@ import net.minecraft.world.World;
 public class ShootingEntityGrenade extends EntityLiving implements IRangedAttackMob {
     public ItemStack stack;
 
-    public ShootingEntityGrenade(World par1World, ItemStack stack) {
-	super(par1World);
+    public ShootingEntityGrenade(World par1World) {
+	    super(par1World);
     }
 
     public void attackEntityWithRangedAttack(EntityLivingBase entitylivingbase, float f, float accuracy, TurretBase base) {
@@ -29,6 +29,7 @@ public class ShootingEntityGrenade extends EntityLiving implements IRangedAttack
             double d1 = entitylivingbase.posY - this.posY;
             double d2 = entitylivingbase.posZ - this.posZ;
             float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2) * (0.2F * (getDistanceToEntity(entitylivingbase) * 0.04F));
+
             entityCrap.setThrowableHeading(d0, d1 + (double) f1, d2, 1.5F, accuracy);
 
             worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:grenade", 1.0F, 1.0F);

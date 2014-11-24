@@ -23,7 +23,7 @@ public class ConfigureGui extends GuiContainer {
 
     public ConfigureGui(InventoryPlayer inventoryPlayer, TurretBase tileEntity) {
         super(new ConfigContainer(inventoryPlayer, tileEntity));
-        this.base = (TurretBase) tileEntity;
+        this.base = tileEntity;
     }
 
     @SuppressWarnings("unchecked")
@@ -101,12 +101,16 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 4) {
+            base.addTrustedPlayer(textFieldName.getText());
             sendChangeToServerAddTrusted();
+
             textFieldName.setText("");
         }
 
         if (guibutton.id == 5) {
+            base.removeTrustedPlayer(textFieldName.getText());
             sendChangeToServerRemoveTrusted();
+
             textFieldName.setText("");
         }
     }
