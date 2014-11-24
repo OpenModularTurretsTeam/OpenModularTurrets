@@ -17,9 +17,15 @@ buildscript {
 
 apply plugin: 'forge'
 
+ext.mcversion="1.7.10"
 version = "1.2.5"
 group= "modularturrets" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "OpenModularTurrets"
+
+if (hasProperty('appendBuildNumber')) {
+    version = version + "-" + appendBuildNumber.toString()
+}
+version = ext.mcversion + "-" + version // should give something like 1.7.10-1.2.5-99
 
 minecraft {
     version = "1.7.10-10.13.2.1230"
