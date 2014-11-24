@@ -402,6 +402,6 @@ public class TurretHeadUtils {
                         target.posX,
                         target.posY + (double)target.getEyeHeight(),
                         target.posZ)
-        ) == null;
+        ) != null;
     }
 }

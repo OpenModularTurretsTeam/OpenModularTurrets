@@ -83,7 +83,7 @@ public class DisposableItemTurretTileEntity extends TurretHead {
                     )
             );
 
-            DisposableTurretProjectile projectile = new DisposableTurretProjectile(worldObj, this.xCoord + 0.5, this.yCoord, this.zCoord + 0.5, ammo);
+            DisposableTurretProjectile projectile = new DisposableTurretProjectile(worldObj, this.xCoord + 0.5, this.yCoord + 1.5, this.zCoord + 0.5, ammo);
 
             if (TurretHeadUtils.hasDamageAmpAddon(base)) {
                 worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:amped", 1.0F, 1.0F);
