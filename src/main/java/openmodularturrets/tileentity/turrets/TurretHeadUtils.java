@@ -182,14 +182,17 @@ public class TurretHeadUtils {
         yaw = yaw - 1.570796F + 3.2F;
         return yaw;
     }
+    
 
-    public static float getAimPitch(Entity target, int xCoord, int yCoord, int zCoord) {
-        double dX = (target.posX - 0.2F) - (xCoord + 0.6F);
-        double dY = (target.posY + 0.6F) - (yCoord - 0.6F);
-        double dZ = (target.posZ - 0.2F) - (zCoord + 0.6F);
-        float pitch = (float) (Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY) + Math.PI);
-        pitch = pitch + 1.65F;
-        return pitch;
+
+    public static float getAimPitch(Entity target, int xCoord, int yCoord,
+	    int zCoord) {
+	double dX = (target.posX - 0.2F) - (xCoord + 0.6F);
+	double dY = (target.posY + 0.6F) - (yCoord - 0.6F);
+	double dZ = (target.posZ - 0.2F) - (zCoord + 0.6F);
+	float pitch = (float) (Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY) + Math.PI);
+	pitch = pitch + 1.65F;
+	return pitch;
     }
 
     public static ItemStack useAnyItemStackFromBase(TurretBase base) {

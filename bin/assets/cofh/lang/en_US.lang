@@ -1,0 +1,47 @@
+gui.cofh.accessMode=Access Mode
+gui.cofh.accessPublic=Public Access
+gui.cofh.accessRestricted=Restricted
+gui.cofh.accessPrivate=Owner Only
+gui.cofh.all=All
+gui.cofh.blank=Blank
+gui.cofh.configuration=Configuration
+gui.cofh.controlStatus=Control Status
+gui.cofh.empty=Empty
+gui.cofh.energy=Energy
+gui.cofh.energyConsume=Power Usage
+gui.cofh.energyProduce=Power Output
+gui.cofh.energyStored=Energy Stored
+gui.cofh.fluid=Fluid
+gui.cofh.friendsList=Friends List
+gui.cofh.information=Information
+gui.cofh.items=Items
+gui.cofh.maxEnergyPerTick=Maximum Power
+gui.cofh.none=None
+gui.cofh.owner=Owner
+gui.cofh.none=None
+gui.cofh.receiving=Receiving
+gui.cofh.redstoneControl=Redstone Control
+gui.cofh.redstoneControlOff=Disabled
+gui.cofh.redstoneControlOn=Enabled
+gui.cofh.redstoneStateHigh=High
+gui.cofh.redstoneStateIgnored=Ignored
+gui.cofh.redstoneStateLow=Low
+gui.cofh.restoreConfig=Restoring Client Configuration...
+gui.cofh.security=Security
+gui.cofh.sending=Sending
+gui.cofh.signalRequired=Signal Required
+gui.cofh.tutorial=Tutorial
+
+gui.cofh.tutorial.fluxRequired=Requires Redstone Flux to operate.;
+gui.cofh.tutorial.tabConfiguration=The Configuration tab determines how items enter and leave this device.
+gui.cofh.tutorial.tabConfiguration2=The Configuration tab determines the operation modes for this device.
+gui.cofh.tutorial.tabRedstone=The Redstone Control tab configures how this device reacts to redstone signals.
+
+item.invalid.name=Invalid Item (Destroy)
+
+message.cofh.holdShift1=Hold
+message.cofh.holdShift2=Shift
+message.cofh.holdShift3=for Details
+
+message.cofh.secure1=This is private and belongs to
+message.cofh.secure2=You could have lost your hand!

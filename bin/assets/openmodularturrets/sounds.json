@@ -1,0 +1,107 @@
+{
+    "amped": {
+        "category": "neutral",
+        "sounds": [
+            {
+                "name": "amped",
+                "stream": false
+            }
+        ]
+    },
+    "bulletHit": {
+        "category": "neutral",
+        "sounds": [
+            {
+                "name": "bulletHit1",
+                "stream": false
+            },
+            {
+                "name": "bulletHit2",
+                "stream": false
+            }
+        ]
+    },
+    "windup": {
+        "category": "neutral",
+        "sounds": [
+            {
+                "name": "windup",
+                "stream": false
+            }
+        ]
+    },
+    "grenade": {
+        "category": "neutral",
+        "sounds": [
+            {
+                "name": "grenade1",
+                "stream": false
+            },
+            {
+                "name": "grenade2",
+                "stream": false
+            }
+        ]
+    },
+    "machinegun": {
+        "category": "neutral",
+        "sounds": [
+            {
+                "name": "machinegun1",
+                "stream": false
+            },
+            {
+                "name": "machinegun2",
+                "stream": false
+            },
+            {
+                "name": "machinegun3",
+                "stream": false
+            }
+        ]
+    },
+    "laser": {
+        "category": "neutral",
+        "sounds": [
+            {
+                "name": "laser1",
+                "stream": false
+            },
+            {
+                "name": "laser2",
+                "stream": false
+            },
+            {
+                "name": "laser3",
+                "stream": false
+            }
+        ]
+    },
+    "warning": {
+        "category": "neutral",
+        "sounds": [
+            {
+                "name": "warning",
+                "stream": false
+            }
+        ]
+    },
+    "laserHit": {
+        "category": "neutral",
+        "sounds": [
+            {
+               "name": "laserHit",
+              "stream": false
+            }
+        ]
+    },
+    "rocket": {
+        "category": "neutral",
+        "sounds": [
+            {
+               "name": "rocket",
+              "stream": false
+            }
+        ]
+    }
+}
