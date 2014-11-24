@@ -13,8 +13,8 @@ public class ShootingEntityMachineGun extends EntityLiving implements IRangedAtt
 
     public ItemStack stack;
 
-    public ShootingEntityMachineGun(World par1World, ItemStack stack) {
-	super(par1World);
+    public ShootingEntityMachineGun(World par1World) {
+	    super(par1World);
     }
 
     public void attackEntityWithRangedAttack(EntityLivingBase entitylivingbase, float f, float accuracy, TurretBase base) {
@@ -29,7 +29,6 @@ public class ShootingEntityMachineGun extends EntityLiving implements IRangedAtt
             double d0 = entitylivingbase.posX - this.posX;
             double d1 = entitylivingbase.posY + (double) entitylivingbase.getEyeHeight() - 2.0D - this.posY;
             double d2 = entitylivingbase.posZ - this.posZ;
-            float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2) * 0.2F;
 
             entityCrap.setThrowableHeading(d0, d1, d2, 2.0F, accuracy);
             worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:machinegun", 1.0F, 1.0F);

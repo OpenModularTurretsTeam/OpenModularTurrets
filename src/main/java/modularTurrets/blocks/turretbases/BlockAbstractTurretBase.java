@@ -18,13 +18,13 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public abstract class BlockAbstractTurretBase extends BlockContainer implements ITileEntityProvider {
-    protected BlockAbstractTurretBase() {
+public abstract class BlockAbstractTurretBase extends BlockContainer {
+    public BlockAbstractTurretBase() {
         super(Material.rock);
 
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
-        this.setHardness(-1F);
-        this.setResistance(20F);
+        this.setBlockUnbreakable();
+        this.setResistance(6000000.0F);
         this.setStepSound(Block.soundTypeStone);
     }
 

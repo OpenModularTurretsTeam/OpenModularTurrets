@@ -13,9 +13,8 @@ public class ShootingEntityDisposableItem extends EntityLiving implements IRange
 
     ItemStack stack;
 
-    public ShootingEntityDisposableItem(World par1World, ItemStack stack) {
-	super(par1World);
-	this.stack = stack;
+    public ShootingEntityDisposableItem(World par1World) {
+        super(par1World);
     }
 
     public void attackEntityWithRangedAttack(EntityLivingBase entitylivingbase, float f, float accuraccy, TurretBase base) {

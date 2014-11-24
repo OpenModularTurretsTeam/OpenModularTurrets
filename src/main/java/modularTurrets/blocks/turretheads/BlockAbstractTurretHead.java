@@ -6,14 +6,14 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 
-public abstract class BlockAbstractTurretHead extends BlockContainer implements ITileEntityProvider {
+public abstract class BlockAbstractTurretHead extends BlockContainer {
     public BlockAbstractTurretHead() {
         super(Material.rock);
 
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
-        this.setHardness(-1F);
-        this.setBlockBounds(1F, 1F, 1F, 1F, 1F, 1F);
-        this.setResistance(20F);
+        this.setBlockBounds(0F, 0F, 0F, 1F, 1F, 1F);
+        this.setBlockUnbreakable();
+        this.setResistance(6000000.0F);
         this.setStepSound(Block.soundTypeStone);
     }
 

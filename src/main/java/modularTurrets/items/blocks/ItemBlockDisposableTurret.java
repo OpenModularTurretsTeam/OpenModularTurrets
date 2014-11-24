@@ -5,6 +5,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -19,19 +21,19 @@ public class ItemBlockDisposableTurret extends ItemBlock {
     @Override
     public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_) {
         p_77624_3_.add("");
-        p_77624_3_.add("\u00A76-Info-");
-        p_77624_3_.add("Tier: \u00A7f0");
-        p_77624_3_.add("Range: \u00A7f"+ Constants.disposableItemTurretRange+" blocks");
-        p_77624_3_.add("Accuracy: \u00A7fLow");
-        p_77624_3_.add("Ammo Type: \u00A7fAny Block/Item");
-        p_77624_3_.add("Base Minimum Tier: \u00A7fBasic");
+        p_77624_3_.add(EnumChatFormatting.GOLD + "--" + StatCollector.translateToLocal("tooltip.info") + "--");
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.tier") + ": " + EnumChatFormatting.WHITE + "0");
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.range") + ": " + EnumChatFormatting.WHITE + Constants.disposableItemTurretRange);
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.accuracy") + ": " + EnumChatFormatting.WHITE + StatCollector.translateToLocal("turret.accuracy.low"));
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.ammo") + ": " + EnumChatFormatting.WHITE + StatCollector.translateToLocal("turret.ammo.0"));
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.tierRequired") + ": " + EnumChatFormatting.WHITE + StatCollector.translateToLocal("base.tier.0"));
         p_77624_3_.add("");
-        p_77624_3_.add("\u00A75-Damage Output-");
-        p_77624_3_.add("Projectile Damage: \u00A7f" + (Constants.disposableItemTurretDamage/2) + " hearts");
-        p_77624_3_.add("AOE Radius: \u00A7f0");
-        p_77624_3_.add("Shots/s: \u00A7f"+df.format(20.0F/Constants.disposableItemTurretFireRate));
-        p_77624_3_.add("Energy Usage per shot: \u00A7f"+Constants.disposableItemTurretPowerUse+" RF");
+        p_77624_3_.add(EnumChatFormatting.DARK_PURPLE + "--" + StatCollector.translateToLocal("tooltip.damage.label") + "--");
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.damage.stat") + ": " + EnumChatFormatting.WHITE + (Constants.disposableItemTurretDamage / 2F) + " " + StatCollector.translateToLocal("tooltip.health"));
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.aoe") + ": " + EnumChatFormatting.WHITE + "0");
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.firerate") + ": " + EnumChatFormatting.WHITE + df.format(20.0F / Constants.disposableItemTurretFireRate));
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.energy.stat") + ": " + EnumChatFormatting.WHITE + Constants.disposableItemTurretPowerUse + " RF");
         p_77624_3_.add("");
-        p_77624_3_.add("\u00A78Poor man's sleeping aid.");
+        p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.turret.0"));
     }
 }
