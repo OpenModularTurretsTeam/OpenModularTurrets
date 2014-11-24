@@ -82,7 +82,7 @@ public class RocketTurretTileEntity extends TurretHead {
                     )
             );
 
-            RocketProjectile projectile = new RocketProjectile(worldObj, this.xCoord + 0.5, this.yCoord + 1, this.zCoord + 0.5, target);
+            RocketProjectile projectile = new RocketProjectile(worldObj, this.xCoord + 0.5, this.yCoord + 1.5, this.zCoord + 0.5, target);
 
             if (TurretHeadUtils.hasDamageAmpAddon(base)) {
                 worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:amped", 1.0F, 1.0F);

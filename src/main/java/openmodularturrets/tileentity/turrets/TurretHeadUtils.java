@@ -126,7 +126,7 @@ public class TurretHeadUtils {
 
                 if (target != null && turret != null) {
                     EntityLivingBase targetELB = (EntityLivingBase) target;
-                    if (canTurretSeeTarget(turret, targetELB) || true) {
+                    if (canTurretSeeTarget(turret, targetELB)) {
                         return target;
                     }
                 }
@@ -402,6 +402,6 @@ public class TurretHeadUtils {
                         target.posX,
                         target.posY + (double)target.getEyeHeight(),
                         target.posZ)
-        ) == null;
+        ) != null;
     }
 }
