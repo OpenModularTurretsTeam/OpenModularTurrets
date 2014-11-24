@@ -1,12 +1,14 @@
 package openmodularturrets.tileentity.turrets;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import openmodularturrets.blocks.Blocks;
 import openmodularturrets.misc.Constants;
 import openmodularturrets.projectiles.DisposableTurretProjectile;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraftforge.common.util.ForgeDirection;
+import openmodularturrets.projectiles.TurretProjectile;
 
 public class DisposableItemTurretTileEntity extends TurretHead {
     public DisposableItemTurretTileEntity() {
@@ -20,96 +22,47 @@ public class DisposableItemTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public void updateEntity() {
+    public Block getTurretBlock() {
+        return Blocks.disposableItemTurret;
+    }
 
-        setSide();
-        this.base = getBase();
+    @Override
+    public int getTurretPowerUsage() {
+        return Constants.disposableItemTurretPowerUse;
+    }
 
-        if (worldObj.isRemote) {
-            return;
-        }
-        
-        if(ticks%5==0)
-        {
-        	 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
+    @Override
+    public int getTurretFireRate() {
+        return Constants.disposableItemTurretFireRate;
+    }
 
-        ticks++;
+    @Override
+    public float getTurretAccuracy() {
+        return Constants.disposableItemTurretAccurraccy;
+    }
 
-        // BASE IS OKAY
-        if (base == null || base.getBaseTier() < this.turretTier) {
-            EntityItem turret_item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, new ItemStack(Blocks.disposableItemTurret));
-            worldObj.spawnEntityInWorld(turret_item);
+    @Override
+    public boolean requiresAmmo() {
+        return true;
+    }
 
-            worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-        } else {
-            TurretHeadUtils.updateSolarPanelAddon(base);
-            TurretHeadUtils.updateRedstoneReactor(base);
+    @Override
+    public boolean requiresSpecificAmmo() {
+        return false;
+    }
 
-            // power check
-            if (!base.isGettingRedstoneSignal()
-                && base.getEnergyStored(ForgeDirection.UNKNOWN) < Math
-                    .round(Constants.disposableItemTurretPowerUse
-                            * (1 - TurretHeadUtils
-                            .getEfficiencyUpgrades(base)))) {
-                return;
-            }
+    @Override
+    public Item getAmmo() {
+        return null;
+    }
 
-            // has cooldown passed?
-            if (ticks < (Constants.disposableItemTurretFireRate * (1 - TurretHeadUtils
-                .getFireRateUpgrades(base)))) {
+    @Override
+    public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
+        return new DisposableTurretProjectile(world, ammo);
+    }
 
-                return;
-            }
-
-            this.target = getTarget();
-
-            // is there a target?
-            if (target == null) {
-                return;
-            }
-
-            this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord, zCoord) + 3.2F;
-            this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord, yCoord, zCoord);
-
-            ItemStack ammo = TurretHeadUtils.useAnyItemStackFromBase(base);
-
-            // Is there ammo?
-            if (ammo == null) {
-                return;
-            }
-
-            // Consume energy
-            base.setEnergyStored(
-                    base.getEnergyStored(ForgeDirection.UNKNOWN) -
-                            (Math.round(Constants.disposableItemTurretPowerUse *
-                                    (1 - TurretHeadUtils.getEfficiencyUpgrades(base))
-                            )
-                    )
-            );
-            
-            
-            DisposableTurretProjectile projectile = new DisposableTurretProjectile(worldObj, this.xCoord + 0.5, this.yCoord + 1.5, this.zCoord + 0.5, ammo);
-
-            if (TurretHeadUtils.hasDamageAmpAddon(base)) {
-                worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:amped", 1.0F, 1.0F);
-                projectile.isAmped = true;
-            }
-
-            double d0 = target.posX - this.xCoord;
-            double d1 = target.posY + (double) target.getEyeHeight() - 2.5F - this.yCoord;
-            double d2 = target.posZ - this.zCoord;
-            float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2) * (0.2F * (getDistanceToEntity(target) * 0.04F));
-            float accuraccy = Constants.disposableItemTurretAccurraccy * (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
-
-            projectile.setThrowableHeading(d0, d1 + (double) f1, d2, 1.6F, accuraccy);
-
-            this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:disposable", 1.0F, 1.0F);
-            this.getWorldObj().spawnEntityInWorld(projectile);
-            
-            
-
-            ticks = 0;
-        }
+    @Override
+    public String getLaunchSoundEffect() {
+        return "disposable";
     }
 }

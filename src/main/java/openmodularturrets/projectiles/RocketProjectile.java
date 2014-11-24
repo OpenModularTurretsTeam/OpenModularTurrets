@@ -1,39 +1,38 @@
 package openmodularturrets.projectiles;
 
-import java.util.List;
-import java.util.Random;
-
-import openmodularturrets.misc.Constants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import openmodularturrets.misc.Constants;
 
-public class RocketProjectile extends EntityThrowable {
+import java.util.List;
+import java.util.Random;
+
+public class RocketProjectile extends TurretProjectile {
 
 	private int ticksAlive = 0;
-	private Entity entity;
+	private Entity target;
 	public float speed = 0.1F;
 	public int upwardsFirst = 15;
 	public float yaw;
 	public int arrowShake;
 	public float accuracy;
-	public boolean isAmped = false;
 
-	public RocketProjectile(World par1World) {
-		super(par1World);
+    public RocketProjectile(World p_i1776_1_) {
+        super(p_i1776_1_);
+    }
+
+    public RocketProjectile(World par1World, Entity target, ItemStack ammo) {
+		super(par1World, ammo);
+
+        this.target = target;
 	}
 
-	public RocketProjectile(World par1World, double par2, double par4, double par6, Entity entity) {
-		super(par1World, par2, par4, par6);
-		this.entity = entity;
-		posY = posY - 0.2;
-	}
-
-	@Override
+    @Override
 	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) {
 		worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
 		this.setDead();
@@ -42,10 +41,10 @@ public class RocketProjectile extends EntityThrowable {
 	@Override
 	public void onEntityUpdate() {
 
-		if (entity != null) {
-			double d0 = entity.posX - this.posX;
-			double d1 = entity.posY + (double) entity.getEyeHeight() - 1.1F - this.posY;
-			double d2 = entity.posZ - this.posZ;
+		if (target != null) {
+			double d0 = target.posX - this.posX;
+			double d1 = target.posY + (double) target.getEyeHeight() - 1.1F - this.posY;
+			double d2 = target.posZ - this.posZ;
 
 			if (ticksAlive >= upwardsFirst) {
 				this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
@@ -54,8 +53,8 @@ public class RocketProjectile extends EntityThrowable {
 				speed = speed + 0.3F;
 			}
 
-			double dX = (entity.posX) - (this.posX);
-			double dZ = (entity.posZ) - (this.posZ);
+			double dX = (target.posX) - (this.posX);
+			double dZ = (target.posZ) - (this.posZ);
 			yaw = ((float) (Math.atan2(dZ, dX))) - 1.570796F;
 
 		}

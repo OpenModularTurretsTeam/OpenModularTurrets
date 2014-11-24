@@ -1,23 +1,16 @@
 package openmodularturrets.projectiles;
 
-import openmodularturrets.misc.Constants;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import openmodularturrets.misc.Constants;
 
-public class LaserProjectile extends EntityThrowable {
+public class LaserProjectile extends TurretProjectile {
     public int arrowShake;
-    public boolean isAmped = false;
 
     public LaserProjectile(World par1World) {
-	super(par1World);
-    }
-
-    public LaserProjectile(World par1World, double par2, double par4, double par6, Entity entity) {
-        super(par1World, par2, par4, par6);
+	    super(par1World);
     }
 
     @Override

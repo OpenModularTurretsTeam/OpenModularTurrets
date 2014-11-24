@@ -103,5 +103,14 @@
               "stream": false
             }
         ]
+    },
+    "disposable": {
+        "category": "neutral",
+        "sounds": [
+            {
+               "name": "disposable",
+              "stream": false
+            }
+        ]
     }
 }
