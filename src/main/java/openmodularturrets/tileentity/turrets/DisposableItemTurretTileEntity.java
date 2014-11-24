@@ -28,6 +28,11 @@ public class DisposableItemTurretTileEntity extends TurretHead {
         if (worldObj.isRemote) {
             return;
         }
+        
+        if(ticks%5==0)
+        {
+        	 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        }
 
         ticks++;
 
@@ -82,7 +87,8 @@ public class DisposableItemTurretTileEntity extends TurretHead {
                             )
                     )
             );
-
+            
+            
             DisposableTurretProjectile projectile = new DisposableTurretProjectile(worldObj, this.xCoord + 0.5, this.yCoord + 1.5, this.zCoord + 0.5, ammo);
 
             if (TurretHeadUtils.hasDamageAmpAddon(base)) {
@@ -100,6 +106,8 @@ public class DisposableItemTurretTileEntity extends TurretHead {
 
             this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:disposable", 1.0F, 1.0F);
             this.getWorldObj().spawnEntityInWorld(projectile);
+            
+            
 
             ticks = 0;
         }

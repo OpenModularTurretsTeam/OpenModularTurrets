@@ -37,8 +37,8 @@ public class LaserTurretRenderer extends TileEntitySpecialRenderer {
         if (te.getWorldObj() != null) {
             rotation = te.getBlockMetadata();
         }
-
-        this.model.setRotationForTarget(turretHead.rotationXY,turretHead.rotationXZ);
+        
+        this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
         ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/laserTurret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 

@@ -30,6 +30,11 @@ public class GrenadeLauncherTurretTileEntity extends TurretHead {
         if (worldObj.isRemote) {
             return;
         }
+        
+        if(ticks%5==0)
+        {
+        	 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        }
 
         ticks++;
 

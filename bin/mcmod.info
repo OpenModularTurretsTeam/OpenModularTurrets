@@ -1,0 +1,24 @@
+[
+    {
+        "modid": "openmodularturrets",
+        "name": "Open Modular Turrets",
+        "description": "All a man needs are meat ingots, and big ass turrets. Adds a heap of new turrets and upgrades!",
+        "version": "1.2.8",
+        "credits": "Poenjabiesous",
+        "logoFile": "/mods/thermalexpansion/textures/logo.png",
+        "mcversion": "1.7.10",
+        "url": "",
+        "updateUrl": "",
+        "authors": [
+            "Poenjabiesous", "UntouchedWagons"
+        ],
+        "parent":"",
+        "screenshots": [],
+        "requiredMods": [
+            "MinecraftForge,ThermalExpansion"
+        ],
+        "dependencies": [
+            "MinecraftForge,ThermalExpansion"
+        ]
+    }
+]
