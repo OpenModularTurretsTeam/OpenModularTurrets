@@ -1,0 +1,28 @@
+package openmodularturrets.blocks.turretheads;
+
+import openmodularturrets.ModularTurrets;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.world.IBlockAccess;
+
+public abstract class BlockAbstractTurretHead extends BlockContainer {
+    public BlockAbstractTurretHead() {
+        super(Material.rock);
+
+        this.setCreativeTab(ModularTurrets.modularTurretsTab);
+        this.setBlockUnbreakable();
+        this.setResistance(6000000.0F);
+        this.setStepSound(Block.soundTypeStone);
+    }
+
+    @Override
+    public int getRenderType() {
+        return -1;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+}
