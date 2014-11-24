@@ -1,9 +1,9 @@
 package openmodularturrets.misc;
 
-import openmodularturrets.blocks.Blocks;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import openmodularturrets.blocks.Blocks;
 
 public class ModularTurretsTab extends CreativeTabs {
 

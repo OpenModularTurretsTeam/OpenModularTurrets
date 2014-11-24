@@ -1,17 +1,8 @@
 package openmodularturrets.tileentity;
 
-import openmodularturrets.tileentity.turretBase.TurretBase;
-import openmodularturrets.tileentity.turretBase.TurretBaseTierFourTileEntity;
-import openmodularturrets.tileentity.turretBase.TurretBaseTierOneTileEntity;
-import openmodularturrets.tileentity.turretBase.TurretBaseTierThreeTileEntity;
-import openmodularturrets.tileentity.turretBase.TurretBaseTierTwoTileEntity;
-import openmodularturrets.tileentity.turretBase.TurretWoodBase;
-import openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
-import openmodularturrets.tileentity.turrets.GrenadeLauncherTurretTileEntity;
-import openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
-import openmodularturrets.tileentity.turrets.MachineGunTurretTileEntity;
-import openmodularturrets.tileentity.turrets.RocketTurretTileEntity;
 import cpw.mods.fml.common.registry.GameRegistry;
+import openmodularturrets.tileentity.turretBase.*;
+import openmodularturrets.tileentity.turrets.*;
 
 public class TileEntities {
 	

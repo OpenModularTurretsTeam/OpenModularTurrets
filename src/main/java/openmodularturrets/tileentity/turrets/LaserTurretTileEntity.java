@@ -1,12 +1,10 @@
 package openmodularturrets.tileentity.turrets;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import openmodularturrets.blocks.Blocks;
-import openmodularturrets.misc.Constants;
+import openmodularturrets.misc.ConfigHandler;
 import openmodularturrets.projectiles.LaserProjectile;
 import openmodularturrets.projectiles.TurretProjectile;
 
@@ -19,27 +17,22 @@ public class LaserTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return Constants.laserTurretRange;
-    }
-
-    @Override
-    public Block getTurretBlock() {
-        return Blocks.laserTurret;
+        return ConfigHandler.getLaserTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return Constants.laserTurretPowerUse;
+        return ConfigHandler.getLaserTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return Constants.laserTurretFireRate;
+        return ConfigHandler.getLaserTurretSettings().getFireRate();
     }
 
     @Override
-    public float getTurretAccuracy() {
-        return Constants.laserTurretAccurraccy;
+    public double getTurretAccuracy() {
+        return ConfigHandler.getLaserTurretSettings().getAccuracy();
     }
 
     @Override

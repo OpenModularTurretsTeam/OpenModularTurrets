@@ -1,10 +1,7 @@
 package openmodularturrets.tileentity.turretBase;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import openmodularturrets.ModularTurrets;
-import openmodularturrets.network.EnergyStatusUpdateMessage;
+import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -15,9 +12,12 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmodularturrets.ModularTurrets;
+import openmodularturrets.network.EnergyStatusUpdateMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class TurretBase extends TileEntity implements IEnergyHandler, IInventory {
     protected EnergyStorage storage;

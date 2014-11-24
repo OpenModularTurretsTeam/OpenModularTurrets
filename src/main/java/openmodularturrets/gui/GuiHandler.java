@@ -1,21 +1,11 @@
 package openmodularturrets.gui;
 
-import openmodularturrets.gui.containers.ConfigContainer;
-import openmodularturrets.gui.containers.TurretBaseTierFourContainer;
-import openmodularturrets.gui.containers.TurretBaseTierOneContainer;
-import openmodularturrets.gui.containers.TurretBaseTierThreeContainer;
-import openmodularturrets.gui.containers.TurretBaseTierTwoContainer;
-import openmodularturrets.gui.containers.TurretBaseTierWoodContainer;
-import openmodularturrets.tileentity.turretBase.TurretBase;
-import openmodularturrets.tileentity.turretBase.TurretBaseTierFourTileEntity;
-import openmodularturrets.tileentity.turretBase.TurretBaseTierOneTileEntity;
-import openmodularturrets.tileentity.turretBase.TurretBaseTierThreeTileEntity;
-import openmodularturrets.tileentity.turretBase.TurretBaseTierTwoTileEntity;
-import openmodularturrets.tileentity.turretBase.TurretWoodBase;
+import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.IGuiHandler;
+import openmodularturrets.gui.containers.*;
+import openmodularturrets.tileentity.turretBase.*;
 
 public class GuiHandler implements IGuiHandler {
 

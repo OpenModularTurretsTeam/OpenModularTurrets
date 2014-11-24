@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import openmodularturrets.misc.Constants;
+import openmodularturrets.misc.ConfigHandler;
 
 public class DisposableTurretProjectile extends TurretProjectile {
 	boolean spawned = false;
@@ -36,18 +36,14 @@ public class DisposableTurretProjectile extends TurretProjectile {
 	@Override
 	protected void onImpact(MovingObjectPosition movingobjectposition) {
 		if (movingobjectposition.entityHit != null) {
+            int damage =  ConfigHandler.getDisposableTurretSettings().getDamage();
+
 			if (isAmped) {
-				movingobjectposition.entityHit.attackEntityFrom(
-						DamageSource.generic,
-						Constants.disposableItemTurretDamage
-								+ Constants.damageAmpDmgBonus);
-				movingobjectposition.entityHit.hurtResistantTime = 0;
-			} else {
-				movingobjectposition.entityHit.attackEntityFrom(
-						DamageSource.generic,
-						Constants.disposableItemTurretDamage);
-				movingobjectposition.entityHit.hurtResistantTime = 0;
+				damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
 			}
+
+            movingobjectposition.entityHit.attackEntityFrom(DamageSource.generic, damage);
+            movingobjectposition.entityHit.hurtResistantTime = 0;
 		}
 
 		if (itemBound != null) {

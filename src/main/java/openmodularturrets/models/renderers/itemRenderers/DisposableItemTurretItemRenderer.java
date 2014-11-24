@@ -1,10 +1,10 @@
 package openmodularturrets.models.renderers.itemRenderers;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer;
 import openmodularturrets.models.ModelDisposableItemTurret;
 import openmodularturrets.models.renderers.DisposableItemTurretRenderer;
 import openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 
 public class DisposableItemTurretItemRenderer implements IItemRenderer {
 

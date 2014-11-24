@@ -3,13 +3,11 @@ package openmodularturrets.projectiles;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import openmodularturrets.misc.Constants;
+import openmodularturrets.misc.ConfigHandler;
 
-import java.util.List;
 import java.util.Random;
 
 public class RocketProjectile extends TurretProjectile {
@@ -79,21 +77,15 @@ public class RocketProjectile extends TurretProjectile {
 	protected void onImpact(MovingObjectPosition movingobjectposition) {
 		if (!worldObj.isRemote) {
 			worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
-			AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 3,
-					this.posY - 5, this.posZ - 5, this.posX + 5, this.posY + 5,
-					this.posZ + 5);
 
-			List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
+            int damage =  ConfigHandler.getRocketTurretSettings().getDamage();
 
-			for (Entity mob : targets) {
-				if (isAmped) {
-					mob.attackEntityFrom(DamageSource.generic, 10 + Constants.damageAmpDmgBonus);
-					mob.hurtResistantTime = 0;
-				} else {
-					mob.attackEntityFrom(DamageSource.generic, 10);
-					mob.hurtResistantTime = 0;
-				}
-			}
+            if (isAmped) {
+                damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
+            }
+
+            movingobjectposition.entityHit.attackEntityFrom(DamageSource.generic, damage);
+            movingobjectposition.entityHit.hurtResistantTime = 0;
 		}
 		this.setDead();
 	}

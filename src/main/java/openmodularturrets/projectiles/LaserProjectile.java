@@ -4,8 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import openmodularturrets.misc.Constants;
-
+import openmodularturrets.misc.ConfigHandler;
 public class LaserProjectile extends TurretProjectile {
     public int arrowShake;
 
@@ -32,15 +31,14 @@ public class LaserProjectile extends TurretProjectile {
         worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:laserHit", 1.0F, 1.0F);
 
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
+            int damage =  ConfigHandler.getLaserTurretSettings().getDamage();
+
             if (isAmped) {
-                movingobjectposition.entityHit.attackEntityFrom(
-                    DamageSource.generic, Constants.laserTurretDamage + Constants.damageAmpDmgBonus);
-                movingobjectposition.entityHit.hurtResistantTime = 0;
-            } else {
-                movingobjectposition.entityHit.attackEntityFrom(
-                    DamageSource.generic, Constants.laserTurretDamage);
-                movingobjectposition.entityHit.hurtResistantTime = 0;
+                damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
             }
+
+            movingobjectposition.entityHit.attackEntityFrom(DamageSource.generic, damage);
+            movingobjectposition.entityHit.hurtResistantTime = 0;
         }
         this.setDead();
     }
