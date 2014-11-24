@@ -16,12 +16,7 @@ buildscript {
 }
 
 apply plugin: 'forge'
-
-<<<<<<< HEAD
 version = "1.2.8"
-=======
-version = "1.2.7.1"
->>>>>>> upstream/master
 group= "modularTurrets" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "OpenModularTurrets"
 
