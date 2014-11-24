@@ -126,7 +126,7 @@ public class TurretHeadUtils {
 
                 if (target != null && turret != null) {
                     EntityLivingBase targetELB = (EntityLivingBase) target;
-                    if (canTurretSeeTarget(turret, targetELB)) {
+                    if (canTurretSeeTarget(turret, targetELB) || true) {
                         return target;
                     }
                 }
