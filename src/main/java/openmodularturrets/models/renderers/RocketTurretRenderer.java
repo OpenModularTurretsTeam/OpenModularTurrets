@@ -48,7 +48,6 @@ public class RocketTurretRenderer extends TileEntitySpecialRenderer {
         model.Pole.rotateAngleY = turretHead.baseFitRotationZ;
         model.BoxUnder.rotateAngleX = turretHead.baseFitRotationX;
         model.renderAll();
-        model.renderAll();
 
         if (turretHead.base != null) {
             if (TurretHeadUtils.hasSolarPanelAddon(turretHead.base)) {
