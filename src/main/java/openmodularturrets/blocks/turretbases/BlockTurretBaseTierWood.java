@@ -3,10 +3,10 @@ package openmodularturrets.blocks.turretbases;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import openmodularturrets.ModInfo;
+import openmodularturrets.reference.ModInfo;
 import openmodularturrets.blocks.BlockNames;
-import openmodularturrets.misc.ConfigHandler;
-import openmodularturrets.tileentity.turretBase.TurretWoodBase;
+import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.tileentity.turretbase.TurretWoodBase;
 
 public class BlockTurretBaseTierWood extends BlockAbstractTurretBase {
 

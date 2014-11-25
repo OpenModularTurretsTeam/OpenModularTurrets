@@ -3,7 +3,7 @@ package openmodularturrets.items.ammo;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import openmodularturrets.ModInfo;
+import openmodularturrets.reference.ModInfo;
 import openmodularturrets.items.ItemNames;
 
 public class BulletAmmoItem extends AmmoItem {

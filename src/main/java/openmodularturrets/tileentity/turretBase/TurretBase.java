@@ -1,4 +1,4 @@
-package openmodularturrets.tileentity.turretBase;
+package openmodularturrets.tileentity.turretbase;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;

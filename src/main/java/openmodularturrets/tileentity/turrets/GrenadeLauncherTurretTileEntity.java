@@ -5,9 +5,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import openmodularturrets.items.Items;
-import openmodularturrets.misc.ConfigHandler;
-import openmodularturrets.projectiles.GrenadeProjectile;
-import openmodularturrets.projectiles.TurretProjectile;
+import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.entity.projectiles.GrenadeProjectile;
+import openmodularturrets.entity.projectiles.TurretProjectile;
 
 public class GrenadeLauncherTurretTileEntity extends TurretHead {
 

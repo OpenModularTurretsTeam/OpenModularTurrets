@@ -14,7 +14,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.network.SetTurretOwnerMessage;
-import openmodularturrets.tileentity.turretBase.TurretBase;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 
 import java.util.Random;
 

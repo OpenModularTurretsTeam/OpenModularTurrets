@@ -12,23 +12,24 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.creativetab.CreativeTabs;
 import openmodularturrets.blocks.Blocks;
-import openmodularturrets.gui.GuiHandler;
+import openmodularturrets.handler.GuiHandler;
+import openmodularturrets.handler.TileEntityHandler;
+import openmodularturrets.handler.RecipeHandler;
 import openmodularturrets.items.Items;
-import openmodularturrets.misc.ConfigHandler;
-import openmodularturrets.misc.ModularTurretsTab;
-import openmodularturrets.misc.Recipes;
+import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.reference.ModInfo;
+import openmodularturrets.client.gui.ModularTurretsTab;
 import openmodularturrets.network.*;
-import openmodularturrets.projectiles.BulletProjectile;
-import openmodularturrets.projectiles.GrenadeProjectile;
-import openmodularturrets.projectiles.LaserProjectile;
-import openmodularturrets.projectiles.RocketProjectile;
-import openmodularturrets.proxies.CommonProxy;
-import openmodularturrets.tileentity.TileEntities;
+import openmodularturrets.entity.projectiles.BulletProjectile;
+import openmodularturrets.entity.projectiles.GrenadeProjectile;
+import openmodularturrets.entity.projectiles.LaserProjectile;
+import openmodularturrets.entity.projectiles.RocketProjectile;
+import openmodularturrets.proxy.CommonProxy;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = "required-after:ThermalFoundation")
 public class ModularTurrets {
 
-    @SidedProxy(clientSide = "openmodularturrets.proxies.ClientProxy", serverSide = "openmodularturrets.proxies.CommonProxy")
+    @SidedProxy(clientSide = "openmodularturrets.proxy.ClientProxy", serverSide = "openmodularturrets.proxy.CommonProxy")
     public static CommonProxy proxy;
 
     @Instance(ModInfo.ID)
@@ -64,10 +65,10 @@ public class ModularTurrets {
     public void init(FMLInitializationEvent event) {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, gui);
 
-        TileEntities.init();
+        TileEntityHandler.init();
 
         proxy.initRenderers();
-        Recipes.initRecipes();
+        RecipeHandler.initRecipes();
 
         EntityRegistry.registerModEntity(RocketProjectile.class, "rocketProjectile", 1, this, 16, 1, true);
         EntityRegistry.registerModEntity(GrenadeProjectile.class, "grenadeProjectile", 2, this, 16, 1, true);

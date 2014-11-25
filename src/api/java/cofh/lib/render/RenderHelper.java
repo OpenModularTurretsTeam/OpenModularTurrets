@@ -29,7 +29,7 @@ public final class RenderHelper {
 	public static final ResourceLocation MC_ITEM_SHEET = new ResourceLocation("textures/atlas/items.png");
 	public static final ResourceLocation MC_FONT_DEFAULT = new ResourceLocation("textures/font/ascii.png");
 	public static final ResourceLocation MC_FONT_ALTERNATE = new ResourceLocation("textures/font/ascii_sga.png");
-	public static final ResourceLocation MC_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
+	public static final ResourceLocation MC_ITEM_GLINT = new ResourceLocation("textures/reference/enchanted_item_glint.png");
 
 	private RenderHelper() {
 

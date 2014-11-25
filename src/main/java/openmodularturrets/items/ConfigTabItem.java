@@ -10,9 +10,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import openmodularturrets.ModInfo;
+import openmodularturrets.reference.ModInfo;
 import openmodularturrets.ModularTurrets;
-import openmodularturrets.tileentity.turretBase.TurretBase;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class ConfigTabItem extends Item {
 

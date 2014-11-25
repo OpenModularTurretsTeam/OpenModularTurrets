@@ -1,6 +1,6 @@
-package openmodularturrets.tileentity.turretBase;
+package openmodularturrets.tileentity.turretbase;
 
-import openmodularturrets.misc.ConfigHandler;
+import openmodularturrets.handler.ConfigHandler;
 
 public class TurretBaseTierTwoTileEntity extends TurretBase {
 
