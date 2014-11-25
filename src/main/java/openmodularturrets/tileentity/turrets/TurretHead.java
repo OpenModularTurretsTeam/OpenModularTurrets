@@ -16,234 +16,255 @@ import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public abstract class TurretHead extends TileEntity {
-    public int ticks;
-    public float rotationXY;
-    public float rotationXZ;
-    public float baseFitRotationX;
-    public float baseFitRotationZ;
-    public int turretTier;
-    public TurretBase base;
-    public boolean hasSetSide = false;
+	public int ticks;
+	public float rotationXY;
+	public float rotationXZ;
+	public float baseFitRotationX;
+	public float baseFitRotationZ;
+	public int turretTier;
+	public TurretBase base;
+	public boolean hasSetSide = false;
 
-    @Override
-    public Packet getDescriptionPacket() {
-        NBTTagCompound var1 = new NBTTagCompound();
-        this.writeToNBT(var1);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
-    }
-    
-    @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-    	NBTTagCompound var1 = pkt.func_148857_g();
-    	readFromNBT(var1);
-    }
+	@Override
+	public Packet getDescriptionPacket() {
+		NBTTagCompound var1 = new NBTTagCompound();
+		this.writeToNBT(var1);
+		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord,
+				this.zCoord, 2, var1);
+	}
 
-    @Override
-    public void writeToNBT(NBTTagCompound par1) {
-        par1.setFloat("rotationXY", rotationXY);
-        par1.setFloat("rotationXZ", rotationXZ);
-        par1.setInteger("ticksBeforeFire", ticks);
-        super.writeToNBT(par1);
-    }
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		NBTTagCompound var1 = pkt.func_148857_g();
+		readFromNBT(var1);
+	}
 
-    @Override
-    public void readFromNBT(NBTTagCompound par1) {
-        super.readFromNBT(par1);
-        this.rotationXY = par1.getFloat("rotationXY");
-        this.rotationXZ = par1.getFloat("rotationXZ");
-        this.ticks = par1.getInteger("ticksBeforeFire");
-    }
+	@Override
+	public void writeToNBT(NBTTagCompound par1) {
+		par1.setFloat("rotationXY", rotationXY);
+		par1.setFloat("rotationXZ", rotationXZ);
+		par1.setInteger("ticksBeforeFire", ticks);
+		super.writeToNBT(par1);
+	}
 
-    public void setSide() {
-        if (hasSetSide) {
-            return;
-        }
+	@Override
+	public void readFromNBT(NBTTagCompound par1) {
+		super.readFromNBT(par1);
+		this.rotationXY = par1.getFloat("rotationXY");
+		this.rotationXZ = par1.getFloat("rotationXZ");
+		this.ticks = par1.getInteger("ticksBeforeFire");
+	}
 
-        if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TurretBase) {
-            this.baseFitRotationX = 1.56F;
-            this.baseFitRotationZ = 1.565F;
-            this.hasSetSide = true;
-            return;
-        }
+	public void setSide() {
+		if (hasSetSide) {
+			return;
+		}
 
-        if (worldObj.getTileEntity(xCoord - 1, yCoord, zCoord) instanceof TurretBase) {
-            this.baseFitRotationX = 1.56F;
-            this.baseFitRotationZ = 4.705F;
-            this.hasSetSide = true;
-            return;
-        }
+		if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TurretBase) {
+			this.baseFitRotationX = 1.56F;
+			this.baseFitRotationZ = 1.565F;
+			this.hasSetSide = true;
+			return;
+		}
 
-        if (worldObj.getTileEntity(xCoord, yCoord, zCoord + 1) instanceof TurretBase) {
-            this.baseFitRotationX = 1.56F;
-            this.baseFitRotationZ = 3.145F;
-            this.hasSetSide = true;
-            return;
-        }
+		if (worldObj.getTileEntity(xCoord - 1, yCoord, zCoord) instanceof TurretBase) {
+			this.baseFitRotationX = 1.56F;
+			this.baseFitRotationZ = 4.705F;
+			this.hasSetSide = true;
+			return;
+		}
 
-        if (worldObj.getTileEntity(xCoord, yCoord, zCoord - 1) instanceof TurretBase) {
-            this.baseFitRotationX = 1.56F;
-            this.baseFitRotationZ = 0F;
-            this.hasSetSide = true;
-            return;
-        }
+		if (worldObj.getTileEntity(xCoord, yCoord, zCoord + 1) instanceof TurretBase) {
+			this.baseFitRotationX = 1.56F;
+			this.baseFitRotationZ = 3.145F;
+			this.hasSetSide = true;
+			return;
+		}
 
-        if (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof TurretBase) {
-            this.baseFitRotationX = 3.145F;
-            this.baseFitRotationZ = 0F;
-            this.hasSetSide = true;
-            return;
-        }
+		if (worldObj.getTileEntity(xCoord, yCoord, zCoord - 1) instanceof TurretBase) {
+			this.baseFitRotationX = 1.56F;
+			this.baseFitRotationZ = 0F;
+			this.hasSetSide = true;
+			return;
+		}
 
-        if (worldObj.getTileEntity(xCoord, yCoord - 1, zCoord) instanceof TurretBase) {
-            this.baseFitRotationX = 0F;
-            this.baseFitRotationZ = 0F;
-            this.hasSetSide = true;
-        }
-    }
+		if (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof TurretBase) {
+			this.baseFitRotationX = 3.145F;
+			this.baseFitRotationZ = 0F;
+			this.hasSetSide = true;
+			return;
+		}
 
-    public Entity getTarget() {
-        return TurretHeadUtils.getTarget(
-                base,
-                worldObj,
-                base.getyAxisDetect(),
-                xCoord,
-                yCoord,
-                zCoord,
-                getTurretRange() + TurretHeadUtils.getRangeUpgrades(base),
-                this
-        );
-    }
+		if (worldObj.getTileEntity(xCoord, yCoord - 1, zCoord) instanceof TurretBase) {
+			this.baseFitRotationX = 0F;
+			this.baseFitRotationZ = 0F;
+			this.hasSetSide = true;
+		}
+	}
 
-    public abstract int getTurretRange();
+	public Entity getTarget() {
+		return TurretHeadUtils
+				.getTarget(
+						base,
+						worldObj,
+						base.getyAxisDetect(),
+						xCoord,
+						yCoord,
+						zCoord,
+						getTurretRange()
+								+ TurretHeadUtils.getRangeUpgrades(base), this);
+	}
 
-    public TurretBase getBase() {
-        return TurretHeadUtils.getTurretBase(worldObj, xCoord, yCoord, zCoord);
-    }
+	public abstract int getTurretRange();
 
-    public float getRotationXY() {
-	return rotationXY;
-    }
+	public TurretBase getBase() {
+		return TurretHeadUtils.getTurretBase(worldObj, xCoord, yCoord, zCoord);
+	}
 
-    public void setRotationXY(float rotationXY) {
-	this.rotationXY = rotationXY;
-    }
+	public float getRotationXY() {
+		return rotationXY;
+	}
 
-    public float getRotationXZ() {
-	return rotationXZ;
-    }
+	public void setRotationXY(float rotationXY) {
+		this.rotationXY = rotationXY;
+	}
 
-    public void setRotationXZ(float rotationXZ) {
-	this.rotationXZ = rotationXZ;
-    }
+	public float getRotationXZ() {
+		return rotationXZ;
+	}
 
-    public float getDistanceToEntity(Entity p_70032_1_)
-    {
-        float f = (float)(this.xCoord - p_70032_1_.posX);
-        float f1 = (float)(this.yCoord - p_70032_1_.posY);
-        float f2 = (float)(this.zCoord - p_70032_1_.posZ);
-        return MathHelper.sqrt_float(f * f + f1 * f1 + f2 * f2);
-    }
+	public void setRotationXZ(float rotationXZ) {
+		this.rotationXZ = rotationXZ;
+	}
 
-    public abstract int getTurretPowerUsage();
+	public float getDistanceToEntity(Entity p_70032_1_) {
+		float f = (float) (this.xCoord - p_70032_1_.posX);
+		float f1 = (float) (this.yCoord - p_70032_1_.posY);
+		float f2 = (float) (this.zCoord - p_70032_1_.posZ);
+		return MathHelper.sqrt_float(f * f + f1 * f1 + f2 * f2);
+	}
 
-    public abstract int getTurretFireRate();
+	public abstract int getTurretPowerUsage();
 
-    public abstract double getTurretAccuracy();
+	public abstract int getTurretFireRate();
 
-    public abstract boolean requiresAmmo();
+	public abstract double getTurretAccuracy();
 
-    public abstract boolean requiresSpecificAmmo();
+	public abstract boolean requiresAmmo();
 
-    public abstract Item getAmmo();
+	public abstract boolean requiresSpecificAmmo();
 
-    public abstract TurretProjectile createProjectile(World world, Entity target, ItemStack ammo);
+	public abstract Item getAmmo();
 
-    public abstract String getLaunchSoundEffect();
+	public abstract TurretProjectile createProjectile(World world,
+			Entity target, ItemStack ammo);
 
-    @Override
-    public void updateEntity() {
+	public abstract String getLaunchSoundEffect();
 
-        setSide();
-        this.base = getBase();
+	@Override
+	public void updateEntity() {
 
-        if (worldObj.isRemote) {
-            return;
-        }
+		setSide();
+		this.base = getBase();
 
-        if(ticks%5==0)
-        {
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
+		if (worldObj.isRemote) {
+			return;
+		}
 
-        ticks++;
+		if (ticks % 5 == 0) {
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
 
-        // BASE IS OKAY
-        if (base == null || base.getBaseTier() < this.turretTier) {
-            this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);
-        } else {
-            TurretHeadUtils.updateSolarPanelAddon(base);
-            TurretHeadUtils.updateRedstoneReactor(base);
+		ticks++;
 
-            int power_required = Math.round(this.getTurretPowerUsage() * (1 - TurretHeadUtils.getEfficiencyUpgrades(base)));
+		// BASE IS OKAY
+		if (base == null || base.getBaseTier() < this.turretTier) {
+			this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);
+		} else {
+			TurretHeadUtils.updateSolarPanelAddon(base);
+			TurretHeadUtils.updateRedstoneReactor(base);
 
-            // power check
-            if (!base.isGettingRedstoneSignal() && base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required) {
-                return;
-            }
+			int power_required = Math.round(this.getTurretPowerUsage()
+					* (1 - TurretHeadUtils.getEfficiencyUpgrades(base)));
 
-            // has cooldown passed?
-            if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtils.getFireRateUpgrades(base)))) {
-                return;
-            }
+			// power check
+			if (!base.isGettingRedstoneSignal()
+					&& base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required) {
+				return;
+			}
 
-            Entity target = getTarget();
+			// has cooldown passed?
+			if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtils
+					.getFireRateUpgrades(base)))) {
+				return;
+			}
 
-            // is there a target?
-            if (target == null) {
-                return;
-            }
+			Entity target = getTarget();
 
-            this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord, zCoord) + 3.2F;
-            this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord, yCoord, zCoord);
+			// is there a target?
+			if (target == null) {
+				return;
+			}
 
-            ItemStack ammo = null;
+			this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord,
+					zCoord) + 3.2F;
+			this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord,
+					yCoord, zCoord);
 
-            if (this.requiresAmmo()) {
-                if (this.requiresSpecificAmmo()) {
-                    ammo = TurretHeadUtils.useSpecificItemStackItemFromBase(base, this.getAmmo());
-                } else {
-                    ammo = TurretHeadUtils.useAnyItemStackFromBase(base);
-                }
+			ItemStack ammo = null;
 
-                // Is there ammo?
-                if (ammo == null) {
-                    return;
-                }
-            }
+			if (this.requiresAmmo()) {
+				if (this.requiresSpecificAmmo()) {
+					ammo = TurretHeadUtils.useSpecificItemStackItemFromBase(
+							base, this.getAmmo());
+				} else {
+					ammo = TurretHeadUtils.useAnyItemStackFromBase(base);
+				}
 
-            // Consume energy
-            base.setEnergyStored(base.getEnergyStored(ForgeDirection.UNKNOWN) - power_required);
+				// Is there ammo?
+				if (ammo == null) {
+					return;
+				}
+			}
 
-            TurretProjectile projectile = this.createProjectile(this.getWorldObj(), target, ammo);
-            projectile.setPosition(this.xCoord + 0.5, this.yCoord + 1.5, this.zCoord + 0.5);
+			// Consume energy
+			base.setEnergyStored(base.getEnergyStored(ForgeDirection.UNKNOWN)
+					- power_required);
 
-            if ((projectile.amp_level = TurretHeadUtils.getAmpLevel(base)) != 0) {
-                worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":amped", 1.0F, 1.0F);
-                projectile.isAmped = true;
-            }
+			TurretProjectile projectile = this.createProjectile(
+					this.getWorldObj(), target, ammo);
+			projectile.setPosition(this.xCoord + 0.5, this.yCoord + 0.5,
+					this.zCoord + 0.5);
 
-            double d0 = target.posX - this.xCoord;
-            double d1 = target.posY + (double) target.getEyeHeight() - 2.5F - this.yCoord;
-            double d2 = target.posZ - this.zCoord;
-            float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2) * (0.2F * (getDistanceToEntity(target) * 0.04F));
-            double accuraccy = this.getTurretAccuracy() * (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
+			if ((projectile.amp_level = TurretHeadUtils.getAmpLevel(base)) != 0) {
+				worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord,
+						ModInfo.ID + ":amped", 1.0F, 1.0F);
+				projectile.isAmped = true;
+			}
 
-            projectile.setThrowableHeading(d0, d1 + (double) f1, d2, 1.6F, (float) accuraccy);
+			double d0 = target.posX - this.xCoord;
+			double d1 = target.posY + (double) target.getEyeHeight() - 1.5F
+					- this.yCoord;
+			double d2 = target.posZ - this.zCoord;
+			float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2)
+					* (0.2F * (getDistanceToEntity(target) * 0.04F));
+			double accuraccy = this.getTurretAccuracy()
+					* (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
 
-            this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":" + this.getLaunchSoundEffect(), 1.0F, 1.0F);
-            this.getWorldObj().spawnEntityInWorld(projectile);
+			if (projectile.gravity == 0.00F) {
+				projectile.setThrowableHeading(d0, d1 + 1.0F, d2, 3.0F,
+						(float) accuraccy);
+			} else {
+				projectile.setThrowableHeading(d0, d1 + (double) f1, d2, 1.6F,
+						(float) accuraccy);
+			}
 
-            ticks = 0;
-        }
-    }
+			this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord,
+					this.zCoord,
+					ModInfo.ID + ":" + this.getLaunchSoundEffect(), 1.0F, 1.0F);
+			this.getWorldObj().spawnEntityInWorld(projectile);
+
+			ticks = 0;
+		}
+	}
 }

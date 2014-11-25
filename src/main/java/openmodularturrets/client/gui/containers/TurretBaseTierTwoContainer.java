@@ -16,8 +16,6 @@ public class TurretBaseTierTwoContainer extends Container {
 	public TurretBaseTierTwoContainer(InventoryPlayer inventoryPlayer,
 			TurretBase te) {
 		this.tileEntity = te;
-		int i;
-		int j;
 
 		for (int x = 0; x < 9; x++) {
 			this.addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18,

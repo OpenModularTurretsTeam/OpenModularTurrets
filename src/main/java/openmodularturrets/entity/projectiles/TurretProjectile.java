@@ -6,6 +6,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public abstract class TurretProjectile extends EntityThrowable {
+	
+	public float gravity;
+	
     public TurretProjectile(World p_i1776_1_) {
         super(p_i1776_1_);
     }

@@ -15,8 +15,6 @@ public class TurretBaseTierWoodContainer extends Container {
 	public TurretBaseTierWoodContainer(InventoryPlayer inventoryPlayer,
 			TurretWoodBase te) {
 		this.tileEntity = te;
-		int i;
-		int j;
 
 		for (int x = 0; x < 9; x++) {
 			this.addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18,
