@@ -1,4 +1,4 @@
 OpenModularTurrets
 ==================
 
-Repo for OpenModularTurrets-1.7.10-v1.1.1
+Repo for OpenModularTurrets for Minecraft. An Addon to Thermal Expansion. It adds modular turrets that can be used to defend your base from players and mobs.
