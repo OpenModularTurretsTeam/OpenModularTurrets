@@ -5,47 +5,60 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import openmodularturrets.handler.ConfigHandler;
+
 public class LaserProjectile extends TurretProjectile {
-    public int arrowShake;
+	public int arrowShake;
 
-    public LaserProjectile(World par1World) {
-	    super(par1World);
-    }
+	public LaserProjectile(World par1World) {
+		super(par1World);
+		this.gravity = 0.00F;
+	}
 
-    @Override
-    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) {
-	this.setDead();
-    }
+	@Override
+	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) {
+		this.setDead();
+		this.gravity = 0.00F;
+	}
 
-    @Override
-    public void onEntityUpdate() {
-        this.posY = posY + (fallDistance * -1);
+	@Override
+	public void onEntityUpdate() {
+		this.posY = posY + (fallDistance * -1);
 
-        if (ticksExisted >= 50) {
-            this.setDead();
-        }
-    }
+		if (ticksExisted >= 50) {
+			this.setDead();
+		}
+	}
 
-    @Override
-    protected void onImpact(MovingObjectPosition movingobjectposition) {
-        worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:laserHit", 1.0F, 1.0F);
+	@Override
+	protected void onImpact(MovingObjectPosition movingobjectposition) {
 
-        if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
-            int damage =  ConfigHandler.getLaserTurretSettings().getDamage();
+		if (this.ticksExisted <= 1) {
+			return;
+		}
 
-            if (isAmped) {
-                damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
-            }
+		if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
 
-            movingobjectposition.entityHit.attackEntityFrom(DamageSource.generic, damage);
-            movingobjectposition.entityHit.hurtResistantTime = 0;
-        }
-        this.setDead();
-    }
+			worldObj.playSoundEffect(posX, posY, posZ,
+					"openmodularturrets:laserHit", 1.0F, 1.0F);
 
-    @Override
-    protected float getGravityVelocity() {
-	return 0.00F;
-    }
+			if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
+				int damage = ConfigHandler.getLaserTurretSettings().getDamage();
+
+				if (isAmped) {
+					damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
+				}
+
+				movingobjectposition.entityHit.attackEntityFrom(
+						DamageSource.generic, damage);
+				movingobjectposition.entityHit.hurtResistantTime = 0;
+			}
+		}
+		this.setDead();
+	}
+
+	@Override
+	protected float getGravityVelocity() {
+		return this.gravity;
+	}	
 
 }

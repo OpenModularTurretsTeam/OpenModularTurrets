@@ -15,45 +15,62 @@ public class GrenadeProjectile extends TurretProjectile {
 
 	public GrenadeProjectile(World world) {
 		super(world);
+		this.gravity = 0.03F;
 	}
 
-    public GrenadeProjectile(World world, ItemStack ammo) {
-        super(world, ammo);
-    }
+	public GrenadeProjectile(World world, ItemStack ammo) {
+		super(world, ammo);
+		this.gravity = 0.03F;
+	}
 
-    @Override
+	@Override
 	public void onEntityUpdate() {
-		if (ticksExisted >= 100) {
+		if (ticksExisted >= 50) {
+
+			if (!worldObj.isRemote) {
+
+				worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
+				AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(
+						this.posX - 3, this.posY - 3, this.posZ - 3,
+						this.posX + 3, this.posY + 3, this.posZ + 3);
+				List<Entity> targets = worldObj.getEntitiesWithinAABB(
+						Entity.class, axis);
+
+				for (Entity mob : targets) {
+					int damage = ConfigHandler.getGrenadeTurretSettings()
+							.getDamage();
+
+					if (isAmped) {
+						damage += ConfigHandler.getDamageAmpDmgBonus()
+								* amp_level;
+					}
+
+					mob.attackEntityFrom(DamageSource.generic, damage);
+					mob.hurtResistantTime = 0;
+				}
+			}
 			this.setDead();
 		}
 
 		for (int i = 0; i <= 20; i++) {
-			worldObj.spawnParticle("reddust", posX, posY, posZ, 1.0D, 1.0D, 1.0D);
+			worldObj.spawnParticle("reddust", posX, posY, posZ, 1.0D, 1.0D,
+					1.0D);
 		}
 	}
 
 	@Override
 	protected void onImpact(MovingObjectPosition movingobjectposition) {
 
-		worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
-		AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 3,
-				this.posY - 3, this.posZ - 3, this.posX + 3, this.posY + 3,
-				this.posZ + 3);
-		List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
-
-		for (Entity mob : targets) {
-            int damage =  ConfigHandler.getGrenadeTurretSettings().getDamage();
-
-            if (isAmped) {
-                damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
-            }
-
-            movingobjectposition.entityHit.attackEntityFrom(DamageSource.generic, damage);
-            movingobjectposition.entityHit.hurtResistantTime = 0;
+		if (this.ticksExisted >= 2) {
+			this.motionX = 0.0F;
+			this.motionY = 0.0F;
+			this.motionZ = 0.0F;
 		}
+	}
 
-		this.setDead();
-
+	@Override
+	protected float getGravityVelocity() {
+		return this.gravity;
 	}
 
 }
