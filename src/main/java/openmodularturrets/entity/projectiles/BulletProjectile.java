@@ -10,10 +10,12 @@ public class BulletProjectile extends TurretProjectile {
 
     public BulletProjectile(World p_i1776_1_) {
         super(p_i1776_1_);
+        this.gravity = 0.00F;
     }
 
     public BulletProjectile(World par1World, ItemStack ammo) {
 		super(par1World, ammo);
+		this.gravity = 0.00F;
 	}
 
     @Override
@@ -25,7 +27,14 @@ public class BulletProjectile extends TurretProjectile {
 
 	@Override
 	protected void onImpact(MovingObjectPosition movingobjectposition) {
-		if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
+		
+		if(this.ticksExisted<=1)
+		{
+			return;
+		}
+		
+		if (movingobjectposition.entityHit != null && !worldObj.isRemote) {							
+			
             int damage =  ConfigHandler.getMachineGunTurretSettings().getDamage();
 
 			if (isAmped) {
@@ -51,6 +60,6 @@ public class BulletProjectile extends TurretProjectile {
 
 	@Override
 	protected float getGravityVelocity() {
-		return 0.00F;
+		return this.gravity;
 	}
 }
