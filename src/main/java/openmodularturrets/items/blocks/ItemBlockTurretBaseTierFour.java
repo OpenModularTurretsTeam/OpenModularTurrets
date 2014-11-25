@@ -6,7 +6,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import openmodularturrets.misc.ConfigHandler;
+import openmodularturrets.handler.ConfigHandler;
 
 import java.util.List;
 

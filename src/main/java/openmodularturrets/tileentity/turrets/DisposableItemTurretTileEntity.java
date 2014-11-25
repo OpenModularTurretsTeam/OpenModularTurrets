@@ -4,9 +4,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import openmodularturrets.misc.ConfigHandler;
-import openmodularturrets.projectiles.DisposableTurretProjectile;
-import openmodularturrets.projectiles.TurretProjectile;
+import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.entity.projectiles.DisposableTurretProjectile;
+import openmodularturrets.entity.projectiles.TurretProjectile;
 
 public class DisposableItemTurretTileEntity extends TurretHead {
     public DisposableItemTurretTileEntity() {

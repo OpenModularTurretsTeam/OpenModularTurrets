@@ -1,0 +1,243 @@
+package openmodularturrets.handler;
+
+import net.minecraftforge.common.config.Configuration;
+
+import java.io.File;
+
+public class ConfigHandler {
+    private static int baseTierWoodMaxCharge;
+    private static int baseTierWoodMaxIo;
+
+    private static int baseTierOneMaxCharge;
+    private static int baseTierOneMaxIo;
+
+    private static int baseTierTwoMaxCharge;
+    private static int baseTierTwoMaxIo;
+
+    private static int baseTierThreeMaxCharge;
+    private static int baseTierThreeMaxIo;
+
+    private static int baseTierFourMaxCharge;
+    private static int baseTierFourMaxIo;
+
+    private static TurretSetting disposable_turret;
+    private static TurretSetting machine_gun_turret;
+    private static TurretSetting rocket_turret;
+    private static TurretSetting grenade_turret;
+    private static TurretSetting laser_turret;
+
+    private static int rangeUpgradeBoost;
+    private static double fireRateUpgradeBoostPercentage;
+    private static double accuraccyUpgradeBoost;
+    private static double efficiencyUpgradeBoostPercentage;
+
+    private static int solarPanelAddonGen;
+    private static int redstoneReactorAddonGen;
+    private static int damageAmpDmgBonus;
+
+    private static int turretWarningDistance;
+
+    public static void init(File configFile) {
+
+		Configuration config = new Configuration(configFile);
+		config.load();
+
+		baseTierWoodMaxCharge = config.get("TurretBaseTierWood", "MaxCharge", 500).getInt();
+        baseTierWoodMaxIo = config.get("TurretBaseTierWood", "MaxIo", 50).getInt();
+
+		baseTierOneMaxCharge = config.get("TurretBaseTierOne", "MaxCharge", 50000).getInt();
+        baseTierOneMaxIo = config.get("TurretBaseTierOne", "MaxIo", 100).getInt();
+
+		baseTierTwoMaxCharge = config.get("TurretBaseTierTwo", "MaxCharge", 150000).getInt();
+        baseTierTwoMaxIo = config.get("TurretBaseTierTwo", "MaxIo", 500).getInt();
+
+		baseTierThreeMaxCharge = config.get("TurretBaseTierThree", "MaxCharge", 500000).getInt();
+        baseTierThreeMaxIo = config.get("TurretBaseTierThree", "MaxIo", 1500).getInt();
+
+		baseTierFourMaxCharge = config.get("TurretBaseTierFour", "MaxCharge", 10000000).getInt();
+        baseTierFourMaxIo = config.get("TurretBaseTierFour", "MaxIo", 5000).getInt();
+
+        disposable_turret = new TurretSetting(
+                config.get("TurretDisposable", "Range", 10, "Turret range, in blocks").getInt(),
+                config.get("TurretDisposable", "FireRateCooldown", 25, "Number of ticks between firings").getInt(),
+                config.get("TurretDisposable", "Damage", 2, "Measured in half-hearts").getInt(),
+                config.get("TurretDisposable", "Accuracy", 5, "Measured in ???, lower is better").getDouble(),
+                config.get("TurretDisposable", "PowerUsage", 2, "RF used per shot").getInt()
+        );
+
+        machine_gun_turret = new TurretSetting(
+                config.get("TurretMachineGun", "Range", 18, "Turret range, in blocks").getInt(),
+                config.get("TurretMachineGun", "FireRateCooldown", 8, "Number of ticks between firings").getInt(),
+                config.get("TurretMachineGun", "Damage", 2, "Measured in half-hearts").getInt(),
+                config.get("TurretMachineGun", "Accuracy", 3, "Measured in ???, lower is better").getDouble(),
+                config.get("TurretMachineGun", "PowerUsage", 100, "RF used per shot").getInt()
+        );
+
+        rocket_turret = new TurretSetting(
+                config.get("TurretRocket", "Range", 30, "Turret range, in blocks").getInt(),
+                config.get("TurretRocket", "FireRateCooldown", 30, "Number of ticks between firings").getInt(),
+                config.get("TurretRocket", "Damage", 10, "Measured in half-hearts").getInt(),
+                config.get("TurretRocket", "Accuracy", 1, "Measured in ???, lower is better").getDouble(),
+                config.get("TurretRocket", "PowerUsage", 5000, "RF used per shot").getInt()
+        );
+
+        grenade_turret = new TurretSetting(
+                config.get("TurretGrenade", "Range", 20, "Turret range, in blocks").getInt(),
+                config.get("TurretGrenade", "FireRateCooldown", 40, "Number of ticks between firings").getInt(),
+                config.get("TurretGrenade", "Damage", 8, "Measured in half-hearts").getInt(),
+                config.get("TurretGrenade", "Accuracy", 3, "Measured in ???, lower is better").getDouble(),
+                config.get("TurretGrenade", "PowerUsage", 3000, "RF used per shot").getInt()
+        );
+
+        laser_turret = new TurretSetting(
+                config.get("TurretLaser", "Range", 25, "Turret range, in blocks").getInt(),
+                config.get("TurretLaser", "FireRateCooldown", 10, "Number of ticks between firings").getInt(),
+                config.get("TurretLaser", "Damage", 2, "Measured in half-hearts").getInt(),
+                config.get("TurretLaser", "Accuracy", 1, "Measured in ???, lower is better").getDouble(),
+                config.get("TurretLaser", "PowerUsage", 10000, "RF used per shot").getInt()
+        );
+
+        rangeUpgradeBoost = config.get("upgrades", "range", 2, "Increases range in blocks linearly").getInt();
+        fireRateUpgradeBoostPercentage = config.get("upgrades", "rateOfFire", 0.1D, "It's a double for some reason, reduces cooldown").getDouble();
+        accuraccyUpgradeBoost = config.get("upgrades", "accuracy", 0.2D, "Increases accuracy linearly").getDouble();
+        efficiencyUpgradeBoostPercentage = config.get("upgrades", "efficiency", 0.08D, "Reduces power consumption linearly").getDouble();
+
+        solarPanelAddonGen = config.get("addons", "solar", 10, "Generates specified RF every tick").getInt();
+        redstoneReactorAddonGen = config.get("addons", "redstone", 1550, "Generates RF from redstone in turret's inventory").getInt();
+        damageAmpDmgBonus = config.get("addons", "damage", 2, "Increases damage linearly").getInt();
+
+        turretWarningDistance = config.get("miscellaneous", "warningDistance", 40).getInt();
+
+        if (config.hasChanged()) {
+            config.save();
+        }
+	}
+
+	public static int getBaseTierWoodMaxCharge() {
+		return baseTierWoodMaxCharge;
+	}
+
+	public static int getBaseTierWoodMaxIo() {
+		return baseTierWoodMaxIo;
+	}
+
+	public static int getBaseTierOneMaxIo() {
+		return baseTierOneMaxIo;
+	}
+
+	public static int getBaseTierTwoMaxIo() {
+		return baseTierTwoMaxIo;
+	}
+
+	public static int getBaseTierThreeMaxIo() {
+		return baseTierThreeMaxIo;
+	}
+
+	public static int getBaseTierFourMaxIo() {
+		return baseTierFourMaxIo;
+	}
+
+	public static int getBaseTierTwoMaxCharge() {
+		return baseTierTwoMaxCharge;
+	}
+
+	public static int getBaseTierThreeMaxCharge() {
+		return baseTierThreeMaxCharge;
+	}
+
+	public static int getBaseTierFourMaxCharge() {
+		return baseTierFourMaxCharge;
+	}
+
+	public static int getBaseTierOneMaxCharge() {
+		return baseTierOneMaxCharge;
+	}
+
+    public static int getTurretWarningDistance() {
+        return turretWarningDistance;
+    }
+
+    public static TurretSetting getDisposableTurretSettings() {
+        return disposable_turret;
+    }
+
+    public static TurretSetting getMachineGunTurretSettings() {
+        return machine_gun_turret;
+    }
+
+    public static TurretSetting getRocketTurretSettings() {
+        return rocket_turret;
+    }
+
+    public static TurretSetting getGrenadeTurretSettings() {
+        return grenade_turret;
+    }
+
+    public static TurretSetting getLaserTurretSettings() {
+        return laser_turret;
+    }
+
+    public static int getRangeUpgradeBoost() {
+        return rangeUpgradeBoost;
+    }
+
+    public static double getFireRateUpgradeBoostPercentage() {
+        return fireRateUpgradeBoostPercentage;
+    }
+
+    public static double getAccuraccyUpgradeBoost() {
+        return accuraccyUpgradeBoost;
+    }
+
+    public static double getEfficiencyUpgradeBoostPercentage() {
+        return efficiencyUpgradeBoostPercentage;
+    }
+
+    public static int getSolarPanelAddonGen() {
+        return solarPanelAddonGen;
+    }
+
+    public static int getRedstoneReactorAddonGen() {
+        return redstoneReactorAddonGen;
+    }
+
+    public static int getDamageAmpDmgBonus() {
+        return damageAmpDmgBonus;
+    }
+
+    public static class TurretSetting {
+        private final int range;
+        private final int rof;
+        private final int damage;
+        private final double accuracy;
+        private final int power_usage;
+
+        public TurretSetting(int range, int rof, int damage, double accuracy, int power_usage) {
+            this.range = range;
+            this.rof = rof;
+            this.damage = damage;
+            this.accuracy = accuracy;
+            this.power_usage = power_usage;
+        }
+
+        public int getRange() {
+            return range;
+        }
+
+        public int getFireRate() {
+            return rof;
+        }
+
+        public int getDamage() {
+            return damage;
+        }
+
+        public double getAccuracy() {
+            return accuracy;
+        }
+
+        public int getPowerUsage() {
+            return power_usage;
+        }
+    }
+}
