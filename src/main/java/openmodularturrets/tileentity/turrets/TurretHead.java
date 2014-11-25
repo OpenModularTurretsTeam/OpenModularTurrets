@@ -11,9 +11,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import openmodularturrets.ModInfo;
-import openmodularturrets.projectiles.TurretProjectile;
-import openmodularturrets.tileentity.turretBase.TurretBase;
+import openmodularturrets.reference.ModInfo;
+import openmodularturrets.entity.projectiles.TurretProjectile;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public abstract class TurretHead extends TileEntity {
     public int ticks;

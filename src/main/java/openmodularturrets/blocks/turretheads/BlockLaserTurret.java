@@ -2,7 +2,7 @@ package openmodularturrets.blocks.turretheads;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import openmodularturrets.ModInfo;
+import openmodularturrets.reference.ModInfo;
 import openmodularturrets.blocks.BlockNames;
 import openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
 

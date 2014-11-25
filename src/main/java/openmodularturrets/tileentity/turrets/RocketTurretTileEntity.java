@@ -5,9 +5,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import openmodularturrets.items.Items;
-import openmodularturrets.misc.ConfigHandler;
-import openmodularturrets.projectiles.RocketProjectile;
-import openmodularturrets.projectiles.TurretProjectile;
+import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.entity.projectiles.RocketProjectile;
+import openmodularturrets.entity.projectiles.TurretProjectile;
 
 public class RocketTurretTileEntity extends TurretHead {
 

@@ -11,10 +11,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import openmodularturrets.ModInfo;
+import openmodularturrets.reference.ModInfo;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.tileentity.LeverTileEntity;
-import openmodularturrets.tileentity.turretBase.TurretWoodBase;
+import openmodularturrets.tileentity.turretbase.TurretWoodBase;
 
 public class LeverBlock extends BlockContainer {
 

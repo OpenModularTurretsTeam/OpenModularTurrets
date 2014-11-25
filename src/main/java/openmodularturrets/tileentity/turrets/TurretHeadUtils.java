@@ -21,9 +21,9 @@ import openmodularturrets.items.upgrades.AccuraccyUpgradeItem;
 import openmodularturrets.items.upgrades.EfficiencyUpgradeItem;
 import openmodularturrets.items.upgrades.FireRateUpgradeItem;
 import openmodularturrets.items.upgrades.RangeUpgradeItem;
-import openmodularturrets.misc.ConfigHandler;
-import openmodularturrets.tileentity.turretBase.TurretBase;
-import openmodularturrets.tileentity.turretBase.TurretWoodBase;
+import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.turretbase.TurretWoodBase;
 
 import java.util.List;
 

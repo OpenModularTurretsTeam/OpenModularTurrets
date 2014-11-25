@@ -7,9 +7,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import openmodularturrets.ModInfo;
+import openmodularturrets.reference.ModInfo;
 import openmodularturrets.items.ItemNames;
-import openmodularturrets.misc.ConfigHandler;
+import openmodularturrets.handler.ConfigHandler;
 
 import java.util.List;
 
