@@ -1,9 +1,9 @@
 package openmodularturrets.gui.customSlot;
 
-import openmodularturrets.items.upgrades.UpgradeItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import openmodularturrets.items.upgrades.UpgradeItem;
 
 public class UpgradeSlot extends Slot {
 

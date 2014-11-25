@@ -1,7 +1,7 @@
 package openmodularturrets.items.ammo;
 
-import openmodularturrets.ModularTurrets;
 import net.minecraft.item.Item;
+import openmodularturrets.ModularTurrets;
 
 public abstract class AmmoItem extends Item {
     public AmmoItem() {

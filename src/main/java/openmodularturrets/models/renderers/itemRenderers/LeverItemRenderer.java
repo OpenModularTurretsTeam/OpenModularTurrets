@@ -1,10 +1,10 @@
 package openmodularturrets.models.renderers.itemRenderers;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer;
 import openmodularturrets.models.ModelLever;
 import openmodularturrets.models.renderers.LeverRenderer;
 import openmodularturrets.tileentity.LeverTileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 
 public class LeverItemRenderer implements IItemRenderer {
 

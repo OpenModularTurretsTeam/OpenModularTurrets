@@ -1,18 +1,16 @@
 package openmodularturrets.projectiles.renderers;
 
-import openmodularturrets.ModInfo;
-import openmodularturrets.projectiles.RocketProjectile;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-
+import openmodularturrets.ModInfo;
+import openmodularturrets.projectiles.RocketProjectile;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RocketRenderer extends Render

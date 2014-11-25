@@ -1,5 +1,9 @@
 package openmodularturrets.models.renderers;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import openmodularturrets.ModInfo;
 import openmodularturrets.models.ModelDamageAmp;
 import openmodularturrets.models.ModelMachineGun;
@@ -7,11 +11,6 @@ import openmodularturrets.models.ModelRedstoneReactor;
 import openmodularturrets.models.SolarPanelAddon;
 import openmodularturrets.tileentity.turrets.TurretHead;
 import openmodularturrets.tileentity.turrets.TurretHeadUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
 public class MachineGunTurretRenderer extends TileEntitySpecialRenderer {

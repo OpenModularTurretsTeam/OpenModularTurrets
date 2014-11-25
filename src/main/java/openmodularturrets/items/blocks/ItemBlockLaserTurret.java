@@ -1,12 +1,12 @@
 package openmodularturrets.items.blocks;
 
-import openmodularturrets.misc.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import openmodularturrets.misc.ConfigHandler;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -23,16 +23,16 @@ public class ItemBlockLaserTurret extends ItemBlock {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.GOLD + "--" + StatCollector.translateToLocal("tooltip.info") + "--");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.tier") + ": " + EnumChatFormatting.WHITE + "4");
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.range") + ": " + EnumChatFormatting.WHITE + Constants.laserTurretRange);
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.range") + ": " + EnumChatFormatting.WHITE + ConfigHandler.getLaserTurretSettings().getRange());
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.accuracy") + ": " + EnumChatFormatting.WHITE + StatCollector.translateToLocal("turret.accuracy.high"));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.ammo") + ": " + EnumChatFormatting.WHITE + StatCollector.translateToLocal("turret.ammo.4"));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.tierRequired") + ": " + EnumChatFormatting.WHITE + StatCollector.translateToLocal("base.tier.4"));
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_PURPLE + "--" + StatCollector.translateToLocal("tooltip.damage.label") + "--");
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.damage.stat") + ": " + EnumChatFormatting.WHITE + (Constants.laserTurretDamage / 2F) + " " + StatCollector.translateToLocal("tooltip.health"));
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.damage.stat") + ": " + EnumChatFormatting.WHITE + (ConfigHandler.getLaserTurretSettings().getDamage() / 2F) + " " + StatCollector.translateToLocal("tooltip.health"));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.aoe") + ": " + EnumChatFormatting.WHITE + "0");
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.firerate") + ": " + EnumChatFormatting.WHITE + df.format(20.0F / Constants.laserTurretFireRate));
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.energy.stat") + ": " + EnumChatFormatting.WHITE + Constants.laserTurretPowerUse+" RF");
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.firerate") + ": " + EnumChatFormatting.WHITE + df.format(20.0F / ConfigHandler.getLaserTurretSettings().getFireRate()));
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.energy.stat") + ": " + EnumChatFormatting.WHITE + ConfigHandler.getLaserTurretSettings().getPowerUsage()+" RF");
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.turret.4"));
     }

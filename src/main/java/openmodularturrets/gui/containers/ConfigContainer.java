@@ -1,9 +1,9 @@
 package openmodularturrets.gui.containers;
 
-import openmodularturrets.tileentity.turretBase.TurretBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import openmodularturrets.tileentity.turretBase.TurretBase;
 
 public class ConfigContainer extends Container {
 

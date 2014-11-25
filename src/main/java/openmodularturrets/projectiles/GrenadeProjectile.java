@@ -1,28 +1,27 @@
 package openmodularturrets.projectiles;
 
-import java.util.List;
-
-import openmodularturrets.misc.Constants;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import openmodularturrets.misc.ConfigHandler;
 
-public class GrenadeProjectile extends EntityThrowable {
+import java.util.List;
+
+public class GrenadeProjectile extends TurretProjectile {
 	public boolean isAmped;
 
 	public GrenadeProjectile(World world) {
 		super(world);
 	}
 
-	public GrenadeProjectile(World par1World, double par2, double par4,
-			double par6) {
-		super(par1World, par2, par4, par6);
-	}
+    public GrenadeProjectile(World world, ItemStack ammo) {
+        super(world, ammo);
+    }
 
-	@Override
+    @Override
 	public void onEntityUpdate() {
 		if (ticksExisted >= 100) {
 			this.setDead();
@@ -43,16 +42,14 @@ public class GrenadeProjectile extends EntityThrowable {
 		List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
 
 		for (Entity mob : targets) {
-			if (isAmped) {
-				mob.attackEntityFrom(DamageSource.generic,
-						Constants.grenadeTurretDamage
-								+ Constants.damageAmpDmgBonus);
-				mob.hurtResistantTime = 0;
-			} else {
-				mob.attackEntityFrom(DamageSource.generic,
-						Constants.grenadeTurretDamage);
-				mob.hurtResistantTime = 0;
-			}
+            int damage =  ConfigHandler.getGrenadeTurretSettings().getDamage();
+
+            if (isAmped) {
+                damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
+            }
+
+            movingobjectposition.entityHit.attackEntityFrom(DamageSource.generic, damage);
+            movingobjectposition.entityHit.hurtResistantTime = 0;
 		}
 
 		this.setDead();
