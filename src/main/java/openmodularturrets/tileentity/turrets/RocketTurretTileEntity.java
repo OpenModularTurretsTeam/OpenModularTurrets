@@ -1,13 +1,13 @@
 package openmodularturrets.tileentity.turrets;
 
-import openmodularturrets.blocks.Blocks;
-import openmodularturrets.items.Items;
-import openmodularturrets.misc.Constants;
-import openmodularturrets.projectiles.RocketProjectile;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.world.World;
+import openmodularturrets.items.Items;
+import openmodularturrets.misc.ConfigHandler;
+import openmodularturrets.projectiles.RocketProjectile;
+import openmodularturrets.projectiles.TurretProjectile;
 
 public class RocketTurretTileEntity extends TurretHead {
 
@@ -18,95 +18,46 @@ public class RocketTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return Constants.rocketTurretRange;
+        return ConfigHandler.getRocketTurretSettings().getRange();
     }
 
     @Override
-    public void updateEntity() {
-        setSide();
-        this.base = getBase();
+    public int getTurretPowerUsage() {
+        return ConfigHandler.getRocketTurretSettings().getPowerUsage();
+    }
 
-        if (worldObj.isRemote) {
-            return;
-        }
-        
-        if(ticks%5==0)
-        {
-        	 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
+    @Override
+    public int getTurretFireRate() {
+        return ConfigHandler.getRocketTurretSettings().getFireRate();
+    }
 
-        ticks++;
+    @Override
+    public double getTurretAccuracy() {
+        return ConfigHandler.getRocketTurretSettings().getAccuracy();
+    }
 
-        // BASE IS OKAY
-        if (base == null || base.getBaseTier() < this.turretTier) {
-            EntityItem turret_item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, new ItemStack(Blocks.rocketTurret));
-            worldObj.spawnEntityInWorld(turret_item);
+    @Override
+    public boolean requiresAmmo() {
+        return true;
+    }
 
-            worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-        } else {
-            TurretHeadUtils.updateSolarPanelAddon(base);
-            TurretHeadUtils.updateRedstoneReactor(base);
+    @Override
+    public boolean requiresSpecificAmmo() {
+        return true;
+    }
 
-            // power check
-            if (!base.isGettingRedstoneSignal()
-                && base.getEnergyStored(ForgeDirection.UNKNOWN) < Math
-                    .round(Constants.rocketTurretPowerUse
-                            * (1 - TurretHeadUtils
-                            .getEfficiencyUpgrades(base)))) {
-                return;
-            }
+    @Override
+    public Item getAmmo() {
+        return Items.rocketCraftable;
+    }
 
-            // Has cooldown passed?
-            if (ticks < (Constants.rocketTurretFireRate * (1 - TurretHeadUtils
-                    .getFireRateUpgrades(base)))) {
-                return;
-            }
+    @Override
+    public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
+        return new RocketProjectile(world, target, ammo);
+    }
 
-            this.target = getTarget();
-
-            // TARGET IS NOT NULL
-            if (target == null) {
-                return;
-            }
-
-            this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord, zCoord) + 3.2F;
-            this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord, yCoord, zCoord);
-
-            ItemStack ammo = TurretHeadUtils.useSpecificItemStackItemFromBase(base, Items.rocketCraftable);
-
-            // Is there ammo to use?
-            if (ammo == null) {
-                return;
-            }
-
-            base.setEnergyStored(
-                    base.getEnergyStored(ForgeDirection.UNKNOWN) -
-                            (Math.round(Constants.rocketTurretPowerUse *
-                                            (1 - TurretHeadUtils.getEfficiencyUpgrades(base))
-                            )
-                    )
-            );
-
-            RocketProjectile projectile = new RocketProjectile(worldObj, this.xCoord + 0.5, this.yCoord + 1.5, this.zCoord + 0.5, target);
-
-            if (TurretHeadUtils.hasDamageAmpAddon(base)) {
-                worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:amped", 1.0F, 1.0F);
-                projectile.isAmped = true;
-            }
-
-            double d0 = target.posX - this.xCoord;
-            double d1 = target.posY + (double) target.getEyeHeight() - 2.5D - this.yCoord;
-            double d2 = target.posZ - this.zCoord;
-            float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2) * 0.2F;
-            float accuracy = Constants.rocketTurretAccurraccy * (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
-
-            projectile.setThrowableHeading(d0, d1 + (double) f1, d2, 1.6F, accuracy);
-            projectile.accuracy = accuracy;
-
-            this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:rocket", 1.0F, 1.0F);
-            this.getWorldObj().spawnEntityInWorld(projectile);
-
-            ticks = 0;
-        }
+    @Override
+    public String getLaunchSoundEffect() {
+        return "rocket";
     }
 }

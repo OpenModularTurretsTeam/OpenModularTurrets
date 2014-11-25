@@ -1,11 +1,12 @@
 package openmodularturrets.tileentity.turrets;
 
-import openmodularturrets.blocks.Blocks;
-import openmodularturrets.misc.Constants;
-import openmodularturrets.projectiles.LaserProjectile;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.world.World;
+import openmodularturrets.misc.ConfigHandler;
+import openmodularturrets.projectiles.LaserProjectile;
+import openmodularturrets.projectiles.TurretProjectile;
 
 public class LaserTurretTileEntity extends TurretHead {
 
@@ -16,86 +17,46 @@ public class LaserTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return Constants.laserTurretRange;
+        return ConfigHandler.getLaserTurretSettings().getRange();
     }
 
     @Override
-    public void updateEntity() {
+    public int getTurretPowerUsage() {
+        return ConfigHandler.getLaserTurretSettings().getPowerUsage();
+    }
 
-        setSide();
-        this.base = getBase();
+    @Override
+    public int getTurretFireRate() {
+        return ConfigHandler.getLaserTurretSettings().getFireRate();
+    }
 
-        if (worldObj.isRemote) {
-            return;
-        }
-        
-        if(ticks%5==0)
-        {
-        	 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
+    @Override
+    public double getTurretAccuracy() {
+        return ConfigHandler.getLaserTurretSettings().getAccuracy();
+    }
 
-        ticks++;
+    @Override
+    public boolean requiresAmmo() {
+        return false;
+    }
 
-        // BASE IS OKAY
-        if (base == null || base.getBaseTier() < this.turretTier) {
-            EntityItem turret_item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, new ItemStack(Blocks.laserTurret));
-            worldObj.spawnEntityInWorld(turret_item);
+    @Override
+    public boolean requiresSpecificAmmo() {
+        return false;
+    }
 
-            worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-        } else {
+    @Override
+    public Item getAmmo() {
+        return null;
+    }
 
-            TurretHeadUtils.updateSolarPanelAddon(base);
-            TurretHeadUtils.updateRedstoneReactor(base);
+    @Override
+    public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
+        return new LaserProjectile(world);
+    }
 
-            // power check
-            if (!base.isGettingRedstoneSignal()
-                && base.getEnergyStored(ForgeDirection.UNKNOWN) < Math
-                    .round(Constants.laserTurretPowerUse
-                            * (1 - TurretHeadUtils
-                            .getEfficiencyUpgrades(base)))) {
-               return;
-            }
-
-            // has cooldown passed?
-            if (ticks < (Constants.laserTurretFireRate * (1 - TurretHeadUtils.getFireRateUpgrades(base)))) {
-                return;
-            }
-
-            target = getTarget();
-
-            // Target found?
-            if (target == null) {
-                return;
-            }
-
-            this.rotationXZ = TurretHeadUtils.getAimYaw(target,xCoord, yCoord, zCoord) + 3.2F;
-            this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord, yCoord, zCoord);
-
-            base.setEnergyStored(
-                    base.getEnergyStored(ForgeDirection.UNKNOWN) -
-                            (Math.round(Constants.laserTurretPowerUse *
-                                    (1 - TurretHeadUtils.getEfficiencyUpgrades(base)))
-                            )
-            );
-
-            LaserProjectile projectile = new LaserProjectile(worldObj, this.xCoord + 0.5, this.yCoord + 1.5, this.zCoord + 0.5, target);
-
-            if (TurretHeadUtils.hasDamageAmpAddon(base)) {
-                worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:amped", 1.0F, 1.0F);
-                projectile.isAmped = true;
-            }
-
-            double d0 = target.posX - this.xCoord;
-            double d1 = target.posY - this.yCoord;
-            double d2 = target.posZ - this.zCoord;
-            float accuraccy = Constants.laserTurretAccurraccy * (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
-
-            projectile.setThrowableHeading(d0, d1, d2, 5.0F, accuraccy);
-
-            this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "openmodularturrets:laser", 0.5F, 1.0F);
-            this.getWorldObj().spawnEntityInWorld(projectile);
-
-            ticks = 0;
-        }
+    @Override
+    public String getLaunchSoundEffect() {
+        return "laser";
     }
 }

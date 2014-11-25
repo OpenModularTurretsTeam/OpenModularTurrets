@@ -1,9 +1,9 @@
 package openmodularturrets.gui.customSlot;
 
-import openmodularturrets.items.addons.AddonItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import openmodularturrets.items.addons.AddonItem;
 
 public class AddonSlot extends Slot {
 

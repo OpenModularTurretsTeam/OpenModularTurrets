@@ -1,13 +1,12 @@
 package openmodularturrets.models.renderers;
 
-import openmodularturrets.ModInfo;
-import openmodularturrets.models.ModelLever;
-import openmodularturrets.tileentity.LeverTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-
+import openmodularturrets.ModInfo;
+import openmodularturrets.models.ModelLever;
+import openmodularturrets.tileentity.LeverTileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class LeverRenderer extends TileEntitySpecialRenderer {

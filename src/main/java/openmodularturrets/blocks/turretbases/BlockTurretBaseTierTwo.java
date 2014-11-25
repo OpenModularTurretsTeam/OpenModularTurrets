@@ -1,12 +1,12 @@
 package openmodularturrets.blocks.turretbases;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import openmodularturrets.ModInfo;
 import openmodularturrets.blocks.BlockNames;
 import openmodularturrets.misc.ConfigHandler;
 import openmodularturrets.tileentity.turretBase.TurretBaseTierTwoTileEntity;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
 public class BlockTurretBaseTierTwo extends BlockAbstractTurretBase {
 

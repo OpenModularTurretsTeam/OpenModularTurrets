@@ -1,10 +1,10 @@
 package openmodularturrets.models.renderers.itemRenderers;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer;
 import openmodularturrets.models.ModelMachineGun;
 import openmodularturrets.models.renderers.MachineGunTurretRenderer;
 import openmodularturrets.tileentity.turrets.MachineGunTurretTileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 
 public class MachineGunTurretItemRenderer implements IItemRenderer {
 

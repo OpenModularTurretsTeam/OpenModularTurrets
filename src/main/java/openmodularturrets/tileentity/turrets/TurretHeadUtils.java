@@ -1,19 +1,5 @@
 package openmodularturrets.tileentity.turrets;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import openmodularturrets.items.upgrades.AccuraccyUpgradeItem;
-import openmodularturrets.items.addons.RedstoneReactorAddonItem;
-import openmodularturrets.items.addons.DamageAmpAddonItem;
-import openmodularturrets.items.upgrades.EfficiencyUpgradeItem;
-import openmodularturrets.items.upgrades.FireRateUpgradeItem;
-import openmodularturrets.items.upgrades.RangeUpgradeItem;
-import openmodularturrets.items.addons.SolarPanelAddonItem;
-import openmodularturrets.misc.ConfigHandler;
-import openmodularturrets.misc.Constants;
-import openmodularturrets.tileentity.turretBase.TurretBase;
-import openmodularturrets.tileentity.turretBase.TurretWoodBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,22 +11,26 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmodularturrets.items.addons.DamageAmpAddonItem;
+import openmodularturrets.items.addons.RedstoneReactorAddonItem;
+import openmodularturrets.items.addons.SolarPanelAddonItem;
+import openmodularturrets.items.upgrades.AccuraccyUpgradeItem;
+import openmodularturrets.items.upgrades.EfficiencyUpgradeItem;
+import openmodularturrets.items.upgrades.FireRateUpgradeItem;
+import openmodularturrets.items.upgrades.RangeUpgradeItem;
+import openmodularturrets.misc.ConfigHandler;
+import openmodularturrets.tileentity.turretBase.TurretBase;
+import openmodularturrets.tileentity.turretBase.TurretWoodBase;
+
+import java.util.List;
 
 public class TurretHeadUtils {
 
-    private static List<EntityPlayerMP> warnList = new ArrayList<EntityPlayerMP>();
-
     public static void warnPlayers(TurretBase base, World worldObj, int downLowAmount, int xCoord, int yCoord, int zCoord, int turretRange) {
         if (base.isAttacksPlayers()) {
-            if (worldObj.getTotalWorldTime() % 160 == 0) {
-                warnList.clear();
-            }
-
             int warnDistance = ConfigHandler.getTurretWarningDistance();
             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(
                     xCoord - turretRange - warnDistance, yCoord - downLowAmount - warnDistance,
@@ -48,24 +38,19 @@ public class TurretHeadUtils {
                     yCoord + turretRange + warnDistance, zCoord + turretRange + warnDistance
             );
 
-            List<Entity> targets = worldObj.getEntitiesWithinAABB(EntityPlayerMP.class, axis);
+            List<EntityPlayerMP> targets = worldObj.getEntitiesWithinAABB(EntityPlayerMP.class, axis);
 
-            for (Entity target : targets) {
-                EntityPlayerMP entity = (EntityPlayerMP) target;
-                if (!entity.getDisplayName().equals(base.getOwner())
-                        && !isTrustedPlayer(entity.getDisplayName(), base)) {
-                    dispatchWarnMessage(entity, worldObj);
+            for (EntityPlayerMP target : targets) {
+                if (!target.getDisplayName().equals(base.getOwner()) && !isTrustedPlayer(target.getDisplayName(), base)) {
+                    dispatchWarnMessage(target, worldObj);
                 }
             }
         }
     }
 
     public static void dispatchWarnMessage(EntityPlayerMP player, World worldObj) {
-        if (!warnList.contains(player)) {
-            warnList.add(player);
-            worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "openmodularturrets:warning", 1.0F, 1.0F);
-            player.addChatMessage(new ChatComponentText("\u00A74You are entering a turret-protected area. Continue at your own risk."));
-        }
+        worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "openmodularturrets:warning", 1.0F, 1.0F);
+        player.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("status.warning")));
     }
 
     public static Entity getTarget(TurretBase base, World worldObj, int downLowAmount, int xCoord, int yCoord, int zCoord, int turretRange, TurretHead turret) {
@@ -146,29 +131,17 @@ public class TurretHeadUtils {
     }
 
     public static TurretBase getTurretBase(World world, int x, int y, int z) {
-        if (world != null) {
-            if (world.getTileEntity(x + 1, y, z) instanceof TurretBase) {
-                return (TurretBase) world.getTileEntity(x + 1, y, z);
-            }
+        if (world == null) {
+            return null;
+        }
 
-            if (world.getTileEntity(x - 1, y, z) instanceof TurretBase) {
-                return (TurretBase) world.getTileEntity(x - 1, y, z);
-            }
+        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+            int offsetX = x + direction.offsetX;
+            int offsetY = y + direction.offsetY;
+            int offsetZ = z + direction.offsetZ;
 
-            if (world.getTileEntity(x, y, z + 1) instanceof TurretBase) {
-                return (TurretBase) world.getTileEntity(x, y, z + 1);
-            }
-
-            if (world.getTileEntity(x, y, z - 1) instanceof TurretBase) {
-                return (TurretBase) world.getTileEntity(x, y, z - 1);
-            }
-
-            if (world.getTileEntity(x, y + 1, z) instanceof TurretBase) {
-                return (TurretBase) world.getTileEntity(x, y + 1, z);
-            }
-
-            if (world.getTileEntity(x, y - 1, z) instanceof TurretBase) {
-                return (TurretBase) world.getTileEntity(x, y - 1, z);
+            if (world.getTileEntity(offsetX, offsetY, offsetZ) instanceof TurretBase) {
+                return (TurretBase) world.getTileEntity(offsetX, offsetY, offsetZ);
             }
         }
 
@@ -182,17 +155,14 @@ public class TurretHeadUtils {
         yaw = yaw - 1.570796F + 3.2F;
         return yaw;
     }
-    
 
-
-    public static float getAimPitch(Entity target, int xCoord, int yCoord,
-	    int zCoord) {
-	double dX = (target.posX - 0.2F) - (xCoord + 0.6F);
-	double dY = (target.posY + 0.6F) - (yCoord - 0.6F);
-	double dZ = (target.posZ - 0.2F) - (zCoord + 0.6F);
-	float pitch = (float) (Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY) + Math.PI);
-	pitch = pitch + 1.65F;
-	return pitch;
+    public static float getAimPitch(Entity target, int xCoord, int yCoord, int zCoord) {
+        double dX = (target.posX - 0.2F) - (xCoord + 0.6F);
+        double dY = (target.posY + 0.6F) - (yCoord - 0.6F);
+        double dZ = (target.posZ - 0.2F) - (zCoord + 0.6F);
+        float pitch = (float) (Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY) + Math.PI);
+        pitch = pitch + 1.65F;
+        return pitch;
     }
 
     public static ItemStack useAnyItemStackFromBase(TurretBase base) {
@@ -231,14 +201,14 @@ public class TurretHeadUtils {
         if (tier == 4) {
             if (base.getStackInSlot(12) != null) {
                 if (base.getStackInSlot(12).getItem() instanceof RangeUpgradeItem) {
-                    value += (Constants.rangeUpgradeBoost * base.getStackInSlot(11).stackSize);
+                    value += (ConfigHandler.getRangeUpgradeBoost() * base.getStackInSlot(11).stackSize);
                 }
             }
         }
 
         if (base.getStackInSlot(11) != null) {
             if (base.getStackInSlot(11).getItem() instanceof RangeUpgradeItem) {
-                value += (Constants.rangeUpgradeBoost * base.getStackInSlot(11).stackSize);
+                value += (ConfigHandler.getRangeUpgradeBoost() * base.getStackInSlot(11).stackSize);
             }
         }
 
@@ -246,45 +216,43 @@ public class TurretHeadUtils {
     }
 
     public static float getAccuraccyUpgrades(TurretBase base) {
-
-        float value = 0.0F;
+        float accuracy = 0.0F;
         int tier = base.getBaseTier();
 
         if (tier == 0) {
-            return value;
+            return accuracy;
         }
 
         if (tier == 4) {
             if (base.getStackInSlot(12) != null) {
                 if (base.getStackInSlot(12).getItem() instanceof AccuraccyUpgradeItem) {
-                    value += (Constants.accuraccyUpgradeBoost * base.getStackInSlot(12).stackSize);
+                    accuracy += (ConfigHandler.getAccuraccyUpgradeBoost() * base.getStackInSlot(12).stackSize);
                 }
             }
         }
 
         if (base.getStackInSlot(11) != null) {
             if (base.getStackInSlot(11).getItem() instanceof AccuraccyUpgradeItem) {
-                value += (Constants.accuraccyUpgradeBoost * base
+                accuracy += (ConfigHandler.getAccuraccyUpgradeBoost() * base
                         .getStackInSlot(11).stackSize);
             }
         }
 
-        return value;
+        return accuracy;
     }
 
     public static float getEfficiencyUpgrades(TurretBase base) {
-
-        float value = 0.0F;
+        float efficiency = 0.0F;
         int tier = base.getBaseTier();
 
         if (tier == 0) {
-            return value;
+            return efficiency;
         }
 
         if (tier == 4) {
             if (base.getStackInSlot(12) != null) {
                 if (base.getStackInSlot(12).getItem() instanceof EfficiencyUpgradeItem) {
-                    value += (Constants.efficiencyUpgradeBoostPercentage * base
+                    efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * base
                             .getStackInSlot(12).stackSize);
                 }
             }
@@ -292,26 +260,26 @@ public class TurretHeadUtils {
 
         if (base.getStackInSlot(11) != null) {
             if (base.getStackInSlot(11).getItem() instanceof EfficiencyUpgradeItem) {
-                value += (Constants.efficiencyUpgradeBoostPercentage * base
+                efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * base
                         .getStackInSlot(11).stackSize);
             }
         }
 
-        return value;
+        return efficiency;
     }
 
     public static float getFireRateUpgrades(TurretBase base) {
-        float value = 0.0F;
+        float rof = 0.0F;
         int tier = base.getBaseTier();
 
         if (tier == 0) {
-            return value;
+            return rof;
         }
 
         if (tier == 4) {
             if (base.getStackInSlot(12) != null) {
                 if (base.getStackInSlot(12).getItem() instanceof FireRateUpgradeItem) {
-                    value += (Constants.fireRateUpgradeBoostPercentage * base
+                    rof += (ConfigHandler.getFireRateUpgradeBoostPercentage() * base
                             .getStackInSlot(12).stackSize);
                 }
             }
@@ -319,77 +287,85 @@ public class TurretHeadUtils {
 
         if (base.getStackInSlot(11) != null) {
             if (base.getStackInSlot(11).getItem() instanceof FireRateUpgradeItem) {
-                value += (Constants.fireRateUpgradeBoostPercentage * base
+                rof += (ConfigHandler.getFireRateUpgradeBoostPercentage() * base
                         .getStackInSlot(11).stackSize);
             }
         }
 
-        return value;
+        return rof;
     }
 
     public static boolean hasRedstoneReactor(TurretBase base) {
-        boolean value = false;
-        if (!(base instanceof TurretWoodBase)) {
-            for (int i = 9; i <= 10; i++) {
-                if (base.getStackInSlot(i) != null) {
-                    if (base.getStackInSlot(i).getItem() instanceof RedstoneReactorAddonItem) {
-                        value = true;
-                    }
-                }
-            }
-            return value;
+        if (base instanceof TurretWoodBase) {
+            return false;
         }
-        return false;
+
+        return base.getStackInSlot(9).getItem() instanceof RedstoneReactorAddonItem || base.getStackInSlot(10).getItem() instanceof RedstoneReactorAddonItem;
     }
 
     public static boolean hasDamageAmpAddon(TurretBase base) {
-        boolean value = false;
-        if (!(base instanceof TurretWoodBase)) {
-            for (int i = 9; i <= 10; i++) {
-                if (base.getStackInSlot(i) != null) {
-                    if (base.getStackInSlot(i).getItem() instanceof DamageAmpAddonItem) {
-                        value = true;
-                    }
-                }
-            }
-            return value;
+        if (base instanceof TurretWoodBase) {
+            return false;
         }
-        return false;
+
+        return base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem || base.getStackInSlot(10).getItem() instanceof DamageAmpAddonItem;
     }
 
     public static boolean hasSolarPanelAddon(TurretBase base) {
-        boolean value = false;
-        if (!(base instanceof TurretWoodBase)) {
-            for (int i = 9; i <= 10; i++) {
-                if (base.getStackInSlot(i) != null) {
-                    if (base.getStackInSlot(i).getItem() instanceof SolarPanelAddonItem) {
-                        value = true;
-                    }
-                }
-            }
-            return value;
+        if (base instanceof TurretWoodBase) {
+            return false;
         }
-        return false;
+
+        return base.getStackInSlot(9).getItem() instanceof SolarPanelAddonItem || base.getStackInSlot(10).getItem() instanceof SolarPanelAddonItem;
+    }
+
+    public static int getAmpLevel(TurretBase base) {
+        int amp_level = 0;
+        int tier = base.getBaseTier();
+
+        if (tier == 0) {
+            return amp_level;
+        }
+
+        if (base.getStackInSlot(10) != null) {
+            if (base.getStackInSlot(10).getItem() instanceof DamageAmpAddonItem) {
+                amp_level += (ConfigHandler.getDamageAmpDmgBonus() * base
+                        .getStackInSlot(10).stackSize);
+            }
+        }
+
+        if (base.getStackInSlot(9) != null) {
+            if (base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem) {
+                amp_level += (ConfigHandler.getDamageAmpDmgBonus() * base
+                        .getStackInSlot(9).stackSize);
+            }
+        }
+
+        return amp_level;
     }
 
     public static void updateSolarPanelAddon(TurretBase base) {
-        if (hasSolarPanelAddon(base)) {
-            if (base.getWorldObj().isDaytime()
-                && !base.getWorldObj().isRaining()
-                && base.getWorldObj().canBlockSeeTheSky(base.xCoord,
-                    base.yCoord + 2, base.zCoord)) {
-                base.receiveEnergy(ForgeDirection.UNKNOWN, 1, false);
-            }
+        if (!hasSolarPanelAddon(base)) {
+            return;
+        }
+
+        if (base.getWorldObj().isDaytime() &&
+                !base.getWorldObj().isRaining() &&
+                base.getWorldObj().canBlockSeeTheSky(base.xCoord, base.yCoord + 2, base.zCoord)) {
+            base.receiveEnergy(ForgeDirection.UNKNOWN, ConfigHandler.getSolarPanelAddonGen(), false);
         }
     }
 
     public static void updateRedstoneReactor(TurretBase base) {
-        if (hasRedstoneReactor(base)
-            && Constants.redstoneReactorAddonGen < (base.getMaxEnergyStored(ForgeDirection.UNKNOWN) - base.getEnergyStored(ForgeDirection.UNKNOWN))) {
-            ItemStack redstone = useSpecificItemStackItemFromBase(base,
-                    Items.redstone);
+        if (!hasRedstoneReactor(base)) {
+            return;
+        }
+
+        if (ConfigHandler.getRedstoneReactorAddonGen() < (base.getMaxEnergyStored(ForgeDirection.UNKNOWN) - base.getEnergyStored(ForgeDirection.UNKNOWN))) {
+            ItemStack redstone = useSpecificItemStackItemFromBase(base, Items.redstone);
+
             if (redstone != null) {
-                base.receiveEnergy(ForgeDirection.UNKNOWN, Constants.redstoneReactorAddonGen, false);
+                base.receiveEnergy(ForgeDirection.UNKNOWN, ConfigHandler.getRedstoneReactorAddonGen(), false);
             }
         }
     }

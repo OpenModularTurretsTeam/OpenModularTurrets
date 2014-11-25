@@ -1,10 +1,5 @@
 package openmodularturrets.gui;
 
-import openmodularturrets.ModInfo;
-import openmodularturrets.ModularTurrets;
-import openmodularturrets.gui.containers.ConfigContainer;
-import openmodularturrets.network.*;
-import openmodularturrets.tileentity.turretBase.TurretBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -12,7 +7,11 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-
+import openmodularturrets.ModInfo;
+import openmodularturrets.ModularTurrets;
+import openmodularturrets.gui.containers.ConfigContainer;
+import openmodularturrets.network.*;
+import openmodularturrets.tileentity.turretBase.TurretBase;
 import org.lwjgl.opengl.GL11;
 
 public class ConfigureGui extends GuiContainer {

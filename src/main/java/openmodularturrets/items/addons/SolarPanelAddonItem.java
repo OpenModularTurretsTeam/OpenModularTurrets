@@ -1,15 +1,15 @@
 package openmodularturrets.items.addons;
 
-import openmodularturrets.ModInfo;
-import openmodularturrets.items.ItemNames;
-import openmodularturrets.misc.Constants;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import openmodularturrets.ModInfo;
+import openmodularturrets.items.ItemNames;
+import openmodularturrets.misc.ConfigHandler;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class SolarPanelAddonItem extends AddonItem {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.RED + StatCollector.translateToLocal("turret.addon.label"));
         p_77624_3_.add("");
-        p_77624_3_.add(StatCollector.translateToLocal("turret.addon.solar.a") + " " + Constants.solarPanelAddonGen + " " + StatCollector.translateToLocal("turret.addon.solar.b"));
+        p_77624_3_.add(StatCollector.translateToLocal("turret.addon.solar.a") + " " + ConfigHandler.getSolarPanelAddonGen() + " " + StatCollector.translateToLocal("turret.addon.solar.b"));
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.addon.solar.flavour"));
     }
