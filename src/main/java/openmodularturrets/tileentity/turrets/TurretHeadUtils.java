@@ -300,7 +300,12 @@ public class TurretHeadUtils {
             return false;
         }
 
-        return base.getStackInSlot(9).getItem() instanceof RedstoneReactorAddonItem || base.getStackInSlot(10).getItem() instanceof RedstoneReactorAddonItem;
+        if (base.getStackInSlot(9) != null)   {
+            return base.getStackInSlot(9).getItem() instanceof RedstoneReactorAddonItem;
+        } else if (base.getStackInSlot(10) != null) {
+            return base.getStackInSlot(10).getItem() instanceof RedstoneReactorAddonItem;
+        }
+        return false;
     }
 
     public static boolean hasDamageAmpAddon(TurretBase base) {
@@ -308,7 +313,12 @@ public class TurretHeadUtils {
             return false;
         }
 
-        return base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem || base.getStackInSlot(10).getItem() instanceof DamageAmpAddonItem;
+        if (base.getStackInSlot(9) != null)   {
+            return base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem;
+        } else if (base.getStackInSlot(10) != null) {
+            return base.getStackInSlot(10).getItem() instanceof DamageAmpAddonItem;
+        }
+        return false;
     }
 
     public static boolean hasSolarPanelAddon(TurretBase base) {
@@ -316,7 +326,12 @@ public class TurretHeadUtils {
             return false;
         }
 
-        return base.getStackInSlot(9).getItem() instanceof SolarPanelAddonItem || base.getStackInSlot(10).getItem() instanceof SolarPanelAddonItem;
+        if (base.getStackInSlot(9) != null)   {
+            return base.getStackInSlot(9).getItem() instanceof SolarPanelAddonItem;
+        } else if (base.getStackInSlot(10) != null) {
+            return base.getStackInSlot(10).getItem() instanceof SolarPanelAddonItem;
+        }
+        return false;
     }
 
     public static int getAmpLevel(TurretBase base) {
