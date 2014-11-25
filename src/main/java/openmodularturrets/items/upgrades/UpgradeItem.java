@@ -1,7 +1,7 @@
 package openmodularturrets.items.upgrades;
 
-import openmodularturrets.ModularTurrets;
 import net.minecraft.item.Item;
+import openmodularturrets.ModularTurrets;
 
 public abstract class UpgradeItem extends Item
 {

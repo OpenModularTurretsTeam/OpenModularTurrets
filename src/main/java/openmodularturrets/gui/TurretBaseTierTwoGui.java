@@ -1,16 +1,5 @@
 package openmodularturrets.gui;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.util.ArrayList;
-
-import openmodularturrets.ModInfo;
-import openmodularturrets.ModularTurrets;
-import openmodularturrets.gui.containers.TurretBaseTierTwoContainer;
-import openmodularturrets.network.AdjustYAxisDetectMessage;
-import openmodularturrets.network.DropBaseMessage;
-import openmodularturrets.network.DropTurretsMessage;
-import openmodularturrets.tileentity.turretBase.TurretBaseTierTwoTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -18,8 +7,16 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
-
+import openmodularturrets.ModInfo;
+import openmodularturrets.ModularTurrets;
+import openmodularturrets.gui.containers.TurretBaseTierTwoContainer;
+import openmodularturrets.network.AdjustYAxisDetectMessage;
+import openmodularturrets.network.DropBaseMessage;
+import openmodularturrets.network.DropTurretsMessage;
+import openmodularturrets.tileentity.turretBase.TurretBaseTierTwoTileEntity;
 import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
 
 public class TurretBaseTierTwoGui extends GuiContainer {
 

@@ -10,6 +10,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.creativetab.CreativeTabs;
 import openmodularturrets.blocks.Blocks;
 import openmodularturrets.gui.GuiHandler;
 import openmodularturrets.items.Items;
@@ -23,7 +24,6 @@ import openmodularturrets.projectiles.LaserProjectile;
 import openmodularturrets.projectiles.RocketProjectile;
 import openmodularturrets.proxies.CommonProxy;
 import openmodularturrets.tileentity.TileEntities;
-import net.minecraft.creativetab.CreativeTabs;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = "required-after:ThermalFoundation")
 public class ModularTurrets {
@@ -47,7 +47,7 @@ public class ModularTurrets {
         Items.init();
         Blocks.init();
 
-        networking = new SimpleNetworkWrapper("vending-machines");
+        networking = new SimpleNetworkWrapper(ModInfo.ID);
         networking.registerMessage(AddTrustedPlayerMessage.class, AddTrustedPlayerMessage.class, 0, Side.SERVER);
         networking.registerMessage(RemoveTrustedPlayerMessage.class, RemoveTrustedPlayerMessage.class, 1, Side.SERVER);
         networking.registerMessage(ToggleAttackMobsMessage.class, ToggleAttackMobsMessage.class, 2, Side.SERVER);

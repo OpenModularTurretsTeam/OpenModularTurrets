@@ -1,17 +1,18 @@
 package openmodularturrets.items;
 
-import openmodularturrets.ModInfo;
-import openmodularturrets.ModularTurrets;
-import openmodularturrets.tileentity.turretBase.TurretBase;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import openmodularturrets.ModInfo;
+import openmodularturrets.ModularTurrets;
+import openmodularturrets.tileentity.turretBase.TurretBase;
 
 public class ConfigTabItem extends Item {
 
@@ -44,10 +45,10 @@ public class ConfigTabItem extends Item {
             if (par2EntityPlayer.getDisplayName().equals(base.getOwner())) {
                 par2EntityPlayer.openGui(ModularTurrets.instance, 5, par3World, par4, par5, par6);
             } else {
-                par2EntityPlayer.addChatMessage(new ChatComponentText("You do not own this turret."));
+                par2EntityPlayer.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
             }
         } else {
-            par2EntityPlayer.addChatMessage(new ChatComponentText("There's no turret base there."));
+            par2EntityPlayer.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.missingBase")));
         }
 
         return true;

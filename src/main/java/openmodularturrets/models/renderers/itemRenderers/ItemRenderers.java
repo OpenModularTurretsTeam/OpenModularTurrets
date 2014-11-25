@@ -1,11 +1,11 @@
 package openmodularturrets.models.renderers.itemRenderers;
 
+import net.minecraft.item.Item;
+import net.minecraftforge.client.MinecraftForgeClient;
 import openmodularturrets.blocks.Blocks;
 import openmodularturrets.models.renderers.TileEntityRenderers;
 import openmodularturrets.tileentity.LeverTileEntity;
 import openmodularturrets.tileentity.turrets.*;
-import net.minecraft.item.Item;
-import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ItemRenderers {
 	public static void init()
