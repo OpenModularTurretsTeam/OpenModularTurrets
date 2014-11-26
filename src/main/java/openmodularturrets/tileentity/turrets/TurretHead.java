@@ -1,6 +1,7 @@
 package openmodularturrets.tileentity.turrets;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,6 +25,7 @@ public abstract class TurretHead extends TileEntity {
 	public int turretTier;
 	public TurretBase base;
 	public boolean hasSetSide = false;
+	public float recoilState = 0.0F;
 
 	@Override
 	public Packet getDescriptionPacket() {
@@ -133,6 +135,10 @@ public abstract class TurretHead extends TileEntity {
 		return rotationXZ;
 	}
 
+	public void doRecoil() {
+		this.recoilState = 0.3F;
+	}
+
 	public void setRotationXZ(float rotationXZ) {
 		this.rotationXZ = rotationXZ;
 	}
@@ -175,6 +181,10 @@ public abstract class TurretHead extends TileEntity {
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 
+		if (recoilState > 0.0F) {
+			recoilState = recoilState - 0.01F;
+		}
+
 		ticks++;
 
 		// BASE IS OKAY
@@ -203,6 +213,11 @@ public abstract class TurretHead extends TileEntity {
 
 			// is there a target?
 			if (target == null) {
+				return;
+			}
+			
+			if(!TurretHeadUtils.canTurretSeeTarget(this, (EntityLivingBase) target))
+			{
 				return;
 			}
 
@@ -262,8 +277,8 @@ public abstract class TurretHead extends TileEntity {
 			this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord,
 					this.zCoord,
 					ModInfo.ID + ":" + this.getLaunchSoundEffect(), 1.0F, 1.0F);
-			this.getWorldObj().spawnEntityInWorld(projectile);
-
+			this.getWorldObj().spawnEntityInWorld(projectile);	
+			doRecoil();
 			ticks = 0;
 		}
 	}
