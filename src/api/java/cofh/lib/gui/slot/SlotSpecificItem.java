@@ -8,7 +8,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 /**
- * Slot which is restricted to a specific item and maximum amount.
+ * Slot which is restricted to a specific blockitem and maximum amount.
  * 
  * @author King Lemming
  * 

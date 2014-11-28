@@ -319,42 +319,51 @@ public class TurretHeadUtils {
 	}
 
 	public static boolean hasRedstoneReactor(TurretBase base) {
-		if (base instanceof TurretWoodBase) {
-			return false;
-		}
+        boolean found = false;
+        if (base instanceof TurretWoodBase) {
+            return false;
+        }
 
-		if (base.getStackInSlot(9) != null) {
-			return base.getStackInSlot(9).getItem() instanceof RedstoneReactorAddonItem;
-		} else if (base.getStackInSlot(10) != null) {
-			return base.getStackInSlot(10).getItem() instanceof RedstoneReactorAddonItem;
-		}
-		return false;
+        if (base.getStackInSlot(9) != null) {
+            found = base.getStackInSlot(9).getItem() instanceof RedstoneReactorAddonItem;
+        }
+
+        if (base.getStackInSlot(10) != null) {
+            found = base.getStackInSlot(10).getItem() instanceof RedstoneReactorAddonItem;
+        }
+        return found;
 	}
 
 	public static boolean hasDamageAmpAddon(TurretBase base) {
-		if (base instanceof TurretWoodBase) {
+        boolean found = false;
+        if (base instanceof TurretWoodBase) {
 			return false;
 		}
 
-		if (base.getStackInSlot(9) != null) {
-			return base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem;
-		} else if (base.getStackInSlot(10) != null) {
-			return base.getStackInSlot(10).getItem() instanceof DamageAmpAddonItem;
-		}
-		return false;
+        if (base.getStackInSlot(9) != null) {
+            found = base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem;
+        }
+
+        if (base.getStackInSlot(10) != null) {
+            found = base.getStackInSlot(10).getItem() instanceof DamageAmpAddonItem;
+        }
+        return found;
 	}
 
 	public static boolean hasSolarPanelAddon(TurretBase base) {
-		if (base instanceof TurretWoodBase) {
+		boolean found = false;
+        if (base instanceof TurretWoodBase) {
 			return false;
 		}
 
 		if (base.getStackInSlot(9) != null) {
-			return base.getStackInSlot(9).getItem() instanceof SolarPanelAddonItem;
-		} else if (base.getStackInSlot(10) != null) {
-			return base.getStackInSlot(10).getItem() instanceof SolarPanelAddonItem;
+			found = base.getStackInSlot(9).getItem() instanceof SolarPanelAddonItem;
 		}
-		return false;
+
+        if (base.getStackInSlot(10) != null) {
+			found = base.getStackInSlot(10).getItem() instanceof SolarPanelAddonItem;
+		}
+		return found;
 	}
 
 	public static int getAmpLevel(TurretBase base) {

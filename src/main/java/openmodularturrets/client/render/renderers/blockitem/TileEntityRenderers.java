@@ -1,4 +1,4 @@
-package openmodularturrets.client.render.models.renderers;
+package openmodularturrets.client.render.renderers.blockitem;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.relauncher.Side;

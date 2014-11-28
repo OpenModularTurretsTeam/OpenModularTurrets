@@ -3,7 +3,7 @@ package openmodularturrets.client.render.renderers.items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import openmodularturrets.client.render.models.ModelGrenadeLauncher;
-import openmodularturrets.client.render.models.renderers.GrenadeLauncherTurretRenderer;
+import openmodularturrets.client.render.renderers.blockitem.GrenadeLauncherTurretRenderer;
 import openmodularturrets.tileentity.turrets.GrenadeLauncherTurretTileEntity;
 
 public class GrenadeLauncherTurretItemRenderer implements IItemRenderer {

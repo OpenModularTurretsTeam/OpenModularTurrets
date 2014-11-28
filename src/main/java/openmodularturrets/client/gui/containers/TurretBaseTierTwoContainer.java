@@ -51,7 +51,7 @@ public class TurretBaseTierTwoContainer extends Container {
 		ItemStack stack = null;
 		Slot slotObject = (Slot) inventorySlots.get(slot);
 
-		// null checks and checks if the item can be stacked (maxStackSize > 1)
+		// null checks and checks if the blockitem can be stacked (maxStackSize > 1)
 		if (slotObject != null && slotObject.getHasStack()) {
 			ItemStack stackInSlot = slotObject.getStack();
 			stack = stackInSlot.copy();

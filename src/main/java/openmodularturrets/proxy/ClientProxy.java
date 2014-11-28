@@ -1,6 +1,6 @@
 package openmodularturrets.proxy;
 
-import openmodularturrets.client.render.models.renderers.TileEntityRenderers;
+import openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
 import openmodularturrets.client.render.renderers.items.ItemRenderers;
 import openmodularturrets.client.render.renderers.projectiles.ProjectileRenderers;
 
