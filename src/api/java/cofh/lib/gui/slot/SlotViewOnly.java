@@ -9,7 +9,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 /**
- * A slot that can only be used to display an item, not edited. Can optionally not highlight when moused over.
+ * A slot that can only be used to display an blockitem, not edited. Can optionally not highlight when moused over.
  */
 public class SlotViewOnly extends Slot {
 

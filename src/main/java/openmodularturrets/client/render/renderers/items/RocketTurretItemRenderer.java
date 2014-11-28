@@ -3,7 +3,7 @@ package openmodularturrets.client.render.renderers.items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import openmodularturrets.client.render.models.ModelRocketTurret;
-import openmodularturrets.client.render.models.renderers.RocketTurretRenderer;
+import openmodularturrets.client.render.renderers.blockitem.RocketTurretRenderer;
 import openmodularturrets.tileentity.turrets.RocketTurretTileEntity;
 
 public class RocketTurretItemRenderer implements IItemRenderer {

@@ -16,10 +16,10 @@ public interface IItemDuct {
 	 * null return means that the entire stack was accepted/routed!
 	 * 
 	 * @param from
-	 *            Orientation the item is inserted from.
+	 *            Orientation the blockitem is inserted from.
 	 * @param item
 	 *            ItemStack to be inserted. The size of this stack corresponds to the maximum amount to insert.
-	 * @return An ItemStack representing how much is remaining after the item was inserted into the Duct.
+	 * @return An ItemStack representing how much is remaining after the blockitem was inserted into the Duct.
 	 */
 	public ItemStack insertItem(ForgeDirection from, ItemStack item);
 

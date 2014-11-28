@@ -62,7 +62,7 @@ public class ComparableItem {
 		return this;
 	}
 
-	// '0' is null. '-1' is an unmapped item (missing in this World)
+	// '0' is null. '-1' is an unmapped blockitem (missing in this World)
 	protected final int getId() {
 
 		return Item.getIdFromItem(item);
