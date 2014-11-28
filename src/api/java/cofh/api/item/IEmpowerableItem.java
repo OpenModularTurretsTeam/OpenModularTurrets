@@ -13,12 +13,12 @@ import net.minecraft.item.ItemStack;
 public interface IEmpowerableItem {
 
 	/**
-	 * Check whether or not a given blockitem is currently in an empowered state.
+	 * Check whether or not a given item is currently in an empowered state.
 	 */
 	boolean isEmpowered(ItemStack stack);
 
 	/**
-	 * Attempt to set the empowered state of the blockitem.
+	 * Attempt to set the empowered state of the item.
 	 * 
 	 * @param stack
 	 *            ItemStack to be empowered/disempowered.
@@ -32,9 +32,9 @@ public interface IEmpowerableItem {
 	 * Callback method for reacting to a state change. Useful in KeyBinding handlers.
 	 * 
 	 * @param player
-	 *            Player holding the blockitem, if applicable.
+	 *            Player holding the item, if applicable.
 	 * @param stack
-	 *            The blockitem being held.
+	 *            The item being held.
 	 */
 	void onStateChange(EntityPlayer player, ItemStack stack);
 

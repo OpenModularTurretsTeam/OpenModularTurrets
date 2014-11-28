@@ -20,12 +20,12 @@ public interface IInventoryHandler extends IInventoryConnection {
 	 * original stack - a null return means that the entire stack was accepted!
 	 * 
 	 * @param from
-	 *            Orientation the blockitem is inserted from.
+	 *            Orientation the item is inserted from.
 	 * @param item
 	 *            ItemStack to be inserted. The size of this stack corresponds to the maximum amount to insert.
 	 * @param simulate
 	 *            If TRUE, the insertion will only be simulated.
-	 * @return An ItemStack representing how much is remaining after the blockitem was inserted (or would have been, if simulated) into the container inventory.
+	 * @return An ItemStack representing how much is remaining after the item was inserted (or would have been, if simulated) into the container inventory.
 	 */
 	ItemStack insertItem(ForgeDirection from, ItemStack item, boolean simulate);
 
@@ -34,7 +34,7 @@ public interface IInventoryHandler extends IInventoryConnection {
 	 * null return means that nothing was extracted!
 	 * 
 	 * @param from
-	 *            Orientation the blockitem is extracted from.
+	 *            Orientation the item is extracted from.
 	 * @param item
 	 *            ItemStack to be extracted. The size of this stack corresponds to the maximum amount to extract. If this is null, then a null ItemStack should
 	 *            immediately be returned.
@@ -49,7 +49,7 @@ public interface IInventoryHandler extends IInventoryConnection {
 	 * null return means that nothing was extracted!
 	 * 
 	 * @param from
-	 *            Orientation the blockitem is extracted from.
+	 *            Orientation the item is extracted from.
 	 * @param maxExtract
 	 *            Maximum number of items to extract. (The returned ItemStack should have a stackSize no higher than this.)
 	 * @param simulate
