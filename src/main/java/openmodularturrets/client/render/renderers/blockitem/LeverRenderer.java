@@ -1,4 +1,4 @@
-package openmodularturrets.client.render.models.renderers;
+package openmodularturrets.client.render.renderers.blockitem;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;

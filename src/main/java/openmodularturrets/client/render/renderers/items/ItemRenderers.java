@@ -3,7 +3,7 @@ package openmodularturrets.client.render.renderers.items;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 import openmodularturrets.blocks.Blocks;
-import openmodularturrets.client.render.models.renderers.TileEntityRenderers;
+import openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
 import openmodularturrets.tileentity.LeverTileEntity;
 import openmodularturrets.tileentity.turrets.*;
 
