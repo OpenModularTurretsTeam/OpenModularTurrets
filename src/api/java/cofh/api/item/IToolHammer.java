@@ -4,7 +4,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
 /**
- * Implement this interface on subclasses of Item to have that blockitem work as a tool for CoFH mods.
+ * Implement this interface on subclasses of Item to have that item work as a tool for CoFH mods.
  */
 public interface IToolHammer {
 
@@ -12,7 +12,7 @@ public interface IToolHammer {
 	 * Called to ensure that the wrench can be used.
 	 * 
 	 * @param item
-	 *            The itemstack for the tool. Not required to match equipped blockitem (e.g., multi-tools that contain other tools)
+	 *            The itemstack for the tool. Not required to match equipped item (e.g., multi-tools that contain other tools)
 	 * @param user
 	 *            The entity using the tool
 	 * @param x
@@ -29,7 +29,7 @@ public interface IToolHammer {
 	 * Callback for when the tool has been used reactively.
 	 * 
 	 * @param item
-	 *            The ItemStack for the tool. Not required to match equipped blockitem (e.g., multi-tools that contain other tools)
+	 *            The ItemStack for the tool. Not required to match equipped item (e.g., multi-tools that contain other tools)
 	 * @param user
 	 *            The entity using the tool
 	 * @param x

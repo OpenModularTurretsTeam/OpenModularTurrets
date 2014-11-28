@@ -3,7 +3,7 @@ package cofh.api.inventory;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
- * Implement this interface on TileEntities which should connect to blockitem transportation blocks.
+ * Implement this interface on TileEntities which should connect to item transportation blocks.
  */
 public interface IInventoryConnection {
 
