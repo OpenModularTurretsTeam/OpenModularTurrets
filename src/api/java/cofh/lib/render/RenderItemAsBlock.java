@@ -7,7 +7,7 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 /**
- * Easy way of rendering an blockitem which should look like a block.
+ * Easy way of rendering an item which should look like a block.
  * 
  * @author King Lemming
  * 
