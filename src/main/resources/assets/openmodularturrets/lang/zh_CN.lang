@@ -1,0 +1,123 @@
+item.bulletThrowable.name=投射型子弹
+item.grenadeThrowable.name=投射型榴弹
+item.bulletCraftable.name=炮塔弹药 - 子弹
+item.grenadeCraftable.name=炮塔弹药 - 榴弹
+item.rocketCraftable.name=炮塔弹药 - 火箭
+item.upgFire.name=升级组件 - 射速
+item.upgEff.name=升级组件 - 效率
+item.upgRan.name=升级组件 - 范围
+item.upgAcc.name=升级组件 - 精准
+item.addonReactor.name=附件 - 红石能源芯片
+item.addonDam.name=附件 - 攻击增强
+item.addonSolar.name=附件 - 太阳能芯片
+item.configTablet.name=炮塔目标设置器
+item.sensorOne.name=传感器 <1级>
+item.sensorTwo.name=传感器 <2级>
+item.sensorThree.name=传感器 <3级>
+item.sensorFour.name=传感器 <4级>
+item.chamber.name=弹膛
+item.barrel.name=炮管
+item.ioBus.name=IO总线
+item.containmentChamber.name=复合式弹膛
+item.energeticBarrel.name=电磁炮管
+
+tile.baseTierWood.name=木制炮塔基座
+tile.baseTierOneBlock.name=铅石炮塔基座
+tile.baseTierTwoBlock.name=硬化炮塔基座
+tile.baseTierThreeBlock.name=强化炮塔基座
+tile.baseTierFourBlock.name=谐振炮塔基座
+tile.disposeItemTurret.name=低等投射炮塔
+tile.rocketTurret.name=火箭发射炮塔
+tile.machineGunTurret.name=机枪炮塔
+tile.grenadeTurret.name=榴弹发射炮塔
+tile.laserTurret.name=镭射炮塔
+tile.leverBlock.name=炮塔基座曲柄
+
+itemGroup.openmodularturrets=Open Modular Turrets
+
+tooltip.tier=等级
+tooltip.range=攻击范围 (方块)
+tooltip.accuracy=精准度
+tooltip.ammo=需求弹药类型
+tooltip.tierRequired=需求基座等级
+tooltip.damage.label=攻击力
+tooltip.damage.stat=射击伤害
+tooltip.aoe=伤害范围
+tooltip.firerate=每秒射击次数
+tooltip.energy.stat=每次射击耗能
+tooltip.info=基础信息
+tooltip.health=颗心
+
+tooptip.energy.label=能量信息
+tooltip.rf.max=储能上限
+tooltip.rf.io=IO上限
+tooltip.extras.label=附加物
+tooltip.extras.addons.0=无
+tooltip.extras.addons.1=1x 附件插槽
+tooltip.extras.addons.2=2x 附件插槽
+tooltip.extras.upgrade.0=无
+tooltip.extras.upgrade.1=1x 升级组件插槽
+tooltip.extras.upgrade.2=2x 升级组件插槽
+
+flavour.base.0=当你无家可归时,记住随时备战
+flavour.base.1=我会抽干你们的血.
+flavour.base.2=早安,长官!!
+flavour.base.3=开火!开火!!
+flavour.base.4a=国王齐兵马,
+flavour.base.4b=破镜难圆没办法.
+
+flavour.turret.0=可怜的人们催眠自己
+flavour.turret.1=突突!!突突突突!!
+flavour.turret.2a=如同"马"悖论的
+flavour.turret.2b=另一个感性形式
+flavour.turret.3=嗖~Boom!
+flavour.turret.4=特斯拉会为我骄傲的.
+
+turret.accuracy.low=低
+turret.accuracy.medium=中
+turret.accuracy.high=高
+turret.accuracy.exact=极其精准
+
+turret.ammo.0=任何方块/物品
+turret.ammo.1=子弹
+turret.ammo.2=榴弹
+turret.ammo.3=制导火箭
+turret.ammo.4=无
+
+base.tier.0=木制基座
+base.tier.1=铅石基座
+base.tier.2=硬化基座
+base.tier.3=强化基座
+base.tier.4=谐振基座
+
+turret.addon.label=炮塔附件
+turret.addon.amp.a.label=每次射击增加
+turret.addon.amp.b.label=点攻击伤害
+turret.addon.amp.flavour=这就是我们的重型炮塔.
+turret.addon.redstone.a=产能
+turret.addon.redstone.b=RF/红石
+turret.addon.redstone.c=红石需放在弹药槽内充当燃料.
+turret.addon.redstone.flavour=升华,精炼.
+turret.addon.solar.a=在日照下产能
+turret.addon.solar.b=RF/t
+turret.addon.solar.flavour=太阳神!
+
+turret.upgrade.label=炮塔升级组件
+turret.upgrade.stacks=可重叠放置4个,效果叠加.
+
+turret.upgrade.range=方块攻击范围.
+turret.upgrade.range.flavour=能把那个叉子递给我吗?
+
+turret.upgrade.rof=炮塔射速.
+turret.upgrade.rof.flavour=时间不等人,时间不等人...
+
+turret.upgrade.eff=射击消耗能量.
+turret.upgrade.eff.flavour=这就是我要的!
+
+turret.upgrade.acc=精准度.
+turret.upgrade.acc.flavour.a=好眼力,狙击手
+turret.upgrade.acc.flavour.b=快逃吧,趁我还没开枪射击.
+
+status.ownership=这架炮塔不属于你
+status.missingBase=未找到炮塔基座.
+status.warning=你进入了炮塔攻击范围,我们可不会为你的安全作担保.
