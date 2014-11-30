@@ -6,6 +6,7 @@ import openmodularturrets.items.addons.DamageAmpAddonItem;
 import openmodularturrets.items.addons.RedstoneReactorAddonItem;
 import openmodularturrets.items.addons.SolarPanelAddonItem;
 import openmodularturrets.items.ammo.BulletAmmoItem;
+import openmodularturrets.items.ammo.FerroSlugItem;
 import openmodularturrets.items.ammo.GrenadeAmmoItem;
 import openmodularturrets.items.ammo.RocketAmmoItem;
 import openmodularturrets.items.upgrades.AccuraccyUpgradeItem;
@@ -19,6 +20,7 @@ public class Items {
     public static Item bulletCraftable;
     public static Item grenadeCraftable;
     public static Item rocketCraftable;
+    public static Item ferroSlug;
     public static Item accuraccyUpgradeItem;
     public static Item efficiencyUpgradeItem;
     public static Item fireRateUpgradeItem;
@@ -76,6 +78,9 @@ public class Items {
 
         rocketCraftable = new RocketAmmoItem();
         GameRegistry.registerItem(rocketCraftable, "rocketCraftable");
+        
+        ferroSlug = new FerroSlugItem();
+        GameRegistry.registerItem(ferroSlug, "ferroSlug");
 
         sensorTierOneItem = new SensorTierOneItem();
         GameRegistry.registerItem(sensorTierOneItem, "sensorTierOneItem");

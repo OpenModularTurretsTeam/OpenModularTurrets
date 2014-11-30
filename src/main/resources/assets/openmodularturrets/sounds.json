@@ -112,5 +112,23 @@
               "stream": false
             }
         ]
+    },
+     "railGun": {
+        "category": "neutral",
+        "sounds": [
+            {
+               "name": "railGun",
+              "stream": false
+            }
+        ]
+    },
+     "railGunHit": {
+        "category": "neutral",
+        "sounds": [
+            {
+               "name": "railGunHit",
+              "stream": false
+            }
+        ]
     }
 }

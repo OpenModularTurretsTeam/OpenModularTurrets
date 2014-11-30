@@ -25,6 +25,7 @@ public class ConfigHandler {
     private static TurretSetting rocket_turret;
     private static TurretSetting grenade_turret;
     private static TurretSetting laser_turret;
+    private static TurretSetting railgun_turret;
 
     private static int rangeUpgradeBoost;
     private static double fireRateUpgradeBoostPercentage;
@@ -95,6 +96,14 @@ public class ConfigHandler {
                 config.get("TurretLaser", "Damage", 2, "Measured in half-hearts").getInt(),
                 config.get("TurretLaser", "Accuracy", 1, "Measured in ???, lower is better").getDouble(),
                 config.get("TurretLaser", "PowerUsage", 10000, "RF used per shot").getInt()
+        );
+        
+        railgun_turret = new TurretSetting(
+                config.get("TurretRailgun", "Range", 30, "Turret range, in blocks").getInt(),
+                config.get("TurretRailgun", "FireRateCooldown", 100, "Number of ticks between firings").getInt(),
+                config.get("TurretRailgun", "Damage", 25, "Measured in half-hearts").getInt(),
+                config.get("TurretRailgun", "Accuracy", 0, "Measured in ???, lower is better").getDouble(),
+                config.get("TurretRailgun", "PowerUsage", 25000, "RF used per shot").getInt()
         );
 
         rangeUpgradeBoost = config.get("upgrades", "range", 2, "Increases range in blocks linearly").getInt();
@@ -177,7 +186,15 @@ public class ConfigHandler {
         return laser_turret;
     }
 
-    public static int getRangeUpgradeBoost() {
+    public static TurretSetting getRailgun_turret() {
+		return railgun_turret;
+	}
+
+	public static void setRailgun_turret(TurretSetting railgun_turret) {
+		ConfigHandler.railgun_turret = railgun_turret;
+	}
+
+	public static int getRangeUpgradeBoost() {
         return rangeUpgradeBoost;
     }
 

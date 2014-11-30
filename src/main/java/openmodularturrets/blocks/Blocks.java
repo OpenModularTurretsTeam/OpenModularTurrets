@@ -17,6 +17,7 @@ public class Blocks {
 	public static Block machineGunTurret;
 	public static Block grenadeLauncherTurret;
 	public static Block laserTurret;
+	public static Block railGunTurret;
 	public static Block leverBlock;
 
 	public static void init() {
@@ -49,6 +50,9 @@ public class Blocks {
 		
 		laserTurret = new BlockLaserTurret();
 		GameRegistry.registerBlock(laserTurret, ItemBlockLaserTurret.class, BlockNames.unlocalisedLaserTurret);
+		
+		railGunTurret = new BlockRailGunTurret();
+		GameRegistry.registerBlock(railGunTurret, ItemBlockRailGunTurret.class, BlockNames.unlocalisedRailGunTurret);
 		
 		leverBlock = new LeverBlock();
 		GameRegistry.registerBlock(leverBlock, BlockNames.unlocalisedLever);

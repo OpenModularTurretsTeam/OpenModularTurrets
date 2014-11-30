@@ -215,9 +215,9 @@ public abstract class TurretHead extends TileEntity {
 			if (target == null) {
 				return;
 			}
-			
-			if(!TurretHeadUtils.canTurretSeeTarget(this, (EntityLivingBase) target))
-			{
+
+			if (!TurretHeadUtils.canTurretSeeTarget(this,
+					(EntityLivingBase) target)) {
 				return;
 			}
 
@@ -248,15 +248,16 @@ public abstract class TurretHead extends TileEntity {
 
 			TurretProjectile projectile = this.createProjectile(
 					this.getWorldObj(), target, ammo);
-			projectile.setPosition(this.xCoord + 0.5, this.yCoord + 0.5,
-					this.zCoord + 0.5);
+			
+				projectile.setPosition(this.xCoord + 0.5, this.yCoord + 0.5,
+						this.zCoord + 0.5);
 
-			if ((projectile.amp_level = TurretHeadUtils.getAmpLevel(base)) != 0) {
-				worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord,
-						ModInfo.ID + ":amped", 1.0F, 1.0F);
-				projectile.isAmped = true;
-			}
-
+				if ((projectile.amp_level = TurretHeadUtils.getAmpLevel(base)) != 0) {
+					worldObj.playSoundEffect(this.xCoord, this.yCoord,
+							this.zCoord, ModInfo.ID + ":amped", 1.0F, 1.0F);
+					projectile.isAmped = true;
+				}
+						
 			double d0 = target.posX - this.xCoord;
 			double d1 = target.posY + (double) target.getEyeHeight() - 1.5F
 					- this.yCoord;
@@ -277,7 +278,7 @@ public abstract class TurretHead extends TileEntity {
 			this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord,
 					this.zCoord,
 					ModInfo.ID + ":" + this.getLaunchSoundEffect(), 1.0F, 1.0F);
-			this.getWorldObj().spawnEntityInWorld(projectile);	
+			this.getWorldObj().spawnEntityInWorld(projectile);
 			doRecoil();
 			ticks = 0;
 		}
