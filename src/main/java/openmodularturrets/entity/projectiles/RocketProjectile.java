@@ -35,7 +35,6 @@ public class RocketProjectile extends TurretProjectile {
 
 	@Override
 	public void onEntityUpdate() {
-		
 
 		if (ticksExisted >= 100) {
 			this.setDead();
@@ -47,33 +46,28 @@ public class RocketProjectile extends TurretProjectile {
 					- this.posY;
 			double d2 = target.posZ - this.posZ;
 
-			if (ticksAlive >= upwardsFirst) {
-				this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
-			} else {
-				this.setThrowableHeading(d0 / 5, 2.0F, d2 / 5, speed, accuracy);
-				speed = speed + 0.3F;
-			}
+			this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
+			speed = speed + 0.3F;
 
 			double dX = (target.posX) - (this.posX);
 			double dZ = (target.posZ) - (this.posZ);
 			yaw = ((float) (Math.atan2(dZ, dX))) - 1.570796F;
 
-		}		
+		}
 
-		for (int i = 0; i <= 20; i++) {
+		for (int i = 0; i <= 25; i++) {
 			Random random = new Random();
-			worldObj.spawnParticle("flame",
+			worldObj.spawnParticle("smoke",
 					posX + (random.nextGaussian() / 10),
 					posY + (random.nextGaussian() / 10),
-					posZ + (random.nextGaussian() / 10), (motionX * -1),
-					(motionY * -1), (motionZ * -1));
+					posZ + (random.nextGaussian() / 10), (0), (0), (0));
 		}
 	}
 
 	@Override
 	protected void onImpact(MovingObjectPosition movingobjectposition) {
 
-		if (this.ticksExisted <= 2) {
+		if (this.ticksExisted <= 5) {
 			return;
 		}
 
@@ -87,7 +81,8 @@ public class RocketProjectile extends TurretProjectile {
 					axis);
 
 			for (Entity mob : targets) {
-				int damage = ConfigHandler.getRocketTurretSettings().getDamage();
+				int damage = ConfigHandler.getRocketTurretSettings()
+						.getDamage();
 
 				if (isAmped) {
 					damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
