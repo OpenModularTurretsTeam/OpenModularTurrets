@@ -6,6 +6,7 @@ public class ItemNames {
     //Unlocalised
     public static final String unlocalisedBulletThrowableItem = "bulletThrowable";
     public static final String unlocalisedGrenadeThrowableItem = "grenadeThrowable";
+    public static final String unlocalisedFerroSlug = "ferroSlug";
     public static final String unlocalisedBulletCraftableItem = "bulletCraftable";
 	public static final String unlocalisedGrenadeCraftableItem = "grenadeCraftable";
 	public static final String unlocalisedRocketCraftableItem = "rocketCraftable";

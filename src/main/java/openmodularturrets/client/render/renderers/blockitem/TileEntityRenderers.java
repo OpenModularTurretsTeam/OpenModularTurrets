@@ -12,6 +12,7 @@ public class TileEntityRenderers {
     public static MachineGunTurretRenderer machineGunTurretRenderer = new MachineGunTurretRenderer();
     public static GrenadeLauncherTurretRenderer grenadeLauncherTurretRenderer = new GrenadeLauncherTurretRenderer();
     public static LaserTurretRenderer laserTurretRenderer = new LaserTurretRenderer();
+    public static RailGunTurretRenderer railGunTurretRenderer = new RailGunTurretRenderer();
     public static LeverRenderer leverRenderer = new LeverRenderer();
 
     @SideOnly(Side.CLIENT)
@@ -21,6 +22,7 @@ public class TileEntityRenderers {
         ClientRegistry.bindTileEntitySpecialRenderer(MachineGunTurretTileEntity.class, machineGunTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(GrenadeLauncherTurretTileEntity.class, grenadeLauncherTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(LaserTurretTileEntity.class, laserTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(RailGunTurretTileEntity.class, railGunTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(LeverTileEntity.class, leverRenderer);
     }
 }
