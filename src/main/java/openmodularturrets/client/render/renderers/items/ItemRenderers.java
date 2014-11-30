@@ -16,5 +16,6 @@ public class ItemRenderers {
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.grenadeLauncherTurret), new GrenadeLauncherTurretItemRenderer(TileEntityRenderers.grenadeLauncherTurretRenderer, new GrenadeLauncherTurretTileEntity()));
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.laserTurret), new LaserTurretItemRenderer(TileEntityRenderers.laserTurretRenderer, new LaserTurretTileEntity()));
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.leverBlock), new LeverItemRenderer(TileEntityRenderers.leverRenderer, new LeverTileEntity()));
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Blocks.railGunTurret), new RailGunTurretItemRenderer(TileEntityRenderers.railGunTurretRenderer, new RailGunTurretTileEntity()));
 	}
 }

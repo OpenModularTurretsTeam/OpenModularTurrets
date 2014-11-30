@@ -3,6 +3,7 @@ item.grenadeThrowable.name=Throwable Grenade
 item.bulletCraftable.name=Ammo - Bullet
 item.grenadeCraftable.name=Ammo - Grenade
 item.rocketCraftable.name=Ammo - Rocket
+item.ferroSlug.name=Ammo - Ferro-Magnetic Slug
 item.upgFire.name=Upgrade - Fire Rate
 item.upgEff.name=Upgrade - Efficiency
 item.upgRan.name=Upgrade - Range
@@ -31,6 +32,7 @@ tile.rocketTurret.name=Rocket Launcher Turret
 tile.machineGunTurret.name=Machine Gun Turret
 tile.grenadeTurret.name=Grenade Launcher Turret
 tile.laserTurret.name=Laser Turret
+tile.railGunTurret.name=Rail Gun Turret
 tile.leverBlock.name=Basic Turret Base Crank
 
 itemGroup.openmodularturrets=Open Modular Turrets
@@ -72,6 +74,7 @@ flavour.turret.2a=Another example is the inductive
 flavour.turret.2b=form of the horse paradox.
 flavour.turret.3=Swoosh:boom
 flavour.turret.4=Tesla would be proud.
+flavour.turret.5=BFG.
 
 turret.accuracy.low=Low
 turret.accuracy.medium=Medium
@@ -83,6 +86,7 @@ turret.ammo.1=Bullet
 turret.ammo.2=Grenade
 turret.ammo.3=Homing Rocket
 turret.ammo.4=None
+turret.ammo.5=Ferro-Magnetic Slugs
 
 base.tier.0=Basic
 base.tier.1=Leadstone

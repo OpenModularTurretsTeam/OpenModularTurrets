@@ -14,5 +14,6 @@ public class BlockNames {
 	public static final String unlocalisedMachineGunTurret = "machineGunTurret";
 	public static final String unlocalisedGrenadeTurret = "grenadeTurret";
 	public static final String unlocalisedLaserTurret = "laserTurret";
+	public static final String unlocalisedRailGunTurret = "railGunTurret";
 	public static final String unlocalisedLever = "leverBlock";
 }
