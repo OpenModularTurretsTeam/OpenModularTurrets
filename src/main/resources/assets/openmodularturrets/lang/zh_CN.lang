@@ -20,7 +20,7 @@ item.chamber.name=弹膛
 item.barrel.name=炮管
 item.ioBus.name=IO总线
 item.containmentChamber.name=复合式弹膛
-item.energeticBarrel.name=电磁炮管
+item.energeticBarrel.name=充能炮管
 
 tile.baseTierWood.name=木制炮塔基座
 tile.baseTierOneBlock.name=铅石炮塔基座
@@ -68,8 +68,8 @@ flavour.base.3=开火!开火!!
 flavour.base.4a=国王齐兵马,
 flavour.base.4b=破镜难圆没办法.
 
-flavour.turret.0=至少能给予你心理安慰
-flavour.turret.1=突突!!嗒嗒嗒嗒!!
+flavour.turret.0=这至少能给予你心理安慰
+flavour.turret.1=哒哒!!哒哒哒哒!!
 flavour.turret.2a=如同"马"悖论的
 flavour.turret.2b=另一个感性形式
 flavour.turret.3=嗖~Boom!
