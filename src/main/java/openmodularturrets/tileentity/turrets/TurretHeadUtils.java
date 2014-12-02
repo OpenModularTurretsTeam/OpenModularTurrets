@@ -319,66 +319,51 @@ public class TurretHeadUtils {
 	}
 
 	public static boolean hasRedstoneReactor(TurretBase base) {
+        boolean found = false;
+        if (base instanceof TurretWoodBase) {
+            return false;
+        }
 
-		if (base instanceof TurretWoodBase) {
-			return false;
-		}
+        if (base.getStackInSlot(9) != null) {
+            found = base.getStackInSlot(9).getItem() instanceof RedstoneReactorAddonItem;
+        }
 
-		if (base.getStackInSlot(9) != null) {
-			if (base.getStackInSlot(9).getItem() instanceof RedstoneReactorAddonItem) {
-				return true;
-			}
-		}
-		
-		if (base.getStackInSlot(10) != null) {
-			if (base.getStackInSlot(10).getItem() instanceof RedstoneReactorAddonItem) {
-				return true;
-			}
-		}
-		
-		return false;
+        if (base.getStackInSlot(10) != null) {
+            found = base.getStackInSlot(10).getItem() instanceof RedstoneReactorAddonItem;
+        }
+        return found;
 	}
 
 	public static boolean hasDamageAmpAddon(TurretBase base) {
-		
-		if (base instanceof TurretWoodBase) {
+        boolean found = false;
+        if (base instanceof TurretWoodBase) {
 			return false;
 		}
 
-		if (base.getStackInSlot(9) != null) {
-			if (base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem) {
-				return true;
-			}
-		}
-		
-		if (base.getStackInSlot(10) != null) {
-			if (base.getStackInSlot(10).getItem() instanceof DamageAmpAddonItem) {
-				return true;
-			}
-		}
-		
-		return false;
+        if (base.getStackInSlot(9) != null) {
+            found = base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem;
+        }
+
+        if (base.getStackInSlot(10) != null) {
+            found = base.getStackInSlot(10).getItem() instanceof DamageAmpAddonItem;
+        }
+        return found;
 	}
 
 	public static boolean hasSolarPanelAddon(TurretBase base) {
-		
-		if (base instanceof TurretWoodBase) {
+		boolean found = false;
+        if (base instanceof TurretWoodBase) {
 			return false;
 		}
 
 		if (base.getStackInSlot(9) != null) {
-			if (base.getStackInSlot(9).getItem() instanceof SolarPanelAddonItem) {
-				return true;
-			}
+			found = base.getStackInSlot(9).getItem() instanceof SolarPanelAddonItem;
 		}
-		
-		if (base.getStackInSlot(10) != null) {
-			if (base.getStackInSlot(10).getItem() instanceof SolarPanelAddonItem) {
-				return true;
-			}
+
+        if (base.getStackInSlot(10) != null) {
+			found = base.getStackInSlot(10).getItem() instanceof SolarPanelAddonItem;
 		}
-		
-		return false;
+		return found;
 	}
 
 	public static int getAmpLevel(TurretBase base) {
@@ -450,7 +435,7 @@ public class TurretHeadUtils {
 
 		if (helper.canEntityBeSeen(target)) {
 			helper.setDead();
-			return true;
+			return true;			
 		}
 		helper.setDead();
 		return false;
