@@ -1,7 +1,5 @@
 package openmodularturrets.client.render.renderers.blockitem;
 
-import java.util.Random;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -58,8 +56,8 @@ public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
 
 		model.Base.rotateAngleX = turretHead.baseFitRotationX;
 		model.Base.rotateAngleY = turretHead.baseFitRotationZ;
-		model.renderAll();
-
+		model.renderAll();		
+		
 		if (turretHead.base != null) {
 			if (TurretHeadUtils.hasSolarPanelAddon(turretHead.base)) {
 				ResourceLocation texturesSolar = (new ResourceLocation(
@@ -74,7 +72,7 @@ public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
 			if (TurretHeadUtils.hasDamageAmpAddon(turretHead.base)) {
 				ResourceLocation texturesAmp = (new ResourceLocation(ModInfo.ID
 						+ ":textures/blocks/damageAmpAddon.png"));
-				Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
+				Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);				
 				amp.setRotationForTarget(turretHead.rotationXY,
 						turretHead.rotationXZ);
 				amp.renderAll();

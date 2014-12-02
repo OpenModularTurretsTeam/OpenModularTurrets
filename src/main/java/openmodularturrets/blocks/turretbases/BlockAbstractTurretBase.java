@@ -7,8 +7,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.management.PlayerManager;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -42,16 +44,21 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
 
         return true;
     }
-
-    @Override
-    public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
-        if (par1World.isRemote) {
-            SetTurretOwnerMessage message = new SetTurretOwnerMessage(par2, par3, par4, Minecraft.getMinecraft().getSession()
-                    .getUsername());
-
-            ModularTurrets.networking.sendToServer(message);
-        }
-    }
+    
+  @Override
+public void onBlockPlacedBy(World world, int x,
+		int y, int z, EntityLivingBase elb,
+		ItemStack stack) {
+	
+	  if(!world.isRemote)	  
+	  {
+		  EntityPlayerMP player = (EntityPlayerMP) elb;
+		  TurretBase base = (TurretBase) world.getTileEntity(x, y, z);	  
+		  base.setOwner(player.getDisplayName());	  
+	  }
+	  
+	  
+}
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block par5, int par6) {
