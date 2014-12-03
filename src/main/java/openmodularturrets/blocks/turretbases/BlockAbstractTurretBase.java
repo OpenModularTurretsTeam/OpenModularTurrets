@@ -27,7 +27,7 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setBlockUnbreakable();
         this.setResistance(6000000.0F);
-        this.setStepSound(Block.soundTypeStone);
+        this.setStepSound(Block.soundTypeStone);      
     }
 
     @Override
