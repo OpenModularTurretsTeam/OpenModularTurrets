@@ -26,6 +26,7 @@ public abstract class TurretHead extends TileEntity {
 	public TurretBase base;
 	public boolean hasSetSide = false;
 	public float recoilState = 0.0F;
+	Entity target = null;
 
 	@Override
 	public Packet getDescriptionPacket() {
@@ -209,16 +210,28 @@ public abstract class TurretHead extends TileEntity {
 				return;
 			}
 
-			Entity target = getTarget();
+			// is there a target, and Has it died in the previous tick?
+			if (target == null || target.isDead) {
+				target = getTarget();
+			}
 
-			// is there a target?
+			// did we even get a target previously?
 			if (target == null) {
 				return;
 			}
-
-			if (!TurretHeadUtils.canTurretSeeTarget(this,
-					(EntityLivingBase) target)) {
+			
+			//Is the base switched off?
+			if (base.isGettingRedstoneSignal()) {
 				return;
+			}
+
+			// Can the turret still see the target? (It's moving)
+			if (target != null) {
+				if (!TurretHeadUtils.canTurretSeeTarget(this,
+						(EntityLivingBase) target)) {
+					target = null;
+					return;
+				}
 			}
 
 			this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord,
@@ -248,16 +261,16 @@ public abstract class TurretHead extends TileEntity {
 
 			TurretProjectile projectile = this.createProjectile(
 					this.getWorldObj(), target, ammo);
-			
-				projectile.setPosition(this.xCoord + 0.5, this.yCoord + 0.5,
-						this.zCoord + 0.5);
 
-				if ((projectile.amp_level = TurretHeadUtils.getAmpLevel(base)) != 0) {
-					worldObj.playSoundEffect(this.xCoord, this.yCoord,
-							this.zCoord, ModInfo.ID + ":amped", 1.0F, 1.0F);
-					projectile.isAmped = true;
-				}
-						
+			projectile.setPosition(this.xCoord + 0.5, this.yCoord + 0.5,
+					this.zCoord + 0.5);
+
+			if ((projectile.amp_level = TurretHeadUtils.getAmpLevel(base)) != 0) {
+				worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord,
+						ModInfo.ID + ":amped", 1.0F, 1.0F);
+				projectile.isAmped = true;
+			}
+
 			double d0 = target.posX - this.xCoord;
 			double d1 = target.posY + (double) target.getEyeHeight() - 1.5F
 					- this.yCoord;
@@ -268,11 +281,13 @@ public abstract class TurretHead extends TileEntity {
 					* (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
 
 			if (projectile.gravity == 0.00F) {
-				projectile.setThrowableHeading(d0, d1 + 1.0F, d2, 3.0F,
+				projectile.setThrowableHeading(d0 + target.motionX, d1 + 0.5F
+						+ target.motionY, d2 + target.motionZ, 3.0F,
 						(float) accuraccy);
 			} else {
-				projectile.setThrowableHeading(d0, d1 + (double) f1, d2, 1.6F,
-						(float) accuraccy);
+				projectile.setThrowableHeading(d0 + target.motionX, d1
+						+ (double) f1 + target.motionY, d2 + target.motionZ,
+						1.6F, (float) accuraccy);
 			}
 
 			this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord,
