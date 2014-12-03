@@ -13,6 +13,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.items.addons.DamageAmpAddonItem;
@@ -93,22 +94,10 @@ public class TurretHeadUtils {
 				}
 
 				if (base.isAttacksMobs()) {
-					if (target1 instanceof EntityMob && !target1.isDead) {
+					if (target1 instanceof IMob && !target1.isDead) {
 						target = target1;
 					}
 				}
-
-				if (base.isAttacksMobs()) {
-					if (target1 instanceof EntityFlying && !target1.isDead) {
-						target = target1;
-					}
-				}
-
-				if (base.isAttacksMobs()) {
-					if (target1 instanceof EntitySlime && !target1.isDead) {
-						target = target1;
-					}
-				}				
 
 				if (base.isAttacksPlayers()) {
 					if (target1 instanceof EntityPlayerMP && !target1.isDead) {
@@ -123,8 +112,10 @@ public class TurretHeadUtils {
 				}
 
 				if (target != null && turret != null) {
+
 					EntityLivingBase targetELB = (EntityLivingBase) target;
-					if (canTurretSeeTarget(turret, targetELB) || true) {
+
+					if (canTurretSeeTarget(turret, targetELB)) {
 						return target;
 					}
 				}
@@ -320,40 +311,40 @@ public class TurretHeadUtils {
 	}
 
 	public static boolean hasRedstoneReactor(TurretBase base) {
-        boolean found = false;
-        if (base instanceof TurretWoodBase) {
-            return false;
-        }
-
-        if (base.getStackInSlot(9) != null) {
-            found = base.getStackInSlot(9).getItem() instanceof RedstoneReactorAddonItem;
-        }
-
-        if (base.getStackInSlot(10) != null && !found) {
-            found = base.getStackInSlot(10).getItem() instanceof RedstoneReactorAddonItem;
-        }
-        return found;
-	}
-
-	public static boolean hasDamageAmpAddon(TurretBase base) {
-        boolean found = false;
-        if (base instanceof TurretWoodBase) {
+		boolean found = false;
+		if (base instanceof TurretWoodBase) {
 			return false;
 		}
 
-        if (base.getStackInSlot(9) != null) {
-            found = base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem;
-        }
+		if (base.getStackInSlot(9) != null) {
+			found = base.getStackInSlot(9).getItem() instanceof RedstoneReactorAddonItem;
+		}
 
-        if (base.getStackInSlot(10) != null && !found) {
-            found = base.getStackInSlot(10).getItem() instanceof DamageAmpAddonItem;
-        }
-        return found;
+		if (base.getStackInSlot(10) != null && !found) {
+			found = base.getStackInSlot(10).getItem() instanceof RedstoneReactorAddonItem;
+		}
+		return found;
+	}
+
+	public static boolean hasDamageAmpAddon(TurretBase base) {
+		boolean found = false;
+		if (base instanceof TurretWoodBase) {
+			return false;
+		}
+
+		if (base.getStackInSlot(9) != null) {
+			found = base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem;
+		}
+
+		if (base.getStackInSlot(10) != null && !found) {
+			found = base.getStackInSlot(10).getItem() instanceof DamageAmpAddonItem;
+		}
+		return found;
 	}
 
 	public static boolean hasSolarPanelAddon(TurretBase base) {
 		boolean found = false;
-        if (base instanceof TurretWoodBase) {
+		if (base instanceof TurretWoodBase) {
 			return false;
 		}
 
@@ -361,7 +352,7 @@ public class TurretHeadUtils {
 			found = base.getStackInSlot(9).getItem() instanceof SolarPanelAddonItem;
 		}
 
-        if (base.getStackInSlot(10) != null && !found) {
+		if (base.getStackInSlot(10) != null && !found) {
 			found = base.getStackInSlot(10).getItem() instanceof SolarPanelAddonItem;
 		}
 		return found;
@@ -429,17 +420,19 @@ public class TurretHeadUtils {
 
 		InvisibleTurretHelperEntity helper = new InvisibleTurretHelperEntity(
 				turret.getWorldObj());
+		helper.posX = turret.xCoord + 0.5F;
+		helper.posY = turret.yCoord + 0.5F;
+		helper.posZ = turret.zCoord + 0.5F;
 
-		helper.posX = turret.xCoord;
-		helper.posY = turret.yCoord;
-		helper.posZ = turret.zCoord;
+		EntityLivingBase targeted = target != null
+				&& helper.canEntityBeSeen(target) ? target : null;
 
-		if (helper.canEntityBeSeen(target)) {
-			helper.setDead();
-			return true;			
+		if (targeted != null && targeted.equals(target)) {
+			return true;
+		} else {
+			return false;
 		}
-		helper.setDead();
-		return false;
 
 	}
+
 }

@@ -21,8 +21,7 @@ public class LaserProjectile extends TurretProjectile {
 	}
 
 	@Override
-	public void onEntityUpdate() {
-		this.posY = posY + (fallDistance * -1);
+	public void onEntityUpdate() {	
 
 		if (ticksExisted >= 50) {
 			this.setDead();
