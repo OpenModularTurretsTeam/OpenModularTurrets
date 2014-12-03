@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -107,7 +108,7 @@ public class TurretHeadUtils {
 					if (target1 instanceof EntitySlime && !target1.isDead) {
 						target = target1;
 					}
-				}
+				}				
 
 				if (base.isAttacksPlayers()) {
 					if (target1 instanceof EntityPlayerMP && !target1.isDead) {
