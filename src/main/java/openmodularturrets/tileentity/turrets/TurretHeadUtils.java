@@ -329,7 +329,7 @@ public class TurretHeadUtils {
             found = base.getStackInSlot(9).getItem() instanceof RedstoneReactorAddonItem;
         }
 
-        if (base.getStackInSlot(10) != null) {
+        if (base.getStackInSlot(10) != null && !found) {
             found = base.getStackInSlot(10).getItem() instanceof RedstoneReactorAddonItem;
         }
         return found;
@@ -345,7 +345,7 @@ public class TurretHeadUtils {
             found = base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem;
         }
 
-        if (base.getStackInSlot(10) != null) {
+        if (base.getStackInSlot(10) != null && !found) {
             found = base.getStackInSlot(10).getItem() instanceof DamageAmpAddonItem;
         }
         return found;
@@ -361,7 +361,7 @@ public class TurretHeadUtils {
 			found = base.getStackInSlot(9).getItem() instanceof SolarPanelAddonItem;
 		}
 
-        if (base.getStackInSlot(10) != null) {
+        if (base.getStackInSlot(10) != null && !found) {
 			found = base.getStackInSlot(10).getItem() instanceof SolarPanelAddonItem;
 		}
 		return found;
