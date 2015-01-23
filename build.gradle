@@ -51,6 +51,17 @@ processResources
     }
 }
 
+repositories {
+    maven {
+        name = "IGW"
+        url = "http://maven.k-4u.nl/"
+    }
+}
+
+dependencies {
+    compile "igwmod:IGW-Mod-1.7.10:1.1.1-17:userdev"
+}
+
 task sourceJar(type: Jar) {
     from sourceSets.main.allSource
     classifier = 'sources'
@@ -62,3 +73,10 @@ task deobfJar(type: Jar) {
 }
 
 build.dependsOn sourceJar, deobfJar
+
+// this fixes dev environments for IDEA 14 users.
+sourceSets {
+    main {
+        output.resourcesDir = output.classesDir
+    }
+}

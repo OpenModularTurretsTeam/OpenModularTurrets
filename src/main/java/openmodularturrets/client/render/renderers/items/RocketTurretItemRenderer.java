@@ -5,6 +5,7 @@ import net.minecraftforge.client.IItemRenderer;
 import openmodularturrets.client.render.models.ModelRocketTurret;
 import openmodularturrets.client.render.renderers.blockitem.RocketTurretRenderer;
 import openmodularturrets.tileentity.turrets.RocketTurretTileEntity;
+import org.lwjgl.opengl.GL11;
 
 public class RocketTurretItemRenderer implements IItemRenderer {
 
@@ -25,13 +26,15 @@ public class RocketTurretItemRenderer implements IItemRenderer {
 	}
 
 	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
-			ItemRendererHelper helper) {
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
 		return true;
 	}
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        this.rocketTurretRenderer.renderTileEntityAt(this.rocketTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
+		GL11.glPushMatrix();
+		GL11.glTranslated(-0.5, -0.5, -0.5);
+		this.rocketTurretRenderer.renderTileEntityAt(this.rocketTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
+		GL11.glPopMatrix();
 	}
 }

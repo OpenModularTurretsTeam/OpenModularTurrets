@@ -12,6 +12,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.creativetab.CreativeTabs;
 import openmodularturrets.blocks.Blocks;
+import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.GuiHandler;
 import openmodularturrets.handler.TileEntityHandler;
 import openmodularturrets.handler.RecipeHandler;
@@ -63,11 +64,15 @@ public class ModularTurrets {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
+        ModCompatibility.checkForMods();
+
         NetworkRegistry.INSTANCE.registerGuiHandler(this, gui);
 
         TileEntityHandler.init();
 
         proxy.initRenderers();
+        proxy.initHandlers();
+
         RecipeHandler.initRecipes();
 
         EntityRegistry.registerModEntity(RocketProjectile.class, "rocketProjectile", 1, this, 16, 1, true);
