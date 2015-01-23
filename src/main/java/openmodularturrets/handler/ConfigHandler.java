@@ -39,7 +39,6 @@ public class ConfigHandler {
     private static int turretWarningDistance;
 
     public static void init(File configFile) {
-
 		Configuration config = new Configuration(configFile);
 		config.load();
 
