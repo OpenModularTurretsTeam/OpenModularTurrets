@@ -5,6 +5,7 @@ import net.minecraftforge.client.IItemRenderer;
 import openmodularturrets.client.render.models.ModelLever;
 import openmodularturrets.client.render.renderers.blockitem.LeverRenderer;
 import openmodularturrets.tileentity.LeverTileEntity;
+import org.lwjgl.opengl.GL11;
 
 public class LeverItemRenderer implements IItemRenderer {
 
@@ -25,14 +26,16 @@ public class LeverItemRenderer implements IItemRenderer {
 	}
 
 	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
-			ItemRendererHelper helper) {
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
 		return true;
 	}
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        this.leverRenderer.renderTileEntityAt(this.leverTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
+		GL11.glPushMatrix();
+		GL11.glTranslated(-0.5, -0.5, -0.5);
+		this.leverRenderer.renderTileEntityAt(this.leverTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
+		GL11.glPopMatrix();
 	}
 
 }

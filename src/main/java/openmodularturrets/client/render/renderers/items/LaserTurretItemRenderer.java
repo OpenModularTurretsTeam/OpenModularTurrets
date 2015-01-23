@@ -5,6 +5,7 @@ import net.minecraftforge.client.IItemRenderer;
 import openmodularturrets.client.render.models.ModelLaserTurret;
 import openmodularturrets.client.render.renderers.blockitem.LaserTurretRenderer;
 import openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
+import org.lwjgl.opengl.GL11;
 
 public class LaserTurretItemRenderer implements IItemRenderer {
 
@@ -17,6 +18,7 @@ public class LaserTurretItemRenderer implements IItemRenderer {
         this.laserTurretTileEntity = laserTurretTileEntity;
 
         this.model = new ModelLaserTurret();
+
 	}
 
 	@Override
@@ -25,14 +27,16 @@ public class LaserTurretItemRenderer implements IItemRenderer {
 	}
 
 	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
-			ItemRendererHelper helper) {
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
 		return true;
 	}
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        this.laserTurretRenderer.renderTileEntityAt(this.laserTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
+		GL11.glPushMatrix();
+		GL11.glTranslated(-0.5, -0.5, -0.5);
+		this.laserTurretRenderer.renderTileEntityAt(this.laserTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
+		GL11.glPopMatrix();
 	}
 
 }

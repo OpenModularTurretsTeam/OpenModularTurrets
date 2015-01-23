@@ -7,6 +7,7 @@ import openmodularturrets.client.render.renderers.blockitem.LaserTurretRenderer;
 import openmodularturrets.client.render.renderers.blockitem.RailGunTurretRenderer;
 import openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
 import openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
+import org.lwjgl.opengl.GL11;
 
 public class RailGunTurretItemRenderer implements IItemRenderer {
 
@@ -27,14 +28,16 @@ public class RailGunTurretItemRenderer implements IItemRenderer {
 	}
 
 	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
-			ItemRendererHelper helper) {
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
 		return true;
 	}
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        this.railGunTurretRenderer.renderTileEntityAt(this.railGunTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
+		GL11.glPushMatrix();
+		GL11.glTranslated(-0.5, -0.5, -0.5);
+		this.railGunTurretRenderer.renderTileEntityAt(this.railGunTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
+		GL11.glPopMatrix();
 	}
 
 }
