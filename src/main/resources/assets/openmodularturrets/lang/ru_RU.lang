@@ -1,0 +1,127 @@
+item.bulletThrowable.name=Метательная пуля
+item.grenadeThrowable.name=Метательная граната
+item.bulletCraftable.name=Боеприпасы - Патрон
+item.grenadeCraftable.name=Боеприпасы - Граната
+item.rocketCraftable.name=Боеприпасы - Ракета
+item.ferroSlug.name=Боеприпасы - Ферромагнитная пуля
+item.upgFire.name=Улучшение - Скорость стрельбы
+item.upgEff.name=Улучшение - Эффективность
+item.upgRan.name=Улучшение - Дальность
+item.upgAcc.name=Улучшение - Точность
+item.addonReactor.name=Дополнение - Реактор красного камня
+item.addonDam.name=Дополнение - Усиление урона
+item.addonSolar.name=Дополнение - Солнечный генератор
+item.configTablet.name=Конфигуратор целеполагания турелей
+item.sensorOne.name=Сенсор (Уровень 1)
+item.sensorTwo.name=Сенсор (Уровень 2)
+item.sensorThree.name=Сенсор (Уровень 3)
+item.sensorFour.name=Сенсор (Уровень 4)
+item.chamber.name=Камера
+item.barrel.name=Цилиндр
+item.ioBus.name=Шина ввода-вывода
+item.containmentChamber.name=Удерживающая камера
+item.energeticBarrel.name=Энергетический цилиндр
+
+tile.baseTierWood.name=Деревянная основа для турели
+tile.baseTierOneBlock.name=Свинцовая основа для турели
+tile.baseTierTwoBlock.name=Усиленная основа для турели
+tile.baseTierThreeBlock.name=Закалённая основа для турели
+tile.baseTierFourBlock.name=Резонирующая основа для турели
+tile.disposeItemTurret.name=Одноразовая турель
+tile.rocketTurret.name=Турель с базукой
+tile.machineGunTurret.name=Пулемётная турель
+tile.grenadeTurret.name=Турель-гранатомёт
+tile.laserTurret.name=Лазерная турель
+tile.railGunTurret.name=Рельсовая турель
+tile.leverBlock.name=Базовая турельная ручка
+
+itemGroup.openmodularturrets=Open Modular Turrets
+
+tooltip.tier=Уровень
+tooltip.range=Дистанция (в блоках)
+tooltip.accuracy=Точность
+tooltip.ammo=Тип боеприпасов
+tooltip.tierRequired=Необходимая основа
+tooltip.damage.label=Характеристика урона
+tooltip.damage.stat=Урон по противнику
+tooltip.aoe=Радиус АОЕ
+tooltip.firerate=Выстрелов/сек
+tooltip.energy.stat=Расход энергии за выстрел
+tooltip.info=Информация
+tooltip.health=единиц
+
+tooptip.energy.label=Энергия
+tooltip.rf.max=Максимальная ёмкость
+tooltip.rf.io=Максимальный ввод/вывод
+tooltip.extras.label=Дополнения
+tooltip.extras.addons.0=Ничего
+tooltip.extras.addons.1=1x слот дополнений
+tooltip.extras.addons.2=2x слот дополнений
+tooltip.extras.upgrade.0=Ничего
+tooltip.extras.upgrade.1=1x слот улучшений
+tooltip.extras.upgrade.2=2x слот улучшений
+
+flavour.base.0=Порох в сырости - и я бездомный.
+flavour.base.1=Выпью твою кровь.
+flavour.base.2=Я сказал: "Доброго дня, сэр!"
+flavour.base.3=Нажать для атаки!
+flavour.base.4a=Вся королевская конница,
+flavour.base.4b=вся королевская рать...
+
+flavour.turret.0=Спокойный сон бедняка.
+flavour.turret.1=ТРАТАТА!! ТРАТАТАТАТА!!
+flavour.turret.2a=Другим примером является побудительная
+flavour.turret.2b=форма парадокса сферической лошади в вакууме.
+flavour.turret.3=Бах-бабах!
+flavour.turret.4=Тесла мог бы гордиться.
+flavour.turret.5=Большое Финишное Глушило.
+
+turret.accuracy.low=Низкая
+turret.accuracy.medium=Средняя
+turret.accuracy.high=Высокая
+turret.accuracy.exact=Абсолютная
+
+turret.ammo.0=Любой блок/предмет
+turret.ammo.1=Патрон
+turret.ammo.2=Граната
+turret.ammo.3=Крылатая ракета
+turret.ammo.4=Ничего
+turret.ammo.5=Ферромагнитная пуля
+
+base.tier.0=Базовая
+base.tier.1=Свинцовая
+base.tier.2=Усиленная
+base.tier.3=Закалённая
+base.tier.4=Резонирующая
+
+turret.addon.label=Дополнение для турели
+turret.addon.amp.a.label=Добавляет
+turret.addon.amp.b.label=урона каждому выстрелу.
+turret.addon.amp.flavour=Теперь у нас есть сокрушительная сила.
+turret.addon.redstone.a=Производит
+turret.addon.redstone.b=RF за
+turret.addon.redstone.c=красной пыли в инвентаре для боеприпасов.
+turret.addon.redstone.flavour=Изысканное поглощение.
+turret.addon.solar.a=Производит
+turret.addon.solar.b=RF/тик, когда светит солнце.
+turret.addon.solar.flavour=Добрый Гелиос!
+
+turret.upgrade.label=Улучшение для турели
+turret.upgrade.stacks=Не более 4 предметов в стаке.
+
+turret.upgrade.range=блока к дистанции за каждое улучшение.
+turret.upgrade.range.flavour=Не передадите мне вилку?
+
+turret.upgrade.rof=к скорости стрельбы за каждое улучшение.
+turret.upgrade.rof.flavour=Потребление времени потребляет время.
+
+turret.upgrade.eff=RF используется для выстрела, за каждое улучшение.
+turret.upgrade.eff.flavour=Эврика!
+
+turret.upgrade.acc=к точности за каждое улучшение.
+turret.upgrade.acc.flavour.a=Снайпер с острым зрением,
+turret.upgrade.acc.flavour.b=я стреляю - ты бежишь.
+
+status.ownership=Вы не владелец данной турели
+status.missingBase=здесь нет нужной базы для турели.
+status.warning=Вы вошли в зону действия турелей. Двигайтесь дальше на свой страх и риск.
