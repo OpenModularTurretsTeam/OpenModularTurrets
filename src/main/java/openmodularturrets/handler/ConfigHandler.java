@@ -37,6 +37,8 @@ public class ConfigHandler {
     private static int damageAmpDmgBonus;
 
     private static int turretWarningDistance;
+    
+    public static boolean turretAlarmSound = true;
 
     public static void init(File configFile) {
 		Configuration config = new Configuration(configFile);
@@ -56,6 +58,8 @@ public class ConfigHandler {
 
 		baseTierFourMaxCharge = config.get("TurretBaseTierFour", "MaxCharge", 10000000).getInt();
         baseTierFourMaxIo = config.get("TurretBaseTierFour", "MaxIo", 5000).getInt();
+        
+        turretAlarmSound = config.get("TurretSound", "Enabled/Disable turret alarm sound", true).getBoolean();
 
         disposable_turret = new TurretSetting(
                 config.get("TurretDisposable", "Range", 10, "Turret range, in blocks").getInt(),
