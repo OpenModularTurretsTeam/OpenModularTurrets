@@ -1,5 +1,6 @@
 package openmodularturrets.entity.projectiles;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
@@ -8,17 +9,17 @@ import openmodularturrets.handler.ConfigHandler;
 
 public class BulletProjectile extends TurretProjectile {
 
-    public BulletProjectile(World p_i1776_1_) {
-        super(p_i1776_1_);
-        this.gravity = 0.00F;
-    }
+	public BulletProjectile(World p_i1776_1_) {
+		super(p_i1776_1_);
+		this.gravity = 0.00F;
+	}
 
-    public BulletProjectile(World par1World, ItemStack ammo) {
+	public BulletProjectile(World par1World, ItemStack ammo) {
 		super(par1World, ammo);
 		this.gravity = 0.00F;
 	}
 
-    @Override
+	@Override
 	public void onEntityUpdate() {
 		if (ticksExisted >= 50) {
 			this.setDead();
@@ -27,22 +28,31 @@ public class BulletProjectile extends TurretProjectile {
 
 	@Override
 	protected void onImpact(MovingObjectPosition movingobjectposition) {
-		
-		if(this.ticksExisted<=1)
-		{
+
+		if (this.ticksExisted <= 1) {
 			return;
 		}
-		
-		if (movingobjectposition.entityHit != null && !worldObj.isRemote) {							
-			
-            int damage =  ConfigHandler.getMachineGunTurretSettings().getDamage();
+
+		if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
+
+			if (movingobjectposition.typeOfHit.equals(0)) {
+				if (worldObj.isAirBlock(movingobjectposition.blockX,
+						movingobjectposition.blockY,
+						movingobjectposition.blockZ)) {
+					return;
+				}
+			}
+
+			int damage = ConfigHandler.getMachineGunTurretSettings()
+					.getDamage();
 
 			if (isAmped) {
 				damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
 			}
 
-            movingobjectposition.entityHit.attackEntityFrom(DamageSource.generic, damage);
-            movingobjectposition.entityHit.hurtResistantTime = 0;
+			movingobjectposition.entityHit.attackEntityFrom(
+					DamageSource.generic, damage);
+			movingobjectposition.entityHit.hurtResistantTime = 0;
 
 		}
 

@@ -36,6 +36,14 @@ public class LaserProjectile extends TurretProjectile {
 		}
 
 		if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
+			
+			if (movingobjectposition.typeOfHit.equals(0)) {
+				if (worldObj.isAirBlock(movingobjectposition.blockX,
+						movingobjectposition.blockY,
+						movingobjectposition.blockZ)) {
+					return;
+				}
+			}
 
 			worldObj.playSoundEffect(posX, posY, posZ,
 					"openmodularturrets:laserHit", 1.0F, 1.0F);

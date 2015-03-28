@@ -70,8 +70,16 @@ public class RocketProjectile extends TurretProjectile {
 		if (this.ticksExisted <= 5) {
 			return;
 		}
+		
+		if (movingobjectposition.typeOfHit.equals(0)) {
+			if (worldObj.isAirBlock(movingobjectposition.blockX,
+					movingobjectposition.blockY,
+					movingobjectposition.blockZ)) {
+				return;
+			}
+		}
 
-		if (!worldObj.isRemote) {
+		if (!worldObj.isRemote) {		
 
 			worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
 			AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 5,
