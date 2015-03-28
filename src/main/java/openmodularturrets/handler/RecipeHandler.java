@@ -148,11 +148,14 @@ public class RecipeHandler {
 				new Object[] { "BDB", "BAB", " C ", 'C', Items.energeticBarrel,
 						'B', "ingotEnderium", 'A', Items.containmentChamber,
 						'D', "dustElectrum" }));
+		
+		GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.railGunTurret,
+				new Object[] { "BAB", "BCB", " C ", 'C', Items.energeticBarrel,
+						'B', "ingotInvar", 'A', Items.containmentChamber }));
 
-		GameRegistry.addRecipe(new ItemStack(Items.bulletCraftable, 32),
-				new Object[] { " B ", " A ", " A ", 'B',
-						net.minecraft.init.Items.iron_ingot, 'A',
-						net.minecraft.init.Items.gunpowder });
+		GameRegistry.addRecipe(new ShapedOreRecipe(Items.bulletCraftable, 32,
+				new Object[] { " B ", " A ", " A ", 'B', "ingotLead", 'A',
+						net.minecraft.init.Items.gunpowder }));
 
 		GameRegistry.addRecipe(new ItemStack(Items.rocketCraftable, 16),
 				new Object[] { " A ", "ABA", "ABA", 'A',
