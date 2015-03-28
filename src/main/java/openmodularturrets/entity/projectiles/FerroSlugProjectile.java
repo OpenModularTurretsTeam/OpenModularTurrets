@@ -25,7 +25,7 @@ public class FerroSlugProjectile extends TurretProjectile {
 		if (ticksExisted >= 50) {
 			this.setDead();
 		}
-		
+
 	}
 
 	@Override
@@ -36,6 +36,14 @@ public class FerroSlugProjectile extends TurretProjectile {
 		}
 
 		if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
+
+			if (movingobjectposition.typeOfHit.equals(0)) {
+				if (worldObj.isAirBlock(movingobjectposition.blockX,
+						movingobjectposition.blockY,
+						movingobjectposition.blockZ)) {
+					return;
+				}
+			}
 
 			int damage = ConfigHandler.getRailgun_turret().getDamage();
 
