@@ -153,7 +153,7 @@ public class RecipeHandler {
 				new Object[] { "BAB", "BCB", " C ", 'C', Items.energeticBarrel,
 						'B', "ingotInvar", 'A', Items.containmentChamber }));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(Items.bulletCraftable, 32,
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.bulletCraftable, 32),
 				new Object[] { " B ", " A ", " A ", 'B', "ingotLead", 'A',
 						net.minecraft.init.Items.gunpowder }));
 
