@@ -78,7 +78,7 @@ public class Items {
 
         rocketCraftable = new RocketAmmoItem();
         GameRegistry.registerItem(rocketCraftable, "rocketCraftable");
-        
+
         ferroSlug = new FerroSlugItem();
         GameRegistry.registerItem(ferroSlug, "ferroSlug");
 

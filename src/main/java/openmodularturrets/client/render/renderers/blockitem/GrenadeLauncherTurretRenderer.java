@@ -4,11 +4,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import openmodularturrets.reference.ModInfo;
 import openmodularturrets.client.render.models.ModelDamageAmp;
 import openmodularturrets.client.render.models.ModelGrenadeLauncher;
 import openmodularturrets.client.render.models.ModelRedstoneReactor;
 import openmodularturrets.client.render.models.SolarPanelAddon;
+import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turrets.TurretHead;
 import openmodularturrets.tileentity.turrets.TurretHeadUtils;
 import org.lwjgl.opengl.GL11;
@@ -21,10 +21,10 @@ public class GrenadeLauncherTurretRenderer extends TileEntitySpecialRenderer {
     ModelRedstoneReactor reac;
 
     public GrenadeLauncherTurretRenderer() {
-	model = new ModelGrenadeLauncher();
-	solar = new SolarPanelAddon();
-	amp = new ModelDamageAmp();
-	reac = new ModelRedstoneReactor();
+        model = new ModelGrenadeLauncher();
+        solar = new SolarPanelAddon();
+        amp = new ModelDamageAmp();
+        reac = new ModelRedstoneReactor();
     }
 
     @Override
@@ -55,7 +55,7 @@ public class GrenadeLauncherTurretRenderer extends TileEntitySpecialRenderer {
             if (TurretHeadUtils.hasSolarPanelAddon(turretHead.base)) {
                 ResourceLocation texturesSolar = (new ResourceLocation(ModInfo.ID + ":textures/blocks/solarPanelAddon.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
-                solar.setRotationForTarget(turretHead.rotationXY,turretHead.rotationXZ);
+                solar.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 solar.renderAll();
             }
 
@@ -76,5 +76,4 @@ public class GrenadeLauncherTurretRenderer extends TileEntitySpecialRenderer {
 
         GL11.glPopMatrix();
     }
-
 }

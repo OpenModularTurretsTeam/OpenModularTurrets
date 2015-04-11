@@ -7,24 +7,24 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import openmodularturrets.reference.ModInfo;
-import openmodularturrets.items.ItemNames;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.items.ItemNames;
+import openmodularturrets.reference.ModInfo;
 
 import java.util.List;
 
 public class RedstoneReactorAddonItem extends AddonItem {
 
-	public RedstoneReactorAddonItem() {
-		super();
+    public RedstoneReactorAddonItem() {
+        super();
 
-		this.setUnlocalizedName(ItemNames.unlocalisedRedReactorAddon);
-	}
+        this.setUnlocalizedName(ItemNames.unlocalisedRedReactorAddon);
+    }
 
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister par1IconRegister) {
-		this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":ammoProductionAddon");
-	}
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister par1IconRegister) {
+        this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":ammoProductionAddon");
+    }
 
     @Override
     public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_) {

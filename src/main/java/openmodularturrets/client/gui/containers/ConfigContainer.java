@@ -7,15 +7,15 @@ import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class ConfigContainer extends Container {
 
-	protected TurretBase tileEntity;
+    protected TurretBase tileEntity;
 
-	public ConfigContainer(InventoryPlayer inventoryPlayer,
-			TurretBase te) {
-		this.tileEntity = te;
-	}
+    public ConfigContainer(InventoryPlayer inventoryPlayer,
+                           TurretBase te) {
+        this.tileEntity = te;
+    }
 
-	@Override
-	public boolean canInteractWith(EntityPlayer player) {
-		return tileEntity.isUseableByPlayer(player);
-	}
+    @Override
+    public boolean canInteractWith(EntityPlayer player) {
+        return tileEntity.isUseableByPlayer(player);
+    }
 }

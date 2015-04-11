@@ -43,7 +43,7 @@ public class RemoveTrustedPlayerMessage implements IMessage, IMessageHandler<Rem
     @Override
     public IMessage onMessage(RemoveTrustedPlayerMessage message, MessageContext ctx) {
         World world = ctx.getServerHandler().playerEntity.worldObj;
-        TurretBase turret = (TurretBase)world.getTileEntity(message.getX(), message.getY(), message.getZ());
+        TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
 
         turret.removeTrustedPlayer(message.getPlayer());
 

@@ -42,7 +42,7 @@ public class ToggleAttackPlayersMessage implements IMessage, IMessageHandler<Tog
     @Override
     public IMessage onMessage(ToggleAttackPlayersMessage message, MessageContext ctx) {
         World world = ctx.getServerHandler().playerEntity.worldObj;
-        TurretBase turret = (TurretBase)world.getTileEntity(message.getX(), message.getY(), message.getZ());
+        TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
 
         turret.setAttacksPlayers(message.doAttackPlayers());
 

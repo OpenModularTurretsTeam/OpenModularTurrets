@@ -10,8 +10,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class SolarPanelAddon extends ModelBase
-{
+public class SolarPanelAddon extends ModelBase {
     //fields
     ModelRenderer Shape1;
     ModelRenderer Shape2;
@@ -43,7 +42,6 @@ public class SolarPanelAddon extends ModelBase
         setRotation(Shape3, -0.2565324F, 0F, 0F);
     }
 
-
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
@@ -68,8 +66,7 @@ public class SolarPanelAddon extends ModelBase
         Shape3.rotateAngleY = z;
     }
 
-    public void renderAll()
-    {
+    public void renderAll() {
         Shape1.render(0.0625F);
         Shape2.render(0.0625F);
         Shape3.render(0.0625F);

@@ -10,60 +10,60 @@ import openmodularturrets.tileentity.turretbase.TurretWoodBase;
 
 public class TurretBaseTierWoodContainer extends Container {
 
-	protected TurretBase tileEntity;
+    protected TurretBase tileEntity;
 
-	public TurretBaseTierWoodContainer(InventoryPlayer inventoryPlayer,
-			TurretWoodBase te) {
-		this.tileEntity = te;
+    public TurretBaseTierWoodContainer(InventoryPlayer inventoryPlayer,
+                                       TurretWoodBase te) {
+        this.tileEntity = te;
 
-		for (int x = 0; x < 9; x++) {
-			this.addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18,
-					142));
-		}
-		
-		for(int y = 0; y < 3; y++) {
-			  for(int x = 0; x < 9; x++) {
-			    this.addSlotToContainer(new Slot(inventoryPlayer, 9 + x + y * 9, 8 + x * 18, 84 + y * 18));
-			  }
-			}
+        for (int x = 0; x < 9; x++) {
+            this.addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18,
+                    142));
+        }
 
-		for (int y = 0; y < 3; y++) {
-			for (int x = 0; x < 3; x++) {
-				addSlotToContainer(new Slot(tileEntity, x + y * 3, 8 + x * 18,
-						17 + y * 18));
-			}
-		}
-	}
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 9; x++) {
+                this.addSlotToContainer(new Slot(inventoryPlayer, 9 + x + y * 9, 8 + x * 18, 84 + y * 18));
+            }
+        }
 
-	@Override
-	public boolean canInteractWith(EntityPlayer player) {
-		return tileEntity.isUseableByPlayer(player);
-	}
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                addSlotToContainer(new Slot(tileEntity, x + y * 3, 8 + x * 18,
+                        17 + y * 18));
+            }
+        }
+    }
 
-	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
-	  Slot slot = getSlot(i);
+    @Override
+    public boolean canInteractWith(EntityPlayer player) {
+        return tileEntity.isUseableByPlayer(player);
+    }
 
-	  if(slot != null && slot.getHasStack()) {
-	    ItemStack itemstack = slot.getStack();
-	    ItemStack result = itemstack.copy();
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer player, int i) {
+        Slot slot = getSlot(i);
 
-	    if(i >= 36) {
-	      if(!mergeItemStack(itemstack, 0, 36, false)) {
-	        return null;
-	      }
-	    } else if(!mergeItemStack(itemstack, 36, 36 + tileEntity.getSizeInventory(), false)) {
-	      return null;
-	    }
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemstack = slot.getStack();
+            ItemStack result = itemstack.copy();
 
-	    if(itemstack.stackSize == 0) {
-	      slot.putStack(null);
-	    } else {
-	      slot.onSlotChanged();
-	    }
-	    slot.onPickupFromSlot(player, itemstack); 
-	    return result;
-	  }
-	  return null;
-	}
+            if (i >= 36) {
+                if (!mergeItemStack(itemstack, 0, 36, false)) {
+                    return null;
+                }
+            } else if (!mergeItemStack(itemstack, 36, 36 + tileEntity.getSizeInventory(), false)) {
+                return null;
+            }
+
+            if (itemstack.stackSize == 0) {
+                slot.putStack(null);
+            } else {
+                slot.onSlotChanged();
+            }
+            slot.onPickupFromSlot(player, itemstack);
+            return result;
+        }
+        return null;
+    }
 }
