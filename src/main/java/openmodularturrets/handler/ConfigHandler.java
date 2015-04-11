@@ -38,7 +38,7 @@ public class ConfigHandler {
 
     private static int turretWarningDistance;
     
-    public static boolean turretAlarmSound = true;
+    public static boolean turretAlarmSound;
 
     public static void init(File configFile) {
 		Configuration config = new Configuration(configFile);
