@@ -54,12 +54,15 @@ public class TurretHeadUtils {
     }
 
     public static void dispatchWarnMessage(EntityPlayerMP player, World worldObj) {
-    	if (ConfigHandler.turretAlarmSound = true) {
-        worldObj.playSoundEffect(player.posX, player.posY, player.posZ,
-                "openmodularturrets:warning", 1.0F, 1.0F); }
-        player.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_RED
-                + StatCollector.translateToLocal("status.warning")));
-    	}
+        if (ConfigHandler.turretAlarmSound) {
+            worldObj.playSoundEffect(player.posX, player.posY, player.posZ,
+                    "openmodularturrets:warning", 1.0F, 1.0F);
+        }
+        if (ConfigHandler.turretWarnMessage) {
+            player.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_RED
+                    + StatCollector.translateToLocal("status.warning")));
+        }
+    }
 
     public static Entity getTarget(TurretBase base, World worldObj,
                                    int downLowAmount, int xCoord, int yCoord, int zCoord,

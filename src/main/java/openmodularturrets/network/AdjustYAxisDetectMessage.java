@@ -11,7 +11,8 @@ public class AdjustYAxisDetectMessage implements IMessage, IMessageHandler<Adjus
     private int x, y, z;
     private int y_axis_detect;
 
-    public AdjustYAxisDetectMessage() { }
+    public AdjustYAxisDetectMessage() {
+    }
 
     public AdjustYAxisDetectMessage(int x, int y, int z, int y_axis_detect) {
         this.x = x;
@@ -41,7 +42,7 @@ public class AdjustYAxisDetectMessage implements IMessage, IMessageHandler<Adjus
     @Override
     public IMessage onMessage(AdjustYAxisDetectMessage message, MessageContext ctx) {
         World world = ctx.getServerHandler().playerEntity.worldObj;
-        TurretBase turret = (TurretBase)world.getTileEntity(message.getX(), message.getY(), message.getZ());
+        TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
 
         turret.setyAxisDetect(message.getYAxisDetect());
 

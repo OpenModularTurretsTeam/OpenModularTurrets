@@ -10,10 +10,10 @@ import openmodularturrets.tileentity.turretbase.*;
 
 public class GuiHandler implements IGuiHandler {
 
-	// returns an instance of the Container you made earlier
-	@Override
-	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity tileEntity = world.getTileEntity(x, y, z);
+    // returns an instance of the Container you made earlier
+    @Override
+    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+        TileEntity tileEntity = world.getTileEntity(x, y, z);
 
         switch (id) {
             case 0:
@@ -31,11 +31,11 @@ public class GuiHandler implements IGuiHandler {
             default:
                 return null;
         }
-	}
+    }
 
-	@Override
-	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity tileEntity = world.getTileEntity(x, y, z);
+    @Override
+    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+        TileEntity tileEntity = world.getTileEntity(x, y, z);
 
         switch (id) {
             case 0:
@@ -53,5 +53,5 @@ public class GuiHandler implements IGuiHandler {
             default:
                 return null;
         }
-	}
+    }
 }

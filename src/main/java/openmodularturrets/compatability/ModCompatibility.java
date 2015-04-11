@@ -1,7 +1,6 @@
 package openmodularturrets.compatability;
 
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModAPIManager;
 
 /**
  * Created by Keridos on 23/01/2015.

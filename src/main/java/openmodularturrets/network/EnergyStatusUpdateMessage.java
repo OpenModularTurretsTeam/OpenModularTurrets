@@ -43,7 +43,7 @@ public class EnergyStatusUpdateMessage implements IMessage, IMessageHandler<Ener
     @Override
     public IMessage onMessage(EnergyStatusUpdateMessage message, MessageContext ctx) {
         World world = Minecraft.getMinecraft().thePlayer.worldObj;
-        TurretBase turret = (TurretBase)world.getTileEntity(message.getX(), message.getY(), message.getZ());
+        TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
 
         if (turret != null) {
             turret.setEnergyStored(message.getEnergy());

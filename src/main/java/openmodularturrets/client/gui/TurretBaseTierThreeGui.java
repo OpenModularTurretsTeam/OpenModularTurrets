@@ -7,12 +7,12 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
-import openmodularturrets.reference.ModInfo;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.client.gui.containers.TurretBaseTierThreeContainer;
 import openmodularturrets.network.AdjustYAxisDetectMessage;
 import openmodularturrets.network.DropBaseMessage;
 import openmodularturrets.network.DropTurretsMessage;
+import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierThreeTileEntity;
 import org.lwjgl.opengl.GL11;
 
@@ -64,11 +64,11 @@ public class TurretBaseTierThreeGui extends GuiContainer {
 
         if (guibutton.id == 3) {
             sendDropTurretsToServer();
-         }
+        }
 
-         if (guibutton.id == 4) {
-         	sendDropBaseToServer();
-         }
+        if (guibutton.id == 4) {
+            sendDropBaseToServer();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -80,7 +80,7 @@ public class TurretBaseTierThreeGui extends GuiContainer {
         fontRenderer.drawString("Ammo", 8, 6, 0);
         fontRenderer.drawString("Inventory", 8, ySize - 97 + 4, 0);
         fontRenderer.drawStringWithShadow("" + base.getyAxisDetect(), 127, 39,
-            40000);
+                40000);
         fontRenderer.drawString("-Y", 123, 6, 0);
 
         int k = (this.width - this.xSize) / 2;
@@ -131,15 +131,13 @@ public class TurretBaseTierThreeGui extends GuiContainer {
         ModularTurrets.networking.sendToServer(message);
     }
 
-    public void sendDropTurretsToServer()
-    {
-    	DropTurretsMessage message = new DropTurretsMessage(base.xCoord, base.yCoord, base.zCoord);
-    	ModularTurrets.networking.sendToServer(message);
+    public void sendDropTurretsToServer() {
+        DropTurretsMessage message = new DropTurretsMessage(base.xCoord, base.yCoord, base.zCoord);
+        ModularTurrets.networking.sendToServer(message);
     }
-    
-    public void sendDropBaseToServer()
-    {
-    	DropBaseMessage message = new DropBaseMessage(base.xCoord, base.yCoord, base.zCoord);
-    	ModularTurrets.networking.sendToServer(message);
+
+    public void sendDropBaseToServer() {
+        DropBaseMessage message = new DropBaseMessage(base.xCoord, base.yCoord, base.zCoord);
+        ModularTurrets.networking.sendToServer(message);
     }
 }

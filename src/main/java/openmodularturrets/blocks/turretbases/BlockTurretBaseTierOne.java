@@ -3,9 +3,9 @@ package openmodularturrets.blocks.turretbases;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import openmodularturrets.reference.ModInfo;
 import openmodularturrets.blocks.BlockNames;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 
 public class BlockTurretBaseTierOne extends BlockAbstractTurretBase {
@@ -29,6 +29,6 @@ public class BlockTurretBaseTierOne extends BlockAbstractTurretBase {
 
     @Override
     public TileEntity createNewTileEntity(World world, int par2) {
-	    return new TurretBaseTierOneTileEntity(this.MaxCharge, this.MaxIO);
+        return new TurretBaseTierOneTileEntity(this.MaxCharge, this.MaxIO);
     }
 }

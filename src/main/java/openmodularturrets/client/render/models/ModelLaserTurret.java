@@ -94,7 +94,6 @@ public class ModelLaserTurret extends ModelBase {
         CounterWeight.setTextureSize(64, 64);
         CounterWeight.mirror = true;
         setRotation(CounterWeight, 0F, 0F, 0F);
-
     }
 
     @Override
