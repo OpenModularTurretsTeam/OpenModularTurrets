@@ -42,9 +42,7 @@ public class OpenModularTurretsWikiTab extends BaseWikiTab {
             Logger.getGlobal().info(pageEntry);
             Logger.getGlobal().info(pageEntry.replace("item", "item/openmodularturrets"));
             return pageEntry.replace("item", "item/openmodularturrets");
-
-        }
-        else if (pageEntry.startsWith("block")) {
+        } else if (pageEntry.startsWith("block")) {
             Logger.getGlobal().info(pageEntry);
             Logger.getGlobal().info(pageEntry.replace("block", "block/openmodularturrets"));
             return pageEntry.replace("block", "block/openmodularturrets");

@@ -2,8 +2,8 @@ package openmodularturrets.blocks.turretheads;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import openmodularturrets.reference.ModInfo;
 import openmodularturrets.blocks.BlockNames;
+import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turrets.RocketTurretTileEntity;
 
 public class BlockRocketTurret extends BlockAbstractTurretHead {
@@ -17,6 +17,6 @@ public class BlockRocketTurret extends BlockAbstractTurretHead {
 
     @Override
     public TileEntity createNewTileEntity(World world, int par2) {
-	    return new RocketTurretTileEntity();
+        return new RocketTurretTileEntity();
     }
 }

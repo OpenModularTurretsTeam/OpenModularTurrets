@@ -12,7 +12,8 @@ public class AddTrustedPlayerMessage implements IMessage, IMessageHandler<AddTru
     private int x, y, z;
     private String player;
 
-    public AddTrustedPlayerMessage() { }
+    public AddTrustedPlayerMessage() {
+    }
 
     public AddTrustedPlayerMessage(int x, int y, int z, String player) {
         this.x = x;
@@ -42,7 +43,7 @@ public class AddTrustedPlayerMessage implements IMessage, IMessageHandler<AddTru
     @Override
     public IMessage onMessage(AddTrustedPlayerMessage message, MessageContext ctx) {
         World world = ctx.getServerHandler().playerEntity.worldObj;
-        TurretBase turret = (TurretBase)world.getTileEntity(message.getX(), message.getY(), message.getZ());
+        TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
 
         turret.addTrustedPlayer(message.getPlayer());
 

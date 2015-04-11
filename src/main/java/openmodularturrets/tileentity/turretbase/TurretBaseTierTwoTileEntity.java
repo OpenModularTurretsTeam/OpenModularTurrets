@@ -19,11 +19,11 @@ public class TurretBaseTierTwoTileEntity extends TurretBase {
 
     @Override
     public int getSizeInventory() {
-	return 12;
+        return 12;
     }
 
     @Override
     public String getInventoryName() {
-	    return "modtur.turretbasetwo";
+        return "modtur.turretbasetwo";
     }
 }

@@ -32,7 +32,7 @@ public class ItemBlockRocketTurret extends ItemBlock {
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.damage.stat") + ": " + EnumChatFormatting.WHITE + (ConfigHandler.getRocketTurretSettings().getDamage() / 2F) + " " + StatCollector.translateToLocal("tooltip.health"));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.aoe") + ": " + EnumChatFormatting.WHITE + "5");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.firerate") + ": " + EnumChatFormatting.WHITE + df.format(20.0F / ConfigHandler.getRocketTurretSettings().getFireRate()));
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.energy.stat") + ": " + EnumChatFormatting.WHITE + ConfigHandler.getRocketTurretSettings().getPowerUsage()+" RF");
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.energy.stat") + ": " + EnumChatFormatting.WHITE + ConfigHandler.getRocketTurretSettings().getPowerUsage() + " RF");
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.turret.3"));
     }

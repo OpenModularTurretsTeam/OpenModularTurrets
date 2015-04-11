@@ -94,7 +94,6 @@ public class ModelDamageAmp extends ModelBase {
         model.rotateAngleZ = z;
     }
 
-
     public void setRotationForTarget(float y, float z) {
         Shape1.rotateAngleX = y;
         Shape1.rotateAngleY = z;

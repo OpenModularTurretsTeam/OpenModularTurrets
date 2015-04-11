@@ -7,24 +7,24 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import openmodularturrets.reference.ModInfo;
-import openmodularturrets.items.ItemNames;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.items.ItemNames;
+import openmodularturrets.reference.ModInfo;
 
 import java.util.List;
 
 public class AccuraccyUpgradeItem extends UpgradeItem {
 
-	public AccuraccyUpgradeItem() {
-		super();
+    public AccuraccyUpgradeItem() {
+        super();
 
-		this.setUnlocalizedName(ItemNames.unlocalisedAccuraccyUpgrade);
-	}
+        this.setUnlocalizedName(ItemNames.unlocalisedAccuraccyUpgrade);
+    }
 
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister par1IconRegister) {
-		this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":accuraccyUpgrade");
-	}
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister par1IconRegister) {
+        this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":accuraccyUpgrade");
+    }
 
     @Override
     public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_) {

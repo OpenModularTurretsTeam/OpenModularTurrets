@@ -1,11 +1,11 @@
 package openmodularturrets.proxy;
 
 public class CommonProxy {
-	public void initRenderers() {
+    public void initRenderers() {
 
-	}
+    }
 
-	public void initHandlers() {
+    public void initHandlers() {
 
-	}
+    }
 }

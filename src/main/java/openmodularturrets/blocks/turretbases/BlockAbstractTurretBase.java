@@ -13,6 +13,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
+import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 import java.util.Random;
@@ -22,9 +23,11 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
         super(Material.rock);
 
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
-        this.setBlockUnbreakable();
-        this.setResistance(6000000.0F);
-        this.setStepSound(Block.soundTypeStone);      
+        if (!ConfigHandler.turretBreakable) {
+            this.setBlockUnbreakable();
+        }
+        this.setResistance(3.0F);
+        this.setStepSound(Block.soundTypeStone);
     }
 
     @Override
@@ -41,21 +44,18 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
 
         return true;
     }
-    
-  @Override
-public void onBlockPlacedBy(World world, int x,
-		int y, int z, EntityLivingBase elb,
-		ItemStack stack) {
-	
-	  if(!world.isRemote)	  
-	  {
-		  EntityPlayerMP player = (EntityPlayerMP) elb;
-		  TurretBase base = (TurretBase) world.getTileEntity(x, y, z);	  
-		  base.setOwner(player.getDisplayName());	  
-	  }
-	  
-	  
-}
+
+    @Override
+    public void onBlockPlacedBy(World world, int x,
+                                int y, int z, EntityLivingBase elb,
+                                ItemStack stack) {
+
+        if (!world.isRemote) {
+            EntityPlayerMP player = (EntityPlayerMP) elb;
+            TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
+            base.setOwner(player.getDisplayName());
+        }
+    }
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block par5, int par6) {

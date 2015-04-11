@@ -13,30 +13,28 @@ public class DisposableItemTurretItemRenderer implements IItemRenderer {
     private final DisposableItemTurretTileEntity disposableItemTurretTileEntity;
     private final ModelDisposableItemTurret model;
 
-	public DisposableItemTurretItemRenderer(DisposableItemTurretRenderer disposableItemTurretRenderer, DisposableItemTurretTileEntity disposableItemTurretTileEntity) {
+    public DisposableItemTurretItemRenderer(DisposableItemTurretRenderer disposableItemTurretRenderer, DisposableItemTurretTileEntity disposableItemTurretTileEntity) {
         this.disposableItemTurretRenderer = disposableItemTurretRenderer;
         this.disposableItemTurretTileEntity = disposableItemTurretTileEntity;
 
-		this.model = new ModelDisposableItemTurret();
+        this.model = new ModelDisposableItemTurret();
+    }
 
-	}
+    @Override
+    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+        return true;
+    }
 
-	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return true;
-	}
+    @Override
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+        return true;
+    }
 
-	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-		return true;
-	}
-
-	@Override
-	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		GL11.glPushMatrix();
-		GL11.glTranslated(-0.5, -0.5, -0.5);
-	    this.disposableItemTurretRenderer.renderTileEntityAt(this.disposableItemTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
-		GL11.glPopMatrix();
-	}
-
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+        GL11.glPushMatrix();
+        GL11.glTranslated(-0.5, -0.5, -0.5);
+        this.disposableItemTurretRenderer.renderTileEntityAt(this.disposableItemTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
+        GL11.glPopMatrix();
+    }
 }

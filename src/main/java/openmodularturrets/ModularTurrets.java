@@ -12,20 +12,20 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.creativetab.CreativeTabs;
 import openmodularturrets.blocks.Blocks;
-import openmodularturrets.compatability.ModCompatibility;
-import openmodularturrets.handler.GuiHandler;
-import openmodularturrets.handler.TileEntityHandler;
-import openmodularturrets.handler.RecipeHandler;
-import openmodularturrets.items.Items;
-import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.reference.ModInfo;
 import openmodularturrets.client.gui.ModularTurretsTab;
-import openmodularturrets.network.*;
+import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.entity.projectiles.BulletProjectile;
 import openmodularturrets.entity.projectiles.GrenadeProjectile;
 import openmodularturrets.entity.projectiles.LaserProjectile;
 import openmodularturrets.entity.projectiles.RocketProjectile;
+import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.handler.GuiHandler;
+import openmodularturrets.handler.RecipeHandler;
+import openmodularturrets.handler.TileEntityHandler;
+import openmodularturrets.items.Items;
+import openmodularturrets.network.*;
 import openmodularturrets.proxy.CommonProxy;
+import openmodularturrets.reference.ModInfo;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = "required-after:ThermalFoundation")
 public class ModularTurrets {

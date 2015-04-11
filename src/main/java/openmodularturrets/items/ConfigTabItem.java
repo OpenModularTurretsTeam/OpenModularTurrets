@@ -10,8 +10,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import openmodularturrets.reference.ModInfo;
 import openmodularturrets.ModularTurrets;
+import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class ConfigTabItem extends Item {
@@ -25,7 +25,7 @@ public class ConfigTabItem extends Item {
 
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister par1IconRegister) {
-	    this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":config");
+        this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":config");
     }
 
     @Override

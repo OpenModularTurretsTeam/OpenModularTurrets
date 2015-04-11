@@ -22,7 +22,7 @@ public class ItemBlockGrenadeLauncherTurret extends ItemBlock {
     public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_) {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.GOLD + "--" + StatCollector.translateToLocal("tooltip.info") + "--");
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.tier") + ": " +EnumChatFormatting.WHITE + "2");
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.tier") + ": " + EnumChatFormatting.WHITE + "2");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.range") + ": " + EnumChatFormatting.WHITE + ConfigHandler.getGrenadeTurretSettings().getRange());
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.accuracy") + ": " + EnumChatFormatting.WHITE + StatCollector.translateToLocal("turret.accuracy.medium"));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.ammo") + ": " + EnumChatFormatting.WHITE + StatCollector.translateToLocal("turret.ammo.2"));
@@ -32,7 +32,7 @@ public class ItemBlockGrenadeLauncherTurret extends ItemBlock {
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.damage.stat") + ": " + EnumChatFormatting.WHITE + (ConfigHandler.getGrenadeTurretSettings().getDamage() / 2F) + " " + StatCollector.translateToLocal("tooltip.health"));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.aoe") + ": 3");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.firerate") + ": " + EnumChatFormatting.WHITE + df.format(20.0F / ConfigHandler.getGrenadeTurretSettings().getFireRate()));
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.energy.stat") + ": " + EnumChatFormatting.WHITE + ConfigHandler.getGrenadeTurretSettings().getPowerUsage()+" RF");
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.energy.stat") + ": " + EnumChatFormatting.WHITE + ConfigHandler.getGrenadeTurretSettings().getPowerUsage() + " RF");
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.turret.2a"));
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.turret.2b"));

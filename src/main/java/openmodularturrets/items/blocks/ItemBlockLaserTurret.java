@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ItemBlockLaserTurret extends ItemBlock {
     public static final DecimalFormat df = new DecimalFormat("0.0");
-    
+
     public ItemBlockLaserTurret(Block p_i45328_1_) {
         super(p_i45328_1_);
     }
@@ -32,7 +32,7 @@ public class ItemBlockLaserTurret extends ItemBlock {
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.damage.stat") + ": " + EnumChatFormatting.WHITE + (ConfigHandler.getLaserTurretSettings().getDamage() / 2F) + " " + StatCollector.translateToLocal("tooltip.health"));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.aoe") + ": " + EnumChatFormatting.WHITE + "0");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.firerate") + ": " + EnumChatFormatting.WHITE + df.format(20.0F / ConfigHandler.getLaserTurretSettings().getFireRate()));
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.energy.stat") + ": " + EnumChatFormatting.WHITE + ConfigHandler.getLaserTurretSettings().getPowerUsage()+" RF");
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.energy.stat") + ": " + EnumChatFormatting.WHITE + ConfigHandler.getLaserTurretSettings().getPowerUsage() + " RF");
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.turret.4"));
     }

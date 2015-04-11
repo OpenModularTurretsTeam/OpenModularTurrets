@@ -7,17 +7,16 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
-import openmodularturrets.reference.ModInfo;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.client.gui.containers.TurretBaseTierWoodContainer;
 import openmodularturrets.network.AdjustYAxisDetectMessage;
 import openmodularturrets.network.DropBaseMessage;
 import openmodularturrets.network.DropTurretsMessage;
+import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TurretWoodBase;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
-
 
 public class TurretBaseTierWoodGui extends GuiContainer {
 
@@ -57,11 +56,11 @@ public class TurretBaseTierWoodGui extends GuiContainer {
         }
 
         if (guibutton.id == 3) {
-           sendDropTurretsToServer();
+            sendDropTurretsToServer();
         }
 
         if (guibutton.id == 4) {
-        	sendDropBaseToServer();
+            sendDropBaseToServer();
         }
     }
 
@@ -80,7 +79,7 @@ public class TurretBaseTierWoodGui extends GuiContainer {
         fontRenderer.drawString("Ammo", 8, 6, 0);
         fontRenderer.drawString("Inventory", 8, ySize - 97 + 4, 0);
         fontRenderer.drawStringWithShadow("" + base.getyAxisDetect(), 127, 39,
-            40000);
+                40000);
         fontRenderer.drawString("-Y", 123, 6, 0);
 
         int k = (this.width - this.xSize) / 2;
@@ -109,12 +108,11 @@ public class TurretBaseTierWoodGui extends GuiContainer {
         targetInfo.add("\u00A77Attack Players: \u00A7b" + base.isAttacksPlayers());
 
         this.drawHoveringText(targetInfo, -128, 17, fontRenderer);
-
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-        ResourceLocation texture = (new ResourceLocation(ModInfo.ID+ ":textures/gui/baseInvWood.png"));
+        ResourceLocation texture = (new ResourceLocation(ModInfo.ID + ":textures/gui/baseInvWood.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
         int x = (width - xSize) / 2;
@@ -129,17 +127,14 @@ public class TurretBaseTierWoodGui extends GuiContainer {
         AdjustYAxisDetectMessage message = new AdjustYAxisDetectMessage(base.xCoord, base.yCoord, base.zCoord, base.getyAxisDetect());
         ModularTurrets.networking.sendToServer(message);
     }
-    
-    public void sendDropTurretsToServer()
-    {
-    	DropTurretsMessage message = new DropTurretsMessage(base.xCoord, base.yCoord, base.zCoord);
-    	ModularTurrets.networking.sendToServer(message);
-    }
-    
-    public void sendDropBaseToServer()
-    {
-    	DropBaseMessage message = new DropBaseMessage(base.xCoord, base.yCoord, base.zCoord);
-    	ModularTurrets.networking.sendToServer(message);
+
+    public void sendDropTurretsToServer() {
+        DropTurretsMessage message = new DropTurretsMessage(base.xCoord, base.yCoord, base.zCoord);
+        ModularTurrets.networking.sendToServer(message);
     }
 
+    public void sendDropBaseToServer() {
+        DropBaseMessage message = new DropBaseMessage(base.xCoord, base.yCoord, base.zCoord);
+        ModularTurrets.networking.sendToServer(message);
+    }
 }

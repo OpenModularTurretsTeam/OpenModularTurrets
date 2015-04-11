@@ -4,20 +4,20 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
-import openmodularturrets.reference.ModInfo;
 import openmodularturrets.ModularTurrets;
+import openmodularturrets.reference.ModInfo;
 
 public class SensorTierThreeItem extends Item {
 
-	public SensorTierThreeItem() {
-		super();
+    public SensorTierThreeItem() {
+        super();
 
-		this.setUnlocalizedName(ItemNames.unlocalisedSensorTierThree);
-		this.setCreativeTab(ModularTurrets.modularTurretsTab);
-	}
+        this.setUnlocalizedName(ItemNames.unlocalisedSensorTierThree);
+        this.setCreativeTab(ModularTurrets.modularTurretsTab);
+    }
 
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister par1IconRegister) {
-		this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":sensorItemTierThree");
-	}
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister par1IconRegister) {
+        this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":sensorItemTierThree");
+    }
 }

@@ -13,30 +13,28 @@ public class LaserTurretItemRenderer implements IItemRenderer {
     private final LaserTurretTileEntity laserTurretTileEntity;
     private ModelLaserTurret model;
 
-	public LaserTurretItemRenderer(LaserTurretRenderer laserTurretRenderer, LaserTurretTileEntity laserTurretTileEntity) {
+    public LaserTurretItemRenderer(LaserTurretRenderer laserTurretRenderer, LaserTurretTileEntity laserTurretTileEntity) {
         this.laserTurretRenderer = laserTurretRenderer;
         this.laserTurretTileEntity = laserTurretTileEntity;
 
         this.model = new ModelLaserTurret();
+    }
 
-	}
+    @Override
+    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+        return true;
+    }
 
-	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return true;
-	}
+    @Override
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+        return true;
+    }
 
-	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-		return true;
-	}
-
-	@Override
-	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		GL11.glPushMatrix();
-		GL11.glTranslated(-0.5, -0.5, -0.5);
-		this.laserTurretRenderer.renderTileEntityAt(this.laserTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
-		GL11.glPopMatrix();
-	}
-
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+        GL11.glPushMatrix();
+        GL11.glTranslated(-0.5, -0.5, -0.5);
+        this.laserTurretRenderer.renderTileEntityAt(this.laserTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
+        GL11.glPopMatrix();
+    }
 }

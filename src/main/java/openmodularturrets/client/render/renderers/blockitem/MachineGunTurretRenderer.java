@@ -4,11 +4,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import openmodularturrets.reference.ModInfo;
 import openmodularturrets.client.render.models.ModelDamageAmp;
 import openmodularturrets.client.render.models.ModelMachineGun;
 import openmodularturrets.client.render.models.ModelRedstoneReactor;
 import openmodularturrets.client.render.models.SolarPanelAddon;
+import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turrets.TurretHead;
 import openmodularturrets.tileentity.turrets.TurretHeadUtils;
 import org.lwjgl.opengl.GL11;
@@ -77,5 +77,4 @@ public class MachineGunTurretRenderer extends TileEntitySpecialRenderer {
         }
         GL11.glPopMatrix();
     }
-
 }

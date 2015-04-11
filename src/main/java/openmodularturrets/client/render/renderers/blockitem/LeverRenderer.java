@@ -4,8 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import openmodularturrets.reference.ModInfo;
 import openmodularturrets.client.render.models.ModelLever;
+import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.LeverTileEntity;
 import org.lwjgl.opengl.GL11;
 
@@ -14,7 +14,7 @@ public class LeverRenderer extends TileEntitySpecialRenderer {
     private ModelLever model;
 
     public LeverRenderer() {
-	model = new ModelLever();
+        model = new ModelLever();
     }
 
     @Override
@@ -32,8 +32,8 @@ public class LeverRenderer extends TileEntitySpecialRenderer {
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
         GL11.glScalef(1.0F, -1F, -1F);
         GL11.glRotatef(rotation * 90, 0.0F, 1.0F, 0.0F);
-        model.Shape1.rotateAngleZ = (lever.rotation/55);
-        model.Shape2.rotateAngleZ = (lever.rotation/55);
+        model.Shape1.rotateAngleZ = (lever.rotation / 55);
+        model.Shape2.rotateAngleZ = (lever.rotation / 55);
         model.renderAll();
         GL11.glPopMatrix();
     }
