@@ -29,7 +29,7 @@ if (hasProperty('appendBuildNumber')) {
 version = ext.mcversion + "-" + version // should give something like 1.7.10-1.2.5-99
  
 minecraft {
-    version = "1.7.10-10.13.2.1230"
+    version = "1.7.10-10.13.2.1291"
     runDir = "eclipse"
 }
  
