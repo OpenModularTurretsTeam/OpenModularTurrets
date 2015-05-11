@@ -42,6 +42,7 @@ public class ConfigHandler {
     public static boolean turretBreakable;
     public static boolean turretWarnMessage;
     public static boolean AllowTrustListModify;
+    public static boolean IGWNotification;
 
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
@@ -126,7 +127,7 @@ public class ConfigHandler {
         turretWarningDistance = config.get("miscellaneous", "warningDistance", 40).getInt();
         
         AllowTrustListModify = config.get("miscellaneous", "Allow players on your trust list to modify your turrets", false).getBoolean();
-
+        IGWNotification = config.get("miscellaneous", "Enable IGW Mod notification", true).getBoolean();
         if (config.hasChanged()) {
             config.save();
         }
