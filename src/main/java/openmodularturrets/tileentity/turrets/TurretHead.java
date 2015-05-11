@@ -2,6 +2,8 @@ package openmodularturrets.tileentity.turrets;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -232,6 +234,21 @@ public abstract class TurretHead extends TileEntity {
                     target = null;
                     return;
                 }
+            }
+            if (target != null && target instanceof EntityPlayerMP) {
+            	EntityPlayerMP entity = (EntityPlayerMP) target;
+            	
+            	if (TurretHeadUtils.isTrustedPlayer(entity.getDisplayName(), base)){
+            		target = null;
+            		return;
+            	}
+            	
+            }
+            if (target != null) {
+            	if (getDistanceToEntity(target) > (getTurretRange() + TurretHeadUtils.getRangeUpgrades(base))){
+            		target = null;
+            		return;
+            	}
             }
 
             this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord,
