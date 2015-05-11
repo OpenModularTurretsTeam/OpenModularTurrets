@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.turrets.TurretHeadUtils;
 
 import java.util.Random;
 
@@ -35,7 +36,7 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
         if (!world.isRemote) {
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
 
-            if (player.getDisplayName().equals(base.getOwner())) {
+            if (player.getDisplayName().equals(base.getOwner()) || TurretHeadUtils.isTrustedPlayer(player.getDisplayName(), base) && ConfigHandler.AllowTrustListModify) {
                 player.openGui(ModularTurrets.instance, base.getBaseTier(), world, x, y, z);
             } else {
                 player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));

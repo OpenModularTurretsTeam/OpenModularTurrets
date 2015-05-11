@@ -23,6 +23,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
 
+import openmodularturrets.handler.ConfigHandler;
+
 /**
  * Created by Keridos on 23/01/2015.
  * This Class
@@ -58,7 +60,7 @@ public class IGWSupportNotifier {
 
     @SubscribeEvent
     public void onPlayerJoin(TickEvent.PlayerTickEvent event) {
-        if (event.player.worldObj.isRemote && event.player == FMLClientHandler.instance().getClientPlayerEntity()) {
+        if (event.player.worldObj.isRemote && ConfigHandler.IGWNotification && event.player == FMLClientHandler.instance().getClientPlayerEntity()) {
             event.player.addChatComponentMessage(IChatComponent.Serializer.func_150699_a("[\"" + EnumChatFormatting.GOLD + "The mod " + supportingMod + " is supporting In-Game Wiki mod. " + EnumChatFormatting.GOLD + "However, In-Game Wiki isn't installed! " + "[\"," + "{\"text\":\"Download Latest\",\"color\":\"green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/igwmod_download\"}}," + "\"]\"]"));
             FMLCommonHandler.instance().bus().unregister(this);
         }

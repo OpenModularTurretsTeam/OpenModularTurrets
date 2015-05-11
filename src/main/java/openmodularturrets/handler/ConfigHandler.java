@@ -41,6 +41,8 @@ public class ConfigHandler {
     public static boolean turretAlarmSound;
     public static boolean turretBreakable;
     public static boolean turretWarnMessage;
+    public static boolean AllowTrustListModify;
+    public static boolean IGWNotification;
 
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
@@ -123,7 +125,9 @@ public class ConfigHandler {
         damageAmpDmgBonus = config.get("addons", "damage", 2, "Increases damage linearly").getInt();
 
         turretWarningDistance = config.get("miscellaneous", "warningDistance", 40).getInt();
-
+        
+        AllowTrustListModify = config.get("miscellaneous", "Allow players on your trust list to modify your turrets", false).getBoolean();
+        IGWNotification = config.get("miscellaneous", "Enable IGW Mod notification", true).getBoolean();
         if (config.hasChanged()) {
             config.save();
         }
@@ -262,6 +266,9 @@ public class ConfigHandler {
 
         public int getPowerUsage() {
             return power_usage;
+        }
+        public boolean TrustModify(){
+        return AllowTrustListModify;
         }
     }
 }
