@@ -268,7 +268,7 @@ public class ConfigHandler {
             return power_usage;
         }
         public boolean TrustModify(){
-        return AllowTrustListModify;
+        	return AllowTrustListModify;
         }
     }
 }

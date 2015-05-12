@@ -20,6 +20,7 @@ import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
 import cpw.mods.fml.common.Optional;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +35,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     protected boolean attacksPlayers;
     protected String owner;
     protected List<String> trustedPlayers;
-    boolean newstate;
-
+    
     public TurretBase(int MaxEnergyStorage, int MaxIO) {
         super();
         yAxisDetect = 2;
@@ -358,9 +358,23 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	}
     
     @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():boolean;  sets to attack hostile mobs or not.")
+	public Object[] setAttacksMobs(Context context, Arguments args) {
+    	this.setAttacksMobs(args.checkBoolean(0));
+        return null;
+	}
+    
+    @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack neutral mobs.")
 	public Object[] isAttacksNeutrals(Context context, Arguments args) {
 		return new Object[] { this.isAttacksNeutrals() };
+	}
+    
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():boolean; sets to attack neutral mobs or not.")
+	public Object[] setAttacksNeutrals(Context context, Arguments args) {
+    	this.setAttacksNeutrals(args.checkBoolean(0));
+    	return null;
 	}
     
     @Optional.Method(modid = "OpenComputers")
@@ -370,9 +384,30 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	}
     
     @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():boolean; sets to attack players or not.")
+	public Object[] setAttacksPlayers(Context context, Arguments args) {
+    	this.setAttacksPlayers(args.checkBoolean(0));
+    	return null;
+	}
+    
+    @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():table; returns a table of trusted players on this base.")
 	public Object[] getTrustedPlayers(Context context, Arguments args) {
 		return new Object[] { this.getTrustedPlayers() };
+	}
+	
+	@Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():string; adds Trusted player to Trustlist.")
+	public Object[] addTrustedPlayer(Context context, Arguments args) {
+		this.addTrustedPlayer(args.checkString(0));
+		return null;
+	}
+	
+	@Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():string; removes Trusted player from Trustlist.")
+	public Object[] removeTrustedPlayer(Context context, Arguments args) {
+		this.removeTrustedPlayer(args.checkString(0));
+		return null;
 	}
     
     @Optional.Method(modid = "OpenComputers")
