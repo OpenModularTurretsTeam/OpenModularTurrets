@@ -55,11 +55,16 @@ repositories {
     maven {
         name = "IGW"
         url = "http://maven.k-4u.nl/"
+    maven {
+        name = "OC repo"
+        url = "http://maven.cil.li/"
+    }
     }
 }
 
 dependencies {
     compile "igwmod:IGW-Mod-1.7.10:1.1.1-17:userdev"
+    compile "li.cil.oc:OpenComputers:MC1.7.10-1.5.9.21:dev"
 }
 
 task sourceJar(type: Jar) {
