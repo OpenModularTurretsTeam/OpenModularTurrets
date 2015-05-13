@@ -361,6 +361,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     @Callback(doc = "function():boolean;  sets to attack hostile mobs or not.")
 	public Object[] setAttacksMobs(Context context, Arguments args) {
     	this.setAttacksMobs(args.checkBoolean(0));
+    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         return null;
 	}
     
@@ -374,6 +375,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     @Callback(doc = "function():boolean; sets to attack neutral mobs or not.")
 	public Object[] setAttacksNeutrals(Context context, Arguments args) {
     	this.setAttacksNeutrals(args.checkBoolean(0));
+    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     	return null;
 	}
     
@@ -387,6 +389,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     @Callback(doc = "function():boolean; sets to attack players or not.")
 	public Object[] setAttacksPlayers(Context context, Arguments args) {
     	this.setAttacksPlayers(args.checkBoolean(0));
+    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     	return null;
 	}
     
@@ -400,6 +403,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     @Callback(doc = "function():string; adds Trusted player to Trustlist.")
 	public Object[] addTrustedPlayer(Context context, Arguments args) {
 		this.addTrustedPlayer(args.checkString(0));
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		return null;
 	}
 	
@@ -407,6 +411,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     @Callback(doc = "function():string; removes Trusted player from Trustlist.")
 	public Object[] removeTrustedPlayer(Context context, Arguments args) {
 		this.removeTrustedPlayer(args.checkString(0));
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		return null;
 	}
     
