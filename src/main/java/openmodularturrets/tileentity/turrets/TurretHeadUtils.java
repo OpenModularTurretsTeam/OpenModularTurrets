@@ -128,8 +128,8 @@ public class TurretHeadUtils {
     }
 
     public static boolean isTrustedPlayer(String name, TurretBase base) {
-        for (String trusted_player : base.getTrustedPlayers()) {
-            if (trusted_player.equals(name)) {
+        for (TurretBase.TrustedPlayer trusted_player : base.getTrustedPlayers()) {
+            if (trusted_player.name.equals(name)) {
                 return true;
             }
         }

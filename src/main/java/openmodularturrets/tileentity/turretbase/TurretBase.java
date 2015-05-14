@@ -2,12 +2,16 @@ package openmodularturrets.tileentity.turretbase;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
+import cpw.mods.fml.common.Optional;
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
@@ -15,14 +19,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.network.EnergyStatusUpdateMessage;
-import li.cil.oc.api.machine.Arguments;
-import li.cil.oc.api.machine.Callback;
-import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.SimpleComponent;
-import cpw.mods.fml.common.Optional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")
 public abstract class TurretBase extends TileEntity implements IEnergyHandler,
@@ -34,8 +34,20 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     protected boolean attacksNeutrals;
     protected boolean attacksPlayers;
     protected String owner;
-    protected List<String> trustedPlayers;
-    
+    protected List<TrustedPlayer> trustedPlayers;
+
+    public class TrustedPlayer {
+        public String name;
+        public boolean canOpenGUI = true;
+        public boolean canChangeTargeting = false;
+        public boolean canAddTrustedPlayers = false;
+        public boolean isAdmin = false;
+
+        public TrustedPlayer(String name) {
+            this.name = name;
+        }
+    }
+
     public TurretBase(int MaxEnergyStorage, int MaxIO) {
         super();
         yAxisDetect = 2;
@@ -43,44 +55,74 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         attacksMobs = true;
         attacksNeutrals = true;
         attacksPlayers = false;
-        trustedPlayers = new ArrayList<String>();
+        trustedPlayers = new ArrayList<TrustedPlayer>();
         this.inv = new ItemStack[this.getSizeInventory()];
     }
 
     public void addTrustedPlayer(String name) {
-        trustedPlayers.add(name);
+        for (TrustedPlayer trustedPlayer : trustedPlayers) {
+            if (trustedPlayer.name.equals(name)) {
+                removeTrustedPlayer(name);
+            }
+        }
+        trustedPlayers.add(new TrustedPlayer(name));
     }
 
     public void removeTrustedPlayer(String name) {
-        trustedPlayers.remove(name);
+        for (TrustedPlayer trustedPlayer : trustedPlayers) {
+            if (trustedPlayer.name.equals(name)) {
+                trustedPlayers.remove(trustedPlayer);
+            }
+        }
     }
 
     public boolean isGettingRedstoneSignal() {
         return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
     }
 
-    public List<String> getTrustedPlayers() {
+    public List<TrustedPlayer> getTrustedPlayers() {
         return trustedPlayers;
+    }
+
+    public TrustedPlayer getTrustedPlayer(String name) {
+        for (TrustedPlayer trustedPlayer : trustedPlayers) {
+            if (trustedPlayer.name.equals(name)) {
+                return trustedPlayer;
+            }
+        }
+        return null;
     }
 
     private NBTTagList getTrustedPlayersAsNBT() {
         NBTTagList nbt = new NBTTagList();
-
-        for (String trustedPlayer : trustedPlayers) {
-            nbt.appendTag(new NBTTagString(trustedPlayer));
+        for (TrustedPlayer trustedPlayer : trustedPlayers) {
+            NBTTagCompound nbtPlayer = new NBTTagCompound();
+            nbtPlayer.setString("name", trustedPlayer.name);
+            nbtPlayer.setBoolean("canOpenGUI", trustedPlayer.canOpenGUI);
+            nbtPlayer.setBoolean("canChangeTargeting", trustedPlayer.canChangeTargeting);
+            nbtPlayer.setBoolean("canAddTrustedPlayers", trustedPlayer.canAddTrustedPlayers);
+            nbtPlayer.setBoolean("isAdmin", trustedPlayer.isAdmin);
+            nbt.appendTag(nbtPlayer);
         }
-
         return nbt;
     }
 
-    private List<String> buildTrustedPlayersFromNBT(NBTTagList nbt) {
-        List<String> trusted_players = new ArrayList<String>();
-
+    private void buildTrustedPlayersFromNBT(NBTTagList nbt) {
         for (int i = 0; i < nbt.tagCount(); i++) {
-            trusted_players.add(nbt.getStringTagAt(i));
+            if (!nbt.getCompoundTagAt(i).getString("name").equals("")) {
+                NBTTagCompound nbtPlayer = nbt.getCompoundTagAt(i);
+                TrustedPlayer trustedPlayer = new TrustedPlayer(nbtPlayer.getString("name"));
+                trustedPlayer.canOpenGUI = nbtPlayer.getBoolean("canOpenGUI");
+                trustedPlayer.canChangeTargeting = nbtPlayer.getBoolean("canChangeTargeting");
+                trustedPlayer.canAddTrustedPlayers = nbtPlayer.getBoolean("canAddTrustedPlayers");
+                trustedPlayer.isAdmin = nbtPlayer.getBoolean("isAdmin");
+                trustedPlayers.add(trustedPlayer);
+            } else if (nbt.getCompoundTagAt(i).getString("name").equals("")) {
+                TrustedPlayer trustedPlayer = new TrustedPlayer(nbt.getStringTagAt(i));
+                Logger.getGlobal().info("found legacy trusted Player: " + nbt.getStringTagAt(i));
+                trustedPlayers.add(trustedPlayer);
+            }
         }
-
-        return trusted_players;
     }
 
     @Override
@@ -136,7 +178,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         this.attacksNeutrals = par1.getBoolean("attacksNeutrals");
         this.attacksPlayers = par1.getBoolean("attacksPlayers");
         this.owner = par1.getString("owner");
-        this.trustedPlayers = buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 8));
+
+        buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 10)); //not sure if we need both - Keridos
+        buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 8));
 
         NBTTagList tagList = par1.getTagList("Inventory", 10);
 
@@ -175,7 +219,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     public void setAttacksPlayers(boolean attacksPlayers) {
         this.attacksPlayers = attacksPlayers;
     }
-    
+
     public String getOwner() {
         return owner;
     }
@@ -343,89 +387,91 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
         ModularTurrets.networking.sendToAll(message);
     }
-    
-    
+
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():string; returns owner of turret base.")
-	public Object[] getOwner(Context context, Arguments args) {
-		return new Object[] { this.getOwner() };
-	}
-    
+    public Object[] getOwner(Context context, Arguments args) {
+        return new Object[]{this.getOwner()};
+    }
+
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack hostile mobs.")
-	public Object[] isAttacksMobs(Context context, Arguments args) {
-		return new Object[] { this.isAttacksMobs() };
-	}
-    
+    public Object[] isAttacksMobs(Context context, Arguments args) {
+        return new Object[]{this.isAttacksMobs()};
+    }
+
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean;  sets to attack hostile mobs or not.")
-	public Object[] setAttacksMobs(Context context, Arguments args) {
-    	this.setAttacksMobs(args.checkBoolean(0));
-    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    public Object[] setAttacksMobs(Context context, Arguments args) {
+        this.setAttacksMobs(args.checkBoolean(0));
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         return null;
-	}
-    
+    }
+
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack neutral mobs.")
-	public Object[] isAttacksNeutrals(Context context, Arguments args) {
-		return new Object[] { this.isAttacksNeutrals() };
-	}
-    
+    public Object[] isAttacksNeutrals(Context context, Arguments args) {
+        return new Object[]{this.isAttacksNeutrals()};
+    }
+
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; sets to attack neutral mobs or not.")
-	public Object[] setAttacksNeutrals(Context context, Arguments args) {
-    	this.setAttacksNeutrals(args.checkBoolean(0));
-    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-    	return null;
-	}
-    
+    public Object[] setAttacksNeutrals(Context context, Arguments args) {
+        this.setAttacksNeutrals(args.checkBoolean(0));
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        return null;
+    }
+
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack players.")
-	public Object[] isAttacksPlayers(Context context, Arguments args) {
-		return new Object[] { this.isAttacksPlayers() };
-	}
-    
+    public Object[] isAttacksPlayers(Context context, Arguments args) {
+        return new Object[]{this.isAttacksPlayers()};
+    }
+
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; sets to attack players or not.")
-	public Object[] setAttacksPlayers(Context context, Arguments args) {
-    	this.setAttacksPlayers(args.checkBoolean(0));
-    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-    	return null;
-	}
-    
+    public Object[] setAttacksPlayers(Context context, Arguments args) {
+        this.setAttacksPlayers(args.checkBoolean(0));
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        return null;
+    }
+
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():table; returns a table of trusted players on this base.")
-	public Object[] getTrustedPlayers(Context context, Arguments args) {
-		return new Object[] { this.getTrustedPlayers() };
-	}
-	
-	@Optional.Method(modid = "OpenComputers")
-    @Callback(doc = "function():string; adds Trusted player to Trustlist.")
-	public Object[] addTrustedPlayer(Context context, Arguments args) {
-		this.addTrustedPlayer(args.checkString(0));
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		return null;
-	}
-	
-	@Optional.Method(modid = "OpenComputers")
+    public Object[] getTrustedPlayers(Context context, Arguments args) {
+        return new Object[]{this.getTrustedPlayers()};
+    }
+
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , canAddTrustedPlayers:boolean , isAdmin:boolean]):string; adds Trusted player to Trustlist.")
+    public Object[] addTrustedPlayer(Context context, Arguments args) {
+        this.addTrustedPlayer(args.checkString(0));
+        TrustedPlayer trustedPlayer = this.getTrustedPlayer(args.checkString(0));
+        trustedPlayer.canOpenGUI = args.optBoolean(1, true);
+        trustedPlayer.canChangeTargeting = args.optBoolean(1, false);
+        trustedPlayer.canAddTrustedPlayers = args.optBoolean(1, false);
+        trustedPlayer.isAdmin = args.optBoolean(1, false);
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        return null;
+    }
+
+    @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():string; removes Trusted player from Trustlist.")
-	public Object[] removeTrustedPlayer(Context context, Arguments args) {
-		this.removeTrustedPlayer(args.checkString(0));
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		return null;
-	}
-    
+    public Object[] removeTrustedPlayer(Context context, Arguments args) {
+        this.removeTrustedPlayer(args.checkString(0));
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        return null;
+    }
+
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():int; returns maxiumum energy storage.")
-	public Object[] getMaxEnergyStorage(Context context, Arguments args) {
-		return new Object[] { this.storage.getMaxEnergyStored() };
-	}
+    public Object[] getMaxEnergyStorage(Context context, Arguments args) {
+        return new Object[]{this.storage.getMaxEnergyStored()};
+    }
 
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():int; returns current energy stored.")
-	public Object[] getCurrentEnergyStorage(Context context, Arguments args) {
-		return new Object[] { this.getEnergyStored(ForgeDirection.UNKNOWN) };
-		
-	}
-
+    public Object[] getCurrentEnergyStorage(Context context, Arguments args) {
+        return new Object[]{this.getEnergyStored(ForgeDirection.UNKNOWN)};
+    }
 }
