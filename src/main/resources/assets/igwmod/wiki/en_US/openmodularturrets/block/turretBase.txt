@@ -1,1 +1,73 @@
 The turret base is the foundation for every turret, it is available in 5 variations: wooden and then tier one to four.
+
+Wood Turret Base
+    This is a Tier 0 turret base.
+    It doesn't hold a lot of energy, and you can't put a whole lot on it, but its a good start.
+
+    Energy Max capacity: 500
+    Max I/O: 50
+    Addons: 0
+    Upgrades: 0
+    
+    Compatible Turret Heads: 
+        Disposable Item Turret
+
+Leadstone Turret Base
+    This is a Tier 1 turret base.
+    A little bit more robust then a Tier 0, this base holds more energy and gives you the 
+    ability to install addons and upgrades.
+
+    Energy Max capacity: 50000
+    Max I/O: 100
+    Addons: 2
+    Upgrades: 1
+
+    Compatible Turret Heads:
+        Disposable Item Turret
+        Machine Gun Turret
+
+Reinforced Turret Base
+    This is a Tier 2 turret base.
+    This turret base is able to hold larger amounts of energy for those more powerful turret heads.
+
+    Energy Max capacity: 150000
+    Max I/O: 500
+    Addons: 2
+    Upgrades: 1
+
+    Compatible Turret Heads:
+        Disposable Item Turret
+        Machine Gun Turret
+        Grenade Launcher Turret
+
+Hardened Turret Base
+    This is a Tier 3 turret base.
+    This turret base is capable of holding quite a bit of energy, this turret base also gives you access to the Rocket Launcher Turret.
+
+    Energy Max capacity: 500000
+    Max I/O: 1500
+    Addons: 2
+    Upgrades: 1
+
+    Compatible Turret Heads:
+        Disposable Item Turret
+        Machine Gun Turret
+        Grenade Launcher Turret
+        Rocket Launcher Turret
+
+Resonant Turret Base
+    This is a Tier 4 turret base.
+    The best of the best, holds massive amounts of energy, multiple addons and upgrades, and gives you access to the best turrets you can build.
+
+    Energy Max capacity: 10000000
+    Max I/O: 5000
+    Addons: 2
+    Upgrades: 2
+
+    Compatible Turret Heads:
+        Disposable Item Turret
+        Machine Gun Turret
+        Grenade Launcher Turret
+        Rocket Launcher Turret
+        Laser Turret
+        Railgun Turret
