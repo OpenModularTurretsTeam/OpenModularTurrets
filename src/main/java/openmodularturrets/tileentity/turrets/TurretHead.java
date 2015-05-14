@@ -238,6 +238,11 @@ public abstract class TurretHead extends TileEntity {
             if (target != null && target instanceof EntityPlayerMP) {
             	EntityPlayerMP entity = (EntityPlayerMP) target;
             	
+            	if (!base.isAttacksPlayers()) {
+            		target = null;
+            		return;
+            	}
+            	
             	if (TurretHeadUtils.isTrustedPlayer(entity.getDisplayName(), base)){
             		target = null;
             		return;

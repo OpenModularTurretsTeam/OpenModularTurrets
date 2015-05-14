@@ -1,0 +1,16 @@
+Laser Turret
+    Tier 4
+    
+    This is the fifth turret you gain access to.
+    High rate of fire, long range, killer accuracy. 
+    What do you expect? its a laser! Pew Pew Pew!
+    
+    Range (in blocks): 25
+    Accuracy: High
+    Ammo type: none
+    Minimum Tier: 4 (Resonant)
+
+    Projectile Damage: 1 Heart
+    AOE radius: 0
+    Shots/s: 2
+    RF per shot: 10000RF
