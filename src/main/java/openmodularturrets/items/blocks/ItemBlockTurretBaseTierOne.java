@@ -19,8 +19,10 @@ public class ItemBlockTurretBaseTierOne extends ItemBlock {
     public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_) {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.AQUA + "--" + StatCollector.translateToLocal("tooptip.energy.label") + "--");
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.rf.max") + ": " + EnumChatFormatting.WHITE + ConfigHandler.getBaseTierOneMaxCharge());
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.rf.io") + ": " + EnumChatFormatting.WHITE + ConfigHandler.getBaseTierOneMaxIo());
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.rf.max") + ": " + EnumChatFormatting.WHITE +
+                               ConfigHandler.getBaseTierOneMaxCharge());
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.rf.io") + ": " + EnumChatFormatting.WHITE +
+                               ConfigHandler.getBaseTierOneMaxIo());
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.GREEN + "--" + StatCollector.translateToLocal("tooltip.extras.label") + "--");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.extras.addons.2"));

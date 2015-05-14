@@ -51,7 +51,7 @@ public class DisposableItemTurretTileEntity extends TurretHead {
 
     @Override
     public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
-        return new DisposableTurretProjectile(world, ammo);
+        return new DisposableTurretProjectile(world, ammo, this.getBase());
     }
 
     @Override

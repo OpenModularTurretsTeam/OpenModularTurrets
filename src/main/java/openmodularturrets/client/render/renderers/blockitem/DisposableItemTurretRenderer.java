@@ -33,8 +33,7 @@ public class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z,
-                                   float scale) {
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
         turretHead = (DisposableItemTurretTileEntity) te;
 
         int rotation = 0;
@@ -42,10 +41,8 @@ public class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
             rotation = te.getBlockMetadata();
         }
 
-        this.model.setRotationForTarget(turretHead.rotationXY,
-                turretHead.rotationXZ);
-        textures = (new ResourceLocation(ModInfo.ID
-                + ":textures/blocks/disposableItemTurret.png"));
+        this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
+        textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/disposableItemTurret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         GL11.glPushMatrix();
@@ -62,30 +59,26 @@ public class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
 
         if (turretHead.base != null) {
             if (TurretHeadUtils.hasSolarPanelAddon(turretHead.base)) {
-                ResourceLocation texturesSolar = (new ResourceLocation(
-                        ModInfo.ID + ":textures/blocks/solarPanelAddon.png"));
-                Minecraft.getMinecraft().renderEngine
-                        .bindTexture(texturesSolar);
-                solar.setRotationForTarget(turretHead.rotationXY,
-                        turretHead.rotationXZ);
+                ResourceLocation texturesSolar = (new ResourceLocation(ModInfo.ID + ":textures/blocks/solarPanelAddon" +
+                                                                               ".png"));
+                Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
+                solar.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 solar.renderAll();
             }
 
             if (TurretHeadUtils.hasDamageAmpAddon(turretHead.base)) {
-                ResourceLocation texturesAmp = (new ResourceLocation(ModInfo.ID
-                        + ":textures/blocks/damageAmpAddon.png"));
+                ResourceLocation texturesAmp = (new ResourceLocation(ModInfo.ID + ":textures/blocks/damageAmpAddon" +
+                                                                             ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
-                amp.setRotationForTarget(turretHead.rotationXY,
-                        turretHead.rotationXZ);
+                amp.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 amp.renderAll();
             }
 
             if (TurretHeadUtils.hasRedstoneReactor(turretHead.base)) {
-                ResourceLocation texturesReac = (new ResourceLocation(
-                        ModInfo.ID + ":textures/blocks/redstoneReactor.png"));
+                ResourceLocation texturesReac = (new ResourceLocation(ModInfo.ID + ":textures/blocks/redstoneReactor" +
+                                                                              ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesReac);
-                reac.setRotationForTarget(turretHead.rotationXY,
-                        turretHead.rotationXZ);
+                reac.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 reac.renderAll();
             }
         }

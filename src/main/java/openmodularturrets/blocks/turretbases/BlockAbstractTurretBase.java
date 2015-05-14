@@ -15,7 +15,6 @@ import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
-import openmodularturrets.tileentity.turrets.TurretHeadUtils;
 
 import java.util.Random;
 
@@ -36,7 +35,7 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
         if (!world.isRemote) {
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
 
-            if (player.getDisplayName().equals(base.getOwner()) || TurretHeadUtils.isTrustedPlayer(player.getDisplayName(), base) && ConfigHandler.AllowTrustListModify) {
+            if (player.getDisplayName().equals(base.getOwner())) {
                 player.openGui(ModularTurrets.instance, base.getBaseTier(), world, x, y, z);
             } else {
                 player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
@@ -47,9 +46,7 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x,
-                                int y, int z, EntityLivingBase elb,
-                                ItemStack stack) {
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase elb, ItemStack stack) {
 
         if (!world.isRemote) {
             EntityPlayerMP player = (EntityPlayerMP) elb;
@@ -78,13 +75,12 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
                     float ry = rand.nextFloat() * 0.8F + 0.1F;
                     float rz = rand.nextFloat() * 0.8F + 0.1F;
 
-                    EntityItem entityItem = new EntityItem(world, x + rx, y
-                            + ry, z + rz, new ItemStack(item.getItem(),
-                            item.stackSize, item.getItemDamage()));
+                    EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz,
+                                                           new ItemStack(item.getItem(), item.stackSize,
+                                                                         item.getItemDamage()));
 
                     if (item.hasTagCompound()) {
-                        entityItem.getEntityItem().setTagCompound(
-                                (NBTTagCompound) item.getTagCompound().copy());
+                        entityItem.getEntityItem().setTagCompound((NBTTagCompound) item.getTagCompound().copy());
                     }
 
                     float factor = 0.05F;

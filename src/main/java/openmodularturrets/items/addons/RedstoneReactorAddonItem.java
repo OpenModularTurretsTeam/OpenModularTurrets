@@ -31,7 +31,8 @@ public class RedstoneReactorAddonItem extends AddonItem {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.RED + StatCollector.translateToLocal("turret.addon.label"));
         p_77624_3_.add("");
-        p_77624_3_.add(StatCollector.translateToLocal("turret.addon.redstone.a") + " " + ConfigHandler.getRedstoneReactorAddonGen() + " " + StatCollector.translateToLocal("turret.addon.redstone.b"));
+        p_77624_3_.add(StatCollector.translateToLocal("turret.addon.redstone.a") + " " + ConfigHandler
+                .getRedstoneReactorAddonGen() + " " + StatCollector.translateToLocal("turret.addon.redstone.b"));
         p_77624_3_.add(StatCollector.translateToLocal("turret.addon.redstone.c"));
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.addon.redstone.flavour"));

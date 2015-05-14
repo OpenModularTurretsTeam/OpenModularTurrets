@@ -6,8 +6,7 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.world.World;
 
-public class DropBaseMessage implements IMessage,
-        IMessageHandler<DropBaseMessage, IMessage> {
+public class DropBaseMessage implements IMessage, IMessageHandler<DropBaseMessage, IMessage> {
     private int x, y, z;
     private String player;
 
@@ -38,8 +37,7 @@ public class DropBaseMessage implements IMessage,
     public IMessage onMessage(DropBaseMessage message, MessageContext ctx) {
         World world = ctx.getServerHandler().playerEntity.worldObj;
 
-        world.func_147480_a(message.getX(), message.getY(), message.getZ(),
-                true);
+        world.func_147480_a(message.getX(), message.getY(), message.getZ(), true);
 
         return null;
     }
