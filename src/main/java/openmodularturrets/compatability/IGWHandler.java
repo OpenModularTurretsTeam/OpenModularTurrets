@@ -32,8 +32,8 @@ public class IGWHandler {
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.grenadeLauncherTurret,
                                                    "openmodularturrets/block/grenadeLauncherTurret");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.laserTurret, "openmodularturrets/block/laserTurret");
-        WikiRegistry
-                .registerBlockAndItemPageEntry(Blocks.machineGunTurret, "openmodularturrets/block/machineGunTurret");
+        WikiRegistry.registerBlockAndItemPageEntry(Blocks.machineGunTurret,
+                                                   "openmodularturrets/block/machineGunTurret");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.rocketTurret, "openmodularturrets/block/rocketTurret");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.railGunTurret, "openmodularturrets/block/railGunTurret");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierWood, "openmodularturrets/block/turretBase");

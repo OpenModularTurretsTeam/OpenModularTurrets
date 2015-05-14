@@ -98,8 +98,8 @@ public class RecipeHandler {
 
         GameRegistry.addRecipe(new ShapedOreRecipe(Items.barrel, new Object[]{"CCC", "   ", "CCC", 'C', "ingotInvar"}));
 
-        GameRegistry
-                .addRecipe(new ShapedOreRecipe(Items.chamber, new Object[]{"CCC", "  C", "CCC", 'C', "ingotInvar"}));
+        GameRegistry.addRecipe(
+                new ShapedOreRecipe(Items.chamber, new Object[]{"CCC", "  C", "CCC", 'C', "ingotInvar"}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(Items.ioBus, new Object[]{" A ", "BBB", " A ", 'A',
                                                                              net.minecraft.init.Items.gold_ingot, 'B',

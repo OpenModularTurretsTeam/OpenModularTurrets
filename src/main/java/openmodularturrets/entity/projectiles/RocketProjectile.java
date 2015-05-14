@@ -78,9 +78,8 @@ public class RocketProjectile extends TurretProjectile {
         if (!worldObj.isRemote) {
 
             worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
-            AxisAlignedBB axis = AxisAlignedBB
-                    .getBoundingBox(this.posX - 5, this.posY - 5, this.posZ - 5, this.posX + 5, this.posY + 5,
-                                    this.posZ + 5);
+            AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 5, this.posY - 5, this.posZ - 5,
+                                                              this.posX + 5, this.posY + 5, this.posZ + 5);
             List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
 
             for (Entity mob : targets) {

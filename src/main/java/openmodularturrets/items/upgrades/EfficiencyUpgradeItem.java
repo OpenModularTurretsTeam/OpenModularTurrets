@@ -31,8 +31,9 @@ public class EfficiencyUpgradeItem extends UpgradeItem {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("turret.upgrade.label"));
         p_77624_3_.add("");
-        p_77624_3_.add("- " + ConfigHandler.getEfficiencyUpgradeBoostPercentage() * 100 + "% " + StatCollector
-                .translateToLocal("turret.upgrade.eff"));
+        p_77624_3_.add(
+                "- " + ConfigHandler.getEfficiencyUpgradeBoostPercentage() * 100 + "% " + StatCollector.translateToLocal(
+                        "turret.upgrade.eff"));
         p_77624_3_.add(StatCollector.translateToLocal("turret.upgrade.stacks"));
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.upgrade.eff.flavour"));

@@ -31,8 +31,8 @@ public class RangeUpgradeItem extends UpgradeItem {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("turret.upgrade.label"));
         p_77624_3_.add("");
-        p_77624_3_.add("+ " + ConfigHandler.getRangeUpgradeBoost() + " " + StatCollector
-                .translateToLocal("turret" + ".upgrade.range"));
+        p_77624_3_.add("+ " + ConfigHandler.getRangeUpgradeBoost() + " " + StatCollector.translateToLocal(
+                "turret" + ".upgrade.range"));
         p_77624_3_.add(StatCollector.translateToLocal("turret.upgrade.stacks"));
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.upgrade.range.flavour"));

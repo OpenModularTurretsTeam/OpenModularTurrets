@@ -186,8 +186,8 @@ public abstract class TurretHead extends TileEntity {
             TurretHeadUtils.updateSolarPanelAddon(base);
             TurretHeadUtils.updateRedstoneReactor(base);
 
-            int power_required = Math
-                    .round(this.getTurretPowerUsage() * (1 - TurretHeadUtils.getEfficiencyUpgrades(base)));
+            int power_required = Math.round(
+                    this.getTurretPowerUsage() * (1 - TurretHeadUtils.getEfficiencyUpgrades(base)));
 
             // power check
             if (!base.isGettingRedstoneSignal() && base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required) {
@@ -273,17 +273,15 @@ public abstract class TurretHead extends TileEntity {
             double accuraccy = this.getTurretAccuracy() * (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
 
             if (projectile.gravity == 0.00F) {
-                projectile
-                        .setThrowableHeading(d0 + target.motionX, d1 + 0.5F + target.motionY, d2 + target.motionZ, 3.0F,
-                                             (float) accuraccy);
+                projectile.setThrowableHeading(d0 + target.motionX, d1 + 0.5F + target.motionY, d2 + target.motionZ,
+                                               3.0F, (float) accuraccy);
             } else {
                 projectile.setThrowableHeading(d0 + target.motionX, d1 + (double) f1 + target.motionY,
                                                d2 + target.motionZ, 1.6F, (float) accuraccy);
             }
 
-            this.getWorldObj()
-                .playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":" + this.getLaunchSoundEffect(),
-                                 1.0F, 1.0F);
+            this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord,
+                                               ModInfo.ID + ":" + this.getLaunchSoundEffect(), 1.0F, 1.0F);
             this.getWorldObj().spawnEntityInWorld(projectile);
             doRecoil();
             ticks = 0;
