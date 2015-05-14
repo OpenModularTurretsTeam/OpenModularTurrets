@@ -1,11 +1,13 @@
 package openmodularturrets.entity.projectiles;
 
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class DisposableTurretProjectile extends TurretProjectile {
     boolean spawned = false;
@@ -16,8 +18,8 @@ public class DisposableTurretProjectile extends TurretProjectile {
         this.gravity = 0.03F;
     }
 
-    public DisposableTurretProjectile(World par1World, ItemStack ammo) {
-        super(par1World, ammo);
+    public DisposableTurretProjectile(World par1World, ItemStack ammo, TurretBase turretBase) {
+        super(par1World, ammo, turretBase);
         this.gravity = 0.03F;
     }
 
@@ -48,23 +50,27 @@ public class DisposableTurretProjectile extends TurretProjectile {
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
 
             if (movingobjectposition.typeOfHit.equals(0)) {
-                if (worldObj.isAirBlock(movingobjectposition.blockX,
-                        movingobjectposition.blockY,
-                        movingobjectposition.blockZ)) {
+                if (worldObj.isAirBlock(movingobjectposition.blockX, movingobjectposition.blockY,
+                                        movingobjectposition.blockZ)) {
                     return;
                 }
             }
 
-            int damage = ConfigHandler.getDisposableTurretSettings()
-                    .getDamage();
+            int damage = ConfigHandler.getDisposableTurretSettings().getDamage();
 
             if (isAmped) {
                 damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
             }
 
-            movingobjectposition.entityHit.attackEntityFrom(
-                    new NormalDamageSource("disposable"), damage);
-            movingobjectposition.entityHit.hurtResistantTime = 0;
+            if (movingobjectposition.entityHit instanceof EntityPlayer) {
+                if (canDamagePlayer((EntityPlayer) movingobjectposition.entityHit)) {
+                    movingobjectposition.entityHit.attackEntityFrom(new NormalDamageSource("disposable"), damage);
+                    movingobjectposition.entityHit.hurtResistantTime = 0;
+                }
+            } else {
+                movingobjectposition.entityHit.attackEntityFrom(new NormalDamageSource("disposable"), damage);
+                movingobjectposition.entityHit.hurtResistantTime = 0;
+            }
         }
 
         if (itemBound != null) {

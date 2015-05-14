@@ -19,24 +19,20 @@ public class LaserRenderer extends Render {
     private static final ResourceLocation laserTextures = new ResourceLocation(
             ModInfo.ID.toLowerCase() + ":textures/blocks/laser.png");
 
-    public void renderLaser(LaserProjectile par1EntityRocket, double par2,
-                            double par4, double par6, float par8, float par9) {
+    public void renderLaser(LaserProjectile par1EntityRocket, double par2, double par4, double par6, float par8, float par9) {
         for (int i = 0; i <= 20; i++) {
-            par1EntityRocket.worldObj.spawnParticle("reddust", par2, par4,
-                    par6, 1.0D, 1.0D, 1.0D);
+            par1EntityRocket.worldObj.spawnParticle("reddust", par2, par4, par6, 1.0D, 1.0D, 1.0D);
         }
 
         this.bindEntityTexture(par1EntityRocket);
         GL11.glPushMatrix();
         GL11.glTranslatef((float) par2, (float) par4 + 0.30F, (float) par6);
         GL11.glRotatef(
-                par1EntityRocket.prevRotationYaw
-                        + (par1EntityRocket.rotationYaw - par1EntityRocket.prevRotationYaw)
-                        * par9 - 90.0F, 0.0F, 1.0F, 0.0F);
+                par1EntityRocket.prevRotationYaw + (par1EntityRocket.rotationYaw - par1EntityRocket.prevRotationYaw) * par9 - 90.0F,
+                0.0F, 1.0F, 0.0F);
         GL11.glRotatef(
-                par1EntityRocket.prevRotationPitch
-                        + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch)
-                        * par9, 0.0F, 0.0F, 1.0F);
+                par1EntityRocket.prevRotationPitch + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch) * par9,
+                0.0F, 0.0F, 1.0F);
 
         Tessellator tessellator = Tessellator.instance;
         byte b0 = 0;
@@ -55,8 +51,7 @@ public class LaserRenderer extends Render {
         }
 
         GL11.glDisable(GL11.GL_LIGHTING);
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,
-                240f, 240f);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
 
         GL11.glRotatef(45.0F, 1.0F, 0.0F, 0.0F);
         GL11.glScalef(f10, f10, f10);
@@ -67,14 +62,10 @@ public class LaserRenderer extends Render {
             GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
             GL11.glNormal3f(0.0F, 0.0F, f10);
             tessellator.startDrawingQuads();
-            tessellator.addVertexWithUV(-16.0D, -2.0D, 0.0D, (double) f2,
-                    (double) f4);
-            tessellator.addVertexWithUV(16.0D, -2.0D, 0.0D, (double) f3,
-                    (double) f4);
-            tessellator.addVertexWithUV(16.0D, 2.0D, 0.0D, (double) f3,
-                    (double) f5);
-            tessellator.addVertexWithUV(-16.0D, 2.0D, 0.0D, (double) f2,
-                    (double) f5);
+            tessellator.addVertexWithUV(-16.0D, -2.0D, 0.0D, (double) f2, (double) f4);
+            tessellator.addVertexWithUV(16.0D, -2.0D, 0.0D, (double) f3, (double) f4);
+            tessellator.addVertexWithUV(16.0D, 2.0D, 0.0D, (double) f3, (double) f5);
+            tessellator.addVertexWithUV(-16.0D, 2.0D, 0.0D, (double) f2, (double) f5);
             tessellator.draw();
         }
 
@@ -103,9 +94,7 @@ public class LaserRenderer extends Render {
      * void doRender(T entity, double d, double d1, double d2, float f, float
      * f1). But JAD is pre 1.5 so doesn't do that.
      */
-    public void doRender(Entity par1Entity, double par2, double par4,
-                         double par6, float par8, float par9) {
-        this.renderLaser((LaserProjectile) par1Entity, par2, par4, par6, par8,
-                par9);
+    public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9) {
+        this.renderLaser((LaserProjectile) par1Entity, par2, par4, par6, par8, par9);
     }
 }

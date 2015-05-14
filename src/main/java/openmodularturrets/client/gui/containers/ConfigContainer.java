@@ -9,8 +9,7 @@ public class ConfigContainer extends Container {
 
     protected TurretBase tileEntity;
 
-    public ConfigContainer(InventoryPlayer inventoryPlayer,
-                           TurretBase te) {
+    public ConfigContainer(InventoryPlayer inventoryPlayer, TurretBase te) {
         this.tileEntity = te;
     }
 

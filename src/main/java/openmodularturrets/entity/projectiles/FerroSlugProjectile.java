@@ -1,10 +1,12 @@
 package openmodularturrets.entity.projectiles;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class FerroSlugProjectile extends TurretProjectile {
 
@@ -13,8 +15,8 @@ public class FerroSlugProjectile extends TurretProjectile {
         this.gravity = 0.00F;
     }
 
-    public FerroSlugProjectile(World par1World, ItemStack ammo) {
-        super(par1World, ammo);
+    public FerroSlugProjectile(World par1World, ItemStack ammo, TurretBase turretBase) {
+        super(par1World, ammo, turretBase);
         this.gravity = 0.00F;
     }
 
@@ -35,9 +37,8 @@ public class FerroSlugProjectile extends TurretProjectile {
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
 
             if (movingobjectposition.typeOfHit.equals(0)) {
-                if (worldObj.isAirBlock(movingobjectposition.blockX,
-                        movingobjectposition.blockY,
-                        movingobjectposition.blockZ)) {
+                if (worldObj.isAirBlock(movingobjectposition.blockX, movingobjectposition.blockY,
+                                        movingobjectposition.blockZ)) {
                     return;
                 }
             }
@@ -48,12 +49,17 @@ public class FerroSlugProjectile extends TurretProjectile {
                 damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
             }
 
-            worldObj.playSoundEffect(posX, posY, posZ,
-                    "openmodularturrets:railGunHit", 1.0F, 1.0F);
+            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:railGunHit", 1.0F, 1.0F);
 
-            movingobjectposition.entityHit.attackEntityFrom(
-                    new ArmorBypassDamageSource("ferroslug"), damage);
-            movingobjectposition.entityHit.hurtResistantTime = 0;
+            if (movingobjectposition.entityHit instanceof EntityPlayer) {
+                if (canDamagePlayer((EntityPlayer) movingobjectposition.entityHit)) {
+                    movingobjectposition.entityHit.attackEntityFrom(new ArmorBypassDamageSource("ferroslug"), damage);
+                    movingobjectposition.entityHit.hurtResistantTime = 0;
+                }
+            } else {
+                movingobjectposition.entityHit.attackEntityFrom(new ArmorBypassDamageSource("ferroslug"), damage);
+                movingobjectposition.entityHit.hurtResistantTime = 0;
+            }
         }
 
         this.setDead();

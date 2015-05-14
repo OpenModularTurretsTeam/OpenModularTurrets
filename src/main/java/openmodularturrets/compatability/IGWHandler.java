@@ -24,12 +24,16 @@ public class IGWHandler {
     private void initTab() {
         WikiRegistry.registerWikiTab(new OpenModularTurretsWikiTab());
 
-        // this is a workaround until Minemaarten enables putting the wiki stuff in our own asset folder, for now its in a subfolder in the igwmod assets
-        WikiRegistry.registerBlockAndItemPageEntry(Blocks.disposableItemTurret, "openmodularturrets/block/disposableItemTurret");
+        // this is a workaround until Minemaarten enables putting the wiki stuff in our own asset folder, for now its
+        // in a subfolder in the igwmod assets
+        WikiRegistry.registerBlockAndItemPageEntry(Blocks.disposableItemTurret,
+                                                   "openmodularturrets/block/disposableItemTurret");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.leverBlock, "openmodularturrets/block/leverBlock");
-        WikiRegistry.registerBlockAndItemPageEntry(Blocks.grenadeLauncherTurret, "openmodularturrets/block/grenadeLauncherTurret");
+        WikiRegistry.registerBlockAndItemPageEntry(Blocks.grenadeLauncherTurret,
+                                                   "openmodularturrets/block/grenadeLauncherTurret");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.laserTurret, "openmodularturrets/block/laserTurret");
-        WikiRegistry.registerBlockAndItemPageEntry(Blocks.machineGunTurret, "openmodularturrets/block/machineGunTurret");
+        WikiRegistry
+                .registerBlockAndItemPageEntry(Blocks.machineGunTurret, "openmodularturrets/block/machineGunTurret");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.rocketTurret, "openmodularturrets/block/rocketTurret");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierWood, "openmodularturrets/block/turretbase");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierOne, "openmodularturrets/block/turretbase");

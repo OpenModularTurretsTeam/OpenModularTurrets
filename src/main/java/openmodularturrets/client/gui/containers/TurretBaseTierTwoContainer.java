@@ -13,26 +13,22 @@ public class TurretBaseTierTwoContainer extends Container {
 
     protected TurretBase tileEntity;
 
-    public TurretBaseTierTwoContainer(InventoryPlayer inventoryPlayer,
-                                      TurretBase te) {
+    public TurretBaseTierTwoContainer(InventoryPlayer inventoryPlayer, TurretBase te) {
         this.tileEntity = te;
 
         for (int x = 0; x < 9; x++) {
-            this.addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18,
-                    142));
+            this.addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 142));
         }
 
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 9; x++) {
-                this.addSlotToContainer(new Slot(inventoryPlayer,
-                        9 + x + y * 9, 8 + x * 18, 84 + y * 18));
+                this.addSlotToContainer(new Slot(inventoryPlayer, 9 + x + y * 9, 8 + x * 18, 84 + y * 18));
             }
         }
 
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
-                addSlotToContainer(new Slot(tileEntity, x + y * 3, 8 + x * 18,
-                        17 + y * 18));
+                addSlotToContainer(new Slot(tileEntity, x + y * 3, 8 + x * 18, 17 + y * 18));
             }
         }
 

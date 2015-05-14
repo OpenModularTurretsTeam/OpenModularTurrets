@@ -1,12 +1,14 @@
 package openmodularturrets.entity.projectiles;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 
 import java.util.List;
 import java.util.Random;
@@ -26,8 +28,8 @@ public class RocketProjectile extends TurretProjectile {
         this.gravity = 0.00F;
     }
 
-    public RocketProjectile(World par1World, Entity target, ItemStack ammo) {
-        super(par1World, ammo);
+    public RocketProjectile(World par1World, Entity target, ItemStack ammo, TurretBase turretBase) {
+        super(par1World, ammo, turretBase);
         this.gravity = 0.00F;
         this.target = target;
     }
@@ -41,8 +43,7 @@ public class RocketProjectile extends TurretProjectile {
 
         if (target != null) {
             double d0 = target.posX - this.posX;
-            double d1 = target.posY + (double) target.getEyeHeight() - 1.1F
-                    - this.posY;
+            double d1 = target.posY + (double) target.getEyeHeight() - 1.1F - this.posY;
             double d2 = target.posZ - this.posZ;
 
             this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
@@ -55,10 +56,8 @@ public class RocketProjectile extends TurretProjectile {
 
         for (int i = 0; i <= 25; i++) {
             Random random = new Random();
-            worldObj.spawnParticle("smoke",
-                    posX + (random.nextGaussian() / 10),
-                    posY + (random.nextGaussian() / 10),
-                    posZ + (random.nextGaussian() / 10), (0), (0), (0));
+            worldObj.spawnParticle("smoke", posX + (random.nextGaussian() / 10), posY + (random.nextGaussian() / 10),
+                                   posZ + (random.nextGaussian() / 10), (0), (0), (0));
         }
     }
 
@@ -70,9 +69,8 @@ public class RocketProjectile extends TurretProjectile {
         }
 
         if (movingobjectposition.typeOfHit.equals(0)) {
-            if (worldObj.isAirBlock(movingobjectposition.blockX,
-                    movingobjectposition.blockY,
-                    movingobjectposition.blockZ)) {
+            if (worldObj.isAirBlock(movingobjectposition.blockX, movingobjectposition.blockY,
+                                    movingobjectposition.blockZ)) {
                 return;
             }
         }
@@ -80,22 +78,27 @@ public class RocketProjectile extends TurretProjectile {
         if (!worldObj.isRemote) {
 
             worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
-            AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 5,
-                    this.posY - 5, this.posZ - 5, this.posX + 5, this.posY + 5,
-                    this.posZ + 5);
-            List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class,
-                    axis);
+            AxisAlignedBB axis = AxisAlignedBB
+                    .getBoundingBox(this.posX - 5, this.posY - 5, this.posZ - 5, this.posX + 5, this.posY + 5,
+                                    this.posZ + 5);
+            List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
 
             for (Entity mob : targets) {
-                int damage = ConfigHandler.getRocketTurretSettings()
-                        .getDamage();
+                int damage = ConfigHandler.getRocketTurretSettings().getDamage();
 
                 if (isAmped) {
                     damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
                 }
 
-                mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
-                mob.hurtResistantTime = 0;
+                if (mob instanceof EntityPlayer) {
+                    if (canDamagePlayer((EntityPlayer) mob)) {
+                        mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
+                        mob.hurtResistantTime = 0;
+                    }
+                } else {
+                    mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
+                    mob.hurtResistantTime = 0;
+                }
             }
         }
         this.setDead();

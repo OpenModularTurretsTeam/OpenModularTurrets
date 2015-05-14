@@ -52,9 +52,8 @@ public class RailGunTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public TurretProjectile createProjectile(World world, Entity target,
-                                             ItemStack ammo) {
-        return new FerroSlugProjectile(world, ammo);
+    public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
+        return new FerroSlugProjectile(world, ammo, this.getBase());
     }
 
     @Override
