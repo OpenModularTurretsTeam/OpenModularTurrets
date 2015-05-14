@@ -31,7 +31,8 @@ public class DamageAmpAddonItem extends AddonItem {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.RED + StatCollector.translateToLocal("turret.addon.label"));
         p_77624_3_.add("");
-        p_77624_3_.add(StatCollector.translateToLocal("turret.addon.amp.a.label") + " " + ConfigHandler.getDamageAmpDmgBonus() + " " + StatCollector.translateToLocal("turret.addon.amp.b.label"));
+        p_77624_3_.add(StatCollector.translateToLocal("turret.addon.amp.a.label") + " " + ConfigHandler
+                .getDamageAmpDmgBonus() + " " + StatCollector.translateToLocal("turret.addon.amp.b.label"));
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.addon.amp.flavour"));
     }

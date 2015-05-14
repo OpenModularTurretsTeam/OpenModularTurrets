@@ -12,13 +12,11 @@ public class TurretBaseTierWoodContainer extends Container {
 
     protected TurretBase tileEntity;
 
-    public TurretBaseTierWoodContainer(InventoryPlayer inventoryPlayer,
-                                       TurretWoodBase te) {
+    public TurretBaseTierWoodContainer(InventoryPlayer inventoryPlayer, TurretWoodBase te) {
         this.tileEntity = te;
 
         for (int x = 0; x < 9; x++) {
-            this.addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18,
-                    142));
+            this.addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 142));
         }
 
         for (int y = 0; y < 3; y++) {
@@ -29,8 +27,7 @@ public class TurretBaseTierWoodContainer extends Container {
 
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
-                addSlotToContainer(new Slot(tileEntity, x + y * 3, 8 + x * 18,
-                        17 + y * 18));
+                addSlotToContainer(new Slot(tileEntity, x + y * 3, 8 + x * 18, 17 + y * 18));
             }
         }
     }

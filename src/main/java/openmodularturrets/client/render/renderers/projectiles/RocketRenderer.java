@@ -14,14 +14,19 @@ import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
 public class RocketRenderer extends Render {
-    private static final ResourceLocation rocketTextures = new ResourceLocation(ModInfo.ID.toLowerCase() + ":textures/blocks/rocket.png");
+    private static final ResourceLocation rocketTextures = new ResourceLocation(
+            ModInfo.ID.toLowerCase() + ":textures/blocks/rocket.png");
 
     public void renderRocket(RocketProjectile par1EntityRocket, double par2, double par4, double par6, float par8, float par9) {
         this.bindEntityTexture(par1EntityRocket);
         GL11.glPushMatrix();
         GL11.glTranslatef((float) par2, (float) par4, (float) par6);
-        GL11.glRotatef(par1EntityRocket.prevRotationYaw + (par1EntityRocket.rotationYaw - par1EntityRocket.prevRotationYaw) * par9 - 90.0F, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(par1EntityRocket.prevRotationPitch + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch) * par9, 0.0F, 0.0F, 1.0F);
+        GL11.glRotatef(
+                par1EntityRocket.prevRotationYaw + (par1EntityRocket.rotationYaw - par1EntityRocket.prevRotationYaw) * par9 - 90.0F,
+                0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(
+                par1EntityRocket.prevRotationPitch + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch) * par9,
+                0.0F, 0.0F, 1.0F);
         Tessellator tessellator = Tessellator.instance;
         byte b0 = 0;
         float f2 = 0.0F;

@@ -39,8 +39,7 @@ public class LeverBlock extends BlockContainer {
     }
 
     @Override
-    public void onBlockPlacedBy(World par1World, int par2, int par3, int par4,
-                                EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
+    public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
         float l = 0;
 
         if (par1World.getTileEntity(par2 + 1, par3, par4) instanceof TurretWoodBase) {
@@ -64,65 +63,54 @@ public class LeverBlock extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World par1World, int par2, int par3,
-                                    int par4, EntityPlayer par5EntityPlayer, int par6, float par7,
-                                    float par8, float par9) {
+    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9) {
 
         TurretWoodBase base;
-        LeverTileEntity lever = (LeverTileEntity) par1World.getTileEntity(
-                par2, par3, par4);
+        LeverTileEntity lever = (LeverTileEntity) par1World.getTileEntity(par2, par3, par4);
 
-        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 0
-                && par1World.getTileEntity(par2, par3, par4 + 1) instanceof TurretWoodBase) {
-            base = (TurretWoodBase) par1World.getTileEntity(par2, par3,
-                    par4 + 1);
+        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 0 && par1World
+                .getTileEntity(par2, par3, par4 + 1) instanceof TurretWoodBase) {
+            base = (TurretWoodBase) par1World.getTileEntity(par2, par3, par4 + 1);
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
-                    par1World.playSoundEffect(par2, par3, par4,
-                            "openmodularturrets:windup", 1.0F, 1.0F);
+                    par1World.playSoundEffect(par2, par3, par4, "openmodularturrets:windup", 1.0F, 1.0F);
                     base.receiveEnergy(ForgeDirection.UNKNOWN, 50, false);
                 }
             }
         }
 
-        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 90
-                && par1World.getTileEntity(par2 - 1, par3, par4) instanceof TurretWoodBase) {
-            base = (TurretWoodBase) par1World.getTileEntity(par2 - 1,
-                    par3, par4);
+        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 90 && par1World
+                .getTileEntity(par2 - 1, par3, par4) instanceof TurretWoodBase) {
+            base = (TurretWoodBase) par1World.getTileEntity(par2 - 1, par3, par4);
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
-                    par1World.playSoundEffect(par2, par3, par4,
-                            "openmodularturrets:windup", 1.0F, 1.0F);
+                    par1World.playSoundEffect(par2, par3, par4, "openmodularturrets:windup", 1.0F, 1.0F);
                     base.receiveEnergy(ForgeDirection.UNKNOWN, 50, false);
                 }
             }
         }
 
-        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 180
-                && par1World.getTileEntity(par2, par3, par4 - 1) instanceof TurretWoodBase) {
-            base = (TurretWoodBase) par1World.getTileEntity(par2, par3,
-                    par4 - 1);
+        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 180 && par1World
+                .getTileEntity(par2, par3, par4 - 1) instanceof TurretWoodBase) {
+            base = (TurretWoodBase) par1World.getTileEntity(par2, par3, par4 - 1);
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
-                    par1World.playSoundEffect(par2, par3, par4,
-                            "openmodularturrets:windup", 1.0F, 1.0F);
+                    par1World.playSoundEffect(par2, par3, par4, "openmodularturrets:windup", 1.0F, 1.0F);
                     base.receiveEnergy(ForgeDirection.UNKNOWN, 50, false);
                 }
             }
         }
 
-        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 270
-                && par1World.getTileEntity(par2 + 1, par3, par4) instanceof TurretWoodBase) {
-            base = (TurretWoodBase) par1World.getTileEntity(par2 + 1,
-                    par3, par4);
+        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 270 && par1World
+                .getTileEntity(par2 + 1, par3, par4) instanceof TurretWoodBase) {
+            base = (TurretWoodBase) par1World.getTileEntity(par2 + 1, par3, par4);
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
-                    par1World.playSoundEffect(par2, par3, par4,
-                            "openmodularturrets:windup", 1.0F, 1.0F);
+                    par1World.playSoundEffect(par2, par3, par4, "openmodularturrets:windup", 1.0F, 1.0F);
                     base.receiveEnergy(ForgeDirection.UNKNOWN, 50, false);
                 }
             }

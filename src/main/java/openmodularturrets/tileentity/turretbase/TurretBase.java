@@ -25,8 +25,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")
-public abstract class TurretBase extends TileEntity implements IEnergyHandler,
-        IInventory, SimpleComponent {
+public abstract class TurretBase extends TileEntity implements IEnergyHandler, IInventory, SimpleComponent {
     protected EnergyStorage storage;
     protected ItemStack[] inv;
     protected int yAxisDetect;
@@ -131,8 +130,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
         this.writeToNBT(var1);
 
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord,
-                this.zCoord, 2, var1);
+        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
     }
 
     @Override
@@ -229,14 +227,12 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     }
 
     @Override
-    public int receiveEnergy(ForgeDirection from, int maxReceive,
-                             boolean simulate) {
+    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
         return storage.receiveEnergy(maxReceive, simulate);
     }
 
     @Override
-    public int extractEnergy(ForgeDirection from, int maxExtract,
-                             boolean simulate) {
+    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
         return 0;
     }
 
@@ -315,9 +311,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this
-                && player.getDistanceSq(xCoord + 0.5, yCoord + 0.5,
-                zCoord + 0.5) < 64;
+        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player
+                .getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
     }
 
     @Override
@@ -365,8 +360,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     }
 
     @Override
-    public void onDataPacket(NetworkManager net,
-                             S35PacketUpdateTileEntity packet) {
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
         super.onDataPacket(net, packet);
 
         readFromNBT(packet.func_148857_g());
@@ -381,9 +375,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             return;
         }
 
-        EnergyStatusUpdateMessage message = new EnergyStatusUpdateMessage(
-                this.xCoord, this.yCoord, this.zCoord,
-                this.getEnergyStored(ForgeDirection.UNKNOWN));
+        EnergyStatusUpdateMessage message = new EnergyStatusUpdateMessage(this.xCoord, this.yCoord, this.zCoord,
+                                                                          this.getEnergyStored(ForgeDirection.UNKNOWN));
 
         ModularTurrets.networking.sendToAll(message);
     }
@@ -443,7 +436,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     }
 
     @Optional.Method(modid = "OpenComputers")
-    @Callback(doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , canAddTrustedPlayers:boolean , isAdmin:boolean]):string; adds Trusted player to Trustlist.")
+    @Callback(doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , " + "canAddTrustedPlayers:boolean , isAdmin:boolean]):string; adds Trusted player to Trustlist.")
     public Object[] addTrustedPlayer(Context context, Arguments args) {
         this.addTrustedPlayer(args.checkString(0));
         TrustedPlayer trustedPlayer = this.getTrustedPlayer(args.checkString(0));

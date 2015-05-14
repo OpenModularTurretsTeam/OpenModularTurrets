@@ -135,31 +135,37 @@ public class ConfigureGui extends GuiContainer {
     }
 
     public void sendChangeToServerMobs() {
-        ToggleAttackMobsMessage message = new ToggleAttackMobsMessage(base.xCoord, base.yCoord, base.zCoord, base.isAttacksMobs());
+        ToggleAttackMobsMessage message = new ToggleAttackMobsMessage(base.xCoord, base.yCoord, base.zCoord,
+                                                                      base.isAttacksMobs());
 
         ModularTurrets.networking.sendToServer(message);
     }
 
     public void sendChangeToServerNeutrals() {
-        ToggleAttackNeutralMobsMessage message = new ToggleAttackNeutralMobsMessage(base.xCoord, base.yCoord, base.zCoord, base.isAttacksNeutrals());
+        ToggleAttackNeutralMobsMessage message = new ToggleAttackNeutralMobsMessage(base.xCoord, base.yCoord,
+                                                                                    base.zCoord,
+                                                                                    base.isAttacksNeutrals());
 
         ModularTurrets.networking.sendToServer(message);
     }
 
     public void sendChangeToServerPlayers() {
-        ToggleAttackPlayersMessage message = new ToggleAttackPlayersMessage(base.xCoord, base.yCoord, base.zCoord, base.isAttacksPlayers());
+        ToggleAttackPlayersMessage message = new ToggleAttackPlayersMessage(base.xCoord, base.yCoord, base.zCoord,
+                                                                            base.isAttacksPlayers());
 
         ModularTurrets.networking.sendToServer(message);
     }
 
     public void sendChangeToServerAddTrusted() {
-        AddTrustedPlayerMessage message = new AddTrustedPlayerMessage(base.xCoord, base.yCoord, base.zCoord, textFieldName.getText());
+        AddTrustedPlayerMessage message = new AddTrustedPlayerMessage(base.xCoord, base.yCoord, base.zCoord,
+                                                                      textFieldName.getText());
 
         ModularTurrets.networking.sendToServer(message);
     }
 
     public void sendChangeToServerRemoveTrusted() {
-        RemoveTrustedPlayerMessage message = new RemoveTrustedPlayerMessage(base.xCoord, base.yCoord, base.zCoord, textFieldName.getText());
+        RemoveTrustedPlayerMessage message = new RemoveTrustedPlayerMessage(base.xCoord, base.yCoord, base.zCoord,
+                                                                            textFieldName.getText());
 
         ModularTurrets.networking.sendToServer(message);
     }

@@ -45,10 +45,12 @@ public class ConfigTabItem extends Item {
             if (par2EntityPlayer.getDisplayName().equals(base.getOwner())) {
                 par2EntityPlayer.openGui(ModularTurrets.instance, 5, par3World, par4, par5, par6);
             } else {
-                par2EntityPlayer.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
+                par2EntityPlayer
+                        .addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status" + ".ownership")));
             }
         } else {
-            par2EntityPlayer.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.missingBase")));
+            par2EntityPlayer
+                    .addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status" + ".missingBase")));
         }
 
         return true;

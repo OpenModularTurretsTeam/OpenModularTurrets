@@ -25,8 +25,7 @@ public class TurretBaseTierFourGui extends GuiContainer {
     private int mouseX;
     private int mouseY;
 
-    public TurretBaseTierFourGui(InventoryPlayer inventoryPlayer,
-                                 TurretBaseTierFourTileEntity tileEntity) {
+    public TurretBaseTierFourGui(InventoryPlayer inventoryPlayer, TurretBaseTierFourTileEntity tileEntity) {
         super(new TurretBaseTierFourContainer(inventoryPlayer, tileEntity));
         this.base = tileEntity;
     }
@@ -40,10 +39,8 @@ public class TurretBaseTierFourGui extends GuiContainer {
 
         this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "-"));
         this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "+"));
-        this.buttonList
-                .add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
-        this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20,
-                "Drop Base"));
+        this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
+        this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
     }
 
     @Override
@@ -77,8 +74,7 @@ public class TurretBaseTierFourGui extends GuiContainer {
         fontRenderer.drawString("Addons:", 71, 6, 0);
         fontRenderer.drawString("Ammo", 8, 6, 0);
         fontRenderer.drawString("Inventory", 8, ySize - 97 + 4, 0);
-        fontRenderer.drawStringWithShadow("" + base.getyAxisDetect(), 127, 39,
-                40000);
+        fontRenderer.drawStringWithShadow("" + base.getyAxisDetect(), 127, 39, 40000);
         fontRenderer.drawString("-Y", 123, 6, 0);
 
         int k = (this.width - this.xSize) / 2;
@@ -86,10 +82,9 @@ public class TurretBaseTierFourGui extends GuiContainer {
         if (mouseX > k + 153 && mouseX < k + 153 + 14) {
             if (mouseY > l + 17 && mouseY < l + 17 + 51) {
                 ArrayList list = new ArrayList();
-                list.add(base.getEnergyStored(ForgeDirection.UNKNOWN) + "/"
-                        + base.getMaxEnergyStored(ForgeDirection.UNKNOWN));
-                this.drawHoveringText(list, mouseX - k, mouseY - l,
-                        fontRenderer);
+                list.add(base.getEnergyStored(ForgeDirection.UNKNOWN) + "/" + base
+                        .getMaxEnergyStored(ForgeDirection.UNKNOWN));
+                this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
             }
         }
 
@@ -105,10 +100,8 @@ public class TurretBaseTierFourGui extends GuiContainer {
 
         targetInfo.add("");
         targetInfo.add("\u00A77Attack Mobs: \u00A7b" + base.isAttacksMobs());
-        targetInfo.add("\u00A77Attack Neutrals: \u00A7b"
-                + base.isAttacksNeutrals());
-        targetInfo.add("\u00A77Attack Players: \u00A7b"
-                + base.isAttacksPlayers());
+        targetInfo.add("\u00A77Attack Neutrals: \u00A7b" + base.isAttacksNeutrals());
+        targetInfo.add("\u00A77Attack Players: \u00A7b" + base.isAttacksPlayers());
 
         this.drawHoveringText(targetInfo, -128, 17, fontRenderer);
     }
@@ -121,10 +114,8 @@ public class TurretBaseTierFourGui extends GuiContainer {
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float par1, int par2,
-                                                   int par3) {
-        ResourceLocation texture = (new ResourceLocation(ModInfo.ID
-                + ":textures/gui/baseInvTier4.png"));
+    protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
+        ResourceLocation texture = (new ResourceLocation(ModInfo.ID + ":textures/gui/baseInvTier4.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
 
@@ -133,30 +124,27 @@ public class TurretBaseTierFourGui extends GuiContainer {
 
         this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 
-        int expression = (base.getEnergyStored(ForgeDirection.UNKNOWN) * 51)
-                / base.getMaxEnergyStored(ForgeDirection.UNKNOWN);
+        int expression = (base.getEnergyStored(ForgeDirection.UNKNOWN) * 51) / base
+                .getMaxEnergyStored(ForgeDirection.UNKNOWN);
 
         drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
-        drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 17, 14,
-                expression);
+        drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 17, 14, expression);
     }
 
     public void sendChangeToServer() {
-        AdjustYAxisDetectMessage message = new AdjustYAxisDetectMessage(
-                base.xCoord, base.yCoord, base.zCoord, base.getyAxisDetect());
+        AdjustYAxisDetectMessage message = new AdjustYAxisDetectMessage(base.xCoord, base.yCoord, base.zCoord,
+                                                                        base.getyAxisDetect());
 
         ModularTurrets.networking.sendToServer(message);
     }
 
     public void sendDropTurretsToServer() {
-        DropTurretsMessage message = new DropTurretsMessage(base.xCoord,
-                base.yCoord, base.zCoord);
+        DropTurretsMessage message = new DropTurretsMessage(base.xCoord, base.yCoord, base.zCoord);
         ModularTurrets.networking.sendToServer(message);
     }
 
     public void sendDropBaseToServer() {
-        DropBaseMessage message = new DropBaseMessage(base.xCoord, base.yCoord,
-                base.zCoord);
+        DropBaseMessage message = new DropBaseMessage(base.xCoord, base.yCoord, base.zCoord);
         ModularTurrets.networking.sendToServer(message);
     }
 }

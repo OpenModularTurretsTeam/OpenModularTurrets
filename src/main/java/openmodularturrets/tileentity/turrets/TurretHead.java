@@ -2,7 +2,6 @@ package openmodularturrets.tileentity.turrets;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -34,8 +33,7 @@ public abstract class TurretHead extends TileEntity {
     public Packet getDescriptionPacket() {
         NBTTagCompound var1 = new NBTTagCompound();
         this.writeToNBT(var1);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord,
-                this.zCoord, 2, var1);
+        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
     }
 
     @Override
@@ -108,16 +106,8 @@ public abstract class TurretHead extends TileEntity {
     }
 
     public Entity getTarget() {
-        return TurretHeadUtils
-                .getTarget(
-                        base,
-                        worldObj,
-                        base.getyAxisDetect(),
-                        xCoord,
-                        yCoord,
-                        zCoord,
-                        getTurretRange()
-                                + TurretHeadUtils.getRangeUpgrades(base), this);
+        return TurretHeadUtils.getTarget(base, worldObj, base.getyAxisDetect(), xCoord, yCoord, zCoord,
+                                         getTurretRange() + TurretHeadUtils.getRangeUpgrades(base), this);
     }
 
     public abstract int getTurretRange();
@@ -165,8 +155,7 @@ public abstract class TurretHead extends TileEntity {
 
     public abstract Item getAmmo();
 
-    public abstract TurretProjectile createProjectile(World world,
-                                                      Entity target, ItemStack ammo);
+    public abstract TurretProjectile createProjectile(World world, Entity target, ItemStack ammo);
 
     public abstract String getLaunchSoundEffect();
 
@@ -197,18 +186,16 @@ public abstract class TurretHead extends TileEntity {
             TurretHeadUtils.updateSolarPanelAddon(base);
             TurretHeadUtils.updateRedstoneReactor(base);
 
-            int power_required = Math.round(this.getTurretPowerUsage()
-                    * (1 - TurretHeadUtils.getEfficiencyUpgrades(base)));
+            int power_required = Math
+                    .round(this.getTurretPowerUsage() * (1 - TurretHeadUtils.getEfficiencyUpgrades(base)));
 
             // power check
-            if (!base.isGettingRedstoneSignal()
-                    && base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required) {
+            if (!base.isGettingRedstoneSignal() && base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required) {
                 return;
             }
 
             // has cooldown passed?
-            if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtils
-                    .getFireRateUpgrades(base)))) {
+            if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtils.getFireRateUpgrades(base)))) {
                 return;
             }
 
@@ -229,39 +216,34 @@ public abstract class TurretHead extends TileEntity {
 
             // Can the turret still see the target? (It's moving)
             if (target != null) {
-                if (!TurretHeadUtils.canTurretSeeTarget(this,
-                        (EntityLivingBase) target)) {
+                if (!TurretHeadUtils.canTurretSeeTarget(this, (EntityLivingBase) target)) {
                     target = null;
                     return;
                 }
             }
             if (target != null && target instanceof EntityPlayerMP) {
-            	EntityPlayerMP entity = (EntityPlayerMP) target;
-            	
-            	if (TurretHeadUtils.isTrustedPlayer(entity.getDisplayName(), base)){
-            		target = null;
-            		return;
-            	}
-            	
+                EntityPlayerMP entity = (EntityPlayerMP) target;
+
+                if (TurretHeadUtils.isTrustedPlayer(entity.getDisplayName(), base)) {
+                    target = null;
+                    return;
+                }
             }
             if (target != null) {
-            	if (getDistanceToEntity(target) > (getTurretRange() + TurretHeadUtils.getRangeUpgrades(base))){
-            		target = null;
-            		return;
-            	}
+                if (getDistanceToEntity(target) > (getTurretRange() + TurretHeadUtils.getRangeUpgrades(base))) {
+                    target = null;
+                    return;
+                }
             }
 
-            this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord,
-                    zCoord) + 3.2F;
-            this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord,
-                    yCoord, zCoord);
+            this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord, zCoord) + 3.2F;
+            this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord, yCoord, zCoord);
 
             ItemStack ammo = null;
 
             if (this.requiresAmmo()) {
                 if (this.requiresSpecificAmmo()) {
-                    ammo = TurretHeadUtils.useSpecificItemStackItemFromBase(
-                            base, this.getAmmo());
+                    ammo = TurretHeadUtils.useSpecificItemStackItemFromBase(base, this.getAmmo());
                 } else {
                     ammo = TurretHeadUtils.useAnyItemStackFromBase(base);
                 }
@@ -273,43 +255,35 @@ public abstract class TurretHead extends TileEntity {
             }
 
             // Consume energy
-            base.setEnergyStored(base.getEnergyStored(ForgeDirection.UNKNOWN)
-                    - power_required);
+            base.setEnergyStored(base.getEnergyStored(ForgeDirection.UNKNOWN) - power_required);
 
-            TurretProjectile projectile = this.createProjectile(
-                    this.getWorldObj(), target, ammo);
+            TurretProjectile projectile = this.createProjectile(this.getWorldObj(), target, ammo);
 
-            projectile.setPosition(this.xCoord + 0.5, this.yCoord + 0.5,
-                    this.zCoord + 0.5);
+            projectile.setPosition(this.xCoord + 0.5, this.yCoord + 0.5, this.zCoord + 0.5);
 
             if ((projectile.amp_level = TurretHeadUtils.getAmpLevel(base)) != 0) {
-                worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord,
-                        ModInfo.ID + ":amped", 1.0F, 1.0F);
+                worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":amped", 1.0F, 1.0F);
                 projectile.isAmped = true;
             }
 
             double d0 = target.posX - this.xCoord;
-            double d1 = target.posY + (double) target.getEyeHeight() - 1.5F
-                    - this.yCoord;
+            double d1 = target.posY + (double) target.getEyeHeight() - 1.5F - this.yCoord;
             double d2 = target.posZ - this.zCoord;
-            float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2)
-                    * (0.2F * (getDistanceToEntity(target) * 0.04F));
-            double accuraccy = this.getTurretAccuracy()
-                    * (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
+            float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2) * (0.2F * (getDistanceToEntity(target) * 0.04F));
+            double accuraccy = this.getTurretAccuracy() * (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
 
             if (projectile.gravity == 0.00F) {
-                projectile.setThrowableHeading(d0 + target.motionX, d1 + 0.5F
-                                + target.motionY, d2 + target.motionZ, 3.0F,
-                        (float) accuraccy);
+                projectile
+                        .setThrowableHeading(d0 + target.motionX, d1 + 0.5F + target.motionY, d2 + target.motionZ, 3.0F,
+                                             (float) accuraccy);
             } else {
-                projectile.setThrowableHeading(d0 + target.motionX, d1
-                                + (double) f1 + target.motionY, d2 + target.motionZ,
-                        1.6F, (float) accuraccy);
+                projectile.setThrowableHeading(d0 + target.motionX, d1 + (double) f1 + target.motionY,
+                                               d2 + target.motionZ, 1.6F, (float) accuraccy);
             }
 
-            this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord,
-                    this.zCoord,
-                    ModInfo.ID + ":" + this.getLaunchSoundEffect(), 1.0F, 1.0F);
+            this.getWorldObj()
+                .playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":" + this.getLaunchSoundEffect(),
+                                 1.0F, 1.0F);
             this.getWorldObj().spawnEntityInWorld(projectile);
             doRecoil();
             ticks = 0;

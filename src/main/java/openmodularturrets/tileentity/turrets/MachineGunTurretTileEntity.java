@@ -52,7 +52,7 @@ public class MachineGunTurretTileEntity extends TurretHead {
 
     @Override
     public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
-        return new BulletProjectile(world, ammo);
+        return new BulletProjectile(world, ammo, this.getBase());
     }
 
     @Override

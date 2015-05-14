@@ -55,21 +55,24 @@ public class MachineGunTurretRenderer extends TileEntitySpecialRenderer {
 
         if (turretHead.base != null) {
             if (TurretHeadUtils.hasSolarPanelAddon(turretHead.base)) {
-                ResourceLocation texturesSolar = (new ResourceLocation(ModInfo.ID + ":textures/blocks/solarPanelAddon.png"));
+                ResourceLocation texturesSolar = (new ResourceLocation(ModInfo.ID + ":textures/blocks/solarPanelAddon" +
+                                                                               ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
                 solar.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 solar.renderAll();
             }
 
             if (TurretHeadUtils.hasDamageAmpAddon(turretHead.base)) {
-                ResourceLocation texturesAmp = (new ResourceLocation(ModInfo.ID + ":textures/blocks/damageAmpAddon.png"));
+                ResourceLocation texturesAmp = (new ResourceLocation(ModInfo.ID + ":textures/blocks/damageAmpAddon" +
+                                                                             ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
                 amp.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 amp.renderAll();
             }
 
             if (TurretHeadUtils.hasRedstoneReactor(turretHead.base)) {
-                ResourceLocation texturesReac = (new ResourceLocation(ModInfo.ID + ":textures/blocks/redstoneReactor.png"));
+                ResourceLocation texturesReac = (new ResourceLocation(ModInfo.ID + ":textures/blocks/redstoneReactor" +
+                                                                              ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesReac);
                 reac.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 reac.renderAll();
