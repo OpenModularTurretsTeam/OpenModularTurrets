@@ -6,8 +6,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import openmodularturrets.blocks.Blocks;
 
-import java.util.logging.Logger;
-
 /**
  * Created by Keridos on 23/01/2015.
  * This Class
@@ -38,15 +36,8 @@ public class OpenModularTurretsWikiTab extends BaseWikiTab {
 
     @Override
     protected String getPageLocation(String pageEntry) {
-        if (pageEntry.startsWith("item")) {
-            Logger.getGlobal().info(pageEntry);
-            Logger.getGlobal().info(pageEntry.replace("item", "item/openmodularturrets"));
-            return pageEntry.replace("item", "item/openmodularturrets");
-        } else if (pageEntry.startsWith("block")) {
-            Logger.getGlobal().info(pageEntry);
-            Logger.getGlobal().info(pageEntry.replace("block", "block/openmodularturrets"));
-            return pageEntry.replace("block", "block/openmodularturrets");
-        }
-        return "openmodularturrets/menu/" + pageEntry;
+        if (pageEntry.startsWith("item") || pageEntry.startsWith("block"))
+            return pageEntry.replace("/openmodularturrets:", "/");
+        return "menu/" + pageEntry;
     }
 }

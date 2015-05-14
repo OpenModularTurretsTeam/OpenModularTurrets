@@ -1,5 +1,6 @@
 package openmodularturrets.entity.projectiles;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -10,8 +11,13 @@ import openmodularturrets.tileentity.turretbase.TurretBase;
 public class LaserProjectile extends TurretProjectile {
     public int arrowShake;
 
-    public LaserProjectile(World par1World, TurretBase turretBase) {
+    public LaserProjectile(World par1World) {
         super(par1World);
+        this.gravity = 0.00F;
+    }
+
+    public LaserProjectile(World par1World, TurretBase turretBase) {
+        super(par1World, turretBase);
         this.gravity = 0.00F;
     }
 
@@ -35,15 +41,16 @@ public class LaserProjectile extends TurretProjectile {
         if (this.ticksExisted <= 1) {
             return;
         }
+        if (movingobjectposition.typeOfHit == movingobjectposition.typeOfHit.BLOCK) {
+            Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
+                                               movingobjectposition.blockZ);
+            if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
+                // Go through non solid block
+                return;
+            }
+        }
 
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
-
-            if (movingobjectposition.typeOfHit.equals(0)) {
-                if (worldObj.isAirBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                        movingobjectposition.blockZ)) {
-                    return;
-                }
-            }
 
             worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:laserHit", 1.0F, 1.0F);
 

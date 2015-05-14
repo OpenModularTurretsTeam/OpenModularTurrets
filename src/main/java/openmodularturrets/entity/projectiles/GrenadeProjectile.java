@@ -16,7 +16,7 @@ import java.util.List;
 public class GrenadeProjectile extends TurretProjectile {
     public boolean isAmped;
 
-    public GrenadeProjectile(World world) {
+    public GrenadeProjectile(World world, TurretBase turretBase) {
         super(world);
         this.gravity = 0.03F;
     }

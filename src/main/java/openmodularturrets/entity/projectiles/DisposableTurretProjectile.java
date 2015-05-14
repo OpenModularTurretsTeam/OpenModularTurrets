@@ -1,5 +1,6 @@
 package openmodularturrets.entity.projectiles;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -46,9 +47,16 @@ public class DisposableTurretProjectile extends TurretProjectile {
         if (this.ticksExisted <= 2) {
             return;
         }
+        if (movingobjectposition.typeOfHit == movingobjectposition.typeOfHit.BLOCK) {
+            Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
+                                               movingobjectposition.blockZ);
+            if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
+                // Go through non solid block
+                return;
+            }
+        }
 
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
-
             if (movingobjectposition.typeOfHit.equals(0)) {
                 if (worldObj.isAirBlock(movingobjectposition.blockX, movingobjectposition.blockY,
                                         movingobjectposition.blockZ)) {
