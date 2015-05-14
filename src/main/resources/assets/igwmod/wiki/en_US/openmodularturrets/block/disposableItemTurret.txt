@@ -1,0 +1,15 @@
+Disposable Item Turret
+    Tier 0 Turret
+
+    This turret is the first turret you will come across.
+    its slow, doesn't do a whole lot of damage, but you can shoot anything you want out of it!
+    
+    Range (in blocks): 10
+    Accuracy: Low
+    Ammo type: Any Block/Item
+    Minimum Tier: 0 (Wood Base)
+
+    Projectile Damage: 1 Heart
+    AOE radius: 0
+    Shots/s: 0.8
+    RF per shot: 2RF
