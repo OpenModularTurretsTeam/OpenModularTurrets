@@ -13,6 +13,7 @@ import openmodularturrets.network.AdjustYAxisDetectMessage;
 import openmodularturrets.network.DropBaseMessage;
 import openmodularturrets.network.DropTurretsMessage;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierThreeTileEntity;
 import org.lwjgl.opengl.GL11;
 
@@ -99,8 +100,8 @@ public class TurretBaseTierThreeGui extends GuiContainer {
         targetInfo.add("");
         targetInfo.add("\u00A75-Trusted Players-");
 
-        for (String trusted_player : base.getTrustedPlayers()) {
-            targetInfo.add("\u00A7b" + trusted_player);
+        for (TurretBase.TrustedPlayer trusted_player : base.getTrustedPlayers()) {
+            targetInfo.add("\u00A7b" + trusted_player.name);
         }
 
         targetInfo.add("");
