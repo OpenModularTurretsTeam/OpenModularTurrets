@@ -266,18 +266,20 @@ public abstract class TurretHead extends TileEntity {
                 projectile.isAmped = true;
             }
 
-            double d0 = target.posX - this.xCoord;
-            double d1 = target.posY + (double) target.getEyeHeight() - 1.5F - this.yCoord;
-            double d2 = target.posZ - this.zCoord;
-            float f1 = MathHelper.sqrt_double(d0 * d0 + d2 * d2) * (0.2F * (getDistanceToEntity(target) * 0.04F));
+            double d0 = target.posX - projectile.posX;
+            double d1 = target.posY + (double) target.getEyeHeight() - 1.5F - projectile.posY;
+            double d2 = target.posZ - projectile.posZ;
+            double dist = MathHelper.sqrt_double(d0 * d0 + d2 * d2);
+            float f1 = (float) dist * (0.2F * (getDistanceToEntity(target) * 0.04F));
             double accuraccy = this.getTurretAccuracy() * (1 - TurretHeadUtils.getAccuraccyUpgrades(base));
 
+            double time = dist / (projectile.gravity == 0.00F ? 3.0 : 1.6); // For target leading estimation
             if (projectile.gravity == 0.00F) {
-                projectile.setThrowableHeading(d0 + target.motionX, d1 + 0.5F + target.motionY, d2 + target.motionZ,
-                                               3.0F, (float) accuraccy);
+                projectile.setThrowableHeading(d0 + target.motionX * time, d1 + 0.5F + target.motionY,
+                                               d2 + target.motionZ * time, 3.0F, (float) accuraccy);
             } else {
-                projectile.setThrowableHeading(d0 + target.motionX, d1 + (double) f1 + target.motionY,
-                                               d2 + target.motionZ, 1.6F, (float) accuraccy);
+                projectile.setThrowableHeading(d0 + target.motionX * time, d1 + (double) f1 + target.motionY,
+                                               d2 + target.motionZ * time, 1.6F, (float) accuraccy);
             }
 
             this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord,
