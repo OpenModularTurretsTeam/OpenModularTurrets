@@ -17,12 +17,12 @@ public class TileEntityRenderers {
 
     @SideOnly(Side.CLIENT)
     public static void init() {
-        ClientRegistry
-                .bindTileEntitySpecialRenderer(DisposableItemTurretTileEntity.class, disposableItemTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(DisposableItemTurretTileEntity.class,
+                                                     disposableItemTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(RocketTurretTileEntity.class, rocketTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(MachineGunTurretTileEntity.class, machineGunTurretRenderer);
-        ClientRegistry
-                .bindTileEntitySpecialRenderer(GrenadeLauncherTurretTileEntity.class, grenadeLauncherTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(GrenadeLauncherTurretTileEntity.class,
+                                                     grenadeLauncherTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(LaserTurretTileEntity.class, laserTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(RailGunTurretTileEntity.class, railGunTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(LeverTileEntity.class, leverRenderer);

@@ -31,8 +31,9 @@ public class SolarPanelAddonItem extends AddonItem {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.RED + StatCollector.translateToLocal("turret.addon.label"));
         p_77624_3_.add("");
-        p_77624_3_.add(StatCollector.translateToLocal("turret.addon.solar.a") + " " + ConfigHandler
-                .getSolarPanelAddonGen() + " " + StatCollector.translateToLocal("turret.addon.solar.b"));
+        p_77624_3_.add(StatCollector.translateToLocal(
+                "turret.addon.solar.a") + " " + ConfigHandler.getSolarPanelAddonGen() + " " + StatCollector.translateToLocal(
+                "turret.addon.solar.b"));
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.addon.solar.flavour"));
     }

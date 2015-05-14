@@ -66,9 +66,9 @@ public class TurretHeadUtils {
         Entity target = null;
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
-            AxisAlignedBB axis = AxisAlignedBB
-                    .getBoundingBox(xCoord - turretRange, yCoord - downLowAmount, zCoord - turretRange,
-                                    xCoord + turretRange, yCoord + turretRange, zCoord + turretRange);
+            AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(xCoord - turretRange, yCoord - downLowAmount,
+                                                              zCoord - turretRange, xCoord + turretRange,
+                                                              yCoord + turretRange, zCoord + turretRange);
 
             List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
 
@@ -247,8 +247,8 @@ public class TurretHeadUtils {
         if (tier == 4) {
             if (base.getStackInSlot(12) != null) {
                 if (base.getStackInSlot(12).getItem() instanceof EfficiencyUpgradeItem) {
-                    efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * base
-                            .getStackInSlot(12).stackSize);
+                    efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * base.getStackInSlot(
+                            12).stackSize);
                 }
             }
         }
@@ -363,10 +363,8 @@ public class TurretHeadUtils {
             return;
         }
 
-        if (base.getWorldObj().isDaytime() && !base.getWorldObj().isRaining() && base.getWorldObj()
-                                                                                     .canBlockSeeTheSky(base.xCoord,
-                                                                                                        base.yCoord + 2,
-                                                                                                        base.zCoord)) {
+        if (base.getWorldObj().isDaytime() && !base.getWorldObj().isRaining() && base.getWorldObj().canBlockSeeTheSky(
+                base.xCoord, base.yCoord + 2, base.zCoord)) {
             base.receiveEnergy(ForgeDirection.UNKNOWN, ConfigHandler.getSolarPanelAddonGen(), false);
         }
     }
@@ -376,8 +374,8 @@ public class TurretHeadUtils {
             return;
         }
 
-        if (ConfigHandler.getRedstoneReactorAddonGen() < (base.getMaxEnergyStored(ForgeDirection.UNKNOWN) - base
-                .getEnergyStored(ForgeDirection.UNKNOWN))) {
+        if (ConfigHandler.getRedstoneReactorAddonGen() < (base.getMaxEnergyStored(
+                ForgeDirection.UNKNOWN) - base.getEnergyStored(ForgeDirection.UNKNOWN))) {
             ItemStack redstone = useSpecificItemStackItemFromBase(base, Items.redstone);
 
             if (redstone != null) {

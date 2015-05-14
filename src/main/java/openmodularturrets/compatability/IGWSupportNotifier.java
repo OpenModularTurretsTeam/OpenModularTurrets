@@ -42,8 +42,7 @@ public class IGWSupportNotifier {
             Configuration config = new Configuration(new File(dir, "IGWMod.cfg"));
             config.load();
             if (config.get(Configuration.CATEGORY_GENERAL, "enable_missing_notification", true, "When enabled, this " +
-                    "will notify players when IGW-Mod is not installed even though mods add " + "support.")
-                      .getBoolean()) {
+                    "will notify players when IGW-Mod is not installed even though mods add " + "support.").getBoolean()) {
                 ModContainer mc = Loader.instance().activeModContainer();
                 String modid = mc.getModId();
                 List<ModContainer> loadedMods = Loader.instance().getActiveModList();
@@ -62,8 +61,7 @@ public class IGWSupportNotifier {
 
     @SubscribeEvent
     public void onPlayerJoin(TickEvent.PlayerTickEvent event) {
-        if (event.player.worldObj.isRemote && ConfigHandler.IGWNotification && event.player == FMLClientHandler
-                .instance().getClientPlayerEntity()) {
+        if (event.player.worldObj.isRemote && ConfigHandler.IGWNotification && event.player == FMLClientHandler.instance().getClientPlayerEntity()) {
             event.player.addChatComponentMessage(IChatComponent.Serializer.func_150699_a(
                     "[\"" + EnumChatFormatting.GOLD + "The mod " + supportingMod + " is supporting In-Game Wiki mod. " +
                             "" + EnumChatFormatting.GOLD + "However, In-Game Wiki isn't installed! " + "[\"," +
@@ -121,8 +119,9 @@ public class IGWSupportNotifier {
                 finalize();
             } catch (Throwable e) {
                 e.printStackTrace();
-                if (Minecraft.getMinecraft().thePlayer != null) Minecraft.getMinecraft().thePlayer
-                        .addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "Failed to download"));
+                if (Minecraft.getMinecraft().thePlayer != null)
+                    Minecraft.getMinecraft().thePlayer.addChatComponentMessage(
+                            new ChatComponentText(EnumChatFormatting.RED + "Failed to download"));
                 try {
                     finalize();
                 } catch (Throwable e1) {
