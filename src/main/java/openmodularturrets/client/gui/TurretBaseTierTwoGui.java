@@ -88,8 +88,8 @@ public class TurretBaseTierTwoGui extends GuiContainer {
         if (mouseX > k + 153 && mouseX < k + 153 + 14) {
             if (mouseY > l + 17 && mouseY < l + 17 + 51) {
                 ArrayList list = new ArrayList();
-                list.add(base.getEnergyStored(ForgeDirection.UNKNOWN) + "/" + base
-                        .getMaxEnergyStored(ForgeDirection.UNKNOWN));
+                list.add(base.getEnergyStored(ForgeDirection.UNKNOWN) + "/" + base.getMaxEnergyStored(
+                        ForgeDirection.UNKNOWN));
                 this.drawHoveringText(list, (int) mouseX - k, (int) mouseY - l, fontRenderer);
             }
         }
@@ -121,8 +121,8 @@ public class TurretBaseTierTwoGui extends GuiContainer {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
         this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
-        int expression = (base.getEnergyStored(ForgeDirection.UNKNOWN) * 51) / base
-                .getMaxEnergyStored(ForgeDirection.UNKNOWN);
+        int expression = (base.getEnergyStored(ForgeDirection.UNKNOWN) * 51) / base.getMaxEnergyStored(
+                ForgeDirection.UNKNOWN);
         drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
         drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 17, 14, expression);
     }

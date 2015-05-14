@@ -34,7 +34,8 @@ public class DisposableItemTurretItemRenderer implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         GL11.glPushMatrix();
         GL11.glTranslated(-0.5, -0.5, -0.5);
-        this.disposableItemTurretRenderer.renderTileEntityAt(this.disposableItemTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
+        this.disposableItemTurretRenderer.renderTileEntityAt(this.disposableItemTurretTileEntity, 0.0D, 0.0D, 0.0D,
+                                                             0.0F);
         GL11.glPopMatrix();
     }
 }

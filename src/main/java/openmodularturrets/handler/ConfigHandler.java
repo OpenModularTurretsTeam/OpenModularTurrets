@@ -64,8 +64,8 @@ public class ConfigHandler {
         baseTierFourMaxIo = config.get("TurretBaseTierFour", "MaxIo", 5000).getInt();
 
         turretAlarmSound = config.get("TurretSound", "Enable/Disable turret alarm sound", true).getBoolean();
-        turretWarnMessage = config.get("TurretWarnMessage", "Should turret warn message be displayed?", true)
-                                  .getBoolean();
+        turretWarnMessage = config.get("TurretWarnMessage", "Should turret warn message be displayed?",
+                                       true).getBoolean();
         turretBreakable = config.get("TurretBreakableByAnyone", "Are turrets breakable by anyone?", false).getBoolean();
 
         disposable_turret = new TurretSetting(
@@ -86,8 +86,8 @@ public class ConfigHandler {
                                           config.get("TurretRocket", "FireRateCooldown", 30,
                                                      "Number of ticks between firings").getInt(),
                                           config.get("TurretRocket", "Damage", 10, "Measured in half-hearts").getInt(),
-                                          config.get("TurretRocket", "Accuracy", 1, "Measured in ???, lower is better")
-                                                .getDouble(),
+                                          config.get("TurretRocket", "Accuracy", 1,
+                                                     "Measured in ???, lower is better").getDouble(),
                                           config.get("TurretRocket", "PowerUsage", 5000, "RF used per shot").getInt());
 
         grenade_turret = new TurretSetting(config.get("TurretGrenade", "Range", 20, "Turret range, in blocks").getInt(),
@@ -96,44 +96,44 @@ public class ConfigHandler {
                                            config.get("TurretGrenade", "Damage", 8, "Measured in half-hearts").getInt(),
                                            config.get("TurretGrenade", "Accuracy", 3,
                                                       "Measured in ???, lower is better").getDouble(),
-                                           config.get("TurretGrenade", "PowerUsage", 3000, "RF used per shot")
-                                                 .getInt());
+                                           config.get("TurretGrenade", "PowerUsage", 3000,
+                                                      "RF used per shot").getInt());
 
         laser_turret = new TurretSetting(config.get("TurretLaser", "Range", 25, "Turret range, in blocks").getInt(),
                                          config.get("TurretLaser", "FireRateCooldown", 10,
                                                     "Number of ticks between firings").getInt(),
                                          config.get("TurretLaser", "Damage", 2, "Measured in half-hearts").getInt(),
-                                         config.get("TurretLaser", "Accuracy", 1, "Measured in ???, lower is better")
-                                               .getDouble(),
+                                         config.get("TurretLaser", "Accuracy", 1,
+                                                    "Measured in ???, lower is better").getDouble(),
                                          config.get("TurretLaser", "PowerUsage", 10000, "RF used per shot").getInt());
 
         railgun_turret = new TurretSetting(config.get("TurretRailgun", "Range", 30, "Turret range, in blocks").getInt(),
                                            config.get("TurretRailgun", "FireRateCooldown", 100,
                                                       "Number of ticks between firings").getInt(),
-                                           config.get("TurretRailgun", "Damage", 25, "Measured in half-hearts")
-                                                 .getInt(), config.get("TurretRailgun", "Accuracy", 0,
-                                                                       "Measured in ???, lower is better").getDouble(),
-                                           config.get("TurretRailgun", "PowerUsage", 25000, "RF used per shot")
-                                                 .getInt());
+                                           config.get("TurretRailgun", "Damage", 25,
+                                                      "Measured in half-hearts").getInt(),
+                                           config.get("TurretRailgun", "Accuracy", 0,
+                                                      "Measured in ???, lower is better").getDouble(),
+                                           config.get("TurretRailgun", "PowerUsage", 25000,
+                                                      "RF used per shot").getInt());
 
         rangeUpgradeBoost = config.get("upgrades", "range", 2, "Increases range in blocks linearly").getInt();
-        fireRateUpgradeBoostPercentage = config
-                .get("upgrades", "rateOfFire", 0.1D, "It's a double for some reason, " + "reduces cooldown")
-                .getDouble();
+        fireRateUpgradeBoostPercentage = config.get("upgrades", "rateOfFire", 0.1D,
+                                                    "It's a double for some reason, " + "reduces cooldown").getDouble();
         accuraccyUpgradeBoost = config.get("upgrades", "accuracy", 0.2D, "Increases accuracy linearly").getDouble();
-        efficiencyUpgradeBoostPercentage = config
-                .get("upgrades", "efficiency", 0.08D, "Reduces power consumption " + "linearly").getDouble();
+        efficiencyUpgradeBoostPercentage = config.get("upgrades", "efficiency", 0.08D,
+                                                      "Reduces power consumption " + "linearly").getDouble();
 
         solarPanelAddonGen = config.get("addons", "solar", 10, "Generates specified RF every tick").getInt();
-        redstoneReactorAddonGen = config
-                .get("addons", "redstone", 1550, "Generates RF from redstone in turret's " + "inventory").getInt();
+        redstoneReactorAddonGen = config.get("addons", "redstone", 1550,
+                                             "Generates RF from redstone in turret's " + "inventory").getInt();
         damageAmpDmgBonus = config.get("addons", "damage", 2, "Increases damage linearly").getInt();
 
         turretWarningDistance = config.get("miscellaneous", "warningDistance", 40).getInt();
 
-        turretDamageTrustedPlayers = config
-                .get("miscellaneous", "Can turrets damage their trusted players when they " + "accidentally hit them?",
-                     true).getBoolean();
+        turretDamageTrustedPlayers = config.get("miscellaneous",
+                                                "Can turrets damage their trusted players when they " + "accidentally hit them?",
+                                                true).getBoolean();
         IGWNotification = config.get("miscellaneous", "Enable IGW Mod notification", true).getBoolean();
         if (config.hasChanged()) {
             config.save();
