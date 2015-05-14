@@ -27,7 +27,7 @@ import openmodularturrets.network.*;
 import openmodularturrets.proxy.CommonProxy;
 import openmodularturrets.reference.ModInfo;
 
-@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = "required-after:ThermalFoundation")
+@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = "required-after:ThermalFoundation;after:OpenComputers")
 public class ModularTurrets {
 
     @SidedProxy(clientSide = "openmodularturrets.proxy.ClientProxy", serverSide = "openmodularturrets.proxy.CommonProxy")

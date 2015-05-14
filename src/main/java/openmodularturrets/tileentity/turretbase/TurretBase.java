@@ -15,12 +15,18 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.network.EnergyStatusUpdateMessage;
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.SimpleComponent;
+import cpw.mods.fml.common.Optional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")
 public abstract class TurretBase extends TileEntity implements IEnergyHandler,
-        IInventory {
+        IInventory, SimpleComponent {
     protected EnergyStorage storage;
     protected ItemStack[] inv;
     protected int yAxisDetect;
@@ -29,7 +35,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     protected boolean attacksPlayers;
     protected String owner;
     protected List<String> trustedPlayers;
-
+    
     public TurretBase(int MaxEnergyStorage, int MaxIO) {
         super();
         yAxisDetect = 2;
@@ -169,7 +175,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     public void setAttacksPlayers(boolean attacksPlayers) {
         this.attacksPlayers = attacksPlayers;
     }
-
+    
     public String getOwner() {
         return owner;
     }
@@ -337,4 +343,89 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
         ModularTurrets.networking.sendToAll(message);
     }
+    
+    
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():string; returns owner of turret base.")
+	public Object[] getOwner(Context context, Arguments args) {
+		return new Object[] { this.getOwner() };
+	}
+    
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():boolean; returns if the turret is currently set to attack hostile mobs.")
+	public Object[] isAttacksMobs(Context context, Arguments args) {
+		return new Object[] { this.isAttacksMobs() };
+	}
+    
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():boolean;  sets to attack hostile mobs or not.")
+	public Object[] setAttacksMobs(Context context, Arguments args) {
+    	this.setAttacksMobs(args.checkBoolean(0));
+    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        return null;
+	}
+    
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():boolean; returns if the turret is currently set to attack neutral mobs.")
+	public Object[] isAttacksNeutrals(Context context, Arguments args) {
+		return new Object[] { this.isAttacksNeutrals() };
+	}
+    
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():boolean; sets to attack neutral mobs or not.")
+	public Object[] setAttacksNeutrals(Context context, Arguments args) {
+    	this.setAttacksNeutrals(args.checkBoolean(0));
+    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    	return null;
+	}
+    
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():boolean; returns if the turret is currently set to attack players.")
+	public Object[] isAttacksPlayers(Context context, Arguments args) {
+		return new Object[] { this.isAttacksPlayers() };
+	}
+    
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():boolean; sets to attack players or not.")
+	public Object[] setAttacksPlayers(Context context, Arguments args) {
+    	this.setAttacksPlayers(args.checkBoolean(0));
+    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    	return null;
+	}
+    
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():table; returns a table of trusted players on this base.")
+	public Object[] getTrustedPlayers(Context context, Arguments args) {
+		return new Object[] { this.getTrustedPlayers() };
+	}
+	
+	@Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():string; adds Trusted player to Trustlist.")
+	public Object[] addTrustedPlayer(Context context, Arguments args) {
+		this.addTrustedPlayer(args.checkString(0));
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		return null;
+	}
+	
+	@Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():string; removes Trusted player from Trustlist.")
+	public Object[] removeTrustedPlayer(Context context, Arguments args) {
+		this.removeTrustedPlayer(args.checkString(0));
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		return null;
+	}
+    
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():int; returns maxiumum energy storage.")
+	public Object[] getMaxEnergyStorage(Context context, Arguments args) {
+		return new Object[] { this.storage.getMaxEnergyStored() };
+	}
+
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():int; returns current energy stored.")
+	public Object[] getCurrentEnergyStorage(Context context, Arguments args) {
+		return new Object[] { this.getEnergyStored(ForgeDirection.UNKNOWN) };
+		
+	}
+
 }
