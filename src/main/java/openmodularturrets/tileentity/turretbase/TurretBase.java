@@ -447,7 +447,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     public Object[] addTrustedPlayer(Context context, Arguments args) {
         this.addTrustedPlayer(args.checkString(0));
         TrustedPlayer trustedPlayer = this.getTrustedPlayer(args.checkString(0));
-        trustedPlayer.canOpenGUI = args.optBoolean(1, true);
+        trustedPlayer.canOpenGUI = args.optBoolean(1, false);
         trustedPlayer.canChangeTargeting = args.optBoolean(1, false);
         trustedPlayer.canAddTrustedPlayers = args.optBoolean(1, false);
         trustedPlayer.isAdmin = args.optBoolean(1, false);
