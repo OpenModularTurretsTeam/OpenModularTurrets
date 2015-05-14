@@ -31,10 +31,11 @@ public class IGWHandler {
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.laserTurret, "openmodularturrets/block/laserTurret");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.machineGunTurret, "openmodularturrets/block/machineGunTurret");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.rocketTurret, "openmodularturrets/block/rocketTurret");
-        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierWood, "openmodularturrets/block/turretbase");
-        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierOne, "openmodularturrets/block/turretbase");
-        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierTwo, "openmodularturrets/block/turretbase");
-        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierThree, "openmodularturrets/block/turretbase");
-        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierFour, "openmodularturrets/block/turretbase");
+        WikiRegistry.registerBlockAndItemPageEntry(Blocks.railGunTurret, "openmodularturrets/block/railGunTurret");
+        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierWood, "openmodularturrets/block/turretBase");
+        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierOne, "openmodularturrets/block/turretBase");
+        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierTwo, "openmodularturrets/block/turretBase");
+        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierThree, "openmodularturrets/block/turretBase");
+        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierFour, "openmodularturrets/block/turretBase");
     }
 }
