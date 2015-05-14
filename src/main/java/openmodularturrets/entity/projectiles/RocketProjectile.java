@@ -1,5 +1,6 @@
 package openmodularturrets.entity.projectiles;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -23,8 +24,8 @@ public class RocketProjectile extends TurretProjectile {
     public int arrowShake;
     public float accuracy;
 
-    public RocketProjectile(World p_i1776_1_) {
-        super(p_i1776_1_);
+    public RocketProjectile(World p_i1776_1_, TurretBase turretBase) {
+        super(p_i1776_1_, turretBase);
         this.gravity = 0.00F;
     }
 
@@ -66,6 +67,14 @@ public class RocketProjectile extends TurretProjectile {
 
         if (this.ticksExisted <= 5) {
             return;
+        }
+        if (movingobjectposition.typeOfHit == movingobjectposition.typeOfHit.BLOCK) {
+            Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
+                                               movingobjectposition.blockZ);
+            if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
+                // Go through non solid block
+                return;
+            }
         }
 
         if (movingobjectposition.typeOfHit.equals(0)) {

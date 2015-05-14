@@ -17,6 +17,11 @@ public abstract class TurretProjectile extends EntityThrowable {
         super(p_i1776_1_);
     }
 
+    public TurretProjectile(World p_i1776_1_, TurretBase turretBase) {
+        super(p_i1776_1_);
+        this.turretBase = turretBase;
+    }
+
     protected TurretProjectile(World p_i1776_1_, ItemStack ammo, TurretBase turretBase) {
         super(p_i1776_1_);
         this.ammo = ammo;

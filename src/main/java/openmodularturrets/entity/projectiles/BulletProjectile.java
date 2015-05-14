@@ -1,5 +1,6 @@
 package openmodularturrets.entity.projectiles;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
@@ -33,9 +34,16 @@ public class BulletProjectile extends TurretProjectile {
         if (this.ticksExisted <= 1) {
             return;
         }
+        if (movingobjectposition.typeOfHit == movingobjectposition.typeOfHit.BLOCK) {
+            Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
+                                               movingobjectposition.blockZ);
+            if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
+                // Go through non solid block
+                return;
+            }
+        }
 
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
-
             if (movingobjectposition.typeOfHit.equals(0)) {
                 if (worldObj.isAirBlock(movingobjectposition.blockX, movingobjectposition.blockY,
                                         movingobjectposition.blockZ)) {

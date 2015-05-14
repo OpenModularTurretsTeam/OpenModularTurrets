@@ -9,10 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.handler.ConfigHandler;
@@ -390,6 +387,16 @@ public class TurretHeadUtils {
         helper.posX = turret.xCoord + 0.5F;
         helper.posY = turret.yCoord + 0.5F;
         helper.posZ = turret.zCoord + 0.5F;
+        helper.height = 0.01F; // This will prevent getEyeHeight() from interfering with tracing thus result in more accurate detection.
+
+        Vec3 vecDelta = Vec3.createVectorHelper(target.posX - helper.posX, target.posY - helper.posY,
+                                                target.posZ - helper.posZ);
+        vecDelta = vecDelta.normalize();
+
+        // Move tracing start position toward potential target to prevent self collision.
+        helper.posX += vecDelta.xCoord;
+        helper.posY += vecDelta.yCoord;
+        helper.posZ += vecDelta.zCoord;
 
         EntityLivingBase targeted = target != null && helper.canEntityBeSeen(target) ? target : null;
 
