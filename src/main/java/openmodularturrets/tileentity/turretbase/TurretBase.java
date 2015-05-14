@@ -38,7 +38,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
     public class TrustedPlayer {
         public String name;
-        public boolean canOpenGUI = true;
+        public boolean canOpenGUI = false;
         public boolean canChangeTargeting = false;
         public boolean canAddTrustedPlayers = false;
         public boolean isAdmin = false;
