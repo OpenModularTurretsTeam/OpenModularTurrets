@@ -159,6 +159,16 @@ public abstract class TurretHead extends TileEntity {
 
     public abstract String getLaunchSoundEffect();
 
+    private boolean chebyshevDistance(Entity target, TurretBase base) {
+        if (MathHelper.abs_max(MathHelper.abs_max(target.posX - this.xCoord, target.posY - this.yCoord),
+                               target.posZ - this.zCoord) > (getTurretRange() + TurretHeadUtils.getRangeUpgrades(
+                base))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public void updateEntity() {
 
@@ -230,7 +240,7 @@ public abstract class TurretHead extends TileEntity {
                 }
             }
             if (target != null) {
-                if (getDistanceToEntity(target) > (getTurretRange() + TurretHeadUtils.getRangeUpgrades(base))) {
+                if (chebyshevDistance(target, base)) {
                     target = null;
                     return;
                 }
@@ -267,7 +277,7 @@ public abstract class TurretHead extends TileEntity {
             }
 
             double d0 = target.posX - projectile.posX;
-            double d1 = target.posY + (double) target.getEyeHeight() - 1.5F - projectile.posY;
+            double d1 = target.posY + (double) target.getEyeHeight() - projectile.posY;
             double d2 = target.posZ - projectile.posZ;
             double dist = MathHelper.sqrt_double(d0 * d0 + d2 * d2);
             float f1 = (float) dist * (0.2F * (getDistanceToEntity(target) * 0.04F));
@@ -275,7 +285,7 @@ public abstract class TurretHead extends TileEntity {
 
             double time = dist / (projectile.gravity == 0.00F ? 3.0 : 1.6); // For target leading estimation
             if (projectile.gravity == 0.00F) {
-                projectile.setThrowableHeading(d0 + target.motionX * time, d1 + 0.5F + target.motionY,
+                projectile.setThrowableHeading(d0 + target.motionX * time, d1 + target.motionY,
                                                d2 + target.motionZ * time, 3.0F, (float) accuraccy);
             } else {
                 projectile.setThrowableHeading(d0 + target.motionX * time, d1 + (double) f1 + target.motionY,

@@ -383,22 +383,29 @@ public class TurretHeadUtils {
 
     public static boolean canTurretSeeTarget(TurretHead turret, EntityLivingBase target) {
 
-        InvisibleTurretHelperEntity helper = new InvisibleTurretHelperEntity(turret.getWorldObj());
-        helper.posX = turret.xCoord + 0.5F;
-        helper.posY = turret.yCoord + 0.5F;
-        helper.posZ = turret.zCoord + 0.5F;
-        helper.height = 0.01F; // This will prevent getEyeHeight() from interfering with tracing thus result in more accurate detection.
+        Vec3 traceStart = Vec3.createVectorHelper(turret.xCoord + 0.5F, turret.yCoord + 0.5F, turret.zCoord + 0.5F);
+        Vec3 traceEnd = Vec3.createVectorHelper(target.posX, target.posY + target.getEyeHeight(), target.posZ);
+        Vec3 vecDelta = Vec3.createVectorHelper(traceEnd.xCoord - traceStart.xCoord,
+                                                traceEnd.yCoord - traceStart.yCoord,
+                                                traceEnd.zCoord - traceStart.zCoord);
 
-        Vec3 vecDelta = Vec3.createVectorHelper(target.posX - helper.posX, target.posY - helper.posY,
-                                                target.posZ - helper.posZ);
-        vecDelta = vecDelta.normalize();
+        // Normalize vector to the largest delta axis
+        double vecDeltaLength = MathHelper.abs_max(vecDelta.xCoord,
+                                                   MathHelper.abs_max(vecDelta.yCoord, vecDelta.zCoord));
+        vecDelta.xCoord /= vecDeltaLength;
+        vecDelta.yCoord /= vecDeltaLength;
+        vecDelta.zCoord /= vecDeltaLength;
 
-        // Move tracing start position toward potential target to prevent self collision.
-        helper.posX += vecDelta.xCoord;
-        helper.posY += vecDelta.yCoord;
-        helper.posZ += vecDelta.zCoord;
+        // Offset start position toward the target to prevent self collision
+        traceStart.xCoord += vecDelta.xCoord;
+        traceStart.yCoord += vecDelta.yCoord;
+        traceStart.zCoord += vecDelta.zCoord;
 
-        EntityLivingBase targeted = target != null && helper.canEntityBeSeen(target) ? target : null;
+        MovingObjectPosition traced = turret.getWorldObj().rayTraceBlocks(
+                Vec3.createVectorHelper(traceStart.xCoord, traceStart.yCoord, traceStart.zCoord),
+                Vec3.createVectorHelper(traceEnd.xCoord, traceEnd.yCoord, traceEnd.zCoord));
+
+        EntityLivingBase targeted = target != null && traced == null ? target : null;
 
         if (targeted != null && targeted.equals(target)) {
             return true;
