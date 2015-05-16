@@ -5,11 +5,11 @@ public class BlockNames {
     }
 
     // Unlocalized
-    public static final String unlocalisedTurretBaseTierWood = "baseTierWood";
     public static final String unlocalisedTurretBaseTierOne = "baseTierOneBlock";
     public static final String unlocalisedTurretBaseTierTwo = "baseTierTwoBlock";
     public static final String unlocalisedTurretBaseTierThree = "baseTierThreeBlock";
     public static final String unlocalisedTurretBaseTierFour = "baseTierFourBlock";
+    public static final String unlocalisedTurretBaseTierFive = "baseTierFiveBlock";
     public static final String unlocalisedDisposableItemTurret = "disposeItemTurret";
     public static final String unlocalisedRocketTurret = "rocketTurret";
     public static final String unlocalisedMachineGunTurret = "machineGunTurret";

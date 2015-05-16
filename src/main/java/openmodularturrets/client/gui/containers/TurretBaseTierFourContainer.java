@@ -37,7 +37,6 @@ public class TurretBaseTierFourContainer extends Container {
         addSlotToContainer(new AddonSlot(tileEntity, 9, 72, 18));
         addSlotToContainer(new AddonSlot(tileEntity, 10, 92, 18));
         addSlotToContainer(new UpgradeSlot(tileEntity, 11, 72, 52));
-        addSlotToContainer(new UpgradeSlot(tileEntity, 12, 92, 52));
     }
 
     @Override

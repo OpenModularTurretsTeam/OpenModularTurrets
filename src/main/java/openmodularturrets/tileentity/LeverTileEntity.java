@@ -4,11 +4,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import openmodularturrets.tileentity.turretbase.TurretWoodBase;
+import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 
 public class LeverTileEntity extends TileEntity {
 
-    TurretWoodBase base;
+    TurretBaseTierOneTileEntity base;
     public float rotation = 0;
     public boolean isTurning = false;
 
@@ -22,20 +22,20 @@ public class LeverTileEntity extends TileEntity {
     @Override
     public void updateEntity() {
         if (base == null) {
-            if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TurretWoodBase) {
-                this.base = (TurretWoodBase) worldObj.getTileEntity(xCoord + 1, yCoord, zCoord);
+            if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TurretBaseTierOneTileEntity) {
+                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(xCoord + 1, yCoord, zCoord);
             }
 
-            if (worldObj.getTileEntity(xCoord - 1, yCoord, zCoord) instanceof TurretWoodBase) {
-                this.base = (TurretWoodBase) worldObj.getTileEntity(xCoord - 1, yCoord, zCoord);
+            if (worldObj.getTileEntity(xCoord - 1, yCoord, zCoord) instanceof TurretBaseTierOneTileEntity) {
+                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(xCoord - 1, yCoord, zCoord);
             }
 
-            if (worldObj.getTileEntity(xCoord, yCoord, zCoord + 1) instanceof TurretWoodBase) {
-                this.base = (TurretWoodBase) worldObj.getTileEntity(xCoord, yCoord, zCoord + 1);
+            if (worldObj.getTileEntity(xCoord, yCoord, zCoord + 1) instanceof TurretBaseTierOneTileEntity) {
+                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(xCoord, yCoord, zCoord + 1);
             }
 
-            if (worldObj.getTileEntity(xCoord, yCoord, zCoord - 1) instanceof TurretWoodBase) {
-                this.base = (TurretWoodBase) worldObj.getTileEntity(xCoord, yCoord, zCoord - 1);
+            if (worldObj.getTileEntity(xCoord, yCoord, zCoord - 1) instanceof TurretBaseTierOneTileEntity) {
+                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(xCoord, yCoord, zCoord - 1);
             }
         }
 
@@ -60,7 +60,7 @@ public class LeverTileEntity extends TileEntity {
 
     @Override
     public void readFromNBT(NBTTagCompound par1) {
-        this.base = (TurretWoodBase) worldObj.getTileEntity(par1.getInteger("baseXCoord"),
+        this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(par1.getInteger("baseXCoord"),
                                                             par1.getInteger("baseYCoord"),
                                                             par1.getInteger("baseXCoord"));
 

@@ -20,7 +20,7 @@ public class TurretBaseTierOneTileEntity extends TurretBase {
 
     @Override
     public int getSizeInventory() {
-        return 12;
+        return 9;
     }
 
     @Override
@@ -31,6 +31,6 @@ public class TurretBaseTierOneTileEntity extends TurretBase {
     @Optional.Method(modid = "OpenComputers")
     @Override
     public String getComponentName() {
-        return "leadstone_base";
+        return "tierOneTurretBase";
     }
 }

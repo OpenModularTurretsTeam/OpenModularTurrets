@@ -12,7 +12,7 @@ public class LaserTurretTileEntity extends TurretHead {
 
     public LaserTurretTileEntity() {
         super();
-        this.turretTier = 4;
+        this.turretTier = 5;
     }
 
     @Override

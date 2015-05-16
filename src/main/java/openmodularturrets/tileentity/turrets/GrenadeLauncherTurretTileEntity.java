@@ -13,7 +13,7 @@ public class GrenadeLauncherTurretTileEntity extends TurretHead {
 
     public GrenadeLauncherTurretTileEntity() {
         super();
-        this.turretTier = 2;
+        this.turretTier = 3;
     }
 
     @Override

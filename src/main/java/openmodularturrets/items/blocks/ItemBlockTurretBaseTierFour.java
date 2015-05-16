@@ -20,15 +20,14 @@ public class ItemBlockTurretBaseTierFour extends ItemBlock {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.AQUA + "--" + StatCollector.translateToLocal("tooptip.energy.label") + "--");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.rf.max") + ": " + EnumChatFormatting.WHITE +
-                               ConfigHandler.getBaseTierFourMaxCharge());
+                               ConfigHandler.getBaseTierThreeMaxCharge());
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.rf.io") + ": " + EnumChatFormatting.WHITE +
-                               ConfigHandler.getBaseTierFourMaxIo());
+                               ConfigHandler.getBaseTierThreeMaxIo());
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.GREEN + "--" + StatCollector.translateToLocal("tooltip.extras.label") + "--");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.extras.addons.2"));
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.extras.upgrade.2"));
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.extras.upgrade.1"));
         p_77624_3_.add("");
-        p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.base.4a"));
-        p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.base.4b"));
+        p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.base.3"));
     }
 }

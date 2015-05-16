@@ -21,25 +21,25 @@ public class Blocks {
     public static Block leverBlock;
 
     public static void init() {
-        turretBaseTierWood = new BlockTurretBaseTierWood();
-        GameRegistry.registerBlock(turretBaseTierWood, ItemBlockTurretBaseTierWood.class,
-                                   BlockNames.unlocalisedTurretBaseTierWood);
-
-        turretBaseTierOne = new BlockTurretBaseTierOne();
-        GameRegistry.registerBlock(turretBaseTierOne, ItemBlockTurretBaseTierOne.class,
+        turretBaseTierWood = new BlockTurretBaseTierOne();
+        GameRegistry.registerBlock(turretBaseTierWood, ItemBlockTurretBaseTierOne.class,
                                    BlockNames.unlocalisedTurretBaseTierOne);
 
-        turretBaseTierTwo = new BlockTurretBaseTierTwo();
-        GameRegistry.registerBlock(turretBaseTierTwo, ItemBlockTurretBaseTierTwo.class,
+        turretBaseTierOne = new BlockTurretBaseTierTwo();
+        GameRegistry.registerBlock(turretBaseTierOne, ItemBlockTurretBaseTierTwo.class,
                                    BlockNames.unlocalisedTurretBaseTierTwo);
 
-        turretBaseTierThree = new BlockTurretBaseTierThree();
-        GameRegistry.registerBlock(turretBaseTierThree, ItemBlockTurretBaseTierThree.class,
+        turretBaseTierTwo = new BlockTurretBaseTierThree();
+        GameRegistry.registerBlock(turretBaseTierTwo, ItemBlockTurretBaseTierThree.class,
                                    BlockNames.unlocalisedTurretBaseTierThree);
 
-        turretBaseTierFour = new BlockTurretBaseTierFour();
-        GameRegistry.registerBlock(turretBaseTierFour, ItemBlockTurretBaseTierFour.class,
+        turretBaseTierThree = new BlockTurretBaseTierFour();
+        GameRegistry.registerBlock(turretBaseTierThree, ItemBlockTurretBaseTierFour.class,
                                    BlockNames.unlocalisedTurretBaseTierFour);
+
+        turretBaseTierFour = new BlockTurretBaseTierFive();
+        GameRegistry.registerBlock(turretBaseTierFour, ItemBlockTurretBaseTierFive.class,
+                                   BlockNames.unlocalisedTurretBaseTierFive);
 
         disposableItemTurret = new BlockDisposableTurret();
         GameRegistry.registerBlock(disposableItemTurret, ItemBlockDisposableTurret.class,

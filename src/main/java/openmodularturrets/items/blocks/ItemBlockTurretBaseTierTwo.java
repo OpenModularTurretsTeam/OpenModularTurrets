@@ -20,14 +20,14 @@ public class ItemBlockTurretBaseTierTwo extends ItemBlock {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.AQUA + "--" + StatCollector.translateToLocal("tooptip.energy.label") + "--");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.rf.max") + ": " + EnumChatFormatting.WHITE +
-                               ConfigHandler.getBaseTierTwoMaxCharge());
+                               ConfigHandler.getBaseTierOneMaxCharge());
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.rf.io") + ": " + EnumChatFormatting.WHITE +
-                               ConfigHandler.getBaseTierTwoMaxIo());
+                               ConfigHandler.getBaseTierOneMaxIo());
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.GREEN + "--" + StatCollector.translateToLocal("tooltip.extras.label") + "--");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.extras.addons.2"));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.extras.upgrade.1"));
         p_77624_3_.add("");
-        p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.base.2"));
+        p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.base.1"));
     }
 }

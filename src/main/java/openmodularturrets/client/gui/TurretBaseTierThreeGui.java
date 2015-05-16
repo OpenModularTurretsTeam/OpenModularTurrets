@@ -31,7 +31,7 @@ public class TurretBaseTierThreeGui extends GuiContainer {
 
     public TurretBaseTierThreeGui(InventoryPlayer inventoryPlayer, TurretBaseTierThreeTileEntity tileEntity) {
         super(new TurretBaseTierThreeContainer(inventoryPlayer, tileEntity));
-        this.base = tileEntity;
+        this.base = (TurretBaseTierThreeTileEntity) tileEntity;
         player = inventoryPlayer.player;
     }
 
@@ -76,7 +76,7 @@ public class TurretBaseTierThreeGui extends GuiContainer {
         }
         
         if (guibutton.id == 5) {
-			player.openGui(ModularTurrets.instance, 5,
+			player.openGui(ModularTurrets.instance, 6,
 					player.worldObj, base.xCoord, base.yCoord, base.zCoord);
 		}
     }
@@ -125,7 +125,8 @@ public class TurretBaseTierThreeGui extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-        ResourceLocation texture = (new ResourceLocation(ModInfo.ID + ":textures/gui/baseInvTier3.png"));
+        // draw your Gui here, only thing you need to change is the path
+        ResourceLocation texture = (new ResourceLocation(ModInfo.ID + ":textures/gui/baseInvTier2.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
         int x = (width - xSize) / 2;
@@ -133,7 +134,6 @@ public class TurretBaseTierThreeGui extends GuiContainer {
         this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
         int expression = (base.getEnergyStored(ForgeDirection.UNKNOWN) * 51) / base.getMaxEnergyStored(
                 ForgeDirection.UNKNOWN);
-
         drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
         drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 17, 14, expression);
     }
