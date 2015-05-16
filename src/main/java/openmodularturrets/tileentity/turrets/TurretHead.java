@@ -210,7 +210,7 @@ public abstract class TurretHead extends TileEntity {
             }
 
             // is there a target, and Has it died in the previous tick?
-            if (target == null || target.isDead) {
+            if (target == null || target.isDead || this.getWorldObj().getEntityByID(target.getEntityId()) == null) {
                 target = getTarget();
             }
 
