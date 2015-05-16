@@ -5,18 +5,14 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import openmodularturrets.client.gui.customSlot.AddonSlot;
-import openmodularturrets.client.gui.customSlot.UpgradeSlot;
-import openmodularturrets.items.addons.AddonItem;
-import openmodularturrets.items.upgrades.UpgradeItem;
 import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 
 public class TurretBaseTierOneContainer extends Container {
 
     protected TurretBase tileEntity;
 
-    public TurretBaseTierOneContainer(InventoryPlayer inventoryPlayer, TurretBase te) {
-
+    public TurretBaseTierOneContainer(InventoryPlayer inventoryPlayer, TurretBaseTierOneTileEntity te) {
         this.tileEntity = te;
 
         for (int x = 0; x < 9; x++) {
@@ -34,10 +30,6 @@ public class TurretBaseTierOneContainer extends Container {
                 addSlotToContainer(new Slot(tileEntity, x + y * 3, 8 + x * 18, 17 + y * 18));
             }
         }
-
-        addSlotToContainer(new AddonSlot(tileEntity, 9, 72, 18));
-        addSlotToContainer(new AddonSlot(tileEntity, 10, 92, 18));
-        addSlotToContainer(new UpgradeSlot(tileEntity, 11, 72, 52));
     }
 
     @Override
@@ -46,77 +38,29 @@ public class TurretBaseTierOneContainer extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-        ItemStack stack = null;
-        Slot slotObject = (Slot) inventorySlots.get(slot);
+    public ItemStack transferStackInSlot(EntityPlayer player, int i) {
+        Slot slot = getSlot(i);
 
-        // null checks and checks if the item can be stacked (maxStackSize > 1)
-        if (slotObject != null && slotObject.getHasStack()) {
-            ItemStack stackInSlot = slotObject.getStack();
-            stack = stackInSlot.copy();
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemstack = slot.getStack();
+            ItemStack result = itemstack.copy();
 
-            // Actual slot start index of turret base
-            int slotStart = 36;
-
-            int ammoSlotStart = 100, ammoSlotEnd = 0, addonSlotStart = 100, addonSlotEnd = 0, upgSlotStart = 100, upgSlotEnd = 0;
-            // Determine the slot range for each type( According to the class constructor )
-            for( int i = slotStart; i < this.inventorySlots.size(); i++ )
-            {
-                Class slotClass = this.getSlot(i).getClass();
-                if( slotClass == Slot.class)
-                {
-                    ammoSlotStart = Math.min(i, ammoSlotStart);
-                    ammoSlotEnd = Math.max( i + 1, ammoSlotEnd );
-                }
-                else if( slotClass == AddonSlot.class )
-                {
-                    addonSlotStart = Math.min(i, addonSlotStart);
-                    addonSlotEnd = Math.max( i + 1, addonSlotEnd );
-                }
-                else if( slotClass == UpgradeSlot.class )
-                {
-                    upgSlotStart = Math.min(i, upgSlotStart );
-                    upgSlotEnd = Math.max( i + 1, upgSlotEnd );
-                }
-            }
-
-            // Transfer from player inventory
-            if( slot < slotStart )
-            {
-                // Priority addon and upgrade slot first
-                if( stackInSlot.getItem() instanceof AddonItem)
-                {
-                    if(!mergeItemStack(stackInSlot, addonSlotStart, addonSlotEnd, false))
-                        return null;
-                }
-                else if( stackInSlot.getItem() instanceof UpgradeItem)
-                {
-                    if(!mergeItemStack(stackInSlot, upgSlotStart, upgSlotEnd, false))
-                        return null;
-                }
-                else
-                {
-                    if(!mergeItemStack(stackInSlot, slotStart, slotStart + 9, false))
-                        return null;
-                }
-            }
-            else // Transfer from turret base inventory
-            {
-                if(!mergeItemStack(stackInSlot, 0, slotStart, false))
+            if (i >= 36) {
+                if (!mergeItemStack(itemstack, 0, 36, false)) {
                     return null;
-            }
-
-            if (stackInSlot.stackSize == 0) {
-                slotObject.putStack(null);
-            } else {
-                slotObject.onSlotChanged();
-            }
-
-            if (stackInSlot.stackSize == stack.stackSize) {
+                }
+            } else if (!mergeItemStack(itemstack, 36, 36 + tileEntity.getSizeInventory(), false)) {
                 return null;
             }
-            slotObject.onPickupFromSlot(player, stackInSlot);
+
+            if (itemstack.stackSize == 0) {
+                slot.putStack(null);
+            } else {
+                slot.onSlotChanged();
+            }
+            slot.onPickupFromSlot(player, itemstack);
+            return result;
         }
-        return stack;
+        return null;
     }
 }

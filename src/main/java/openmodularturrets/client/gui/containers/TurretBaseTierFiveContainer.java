@@ -11,12 +11,11 @@ import openmodularturrets.items.addons.AddonItem;
 import openmodularturrets.items.upgrades.UpgradeItem;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-public class TurretBaseTierTwoContainer extends Container {
+public class TurretBaseTierFiveContainer extends Container {
 
     protected TurretBase tileEntity;
 
-    public TurretBaseTierTwoContainer(InventoryPlayer inventoryPlayer, TurretBase te) {
-
+    public TurretBaseTierFiveContainer(InventoryPlayer inventoryPlayer, TurretBase te) {
         this.tileEntity = te;
 
         for (int x = 0; x < 9; x++) {
@@ -38,6 +37,7 @@ public class TurretBaseTierTwoContainer extends Container {
         addSlotToContainer(new AddonSlot(tileEntity, 9, 72, 18));
         addSlotToContainer(new AddonSlot(tileEntity, 10, 92, 18));
         addSlotToContainer(new UpgradeSlot(tileEntity, 11, 72, 52));
+        addSlotToContainer(new UpgradeSlot(tileEntity, 12, 92, 52));
     }
 
     @Override

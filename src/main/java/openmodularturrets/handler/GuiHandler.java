@@ -15,8 +15,6 @@ public class GuiHandler implements IGuiHandler {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
 
         switch (id) {
-            case 0:
-                return new TurretBaseTierWoodContainer(player.inventory, (TurretWoodBase) tileEntity);
             case 1:
                 return new TurretBaseTierOneContainer(player.inventory, (TurretBaseTierOneTileEntity) tileEntity);
             case 2:
@@ -26,6 +24,8 @@ public class GuiHandler implements IGuiHandler {
             case 4:
                 return new TurretBaseTierFourContainer(player.inventory, (TurretBaseTierFourTileEntity) tileEntity);
             case 5:
+                return new TurretBaseTierFiveContainer(player.inventory, (TurretBaseTierFiveTileEntity) tileEntity);
+            case 6:
                 return new ConfigContainer(player.inventory, (TurretBase) tileEntity);
             default:
                 return null;
@@ -37,8 +37,6 @@ public class GuiHandler implements IGuiHandler {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
 
         switch (id) {
-            case 0:
-                return new TurretBaseTierWoodGui(player.inventory, (TurretWoodBase) tileEntity);
             case 1:
                 return new TurretBaseTierOneGui(player.inventory, (TurretBaseTierOneTileEntity) tileEntity);
             case 2:
@@ -48,6 +46,8 @@ public class GuiHandler implements IGuiHandler {
             case 4:
                 return new TurretBaseTierFourGui(player.inventory, (TurretBaseTierFourTileEntity) tileEntity);
             case 5:
+                return new TurretBaseTierFiveGui(player.inventory, (TurretBaseTierFiveTileEntity) tileEntity);
+            case 6:
                 return new ConfigureGui(player.inventory, (TurretBase) tileEntity);
             default:
                 return null;

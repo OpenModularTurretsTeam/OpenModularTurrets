@@ -77,7 +77,7 @@ public class ConfigureGui extends GuiContainer {
 
 			this.buttonList
 					.add(new GuiButton(
-							8,
+							9999,
 							x + 70,
 							y + 135,
 							23,
@@ -87,7 +87,7 @@ public class ConfigureGui extends GuiContainer {
 									: "\u00A7cN"));
 			this.buttonList
 					.add(new GuiButton(
-							9,
+							9999,
 							x + 93,
 							y + 135,
 							23,
@@ -97,7 +97,7 @@ public class ConfigureGui extends GuiContainer {
 									: "\u00A7cN"));
 			this.buttonList
 					.add(new GuiButton(
-							10,
+							9999,
 							x + 116,
 							y + 135,
 							23,
@@ -181,7 +181,7 @@ public class ConfigureGui extends GuiContainer {
 					sendChangeToServerAddTrusted();
 					textFieldAddTrustedPlayer.setText("");
 					this.base.currentTrustedPlayerAdmin = 0;
-					player.openGui(ModularTurrets.instance, 5, player.worldObj,
+					player.openGui(ModularTurrets.instance, 6, player.worldObj,
 							base.xCoord, base.yCoord, base.zCoord);
 				}
 			} else {
@@ -199,7 +199,7 @@ public class ConfigureGui extends GuiContainer {
 				sendChangeToServerRemoveTrusted();
 				textFieldAddTrustedPlayer.setText("");
 				this.base.currentTrustedPlayerAdmin = 0;
-				player.openGui(ModularTurrets.instance, 5, player.worldObj,
+				player.openGui(ModularTurrets.instance, 6, player.worldObj,
 						base.xCoord, base.yCoord, base.zCoord);
 			} else {
 				player.addChatMessage(new ChatComponentText(StatCollector
@@ -210,7 +210,7 @@ public class ConfigureGui extends GuiContainer {
 		if (guibutton.id == 6) {
 			if ((this.base.currentTrustedPlayerAdmin - 1 >= 0)) {
 				this.base.currentTrustedPlayerAdmin--;
-				player.openGui(ModularTurrets.instance, 5, player.worldObj,
+				player.openGui(ModularTurrets.instance, 6, player.worldObj,
 						base.xCoord, base.yCoord, base.zCoord);
 			}
 		}
@@ -219,7 +219,7 @@ public class ConfigureGui extends GuiContainer {
 			if (!((this.base.currentTrustedPlayerAdmin + 1) > (copiedTrusted
 					.size() - 1))) {
 				this.base.currentTrustedPlayerAdmin++;
-				player.openGui(ModularTurrets.instance, 5, player.worldObj,
+				player.openGui(ModularTurrets.instance, 6, player.worldObj,
 						base.xCoord, base.yCoord, base.zCoord);
 			}
 		}

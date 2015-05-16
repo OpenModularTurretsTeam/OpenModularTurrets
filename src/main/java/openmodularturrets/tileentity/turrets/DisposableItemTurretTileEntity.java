@@ -11,7 +11,7 @@ import openmodularturrets.handler.ConfigHandler;
 public class DisposableItemTurretTileEntity extends TurretHead {
     public DisposableItemTurretTileEntity() {
         super();
-        this.turretTier = 0;
+        this.turretTier = 1;
     }
 
     @Override

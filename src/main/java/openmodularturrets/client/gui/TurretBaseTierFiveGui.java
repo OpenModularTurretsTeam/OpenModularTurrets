@@ -9,28 +9,28 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.ModularTurrets;
-import openmodularturrets.client.gui.containers.TurretBaseTierFourContainer;
+import openmodularturrets.client.gui.containers.TurretBaseTierFiveContainer;
 import openmodularturrets.network.AdjustYAxisDetectMessage;
 import openmodularturrets.network.DropBaseMessage;
 import openmodularturrets.network.DropTurretsMessage;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
-import openmodularturrets.tileentity.turretbase.TurretBaseTierFourTileEntity;
+import openmodularturrets.tileentity.turretbase.TurretBaseTierFiveTileEntity;
 
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
-public class TurretBaseTierFourGui extends GuiContainer {
+public class TurretBaseTierFiveGui extends GuiContainer {
 
-    TurretBaseTierFourTileEntity base;
+    TurretBaseTierFiveTileEntity base;
     private int mouseX;
     private int mouseY;
     private EntityPlayer player;
 
-    public TurretBaseTierFourGui(InventoryPlayer inventoryPlayer, TurretBaseTierFourTileEntity tileEntity) {
-        super(new TurretBaseTierFourContainer(inventoryPlayer, tileEntity));
+    public TurretBaseTierFiveGui(InventoryPlayer inventoryPlayer, TurretBaseTierFiveTileEntity tileEntity) {
+        super(new TurretBaseTierFiveContainer(inventoryPlayer, tileEntity));
         this.base = tileEntity;
         player = inventoryPlayer.player;
     }
@@ -41,18 +41,12 @@ public class TurretBaseTierFourGui extends GuiContainer {
         super.initGui();
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
+
         this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "-"));
         this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "+"));
         this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
         this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
         this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
-    }
-
-    @Override
-    public void drawScreen(int par1, int par2, float par3) {
-        this.mouseX = par1;
-        this.mouseY = par2;
-        super.drawScreen(par1, par2, par3);
     }
 
     @Override
@@ -99,7 +93,7 @@ public class TurretBaseTierFourGui extends GuiContainer {
                 ArrayList list = new ArrayList();
                 list.add(base.getEnergyStored(ForgeDirection.UNKNOWN) + "/" + base.getMaxEnergyStored(
                         ForgeDirection.UNKNOWN));
-                this.drawHoveringText(list, (int) mouseX - k, (int) mouseY - l, fontRenderer);
+                this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
             }
         }
 
@@ -107,8 +101,9 @@ public class TurretBaseTierFourGui extends GuiContainer {
 
         targetInfo.add("\u00A76Owner: \u00A7f" + base.getOwner());
         boolean isCurrentlyOn = !base.isGettingRedstoneSignal() && base.isActive();
-        targetInfo.add("\u00A76Active: "+ (isCurrentlyOn ? "\u00A72Yes" : "\u00A7cNo"));
+		targetInfo.add("\u00A76Active: "+ (isCurrentlyOn ? "\u00A72Yes" : "\u00A7cNo"));
 		targetInfo.add("");
+        targetInfo.add("");
         targetInfo.add("\u00A75-Trusted Players-");
 
         for (TrustedPlayer trusted_player : base.getTrustedPlayers()) {
@@ -124,13 +119,23 @@ public class TurretBaseTierFourGui extends GuiContainer {
     }
 
     @Override
+    public void drawScreen(int par1, int par2, float par3) {
+        this.mouseX = par1;
+        this.mouseY = par2;
+        super.drawScreen(par1, par2, par3);
+    }
+
+    @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-        ResourceLocation texture = (new ResourceLocation(ModInfo.ID + ":textures/gui/baseInvTier3.png"));
+        ResourceLocation texture = (new ResourceLocation(ModInfo.ID + ":textures/gui/baseInvTier4.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
+
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
+
         this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+
         int expression = (base.getEnergyStored(ForgeDirection.UNKNOWN) * 51) / base.getMaxEnergyStored(
                 ForgeDirection.UNKNOWN);
 

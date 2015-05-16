@@ -31,6 +31,6 @@ public class TurretBaseTierThreeTileEntity extends TurretBase {
     @Optional.Method(modid = "OpenComputers")
     @Override
     public String getComponentName() {
-        return "hardened_base";
+        return "tierThreeTurretBase";
     }
 }

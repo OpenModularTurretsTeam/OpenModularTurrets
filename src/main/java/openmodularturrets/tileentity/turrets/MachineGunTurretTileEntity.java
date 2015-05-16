@@ -12,7 +12,7 @@ import openmodularturrets.items.Items;
 public class MachineGunTurretTileEntity extends TurretHead {
     public MachineGunTurretTileEntity() {
         super();
-        this.turretTier = 1;
+        this.turretTier = 2;
     }
 
     @Override

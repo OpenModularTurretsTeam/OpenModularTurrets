@@ -3,34 +3,34 @@ package openmodularturrets.tileentity.turretbase;
 import cpw.mods.fml.common.Optional;
 import openmodularturrets.handler.ConfigHandler;
 
-public class TurretWoodBase extends TurretBase {
+public class TurretBaseTierFiveTileEntity extends TurretBase {
 
-    public TurretWoodBase() {
-        this(ConfigHandler.getBaseTierWoodMaxCharge(), ConfigHandler.getBaseTierWoodMaxIo());
+    public TurretBaseTierFiveTileEntity() {
+        this(ConfigHandler.getBaseTierFiveMaxCharge(), ConfigHandler.getBaseTierFiveMaxIo());
     }
 
-    public TurretWoodBase(int MaxEnergyStorage, int MaxIO) {
+    public TurretBaseTierFiveTileEntity(int MaxEnergyStorage, int MaxIO) {
         super(MaxEnergyStorage, MaxIO);
     }
 
     @Override
     public int getBaseTier() {
-        return 0;
+        return 5;
     }
 
     @Override
     public int getSizeInventory() {
-        return 9;
+        return 13;
     }
 
     @Override
     public String getInventoryName() {
-        return "modtur.turretbasewood";
+        return "modtur.turretbasefive";
     }
 
     @Optional.Method(modid = "OpenComputers")
     @Override
     public String getComponentName() {
-        return "wood_base";
+        return "tierFiveTurretBase";
     }
 }

@@ -22,7 +22,7 @@ import openmodularturrets.items.upgrades.FireRateUpgradeItem;
 import openmodularturrets.items.upgrades.RangeUpgradeItem;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
-import openmodularturrets.tileentity.turretbase.TurretWoodBase;
+import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 
 import java.util.List;
 
@@ -188,11 +188,11 @@ public class TurretHeadUtils {
         int value = 0;
         int tier = base.getBaseTier();
 
-        if (tier == 0) {
+        if (tier == 1) {
             return value;
         }
 
-        if (tier == 4) {
+        if (tier == 5) {
             if (base.getStackInSlot(12) != null) {
                 if (base.getStackInSlot(12).getItem() instanceof RangeUpgradeItem) {
                     value += (ConfigHandler.getRangeUpgradeBoost() * base.getStackInSlot(12).stackSize);
@@ -213,11 +213,11 @@ public class TurretHeadUtils {
         float accuracy = 0.0F;
         int tier = base.getBaseTier();
 
-        if (tier == 0) {
+        if (tier == 1) {
             return accuracy;
         }
 
-        if (tier == 4) {
+        if (tier == 5) {
             if (base.getStackInSlot(12) != null) {
                 if (base.getStackInSlot(12).getItem() instanceof AccuraccyUpgradeItem) {
                     accuracy += (ConfigHandler.getAccuraccyUpgradeBoost() * base.getStackInSlot(12).stackSize);
@@ -238,11 +238,11 @@ public class TurretHeadUtils {
         float efficiency = 0.0F;
         int tier = base.getBaseTier();
 
-        if (tier == 0) {
+        if (tier == 1) {
             return efficiency;
         }
 
-        if (tier == 4) {
+        if (tier == 5) {
             if (base.getStackInSlot(12) != null) {
                 if (base.getStackInSlot(12).getItem() instanceof EfficiencyUpgradeItem) {
                     efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * base.getStackInSlot(
@@ -264,11 +264,11 @@ public class TurretHeadUtils {
         float rof = 0.0F;
         int tier = base.getBaseTier();
 
-        if (tier == 0) {
+        if (tier == 1) {
             return rof;
         }
 
-        if (tier == 4) {
+        if (tier == 5) {
             if (base.getStackInSlot(12) != null) {
                 if (base.getStackInSlot(12).getItem() instanceof FireRateUpgradeItem) {
                     rof += (ConfigHandler.getFireRateUpgradeBoostPercentage() * base.getStackInSlot(12).stackSize);
@@ -287,7 +287,7 @@ public class TurretHeadUtils {
 
     public static boolean hasRedstoneReactor(TurretBase base) {
         boolean found = false;
-        if (base instanceof TurretWoodBase) {
+        if (base instanceof TurretBaseTierOneTileEntity) {
             return false;
         }
 
@@ -303,7 +303,7 @@ public class TurretHeadUtils {
 
     public static boolean hasDamageAmpAddon(TurretBase base) {
         boolean found = false;
-        if (base instanceof TurretWoodBase) {
+        if (base instanceof TurretBaseTierOneTileEntity) {
             return false;
         }
 
@@ -319,7 +319,7 @@ public class TurretHeadUtils {
 
     public static boolean hasSolarPanelAddon(TurretBase base) {
         boolean found = false;
-        if (base instanceof TurretWoodBase) {
+        if (base instanceof TurretBaseTierOneTileEntity) {
             return false;
         }
 
@@ -337,7 +337,7 @@ public class TurretHeadUtils {
         int amp_level = 0;
         int tier = base.getBaseTier();
 
-        if (tier == 0) {
+        if (tier == 1) {
             return amp_level;
         }
 
