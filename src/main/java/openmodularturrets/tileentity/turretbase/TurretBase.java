@@ -9,6 +9,7 @@ import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -25,7 +26,7 @@ import java.util.logging.Logger;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")
 public abstract class TurretBase extends TileEntity implements IEnergyHandler,
-		IInventory, SimpleComponent {
+		IInventory, SimpleComponent, ISidedInventory {
 	protected EnergyStorage storage;
 	protected ItemStack[] inv;
 	protected int yAxisDetect;
@@ -390,6 +391,23 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 			ticks = 0;
 		}
 	}
+	
+	 @Override
+	    public int[] getAccessibleSlotsFromSide(int side) {
+	        return new int[]{0,1,2,3,4,5,6,7,8};
+	    }
+
+	    @Override
+	    public boolean canInsertItem(int slotID, ItemStack itemstack, int side)
+	    {
+	        return isItemValidForSlot(slotID, itemstack);
+	    }
+
+	    @Override
+	    public boolean canExtractItem(int slotID, ItemStack itemstack, int side)
+	    {
+	        return true;
+	    }
 
 	@Optional.Method(modid = "OpenComputers")
 	@Callback(doc = "function():string; returns owner of turret base.")
