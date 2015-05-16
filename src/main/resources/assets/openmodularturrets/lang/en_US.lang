@@ -121,6 +121,6 @@ turret.upgrade.acc=accuracy per upgrade.
 turret.upgrade.acc.flavour.a=Good eye sniper,
 turret.upgrade.acc.flavour.b=I'll shoot, you run.
 
-status.ownership=You do not own this turret
+status.ownership=You do not own this turret, or you dont have permission to do that.
 status.missingBase=There's no turret base there.
 status.warning=You are entering a turret-protected area. Continue at your own risk.
