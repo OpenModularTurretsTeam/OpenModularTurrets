@@ -114,10 +114,6 @@ public class RecipeHandler {
                                                                 net.minecraft.init.Items.diamond, 'B',
                                                                 "ingotPlatinum"}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(Items.configTab,
-                                                   new Object[]{" A ", "BCB", "BBB", 'A', "ingotElectrum", 'B',
-                                                                "ingotInvar", 'C', Items.sensorTierOneItem}));
-
         GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.leverBlock, new Object[]{"CCC", "C  ", "C  ", 'C',
                                                                                    net.minecraft.init.Blocks.stone}));
 

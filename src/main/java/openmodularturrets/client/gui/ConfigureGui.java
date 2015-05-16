@@ -17,7 +17,6 @@ import org.lwjgl.opengl.GL11;
 public class ConfigureGui extends GuiContainer {
 
     TurretBase base;
-
     GuiTextField textFieldName;
 
     public ConfigureGui(InventoryPlayer inventoryPlayer, TurretBase tileEntity) {
@@ -102,14 +101,12 @@ public class ConfigureGui extends GuiContainer {
         if (guibutton.id == 4) {
             base.addTrustedPlayer(textFieldName.getText());
             sendChangeToServerAddTrusted();
-
             textFieldName.setText("");
         }
 
         if (guibutton.id == 5) {
             base.removeTrustedPlayer(textFieldName.getText());
             sendChangeToServerRemoveTrusted();
-
             textFieldName.setText("");
         }
     }
@@ -137,7 +134,6 @@ public class ConfigureGui extends GuiContainer {
     public void sendChangeToServerMobs() {
         ToggleAttackMobsMessage message = new ToggleAttackMobsMessage(base.xCoord, base.yCoord, base.zCoord,
                                                                       base.isAttacksMobs());
-
         ModularTurrets.networking.sendToServer(message);
     }
 

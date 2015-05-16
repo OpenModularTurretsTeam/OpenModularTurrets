@@ -7,10 +7,10 @@ import cpw.mods.fml.common.Loader;
  * This Class
  */
 public class ModCompatibility {
+	
     public static boolean IGWModLoaded = false;
-
     public static IGWHandler igwHandler = null;
-
+    
     public static void checkForMods() {
         IGWModLoaded = Loader.isModLoaded("IGWMod");
         new IGWSupportNotifier();

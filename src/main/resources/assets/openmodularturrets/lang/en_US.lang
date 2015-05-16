@@ -11,7 +11,6 @@ item.upgAcc.name=Upgrade - Accuracy
 item.addonReactor.name=Addon - Redstone Reactor
 item.addonDam.name=Addon - Damage Boost
 item.addonSolar.name=Addon - Solar Generator
-item.configTablet.name=Turret Target Configuration Device
 item.sensorOne.name=Sensor (Tier 1)
 item.sensorTwo.name=Sensor (Tier 2)
 item.sensorThree.name=Sensor (Tier 3)
