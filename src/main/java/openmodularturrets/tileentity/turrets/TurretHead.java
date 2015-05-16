@@ -200,7 +200,7 @@ public abstract class TurretHead extends TileEntity {
                     this.getTurretPowerUsage() * (1 - TurretHeadUtils.getEfficiencyUpgrades(base)));
 
             // power check
-            if (!base.isGettingRedstoneSignal() && base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required) {
+            if ((base.isGettingRedstoneSignal()) || (base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required) || (!base.isActive())) {
                 return;
             }
 
@@ -216,11 +216,6 @@ public abstract class TurretHead extends TileEntity {
 
             // did we even get a target previously?
             if (target == null) {
-                return;
-            }
-
-            //Is the base switched off? OC/Redstone?
-            if (base.isGettingRedstoneSignal() || !base.isActive()) {
                 return;
             }
 

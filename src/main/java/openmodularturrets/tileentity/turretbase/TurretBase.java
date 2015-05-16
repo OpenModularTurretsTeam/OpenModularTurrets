@@ -48,7 +48,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		attacksPlayers = false;
 		trustedPlayers = new ArrayList<TrustedPlayer>();
 		this.inv = new ItemStack[this.getSizeInventory()];
-		isActive = false;
+		isActive = true;
 	}
 
 	public void addTrustedPlayer(String name) {
