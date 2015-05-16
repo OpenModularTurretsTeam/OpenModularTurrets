@@ -6,11 +6,12 @@ build/
 # Ignore Gradle GUI config
 gradle-app.setting
 
+# Mod/Forge related stuff
 libs
 eclipse
-OpenModularTurrets.iws
-OpenModularTurrets.ipr
-OpenModularTurrets.iml
+*.iws
+*.ipr
+*.iml
 .classpath
 .project
 .settings
