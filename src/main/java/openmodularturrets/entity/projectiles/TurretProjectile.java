@@ -41,7 +41,7 @@ public abstract class TurretProjectile extends EntityThrowable {
         }
         return true;
     }
-
+    
     @Override
     public void writeEntityToNBT(NBTTagCompound p_70014_1_) {
         super.writeEntityToNBT(p_70014_1_);
