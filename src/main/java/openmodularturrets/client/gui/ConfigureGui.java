@@ -305,7 +305,7 @@ public class ConfigureGui extends GuiContainer {
 		if (mouseX > k + 114 && mouseX < k + 114 + 51) {
 			if (mouseY > l + 98 && mouseY < l + 98 + 20) {
 				ArrayList list = new ArrayList();
-				list.add("Adds the typed player to the turret's trusted list.");
+				list.add("Adds the given player to the turret's trusted list.");
 				this.drawHoveringText(list, mouseX - k, mouseY - l,
 						fontRenderer);
 			}
@@ -342,7 +342,7 @@ public class ConfigureGui extends GuiContainer {
 		if (mouseX > k + 70 && mouseX < k + 70 + 23) {
 			if (mouseY > l + 135 && mouseY < l + 135 + 20) {
 				ArrayList list = new ArrayList();
-				list.add("Wether or not the viewed trusted player can open this turret base's gui.");
+				list.add("If the viewed trusted player can open this turret base's gui.");
 				this.drawHoveringText(list, mouseX - k, mouseY - l,
 						fontRenderer);
 			}
@@ -352,7 +352,7 @@ public class ConfigureGui extends GuiContainer {
 		if (mouseX > k + 93 && mouseX < k + 93 + 23) {
 			if (mouseY > l + 135 && mouseY < l + 135 + 20) {
 				ArrayList list = new ArrayList();
-				list.add("Wether or not the viewed trusted player can change the base's targeting parameters.");
+				list.add("If the viewed trusted player can change the base's targeting parameters.");
 				this.drawHoveringText(list, mouseX - k, mouseY - l,
 						fontRenderer);
 			}
@@ -362,7 +362,7 @@ public class ConfigureGui extends GuiContainer {
 		if (mouseX > k + 116 && mouseX < k + 116 + 23) {
 			if (mouseY > l + 135 && mouseY < l + 135 + 20) {
 				ArrayList list = new ArrayList();
-				list.add("Wether or not the viewed trusted player can modify/add/remove trusted players.");
+				list.add("If the viewed trusted player can modify/add/remove trusted players.");
 				this.drawHoveringText(list, mouseX - k, mouseY - l,
 						fontRenderer);
 			}
