@@ -180,7 +180,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		this.isActive = par1.getBoolean("isActive");
 
 		buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 10));
-
 		NBTTagList tagList = par1.getTagList("Inventory", 10);
 
 		for (int i = 0; i < tagList.tagCount(); i++) {
