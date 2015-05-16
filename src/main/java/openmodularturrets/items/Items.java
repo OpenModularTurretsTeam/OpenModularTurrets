@@ -28,7 +28,6 @@ public class Items {
     public static Item redstoneReactorAddon;
     public static Item damageAmpAddon;
     public static Item solarPanelAddon;
-    public static Item configTab;
     public static Item sensorTierOneItem;
     public static Item sensorTierTwoItem;
     public static Item sensorTierThreeItem;
@@ -66,9 +65,6 @@ public class Items {
 
         solarPanelAddon = new SolarPanelAddonItem();
         GameRegistry.registerItem(solarPanelAddon, "solarPanelAddon");
-
-        configTab = new ConfigTabItem();
-        GameRegistry.registerItem(configTab, "configTab");
 
         bulletCraftable = new BulletAmmoItem();
         GameRegistry.registerItem(bulletCraftable, "bulletCraftable");
