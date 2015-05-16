@@ -177,15 +177,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		this.attacksPlayers = par1.getBoolean("attacksPlayers");
 		this.owner = par1.getString("owner");
 
-		buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 10)); // not
-																			// sure
-																			// if
-																			// we
-																			// need
-																			// both
-																			// -
-																			// Keridos
-		// buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 8));
+		buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 10));
 
 		NBTTagList tagList = par1.getTagList("Inventory", 10);
 
@@ -391,6 +383,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 			ticks = 0;
 		}
 	}
+	
 	
 	 @Override
 	    public int[] getAccessibleSlotsFromSide(int side) {
