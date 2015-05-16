@@ -20,6 +20,7 @@ import openmodularturrets.items.upgrades.AccuraccyUpgradeItem;
 import openmodularturrets.items.upgrades.EfficiencyUpgradeItem;
 import openmodularturrets.items.upgrades.FireRateUpgradeItem;
 import openmodularturrets.items.upgrades.RangeUpgradeItem;
+import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.tileentity.turretbase.TurretWoodBase;
 
@@ -114,7 +115,7 @@ public class TurretHeadUtils {
     }
 
     public static boolean isTrustedPlayer(String name, TurretBase base) {
-        for (TurretBase.TrustedPlayer trusted_player : base.getTrustedPlayers()) {
+        for (TrustedPlayer trusted_player : base.getTrustedPlayers()) {
             if (trusted_player.name.equals(name)) {
                 return true;
             }

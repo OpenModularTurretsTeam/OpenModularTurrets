@@ -18,7 +18,6 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.ModularTurrets;
-import openmodularturrets.network.EnergyStatusUpdateMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,18 +33,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     protected boolean attacksPlayers;
     protected String owner;
     protected List<TrustedPlayer> trustedPlayers;
-
-    public class TrustedPlayer {
-        public String name;
-        public boolean canOpenGUI = false;
-        public boolean canChangeTargeting = false;
-        public boolean canAddTrustedPlayers = false;
-        public boolean isAdmin = false;
-
-        public TrustedPlayer(String name) {
-            this.name = name;
-        }
-    }
+    protected int ticks;
 
     public TurretBase(int MaxEnergyStorage, int MaxIO) {
         super();
@@ -107,6 +95,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     }
 
     private void buildTrustedPlayersFromNBT(NBTTagList nbt) {
+    	trustedPlayers.clear();
         for (int i = 0; i < nbt.tagCount(); i++) {
             if (!nbt.getCompoundTagAt(i).getString("name").equals("")) {
                 NBTTagCompound nbtPlayer = nbt.getCompoundTagAt(i);
@@ -127,9 +116,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Override
     public Packet getDescriptionPacket() {
         NBTTagCompound var1 = new NBTTagCompound();
-
         this.writeToNBT(var1);
-
         return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
     }
 
@@ -178,7 +165,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         this.owner = par1.getString("owner");
 
         buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 10)); //not sure if we need both - Keridos
-        buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 8));
+        //buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 8));
 
         NBTTagList tagList = par1.getTagList("Inventory", 10);
 
@@ -363,9 +350,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
         super.onDataPacket(net, packet);
-
         readFromNBT(packet.func_148857_g());
-        this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     @Override
@@ -375,12 +360,15 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         if (this.worldObj.isRemote) {
             return;
         }
+        
+        ticks++;
 
-        EnergyStatusUpdateMessage message = new EnergyStatusUpdateMessage(this.xCoord, this.yCoord, this.zCoord,
-                                                                          this.getEnergyStored(ForgeDirection.UNKNOWN));
-
-        ModularTurrets.networking.sendToAll(message);
+        if (ticks % 5 == 0) {
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            ticks = 0;
+        }
     }
+    
 
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():string; returns owner of turret base.")

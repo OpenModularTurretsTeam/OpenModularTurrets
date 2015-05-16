@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -13,8 +14,10 @@ import openmodularturrets.network.AdjustYAxisDetectMessage;
 import openmodularturrets.network.DropBaseMessage;
 import openmodularturrets.network.DropTurretsMessage;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierTwoTileEntity;
+
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -24,10 +27,12 @@ public class TurretBaseTierTwoGui extends GuiContainer {
     TurretBaseTierTwoTileEntity base;
     private int mouseX;
     private int mouseY;
+    private EntityPlayer player;
 
     public TurretBaseTierTwoGui(InventoryPlayer inventoryPlayer, TurretBaseTierTwoTileEntity tileEntity) {
         super(new TurretBaseTierTwoContainer(inventoryPlayer, tileEntity));
         this.base = (TurretBaseTierTwoTileEntity) tileEntity;
+        player = inventoryPlayer.player;
     }
 
     @SuppressWarnings("unchecked")
@@ -40,6 +45,7 @@ public class TurretBaseTierTwoGui extends GuiContainer {
         this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "+"));
         this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
         this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
+        this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
     }
 
     @Override
@@ -53,13 +59,11 @@ public class TurretBaseTierTwoGui extends GuiContainer {
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 1) {
             this.base.setyAxisDetect(this.base.getyAxisDetect() - 1);
-
             sendChangeToServer();
         }
 
         if (guibutton.id == 2) {
             this.base.setyAxisDetect(this.base.getyAxisDetect() + 1);
-
             sendChangeToServer();
         }
 
@@ -70,6 +74,11 @@ public class TurretBaseTierTwoGui extends GuiContainer {
         if (guibutton.id == 4) {
             sendDropBaseToServer();
         }
+        
+        if (guibutton.id == 5) {
+			player.openGui(ModularTurrets.instance, 5,
+					player.worldObj, base.xCoord, base.yCoord, base.zCoord);
+		}
     }
 
     @SuppressWarnings("unchecked")
@@ -100,7 +109,7 @@ public class TurretBaseTierTwoGui extends GuiContainer {
         targetInfo.add("");
         targetInfo.add("\u00A75-Trusted Players-");
 
-        for (TurretBase.TrustedPlayer trusted_player : base.getTrustedPlayers()) {
+        for (TrustedPlayer trusted_player : base.getTrustedPlayers()) {
             targetInfo.add("\u00A7b" + trusted_player.name);
         }
 
