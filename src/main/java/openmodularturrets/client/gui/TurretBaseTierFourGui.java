@@ -100,6 +100,9 @@ public class TurretBaseTierFourGui extends GuiContainer {
         ArrayList targetInfo = new ArrayList();
 
         targetInfo.add("\u00A76Owner: \u00A7f" + base.getOwner());
+        boolean isCurrentlyOn = !base.isGettingRedstoneSignal() && base.isActive();
+		targetInfo.add("\u00A76Active: "+ (isCurrentlyOn ? "\u00A72Yes" : "\u00A7cNo"));
+		targetInfo.add("");
         targetInfo.add("");
         targetInfo.add("\u00A75-Trusted Players-");
 
