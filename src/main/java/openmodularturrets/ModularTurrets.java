@@ -60,7 +60,7 @@ public class ModularTurrets {
 		TileEntityHandler.init();
 		proxy.initRenderers();
 		proxy.initHandlers();
-		RecipeHandler.initRecipes();
+		RecipeHandler.initRecipes();		
 		ProjectileEntityHandler.registerProjectiles(this);		
 	}
 }

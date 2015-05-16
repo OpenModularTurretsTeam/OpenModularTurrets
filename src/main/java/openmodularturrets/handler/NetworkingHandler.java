@@ -4,6 +4,7 @@ import openmodularturrets.network.AddTrustedPlayerMessage;
 import openmodularturrets.network.AdjustYAxisDetectMessage;
 import openmodularturrets.network.DropBaseMessage;
 import openmodularturrets.network.DropTurretsMessage;
+import openmodularturrets.network.ModifyPermissionsMessage;
 import openmodularturrets.network.RemoveTrustedPlayerMessage;
 import openmodularturrets.network.SetTurretOwnerMessage;
 import openmodularturrets.network.ToggleAttackMobsMessage;
@@ -45,6 +46,9 @@ public class NetworkingHandler {
 
 		networking.registerMessage(DropBaseMessage.class,
 				DropBaseMessage.class, 9, Side.SERVER);
+		
+		networking.registerMessage(ModifyPermissionsMessage.class,
+				ModifyPermissionsMessage.class, 10, Side.SERVER);
 
 		return networking;
 
