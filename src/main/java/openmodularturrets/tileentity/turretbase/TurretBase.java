@@ -524,4 +524,18 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	public Object[] getCurrentEnergyStorage(Context context, Arguments args) {
 		return new Object[] { this.getEnergyStored(ForgeDirection.UNKNOWN) };
 	}
+	
+	@Optional.Method(modid = "OpenComputers")
+	@Callback(doc = "function():boolean; returns if the turret is currently active.")
+	public Object[] getActive(Context context, Arguments args) {
+		return new Object[] { this.isActive() };
+	}
+
+	@Optional.Method(modid = "OpenComputers")
+	@Callback(doc = "function():boolean; toggles turret on/off.")
+	public Object[] setActive(Context context, Arguments args) {
+		this.setActive(args.checkBoolean(0));
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		return null;
+	}
 }
