@@ -14,10 +14,10 @@ public class ProjectileEntityHandler {
 		EntityRegistry.registerModEntity(RocketProjectile.class,
 				"rocketProjectile", 1, turrets, 16, 1, true);
 		EntityRegistry.registerModEntity(GrenadeProjectile.class,
-				"grenadeProjectile", 2, turrets, 16, 1, true);
+				"grenadeProjectile", 2, turrets, 16, 5, true);
 		EntityRegistry.registerModEntity(BulletProjectile.class,
-				"bulletProjectile", 3, turrets, 16, 1, true);
+				"bulletProjectile", 3, turrets, 16, 5, true);
 		EntityRegistry.registerModEntity(LaserProjectile.class,
-				"laserProjectile", 4, turrets, 16, 1, true);
+				"laserProjectile", 4, turrets, 16, 5, true);
 	}		
 }
