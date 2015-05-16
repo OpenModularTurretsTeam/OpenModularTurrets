@@ -219,8 +219,8 @@ public abstract class TurretHead extends TileEntity {
                 return;
             }
 
-            //Is the base switched off?
-            if (base.isGettingRedstoneSignal()) {
+            //Is the base switched off? OC/Redstone?
+            if (base.isGettingRedstoneSignal() || !base.isActive()) {
                 return;
             }
 

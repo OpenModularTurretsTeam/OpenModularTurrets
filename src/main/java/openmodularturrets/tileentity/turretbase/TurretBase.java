@@ -37,6 +37,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	protected List<TrustedPlayer> trustedPlayers;
 	protected int ticks;
 	public int currentTrustedPlayerAdmin = 0;
+	private boolean isActive;
 
 	public TurretBase(int MaxEnergyStorage, int MaxIO) {
 		super();
@@ -47,6 +48,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		attacksPlayers = false;
 		trustedPlayers = new ArrayList<TrustedPlayer>();
 		this.inv = new ItemStack[this.getSizeInventory()];
+		isActive = false;
 	}
 
 	public void addTrustedPlayer(String name) {
@@ -54,17 +56,15 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	}
 
 	public void removeTrustedPlayer(String name) {
-    	List<TrustedPlayer> copiedTrusteds = new ArrayList();
-    	copiedTrusteds.addAll(trustedPlayers);
-    	for(int i =0;i<=copiedTrusteds.size()-1;i++)
-    	{
-    		TrustedPlayer player = copiedTrusteds.get(i);
-    		if(player.getName().equals(name))
-    		{
-    			trustedPlayers.remove(i);
-    		}
-    	}
-    }
+		List<TrustedPlayer> copiedTrusteds = new ArrayList();
+		copiedTrusteds.addAll(trustedPlayers);
+		for (int i = 0; i <= copiedTrusteds.size() - 1; i++) {
+			TrustedPlayer player = copiedTrusteds.get(i);
+			if (player.getName().equals(name)) {
+				trustedPlayers.remove(i);
+			}
+		}
+	}
 
 	public boolean isGettingRedstoneSignal() {
 		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
@@ -146,6 +146,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		par1.setBoolean("attacksPlayers", attacksPlayers);
 		par1.setString("owner", owner);
 		par1.setTag("trustedPlayers", getTrustedPlayersAsNBT());
+		par1.setBoolean("isActive", isActive);
 
 		NBTTagList itemList = new NBTTagList();
 
@@ -176,6 +177,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		this.attacksNeutrals = par1.getBoolean("attacksNeutrals");
 		this.attacksPlayers = par1.getBoolean("attacksPlayers");
 		this.owner = par1.getString("owner");
+		this.isActive = par1.getBoolean("isActive");
 
 		buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 10));
 
@@ -383,24 +385,57 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 			ticks = 0;
 		}
 	}
-	
-	
-	 @Override
-	    public int[] getAccessibleSlotsFromSide(int side) {
-	        return new int[]{0,1,2,3,4,5,6,7,8};
-	    }
 
-	    @Override
-	    public boolean canInsertItem(int slotID, ItemStack itemstack, int side)
-	    {
-	        return isItemValidForSlot(slotID, itemstack);
-	    }
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+	}
 
-	    @Override
-	    public boolean canExtractItem(int slotID, ItemStack itemstack, int side)
-	    {
-	        return true;
-	    }
+	@Override
+	public boolean canInsertItem(int slotID, ItemStack itemstack, int side) {
+		return isItemValidForSlot(slotID, itemstack);
+	}
+
+	@Override
+	public boolean canExtractItem(int slotID, ItemStack itemstack, int side) {
+		return true;
+	}
+
+	public ItemStack[] getInv() {
+		return inv;
+	}
+
+	public void setInv(ItemStack[] inv) {
+		this.inv = inv;
+	}
+
+	public int getTicks() {
+		return ticks;
+	}
+
+	public void setTicks(int ticks) {
+		this.ticks = ticks;
+	}
+
+	public int getCurrentTrustedPlayerAdmin() {
+		return currentTrustedPlayerAdmin;
+	}
+
+	public void setCurrentTrustedPlayerAdmin(int currentTrustedPlayerAdmin) {
+		this.currentTrustedPlayerAdmin = currentTrustedPlayerAdmin;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public void setTrustedPlayers(List<TrustedPlayer> trustedPlayers) {
+		this.trustedPlayers = trustedPlayers;
+	}
 
 	@Optional.Method(modid = "OpenComputers")
 	@Callback(doc = "function():string; returns owner of turret base.")
