@@ -21,11 +21,11 @@ item.ioBus.name=IO Bus
 item.containmentChamber.name=Containment Chamber
 item.energeticBarrel.name=Energetic Barrel
 
-tile.baseTierWood.name=Wood Turret Base
-tile.baseTierOneBlock.name=Leadstone Turret Base
-tile.baseTierTwoBlock.name=Reinforced Turret Base
-tile.baseTierThreeBlock.name=Hardened Turret Base
-tile.baseTierFourBlock.name=Resonant Turret Base
+tile.baseTierOneBlock.name=Tier 1 Turret Base
+tile.baseTierTwoBlock.name=Tier 2 Turret Base
+tile.baseTierThreeBlock.name=Tier 3 Turret Base
+tile.baseTierFourBlock.name=Tier 4 Turret Base
+tile.baseTierFiveBlock.name=Tier 5 Turret Base
 tile.disposeItemTurret.name=Disposable Item Turret
 tile.rocketTurret.name=Rocket Launcher Turret
 tile.machineGunTurret.name=Machine Gun Turret
@@ -87,11 +87,11 @@ turret.ammo.3=Homing Rocket
 turret.ammo.4=None
 turret.ammo.5=Ferro-Magnetic Slugs
 
-base.tier.0=Basic
-base.tier.1=Leadstone
-base.tier.2=Reinforced
-base.tier.3=Hardened
-base.tier.4=Resonant
+base.tier.0=Tier 1 Turret Base
+base.tier.1=Tier 2 Turret Base
+base.tier.2=Tier 3 Turret Base
+base.tier.3=Tier 4 Turret Base
+base.tier.4=Tier 5 Turret Base
 
 turret.addon.label=Turret Addon
 turret.addon.amp.a.label=Adds

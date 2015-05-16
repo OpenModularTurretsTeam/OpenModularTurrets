@@ -13,7 +13,7 @@ public class RailGunTurretTileEntity extends TurretHead {
 
     public RailGunTurretTileEntity() {
         super();
-        this.turretTier = 4;
+        this.turretTier = 5;
     }
 
     @Override

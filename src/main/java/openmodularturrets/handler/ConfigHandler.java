@@ -5,9 +5,6 @@ import net.minecraftforge.common.config.Configuration;
 import java.io.File;
 
 public class ConfigHandler {
-    private static int baseTierWoodMaxCharge;
-    private static int baseTierWoodMaxIo;
-
     private static int baseTierOneMaxCharge;
     private static int baseTierOneMaxIo;
 
@@ -19,6 +16,9 @@ public class ConfigHandler {
 
     private static int baseTierFourMaxCharge;
     private static int baseTierFourMaxIo;
+
+    private static int baseTierFiveMaxCharge;
+    private static int baseTierFiveMaxIo;
 
     private static TurretSetting disposable_turret;
     private static TurretSetting machine_gun_turret;
@@ -48,20 +48,20 @@ public class ConfigHandler {
         Configuration config = new Configuration(configFile);
         config.load();
 
-        baseTierWoodMaxCharge = config.get("TurretBaseTierWood", "MaxCharge", 500).getInt();
-        baseTierWoodMaxIo = config.get("TurretBaseTierWood", "MaxIo", 50).getInt();
+        baseTierOneMaxCharge = config.get("TurretBaseTierOne", "MaxCharge", 500).getInt();
+        baseTierOneMaxIo = config.get("TurretBaseTierOne", "MaxIo", 50).getInt();
 
-        baseTierOneMaxCharge = config.get("TurretBaseTierOne", "MaxCharge", 50000).getInt();
-        baseTierOneMaxIo = config.get("TurretBaseTierOne", "MaxIo", 100).getInt();
+        baseTierTwoMaxCharge = config.get("TurretBaseTierTwo", "MaxCharge", 50000).getInt();
+        baseTierTwoMaxIo = config.get("TurretBaseTierTwo", "MaxIo", 100).getInt();
 
-        baseTierTwoMaxCharge = config.get("TurretBaseTierTwo", "MaxCharge", 150000).getInt();
-        baseTierTwoMaxIo = config.get("TurretBaseTierTwo", "MaxIo", 500).getInt();
+        baseTierThreeMaxCharge = config.get("TurretBaseTierTwo", "MaxCharge", 150000).getInt();
+        baseTierThreeMaxIo = config.get("TurretBaseTierTwo", "MaxIo", 500).getInt();
 
-        baseTierThreeMaxCharge = config.get("TurretBaseTierThree", "MaxCharge", 500000).getInt();
-        baseTierThreeMaxIo = config.get("TurretBaseTierThree", "MaxIo", 1500).getInt();
+        baseTierFourMaxCharge = config.get("TurretBaseTierFour", "MaxCharge", 500000).getInt();
+        baseTierFourMaxIo = config.get("TurretBaseTierFour", "MaxIo", 1500).getInt();
 
-        baseTierFourMaxCharge = config.get("TurretBaseTierFour", "MaxCharge", 10000000).getInt();
-        baseTierFourMaxIo = config.get("TurretBaseTierFour", "MaxIo", 5000).getInt();
+        baseTierFiveMaxCharge = config.get("TurretBaseTierFive", "MaxCharge", 10000000).getInt();
+        baseTierFiveMaxIo = config.get("TurretBaseTierFive", "MaxIo", 5000).getInt();
 
         turretAlarmSound = config.get("TurretSound", "Enable/Disable turret alarm sound", true).getBoolean();
         turretWarnMessage = config.get("TurretWarnMessage", "Should turret warn message be displayed?",
@@ -140,14 +140,6 @@ public class ConfigHandler {
         }
     }
 
-    public static int getBaseTierWoodMaxCharge() {
-        return baseTierWoodMaxCharge;
-    }
-
-    public static int getBaseTierWoodMaxIo() {
-        return baseTierWoodMaxIo;
-    }
-
     public static int getBaseTierOneMaxIo() {
         return baseTierOneMaxIo;
     }
@@ -164,7 +156,55 @@ public class ConfigHandler {
         return baseTierFourMaxIo;
     }
 
-    public static int getBaseTierTwoMaxCharge() {
+	public static int getBaseTierFiveMaxCharge() {
+		return baseTierFiveMaxCharge;
+	}
+
+	public static int getBaseTierFiveMaxIo() {
+		return baseTierFiveMaxIo;
+	}
+
+	public static TurretSetting getDisposable_turret() {
+		return disposable_turret;
+	}
+
+	public static TurretSetting getMachine_gun_turret() {
+		return machine_gun_turret;
+	}
+
+	public static TurretSetting getRocket_turret() {
+		return rocket_turret;
+	}
+
+	public static TurretSetting getGrenade_turret() {
+		return grenade_turret;
+	}
+
+	public static TurretSetting getLaser_turret() {
+		return laser_turret;
+	}
+
+	public static boolean isTurretAlarmSound() {
+		return turretAlarmSound;
+	}
+
+	public static boolean isTurretBreakable() {
+		return turretBreakable;
+	}
+
+	public static boolean isTurretWarnMessage() {
+		return turretWarnMessage;
+	}
+
+	public static boolean isTurretDamageTrustedPlayers() {
+		return turretDamageTrustedPlayers;
+	}
+
+	public static boolean isIGWNotification() {
+		return IGWNotification;
+	}
+
+	public static int getBaseTierTwoMaxCharge() {
         return baseTierTwoMaxCharge;
     }
 
@@ -275,4 +315,6 @@ public class ConfigHandler {
             return power_usage;
         }
     }
+    
+    
 }

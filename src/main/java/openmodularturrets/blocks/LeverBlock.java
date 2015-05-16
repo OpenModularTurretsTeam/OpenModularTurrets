@@ -14,7 +14,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.LeverTileEntity;
-import openmodularturrets.tileentity.turretbase.TurretWoodBase;
+import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 
 public class LeverBlock extends BlockContainer {
 
@@ -42,19 +42,19 @@ public class LeverBlock extends BlockContainer {
     public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
         float l = 0;
 
-        if (par1World.getTileEntity(par2 + 1, par3, par4) instanceof TurretWoodBase) {
+        if (par1World.getTileEntity(par2 + 1, par3, par4) instanceof TurretBaseTierOneTileEntity) {
             l = 270F;
         }
 
-        if (par1World.getTileEntity(par2 - 1, par3, par4) instanceof TurretWoodBase) {
+        if (par1World.getTileEntity(par2 - 1, par3, par4) instanceof TurretBaseTierOneTileEntity) {
             l = 90F;
         }
 
-        if (par1World.getTileEntity(par2, par3, par4 + 1) instanceof TurretWoodBase) {
+        if (par1World.getTileEntity(par2, par3, par4 + 1) instanceof TurretBaseTierOneTileEntity) {
             l = 0F;
         }
 
-        if (par1World.getTileEntity(par2, par3, par4 - 1) instanceof TurretWoodBase) {
+        if (par1World.getTileEntity(par2, par3, par4 - 1) instanceof TurretBaseTierOneTileEntity) {
             l = 180;
         }
 
@@ -65,12 +65,12 @@ public class LeverBlock extends BlockContainer {
     @Override
     public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9) {
 
-        TurretWoodBase base;
+        TurretBaseTierOneTileEntity base;
         LeverTileEntity lever = (LeverTileEntity) par1World.getTileEntity(par2, par3, par4);
 
         if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 0 && par1World.getTileEntity(par2, par3,
-                                                                                                par4 + 1) instanceof TurretWoodBase) {
-            base = (TurretWoodBase) par1World.getTileEntity(par2, par3, par4 + 1);
+                                                                                                par4 + 1) instanceof TurretBaseTierOneTileEntity) {
+            base = (TurretBaseTierOneTileEntity) par1World.getTileEntity(par2, par3, par4 + 1);
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
@@ -81,8 +81,8 @@ public class LeverBlock extends BlockContainer {
         }
 
         if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 90 && par1World.getTileEntity(par2 - 1, par3,
-                                                                                                 par4) instanceof TurretWoodBase) {
-            base = (TurretWoodBase) par1World.getTileEntity(par2 - 1, par3, par4);
+                                                                                                 par4) instanceof TurretBaseTierOneTileEntity) {
+            base = (TurretBaseTierOneTileEntity) par1World.getTileEntity(par2 - 1, par3, par4);
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
@@ -93,8 +93,8 @@ public class LeverBlock extends BlockContainer {
         }
 
         if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 180 && par1World.getTileEntity(par2, par3,
-                                                                                                  par4 - 1) instanceof TurretWoodBase) {
-            base = (TurretWoodBase) par1World.getTileEntity(par2, par3, par4 - 1);
+                                                                                                  par4 - 1) instanceof TurretBaseTierOneTileEntity) {
+            base = (TurretBaseTierOneTileEntity) par1World.getTileEntity(par2, par3, par4 - 1);
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
@@ -105,8 +105,8 @@ public class LeverBlock extends BlockContainer {
         }
 
         if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 270 && par1World.getTileEntity(par2 + 1, par3,
-                                                                                                  par4) instanceof TurretWoodBase) {
-            base = (TurretWoodBase) par1World.getTileEntity(par2 + 1, par3, par4);
+                                                                                                  par4) instanceof TurretBaseTierOneTileEntity) {
+            base = (TurretBaseTierOneTileEntity) par1World.getTileEntity(par2 + 1, par3, par4);
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {

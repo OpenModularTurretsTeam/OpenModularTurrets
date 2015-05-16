@@ -31,7 +31,7 @@ public class TurretBaseTierTwoGui extends GuiContainer {
 
     public TurretBaseTierTwoGui(InventoryPlayer inventoryPlayer, TurretBaseTierTwoTileEntity tileEntity) {
         super(new TurretBaseTierTwoContainer(inventoryPlayer, tileEntity));
-        this.base = (TurretBaseTierTwoTileEntity) tileEntity;
+        this.base = tileEntity;
         player = inventoryPlayer.player;
     }
 
@@ -46,13 +46,6 @@ public class TurretBaseTierTwoGui extends GuiContainer {
         this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
         this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
         this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
-    }
-
-    @Override
-    public void drawScreen(int par1, int par2, float par3) {
-        this.mouseX = par1;
-        this.mouseY = par2;
-        super.drawScreen(par1, par2, par3);
     }
 
     @Override
@@ -76,9 +69,16 @@ public class TurretBaseTierTwoGui extends GuiContainer {
         }
         
         if (guibutton.id == 5) {
-			player.openGui(ModularTurrets.instance, 5,
+			player.openGui(ModularTurrets.instance, 6,
 					player.worldObj, base.xCoord, base.yCoord, base.zCoord);
 		}
+    }
+
+    @Override
+    public void drawScreen(int par1, int par2, float par3) {
+        this.mouseX = par1;
+        this.mouseY = par2;
+        super.drawScreen(par1, par2, par3);
     }
 
     @SuppressWarnings("unchecked")
@@ -125,8 +125,7 @@ public class TurretBaseTierTwoGui extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-        // draw your Gui here, only thing you need to change is the path
-        ResourceLocation texture = (new ResourceLocation(ModInfo.ID + ":textures/gui/baseInvTier2.png"));
+        ResourceLocation texture = (new ResourceLocation(ModInfo.ID + ":textures/gui/baseInvTier1.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
         int x = (width - xSize) / 2;
@@ -134,6 +133,7 @@ public class TurretBaseTierTwoGui extends GuiContainer {
         this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
         int expression = (base.getEnergyStored(ForgeDirection.UNKNOWN) * 51) / base.getMaxEnergyStored(
                 ForgeDirection.UNKNOWN);
+
         drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
         drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 17, 14, expression);
     }

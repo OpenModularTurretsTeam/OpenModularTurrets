@@ -20,7 +20,7 @@ public class TurretBaseTierFourTileEntity extends TurretBase {
 
     @Override
     public int getSizeInventory() {
-        return 13;
+        return 12;
     }
 
     @Override
@@ -31,6 +31,6 @@ public class TurretBaseTierFourTileEntity extends TurretBase {
     @Optional.Method(modid = "OpenComputers")
     @Override
     public String getComponentName() {
-        return "resonant_base";
+        return "tierFourTurretBase";
     }
 }
