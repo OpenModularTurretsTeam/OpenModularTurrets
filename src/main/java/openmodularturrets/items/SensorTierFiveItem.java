@@ -7,17 +7,17 @@ import net.minecraft.item.Item;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
 
-public class SensorTierOneItem extends Item {
+public class SensorTierFiveItem extends Item {
 
-    public SensorTierOneItem() {
+    public SensorTierFiveItem() {
         super();
 
-        this.setUnlocalizedName(ItemNames.unlocalisedSensorTierOne);
+        this.setUnlocalizedName(ItemNames.unlocalisedSensorTierFive);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
     }
 
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister par1IconRegister) {
-        this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":sensorItemTierOne");
+        this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":sensorItemTierFive");
     }
 }

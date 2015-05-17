@@ -18,10 +18,10 @@ public class ItemNames {
     public static final String unlocalisedRedReactorAddon = "addonReactor";
     public static final String unlocalisedDamageAmpAddon = "addonDam";
     public static final String unlocalisedSolarPanelAddon = "addonSolar";
-    public static final String unlocalisedSensorTierOne = "sensorOne";
     public static final String unlocalisedSensorTierTwo = "sensorTwo";
     public static final String unlocalisedSensorTierThree = "sensorThree";
     public static final String unlocalisedSensorTierFour = "sensorFour";
+    public static final String unlocalisedSensorTierFive = "sensorFive";
     public static final String unlocalisedChamber = "chamber";
     public static final String unlocalisedBarrel = "barrel";
     public static final String unlocalisedIOBus = "ioBus";

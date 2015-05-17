@@ -28,10 +28,10 @@ public class Items {
     public static Item redstoneReactorAddon;
     public static Item damageAmpAddon;
     public static Item solarPanelAddon;
-    public static Item sensorTierOneItem;
     public static Item sensorTierTwoItem;
     public static Item sensorTierThreeItem;
     public static Item sensorTierFourItem;
+    public static Item sensorTierFiveItem;
     public static Item barrel;
     public static Item chamber;
     public static Item ioBus;
@@ -78,9 +78,6 @@ public class Items {
         ferroSlug = new FerroSlugItem();
         GameRegistry.registerItem(ferroSlug, "ferroSlug");
 
-        sensorTierOneItem = new SensorTierOneItem();
-        GameRegistry.registerItem(sensorTierOneItem, "sensorTierOneItem");
-
         sensorTierTwoItem = new SensorTierTwoItem();
         GameRegistry.registerItem(sensorTierTwoItem, "sensorTierTwoItem");
 
@@ -89,6 +86,9 @@ public class Items {
 
         sensorTierFourItem = new SensorTierFourItem();
         GameRegistry.registerItem(sensorTierFourItem, "sensorTierFourItem");
+
+        sensorTierFiveItem = new SensorTierFiveItem();
+        GameRegistry.registerItem(sensorTierFiveItem, "sensorTierFiveItem");
 
         barrel = new BarrelItem();
         GameRegistry.registerItem(barrel, "barrel");
