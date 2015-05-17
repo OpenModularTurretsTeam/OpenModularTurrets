@@ -77,7 +77,7 @@ public class ConfigureGui extends GuiContainer {
 
 			this.buttonList
 					.add(new GuiButton(
-							9999,
+							8,
 							x + 70,
 							y + 135,
 							23,
@@ -87,7 +87,7 @@ public class ConfigureGui extends GuiContainer {
 									: "\u00A7cN"));
 			this.buttonList
 					.add(new GuiButton(
-							9999,
+							9,
 							x + 93,
 							y + 135,
 							23,
@@ -97,7 +97,7 @@ public class ConfigureGui extends GuiContainer {
 									: "\u00A7cN"));
 			this.buttonList
 					.add(new GuiButton(
-							9999,
+							10,
 							x + 116,
 							y + 135,
 							23,
@@ -107,10 +107,10 @@ public class ConfigureGui extends GuiContainer {
 									: "\u00A7cN"));
 
 		} else {
-			this.buttonList.add(new GuiButton(8, x + 70, y + 135, 23, 20, "?"));
-			this.buttonList.add(new GuiButton(9, x + 93, y + 135, 23, 20, "?"));
+			this.buttonList.add(new GuiButton(999, x + 70, y + 135, 23, 20, "?"));
+			this.buttonList.add(new GuiButton(999, x + 93, y + 135, 23, 20, "?"));
 			this.buttonList
-					.add(new GuiButton(10, x + 116, y + 135, 23, 20, "?"));
+					.add(new GuiButton(999, x + 116, y + 135, 23, 20, "?"));
 		}
 	}
 
@@ -228,13 +228,16 @@ public class ConfigureGui extends GuiContainer {
 			if (player.getDisplayName().equals(base.getOwner())
 					|| (this.copiedTrusted.get(base.currentTrustedPlayerAdmin) != null && this.copiedTrusted
 							.get(base.currentTrustedPlayerAdmin).canAddTrustedPlayers)) {
+				
 				sendChangeToServerModifyPermissions(
 						this.copiedTrusted.get(base.currentTrustedPlayerAdmin)
 								.getName(), "gui", !base.getTrustedPlayers()
 								.get(base.currentTrustedPlayerAdmin).canOpenGUI);
+			
 				guibutton.displayString = !base.getTrustedPlayers().get(
 						base.currentTrustedPlayerAdmin).canOpenGUI ? "\u00A72Y"
 						: "\u00A7cN";
+				
 			} else {
 				player.addChatMessage(new ChatComponentText(StatCollector
 						.translateToLocal("status.ownership")));

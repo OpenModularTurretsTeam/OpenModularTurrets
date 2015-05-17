@@ -57,6 +57,6 @@ public class PotatoCannonTurretTileEntity extends TurretHead {
 
     @Override
     public String getLaunchSoundEffect() {
-        return "disposable";
+        return "potato";
     }
 }
