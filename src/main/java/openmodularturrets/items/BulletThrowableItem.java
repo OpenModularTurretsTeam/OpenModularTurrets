@@ -5,11 +5,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 
 public class BulletThrowableItem extends Item {
     public BulletThrowableItem() {
         super();
-        this.setUnlocalizedName(ItemNames.unlocalisedBulletThrowableItem);
+        this.setUnlocalizedName(Names.Items.unlocalisedBulletThrowableItem);
     }
 
     @SideOnly(Side.CLIENT)

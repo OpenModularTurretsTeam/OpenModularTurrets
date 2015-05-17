@@ -5,12 +5,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 
 public class GrenadeThrowableItem extends Item {
     public GrenadeThrowableItem() {
         super();
 
-        this.setUnlocalizedName(ItemNames.unlocalisedGrenadeThrowableItem);
+        this.setUnlocalizedName(Names.Items.unlocalisedGrenadeThrowableItem);
     }
 
     @SideOnly(Side.CLIENT)

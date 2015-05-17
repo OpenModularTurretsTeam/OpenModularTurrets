@@ -6,13 +6,14 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 
 public class IOBusItem extends Item {
 
     public IOBusItem() {
         super();
 
-        this.setUnlocalizedName(ItemNames.unlocalisedIOBus);
+        this.setUnlocalizedName(Names.Items.unlocalisedIOBus);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
     }
 

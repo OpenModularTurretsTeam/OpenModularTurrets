@@ -2,8 +2,8 @@ package openmodularturrets.blocks.turretheads;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import openmodularturrets.blocks.BlockNames;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.turrets.MachineGunTurretTileEntity;
 
 public class BlockMachineGunTurret extends BlockAbstractTurretHead {
@@ -11,7 +11,7 @@ public class BlockMachineGunTurret extends BlockAbstractTurretHead {
     public BlockMachineGunTurret() {
         super();
 
-        this.setBlockName(BlockNames.unlocalisedMachineGunTurret);
+        this.setBlockName(Names.Blocks.unlocalisedMachineGunTurret);
         this.setBlockTextureName(ModInfo.ID + ":machineGunTurret");
     }
 

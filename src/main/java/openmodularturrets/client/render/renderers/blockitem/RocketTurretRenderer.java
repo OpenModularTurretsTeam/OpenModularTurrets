@@ -10,7 +10,7 @@ import openmodularturrets.client.render.models.ModelRocketTurret;
 import openmodularturrets.client.render.models.SolarPanelAddon;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turrets.TurretHead;
-import openmodularturrets.tileentity.turrets.TurretHeadUtils;
+import openmodularturrets.util.TurretHeadUtils;
 import org.lwjgl.opengl.GL11;
 
 public class RocketTurretRenderer extends TileEntitySpecialRenderer {

@@ -12,7 +12,7 @@ import openmodularturrets.client.render.models.ModelRedstoneReactor;
 import openmodularturrets.client.render.models.SolarPanelAddon;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
-import openmodularturrets.tileentity.turrets.TurretHeadUtils;
+import openmodularturrets.util.TurretHeadUtils;
 import org.lwjgl.opengl.GL11;
 
 public class RailGunTurretRenderer extends TileEntitySpecialRenderer {

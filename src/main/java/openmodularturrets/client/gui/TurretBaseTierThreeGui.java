@@ -15,9 +15,7 @@ import openmodularturrets.network.DropBaseMessage;
 import openmodularturrets.network.DropTurretsMessage;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
-import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierThreeTileEntity;
-
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -106,7 +104,7 @@ public class TurretBaseTierThreeGui extends GuiContainer {
         ArrayList targetInfo = new ArrayList();
 
         targetInfo.add("\u00A76Owner: \u00A7f" + base.getOwner());
-        boolean isCurrentlyOn = !base.isGettingRedstoneSignal() && base.isActive();
+        boolean isCurrentlyOn = base.isActive();
         targetInfo.add("\u00A76Active: "+ (isCurrentlyOn ? "\u00A72Yes" : "\u00A7cNo"));
 		targetInfo.add("");
         targetInfo.add("\u00A75-Trusted Players-");

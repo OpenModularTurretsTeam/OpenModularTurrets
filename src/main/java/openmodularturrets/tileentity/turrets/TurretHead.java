@@ -16,6 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.util.TurretHeadUtils;
 
 public abstract class TurretHead extends TileEntity {
     public int ticks;
@@ -200,7 +201,7 @@ public abstract class TurretHead extends TileEntity {
                     this.getTurretPowerUsage() * (1 - TurretHeadUtils.getEfficiencyUpgrades(base)));
 
             // power check
-            if ((base.isGettingRedstoneSignal()) || (base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required) || (!base.isActive())) {
+            if ((base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required) || (!base.isActive())) {
                 return;
             }
 

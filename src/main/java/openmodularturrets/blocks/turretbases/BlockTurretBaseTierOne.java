@@ -3,9 +3,9 @@ package openmodularturrets.blocks.turretbases;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import openmodularturrets.blocks.BlockNames;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 
 public class BlockTurretBaseTierOne extends BlockAbstractTurretBase {
@@ -16,7 +16,7 @@ public class BlockTurretBaseTierOne extends BlockAbstractTurretBase {
     public BlockTurretBaseTierOne() {
         super();
 
-        this.setBlockName(BlockNames.unlocalisedTurretBaseTierOne);
+        this.setBlockName(Names.Blocks.unlocalisedTurretBaseTierOne);
         this.setBlockTextureName(ModInfo.ID + ":turretBaseTierOne");
     }
 
