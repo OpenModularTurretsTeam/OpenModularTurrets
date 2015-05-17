@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")
 public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		IInventory, SimpleComponent, ISidedInventory {
+	
 	protected EnergyStorage storage;
 	protected ItemStack[] inv;
 	protected int yAxisDetect;
