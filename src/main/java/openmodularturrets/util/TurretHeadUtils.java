@@ -20,6 +20,7 @@ import openmodularturrets.items.upgrades.AccuraccyUpgradeItem;
 import openmodularturrets.items.upgrades.EfficiencyUpgradeItem;
 import openmodularturrets.items.upgrades.FireRateUpgradeItem;
 import openmodularturrets.items.upgrades.RangeUpgradeItem;
+import openmodularturrets.items.upgrades.ScattershotUpgradeItem;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
@@ -203,6 +204,31 @@ public class TurretHeadUtils {
 
         if (base.getStackInSlot(11) != null) {
             if (base.getStackInSlot(11).getItem() instanceof RangeUpgradeItem) {
+                value += (ConfigHandler.getRangeUpgradeBoost() * base.getStackInSlot(11).stackSize);
+            }
+        }
+
+        return value;
+    }
+    
+    public static int getScattershotUpgradesUpgrades(TurretBase base) {
+        int value = 0;
+        int tier = base.getBaseTier();
+
+        if (tier == 1) {
+            return value;
+        }
+
+        if (tier == 5) {
+            if (base.getStackInSlot(12) != null) {
+                if (base.getStackInSlot(12).getItem() instanceof ScattershotUpgradeItem) {
+                    value += (ConfigHandler.getRangeUpgradeBoost() * base.getStackInSlot(12).stackSize);
+                }
+            }
+        }
+
+        if (base.getStackInSlot(11) != null) {
+            if (base.getStackInSlot(11).getItem() instanceof ScattershotUpgradeItem) {
                 value += (ConfigHandler.getRangeUpgradeBoost() * base.getStackInSlot(11).stackSize);
             }
         }
