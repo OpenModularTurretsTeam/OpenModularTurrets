@@ -8,17 +8,17 @@ import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
-public class ChamberItem extends Item {
+public class BarrelTierFourItem extends Item {
 
-    public ChamberItem() {
+    public BarrelTierFourItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedChamber);
+        this.setUnlocalizedName(Names.Items.unlocalisedBarrelTierFour);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
     }
 
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister par1IconRegister) {
-        this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":chamber");
+        this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":barrelTierFour");
     }
 }
