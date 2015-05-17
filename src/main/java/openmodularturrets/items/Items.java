@@ -13,6 +13,7 @@ import openmodularturrets.items.upgrades.AccuraccyUpgradeItem;
 import openmodularturrets.items.upgrades.EfficiencyUpgradeItem;
 import openmodularturrets.items.upgrades.FireRateUpgradeItem;
 import openmodularturrets.items.upgrades.RangeUpgradeItem;
+import openmodularturrets.items.upgrades.ScattershotUpgradeItem;
 
 public class Items {
     public static Item bulletThrowable;
@@ -25,6 +26,7 @@ public class Items {
     public static Item efficiencyUpgradeItem;
     public static Item fireRateUpgradeItem;
     public static Item rangeUpgradeItem;
+    public static Item scattershotUpgradeItem;
     public static Item redstoneReactorAddon;
     public static Item damageAmpAddon;
     public static Item solarPanelAddon;
@@ -67,6 +69,9 @@ public class Items {
 
         rangeUpgradeItem = new RangeUpgradeItem();
         GameRegistry.registerItem(rangeUpgradeItem, "rangeUpgradeItem");
+        
+        scattershotUpgradeItem = new ScattershotUpgradeItem();
+        GameRegistry.registerItem(scattershotUpgradeItem, "scattershotUpgradeItem");
 
         redstoneReactorAddon = new RedstoneReactorAddonItem();
         GameRegistry.registerItem(redstoneReactorAddon, "redstoneReactorAddon");

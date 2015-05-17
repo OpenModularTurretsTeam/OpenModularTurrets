@@ -8,6 +8,7 @@ item.upgFire.name=Upgrade - Fire Rate
 item.upgEff.name=Upgrade - Efficiency
 item.upgRan.name=Upgrade - Range
 item.upgAcc.name=Upgrade - Accuracy
+item.upgScatter.name=Upgrade - Scattershot
 item.addonReactor.name=Addon - Redstone Reactor
 item.addonDam.name=Addon - Damage Boost
 item.addonSolar.name=Addon - Solar Generator
@@ -131,6 +132,10 @@ turret.upgrade.acc=accuracy per upgrade.
 turret.upgrade.acc.flavour.a=Good eye sniper,
 turret.upgrade.acc.flavour.b=I'll shoot, you run.
 
-status.ownership=You do not own this turret, or you dont have permission to do that.
+turret.upgrade.scatter.a=Adds 2 projectiles to each shot, at the cost of 
+turret.upgrade.scatter.b=+2 ammo usage, decreased accuracy, and increased RF usage. 
+turret.upgrade.scatter.flavour=You just need to shoot more bullets.
+
+status.ownership=You do not own this turret, or you don't have permission to do that.
 status.missingBase=There's no turret base there.
 status.warning=You are entering a turret-protected area. Continue at your own risk.
