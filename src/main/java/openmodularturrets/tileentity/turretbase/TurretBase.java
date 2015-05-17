@@ -40,7 +40,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	protected boolean inverted;
 	protected boolean redstone;
 
-
 	public TurretBase(int MaxEnergyStorage, int MaxIO) {
 		super();
 		this.yAxisDetect = 2;
@@ -543,7 +542,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	public Object[] getCurrentEnergyStorage(Context context, Arguments args) {
 		return new Object[] { this.getEnergyStored(ForgeDirection.UNKNOWN) };
 	}
-	
+
 	@Optional.Method(modid = "OpenComputers")
 	@Callback(doc = "function():boolean; returns if the turret is currently active.")
 	public Object[] getActive(Context context, Arguments args) {
