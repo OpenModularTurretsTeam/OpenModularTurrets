@@ -69,9 +69,9 @@ public class TurretHeadUtils {
                                                               zCoord - turretRange, xCoord + turretRange,
                                                               yCoord + turretRange, zCoord + turretRange);
 
-            List<Entity> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
+            List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-            for (Entity target1 : targets) {
+            for (EntityLivingBase target1 : targets) {
 
                 if (base.isAttacksNeutrals()) {
                     if (target1 instanceof EntityAnimal && !target1.isDead) {
