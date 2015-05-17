@@ -36,10 +36,10 @@ public class IGWHandler {
                                                    "openmodularturrets/block/machineGunTurret");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.rocketTurret, "openmodularturrets/block/rocketTurret");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.railGunTurret, "openmodularturrets/block/railGunTurret");
-        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierWood, "openmodularturrets/block/turretBase");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierOne, "openmodularturrets/block/turretBase");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierTwo, "openmodularturrets/block/turretBase");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierThree, "openmodularturrets/block/turretBase");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierFour, "openmodularturrets/block/turretBase");
+        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierFive, "openmodularturrets/block/turretBase");
     }
 }
