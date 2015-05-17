@@ -28,15 +28,26 @@ public class Items {
     public static Item redstoneReactorAddon;
     public static Item damageAmpAddon;
     public static Item solarPanelAddon;
+    
+    public static Item sensorTierOneItem;
     public static Item sensorTierTwoItem;
     public static Item sensorTierThreeItem;
     public static Item sensorTierFourItem;
     public static Item sensorTierFiveItem;
-    public static Item barrel;
-    public static Item chamber;
+    
+    public static Item barrelTierOneItem;
+    public static Item barrelTierTwoItem;
+    public static Item barrelTierThreeItem;
+    public static Item barrelTierFourItem;
+    public static Item barrelTierFiveItem;
+    
+    public static Item chamberTierOneItem;
+    public static Item chamberTierTwoItem;
+    public static Item chamberTierThreeItem;
+    public static Item chamberTierFourItem;
+    public static Item chamberTierFiveItem;
+    
     public static Item ioBus;
-    public static Item energeticBarrel;
-    public static Item containmentChamber;
 
     public static void init() {
         bulletThrowable = new BulletThrowableItem();
@@ -77,6 +88,9 @@ public class Items {
 
         ferroSlug = new FerroSlugItem();
         GameRegistry.registerItem(ferroSlug, "ferroSlug");
+        
+        sensorTierOneItem = new SensorTierOneItem();
+        GameRegistry.registerItem(sensorTierOneItem, "sensorTierOneItem");
 
         sensorTierTwoItem = new SensorTierTwoItem();
         GameRegistry.registerItem(sensorTierTwoItem, "sensorTierTwoItem");
@@ -89,20 +103,44 @@ public class Items {
 
         sensorTierFiveItem = new SensorTierFiveItem();
         GameRegistry.registerItem(sensorTierFiveItem, "sensorTierFiveItem");
+        
+        
 
-        barrel = new BarrelItem();
-        GameRegistry.registerItem(barrel, "barrel");
+        barrelTierOneItem = new BarrelTierOneItem();
+        GameRegistry.registerItem(barrelTierOneItem, "barrelTierOne");
+        
+        barrelTierTwoItem = new BarrelTierTwoItem();
+        GameRegistry.registerItem(barrelTierTwoItem, "barrelTierTwo");
+        
+        barrelTierThreeItem = new BarrelTierThreeItem();
+        GameRegistry.registerItem(barrelTierThreeItem, "barrelTierThree");
+        
+        barrelTierFourItem = new BarrelTierFourItem();
+        GameRegistry.registerItem(barrelTierFourItem, "barrelTierFour");
+        
+        barrelTierFiveItem = new BarrelTierFiveItem();
+        GameRegistry.registerItem(barrelTierFiveItem, "barrelTierFive");
+        
+        
+        
 
-        chamber = new ChamberItem();
-        GameRegistry.registerItem(chamber, "chamber");
+        chamberTierOneItem = new ChamberTierOneItem();
+        GameRegistry.registerItem(chamberTierOneItem, "chamberTierOne");
+        
+        chamberTierTwoItem = new ChamberTierTwoItem();
+        GameRegistry.registerItem(chamberTierTwoItem, "chamberTierTwo");
+        
+        chamberTierThreeItem = new ChamberTierThreeItem();
+        GameRegistry.registerItem(chamberTierThreeItem, "chamberTierThree");
+        
+        chamberTierFourItem = new ChamberTierFourItem();
+        GameRegistry.registerItem(chamberTierFourItem, "chamberTierFour");
+        
+        chamberTierFiveItem = new ChamberTierFiveItem();
+        GameRegistry.registerItem(chamberTierFiveItem, "chamberTierFive");
+        
 
         ioBus = new IOBusItem();
         GameRegistry.registerItem(ioBus, "ioBus");
-
-        energeticBarrel = new EnergeticBarrelItem();
-        GameRegistry.registerItem(energeticBarrel, "energeticBarrel");
-
-        containmentChamber = new ContainmentChamberItem();
-        GameRegistry.registerItem(containmentChamber, "containmentChamber");
     }
 }

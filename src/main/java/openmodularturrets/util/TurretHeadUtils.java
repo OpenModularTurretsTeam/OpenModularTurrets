@@ -69,7 +69,7 @@ public class TurretHeadUtils {
                                                               zCoord - turretRange, xCoord + turretRange,
                                                               yCoord + turretRange, zCoord + turretRange);
 
-            List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
+            List<Entity> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (Entity target1 : targets) {
 
