@@ -13,19 +13,19 @@ public class RecipeHandler {
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.turretBaseTierFive,
 				new Object[] { "ADA", "DCD", "ADA", 'A', "ingotEnderium", 'D',
-						Items.ioBus, 'C', Items.sensorTierFourItem }));
+						Items.ioBus, 'C', Items.sensorTierFiveItem }));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.turretBaseTierFour,
 				new Object[] { "ADA", "DCD", "ADA", 'A', "ingotElectrum", 'D',
-						Items.ioBus, 'C', Items.sensorTierThreeItem }));
+						Items.ioBus, 'C', Items.sensorTierFourItem }));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.turretBaseTierThree,
 				new Object[] { "ADA", "DCD", "ADA", 'A', "ingotInvar", 'D',
-						Items.ioBus, 'C', Items.sensorTierTwoItem }));
+						Items.ioBus, 'C', Items.sensorTierThreeItem }));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.turretBaseTierTwo,
 				new Object[] { "ADA", "DCD", "ADA", 'A', "ingotLead", 'D',
-						Items.ioBus, 'C', Items.sensorTierOneItem }));
+						Items.ioBus, 'C', Items.sensorTierTwoItem }));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.turretBaseTierOne,
 				new Object[] { "ADA", "DCD", "ADA", 'A',
@@ -33,22 +33,22 @@ public class RecipeHandler {
 						net.minecraft.init.Items.iron_ingot, 'C',
 						net.minecraft.init.Items.redstone }));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(Items.sensorTierFourItem,
+		GameRegistry.addRecipe(new ShapedOreRecipe(Items.sensorTierFiveItem,
 				new Object[] { "ADA", "DCD", "ADA", 'A', "ingotEnderium", 'D',
 						net.minecraft.init.Items.diamond, 'C',
 						net.minecraft.init.Blocks.redstone_block }));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(Items.sensorTierThreeItem,
+		GameRegistry.addRecipe(new ShapedOreRecipe(Items.sensorTierFourItem,
 				new Object[] { "ADA", "DCD", "ADA", 'A', "ingotElectrum", 'D',
 						net.minecraft.init.Items.diamond, 'C',
 						net.minecraft.init.Blocks.redstone_block }));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(Items.sensorTierTwoItem,
+		GameRegistry.addRecipe(new ShapedOreRecipe(Items.sensorTierThreeItem,
 				new Object[] { "ADA", "DCD", "ADA", 'A', "ingotInvar", 'D',
 						net.minecraft.init.Items.diamond, 'C',
 						net.minecraft.init.Blocks.redstone_block }));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(Items.sensorTierOneItem,
+		GameRegistry.addRecipe(new ShapedOreRecipe(Items.sensorTierTwoItem,
 				new Object[] { "ADA", "DCD", "ADA", 'A', "ingotLead", 'D',
 						net.minecraft.init.Items.diamond, 'C',
 						net.minecraft.init.Blocks.redstone_block }));
