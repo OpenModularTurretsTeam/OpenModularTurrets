@@ -391,6 +391,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		if (this.worldObj.isRemote) {
 			return;
 		}
+		
 		if (checkRedstone) {
 			redstone = worldObj.isBlockIndirectlyGettingPowered(this.xCoord, this.yCoord, this.zCoord);
 		}
