@@ -8,28 +8,16 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.creativetab.CreativeTabs;
 import openmodularturrets.blocks.Blocks;
 import openmodularturrets.client.gui.ModularTurretsTab;
 import openmodularturrets.compatability.ModCompatibility;
-import openmodularturrets.entity.projectiles.BulletProjectile;
-import openmodularturrets.entity.projectiles.GrenadeProjectile;
-import openmodularturrets.entity.projectiles.LaserProjectile;
-import openmodularturrets.entity.projectiles.RocketProjectile;
-import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.handler.GuiHandler;
-import openmodularturrets.handler.NetworkingHandler;
-import openmodularturrets.handler.ProjectileEntityHandler;
-import openmodularturrets.handler.RecipeHandler;
-import openmodularturrets.handler.TileEntityHandler;
+import openmodularturrets.handler.*;
 import openmodularturrets.items.Items;
-import openmodularturrets.network.*;
 import openmodularturrets.proxy.CommonProxy;
 import openmodularturrets.reference.ModInfo;
 
-@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = "required-after:ThermalFoundation;after:OpenComputers")
+@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = ModInfo.DEPENDENCIES)
 public class ModularTurrets {
 
 	@SidedProxy(clientSide = "openmodularturrets.proxy.ClientProxy", serverSide = "openmodularturrets.proxy"
