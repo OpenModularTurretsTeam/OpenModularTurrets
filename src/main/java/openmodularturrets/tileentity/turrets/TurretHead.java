@@ -219,6 +219,9 @@ public abstract class TurretHead extends TileEntity {
             if (target == null) {
                 return;
             }
+            
+            this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord, zCoord) + 3.2F;
+            this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord, yCoord, zCoord);
 
             // Can the turret still see the target? (It's moving)
             if (target != null) {
@@ -241,9 +244,6 @@ public abstract class TurretHead extends TileEntity {
                     return;
                 }
             }
-
-            this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord, zCoord) + 3.2F;
-            this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord, yCoord, zCoord);
 
             ItemStack ammo = null;
 
