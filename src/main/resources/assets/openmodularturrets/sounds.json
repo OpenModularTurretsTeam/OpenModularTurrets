@@ -113,6 +113,15 @@
             }
         ]
     },
+    "potato": {
+        "category": "neutral",
+        "sounds": [
+            {
+               "name": "potato",
+              "stream": false
+            }
+        ]
+    },
      "railGun": {
         "category": "neutral",
         "sounds": [
