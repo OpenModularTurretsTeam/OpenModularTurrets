@@ -50,9 +50,9 @@ public class ConfigureGui extends GuiContainer {
 		String mobsButton = "Attack Mobs: "
 				+ (base.isAttacksMobs() ? "\u00A72Yes" : "\u00A7cNo");
 		String neutralsButton = "Attack Neutrals: "
-				+ (base.isAttacksMobs() ? "\u00A72Yes" : "\u00A7cNo");
+				+ (base.isAttacksNeutrals() ? "\u00A72Yes" : "\u00A7cNo");
 		String playersButton = "Attack Players: "
-				+ (base.isAttacksMobs() ? "\u00A72Yes" : "\u00A7cNo");
+				+ (base.isAttacksPlayers() ? "\u00A72Yes" : "\u00A7cNo");
 
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
