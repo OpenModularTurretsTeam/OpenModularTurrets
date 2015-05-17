@@ -39,6 +39,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	protected boolean active;
 	protected boolean inverted;
 	protected boolean redstone;
+	protected boolean checkRedstone = false;
 
 
 	public TurretBase(int MaxEnergyStorage, int MaxIO) {
@@ -51,7 +52,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		this.trustedPlayers = new ArrayList<TrustedPlayer>();
 		this.inv = new ItemStack[this.getSizeInventory()];
 		this.inverted = true;
-		this.active = true;
+		this.active = true;  //redstone will be automatically set on block place and update
 	}
 
 	public void addTrustedPlayer(String name) {
@@ -178,11 +179,23 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		this.attacksNeutrals = par1.getBoolean("attacksNeutrals");
 		this.attacksPlayers = par1.getBoolean("attacksPlayers");
 		this.owner = par1.getString("owner");
-		this.active = par1.getBoolean("active");
-		this.inverted = par1.getBoolean("inverted");
-		this.redstone = par1.getBoolean("redstone");
-
 		buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 10));
+		if (par1.hasKey("active")) {
+			this.active = par1.getBoolean("active");
+		} else {
+			active = true;
+		}
+		if (par1.hasKey("inverted")) {
+			this.inverted = par1.getBoolean("inverted");
+		} else {
+			inverted = true;
+		}
+		if (par1.hasKey("redstone")) { //setting redstone from world redstone state if world
+			this.redstone = par1.getBoolean("redstone");
+		} else {
+			checkRedstone = true;
+		}
+
 		NBTTagList tagList = par1.getTagList("Inventory", 10);
 
 		for (int i = 0; i < tagList.tagCount(); i++) {
@@ -379,6 +392,10 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		if (this.worldObj.isRemote) {
 			return;
 		}
+		if (checkRedstone) {
+			redstone = worldObj.isBlockIndirectlyGettingPowered(this.xCoord, this.yCoord, this.zCoord);
+		}
+
 
 		ticks++;
 
