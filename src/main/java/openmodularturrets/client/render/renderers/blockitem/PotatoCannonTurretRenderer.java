@@ -1,44 +1,51 @@
 package openmodularturrets.client.render.renderers.blockitem;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import openmodularturrets.client.render.models.ModelDamageAmp;
-import openmodularturrets.client.render.models.ModelLaserTurret;
+import openmodularturrets.client.render.models.ModelDisposableItemTurret;
+import openmodularturrets.client.render.models.ModelPotatoCannonTurret;
 import openmodularturrets.client.render.models.ModelRedstoneReactor;
 import openmodularturrets.client.render.models.ModelSolarPanelAddon;
 import openmodularturrets.reference.ModInfo;
-import openmodularturrets.tileentity.turrets.TurretHead;
+import openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
+import openmodularturrets.tileentity.turrets.PotatoCannonTurretTileEntity;
 import openmodularturrets.util.TurretHeadUtils;
+
 import org.lwjgl.opengl.GL11;
 
-public class LaserTurretRenderer extends TileEntitySpecialRenderer {
+public class PotatoCannonTurretRenderer extends TileEntitySpecialRenderer {
 
-    private ModelLaserTurret model;
+    private ModelPotatoCannonTurret model;
     ModelSolarPanelAddon solar;
     ModelDamageAmp amp;
     ModelRedstoneReactor reac;
+    PotatoCannonTurretTileEntity turretHead;
+    ResourceLocation textures;
 
-    public LaserTurretRenderer() {
-        model = new ModelLaserTurret();
+    public PotatoCannonTurretRenderer() {
+        model = new ModelPotatoCannonTurret();
         solar = new ModelSolarPanelAddon();
         amp = new ModelDamageAmp();
         reac = new ModelRedstoneReactor();
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
+        turretHead = (PotatoCannonTurretTileEntity) te;
 
-        TurretHead turretHead = (TurretHead) te;
         int rotation = 0;
-
         if (te.getWorldObj() != null) {
             rotation = te.getBlockMetadata();
         }
 
         this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
-        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/laserTurret.png"));
+        textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/potatoCannonTurret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         GL11.glPushMatrix();
@@ -51,8 +58,8 @@ public class LaserTurretRenderer extends TileEntitySpecialRenderer {
         model.Pole.rotateAngleX = turretHead.baseFitRotationX;
         model.Pole.rotateAngleY = turretHead.baseFitRotationZ;
         model.BoxUnder.rotateAngleX = turretHead.baseFitRotationX;
-
         model.renderAll();
+
         if (turretHead.base != null) {
             if (TurretHeadUtils.hasSolarPanelAddon(turretHead.base)) {
                 ResourceLocation texturesSolar = (new ResourceLocation(ModInfo.ID + ":textures/blocks/solarPanelAddon" +
@@ -78,6 +85,7 @@ public class LaserTurretRenderer extends TileEntitySpecialRenderer {
                 reac.renderAll();
             }
         }
+
         GL11.glPopMatrix();
     }
 }

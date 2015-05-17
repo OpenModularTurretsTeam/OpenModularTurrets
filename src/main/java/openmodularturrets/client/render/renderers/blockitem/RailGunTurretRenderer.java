@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import openmodularturrets.client.render.models.ModelDamageAmp;
 import openmodularturrets.client.render.models.ModelRailgun;
 import openmodularturrets.client.render.models.ModelRedstoneReactor;
-import openmodularturrets.client.render.models.SolarPanelAddon;
+import openmodularturrets.client.render.models.ModelSolarPanelAddon;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
 import openmodularturrets.util.TurretHeadUtils;
@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
 
     private ModelRailgun model;
-    SolarPanelAddon solar;
+    ModelSolarPanelAddon solar;
     ModelDamageAmp amp;
     ModelRedstoneReactor reac;
     RailGunTurretTileEntity turretHead;
@@ -26,7 +26,7 @@ public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
 
     public RailGunTurretRenderer() {
         model = new ModelRailgun();
-        solar = new SolarPanelAddon();
+        solar = new ModelSolarPanelAddon();
         amp = new ModelDamageAmp();
         reac = new ModelRedstoneReactor();
     }
