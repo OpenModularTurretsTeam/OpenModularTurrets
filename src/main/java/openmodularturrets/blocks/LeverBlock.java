@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.LeverTileEntity;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 
@@ -20,7 +21,7 @@ public class LeverBlock extends BlockContainer {
 
     public LeverBlock() {
         super(Material.rock);
-        this.setBlockName(BlockNames.unlocalisedLever);
+        this.setBlockName(Names.Blocks.unlocalisedLever);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setHardness(2F);
         this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);

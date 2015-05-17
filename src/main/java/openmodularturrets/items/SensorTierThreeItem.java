@@ -6,13 +6,14 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 
 public class SensorTierThreeItem extends Item {
 
     public SensorTierThreeItem() {
         super();
 
-        this.setUnlocalizedName(ItemNames.unlocalisedSensorTierThree);
+        this.setUnlocalizedName(Names.Items.unlocalisedSensorTierThree);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
     }
 

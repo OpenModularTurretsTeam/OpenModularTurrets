@@ -6,13 +6,14 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 
 public class ContainmentChamberItem extends Item {
 
     public ContainmentChamberItem() {
         super();
 
-        this.setUnlocalizedName(ItemNames.unlocalisedContainmentChamber);
+        this.setUnlocalizedName(Names.Items.unlocalisedContainmentChamber);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
     }
 

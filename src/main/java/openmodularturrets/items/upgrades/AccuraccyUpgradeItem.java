@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.items.ItemNames;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class AccuraccyUpgradeItem extends UpgradeItem {
     public AccuraccyUpgradeItem() {
         super();
 
-        this.setUnlocalizedName(ItemNames.unlocalisedAccuraccyUpgrade);
+        this.setUnlocalizedName(Names.Items.unlocalisedAccuraccyUpgrade);
     }
 
     @SideOnly(Side.CLIENT)

@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.items.ItemNames;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class SolarPanelAddonItem extends AddonItem {
     public SolarPanelAddonItem() {
         super();
 
-        this.setUnlocalizedName(ItemNames.unlocalisedSolarPanelAddon);
+        this.setUnlocalizedName(Names.Items.unlocalisedSolarPanelAddon);
     }
 
     @SideOnly(Side.CLIENT)

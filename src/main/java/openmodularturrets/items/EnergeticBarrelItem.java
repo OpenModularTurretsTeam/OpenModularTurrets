@@ -6,13 +6,14 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 
 public class EnergeticBarrelItem extends Item {
 
     public EnergeticBarrelItem() {
         super();
 
-        this.setUnlocalizedName(ItemNames.unlocalisedEnergeticBarrel);
+        this.setUnlocalizedName(Names.Items.unlocalisedEnergeticBarrel);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
     }
 

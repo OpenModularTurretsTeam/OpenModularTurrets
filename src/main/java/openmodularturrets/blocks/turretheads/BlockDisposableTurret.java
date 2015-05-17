@@ -2,8 +2,8 @@ package openmodularturrets.blocks.turretheads;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import openmodularturrets.blocks.BlockNames;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
 
 public class BlockDisposableTurret extends BlockAbstractTurretHead {
@@ -11,7 +11,7 @@ public class BlockDisposableTurret extends BlockAbstractTurretHead {
     public BlockDisposableTurret() {
         super();
 
-        this.setBlockName(BlockNames.unlocalisedDisposableItemTurret);
+        this.setBlockName(Names.Blocks.unlocalisedDisposableItemTurret);
         this.setBlockTextureName(ModInfo.ID + ":disposableItemTurret");
     }
 
