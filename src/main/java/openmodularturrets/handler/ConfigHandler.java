@@ -21,6 +21,7 @@ public class ConfigHandler {
     private static int baseTierFiveMaxIo;
 
     private static TurretSetting disposable_turret;
+    private static TurretSetting potato_cannon_turret;
     private static TurretSetting machine_gun_turret;
     private static TurretSetting rocket_turret;
     private static TurretSetting grenade_turret;
@@ -74,6 +75,13 @@ public class ConfigHandler {
                 config.get("TurretDisposable", "Damage", 2, "Measured in half-hearts").getInt(),
                 config.get("TurretDisposable", "Accuracy", 5, "Measured in ???, lower is better").getDouble(),
                 config.get("TurretDisposable", "PowerUsage", 2, "RF used per shot").getInt());
+        
+        potato_cannon_turret = new TurretSetting(
+                config.get("TurretPotatoCannon", "Range", 15, "Turret range, in blocks").getInt(),
+                config.get("TurretPotatoCannon", "FireRateCooldown", 35, "Number of ticks between firings").getInt(),
+                config.get("TurretPotatoCannon", "Damage", 3, "Measured in half-hearts").getInt(),
+                config.get("TurretPotatoCannon", "Accuracy", 3, "Measured in ???, lower is better").getDouble(),
+                config.get("TurretPotatoCannon", "PowerUsage", 10, "RF used per shot").getInt());
 
         machine_gun_turret = new TurretSetting(
                 config.get("TurretMachineGun", "Range", 18, "Turret range, in blocks").getInt(),
@@ -226,6 +234,10 @@ public class ConfigHandler {
 
     public static TurretSetting getDisposableTurretSettings() {
         return disposable_turret;
+    }
+    
+    public static TurretSetting getPotatoCannonTurretSettings() {
+        return potato_cannon_turret;
     }
 
     public static TurretSetting getMachineGunTurretSettings() {

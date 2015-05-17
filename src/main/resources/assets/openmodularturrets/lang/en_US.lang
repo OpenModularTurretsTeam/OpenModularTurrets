@@ -27,13 +27,14 @@ item.barrelTierThree.name=Barrel (Tier 3)
 item.barrelTierFour.name=Barrel (Tier 4)
 item.barrelTierFive.name=Barrel (Tier 5)
 item.ioBus.name=IO Bus
-
 tile.baseTierWood.name=Turret Base (Tier 1) 
-tile.baseTierTwoBlock.name=Turret Base (Tier 2) 
-tile.baseTierThreeBlock.name=Turret Base (Tier 3) 
-tile.baseTierFourBlock.name=Turret Base (Tier 4) 
-tile.baseTierFiveBlock.name=Turret Base (Tier 5) 
+tile.baseTierOneBlock.name=Turret Base (Tier 2) 
+tile.baseTierTwoBlock.name=Turret Base (Tier 3) 
+tile.baseTierThreeBlock.name=Turret Base (Tier 4) 
+tile.baseTierFourBlock.name=Turret Base (Tier 5) 
+
 tile.disposeItemTurret.name=Disposable Item Turret
+tile.potatoCannonTurret.name=Potato Cannon Turret
 tile.rocketTurret.name=Rocket Launcher Turret
 tile.machineGunTurret.name=Machine Gun Turret
 tile.grenadeTurret.name=Grenade Launcher Turret
@@ -81,6 +82,7 @@ flavour.turret.2b=form of the horse paradox.
 flavour.turret.3=Swoosh:boom
 flavour.turret.4=Tesla would be proud.
 flavour.turret.5=BFG.
+flavour.turret.6=A PVC masterpiece.
 
 turret.accuracy.low=Low
 turret.accuracy.medium=Medium
@@ -93,6 +95,7 @@ turret.ammo.2=Grenade
 turret.ammo.3=Homing Rocket
 turret.ammo.4=None
 turret.ammo.5=Ferro-Magnetic Slugs
+turret.ammo.6=Potato
 
 base.tier.0=Tier 1 Turret Base
 base.tier.1=Tier 2 Turret Base
