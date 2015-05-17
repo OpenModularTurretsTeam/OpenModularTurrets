@@ -205,10 +205,7 @@ public abstract class TurretHead extends TileEntity {
                 return;
             }
 
-            // has cooldown passed?
-            if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtils.getFireRateUpgrades(base)))) {
-                return;
-            }
+           
 
             // is there a target, and Has it died in the previous tick?
             if (target == null || target.isDead || this.getWorldObj().getEntityByID(target.getEntityId()) == null) {
@@ -222,6 +219,11 @@ public abstract class TurretHead extends TileEntity {
             
             this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord, zCoord) + 3.2F;
             this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord, yCoord, zCoord);
+            
+            // has cooldown passed?
+            if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtils.getFireRateUpgrades(base)))) {
+                return;
+            }
 
             // Can the turret still see the target? (It's moving)
             if (target != null) {
