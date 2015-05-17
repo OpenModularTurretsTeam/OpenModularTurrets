@@ -37,6 +37,7 @@ public class Names {
         public static final String unlocalisedEfficiencyUpgrade = "upgEff";
         public static final String unlocalisedRangeUpgrade = "upgRan";
         public static final String unlocalisedAccuraccyUpgrade = "upgAcc";
+        public static final String unlocalisedScattershotUpgrade = "upgScatter";
         public static final String unlocalisedRedReactorAddon = "addonReactor";
         public static final String unlocalisedDamageAmpAddon = "addonDam";
         public static final String unlocalisedSolarPanelAddon = "addonSolar";
