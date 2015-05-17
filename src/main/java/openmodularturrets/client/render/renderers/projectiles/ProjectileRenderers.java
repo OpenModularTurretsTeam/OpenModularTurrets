@@ -9,7 +9,7 @@ public class ProjectileRenderers {
 
     public static void init() {
         RenderingRegistry.registerEntityRenderingHandler(DisposableTurretProjectile.class,
-                                                         new CrapProjectileRenderer(null));
+                                                         new ItemProjectileRenderer(null));
         RenderingRegistry.registerEntityRenderingHandler(RocketProjectile.class, new RocketRenderer());
         RenderingRegistry.registerEntityRenderingHandler(BulletProjectile.class,
                                                          new RenderSnowball(Items.bulletThrowable));

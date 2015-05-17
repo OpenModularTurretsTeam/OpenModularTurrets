@@ -4,8 +4,8 @@ import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 
-public class CrapProjectileRenderer extends RenderSnowball {
-    public CrapProjectileRenderer(Item par1Item) {
+public class ItemProjectileRenderer extends RenderSnowball {
+    public ItemProjectileRenderer(Item par1Item) {
         super(par1Item);
     }
 

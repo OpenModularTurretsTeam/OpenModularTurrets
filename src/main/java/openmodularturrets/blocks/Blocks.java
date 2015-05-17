@@ -14,6 +14,7 @@ public class Blocks {
     public static Block turretBaseTierFour;
     public static Block turretBaseTierFive;
     public static Block disposableItemTurret;
+    public static Block potatoCannonTurret;
     public static Block rocketTurret;
     public static Block machineGunTurret;
     public static Block grenadeLauncherTurret;
@@ -45,18 +46,23 @@ public class Blocks {
         disposableItemTurret = new BlockDisposableTurret();
         GameRegistry.registerBlock(disposableItemTurret, ItemBlockDisposableTurret.class,
                 Names.Blocks.unlocalisedDisposableItemTurret);
-
-        rocketTurret = new BlockRocketTurret();
-        GameRegistry.registerBlock(rocketTurret, ItemBlockRocketTurret.class, Names.Blocks.unlocalisedRocketTurret);
-
+        
+        potatoCannonTurret = new BlockPotatoCannonTurret();
+        GameRegistry.registerBlock(potatoCannonTurret, ItemBlockPotatoCannonTurret.class,
+                Names.Blocks.unlocalisedPotatoCannonTurret);
+          
         machineGunTurret = new BlockMachineGunTurret();
         GameRegistry.registerBlock(machineGunTurret, ItemBlockMachineGunTurret.class,
                 Names.Blocks.unlocalisedMachineGunTurret);
-
+        
         grenadeLauncherTurret = new BlockGrenadeLauncherTurret();
         GameRegistry.registerBlock(grenadeLauncherTurret, ItemBlockGrenadeLauncherTurret.class,
                 Names.Blocks.unlocalisedGrenadeTurret);
 
+        rocketTurret = new BlockRocketTurret();
+        GameRegistry.registerBlock(rocketTurret, ItemBlockRocketTurret.class, Names.Blocks.unlocalisedRocketTurret);
+
+       
         laserTurret = new BlockLaserTurret();
         GameRegistry.registerBlock(laserTurret, ItemBlockLaserTurret.class, Names.Blocks.unlocalisedLaserTurret);
 
