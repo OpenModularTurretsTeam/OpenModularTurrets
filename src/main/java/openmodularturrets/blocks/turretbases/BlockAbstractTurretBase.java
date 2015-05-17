@@ -46,12 +46,27 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase elb, ItemStack stack) {
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block par5) {
+        if (!world.isRemote) {
+            if (world.isBlockIndirectlyGettingPowered(x, y, z)) {
+                ((TurretBase) world.getTileEntity(x, y, z)).setRedstone(true);
+            } else if (!world.isBlockIndirectlyGettingPowered(x, y, z)) {
+                ((TurretBase) world.getTileEntity(x, y, z)).setRedstone(false);
+            }
+        }
+    }
 
+    @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase elb, ItemStack stack) {
         if (!world.isRemote) {
             EntityPlayerMP player = (EntityPlayerMP) elb;
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
             base.setOwner(player.getDisplayName());
+            if (world.isBlockIndirectlyGettingPowered(x, y, z)) {
+                base.setRedstone(true);
+            } else if (!world.isBlockIndirectlyGettingPowered(x, y, z)) {
+                base.setRedstone(false);
+            }
         }
     }
 

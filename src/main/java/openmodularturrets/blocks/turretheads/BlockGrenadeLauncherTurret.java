@@ -2,8 +2,8 @@ package openmodularturrets.blocks.turretheads;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import openmodularturrets.blocks.BlockNames;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.turrets.GrenadeLauncherTurretTileEntity;
 
 public class BlockGrenadeLauncherTurret extends BlockAbstractTurretHead {
@@ -11,7 +11,7 @@ public class BlockGrenadeLauncherTurret extends BlockAbstractTurretHead {
     public BlockGrenadeLauncherTurret() {
         super();
 
-        this.setBlockName(BlockNames.unlocalisedGrenadeTurret);
+        this.setBlockName(Names.Blocks.unlocalisedGrenadeTurret);
         this.setBlockTextureName(ModInfo.ID + ":grenadeTurret");
     }
 

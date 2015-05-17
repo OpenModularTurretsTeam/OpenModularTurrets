@@ -18,7 +18,6 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import openmodularturrets.ModularTurrets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,18 +36,22 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	protected List<TrustedPlayer> trustedPlayers;
 	protected int ticks;
 	public int currentTrustedPlayerAdmin = 0;
-	private boolean isActive;
+	protected boolean active;
+	protected boolean inverted;
+	protected boolean redstone;
+
 
 	public TurretBase(int MaxEnergyStorage, int MaxIO) {
 		super();
-		yAxisDetect = 2;
+		this.yAxisDetect = 2;
 		this.storage = new EnergyStorage(MaxEnergyStorage, MaxIO);
-		attacksMobs = true;
-		attacksNeutrals = true;
-		attacksPlayers = false;
-		trustedPlayers = new ArrayList<TrustedPlayer>();
+		this.attacksMobs = true;
+		this.attacksNeutrals = true;
+		this.attacksPlayers = false;
+		this.trustedPlayers = new ArrayList<TrustedPlayer>();
 		this.inv = new ItemStack[this.getSizeInventory()];
-		isActive = true;
+		this.inverted = true;
+		this.active = true;
 	}
 
 	public void addTrustedPlayer(String name) {
@@ -64,10 +67,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 				trustedPlayers.remove(i);
 			}
 		}
-	}
-
-	public boolean isGettingRedstoneSignal() {
-		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 	}
 
 	public List<TrustedPlayer> getTrustedPlayers() {
@@ -146,7 +145,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		par1.setBoolean("attacksPlayers", attacksPlayers);
 		par1.setString("owner", owner);
 		par1.setTag("trustedPlayers", getTrustedPlayersAsNBT());
-		par1.setBoolean("isActive", isActive);
+		par1.setBoolean("active", active);
+		par1.setBoolean("inverted", inverted);
+		par1.setBoolean("redstone", redstone);
 
 		NBTTagList itemList = new NBTTagList();
 
@@ -177,7 +178,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		this.attacksNeutrals = par1.getBoolean("attacksNeutrals");
 		this.attacksPlayers = par1.getBoolean("attacksPlayers");
 		this.owner = par1.getString("owner");
-		this.isActive = par1.getBoolean("isActive");
+		this.active = par1.getBoolean("active");
+		this.inverted = par1.getBoolean("inverted");
+		this.redstone = par1.getBoolean("redstone");
 
 		buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 10));
 		NBTTagList tagList = par1.getTagList("Inventory", 10);
@@ -425,11 +428,27 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	}
 
 	public boolean isActive() {
-		return isActive;
+		return active;
 	}
 
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+	public void setInverted(boolean inverted) {
+		this.inverted = inverted;
+		this.active = redstone ^ this.inverted;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	public boolean getInverted() {
+		return this.inverted;
+	}
+
+	public void setRedstone(boolean redstone) {
+		this.redstone = redstone;
+		this.active = this.redstone ^ inverted;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	public boolean getRedstone() {
+		return this.redstone;
 	}
 
 	public void setTrustedPlayers(List<TrustedPlayer> trustedPlayers) {
@@ -532,10 +551,24 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	}
 
 	@Optional.Method(modid = "OpenComputers")
-	@Callback(doc = "function():boolean; toggles turret on/off.")
-	public Object[] setActive(Context context, Arguments args) {
-		this.setActive(args.checkBoolean(0));
+	@Callback(doc = "function():boolean; toggles turret inversion.")
+	public Object[] setInverted(Context context, Arguments args) {
+		this.setInverted(args.checkBoolean(0));
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		return null;
+	}
+
+	@Optional.Method(modid = "OpenComputers")
+	@Callback(doc = "function():boolean; shows redstone invert state.")
+	public Object[] getInverted(Context context, Arguments args) {
+		this.getInverted();
+		return null;
+	}
+
+	@Optional.Method(modid = "OpenComputers")
+	@Callback(doc = "function():boolean; shows redstone state.")
+	public Object[] getRedstone(Context context, Arguments args) {
+		this.getRedstone();
 		return null;
 	}
 }

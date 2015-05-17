@@ -1,4 +1,4 @@
-package openmodularturrets.tileentity.turrets;
+package openmodularturrets.util;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,6 +23,7 @@ import openmodularturrets.items.upgrades.RangeUpgradeItem;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
+import openmodularturrets.tileentity.turrets.TurretHead;
 
 import java.util.List;
 

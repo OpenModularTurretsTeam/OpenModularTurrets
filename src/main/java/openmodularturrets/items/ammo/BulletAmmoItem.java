@@ -3,15 +3,15 @@ package openmodularturrets.items.ammo;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import openmodularturrets.items.ItemNames;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 
 public class BulletAmmoItem extends AmmoItem {
 
     public BulletAmmoItem() {
         super();
 
-        this.setUnlocalizedName(ItemNames.unlocalisedBulletCraftableItem);
+        this.setUnlocalizedName(Names.Items.unlocalisedBulletCraftableItem);
     }
 
     @SideOnly(Side.CLIENT)

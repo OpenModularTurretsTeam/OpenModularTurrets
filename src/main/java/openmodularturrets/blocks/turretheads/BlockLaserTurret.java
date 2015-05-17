@@ -2,8 +2,8 @@ package openmodularturrets.blocks.turretheads;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import openmodularturrets.blocks.BlockNames;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
 
 public class BlockLaserTurret extends BlockAbstractTurretHead {
@@ -11,7 +11,7 @@ public class BlockLaserTurret extends BlockAbstractTurretHead {
     public BlockLaserTurret() {
         super();
 
-        this.setBlockName(BlockNames.unlocalisedLaserTurret);
+        this.setBlockName(Names.Blocks.unlocalisedLaserTurret);
         this.setBlockTextureName(ModInfo.ID + ":laserTurret");
     }
 

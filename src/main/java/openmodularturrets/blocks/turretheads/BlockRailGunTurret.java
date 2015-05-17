@@ -2,8 +2,8 @@ package openmodularturrets.blocks.turretheads;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import openmodularturrets.blocks.BlockNames;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
 
 import java.util.Random;
@@ -13,7 +13,7 @@ public class BlockRailGunTurret extends BlockAbstractTurretHead {
     public BlockRailGunTurret() {
         super();
 
-        this.setBlockName(BlockNames.unlocalisedRailGunTurret);
+        this.setBlockName(Names.Blocks.unlocalisedRailGunTurret);
         this.setBlockTextureName(ModInfo.ID + ":railGunTurret");
     }
 
