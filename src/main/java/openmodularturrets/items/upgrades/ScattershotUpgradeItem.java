@@ -17,7 +17,7 @@ public class ScattershotUpgradeItem extends UpgradeItem {
 
     public ScattershotUpgradeItem() {
         super();
-        this.setUnlocalizedName(Names.Items.unlocalisedAccuraccyUpgrade);
+        this.setUnlocalizedName(Names.Items.unlocalisedScattershotUpgrade);
         this.setMaxStackSize(2);
     }
 
