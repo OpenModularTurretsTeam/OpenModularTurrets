@@ -335,7 +335,7 @@ public abstract class TurretHead extends TileEntity {
 
 				this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord,
 						this.zCoord,
-						ModInfo.ID + ":" + this.getLaunchSoundEffect(), 1.0F,
+						ModInfo.ID + ":" + this.getLaunchSoundEffect(), 0.6F,
 						1.0F);
 				this.getWorldObj().spawnEntityInWorld(projectile);
 			}
