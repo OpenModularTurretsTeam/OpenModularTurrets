@@ -107,7 +107,7 @@ public class TurretHeadUtils {
 
                     EntityLivingBase targetELB = (EntityLivingBase) target;
 
-                    if (canTurretSeeTarget(turret, targetELB)) {
+                    if (canTurretSeeTarget(turret, targetELB) && targetELB.getHealth() > 0.0F) {
                         return target;
                     }
                 }
