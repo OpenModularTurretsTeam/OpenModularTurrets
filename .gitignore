@@ -15,5 +15,6 @@ eclipse
 .classpath
 .project
 .settings
+.idea
 bin
 logs
