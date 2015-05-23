@@ -139,3 +139,9 @@ turret.upgrade.scatter.flavour=You just need to shoot more bullets.
 status.ownership=You do not own this turret, or you don't have permission to do that.
 status.missingBase=There's no turret base there.
 status.warning=You are entering a turret-protected area. Continue at your own risk.
+
+gui.openmodularturrets:owner=Owner
+gui.openmodularturrets:invert=Inverted
+gui.openmodularturrets:active=Active
+gui.openmodularturrets:mode=Mode
+gui.openmodularturrets:true=true
