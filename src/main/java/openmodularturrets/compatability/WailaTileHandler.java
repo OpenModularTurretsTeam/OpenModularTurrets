@@ -83,7 +83,7 @@ public class WailaTileHandler implements IWailaDataProvider {
         String inverted = (invert ? Names.Localizations.TRUE : Names.Localizations.FALSE);
         String isActive = (active ? Names.Localizations.TRUE : Names.Localizations.FALSE);
         currenttip.add(safeLocalize(Names.Localizations.INVERT) + ": " + safeLocalize(inverted));
-        currenttip.add(safeLocalize(Names.Localizations.ACTIVE) + ": " + safeLocalize(inverted));
+        currenttip.add(safeLocalize(Names.Localizations.ACTIVE) + ": " + safeLocalize(isActive));
         String owner = accessor.getNBTData().getString("owner");
         currenttip.add(safeLocalize(Names.Localizations.OWNER) + ": " + owner);
         return currenttip;
