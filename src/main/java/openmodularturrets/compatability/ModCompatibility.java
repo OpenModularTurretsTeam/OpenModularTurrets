@@ -1,7 +1,12 @@
 package openmodularturrets.compatability;
 
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.event.FMLInterModComms;
+import net.minecraft.nbt.NBTTagCompound;
+import openmodularturrets.reference.ModInfo;
 
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -35,6 +40,28 @@ public class ModCompatibility {
             Logger.getGlobal().info("Ek het geweet ek kon nie die enigste modding saffer wees nie. (Found Thaumcraft)");
         }
         IGWModLoaded = Loader.isModLoaded("IGWMod");
-        new IGWSupportNotifier();
+
     }
+
+    public static String getBuildNumber() {
+        Map<String, ModContainer> modList = Loader.instance().getIndexedModList();
+        return modList.get(ModInfo.ID).getProcessedVersion().getVersionString().split("-")[1];
+    }
+
+    private static void addVersionCheckerInfo() {
+        NBTTagCompound versionchecker = new NBTTagCompound();
+        versionchecker.setString("curseProjectName", "224663-openmodularturrets");
+        versionchecker.setString("curseFilenameParser", "OpenModularTurrets-1.7.10-[]");
+        versionchecker.setString("modDisplayName", "OpenModularTurrets");
+        versionchecker.setString("oldVersion", ModInfo.VERSION + "-" + getBuildNumber());
+        FMLInterModComms.sendRuntimeMessage("openmodularturrets", "VersionChecker", "addCurseCheck", versionchecker);
+    }
+
+
+    public static void performModCompat() {
+        FMLInterModComms.sendMessage("Waila", "register", "openmodularturrets.compatability.WailaTileHandler.callbackRegister");
+        new IGWSupportNotifier();
+        addVersionCheckerInfo();
+    }
+
 }
