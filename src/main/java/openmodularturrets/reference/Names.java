@@ -66,6 +66,10 @@ public class Names {
     }
 
     public static class Localizations {
-
+        public static final String OWNER = "gui.openmodularturrets:owner";
+        public static final String INVERT = "gui.openmodularturrets:invert";
+        public static final String ACTIVE = "gui.openmodularturrets:active";
+        public static final String TRUE = "gui.openmodularturrets:true";
+        public static final String FALSE = "gui.openmodularturrets:false";
     }
 }

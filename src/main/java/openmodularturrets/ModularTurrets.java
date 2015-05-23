@@ -28,12 +28,10 @@ public class ModularTurrets {
 	public static ModularTurrets instance;
 	public static SimpleNetworkWrapper networking;
 	public GuiHandler gui = new GuiHandler();
-	public static CreativeTabs modularTurretsTab = new ModularTurretsTab(
-			ModInfo.ID);
+	public static CreativeTabs modularTurretsTab = new ModularTurretsTab(ModInfo.ID);
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-	
 		ConfigHandler.init(event.getSuggestedConfigurationFile());
 		Items.init();
 		Blocks.init();
@@ -42,8 +40,8 @@ public class ModularTurrets {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		
 		ModCompatibility.checkForMods();
+		ModCompatibility.performModCompat();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, gui);
 		TileEntityHandler.init();
 		proxy.initRenderers();
