@@ -11,10 +11,10 @@ import openmodularturrets.handler.ConfigHandler;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class ItemBlockRailGunTurret extends ItemBlock {
+public class ItemBlockRelativisticTurret extends ItemBlock {
     public static final DecimalFormat df = new DecimalFormat("0.0");
 
-    public ItemBlockRailGunTurret(Block p_i45328_1_) {
+    public ItemBlockRelativisticTurret(Block p_i45328_1_) {
         super(p_i45328_1_);
     }
 
@@ -22,27 +22,27 @@ public class ItemBlockRailGunTurret extends ItemBlock {
     public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_) {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.GOLD + "--" + StatCollector.translateToLocal("tooltip.info") + "--");
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.tier") + ": " + EnumChatFormatting.WHITE + "5");
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.tier") + ": " + EnumChatFormatting.WHITE + "3");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.range") + ": " + EnumChatFormatting.WHITE +
-                               ConfigHandler.getRailgun_turret().getRange());
+                               ConfigHandler.getRelativistic_turret().getRange());
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.accuracy") + ": " + EnumChatFormatting.WHITE +
-                               StatCollector.translateToLocal("turret.accuracy.exact"));
+                               StatCollector.translateToLocal("turret.accuracy.high"));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.ammo") + ": " + EnumChatFormatting.WHITE +
-                               StatCollector.translateToLocal("turret.ammo.5"));
+                               StatCollector.translateToLocal("turret.ammo.4"));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.tierRequired") + ": " + EnumChatFormatting.WHITE +
-                               StatCollector.translateToLocal("base.tier.5"));
+                               StatCollector.translateToLocal("base.tier.3"));
         p_77624_3_.add("");
         p_77624_3_.add(
                 EnumChatFormatting.DARK_PURPLE + "--" + StatCollector.translateToLocal("tooltip.damage.label") + "--");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.damage.stat") + ": " + EnumChatFormatting.WHITE +
-                               (ConfigHandler.getRailgun_turret().getDamage() / 2F) + " " + StatCollector.translateToLocal(
-                "tooltip" + ".health"));
+                               (ConfigHandler.getRelativistic_turret().getDamage() / 2F) + " " + StatCollector.translateToLocal(
+                "tooltip.health"));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.aoe") + ": " + EnumChatFormatting.WHITE + "0");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.firerate") + ": " + EnumChatFormatting.WHITE + df.format(
-                20.0F / ConfigHandler.getRailgun_turret().getFireRate()));
+                20.0F / ConfigHandler.getRelativistic_turret().getFireRate()));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.energy.stat") + ": " + EnumChatFormatting.WHITE +
-                               ConfigHandler.getRailgun_turret().getPowerUsage() + " RF");
+                               ConfigHandler.getRelativistic_turret().getPowerUsage() + " RF");
         p_77624_3_.add("");
-        p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.turret.5"));
+        p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.turret.8"));
     }
 }
