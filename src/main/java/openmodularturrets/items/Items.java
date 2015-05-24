@@ -6,6 +6,7 @@ import openmodularturrets.items.addons.DamageAmpAddonItem;
 import openmodularturrets.items.addons.PotentiaAddonItem;
 import openmodularturrets.items.addons.RedstoneReactorAddonItem;
 import openmodularturrets.items.addons.SolarPanelAddonItem;
+import openmodularturrets.items.ammo.BlazingClayAmmoItem;
 import openmodularturrets.items.ammo.BulletAmmoItem;
 import openmodularturrets.items.ammo.FerroSlugItem;
 import openmodularturrets.items.ammo.GrenadeAmmoItem;
@@ -20,6 +21,7 @@ public class Items {
     public static Item bulletThrowable;
     public static Item grenadeThrowable;
     public static Item bulletCraftable;
+    public static Item blazingClayCraftable;
     public static Item grenadeCraftable;
     public static Item rocketCraftable;
     public static Item ferroSlug;
@@ -89,6 +91,9 @@ public class Items {
 
         bulletCraftable = new BulletAmmoItem();
         GameRegistry.registerItem(bulletCraftable, "bulletCraftable");
+        
+        blazingClayCraftable = new BlazingClayAmmoItem();
+        GameRegistry.registerItem(blazingClayCraftable, "blazingClayCraftable");
 
         grenadeCraftable = new GrenadeAmmoItem();
         GameRegistry.registerItem(grenadeCraftable, "grenadeCraftable");

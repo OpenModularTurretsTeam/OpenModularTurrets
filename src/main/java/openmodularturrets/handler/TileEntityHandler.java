@@ -21,6 +21,9 @@ public class TileEntityHandler {
         GameRegistry.registerTileEntity(TurretBaseTierThreeTileEntity.class, "turretBaseTwo");
         GameRegistry.registerTileEntity(TurretBaseTierFourTileEntity.class, "turretBaseThree");
         GameRegistry.registerTileEntity(TurretBaseTierFiveTileEntity.class, "turretBaseFour");
-        GameRegistry.registerTileEntity(RailGunTurretTileEntity.class, "railGunTurret");
+        GameRegistry.registerTileEntity(RailGunTurretTileEntity.class, "railGunTurret");      
+        GameRegistry.registerTileEntity(IncendiaryTurretTileEntity.class, "incendiaryTurret");
+        GameRegistry.registerTileEntity(RelativisticTurretTileEntity.class, "relativisticTurret");
+        GameRegistry.registerTileEntity(TeleporterTurretTileEntity.class, "teleporterTurret");
     }
 }

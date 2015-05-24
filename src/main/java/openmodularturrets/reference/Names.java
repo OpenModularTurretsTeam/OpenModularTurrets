@@ -33,6 +33,7 @@ public class Names {
         public static final String unlocalisedBulletCraftableItem = "bulletCraftable";
         public static final String unlocalisedGrenadeCraftableItem = "grenadeCraftable";
         public static final String unlocalisedRocketCraftableItem = "rocketCraftable";
+        public static final String unlocalisedBlazingClayItem = "blazingClayCraftable";
         public static final String unlocalisedFireRateUpgrade = "upgFire";
         public static final String unlocalisedEfficiencyUpgrade = "upgEff";
         public static final String unlocalisedRangeUpgrade = "upgRan";
