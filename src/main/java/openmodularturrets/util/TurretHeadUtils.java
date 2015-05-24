@@ -1,5 +1,6 @@
 package openmodularturrets.util;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
@@ -172,8 +173,7 @@ public class TurretHeadUtils {
 				}
 
 				if (base.isAttacksPlayers()) {
-					if (target1 instanceof EntityPlayerMP 
-							&& !target1.isDead
+					if (target1 instanceof EntityPlayerMP && !target1.isDead
 							&& target1.getDistance(xCoord, yCoord, zCoord) >= 3) {
 						EntityPlayerMP entity = (EntityPlayerMP) target1;
 
@@ -619,24 +619,49 @@ public class TurretHeadUtils {
 		vecDelta.yCoord /= vecDeltaLength;
 		vecDelta.zCoord /= vecDeltaLength;
 
-		// Offset start position toward the target to prevent self collision
-		traceStart.xCoord += vecDelta.xCoord;
-		traceStart.yCoord += vecDelta.yCoord;
-		traceStart.zCoord += vecDelta.zCoord;
+		// Limit how many non solid block a turret can see through
+		for (int i = 0; i < 10; i++) {
+			// Offset start position toward the target to prevent self collision
+			traceStart.xCoord += vecDelta.xCoord;
+			traceStart.yCoord += vecDelta.yCoord;
+			traceStart.zCoord += vecDelta.zCoord;
 
-		MovingObjectPosition traced = turret.getWorldObj().rayTraceBlocks(
-				Vec3.createVectorHelper(traceStart.xCoord, traceStart.yCoord,
-						traceStart.zCoord),
-				Vec3.createVectorHelper(traceEnd.xCoord, traceEnd.yCoord,
-						traceEnd.zCoord));
+			MovingObjectPosition traced = turret.getWorldObj().rayTraceBlocks(
+					Vec3.createVectorHelper(traceStart.xCoord,
+							traceStart.yCoord, traceStart.zCoord),
+					Vec3.createVectorHelper(traceEnd.xCoord, traceEnd.yCoord,
+							traceEnd.zCoord));
 
-		EntityLivingBase targeted = target != null && traced == null ? target
-				: null;
+			if (traced != null && traced.typeOfHit == traced.typeOfHit.BLOCK) {
+				Block hitBlock = turret.getWorldObj().getBlock(traced.blockX,
+						traced.blockY, traced.blockZ);
 
-		if (targeted != null && targeted.equals(target)) {
-			return true;
-		} else {
-			return false;
+				// If non solid block is in the way then proceed to continue
+				// tracing
+				if (hitBlock != null
+						&& !hitBlock.getMaterial().isSolid()
+						&& MathHelper.abs_max(
+								MathHelper.abs_max(traceStart.xCoord
+										- traceEnd.xCoord, traceStart.yCoord
+										- traceEnd.yCoord), traceStart.zCoord
+										- traceEnd.zCoord) > 1) {
+					// Start at new position and continue
+					traceStart = traced.hitVec;
+					continue;
+				}
+			}
+
+			EntityLivingBase targeted = target != null && traced == null ? target
+					: null;
+
+			if (targeted != null && targeted.equals(target)) {
+				return true;
+			} else {
+				return false;
+			}
 		}
+
+		// If all above failed, the target cannot be seen
+		return false;
 	}
 }
