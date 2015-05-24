@@ -16,6 +16,21 @@ public class RecipeHandler {
 		{
 			ThaumcraftRecipeHandler.init();
 		}
+		
+		if(ModCompatibility.ThermalExpansionLoaded)
+		{
+			ThermalExpansionRecipeHandler.init();
+		}
+		
+		if(ModCompatibility.EnderIOLoaded)
+		{
+			EnderIORecipeHandler.init();
+		}
+		
+		if(ModCompatibility.MekanismLoaded)
+		{
+			MekanismRecipeHandler.init();
+		}
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.turretBaseTierFive,
 				new Object[] { "ADA", "DCD", "ADA", 'A', "ingotEnderium", 'D',
