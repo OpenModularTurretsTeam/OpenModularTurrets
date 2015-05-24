@@ -109,11 +109,11 @@ turret.ammo.5=Ferro-Magnetic Slugs
 turret.ammo.6=Potato
 turret.ammo.7=Blazing Clay
 
-base.tier.0=Tier 1 Turret Base
-base.tier.1=Tier 2 Turret Base
-base.tier.2=Tier 3 Turret Base
-base.tier.3=Tier 4 Turret Base
-base.tier.4=Tier 5 Turret Base
+base.tier.1=Tier 1 Turret Base
+base.tier.2=Tier 2 Turret Base
+base.tier.3=Tier 3 Turret Base
+base.tier.4=Tier 4 Turret Base
+base.tier.5=Tier 5 Turret Base
 
 turret.addon.label=Turret Addon
 turret.addon.amp.a.label=Adds
