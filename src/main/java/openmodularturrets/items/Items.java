@@ -3,6 +3,7 @@ package openmodularturrets.items;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import openmodularturrets.items.addons.DamageAmpAddonItem;
+import openmodularturrets.items.addons.PotentiaAddonItem;
 import openmodularturrets.items.addons.RedstoneReactorAddonItem;
 import openmodularturrets.items.addons.SolarPanelAddonItem;
 import openmodularturrets.items.ammo.BulletAmmoItem;
@@ -30,6 +31,7 @@ public class Items {
     public static Item redstoneReactorAddon;
     public static Item damageAmpAddon;
     public static Item solarPanelAddon;
+    public static Item potentiaAddon;
     
     public static Item sensorTierOneItem;
     public static Item sensorTierTwoItem;
@@ -81,6 +83,9 @@ public class Items {
 
         solarPanelAddon = new SolarPanelAddonItem();
         GameRegistry.registerItem(solarPanelAddon, "solarPanelAddon");
+        
+        potentiaAddon = new PotentiaAddonItem();
+        GameRegistry.registerItem(potentiaAddon, "potentiaAddon");
 
         bulletCraftable = new BulletAmmoItem();
         GameRegistry.registerItem(bulletCraftable, "bulletCraftable");
