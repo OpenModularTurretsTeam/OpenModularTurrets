@@ -41,6 +41,7 @@ public class Names {
         public static final String unlocalisedRedReactorAddon = "addonReactor";
         public static final String unlocalisedDamageAmpAddon = "addonDam";
         public static final String unlocalisedSolarPanelAddon = "addonSolar";
+        public static final String unlocalisedPotentiaAddon = "addonPotentia";
         
         public static final String unlocalisedSensorTierOne = "sensorOne";
         public static final String unlocalisedSensorTierTwo = "sensorTwo";

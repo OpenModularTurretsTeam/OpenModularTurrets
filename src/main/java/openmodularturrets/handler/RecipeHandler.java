@@ -4,12 +4,18 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import openmodularturrets.blocks.Blocks;
+import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.items.Items;
 
 public class RecipeHandler {
 
 	@SuppressWarnings("RedundantArrayCreation")
 	public static void initRecipes() {
+		
+		if(ModCompatibility.ThaumcraftLoaded)
+		{
+			ThaumcraftRecipeHandler.init();
+		}
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.turretBaseTierFive,
 				new Object[] { "ADA", "DCD", "ADA", 'A', "ingotEnderium", 'D',

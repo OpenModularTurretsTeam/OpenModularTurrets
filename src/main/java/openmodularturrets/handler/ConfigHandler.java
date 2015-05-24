@@ -19,6 +19,9 @@ public class ConfigHandler {
 
     private static int baseTierFiveMaxCharge;
     private static int baseTierFiveMaxIo;
+    
+    private static int potentiaToRFRatio;
+    private static int potentiaAddonCapacity;
 
     private static TurretSetting disposable_turret;
     private static TurretSetting potato_cannon_turret;
@@ -68,7 +71,10 @@ public class ConfigHandler {
         turretWarnMessage = config.get("TurretWarnMessage", "Should turret warn message be displayed?",
                                        true).getBoolean();
         turretBreakable = config.get("TurretBreakableByAnyone", "Are turrets breakable by anyone?", false).getBoolean();
-
+        
+        potentiaToRFRatio = config.get("PotentiaToRFRatio", "Potentia Addons RF convertion", 500).getInt();
+        potentiaAddonCapacity = config.get("PotentiaAddonCapacity", "How much potentia the addon can store", 20).getInt();
+        
         disposable_turret = new TurretSetting(
                 config.get("TurretDisposable", "Range", 10, "Turret range, in blocks").getInt(),
                 config.get("TurretDisposable", "FireRateCooldown", 25, "Number of ticks between firings").getInt(),
@@ -292,7 +298,18 @@ public class ConfigHandler {
         return damageAmpDmgBonus;
     }
 
-    public static class TurretSetting {
+    public static int getPotentiaToRFRatio() {
+		return potentiaToRFRatio;
+	}
+   
+
+	public static int getPotentiaAddonCapacity() {
+		return potentiaAddonCapacity;
+	}
+
+
+
+	public static class TurretSetting {
         private final int range;
         private final int rof;
         private final int damage;

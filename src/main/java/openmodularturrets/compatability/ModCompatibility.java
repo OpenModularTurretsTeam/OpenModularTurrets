@@ -25,7 +25,7 @@ public class ModCompatibility {
     public static void checkForMods() {
         ThermalExpansionLoaded = Loader.isModLoaded("ThermalExpansion");
         if(ThermalExpansionLoaded){
-            Logger.getGlobal().info("Hi there, ?? = ??0?T (Found ThermalExpansion");
+            Logger.getGlobal().info("Hi there, dV=V0B(t1-t0)! (Found ThermalExpansion");
         }
         EnderIOLoaded = Loader.isModLoaded("EnderIO");
         if(EnderIOLoaded){
@@ -37,7 +37,7 @@ public class ModCompatibility {
         }
         ThaumcraftLoaded = Loader.isModLoaded("Thaumcraft");
         if(ThaumcraftLoaded){
-            Logger.getGlobal().info("Ek het geweet ek kon nie die enigste modding saffer wees nie. (Found Thaumcraft)");
+            Logger.getGlobal().info("Afrikaners is plesierig. (Found Thaumcraft)");
         }
         IGWModLoaded = Loader.isModLoaded("IGWMod");
 
