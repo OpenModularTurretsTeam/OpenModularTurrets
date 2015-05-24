@@ -22,7 +22,7 @@ public class ItemBlockPotatoCannonTurret extends ItemBlock {
     public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_) {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.GOLD + "--" + StatCollector.translateToLocal("tooltip.info") + "--");
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.tier") + ": " + EnumChatFormatting.WHITE + "0");
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.tier") + ": " + EnumChatFormatting.WHITE + "1");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.range") + ": " + EnumChatFormatting.WHITE +
                                ConfigHandler.getPotatoCannonTurretSettings().getRange());
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.accuracy") + ": " + EnumChatFormatting.WHITE +
@@ -30,7 +30,7 @@ public class ItemBlockPotatoCannonTurret extends ItemBlock {
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.ammo") + ": " + EnumChatFormatting.WHITE +
                                StatCollector.translateToLocal("turret.ammo.6"));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.tierRequired") + ": " + EnumChatFormatting.WHITE +
-                               StatCollector.translateToLocal("base.tier.0"));
+                               StatCollector.translateToLocal("base.tier.1"));
         p_77624_3_.add("");
         p_77624_3_.add(
                 EnumChatFormatting.DARK_PURPLE + "--" + StatCollector.translateToLocal("tooltip.damage.label") + "--");

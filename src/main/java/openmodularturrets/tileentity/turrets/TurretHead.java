@@ -29,6 +29,7 @@ public abstract class TurretHead extends TileEntity {
 	public boolean hasSetSide = false;
 	public float recoilState = 0.0F;
 	Entity target = null;
+	public float rotationAmimation = 0.00F;
 
 	@Override
 	public Packet getDescriptionPacket() {
@@ -106,6 +107,34 @@ public abstract class TurretHead extends TileEntity {
 			this.hasSetSide = true;
 		}
 	}
+	
+	public Entity getTargetWithMinRange()
+	{
+		return TurretHeadUtils
+				.getTargetWithMinimumRange(
+						base,
+						worldObj,
+						base.getyAxisDetect(),
+						xCoord,
+						yCoord,
+						zCoord,
+						getTurretRange()
+								+ TurretHeadUtils.getRangeUpgrades(base), this);
+	}
+	
+	public Entity getTargetWithoutEffect()
+	{
+		return TurretHeadUtils
+				.getTargetWithoutSlowEffect(
+						base,
+						worldObj,
+						base.getyAxisDetect(),
+						xCoord,
+						yCoord,
+						zCoord,
+						getTurretRange()
+								+ TurretHeadUtils.getRangeUpgrades(base), this);
+	}
 
 	public Entity getTarget() {
 		return TurretHeadUtils
@@ -170,7 +199,7 @@ public abstract class TurretHead extends TileEntity {
 
 	public abstract String getLaunchSoundEffect();
 
-	private boolean chebyshevDistance(Entity target, TurretBase base) {
+	public boolean chebyshevDistance(Entity target, TurretBase base) {
 		if (MathHelper.abs_max(
 				MathHelper.abs_max(target.posX - this.xCoord, target.posY
 						- this.yCoord), target.posZ - this.zCoord) > (getTurretRange() + TurretHeadUtils
@@ -186,6 +215,11 @@ public abstract class TurretHead extends TileEntity {
 
 		setSide();
 		this.base = getBase();
+
+		if (rotationAmimation >= 360F) {
+			rotationAmimation = 0F;
+		}
+		rotationAmimation = rotationAmimation + 0.03F;
 
 		if (worldObj.isRemote) {
 			return;

@@ -22,7 +22,7 @@ public class ItemBlockLaserTurret extends ItemBlock {
     public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List p_77624_3_, boolean p_77624_4_) {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.GOLD + "--" + StatCollector.translateToLocal("tooltip.info") + "--");
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.tier") + ": " + EnumChatFormatting.WHITE + "4");
+        p_77624_3_.add(StatCollector.translateToLocal("tooltip.tier") + ": " + EnumChatFormatting.WHITE + "5");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.range") + ": " + EnumChatFormatting.WHITE +
                                ConfigHandler.getLaserTurretSettings().getRange());
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.accuracy") + ": " + EnumChatFormatting.WHITE +
@@ -30,7 +30,7 @@ public class ItemBlockLaserTurret extends ItemBlock {
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.ammo") + ": " + EnumChatFormatting.WHITE +
                                StatCollector.translateToLocal("turret.ammo.4"));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.tierRequired") + ": " + EnumChatFormatting.WHITE +
-                               StatCollector.translateToLocal("base.tier.4"));
+                               StatCollector.translateToLocal("base.tier.5"));
         p_77624_3_.add("");
         p_77624_3_.add(
                 EnumChatFormatting.DARK_PURPLE + "--" + StatCollector.translateToLocal("tooltip.damage.label") + "--");

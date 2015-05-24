@@ -55,5 +55,23 @@ public class ItemRenderers {
 						TileEntityRenderers.railGunTurretRenderer,
 						new RailGunTurretTileEntity()));
 
+		MinecraftForgeClient.registerItemRenderer(Item
+				.getItemFromBlock(Blocks.incendiaryTurret),
+				new IncendiaryTurretItemRenderer(
+						TileEntityRenderers.incendiaryTurretRenderer,
+						new IncendiaryTurretTileEntity()));
+
+		MinecraftForgeClient.registerItemRenderer(Item
+				.getItemFromBlock(Blocks.relativisticTurret),
+				new RelativisticTurretItemRenderer(
+						TileEntityRenderers.relativisticTurretRenderer,
+						new RelativisticTurretTileEntity()));
+
+		MinecraftForgeClient.registerItemRenderer(Item
+				.getItemFromBlock(Blocks.teleporterTurret),
+				new TeleporterTurretItemRenderer(
+						TileEntityRenderers.teleporterTurretRenderer,
+						new TeleporterTurretTileEntity()));
+
 	}
 }

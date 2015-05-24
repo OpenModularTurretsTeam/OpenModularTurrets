@@ -122,6 +122,33 @@
             }
         ]
     },
+    "incendiary": {
+        "category": "neutral",
+        "sounds": [
+            {
+               "name": "incendiary",
+              "stream": false
+            }
+        ]
+    },
+    "relativistic": {
+        "category": "neutral",
+        "sounds": [
+            {
+               "name": "relativistic",
+              "stream": false
+            }
+        ]
+    },
+    "teleport": {
+        "category": "neutral",
+        "sounds": [
+            {
+               "name": "teleport",
+              "stream": false
+            }
+        ]
+    },
      "railGun": {
         "category": "neutral",
         "sounds": [
