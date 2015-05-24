@@ -11,6 +11,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmodularturrets.blocks.turretheads.BlockTeleporterTurret;
 import openmodularturrets.entity.projectiles.BulletProjectile;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
@@ -142,19 +143,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
 			target.setPosition(this.xCoord + 0.5F, this.yCoord + 1.0F,
 					zCoord + 0.5F);
 			worldObj.updateEntity(target);
-
-			for (int i = 0; i <= 10; i++) {
-				Random random = new Random();
-				float var21 = (random.nextFloat() - 0.5F) * 0.2F;
-				float var22 = (random.nextFloat() - 0.5F) * 0.2F;
-				float var23 = (random.nextFloat() - 0.5F) * 0.2F;
-				worldObj.spawnParticle("portal",
-						xCoord + 0.5f + random.nextGaussian(), yCoord + 0.5f
-								+ random.nextGaussian(),
-						zCoord + 0.5f + random.nextGaussian(), (double) var21,
-						(double) var22, (double) var23);
-			}
-
+			((BlockTeleporterTurret) worldObj.getBlock(xCoord, yCoord, zCoord)).shouldAnimate = true;
 			target = null;
 
 		}
