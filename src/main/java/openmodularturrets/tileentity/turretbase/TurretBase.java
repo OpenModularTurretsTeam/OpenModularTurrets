@@ -366,8 +366,8 @@ public abstract class TurretBase extends TileVisNode implements IEnergyHandler,
 				if (VisNetHandler.drainVis(worldObj, xCoord, yCoord, zCoord,
 						Aspect.ORDER, 1) == 1) {
 					this.amountOfPotentia = this.amountOfPotentia - 0.01F;
-					this.receiveEnergy(ForgeDirection.UNKNOWN, Math
-							.round(ConfigHandler.getPotentiaToRFRatio()),
+					this.receiveEnergy(ForgeDirection.UNKNOWN,
+							Math.round(ConfigHandler.getPotentiaToRFRatio()),
 							false);
 				} else {
 					this.amountOfPotentia = this.amountOfPotentia - 0.01F;
