@@ -31,9 +31,11 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
 import thaumcraft.api.aspects.IEssentiaTransport;
+import thaumcraft.api.visnet.TileVisNode;
+import thaumcraft.api.visnet.VisNetHandler;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")
-public abstract class TurretBase extends TileEntity implements IEnergyHandler,
+public abstract class TurretBase extends TileVisNode implements IEnergyHandler,
 		IInventory, SimpleComponent, ISidedInventory, IEssentiaTransport,
 		IAspectContainer {
 
@@ -361,10 +363,18 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 			if (amountOfPotentia > 0.00F
 					&& !(storage.getMaxEnergyStored()
 							- storage.getEnergyStored() == 0)) {
-				this.amountOfPotentia = this.amountOfPotentia - 0.01F;
-				this.receiveEnergy(ForgeDirection.UNKNOWN,
-						Math.round(ConfigHandler.getPotentiaToRFRatio() / 10),
-						false);
+				if (VisNetHandler.drainVis(worldObj, xCoord, yCoord, zCoord,
+						Aspect.ORDER, 1) == 1) {
+					this.amountOfPotentia = this.amountOfPotentia - 0.01F;
+					this.receiveEnergy(ForgeDirection.UNKNOWN, Math
+							.round(ConfigHandler.getPotentiaToRFRatio()),
+							false);
+				} else {
+					this.amountOfPotentia = this.amountOfPotentia - 0.01F;
+					this.receiveEnergy(ForgeDirection.UNKNOWN, Math
+							.round(ConfigHandler.getPotentiaToRFRatio() / 10),
+							false);
+				}
 			}
 		}
 
@@ -700,6 +710,16 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	@Override
+	public int getRange() {
+		return 7;
+	}
+
+	@Override
+	public boolean isSource() {
+		return false;
 	}
 
 	@Optional.Method(modid = "OpenComputers")
