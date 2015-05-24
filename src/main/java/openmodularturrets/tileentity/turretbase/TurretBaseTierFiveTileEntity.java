@@ -1,7 +1,10 @@
 package openmodularturrets.tileentity.turretbase;
 
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.Optional;
 import openmodularturrets.handler.ConfigHandler;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
 
 public class TurretBaseTierFiveTileEntity extends TurretBase {
 

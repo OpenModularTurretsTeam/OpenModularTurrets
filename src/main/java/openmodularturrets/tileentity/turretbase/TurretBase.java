@@ -7,6 +7,7 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -23,10 +24,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.util.TurretHeadUtils;
+import thaumcraft.api.ThaumcraftApiHelper;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aspects.IAspectContainer;
+import thaumcraft.api.aspects.IEssentiaTransport;
+
 @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")
 public abstract class TurretBase extends TileEntity implements IEnergyHandler,
-		IInventory, SimpleComponent, ISidedInventory {
-	
+		IInventory, SimpleComponent, ISidedInventory, IEssentiaTransport,
+		IAspectContainer {
+
 	protected EnergyStorage storage;
 	protected ItemStack[] inv;
 	protected int yAxisDetect;
@@ -42,6 +52,10 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	protected boolean redstone;
 	protected boolean checkRedstone = false;
 
+	protected float amountOfPotentia = 0F;
+	protected float maxAmountOfPotentia = ConfigHandler
+			.getPotentiaAddonCapacity();
+
 	public TurretBase(int MaxEnergyStorage, int MaxIO) {
 		super();
 		this.yAxisDetect = 2;
@@ -52,7 +66,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		this.trustedPlayers = new ArrayList<TrustedPlayer>();
 		this.inv = new ItemStack[this.getSizeInventory()];
 		this.inverted = true;
-		this.active = true;  //redstone will be automatically set on block place and update
+		this.active = true; // redstone will be automatically set on block place
+							// and update
 	}
 
 	public void addTrustedPlayer(String name) {
@@ -139,6 +154,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		par1.setInteger("maxStorage", this.storage.getMaxEnergyStored());
 		par1.setInteger("energyStored",
 				this.getEnergyStored(ForgeDirection.UNKNOWN));
+		par1.setFloat("amountOfPotentia", amountOfPotentia);
 		par1.setInteger("maxIO", this.storage.getMaxReceive());
 		par1.setInteger("yAxisDetect", this.yAxisDetect);
 		par1.setBoolean("attacksMobs", attacksMobs);
@@ -173,7 +189,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		this.storage.setCapacity(par1.getInteger("maxStorage"));
 		this.storage.setEnergyStored(par1.getInteger("energyStored"));
 		this.storage.setMaxReceive(par1.getInteger("maxIO"));
-
+		this.amountOfPotentia = par1.getFloat("amountOfPotentia");
 		this.yAxisDetect = par1.getInteger("yAxisDetect");
 		this.attacksMobs = par1.getBoolean("attacksMobs");
 		this.attacksNeutrals = par1.getBoolean("attacksNeutrals");
@@ -190,7 +206,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		} else {
 			inverted = true;
 		}
-		if (par1.hasKey("redstone")) { //setting redstone from world redstone state if world
+		if (par1.hasKey("redstone")) {
 			this.redstone = par1.getBoolean("redstone");
 		} else {
 			checkRedstone = true;
@@ -206,6 +222,181 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 				inv[slot] = ItemStack.loadItemStackFromNBT(tag);
 			}
 		}
+	}
+
+	@Override
+	public ItemStack decrStackSize(int slot, int amt) {
+		ItemStack stack = getStackInSlot(slot);
+
+		if (stack != null) {
+			if (stack.stackSize <= amt) {
+				setInventorySlotContents(slot, null);
+			} else {
+				stack = stack.splitStack(amt);
+				if (stack.stackSize == 0) {
+					setInventorySlotContents(slot, null);
+				}
+			}
+		}
+		return stack;
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int slot) {
+		ItemStack stack = getStackInSlot(slot);
+		if (stack != null) {
+			setInventorySlotContents(slot, null);
+		}
+		return stack;
+	}
+
+	@Override
+	public void setInventorySlotContents(int slot, ItemStack stack) {
+		inv[slot] = stack;
+		if (stack != null && stack.stackSize > getInventoryStackLimit()) {
+			stack.stackSize = getInventoryStackLimit();
+		}
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this
+				&& player.getDistanceSq(xCoord + 0.5, yCoord + 0.5,
+						zCoord + 0.5) < 64;
+	}
+
+	public void setyAxisDetect(int yAxisDetect) {
+		this.yAxisDetect = yAxisDetect;
+
+		if (this.yAxisDetect > 9) {
+			this.yAxisDetect = 9;
+		}
+
+		if (this.yAxisDetect < 0) {
+			this.yAxisDetect = 0;
+		}
+	}
+
+	private IEssentiaTransport getConnectableTileWithoutOrientation() {
+		if (worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord) instanceof IEssentiaTransport) {
+			return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord + 1,
+					this.yCoord, this.zCoord);
+		}
+
+		if (worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord) instanceof IEssentiaTransport) {
+			return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord - 1,
+					this.yCoord, this.zCoord);
+		}
+
+		if (worldObj.getTileEntity(this.xCoord, this.yCoord + 1, this.zCoord) instanceof IEssentiaTransport) {
+			return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord,
+					this.yCoord + 1, this.zCoord);
+		}
+
+		if (worldObj.getTileEntity(this.xCoord, this.yCoord - 1, this.zCoord) instanceof IEssentiaTransport) {
+			return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord,
+					this.yCoord - 1, this.zCoord);
+		}
+
+		if (worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1) instanceof IEssentiaTransport) {
+			return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord,
+					this.yCoord, this.zCoord + 1);
+		}
+
+		if (worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1) instanceof IEssentiaTransport) {
+			return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord,
+					this.yCoord, this.zCoord - 1);
+		}
+		return null;
+	}
+
+	private void notifyNeighborsOfChange() {
+
+		Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(
+				xCoord + 1, yCoord, zCoord);
+		Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(
+				xCoord - 1, yCoord, zCoord);
+		Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord,
+				yCoord + 1, zCoord);
+		Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord,
+				yCoord - 1, zCoord);
+		Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord,
+				yCoord, zCoord + 1);
+		Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord,
+				yCoord, zCoord - 1);
+
+	}
+
+	private int drawEssentia() {
+
+		IEssentiaTransport ic = getConnectableTileWithoutOrientation();
+		if (ic != null) {
+			if (ic.takeEssentia(Aspect.ENERGY, 1, ForgeDirection.UP) == 1) {
+				return 1;
+			}
+		}
+		return 0;
+
+	}
+
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+
+		if (this.worldObj.isRemote) {
+			if (ticks % 10 == 0)
+				notifyNeighborsOfChange();
+			ticks = 0;
+			return;
+		}
+
+		ticks++;
+
+		if (checkRedstone) {
+			redstone = worldObj.isBlockIndirectlyGettingPowered(this.xCoord,
+					this.yCoord, this.zCoord);
+		}
+
+		if (TurretHeadUtils.hasPotentiaUpgradeAddon(this)) {
+			if (amountOfPotentia > 0.00F
+					&& !(storage.getMaxEnergyStored()
+							- storage.getEnergyStored() == 0)) {
+				this.amountOfPotentia = this.amountOfPotentia - 0.01F;
+				this.receiveEnergy(ForgeDirection.UNKNOWN,
+						Math.round(ConfigHandler.getPotentiaToRFRatio() / 10),
+						false);
+			}
+		}
+
+		if (ticks % 5 == 0) {
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+
+		if (ticks % 20 == 0) {
+			ticks = 0;
+			if (amountOfPotentia <= maxAmountOfPotentia) {
+				amountOfPotentia = amountOfPotentia + drawEssentia();
+			}
+		}
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net,
+			S35PacketUpdateTileEntity packet) {
+		super.onDataPacket(net, packet);
+		readFromNBT(packet.func_148857_g());
+	}
+
+	public void setInverted(boolean inverted) {
+		this.inverted = inverted;
+		this.active = redstone ^ this.inverted;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	public void setRedstone(boolean redstone) {
+		this.redstone = redstone;
+		this.active = this.redstone ^ inverted;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public abstract int getBaseTier();
@@ -279,40 +470,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	}
 
 	@Override
-	public ItemStack decrStackSize(int slot, int amt) {
-		ItemStack stack = getStackInSlot(slot);
-
-		if (stack != null) {
-			if (stack.stackSize <= amt) {
-				setInventorySlotContents(slot, null);
-			} else {
-				stack = stack.splitStack(amt);
-				if (stack.stackSize == 0) {
-					setInventorySlotContents(slot, null);
-				}
-			}
-		}
-		return stack;
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		ItemStack stack = getStackInSlot(slot);
-		if (stack != null) {
-			setInventorySlotContents(slot, null);
-		}
-		return stack;
-	}
-
-	@Override
-	public void setInventorySlotContents(int slot, ItemStack stack) {
-		inv[slot] = stack;
-		if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-			stack.stackSize = getInventoryStackLimit();
-		}
-	}
-
-	@Override
 	public String getInventoryName() {
 		return null;
 	}
@@ -325,13 +482,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this
-				&& player.getDistanceSq(xCoord + 0.5, yCoord + 0.5,
-						zCoord + 0.5) < 64;
 	}
 
 	@Override
@@ -361,49 +511,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		return yAxisDetect;
 	}
 
-	public void setyAxisDetect(int yAxisDetect) {
-		this.yAxisDetect = yAxisDetect;
-
-		if (this.yAxisDetect > 9) {
-			this.yAxisDetect = 9;
-		}
-
-		if (this.yAxisDetect < 0) {
-			this.yAxisDetect = 0;
-		}
-	}
-
 	@Override
 	public boolean canConnectEnergy(ForgeDirection from) {
 		return true;
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net,
-			S35PacketUpdateTileEntity packet) {
-		super.onDataPacket(net, packet);
-		readFromNBT(packet.func_148857_g());
-	}
-
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-
-		if (this.worldObj.isRemote) {
-			return;
-		}
-		
-		if (checkRedstone) {
-			redstone = worldObj.isBlockIndirectlyGettingPowered(this.xCoord, this.yCoord, this.zCoord);
-		}
-
-
-		ticks++;
-
-		if (ticks % 5 == 0) {
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-			ticks = 0;
-		}
 	}
 
 	@Override
@@ -449,20 +559,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		return active;
 	}
 
-	public void setInverted(boolean inverted) {
-		this.inverted = inverted;
-		this.active = redstone ^ this.inverted;
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-	}
-
 	public boolean getInverted() {
 		return this.inverted;
-	}
-
-	public void setRedstone(boolean redstone) {
-		this.redstone = redstone;
-		this.active = this.redstone ^ inverted;
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public boolean getRedstone() {
@@ -471,6 +569,137 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
 	public void setTrustedPlayers(List<TrustedPlayer> trustedPlayers) {
 		this.trustedPlayers = trustedPlayers;
+	}
+
+	@Override
+	public boolean isConnectable(ForgeDirection face) {
+		return TurretHeadUtils.hasPotentiaUpgradeAddon(this);
+	}
+
+	@Override
+	public boolean canInputFrom(ForgeDirection face) {
+		return TurretHeadUtils.hasPotentiaUpgradeAddon(this);
+	}
+
+	@Override
+	public boolean canOutputTo(ForgeDirection face) {
+		return false;
+	}
+
+	@Override
+	public void setSuction(Aspect aspect, int amount) {
+
+	}
+
+	@Override
+	public Aspect getSuctionType(ForgeDirection face) {
+		return null;
+	}
+
+	@Override
+	public int takeEssentia(Aspect aspect, int amount, ForgeDirection face) {
+		return 0;
+	}
+
+	@Override
+	public Aspect getEssentiaType(ForgeDirection face) {
+		return null;
+	}
+
+	@Override
+	public int getEssentiaAmount(ForgeDirection face) {
+		return 0;
+	}
+
+	@Override
+	public int getMinimumSuction() {
+		return 0;
+	}
+
+	@Override
+	public boolean renderExtendedTube() {
+		return false;
+	}
+
+	@Override
+	public AspectList getAspects() {
+		if (TurretHeadUtils.hasPotentiaUpgradeAddon(this)) {
+			return new AspectList().add(Aspect.ENERGY,
+					(int) Math.floor(amountOfPotentia));
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public void setAspects(AspectList aspects) {
+	}
+
+	@Override
+	public boolean doesContainerAccept(Aspect tag) {
+		if (tag.equals(Aspect.ENERGY)) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public int addToContainer(Aspect tag, int amount) {
+		return 0;
+	}
+
+	@Override
+	public int getSuctionAmount(ForgeDirection face) {
+		return 64;
+	}
+
+	@Override
+	public int addEssentia(Aspect aspect, int amount, ForgeDirection face) {
+		return 0;
+	}
+
+	@Override
+	public boolean takeFromContainer(Aspect tag, int amount) {
+		return false;
+	}
+
+	@Override
+	public boolean takeFromContainer(AspectList ot) {
+		return false;
+	}
+
+	@Override
+	public boolean doesContainerContainAmount(Aspect tag, int amount) {
+		return false;
+	}
+
+	@Override
+	public boolean doesContainerContain(AspectList ot) {
+		return false;
+	}
+
+	@Override
+	public int containerContains(Aspect tag) {
+		if (tag.equals(Aspect.ENERGY)) {
+			return Math.round(amountOfPotentia);
+		}
+		return 0;
+	}
+
+	public boolean isCheckRedstone() {
+		return checkRedstone;
+	}
+
+	public void setCheckRedstone(boolean checkRedstone) {
+		this.checkRedstone = checkRedstone;
+	}
+
+	public boolean isCanConnectEssentia() {
+		return TurretHeadUtils.hasPotentiaUpgradeAddon(this);
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	@Optional.Method(modid = "OpenComputers")

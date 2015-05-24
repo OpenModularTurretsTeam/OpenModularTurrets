@@ -23,7 +23,7 @@ public class RedstoneReactorAddonItem extends AddonItem {
 
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister par1IconRegister) {
-        this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":ammoProductionAddon");
+        this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":redstoneProductionAddon");
     }
 
     @Override

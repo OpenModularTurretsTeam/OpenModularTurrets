@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.addons.DamageAmpAddonItem;
+import openmodularturrets.items.addons.PotentiaAddonItem;
 import openmodularturrets.items.addons.RedstoneReactorAddonItem;
 import openmodularturrets.items.addons.SolarPanelAddonItem;
 import openmodularturrets.items.upgrades.AccuraccyUpgradeItem;
@@ -356,6 +357,22 @@ public class TurretHeadUtils {
 
         if (base.getStackInSlot(10) != null && !found) {
             found = base.getStackInSlot(10).getItem() instanceof SolarPanelAddonItem;
+        }
+        return found;
+    }
+    
+    public static boolean hasPotentiaUpgradeAddon(TurretBase base) {
+        boolean found = false;
+        if (base instanceof TurretBaseTierOneTileEntity) {
+            return false;
+        }
+
+        if (base.getStackInSlot(9) != null) {
+            found = base.getStackInSlot(9).getItem() instanceof PotentiaAddonItem;
+        }
+
+        if (base.getStackInSlot(10) != null && !found) {
+            found = base.getStackInSlot(10).getItem() instanceof PotentiaAddonItem;
         }
         return found;
     }
