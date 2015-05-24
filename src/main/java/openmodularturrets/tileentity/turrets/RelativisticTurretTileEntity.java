@@ -147,13 +147,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
 					Potion.moveSlowdown.id, 200));
 			((EntityLivingBase) target).addPotionEffect(new PotionEffect(
 					Potion.weakness.id, 200));
-			
-			 for (int i = 0; i <= 5; i++) {
-		            Random random = new Random();
-		            worldObj.spawnParticle("reddust", xCoord + (random.nextGaussian() / 10) + 0.5F, yCoord,
-		                                      zCoord + (random.nextGaussian() / 10) + 0.5F, (0), (50), (200));
-		        }
-			
+
 			target = null;
 
 		}
