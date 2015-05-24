@@ -14,16 +14,13 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.addons.DamageAmpAddonItem;
 import openmodularturrets.items.addons.PotentiaAddonItem;
 import openmodularturrets.items.addons.RedstoneReactorAddonItem;
 import openmodularturrets.items.addons.SolarPanelAddonItem;
-import openmodularturrets.items.upgrades.AccuraccyUpgradeItem;
-import openmodularturrets.items.upgrades.EfficiencyUpgradeItem;
-import openmodularturrets.items.upgrades.FireRateUpgradeItem;
-import openmodularturrets.items.upgrades.RangeUpgradeItem;
-import openmodularturrets.items.upgrades.ScattershotUpgradeItem;
+import openmodularturrets.items.upgrades.*;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
@@ -531,6 +528,9 @@ public class TurretHeadUtils {
 	public static boolean hasPotentiaUpgradeAddon(TurretBase base) {
 		boolean found = false;
 		if (base instanceof TurretBaseTierOneTileEntity) {
+			return false;
+		}
+		if (!ModCompatibility.ThaumcraftLoaded) {
 			return false;
 		}
 

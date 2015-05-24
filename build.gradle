@@ -83,6 +83,10 @@ repositories {
         name = "OC repo"
         url = "http://maven.cil.li/"
     }
+    ivy {
+        name = 'ThaumCraft 4 API'
+        artifactPattern 'https://dl.dropboxusercontent.com/u/47135879/[module](-[classifier])-1.7.10-[revision](.[ext])'
+    }
 }
 
 dependencies {
@@ -92,6 +96,8 @@ dependencies {
     compile "codechicken:CodeChickenLib:${config.minecraft_version}-${config.ccl_version}:dev"
     compile "codechicken:CodeChickenCore:${config.minecraft_version}-${config.ccc_version}:dev"
     compile "li.cil.oc:OpenComputers:MC${config.minecraft_version}-${config.oc_version}:dev"
+    compile "Azanor:Thaumcraft:${config.tc_version}:deobf@jar"
+    runtime "com.github.azanor:baubles:${config.baubles_version}"
 }
 
 task sourceJar(type: Jar) {
