@@ -37,13 +37,17 @@ public class PotentiaAddonItem extends AddonItem {
 		p_77624_3_.add(StatCollector
 				.translateToLocal("turret.addon.potentia.a")
 				+ ConfigHandler.getPotentiaToRFRatio()
-				+ " " 
-				+ StatCollector
-				.translateToLocal("turret.addon.potentia.b"));
+				+ " "
+				+ StatCollector.translateToLocal("turret.addon.potentia.b"));
 		p_77624_3_.add("");
 		p_77624_3_.add(StatCollector
 				.translateToLocal("turret.addon.potentia.c")
-				+ ConfigHandler.getPotentiaAddonCapacity());
+				+ ConfigHandler.getPotentiaAddonCapacity() + ".");
+		p_77624_3_.add("");
+		p_77624_3_.add(StatCollector
+				.translateToLocal("turret.addon.potentia.d"));
+		p_77624_3_.add(StatCollector
+				.translateToLocal("turret.addon.potentia.e"));
 		p_77624_3_.add("");
 		p_77624_3_.add(EnumChatFormatting.DARK_GRAY
 				+ StatCollector

@@ -129,6 +129,8 @@ turret.addon.solar.flavour=Good Helios!
 turret.addon.potentia.a=Converts piped Potentia into RF (
 turret.addon.potentia.b=RF per unit).
 turret.addon.potentia.c=Adds an internal Potentia capacity of 
+turret.addon.potentia.d=Adding Ordo vis through a network
+turret.addon.potentia.e=multiplies RF conversion rate x10.
 turret.addon.potentia.flavour=Because Eskom can't get it right...
 
 turret.upgrade.label=Turret Upgrade
