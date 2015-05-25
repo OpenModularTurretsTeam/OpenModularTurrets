@@ -23,6 +23,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.util.TurretHeadUtils;
 import thaumcraft.api.aspects.Aspect;
@@ -141,7 +142,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 						nbt.getStringTagAt(i));
 				Logger.getGlobal()
 						.info("found legacy trusted Player: "
-								+ nbt.getStringTagAt(i));
+                                + nbt.getStringTagAt(i));
 				trustedPlayers.add(trustedPlayer);
 			}
 		}
@@ -336,6 +337,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
 	}
 
+    @Optional.Method(modid = "Thaumcraft")
 	private int drawEssentia() {
 
 		IEssentiaTransport ic = getConnectableTileWithoutOrientation();
@@ -388,13 +390,14 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		if (ticks % 5 == 0) {
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
-
-		if (ticks % 20 == 0) {
-			ticks = 0;
-			if (amountOfPotentia <= maxAmountOfPotentia) {
-				amountOfPotentia = amountOfPotentia + drawEssentia();
-			}
-		}
+        if (ModCompatibility.ThaumcraftLoaded) {
+            if (ticks % 20 == 0) {
+                ticks = 0;
+                if (amountOfPotentia <= maxAmountOfPotentia) {
+                    amountOfPotentia = amountOfPotentia + drawEssentia();
+                }
+            }
+        }
 	}
 
 	@Override
