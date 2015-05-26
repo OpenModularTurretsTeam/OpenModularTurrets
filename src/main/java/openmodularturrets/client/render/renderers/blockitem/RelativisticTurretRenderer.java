@@ -5,15 +5,11 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import openmodularturrets.client.render.models.ModelDamageAmp;
-import openmodularturrets.client.render.models.ModelIncendiaryTurret;
-import openmodularturrets.client.render.models.ModelMachineGun;
 import openmodularturrets.client.render.models.ModelRedstoneReactor;
 import openmodularturrets.client.render.models.ModelRelativisticTurret;
 import openmodularturrets.client.render.models.ModelSolarPanelAddon;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turrets.TurretHead;
-import openmodularturrets.util.TurretHeadUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class RelativisticTurretRenderer extends TileEntitySpecialRenderer {
