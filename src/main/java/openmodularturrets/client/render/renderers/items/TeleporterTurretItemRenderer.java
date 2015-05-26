@@ -2,17 +2,9 @@ package openmodularturrets.client.render.renderers.items;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
-import openmodularturrets.client.render.models.ModelMachineGun;
 import openmodularturrets.client.render.models.ModelTeleporterTurret;
-import openmodularturrets.client.render.renderers.blockitem.IncendiaryTurretRenderer;
-import openmodularturrets.client.render.renderers.blockitem.MachineGunTurretRenderer;
-import openmodularturrets.client.render.renderers.blockitem.RelativisticTurretRenderer;
 import openmodularturrets.client.render.renderers.blockitem.TeleporterTurretRenderer;
-import openmodularturrets.tileentity.turrets.IncendiaryTurretTileEntity;
-import openmodularturrets.tileentity.turrets.MachineGunTurretTileEntity;
-import openmodularturrets.tileentity.turrets.RelativisticTurretTileEntity;
 import openmodularturrets.tileentity.turrets.TeleporterTurretTileEntity;
-
 import org.lwjgl.opengl.GL11;
 
 public class TeleporterTurretItemRenderer implements IItemRenderer {

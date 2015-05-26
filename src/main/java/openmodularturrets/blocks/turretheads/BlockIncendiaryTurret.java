@@ -4,7 +4,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
-import openmodularturrets.tileentity.turrets.GrenadeLauncherTurretTileEntity;
 import openmodularturrets.tileentity.turrets.IncendiaryTurretTileEntity;
 
 public class BlockIncendiaryTurret extends BlockAbstractTurretHead {

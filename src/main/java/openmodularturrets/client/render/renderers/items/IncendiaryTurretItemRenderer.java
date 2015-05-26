@@ -3,12 +3,8 @@ package openmodularturrets.client.render.renderers.items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import openmodularturrets.client.render.models.ModelIncendiaryTurret;
-import openmodularturrets.client.render.models.ModelMachineGun;
 import openmodularturrets.client.render.renderers.blockitem.IncendiaryTurretRenderer;
-import openmodularturrets.client.render.renderers.blockitem.MachineGunTurretRenderer;
 import openmodularturrets.tileentity.turrets.IncendiaryTurretTileEntity;
-import openmodularturrets.tileentity.turrets.MachineGunTurretTileEntity;
-
 import org.lwjgl.opengl.GL11;
 
 public class IncendiaryTurretItemRenderer implements IItemRenderer {

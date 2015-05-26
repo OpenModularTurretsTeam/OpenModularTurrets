@@ -1,18 +1,9 @@
 package openmodularturrets.handler;
 
-import openmodularturrets.network.AddTrustedPlayerMessage;
-import openmodularturrets.network.AdjustYAxisDetectMessage;
-import openmodularturrets.network.DropBaseMessage;
-import openmodularturrets.network.DropTurretsMessage;
-import openmodularturrets.network.ModifyPermissionsMessage;
-import openmodularturrets.network.RemoveTrustedPlayerMessage;
-import openmodularturrets.network.SetTurretOwnerMessage;
-import openmodularturrets.network.ToggleAttackMobsMessage;
-import openmodularturrets.network.ToggleAttackNeutralMobsMessage;
-import openmodularturrets.network.ToggleAttackPlayersMessage;
-import openmodularturrets.reference.ModInfo;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
+import openmodularturrets.network.*;
+import openmodularturrets.reference.ModInfo;
 
 public class NetworkingHandler {
 
