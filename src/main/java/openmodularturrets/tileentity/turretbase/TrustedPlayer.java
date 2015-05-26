@@ -20,32 +20,16 @@ public class TrustedPlayer {
 		this.name = name;
 	}
 
-	public boolean isCanOpenGUI() {
-		return canOpenGUI;
-	}
-
 	public void setCanOpenGUI(boolean canOpenGUI) {
 		this.canOpenGUI = canOpenGUI;
-	}
-
-	public boolean isCanChangeTargeting() {
-		return canChangeTargeting;
 	}
 
 	public void setCanChangeTargeting(boolean canChangeTargeting) {
 		this.canChangeTargeting = canChangeTargeting;
 	}
 
-	public boolean isCanAddTrustedPlayers() {
-		return canAddTrustedPlayers;
-	}
-
 	public void setCanAddTrustedPlayers(boolean canAddTrustedPlayers) {
 		this.canAddTrustedPlayers = canAddTrustedPlayers;
-	}
-
-	public boolean isAdmin() {
-		return isAdmin;
 	}
 
 	public void setAdmin(boolean isAdmin) {

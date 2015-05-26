@@ -1,7 +1,5 @@
 package openmodularturrets.entity.projectiles;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +10,8 @@ import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
+
+import java.util.List;
 
 public class BlazingClayProjectile extends TurretProjectile {
 

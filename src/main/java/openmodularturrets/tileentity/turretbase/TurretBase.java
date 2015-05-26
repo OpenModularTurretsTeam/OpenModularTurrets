@@ -40,7 +40,7 @@ import java.util.logging.Logger;
 		@Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft"),
 		@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers"),
 		@Optional.Interface(iface = "thaumcraft.api.aspects.IAspectContainer", modid = "Thaumcraft"),
-		@Optional.Interface(iface = "thaumcraft.api.aspects.IEssentiaTransport", modid = "Thaumcraft") })
+		@Optional.Interface(iface = "thaumcraft.api.aspects.IEssentiaTransport", modid = "Thaumcraft")})
 
 public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		IInventory, SimpleComponent, ISidedInventory, IEssentiaTransport,
@@ -84,7 +84,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	}
 
 	public void removeTrustedPlayer(String name) {
-		List<TrustedPlayer> copiedTrusteds = new ArrayList();
+		List<TrustedPlayer> copiedTrusteds = new ArrayList<TrustedPlayer>();
 		copiedTrusteds.addAll(trustedPlayers);
 		for (int i = 0; i <= copiedTrusteds.size() - 1; i++) {
 			TrustedPlayer player = copiedTrusteds.get(i);
@@ -519,14 +519,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		return true;
 	}
 
-	public EnergyStorage getStorage() {
-		return storage;
-	}
-
-	public void setStorage(EnergyStorage storage) {
-		this.storage = storage;
-	}
-
 	public int getyAxisDetect() {
 		return yAxisDetect;
 	}
@@ -551,30 +543,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 		return true;
 	}
 
-	public ItemStack[] getInv() {
-		return inv;
-	}
-
-	public void setInv(ItemStack[] inv) {
-		this.inv = inv;
-	}
-
-	public int getTicks() {
-		return ticks;
-	}
-
-	public void setTicks(int ticks) {
-		this.ticks = ticks;
-	}
-
-	public int getCurrentTrustedPlayerAdmin() {
-		return currentTrustedPlayerAdmin;
-	}
-
-	public void setCurrentTrustedPlayerAdmin(int currentTrustedPlayerAdmin) {
-		this.currentTrustedPlayerAdmin = currentTrustedPlayerAdmin;
-	}
-
 	public boolean isActive() {
 		return active;
 	}
@@ -585,10 +553,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
 	public boolean getRedstone() {
 		return this.redstone;
-	}
-
-	public void setTrustedPlayers(List<TrustedPlayer> trustedPlayers) {
-		this.trustedPlayers = trustedPlayers;
 	}
 
 	@Optional.Method(modid = "Thaumcraft")
@@ -670,10 +634,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	@Optional.Method(modid = "Thaumcraft")
 	@Override
 	public boolean doesContainerAccept(Aspect tag) {
-		if (tag.equals(Aspect.ENERGY)) {
-			return true;
-		}
-		return false;
+		return tag.equals(Aspect.ENERGY);
 	}
 
 	@Optional.Method(modid = "Thaumcraft")
@@ -721,23 +682,11 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	@Optional.Method(modid = "Thaumcraft")
 	@Override
 	public int containerContains(Aspect tag) {
-		if (tag.equals(Aspect.ENERGY)) {
-			return Math.round(amountOfPotentia);
-		}
-		return 0;
-	}
-
-	public boolean isCheckRedstone() {
-		return checkRedstone;
-	}
-
-	public void setCheckRedstone(boolean checkRedstone) {
-		this.checkRedstone = checkRedstone;
-	}
-
-	public boolean isCanConnectEssentia() {
-		return TurretHeadUtils.hasPotentiaUpgradeAddon(this);
-	}
+        if (tag.equals(Aspect.ENERGY)) {
+            return Math.round(amountOfPotentia);
+        }
+        return 0;
+    }
 
 	public void setActive(boolean active) {
 		this.active = active;
@@ -887,7 +836,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 				commands.getTrustedPlayers.toString(),
 				commands.addTrustedPlayer.toString(),
 				commands.removeTrustedPlayer.toString(),
-				commands.getActive.toString(), commands.getInverted.toString(),
+				commands.getActive.toString(),
+				commands.getInverted.toString(),
 				commands.getRedstone.toString(),
 				commands.setInverted.toString() };
 	}
@@ -898,7 +848,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 			int method, Object[] arguments) throws LuaException,
 			InterruptedException {
 		// method is command
-		boolean b = false;
+		boolean b;
 		switch (commands.values()[method]) {
 		case getOwner:
 			return new Object[] { this.getOwner() };
@@ -1009,9 +959,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 	@Optional.Method(modid = "ComputerCraft")
 	@Override
 	public boolean equals(IPeripheral other) {
-		if (other.getType() == getType()) {
-			return true;
-		} else
-			return false;
+		return other.getType().equals(getType());
 	}
 }

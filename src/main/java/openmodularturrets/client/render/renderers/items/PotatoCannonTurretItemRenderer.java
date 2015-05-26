@@ -3,11 +3,8 @@ package openmodularturrets.client.render.renderers.items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import openmodularturrets.client.render.models.ModelDisposableItemTurret;
-import openmodularturrets.client.render.renderers.blockitem.DisposableItemTurretRenderer;
 import openmodularturrets.client.render.renderers.blockitem.PotatoCannonTurretRenderer;
-import openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
 import openmodularturrets.tileentity.turrets.PotatoCannonTurretTileEntity;
-
 import org.lwjgl.opengl.GL11;
 
 public class PotatoCannonTurretItemRenderer implements IItemRenderer {

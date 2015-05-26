@@ -45,7 +45,11 @@ public class ModCompatibility {
 
     public static String getBuildNumber() {
         Map<String, ModContainer> modList = Loader.instance().getIndexedModList();
-        return modList.get(ModInfo.ID).getProcessedVersion().getVersionString().split("-")[1];
+        if (modList.get(ModInfo.ID).getProcessedVersion().getVersionString().split("-").length >0) {
+            return modList.get(ModInfo.ID).getProcessedVersion().getVersionString().split("-")[1];
+        } else {
+            return "0";
+        }
     }
 
     private static void addVersionCheckerInfo() {

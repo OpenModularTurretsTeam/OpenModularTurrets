@@ -7,15 +7,12 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import openmodularturrets.client.render.models.ModelDamageAmp;
-import openmodularturrets.client.render.models.ModelDisposableItemTurret;
 import openmodularturrets.client.render.models.ModelPotatoCannonTurret;
 import openmodularturrets.client.render.models.ModelRedstoneReactor;
 import openmodularturrets.client.render.models.ModelSolarPanelAddon;
 import openmodularturrets.reference.ModInfo;
-import openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
 import openmodularturrets.tileentity.turrets.PotatoCannonTurretTileEntity;
 import openmodularturrets.util.TurretHeadUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class PotatoCannonTurretRenderer extends TileEntitySpecialRenderer {
