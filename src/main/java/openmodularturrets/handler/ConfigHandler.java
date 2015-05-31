@@ -5,24 +5,19 @@ import net.minecraftforge.common.config.Configuration;
 import java.io.File;
 
 public class ConfigHandler {
+	
 	private static int baseTierOneMaxCharge;
 	private static int baseTierOneMaxIo;
-
 	private static int baseTierTwoMaxCharge;
 	private static int baseTierTwoMaxIo;
-
 	private static int baseTierThreeMaxCharge;
 	private static int baseTierThreeMaxIo;
-
 	private static int baseTierFourMaxCharge;
 	private static int baseTierFourMaxIo;
-
 	private static int baseTierFiveMaxCharge;
 	private static int baseTierFiveMaxIo;
-
 	private static int potentiaToRFRatio;
 	private static int potentiaAddonCapacity;
-
 	private static TurretSetting disposable_turret;
 	private static TurretSetting potato_cannon_turret;
 	private static TurretSetting machine_gun_turret;
@@ -33,23 +28,25 @@ public class ConfigHandler {
 	private static TurretSetting teleporter_turret;
 	private static TurretSetting laser_turret;
 	private static TurretSetting railgun_turret;
-
 	private static int rangeUpgradeBoost;
 	private static double fireRateUpgradeBoostPercentage;
 	private static double accuraccyUpgradeBoost;
 	private static double efficiencyUpgradeBoostPercentage;
-
 	private static int solarPanelAddonGen;
 	private static int redstoneReactorAddonGen;
 	private static int damageAmpDmgBonus;
-
 	private static int turretWarningDistance;
-
 	public static boolean turretAlarmSound;
 	public static boolean turretBreakable;
 	public static boolean turretWarnMessage;
 	public static boolean turretDamageTrustedPlayers;
 	public static boolean IGWNotification;
+	
+	public static boolean shouldCreateThermalExpansionRecipes;
+	public static boolean shouldCreateEnderIORecipes;
+	public static boolean shouldCreateMekanismRecipes;
+	
+	public static boolean shouldDoThaumcraftIntegration;
 
 	public static void init(File configFile) {
 		Configuration config = new Configuration(configFile);
@@ -216,8 +213,33 @@ public class ConfigHandler {
 				"miscellaneous",
 				"Can turrets damage their trusted players when they "
 						+ "accidentally hit them?", true).getBoolean();
+		
 		IGWNotification = config.get("miscellaneous",
 				"Enable IGW Mod notification", true).getBoolean();
+		if (config.hasChanged()) {
+			config.save();
+		}
+		
+		shouldDoThaumcraftIntegration = config.get("miscellaneous",
+				"Should we enable items that integrate wih Thaumcraft?", true).getBoolean();
+		if (config.hasChanged()) {
+			config.save();
+		}
+		
+		shouldCreateEnderIORecipes = config.get("miscellaneous",
+				"Should EnderIO recipes be instantiated?", true).getBoolean();
+		if (config.hasChanged()) {
+			config.save();
+		}
+		
+		shouldCreateThermalExpansionRecipes = config.get("miscellaneous",
+				"Should Thermal Expansion recipes be instantiated?", true).getBoolean();
+		if (config.hasChanged()) {
+			config.save();
+		}
+		
+		shouldCreateMekanismRecipes = config.get("miscellaneous",
+				"Should Mekanism recipes be instantiated?", true).getBoolean();
 		if (config.hasChanged()) {
 			config.save();
 		}
@@ -387,7 +409,21 @@ public class ConfigHandler {
 		return teleporter_turret;
 	}
 
+	public static boolean isShouldCreateThermalExpansionRecipes() {
+		return shouldCreateThermalExpansionRecipes;
+	}
 
+	public static boolean isShouldCreateEnderIORecipes() {
+		return shouldCreateEnderIORecipes;
+	}
+
+	public static boolean isShouldCreateMekanismRecipes() {
+		return shouldCreateMekanismRecipes;
+	}
+
+	public static boolean isShouldDoThaumcraftIntegration() {
+		return shouldDoThaumcraftIntegration;
+	}
 
 	public static class TurretSetting {
 		private final int range;

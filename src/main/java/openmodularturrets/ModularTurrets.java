@@ -32,16 +32,16 @@ public class ModularTurrets {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		ConfigHandler.init(event.getSuggestedConfigurationFile());
-		Items.init();
-		Blocks.init();
+		ConfigHandler.init(event.getSuggestedConfigurationFile());	
 		networking = NetworkingHandler.initNetworking();
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		ModCompatibility.checkForMods();
-		ModCompatibility.performModCompat();
+		ModCompatibility.performModCompat();		
+		Items.init();
+		Blocks.init();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, gui);
 		TileEntityHandler.init();
 		proxy.initRenderers();
