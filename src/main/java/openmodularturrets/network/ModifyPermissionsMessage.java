@@ -64,8 +64,8 @@ public class ModifyPermissionsMessage implements IMessage, IMessageHandler<Modif
 			turret.getTrustedPlayer(message.getPlayer()).setCanChangeTargeting(message.canDo);
 		}
 
-		if (message.getPerm().equals("modTrust")) {
-			turret.getTrustedPlayer(message.getPlayer()).setCanAddTrustedPlayers(message.canDo);
+		if (message.getPerm().equals("isAdmin")) {
+			turret.getTrustedPlayer(message.getPlayer()).setAdmin(message.canDo);
 		}
 
 		return null;

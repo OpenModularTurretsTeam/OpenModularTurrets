@@ -34,6 +34,7 @@ import thaumcraft.api.visnet.VisNetHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import static openmodularturrets.util.PlayerUtil.getPlayerUIDUnstable;
@@ -58,7 +59,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     protected String owner;
     protected List<TrustedPlayer> trustedPlayers;
     protected int ticks;
-    public int currentTrustedPlayerAdmin = 0;
+    public int trustedPlayerIndex = 0;
     protected boolean active;
     protected boolean inverted;
     protected boolean redstone;
@@ -114,6 +115,15 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         return null;
     }
 
+    public TrustedPlayer getTrustedPlayer(UUID uuid) {
+        for (TrustedPlayer trustedPlayer : trustedPlayers) {
+            if (trustedPlayer.uuid.equals(uuid)) {
+                return trustedPlayer;
+            }
+        }
+        return null;
+    }
+
     private NBTTagList getTrustedPlayersAsNBT() {
         NBTTagList nbt = new NBTTagList();
         for (TrustedPlayer trustedPlayer : trustedPlayers) {
@@ -122,8 +132,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             nbtPlayer.setBoolean("canOpenGUI", trustedPlayer.canOpenGUI);
             nbtPlayer.setBoolean("canChangeTargeting",
                     trustedPlayer.canChangeTargeting);
-            nbtPlayer.setBoolean("canAddTrustedPlayers",
-                    trustedPlayer.canAddTrustedPlayers);
+            nbtPlayer.setBoolean("admin",
+                    trustedPlayer.admin);
             if (!trustedPlayer.uuid.toString().equals("")) {
                 nbtPlayer.setString("UUID", trustedPlayer.uuid.toString());
             } else if (getPlayerUUID(trustedPlayer.name) != null) {
@@ -144,8 +154,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                 trustedPlayer.canOpenGUI = nbtPlayer.getBoolean("canOpenGUI");
                 trustedPlayer.canChangeTargeting = nbtPlayer
                         .getBoolean("canChangeTargeting");
-                trustedPlayer.canAddTrustedPlayers = nbtPlayer
-                        .getBoolean("canAddTrustedPlayers");
+                trustedPlayer.admin = nbtPlayer
+                        .getBoolean("admin");
                 if (nbtPlayer.hasKey("UUID")) {
                     trustedPlayer.uuid = getPlayerUIDUnstable(nbtPlayer.getString("UUID"));
                 } else {
@@ -158,6 +168,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                 Logger.getGlobal()
                         .info("found legacy trusted Player: "
                                 + nbt.getStringTagAt(i));
+                trustedPlayer.uuid = getPlayerUUID(trustedPlayer.name);
                 trustedPlayers.add(trustedPlayer);
             }
         }
@@ -348,7 +359,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     }
 
     private void notifyNeighborsOfChange() {
-
         Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(
                 xCoord + 1, yCoord, zCoord);
         Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(
@@ -366,7 +376,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
     @Optional.Method(modid = "Thaumcraft")
     private int drawEssentia() {
-
         IEssentiaTransport ic = getConnectableTileWithoutOrientation();
         if (ic != null) {
             if (ic.takeEssentia(Aspect.ENERGY, 1, ForgeDirection.UP) == 1) {
@@ -807,7 +816,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , "
-            + "canAddTrustedPlayers:boolean]):string; adds Trusted player to Trustlist.")
+            + "admin:boolean]):string; adds Trusted player to Trustlist.")
     public Object[] addTrustedPlayer(Context context, Arguments args) {
         if (!computerAccessable) {
             return new Object[]{"Computer access deactivated!"};
@@ -817,7 +826,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                 .getTrustedPlayer(args.checkString(0));
         trustedPlayer.canOpenGUI = args.optBoolean(1, false);
         trustedPlayer.canChangeTargeting = args.optBoolean(1, false);
-        trustedPlayer.canAddTrustedPlayers = args.optBoolean(1, false);
+        trustedPlayer.admin = args.optBoolean(1, false);
         trustedPlayer.uuid = getPlayerUUID(args.checkString(0));
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         return null;
@@ -988,7 +997,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                 trustedPlayer.canOpenGUI = arguments[1].toString().equals("true");
                 trustedPlayer.canChangeTargeting = arguments[2].toString().equals(
                         "true");
-                trustedPlayer.canAddTrustedPlayers = arguments[3].toString()
+                trustedPlayer.admin = arguments[3].toString()
                         .equals("true");
                 trustedPlayer.uuid = getPlayerUUID(arguments[0].toString());
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
