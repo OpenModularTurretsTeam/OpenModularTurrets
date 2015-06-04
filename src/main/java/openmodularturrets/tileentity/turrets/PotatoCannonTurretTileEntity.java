@@ -32,7 +32,7 @@ public class PotatoCannonTurretTileEntity extends TurretHead {
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getPotatoCannonTurretSettings().getAccuracy();
+        return ConfigHandler.getPotatoCannonTurretSettings().getAccuracy()/10;
     }
 
     @Override
