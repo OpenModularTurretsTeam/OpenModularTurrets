@@ -109,7 +109,7 @@ public class TurretHeadUtil {
 
                         if (!entity.getUniqueID().equals(base.getOwner())
                                 && !isTrustedPlayer(entity.getUniqueID(),
-                                base)) {
+                                base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
                         }
                     }
@@ -118,7 +118,7 @@ public class TurretHeadUtil {
                 if (target != null && turret != null) {
 
                     EntityLivingBase targetELB = (EntityLivingBase) target;
-
+                    
                     if (canTurretSeeTarget(turret, targetELB)
                             && targetELB.getHealth() > 0.0F) {
                         return target;
