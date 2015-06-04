@@ -10,7 +10,7 @@ import openmodularturrets.client.render.models.ModelRocketTurret;
 import openmodularturrets.client.render.models.ModelSolarPanelAddon;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turrets.TurretHead;
-import openmodularturrets.util.TurretHeadUtils;
+import openmodularturrets.util.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
 public class RocketTurretRenderer extends TileEntitySpecialRenderer {
@@ -49,7 +49,7 @@ public class RocketTurretRenderer extends TileEntitySpecialRenderer {
         model.renderAll();
 
         if (turretHead.base != null) {
-            if (TurretHeadUtils.hasSolarPanelAddon(turretHead.base)) {
+            if (TurretHeadUtil.hasSolarPanelAddon(turretHead.base)) {
                 ResourceLocation texturesSolar = (new ResourceLocation(ModInfo.ID + ":textures/blocks/solarPanelAddon" +
                                                                                ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
@@ -57,7 +57,7 @@ public class RocketTurretRenderer extends TileEntitySpecialRenderer {
                 solar.renderAll();
             }
 
-            if (TurretHeadUtils.hasDamageAmpAddon(turretHead.base)) {
+            if (TurretHeadUtil.hasDamageAmpAddon(turretHead.base)) {
                 ResourceLocation texturesAmp = (new ResourceLocation(ModInfo.ID + ":textures/blocks/damageAmpAddon" +
                                                                              ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
@@ -65,7 +65,7 @@ public class RocketTurretRenderer extends TileEntitySpecialRenderer {
                 amp.renderAll();
             }
 
-            if (TurretHeadUtils.hasRedstoneReactor(turretHead.base)) {
+            if (TurretHeadUtil.hasRedstoneReactor(turretHead.base)) {
                 ResourceLocation texturesReac = (new ResourceLocation(ModInfo.ID + ":textures/blocks/redstoneReactor" +
                                                                               ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesReac);

@@ -35,7 +35,7 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
         if (!world.isRemote) {
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
 
-            if (player.getDisplayName().equals(base.getOwner()) || base.getTrustedPlayer(player.getDisplayName()).canOpenGUI) {
+            if (player.getUniqueID().toString().equals(base.getOwner()) || base.getTrustedPlayer(player.getDisplayName()).canOpenGUI) {
                 player.openGui(ModularTurrets.instance, base.getBaseTier(), world, x, y, z);
             } else {
                 player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
