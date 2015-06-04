@@ -2,17 +2,10 @@ package openmodularturrets.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
-import openmodularturrets.ModularTurrets;
 import openmodularturrets.client.gui.containers.TurretBaseTierTwoContainer;
-import openmodularturrets.network.AdjustYAxisDetectMessage;
-import openmodularturrets.network.DropBaseMessage;
-import openmodularturrets.network.DropTurretsMessage;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierTwoTileEntity;
@@ -22,63 +15,10 @@ import java.util.ArrayList;
 
 import static openmodularturrets.util.PlayerUtil.getPlayerNameFromUUID;
 
-public class TurretBaseTierTwoGui extends GuiContainer {
-
-    TurretBaseTierTwoTileEntity base;
-    private int mouseX;
-    private int mouseY;
-    private EntityPlayer player;
+public class TurretBaseTierTwoGui extends TurretBaseAbstractGui {
 
     public TurretBaseTierTwoGui(InventoryPlayer inventoryPlayer, TurretBaseTierTwoTileEntity tileEntity) {
-        super(new TurretBaseTierTwoContainer(inventoryPlayer, tileEntity));
-        this.base = tileEntity;
-        player = inventoryPlayer.player;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void initGui() {
-        super.initGui();
-        int x = (width - xSize) / 2;
-        int y = (height - ySize) / 2;
-        this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "-"));
-        this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "+"));
-        this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
-        this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
-        this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton guibutton) {
-        if (guibutton.id == 1) {
-            this.base.setyAxisDetect(this.base.getyAxisDetect() - 1);
-            sendChangeToServer();
-        }
-
-        if (guibutton.id == 2) {
-            this.base.setyAxisDetect(this.base.getyAxisDetect() + 1);
-            sendChangeToServer();
-        }
-
-        if (guibutton.id == 3) {
-            sendDropTurretsToServer();
-        }
-
-        if (guibutton.id == 4) {
-            sendDropBaseToServer();
-        }
-        
-        if (guibutton.id == 5) {
-			player.openGui(ModularTurrets.instance, 6,
-					player.worldObj, base.xCoord, base.yCoord, base.zCoord);
-		}
-    }
-
-    @Override
-    public void drawScreen(int par1, int par2, float par3) {
-        this.mouseX = par1;
-        this.mouseY = par2;
-        super.drawScreen(par1, par2, par3);
+        super(inventoryPlayer, tileEntity, new TurretBaseTierTwoContainer(inventoryPlayer, tileEntity));
     }
 
     @SuppressWarnings("unchecked")
@@ -136,22 +76,5 @@ public class TurretBaseTierTwoGui extends GuiContainer {
 
         drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
         drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 17, 14, expression);
-    }
-
-    public void sendChangeToServer() {
-        AdjustYAxisDetectMessage message = new AdjustYAxisDetectMessage(base.xCoord, base.yCoord, base.zCoord,
-                                                                        base.getyAxisDetect());
-
-        ModularTurrets.networking.sendToServer(message);
-    }
-
-    public void sendDropTurretsToServer() {
-        DropTurretsMessage message = new DropTurretsMessage(base.xCoord, base.yCoord, base.zCoord);
-        ModularTurrets.networking.sendToServer(message);
-    }
-
-    public void sendDropBaseToServer() {
-        DropBaseMessage message = new DropBaseMessage(base.xCoord, base.yCoord, base.zCoord);
-        ModularTurrets.networking.sendToServer(message);
     }
 }

@@ -34,14 +34,18 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float what, float these, float are) {
         if (!world.isRemote) {
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
-
-            if (player.getUniqueID().toString().equals(base.getOwner()) || base.getTrustedPlayer(player.getDisplayName()).canOpenGUI) {
+            if (base.getTrustedPlayer(player.getUniqueID()) != null) {
+                if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI) {
+                    player.openGui(ModularTurrets.instance, base.getBaseTier(), world, x, y, z);
+                }
+            }
+            if (player.getUniqueID().toString().equals(base.getOwner())) {
                 player.openGui(ModularTurrets.instance, base.getBaseTier(), world, x, y, z);
             } else {
                 player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
             }
-        }
 
+        }
         return true;
     }
 
@@ -61,7 +65,7 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
         if (!world.isRemote) {
             EntityPlayerMP player = (EntityPlayerMP) elb;
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
-            base.setOwner(player.getDisplayName());
+            base.setOwner(player.getUniqueID().toString());
             if (world.isBlockIndirectlyGettingPowered(x, y, z)) {
                 base.setRedstone(true);
             } else if (!world.isBlockIndirectlyGettingPowered(x, y, z)) {
@@ -91,8 +95,8 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
                     float rz = rand.nextFloat() * 0.8F + 0.1F;
 
                     EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz,
-                                                           new ItemStack(item.getItem(), item.stackSize,
-                                                                         item.getItemDamage()));
+                            new ItemStack(item.getItem(), item.stackSize,
+                                    item.getItemDamage()));
 
                     if (item.hasTagCompound()) {
                         entityItem.getEntityItem().setTagCompound((NBTTagCompound) item.getTagCompound().copy());
