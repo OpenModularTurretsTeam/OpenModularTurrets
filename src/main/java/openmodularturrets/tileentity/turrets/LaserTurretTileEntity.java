@@ -32,7 +32,7 @@ public class LaserTurretTileEntity extends TurretHead {
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getLaserTurretSettings().getAccuracy();
+        return ConfigHandler.getLaserTurretSettings().getAccuracy()/10;
     }
 
     @Override
