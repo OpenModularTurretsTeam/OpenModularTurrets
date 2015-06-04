@@ -221,6 +221,11 @@ public class ConfigureGui extends GuiContainer {
                         sendChangeToServerRemoveTrusted();
                         textFieldAddTrustedPlayer.setText("");
                         this.base.trustedPlayerIndex = 0;
+                        if (this.copiedTrusted.get(base.trustedPlayerIndex).uuid.equals(player.getUniqueID())
+                                && !player.getUniqueID().toString().equals(base.getOwner())) {
+                            mc.displayGuiScreen(null);
+                            return;
+                        }
                         player.openGui(ModularTurrets.instance, 6, player.worldObj,
                                 base.xCoord, base.yCoord, base.zCoord);
                     }
