@@ -53,7 +53,7 @@ public class ModifyPermissionsMessage implements IMessage, IMessageHandler<Modif
 		World world = ctx.getServerHandler().playerEntity.worldObj;
 		TurretBase turret = (TurretBase) world.getTileEntity(message.getX(),
 				message.getY(), message.getZ());
-		
+
 		System.out.println(turret);
 
 		if (message.getPerm().equals("gui")) {
@@ -67,7 +67,7 @@ public class ModifyPermissionsMessage implements IMessage, IMessageHandler<Modif
 		if (message.getPerm().equals("isAdmin")) {
 			turret.getTrustedPlayer(message.getPlayer()).setAdmin(message.canDo);
 		}
-
+		world.markBlockForUpdate(turret.xCoord, turret.yCoord, turret.zCoord);
 		return null;
 	}
 

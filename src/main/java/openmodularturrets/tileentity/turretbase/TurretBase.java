@@ -134,7 +134,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                     trustedPlayer.canChangeTargeting);
             nbtPlayer.setBoolean("admin",
                     trustedPlayer.admin);
-            if (!trustedPlayer.uuid.toString().equals("")) {
+            if (trustedPlayer.uuid != null) {
                 nbtPlayer.setString("UUID", trustedPlayer.uuid.toString());
             } else if (getPlayerUUID(trustedPlayer.name) != null) {
                 nbtPlayer.setString("UUID", getPlayerUUID(trustedPlayer.name).toString());
@@ -161,7 +161,10 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                 } else {
                     trustedPlayer.uuid = getPlayerUUID(trustedPlayer.name);
                 }
-                trustedPlayers.add(trustedPlayer);
+                if (trustedPlayer.uuid != null) {
+                    Logger.getGlobal().info("TrustedPlayerName: " + trustedPlayer.name + " UUID: " + trustedPlayer.uuid.toString());
+                    trustedPlayers.add(trustedPlayer);
+                }
             } else if (nbt.getCompoundTagAt(i).getString("name").equals("")) {
                 TrustedPlayer trustedPlayer = new TrustedPlayer(
                         nbt.getStringTagAt(i));
@@ -169,7 +172,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                         .info("found legacy trusted Player: "
                                 + nbt.getStringTagAt(i));
                 trustedPlayer.uuid = getPlayerUUID(trustedPlayer.name);
-                trustedPlayers.add(trustedPlayer);
+                if (trustedPlayer.uuid != null) {
+                    trustedPlayers.add(trustedPlayer);
+                }
             }
         }
     }
@@ -232,12 +237,15 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         this.attacksPlayers = par1.getBoolean("attacksPlayers");
         if (getPlayerUIDUnstable(par1.getString("owner")) != null) {
             this.owner = getPlayerUIDUnstable(par1.getString("owner")).toString();
-        } else if (getPlayerUUID(par1.getString("owner")) != null && par1.hasKey("owner")) {
+        } else if (getPlayerUUID(par1.getString("owner")) != null) {
             this.owner = getPlayerUUID(par1.getString("owner")).toString();
         } else {
-
+            Logger.getGlobal().info("Found non existent owner: " + par1.getString("owner"));
         }
         buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 10));
+        if (trustedPlayers.size() == 0) {
+            buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 8));
+        }
         if (par1.hasKey("active")) {
             this.active = par1.getBoolean("active");
         } else {
@@ -493,8 +501,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         return computerAccessable;
     }
 
-    public void setComputerAccessable(boolean computerAccess) {
-        this.computerAccessable = computerAccess;
+    public void setComputerAccessable(boolean computerAccessable) {
+        this.computerAccessable = computerAccessable;
     }
 
     @Override
