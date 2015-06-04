@@ -68,8 +68,6 @@ public class TurretHeadUtil {
     public static Entity getTarget(TurretBase base, World worldObj,
                                    int downLowAmount, int xCoord, int yCoord, int zCoord,
                                    int turretRange, TurretHead turret) {
-        warnPlayers(base, worldObj, downLowAmount, xCoord, yCoord, zCoord,
-                turretRange);
 
         Entity target = null;
 
@@ -118,7 +116,7 @@ public class TurretHeadUtil {
                 if (target != null && turret != null) {
 
                     EntityLivingBase targetELB = (EntityLivingBase) target;
-                    
+
                     if (canTurretSeeTarget(turret, targetELB)
                             && targetELB.getHealth() > 0.0F) {
                         return target;
@@ -132,8 +130,6 @@ public class TurretHeadUtil {
     public static Entity getTargetWithMinimumRange(TurretBase base,
                                                    World worldObj, int downLowAmount, int xCoord, int yCoord,
                                                    int zCoord, int turretRange, TurretHead turret) {
-        warnPlayers(base, worldObj, downLowAmount, xCoord, yCoord, zCoord,
-                turretRange);
 
         Entity target = null;
 
@@ -200,8 +196,6 @@ public class TurretHeadUtil {
     public static Entity getTargetWithoutSlowEffect(TurretBase base,
                                                     World worldObj, int downLowAmount, int xCoord, int yCoord,
                                                     int zCoord, int turretRange, TurretHead turret) {
-        warnPlayers(base, worldObj, downLowAmount, xCoord, yCoord, zCoord,
-                turretRange);
 
         Entity target = null;
 
