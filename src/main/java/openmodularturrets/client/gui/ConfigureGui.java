@@ -205,16 +205,8 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 5) { //remove trusted player
-            if (this.copiedTrusted.get(base.trustedPlayerIndex) != null && player.getUniqueID().toString().equals(base.getOwner())) {
-                base.removeTrustedPlayer(copiedTrusted.get(
-                        base.trustedPlayerIndex).getName());
-                sendChangeToServerRemoveTrusted();
-                textFieldAddTrustedPlayer.setText("");
-                this.base.trustedPlayerIndex = 0;
-                player.openGui(ModularTurrets.instance, 6, player.worldObj,
-                        base.xCoord, base.yCoord, base.zCoord);
-            } else if (base.getTrustedPlayer(player.getUniqueID()).admin) {
-                if (this.copiedTrusted.get(base.trustedPlayerIndex) != null && this.copiedTrusted.size() > 0) {
+            if (copiedTrusted.size() > 0) {
+                if (this.copiedTrusted.get(base.trustedPlayerIndex) != null && player.getUniqueID().toString().equals(base.getOwner())) {
                     base.removeTrustedPlayer(copiedTrusted.get(
                             base.trustedPlayerIndex).getName());
                     sendChangeToServerRemoveTrusted();
@@ -222,10 +214,20 @@ public class ConfigureGui extends GuiContainer {
                     this.base.trustedPlayerIndex = 0;
                     player.openGui(ModularTurrets.instance, 6, player.worldObj,
                             base.xCoord, base.yCoord, base.zCoord);
+                } else if (base.getTrustedPlayer(player.getUniqueID()).admin) {
+                    if (this.copiedTrusted.get(base.trustedPlayerIndex) != null && this.copiedTrusted.size() > 0) {
+                        base.removeTrustedPlayer(copiedTrusted.get(
+                                base.trustedPlayerIndex).getName());
+                        sendChangeToServerRemoveTrusted();
+                        textFieldAddTrustedPlayer.setText("");
+                        this.base.trustedPlayerIndex = 0;
+                        player.openGui(ModularTurrets.instance, 6, player.worldObj,
+                                base.xCoord, base.yCoord, base.zCoord);
+                    }
+                } else {
+                    player.addChatMessage(new ChatComponentText(StatCollector
+                            .translateToLocal("status.ownership")));
                 }
-            } else {
-                player.addChatMessage(new ChatComponentText(StatCollector
-                        .translateToLocal("status.ownership")));
             }
         }
 
