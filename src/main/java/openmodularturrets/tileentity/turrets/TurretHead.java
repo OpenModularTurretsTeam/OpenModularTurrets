@@ -16,7 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TurretBase;
-import openmodularturrets.util.TurretHeadUtils;
+import openmodularturrets.util.TurretHeadUtil;
 
 public abstract class TurretHead extends TileEntity {
 	public int ticks;
@@ -110,7 +110,7 @@ public abstract class TurretHead extends TileEntity {
 	
 	public Entity getTargetWithMinRange()
 	{
-		return TurretHeadUtils
+		return TurretHeadUtil
 				.getTargetWithMinimumRange(
 						base,
 						worldObj,
@@ -119,12 +119,12 @@ public abstract class TurretHead extends TileEntity {
 						yCoord,
 						zCoord,
 						getTurretRange()
-								+ TurretHeadUtils.getRangeUpgrades(base), this);
+								+ TurretHeadUtil.getRangeUpgrades(base), this);
 	}
 	
 	public Entity getTargetWithoutEffect()
 	{
-		return TurretHeadUtils
+		return TurretHeadUtil
 				.getTargetWithoutSlowEffect(
 						base,
 						worldObj,
@@ -133,11 +133,11 @@ public abstract class TurretHead extends TileEntity {
 						yCoord,
 						zCoord,
 						getTurretRange()
-								+ TurretHeadUtils.getRangeUpgrades(base), this);
+								+ TurretHeadUtil.getRangeUpgrades(base), this);
 	}
 
 	public Entity getTarget() {
-		return TurretHeadUtils
+		return TurretHeadUtil
 				.getTarget(
 						base,
 						worldObj,
@@ -146,13 +146,13 @@ public abstract class TurretHead extends TileEntity {
 						yCoord,
 						zCoord,
 						getTurretRange()
-								+ TurretHeadUtils.getRangeUpgrades(base), this);
+								+ TurretHeadUtil.getRangeUpgrades(base), this);
 	}
 
 	public abstract int getTurretRange();
 
 	public TurretBase getBase() {
-		return TurretHeadUtils.getTurretBase(worldObj, xCoord, yCoord, zCoord);
+		return TurretHeadUtil.getTurretBase(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	public float getRotationXY() {
@@ -202,7 +202,7 @@ public abstract class TurretHead extends TileEntity {
 	public boolean chebyshevDistance(Entity target, TurretBase base) {
 		if (MathHelper.abs_max(
 				MathHelper.abs_max(target.posX - this.xCoord, target.posY
-						- this.yCoord), target.posZ - this.zCoord) > (getTurretRange() + TurretHeadUtils
+						- this.yCoord), target.posZ - this.zCoord) > (getTurretRange() + TurretHeadUtil
 				.getRangeUpgrades(base))) {
 			return true;
 		} else {
@@ -239,13 +239,13 @@ public abstract class TurretHead extends TileEntity {
 		if (base == null || base.getBaseTier() < this.turretTier) {
 			this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);
 		} else {
-			TurretHeadUtils.updateSolarPanelAddon(base);
-			TurretHeadUtils.updateRedstoneReactor(base);
+			TurretHeadUtil.updateSolarPanelAddon(base);
+			TurretHeadUtil.updateRedstoneReactor(base);
 
 			int power_required = Math
 					.round(this.getTurretPowerUsage()
-							* (1 - TurretHeadUtils.getEfficiencyUpgrades(base))
-							* (1 + TurretHeadUtils
+							* (1 - TurretHeadUtil.getEfficiencyUpgrades(base))
+							* (1 + TurretHeadUtil
 									.getScattershotUpgradesUpgrades(base)));
 
 			// power check
@@ -267,20 +267,20 @@ public abstract class TurretHead extends TileEntity {
 				return;
 			}
 
-			this.rotationXZ = TurretHeadUtils.getAimYaw(target, xCoord, yCoord,
+			this.rotationXZ = TurretHeadUtil.getAimYaw(target, xCoord, yCoord,
 					zCoord) + 3.2F;
-			this.rotationXY = TurretHeadUtils.getAimPitch(target, xCoord,
+			this.rotationXY = TurretHeadUtil.getAimPitch(target, xCoord,
 					yCoord, zCoord);
 
 			// has cooldown passed?
-			if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtils
+			if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil
 					.getFireRateUpgrades(base)))) {
 				return;
 			}
 
 			// Can the turret still see the target? (It's moving)
 			if (target != null) {
-				if (!TurretHeadUtils.canTurretSeeTarget(this,
+				if (!TurretHeadUtil.canTurretSeeTarget(this,
 						(EntityLivingBase) target)) {
 					target = null;
 					return;
@@ -289,7 +289,7 @@ public abstract class TurretHead extends TileEntity {
 			if (target != null && target instanceof EntityPlayerMP) {
 				EntityPlayerMP entity = (EntityPlayerMP) target;
 
-				if (TurretHeadUtils.isTrustedPlayer(entity.getDisplayName(),
+				if (TurretHeadUtil.isTrustedPlayer(entity.getUniqueID(),
 						base)) {
 					target = null;
 					return;
@@ -306,14 +306,14 @@ public abstract class TurretHead extends TileEntity {
 
 			if (this.requiresAmmo()) {
 				if (this.requiresSpecificAmmo()) {
-					for (int i = 0; i <= TurretHeadUtils
+					for (int i = 0; i <= TurretHeadUtil
 							.getScattershotUpgradesUpgrades(base); i++) {
-						ammo = TurretHeadUtils
+						ammo = TurretHeadUtil
 								.useSpecificItemStackItemFromBase(base,
 										this.getAmmo());
 					}
 				} else {
-					ammo = TurretHeadUtils.useAnyItemStackFromBase(base);
+					ammo = TurretHeadUtil.useAnyItemStackFromBase(base);
 				}
 
 				// Is there ammo?
@@ -326,7 +326,7 @@ public abstract class TurretHead extends TileEntity {
 			base.setEnergyStored(base.getEnergyStored(ForgeDirection.UNKNOWN)
 					- power_required);
 
-			for (int i = 0; i <= TurretHeadUtils
+			for (int i = 0; i <= TurretHeadUtil
 					.getScattershotUpgradesUpgrades(base); i++) {
 
 				TurretProjectile projectile = this.createProjectile(
@@ -335,7 +335,7 @@ public abstract class TurretHead extends TileEntity {
 				projectile.setPosition(this.xCoord + 0.5, this.yCoord + 0.5,
 						this.zCoord + 0.5);
 
-				if ((projectile.amp_level = TurretHeadUtils.getAmpLevel(base)) != 0) {
+				if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
 					worldObj.playSoundEffect(this.xCoord, this.yCoord,
 							this.zCoord, ModInfo.ID + ":amped", 1.0F, 1.0F);
 					projectile.isAmped = true;
@@ -349,8 +349,8 @@ public abstract class TurretHead extends TileEntity {
 				float f1 = (float) dist
 						* (0.2F * (getDistanceToEntity(target) * 0.04F));
 				double accuraccy = this.getTurretAccuracy()
-						* (1 - TurretHeadUtils.getAccuraccyUpgrades(base))
-						* (1 + TurretHeadUtils
+						* (1 - TurretHeadUtil.getAccuraccyUpgrades(base))
+						* (1 + TurretHeadUtil
 								.getScattershotUpgradesUpgrades(base));
 
 				double time = dist / (projectile.gravity == 0.00F ? 3.0 : 1.6); // For

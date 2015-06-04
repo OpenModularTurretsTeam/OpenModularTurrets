@@ -129,7 +129,7 @@ public class ConfigureGui extends GuiContainer {
 	@Override
 	protected void actionPerformed(GuiButton guibutton) {
 		if (guibutton.id == 1) {
-			if (player.getDisplayName().equals(base.getOwner())
+			if (player.getUniqueID().toString().equals(base.getOwner())
 					|| (this.copiedTrusted.get(base.currentTrustedPlayerAdmin) != null && this.copiedTrusted
 							.get(base.currentTrustedPlayerAdmin).canChangeTargeting)) {
 				sendChangeToServerMobs(!base.isAttacksMobs());
@@ -142,7 +142,7 @@ public class ConfigureGui extends GuiContainer {
 		}
 
 		if (guibutton.id == 2) {
-			if (player.getDisplayName().equals(base.getOwner())
+			if (player.getUniqueID().toString().equals(base.getOwner())
 					|| (this.copiedTrusted.get(base.currentTrustedPlayerAdmin) != null && this.copiedTrusted
 							.get(base.currentTrustedPlayerAdmin).canChangeTargeting)) {
 				sendChangeToServerNeutrals(!base.isAttacksNeutrals());
@@ -156,7 +156,7 @@ public class ConfigureGui extends GuiContainer {
 		}
 
 		if (guibutton.id == 3) {
-			if (player.getDisplayName().equals(base.getOwner())
+			if (player.getUniqueID().toString().equals(base.getOwner())
 					|| (this.copiedTrusted.get(base.currentTrustedPlayerAdmin) != null && this.copiedTrusted
 							.get(base.currentTrustedPlayerAdmin).canChangeTargeting)) {
 				sendChangeToServerPlayers(!base.isAttacksPlayers());
@@ -170,7 +170,7 @@ public class ConfigureGui extends GuiContainer {
 		}
 
 		if (guibutton.id == 4) {
-			if (player.getDisplayName().equals(base.getOwner())
+			if (player.getUniqueID().toString().equals(base.getOwner())
 					|| (this.copiedTrusted.get(base.currentTrustedPlayerAdmin) != null && this.copiedTrusted
 							.get(base.currentTrustedPlayerAdmin).canAddTrustedPlayers)) {
 				if (!textFieldAddTrustedPlayer.getText().equals("")
@@ -189,7 +189,7 @@ public class ConfigureGui extends GuiContainer {
 		}
 
 		if (guibutton.id == 5) {
-			if (player.getDisplayName().equals(base.getOwner())
+			if (player.getUniqueID().toString().equals(base.getOwner())
 					|| (this.copiedTrusted.get(base.currentTrustedPlayerAdmin) != null && this.copiedTrusted
 							.get(base.currentTrustedPlayerAdmin).canAddTrustedPlayers)) {
 				base.removeTrustedPlayer(copiedTrusted.get(
@@ -223,7 +223,7 @@ public class ConfigureGui extends GuiContainer {
 		}
 
 		if (guibutton.id == 8) {
-			if (player.getDisplayName().equals(base.getOwner())
+			if (player.getUniqueID().toString().equals(base.getOwner())
 					|| (this.copiedTrusted.get(base.currentTrustedPlayerAdmin) != null && this.copiedTrusted
 							.get(base.currentTrustedPlayerAdmin).canAddTrustedPlayers)) {
 				
@@ -243,7 +243,7 @@ public class ConfigureGui extends GuiContainer {
 		}
 
 		if (guibutton.id == 9) {
-			if (player.getDisplayName().equals(base.getOwner())
+			if (player.getUniqueID().toString().equals(base.getOwner())
 					|| (this.copiedTrusted.get(base.currentTrustedPlayerAdmin) != null && this.copiedTrusted
 							.get(base.currentTrustedPlayerAdmin).canAddTrustedPlayers)) {
 				sendChangeToServerModifyPermissions(
@@ -262,7 +262,7 @@ public class ConfigureGui extends GuiContainer {
 		}
 
 		if (guibutton.id == 10) {
-			if (player.getDisplayName().equals(base.getOwner())
+			if (player.getUniqueID().toString().equals(base.getOwner())
 					|| (this.copiedTrusted.get(base.currentTrustedPlayerAdmin) != null && this.copiedTrusted
 							.get(base.currentTrustedPlayerAdmin).canAddTrustedPlayers)) {
 				sendChangeToServerModifyPermissions(
