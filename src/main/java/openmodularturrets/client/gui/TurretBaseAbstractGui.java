@@ -35,7 +35,11 @@ public class TurretBaseAbstractGui extends GuiContainer {
 
         this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "-"));
         this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "+"));
-        if (base.getTrustedPlayer(player.getUniqueID()) != null) {
+        if (player.getUniqueID().toString().equals(base.getOwner())) {
+            this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
+            this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
+            this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
+        } else if (base.getTrustedPlayer(player.getUniqueID()) != null) {
             if (base.getTrustedPlayer(player.getUniqueID()).admin) {
                 this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
                 this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
@@ -44,10 +48,6 @@ public class TurretBaseAbstractGui extends GuiContainer {
                     base.getTrustedPlayer(player.getUniqueID()).admin) {
                 this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
             }
-        } else if (player.getUniqueID().toString().equals(base.getOwner())) {
-            this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
-            this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
-            this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
         }
     }
 
