@@ -3,7 +3,9 @@ package openmodularturrets.blocks.turretheads;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public abstract class BlockAbstractTurretHead extends BlockContainer {
     public BlockAbstractTurretHead() {
@@ -23,6 +25,19 @@ public abstract class BlockAbstractTurretHead extends BlockContainer {
 
     @Override
     public boolean isOpaqueCube() {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+        if (world.getTileEntity(x + 1, y, z) instanceof TurretBase ||
+                world.getTileEntity(x - 1, y, z) instanceof TurretBase ||
+                world.getTileEntity(x, y + 1, z) instanceof TurretBase ||
+                world.getTileEntity(x, y - 1, z) instanceof TurretBase ||
+                world.getTileEntity(x, y, z + 1) instanceof TurretBase ||
+                world.getTileEntity(x, y, z - 1) instanceof TurretBase) {
+            return true;
+        }
         return false;
     }
 }
