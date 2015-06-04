@@ -46,7 +46,6 @@ public class SetTurretOwnerMessage implements IMessage, IMessageHandler<SetTurre
         TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
 
         turret.setOwner(message.getOwner());
-        world.markBlockForUpdate(turret.xCoord, turret.yCoord, turret.zCoord);
         return null;
     }
 
