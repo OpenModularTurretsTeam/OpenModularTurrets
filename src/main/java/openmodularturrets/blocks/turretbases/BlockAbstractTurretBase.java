@@ -37,6 +37,7 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
             if (base.getTrustedPlayer(player.getUniqueID()) != null) {
                 if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI) {
                     player.openGui(ModularTurrets.instance, base.getBaseTier(), world, x, y, z);
+                    return true;
                 }
             }
             if (player.getUniqueID().toString().equals(base.getOwner())) {
