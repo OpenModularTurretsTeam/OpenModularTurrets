@@ -42,7 +42,6 @@ public class PlayerUtil {
                 return entry.getValue();
             }
         }
-
         return null;
     }
 }
