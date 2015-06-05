@@ -7,6 +7,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -173,7 +174,7 @@ public class TurretHeadUtil {
 
                         if (!entity.getUniqueID().equals(base.getOwner())
                                 && !isTrustedPlayer(entity.getUniqueID(),
-                                base)) {
+                                base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
                         }
                     }
@@ -239,7 +240,7 @@ public class TurretHeadUtil {
 
                         if (!entity.getUniqueID().equals(base.getOwner())
                                 && !isTrustedPlayer(entity.getUniqueID(),
-                                base)) {
+                                base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
                         }
                     }
@@ -314,6 +315,20 @@ public class TurretHeadUtil {
                     && ammoCheck.getItem() != null) {
                 base.decrStackSize(i, 1);
                 return new ItemStack(ammoCheck.getItem());
+            }
+        }
+
+        return null;
+    }
+
+    public static ItemStack useSpecificItemStackBlockFromBase(TurretBase base, ItemStack stack) {
+        for (int i = 0; i <= 8; i++) {
+            ItemStack ammo_stack = base.getStackInSlot(i);
+
+            if (ammo_stack != null && ammo_stack.stackSize > 0
+                    && ammo_stack.getItem() == stack.getItem()) {
+                base.decrStackSize(i, 1);
+                return new ItemStack(ammo_stack.getItem());
             }
         }
 
@@ -586,6 +601,17 @@ public class TurretHeadUtil {
         if (ConfigHandler.getRedstoneReactorAddonGen() < (base
                 .getMaxEnergyStored(ForgeDirection.UNKNOWN) - base
                 .getEnergyStored(ForgeDirection.UNKNOWN))) {
+
+            //Prioritise redstone blocks
+            ItemStack redstoneBlock = useSpecificItemStackBlockFromBase(base,
+                    new ItemStack(Blocks.redstone_block));
+
+            if (redstoneBlock != null) {
+                base.receiveEnergy(ForgeDirection.UNKNOWN,
+                        ConfigHandler.getRedstoneReactorAddonGen() * 9, false);
+                return;
+            }
+
             ItemStack redstone = useSpecificItemStackItemFromBase(base,
                     Items.redstone);
 
