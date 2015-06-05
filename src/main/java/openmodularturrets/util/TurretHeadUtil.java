@@ -33,7 +33,7 @@ import java.util.UUID;
 
 public class TurretHeadUtil {
 
-    public static HashSet<EntityPlayerMP> warnedPlayers = new HashSet<>();
+    public static HashSet<EntityPlayerMP> warnedPlayers = new HashSet<EntityPlayerMP>();
 
     public static void warnPlayers(TurretBase base, World worldObj,
                                    int downLowAmount, int xCoord, int yCoord, int zCoord,
