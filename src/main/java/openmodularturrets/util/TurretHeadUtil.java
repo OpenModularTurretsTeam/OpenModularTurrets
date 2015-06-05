@@ -27,10 +27,14 @@ import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 import openmodularturrets.tileentity.turrets.TurretHead;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
 public class TurretHeadUtil {
+
+    public static HashSet<EntityPlayerMP> warnedPlayers = new HashSet<>();
+
     public static void warnPlayers(TurretBase base, World worldObj,
                                    int downLowAmount, int xCoord, int yCoord, int zCoord,
                                    int turretRange) {
@@ -42,13 +46,19 @@ public class TurretHeadUtil {
                     + turretRange + warnDistance, yCoord + turretRange
                     + warnDistance, zCoord + turretRange + warnDistance);
 
+            if(worldObj.getWorldTime() % 100 == 0)
+            {
+                warnedPlayers.clear();
+            }
+
             List<EntityPlayerMP> targets = worldObj.getEntitiesWithinAABB(
                     EntityPlayerMP.class, axis);
 
             for (EntityPlayerMP target : targets) {
                 if (!target.getUniqueID().toString().equals(base.getOwner())
-                        && !isTrustedPlayer(target.getUniqueID(), base)) {
+                        && !isTrustedPlayer(target.getUniqueID(), base) && !warnedPlayers.contains(target)) {
                     dispatchWarnMessage(target, worldObj);
+                    warnedPlayers.add(target);
                 }
             }
         }
