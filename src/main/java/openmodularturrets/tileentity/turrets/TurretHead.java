@@ -286,15 +286,19 @@ public abstract class TurretHead extends TileEntity {
 					return;
 				}
 			}
+
+			//Player checks
 			if (target != null && target instanceof EntityPlayerMP) {
 				EntityPlayerMP entity = (EntityPlayerMP) target;
 
 				if (TurretHeadUtil.isTrustedPlayer(entity.getUniqueID(),
-						base)) {
+						base) || entity.capabilities.isCreativeMode || !base.isAttacksPlayers()) {
 					target = null;
 					return;
 				}
 			}
+
+			//Is the target out of range now?
 			if (target != null) {
 				if (chebyshevDistance(target, base)) {
 					target = null;
