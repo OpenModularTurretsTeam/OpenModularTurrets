@@ -18,9 +18,6 @@ import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.TurretHeadUtil;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 public abstract class TurretHead extends TileEntity {
     public int ticks;
     public float rotationXY;
@@ -225,14 +222,13 @@ public abstract class TurretHead extends TileEntity {
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
 
-        TurretHeadUtil.warnPlayers(base, base.getWorldObj(), base.getyAxisDetect(), this.xCoord, this.yCoord, this.zCoord, getTurretRange());
-
         ticks++;
 
         // BASE IS OKAY
         if (base == null || base.getBaseTier() < this.turretTier) {
             this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);
         } else {
+            TurretHeadUtil.warnPlayers(base, base.getWorldObj(), base.getyAxisDetect(), this.xCoord, this.yCoord, this.zCoord, getTurretRange());
             TurretHeadUtil.updateSolarPanelAddon(base);
             TurretHeadUtil.updateRedstoneReactor(base);
 
