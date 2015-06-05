@@ -29,7 +29,6 @@ public class LaserProjectile extends TurretProjectile {
 
     @Override
     public void onEntityUpdate() {
-
         if (ticksExisted >= 50) {
             this.setDead();
         }

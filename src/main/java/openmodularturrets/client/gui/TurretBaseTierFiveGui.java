@@ -2,17 +2,10 @@ package openmodularturrets.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
-import openmodularturrets.ModularTurrets;
 import openmodularturrets.client.gui.containers.TurretBaseTierFiveContainer;
-import openmodularturrets.network.AdjustYAxisDetectMessage;
-import openmodularturrets.network.DropBaseMessage;
-import openmodularturrets.network.DropTurretsMessage;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierFiveTileEntity;
@@ -20,59 +13,10 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
-import static openmodularturrets.util.PlayerUtil.getPlayerNameFromUUID;
-
-public class TurretBaseTierFiveGui extends GuiContainer {
-
-    TurretBaseTierFiveTileEntity base;
-    private int mouseX;
-    private int mouseY;
-    private EntityPlayer player;
+public class TurretBaseTierFiveGui extends TurretBaseAbstractGui {
 
     public TurretBaseTierFiveGui(InventoryPlayer inventoryPlayer, TurretBaseTierFiveTileEntity tileEntity) {
-        super(new TurretBaseTierFiveContainer(inventoryPlayer, tileEntity));
-        this.base = tileEntity;
-        player = inventoryPlayer.player;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void initGui() {
-        super.initGui();
-        int x = (width - xSize) / 2;
-        int y = (height - ySize) / 2;
-
-        this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "-"));
-        this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "+"));
-        this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
-        this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
-        this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton guibutton) {
-        if (guibutton.id == 1) {
-            this.base.setyAxisDetect(this.base.getyAxisDetect() - 1);
-            sendChangeToServer();
-        }
-
-        if (guibutton.id == 2) {
-            this.base.setyAxisDetect(this.base.getyAxisDetect() + 1);
-            sendChangeToServer();
-        }
-
-        if (guibutton.id == 3) {
-            sendDropTurretsToServer();
-        }
-
-        if (guibutton.id == 4) {
-            sendDropBaseToServer();
-        }
-        
-        if (guibutton.id == 5) {
-			player.openGui(ModularTurrets.instance, 6,
-					player.worldObj, base.xCoord, base.yCoord, base.zCoord);
-		}
+        super(inventoryPlayer, tileEntity, new TurretBaseTierFiveContainer(inventoryPlayer, tileEntity));
     }
 
     @SuppressWarnings("unchecked")
@@ -99,10 +43,10 @@ public class TurretBaseTierFiveGui extends GuiContainer {
 
         ArrayList targetInfo = new ArrayList();
 
-        targetInfo.add("\u00A76Owner: \u00A7f" + getPlayerNameFromUUID(base.getOwner()));
+        targetInfo.add("\u00A76Owner: \u00A7f" + base.getOwnerName());
         boolean isCurrentlyOn = base.isActive();
-        targetInfo.add("\u00A76Active: "+ (isCurrentlyOn ? "\u00A72Yes" : "\u00A7cNo"));
-		targetInfo.add("");
+        targetInfo.add("\u00A76Active: " + (isCurrentlyOn ? "\u00A72Yes" : "\u00A7cNo"));
+        targetInfo.add("");
         targetInfo.add("");
         targetInfo.add("\u00A75-Trusted Players-");
 
@@ -116,13 +60,6 @@ public class TurretBaseTierFiveGui extends GuiContainer {
         targetInfo.add("\u00A77Attack Players: \u00A7b" + base.isAttacksPlayers());
 
         this.drawHoveringText(targetInfo, -128, 17, fontRenderer);
-    }
-
-    @Override
-    public void drawScreen(int par1, int par2, float par3) {
-        this.mouseX = par1;
-        this.mouseY = par2;
-        super.drawScreen(par1, par2, par3);
     }
 
     @Override
@@ -143,20 +80,5 @@ public class TurretBaseTierFiveGui extends GuiContainer {
         drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 17, 14, expression);
     }
 
-    public void sendChangeToServer() {
-        AdjustYAxisDetectMessage message = new AdjustYAxisDetectMessage(base.xCoord, base.yCoord, base.zCoord,
-                                                                        base.getyAxisDetect());
 
-        ModularTurrets.networking.sendToServer(message);
-    }
-
-    public void sendDropTurretsToServer() {
-        DropTurretsMessage message = new DropTurretsMessage(base.xCoord, base.yCoord, base.zCoord);
-        ModularTurrets.networking.sendToServer(message);
-    }
-
-    public void sendDropBaseToServer() {
-        DropBaseMessage message = new DropBaseMessage(base.xCoord, base.yCoord, base.zCoord);
-        ModularTurrets.networking.sendToServer(message);
-    }
 }

@@ -46,7 +46,6 @@ public class AddTrustedPlayerMessage implements IMessage, IMessageHandler<AddTru
         TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
 
         turret.addTrustedPlayer(message.getPlayer());
-
         return null;
     }
 
