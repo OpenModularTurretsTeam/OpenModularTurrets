@@ -37,8 +37,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import static openmodularturrets.util.PlayerUtil.getPlayerUIDUnstable;
-import static openmodularturrets.util.PlayerUtil.getPlayerUUID;
+import static openmodularturrets.util.PlayerUtil.*;
 
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft"),
@@ -57,6 +56,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     protected boolean attacksNeutrals;
     protected boolean attacksPlayers;
     protected String owner;
+    protected String ownerName = "";
     protected List<TrustedPlayer> trustedPlayers;
     protected int ticks;
     public int trustedPlayerIndex = 0;
@@ -64,7 +64,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     protected boolean inverted;
     protected boolean redstone;
     protected boolean checkRedstone = false;
-    protected boolean computerAccessable = false;
+    protected boolean computerAccessable = true;
     protected float amountOfPotentia = 0F;
     protected float maxAmountOfPotentia = ConfigHandler
             .getPotentiaAddonCapacity();
@@ -87,17 +87,20 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         TrustedPlayer trustedPlayer = new TrustedPlayer(name);
         trustedPlayer.uuid = getPlayerUUID(name);
         if (trustedPlayer.uuid != null) {
+            for (TrustedPlayer player : trustedPlayers) {
+                if (player.getName().toLowerCase().equals(name.toLowerCase()) || !trustedPlayer.uuid.toString().equals(owner)) {
+                    return;
+                }
+            }
             trustedPlayers.add(trustedPlayer);
         }
     }
 
     public void removeTrustedPlayer(String name) {
-        List<TrustedPlayer> copiedTrusteds = new ArrayList<TrustedPlayer>();
-        copiedTrusteds.addAll(trustedPlayers);
-        for (int i = 0; i <= copiedTrusteds.size() - 1; i++) {
-            TrustedPlayer player = copiedTrusteds.get(i);
+        for (TrustedPlayer player : trustedPlayers) {
             if (player.getName().equals(name)) {
-                trustedPlayers.remove(i);
+                trustedPlayers.remove(player);
+                return;
             }
         }
     }
@@ -200,6 +203,10 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         par1.setBoolean("attacksNeutrals", attacksNeutrals);
         par1.setBoolean("attacksPlayers", attacksPlayers);
         par1.setString("owner", owner);
+        if (ownerName.isEmpty() && getPlayerNameFromUUID(owner) != null) {
+            ownerName = getPlayerNameFromUUID(owner);
+        }
+        par1.setString("ownerName", ownerName);
         par1.setTag("trustedPlayers", getTrustedPlayersAsNBT());
         par1.setBoolean("active", active);
         par1.setBoolean("inverted", inverted);
@@ -241,6 +248,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         } else {
             Logger.getGlobal().info("Found non existent owner: " + par1.getString("owner") + "at coordinates: "
                     + this.xCoord + "," + this.yCoord + "," + this.zCoord);
+        }
+        if (par1.hasKey("ownerName")) {
+            this.ownerName = par1.getString("ownerName");
         }
         buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 10));
         if (trustedPlayers.size() == 0) {
@@ -503,6 +513,10 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
     public void setComputerAccessable(boolean computerAccessable) {
         this.computerAccessable = computerAccessable;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
     }
 
     @Override

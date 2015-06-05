@@ -14,18 +14,15 @@ import openmodularturrets.ModularTurrets;
 import openmodularturrets.client.gui.containers.ConfigContainer;
 import openmodularturrets.network.*;
 import openmodularturrets.reference.ModInfo;
-import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ConfigureGui extends GuiContainer {
 
     TurretBase base;
     GuiTextField textFieldAddTrustedPlayer;
-    private List<TrustedPlayer> copiedTrusted = new ArrayList<TrustedPlayer>();
     EntityPlayer player;
     private int mouseX;
     private int mouseY;
@@ -34,7 +31,7 @@ public class ConfigureGui extends GuiContainer {
         super(new ConfigContainer(inventoryPlayer, tileEntity));
         this.base = tileEntity;
         player = inventoryPlayer.player;
-        this.copiedTrusted.addAll(base.getTrustedPlayers());
+
     }
 
     @SuppressWarnings("unchecked")
@@ -71,7 +68,7 @@ public class ConfigureGui extends GuiContainer {
         this.buttonList.add(new GuiButton(6, x + 10, y + 135, 20, 20, "<<"));
         this.buttonList.add(new GuiButton(7, x + 145, y + 135, 20, 20, ">>"));
 
-        if (this.copiedTrusted.size() > 0) {
+        if (this.base.getTrustedPlayers().size() > 0) {
 
             this.buttonList
                     .add(new GuiButton(
@@ -80,7 +77,7 @@ public class ConfigureGui extends GuiContainer {
                             y + 135,
                             23,
                             20,
-                            this.copiedTrusted
+                            this.base.getTrustedPlayers()
                                     .get(base.trustedPlayerIndex).canOpenGUI ? "\u00A72Y"
                                     : "\u00A7cN"));
             this.buttonList
@@ -90,7 +87,7 @@ public class ConfigureGui extends GuiContainer {
                             y + 135,
                             23,
                             20,
-                            this.copiedTrusted
+                            this.base.getTrustedPlayers()
                                     .get(base.trustedPlayerIndex).canChangeTargeting ? "\u00A72Y"
                                     : "\u00A7cN"));
             this.buttonList
@@ -100,15 +97,14 @@ public class ConfigureGui extends GuiContainer {
                             y + 135,
                             23,
                             20,
-                            this.copiedTrusted
+                            this.base.getTrustedPlayers()
                                     .get(base.trustedPlayerIndex).admin ? "\u00A72Y"
                                     : "\u00A7cN"));
 
         } else {
             this.buttonList.add(new GuiButton(999, x + 70, y + 135, 23, 20, "?"));
             this.buttonList.add(new GuiButton(999, x + 93, y + 135, 23, 20, "?"));
-            this.buttonList
-                    .add(new GuiButton(999, x + 116, y + 135, 23, 20, "?"));
+            this.buttonList.add(new GuiButton(999, x + 116, y + 135, 23, 20, "?"));
         }
     }
 
@@ -205,23 +201,23 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 5) { //remove trusted player
-            if (copiedTrusted.size() > 0) {
-                if (this.copiedTrusted.get(base.trustedPlayerIndex) != null && player.getUniqueID().toString().equals(base.getOwner())) {
-                    base.removeTrustedPlayer(copiedTrusted.get(
-                            base.trustedPlayerIndex).getName());
+            if (base.getTrustedPlayers().size() > 0) {
+                if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && player.getUniqueID().toString().equals(base.getOwner())) {
                     sendChangeToServerRemoveTrusted();
+                    base.removeTrustedPlayer(base.getTrustedPlayers().get(
+                            base.trustedPlayerIndex).getName());
                     textFieldAddTrustedPlayer.setText("");
                     this.base.trustedPlayerIndex = 0;
                     player.openGui(ModularTurrets.instance, 6, player.worldObj,
                             base.xCoord, base.yCoord, base.zCoord);
                 } else if (base.getTrustedPlayer(player.getUniqueID()).admin) {
-                    if (this.copiedTrusted.get(base.trustedPlayerIndex) != null && this.copiedTrusted.size() > 0) {
-                        base.removeTrustedPlayer(copiedTrusted.get(
-                                base.trustedPlayerIndex).getName());
+                    if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && this.base.getTrustedPlayers().size() > 0) {
                         sendChangeToServerRemoveTrusted();
+                        base.removeTrustedPlayer(base.getTrustedPlayers().get(
+                                base.trustedPlayerIndex).getName());
                         textFieldAddTrustedPlayer.setText("");
                         this.base.trustedPlayerIndex = 0;
-                        if (this.copiedTrusted.get(base.trustedPlayerIndex).uuid.equals(player.getUniqueID())
+                        if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex).uuid.equals(player.getUniqueID())
                                 && !player.getUniqueID().toString().equals(base.getOwner())) {
                             mc.displayGuiScreen(null);
                             return;
@@ -245,7 +241,7 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 7) { //increase index of trusted player list
-            if (!((this.base.trustedPlayerIndex + 1) > (copiedTrusted
+            if (!((this.base.trustedPlayerIndex + 1) > (base.getTrustedPlayers()
                     .size() - 1))) {
                 this.base.trustedPlayerIndex++;
                 player.openGui(ModularTurrets.instance, 6, player.worldObj,
@@ -254,18 +250,18 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 8) { //change trusted player permission for GUI opening
-            if (player.getUniqueID().toString().equals(base.getOwner()) && this.copiedTrusted.get(base.trustedPlayerIndex) != null) {
+            if (player.getUniqueID().toString().equals(base.getOwner()) && this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null) {
                 sendChangeToServerModifyPermissions(
-                        this.copiedTrusted.get(base.trustedPlayerIndex)
+                        this.base.getTrustedPlayers().get(base.trustedPlayerIndex)
                                 .getName(), "gui", !base.getTrustedPlayers()
                                 .get(base.trustedPlayerIndex).canOpenGUI);
                 guibutton.displayString = !base.getTrustedPlayers().get(
                         base.trustedPlayerIndex).canOpenGUI ? "\u00A72Y"
                         : "\u00A7cN";
 
-            } else if (this.copiedTrusted.get(base.trustedPlayerIndex) != null && base.getTrustedPlayer(player.getUniqueID()).admin) {
+            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && base.getTrustedPlayer(player.getUniqueID()).admin) {
                 sendChangeToServerModifyPermissions(
-                        this.copiedTrusted.get(base.trustedPlayerIndex)
+                        this.base.getTrustedPlayers().get(base.trustedPlayerIndex)
                                 .getName(), "gui", !base.getTrustedPlayers()
                                 .get(base.trustedPlayerIndex).canOpenGUI);
                 guibutton.displayString = !base.getTrustedPlayers().get(
@@ -278,18 +274,18 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 9) { //change trusted player permission for targeting
-            if (player.getUniqueID().toString().equals(base.getOwner()) && this.copiedTrusted.get(base.trustedPlayerIndex) != null) {
+            if (player.getUniqueID().toString().equals(base.getOwner()) && this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null) {
                 sendChangeToServerModifyPermissions(
-                        this.copiedTrusted.get(base.trustedPlayerIndex)
+                        this.base.getTrustedPlayers().get(base.trustedPlayerIndex)
                                 .getName(), "targeting", !base.getTrustedPlayers().get(
                                 base.trustedPlayerIndex).canChangeTargeting);
                 guibutton.displayString = !base.getTrustedPlayers().get(
                         base.trustedPlayerIndex).canChangeTargeting ? "\u00A72Y"
                         : "\u00A7cN";
 
-            } else if (this.copiedTrusted.get(base.trustedPlayerIndex) != null && base.getTrustedPlayer(player.getUniqueID()).admin) {
+            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && base.getTrustedPlayer(player.getUniqueID()).admin) {
                 sendChangeToServerModifyPermissions(
-                        this.copiedTrusted.get(base.trustedPlayerIndex)
+                        this.base.getTrustedPlayers().get(base.trustedPlayerIndex)
                                 .getName(), "targeting", !base.getTrustedPlayers().get(
                                 base.trustedPlayerIndex).canChangeTargeting);
                 guibutton.displayString = !base.getTrustedPlayers().get(
@@ -302,18 +298,18 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 10) { //change trusted player permission for administering
-            if (player.getUniqueID().toString().equals(base.getOwner()) && this.copiedTrusted.get(base.trustedPlayerIndex) != null) {
+            if (player.getUniqueID().toString().equals(base.getOwner()) && this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null) {
                 sendChangeToServerModifyPermissions(
-                        this.copiedTrusted.get(base.trustedPlayerIndex)
+                        this.base.getTrustedPlayers().get(base.trustedPlayerIndex)
                                 .getName(), "isAdmin", !base.getTrustedPlayers().get(
                                 base.trustedPlayerIndex).admin);
                 guibutton.displayString = !base.getTrustedPlayers().get(
                         base.trustedPlayerIndex).admin ? "\u00A72Y"
                         : "\u00A7cN";
 
-            } else if (this.copiedTrusted.get(base.trustedPlayerIndex) != null && base.getTrustedPlayer(player.getUniqueID()).admin) {
+            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && base.getTrustedPlayer(player.getUniqueID()).admin) {
                 sendChangeToServerModifyPermissions(
-                        this.copiedTrusted.get(base.trustedPlayerIndex)
+                        this.base.getTrustedPlayers().get(base.trustedPlayerIndex)
                                 .getName(), "isAdmin", !base.getTrustedPlayers().get(
                                 base.trustedPlayerIndex).admin);
                 guibutton.displayString = !base.getTrustedPlayers().get(
@@ -332,12 +328,12 @@ public class ConfigureGui extends GuiContainer {
         fontRenderer.drawString("Targeting options:", 10, 8, 0);
         fontRenderer.drawString("Add Trusted Player:", 10, 87, 0);
 
-        if (this.copiedTrusted.size() == 0) {
+        if (this.base.getTrustedPlayers().size() == 0) {
             fontRenderer.drawString("\u00A7f<No trusted players to edit>", 10,
                     124, 0);
         } else {
             fontRenderer.drawString(
-                    copiedTrusted.get(base.trustedPlayerIndex).getName()
+                    base.getTrustedPlayers().get(base.trustedPlayerIndex).getName()
                             + "'s Permissions:", 10, 124, 0);
         }
 
@@ -462,7 +458,7 @@ public class ConfigureGui extends GuiContainer {
 
     public void sendChangeToServerRemoveTrusted() {
         RemoveTrustedPlayerMessage message = new RemoveTrustedPlayerMessage(
-                base.xCoord, base.yCoord, base.zCoord, copiedTrusted.get(
+                base.xCoord, base.yCoord, base.zCoord, base.getTrustedPlayers().get(
                 base.trustedPlayerIndex).getName());
 
         ModularTurrets.networking.sendToServer(message);
