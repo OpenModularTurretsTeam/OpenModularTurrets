@@ -13,8 +13,6 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
-import static openmodularturrets.util.PlayerUtil.getPlayerNameFromUUID;
-
 public class TurretBaseTierTwoGui extends TurretBaseAbstractGui {
 
     public TurretBaseTierTwoGui(InventoryPlayer inventoryPlayer, TurretBaseTierTwoTileEntity tileEntity) {
@@ -45,7 +43,7 @@ public class TurretBaseTierTwoGui extends TurretBaseAbstractGui {
 
         ArrayList targetInfo = new ArrayList();
 
-        targetInfo.add("\u00A76Owner: \u00A7f" + getPlayerNameFromUUID(base.getOwner()));
+        targetInfo.add("\u00A76Owner: \u00A7f" + base.getOwnerName());
         boolean isCurrentlyOn = base.isActive();
         targetInfo.add("\u00A76Active: "+ (isCurrentlyOn ? "\u00A72Yes" : "\u00A7cNo"));
 		targetInfo.add("");
