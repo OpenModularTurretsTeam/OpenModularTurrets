@@ -53,7 +53,7 @@ public class ModCompatibility {
 		Map<String, ModContainer> modList = Loader.instance()
 				.getIndexedModList();
 		if (modList.get(ModInfo.ID).getProcessedVersion().getVersionString()
-				.split("-").length > 0) {
+				.split("-").length > 1) {
 			return modList.get(ModInfo.ID).getProcessedVersion()
 					.getVersionString().split("-")[1];
 		} else {
