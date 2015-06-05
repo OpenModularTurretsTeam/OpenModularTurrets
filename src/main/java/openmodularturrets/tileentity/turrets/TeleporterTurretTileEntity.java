@@ -37,9 +37,6 @@ public class TeleporterTurretTileEntity extends TurretHead {
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
 
-        if (recoilState > 0.0F) {
-            recoilState = recoilState - 0.01F;
-        }
 
         ticks++;
 
