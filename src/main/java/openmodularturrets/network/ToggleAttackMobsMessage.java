@@ -46,7 +46,6 @@ public class ToggleAttackMobsMessage implements IMessage, IMessageHandler<Toggle
         TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
 
         turret.setAttacksMobs(message.doAttackMobs());
-
         return null;
     }
 

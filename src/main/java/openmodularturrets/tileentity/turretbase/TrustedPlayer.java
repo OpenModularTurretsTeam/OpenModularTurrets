@@ -2,14 +2,12 @@ package openmodularturrets.tileentity.turretbase;
 
 import java.util.UUID;
 
-import static openmodularturrets.util.PlayerUtil.getPlayerUIDUnstable;
-
 public class TrustedPlayer {
 
 	public String name = "";
 	public boolean canOpenGUI = false;
 	public boolean canChangeTargeting = false;
-	public boolean canAddTrustedPlayers = false;
+	public boolean admin = false;
 	public UUID uuid;
 
 	public TrustedPlayer(String name) {
@@ -32,12 +30,7 @@ public class TrustedPlayer {
 		this.canChangeTargeting = canChangeTargeting;
 	}
 
-	public void setCanAddTrustedPlayers(boolean canAddTrustedPlayers) {
-		this.canAddTrustedPlayers = canAddTrustedPlayers;
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
-
-	public void setUuidUnstable(String uuid) {
-		this.uuid = getPlayerUIDUnstable(uuid);
-	}
-	
 }
