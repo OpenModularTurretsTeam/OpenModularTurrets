@@ -19,6 +19,8 @@ public class ModCompatibility {
 	public static boolean EnderIOLoaded = false;
 	public static boolean MekanismLoaded = false;
 	public static boolean ThaumcraftLoaded = false;
+	public static boolean OpenComputersLoaded = false;
+	public static boolean ComputercraftLoaded = false;
 	public static IGWHandler igwHandler = null;
 
 	public static void checkForMods() {
@@ -43,6 +45,14 @@ public class ModCompatibility {
 		if (ThaumcraftLoaded) {
 			Logger.getGlobal().info(
 					"Afrikaners is plesierig. (Found Thaumcraft)");
+		}
+		
+		OpenComputersLoaded = Loader.isModLoaded("OpenComputers");
+		ComputercraftLoaded = Loader.isModLoaded("ComputerCraft");
+		
+		if(OpenComputersLoaded || ComputercraftLoaded)
+		{
+			
 		}
 
 		IGWModLoaded = Loader.isModLoaded("IGWMod");
