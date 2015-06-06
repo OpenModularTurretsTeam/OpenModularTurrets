@@ -64,7 +64,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     protected boolean inverted;
     protected boolean redstone;
     protected boolean checkRedstone = false;
-    protected boolean computerAccessable = true;
+    protected boolean computerAccessable = false;
     protected float amountOfPotentia = 0F;
     protected float maxAmountOfPotentia = ConfigHandler
             .getPotentiaAddonCapacity();
@@ -417,11 +417,30 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
         ticks++;
 
+        //Redstone
         if (checkRedstone) {
             redstone = worldObj.isBlockIndirectlyGettingPowered(this.xCoord,
                     this.yCoord, this.zCoord);
         }
-
+        
+        if (ticks % 5 == 0) {
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            
+            //Computers
+            if(ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputercraftLoaded)
+            {
+            	if(TurretHeadUtil.hasSerialPortAddon(this))
+            	{
+            		this.computerAccessable = true;
+            	}
+            	else
+            	{
+            		this.computerAccessable = false;
+            	}
+            }
+        }
+   
+        //Thaumcraft
         if (TurretHeadUtil.hasPotentiaUpgradeAddon(this)) {
             if (amountOfPotentia > 0.00F
                     && !(storage.getMaxEnergyStored()
@@ -441,9 +460,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             }
         }
 
-        if (ticks % 5 == 0) {
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
+       
         if (ModCompatibility.ThaumcraftLoaded) {
             if (ticks % 20 == 0) {
                 ticks = 0;

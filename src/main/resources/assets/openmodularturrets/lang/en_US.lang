@@ -14,6 +14,7 @@ item.addonReactor.name=Addon - Redstone Reactor
 item.addonDam.name=Addon - Damage Boost
 item.addonSolar.name=Addon - Solar Generator
 item.addonPotentia.name=Addon - Potentia Converter
+item.addonSerialPort.name=Addon - Serial Port
 item.sensorOne.name=Sensor (Tier 1)
 item.sensorTwo.name=Sensor (Tier 2)
 item.sensorThree.name=Sensor (Tier 3)
@@ -131,6 +132,9 @@ turret.addon.potentia.c=Adds an internal Potentia capacity of
 turret.addon.potentia.d=Adding Ordo vis through a network
 turret.addon.potentia.e=multiplies RF conversion rate x10.
 turret.addon.potentia.flavour=Because Eskom can't get it right...
+turret.addon.serial.a=Enables OpenComputers and ComputerCraft
+turret.addon.serial.b=compatibility.
+turret.addon.serial.flavour=Who needs OOP?
 
 turret.upgrade.label=Turret Upgrade
 turret.upgrade.stacks=Stacks up to 4 times.

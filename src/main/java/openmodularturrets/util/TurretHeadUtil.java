@@ -20,6 +20,7 @@ import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.addons.DamageAmpAddonItem;
 import openmodularturrets.items.addons.PotentiaAddonItem;
 import openmodularturrets.items.addons.RedstoneReactorAddonItem;
+import openmodularturrets.items.addons.SerialPortAddonItem;
 import openmodularturrets.items.addons.SolarPanelAddonItem;
 import openmodularturrets.items.upgrades.*;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
@@ -560,6 +561,25 @@ public class TurretHeadUtil {
 
         if (base.getStackInSlot(10) != null && !found) {
             found = base.getStackInSlot(10).getItem() instanceof PotentiaAddonItem;
+        }
+        return found;
+    }
+    
+    public static boolean hasSerialPortAddon(TurretBase base) {
+        boolean found = false;
+        if (base instanceof TurretBaseTierOneTileEntity) {
+            return false;
+        }
+        if (!ModCompatibility.OpenComputersLoaded || !ModCompatibility.ComputercraftLoaded) {
+            return false;
+        }
+
+        if (base.getStackInSlot(9) != null) {
+            found = base.getStackInSlot(9).getItem() instanceof SerialPortAddonItem;
+        }
+
+        if (base.getStackInSlot(10) != null && !found) {
+            found = base.getStackInSlot(10).getItem() instanceof SerialPortAddonItem;
         }
         return found;
     }

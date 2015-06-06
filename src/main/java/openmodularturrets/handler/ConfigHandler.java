@@ -47,6 +47,7 @@ public class ConfigHandler {
     public static boolean shouldCreateMekanismRecipes;
 
     public static boolean shouldDoThaumcraftIntegration;
+    public static boolean shouldDoComputerIntegration;
 
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
@@ -221,7 +222,13 @@ public class ConfigHandler {
         }
 
         shouldDoThaumcraftIntegration = config.get("miscellaneous",
-                "Should we enable items that integrate wih Thaumcraft?", true).getBoolean();
+                "Should we enable items that integrate with Thaumcraft?", true).getBoolean();
+        if (config.hasChanged()) {
+            config.save();
+        }
+        
+        shouldDoComputerIntegration = config.get("miscellaneous",
+                "Should we enable items that integrate with ComputerCraft/OpenComputers?", true).getBoolean();
         if (config.hasChanged()) {
             config.save();
         }
@@ -424,8 +431,14 @@ public class ConfigHandler {
     public static boolean isShouldDoThaumcraftIntegration() {
         return shouldDoThaumcraftIntegration;
     }
+    
+    
 
-    public static class TurretSetting {
+    public static boolean isShouldDoComputerIntegration() {
+		return shouldDoComputerIntegration;
+	}
+
+	public static class TurretSetting {
         private final int range;
         private final int rof;
         private final int damage;
