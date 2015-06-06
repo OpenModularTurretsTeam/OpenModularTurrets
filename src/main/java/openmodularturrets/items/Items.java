@@ -6,6 +6,7 @@ import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.items.addons.DamageAmpAddonItem;
 import openmodularturrets.items.addons.PotentiaAddonItem;
 import openmodularturrets.items.addons.RedstoneReactorAddonItem;
+import openmodularturrets.items.addons.SerialPortAddonItem;
 import openmodularturrets.items.addons.SolarPanelAddonItem;
 import openmodularturrets.items.ammo.*;
 import openmodularturrets.items.upgrades.*;
@@ -28,6 +29,7 @@ public class Items {
 	public static Item damageAmpAddon;
 	public static Item solarPanelAddon;
 	public static Item potentiaAddon;
+	public static Item serialPortAddon;
 
 	public static Item sensorTierOneItem;
 	public static Item sensorTierTwoItem;
@@ -50,12 +52,6 @@ public class Items {
 	public static Item ioBus;
 
 	public static void init() {
-
-		// Thaumcraft Only
-		if (ModCompatibility.ThaumcraftLoaded) {
-			potentiaAddon = new PotentiaAddonItem();
-			GameRegistry.registerItem(potentiaAddon, "potentiaAddon");
-		}
 
 		bulletThrowable = new BulletThrowableItem();
 		GameRegistry.registerItem(bulletThrowable, "bulletThrowable");
@@ -88,6 +84,19 @@ public class Items {
 
 		solarPanelAddon = new SolarPanelAddonItem();
 		GameRegistry.registerItem(solarPanelAddon, "solarPanelAddon");
+		
+		// Thaumcraft Only
+				if (ModCompatibility.ThaumcraftLoaded) {
+					potentiaAddon = new PotentiaAddonItem();
+					GameRegistry.registerItem(potentiaAddon, "potentiaAddon");
+				}
+
+				//Computer mods Only
+				if (ModCompatibility.ComputercraftLoaded
+						|| ModCompatibility.OpenComputersLoaded) {
+					serialPortAddon = new SerialPortAddonItem();
+					GameRegistry.registerItem(serialPortAddon, "serialPortAddon");
+				}
 
 		bulletCraftable = new BulletAmmoItem();
 		GameRegistry.registerItem(bulletCraftable, "bulletCraftable");

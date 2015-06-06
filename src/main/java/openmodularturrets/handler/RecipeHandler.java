@@ -11,12 +11,7 @@ public class RecipeHandler {
 
     @SuppressWarnings("RedundantArrayCreation")
     public static void initRecipes() {
-
-        // Integration
-        if (ModCompatibility.ThaumcraftLoaded
-                && ConfigHandler.shouldDoThaumcraftIntegration) {
-            ThaumcraftRecipeHandler.init();
-        }
+       
 
         // Recipes
         int recipesDone = 0;
@@ -99,7 +94,19 @@ public class RecipeHandler {
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Items.damageAmpAddon, 1), new Object[]{"AAA", "B B", "AAA",
-                'A', "ingotIron", 'B', net.minecraft.init.Items.ender_pearl}));
+                'A', "ingotIron", 'B', net.minecraft.init.Items.ender_pearl}));               
+        
+        // Integration
+        if (ModCompatibility.ThaumcraftLoaded
+                && ConfigHandler.shouldDoThaumcraftIntegration) {
+            ThaumcraftRecipeHandler.init();
+        }
+        
+        if ((ModCompatibility.ComputercraftLoaded || ModCompatibility.OpenComputersLoaded)
+                && ConfigHandler.shouldDoThaumcraftIntegration) {
+            ComputerRecipeHandler.init();
+        }
+
 
         // Upgrades
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
@@ -133,6 +140,12 @@ public class RecipeHandler {
                         net.minecraft.init.Items.blaze_powder, 'B',
                         net.minecraft.init.Items.clay_ball, 'C',
                         net.minecraft.init.Items.redstone});
+        
+        //Other
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Items.ioBus, 1), new Object[]{" A ", "BBB",
+                " C ", 'A', "ingotGold", 'B',
+                net.minecraft.init.Items.redstone, 'C', "ingotIron"}));
 
     }
 }
