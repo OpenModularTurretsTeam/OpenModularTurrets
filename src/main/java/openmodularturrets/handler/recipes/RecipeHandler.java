@@ -1,40 +1,50 @@
-package openmodularturrets.handler;
+package openmodularturrets.handler.recipes;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import openmodularturrets.blocks.Blocks;
 import openmodularturrets.compatability.ModCompatibility;
+import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.Items;
 
 public class RecipeHandler {
 
     @SuppressWarnings("RedundantArrayCreation")
     public static void initRecipes() {
-       
-
+        boolean recipesDone = false;
         // Recipes
-        int recipesDone = 0;
+
         if (ModCompatibility.ThermalExpansionLoaded
-                && ConfigHandler.shouldCreateThermalExpansionRecipes) {
+                && ConfigHandler.recipes.equals("thermalexpansion")) {
             ThermalExpansionRecipeHandler.init();
-            recipesDone++;
-        }
-
-        if (ModCompatibility.EnderIOLoaded
-                && ConfigHandler.shouldCreateEnderIORecipes) {
+            recipesDone = true;
+        } else if (ModCompatibility.EnderIOLoaded
+                && ConfigHandler.recipes.equals("enderio")) {
             EnderIORecipeHandler.init();
-            recipesDone++;
-        }
-
-        if (ModCompatibility.MekanismLoaded
-                && ConfigHandler.shouldCreateMekanismRecipes) {
+            recipesDone = true;
+        } else if (ModCompatibility.MekanismLoaded
+                && ConfigHandler.recipes.equals("mekanism")) {
             MekanismRecipeHandler.init();
-            recipesDone++;
+            recipesDone = true;
+        } else if (ConfigHandler.recipes.equals("vanilla")) {
+            VanillaRecipeHandler.init();
+            recipesDone = true;
+        } else if (ConfigHandler.recipes.equals("auto")) {
+            if (ModCompatibility.EnderIOLoaded) {
+                EnderIORecipeHandler.init();
+            } else if (ModCompatibility.ThermalExpansionLoaded) {
+                ThermalExpansionRecipeHandler.init();
+            } else if (ModCompatibility.MekanismLoaded) {
+                MekanismRecipeHandler.init();
+            } else {
+                VanillaRecipeHandler.init();
+            }
+            recipesDone = true;
         }
 
-        // Only do vanilla if nothing else is loaded
-        if (recipesDone == 0) {
+        // Only do vanilla if setting was invalid (recipes chosen but mod not available)
+        if (!recipesDone) {
             VanillaRecipeHandler.init();
         }
 

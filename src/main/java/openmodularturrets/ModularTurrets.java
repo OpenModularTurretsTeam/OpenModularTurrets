@@ -14,6 +14,7 @@ import openmodularturrets.blocks.Blocks;
 import openmodularturrets.client.gui.ModularTurretsTab;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.*;
+import openmodularturrets.handler.recipes.RecipeHandler;
 import openmodularturrets.items.Items;
 import openmodularturrets.proxy.CommonProxy;
 import openmodularturrets.reference.ModInfo;
