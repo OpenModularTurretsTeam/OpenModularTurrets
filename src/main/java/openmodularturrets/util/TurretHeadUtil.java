@@ -17,11 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.items.addons.DamageAmpAddonItem;
-import openmodularturrets.items.addons.PotentiaAddonItem;
-import openmodularturrets.items.addons.RedstoneReactorAddonItem;
-import openmodularturrets.items.addons.SerialPortAddonItem;
-import openmodularturrets.items.addons.SolarPanelAddonItem;
+import openmodularturrets.items.addons.*;
 import openmodularturrets.items.upgrades.*;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
@@ -117,7 +113,7 @@ public class TurretHeadUtil {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
-                        if (!entity.getUniqueID().equals(base.getOwner())
+                        if (!entity.getUniqueID().toString().equals(base.getOwner())
                                 && !isTrustedPlayer(entity.getUniqueID(),
                                 base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
@@ -183,7 +179,7 @@ public class TurretHeadUtil {
                             && target1.getDistance(xCoord, yCoord, zCoord) >= 3) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
-                        if (!entity.getUniqueID().equals(base.getOwner())
+                        if (!entity.getUniqueID().toString().equals(base.getOwner())
                                 && !isTrustedPlayer(entity.getUniqueID(),
                                 base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
@@ -249,7 +245,7 @@ public class TurretHeadUtil {
                             && !target1.isPotionActive(Potion.moveSlowdown.id)) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
-                        if (!entity.getUniqueID().equals(base.getOwner())
+                        if (!entity.getUniqueID().toString().equals(base.getOwner())
                                 && !isTrustedPlayer(entity.getUniqueID(),
                                 base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
