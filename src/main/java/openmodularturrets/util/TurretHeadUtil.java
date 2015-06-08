@@ -422,7 +422,7 @@ public class TurretHeadUtil {
         if (tier == 5) {
             if (base.getStackInSlot(12) != null) {
                 if (base.getStackInSlot(12).getItem() instanceof AccuraccyUpgradeItem) {
-                    accuracy += (ConfigHandler.getAccuraccyUpgradeBoost() * base
+                    accuracy += (ConfigHandler.getAccuracyUpgradeBoost() * base
                             .getStackInSlot(12).stackSize);
                 }
             }
@@ -430,7 +430,7 @@ public class TurretHeadUtil {
 
         if (base.getStackInSlot(11) != null) {
             if (base.getStackInSlot(11).getItem() instanceof AccuraccyUpgradeItem) {
-                accuracy += (ConfigHandler.getAccuraccyUpgradeBoost() * base
+                accuracy += (ConfigHandler.getAccuracyUpgradeBoost() * base
                         .getStackInSlot(11).stackSize);
             }
         }

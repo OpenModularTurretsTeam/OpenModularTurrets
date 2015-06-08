@@ -30,7 +30,7 @@ public class ConfigHandler {
     private static TurretSetting railgun_turret;
     private static int rangeUpgradeBoost;
     private static double fireRateUpgradeBoostPercentage;
-    private static double accuraccyUpgradeBoost;
+    private static double accuracyUpgradeBoost;
     private static double efficiencyUpgradeBoostPercentage;
     private static int solarPanelAddonGen;
     private static int redstoneReactorAddonGen;
@@ -42,9 +42,7 @@ public class ConfigHandler {
     public static boolean turretDamageTrustedPlayers;
     public static boolean IGWNotification;
 
-    public static boolean shouldCreateThermalExpansionRecipes;
-    public static boolean shouldCreateEnderIORecipes;
-    public static boolean shouldCreateMekanismRecipes;
+    public static String recipes;
 
     public static boolean shouldDoThaumcraftIntegration;
     public static boolean shouldDoComputerIntegration;
@@ -77,18 +75,6 @@ public class ConfigHandler {
                 10000000).getInt();
         baseTierFiveMaxIo = config.get("TurretBaseTierFive", "MaxIo", 5000)
                 .getInt();
-
-        turretAlarmSound = config.get("TurretSound",
-                "Enable/Disable turret alarm sound", true).getBoolean();
-        turretWarnMessage = config.get("TurretWarnMessage",
-                "Should turret warn message be displayed?", true).getBoolean();
-        turretBreakable = config.get("TurretBreakableByAnyone",
-                "Are turrets breakable by anyone?", false).getBoolean();
-
-        potentiaToRFRatio = config.get("PotentiaToRFRatio",
-                "Potentia Addons' RF conversion ratio per 1 essentia", 500).getInt();
-        potentiaAddonCapacity = config.get("PotentiaAddonCapacity",
-                "How much potentia the addon can store", 20).getInt();
 
         disposable_turret = new TurretSetting(config.get("TurretDisposable",
                 "Range", 10, "Turret range, in blocks").getInt(), config.get(
@@ -194,7 +180,7 @@ public class ConfigHandler {
         fireRateUpgradeBoostPercentage = config.get("upgrades", "rateOfFire",
                 0.1D, "It's a double for some reason, " + "reduces cooldown")
                 .getDouble();
-        accuraccyUpgradeBoost = config.get("upgrades", "accuracy", 0.2D,
+        accuracyUpgradeBoost = config.get("upgrades", "accuracy", 0.2D,
                 "Increases accuracy linearly").getDouble();
         efficiencyUpgradeBoostPercentage = config.get("upgrades", "efficiency",
                 0.08D, "Reduces power consumption " + "linearly").getDouble();
@@ -210,43 +196,36 @@ public class ConfigHandler {
         turretWarningDistance = config.get("miscellaneous", "warningDistance",
                 40).getInt();
 
+        turretAlarmSound = config.get("miscellaneous",
+                "Enable/Disable turret alarm sound", true).getBoolean();
+        turretWarnMessage = config.get("miscellaneous",
+                "Should turret warn message be displayed?", true).getBoolean();
+        turretBreakable = config.get("miscellaneous",
+                "Are turrets breakable by anyone?", false).getBoolean();
+
         turretDamageTrustedPlayers = config.get(
                 "miscellaneous",
                 "Can turrets damage their trusted players when they "
                         + "accidentally hit them?", true).getBoolean();
 
-        IGWNotification = config.get("miscellaneous",
-                "Enable IGW Mod notification", true).getBoolean();
-        if (config.hasChanged()) {
-            config.save();
-        }
+        recipes = config.get("miscellaneous",
+                "Which recipes should we do? (auto,enderio, thermalexpansion,mekanism,vanilla)", "auto").getString();
 
-        shouldDoThaumcraftIntegration = config.get("miscellaneous",
+        shouldDoThaumcraftIntegration = config.get("ModCompatability",
                 "Should we enable items that integrate with Thaumcraft?", true).getBoolean();
-        if (config.hasChanged()) {
-            config.save();
-        }
-        
-        shouldDoComputerIntegration = config.get("miscellaneous",
+
+        shouldDoComputerIntegration = config.get("ModCompatability",
                 "Should we enable items that integrate with ComputerCraft/OpenComputers?", true).getBoolean();
-        if (config.hasChanged()) {
-            config.save();
-        }
 
-        shouldCreateEnderIORecipes = config.get("miscellaneous",
-                "Should EnderIO recipes be instantiated?", true).getBoolean();
-        if (config.hasChanged()) {
-            config.save();
-        }
+        IGWNotification = config.get("ModCompatability",
+                "Enable IGW Mod notification", true).getBoolean();
 
-        shouldCreateThermalExpansionRecipes = config.get("miscellaneous",
-                "Should Thermal Expansion recipes be instantiated?", true).getBoolean();
-        if (config.hasChanged()) {
-            config.save();
-        }
+        potentiaToRFRatio = config.get("ModCompatability",
+                "Potentia Addons' RF conversion ratio per 1 essentia", 500).getInt();
 
-        shouldCreateMekanismRecipes = config.get("miscellaneous",
-                "Should Mekanism recipes be instantiated?", true).getBoolean();
+        potentiaAddonCapacity = config.get("ModCompatability",
+                "How much potentia the addon can store", 20).getInt();
+
         if (config.hasChanged()) {
             config.save();
         }
@@ -274,46 +253,6 @@ public class ConfigHandler {
 
     public static int getBaseTierFiveMaxIo() {
         return baseTierFiveMaxIo;
-    }
-
-    public static TurretSetting getDisposable_turret() {
-        return disposable_turret;
-    }
-
-    public static TurretSetting getMachine_gun_turret() {
-        return machine_gun_turret;
-    }
-
-    public static TurretSetting getRocket_turret() {
-        return rocket_turret;
-    }
-
-    public static TurretSetting getGrenade_turret() {
-        return grenade_turret;
-    }
-
-    public static TurretSetting getLaser_turret() {
-        return laser_turret;
-    }
-
-    public static boolean isTurretAlarmSound() {
-        return turretAlarmSound;
-    }
-
-    public static boolean isTurretBreakable() {
-        return turretBreakable;
-    }
-
-    public static boolean isTurretWarnMessage() {
-        return turretWarnMessage;
-    }
-
-    public static boolean isTurretDamageTrustedPlayers() {
-        return turretDamageTrustedPlayers;
-    }
-
-    public static boolean isIGWNotification() {
-        return IGWNotification;
     }
 
     public static int getBaseTierTwoMaxCharge() {
@@ -372,8 +311,8 @@ public class ConfigHandler {
         return fireRateUpgradeBoostPercentage;
     }
 
-    public static double getAccuraccyUpgradeBoost() {
-        return accuraccyUpgradeBoost;
+    public static double getAccuracyUpgradeBoost() {
+        return accuracyUpgradeBoost;
     }
 
     public static double getEfficiencyUpgradeBoostPercentage() {
@@ -416,27 +355,6 @@ public class ConfigHandler {
         return teleporter_turret;
     }
 
-    public static boolean isShouldCreateThermalExpansionRecipes() {
-        return shouldCreateThermalExpansionRecipes;
-    }
-
-    public static boolean isShouldCreateEnderIORecipes() {
-        return shouldCreateEnderIORecipes;
-    }
-
-    public static boolean isShouldCreateMekanismRecipes() {
-        return shouldCreateMekanismRecipes;
-    }
-
-    public static boolean isShouldDoThaumcraftIntegration() {
-        return shouldDoThaumcraftIntegration;
-    }
-    
-    
-
-    public static boolean isShouldDoComputerIntegration() {
-		return shouldDoComputerIntegration;
-	}
 
 	public static class TurretSetting {
         private final int range;

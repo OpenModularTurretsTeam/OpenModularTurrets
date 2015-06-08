@@ -1,4 +1,4 @@
-package openmodularturrets.handler;
+package openmodularturrets.handler.recipes;
 
 public class MekanismRecipeHandler {
 
