@@ -88,7 +88,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         trustedPlayer.uuid = getPlayerUUID(name);
         if (trustedPlayer.uuid != null) {
             for (TrustedPlayer player : trustedPlayers) {
-                if (player.getName().toLowerCase().equals(name.toLowerCase()) || !trustedPlayer.uuid.toString().equals(owner)) {
+                if (player.getName().toLowerCase().equals(name.toLowerCase()) || trustedPlayer.uuid.toString().equals(owner)) {
                     return;
                 }
             }
@@ -401,7 +401,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             }
         }
         return 0;
-
     }
 
     @Override
