@@ -8,6 +8,8 @@ import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
+import java.util.Random;
+
 public class LaserProjectile extends TurretProjectile {
     public int arrowShake;
 
@@ -51,7 +53,8 @@ public class LaserProjectile extends TurretProjectile {
 
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
 
-            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:laserHit", 1.0F, 1.0F);
+            Random random = new Random();
+            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:laserHit", ConfigHandler.getTurretSoundVolume(),  random.nextFloat()+0.5F);
 
             if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
                 int damage = ConfigHandler.getLaserTurretSettings().getDamage();
