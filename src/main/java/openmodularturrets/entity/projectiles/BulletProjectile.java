@@ -9,6 +9,8 @@ import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
+import java.util.Random;
+
 public class BulletProjectile extends TurretProjectile {
 
     public BulletProjectile(World p_i1776_1_) {
@@ -69,7 +71,8 @@ public class BulletProjectile extends TurretProjectile {
         }
 
         if (movingobjectposition.entityHit == null && !worldObj.isRemote) {
-            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:bulletHit", 1.0F, 1.0F);
+            Random random = new Random();
+            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:bulletHit", ConfigHandler.getTurretSoundVolume(),  random.nextFloat()+0.5F);
         }
         this.setDead();
     }

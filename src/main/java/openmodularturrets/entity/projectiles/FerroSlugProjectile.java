@@ -9,6 +9,8 @@ import openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSour
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
+import java.util.Random;
+
 public class FerroSlugProjectile extends TurretProjectile {
 
     public FerroSlugProjectile(World p_i1776_1_) {
@@ -57,7 +59,8 @@ public class FerroSlugProjectile extends TurretProjectile {
                 damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
             }
 
-            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:railGunHit", 1.0F, 1.0F);
+            Random random = new Random();
+            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:railGunHit", ConfigHandler.getTurretSoundVolume(),  random.nextFloat()+0.5F);
 
             if (movingobjectposition.entityHit instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) movingobjectposition.entityHit)) {

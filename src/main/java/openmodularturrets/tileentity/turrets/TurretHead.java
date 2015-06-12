@@ -14,9 +14,12 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.entity.projectiles.TurretProjectile;
+import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.TurretHeadUtil;
+
+import java.util.Random;
 
 public abstract class TurretHead extends TileEntity {
     public int ticks;
@@ -329,9 +332,11 @@ public abstract class TurretHead extends TileEntity {
                 projectile.setPosition(this.xCoord + 0.5, this.yCoord + 0.5,
                         this.zCoord + 0.5);
 
+                Random random = new Random();
+
                 if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
                     worldObj.playSoundEffect(this.xCoord, this.yCoord,
-                            this.zCoord, ModInfo.ID + ":amped", 1.0F, 1.0F);
+                            this.zCoord, ModInfo.ID + ":amped", ConfigHandler.getTurretSoundVolume(),  random.nextFloat()+0.5F);
                     projectile.isAmped = true;
                 }
 
@@ -364,8 +369,8 @@ public abstract class TurretHead extends TileEntity {
 
                 this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord,
                         this.zCoord,
-                        ModInfo.ID + ":" + this.getLaunchSoundEffect(), 0.6F,
-                        1.0F);
+                        ModInfo.ID + ":" + this.getLaunchSoundEffect(), ConfigHandler.getTurretSoundVolume(),
+                        random.nextFloat()+0.5F);
                 this.getWorldObj().spawnEntityInWorld(projectile);
             }
             ticks = 0;
