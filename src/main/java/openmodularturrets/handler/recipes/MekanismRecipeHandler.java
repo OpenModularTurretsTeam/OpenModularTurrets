@@ -98,26 +98,26 @@ public class MekanismRecipeHandler {
         GameRegistry
                 .addRecipe(new ShapedOreRecipe(new ItemStack(
                         Blocks.turretBaseTierTwo, 1), new Object[]{"ABA",
-                        "ECE", "ADA", 'A', ironEnriched, 'B', Blocks.turretBaseTierOne, 'C',
+                        "ECE", "ADA", 'A', ironEnriched, 'B', energyTablet, 'C',
                         Items.sensorTierTwoItem, 'D', "ingotOsmium", 'E',
                         Items.ioBus}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Blocks.turretBaseTierThree, 1),
                 new Object[]{"ABA", "ECE", "ADA", 'A', alloyEnriched, 'B',
-                        Blocks.turretBaseTierTwo, 'C', Items.sensorTierThreeItem, 'D',
+                        energyTablet, 'C', Items.sensorTierThreeItem, 'D',
                         "ingotOsmium", 'E', Items.ioBus}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Blocks.turretBaseTierFour, 1),
                 new Object[]{"ABA", "ECE", "ADA", 'A', alloyReinforced, 'B',
-                        Blocks.turretBaseTierThree, 'C', Items.sensorTierFourItem, 'D',
+                        energyTablet, 'C', Items.sensorTierFourItem, 'D',
                         "ingotOsmium", 'E', Items.ioBus}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Blocks.turretBaseTierFive, 1), new Object[]{"ABA", "ECE",
                 "ADA", 'A', net.minecraft.init.Blocks.obsidian, 'B',
-                Blocks.turretBaseTierFour, 'C', Items.sensorTierFiveItem, 'D',
+                energyTablet, 'C', Items.sensorTierFiveItem, 'D',
                 "ingotOsmium", 'E', Items.ioBus}));
 
         // Turrets
