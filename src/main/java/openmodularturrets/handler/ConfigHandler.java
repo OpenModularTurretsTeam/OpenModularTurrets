@@ -41,6 +41,7 @@ public class ConfigHandler {
     public static boolean turretWarnMessage;
     public static boolean turretDamageTrustedPlayers;
     public static boolean IGWNotification;
+    private static float turretSoundVolume;
 
     public static String recipes;
 
@@ -186,22 +187,22 @@ public class ConfigHandler {
                 0.08D, "Reduces power consumption " + "linearly").getDouble();
 
         solarPanelAddonGen = config.get("addons", "solar", 10,
-                "Generates specified RF every tick").getInt();
+                "Generates specified RF every tick in sunlight").getInt();
         redstoneReactorAddonGen = config.get("addons", "redstone", 1550,
-                "Generates RF from redstone in turret's " + "inventory")
+                "Generates RF from redstone dust/blocks in turret's " + "inventory")
                 .getInt();
         damageAmpDmgBonus = config.get("addons", "damage", 2,
                 "Increases damage linearly").getInt();
 
         turretWarningDistance = config.get("miscellaneous", "warningDistance",
-                40).getInt();
+                5, "Distance outside the max range of a turret players should be warned").getInt();
 
         turretAlarmSound = config.get("miscellaneous",
-                "Enable/Disable turret alarm sound", true).getBoolean();
+                "Enable/Disable turret alarm sound. True=enabled, false=disabled", true).getBoolean();
         turretWarnMessage = config.get("miscellaneous",
                 "Should turret warn message be displayed?", true).getBoolean();
         turretBreakable = config.get("miscellaneous",
-                "Are turrets breakable by anyone?", false).getBoolean();
+                "Are turrets/turret bases breakable by anyone?", false).getBoolean();
 
         turretDamageTrustedPlayers = config.get(
                 "miscellaneous",
@@ -209,7 +210,10 @@ public class ConfigHandler {
                         + "accidentally hit them?", true).getBoolean();
 
         recipes = config.get("miscellaneous",
-                "Which recipes should we do? (auto,enderio, thermalexpansion,mekanism,vanilla)", "auto").getString();
+                "Which recipes should we do? (auto, enderio, thermalexpansion, mekanism, vanilla)", "auto").getString();
+
+        turretSoundVolume = config.get("miscellaneous",
+                "Turret sound volume percentage (Between 0 - 100)", 40).getInt()/10;
 
         shouldDoThaumcraftIntegration = config.get("ModCompatability",
                 "Should we enable items that integrate with Thaumcraft?", true).getBoolean();
@@ -224,7 +228,8 @@ public class ConfigHandler {
                 "Potentia Addons' RF conversion ratio per 1 essentia", 500).getInt();
 
         potentiaAddonCapacity = config.get("ModCompatability",
-                "How much potentia the addon can store", 20).getInt();
+                "How much essentia the Potentia Addon can store", 20).getInt();
+
 
         if (config.hasChanged()) {
             config.save();
@@ -355,8 +360,11 @@ public class ConfigHandler {
         return teleporter_turret;
     }
 
+    public static float getTurretSoundVolume() {
+        return turretSoundVolume;
+    }
 
-	public static class TurretSetting {
+    public static class TurretSetting {
         private final int range;
         private final int rof;
         private final int damage;
