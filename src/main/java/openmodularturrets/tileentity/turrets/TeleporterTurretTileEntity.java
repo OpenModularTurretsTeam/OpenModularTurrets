@@ -24,10 +24,10 @@ public class TeleporterTurretTileEntity extends TurretHead {
         setSide();
         this.base = getBase();
 
-        if (rotationAmimation >= 360F) {
-            rotationAmimation = 0F;
+        if (rotationAnimation >= 360F) {
+            rotationAnimation = 0F;
         }
-        rotationAmimation = rotationAmimation + 0.03F;
+        rotationAnimation = rotationAnimation + 0.03F;
 
         if (worldObj.isRemote) {
             return;
@@ -51,7 +51,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
                     .round(this.getTurretPowerUsage()
                             * (1 - TurretHeadUtil.getEfficiencyUpgrades(base))
                             * (1 + TurretHeadUtil
-                            .getScattershotUpgradesUpgrades(base)));
+                            .getScattershotUpgrades(base)));
 
             // power check
             if ((base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required)
@@ -112,7 +112,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
             if (this.requiresAmmo()) {
                 if (this.requiresSpecificAmmo()) {
                     for (int i = 0; i <= TurretHeadUtil
-                            .getScattershotUpgradesUpgrades(base); i++) {
+                            .getScattershotUpgrades(base); i++) {
                         ammo = TurretHeadUtil
                                 .useSpecificItemStackItemFromBase(base,
                                         this.getAmmo());
