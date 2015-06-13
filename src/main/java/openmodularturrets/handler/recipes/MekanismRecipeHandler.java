@@ -17,6 +17,7 @@ public class MekanismRecipeHandler {
         ItemStack alloyReinforced;
         ItemStack alloyAtomic;
         ItemStack energyTablet;
+        ItemStack controlCircuit;
 
 
 		/* Items */
@@ -25,134 +26,131 @@ public class MekanismRecipeHandler {
         alloyReinforced = GameRegistry.findItemStack(Mek, "ReinforcedAlloy", 1);
         alloyAtomic = GameRegistry.findItemStack(Mek, "AtomicAlloy", 1);
         energyTablet = GameRegistry.findItemStack(Mek, "EnergyTablet", 1);
+        controlCircuit = GameRegistry.findItemStack(Mek, "ControlCircuit", 1);
 
 
         // Items
         // Barrels
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.barrelTierTwoItem, 1), new Object[]{"AAA", " B ",
-                "AAA", 'A', ironEnriched, 'B', Items.barrelTierOneItem}));
+                Items.barrelTierTwoItem, 1), new Object[]{"CAC", " B ",
+                "CAC", 'A', ironEnriched, 'B', Items.barrelTierOneItem, 'C', "ingotTin"}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.barrelTierThreeItem, 1), new Object[]{"AAA", " B ",
-                "AAA", 'A', alloyEnriched, 'B', Items.barrelTierTwoItem}));
+                Items.barrelTierThreeItem, 1), new Object[]{"CAC", " B ",
+                "CAC", 'A', alloyEnriched, 'B', Items.barrelTierTwoItem, 'C', "ingotSteel"}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Items.barrelTierFourItem, 1), new Object[]{"CAC", " B ",
-                "CAC", 'A', net.minecraft.init.Items.diamond, 'B',
-                Items.barrelTierThreeItem, 'C', alloyReinforced}));
+                "CAC", 'A', alloyReinforced, 'B', Items.barrelTierThreeItem, 'C', "ingotRefinedGlowstone"}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.barrelTierFiveItem, 1), new Object[]{"AAA", "CBC",
-                "AAA", 'A', net.minecraft.init.Blocks.obsidian, 'B',
-                Items.barrelTierFourItem, 'C', alloyAtomic}));
+                Items.barrelTierFiveItem, 1), new Object[]{"CAC", " B ",
+                "CAC", 'A', alloyAtomic, 'B',
+                Items.barrelTierFourItem, 'C', "ingotRefinedObsidian"}));
 
         // Chambers
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.chamberTierTwoItem, 1), new Object[]{"AAA", " BC",
-                "AAA", 'A', ironEnriched, 'B', Items.chamberTierOneItem, 'C',
+                Items.chamberTierTwoItem, 1), new Object[]{"ACA", " BC",
+                "ACA", 'A', ironEnriched, 'B', Items.chamberTierOneItem, 'C',
+                "ingotTin"}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Items.chamberTierThreeItem, 1), new Object[]{"ACA", " BC",
+                "ACA", 'A', alloyEnriched, 'B', Items.chamberTierTwoItem, 'C',
                 "ingotSteel"}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.chamberTierThreeItem, 1), new Object[]{"AAA", " BC",
-                "AAA", 'A', alloyEnriched, 'B', Items.chamberTierTwoItem, 'C',
-                "ingotSteel"}));
+                Items.chamberTierFourItem, 1), new Object[]{"ACA", " BC",
+                "ACA", 'A', alloyReinforced, 'B',
+                Items.chamberTierThreeItem, 'C', "ingotRefinedGlowstone"}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.chamberTierFourItem, 1), new Object[]{"DAD", " BC",
-                "DAD", 'A', net.minecraft.init.Items.diamond, 'B',
-                Items.chamberTierThreeItem, 'C', "ingotSteel", 'D',
-                alloyReinforced}));
-
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.chamberTierFiveItem, 1), new Object[]{"ADA", " BC",
-                "ADA", 'A', net.minecraft.init.Blocks.obsidian, 'B',
-                Items.chamberTierFourItem, 'C', "ingotSteel", 'D',
-                alloyAtomic}));
+                Items.chamberTierFiveItem, 1), new Object[]{"ACA", " BC",
+                "ACA", 'A', alloyAtomic, 'B',
+                Items.chamberTierFourItem, 'C', "ingotRefinedObsidian"}));
 
         // Sensors
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.sensorTierTwoItem, 1), new Object[]{" A ", "ABA",
+                Items.sensorTierTwoItem, 1), new Object[]{" A ", "DBD",
                 " C ", 'A', ironEnriched, 'B', Items.sensorTierOneItem, 'C',
-                Items.ioBus}));
+                Items.ioBus, 'D', controlCircuit}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.sensorTierThreeItem, 1), new Object[]{" C ", "ABA",
-                " C ", 'A', alloyEnriched, 'B', Items.sensorTierTwoItem, 'C',
-                Items.ioBus}));
+                Items.sensorTierThreeItem, 1), new Object[]{" A ",
+                "DBD", " C ", 'A', alloyEnriched, 'B', Items.sensorTierTwoItem, 'C',
+                Items.ioBus, 'D', controlCircuit}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.sensorTierFourItem, 1), new Object[]{"EDE", "CBC",
-                "EDE", 'B', Items.sensorTierThreeItem, 'C', Items.ioBus, 'D',
-                net.minecraft.init.Items.diamond, 'E', alloyReinforced}));
+                Items.sensorTierFourItem, 1), new Object[]{" A ",
+                "DBD", " C ", 'B', Items.sensorTierThreeItem, 'C', Items.ioBus, 'D',
+                net.minecraft.init.Items.diamond, 'A', alloyReinforced, 'D', controlCircuit}));
 
         GameRegistry
                 .addRecipe(new ShapedOreRecipe(new ItemStack(
-                        Items.sensorTierFiveItem, 1), new Object[]{"EDE",
-                        "CBC", "EDE", 'B', Items.sensorTierFourItem, 'C',
-                        Items.ioBus, 'D',
-                        net.minecraft.init.Items.glowstone_dust, 'E',
-                        alloyAtomic}));
+                        Items.sensorTierFiveItem, 1), new Object[]{" A ",
+                        "DBD", " C ", 'B', Items.sensorTierFourItem, 'C',
+                        Items.ioBus, 'A',
+                        alloyAtomic, 'D', controlCircuit}));
 
         // Bases
         GameRegistry
                 .addRecipe(new ShapedOreRecipe(new ItemStack(
                         Blocks.turretBaseTierTwo, 1), new Object[]{"ABA",
                         "ECE", "ADA", 'A', ironEnriched, 'B', energyTablet, 'C',
-                        Items.sensorTierTwoItem, 'D', "ingotOsmium", 'E',
+                        Items.sensorTierTwoItem, 'D', "ingotTin", 'E',
                         Items.ioBus}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Blocks.turretBaseTierThree, 1),
                 new Object[]{"ABA", "ECE", "ADA", 'A', alloyEnriched, 'B',
                         energyTablet, 'C', Items.sensorTierThreeItem, 'D',
-                        "ingotOsmium", 'E', Items.ioBus}));
+                        "ingotSteel", 'E', Items.ioBus}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Blocks.turretBaseTierFour, 1),
                 new Object[]{"ABA", "ECE", "ADA", 'A', alloyReinforced, 'B',
                         energyTablet, 'C', Items.sensorTierFourItem, 'D',
-                        "ingotOsmium", 'E', Items.ioBus}));
+                        "ingotRefinedGlowstone", 'E', Items.ioBus}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Blocks.turretBaseTierFive, 1), new Object[]{"ABA", "ECE",
                 "ADA", 'A', net.minecraft.init.Blocks.obsidian, 'B',
                 energyTablet, 'C', Items.sensorTierFiveItem, 'D',
-                "ingotOsmium", 'E', Items.ioBus}));
+                "ingotRefinedObsidian", 'E', Items.ioBus}));
 
         // Turrets
         GameRegistry
                 .addRecipe(new ShapedOreRecipe(new ItemStack(
                         Blocks.machineGunTurret, 1), new Object[]{" A ",
                         "CAC", "DBD", 'A', Items.barrelTierTwoItem, 'B',
-                        Items.chamberTierTwoItem, 'C', ironEnriched, 'D',
+                        Items.chamberTierTwoItem, 'C', "ingotTin", 'D',
                         Items.ioBus}));
 
         GameRegistry
                 .addRecipe(new ShapedOreRecipe(new ItemStack(
                         Blocks.incendiaryTurret, 1), new Object[]{"A A",
                         "BCB", "DCD", 'A', Items.barrelTierTwoItem, 'B',
-                        Items.chamberTierTwoItem, 'C', ironEnriched, 'D',
+                        Items.chamberTierTwoItem, 'C', "ingotTin", 'D',
                         Items.ioBus}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Blocks.grenadeLauncherTurret, 1),
                 new Object[]{" A ", "CBC", "CDC", 'A',
                         Items.barrelTierThreeItem, 'B',
-                        Items.chamberTierThreeItem, 'C', alloyEnriched, 'D',
+                        Items.chamberTierThreeItem, 'C', "ingotSteel", 'D',
                         Items.ioBus}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Blocks.relativisticTurret, 1),
                 new Object[]{"CAC", "ABA", "CDC", 'A',
                         net.minecraft.init.Items.ender_pearl, 'B',
-                        Items.sensorTierThreeItem, 'C', alloyEnriched, 'D',
+                        Items.sensorTierThreeItem, 'C', "ingotSteel", 'D',
                         Items.ioBus}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Blocks.rocketTurret, 1), new Object[]{"CAC", "CAC", "EDE",
                 'A', Items.barrelTierFourItem, 'B', Items.chamberTierFourItem,
-                'C', alloyReinforced, 'D', Items.ioBus, 'E',
+                'C', "ingotRefinedGlowstone", 'D', Items.ioBus, 'E',
                 net.minecraft.init.Items.diamond}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
@@ -166,13 +164,13 @@ public class MekanismRecipeHandler {
                 Blocks.laserTurret, 1), new Object[]{"EAE", "CBC", "DCD",
                 'A', Items.barrelTierFiveItem, 'B', Items.chamberTierFiveItem,
                 'C', net.minecraft.init.Blocks.obsidian, 'D', Items.ioBus, 'E',
-                alloyAtomic}));
+                "ingotRefinedObsidian"}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Blocks.railGunTurret, 1), new Object[]{"EAE", "CAC", "DBD",
                 'A', Items.barrelTierFiveItem, 'B', Items.chamberTierFiveItem,
                 'C', net.minecraft.init.Blocks.obsidian, 'D', Items.ioBus, 'E',
-                alloyAtomic}));
+                "ingotRefinedObsidian"}));
 
         // Ammo
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
@@ -182,7 +180,7 @@ public class MekanismRecipeHandler {
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Items.bulletCraftable, 64), new Object[]{" A ", " B ", " C ",
-                'A', ironEnriched, 'B', net.minecraft.init.Items.gunpowder, 'C',
+                'A', "ingotOsmium", 'B', net.minecraft.init.Items.gunpowder, 'C',
                 "ingotIron"}));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(

@@ -56,9 +56,9 @@ public class RelativisticTurretRenderer extends TileEntitySpecialRenderer {
         model.Crystal.rotateAngleX = turretHead.baseFitRotationX;
         model.Crystal.rotateAngleY = turretHead.baseFitRotationZ;
         
-        model.Crystal.rotateAngleX = turretHead.rotationAmimation;
-        model.Crystal.rotateAngleY = turretHead.rotationAmimation;
-        model.Crystal.rotateAngleZ = turretHead.rotationAmimation;
+        model.Crystal.rotateAngleX = turretHead.rotationAnimation;
+        model.Crystal.rotateAngleY = turretHead.rotationAnimation;
+        model.Crystal.rotateAngleZ = turretHead.rotationAnimation;
 
         model.renderAll();
         GL11.glPopMatrix();

@@ -93,7 +93,7 @@ public class ThermalExpansionRecipeHandler {
 						Items.sensorTierFiveItem, 1), new Object[] { "EDE",
 						"CBC", "EDE", 'B', Items.sensorTierFourItem, 'C',
 						Items.ioBus, 'D',
-						net.minecraft.init.Items.glowstone_dust, 'E',
+						net.minecraft.init.Blocks.obsidian, 'E',
 						"ingotEnderium" }));
 
 		// Bases

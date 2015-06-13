@@ -43,8 +43,7 @@ public class TurretHeadUtil {
                     + turretRange + warnDistance, yCoord + turretRange
                     + warnDistance, zCoord + turretRange + warnDistance);
 
-            if(worldObj.getWorldTime() % 100 == 0)
-            {
+            if (worldObj.getWorldTime() % 200 == 0) {
                 warnedPlayers.clear();
             }
 
@@ -53,7 +52,7 @@ public class TurretHeadUtil {
 
             for (EntityPlayerMP target : targets) {
                 if (!target.getUniqueID().toString().equals(base.getOwner())
-                        && !isTrustedPlayer(target.getUniqueID(), base) && !warnedPlayers.contains(target)) {
+                        && !isTrustedPlayer(target.getUniqueID(), base) && !warnedPlayers.contains(target) && !target.capabilities.isCreativeMode) {
                     dispatchWarnMessage(target, worldObj);
                     warnedPlayers.add(target);
                 }
@@ -384,7 +383,7 @@ public class TurretHeadUtil {
         return value;
     }
 
-    public static int getScattershotUpgradesUpgrades(TurretBase base) {
+    public static int getScattershotUpgrades(TurretBase base) {
         int value = 0;
         int tier = base.getBaseTier();
 
@@ -560,7 +559,7 @@ public class TurretHeadUtil {
         }
         return found;
     }
-    
+
     public static boolean hasSerialPortAddon(TurretBase base) {
         boolean found = false;
         if (base instanceof TurretBaseTierOneTileEntity) {

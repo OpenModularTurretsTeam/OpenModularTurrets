@@ -47,11 +47,11 @@ public class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
 		model.Base.rotateAngleX = turretHead.baseFitRotationX;
 		model.Base.rotateAngleY = turretHead.baseFitRotationZ;
 
-		model.Spinner1.rotateAngleY = turretHead.rotationAmimation;
-		model.Spinner2.rotateAngleY = turretHead.rotationAmimation;
-		model.Spinner3.rotateAngleY = turretHead.rotationAmimation;
-		model.Spinner4.rotateAngleY = turretHead.rotationAmimation;
-		model.PillarLarge.rotateAngleY = (turretHead.rotationAmimation) * -1;
+		model.Spinner1.rotateAngleY = turretHead.rotationAnimation;
+		model.Spinner2.rotateAngleY = turretHead.rotationAnimation;
+		model.Spinner3.rotateAngleY = turretHead.rotationAnimation;
+		model.Spinner4.rotateAngleY = turretHead.rotationAnimation;
+		model.PillarLarge.rotateAngleY = (turretHead.rotationAnimation) * -1;
 
 		model.renderAll();
 
