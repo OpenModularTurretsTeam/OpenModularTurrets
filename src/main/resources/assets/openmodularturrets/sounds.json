@@ -12,11 +12,7 @@
         "category": "neutral",
         "sounds": [
             {
-                "name": "bulletHit1",
-                "stream": false
-            },
-            {
-                "name": "bulletHit2",
+                "name": "bulletHit",
                 "stream": false
             }
         ]
@@ -34,11 +30,7 @@
         "category": "neutral",
         "sounds": [
             {
-                "name": "grenade1",
-                "stream": false
-            },
-            {
-                "name": "grenade2",
+                "name": "grenade",
                 "stream": false
             }
         ]
@@ -47,15 +39,7 @@
         "category": "neutral",
         "sounds": [
             {
-                "name": "machinegun1",
-                "stream": false
-            },
-            {
-                "name": "machinegun2",
-                "stream": false
-            },
-            {
-                "name": "machinegun3",
+                "name": "machinegun",
                 "stream": false
             }
         ]
@@ -64,15 +48,7 @@
         "category": "neutral",
         "sounds": [
             {
-                "name": "laser1",
-                "stream": false
-            },
-            {
-                "name": "laser2",
-                "stream": false
-            },
-            {
-                "name": "laser3",
+                "name": "laser",
                 "stream": false
             }
         ]
