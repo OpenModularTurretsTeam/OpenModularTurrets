@@ -1,12 +1,10 @@
 package openmodularturrets.compatability;
 
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import net.minecraft.nbt.NBTTagCompound;
 import openmodularturrets.reference.ModInfo;
 
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -59,7 +57,7 @@ public class ModCompatibility {
 
 	}
 
-	public static String getBuildNumber() {
+	/*public static String getBuildNumber() {
 		Map<String, ModContainer> modList = Loader.instance()
 				.getIndexedModList();
 		if (modList.get(ModInfo.ID).getProcessedVersion().getVersionString()
@@ -69,7 +67,7 @@ public class ModCompatibility {
 		} else {
 			return "0";
 		}
-	}
+	}*/
 
 	private static void addVersionCheckerInfo() {
 		NBTTagCompound versionchecker = new NBTTagCompound();
@@ -78,8 +76,7 @@ public class ModCompatibility {
 		versionchecker.setString("curseFilenameParser",
 				"OpenModularTurrets-1.7.10-[]");
 		versionchecker.setString("modDisplayName", "OpenModularTurrets");
-		versionchecker.setString("oldVersion", ModInfo.VERSION + "-"
-				+ getBuildNumber());
+		versionchecker.setString("oldVersion", ModInfo.VERSION);
 		FMLInterModComms.sendRuntimeMessage("openmodularturrets",
 				"VersionChecker", "addCurseCheck", versionchecker);
 	}
