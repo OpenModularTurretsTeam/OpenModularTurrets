@@ -74,7 +74,7 @@ public class ModCompatibility {
 		versionchecker.setString("curseProjectName",
 				"224663-openmodularturrets");
 		versionchecker.setString("curseFilenameParser",
-				"OpenModularTurrets-1.7.10-[]");
+				"OpenModularTurrets-1.7.10-[].jar");
 		versionchecker.setString("modDisplayName", "OpenModularTurrets");
 		versionchecker.setString("oldVersion", ModInfo.VERSION);
 		FMLInterModComms.sendRuntimeMessage("openmodularturrets",
