@@ -4,6 +4,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import openmodularturrets.blocks.Blocks;
+import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.Items;
 
 public class MekanismRecipeHandler {
@@ -119,58 +120,74 @@ public class MekanismRecipeHandler {
                 "ingotRefinedObsidian", 'E', Items.ioBus}));
 
         // Turrets
-        GameRegistry
-                .addRecipe(new ShapedOreRecipe(new ItemStack(
-                        Blocks.machineGunTurret, 1), new Object[]{" A ",
-                        "CAC", "DBD", 'A', Items.barrelTierTwoItem, 'B',
-                        Items.chamberTierTwoItem, 'C', "ingotTin", 'D',
-                        Items.ioBus}));
+        if (ConfigHandler.getMachineGunTurretSettings().isEnabled()) {
+            GameRegistry
+                    .addRecipe(new ShapedOreRecipe(new ItemStack(
+                            Blocks.machineGunTurret, 1), new Object[]{" A ",
+                            "CAC", "DBD", 'A', Items.barrelTierTwoItem, 'B',
+                            Items.chamberTierTwoItem, 'C', "ingotTin", 'D',
+                            Items.ioBus}));
+        }
 
-        GameRegistry
-                .addRecipe(new ShapedOreRecipe(new ItemStack(
-                        Blocks.incendiaryTurret, 1), new Object[]{"A A",
-                        "BCB", "DCD", 'A', Items.barrelTierTwoItem, 'B',
-                        Items.chamberTierTwoItem, 'C', "ingotTin", 'D',
-                        Items.ioBus}));
+        if (ConfigHandler.getIncendiary_turret().isEnabled()) {
+            GameRegistry
+                    .addRecipe(new ShapedOreRecipe(new ItemStack(
+                            Blocks.incendiaryTurret, 1), new Object[]{"A A",
+                            "BCB", "DCD", 'A', Items.barrelTierTwoItem, 'B',
+                            Items.chamberTierTwoItem, 'C', "ingotTin", 'D',
+                            Items.ioBus}));
+        }
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.grenadeLauncherTurret, 1),
-                new Object[]{" A ", "CBC", "CDC", 'A',
-                        Items.barrelTierThreeItem, 'B',
-                        Items.chamberTierThreeItem, 'C', "ingotSteel", 'D',
-                        Items.ioBus}));
+        if (ConfigHandler.getGrenadeTurretSettings().isEnabled()) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                    Blocks.grenadeLauncherTurret, 1),
+                    new Object[]{" A ", "CBC", "CDC", 'A',
+                            Items.barrelTierThreeItem, 'B',
+                            Items.chamberTierThreeItem, 'C', "ingotSteel", 'D',
+                            Items.ioBus}));
+        }
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.relativisticTurret, 1),
-                new Object[]{"CAC", "ABA", "CDC", 'A',
-                        net.minecraft.init.Items.ender_pearl, 'B',
-                        Items.sensorTierThreeItem, 'C', "ingotSteel", 'D',
-                        Items.ioBus}));
+        if (ConfigHandler.getRelativistic_turret().isEnabled()) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                    Blocks.relativisticTurret, 1),
+                    new Object[]{"CAC", "ABA", "CDC", 'A',
+                            net.minecraft.init.Items.ender_pearl, 'B',
+                            Items.sensorTierThreeItem, 'C', "ingotSteel", 'D',
+                            Items.ioBus}));
+        }
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.rocketTurret, 1), new Object[]{"CAC", "CAC", "EDE",
-                'A', Items.barrelTierFourItem, 'B', Items.chamberTierFourItem,
-                'C', "ingotRefinedGlowstone", 'D', Items.ioBus, 'E',
-                net.minecraft.init.Items.diamond}));
+        if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                    Blocks.rocketTurret, 1), new Object[]{"CAC", "CAC", "EDE",
+                    'A', Items.barrelTierFourItem, 'B', Items.chamberTierFourItem,
+                    'C', "ingotRefinedGlowstone", 'D', Items.ioBus, 'E',
+                    net.minecraft.init.Items.diamond}));
+        }
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.teleporterTurret, 1), new Object[]{"CEC", "ABA",
-                "CDC", 'A', net.minecraft.init.Items.diamond, 'B',
-                Items.sensorTierFourItem, 'C',
-                net.minecraft.init.Items.ender_eye, 'D', Items.ioBus, 'E',
-                net.minecraft.init.Items.diamond}));
+        if (ConfigHandler.getTeleporter_turret().isEnabled()) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                    Blocks.teleporterTurret, 1), new Object[]{"CEC", "ABA",
+                    "CDC", 'A', net.minecraft.init.Items.diamond, 'B',
+                    Items.sensorTierFourItem, 'C',
+                    net.minecraft.init.Items.ender_eye, 'D', Items.ioBus, 'E',
+                    net.minecraft.init.Items.diamond}));
+        }
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.laserTurret, 1), new Object[]{"EAE", "CBC", "DCD",
-                'A', Items.barrelTierFiveItem, 'B', Items.chamberTierFiveItem,
-                'C', net.minecraft.init.Blocks.obsidian, 'D', Items.ioBus, 'E',
-                "ingotRefinedObsidian"}));
+        if (ConfigHandler.getLaserTurretSettings().isEnabled()) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                    Blocks.laserTurret, 1), new Object[]{"EAE", "CBC", "DCD",
+                    'A', Items.barrelTierFiveItem, 'B', Items.chamberTierFiveItem,
+                    'C', net.minecraft.init.Blocks.obsidian, 'D', Items.ioBus, 'E',
+                    "ingotRefinedObsidian"}));
+        }
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.railGunTurret, 1), new Object[]{"EAE", "CAC", "DBD",
-                'A', Items.barrelTierFiveItem, 'B', Items.chamberTierFiveItem,
-                'C', net.minecraft.init.Blocks.obsidian, 'D', Items.ioBus, 'E',
-                "ingotRefinedObsidian"}));
+        if (ConfigHandler.getRailgun_turret().isEnabled()) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                    Blocks.railGunTurret, 1), new Object[]{"EAE", "CAC", "DBD",
+                    'A', Items.barrelTierFiveItem, 'B', Items.chamberTierFiveItem,
+                    'C', net.minecraft.init.Blocks.obsidian, 'D', Items.ioBus, 'E',
+                    "ingotRefinedObsidian"}));
+        }
 
         // Ammo
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
