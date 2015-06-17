@@ -70,19 +70,23 @@ public class RecipeHandler {
                 "ABA", 'A', net.minecraft.init.Blocks.cobblestone, 'B',
                 "plankWood", 'C', Items.sensorTierOneItem}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.disposableItemTurret, 1), new Object[]{" A ", "CBC",
-                "CDC", 'A', Items.barrelTierOneItem, 'B',
-                Items.chamberTierOneItem, 'C',
-                net.minecraft.init.Blocks.cobblestone, 'D',
-                net.minecraft.init.Items.redstone}));
+        if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                    Blocks.disposableItemTurret, 1), new Object[]{" A ", "CBC",
+                    "CDC", 'A', Items.barrelTierOneItem, 'B',
+                    Items.chamberTierOneItem, 'C',
+                    net.minecraft.init.Blocks.cobblestone, 'D',
+                    net.minecraft.init.Items.redstone}));
+        }
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.potatoCannonTurret, 1), new Object[]{"CAC", "CAC",
-                "DBD", 'A', Items.barrelTierOneItem, 'B',
-                Items.chamberTierOneItem, 'C',
-                net.minecraft.init.Blocks.cobblestone, 'D',
-                net.minecraft.init.Items.redstone}));
+        if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                    Blocks.potatoCannonTurret, 1), new Object[]{"CAC", "CAC",
+                    "DBD", 'A', Items.barrelTierOneItem, 'B',
+                    Items.chamberTierOneItem, 'C',
+                    net.minecraft.init.Blocks.cobblestone, 'D',
+                    net.minecraft.init.Items.redstone}));
+        }
 
         GameRegistry.addRecipe(new ItemStack(Blocks.leverBlock, 1),
                 new Object[]{"AAA", "A  ", "A  ", 'A',
@@ -104,14 +108,14 @@ public class RecipeHandler {
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Items.damageAmpAddon, 1), new Object[]{"AAA", "B B", "AAA",
-                'A', "ingotIron", 'B', net.minecraft.init.Items.ender_pearl}));               
-        
+                'A', "ingotIron", 'B', net.minecraft.init.Items.ender_pearl}));
+
         // Integration
         if (ModCompatibility.ThaumcraftLoaded
                 && ConfigHandler.shouldDoThaumcraftIntegration) {
             ThaumcraftRecipeHandler.init();
         }
-        
+
         if ((ModCompatibility.ComputercraftLoaded || ModCompatibility.OpenComputersLoaded)
                 && ConfigHandler.shouldDoThaumcraftIntegration) {
             ComputerRecipeHandler.init();
@@ -150,7 +154,7 @@ public class RecipeHandler {
                         net.minecraft.init.Items.blaze_powder, 'B',
                         net.minecraft.init.Items.clay_ball, 'C',
                         net.minecraft.init.Items.redstone});
-        
+
         //Other
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Items.ioBus, 1), new Object[]{" A ", "BBB",

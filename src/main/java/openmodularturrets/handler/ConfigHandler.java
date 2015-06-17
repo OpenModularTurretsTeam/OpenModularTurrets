@@ -66,9 +66,9 @@ public class ConfigHandler {
         baseTierTwoMaxIo = config.get("TurretBaseTierTwo", "MaxIo", 100)
                 .getInt();
 
-        baseTierThreeMaxCharge = config.get("TurretBaseTierTwo", "MaxCharge",
+        baseTierThreeMaxCharge = config.get("TurretBaseTierThree", "MaxCharge",
                 150000).getInt();
-        baseTierThreeMaxIo = config.get("TurretBaseTierTwo", "MaxIo", 500)
+        baseTierThreeMaxIo = config.get("TurretBaseTierThree", "MaxIo", 500)
                 .getInt();
 
         baseTierFourMaxCharge = config.get("TurretBaseTierFour", "MaxCharge",
@@ -89,7 +89,9 @@ public class ConfigHandler {
                 .getInt(), config.get("TurretDisposable", "Accuracy", 50,
                 "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(), config.get(
                 "TurretDisposable", "PowerUsage", 2, "RF used per shot")
-                .getInt());
+                .getInt(), config.get(
+                "TurretDisposable", "Enabled", true, "Enabled?")
+                .getBoolean());
 
         potato_cannon_turret = new TurretSetting(config.get(
                 "TurretPotatoCannon", "Range", 15, "Turret range, in blocks")
@@ -99,7 +101,9 @@ public class ConfigHandler {
                 .getInt(), config.get("TurretPotatoCannon", "Accuracy", 30,
                 "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(), config.get(
                 "TurretPotatoCannon", "PowerUsage", 10, "RF used per shot")
-                .getInt());
+                .getInt(), config.get(
+                "TurretPotatoCannon", "Enabled", true, "Enabled?")
+                .getBoolean());
 
         machine_gun_turret = new TurretSetting(config.get("TurretMachineGun",
                 "Range", 18, "Turret range, in blocks").getInt(), config.get(
@@ -109,7 +113,9 @@ public class ConfigHandler {
                 .getInt(), config.get("TurretMachineGun", "Accuracy", 30,
                 "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(), config.get(
                 "TurretMachineGun", "PowerUsage", 100, "RF used per shot")
-                .getInt());
+                .getInt(), config.get(
+                "TurretMachineGun", "Enabled", true, "Enabled?")
+                .getBoolean());
 
         incendiary_turret = new TurretSetting(config.get("TurretIncendiary",
                 "Range", 12, "Turret range, in blocks").getInt(), config.get(
@@ -119,7 +125,9 @@ public class ConfigHandler {
                 .getInt(), config.get("TurretIncendiary", "Accuracy", 30,
                 "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(), config.get(
                 "TurretIncendiary", "PowerUsage", 250, "RF used per shot")
-                .getInt());
+                .getInt(), config.get(
+                "TurretIncendiary", "Enabled", true, "Enabled?")
+                .getBoolean());
 
         grenade_turret = new TurretSetting(config.get("TurretGrenade", "Range",
                 20, "Turret range, in blocks").getInt(), config.get(
@@ -129,7 +137,9 @@ public class ConfigHandler {
                 .getInt(), config.get("TurretGrenade", "Accuracy", 30,
                 "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(), config.get(
                 "TurretGrenade", "PowerUsage", 3000, "RF used per shot")
-                .getInt());
+                .getInt(), config.get(
+                "TurretGrenade", "Enabled", true, "Enabled?")
+                .getBoolean());
 
         relativistic_turret = new TurretSetting(config.get("TurretRelativistic", "Range",
                 20, "Turret range, in blocks").getInt(), config.get(
@@ -139,7 +149,9 @@ public class ConfigHandler {
                 .getInt(), config.get("TurretRelativistic", "Accuracy", 0,
                 "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(), config.get(
                 "TurretRelativistic", "PowerUsage", 5000, "RF used per shot")
-                .getInt());
+                .getInt(), config.get(
+                "TurretRelativistic", "Enabled", true, "Enabled?")
+                .getBoolean());
 
         rocket_turret = new TurretSetting(config.get("TurretRocket", "Range",
                 30, "Turret range, in blocks").getInt(), config.get(
@@ -149,7 +161,9 @@ public class ConfigHandler {
                 .getInt(), config.get("TurretRocket", "Accuracy", 10,
                 "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(), config.get(
                 "TurretRocket", "PowerUsage", 5000, "RF used per shot")
-                .getInt());
+                .getInt(), config.get(
+                "TurretRocket", "Enabled", true, "Enabled?")
+                .getBoolean());
 
         teleporter_turret = new TurretSetting(config.get("TurretTeleporter", "Range",
                 20, "Turret range, in blocks").getInt(), config.get(
@@ -159,7 +173,9 @@ public class ConfigHandler {
                 .getInt(), config.get("TurretTeleporter", "Accuracy", 0,
                 "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(), config.get(
                 "TurretTeleporter", "PowerUsage", 15000, "RF used per shot")
-                .getInt());
+                .getInt(), config.get(
+                "TurretTeleporter", "Enabled", true, "Enabled?")
+                .getBoolean());
 
         laser_turret = new TurretSetting(config.get("TurretLaser", "Range", 25,
                 "Turret range, in blocks").getInt(), config.get("TurretLaser",
@@ -168,7 +184,9 @@ public class ConfigHandler {
                 "Measured in half-hearts").getInt(), config.get("TurretLaser",
                 "Accuracy", 10, "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretLaser", "PowerUsage", 10000,
-                        "RF used per shot").getInt());
+                        "RF used per shot").getInt(), config.get(
+                "TurretLaser", "Enabled", true, "Enabled?")
+                .getBoolean());
 
         railgun_turret = new TurretSetting(config.get("TurretRailgun", "Range",
                 30, "Turret range, in blocks").getInt(), config.get(
@@ -178,7 +196,9 @@ public class ConfigHandler {
                 .getInt(), config.get("TurretRailgun", "Accuracy", 0,
                 "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(), config.get(
                 "TurretRailgun", "PowerUsage", 25000, "RF used per shot")
-                .getInt());
+                .getInt(), config.get(
+                "TurretRailgun", "Enabled", true, "Enabled?")
+                .getBoolean());
 
         rangeUpgradeBoost = config.get("upgrades", "range", 2,
                 "Increases range in blocks linearly").getInt();
@@ -383,14 +403,16 @@ public class ConfigHandler {
         private final int damage;
         private final double accuracy;
         private final int power_usage;
+        private final boolean enabled;
 
         public TurretSetting(int range, int rof, int damage, double accuracy,
-                             int power_usage) {
+                             int power_usage, boolean enabled) {
             this.range = range;
             this.rof = rof;
             this.damage = damage;
             this.accuracy = accuracy;
             this.power_usage = power_usage;
+            this.enabled=enabled;
         }
 
         public int getRange() {
@@ -411,6 +433,10 @@ public class ConfigHandler {
 
         public int getPowerUsage() {
             return power_usage;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
         }
     }
 
