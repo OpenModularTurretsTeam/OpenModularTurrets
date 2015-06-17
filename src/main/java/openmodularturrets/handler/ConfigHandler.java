@@ -48,6 +48,10 @@ public class ConfigHandler {
     public static boolean shouldDoThaumcraftIntegration;
     public static boolean shouldDoComputerIntegration;
 
+    public static boolean globalCanTargetPlayers;
+    public static boolean globalCanTargetNeutrals;
+    public static boolean globalCanTargetMobs;
+
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
         config.load();
@@ -229,6 +233,15 @@ public class ConfigHandler {
 
         potentiaAddonCapacity = config.get("ModCompatability",
                 "How much essentia the Potentia Addon can store", 20).getInt();
+
+        globalCanTargetPlayers = config.get("GlobalTargetingParameters",
+                "Can turrets attack players?", true).getBoolean();
+
+        globalCanTargetNeutrals = config.get("GlobalTargetingParameters",
+                "Can turrets attack neutrals?", true).getBoolean();
+
+        globalCanTargetMobs = config.get("GlobalTargetingParameters",
+                "Can turrets attack mobs?", true).getBoolean();
 
 
         if (config.hasChanged()) {
