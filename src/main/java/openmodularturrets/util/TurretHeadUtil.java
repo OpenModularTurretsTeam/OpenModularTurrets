@@ -89,26 +89,26 @@ public class TurretHeadUtil {
 
             for (EntityLivingBase target1 : targets) {
 
-                if (base.isAttacksNeutrals()) {
+                if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAnimal && !target1.isDead) {
                         target = target1;
                     }
                 }
 
-                if (base.isAttacksNeutrals()) {
+                if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAmbientCreature
                             && !target1.isDead) {
                         target = target1;
                     }
                 }
 
-                if (base.isAttacksMobs()) {
+                if (base.isAttacksMobs() && ConfigHandler.globalCanTargetMobs) {
                     if (target1 instanceof IMob && !target1.isDead) {
                         target = target1;
                     }
                 }
 
-                if (base.isAttacksPlayers()) {
+                if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetPlayers) {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
@@ -151,14 +151,14 @@ public class TurretHeadUtil {
 
             for (EntityLivingBase target1 : targets) {
 
-                if (base.isAttacksNeutrals()) {
+                if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAnimal && !target1.isDead
                             && target1.getDistance(xCoord, yCoord, zCoord) >= 3) {
                         target = target1;
                     }
                 }
 
-                if (base.isAttacksNeutrals()) {
+                if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAmbientCreature
                             && !target1.isDead
                             && target1.getDistance(xCoord, yCoord, zCoord) >= 3) {
@@ -166,14 +166,14 @@ public class TurretHeadUtil {
                     }
                 }
 
-                if (base.isAttacksMobs()) {
+                if (base.isAttacksMobs() && ConfigHandler.globalCanTargetMobs) {
                     if (target1 instanceof IMob && !target1.isDead
                             && target1.getDistance(xCoord, yCoord, zCoord) >= 3) {
                         target = target1;
                     }
                 }
 
-                if (base.isAttacksPlayers()) {
+                if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetMobs) {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead
                             && target1.getDistance(xCoord, yCoord, zCoord) >= 3) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
@@ -217,14 +217,14 @@ public class TurretHeadUtil {
 
             for (EntityLivingBase target1 : targets) {
 
-                if (base.isAttacksNeutrals()) {
+                if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAnimal && !target1.isDead
                             && !target1.isPotionActive(Potion.moveSlowdown.id)) {
                         target = target1;
                     }
                 }
 
-                if (base.isAttacksNeutrals()) {
+                if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAmbientCreature
                             && !target1.isDead
                             && !target1.isPotionActive(Potion.moveSlowdown.id)) {
@@ -232,14 +232,14 @@ public class TurretHeadUtil {
                     }
                 }
 
-                if (base.isAttacksMobs()) {
+                if (base.isAttacksMobs() && ConfigHandler.globalCanTargetMobs) {
                     if (target1 instanceof IMob && !target1.isDead
                             && !target1.isPotionActive(Potion.moveSlowdown.id)) {
                         target = target1;
                     }
                 }
 
-                if (base.isAttacksPlayers()) {
+                if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetPlayers) {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead
                             && !target1.isPotionActive(Potion.moveSlowdown.id)) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
