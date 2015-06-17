@@ -173,7 +173,7 @@ public class TurretHeadUtil {
                     }
                 }
 
-                if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetMobs) {
+                if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetPlayers) {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead
                             && target1.getDistance(xCoord, yCoord, zCoord) >= 3) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
