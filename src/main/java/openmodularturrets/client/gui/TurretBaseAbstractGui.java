@@ -1,20 +1,27 @@
 package openmodularturrets.client.gui;
 
+import codechicken.lib.vec.Rectangle4i;
+import codechicken.nei.VisiblityData;
+import codechicken.nei.api.INEIGuiHandler;
+import codechicken.nei.api.TaggedInventoryArea;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.network.AdjustYAxisDetectMessage;
 import openmodularturrets.network.DropBaseMessage;
 import openmodularturrets.network.DropTurretsMessage;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
+import java.util.List;
+
 /**
  * Created by nico on 6/4/15.
  */
-public class TurretBaseAbstractGui extends GuiContainer {
+public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
 
     TurretBase base;
     protected int mouseX;
@@ -105,4 +112,53 @@ public class TurretBaseAbstractGui extends GuiContainer {
         DropBaseMessage message = new DropBaseMessage(base.xCoord, base.yCoord, base.zCoord);
         ModularTurrets.networking.sendToServer(message);
     }
+
+    @Override
+    public VisiblityData modifyVisiblity(GuiContainer guiContainer, VisiblityData visiblityData) {
+        return visiblityData;
+    }
+
+    @Override
+    public Iterable<Integer> getItemSpawnSlots(GuiContainer guiContainer, ItemStack itemStack) {
+        return null;
+    }
+
+    @Override
+    public List<TaggedInventoryArea> getInventoryAreas(GuiContainer guiContainer) {
+        return null;
+    }
+
+    @Override
+    public boolean handleDragNDrop(GuiContainer guiContainer, int i, int i1, ItemStack itemStack, int i2) {
+        return false;
+    }
+
+    @Override
+    public boolean hideItemPanelSlot(GuiContainer guiContainer, int x, int y, int w, int h) {
+        boolean intersects = false;
+        if (guiContainer instanceof TurretBaseAbstractGui) {
+
+            Rectangle4i rectangle = new Rectangle4i(x, y, w, h);
+            Rectangle4i rectangleGUI;
+            if (player.getUniqueID().toString().equals(base.getOwner())) {
+                rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, y = (height - ySize) / 2, 80, 70);
+                intersects = rectangle.intersects(rectangleGUI);
+            } else if (base.getTrustedPlayer(player.getUniqueID()) != null) {
+                if (base.getTrustedPlayer(player.getUniqueID()).admin) {
+                    rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, y = (height - ySize) / 2, 80, 45);
+                    intersects = rectangle.intersects(rectangleGUI);
+                }
+                if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting ||
+                        base.getTrustedPlayer(player.getUniqueID()).admin) {
+                    rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, y = (height - ySize) / 2 + 50, 80, 20);
+                    if (!intersects) {
+                        intersects = rectangle.intersects(rectangleGUI);
+                    }
+                }
+
+            }
+        }
+        return intersects;
+    }
+
 }
