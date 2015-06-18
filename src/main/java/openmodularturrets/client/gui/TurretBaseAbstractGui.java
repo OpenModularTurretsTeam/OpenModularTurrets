@@ -137,28 +137,25 @@ public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandle
     public boolean hideItemPanelSlot(GuiContainer guiContainer, int x, int y, int w, int h) {
         boolean intersects = false;
         if (guiContainer instanceof TurretBaseAbstractGui) {
-
             Rectangle4i rectangle = new Rectangle4i(x, y, w, h);
             Rectangle4i rectangleGUI;
             if (player.getUniqueID().toString().equals(base.getOwner())) {
-                rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, y = (height - ySize) / 2, 80, 70);
+                rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 70);
                 intersects = rectangle.intersects(rectangleGUI);
             } else if (base.getTrustedPlayer(player.getUniqueID()) != null) {
                 if (base.getTrustedPlayer(player.getUniqueID()).admin) {
-                    rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, y = (height - ySize) / 2, 80, 45);
+                    rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 45);
                     intersects = rectangle.intersects(rectangleGUI);
                 }
                 if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting ||
                         base.getTrustedPlayer(player.getUniqueID()).admin) {
-                    rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, y = (height - ySize) / 2 + 50, 80, 20);
+                    rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, (height - ySize) / 2 + 50, 80, 20);
                     if (!intersects) {
                         intersects = rectangle.intersects(rectangleGUI);
                     }
                 }
-
             }
         }
         return intersects;
     }
-
 }
