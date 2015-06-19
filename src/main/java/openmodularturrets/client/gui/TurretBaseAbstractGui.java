@@ -4,6 +4,7 @@ import codechicken.lib.vec.Rectangle4i;
 import codechicken.nei.VisiblityData;
 import codechicken.nei.api.INEIGuiHandler;
 import codechicken.nei.api.TaggedInventoryArea;
+import cpw.mods.fml.common.Optional;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +22,8 @@ import java.util.List;
 /**
  * Created by nico on 6/4/15.
  */
+
+@Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
 public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
 
     TurretBase base;
@@ -113,26 +116,31 @@ public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandle
         ModularTurrets.networking.sendToServer(message);
     }
 
+    @Optional.Method(modid = "NotEnoughItems")
     @Override
     public VisiblityData modifyVisiblity(GuiContainer guiContainer, VisiblityData visiblityData) {
         return visiblityData;
     }
 
+    @Optional.Method(modid = "NotEnoughItems")
     @Override
     public Iterable<Integer> getItemSpawnSlots(GuiContainer guiContainer, ItemStack itemStack) {
         return null;
     }
 
+    @Optional.Method(modid = "NotEnoughItems")
     @Override
     public List<TaggedInventoryArea> getInventoryAreas(GuiContainer guiContainer) {
         return null;
     }
 
+    @Optional.Method(modid = "NotEnoughItems")
     @Override
     public boolean handleDragNDrop(GuiContainer guiContainer, int i, int i1, ItemStack itemStack, int i2) {
         return false;
     }
 
+    @Optional.Method(modid = "NotEnoughItems")
     @Override
     public boolean hideItemPanelSlot(GuiContainer guiContainer, int x, int y, int w, int h) {
         boolean intersects = false;
