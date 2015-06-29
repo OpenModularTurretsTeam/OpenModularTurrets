@@ -1,17 +1,5 @@
 Rail Gun Turret
-    Tier 4
-    
-    This is the sixth turret you gain access to.
-    an electromagnetic catapult designed to hurl projectiles at extremely high speeds.
-    translation: shoots big pieces of metal at high speeds!
-    Fast, deadly, accurate, and now armor piercing!
-    
-    Range (in blocks): 30
-    Accuracy: Pin Point
-    Ammo type: Ferro-Magnetic Slugs
-    Minimum Tier: 4 (Resonant)
+    Tier 5 Turret
 
-    Projectile Damage: 12.5 Hearts
-    AOE radius: 0
-    Shots/s: 0.2
-    RF per shot: 25000RF
+    An electromagnetic catapult designed to hurl projectiles at extremely high speeds.
+    Fast, deadly, accurate, and now 100% armor piercing!

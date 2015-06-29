@@ -1,16 +1,7 @@
 Rocket Launcher Turret
-    Tier 3
+    Tier 4 Turret
     
-    This is the fourth turret you gain access to. Like the Grenade Launcher Turret,
-    this turret hurls explosives at your enemies, except this time it chases and explodes
-    on them with pinpoint accuracy.
-    
-    Range (in blocks): 30
-    Accuracy: Pin Point
-    Ammo type: Homing Roket
-    Minimum Tier: 3 (Hardened)
+    Like the Grenade Launcher Turret, this turret launches explosives at your enemies,
+    except this time it explodes on them with pinpoint accuracy.
 
-    Projectile Damage: 5 Hearts
-    AOE radius: 5
-    Shots/s: 0.7
-    RF per shot: 5000RF
+    Rockets will not damage blocks.

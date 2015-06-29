@@ -1,0 +1,6 @@
+Teleporter Turret
+    Tier 4 Turret
+
+    Teleports all eligible targets within range to the block above it.
+
+    Note that this turret has a minimum range of 3 blocks.
