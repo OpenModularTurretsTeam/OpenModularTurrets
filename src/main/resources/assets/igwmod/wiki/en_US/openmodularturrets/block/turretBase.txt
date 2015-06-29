@@ -1,73 +1,11 @@
-The turret base is the foundation for every turret, it is available in 5 variations: wooden and then tier one to four.
+The turret base is the foundation for every turret, it is available in 5 variations: Tier 1 - Tier 5.
 
-Wood Turret Base
-    This is a Tier 0 turret base.
-    It doesn't hold a lot of energy, and you can't put a whole lot on it, but its a good start.
+Each base can can support it's own and previous tiers' turrets, but not tiers above it's own.
 
-    Energy Max capacity: 500
-    Max I/O: 50
-    Addons: 0
-    Upgrades: 0
-    
-    Compatible Turret Heads: 
-        Disposable Item Turret
+Each turret can be placed in any orientation from the base; top, bottom, left, right, front or back.
 
-Leadstone Turret Base
-    This is a Tier 1 turret base.
-    A little bit more robust then a Tier 0, this base holds more energy and gives you the 
-    ability to install addons and upgrades.
+Turret bases use RF as a power source, and can be used with any item-piping system for automation.
 
-    Energy Max capacity: 50000
-    Max I/O: 100
-    Addons: 2
-    Upgrades: 1
+The -Y configurable parameter is used to define how far below the turret it should look for targets.
 
-    Compatible Turret Heads:
-        Disposable Item Turret
-        Machine Gun Turret
-
-Reinforced Turret Base
-    This is a Tier 2 turret base.
-    This turret base is able to hold larger amounts of energy for those more powerful turret heads.
-
-    Energy Max capacity: 150000
-    Max I/O: 500
-    Addons: 2
-    Upgrades: 1
-
-    Compatible Turret Heads:
-        Disposable Item Turret
-        Machine Gun Turret
-        Grenade Launcher Turret
-
-Hardened Turret Base
-    This is a Tier 3 turret base.
-    This turret base is capable of holding quite a bit of energy, this turret base also gives you access to the Rocket Launcher Turret.
-
-    Energy Max capacity: 500000
-    Max I/O: 1500
-    Addons: 2
-    Upgrades: 1
-
-    Compatible Turret Heads:
-        Disposable Item Turret
-        Machine Gun Turret
-        Grenade Launcher Turret
-        Rocket Launcher Turret
-
-Resonant Turret Base
-    This is a Tier 4 turret base.
-    The best of the best, holds massive amounts of energy, multiple addons and upgrades, and gives you access to the best turrets you can build.
-
-    Energy Max capacity: 10000000
-    Max I/O: 5000
-    Addons: 2
-    Upgrades: 2
-
-    Compatible Turret Heads:
-        Disposable Item Turret
-        Machine Gun Turret
-        Grenade Launcher Turret
-        Rocket Launcher Turret
-        Laser Turret
-        Railgun Turret
+Remember to shift-place turrets when placing then on a base
