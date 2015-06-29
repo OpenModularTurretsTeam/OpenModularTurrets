@@ -166,8 +166,10 @@ gui.openmodularturrets:active=Active
 gui.openmodularturrets:mode=Mode
 gui.openmodularturrets:true=true
 
+death.attack.disposable=Very %s, much dead, such wow...
 death.attack.bullet=%s ate some delicious lead.
-death.attack.blazingClay=%s got cooked to a juicy medium-rare.
+death.attack.blazingclay=%s got cooked to a juicy medium-rare.
 death.attack.grenade=%s may need some assembly.
 death.attack.rocket=%s found that rainbow connection in the form of a rocket.
 death.attack.laser=%s got disintegrated.
+death.attack.ferroslug=%s found atomized minerva.
