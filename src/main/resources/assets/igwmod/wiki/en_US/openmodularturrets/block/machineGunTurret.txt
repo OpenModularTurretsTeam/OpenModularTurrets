@@ -1,15 +1,3 @@
 Machine Gun Turret
-    Tier 1
-    This is the second turret you will gain access to. 
-    Fast rate of fire, low damage.
-    
-    
-    Range (in blocks): 18
-    Accuracy: Medium
-    Ammo type: Bullet
-    Minimum Tier: 1 (Leadstone)
-
-    Projectile Damage: 1 Heart
-    AOE radius: 0
-    Shots/s: 2.5
-    RF per shot: 100RF
+    Tier 2 Turret
+    Fast rate of fire, low damage. Uses bullets as ammo.

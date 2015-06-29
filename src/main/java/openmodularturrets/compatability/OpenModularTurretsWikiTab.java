@@ -22,7 +22,7 @@ public class OpenModularTurretsWikiTab extends BaseWikiTab {
 
     @Override
     public ItemStack renderTabIcon(GuiWiki gui) {
-        return new ItemStack(Blocks.laserTurret);
+        return new ItemStack(Blocks.machineGunTurret);
     }
 
     @Override

@@ -1,16 +1,7 @@
 Grenade Launcher Turret
-    Tier 2
-    
-    This is the third turret you gain access to.
-    It is capable of lobbing tiny balls of of death (grenades) decent distances
-    and do damage to everything around it, when it explodes.
-    
-    Range (in blocks): 20
-    Accuracy: Medium
-    Ammo type: Grenade
-    Minimum Tier: 2 (reinforced)
+    Tier 3 Turret
 
-    Projectile Damage: 4 Hearts
-    AOE radius: 3
-    Shots/s: 0.5
-    RF per shot: 3000RF
+    This turret is capable of lobbing tiny balls of of death (grenades) at decent distances
+    and do damage to everything around it when it explodes.
+
+    Grenades will not damage blocks.

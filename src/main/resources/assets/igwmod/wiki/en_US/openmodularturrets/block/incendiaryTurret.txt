@@ -1,0 +1,6 @@
+Incendiary Turret
+    Tier 2 Turret
+
+    Fires blazing clay lumps at foes, and sets all entities on fire within the AOE.
+
+    Great for crowd control, but does very little damage over the large AOE radius.

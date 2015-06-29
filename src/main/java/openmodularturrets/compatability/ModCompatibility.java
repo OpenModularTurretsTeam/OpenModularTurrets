@@ -47,10 +47,9 @@ public class ModCompatibility {
 		
 		OpenComputersLoaded = Loader.isModLoaded("OpenComputers");
 		ComputercraftLoaded = Loader.isModLoaded("ComputerCraft");
-		
 		if(OpenComputersLoaded || ComputercraftLoaded)
 		{
-			
+			Logger.getGlobal().info("Enabling LUA integration. (Found OpenComputers/ComputerCraft");
 		}
 
 		IGWModLoaded = Loader.isModLoaded("IGWMod");

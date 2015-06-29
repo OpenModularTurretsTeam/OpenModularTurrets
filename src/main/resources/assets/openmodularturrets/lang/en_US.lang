@@ -165,3 +165,9 @@ gui.openmodularturrets:invert=Inverted
 gui.openmodularturrets:active=Active
 gui.openmodularturrets:mode=Mode
 gui.openmodularturrets:true=true
+
+death.attack.bullet=%s ate some delicious lead.
+death.attack.blazingClay=%s got cooked to a juicy medium-rare.
+death.attack.grenade=%s may need some assembly.
+death.attack.rocket=%s found that rainbow connection in the form of a rocket.
+death.attack.laser=%s got disintegrated.
