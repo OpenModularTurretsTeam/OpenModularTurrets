@@ -20,10 +20,7 @@ public class EnderIORecipeHandler {
 		ItemStack basicCapacitor;
 		ItemStack doubleCapacitor;
 		ItemStack octadicCapacitor;
-		ItemStack machineChassis;
-		ItemStack pulsatingCrystal;
 		ItemStack vibrantCrystal;
-		ItemStack enderCrystal;
 
 		/* Items */
 
@@ -41,9 +38,7 @@ public class EnderIORecipeHandler {
 		octadicCapacitor = new ItemStack(capacitorItem, 1, 2);
 
 		Item materialsItem = GameRegistry.findItem("EnderIO", "itemMaterial");
-		pulsatingCrystal = new ItemStack(materialsItem, 1, 5);
 		vibrantCrystal = new ItemStack(materialsItem, 1, 6);
-		enderCrystal = new ItemStack(materialsItem, 1, 8);
 
 		// Items
 		// Barrels
@@ -58,7 +53,7 @@ public class EnderIORecipeHandler {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
 				Items.barrelTierFourItem, 1), new Object[] { "CAC", " B ",
 				"CAC", 'A', net.minecraft.init.Items.diamond, 'B',
-				Items.barrelTierThreeItem, 'C', "ingotVibrantAlloy" }));
+				Items.barrelTierThreeItem, 'C', "ingotSoularium" }));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
 				Items.barrelTierFiveItem, 1), new Object[] { "AAA", "CBC",
@@ -80,7 +75,7 @@ public class EnderIORecipeHandler {
 				Items.chamberTierFourItem, 1), new Object[] { "DAD", " BC",
 				"DAD", 'A', net.minecraft.init.Items.diamond, 'B',
 				Items.chamberTierThreeItem, 'C', doubleCapacitor, 'D',
-                "ingotVibrantAlloy" }));
+                "ingotSoularium" }));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
 				Items.chamberTierFiveItem, 1), new Object[] { "ADA", " BC",
@@ -102,7 +97,7 @@ public class EnderIORecipeHandler {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
 				Items.sensorTierFourItem, 1), new Object[] { "EDE", "CBC",
 				"EDE", 'B', Items.sensorTierThreeItem, 'C', Items.ioBus, 'D',
-				net.minecraft.init.Items.diamond, 'E', "ingotVibrantAlloy" }));
+				net.minecraft.init.Items.diamond, 'E', "ingotSoularium" }));
 
 		GameRegistry
 				.addRecipe(new ShapedOreRecipe(new ItemStack(
@@ -128,7 +123,7 @@ public class EnderIORecipeHandler {
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
 				Blocks.turretBaseTierFour, 1),
-				new Object[] { "ABA", "ECE", "ADA", 'A', "ingotVibrantAlloy", 'B',
+				new Object[] { "ABA", "ECE", "ADA", 'A', "ingotSoularium", 'B',
 						capacitorBankVibrant, 'C', Items.sensorTierFourItem, 'D',
 						doubleCapacitor, 'E', Items.ioBus }));
 
@@ -179,7 +174,7 @@ public class EnderIORecipeHandler {
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
 					Blocks.rocketTurret, 1), new Object[]{"CAC", "CAC", "EDE",
 					'A', Items.barrelTierFourItem, 'B', Items.chamberTierFourItem,
-					'C', "ingotVibrantAlloy", 'D', Items.ioBus, 'E',
+					'C', "ingotSoularium", 'D', Items.ioBus, 'E',
 					net.minecraft.init.Items.diamond}));
 		}
 
