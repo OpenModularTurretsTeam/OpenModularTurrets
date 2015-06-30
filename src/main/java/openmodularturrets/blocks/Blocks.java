@@ -88,7 +88,7 @@ public class Blocks {
         }
 
         if (ConfigHandler.getGrenadeTurretSettings().isEnabled()) {
-            grenadeLauncherTurret = new BlockGrenadeLauncherTurret();
+            grenadeLauncherTurret = new BlockGrenadeTurret();
             GameRegistry.registerBlock(grenadeLauncherTurret,
                     ItemBlockGrenadeLauncherTurret.class,
                     Names.Blocks.unlocalisedGrenadeTurret);
