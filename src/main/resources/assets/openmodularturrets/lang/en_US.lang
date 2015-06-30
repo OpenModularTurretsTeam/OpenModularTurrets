@@ -48,6 +48,8 @@ tile.relativisticTurret.name=Relativistic Turret
 tile.laserTurret.name=Laser Turret
 tile.railGunTurret.name=Rail Gun Turret
 tile.leverBlock.name=Basic Turret Base Crank
+#for IGWMod
+tile.turretBase.name=Turret Base
 
 itemGroup.openmodularturrets=Open Modular Turrets
 
@@ -165,6 +167,7 @@ gui.openmodularturrets:invert=Inverted
 gui.openmodularturrets:active=Active
 gui.openmodularturrets:mode=Mode
 gui.openmodularturrets:true=true
+gui.openmodularturrets:false=false
 
 death.attack.disposable=Very %s, much dead, such wow...
 death.attack.bullet=%s ate some delicious lead.
