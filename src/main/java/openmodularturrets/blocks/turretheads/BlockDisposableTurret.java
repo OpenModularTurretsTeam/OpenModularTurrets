@@ -12,7 +12,7 @@ public class BlockDisposableTurret extends BlockAbstractTurretHead {
         super();
 
         this.setBlockName(Names.Blocks.unlocalisedDisposableItemTurret);
-        this.setBlockTextureName(ModInfo.ID + ":disposableItemTurret");
+        this.setBlockTextureName(ModInfo.ID + ":disposeItemTurret");
     }
 
     @Override

@@ -6,9 +6,9 @@ import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.turrets.GrenadeLauncherTurretTileEntity;
 
-public class BlockGrenadeLauncherTurret extends BlockAbstractTurretHead {
+public class BlockGrenadeTurret extends BlockAbstractTurretHead {
 
-    public BlockGrenadeLauncherTurret() {
+    public BlockGrenadeTurret() {
         super();
 
         this.setBlockName(Names.Blocks.unlocalisedGrenadeTurret);
