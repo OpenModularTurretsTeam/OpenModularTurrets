@@ -55,7 +55,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     protected boolean attacksMobs;
     protected boolean attacksNeutrals;
     protected boolean attacksPlayers;
-    protected String owner;
+    protected String owner = "";
     protected String ownerName = "";
     protected List<TrustedPlayer> trustedPlayers;
     protected int ticks;
@@ -247,7 +247,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             this.owner = getPlayerUUID(par1.getString("owner")).toString();
         } else {
             Logger.getGlobal().info("Found non existent owner: " + par1.getString("owner") + "at coordinates: "
-                    + this.xCoord + "," + this.yCoord + "," + this.zCoord);
+                    + this.xCoord + "," + this.yCoord + "," + this.zCoord + ".");
         }
         if (par1.hasKey("ownerName")) {
             this.ownerName = par1.getString("ownerName");
@@ -421,24 +421,20 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             redstone = worldObj.isBlockIndirectlyGettingPowered(this.xCoord,
                     this.yCoord, this.zCoord);
         }
-        
+
         if (ticks % 5 == 0) {
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-            
+
             //Computers
-            if(ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputercraftLoaded)
-            {
-            	if(TurretHeadUtil.hasSerialPortAddon(this))
-            	{
-            		this.computerAccessable = true;
-            	}
-            	else
-            	{
-            		this.computerAccessable = false;
-            	}
+            if (ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputercraftLoaded) {
+                if (TurretHeadUtil.hasSerialPortAddon(this)) {
+                    this.computerAccessable = true;
+                } else {
+                    this.computerAccessable = false;
+                }
             }
         }
-   
+
         //Thaumcraft
         if (TurretHeadUtil.hasPotentiaUpgradeAddon(this)) {
             if (amountOfPotentia > 0.00F
@@ -459,7 +455,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             }
         }
 
-       
+
         if (ModCompatibility.ThaumcraftLoaded) {
             if (ticks % 20 == 0) {
                 ticks = 0;
