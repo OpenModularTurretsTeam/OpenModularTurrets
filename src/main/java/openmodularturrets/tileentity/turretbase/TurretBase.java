@@ -247,7 +247,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             this.owner = getPlayerUUID(par1.getString("owner")).toString();
         } else {
             Logger.getGlobal().info("Found non existent owner: " + par1.getString("owner") + "at coordinates: "
-                    + this.xCoord + "," + this.yCoord + "," + this.zCoord + ".");
+                    + this.xCoord + "," + this.yCoord + "," + this.zCoord + ". Dropping Turretbase");
+            worldObj.func_147480_a(this.xCoord, this.yCoord, this.zCoord, true);
+            return;
         }
         if (par1.hasKey("ownerName")) {
             this.ownerName = par1.getString("ownerName");
