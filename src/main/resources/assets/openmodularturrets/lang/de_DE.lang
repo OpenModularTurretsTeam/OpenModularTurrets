@@ -3,8 +3,8 @@ item.grenadeThrowable.name=Werfbare Granate
 item.bulletCraftable.name=Munition - Kugel
 item.grenadeCraftable.name=Munition - Granate
 item.rocketCraftable.name=Munition - Rakete
-item.ferroSlug.name=Ammo - Ferro-Magnetisches Geschoss
-item.blazingClayCraftable.name=Ammo - Glühender Ton
+item.ferroSlug.name=Munition - Ferro-Magnetisches Geschoss
+item.blazingClayCraftable.name=Munition - Glühender Ton
 item.upgFire.name=Upgrade - Feuerrate
 item.upgEff.name=Upgrade - Effizienz
 item.upgRan.name=Upgrade - Reichweite
@@ -71,11 +71,11 @@ tooltip.rf.max=Max Energie
 tooltip.rf.io=Max Energiefluss
 tooltip.extras.label=Extras
 tooltip.extras.addons.0=Nichts
-tooltip.extras.addons.1=1x Addon slots
-tooltip.extras.addons.2=2x Addon slots
+tooltip.extras.addons.1=1x Addon Slots
+tooltip.extras.addons.2=2x Addon Slots
 tooltip.extras.upgrade.0=Nichts
-tooltip.extras.upgrade.1=1x Upgrade slots
-tooltip.extras.upgrade.2=2x Upgrade slots
+tooltip.extras.upgrade.1=1x Upgrade Slots
+tooltip.extras.upgrade.2=2x Upgrade Slots
 
 flavour.base.0=Bäume überall.
 flavour.base.1=Ich werd mit deinem Blut malen!
@@ -129,16 +129,16 @@ turret.addon.solar.a=Erzeugt
 turret.addon.solar.b=RF/t im Sonnenlicht.
 turret.addon.solar.flavour=Gutes Licht!
 turret.addon.potentia.a=Konvertiert eingespeiste Potentia
-turret.addon.potentia.b=in RF (RF per unit).
-turret.addon.potentia.c=Fügt einen Potentio Speicher hinzu für :
+turret.addon.potentia.b=in RF (RF pro Einheit).
+turret.addon.potentia.c=Fügt einen Potentia Speicher hinzu für
 turret.addon.potentia.d=Ordo Vis hinzuzufügen,
 turret.addon.potentia.e=multipliziert die RF Rate um 10.
-turret.addon.potentia.flavour=Weil RWE es nicht hinkriegt.
+turret.addon.potentia.flavour=Weil RWE es nicht gebacken kriegt.
 turret.addon.serial.a=Erlaubt OpenComputers und ComputerCraft
 turret.addon.serial.b=Kompatabilität.
 turret.addon.serial.flavour=Wer braucht OOP?
 
-turret.upgrade.label=Turrm Upgrade
+turret.upgrade.label=Turm Upgrade
 turret.upgrade.stacks=Stackt bis zu 4 mal.
 
 turret.upgrade.range=block Reichweite pro Upgrade.
@@ -156,11 +156,11 @@ turret.upgrade.acc.flavour.b=Ich schiesse, du rennst.
 
 turret.upgrade.scatter.a=Fügt 2 Projektile zu jedem Schuss hinzu für
 turret.upgrade.scatter.b=+2 Munitionsverbrauch, weniger Genauigkeit, und mehr RF Verbrauch.
-turret.upgrade.scatter.flavour=Einfach mehr Kugeln schiessen.
+turret.upgrade.scatter.flavour=Einfach mit mehr Kugeln schiessen.
 
 status.ownership=Du besitzt diesen Turm nicht, oder hast dazu keine Berechtigung.
-status.missingBase=Da ist keine Turm Basis.
-status.warning=Du betrittst einen Turmgesicherten Bereich. Weitergehen auf eigene Gefahr.
+status.missingBase=Dort ist keine Turm Basis.
+status.warning=Du betrittst einen turmgesicherten Bereich. Weitergehen auf eigene Gefahr.
 
 gui.openmodularturrets:owner=Besitzer
 gui.openmodularturrets:invert=Invertiert
@@ -170,7 +170,7 @@ gui.openmodularturrets:true=ja
 gui.openmodularturrets:false=nein
 
 death.attack.disposable=Very %s, much dead, such wow...
-death.attack.bullet=%s aß zu viel leckers Blei.
+death.attack.bullet=%s aß zu viel leckeres Blei.
 death.attack.blazingclay=%s wurde medium-rare gebraten.
 death.attack.grenade=%s muss wieder zusammengesetzt werden.
 death.attack.rocket=%s fand die Rakete am ende des Regenbongens.
