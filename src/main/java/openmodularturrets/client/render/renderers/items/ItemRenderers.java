@@ -5,6 +5,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import openmodularturrets.blocks.Blocks;
 import openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
 import openmodularturrets.tileentity.LeverTileEntity;
+import openmodularturrets.tileentity.expander.*;
 import openmodularturrets.tileentity.turrets.*;
 
 public class ItemRenderers {
@@ -72,6 +73,36 @@ public class ItemRenderers {
 				new TeleporterTurretItemRenderer(
 						TileEntityRenderers.teleporterTurretRenderer,
 						new TeleporterTurretTileEntity()));
+
+		MinecraftForgeClient.registerItemRenderer(Item
+						.getItemFromBlock(Blocks.expanderPowerTierOne),
+				new ExpanderPowerTierOneItemRenderer(
+						TileEntityRenderers.expanderTierOneRenderer,
+						new ExpanderPowerTierOneTileEntity()));
+
+		MinecraftForgeClient.registerItemRenderer(Item
+						.getItemFromBlock(Blocks.expanderPowerTierTwo),
+				new ExpanderPowerTierTwoItemRenderer(
+						TileEntityRenderers.expanderTierTwoRenderer,
+						new ExpanderPowerTierTwoTileEntity()));
+
+		MinecraftForgeClient.registerItemRenderer(Item
+						.getItemFromBlock(Blocks.expanderPowerTierThree),
+				new ExpanderPowerTierThreeItemRenderer(
+						TileEntityRenderers.expanderTierThreeRenderer,
+						new ExpanderPowerTierThreeTileEntity()));
+
+		MinecraftForgeClient.registerItemRenderer(Item
+						.getItemFromBlock(Blocks.expanderPowerTierFour),
+				new ExpanderPowerTierFourItemRenderer(
+						TileEntityRenderers.expanderTierFourRenderer,
+						new ExpanderPowerTierFourTileEntity()));
+
+		MinecraftForgeClient.registerItemRenderer(Item
+						.getItemFromBlock(Blocks.expanderPowerTierFive),
+				new ExpanderPowerTierFiveItemRenderer(
+						TileEntityRenderers.expanderTierFiveRenderer,
+						new ExpanderPowerTierFiveTileEntity()));
 
 	}
 }

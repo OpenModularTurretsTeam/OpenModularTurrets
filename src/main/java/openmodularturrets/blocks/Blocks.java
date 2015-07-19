@@ -2,6 +2,7 @@ package openmodularturrets.blocks;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import openmodularturrets.blocks.expanders.*;
 import openmodularturrets.blocks.turretbases.*;
 import openmodularturrets.blocks.turretheads.*;
 import openmodularturrets.handler.ConfigHandler;
@@ -31,6 +32,12 @@ public class Blocks {
     public static Block railGunTurret;
     public static Block leverBlock;
 
+    public static Block expanderPowerTierOne;
+    public static Block expanderPowerTierTwo;
+    public static Block expanderPowerTierThree;
+    public static Block expanderPowerTierFour;
+    public static Block expanderPowerTierFive;
+
     public static void init() {
         turretBaseTierOne = new BlockTurretBaseTierOne();
         GameRegistry.registerBlock(turretBaseTierOne,
@@ -56,6 +63,31 @@ public class Blocks {
         GameRegistry.registerBlock(turretBaseTierFive,
                 ItemBlockTurretBaseTierFive.class,
                 Names.Blocks.unlocalisedTurretBaseTierFive);
+
+        expanderPowerTierOne = new BlockExpanderPowerTierOne();
+        GameRegistry.registerBlock(expanderPowerTierOne,
+                ItemBlockExpanderPowerTierOne.class,
+                Names.Blocks.unlocalisedExpanderPowerTierOne);
+
+        expanderPowerTierTwo = new BlockExpanderPowerTierTwo();
+        GameRegistry.registerBlock(expanderPowerTierTwo,
+                ItemBlockExpanderPowerTierTwo.class,
+                Names.Blocks.unlocalisedExpanderPowerTierTwo);
+
+        expanderPowerTierThree = new BlockExpanderPowerTierThree();
+        GameRegistry.registerBlock(expanderPowerTierThree,
+                ItemBlockExpanderPowerTierThree.class,
+                Names.Blocks.unlocalisedExpanderPowerTierThree);
+
+        expanderPowerTierFour = new BlockExpanderPowerTierFour();
+        GameRegistry.registerBlock(expanderPowerTierFour,
+                ItemBlockExpanderPowerTierFour.class,
+                Names.Blocks.unlocalisedExpanderPowerTierFour);
+
+        expanderPowerTierFive = new BlockExpanderPowerTierFive();
+        GameRegistry.registerBlock(expanderPowerTierFive,
+                ItemBlockExpanderPowerTierFive.class,
+                Names.Blocks.unlocalisedExpanderPowerTierFive);
 
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
             disposableItemTurret = new BlockDisposableTurret();

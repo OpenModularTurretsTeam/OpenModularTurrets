@@ -19,6 +19,7 @@ import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.addons.*;
 import openmodularturrets.items.upgrades.*;
+import openmodularturrets.tileentity.expander.AbstractPowerExpander;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
@@ -275,6 +276,53 @@ public class TurretHeadUtil {
 
         return false;
     }
+
+    public static int getPowerExtenderTotalExtraCapacity(World world, int x, int y, int z) {
+        int totalExtraCap = 0;
+        if (world.getTileEntity(x + 1, y, z) instanceof AbstractPowerExpander) {
+            totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue((AbstractPowerExpander) world.getTileEntity(x + 1, y, z));
+        }
+        if (world.getTileEntity(x - 1, y, z) instanceof AbstractPowerExpander) {
+            totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue((AbstractPowerExpander) world.getTileEntity(x - 1, y, z));
+        }
+        if (world.getTileEntity(x, y + 1, z) instanceof AbstractPowerExpander) {
+            totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue((AbstractPowerExpander) world.getTileEntity(x, y + 1, z));
+        }
+        if (world.getTileEntity(x, y - 1, z) instanceof AbstractPowerExpander) {
+            totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue((AbstractPowerExpander) world.getTileEntity(x, y - 1, z));
+        }
+        if (world.getTileEntity(x, y, z + 1) instanceof AbstractPowerExpander) {
+            totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue((AbstractPowerExpander) world.getTileEntity(x, y, z + 1));
+        }
+        if (world.getTileEntity(x, y, z - 1) instanceof AbstractPowerExpander) {
+            totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue((AbstractPowerExpander) world.getTileEntity(x, y, z - 1));
+        }
+
+        return totalExtraCap;
+    }
+
+    private static int getPowerExtenderCapacityValue(AbstractPowerExpander expander) {
+        if (expander != null) {
+            int tier = expander.getTier();
+
+            switch (tier) {
+                case 1:
+                    return ConfigHandler.getExpanderPowerTierOneCapacity();
+                case 2:
+                    return ConfigHandler.getExpanderPowerTierTwoCapacity();
+                case 3:
+                    return ConfigHandler.getExpanderPowerTierThreeCapacity();
+                case 4:
+                    return ConfigHandler.getExpanderPowerTierFourCapacity();
+                case 5:
+                    return ConfigHandler.getExpanderPowerTierFiveCapacity();
+                default:
+                    return 0;
+            }
+        }
+        return 0;
+    }
+
 
     public static TurretBase getTurretBase(World world, int x, int y, int z) {
         if (world == null) {

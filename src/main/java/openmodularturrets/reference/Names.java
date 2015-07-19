@@ -23,6 +23,12 @@ public class Names {
         public static final String unlocalisedTeleporterTurret = "teleporterTurret";
         public static final String unlocalisedRailGunTurret = "railGunTurret";
         public static final String unlocalisedLever = "leverBlock";
+
+        public static final String unlocalisedExpanderPowerTierOne = "expanderPowerTierOne";
+        public static final String unlocalisedExpanderPowerTierTwo = "expanderPowerTierTwo";
+        public static final String unlocalisedExpanderPowerTierThree = "expanderPowerTierThree";
+        public static final String unlocalisedExpanderPowerTierFour = "expanderPowerTierFour";
+        public static final String unlocalisedExpanderPowerTierFive = "expanderPowerTierFive";
     }
 
     public static class Items {
