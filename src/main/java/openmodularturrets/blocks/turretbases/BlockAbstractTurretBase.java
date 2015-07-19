@@ -7,6 +7,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
@@ -19,6 +21,9 @@ import openmodularturrets.tileentity.turretbase.TurretBase;
 import java.util.Random;
 
 public abstract class BlockAbstractTurretBase extends BlockContainer {
+
+    public ItemStack camoStack;
+
     public BlockAbstractTurretBase() {
         super(Material.rock);
 
@@ -32,7 +37,12 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float what, float these, float are) {
-        if (!world.isRemote) {
+
+        if (player.isSneaking()) {
+            this.camoStack = null;
+        }
+
+        if (!world.isRemote && player.getCurrentEquippedItem() == null) {
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
             if (base.getTrustedPlayer(player.getUniqueID()) != null) {
                 if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI) {
@@ -44,6 +54,16 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
                 player.openGui(ModularTurrets.instance, base.getBaseTier(), world, x, y, z);
             } else {
                 player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
+            }
+        }
+
+        if (!world.isRemote && player.getCurrentEquippedItem() != null) {
+            if (player.getCurrentEquippedItem() != null
+                    && player.getCurrentEquippedItem().getItem() instanceof ItemBlock
+                    && Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()).isNormalCube()) {
+                camoStack = new ItemStack(player.getCurrentEquippedItem().getItem());
+            } else {
+                camoStack = null;
             }
 
         }
