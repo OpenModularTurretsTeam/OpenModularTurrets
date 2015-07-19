@@ -48,6 +48,12 @@ tile.relativisticTurret.name=Relativistic Turret
 tile.laserTurret.name=Laser Turret
 tile.railGunTurret.name=Rail Gun Turret
 tile.leverBlock.name=Basic Turret Base Crank
+tile.expanderPowerTierOne.name=Base Power Expander (Tier 1)
+tile.expanderPowerTierTwo.name=Base Power Expander (Tier 2)
+tile.expanderPowerTierThree.name=Base Power Expander (Tier 3)
+tile.expanderPowerTierFour.name=Base Power Expander (Tier 4)
+tile.expanderPowerTierFive.name=Base Power Expander (Tier 5)
+
 #for IGWMod
 tile.turretBase.name=Turret Base
 
@@ -76,6 +82,16 @@ tooltip.extras.addons.2=2x Addon slots
 tooltip.extras.upgrade.0=None
 tooltip.extras.upgrade.1=1x Upgrade slots
 tooltip.extras.upgrade.2=2x Upgrade slots
+
+tooltip.expander.power1=Turret Base RF Expander
+tooltip.expander.power2=Adds
+tooltip.expander.power3=RF capacity to a turret base.
+
+flavour.expander.power.1=Now with flavour!
+flavour.expander.power.2=Kinetic expansion.
+flavour.expander.power.3=There, their and they're.
+flavour.expander.power.4=Can be used as a sinking device.
+flavour.expander.power.5=Asymmetrical warfare.
 
 flavour.base.0=There are trees, everywhere...
 flavour.base.1=I'll draw your blood.

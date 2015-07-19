@@ -52,6 +52,12 @@ public class ConfigHandler {
     public static boolean globalCanTargetNeutrals;
     public static boolean globalCanTargetMobs;
 
+    public static int expanderPowerTierOneCapacity;
+    public static int expanderPowerTierTwoCapacity;
+    public static int expanderPowerTierThreeCapacity;
+    public static int expanderPowerTierFourCapacity;
+    public static int expanderPowerTierFiveCapacity;
+
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
         config.load();
@@ -263,6 +269,21 @@ public class ConfigHandler {
         globalCanTargetMobs = config.get("GlobalTargetingParameters",
                 "Can turrets attack mobs?", true).getBoolean();
 
+        expanderPowerTierOneCapacity = config.get("Expanders",
+                "Power expander tier one capacity", 250).getInt();
+
+        expanderPowerTierTwoCapacity = config.get("Expanders",
+                "Power expander tier two capacity", 25000).getInt();
+
+        expanderPowerTierThreeCapacity = config.get("Expanders",
+                "Power expander tier three capacity", 75000).getInt();
+
+        expanderPowerTierFourCapacity = config.get("Expanders",
+                "Power expander tier four capacity", 250000).getInt();
+
+        expanderPowerTierFiveCapacity = config.get("Expanders",
+                "Power expander tier five capacity", 5000000).getInt();
+
 
         if (config.hasChanged()) {
             config.save();
@@ -440,4 +461,23 @@ public class ConfigHandler {
         }
     }
 
+    public static int getExpanderPowerTierOneCapacity() {
+        return expanderPowerTierOneCapacity;
+    }
+
+    public static int getExpanderPowerTierTwoCapacity() {
+        return expanderPowerTierTwoCapacity;
+    }
+
+    public static int getExpanderPowerTierThreeCapacity() {
+        return expanderPowerTierThreeCapacity;
+    }
+
+    public static int getExpanderPowerTierFourCapacity() {
+        return expanderPowerTierFourCapacity;
+    }
+
+    public static int getExpanderPowerTierFiveCapacity() {
+        return expanderPowerTierFiveCapacity;
+    }
 }

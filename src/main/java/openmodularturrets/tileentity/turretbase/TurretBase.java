@@ -50,6 +50,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         IAspectContainer, IPeripheral {
 
     protected EnergyStorage storage;
+    protected int maxEnergyStorage;
     protected ItemStack[] inv;
     protected int yAxisDetect;
     protected boolean attacksMobs;
@@ -79,8 +80,24 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         this.trustedPlayers = new ArrayList<TrustedPlayer>();
         this.inv = new ItemStack[this.getSizeInventory()];
         this.inverted = true;
-        this.active = true; // redstone will be automatically set on block place
-        // and update
+        this.active = true;
+    }
+
+    private int getMaxEnergyStorageWithExtenders() {
+        int tier = getBaseTier();
+        switch (tier) {
+            case 1:
+                return ConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExtenderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+            case 2:
+                return ConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil.getPowerExtenderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+            case 3:
+                return ConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExtenderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+            case 4:
+                return ConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExtenderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+            case 5:
+                return ConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil.getPowerExtenderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+        }
+        return 0;
     }
 
     public void addTrustedPlayer(String name) {
@@ -435,6 +452,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                     this.computerAccessable = false;
                 }
             }
+
+            //Extenders
+            this.storage.setCapacity(getMaxEnergyStorageWithExtenders());
         }
 
         //Thaumcraft
