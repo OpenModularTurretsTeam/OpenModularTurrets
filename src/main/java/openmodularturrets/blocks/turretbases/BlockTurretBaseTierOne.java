@@ -2,6 +2,8 @@ package openmodularturrets.blocks.turretbases;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.ModInfo;
@@ -12,6 +14,7 @@ public class BlockTurretBaseTierOne extends BlockAbstractTurretBase {
 
     public final int MaxCharge = ConfigHandler.getBaseTierOneMaxCharge();
     public final int MaxIO = ConfigHandler.getBaseTierOneMaxIo();
+    private IIcon iconIndex;
 
     public BlockTurretBaseTierOne() {
         super();
@@ -25,6 +28,15 @@ public class BlockTurretBaseTierOne extends BlockAbstractTurretBase {
         super.registerBlockIcons(p_149651_1_);
 
         blockIcon = p_149651_1_.registerIcon(ModInfo.ID.toLowerCase() + ":turretBaseTierOne");
+    }
+
+    @Override
+    public IIcon getIcon(IBlockAccess p_149673_1_, int p_149673_2_, int p_149673_3_, int p_149673_4_, int p_149673_5_) {
+        if (this.camoStack == null) {
+            return blockIcon;
+        } else {
+            return this.camoStack.getIconIndex();
+        }
     }
 
     @Override

@@ -23,6 +23,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmodularturrets.blocks.turretbases.BlockAbstractTurretBase;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.util.TurretHeadUtil;
@@ -230,6 +231,18 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         par1.setBoolean("redstone", redstone);
         par1.setBoolean("computerAccessable", computerAccessable);
 
+        try {
+            ItemStack camoStack = ((BlockAbstractTurretBase) worldObj.getBlock(xCoord, yCoord, zCoord)).camoStack;
+            if (camoStack != null) {
+                NBTTagCompound camo = new NBTTagCompound();
+                camoStack.writeToNBT(camo);
+                par1.setTag("camoStack", camo);
+            }
+        } catch (Exception e) {
+            Logger.getGlobal().warning("Could not save turret base camo itemstack to NBT, please report this to me:" + e.getMessage());
+        }
+
+
         NBTTagList itemList = new NBTTagList();
 
         for (int i = 0; i < this.inv.length; i++) {
@@ -294,6 +307,15 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             this.computerAccessable = par1.getBoolean("computerAccessable");
         } else {
             computerAccessable = false;
+        }
+
+        try {
+            ItemStack camoStack = ItemStack.loadItemStackFromNBT(par1.getCompoundTag("camoStack"));
+            if (camoStack != null) {
+                ((BlockAbstractTurretBase) worldObj.getBlock(xCoord, yCoord, zCoord)).camoStack = camoStack;
+            }
+        } catch (Exception e) {
+            Logger.getGlobal().warning("Could not load turret base camo itemstack from NBT, please report this to me:" + e.getMessage());
         }
 
         NBTTagList tagList = par1.getTagList("Inventory", 10);
