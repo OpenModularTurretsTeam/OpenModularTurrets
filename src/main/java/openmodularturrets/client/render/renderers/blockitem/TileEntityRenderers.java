@@ -20,11 +20,17 @@ public class TileEntityRenderers {
     public static RelativisticTurretRenderer relativisticTurretRenderer = new RelativisticTurretRenderer();
     public static TeleporterTurretRenderer teleporterTurretRenderer = new TeleporterTurretRenderer();
 
-    public static ExpanderTierOneRenderer expanderTierOneRenderer = new ExpanderTierOneRenderer();
-    public static ExpanderTierTwoRenderer expanderTierTwoRenderer = new ExpanderTierTwoRenderer();
-    public static ExpanderTierThreeRenderer expanderTierThreeRenderer = new ExpanderTierThreeRenderer();
-    public static ExpanderTierFourRenderer expanderTierFourRenderer = new ExpanderTierFourRenderer();
-    public static ExpanderTierFiveRenderer expanderTierFiveRenderer = new ExpanderTierFiveRenderer();
+    public static ExpanderPowerTierOneRenderer expanderPowerTierOneRenderer = new ExpanderPowerTierOneRenderer();
+    public static ExpanderPowerTierTwoRenderer expanderPowerTierTwoRenderer = new ExpanderPowerTierTwoRenderer();
+    public static ExpanderPowerTierThreeRenderer expanderPowerTierThreeRenderer = new ExpanderPowerTierThreeRenderer();
+    public static ExpanderPowerTierFourRenderer expanderPowerTierFourRenderer = new ExpanderPowerTierFourRenderer();
+    public static ExpanderPowerTierFiveRenderer expanderPowerTierFiveRenderer = new ExpanderPowerTierFiveRenderer();
+
+    public static ExpanderInvTierOneRenderer expanderInvTierOneRenderer = new ExpanderInvTierOneRenderer();
+    public static ExpanderInvTierTwoRenderer expanderInvTierTwoRenderer = new ExpanderInvTierTwoRenderer();
+    public static ExpanderInvTierThreeRenderer expanderInvTierThreeRenderer = new ExpanderInvTierThreeRenderer();
+    public static ExpanderInvTierFourRenderer expanderInvTierFourRenderer = new ExpanderInvTierFourRenderer();
+    public static ExpanderInvTierFiveRenderer expanderInvTierFiveRenderer = new ExpanderInvTierFiveRenderer();
 
     public static LeverRenderer leverRenderer = new LeverRenderer();
 
@@ -55,15 +61,26 @@ public class TileEntityRenderers {
         ClientRegistry.bindTileEntitySpecialRenderer(LeverTileEntity.class,
                 leverRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierOneTileEntity.class,
-                expanderTierOneRenderer);
+                expanderPowerTierOneRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierTwoTileEntity.class,
-                expanderTierTwoRenderer);
+                expanderPowerTierTwoRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierThreeTileEntity.class,
-                expanderTierThreeRenderer);
+                expanderPowerTierThreeRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierFourTileEntity.class,
-                expanderTierFourRenderer);
+                expanderPowerTierFourRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierFiveTileEntity.class,
-                expanderTierFiveRenderer);
+                expanderPowerTierFiveRenderer);
+
+        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierOneTileEntity.class,
+                expanderInvTierOneRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierTwoTileEntity.class,
+                expanderInvTierTwoRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierThreeTileEntity.class,
+                expanderInvTierThreeRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierFourTileEntity.class,
+                expanderInvTierFourRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierFiveTileEntity.class,
+                expanderInvTierFiveRenderer);
 
 
     }

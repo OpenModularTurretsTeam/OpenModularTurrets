@@ -11,11 +11,11 @@ import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.expander.AbstractPowerExpander;
 import org.lwjgl.opengl.GL11;
 
-public class ExpanderTierFourRenderer extends TileEntitySpecialRenderer {
+public class ExpanderPowerTierFiveRenderer extends TileEntitySpecialRenderer {
 
     private ModelExpander model;
 
-    public ExpanderTierFourRenderer() {
+    public ExpanderPowerTierFiveRenderer() {
         model = new ModelExpander();
     }
 
@@ -24,7 +24,7 @@ public class ExpanderTierFourRenderer extends TileEntitySpecialRenderer {
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
 
         AbstractPowerExpander expander = (AbstractPowerExpander) te;
-        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/expanderPowerTierFour.png"));
+        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/expanderPowerTierFive.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         int rotation = 0;

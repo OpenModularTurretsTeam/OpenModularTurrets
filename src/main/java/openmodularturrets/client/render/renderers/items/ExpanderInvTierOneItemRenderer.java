@@ -3,19 +3,21 @@ package openmodularturrets.client.render.renderers.items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import openmodularturrets.client.render.models.ModelExpander;
+import openmodularturrets.client.render.renderers.blockitem.ExpanderInvTierOneRenderer;
 import openmodularturrets.client.render.renderers.blockitem.ExpanderPowerTierOneRenderer;
+import openmodularturrets.tileentity.expander.ExpanderInvTierOneTileEntity;
 import openmodularturrets.tileentity.expander.ExpanderPowerTierOneTileEntity;
 import org.lwjgl.opengl.GL11;
 
-public class ExpanderPowerTierOneItemRenderer implements IItemRenderer {
+public class ExpanderInvTierOneItemRenderer implements IItemRenderer {
 
-    private final ExpanderPowerTierOneRenderer expanderPowerTierOneRenderer;
-    private final ExpanderPowerTierOneTileEntity expanderPowerTierOneTileEntity;
+    private final ExpanderInvTierOneRenderer expanderInvTierOneRenderer;
+    private final ExpanderInvTierOneTileEntity expanderInvTierOneTileEntity;
     private final ModelExpander model;
 
-    public ExpanderPowerTierOneItemRenderer(ExpanderPowerTierOneRenderer expanderPowerTierOneRenderer, ExpanderPowerTierOneTileEntity expanderPowerTierOneTileEntity) {
-        this.expanderPowerTierOneRenderer = expanderPowerTierOneRenderer;
-        this.expanderPowerTierOneTileEntity = expanderPowerTierOneTileEntity;
+    public ExpanderInvTierOneItemRenderer(ExpanderInvTierOneRenderer expanderInvTierOneRenderer, ExpanderInvTierOneTileEntity expanderInvTierOneTileEntity) {
+        this.expanderInvTierOneRenderer = expanderInvTierOneRenderer;
+        this.expanderInvTierOneTileEntity = expanderInvTierOneTileEntity;
         this.model = new ModelExpander();
     }
 
@@ -33,7 +35,7 @@ public class ExpanderPowerTierOneItemRenderer implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         GL11.glPushMatrix();
         GL11.glTranslated(-0.5, -0.5, -0.5);
-        this.expanderPowerTierOneRenderer.renderTileEntityAt(this.expanderPowerTierOneTileEntity, 0.0D, 0.0D, 0.0D,
+        this.expanderInvTierOneRenderer.renderTileEntityAt(this.expanderInvTierOneTileEntity, 0.0D, 0.0D, 0.0D,
                 0.0F);
         GL11.glPopMatrix();
     }

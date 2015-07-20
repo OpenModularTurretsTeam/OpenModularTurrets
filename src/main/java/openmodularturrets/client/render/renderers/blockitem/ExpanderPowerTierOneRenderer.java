@@ -6,16 +6,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import openmodularturrets.client.render.models.ModelExpander;
+import openmodularturrets.client.render.models.*;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.expander.AbstractPowerExpander;
 import org.lwjgl.opengl.GL11;
 
-public class ExpanderTierTwoRenderer extends TileEntitySpecialRenderer {
+public class ExpanderPowerTierOneRenderer extends TileEntitySpecialRenderer {
 
     private ModelExpander model;
 
-    public ExpanderTierTwoRenderer() {
+    public ExpanderPowerTierOneRenderer() {
         model = new ModelExpander();
     }
 
@@ -24,7 +24,7 @@ public class ExpanderTierTwoRenderer extends TileEntitySpecialRenderer {
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
 
         AbstractPowerExpander expander = (AbstractPowerExpander) te;
-        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/expanderPowerTierTwo.png"));
+        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/expanderPowerTierOne.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         int rotation = 0;

@@ -18,11 +18,11 @@ public abstract class AbstractInvExpander extends TileEntity implements IInvento
     public float baseFitRotationZ;
     public TurretBase base;
     public boolean hasSetSide = false;
-    protected ItemStack[] inv;
+    public ItemStack[] inv;
     public int tier;
 
-    public AbstractInvExpander(int size) {
-        this.inv = new ItemStack[this.getSizeInventory()];
+    public AbstractInvExpander() {
+        this.inv = new ItemStack[9];
     }
 
     @Override
@@ -42,7 +42,6 @@ public abstract class AbstractInvExpander extends TileEntity implements IInvento
     @Override
     public void writeToNBT(NBTTagCompound par1) {
         super.writeToNBT(par1);
-
 
         NBTTagList itemList = new NBTTagList();
 
@@ -78,46 +77,43 @@ public abstract class AbstractInvExpander extends TileEntity implements IInvento
     }
 
     public void setSide() {
-        if (hasSetSide) {
-            return;
-        }
 
         if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TurretBase) {
-            this.baseFitRotationX = 1.56F;
-            this.baseFitRotationZ = 1.565F;
+            this.baseFitRotationX = 0F;
+            this.baseFitRotationZ = 4.705F;
             this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(xCoord - 1, yCoord, zCoord) instanceof TurretBase) {
+            this.baseFitRotationX = 0F;
+            this.baseFitRotationZ = 1.56F;
+            this.hasSetSide = true;
+            return;
+        }
+
+        if (worldObj.getTileEntity(xCoord, yCoord - 1, zCoord) instanceof TurretBase) {
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 4.705F;
             this.hasSetSide = true;
             return;
         }
 
-        if (worldObj.getTileEntity(xCoord, yCoord, zCoord + 1) instanceof TurretBase) {
-            this.baseFitRotationX = 1.56F;
-            this.baseFitRotationZ = 3.145F;
-            this.hasSetSide = true;
-            return;
-        }
-
-        if (worldObj.getTileEntity(xCoord, yCoord, zCoord - 1) instanceof TurretBase) {
-            this.baseFitRotationX = 1.56F;
+        if (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof TurretBase) {
+            this.baseFitRotationX = 4.705F;
             this.baseFitRotationZ = 0F;
             this.hasSetSide = true;
             return;
         }
 
-        if (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof TurretBase) {
+        if (worldObj.getTileEntity(xCoord, yCoord, zCoord - 1) instanceof TurretBase) {
             this.baseFitRotationX = 3.145F;
             this.baseFitRotationZ = 0F;
             this.hasSetSide = true;
             return;
         }
 
-        if (worldObj.getTileEntity(xCoord, yCoord - 1, zCoord) instanceof TurretBase) {
+        if (worldObj.getTileEntity(xCoord, yCoord, zCoord + 1) instanceof TurretBase) {
             this.baseFitRotationX = 0F;
             this.baseFitRotationZ = 0F;
             this.hasSetSide = true;
@@ -131,6 +127,9 @@ public abstract class AbstractInvExpander extends TileEntity implements IInvento
             setSide();
         }
 
+        if (getBase() == null) {
+            this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);
+        }
     }
 
     @Override

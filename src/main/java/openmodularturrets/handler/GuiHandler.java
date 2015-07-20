@@ -6,6 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import openmodularturrets.client.gui.*;
 import openmodularturrets.client.gui.containers.*;
+import openmodularturrets.tileentity.expander.AbstractInvExpander;
 import openmodularturrets.tileentity.turretbase.*;
 
 public class GuiHandler implements IGuiHandler {
@@ -27,6 +28,8 @@ public class GuiHandler implements IGuiHandler {
                 return new TurretBaseTierFiveContainer(player.inventory, (TurretBaseTierFiveTileEntity) tileEntity);
             case 6:
                 return new ConfigContainer(player.inventory, (TurretBase) tileEntity);
+            case 7:
+                return new ExpanderInvContainer(player.inventory, (AbstractInvExpander) tileEntity);
             default:
                 return null;
         }
@@ -49,6 +52,8 @@ public class GuiHandler implements IGuiHandler {
                 return new TurretBaseTierFiveGui(player.inventory, (TurretBaseTierFiveTileEntity) tileEntity);
             case 6:
                 return new ConfigureGui(player.inventory, (TurretBase) tileEntity);
+            case 7:
+                return new ExpanderInvGui(player.inventory, (AbstractInvExpander) tileEntity);
             default:
                 return null;
         }

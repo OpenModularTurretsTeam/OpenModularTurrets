@@ -88,8 +88,9 @@ public abstract class AbstractPowerExpander extends TileEntity {
 
     @Override
     public void updateEntity() {
-
-        setSide();
+        if (!hasSetSide) {
+            setSide();
+        }
 
         if (getBase() == null) {
             this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);

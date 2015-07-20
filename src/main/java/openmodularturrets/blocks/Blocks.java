@@ -38,6 +38,12 @@ public class Blocks {
     public static Block expanderPowerTierFour;
     public static Block expanderPowerTierFive;
 
+    public static Block expanderInvTierOne;
+    public static Block expanderInvTierTwo;
+    public static Block expanderInvTierThree;
+    public static Block expanderInvTierFour;
+    public static Block expanderInvTierFive;
+
     public static void init() {
         turretBaseTierOne = new BlockTurretBaseTierOne();
         GameRegistry.registerBlock(turretBaseTierOne,
@@ -88,6 +94,31 @@ public class Blocks {
         GameRegistry.registerBlock(expanderPowerTierFive,
                 ItemBlockExpanderPowerTierFive.class,
                 Names.Blocks.unlocalisedExpanderPowerTierFive);
+
+        expanderInvTierOne = new BlockExpanderInvTierOne();
+        GameRegistry.registerBlock(expanderInvTierOne,
+                ItemBlockExpanderInvTierOne.class,
+                Names.Blocks.unlocalisedExpanderInvTierOne);
+
+        expanderInvTierTwo = new BlockExpanderInvTierTwo();
+        GameRegistry.registerBlock(expanderInvTierTwo,
+                ItemBlockExpanderInvTierTwo.class,
+                Names.Blocks.unlocalisedExpanderInvTierTwo);
+
+        expanderInvTierThree = new BlockExpanderInvTierThree();
+        GameRegistry.registerBlock(expanderInvTierThree,
+                ItemBlockExpanderInvTierThree.class,
+                Names.Blocks.unlocalisedExpanderInvTierThree);
+
+        expanderInvTierFour = new BlockExpanderInvTierFour();
+        GameRegistry.registerBlock(expanderInvTierFour,
+                ItemBlockExpanderInvTierFour.class,
+                Names.Blocks.unlocalisedExpanderInvTierFour);
+
+        expanderInvTierFive = new BlockExpanderInvTierFive();
+        GameRegistry.registerBlock(expanderInvTierFive,
+                ItemBlockExpanderInvTierFive.class,
+                Names.Blocks.unlocalisedExpanderInvTierFive);
 
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
             disposableItemTurret = new BlockDisposableTurret();
