@@ -3,162 +3,162 @@ package openmodularturrets.items;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import openmodularturrets.compatability.ModCompatibility;
-import openmodularturrets.items.addons.DamageAmpAddonItem;
-import openmodularturrets.items.addons.PotentiaAddonItem;
-import openmodularturrets.items.addons.RedstoneReactorAddonItem;
-import openmodularturrets.items.addons.SerialPortAddonItem;
-import openmodularturrets.items.addons.SolarPanelAddonItem;
+import openmodularturrets.items.addons.*;
 import openmodularturrets.items.ammo.*;
 import openmodularturrets.items.upgrades.*;
 
 public class Items {
 
-	public static Item bulletThrowable;
-	public static Item grenadeThrowable;
-	public static Item bulletCraftable;
-	public static Item blazingClayCraftable;
-	public static Item grenadeCraftable;
-	public static Item rocketCraftable;
-	public static Item ferroSlug;
-	public static Item accuraccyUpgradeItem;
-	public static Item efficiencyUpgradeItem;
-	public static Item fireRateUpgradeItem;
-	public static Item rangeUpgradeItem;
-	public static Item scattershotUpgradeItem;
-	public static Item redstoneReactorAddon;
-	public static Item damageAmpAddon;
-	public static Item solarPanelAddon;
-	public static Item potentiaAddon;
-	public static Item serialPortAddon;
+    public static Item bulletThrowable;
+    public static Item grenadeThrowable;
+    public static Item bulletCraftable;
+    public static Item blazingClayCraftable;
+    public static Item grenadeCraftable;
+    public static Item rocketCraftable;
+    public static Item ferroSlug;
+    public static Item accuraccyUpgradeItem;
+    public static Item efficiencyUpgradeItem;
+    public static Item fireRateUpgradeItem;
+    public static Item rangeUpgradeItem;
+    public static Item scattershotUpgradeItem;
+    public static Item redstoneReactorAddon;
+    public static Item damageAmpAddon;
+    public static Item solarPanelAddon;
+    public static Item potentiaAddon;
+    public static Item serialPortAddon;
+    public static Item recyclerAddon;
 
-	public static Item sensorTierOneItem;
-	public static Item sensorTierTwoItem;
-	public static Item sensorTierThreeItem;
-	public static Item sensorTierFourItem;
-	public static Item sensorTierFiveItem;
+    public static Item sensorTierOneItem;
+    public static Item sensorTierTwoItem;
+    public static Item sensorTierThreeItem;
+    public static Item sensorTierFourItem;
+    public static Item sensorTierFiveItem;
 
-	public static Item barrelTierOneItem;
-	public static Item barrelTierTwoItem;
-	public static Item barrelTierThreeItem;
-	public static Item barrelTierFourItem;
-	public static Item barrelTierFiveItem;
+    public static Item barrelTierOneItem;
+    public static Item barrelTierTwoItem;
+    public static Item barrelTierThreeItem;
+    public static Item barrelTierFourItem;
+    public static Item barrelTierFiveItem;
 
-	public static Item chamberTierOneItem;
-	public static Item chamberTierTwoItem;
-	public static Item chamberTierThreeItem;
-	public static Item chamberTierFourItem;
-	public static Item chamberTierFiveItem;
+    public static Item chamberTierOneItem;
+    public static Item chamberTierTwoItem;
+    public static Item chamberTierThreeItem;
+    public static Item chamberTierFourItem;
+    public static Item chamberTierFiveItem;
 
-	public static Item ioBus;
+    public static Item ioBus;
 
-	public static void init() {
+    public static void init() {
 
-		bulletThrowable = new BulletThrowableItem();
-		GameRegistry.registerItem(bulletThrowable, "bulletThrowable");
+        bulletThrowable = new BulletThrowableItem();
+        GameRegistry.registerItem(bulletThrowable, "bulletThrowable");
 
-		grenadeThrowable = new GrenadeThrowableItem();
-		GameRegistry.registerItem(grenadeThrowable, "grenadeThrowable");
+        grenadeThrowable = new GrenadeThrowableItem();
+        GameRegistry.registerItem(grenadeThrowable, "grenadeThrowable");
 
-		accuraccyUpgradeItem = new AccuraccyUpgradeItem();
-		GameRegistry.registerItem(accuraccyUpgradeItem, "accuraccyUpgradeItem");
+        accuraccyUpgradeItem = new AccuraccyUpgradeItem();
+        GameRegistry.registerItem(accuraccyUpgradeItem, "accuraccyUpgradeItem");
 
-		efficiencyUpgradeItem = new EfficiencyUpgradeItem();
-		GameRegistry.registerItem(efficiencyUpgradeItem,
-				"efficiencyUpgradeItem");
+        efficiencyUpgradeItem = new EfficiencyUpgradeItem();
+        GameRegistry.registerItem(efficiencyUpgradeItem,
+                "efficiencyUpgradeItem");
 
-		fireRateUpgradeItem = new FireRateUpgradeItem();
-		GameRegistry.registerItem(fireRateUpgradeItem, "fireRateUpgradeItem");
+        fireRateUpgradeItem = new FireRateUpgradeItem();
+        GameRegistry.registerItem(fireRateUpgradeItem, "fireRateUpgradeItem");
 
-		rangeUpgradeItem = new RangeUpgradeItem();
-		GameRegistry.registerItem(rangeUpgradeItem, "rangeUpgradeItem");
+        rangeUpgradeItem = new RangeUpgradeItem();
+        GameRegistry.registerItem(rangeUpgradeItem, "rangeUpgradeItem");
 
-		scattershotUpgradeItem = new ScattershotUpgradeItem();
-		GameRegistry.registerItem(scattershotUpgradeItem,
-				"scattershotUpgradeItem");
+        scattershotUpgradeItem = new ScattershotUpgradeItem();
+        GameRegistry.registerItem(scattershotUpgradeItem,
+                "scattershotUpgradeItem");
 
-		redstoneReactorAddon = new RedstoneReactorAddonItem();
-		GameRegistry.registerItem(redstoneReactorAddon, "redstoneReactorAddon");
+        redstoneReactorAddon = new RedstoneReactorAddonItem();
+        GameRegistry.registerItem(redstoneReactorAddon, "redstoneReactorAddon");
 
-		damageAmpAddon = new DamageAmpAddonItem();
-		GameRegistry.registerItem(damageAmpAddon, "damageAmpAddon");
+        damageAmpAddon = new DamageAmpAddonItem();
+        GameRegistry.registerItem(damageAmpAddon, "damageAmpAddon");
 
-		solarPanelAddon = new SolarPanelAddonItem();
-		GameRegistry.registerItem(solarPanelAddon, "solarPanelAddon");
-		
-		// Thaumcraft Only
-				if (ModCompatibility.ThaumcraftLoaded) {
-					potentiaAddon = new PotentiaAddonItem();
-					GameRegistry.registerItem(potentiaAddon, "potentiaAddon");
-				}
+        solarPanelAddon = new SolarPanelAddonItem();
+        GameRegistry.registerItem(solarPanelAddon, "solarPanelAddon");
 
-				//Computer mods Only
-				if (ModCompatibility.ComputercraftLoaded
-						|| ModCompatibility.OpenComputersLoaded) {
-					serialPortAddon = new SerialPortAddonItem();
-					GameRegistry.registerItem(serialPortAddon, "serialPortAddon");
-				}
+        recyclerAddon = new RecyclerAddonItem();
+        GameRegistry.registerItem(recyclerAddon, "recyclerAddon");
 
-		bulletCraftable = new BulletAmmoItem();
-		GameRegistry.registerItem(bulletCraftable, "bulletCraftable");
+        // Thaumcraft Only
+        if (ModCompatibility.ThaumcraftLoaded) {
+            potentiaAddon = new PotentiaAddonItem();
+            GameRegistry.registerItem(potentiaAddon, "potentiaAddon");
+        }
 
-		blazingClayCraftable = new BlazingClayAmmoItem();
-		GameRegistry.registerItem(blazingClayCraftable, "blazingClayCraftable");
+        //Computer mods Only
+        if (ModCompatibility.ComputercraftLoaded
+                || ModCompatibility.OpenComputersLoaded) {
+            serialPortAddon = new SerialPortAddonItem();
+            GameRegistry.registerItem(serialPortAddon, "serialPortAddon");
+        }
 
-		grenadeCraftable = new GrenadeAmmoItem();
-		GameRegistry.registerItem(grenadeCraftable, "grenadeCraftable");
+        bulletCraftable = new BulletAmmoItem();
+        GameRegistry.registerItem(bulletCraftable, "bulletCraftable");
 
-		rocketCraftable = new RocketAmmoItem();
-		GameRegistry.registerItem(rocketCraftable, "rocketCraftable");
+        blazingClayCraftable = new BlazingClayAmmoItem();
+        GameRegistry.registerItem(blazingClayCraftable, "blazingClayCraftable");
 
-		ferroSlug = new FerroSlugItem();
-		GameRegistry.registerItem(ferroSlug, "ferroSlug");
+        grenadeCraftable = new GrenadeAmmoItem();
+        GameRegistry.registerItem(grenadeCraftable, "grenadeCraftable");
 
-		sensorTierOneItem = new SensorTierOneItem();
-		GameRegistry.registerItem(sensorTierOneItem, "sensorTierOneItem");
+        rocketCraftable = new RocketAmmoItem();
+        GameRegistry.registerItem(rocketCraftable, "rocketCraftable");
 
-		sensorTierTwoItem = new SensorTierTwoItem();
-		GameRegistry.registerItem(sensorTierTwoItem, "sensorTierTwoItem");
+        ferroSlug = new FerroSlugItem();
+        GameRegistry.registerItem(ferroSlug, "ferroSlug");
 
-		sensorTierThreeItem = new SensorTierThreeItem();
-		GameRegistry.registerItem(sensorTierThreeItem, "sensorTierThreeItem");
+        sensorTierOneItem = new SensorTierOneItem();
+        GameRegistry.registerItem(sensorTierOneItem, "sensorTierOneItem");
 
-		sensorTierFourItem = new SensorTierFourItem();
-		GameRegistry.registerItem(sensorTierFourItem, "sensorTierFourItem");
+        sensorTierTwoItem = new SensorTierTwoItem();
+        GameRegistry.registerItem(sensorTierTwoItem, "sensorTierTwoItem");
 
-		sensorTierFiveItem = new SensorTierFiveItem();
-		GameRegistry.registerItem(sensorTierFiveItem, "sensorTierFiveItem");
+        sensorTierThreeItem = new SensorTierThreeItem();
+        GameRegistry.registerItem(sensorTierThreeItem, "sensorTierThreeItem");
 
-		barrelTierOneItem = new BarrelTierOneItem();
-		GameRegistry.registerItem(barrelTierOneItem, "barrelTierOne");
+        sensorTierFourItem = new SensorTierFourItem();
+        GameRegistry.registerItem(sensorTierFourItem, "sensorTierFourItem");
 
-		barrelTierTwoItem = new BarrelTierTwoItem();
-		GameRegistry.registerItem(barrelTierTwoItem, "barrelTierTwo");
+        sensorTierFiveItem = new SensorTierFiveItem();
+        GameRegistry.registerItem(sensorTierFiveItem, "sensorTierFiveItem");
 
-		barrelTierThreeItem = new BarrelTierThreeItem();
-		GameRegistry.registerItem(barrelTierThreeItem, "barrelTierThree");
+        barrelTierOneItem = new BarrelTierOneItem();
+        GameRegistry.registerItem(barrelTierOneItem, "barrelTierOne");
 
-		barrelTierFourItem = new BarrelTierFourItem();
-		GameRegistry.registerItem(barrelTierFourItem, "barrelTierFour");
+        barrelTierTwoItem = new BarrelTierTwoItem();
+        GameRegistry.registerItem(barrelTierTwoItem, "barrelTierTwo");
 
-		barrelTierFiveItem = new BarrelTierFiveItem();
-		GameRegistry.registerItem(barrelTierFiveItem, "barrelTierFive");
+        barrelTierThreeItem = new BarrelTierThreeItem();
+        GameRegistry.registerItem(barrelTierThreeItem, "barrelTierThree");
 
-		chamberTierOneItem = new ChamberTierOneItem();
-		GameRegistry.registerItem(chamberTierOneItem, "chamberTierOne");
+        barrelTierFourItem = new BarrelTierFourItem();
+        GameRegistry.registerItem(barrelTierFourItem, "barrelTierFour");
 
-		chamberTierTwoItem = new ChamberTierTwoItem();
-		GameRegistry.registerItem(chamberTierTwoItem, "chamberTierTwo");
+        barrelTierFiveItem = new BarrelTierFiveItem();
+        GameRegistry.registerItem(barrelTierFiveItem, "barrelTierFive");
 
-		chamberTierThreeItem = new ChamberTierThreeItem();
-		GameRegistry.registerItem(chamberTierThreeItem, "chamberTierThree");
+        chamberTierOneItem = new ChamberTierOneItem();
+        GameRegistry.registerItem(chamberTierOneItem, "chamberTierOne");
 
-		chamberTierFourItem = new ChamberTierFourItem();
-		GameRegistry.registerItem(chamberTierFourItem, "chamberTierFour");
+        chamberTierTwoItem = new ChamberTierTwoItem();
+        GameRegistry.registerItem(chamberTierTwoItem, "chamberTierTwo");
 
-		chamberTierFiveItem = new ChamberTierFiveItem();
-		GameRegistry.registerItem(chamberTierFiveItem, "chamberTierFive");
+        chamberTierThreeItem = new ChamberTierThreeItem();
+        GameRegistry.registerItem(chamberTierThreeItem, "chamberTierThree");
 
-		ioBus = new IOBusItem();
-		GameRegistry.registerItem(ioBus, "ioBus");
-	}
+        chamberTierFourItem = new ChamberTierFourItem();
+        GameRegistry.registerItem(chamberTierFourItem, "chamberTierFour");
+
+        chamberTierFiveItem = new ChamberTierFiveItem();
+        GameRegistry.registerItem(chamberTierFiveItem, "chamberTierFive");
+
+        ioBus = new IOBusItem();
+        GameRegistry.registerItem(ioBus, "ioBus");
+    }
 }

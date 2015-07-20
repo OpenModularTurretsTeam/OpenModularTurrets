@@ -50,6 +50,7 @@ public class Names {
         public static final String unlocalisedSolarPanelAddon = "addonSolar";
         public static final String unlocalisedPotentiaAddon = "addonPotentia";
         public static final String unlocalisedSerialPortAddon = "addonSerialPort";
+        public static final String unlocalisedRecyclerAddon = "addonRecycler";
         
         public static final String unlocalisedSensorTierOne = "sensorOne";
         public static final String unlocalisedSensorTierTwo = "sensorTwo";

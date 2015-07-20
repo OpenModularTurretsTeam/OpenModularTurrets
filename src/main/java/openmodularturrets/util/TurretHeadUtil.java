@@ -27,6 +27,7 @@ import openmodularturrets.tileentity.turrets.TurretHead;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 public class TurretHeadUtil {
@@ -367,8 +368,25 @@ public class TurretHeadUtil {
             ItemStack ammoCheck = base.getStackInSlot(i);
             if (ammoCheck != null && ammoCheck.stackSize > 0
                     && ammoCheck.getItem() != null) {
-                base.decrStackSize(i, 1);
-                return new ItemStack(ammoCheck.getItem());
+                if (hasRecyclerAddon(base)) {
+                    int chance = new Random().nextInt(99);
+
+                    //For negating
+                    if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
+                        return new ItemStack(ammoCheck.getItem());
+                        //For adding
+                    } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
+                        base.decrStackSize(i, -1);
+                        return new ItemStack(ammoCheck.getItem());
+                    } else {
+                        base.decrStackSize(i, 1);
+                        return new ItemStack(ammoCheck.getItem());
+                    }
+
+                } else {
+                    base.decrStackSize(i, 1);
+                    return new ItemStack(ammoCheck.getItem());
+                }
             }
         }
 
@@ -396,8 +414,27 @@ public class TurretHeadUtil {
 
             if (ammo_stack != null && ammo_stack.stackSize > 0
                     && ammo_stack.getItem() == item) {
-                base.decrStackSize(i, 1);
-                return new ItemStack(ammo_stack.getItem());
+
+                if (hasRecyclerAddon(base)) {
+                    int chance = new Random().nextInt(99);
+
+                    //For negating
+                    if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
+                        return new ItemStack(ammo_stack.getItem());
+                        //For adding
+                    } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
+                        base.decrStackSize(i, -1);
+                        return new ItemStack(ammo_stack.getItem());
+                    } else {
+                        base.decrStackSize(i, 1);
+                        return new ItemStack(ammo_stack.getItem());
+                    }
+
+                } else {
+                    base.decrStackSize(i, 1);
+                    return new ItemStack(ammo_stack.getItem());
+                }
+
             }
         }
 
@@ -623,6 +660,21 @@ public class TurretHeadUtil {
 
         if (base.getStackInSlot(10) != null && !found) {
             found = base.getStackInSlot(10).getItem() instanceof SerialPortAddonItem;
+        }
+        return found;
+    }
+
+    public static boolean hasRecyclerAddon(TurretBase base) {
+        boolean found = false;
+        if (base instanceof TurretBaseTierOneTileEntity) {
+            return false;
+        }
+        if (base.getStackInSlot(9) != null) {
+            found = base.getStackInSlot(9).getItem() instanceof RecyclerAddonItem;
+        }
+
+        if (base.getStackInSlot(10) != null && !found) {
+            found = base.getStackInSlot(10).getItem() instanceof RecyclerAddonItem;
         }
         return found;
     }
