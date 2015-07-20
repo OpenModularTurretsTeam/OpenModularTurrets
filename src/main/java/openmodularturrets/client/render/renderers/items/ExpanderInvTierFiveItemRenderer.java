@@ -33,7 +33,7 @@ public class ExpanderInvTierFiveItemRenderer implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         GL11.glPushMatrix();
         GL11.glTranslated(-0.5, -0.5, -0.5);
-        this.expanderInvTierFiveRenderer.renderTileEntityAt(this.expanderInvTierFiveTileEntity, 0.0D, 0.0D, 0.0D,
+        this.expanderInvTierFiveRenderer.renderTileEntityAt(this.expanderInvTierFiveTileEntity, 0.1D, 0.1D, -0.2D,
                 0.0F);
         GL11.glPopMatrix();
     }
