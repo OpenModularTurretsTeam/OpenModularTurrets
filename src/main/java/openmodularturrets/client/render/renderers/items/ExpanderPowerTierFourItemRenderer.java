@@ -33,7 +33,7 @@ public class ExpanderPowerTierFourItemRenderer implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         GL11.glPushMatrix();
         GL11.glTranslated(-0.5, -0.5, -0.5);
-        this.expanderPowerTierFourRenderer.renderTileEntityAt(this.expanderPowerTierFourTileEntity, 0.0D, 0.0D, 0.0D,
+        this.expanderPowerTierFourRenderer.renderTileEntityAt(this.expanderPowerTierFourTileEntity, 0.1D, 0.1D, -0.2D,
                 0.0F);
         GL11.glPopMatrix();
     }

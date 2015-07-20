@@ -35,6 +35,18 @@ public class Names {
         public static final String unlocalisedExpanderInvTierThree = "expanderInvTierThree";
         public static final String unlocalisedExpanderInvTierFour = "expanderInvTierFour";
         public static final String unlocalisedExpanderInvTierFive = "expanderInvTierFive";
+
+        public static final String unlocalisedHardWallTierOne = "hardWallTierOne";
+        public static final String unlocalisedHardWallTierTwo = "hardWallTierTwo";
+        public static final String unlocalisedHardWallTierThree = "hardWallTierThree";
+        public static final String unlocalisedHardWallTierFour = "hardWallTierFour";
+        public static final String unlocalisedHardWallTierFive = "hardWallTierFive";
+
+        public static final String unlocalisedFenceTierOne = "fenceTierOne";
+        public static final String unlocalisedFenceTierTwo = "fenceTierTwo";
+        public static final String unlocalisedFenceTierThree = "fenceTierThree";
+        public static final String unlocalisedFenceTierFour = "fenceTierFour";
+        public static final String unlocalisedFenceTierFive = "fenceTierFive";
     }
 
     public static class Items {
