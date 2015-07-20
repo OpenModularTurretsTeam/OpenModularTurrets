@@ -19,6 +19,7 @@ import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.addons.*;
 import openmodularturrets.items.upgrades.*;
+import openmodularturrets.tileentity.expander.AbstractInvExpander;
 import openmodularturrets.tileentity.expander.AbstractPowerExpander;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
@@ -278,7 +279,7 @@ public class TurretHeadUtil {
         return false;
     }
 
-    public static int getPowerExtenderTotalExtraCapacity(World world, int x, int y, int z) {
+    public static int getPowerExpanderTotalExtraCapacity(World world, int x, int y, int z) {
         int totalExtraCap = 0;
         if (world.getTileEntity(x + 1, y, z) instanceof AbstractPowerExpander) {
             totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue((AbstractPowerExpander) world.getTileEntity(x + 1, y, z));
@@ -300,6 +301,255 @@ public class TurretHeadUtil {
         }
 
         return totalExtraCap;
+    }
+
+    public static ItemStack getSpecificItemFromInvExpanders(World world, ItemStack itemStack, TurretBase base) {
+        int x = base.xCoord;
+        int y = base.yCoord;
+        int z = base.zCoord;
+
+        if (world.getTileEntity(x + 1, y, z) instanceof AbstractInvExpander) {
+            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x + 1, y, z);
+            for (int i = 0; i < exp.getSizeInventory(); i++) {
+                ItemStack ammoCheck = exp.getStackInSlot(i);
+                if (ammoCheck != null && ammoCheck.getItem() == itemStack.getItem()) {
+                    if (hasRecyclerAddon(base)) {
+                        int chance = new Random().nextInt(99);
+
+                        //For negating
+                        if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
+                            return new ItemStack(ammoCheck.getItem());
+                            //For adding
+                        } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
+                            exp.decrStackSize(i, -1);
+                            return new ItemStack(ammoCheck.getItem());
+                        } else {
+                            exp.decrStackSize(i, 1);
+                            return new ItemStack(ammoCheck.getItem());
+                        }
+
+                    } else {
+                        exp.decrStackSize(i, 1);
+                        return new ItemStack(ammoCheck.getItem());
+                    }
+                }
+            }
+        }
+
+
+        if (world.getTileEntity(x - 1, y, z) instanceof AbstractInvExpander) {
+            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x - 1, y, z);
+            for (int i = 0; i < exp.getSizeInventory(); i++) {
+                ItemStack ammoCheck = exp.getStackInSlot(i);
+                if (ammoCheck != null && ammoCheck.getItem() == itemStack.getItem()) {
+                    if (hasRecyclerAddon(base)) {
+                        int chance = new Random().nextInt(99);
+
+                        //For negating
+                        if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
+                            return new ItemStack(ammoCheck.getItem());
+                            //For adding
+                        } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
+                            exp.decrStackSize(i, -1);
+                            return new ItemStack(ammoCheck.getItem());
+                        } else {
+                            exp.decrStackSize(i, 1);
+                            return new ItemStack(ammoCheck.getItem());
+                        }
+
+                    } else {
+                        exp.decrStackSize(i, 1);
+                        return new ItemStack(ammoCheck.getItem());
+                    }
+                }
+            }
+        }
+
+        if (world.getTileEntity(x, y + 1, z) instanceof AbstractInvExpander) {
+            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y + 1, z);
+            for (int i = 0; i < exp.getSizeInventory(); i++) {
+                ItemStack ammoCheck = exp.getStackInSlot(i);
+                if (ammoCheck != null && ammoCheck.getItem() == itemStack.getItem()) {
+                    if (hasRecyclerAddon(base)) {
+                        int chance = new Random().nextInt(99);
+
+                        //For negating
+                        if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
+                            return new ItemStack(ammoCheck.getItem());
+                            //For adding
+                        } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
+                            exp.decrStackSize(i, -1);
+                            return new ItemStack(ammoCheck.getItem());
+                        } else {
+                            exp.decrStackSize(i, 1);
+                            return new ItemStack(ammoCheck.getItem());
+                        }
+
+                    } else {
+                        exp.decrStackSize(i, 1);
+                        return new ItemStack(ammoCheck.getItem());
+                    }
+                }
+            }
+        }
+
+        if (world.getTileEntity(x, y - 1, z) instanceof AbstractInvExpander) {
+            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y - 1, z);
+            for (int i = 0; i < exp.getSizeInventory(); i++) {
+                ItemStack ammoCheck = exp.getStackInSlot(i);
+                if (ammoCheck != null && ammoCheck.getItem() == itemStack.getItem()) {
+                    if (hasRecyclerAddon(base)) {
+                        int chance = new Random().nextInt(99);
+
+                        //For negating
+                        if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
+                            return new ItemStack(ammoCheck.getItem());
+                            //For adding
+                        } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
+                            exp.decrStackSize(i, -1);
+                            return new ItemStack(ammoCheck.getItem());
+                        } else {
+                            exp.decrStackSize(i, 1);
+                            return new ItemStack(ammoCheck.getItem());
+                        }
+
+                    } else {
+                        exp.decrStackSize(i, 1);
+                        return new ItemStack(ammoCheck.getItem());
+                    }
+                }
+            }
+        }
+
+        if (world.getTileEntity(x, y, z + 1) instanceof AbstractInvExpander) {
+            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y, z + 1);
+            for (int i = 0; i < exp.getSizeInventory(); i++) {
+                ItemStack ammoCheck = exp.getStackInSlot(i);
+                if (ammoCheck != null && ammoCheck.getItem() == itemStack.getItem()) {
+                    if (hasRecyclerAddon(base)) {
+                        int chance = new Random().nextInt(99);
+
+                        //For negating
+                        if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
+                            return new ItemStack(ammoCheck.getItem());
+                            //For adding
+                        } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
+                            exp.decrStackSize(i, -1);
+                            return new ItemStack(ammoCheck.getItem());
+                        } else {
+                            exp.decrStackSize(i, 1);
+                            return new ItemStack(ammoCheck.getItem());
+                        }
+
+                    } else {
+                        exp.decrStackSize(i, 1);
+                        return new ItemStack(ammoCheck.getItem());
+                    }
+                }
+            }
+        }
+
+        if (world.getTileEntity(x, y, z - 1) instanceof AbstractInvExpander) {
+            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y, z - 1);
+            for (int i = 0; i < exp.getSizeInventory(); i++) {
+                ItemStack ammoCheck = exp.getStackInSlot(i);
+                if (ammoCheck != null && ammoCheck.getItem() == itemStack.getItem()) {
+                    if (hasRecyclerAddon(base)) {
+                        int chance = new Random().nextInt(99);
+
+                        //For negating
+                        if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
+                            return new ItemStack(ammoCheck.getItem());
+                            //For adding
+                        } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
+                            exp.decrStackSize(i, -1);
+                            return new ItemStack(ammoCheck.getItem());
+                        } else {
+                            exp.decrStackSize(i, 1);
+                            return new ItemStack(ammoCheck.getItem());
+                        }
+
+                    } else {
+                        exp.decrStackSize(i, 1);
+                        return new ItemStack(ammoCheck.getItem());
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static ItemStack getAnyItemFromInvExpanders(World world, TurretBase base) {
+        int x = base.xCoord;
+        int y = base.yCoord;
+        int z = base.zCoord;
+        if (world.getTileEntity(x + 1, y, z) instanceof AbstractInvExpander) {
+            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x + 1, y, z);
+            for (int i = 0; i < exp.getSizeInventory(); i++) {
+                ItemStack itemCheck = exp.getStackInSlot(i);
+                if (itemCheck != null) {
+                    exp.decrStackSize(i, 1);
+                    return new ItemStack(itemCheck.getItem());
+                }
+            }
+        }
+
+
+        if (world.getTileEntity(x - 1, y, z) instanceof AbstractInvExpander) {
+            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x - 1, y, z);
+            for (int i = 0; i < exp.getSizeInventory(); i++) {
+                ItemStack itemCheck = exp.getStackInSlot(i);
+                if (itemCheck != null) {
+                    exp.decrStackSize(i, 1);
+                    return new ItemStack(itemCheck.getItem());
+                }
+            }
+        }
+
+        if (world.getTileEntity(x, y + 1, z) instanceof AbstractInvExpander) {
+            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y + 1, z);
+            for (int i = 0; i < exp.getSizeInventory(); i++) {
+                ItemStack itemCheck = exp.getStackInSlot(i);
+                if (itemCheck != null) {
+                    exp.decrStackSize(i, 1);
+                    return new ItemStack(itemCheck.getItem());
+                }
+            }
+        }
+
+        if (world.getTileEntity(x, y - 1, z) instanceof AbstractInvExpander) {
+            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y - 1, z);
+            for (int i = 0; i < exp.getSizeInventory(); i++) {
+                ItemStack itemCheck = exp.getStackInSlot(i);
+                if (itemCheck != null) {
+                    exp.decrStackSize(i, 1);
+                    return new ItemStack(itemCheck.getItem());
+                }
+            }
+        }
+
+        if (world.getTileEntity(x, y, z + 1) instanceof AbstractInvExpander) {
+            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y, z + 1);
+            for (int i = 0; i < exp.getSizeInventory(); i++) {
+                ItemStack itemCheck = exp.getStackInSlot(i);
+                if (itemCheck != null) {
+                    exp.decrStackSize(i, 1);
+                    return new ItemStack(itemCheck.getItem());
+                }
+            }
+        }
+
+        if (world.getTileEntity(x, y, z - 1) instanceof AbstractInvExpander) {
+            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y, z - 1);
+            for (int i = 0; i < exp.getSizeInventory(); i++) {
+                ItemStack itemCheck = exp.getStackInSlot(i);
+                if (itemCheck != null) {
+                    exp.decrStackSize(i, 1);
+                    return new ItemStack(itemCheck.getItem());
+                }
+            }
+        }
+        return null;
     }
 
     private static int getPowerExtenderCapacityValue(AbstractPowerExpander expander) {
@@ -368,28 +618,10 @@ public class TurretHeadUtil {
             ItemStack ammoCheck = base.getStackInSlot(i);
             if (ammoCheck != null && ammoCheck.stackSize > 0
                     && ammoCheck.getItem() != null) {
-                if (hasRecyclerAddon(base)) {
-                    int chance = new Random().nextInt(99);
-
-                    //For negating
-                    if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
-                        return new ItemStack(ammoCheck.getItem());
-                        //For adding
-                    } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
-                        base.decrStackSize(i, -1);
-                        return new ItemStack(ammoCheck.getItem());
-                    } else {
-                        base.decrStackSize(i, 1);
-                        return new ItemStack(ammoCheck.getItem());
-                    }
-
-                } else {
-                    base.decrStackSize(i, 1);
-                    return new ItemStack(ammoCheck.getItem());
-                }
+                base.decrStackSize(i, 1);
+                return new ItemStack(ammoCheck.getItem());
             }
         }
-
         return null;
     }
 
@@ -731,6 +963,10 @@ public class TurretHeadUtil {
             ItemStack redstoneBlock = useSpecificItemStackBlockFromBase(base,
                     new ItemStack(Blocks.redstone_block));
 
+            if (redstoneBlock == null) {
+                redstoneBlock = getSpecificItemFromInvExpanders(base.getWorldObj(), new ItemStack(Blocks.redstone_block), base);
+            }
+
             if (redstoneBlock != null) {
                 base.receiveEnergy(ForgeDirection.UNKNOWN,
                         ConfigHandler.getRedstoneReactorAddonGen() * 9, false);
@@ -739,6 +975,10 @@ public class TurretHeadUtil {
 
             ItemStack redstone = useSpecificItemStackItemFromBase(base,
                     Items.redstone);
+
+            if (redstone == null) {
+                redstone = getSpecificItemFromInvExpanders(base.getWorldObj(), new ItemStack(Items.redstone), base);
+            }
 
             if (redstone != null) {
                 base.receiveEnergy(ForgeDirection.UNKNOWN,

@@ -11,11 +11,11 @@ import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.expander.AbstractPowerExpander;
 import org.lwjgl.opengl.GL11;
 
-public class ExpanderTierThreeRenderer extends TileEntitySpecialRenderer {
+public class ExpanderPowerTierThreeRenderer extends TileEntitySpecialRenderer {
 
     private ModelExpander model;
 
-    public ExpanderTierThreeRenderer() {
+    public ExpanderPowerTierThreeRenderer() {
         model = new ModelExpander();
     }
 

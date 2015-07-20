@@ -8,14 +8,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import openmodularturrets.client.render.models.ModelExpander;
 import openmodularturrets.reference.ModInfo;
+import openmodularturrets.tileentity.expander.AbstractInvExpander;
 import openmodularturrets.tileentity.expander.AbstractPowerExpander;
 import org.lwjgl.opengl.GL11;
 
-public class ExpanderTierFiveRenderer extends TileEntitySpecialRenderer {
+public class ExpanderInvTierFourRenderer extends TileEntitySpecialRenderer {
 
     private ModelExpander model;
 
-    public ExpanderTierFiveRenderer() {
+    public ExpanderInvTierFourRenderer() {
         model = new ModelExpander();
     }
 
@@ -23,8 +24,8 @@ public class ExpanderTierFiveRenderer extends TileEntitySpecialRenderer {
     @SideOnly(Side.CLIENT)
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
 
-        AbstractPowerExpander expander = (AbstractPowerExpander) te;
-        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/expanderPowerTierFive.png"));
+        AbstractInvExpander expander = (AbstractInvExpander) te;
+        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/expanderInvTierFour.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         int rotation = 0;

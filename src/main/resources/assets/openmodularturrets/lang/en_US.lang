@@ -54,6 +54,11 @@ tile.expanderPowerTierTwo.name=Base Power Expander (Tier 2)
 tile.expanderPowerTierThree.name=Base Power Expander (Tier 3)
 tile.expanderPowerTierFour.name=Base Power Expander (Tier 4)
 tile.expanderPowerTierFive.name=Base Power Expander (Tier 5)
+tile.expanderInvTierOne.name=Base Inventory Expander (Tier 1)
+tile.expanderInvTierTwo.name=Base Inventory Expander (Tier 2)
+tile.expanderInvTierThree.name=Base Inventory Expander (Tier 3)
+tile.expanderInvTierFour.name=Base Inventory Expander (Tier 4)
+tile.expanderInvTierFive.name=Base Inventory Expander (Tier 5)
 
 #for IGWMod
 tile.turretBase.name=Turret Base
@@ -88,11 +93,21 @@ tooltip.expander.power1=Turret Base RF Expander
 tooltip.expander.power2=Adds
 tooltip.expander.power3=RF capacity to a turret base.
 
+tooltip.expander.inv1=Turret Base Inventory Expander
+tooltip.expander.inv2=Adds 9 slots of inventory space that the turret base can use.
+tooltip.expander.inv3=Each slot can only accept a max stack size of
+
 flavour.expander.power.1=Now with flavour!
 flavour.expander.power.2=Kinetic expansion.
 flavour.expander.power.3=There, their and they're.
 flavour.expander.power.4=Can be used as a sinking device.
 flavour.expander.power.5=Asymmetrical warfare.
+
+flavour.expander.inv.1=A little goes a long way.
+flavour.expander.inv.2=Supplies!
+flavour.expander.inv.3=Hair, heir and hare.
+flavour.expander.inv.4=Can be used as a floatation device.
+flavour.expander.inv.5=Very space, much inventory.
 
 flavour.base.0=There are trees, everywhere...
 flavour.base.1=I'll draw your blood.

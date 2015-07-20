@@ -77,32 +77,66 @@ public class ItemRenderers {
 		MinecraftForgeClient.registerItemRenderer(Item
 						.getItemFromBlock(Blocks.expanderPowerTierOne),
 				new ExpanderPowerTierOneItemRenderer(
-						TileEntityRenderers.expanderTierOneRenderer,
+						TileEntityRenderers.expanderPowerTierOneRenderer,
 						new ExpanderPowerTierOneTileEntity()));
 
 		MinecraftForgeClient.registerItemRenderer(Item
 						.getItemFromBlock(Blocks.expanderPowerTierTwo),
 				new ExpanderPowerTierTwoItemRenderer(
-						TileEntityRenderers.expanderTierTwoRenderer,
+						TileEntityRenderers.expanderPowerTierTwoRenderer,
 						new ExpanderPowerTierTwoTileEntity()));
 
 		MinecraftForgeClient.registerItemRenderer(Item
 						.getItemFromBlock(Blocks.expanderPowerTierThree),
 				new ExpanderPowerTierThreeItemRenderer(
-						TileEntityRenderers.expanderTierThreeRenderer,
+						TileEntityRenderers.expanderPowerTierThreeRenderer,
 						new ExpanderPowerTierThreeTileEntity()));
 
 		MinecraftForgeClient.registerItemRenderer(Item
 						.getItemFromBlock(Blocks.expanderPowerTierFour),
 				new ExpanderPowerTierFourItemRenderer(
-						TileEntityRenderers.expanderTierFourRenderer,
+						TileEntityRenderers.expanderPowerTierFourRenderer,
 						new ExpanderPowerTierFourTileEntity()));
 
 		MinecraftForgeClient.registerItemRenderer(Item
 						.getItemFromBlock(Blocks.expanderPowerTierFive),
 				new ExpanderPowerTierFiveItemRenderer(
-						TileEntityRenderers.expanderTierFiveRenderer,
+						TileEntityRenderers.expanderPowerTierFiveRenderer,
 						new ExpanderPowerTierFiveTileEntity()));
+
+
+
+
+
+		MinecraftForgeClient.registerItemRenderer(Item
+						.getItemFromBlock(Blocks.expanderInvTierOne),
+				new ExpanderInvTierOneItemRenderer(
+						TileEntityRenderers.expanderInvTierOneRenderer,
+						new ExpanderInvTierOneTileEntity()));
+
+		MinecraftForgeClient.registerItemRenderer(Item
+						.getItemFromBlock(Blocks.expanderInvTierTwo),
+				new ExpanderInvTierTwoItemRenderer(
+						TileEntityRenderers.expanderInvTierTwoRenderer,
+						new ExpanderInvTierTwoTileEntity()));
+
+		MinecraftForgeClient.registerItemRenderer(Item
+						.getItemFromBlock(Blocks.expanderInvTierThree),
+				new ExpanderInvTierThreeItemRenderer(
+						TileEntityRenderers.expanderInvTierThreeRenderer,
+						new ExpanderInvTierThreeTileEntity()));
+
+		MinecraftForgeClient.registerItemRenderer(Item
+						.getItemFromBlock(Blocks.expanderInvTierFour),
+				new ExpanderInvTierFourItemRenderer(
+						TileEntityRenderers.expanderInvTierFourRenderer,
+						new ExpanderInvTierFourTileEntity()));
+
+		MinecraftForgeClient.registerItemRenderer(Item
+						.getItemFromBlock(Blocks.expanderInvTierFive),
+				new ExpanderInvTierFiveItemRenderer(
+						TileEntityRenderers.expanderInvTierFiveRenderer,
+						new ExpanderInvTierFiveTileEntity()));
 
 	}
 }

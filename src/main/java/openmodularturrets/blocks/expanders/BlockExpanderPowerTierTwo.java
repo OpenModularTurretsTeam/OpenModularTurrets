@@ -16,10 +16,10 @@ public class BlockExpanderPowerTierTwo extends BlockContainer {
     public BlockExpanderPowerTierTwo() {
         super(Material.rock);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
-        this.setResistance(5.0F);
+        this.setResistance(3.0F);
         this.setStepSound(Block.soundTypeStone);
         this.setBlockName(Names.Blocks.unlocalisedExpanderPowerTierTwo);
-        this.setBlockBounds(0.2F, 0.2F, 0.2F, 0.8F, 0.8F, 0.8F);
+        this.setBlockBounds(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
     }
 
     @Override

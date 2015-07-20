@@ -29,6 +29,12 @@ public class Names {
         public static final String unlocalisedExpanderPowerTierThree = "expanderPowerTierThree";
         public static final String unlocalisedExpanderPowerTierFour = "expanderPowerTierFour";
         public static final String unlocalisedExpanderPowerTierFive = "expanderPowerTierFive";
+
+        public static final String unlocalisedExpanderInvTierOne = "expanderInvTierOne";
+        public static final String unlocalisedExpanderInvTierTwo = "expanderInvTierTwo";
+        public static final String unlocalisedExpanderInvTierThree = "expanderInvTierThree";
+        public static final String unlocalisedExpanderInvTierFour = "expanderInvTierFour";
+        public static final String unlocalisedExpanderInvTierFive = "expanderInvTierFive";
     }
 
     public static class Items {

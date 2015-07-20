@@ -31,5 +31,10 @@ public class TileEntityHandler {
         GameRegistry.registerTileEntity(ExpanderPowerTierThreeTileEntity.class, "expanderPowerTierThree");
         GameRegistry.registerTileEntity(ExpanderPowerTierFourTileEntity.class, "expanderPowerTierFour");
         GameRegistry.registerTileEntity(ExpanderPowerTierFiveTileEntity.class, "expanderPowerTierFive");
+        GameRegistry.registerTileEntity(ExpanderInvTierOneTileEntity.class, "expanderInvTierOne");
+        GameRegistry.registerTileEntity(ExpanderInvTierTwoTileEntity.class, "expanderInvTierTwo");
+        GameRegistry.registerTileEntity(ExpanderInvTierThreeTileEntity.class, "expanderInvTierThree");
+        GameRegistry.registerTileEntity(ExpanderInvTierFourTileEntity.class, "expanderInvTierFour");
+        GameRegistry.registerTileEntity(ExpanderInvTierFiveTileEntity.class, "expanderInvTierFive");
     }
 }
