@@ -23,8 +23,6 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import openmodularturrets.blocks.turretbases.BlockAbstractTurretBase;
-import openmodularturrets.blocks.turretbases.BlockTurretBaseTierFive;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.util.TurretHeadUtil;
@@ -90,15 +88,15 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         int tier = getBaseTier();
         switch (tier) {
             case 1:
-                return ConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExtenderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             case 2:
-                return ConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil.getPowerExtenderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             case 3:
-                return ConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExtenderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             case 4:
-                return ConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExtenderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             case 5:
-                return ConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil.getPowerExtenderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
         }
         return 0;
     }

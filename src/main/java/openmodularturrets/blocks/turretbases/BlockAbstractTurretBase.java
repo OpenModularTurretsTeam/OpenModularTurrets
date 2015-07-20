@@ -52,6 +52,7 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
             if (player.getCurrentEquippedItem() != null
                     && player.getCurrentEquippedItem().getItem() instanceof ItemBlock
                     && Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()).isNormalCube()
+                    && Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()).isOpaqueCube()
                     && !(Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()) instanceof BlockAbstractTurretBase)) {
                 TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
                 if (base != null) {

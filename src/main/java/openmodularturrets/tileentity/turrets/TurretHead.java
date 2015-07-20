@@ -318,9 +318,15 @@ public abstract class TurretHead extends TileEntity {
                         ammo = TurretHeadUtil
                                 .useSpecificItemStackItemFromBase(base,
                                         this.getAmmo());
+                        if (ammo == null) {
+                            ammo = TurretHeadUtil.getSpecificItemFromInvExpanders(worldObj, new ItemStack(this.getAmmo()), base);
+                        }
                     }
                 } else {
                     ammo = TurretHeadUtil.useAnyItemStackFromBase(base);
+                    if (ammo == null) {
+                        ammo = TurretHeadUtil.getAnyItemFromInvExpanders(worldObj, base);
+                    }
                 }
 
                 // Is there ammo?

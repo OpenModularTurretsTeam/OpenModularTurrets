@@ -31,7 +31,7 @@ public class BlockExpanderPowerTierOne extends BlockContainer {
         this.setResistance(3.0F);
         this.setStepSound(Block.soundTypeStone);
         this.setBlockName(Names.Blocks.unlocalisedExpanderPowerTierOne);
-        this.setBlockBounds(0.2F, 0.2F, 0.2F, 0.8F, 0.8F, 0.8F);
+        this.setBlockBounds(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
     }
 
     @Override
