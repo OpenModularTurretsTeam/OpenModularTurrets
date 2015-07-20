@@ -54,8 +54,6 @@ public class ModifyPermissionsMessage implements IMessage, IMessageHandler<Modif
 		TurretBase turret = (TurretBase) world.getTileEntity(message.getX(),
 				message.getY(), message.getZ());
 
-		System.out.println(turret);
-
 		if (message.getPerm().equals("gui")) {
 			turret.getTrustedPlayer(message.getPlayer()).setCanOpenGUI(message.canDo);
 		}

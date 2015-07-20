@@ -24,6 +24,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.blocks.turretbases.BlockAbstractTurretBase;
+import openmodularturrets.blocks.turretbases.BlockTurretBaseTierFive;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.util.TurretHeadUtil;
@@ -70,6 +71,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     protected float amountOfPotentia = 0F;
     protected float maxAmountOfPotentia = ConfigHandler
             .getPotentiaAddonCapacity();
+    public ItemStack camoStack;
 
     public TurretBase(int MaxEnergyStorage, int MaxIO) {
         super();
@@ -231,18 +233,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         par1.setBoolean("redstone", redstone);
         par1.setBoolean("computerAccessable", computerAccessable);
 
-        try {
-            ItemStack camoStack = ((BlockAbstractTurretBase) worldObj.getBlock(xCoord, yCoord, zCoord)).camoStack;
-            if (camoStack != null) {
-                NBTTagCompound camo = new NBTTagCompound();
-                camoStack.writeToNBT(camo);
-                par1.setTag("camoStack", camo);
-            }
-        } catch (Exception e) {
-            Logger.getGlobal().warning("Could not save turret base camo itemstack to NBT, please report this to me:" + e.getMessage());
-        }
-
-
         NBTTagList itemList = new NBTTagList();
 
         for (int i = 0; i < this.inv.length; i++) {
@@ -257,6 +247,15 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         }
 
         par1.setTag("Inventory", itemList);
+
+        if (camoStack != null) {
+            NBTTagCompound tag = new NBTTagCompound();
+            itemList.appendTag(tag);
+            camoStack.writeToNBT(tag);
+            par1.setTag("CamoStack", tag);
+        }
+
+
     }
 
     @Override
@@ -309,24 +308,19 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             computerAccessable = false;
         }
 
-        try {
-            ItemStack camoStack = ItemStack.loadItemStackFromNBT(par1.getCompoundTag("camoStack"));
-            if (camoStack != null) {
-                ((BlockAbstractTurretBase) worldObj.getBlock(xCoord, yCoord, zCoord)).camoStack = camoStack;
-            }
-        } catch (Exception e) {
-            Logger.getGlobal().warning("Could not load turret base camo itemstack from NBT, please report this to me:" + e.getMessage());
-        }
-
         NBTTagList tagList = par1.getTagList("Inventory", 10);
 
         for (int i = 0; i < tagList.tagCount(); i++) {
             NBTTagCompound tag = tagList.getCompoundTagAt(i);
             byte slot = tag.getByte("Slot");
-
             if (slot >= 0 && slot < inv.length) {
                 inv[slot] = ItemStack.loadItemStackFromNBT(tag);
             }
+        }
+
+        NBTTagCompound tag = par1.getCompoundTag("CamoStack");
+        if (tag != null) {
+            camoStack = ItemStack.loadItemStackFromNBT(tag);
         }
     }
 
@@ -447,7 +441,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     @Override
     public void updateEntity() {
         super.updateEntity();
-
         if (this.worldObj.isRemote) {
             if (ticks % 10 == 0)
                 notifyNeighborsOfChange();

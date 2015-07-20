@@ -1,7 +1,13 @@
 package openmodularturrets.tileentity.turretbase;
 
 import cpw.mods.fml.common.Optional;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import openmodularturrets.blocks.turretbases.BlockAbstractTurretBase;
+import openmodularturrets.blocks.turretbases.BlockTurretBaseTierFive;
 import openmodularturrets.handler.ConfigHandler;
+
+import java.util.logging.Logger;
 
 public class TurretBaseTierFiveTileEntity extends TurretBase {
 
