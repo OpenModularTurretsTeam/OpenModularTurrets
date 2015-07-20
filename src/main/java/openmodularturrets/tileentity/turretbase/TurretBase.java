@@ -243,17 +243,13 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                 itemList.appendTag(tag);
             }
         }
-
         par1.setTag("Inventory", itemList);
 
         if (camoStack != null) {
-            NBTTagCompound tag = new NBTTagCompound();
-            itemList.appendTag(tag);
-            camoStack.writeToNBT(tag);
-            par1.setTag("CamoStack", tag);
+            NBTTagCompound tag2 = new NBTTagCompound();
+            camoStack.writeToNBT(tag2);
+            par1.setTag("CamoStack", tag2);
         }
-
-
     }
 
     @Override
@@ -316,9 +312,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             }
         }
 
-        NBTTagCompound tag = par1.getCompoundTag("CamoStack");
-        if (tag != null) {
-            camoStack = ItemStack.loadItemStackFromNBT(tag);
+        NBTTagCompound tag2 = par1.getCompoundTag("CamoStack");
+        if (tag2 != null) {
+            camoStack = ItemStack.loadItemStackFromNBT(tag2);
         }
     }
 
