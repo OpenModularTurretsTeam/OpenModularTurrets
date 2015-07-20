@@ -22,11 +22,8 @@ import java.util.Random;
 
 public abstract class BlockAbstractTurretBase extends BlockContainer {
 
-    public ItemStack camoStack;
-
     public BlockAbstractTurretBase() {
         super(Material.rock);
-
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         if (!ConfigHandler.turretBreakable) {
             this.setBlockUnbreakable();
@@ -38,11 +35,36 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float what, float these, float are) {
 
-        if (player.isSneaking()) {
-            this.camoStack = null;
+        if (!world.isRemote && player.isSneaking() && player.getCurrentEquippedItem() == null) {
+            TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
+            if (base != null) {
+                if (base != null) {
+                    if (player.getUniqueID().toString().equals(base.getOwner())) {
+                        base.camoStack = null;
+                    } else {
+                        player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
+                    }
+                }
+            }
         }
 
-        if (!world.isRemote && player.getCurrentEquippedItem() == null) {
+        if (!world.isRemote && !player.isSneaking() && player.getCurrentEquippedItem() != null) {
+            if (player.getCurrentEquippedItem() != null
+                    && player.getCurrentEquippedItem().getItem() instanceof ItemBlock
+                    && Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()).isNormalCube()
+                    && !(Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()) instanceof BlockAbstractTurretBase)) {
+                TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
+                if (base != null) {
+                    if (player.getUniqueID().toString().equals(base.getOwner())) {
+                        base.camoStack = player.getCurrentEquippedItem();
+                    } else {
+                        player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
+                    }
+                }
+            }
+        }
+
+        if (!world.isRemote && !player.isSneaking() && player.getCurrentEquippedItem() == null) {
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
             if (base.getTrustedPlayer(player.getUniqueID()) != null) {
                 if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI) {
@@ -55,17 +77,6 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
             } else {
                 player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
             }
-        }
-
-        if (!world.isRemote && player.getCurrentEquippedItem() != null) {
-            if (player.getCurrentEquippedItem() != null
-                    && player.getCurrentEquippedItem().getItem() instanceof ItemBlock
-                    && Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()).isNormalCube()) {
-                camoStack = new ItemStack(player.getCurrentEquippedItem().getItem());
-            } else {
-                camoStack = null;
-            }
-
         }
         return true;
     }
