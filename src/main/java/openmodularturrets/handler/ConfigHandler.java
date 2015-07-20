@@ -58,6 +58,9 @@ public class ConfigHandler {
     public static int expanderPowerTierFourCapacity;
     public static int expanderPowerTierFiveCapacity;
 
+    public static int recyclerNegateChance;
+    public static int recyclerAddChance;
+
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
         config.load();
@@ -223,6 +226,12 @@ public class ConfigHandler {
                 .getInt();
         damageAmpDmgBonus = config.get("addons", "damage", 2,
                 "Increases damage linearly").getInt();
+
+        recyclerNegateChance = config.get("addons", "recycler", 10,
+                "Recycler ammo use negation % chance").getInt();
+
+        recyclerAddChance = config.get("addons", "recycler", 5,
+                "Recycler ammo add % chance").getInt();
 
         turretWarningDistance = config.get("miscellaneous", "warningDistance",
                 5, "Distance outside the max range of a turret players should be warned").getInt();
@@ -479,5 +488,13 @@ public class ConfigHandler {
 
     public static int getExpanderPowerTierFiveCapacity() {
         return expanderPowerTierFiveCapacity;
+    }
+
+    public static int getRecyclerAddChance() {
+        return recyclerAddChance;
+    }
+
+    public static int getRecyclerNegateChance() {
+        return recyclerNegateChance;
     }
 }
