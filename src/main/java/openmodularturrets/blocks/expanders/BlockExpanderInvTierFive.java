@@ -17,8 +17,6 @@ import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.expander.AbstractInvExpander;
 import openmodularturrets.tileentity.expander.ExpanderInvTierFiveTileEntity;
-import openmodularturrets.tileentity.expander.ExpanderInvTierFourTileEntity;
-import openmodularturrets.tileentity.expander.ExpanderInvTierOneTileEntity;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 import java.util.Random;

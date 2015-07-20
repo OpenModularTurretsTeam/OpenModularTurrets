@@ -70,6 +70,16 @@ public class RecipeHandler {
                 "ABA", 'A', net.minecraft.init.Blocks.cobblestone, 'B',
                 "plankWood", 'C', Items.sensorTierOneItem}));
 
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderPowerTierOne, 1), new Object[]{"ABA", "DCD",
+                "ADA", 'A', net.minecraft.init.Blocks.cobblestone, 'B', "plankWood", 'C',
+                net.minecraft.init.Items.redstone, 'D', Items.ioBus}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderInvTierOne, 1), new Object[]{"ABA", "DCD",
+                "ADA", 'A', net.minecraft.init.Blocks.cobblestone, 'B', "plankWood", 'C',
+                net.minecraft.init.Blocks.chest, 'D', Items.ioBus}));
+
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                     Blocks.disposableItemTurret, 1), new Object[]{" A ", "CBC",
@@ -109,6 +119,52 @@ public class RecipeHandler {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                 Items.damageAmpAddon, 1), new Object[]{"AAA", "B B", "AAA",
                 'A', "ingotIron", 'B', net.minecraft.init.Items.ender_pearl}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Items.recyclerAddon, 1), new Object[]{"ABA", "BCD", "ABA",
+                'A', "ingotGold", 'B', net.minecraft.init.Items.magma_cream, 'C', net.minecraft.init.Blocks.ender_chest, 'D', Items.ioBus}));
+
+        //Fences
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.fenceTierOne, 16), new Object[]{"ABA", "BAB", "ABA",
+                'A', net.minecraft.init.Blocks.iron_bars, 'B', net.minecraft.init.Blocks.cobblestone}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.fenceTierTwo, 16), new Object[]{"ABA", "BAB", "ABA",
+                'A', net.minecraft.init.Blocks.iron_bars, 'B', "ingotIron"}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.fenceTierThree, 16), new Object[]{"ABA", "BAB", "ABA",
+                'A', net.minecraft.init.Blocks.iron_bars, 'B', "ingotGold"}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.fenceTierFour, 16), new Object[]{"ABA", "BAB", "ABA",
+                'A', net.minecraft.init.Blocks.iron_bars, 'B', net.minecraft.init.Items.diamond}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.fenceTierFive, 16), new Object[]{"ABA", "BAB", "ABA",
+                'A', net.minecraft.init.Blocks.iron_bars, 'B', net.minecraft.init.Blocks.obsidian}));
+
+        //Hard Walls
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.hardWallTierOne, 16), new Object[]{"ABA", "BCB", "ABA",
+                'A', net.minecraft.init.Blocks.gravel, 'B', net.minecraft.init.Blocks.cobblestone, 'C', net.minecraft.init.Blocks.sand}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.hardWallTierTwo, 16), new Object[]{"ABA", "BAB", "ABA",
+                'A', Blocks.hardWallTierOne, 'B', net.minecraft.init.Blocks.stone}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.hardWallTierThree, 16), new Object[]{"ABA", "BAB", "ABA",
+                'A', Blocks.hardWallTierTwo, 'B', net.minecraft.init.Blocks.brick_block}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.hardWallTierFour, 16), new Object[]{"ABA", "BAB", "ABA",
+                'A', Blocks.hardWallTierThree, 'B', net.minecraft.init.Blocks.nether_brick}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.hardWallTierFive, 16), new Object[]{"ABA", "BAB", "ABA",
+                'A', Blocks.hardWallTierThree, 'B', net.minecraft.init.Blocks.obsidian}));
 
         // Integration
         if (ModCompatibility.ThaumcraftLoaded

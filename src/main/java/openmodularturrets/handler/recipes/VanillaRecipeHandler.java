@@ -103,10 +103,52 @@ public class VanillaRecipeHandler {
                 Blocks.turretBaseTierFour, 'C', Items.sensorTierFiveItem, 'D',
                 Items.ioBus}));
 
+        // Power Expanders
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.turretBaseTierOne, 1), new Object[]{"ABA", "BCB",
-                "ABA", 'A', net.minecraft.init.Blocks.cobblestone, 'B',
-                "plankWood", 'C', Items.sensorTierOneItem}));
+                Blocks.expanderPowerTierTwo, 1), new Object[]{"ABA", "DCD",
+                "ADA", 'A', "ingotIron", 'B', Blocks.expanderPowerTierOne, 'C',
+                net.minecraft.init.Blocks.redstone_block, 'D', Items.ioBus}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderPowerTierThree, 1), new Object[]{"ABA", "DCD",
+                "ADA", 'A', "ingotGold", 'B', Blocks.expanderPowerTierTwo, 'C',
+                net.minecraft.init.Blocks.redstone_block, 'D', Items.ioBus}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderPowerTierFour, 1), new Object[]{"ABA", "DCD",
+                "ADA", 'A', net.minecraft.init.Items.diamond, 'B',
+                Blocks.expanderPowerTierThree, 'C', net.minecraft.init.Blocks.redstone_block, 'D',
+                Items.ioBus}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderPowerTierFive, 1), new Object[]{"ABA", "DCD",
+                "ADA", 'A', net.minecraft.init.Blocks.obsidian, 'B',
+                Blocks.expanderPowerTierFour, 'C', net.minecraft.init.Blocks.redstone_block, 'D',
+                Items.ioBus}));
+
+        // Inventory Expanders
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderInvTierTwo, 1), new Object[]{"ABA", "DCD",
+                "ADA", 'A', "ingotIron", 'B', Blocks.expanderInvTierOne, 'C',
+                net.minecraft.init.Blocks.chest, 'D', Items.ioBus}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderInvTierThree, 1), new Object[]{"ABA", "DCD",
+                "ADA", 'A', "ingotGold", 'B', Blocks.expanderInvTierTwo, 'C',
+                net.minecraft.init.Blocks.chest, 'D', Items.ioBus}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderInvTierFour, 1), new Object[]{"ABA", "DCD",
+                "ADA", 'A', net.minecraft.init.Items.diamond, 'B',
+                Blocks.expanderInvTierThree, 'C', net.minecraft.init.Blocks.chest, 'D',
+                Items.ioBus}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderInvTierFive, 1), new Object[]{"ABA", "DCD",
+                "ADA", 'A', net.minecraft.init.Blocks.obsidian, 'B',
+                Blocks.expanderInvTierFour, 'C', net.minecraft.init.Blocks.chest, 'D',
+                Items.ioBus}));
+
 
         // Turrets
         if (ConfigHandler.getMachineGunTurretSettings().isEnabled()) {
@@ -154,7 +196,7 @@ public class VanillaRecipeHandler {
                     net.minecraft.init.Items.diamond}));
         }
 
-        if(ConfigHandler.getTeleporter_turret().isEnabled()) {
+        if (ConfigHandler.getTeleporter_turret().isEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                     Blocks.teleporterTurret, 1), new Object[]{"CEC", "ABA",
                     "CDC", 'A', net.minecraft.init.Items.diamond, 'B',
@@ -163,14 +205,14 @@ public class VanillaRecipeHandler {
                     net.minecraft.init.Items.quartz}));
         }
 
-        if(ConfigHandler.getLaserTurretSettings().isEnabled()) {
+        if (ConfigHandler.getLaserTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                     Blocks.laserTurret, 1), new Object[]{" A ", "CBC", "DCD",
                     'A', Items.barrelTierFiveItem, 'B', Items.chamberTierFiveItem,
                     'C', net.minecraft.init.Blocks.obsidian, 'D', Items.ioBus}));
         }
 
-        if(ConfigHandler.getRailgun_turret().isEnabled()) {
+        if (ConfigHandler.getRailgun_turret().isEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
                     Blocks.railGunTurret, 1), new Object[]{"CAC", "CAC", "DBD",
                     'A', Items.barrelTierFiveItem, 'B', Items.chamberTierFiveItem,

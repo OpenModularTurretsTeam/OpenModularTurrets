@@ -3,6 +3,7 @@ package openmodularturrets.blocks;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import openmodularturrets.blocks.expanders.*;
+import openmodularturrets.blocks.misc.*;
 import openmodularturrets.blocks.turretbases.*;
 import openmodularturrets.blocks.turretheads.*;
 import openmodularturrets.handler.ConfigHandler;
@@ -43,6 +44,18 @@ public class Blocks {
     public static Block expanderInvTierThree;
     public static Block expanderInvTierFour;
     public static Block expanderInvTierFive;
+
+    public static Block hardWallTierOne;
+    public static Block hardWallTierTwo;
+    public static Block hardWallTierThree;
+    public static Block hardWallTierFour;
+    public static Block hardWallTierFive;
+
+    public static Block fenceTierOne;
+    public static Block fenceTierTwo;
+    public static Block fenceTierThree;
+    public static Block fenceTierFour;
+    public static Block fenceTierFive;
 
     public static void init() {
         turretBaseTierOne = new BlockTurretBaseTierOne();
@@ -120,6 +133,46 @@ public class Blocks {
                 ItemBlockExpanderInvTierFive.class,
                 Names.Blocks.unlocalisedExpanderInvTierFive);
 
+        hardWallTierOne = new BlockHardWallTierOne();
+        GameRegistry.registerBlock(hardWallTierOne,
+                Names.Blocks.unlocalisedHardWallTierOne);
+
+        hardWallTierTwo = new BlockHardWallTierTwo();
+        GameRegistry.registerBlock(hardWallTierTwo,
+                Names.Blocks.unlocalisedHardWallTierTwo);
+
+        hardWallTierThree = new BlockHardWallTierThree();
+        GameRegistry.registerBlock(hardWallTierThree,
+                Names.Blocks.unlocalisedHardWallTierThree);
+
+        hardWallTierFour = new BlockHardWallTierFour();
+        GameRegistry.registerBlock(hardWallTierFour,
+                Names.Blocks.unlocalisedHardWallTierFour);
+
+        hardWallTierFive = new BlockHardWallTierFive();
+        GameRegistry.registerBlock(hardWallTierFive,
+                Names.Blocks.unlocalisedHardWallTierFive);
+
+        fenceTierOne = new BlockFenceTierOne();
+        GameRegistry.registerBlock(fenceTierOne,
+                Names.Blocks.unlocalisedFenceTierOne);
+
+        fenceTierTwo = new BlockFenceTierTwo();
+        GameRegistry.registerBlock(fenceTierTwo,
+                Names.Blocks.unlocalisedFenceTierTwo);
+
+        fenceTierThree = new BlockFenceTierThree();
+        GameRegistry.registerBlock(fenceTierThree,
+                Names.Blocks.unlocalisedFenceTierThree);
+
+        fenceTierFour = new BlockFenceTierFour();
+        GameRegistry.registerBlock(fenceTierFour,
+                Names.Blocks.unlocalisedFenceTierFour);
+
+        fenceTierFive = new BlockFenceTierFive();
+        GameRegistry.registerBlock(fenceTierFive,
+                Names.Blocks.unlocalisedFenceTierFive);
+
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
             disposableItemTurret = new BlockDisposableTurret();
             GameRegistry.registerBlock(disposableItemTurret,
@@ -186,7 +239,7 @@ public class Blocks {
                     Names.Blocks.unlocalisedLaserTurret);
         }
 
-        if(ConfigHandler.getRailgun_turret().isEnabled()) {
+        if (ConfigHandler.getRailgun_turret().isEnabled()) {
             railGunTurret = new BlockRailGunTurret();
             GameRegistry.registerBlock(railGunTurret, ItemBlockRailGunTurret.class,
                     Names.Blocks.unlocalisedRailGunTurret);

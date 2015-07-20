@@ -60,6 +60,18 @@ tile.expanderInvTierThree.name=Base Inventory Expander (Tier 3)
 tile.expanderInvTierFour.name=Base Inventory Expander (Tier 4)
 tile.expanderInvTierFive.name=Base Inventory Expander (Tier 5)
 
+tile.fenceTierOne.name=Fence (Tier 1)
+tile.fenceTierTwo.name=Fence (Tier 2)
+tile.fenceTierThree.name=Fence (Tier 3)
+tile.fenceTierFour.name=Fence (Tier 4)
+tile.fenceTierFive.name=Fence (Tier 5)
+
+tile.hardWallTierOne.name=Hard Wall (Tier 1)
+tile.hardWallTierTwo.name=Hard Wall (Tier 2)
+tile.hardWallTierThree.name=Hard Wall (Tier 3)
+tile.hardWallTierFour.name=Hard Wall (Tier 4)
+tile.hardWallTierFive.name=Hard Wall (Tier 5)
+
 #for IGWMod
 tile.turretBase.name=Turret Base
 

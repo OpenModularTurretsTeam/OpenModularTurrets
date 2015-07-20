@@ -119,6 +119,59 @@ public class MekanismRecipeHandler {
                 energyTablet, 'C', Items.sensorTierFiveItem, 'D',
                 "ingotRefinedObsidian", 'E', Items.ioBus}));
 
+
+        //Power Expanders
+        GameRegistry
+                .addRecipe(new ShapedOreRecipe(new ItemStack(
+                        Blocks.expanderPowerTierTwo, 1), new Object[]{"ABA",
+                        "ECE", "ADA", 'A', ironEnriched, 'B', energyTablet, 'C',
+                        net.minecraft.init.Blocks.redstone_block, 'D', "ingotTin", 'E',
+                        Items.ioBus}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderPowerTierThree, 1),
+                new Object[]{"ABA", "ECE", "ADA", 'A', alloyEnriched, 'B',
+                        energyTablet, 'C', net.minecraft.init.Blocks.redstone_block, 'D',
+                        "ingotSteel", 'E', Items.ioBus}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderPowerTierFour, 1),
+                new Object[]{"ABA", "ECE", "ADA", 'A', alloyReinforced, 'B',
+                        energyTablet, 'C', net.minecraft.init.Blocks.redstone_block, 'D',
+                        "ingotRefinedGlowstone", 'E', Items.ioBus}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderPowerTierFive, 1), new Object[]{"ABA", "ECE",
+                "ADA", 'A', net.minecraft.init.Blocks.obsidian, 'B',
+                energyTablet, 'C', net.minecraft.init.Blocks.redstone_block, 'D',
+                "ingotRefinedObsidian", 'E', Items.ioBus}));
+
+        //Inventory Expanders
+        GameRegistry
+                .addRecipe(new ShapedOreRecipe(new ItemStack(
+                        Blocks.expanderInvTierTwo, 1), new Object[]{"ABA",
+                        "ECE", "ADA", 'A', ironEnriched, 'B', energyTablet, 'C',
+                        net.minecraft.init.Blocks.chest, 'D', "ingotTin", 'E',
+                        Items.ioBus}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderInvTierThree, 1),
+                new Object[]{"ABA", "ECE", "ADA", 'A', alloyEnriched, 'B',
+                        energyTablet, 'C', net.minecraft.init.Blocks.chest, 'D',
+                        "ingotSteel", 'E', Items.ioBus}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderInvTierFour, 1),
+                new Object[]{"ABA", "ECE", "ADA", 'A', alloyReinforced, 'B',
+                        energyTablet, 'C', net.minecraft.init.Blocks.chest, 'D',
+                        "ingotRefinedGlowstone", 'E', Items.ioBus}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+                Blocks.expanderInvTierFive, 1), new Object[]{"ABA", "ECE",
+                "ADA", 'A', net.minecraft.init.Blocks.obsidian, 'B',
+                energyTablet, 'C', net.minecraft.init.Blocks.chest, 'D',
+                "ingotRefinedObsidian", 'E', Items.ioBus}));
+
         // Turrets
         if (ConfigHandler.getMachineGunTurretSettings().isEnabled()) {
             GameRegistry
