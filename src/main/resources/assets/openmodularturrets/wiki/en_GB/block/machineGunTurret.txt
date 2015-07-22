@@ -1,0 +1,4 @@
+Machine Gun Turret
+    Tier 2 Turret
+
+    Fast rate of fire, low damage. Uses bullets as ammo.

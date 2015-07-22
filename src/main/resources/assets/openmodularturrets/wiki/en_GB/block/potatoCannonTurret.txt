@@ -1,0 +1,5 @@
+Potato Cannon Turret
+    Tier 1 Turret
+
+    This turrets has some damage, range and accuracy advantages over the
+    Disposable Item Turret, but can only fire potatoes.
