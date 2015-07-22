@@ -1,0 +1,7 @@
+Grenade Launcher Turret
+    Tier 3 Turret
+
+    This turret is capable of lobbing tiny balls of of death (grenades) at decent distances
+    and do damage to everything around it when it explodes.
+
+    Grenades will not damage blocks.

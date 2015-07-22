@@ -405,7 +405,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         return null;
     }
 
-    private void notifyNeighborsOfChange() {
+    private void updateNeighboursRender() {
         Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(
                 xCoord + 1, yCoord, zCoord);
         Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(
@@ -434,24 +434,21 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
     @Override
     public void updateEntity() {
-        super.updateEntity();
         if (this.worldObj.isRemote) {
             if (ticks % 10 == 0)
-                notifyNeighborsOfChange();
+                updateNeighboursRender();
             ticks = 0;
             return;
         }
 
         ticks++;
 
-        //Redstone
-        if (checkRedstone) {
-            redstone = worldObj.isBlockIndirectlyGettingPowered(this.xCoord,
-                    this.yCoord, this.zCoord);
-        }
-
         if (ticks % 5 == 0) {
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            //Redstone
+            if (checkRedstone) {
+                redstone = worldObj.isBlockIndirectlyGettingPowered(this.xCoord,
+                        this.yCoord, this.zCoord);
+            }
 
             //Computers
             if (ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputercraftLoaded) {
@@ -464,34 +461,33 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
             //Extenders
             this.storage.setCapacity(getMaxEnergyStorageWithExtenders());
-        }
 
-        //Thaumcraft
-        if (TurretHeadUtil.hasPotentiaUpgradeAddon(this)) {
-            if (amountOfPotentia > 0.00F
-                    && !(storage.getMaxEnergyStored()
-                    - storage.getEnergyStored() == 0)) {
-                if (VisNetHandler.drainVis(worldObj, xCoord, yCoord, zCoord,
-                        Aspect.ORDER, 1) == 1) {
-                    this.amountOfPotentia = this.amountOfPotentia - 0.01F;
-                    this.receiveEnergy(ForgeDirection.UNKNOWN,
-                            Math.round(ConfigHandler.getPotentiaToRFRatio()),
-                            false);
-                } else {
-                    this.amountOfPotentia = this.amountOfPotentia - 0.01F;
-                    this.receiveEnergy(ForgeDirection.UNKNOWN, Math
-                                    .round(ConfigHandler.getPotentiaToRFRatio() / 10),
-                            false);
+            //Thaumcraft
+            if (ModCompatibility.ThaumcraftLoaded) {
+                if (TurretHeadUtil.hasPotentiaUpgradeAddon(this)) {
+                    if (amountOfPotentia > 0.05F
+                            && !(storage.getMaxEnergyStored()
+                            - storage.getEnergyStored() == 0)) {
+                        if (VisNetHandler.drainVis(worldObj, xCoord, yCoord, zCoord,
+                                Aspect.ORDER, 5) == 5) {
+                            this.amountOfPotentia = this.amountOfPotentia - 0.05F;
+                            this.receiveEnergy(ForgeDirection.UNKNOWN,
+                                    Math.round(ConfigHandler.getPotentiaToRFRatio() * 5),
+                                    false);
+                        } else {
+                            this.amountOfPotentia = this.amountOfPotentia - 0.05F;
+                            this.receiveEnergy(ForgeDirection.UNKNOWN, Math
+                                            .round(ConfigHandler.getPotentiaToRFRatio() / 2),
+                                    false);
+                        }
+                    }
                 }
-            }
-        }
 
-
-        if (ModCompatibility.ThaumcraftLoaded) {
-            if (ticks % 20 == 0) {
-                ticks = 0;
-                if (amountOfPotentia <= maxAmountOfPotentia) {
-                    amountOfPotentia = amountOfPotentia + drawEssentia();
+                if (ticks % 20 == 0) {
+                    ticks = 0;
+                    if (amountOfPotentia <= maxAmountOfPotentia) {
+                        amountOfPotentia = amountOfPotentia + drawEssentia();
+                    }
                 }
             }
         }
