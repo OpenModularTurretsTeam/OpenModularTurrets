@@ -1,0 +1,3 @@
+Lever
+    This is for your Tier 1 base.
+    You place this on the side, and right click to power. This will only work for the Tier 1 base.

@@ -1,0 +1,7 @@
+Rocket Launcher Turret
+    Tier 4 Turret
+    
+    Like the Grenade Launcher Turret, this turret launches explosives at your enemies,
+    except this time it explodes on them with pinpoint accuracy.
+
+    Rockets will not damage blocks.

@@ -1,0 +1,7 @@
+Disposable Item Turret
+    Tier 1 Turret
+
+    This turret is the first turret you will have access to.
+
+    It's slow, doesn't do a whole lot of damage, but you can shoot anything you want out of it
+    and it's dirt cheap!
