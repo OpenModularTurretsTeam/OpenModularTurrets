@@ -23,6 +23,7 @@ import java.util.Random;
 
 public abstract class TurretHead extends TileEntity {
     public int ticks;
+    public int targetingTicks;
     public float rotationXY;
     public float rotationXZ;
     public float baseFitRotationX;
@@ -32,7 +33,6 @@ public abstract class TurretHead extends TileEntity {
     public boolean hasSetSide = false;
     Entity target = null;
     public float rotationAnimation = 0.00F;
-    public float recoilAnimation = 0.00F;
 
     @Override
     public Packet getDescriptionPacket() {
@@ -51,7 +51,6 @@ public abstract class TurretHead extends TileEntity {
     @Override
     public void writeToNBT(NBTTagCompound par1) {
         par1.setFloat("rotationXY", rotationXY);
-        par1.setFloat("recoilAnimation", recoilAnimation);
         par1.setFloat("rotationXZ", rotationXZ);
         par1.setInteger("ticksBeforeFire", ticks);
         super.writeToNBT(par1);
@@ -62,7 +61,6 @@ public abstract class TurretHead extends TileEntity {
         super.readFromNBT(par1);
         this.rotationXY = par1.getFloat("rotationXY");
         this.rotationXZ = par1.getFloat("rotationXZ");
-        this.recoilAnimation = par1.getFloat("recoilAnimation");
         this.ticks = par1.getInteger("ticksBeforeFire");
     }
 
@@ -215,18 +213,14 @@ public abstract class TurretHead extends TileEntity {
         setSide();
         this.base = getBase();
 
-        if (rotationAnimation >= 360F) {
-            rotationAnimation = 0F;
-        }
-        rotationAnimation = rotationAnimation + 0.03F;
-
         if (worldObj.isRemote) {
-            return;
-        }
 
-        //Recoil animation
-        if (recoilAnimation >= 0.03F) {
-            recoilAnimation = recoilAnimation - 0.03F;
+            if (rotationAnimation >= 360F) {
+                rotationAnimation = 0F;
+            }
+            rotationAnimation = rotationAnimation + 0.03F;
+
+            return;
         }
 
         if (ticks % 5 == 0) {
@@ -245,11 +239,19 @@ public abstract class TurretHead extends TileEntity {
             TurretHeadUtil.updateSolarPanelAddon(base);
             TurretHeadUtil.updateRedstoneReactor(base);
 
+            //turret tick rate;
+            if (target == null && targetingTicks < ConfigHandler.getTurretTargetSearchTicks()) {
+                targetingTicks++;
+                return;
+            }
+            targetingTicks = 0;
+
             int power_required = Math
                     .round(this.getTurretPowerUsage()
                             * (1 - TurretHeadUtil.getEfficiencyUpgrades(base))
                             * (1 + TurretHeadUtil
                             .getScattershotUpgrades(base)));
+
 
             // power check
             if ((base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required)
