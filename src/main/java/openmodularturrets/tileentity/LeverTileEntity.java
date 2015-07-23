@@ -50,20 +50,11 @@ public class LeverTileEntity extends TileEntity {
 
     @Override
     public void writeToNBT(NBTTagCompound par1) {
-        if (base != null) {
-            par1.setInteger("baseXCoord", base.xCoord);
-            par1.setInteger("baseYCoord", base.yCoord);
-            par1.setInteger("baseZCoord", base.zCoord);
-        }
         super.writeToNBT(par1);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound par1) {
-        this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(par1.getInteger("baseXCoord"),
-                                                            par1.getInteger("baseYCoord"),
-                                                            par1.getInteger("baseXCoord"));
-
         super.readFromNBT(par1);
     }
 }
