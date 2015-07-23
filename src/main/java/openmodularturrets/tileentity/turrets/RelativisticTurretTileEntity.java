@@ -48,6 +48,13 @@ public class RelativisticTurretTileEntity extends TurretHead {
 			TurretHeadUtil.updateSolarPanelAddon(base);
 			TurretHeadUtil.updateRedstoneReactor(base);
 
+			//turret tick rate;
+			if (target == null && targetingTicks < ConfigHandler.getTurretTargetSearchTicks()) {
+				targetingTicks++;
+				return;
+			}
+			targetingTicks = 0;
+
 			int power_required = Math
 					.round(this.getTurretPowerUsage()
 							* (1 - TurretHeadUtil.getEfficiencyUpgrades(base))

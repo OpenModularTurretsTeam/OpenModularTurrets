@@ -46,7 +46,7 @@ public class TurretHeadUtil {
                     + turretRange + warnDistance, yCoord + turretRange
                     + warnDistance, zCoord + turretRange + warnDistance);
 
-            if (worldObj.getWorldTime() % 200 == 0) {
+            if (worldObj.getWorldTime() % 2000 == 0) {
                 warnedPlayers.clear();
             }
 
@@ -882,7 +882,7 @@ public class TurretHeadUtil {
         if (base instanceof TurretBaseTierOneTileEntity) {
             return false;
         }
-        if (!ModCompatibility.OpenComputersLoaded || !ModCompatibility.ComputercraftLoaded) {
+        if (!ModCompatibility.OpenComputersLoaded && !ModCompatibility.ComputercraftLoaded) {
             return false;
         }
 
