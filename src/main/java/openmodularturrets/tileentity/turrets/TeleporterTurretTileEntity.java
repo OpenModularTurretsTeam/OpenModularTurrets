@@ -24,12 +24,13 @@ public class TeleporterTurretTileEntity extends TurretHead {
         setSide();
         this.base = getBase();
 
-        if (rotationAnimation >= 360F) {
-            rotationAnimation = 0F;
-        }
-        rotationAnimation = rotationAnimation + 0.03F;
-
         if (worldObj.isRemote) {
+
+            if (rotationAnimation >= 360F) {
+                rotationAnimation = 0F;
+            }
+            rotationAnimation = rotationAnimation + 0.03F;
+
             return;
         }
 

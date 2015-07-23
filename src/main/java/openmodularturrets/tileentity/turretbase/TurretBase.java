@@ -444,6 +444,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         ticks++;
 
         if (ticks % 5 == 0) {
+
             //Redstone
             if (checkRedstone) {
                 redstone = worldObj.isBlockIndirectlyGettingPowered(this.xCoord,
@@ -490,6 +491,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                     }
                 }
             }
+            worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
         }
     }
 
