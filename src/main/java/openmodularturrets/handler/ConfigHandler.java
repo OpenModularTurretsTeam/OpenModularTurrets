@@ -296,7 +296,7 @@ public class ConfigHandler {
                 "Power expander tier five capacity", 5000000).getInt();
 
         turretTargetSearchTicks = config.get("GlobalTargetingParameters",
-                "If a turret does not have a target, how many tick should it wait before looking again?", 10).getInt();
+                "If a turret does not have a target, how many ticks should it wait before looking again?", 10).getInt();
 
 
         if (config.hasChanged()) {
