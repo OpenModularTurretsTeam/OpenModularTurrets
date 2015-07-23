@@ -219,7 +219,6 @@ public abstract class TurretHead extends TileEntity {
                 rotationAnimation = 0F;
             }
             rotationAnimation = rotationAnimation + 0.03F;
-
             return;
         }
 
