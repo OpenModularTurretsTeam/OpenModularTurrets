@@ -61,6 +61,8 @@ public class ConfigHandler {
     public static int recyclerNegateChance;
     public static int recyclerAddChance;
 
+    public static int turretTargetSearchTicks;
+
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
         config.load();
@@ -252,7 +254,7 @@ public class ConfigHandler {
                 "Which recipes should we do? (auto, enderio, thermalexpansion, mekanism, vanilla)", "auto").getString();
 
         turretSoundVolume = config.get("miscellaneous",
-                "Turret sound volume percentage (Between 0 - 100)", 40).getInt()/10;
+                "Turret sound volume percentage (Between 0 - 100)", 40).getInt() / 10;
 
         shouldDoThaumcraftIntegration = config.get("ModCompatability",
                 "Should we enable items that integrate with Thaumcraft?", true).getBoolean();
@@ -292,6 +294,9 @@ public class ConfigHandler {
 
         expanderPowerTierFiveCapacity = config.get("Expanders",
                 "Power expander tier five capacity", 5000000).getInt();
+
+        turretTargetSearchTicks = config.get("GlobalTargetingParameters",
+                "If a turret does not have a target, how many tick should it wait before looking again?", 10).getInt();
 
 
         if (config.hasChanged()) {
@@ -442,7 +447,7 @@ public class ConfigHandler {
             this.damage = damage;
             this.accuracy = accuracy;
             this.power_usage = power_usage;
-            this.enabled=enabled;
+            this.enabled = enabled;
         }
 
         public int getRange() {
@@ -496,5 +501,9 @@ public class ConfigHandler {
 
     public static int getRecyclerNegateChance() {
         return recyclerNegateChance;
+    }
+
+    public static int getTurretTargetSearchTicks() {
+        return turretTargetSearchTicks;
     }
 }
