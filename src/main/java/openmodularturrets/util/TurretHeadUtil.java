@@ -7,8 +7,6 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -947,43 +945,6 @@ public class TurretHeadUtil {
                 base.yCoord + 2, base.zCoord)) {
             base.receiveEnergy(ForgeDirection.UNKNOWN,
                     ConfigHandler.getSolarPanelAddonGen(), false);
-        }
-    }
-
-    public static void updateRedstoneReactor(TurretBase base) {
-        if (!hasRedstoneReactor(base)) {
-            return;
-        }
-
-        if (ConfigHandler.getRedstoneReactorAddonGen() < (base
-                .getMaxEnergyStored(ForgeDirection.UNKNOWN) - base
-                .getEnergyStored(ForgeDirection.UNKNOWN))) {
-
-            //Prioritise redstone blocks
-            ItemStack redstoneBlock = useSpecificItemStackBlockFromBase(base,
-                    new ItemStack(Blocks.redstone_block));
-
-            if (redstoneBlock == null) {
-                redstoneBlock = getSpecificItemFromInvExpanders(base.getWorldObj(), new ItemStack(Blocks.redstone_block), base);
-            }
-
-            if (redstoneBlock != null) {
-                base.receiveEnergy(ForgeDirection.UNKNOWN,
-                        ConfigHandler.getRedstoneReactorAddonGen() * 9, false);
-                return;
-            }
-
-            ItemStack redstone = useSpecificItemStackItemFromBase(base,
-                    Items.redstone);
-
-            if (redstone == null) {
-                redstone = getSpecificItemFromInvExpanders(base.getWorldObj(), new ItemStack(Items.redstone), base);
-            }
-
-            if (redstone != null) {
-                base.receiveEnergy(ForgeDirection.UNKNOWN,
-                        ConfigHandler.getRedstoneReactorAddonGen(), false);
-            }
         }
     }
 

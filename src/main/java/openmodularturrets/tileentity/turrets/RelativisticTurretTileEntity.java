@@ -45,7 +45,6 @@ public class RelativisticTurretTileEntity extends TurretHead {
             this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);
         } else {
             TurretHeadUtil.updateSolarPanelAddon(base);
-            TurretHeadUtil.updateRedstoneReactor(base);
 
             //turret tick rate;
             if (target == null && targetingTicks < ConfigHandler.getTurretTargetSearchTicks()) {
