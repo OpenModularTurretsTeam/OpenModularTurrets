@@ -482,21 +482,12 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
         ticks++;
 
-        if (ticks % 5 == 0) {
+        if (!worldObj.isRemote && ticks % 5 == 0) {
 
             //Redstone
             if (checkRedstone) {
                 redstone = worldObj.isBlockIndirectlyGettingPowered(this.xCoord,
                         this.yCoord, this.zCoord);
-            }
-
-            //Computers
-            if (ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputercraftLoaded) {
-                if (TurretHeadUtil.hasSerialPortAddon(this)) {
-                    this.computerAccessable = true;
-                } else {
-                    this.computerAccessable = false;
-                }
             }
 
             //Extenders
@@ -523,15 +514,26 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                         worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
                     }
                 }
+            }
 
-                if (ticks % 20 == 0) {
-                    ticks = 0;
-                    if (amountOfPotentia <= maxAmountOfPotentia) {
-                        amountOfPotentia = amountOfPotentia + drawEssentia();
-                    }
-                    updateRedstoneReactor(this);
-                    worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+            if (ticks % 20 == 0) {
+                ticks = 0;
+                if (amountOfPotentia <= maxAmountOfPotentia) {
+                    amountOfPotentia = amountOfPotentia + drawEssentia();
                 }
+
+                //Computers
+                if (ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputercraftLoaded) {
+                    if (TurretHeadUtil.hasSerialPortAddon(this)) {
+                        this.computerAccessable = true;
+                    } else {
+                        this.computerAccessable = false;
+                    }
+                }
+
+                updateRedstoneReactor(this);
+                worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+
             }
         }
     }
