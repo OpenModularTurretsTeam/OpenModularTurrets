@@ -103,9 +103,10 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                 redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(), new ItemStack(Blocks.redstone_block), base);
             }
 
-            if (redstoneBlock != null) {
-                base.receiveEnergy(ForgeDirection.UNKNOWN,
-                        ConfigHandler.getRedstoneReactorAddonGen() * 9, false);
+            if (redstoneBlock != null && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base
+                    .getMaxEnergyStored(ForgeDirection.UNKNOWN) - base
+                    .getEnergyStored(ForgeDirection.UNKNOWN))) {
+                base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen() * 9);
                 return;
             }
 
@@ -117,8 +118,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             }
 
             if (redstone != null) {
-                base.receiveEnergy(ForgeDirection.UNKNOWN,
-                        ConfigHandler.getRedstoneReactorAddonGen(), false);
+                base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen());
             }
         }
     }
@@ -482,7 +482,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
         ticks++;
 
-        if (!worldObj.isRemote && ticks % 5 == 0) {
+        if (ticks % 5 == 0) {
 
             //Redstone
             if (checkRedstone) {
@@ -502,14 +502,10 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                         if (VisNetHandler.drainVis(worldObj, xCoord, yCoord, zCoord,
                                 Aspect.ORDER, 5) == 5) {
                             this.amountOfPotentia = this.amountOfPotentia - 0.05F;
-                            this.receiveEnergy(ForgeDirection.UNKNOWN,
-                                    Math.round(ConfigHandler.getPotentiaToRFRatio() * 5),
-                                    false);
+                            this.storage.modifyEnergyStored(Math.round(ConfigHandler.getPotentiaToRFRatio() * 5));
                         } else {
                             this.amountOfPotentia = this.amountOfPotentia - 0.05F;
-                            this.receiveEnergy(ForgeDirection.UNKNOWN, Math
-                                            .round(ConfigHandler.getPotentiaToRFRatio() / 2),
-                                    false);
+                            this.storage.modifyEnergyStored(Math.round(ConfigHandler.getPotentiaToRFRatio() / 2));
                         }
                         worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
                     }
@@ -518,7 +514,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
             if (ticks % 20 == 0) {
                 ticks = 0;
-                if (amountOfPotentia <= maxAmountOfPotentia) {
+                if (ModCompatibility.ThaumcraftLoaded && amountOfPotentia <= maxAmountOfPotentia) {
                     amountOfPotentia = amountOfPotentia + drawEssentia();
                 }
 
@@ -533,7 +529,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
                 updateRedstoneReactor(this);
                 worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
-
             }
         }
     }
