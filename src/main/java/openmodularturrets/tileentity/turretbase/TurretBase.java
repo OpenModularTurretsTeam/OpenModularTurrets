@@ -533,7 +533,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                     worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
                 }
             }
-            worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
         }
     }
 
