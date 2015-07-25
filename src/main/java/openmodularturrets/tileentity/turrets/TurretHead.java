@@ -236,7 +236,6 @@ public abstract class TurretHead extends TileEntity {
                 TurretHeadUtil.warnPlayers(base, base.getWorldObj(), base.getyAxisDetect(), this.xCoord, this.yCoord, this.zCoord, getTurretRange());
             }
             TurretHeadUtil.updateSolarPanelAddon(base);
-            TurretHeadUtil.updateRedstoneReactor(base);
 
             //turret tick rate;
             if (target == null && targetingTicks < ConfigHandler.getTurretTargetSearchTicks()) {

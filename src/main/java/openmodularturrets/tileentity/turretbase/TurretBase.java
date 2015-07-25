@@ -13,6 +13,8 @@ import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -82,6 +84,43 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         this.inv = new ItemStack[this.getSizeInventory()];
         this.inverted = true;
         this.active = true;
+    }
+
+    public static void updateRedstoneReactor(TurretBase base) {
+        if (!TurretHeadUtil.hasRedstoneReactor(base)) {
+            return;
+        }
+
+        if (ConfigHandler.getRedstoneReactorAddonGen() < (base
+                .getMaxEnergyStored(ForgeDirection.UNKNOWN) - base
+                .getEnergyStored(ForgeDirection.UNKNOWN))) {
+
+            //Prioritise redstone blocks
+            ItemStack redstoneBlock = TurretHeadUtil.useSpecificItemStackBlockFromBase(base,
+                    new ItemStack(Blocks.redstone_block));
+
+            if (redstoneBlock == null) {
+                redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(), new ItemStack(Blocks.redstone_block), base);
+            }
+
+            if (redstoneBlock != null) {
+                base.receiveEnergy(ForgeDirection.UNKNOWN,
+                        ConfigHandler.getRedstoneReactorAddonGen() * 9, false);
+                return;
+            }
+
+            ItemStack redstone = TurretHeadUtil.useSpecificItemStackItemFromBase(base,
+                    Items.redstone);
+
+            if (redstone == null) {
+                redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(), new ItemStack(Items.redstone), base);
+            }
+
+            if (redstone != null) {
+                base.receiveEnergy(ForgeDirection.UNKNOWN,
+                        ConfigHandler.getRedstoneReactorAddonGen(), false);
+            }
+        }
     }
 
     private int getMaxEnergyStorageWithExtenders() {
@@ -481,6 +520,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                                             .round(ConfigHandler.getPotentiaToRFRatio() / 2),
                                     false);
                         }
+                        worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
                     }
                 }
 
@@ -489,6 +529,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                     if (amountOfPotentia <= maxAmountOfPotentia) {
                         amountOfPotentia = amountOfPotentia + drawEssentia();
                     }
+                    updateRedstoneReactor(this);
+                    worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
                 }
             }
             worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
