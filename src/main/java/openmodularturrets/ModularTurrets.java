@@ -30,13 +30,15 @@ public class ModularTurrets {
     @Instance(ModInfo.ID)
     public static ModularTurrets instance;
     public static SimpleNetworkWrapper networking;
-    public GuiHandler gui = new GuiHandler();
-    public static CreativeTabs modularTurretsTab = new ModularTurretsTab(ModInfo.ID);
+    public GuiHandler gui;
+    public static CreativeTabs modularTurretsTab;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         networking = NetworkingHandler.initNetworking();
+        gui = new GuiHandler();
+        modularTurretsTab = new ModularTurretsTab(ModInfo.ID);
     }
 
     @EventHandler
