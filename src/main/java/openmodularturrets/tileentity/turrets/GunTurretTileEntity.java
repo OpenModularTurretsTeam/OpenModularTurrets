@@ -9,30 +9,30 @@ import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.Items;
 
-public class MachineGunTurretTileEntity extends TurretHead {
-    public MachineGunTurretTileEntity() {
+public class GunTurretTileEntity extends TurretHead {
+    public GunTurretTileEntity() {
         super();
         this.turretTier = 2;
     }
 
     @Override
     public int getTurretRange() {
-        return ConfigHandler.getMachineGunTurretSettings().getRange();
+        return ConfigHandler.getGunTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return ConfigHandler.getMachineGunTurretSettings().getPowerUsage();
+        return ConfigHandler.getGunTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return ConfigHandler.getMachineGunTurretSettings().getFireRate();
+        return ConfigHandler.getGunTurretSettings().getFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getMachineGunTurretSettings().getAccuracy()/10;
+        return ConfigHandler.getGunTurretSettings().getAccuracy() / 10;
     }
 
     @Override

@@ -14,7 +14,7 @@ public class TileEntityHandler {
         GameRegistry.registerTileEntity(DisposableItemTurretTileEntity.class, "disposableItemTurret");
         GameRegistry.registerTileEntity(PotatoCannonTurretTileEntity.class, "potatoCannonTurret");
         GameRegistry.registerTileEntity(RocketTurretTileEntity.class, "rocketTurret");
-        GameRegistry.registerTileEntity(MachineGunTurretTileEntity.class, "machineGunTurret");
+        GameRegistry.registerTileEntity(GunTurretTileEntity.class, "machineGunTurret");
         GameRegistry.registerTileEntity(GrenadeLauncherTurretTileEntity.class, "grenadeTurret");
         GameRegistry.registerTileEntity(LaserTurretTileEntity.class, "laserTurret");
         GameRegistry.registerTileEntity(LeverTileEntity.class, "leverTileEntity");

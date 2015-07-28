@@ -20,7 +20,7 @@ public class ConfigHandler {
     private static int potentiaAddonCapacity;
     private static TurretSetting disposable_turret;
     private static TurretSetting potato_cannon_turret;
-    private static TurretSetting machine_gun_turret;
+    private static TurretSetting gun_turret;
     private static TurretSetting incendiary_turret;
     private static TurretSetting grenade_turret;
     private static TurretSetting relativistic_turret;
@@ -116,7 +116,7 @@ public class ConfigHandler {
                 "TurretPotatoCannon", "Enabled", true, "Enabled?")
                 .getBoolean());
 
-        machine_gun_turret = new TurretSetting(config.get("TurretMachineGun",
+        gun_turret = new TurretSetting(config.get("TurretMachineGun",
                 "Range", 18, "Turret range, in blocks").getInt(), config.get(
                 "TurretMachineGun", "FireRateCooldown", 8,
                 "Number of ticks between firings").getInt(), config.get(
@@ -356,8 +356,8 @@ public class ConfigHandler {
         return potato_cannon_turret;
     }
 
-    public static TurretSetting getMachineGunTurretSettings() {
-        return machine_gun_turret;
+    public static TurretSetting getGunTurretSettings() {
+        return gun_turret;
     }
 
     public static TurretSetting getRocketTurretSettings() {

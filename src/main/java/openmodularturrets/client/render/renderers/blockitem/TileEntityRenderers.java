@@ -44,7 +44,7 @@ public class TileEntityRenderers {
         ClientRegistry.bindTileEntitySpecialRenderer(
                 RocketTurretTileEntity.class, rocketTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(
-                MachineGunTurretTileEntity.class, machineGunTurretRenderer);
+                GunTurretTileEntity.class, machineGunTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(
                 GrenadeLauncherTurretTileEntity.class,
                 grenadeLauncherTurretRenderer);
