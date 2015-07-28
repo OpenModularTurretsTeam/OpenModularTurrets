@@ -32,7 +32,7 @@ public class ItemRenderers {
 				.getItemFromBlock(Blocks.machineGunTurret),
 				new MachineGunTurretItemRenderer(
 						TileEntityRenderers.machineGunTurretRenderer,
-						new MachineGunTurretTileEntity()));
+						new GunTurretTileEntity()));
 
 		MinecraftForgeClient.registerItemRenderer(Item
 				.getItemFromBlock(Blocks.grenadeLauncherTurret),

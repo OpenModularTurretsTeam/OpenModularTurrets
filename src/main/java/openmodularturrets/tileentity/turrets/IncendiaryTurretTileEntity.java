@@ -32,7 +32,7 @@ public class IncendiaryTurretTileEntity extends TurretHead {
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getMachineGunTurretSettings().getAccuracy()/10;
+        return ConfigHandler.getIncendiary_turret().getAccuracy() / 10;
     }
 
     @Override
