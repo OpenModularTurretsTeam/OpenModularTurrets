@@ -24,7 +24,7 @@ public class OpenModularTurretsWikiTab extends BaseWikiTab {
             pageEntries.add("block/potatoCannonTurret");
         }
 
-        if (ConfigHandler.getMachineGunTurretSettings().isEnabled()) {
+        if (ConfigHandler.getGunTurretSettings().isEnabled()) {
             pageEntries.add("block/machineGunTurret");
         }
 

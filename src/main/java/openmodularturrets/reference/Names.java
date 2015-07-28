@@ -14,7 +14,7 @@ public class Names {
         public static final String unlocalisedTurretBaseTierFive = "baseTierFourBlock";
         public static final String unlocalisedDisposableItemTurret = "disposeItemTurret";
         public static final String unlocalisedRocketTurret = "rocketTurret";
-        public static final String unlocalisedMachineGunTurret = "machineGunTurret";
+        public static final String unlocalisedGunTurret = "machineGunTurret";
         public static final String unlocalisedGrenadeTurret = "grenadeTurret";
         public static final String unlocalisedLaserTurret = "laserTurret";
         public static final String unlocalisedPotatoCannonTurret = "potatoCannonTurret";

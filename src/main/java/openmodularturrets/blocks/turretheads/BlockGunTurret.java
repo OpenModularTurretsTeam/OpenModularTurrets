@@ -4,19 +4,19 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
-import openmodularturrets.tileentity.turrets.MachineGunTurretTileEntity;
+import openmodularturrets.tileentity.turrets.GunTurretTileEntity;
 
-public class BlockMachineGunTurret extends BlockAbstractTurretHead {
+public class BlockGunTurret extends BlockAbstractTurretHead {
 
-    public BlockMachineGunTurret() {
+    public BlockGunTurret() {
         super();
 
-        this.setBlockName(Names.Blocks.unlocalisedMachineGunTurret);
+        this.setBlockName(Names.Blocks.unlocalisedGunTurret);
         this.setBlockTextureName(ModInfo.ID + ":machineGunTurret");
     }
 
     @Override
     public TileEntity createNewTileEntity(World world, int par2) {
-        return new MachineGunTurretTileEntity();
+        return new GunTurretTileEntity();
     }
 }

@@ -187,11 +187,11 @@ public class Blocks {
                     Names.Blocks.unlocalisedPotatoCannonTurret);
         }
 
-        if (ConfigHandler.getMachineGunTurretSettings().isEnabled()) {
-            machineGunTurret = new BlockMachineGunTurret();
+        if (ConfigHandler.getGunTurretSettings().isEnabled()) {
+            machineGunTurret = new BlockGunTurret();
             GameRegistry.registerBlock(machineGunTurret,
                     ItemBlockMachineGunTurret.class,
-                    Names.Blocks.unlocalisedMachineGunTurret);
+                    Names.Blocks.unlocalisedGunTurret);
 
         }
 

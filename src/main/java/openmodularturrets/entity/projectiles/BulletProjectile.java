@@ -53,7 +53,7 @@ public class BulletProjectile extends TurretProjectile {
                 }
             }
 
-            int damage = ConfigHandler.getMachineGunTurretSettings().getDamage();
+            int damage = ConfigHandler.getGunTurretSettings().getDamage();
 
             if (isAmped) {
                 damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;

@@ -4,18 +4,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import openmodularturrets.client.render.models.ModelMachineGun;
 import openmodularturrets.client.render.renderers.blockitem.MachineGunTurretRenderer;
-import openmodularturrets.tileentity.turrets.MachineGunTurretTileEntity;
+import openmodularturrets.tileentity.turrets.GunTurretTileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class MachineGunTurretItemRenderer implements IItemRenderer {
 
     private final MachineGunTurretRenderer machineGunTurretRenderer;
-    private final MachineGunTurretTileEntity machineGunTurretTileEntity;
+    private final GunTurretTileEntity gunTurretTileEntity;
     private final ModelMachineGun model;
 
-    public MachineGunTurretItemRenderer(MachineGunTurretRenderer machineGunTurretRenderer, MachineGunTurretTileEntity machineGunTurretTileEntity) {
+    public MachineGunTurretItemRenderer(MachineGunTurretRenderer machineGunTurretRenderer, GunTurretTileEntity gunTurretTileEntity) {
         this.machineGunTurretRenderer = machineGunTurretRenderer;
-        this.machineGunTurretTileEntity = machineGunTurretTileEntity;
+        this.gunTurretTileEntity = gunTurretTileEntity;
 
         this.model = new ModelMachineGun();
     }
@@ -34,7 +34,7 @@ public class MachineGunTurretItemRenderer implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         GL11.glPushMatrix();
         GL11.glTranslated(-0.5, -0.5, -0.5);
-        this.machineGunTurretRenderer.renderTileEntityAt(this.machineGunTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
+        this.machineGunTurretRenderer.renderTileEntityAt(this.gunTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
         GL11.glPopMatrix();
     }
 }

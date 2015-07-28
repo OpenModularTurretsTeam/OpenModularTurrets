@@ -151,7 +151,7 @@ public class VanillaRecipeHandler {
 
 
         // Turrets
-        if (ConfigHandler.getMachineGunTurretSettings().isEnabled()) {
+        if (ConfigHandler.getGunTurretSettings().isEnabled()) {
             GameRegistry
                     .addRecipe(new ShapedOreRecipe(new ItemStack(
                             Blocks.machineGunTurret, 1), new Object[]{" A ",
