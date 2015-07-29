@@ -32,6 +32,10 @@ public class RocketTurretRenderer extends TileEntitySpecialRenderer {
 
         TurretHead turretHead = (TurretHead) te;
 
+        if (turretHead.shouldConceal) {
+            return;
+        }
+
         this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
         ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/rocketTurret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);

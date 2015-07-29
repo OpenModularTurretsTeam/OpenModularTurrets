@@ -27,6 +27,7 @@ public class Items {
     public static Item potentiaAddon;
     public static Item serialPortAddon;
     public static Item recyclerAddon;
+    public static Item concealerAddon;
 
     public static Item sensorTierOneItem;
     public static Item sensorTierTwoItem;
@@ -45,6 +46,7 @@ public class Items {
     public static Item chamberTierThreeItem;
     public static Item chamberTierFourItem;
     public static Item chamberTierFiveItem;
+
 
     public static Item ioBus;
 
@@ -84,6 +86,9 @@ public class Items {
 
         recyclerAddon = new RecyclerAddonItem();
         GameRegistry.registerItem(recyclerAddon, "recyclerAddon");
+
+        concealerAddon = new ConcealerAddonItem();
+        GameRegistry.registerItem(concealerAddon, "concealerAddon");
 
         // Thaumcraft Only
         if (ModCompatibility.ThaumcraftLoaded) {

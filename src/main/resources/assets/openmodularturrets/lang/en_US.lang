@@ -16,6 +16,7 @@ item.addonSolar.name=Addon - Solar Generator
 item.addonPotentia.name=Addon - Potentia Converter
 item.addonSerialPort.name=Addon - Serial Port
 item.addonRecycler.name=Addon - Recycler
+item.addonConcealer.name=Addon - Turret Concealer
 item.sensorOne.name=Sensor (Tier 1)
 item.sensorTwo.name=Sensor (Tier 2)
 item.sensorThree.name=Sensor (Tier 3)
@@ -186,6 +187,8 @@ turret.addon.recycler.2=as well as a chance to generate ammo, per shot.
 turret.addon.recycler.3=Ammo use negation chance:
 turret.addon.recycler.4=Ammo generation chance:
 turret.addon.recycler.flavour=Reduce, reuse, reassert.
+turret.addon.concealer.1=Visibly conceals turrets inside base if no target is present.
+turret.addon.concealer.flavour=Almost like project rainbow.
 
 turret.upgrade.label=Turret Upgrade
 turret.upgrade.stacks=Stacks up to 4 times.

@@ -32,6 +32,10 @@ public class RelativisticTurretRenderer extends TileEntitySpecialRenderer {
             rotation = te.getBlockMetadata();
         }
 
+        if (turretHead.shouldConceal) {
+            return;
+        }
+
         this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
         ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/relativisticTurret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);

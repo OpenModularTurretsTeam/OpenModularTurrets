@@ -142,5 +142,23 @@
               "stream": false
             }
         ]
+    },
+    "turretDeploy": {
+        "category": "neutral",
+        "sounds": [
+            {
+                "name": "turretDeploy",
+                "stream": false
+            }
+        ]
+    },
+    "turretRetract": {
+        "category": "neutral",
+        "sounds": [
+            {
+                "name": "turretRetract",
+                "stream": false
+            }
+        ]
     }
 }
