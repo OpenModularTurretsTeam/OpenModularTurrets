@@ -41,6 +41,10 @@ public class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
             rotation = te.getBlockMetadata();
         }
 
+        if (turretHead.shouldConceal) {
+             return;
+        }
+
         this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
         textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/disposeItemTurret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);

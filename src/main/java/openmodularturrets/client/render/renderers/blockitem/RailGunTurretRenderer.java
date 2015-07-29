@@ -41,6 +41,10 @@ public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
             rotation = te.getBlockMetadata();
         }
 
+        if (turretHead.shouldConceal) {
+            return;
+        }
+
         this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
         textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/railGunTurret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
