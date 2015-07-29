@@ -31,7 +31,7 @@ public abstract class TurretHead extends TileEntity {
     public int turretTier;
     public TurretBase base;
     public boolean hasSetSide = false;
-    Entity target = null;
+    public Entity target = null;
     public float rotationAnimation = 0.00F;
     public boolean shouldConceal = false;
     public boolean playedDeploy = false;
