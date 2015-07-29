@@ -28,6 +28,11 @@ public class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
 			float scale) {
 
 		TurretHead turretHead = (TurretHead) te;
+
+		if (turretHead.shouldConceal) {
+			return;
+		}
+
 		int rotation = 0;
 		if (te.getWorldObj() != null) {
 			rotation = te.getBlockMetadata();

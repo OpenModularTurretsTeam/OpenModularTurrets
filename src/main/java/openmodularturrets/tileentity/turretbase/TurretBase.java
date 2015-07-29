@@ -27,6 +27,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.tileentity.turrets.TurretHead;
 import openmodularturrets.util.TurretHeadUtil;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -72,6 +73,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     protected float maxAmountOfPotentia = ConfigHandler
             .getPotentiaAddonCapacity();
     public ItemStack camoStack;
+
+    //For concealment
+    public boolean shouldConcealTurrets;
 
     public TurretBase(int MaxEnergyStorage, int MaxIO) {
         super();
@@ -269,6 +273,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         par1.setBoolean("inverted", inverted);
         par1.setBoolean("redstone", redstone);
         par1.setBoolean("computerAccessable", computerAccessable);
+        par1.setBoolean("shouldConcealTurrets", shouldConcealTurrets);
 
         NBTTagList itemList = new NBTTagList();
 
@@ -303,6 +308,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         this.attacksMobs = par1.getBoolean("attacksMobs");
         this.attacksNeutrals = par1.getBoolean("attacksNeutrals");
         this.attacksPlayers = par1.getBoolean("attacksPlayers");
+        this.shouldConcealTurrets = par1.getBoolean("shouldConcealTurrets");
         if (getPlayerUIDUnstable(par1.getString("owner")) != null) {
             this.owner = getPlayerUIDUnstable(par1.getString("owner")).toString();
         } else if (getPlayerUUID(par1.getString("owner")) != null) {
@@ -483,6 +489,10 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         ticks++;
 
         if (ticks % 5 == 0) {
+
+            //Concealment
+            this.shouldConcealTurrets = TurretHeadUtil.hasConcealmentAddon(this);
+
             //Extenders
             this.storage.setCapacity(getMaxEnergyStorageWithExtenders());
 

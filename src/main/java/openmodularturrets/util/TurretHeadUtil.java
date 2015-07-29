@@ -840,6 +840,22 @@ public class TurretHeadUtil {
         return found;
     }
 
+    public static boolean hasConcealmentAddon(TurretBase base) {
+        boolean found = false;
+        if (base instanceof TurretBaseTierOneTileEntity) {
+            return false;
+        }
+
+        if (base.getStackInSlot(9) != null) {
+            found = base.getStackInSlot(9).getItem() instanceof ConcealerAddonItem;
+        }
+
+        if (base.getStackInSlot(10) != null && !found) {
+            found = base.getStackInSlot(10).getItem() instanceof ConcealerAddonItem;
+        }
+        return found;
+    }
+
     public static boolean hasSolarPanelAddon(TurretBase base) {
         boolean found = false;
         if (base instanceof TurretBaseTierOneTileEntity) {

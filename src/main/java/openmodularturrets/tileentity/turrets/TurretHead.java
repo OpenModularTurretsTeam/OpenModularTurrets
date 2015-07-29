@@ -33,6 +33,9 @@ public abstract class TurretHead extends TileEntity {
     public boolean hasSetSide = false;
     Entity target = null;
     public float rotationAnimation = 0.00F;
+    public boolean shouldConceal = false;
+    public boolean playedDeploy = false;
+    public int ticksWithoutTarget;
 
     @Override
     public Packet getDescriptionPacket() {
@@ -53,6 +56,7 @@ public abstract class TurretHead extends TileEntity {
         par1.setFloat("rotationXY", rotationXY);
         par1.setFloat("rotationXZ", rotationXZ);
         par1.setInteger("ticksBeforeFire", ticks);
+        par1.setBoolean("shouldConceal", shouldConceal);
         super.writeToNBT(par1);
     }
 
@@ -61,7 +65,7 @@ public abstract class TurretHead extends TileEntity {
         super.readFromNBT(par1);
         this.rotationXY = par1.getFloat("rotationXY");
         this.rotationXZ = par1.getFloat("rotationXZ");
-        this.ticks = par1.getInteger("ticksBeforeFire");
+        this.shouldConceal = par1.getBoolean("shouldConceal");
     }
 
     public void setSide() {
@@ -221,6 +225,34 @@ public abstract class TurretHead extends TileEntity {
             rotationAnimation = rotationAnimation + 0.03F;
             return;
         }
+
+        if (base != null && base.shouldConcealTurrets) {
+
+            if (!shouldConceal && target == null && ticksWithoutTarget >= 40) {
+                ticksWithoutTarget = 0;
+                shouldConceal = true;
+                playedDeploy = false;
+                worldObj.playSoundEffect(this.xCoord, this.yCoord,
+                        this.zCoord, ModInfo.ID + ":turretRetract", ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+            } else {
+                ticksWithoutTarget++;
+            }
+
+
+            if (base != null && target != null) {
+                ticksWithoutTarget = 0;
+                shouldConceal = false;
+
+                if (!playedDeploy) {
+                    worldObj.playSoundEffect(this.xCoord, this.yCoord,
+                            this.zCoord, ModInfo.ID + ":turretDeploy", ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+                    playedDeploy = true;
+                }
+            }
+        } else {
+            this.shouldConceal = false;
+        }
+
 
         if (ticks % 5 == 0) {
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
