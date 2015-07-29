@@ -15,6 +15,7 @@ import openmodularturrets.ModularTurrets;
 import openmodularturrets.network.AdjustYAxisDetectMessage;
 import openmodularturrets.network.DropBaseMessage;
 import openmodularturrets.network.DropTurretsMessage;
+import openmodularturrets.network.SetBaseTargetingType;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 import java.util.List;
@@ -49,6 +50,7 @@ public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandle
             this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
             this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
             this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
+            this.buttonList.add(new GuiButton(6, x + 180, y + 75, 80, 20, base.multiTargeting ? "Target: Multi" : "Target: Single"));
         } else if (base.getTrustedPlayer(player.getUniqueID()) != null) {
             if (base.getTrustedPlayer(player.getUniqueID()).admin) {
                 this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
@@ -92,6 +94,16 @@ public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandle
             player.openGui(ModularTurrets.instance, 6,
                     player.worldObj, base.xCoord, base.yCoord, base.zCoord);
         }
+
+        if (guibutton.id == 6) {
+            sendSetBaseTargetingToServer();
+            for (Object button : buttonList) {
+                if (((GuiButton) button).id == 6) {
+                    this.base.multiTargeting = !this.base.multiTargeting;
+                    ((GuiButton) button).displayString = base.multiTargeting ? "Target: Multi" : "Target: Single";
+                }
+            }
+        }
     }
 
     @Override
@@ -113,6 +125,11 @@ public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandle
 
     public void sendDropBaseToServer() {
         DropBaseMessage message = new DropBaseMessage(base.xCoord, base.yCoord, base.zCoord);
+        ModularTurrets.networking.sendToServer(message);
+    }
+
+    public void sendSetBaseTargetingToServer() {
+        SetBaseTargetingType message = new SetBaseTargetingType(base.xCoord, base.yCoord, base.zCoord);
         ModularTurrets.networking.sendToServer(message);
     }
 
