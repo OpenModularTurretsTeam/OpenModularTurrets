@@ -1,6 +1,5 @@
 package openmodularturrets.network;
 
-import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -8,18 +7,16 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.world.World;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-public class AddTrustedPlayerMessage implements IMessage, IMessageHandler<AddTrustedPlayerMessage, IMessage> {
+public class SetBaseTargetingType implements IMessage, IMessageHandler<SetBaseTargetingType, IMessage> {
     private int x, y, z;
-    private String player;
 
-    public AddTrustedPlayerMessage() {
+    public SetBaseTargetingType() {
     }
 
-    public AddTrustedPlayerMessage(int x, int y, int z, String player) {
+    public SetBaseTargetingType(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.player = player;
     }
 
     @Override
@@ -27,8 +24,6 @@ public class AddTrustedPlayerMessage implements IMessage, IMessageHandler<AddTru
         this.x = buf.readInt();
         this.y = buf.readInt();
         this.z = buf.readInt();
-
-        this.player = ByteBufUtils.readUTF8String(buf);
     }
 
     @Override
@@ -36,16 +31,13 @@ public class AddTrustedPlayerMessage implements IMessage, IMessageHandler<AddTru
         buf.writeInt(this.x);
         buf.writeInt(this.y);
         buf.writeInt(this.z);
-
-        ByteBufUtils.writeUTF8String(buf, this.player);
     }
 
     @Override
-    public IMessage onMessage(AddTrustedPlayerMessage message, MessageContext ctx) {
+    public IMessage onMessage(SetBaseTargetingType message, MessageContext ctx) {
         World world = ctx.getServerHandler().playerEntity.worldObj;
-        TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
-        turret.addTrustedPlayer(message.getPlayer());
-        world.markBlockForUpdate(message.getX(), message.getY(), message.getZ());
+        TurretBase turretbase = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
+        turretbase.multiTargeting = !turretbase.multiTargeting;
         return null;
     }
 
@@ -59,9 +51,5 @@ public class AddTrustedPlayerMessage implements IMessage, IMessageHandler<AddTru
 
     public int getZ() {
         return z;
-    }
-
-    public String getPlayer() {
-        return player;
     }
 }

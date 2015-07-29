@@ -32,6 +32,7 @@ import java.util.UUID;
 public class TurretHeadUtil {
 
     public static HashSet<EntityPlayerMP> warnedPlayers = new HashSet<EntityPlayerMP>();
+    private TurretHead turret;
 
     public static void warnPlayers(TurretBase base, World worldObj,
                                    int downLowAmount, int xCoord, int yCoord, int zCoord,
@@ -123,8 +124,11 @@ public class TurretHeadUtil {
 
                 if (target != null && turret != null) {
 
-                    EntityLivingBase targetELB = (EntityLivingBase) target;
+                    if (base.multiTargeting && isTargetAlreadyTargeted(base, target)) {
+                        continue;
+                    }
 
+                    EntityLivingBase targetELB = (EntityLivingBase) target;
                     if (canTurretSeeTarget(turret, targetELB)
                             && targetELB.getHealth() > 0.0F) {
                         return target;
@@ -188,6 +192,10 @@ public class TurretHeadUtil {
                 }
 
                 if (target != null && turret != null) {
+
+                    if (base.multiTargeting && isTargetAlreadyTargeted(base, target)) {
+                        continue;
+                    }
 
                     EntityLivingBase targetELB = (EntityLivingBase) target;
 
@@ -257,6 +265,10 @@ public class TurretHeadUtil {
 
                     EntityLivingBase targetELB = (EntityLivingBase) target;
 
+                    if (base.multiTargeting && isTargetAlreadyTargeted(base, target)) {
+                        continue;
+                    }
+
                     if (canTurretSeeTarget(turret, targetELB)
                             && targetELB.getHealth() > 0.0F) {
                         return target;
@@ -265,6 +277,52 @@ public class TurretHeadUtil {
             }
         }
         return null;
+    }
+
+    public static boolean isTargetAlreadyTargeted(TurretBase base, Entity entity) {
+        if (base.getWorldObj().getTileEntity(base.xCoord + 1, base.yCoord, base.zCoord) instanceof TurretHead) {
+            TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord + 1, base.yCoord, base.zCoord);
+            if (turret.target != null && entity.equals(turret.target)) {
+                return true;
+            }
+        }
+
+        if (base.getWorldObj().getTileEntity(base.xCoord - 1, base.yCoord, base.zCoord) instanceof TurretHead) {
+            TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord - 1, base.yCoord, base.zCoord);
+            if (turret.target != null && entity.equals(turret.target)) {
+                return true;
+            }
+        }
+
+        if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord + 1, base.zCoord) instanceof TurretHead) {
+            TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord + 1, base.zCoord);
+            if (turret.target != null && entity.equals(turret.target)) {
+                return true;
+            }
+        }
+
+        if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord - 1, base.zCoord) instanceof TurretHead) {
+            TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord - 1, base.zCoord);
+            if (turret.target != null && entity.equals(turret.target)) {
+                return true;
+            }
+        }
+
+        if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord, base.zCoord + 1) instanceof TurretHead) {
+            TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord, base.zCoord + 1);
+            if (turret.target != null && entity.equals(turret.target)) {
+                return true;
+            }
+        }
+
+        if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord, base.zCoord - 1) instanceof TurretHead) {
+            TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord, base.zCoord - 1);
+            if (turret.target != null && entity.equals(turret.target)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static boolean isTrustedPlayer(UUID uuid, TurretBase base) {
