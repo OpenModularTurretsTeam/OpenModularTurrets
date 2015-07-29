@@ -226,33 +226,6 @@ public abstract class TurretHead extends TileEntity {
             return;
         }
 
-        if (base != null && base.shouldConcealTurrets) {
-
-            if (!shouldConceal && target == null && ticksWithoutTarget >= 40) {
-                ticksWithoutTarget = 0;
-                shouldConceal = true;
-                playedDeploy = false;
-                worldObj.playSoundEffect(this.xCoord, this.yCoord,
-                        this.zCoord, ModInfo.ID + ":turretRetract", ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
-            } else {
-                ticksWithoutTarget++;
-            }
-
-
-            if (base != null && target != null) {
-                ticksWithoutTarget = 0;
-                shouldConceal = false;
-
-                if (!playedDeploy) {
-                    worldObj.playSoundEffect(this.xCoord, this.yCoord,
-                            this.zCoord, ModInfo.ID + ":turretDeploy", ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
-                    playedDeploy = true;
-                }
-            }
-        } else {
-            this.shouldConceal = false;
-        }
-
 
         if (ticks % 5 == 0) {
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -267,7 +240,10 @@ public abstract class TurretHead extends TileEntity {
             if (base.isAttacksPlayers()) {
                 TurretHeadUtil.warnPlayers(base, base.getWorldObj(), base.getyAxisDetect(), this.xCoord, this.yCoord, this.zCoord, getTurretRange());
             }
+
+            //Real time tick updates
             TurretHeadUtil.updateSolarPanelAddon(base);
+            concealmentChecks();
 
             //turret tick rate;
             if (target == null && targetingTicks < ConfigHandler.getTurretTargetSearchTicks()) {
@@ -276,14 +252,13 @@ public abstract class TurretHead extends TileEntity {
             }
             targetingTicks = 0;
 
+            // power check
             int power_required = Math
                     .round(this.getTurretPowerUsage()
                             * (1 - TurretHeadUtil.getEfficiencyUpgrades(base))
                             * (1 + TurretHeadUtil
                             .getScattershotUpgrades(base)));
 
-
-            // power check
             if ((base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required)
                     || (!base.isActive())) {
                 return;
@@ -302,6 +277,7 @@ public abstract class TurretHead extends TileEntity {
                 return;
             }
 
+            //set where the turret is aiming at.
             this.rotationXZ = TurretHeadUtil.getAimYaw(target, xCoord, yCoord,
                     zCoord) + 3.2F;
             this.rotationXY = TurretHeadUtil.getAimPitch(target, xCoord,
@@ -322,7 +298,7 @@ public abstract class TurretHead extends TileEntity {
                 }
             }
 
-            //Player checks
+            //Player checks: is target in creative mode?
             if (target != null && target instanceof EntityPlayerMP) {
                 EntityPlayerMP entity = (EntityPlayerMP) target;
 
@@ -341,8 +317,8 @@ public abstract class TurretHead extends TileEntity {
                 }
             }
 
+            //Finally, try to shoot if criteria is met.
             ItemStack ammo = null;
-
             if (this.requiresAmmo()) {
                 if (this.requiresSpecificAmmo()) {
                     for (int i = 0; i <= TurretHeadUtil
@@ -422,6 +398,37 @@ public abstract class TurretHead extends TileEntity {
                 this.getWorldObj().spawnEntityInWorld(projectile);
             }
             ticks = 0;
+        }
+    }
+
+    public void concealmentChecks() {
+        if (base != null && base.shouldConcealTurrets) {
+
+            if (!shouldConceal && target == null && ticksWithoutTarget >= 40) {
+                ticksWithoutTarget = 0;
+                shouldConceal = true;
+                playedDeploy = false;
+                worldObj.playSoundEffect(this.xCoord, this.yCoord,
+                        this.zCoord, ModInfo.ID + ":turretRetract", ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+                worldObj.getBlock(xCoord, yCoord, zCoord).setBlockBounds(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+            } else {
+                ticksWithoutTarget++;
+            }
+
+
+            if (base != null && target != null) {
+                ticksWithoutTarget = 0;
+                shouldConceal = false;
+
+                if (!playedDeploy) {
+                    worldObj.playSoundEffect(this.xCoord, this.yCoord,
+                            this.zCoord, ModInfo.ID + ":turretDeploy", ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+                    playedDeploy = true;
+                    worldObj.getBlock(xCoord, yCoord, zCoord).setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 1F, 0.8F);
+                }
+            }
+        } else {
+            this.shouldConceal = false;
         }
     }
 }
