@@ -13,6 +13,8 @@ import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.util.TurretHeadUtil;
 
+import java.util.Random;
+
 public class TeleporterTurretTileEntity extends TurretHead {
     public TeleporterTurretTileEntity() {
         super();
@@ -43,6 +45,8 @@ public class TeleporterTurretTileEntity extends TurretHead {
         if (base == null || base.getBaseTier() < this.turretTier) {
             this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);
         } else {
+
+            concealmentChecks();
             TurretHeadUtil.updateSolarPanelAddon(base);
 
             //turret tick rate;
