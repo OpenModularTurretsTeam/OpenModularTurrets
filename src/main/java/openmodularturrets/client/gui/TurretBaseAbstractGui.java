@@ -165,7 +165,7 @@ public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandle
             Rectangle4i rectangle = new Rectangle4i(x, y, w, h);
             Rectangle4i rectangleGUI;
             if (player.getUniqueID().toString().equals(base.getOwner())) {
-                rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 70);
+                rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 95);
                 intersects = rectangle.intersects(rectangleGUI);
             } else if (base.getTrustedPlayer(player.getUniqueID()) != null) {
                 if (base.getTrustedPlayer(player.getUniqueID()).admin) {
