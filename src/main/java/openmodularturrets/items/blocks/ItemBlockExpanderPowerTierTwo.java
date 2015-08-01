@@ -20,7 +20,9 @@ public class ItemBlockExpanderPowerTierTwo extends ItemBlock {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.expander.power1"));
         p_77624_3_.add("");
-        p_77624_3_.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal("tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierTwoCapacity() + " " + StatCollector.translateToLocal("tooltip.expander.power3"));
+        p_77624_3_.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal(
+                "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierTwoCapacity() + " " + StatCollector.translateToLocal(
+                "tooltip.expander.power3"));
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.expander.power.2"));
     }

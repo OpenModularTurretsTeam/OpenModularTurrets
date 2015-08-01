@@ -14,8 +14,6 @@ import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.expander.AbstractInvExpander;
 import openmodularturrets.tileentity.expander.ExpanderInvTierTwoTileEntity;
-import openmodularturrets.tileentity.expander.ExpanderPowerTierOneTileEntity;
-import openmodularturrets.tileentity.expander.ExpanderPowerTierTwoTileEntity;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class BlockExpanderInvTierTwo extends BlockContainer {

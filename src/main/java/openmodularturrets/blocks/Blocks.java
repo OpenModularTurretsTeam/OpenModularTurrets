@@ -59,190 +59,151 @@ public class Blocks {
 
     public static void init() {
         turretBaseTierOne = new BlockTurretBaseTierOne();
-        GameRegistry.registerBlock(turretBaseTierOne,
-                ItemBlockTurretBaseTierOne.class,
-                Names.Blocks.unlocalisedTurretBaseTierOne);
+        GameRegistry.registerBlock(turretBaseTierOne, ItemBlockTurretBaseTierOne.class,
+                                   Names.Blocks.unlocalisedTurretBaseTierOne);
 
         turretBaseTierTwo = new BlockTurretBaseTierTwo();
-        GameRegistry.registerBlock(turretBaseTierTwo,
-                ItemBlockTurretBaseTierTwo.class,
-                Names.Blocks.unlocalisedTurretBaseTierTwo);
+        GameRegistry.registerBlock(turretBaseTierTwo, ItemBlockTurretBaseTierTwo.class,
+                                   Names.Blocks.unlocalisedTurretBaseTierTwo);
 
         turretBaseTierThree = new BlockTurretBaseTierThree();
-        GameRegistry.registerBlock(turretBaseTierThree,
-                ItemBlockTurretBaseTierThree.class,
-                Names.Blocks.unlocalisedTurretBaseTierThree);
+        GameRegistry.registerBlock(turretBaseTierThree, ItemBlockTurretBaseTierThree.class,
+                                   Names.Blocks.unlocalisedTurretBaseTierThree);
 
         turretBaseTierFour = new BlockTurretBaseTierFour();
-        GameRegistry.registerBlock(turretBaseTierFour,
-                ItemBlockTurretBaseTierFour.class,
-                Names.Blocks.unlocalisedTurretBaseTierFour);
+        GameRegistry.registerBlock(turretBaseTierFour, ItemBlockTurretBaseTierFour.class,
+                                   Names.Blocks.unlocalisedTurretBaseTierFour);
 
         turretBaseTierFive = new BlockTurretBaseTierFive();
-        GameRegistry.registerBlock(turretBaseTierFive,
-                ItemBlockTurretBaseTierFive.class,
-                Names.Blocks.unlocalisedTurretBaseTierFive);
+        GameRegistry.registerBlock(turretBaseTierFive, ItemBlockTurretBaseTierFive.class,
+                                   Names.Blocks.unlocalisedTurretBaseTierFive);
 
         expanderPowerTierOne = new BlockExpanderPowerTierOne();
-        GameRegistry.registerBlock(expanderPowerTierOne,
-                ItemBlockExpanderPowerTierOne.class,
-                Names.Blocks.unlocalisedExpanderPowerTierOne);
+        GameRegistry.registerBlock(expanderPowerTierOne, ItemBlockExpanderPowerTierOne.class,
+                                   Names.Blocks.unlocalisedExpanderPowerTierOne);
 
         expanderPowerTierTwo = new BlockExpanderPowerTierTwo();
-        GameRegistry.registerBlock(expanderPowerTierTwo,
-                ItemBlockExpanderPowerTierTwo.class,
-                Names.Blocks.unlocalisedExpanderPowerTierTwo);
+        GameRegistry.registerBlock(expanderPowerTierTwo, ItemBlockExpanderPowerTierTwo.class,
+                                   Names.Blocks.unlocalisedExpanderPowerTierTwo);
 
         expanderPowerTierThree = new BlockExpanderPowerTierThree();
-        GameRegistry.registerBlock(expanderPowerTierThree,
-                ItemBlockExpanderPowerTierThree.class,
-                Names.Blocks.unlocalisedExpanderPowerTierThree);
+        GameRegistry.registerBlock(expanderPowerTierThree, ItemBlockExpanderPowerTierThree.class,
+                                   Names.Blocks.unlocalisedExpanderPowerTierThree);
 
         expanderPowerTierFour = new BlockExpanderPowerTierFour();
-        GameRegistry.registerBlock(expanderPowerTierFour,
-                ItemBlockExpanderPowerTierFour.class,
-                Names.Blocks.unlocalisedExpanderPowerTierFour);
+        GameRegistry.registerBlock(expanderPowerTierFour, ItemBlockExpanderPowerTierFour.class,
+                                   Names.Blocks.unlocalisedExpanderPowerTierFour);
 
         expanderPowerTierFive = new BlockExpanderPowerTierFive();
-        GameRegistry.registerBlock(expanderPowerTierFive,
-                ItemBlockExpanderPowerTierFive.class,
-                Names.Blocks.unlocalisedExpanderPowerTierFive);
+        GameRegistry.registerBlock(expanderPowerTierFive, ItemBlockExpanderPowerTierFive.class,
+                                   Names.Blocks.unlocalisedExpanderPowerTierFive);
 
         expanderInvTierOne = new BlockExpanderInvTierOne();
-        GameRegistry.registerBlock(expanderInvTierOne,
-                ItemBlockExpanderInvTierOne.class,
-                Names.Blocks.unlocalisedExpanderInvTierOne);
+        GameRegistry.registerBlock(expanderInvTierOne, ItemBlockExpanderInvTierOne.class,
+                                   Names.Blocks.unlocalisedExpanderInvTierOne);
 
         expanderInvTierTwo = new BlockExpanderInvTierTwo();
-        GameRegistry.registerBlock(expanderInvTierTwo,
-                ItemBlockExpanderInvTierTwo.class,
-                Names.Blocks.unlocalisedExpanderInvTierTwo);
+        GameRegistry.registerBlock(expanderInvTierTwo, ItemBlockExpanderInvTierTwo.class,
+                                   Names.Blocks.unlocalisedExpanderInvTierTwo);
 
         expanderInvTierThree = new BlockExpanderInvTierThree();
-        GameRegistry.registerBlock(expanderInvTierThree,
-                ItemBlockExpanderInvTierThree.class,
-                Names.Blocks.unlocalisedExpanderInvTierThree);
+        GameRegistry.registerBlock(expanderInvTierThree, ItemBlockExpanderInvTierThree.class,
+                                   Names.Blocks.unlocalisedExpanderInvTierThree);
 
         expanderInvTierFour = new BlockExpanderInvTierFour();
-        GameRegistry.registerBlock(expanderInvTierFour,
-                ItemBlockExpanderInvTierFour.class,
-                Names.Blocks.unlocalisedExpanderInvTierFour);
+        GameRegistry.registerBlock(expanderInvTierFour, ItemBlockExpanderInvTierFour.class,
+                                   Names.Blocks.unlocalisedExpanderInvTierFour);
 
         expanderInvTierFive = new BlockExpanderInvTierFive();
-        GameRegistry.registerBlock(expanderInvTierFive,
-                ItemBlockExpanderInvTierFive.class,
-                Names.Blocks.unlocalisedExpanderInvTierFive);
+        GameRegistry.registerBlock(expanderInvTierFive, ItemBlockExpanderInvTierFive.class,
+                                   Names.Blocks.unlocalisedExpanderInvTierFive);
 
         hardWallTierOne = new BlockHardWallTierOne();
-        GameRegistry.registerBlock(hardWallTierOne,
-                Names.Blocks.unlocalisedHardWallTierOne);
+        GameRegistry.registerBlock(hardWallTierOne, Names.Blocks.unlocalisedHardWallTierOne);
 
         hardWallTierTwo = new BlockHardWallTierTwo();
-        GameRegistry.registerBlock(hardWallTierTwo,
-                Names.Blocks.unlocalisedHardWallTierTwo);
+        GameRegistry.registerBlock(hardWallTierTwo, Names.Blocks.unlocalisedHardWallTierTwo);
 
         hardWallTierThree = new BlockHardWallTierThree();
-        GameRegistry.registerBlock(hardWallTierThree,
-                Names.Blocks.unlocalisedHardWallTierThree);
+        GameRegistry.registerBlock(hardWallTierThree, Names.Blocks.unlocalisedHardWallTierThree);
 
         hardWallTierFour = new BlockHardWallTierFour();
-        GameRegistry.registerBlock(hardWallTierFour,
-                Names.Blocks.unlocalisedHardWallTierFour);
+        GameRegistry.registerBlock(hardWallTierFour, Names.Blocks.unlocalisedHardWallTierFour);
 
         hardWallTierFive = new BlockHardWallTierFive();
-        GameRegistry.registerBlock(hardWallTierFive,
-                Names.Blocks.unlocalisedHardWallTierFive);
+        GameRegistry.registerBlock(hardWallTierFive, Names.Blocks.unlocalisedHardWallTierFive);
 
         fenceTierOne = new BlockFenceTierOne();
-        GameRegistry.registerBlock(fenceTierOne,
-                Names.Blocks.unlocalisedFenceTierOne);
+        GameRegistry.registerBlock(fenceTierOne, Names.Blocks.unlocalisedFenceTierOne);
 
         fenceTierTwo = new BlockFenceTierTwo();
-        GameRegistry.registerBlock(fenceTierTwo,
-                Names.Blocks.unlocalisedFenceTierTwo);
+        GameRegistry.registerBlock(fenceTierTwo, Names.Blocks.unlocalisedFenceTierTwo);
 
         fenceTierThree = new BlockFenceTierThree();
-        GameRegistry.registerBlock(fenceTierThree,
-                Names.Blocks.unlocalisedFenceTierThree);
+        GameRegistry.registerBlock(fenceTierThree, Names.Blocks.unlocalisedFenceTierThree);
 
         fenceTierFour = new BlockFenceTierFour();
-        GameRegistry.registerBlock(fenceTierFour,
-                Names.Blocks.unlocalisedFenceTierFour);
+        GameRegistry.registerBlock(fenceTierFour, Names.Blocks.unlocalisedFenceTierFour);
 
         fenceTierFive = new BlockFenceTierFive();
-        GameRegistry.registerBlock(fenceTierFive,
-                Names.Blocks.unlocalisedFenceTierFive);
+        GameRegistry.registerBlock(fenceTierFive, Names.Blocks.unlocalisedFenceTierFive);
 
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
             disposableItemTurret = new BlockDisposableTurret();
-            GameRegistry.registerBlock(disposableItemTurret,
-                    ItemBlockDisposableTurret.class,
-                    Names.Blocks.unlocalisedDisposableItemTurret);
+            GameRegistry.registerBlock(disposableItemTurret, ItemBlockDisposableTurret.class,
+                                       Names.Blocks.unlocalisedDisposableItemTurret);
         }
 
         if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
             potatoCannonTurret = new BlockPotatoCannonTurret();
-            GameRegistry.registerBlock(potatoCannonTurret,
-                    ItemBlockPotatoCannonTurret.class,
-                    Names.Blocks.unlocalisedPotatoCannonTurret);
+            GameRegistry.registerBlock(potatoCannonTurret, ItemBlockPotatoCannonTurret.class,
+                                       Names.Blocks.unlocalisedPotatoCannonTurret);
         }
 
         if (ConfigHandler.getGunTurretSettings().isEnabled()) {
             machineGunTurret = new BlockGunTurret();
-            GameRegistry.registerBlock(machineGunTurret,
-                    ItemBlockMachineGunTurret.class,
-                    Names.Blocks.unlocalisedGunTurret);
-
+            GameRegistry.registerBlock(machineGunTurret, ItemBlockMachineGunTurret.class,
+                                       Names.Blocks.unlocalisedGunTurret);
         }
 
         if (ConfigHandler.getIncendiary_turret().isEnabled()) {
             incendiaryTurret = new BlockIncendiaryTurret();
-            GameRegistry.registerBlock(incendiaryTurret,
-                    ItemBlockIncendiaryTurret.class,
-                    Names.Blocks.unlocalisedIncendiaryTurret);
-
+            GameRegistry.registerBlock(incendiaryTurret, ItemBlockIncendiaryTurret.class,
+                                       Names.Blocks.unlocalisedIncendiaryTurret);
         }
 
         if (ConfigHandler.getGrenadeTurretSettings().isEnabled()) {
             grenadeLauncherTurret = new BlockGrenadeTurret();
-            GameRegistry.registerBlock(grenadeLauncherTurret,
-                    ItemBlockGrenadeLauncherTurret.class,
-                    Names.Blocks.unlocalisedGrenadeTurret);
+            GameRegistry.registerBlock(grenadeLauncherTurret, ItemBlockGrenadeLauncherTurret.class,
+                                       Names.Blocks.unlocalisedGrenadeTurret);
         }
 
         if (ConfigHandler.getRelativistic_turret().isEnabled()) {
             relativisticTurret = new BlockRelativisticTurret();
-            GameRegistry.registerBlock(relativisticTurret,
-                    ItemBlockRelativisticTurret.class,
-                    Names.Blocks.unlocalisedRelativisticTurret);
-
+            GameRegistry.registerBlock(relativisticTurret, ItemBlockRelativisticTurret.class,
+                                       Names.Blocks.unlocalisedRelativisticTurret);
         }
 
         if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
             rocketTurret = new BlockRocketTurret();
-            GameRegistry.registerBlock(rocketTurret,
-                    ItemBlockRocketTurret.class,
-                    Names.Blocks.unlocalisedRocketTurret);
+            GameRegistry.registerBlock(rocketTurret, ItemBlockRocketTurret.class, Names.Blocks.unlocalisedRocketTurret);
         }
 
         if (ConfigHandler.getTeleporter_turret().isEnabled()) {
             teleporterTurret = new BlockTeleporterTurret();
-            GameRegistry.registerBlock(teleporterTurret,
-                    ItemBlockTeleporterTurret.class,
-                    Names.Blocks.unlocalisedTeleporterTurret);
+            GameRegistry.registerBlock(teleporterTurret, ItemBlockTeleporterTurret.class,
+                                       Names.Blocks.unlocalisedTeleporterTurret);
         }
 
         if (ConfigHandler.getLaserTurretSettings().isEnabled()) {
             laserTurret = new BlockLaserTurret();
-            GameRegistry.registerBlock(laserTurret,
-                    ItemBlockLaserTurret.class,
-                    Names.Blocks.unlocalisedLaserTurret);
+            GameRegistry.registerBlock(laserTurret, ItemBlockLaserTurret.class, Names.Blocks.unlocalisedLaserTurret);
         }
 
         if (ConfigHandler.getRailgun_turret().isEnabled()) {
             railGunTurret = new BlockRailGunTurret();
             GameRegistry.registerBlock(railGunTurret, ItemBlockRailGunTurret.class,
-                    Names.Blocks.unlocalisedRailGunTurret);
+                                       Names.Blocks.unlocalisedRailGunTurret);
         }
 
         leverBlock = new LeverBlock();

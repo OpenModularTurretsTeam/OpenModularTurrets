@@ -60,50 +60,41 @@ public class TurretBaseTierFiveContainer extends Container {
 
             int ammoSlotStart = 100, ammoSlotEnd = 0, addonSlotStart = 100, addonSlotEnd = 0, upgSlotStart = 100, upgSlotEnd = 0;
             // Determine the slot range for each type( According to the class constructor )
-            for( int i = slotStart; i < this.inventorySlots.size(); i++ )
-            {
+            for (int i = slotStart; i < this.inventorySlots.size(); i++) {
                 Class slotClass = this.getSlot(i).getClass();
-                if( slotClass == Slot.class)
-                {
+                if (slotClass == Slot.class) {
                     ammoSlotStart = Math.min(i, ammoSlotStart);
-                    ammoSlotEnd = Math.max( i + 1, ammoSlotEnd );
-                }
-                else if( slotClass == AddonSlot.class )
-                {
+                    ammoSlotEnd = Math.max(i + 1, ammoSlotEnd);
+                } else if (slotClass == AddonSlot.class) {
                     addonSlotStart = Math.min(i, addonSlotStart);
-                    addonSlotEnd = Math.max( i + 1, addonSlotEnd );
-                }
-                else if( slotClass == UpgradeSlot.class )
-                {
-                    upgSlotStart = Math.min(i, upgSlotStart );
-                    upgSlotEnd = Math.max( i + 1, upgSlotEnd );
+                    addonSlotEnd = Math.max(i + 1, addonSlotEnd);
+                } else if (slotClass == UpgradeSlot.class) {
+                    upgSlotStart = Math.min(i, upgSlotStart);
+                    upgSlotEnd = Math.max(i + 1, upgSlotEnd);
                 }
             }
 
             // Transfer from player inventory
-            if( slot < slotStart )
-            {
+            if (slot < slotStart) {
                 // Priority addon and upgrade slot first
-                if( stackInSlot.getItem() instanceof AddonItem)
-                {
-                    if(!mergeItemStack(stackInSlot, addonSlotStart, addonSlotEnd, false))
+                if (stackInSlot.getItem() instanceof AddonItem) {
+                    if (!mergeItemStack(stackInSlot, addonSlotStart, addonSlotEnd, false)) {
                         return null;
-                }
-                else if( stackInSlot.getItem() instanceof UpgradeItem)
-                {
-                    if(!mergeItemStack(stackInSlot, upgSlotStart, upgSlotEnd, false))
+                    }
+                } else if (stackInSlot.getItem() instanceof UpgradeItem) {
+                    if (!mergeItemStack(stackInSlot, upgSlotStart, upgSlotEnd, false)) {
                         return null;
-                }
-                else
-                {
-                    if(!mergeItemStack(stackInSlot, slotStart, slotStart + 9, false))
+                    }
+                } else {
+                    if (!mergeItemStack(stackInSlot, slotStart, slotStart + 9, false)) {
                         return null;
+                    }
                 }
-            }
-            else // Transfer from turret base inventory
+            } else // Transfer from turret base inventory
             {
-                if(!mergeItemStack(stackInSlot, 0, slotStart, false))
+                if (!mergeItemStack(stackInSlot, 0, slotStart, false)) {
                     return null;
+                }
             }
 
             if (stackInSlot.stackSize == 0) {

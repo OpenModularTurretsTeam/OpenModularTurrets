@@ -47,7 +47,6 @@ public class Items {
     public static Item chamberTierFourItem;
     public static Item chamberTierFiveItem;
 
-
     public static Item ioBus;
 
     public static void init() {
@@ -62,8 +61,7 @@ public class Items {
         GameRegistry.registerItem(accuraccyUpgradeItem, "accuraccyUpgradeItem");
 
         efficiencyUpgradeItem = new EfficiencyUpgradeItem();
-        GameRegistry.registerItem(efficiencyUpgradeItem,
-                "efficiencyUpgradeItem");
+        GameRegistry.registerItem(efficiencyUpgradeItem, "efficiencyUpgradeItem");
 
         fireRateUpgradeItem = new FireRateUpgradeItem();
         GameRegistry.registerItem(fireRateUpgradeItem, "fireRateUpgradeItem");
@@ -72,8 +70,7 @@ public class Items {
         GameRegistry.registerItem(rangeUpgradeItem, "rangeUpgradeItem");
 
         scattershotUpgradeItem = new ScattershotUpgradeItem();
-        GameRegistry.registerItem(scattershotUpgradeItem,
-                "scattershotUpgradeItem");
+        GameRegistry.registerItem(scattershotUpgradeItem, "scattershotUpgradeItem");
 
         redstoneReactorAddon = new RedstoneReactorAddonItem();
         GameRegistry.registerItem(redstoneReactorAddon, "redstoneReactorAddon");
@@ -97,8 +94,7 @@ public class Items {
         }
 
         //Computer mods Only
-        if (ModCompatibility.ComputercraftLoaded
-                || ModCompatibility.OpenComputersLoaded) {
+        if (ModCompatibility.ComputercraftLoaded || ModCompatibility.OpenComputersLoaded) {
             serialPortAddon = new SerialPortAddonItem();
             GameRegistry.registerItem(serialPortAddon, "serialPortAddon");
         }

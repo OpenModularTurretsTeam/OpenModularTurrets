@@ -102,8 +102,9 @@ public class IGWSupportNotifier {
         @Override
         public void run() {
             try {
-                if (Minecraft.getMinecraft().thePlayer != null)
+                if (Minecraft.getMinecraft().thePlayer != null) {
                     Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("Downloading IGW-Mod..."));
+                }
                 URL url = new URL(LATEST_DL_URL);
                 URLConnection connection = url.openConnection();
                 connection.connect();
@@ -112,16 +113,18 @@ public class IGWSupportNotifier {
                 File dir = new File(".", "mods");
                 File f = new File(dir, fileName);
                 FileUtils.copyURLToFile(url, f);
-                if (Minecraft.getMinecraft().thePlayer != null) Minecraft.getMinecraft().thePlayer.addChatMessage(
-                        new ChatComponentText(
-                                EnumChatFormatting.GREEN + "Successfully downloaded. Restart Minecraft to apply."));
+                if (Minecraft.getMinecraft().thePlayer != null) {
+                    Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(
+                            EnumChatFormatting.GREEN + "Successfully downloaded. Restart Minecraft to apply."));
+                }
                 Desktop.getDesktop().open(dir);
                 finalize();
             } catch (Throwable e) {
                 e.printStackTrace();
-                if (Minecraft.getMinecraft().thePlayer != null)
+                if (Minecraft.getMinecraft().thePlayer != null) {
                     Minecraft.getMinecraft().thePlayer.addChatComponentMessage(
                             new ChatComponentText(EnumChatFormatting.RED + "Failed to download"));
+                }
                 try {
                     finalize();
                 } catch (Throwable e1) {

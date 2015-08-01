@@ -59,7 +59,7 @@ public class RelativisticTurretRenderer extends TileEntitySpecialRenderer {
         model.Base2.rotateAngleY = turretHead.baseFitRotationZ;
         model.Crystal.rotateAngleX = turretHead.baseFitRotationX;
         model.Crystal.rotateAngleY = turretHead.baseFitRotationZ;
-        
+
         model.Crystal.rotateAngleX = turretHead.rotationAnimation;
         model.Crystal.rotateAngleY = turretHead.rotationAnimation;
         model.Crystal.rotateAngleZ = turretHead.rotationAnimation;

@@ -7,7 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
@@ -31,8 +30,7 @@ public class SerialPortAddonItem extends AddonItem {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.RED + StatCollector.translateToLocal("turret.addon.label"));
         p_77624_3_.add("");
-        p_77624_3_.add(StatCollector.translateToLocal(
-                "turret.addon.serial.a") + " " + StatCollector.translateToLocal(
+        p_77624_3_.add(StatCollector.translateToLocal("turret.addon.serial.a") + " " + StatCollector.translateToLocal(
                 "turret.addon.serial.b"));
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.addon.serial.flavour"));

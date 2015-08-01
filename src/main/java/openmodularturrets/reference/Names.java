@@ -70,25 +70,25 @@ public class Names {
         public static final String unlocalisedSerialPortAddon = "addonSerialPort";
         public static final String unlocalisedRecyclerAddon = "addonRecycler";
         public static final String unlocalisedConcealerAddon = "addonConcealer";
-        
+
         public static final String unlocalisedSensorTierOne = "sensorOne";
         public static final String unlocalisedSensorTierTwo = "sensorTwo";
         public static final String unlocalisedSensorTierThree = "sensorThree";
         public static final String unlocalisedSensorTierFour = "sensorFour";
         public static final String unlocalisedSensorTierFive = "sensorFive";
-        
+
         public static final String unlocalisedChamberTierOne = "chamberTierOne";
         public static final String unlocalisedChamberTierTwo = "chamberTierTwo";
         public static final String unlocalisedChamberTierThree = "chamberTierThree";
         public static final String unlocalisedChamberTierFour = "chamberTierFour";
         public static final String unlocalisedChamberTierFive = "chamberTierFive";
-        
+
         public static final String unlocalisedBarrelTierOne = "barrelTierOne";
         public static final String unlocalisedBarrelTierTwo = "barrelTierTwo";
         public static final String unlocalisedBarrelTierThree = "barrelTierThree";
         public static final String unlocalisedBarrelTierFour = "barrelTierFour";
         public static final String unlocalisedBarrelTierFive = "barrelTierFive";
-        
+
         public static final String unlocalisedIOBus = "ioBus";
         public static final String unlocalisedContainmentChamber = "containmentChamber";
         public static final String unlocalisedEnergeticBarrel = "energeticBarrel";

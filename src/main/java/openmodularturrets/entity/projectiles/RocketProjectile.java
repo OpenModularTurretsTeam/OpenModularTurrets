@@ -28,7 +28,7 @@ public class RocketProjectile extends TurretProjectile {
         super(par1World);
         this.gravity = 0.00F;
     }
-    
+
     public RocketProjectile(World p_i1776_1_, TurretBase turretBase) {
         super(p_i1776_1_, turretBase);
         this.gravity = 0.00F;

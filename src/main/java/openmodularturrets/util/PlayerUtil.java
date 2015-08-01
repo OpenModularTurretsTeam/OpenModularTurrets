@@ -22,8 +22,9 @@ public class PlayerUtil {
     }
 
     public static UUID getPlayerUIDUnstable(String possibleUUID) {
-        if (possibleUUID == null || possibleUUID.isEmpty())
+        if (possibleUUID == null || possibleUUID.isEmpty()) {
             return null;
+        }
         UUID uuid = null;
         try {
             uuid = UUID.fromString(possibleUUID);

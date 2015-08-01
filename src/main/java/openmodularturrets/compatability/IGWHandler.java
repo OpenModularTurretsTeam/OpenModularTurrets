@@ -29,7 +29,5 @@ public class IGWHandler {
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierThree, "block/turretBase");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierFour, "block/turretBase");
         WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierFive, "block/turretBase");
-
-
     }
 }

@@ -35,51 +35,51 @@ public class BlazingClayProjectile extends TurretProjectile {
     @Override
     protected void onImpact(MovingObjectPosition movingobjectposition) {
 
-    	 if (this.ticksExisted <= 1) {
-             return;
-         }
-         if (movingobjectposition.typeOfHit == movingobjectposition.typeOfHit.BLOCK) {
-             Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                                movingobjectposition.blockZ);
-             if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
-                 // Go through non solid block
-                 return;
-             }
-         }
+        if (this.ticksExisted <= 1) {
+            return;
+        }
+        if (movingobjectposition.typeOfHit == movingobjectposition.typeOfHit.BLOCK) {
+            Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
+                                               movingobjectposition.blockZ);
+            if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
+                // Go through non solid block
+                return;
+            }
+        }
 
-         if (movingobjectposition.typeOfHit.equals(0)) {
-             if (worldObj.isAirBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                     movingobjectposition.blockZ)) {
-                 return;
-             }
-         }
+        if (movingobjectposition.typeOfHit.equals(0)) {
+            if (worldObj.isAirBlock(movingobjectposition.blockX, movingobjectposition.blockY,
+                                    movingobjectposition.blockZ)) {
+                return;
+            }
+        }
 
-         if (!worldObj.isRemote) {
-             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 5, this.posY - 5, this.posZ - 5,
-                                                               this.posX + 5, this.posY + 5, this.posZ + 5);
-             List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
+        if (!worldObj.isRemote) {
+            AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 5, this.posY - 5, this.posZ - 5,
+                                                              this.posX + 5, this.posY + 5, this.posZ + 5);
+            List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
 
-             for (Entity mob : targets) {
-                 int damage = ConfigHandler.getIncendiary_turret().getDamage();
+            for (Entity mob : targets) {
+                int damage = ConfigHandler.getIncendiary_turret().getDamage();
 
-                 if (isAmped) {
-                     damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
-                 }
+                if (isAmped) {
+                    damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
+                }
 
-                 if (mob instanceof EntityPlayer) {
-                     if (canDamagePlayer((EntityPlayer) mob)) {
-                         mob.attackEntityFrom(new NormalDamageSource("bullet"), damage);
-                         mob.hurtResistantTime = 0;
-                         mob.setFire(5);
-                     }
-                 } else {
-                     mob.attackEntityFrom(new NormalDamageSource("bullet"), damage);
-                     mob.hurtResistantTime = 0;
-                     mob.setFire(5);
-                 }
-             }
-         }
-         this.setDead();
+                if (mob instanceof EntityPlayer) {
+                    if (canDamagePlayer((EntityPlayer) mob)) {
+                        mob.attackEntityFrom(new NormalDamageSource("bullet"), damage);
+                        mob.hurtResistantTime = 0;
+                        mob.setFire(5);
+                    }
+                } else {
+                    mob.attackEntityFrom(new NormalDamageSource("bullet"), damage);
+                    mob.hurtResistantTime = 0;
+                    mob.setFire(5);
+                }
+            }
+        }
+        this.setDead();
     }
 
     @Override

@@ -10,7 +10,6 @@ import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.expander.ExpanderPowerTierFiveTileEntity;
-import openmodularturrets.tileentity.expander.ExpanderPowerTierOneTileEntity;
 
 public class BlockExpanderPowerTierFive extends BlockContainer {
     public BlockExpanderPowerTierFive() {

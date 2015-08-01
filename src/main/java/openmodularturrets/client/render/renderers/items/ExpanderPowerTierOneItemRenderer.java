@@ -34,7 +34,7 @@ public class ExpanderPowerTierOneItemRenderer implements IItemRenderer {
         GL11.glPushMatrix();
         GL11.glTranslated(-0.5, -0.5, -0.5);
         this.expanderPowerTierOneRenderer.renderTileEntityAt(this.expanderPowerTierOneTileEntity, 0.1D, 0.1D, -0.2D,
-                0.0F);
+                                                             0.0F);
         GL11.glPopMatrix();
     }
 }

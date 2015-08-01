@@ -33,7 +33,7 @@ public class RocketTurretTileEntity extends TurretHead {
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getRocketTurretSettings().getAccuracy()/10;
+        return ConfigHandler.getRocketTurretSettings().getAccuracy() / 10;
     }
 
     @Override

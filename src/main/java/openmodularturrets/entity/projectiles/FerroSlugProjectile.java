@@ -60,7 +60,8 @@ public class FerroSlugProjectile extends TurretProjectile {
             }
 
             Random random = new Random();
-            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:railGunHit", ConfigHandler.getTurretSoundVolume(),  random.nextFloat()+0.5F);
+            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:railGunHit",
+                                     ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
 
             if (movingobjectposition.entityHit instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) movingobjectposition.entityHit)) {

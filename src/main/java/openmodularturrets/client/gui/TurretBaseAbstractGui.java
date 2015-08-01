@@ -50,14 +50,15 @@ public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandle
             this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
             this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
             this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
-            this.buttonList.add(new GuiButton(6, x + 180, y + 75, 80, 20, base.multiTargeting ? "Target: Multi" : "Target: Single"));
+            this.buttonList.add(new GuiButton(6, x + 180, y + 75, 80, 20,
+                                              base.multiTargeting ? "Target: Multi" : "Target: Single"));
         } else if (base.getTrustedPlayer(player.getUniqueID()) != null) {
             if (base.getTrustedPlayer(player.getUniqueID()).admin) {
                 this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
                 this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
             }
-            if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting ||
-                    base.getTrustedPlayer(player.getUniqueID()).admin) {
+            if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting || base.getTrustedPlayer(
+                    player.getUniqueID()).admin) {
                 this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
             }
         }
@@ -91,8 +92,7 @@ public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandle
         }
 
         if (guibutton.id == 5) {
-            player.openGui(ModularTurrets.instance, 6,
-                    player.worldObj, base.xCoord, base.yCoord, base.zCoord);
+            player.openGui(ModularTurrets.instance, 6, player.worldObj, base.xCoord, base.yCoord, base.zCoord);
         }
 
         if (guibutton.id == 6) {
@@ -113,7 +113,7 @@ public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandle
 
     public void sendChangeToServer() {
         AdjustYAxisDetectMessage message = new AdjustYAxisDetectMessage(base.xCoord, base.yCoord, base.zCoord,
-                base.getyAxisDetect());
+                                                                        base.getyAxisDetect());
 
         ModularTurrets.networking.sendToServer(message);
     }
@@ -172,8 +172,8 @@ public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandle
                     rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 45);
                     intersects = rectangle.intersects(rectangleGUI);
                 }
-                if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting ||
-                        base.getTrustedPlayer(player.getUniqueID()).admin) {
+                if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting || base.getTrustedPlayer(
+                        player.getUniqueID()).admin) {
                     rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, (height - ySize) / 2 + 50, 80, 20);
                     if (!intersects) {
                         intersects = rectangle.intersects(rectangleGUI);

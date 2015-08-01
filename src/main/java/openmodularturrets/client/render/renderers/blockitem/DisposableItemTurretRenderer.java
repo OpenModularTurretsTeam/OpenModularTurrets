@@ -42,7 +42,7 @@ public class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
         }
 
         if (turretHead.shouldConceal) {
-             return;
+            return;
         }
 
         this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);

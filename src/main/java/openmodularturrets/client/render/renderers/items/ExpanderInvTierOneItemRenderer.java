@@ -4,9 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import openmodularturrets.client.render.models.ModelExpander;
 import openmodularturrets.client.render.renderers.blockitem.ExpanderInvTierOneRenderer;
-import openmodularturrets.client.render.renderers.blockitem.ExpanderPowerTierOneRenderer;
 import openmodularturrets.tileentity.expander.ExpanderInvTierOneTileEntity;
-import openmodularturrets.tileentity.expander.ExpanderPowerTierOneTileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class ExpanderInvTierOneItemRenderer implements IItemRenderer {
@@ -35,8 +33,7 @@ public class ExpanderInvTierOneItemRenderer implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         GL11.glPushMatrix();
         GL11.glTranslated(-0.5, -0.5, -0.5);
-        this.expanderInvTierOneRenderer.renderTileEntityAt(this.expanderInvTierOneTileEntity,0.1D, 0.1D, -0.2D,
-                0.0F);
+        this.expanderInvTierOneRenderer.renderTileEntityAt(this.expanderInvTierOneTileEntity, 0.1D, 0.1D, -0.2D, 0.0F);
         GL11.glPopMatrix();
     }
 }

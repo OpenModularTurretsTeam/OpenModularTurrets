@@ -9,7 +9,6 @@ import net.minecraft.util.ResourceLocation;
 import openmodularturrets.client.render.models.ModelExpander;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.expander.AbstractInvExpander;
-import openmodularturrets.tileentity.expander.AbstractPowerExpander;
 import org.lwjgl.opengl.GL11;
 
 public class ExpanderInvTierFourRenderer extends TileEntitySpecialRenderer {

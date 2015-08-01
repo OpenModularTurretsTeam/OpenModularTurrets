@@ -47,14 +47,30 @@ public class GeneralUtil {
             }
         }
 
-        if (item instanceof ItemTool && ((ItemTool) item).getToolMaterialName().equals("WOOD")) return 200;
-        if (item instanceof ItemSword && ((ItemSword) item).getToolMaterialName().equals("WOOD")) return 200;
-        if (item instanceof ItemHoe && ((ItemHoe) item).getToolMaterialName().equals("WOOD")) return 200;
-        if (item == Items.stick) return 100;
-        if (item == Items.coal) return 1600;
-        if (item == Items.lava_bucket) return 20000;
-        if (item == Item.getItemFromBlock(Blocks.sapling)) return 100;
-        if (item == Items.blaze_rod) return 2400;
+        if (item instanceof ItemTool && ((ItemTool) item).getToolMaterialName().equals("WOOD")) {
+            return 200;
+        }
+        if (item instanceof ItemSword && ((ItemSword) item).getToolMaterialName().equals("WOOD")) {
+            return 200;
+        }
+        if (item instanceof ItemHoe && ((ItemHoe) item).getToolMaterialName().equals("WOOD")) {
+            return 200;
+        }
+        if (item == Items.stick) {
+            return 100;
+        }
+        if (item == Items.coal) {
+            return 1600;
+        }
+        if (item == Items.lava_bucket) {
+            return 20000;
+        }
+        if (item == Item.getItemFromBlock(Blocks.sapling)) {
+            return 100;
+        }
+        if (item == Items.blaze_rod) {
+            return 2400;
+        }
         return GameRegistry.getFuelValue(itemStack);
     }
 }

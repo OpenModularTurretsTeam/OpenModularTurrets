@@ -15,16 +15,13 @@ public class RecipeHandler {
         boolean recipesDone = false;
         // Recipes
 
-        if (ModCompatibility.ThermalExpansionLoaded
-                && ConfigHandler.recipes.equals("thermalexpansion")) {
+        if (ModCompatibility.ThermalExpansionLoaded && ConfigHandler.recipes.equals("thermalexpansion")) {
             ThermalExpansionRecipeHandler.init();
             recipesDone = true;
-        } else if (ModCompatibility.EnderIOLoaded
-                && ConfigHandler.recipes.equals("enderio")) {
+        } else if (ModCompatibility.EnderIOLoaded && ConfigHandler.recipes.equals("enderio")) {
             EnderIORecipeHandler.init();
             recipesDone = true;
-        } else if (ModCompatibility.MekanismLoaded
-                && ConfigHandler.recipes.equals("mekanism")) {
+        } else if (ModCompatibility.MekanismLoaded && ConfigHandler.recipes.equals("mekanism")) {
             MekanismRecipeHandler.init();
             recipesDone = true;
         } else if (ConfigHandler.recipes.equals("vanilla")) {
@@ -50,172 +47,173 @@ public class RecipeHandler {
 
         //RECIPES THAT DON'T CHANGE BASED ON MODS LOADED:
         //Tier 1 static recipes (Because they shouldn't use expensive mod items, only redstone, cobblestone and planks)
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.barrelTierOneItem, 1), new Object[]{"AAA", " B ",
-                "AAA", 'A', net.minecraft.init.Blocks.cobblestone, 'B',
-                "plankWood"}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.barrelTierOneItem, 1),
+                                                   new Object[]{"AAA", " B ", "AAA", 'A',
+                                                                net.minecraft.init.Blocks.cobblestone, 'B',
+                                                                "plankWood"}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.chamberTierOneItem, 1), new Object[]{"AAA", " BC",
-                "AAA", 'A', net.minecraft.init.Blocks.cobblestone, 'B',
-                "plankWood", 'C', net.minecraft.init.Items.redstone}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.chamberTierOneItem, 1),
+                                                   new Object[]{"AAA", " BC", "AAA", 'A',
+                                                                net.minecraft.init.Blocks.cobblestone, 'B', "plankWood",
+                                                                'C', net.minecraft.init.Items.redstone}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.sensorTierOneItem, 1),
-                new Object[]{" A ", "ABA", " A ", 'A',
-                        net.minecraft.init.Items.redstone, 'B', "plankWood"}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.sensorTierOneItem, 1),
+                                                   new Object[]{" A ", "ABA", " A ", 'A',
+                                                                net.minecraft.init.Items.redstone, 'B', "plankWood"}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.turretBaseTierOne, 1), new Object[]{"ABA", "BCB",
-                "ABA", 'A', net.minecraft.init.Blocks.cobblestone, 'B',
-                "plankWood", 'C', Items.sensorTierOneItem}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.turretBaseTierOne, 1),
+                                                   new Object[]{"ABA", "BCB", "ABA", 'A',
+                                                                net.minecraft.init.Blocks.cobblestone, 'B', "plankWood",
+                                                                'C', Items.sensorTierOneItem}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.expanderPowerTierOne, 1), new Object[]{"ABA", "DCD",
-                "ADA", 'A', net.minecraft.init.Blocks.cobblestone, 'B', "plankWood", 'C',
-                net.minecraft.init.Items.redstone, 'D', Items.ioBus}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.expanderPowerTierOne, 1),
+                                                   new Object[]{"ABA", "DCD", "ADA", 'A',
+                                                                net.minecraft.init.Blocks.cobblestone, 'B', "plankWood",
+                                                                'C', net.minecraft.init.Items.redstone, 'D',
+                                                                Items.ioBus}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.expanderInvTierOne, 1), new Object[]{"ABA", "DCD",
-                "ADA", 'A', net.minecraft.init.Blocks.cobblestone, 'B', "plankWood", 'C',
-                net.minecraft.init.Blocks.chest, 'D', Items.ioBus}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.expanderInvTierOne, 1),
+                                                   new Object[]{"ABA", "DCD", "ADA", 'A',
+                                                                net.minecraft.init.Blocks.cobblestone, 'B', "plankWood",
+                                                                'C', net.minecraft.init.Blocks.chest, 'D',
+                                                                Items.ioBus}));
 
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                    Blocks.disposableItemTurret, 1), new Object[]{" A ", "CBC",
-                    "CDC", 'A', Items.barrelTierOneItem, 'B',
-                    Items.chamberTierOneItem, 'C',
-                    net.minecraft.init.Blocks.cobblestone, 'D',
-                    net.minecraft.init.Items.redstone}));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.disposableItemTurret, 1),
+                                                       new Object[]{" A ", "CBC", "CDC", 'A', Items.barrelTierOneItem,
+                                                                    'B', Items.chamberTierOneItem, 'C',
+                                                                    net.minecraft.init.Blocks.cobblestone, 'D',
+                                                                    net.minecraft.init.Items.redstone}));
         }
 
         if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                    Blocks.potatoCannonTurret, 1), new Object[]{"CAC", "CAC",
-                    "DBD", 'A', Items.barrelTierOneItem, 'B',
-                    Items.chamberTierOneItem, 'C',
-                    net.minecraft.init.Blocks.cobblestone, 'D',
-                    net.minecraft.init.Items.redstone}));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.potatoCannonTurret, 1),
+                                                       new Object[]{"CAC", "CAC", "DBD", 'A', Items.barrelTierOneItem,
+                                                                    'B', Items.chamberTierOneItem, 'C',
+                                                                    net.minecraft.init.Blocks.cobblestone, 'D',
+                                                                    net.minecraft.init.Items.redstone}));
         }
 
         GameRegistry.addRecipe(new ItemStack(Blocks.leverBlock, 1),
-                new Object[]{"AAA", "A  ", "A  ", 'A',
-                        net.minecraft.init.Blocks.cobblestone});
+                               new Object[]{"AAA", "A  ", "A  ", 'A', net.minecraft.init.Blocks.cobblestone});
 
         // Addons
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.solarPanelAddon, 1), new Object[]{"AAA", "CBC", "DED",
-                'A', net.minecraft.init.Blocks.glass_pane, 'B',
-                net.minecraft.init.Blocks.lapis_block, 'C',
-                net.minecraft.init.Items.redstone, 'D', "ingotIron", 'E',
-                Items.ioBus}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.solarPanelAddon, 1),
+                                                   new Object[]{"AAA", "CBC", "DED", 'A',
+                                                                net.minecraft.init.Blocks.glass_pane, 'B',
+                                                                net.minecraft.init.Blocks.lapis_block, 'C',
+                                                                net.minecraft.init.Items.redstone, 'D', "ingotIron",
+                                                                'E', Items.ioBus}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.redstoneReactorAddon, 1), new Object[]{"CAC", "ABD",
-                "CAC", 'A', "ingotIron", 'B',
-                net.minecraft.init.Items.ender_eye, 'C',
-                net.minecraft.init.Items.quartz, 'D', Items.ioBus}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.redstoneReactorAddon, 1),
+                                                   new Object[]{"CAC", "ABD", "CAC", 'A', "ingotIron", 'B',
+                                                                net.minecraft.init.Items.ender_eye, 'C',
+                                                                net.minecraft.init.Items.quartz, 'D', Items.ioBus}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.damageAmpAddon, 1), new Object[]{"AAA", "B B", "AAA",
-                'A', "ingotIron", 'B', net.minecraft.init.Items.ender_pearl}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.damageAmpAddon, 1),
+                                                   new Object[]{"AAA", "B B", "AAA", 'A', "ingotIron", 'B',
+                                                                net.minecraft.init.Items.ender_pearl}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.recyclerAddon, 1), new Object[]{"ABA", "BCD", "ABA",
-                'A', "ingotGold", 'B', net.minecraft.init.Items.magma_cream, 'C', net.minecraft.init.Blocks.ender_chest, 'D', Items.ioBus}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.recyclerAddon, 1),
+                                                   new Object[]{"ABA", "BCD", "ABA", 'A', "ingotGold", 'B',
+                                                                net.minecraft.init.Items.magma_cream, 'C',
+                                                                net.minecraft.init.Blocks.ender_chest, 'D',
+                                                                Items.ioBus}));
 
         //Fences
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.fenceTierOne, 16), new Object[]{"ABA", "BAB", "ABA",
-                'A', net.minecraft.init.Blocks.iron_bars, 'B', net.minecraft.init.Blocks.cobblestone}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.fenceTierOne, 16),
+                                                   new Object[]{"ABA", "BAB", "ABA", 'A',
+                                                                net.minecraft.init.Blocks.iron_bars, 'B',
+                                                                net.minecraft.init.Blocks.cobblestone}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.fenceTierTwo, 16), new Object[]{"ABA", "BAB", "ABA",
-                'A', net.minecraft.init.Blocks.iron_bars, 'B', "ingotIron"}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.fenceTierTwo, 16),
+                                                   new Object[]{"ABA", "BAB", "ABA", 'A',
+                                                                net.minecraft.init.Blocks.iron_bars, 'B',
+                                                                "ingotIron"}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.fenceTierThree, 16), new Object[]{"ABA", "BAB", "ABA",
-                'A', net.minecraft.init.Blocks.iron_bars, 'B', "ingotGold"}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.fenceTierThree, 16),
+                                                   new Object[]{"ABA", "BAB", "ABA", 'A',
+                                                                net.minecraft.init.Blocks.iron_bars, 'B',
+                                                                "ingotGold"}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.fenceTierFour, 16), new Object[]{"ABA", "BAB", "ABA",
-                'A', net.minecraft.init.Blocks.iron_bars, 'B', net.minecraft.init.Items.diamond}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.fenceTierFour, 16),
+                                                   new Object[]{"ABA", "BAB", "ABA", 'A',
+                                                                net.minecraft.init.Blocks.iron_bars, 'B',
+                                                                net.minecraft.init.Items.diamond}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.fenceTierFive, 16), new Object[]{"ABA", "BAB", "ABA",
-                'A', net.minecraft.init.Blocks.iron_bars, 'B', net.minecraft.init.Blocks.obsidian}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.fenceTierFive, 16),
+                                                   new Object[]{"ABA", "BAB", "ABA", 'A',
+                                                                net.minecraft.init.Blocks.iron_bars, 'B',
+                                                                net.minecraft.init.Blocks.obsidian}));
 
         //Hard Walls
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.hardWallTierOne, 16), new Object[]{"ABA", "BCB", "ABA",
-                'A', net.minecraft.init.Blocks.gravel, 'B', net.minecraft.init.Blocks.cobblestone, 'C', net.minecraft.init.Blocks.sand}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.hardWallTierOne, 16),
+                                                   new Object[]{"ABA", "BCB", "ABA", 'A',
+                                                                net.minecraft.init.Blocks.gravel, 'B',
+                                                                net.minecraft.init.Blocks.cobblestone, 'C',
+                                                                net.minecraft.init.Blocks.sand}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.hardWallTierTwo, 16), new Object[]{"ABA", "BAB", "ABA",
-                'A', Blocks.hardWallTierOne, 'B', net.minecraft.init.Blocks.stone}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.hardWallTierTwo, 16),
+                                                   new Object[]{"ABA", "BAB", "ABA", 'A', Blocks.hardWallTierOne, 'B',
+                                                                net.minecraft.init.Blocks.stone}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.hardWallTierThree, 16), new Object[]{"ABA", "BAB", "ABA",
-                'A', Blocks.hardWallTierTwo, 'B', net.minecraft.init.Blocks.brick_block}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.hardWallTierThree, 16),
+                                                   new Object[]{"ABA", "BAB", "ABA", 'A', Blocks.hardWallTierTwo, 'B',
+                                                                net.minecraft.init.Blocks.brick_block}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.hardWallTierFour, 16), new Object[]{"ABA", "BAB", "ABA",
-                'A', Blocks.hardWallTierThree, 'B', net.minecraft.init.Blocks.nether_brick}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.hardWallTierFour, 16),
+                                                   new Object[]{"ABA", "BAB", "ABA", 'A', Blocks.hardWallTierThree, 'B',
+                                                                net.minecraft.init.Blocks.nether_brick}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Blocks.hardWallTierFive, 16), new Object[]{"ABA", "BAB", "ABA",
-                'A', Blocks.hardWallTierThree, 'B', net.minecraft.init.Blocks.obsidian}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.hardWallTierFive, 16),
+                                                   new Object[]{"ABA", "BAB", "ABA", 'A', Blocks.hardWallTierThree, 'B',
+                                                                net.minecraft.init.Blocks.obsidian}));
 
         // Integration
-        if (ModCompatibility.ThaumcraftLoaded
-                && ConfigHandler.shouldDoThaumcraftIntegration) {
+        if (ModCompatibility.ThaumcraftLoaded && ConfigHandler.shouldDoThaumcraftIntegration) {
             ThaumcraftRecipeHandler.init();
         }
 
-        if ((ModCompatibility.ComputercraftLoaded || ModCompatibility.OpenComputersLoaded)
-                && ConfigHandler.shouldDoThaumcraftIntegration) {
+        if ((ModCompatibility.ComputercraftLoaded || ModCompatibility.OpenComputersLoaded) && ConfigHandler.shouldDoThaumcraftIntegration) {
             ComputerRecipeHandler.init();
         }
 
-
         // Upgrades
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.efficiencyUpgradeItem, 1), new Object[]{" A ", "ABA",
-                " C ", 'A', net.minecraft.init.Items.quartz, 'B',
-                net.minecraft.init.Items.ender_eye, 'C', Items.ioBus}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.efficiencyUpgradeItem, 1),
+                                                   new Object[]{" A ", "ABA", " C ", 'A',
+                                                                net.minecraft.init.Items.quartz, 'B',
+                                                                net.minecraft.init.Items.ender_eye, 'C', Items.ioBus}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.accuraccyUpgradeItem, 1), new Object[]{" A ", "ABA",
-                " C ", 'A', net.minecraft.init.Items.quartz, 'B', "ingotGold",
-                'C', Items.ioBus}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.accuraccyUpgradeItem, 1),
+                                                   new Object[]{" A ", "ABA", " C ", 'A',
+                                                                net.minecraft.init.Items.quartz, 'B', "ingotGold", 'C',
+                                                                Items.ioBus}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.fireRateUpgradeItem, 1), new Object[]{" A ", "ABA",
-                " C ", 'A', net.minecraft.init.Items.quartz, 'B',
-                net.minecraft.init.Items.blaze_powder, 'C', Items.ioBus}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.fireRateUpgradeItem, 1),
+                                                   new Object[]{" A ", "ABA", " C ", 'A',
+                                                                net.minecraft.init.Items.quartz, 'B',
+                                                                net.minecraft.init.Items.blaze_powder, 'C',
+                                                                Items.ioBus}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.rangeUpgradeItem, 1), new Object[]{" A ", "ABA", " C ",
-                'A', net.minecraft.init.Items.quartz, 'B',
-                net.minecraft.init.Items.diamond, 'C', Items.ioBus}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.rangeUpgradeItem, 1),
+                                                   new Object[]{" A ", "ABA", " C ", 'A',
+                                                                net.minecraft.init.Items.quartz, 'B',
+                                                                net.minecraft.init.Items.diamond, 'C', Items.ioBus}));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.scattershotUpgradeItem, 1), new Object[]{" A ", "ABA",
-                " C ", 'A', net.minecraft.init.Items.quartz, 'B',
-                net.minecraft.init.Items.flint, 'C', Items.ioBus}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.scattershotUpgradeItem, 1),
+                                                   new Object[]{" A ", "ABA", " C ", 'A',
+                                                                net.minecraft.init.Items.quartz, 'B',
+                                                                net.minecraft.init.Items.flint, 'C', Items.ioBus}));
 
         //Ammo
         GameRegistry.addRecipe(new ItemStack(Items.blazingClayCraftable, 32),
-                new Object[]{"BCB", "CAC", "BCB", 'A',
-                        net.minecraft.init.Items.blaze_powder, 'B',
-                        net.minecraft.init.Items.clay_ball, 'C',
-                        net.minecraft.init.Items.redstone});
+                               new Object[]{"BCB", "CAC", "BCB", 'A', net.minecraft.init.Items.blaze_powder, 'B',
+                                            net.minecraft.init.Items.clay_ball, 'C',
+                                            net.minecraft.init.Items.redstone});
 
         //Other
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-                Items.ioBus, 1), new Object[]{" A ", "BBB",
-                " C ", 'A', "ingotGold", 'B',
-                net.minecraft.init.Items.redstone, 'C', "ingotIron"}));
-
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.ioBus, 1),
+                                                   new Object[]{" A ", "BBB", " C ", 'A', "ingotGold", 'B',
+                                                                net.minecraft.init.Items.redstone, 'C', "ingotIron"}));
     }
 }
