@@ -77,8 +77,9 @@ public class OpenModularTurretsWikiTab extends BaseWikiTab {
 
     @Override
     protected String getPageLocation(String pageEntry) {
-        if (pageEntry.startsWith("item") || pageEntry.startsWith("block"))
+        if (pageEntry.startsWith("item") || pageEntry.startsWith("block")) {
             return pageEntry;
+        }
         return "openmodularturrets:menu/" + pageEntry;
     }
 }

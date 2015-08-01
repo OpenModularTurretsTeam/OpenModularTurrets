@@ -72,7 +72,8 @@ public class BulletProjectile extends TurretProjectile {
 
         if (movingobjectposition.entityHit == null && !worldObj.isRemote) {
             Random random = new Random();
-            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:bulletHit", ConfigHandler.getTurretSoundVolume(),  random.nextFloat()+0.5F);
+            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:bulletHit",
+                                     ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
         }
         this.setDead();
     }

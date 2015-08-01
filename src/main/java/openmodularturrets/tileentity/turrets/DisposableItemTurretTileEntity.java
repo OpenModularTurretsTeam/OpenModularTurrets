@@ -31,7 +31,7 @@ public class DisposableItemTurretTileEntity extends TurretHead {
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getDisposableTurretSettings().getAccuracy()/10;
+        return ConfigHandler.getDisposableTurretSettings().getAccuracy() / 10;
     }
 
     @Override

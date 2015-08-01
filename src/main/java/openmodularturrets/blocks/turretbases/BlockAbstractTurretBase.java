@@ -7,7 +7,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,24 +41,25 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
                     if (player.getUniqueID().toString().equals(base.getOwner())) {
                         base.camoStack = null;
                     } else {
-                        player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
+                        player.addChatMessage(
+                                new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
                     }
                 }
             }
         }
 
         if (!world.isRemote && !player.isSneaking() && player.getCurrentEquippedItem() != null) {
-            if (player.getCurrentEquippedItem() != null
-                    && player.getCurrentEquippedItem().getItem() instanceof ItemBlock
-                    && Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()).isNormalCube()
-                    && Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()).isOpaqueCube()
-                    && !(Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()) instanceof BlockAbstractTurretBase)) {
+            if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemBlock && Block.getBlockFromItem(
+                    player.getCurrentEquippedItem().getItem()).isNormalCube() && Block.getBlockFromItem(
+                    player.getCurrentEquippedItem().getItem()).isOpaqueCube() && !(Block.getBlockFromItem(
+                    player.getCurrentEquippedItem().getItem()) instanceof BlockAbstractTurretBase)) {
                 TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
                 if (base != null) {
                     if (player.getUniqueID().toString().equals(base.getOwner())) {
                         base.camoStack = player.getCurrentEquippedItem();
                     } else {
-                        player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
+                        player.addChatMessage(
+                                new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
                     }
                 }
             }
@@ -128,8 +128,8 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
                     float rz = rand.nextFloat() * 0.8F + 0.1F;
 
                     EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz,
-                            new ItemStack(item.getItem(), item.stackSize,
-                                    item.getItemDamage()));
+                                                           new ItemStack(item.getItem(), item.stackSize,
+                                                                         item.getItemDamage()));
 
                     if (item.hasTagCompound()) {
                         entityItem.getEntityItem().setTagCompound((NBTTagCompound) item.getTagCompound().copy());

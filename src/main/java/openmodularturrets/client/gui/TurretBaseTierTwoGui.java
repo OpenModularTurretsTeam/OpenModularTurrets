@@ -45,8 +45,8 @@ public class TurretBaseTierTwoGui extends TurretBaseAbstractGui {
 
         targetInfo.add("\u00A76Owner: \u00A7f" + base.getOwnerName());
         boolean isCurrentlyOn = base.isActive();
-        targetInfo.add("\u00A76Active: "+ (isCurrentlyOn ? "\u00A72Yes" : "\u00A7cNo"));
-		targetInfo.add("");
+        targetInfo.add("\u00A76Active: " + (isCurrentlyOn ? "\u00A72Yes" : "\u00A7cNo"));
+        targetInfo.add("");
         targetInfo.add("\u00A75-Trusted Players-");
 
         for (TrustedPlayer trusted_player : base.getTrustedPlayers()) {

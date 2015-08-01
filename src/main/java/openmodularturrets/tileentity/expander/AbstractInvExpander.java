@@ -1,6 +1,5 @@
 package openmodularturrets.tileentity.expander;
 
-import cofh.api.energy.EnergyStorage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -29,8 +28,7 @@ public abstract class AbstractInvExpander extends TileEntity implements IInvento
     public Packet getDescriptionPacket() {
         NBTTagCompound var1 = new NBTTagCompound();
         this.writeToNBT(var1);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord,
-                this.zCoord, 2, var1);
+        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
     }
 
     @Override
@@ -58,11 +56,9 @@ public abstract class AbstractInvExpander extends TileEntity implements IInvento
         par1.setTag("Inventory", itemList);
     }
 
-
     @Override
     public void readFromNBT(NBTTagCompound par1) {
         super.readFromNBT(par1);
-
 
         NBTTagList tagList = par1.getTagList("Inventory", 10);
 
@@ -168,9 +164,9 @@ public abstract class AbstractInvExpander extends TileEntity implements IInvento
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this
-                && player.getDistanceSq(xCoord + 0.5, yCoord + 0.5,
-                zCoord + 0.5) < 64;
+        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.getDistanceSq(xCoord + 0.5,
+                                                                                              yCoord + 0.5,
+                                                                                              zCoord + 0.5) < 64;
     }
 
     @Override

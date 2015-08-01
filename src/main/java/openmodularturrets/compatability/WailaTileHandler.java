@@ -111,8 +111,9 @@ public class WailaTileHandler implements IWailaDataProvider {
     @Override
     public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z) {
 
-        if (te != null)
+        if (te != null) {
             te.writeToNBT(tag);
+        }
 
         return tag;
     }

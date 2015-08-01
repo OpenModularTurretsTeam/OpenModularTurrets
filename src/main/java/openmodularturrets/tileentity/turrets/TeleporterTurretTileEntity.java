@@ -13,8 +13,6 @@ import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.util.TurretHeadUtil;
 
-import java.util.Random;
-
 public class TeleporterTurretTileEntity extends TurretHead {
     public TeleporterTurretTileEntity() {
         super();
@@ -38,7 +36,6 @@ public class TeleporterTurretTileEntity extends TurretHead {
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
 
-
         ticks++;
 
         // BASE IS OKAY
@@ -56,23 +53,17 @@ public class TeleporterTurretTileEntity extends TurretHead {
             }
             targetingTicks = 0;
 
-            int power_required = Math
-                    .round(this.getTurretPowerUsage()
-                            * (1 - TurretHeadUtil.getEfficiencyUpgrades(base))
-                            * (1 + TurretHeadUtil
-                            .getScattershotUpgrades(base)));
+            int power_required = Math.round(this.getTurretPowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(
+                    base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
 
             // power check
-            if ((base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required)
-                    || (!base.isActive())) {
+            if ((base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required) || (!base.isActive())) {
                 return;
             }
 
             // is there a target, and has it died in the previous tick?
-            if (target == null
-                    || target.isDead
-                    || this.getWorldObj().getEntityByID(target.getEntityId()) == null
-                    || ((EntityLivingBase) target).getHealth() <= 0.0F) {
+            if (target == null || target.isDead || this.getWorldObj().getEntityByID(
+                    target.getEntityId()) == null || ((EntityLivingBase) target).getHealth() <= 0.0F) {
                 target = getTargetWithMinRange();
             }
 
@@ -81,21 +72,17 @@ public class TeleporterTurretTileEntity extends TurretHead {
                 return;
             }
 
-            this.rotationXZ = TurretHeadUtil.getAimYaw(target, xCoord, yCoord,
-                    zCoord) + 3.2F;
-            this.rotationXY = TurretHeadUtil.getAimPitch(target, xCoord,
-                    yCoord, zCoord);
+            this.rotationXZ = TurretHeadUtil.getAimYaw(target, xCoord, yCoord, zCoord) + 3.2F;
+            this.rotationXY = TurretHeadUtil.getAimPitch(target, xCoord, yCoord, zCoord);
 
             // has cooldown passed?
-            if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil
-                    .getFireRateUpgrades(base)))) {
+            if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
                 return;
             }
 
             // Can the turret still see the target? (It's moving)
             if (target != null) {
-                if (!TurretHeadUtil.canTurretSeeTarget(this,
-                        (EntityLivingBase) target)) {
+                if (!TurretHeadUtil.canTurretSeeTarget(this, (EntityLivingBase) target)) {
                     target = null;
                     return;
                 }
@@ -103,8 +90,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
             if (target != null && target instanceof EntityPlayerMP) {
                 EntityPlayerMP entity = (EntityPlayerMP) target;
 
-                if (TurretHeadUtil.isTrustedPlayer(entity.getUniqueID(),
-                        base)) {
+                if (TurretHeadUtil.isTrustedPlayer(entity.getUniqueID(), base)) {
                     target = null;
                     return;
                 }
@@ -120,11 +106,8 @@ public class TeleporterTurretTileEntity extends TurretHead {
 
             if (this.requiresAmmo()) {
                 if (this.requiresSpecificAmmo()) {
-                    for (int i = 0; i <= TurretHeadUtil
-                            .getScattershotUpgrades(base); i++) {
-                        ammo = TurretHeadUtil
-                                .useSpecificItemStackItemFromBase(base,
-                                        this.getAmmo());
+                    for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
+                        ammo = TurretHeadUtil.useSpecificItemStackItemFromBase(base, this.getAmmo());
                     }
                 } else {
                     ammo = TurretHeadUtil.useAnyItemStackFromBase(base);
@@ -137,24 +120,19 @@ public class TeleporterTurretTileEntity extends TurretHead {
             }
 
             // Consume energy
-            base.setEnergyStored(base.getEnergyStored(ForgeDirection.UNKNOWN)
-                    - power_required);
+            base.setEnergyStored(base.getEnergyStored(ForgeDirection.UNKNOWN) - power_required);
 
             EntityLivingBase base = (EntityLivingBase) target;
-            base.setPositionAndUpdate(this.xCoord + 0.5F, this.yCoord + 1.0F,
-                    zCoord + 0.5F);
+            base.setPositionAndUpdate(this.xCoord + 0.5F, this.yCoord + 1.0F, zCoord + 0.5F);
 
             ((BlockTeleporterTurret) worldObj.getBlock(xCoord, yCoord, zCoord)).shouldAnimate = true;
             target = null;
-
         }
 
-        this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord,
-                this.zCoord, ModInfo.ID + ":" + this.getLaunchSoundEffect(),
-                0.6F, 1.0F);
+        this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord,
+                                           ModInfo.ID + ":" + this.getLaunchSoundEffect(), 0.6F, 1.0F);
 
         ticks = 0;
-
     }
 
     @Override
@@ -193,8 +171,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public TurretProjectile createProjectile(World world, Entity target,
-                                             ItemStack ammo) {
+    public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
         return null;
     }
 

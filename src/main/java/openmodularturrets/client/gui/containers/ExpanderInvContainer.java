@@ -5,12 +5,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import openmodularturrets.client.gui.customSlot.AddonSlot;
-import openmodularturrets.client.gui.customSlot.UpgradeSlot;
-import openmodularturrets.items.addons.AddonItem;
-import openmodularturrets.items.upgrades.UpgradeItem;
 import openmodularturrets.tileentity.expander.AbstractInvExpander;
-import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class ExpanderInvContainer extends Container {
 
@@ -39,12 +34,10 @@ public class ExpanderInvContainer extends Container {
         }
     }
 
-
     @Override
     public boolean canInteractWith(EntityPlayer player) {
         return tileEntity.isUseableByPlayer(player);
     }
-
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_) {
@@ -97,7 +90,8 @@ public class ExpanderInvContainer extends Container {
                 slot.onSlotChanged();
                 stack.stackSize -= transfer;
                 flag = true;
-            } else if (slotStack.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getItemDamage() == slotStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, slotStack)) {
+            } else if (slotStack.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getItemDamage() == slotStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(
+                    stack, slotStack)) {
                 int maxTransfer = totalLimit - slotStack.stackSize;
                 int transfer = maxTransfer > stack.stackSize ? stack.stackSize : maxTransfer;
                 slotStack.stackSize += transfer;
@@ -106,11 +100,9 @@ public class ExpanderInvContainer extends Container {
                 flag = true;
             }
 
-
             i += increment;
         }
 
         return flag;
-
     }
 }
