@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.util.PlayerUtil;
 
 public abstract class TurretProjectile extends EntityThrowable {
 
@@ -35,7 +36,8 @@ public abstract class TurretProjectile extends EntityThrowable {
 
     protected boolean canDamagePlayer(EntityPlayer entityPlayer) {
         if (!ConfigHandler.turretDamageTrustedPlayers) {
-            if (this.turretBase.getTrustedPlayer(entityPlayer.getGameProfile().getName()) != null) {
+            if (this.turretBase.getTrustedPlayer(entityPlayer.getUniqueID()) != null
+                    || PlayerUtil.getPlayerUIDUnstable(this.turretBase.getOwner()).equals(entityPlayer.getUniqueID())) {
                 return false;
             }
         }
