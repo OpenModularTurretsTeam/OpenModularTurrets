@@ -36,52 +36,35 @@ public class TileEntityRenderers {
 
     @SideOnly(Side.CLIENT)
     public static void init() {
-        ClientRegistry.bindTileEntitySpecialRenderer(
-                DisposableItemTurretTileEntity.class,
-                disposableItemTurretRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(
-                PotatoCannonTurretTileEntity.class, potatoCannonTurretRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(
-                RocketTurretTileEntity.class, rocketTurretRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(
-                GunTurretTileEntity.class, machineGunTurretRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(
-                GrenadeLauncherTurretTileEntity.class,
-                grenadeLauncherTurretRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(
-                LaserTurretTileEntity.class, laserTurretRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(
-                RailGunTurretTileEntity.class, railGunTurretRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(
-                IncendiaryTurretTileEntity.class, incendiaryTurretRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(
-                RelativisticTurretTileEntity.class, relativisticTurretRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(
-                TeleporterTurretTileEntity.class, teleporterTurretRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(LeverTileEntity.class,
-                leverRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(DisposableItemTurretTileEntity.class,
+                                                     disposableItemTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(PotatoCannonTurretTileEntity.class, potatoCannonTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(RocketTurretTileEntity.class, rocketTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(GunTurretTileEntity.class, machineGunTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(GrenadeLauncherTurretTileEntity.class,
+                                                     grenadeLauncherTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(LaserTurretTileEntity.class, laserTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(RailGunTurretTileEntity.class, railGunTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(IncendiaryTurretTileEntity.class, incendiaryTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(RelativisticTurretTileEntity.class, relativisticTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(TeleporterTurretTileEntity.class, teleporterTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(LeverTileEntity.class, leverRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierOneTileEntity.class,
-                expanderPowerTierOneRenderer);
+                                                     expanderPowerTierOneRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierTwoTileEntity.class,
-                expanderPowerTierTwoRenderer);
+                                                     expanderPowerTierTwoRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierThreeTileEntity.class,
-                expanderPowerTierThreeRenderer);
+                                                     expanderPowerTierThreeRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierFourTileEntity.class,
-                expanderPowerTierFourRenderer);
+                                                     expanderPowerTierFourRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierFiveTileEntity.class,
-                expanderPowerTierFiveRenderer);
+                                                     expanderPowerTierFiveRenderer);
 
-        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierOneTileEntity.class,
-                expanderInvTierOneRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierTwoTileEntity.class,
-                expanderInvTierTwoRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierOneTileEntity.class, expanderInvTierOneRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierTwoTileEntity.class, expanderInvTierTwoRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierThreeTileEntity.class,
-                expanderInvTierThreeRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierFourTileEntity.class,
-                expanderInvTierFourRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierFiveTileEntity.class,
-                expanderInvTierFiveRenderer);
-
-
+                                                     expanderInvTierThreeRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierFourTileEntity.class, expanderInvTierFourRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierFiveTileEntity.class, expanderInvTierFiveRenderer);
     }
 }

@@ -54,7 +54,8 @@ public class LaserProjectile extends TurretProjectile {
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
 
             Random random = new Random();
-            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:laserHit", ConfigHandler.getTurretSoundVolume(),  random.nextFloat()+0.5F);
+            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:laserHit",
+                                     ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
 
             if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
                 int damage = ConfigHandler.getLaserTurretSettings().getDamage();

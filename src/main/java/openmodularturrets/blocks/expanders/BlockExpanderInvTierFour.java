@@ -15,7 +15,8 @@ import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
-import openmodularturrets.tileentity.expander.*;
+import openmodularturrets.tileentity.expander.AbstractInvExpander;
+import openmodularturrets.tileentity.expander.ExpanderInvTierFourTileEntity;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 import java.util.Random;
@@ -75,8 +76,8 @@ public class BlockExpanderInvTierFour extends BlockContainer {
                     float rz = rand.nextFloat() * 0.8F + 0.1F;
 
                     EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz,
-                            new ItemStack(item.getItem(), item.stackSize,
-                                    item.getItemDamage()));
+                                                           new ItemStack(item.getItem(), item.stackSize,
+                                                                         item.getItemDamage()));
 
                     if (item.hasTagCompound()) {
                         entityItem.getEntityItem().setTagCompound((NBTTagCompound) item.getTagCompound().copy());

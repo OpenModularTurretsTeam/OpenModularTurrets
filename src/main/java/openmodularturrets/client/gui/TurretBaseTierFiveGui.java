@@ -78,6 +78,4 @@ public class TurretBaseTierFiveGui extends TurretBaseAbstractGui {
         drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
         drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 17, 14, expression);
     }
-
-
 }

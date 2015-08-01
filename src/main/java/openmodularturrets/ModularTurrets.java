@@ -23,8 +23,7 @@ import openmodularturrets.util.CommandChangeOwner;
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = ModInfo.DEPENDENCIES)
 public class ModularTurrets {
 
-    @SidedProxy(clientSide = "openmodularturrets.proxy.ClientProxy", serverSide = "openmodularturrets.proxy"
-            + "" + ".CommonProxy")
+    @SidedProxy(clientSide = "openmodularturrets.proxy.ClientProxy", serverSide = "openmodularturrets.proxy" + "" + ".CommonProxy")
     public static CommonProxy proxy;
 
     @Instance(ModInfo.ID)

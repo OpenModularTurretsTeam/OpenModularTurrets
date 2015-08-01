@@ -33,7 +33,7 @@ public class RailGunTurretTileEntity extends TurretHead {
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getRailgun_turret().getAccuracy()/10;
+        return ConfigHandler.getRailgun_turret().getAccuracy() / 10;
     }
 
     @Override

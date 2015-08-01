@@ -25,7 +25,6 @@ public class BlockHardWallTierThree extends Block {
         blockIcon = p_149651_1_.registerIcon(ModInfo.ID.toLowerCase() + ":hardWallTierThree");
     }
 
-
     @Override
     public boolean isOpaqueCube() {
         return true;

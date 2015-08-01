@@ -6,10 +6,10 @@ import openmodularturrets.items.Items;
 
 public class ThaumcraftRecipeHandler {
 
-	public static void init() {
+    public static void init() {
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(Items.potentiaAddon,
-				new Object[] { " A ", "ABA", " A ", 'A', "ingotThaumium", 'B',
-						Items.redstoneReactorAddon }));
-	}
+        GameRegistry.addRecipe(new ShapedOreRecipe(Items.potentiaAddon,
+                                                   new Object[]{" A ", "ABA", " A ", 'A', "ingotThaumium", 'B',
+                                                                Items.redstoneReactorAddon}));
+    }
 }

@@ -14,52 +14,49 @@ import org.lwjgl.opengl.GL11;
 
 public class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
 
-	private ModelTeleporterTurret model;
-	ModelSolarPanelAddon solar;
-	ModelDamageAmp amp;
-	ModelRedstoneReactor reac;
+    private ModelTeleporterTurret model;
+    ModelSolarPanelAddon solar;
+    ModelDamageAmp amp;
+    ModelRedstoneReactor reac;
 
-	public TeleporterTurretRenderer() {
-		model = new ModelTeleporterTurret();
-	}
+    public TeleporterTurretRenderer() {
+        model = new ModelTeleporterTurret();
+    }
 
-	@Override
-	public void renderTileEntityAt(TileEntity te, double x, double y, double z,
-			float scale) {
+    @Override
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
 
-		TurretHead turretHead = (TurretHead) te;
+        TurretHead turretHead = (TurretHead) te;
 
-		if (turretHead.shouldConceal) {
-			return;
-		}
+        if (turretHead.shouldConceal) {
+            return;
+        }
 
-		int rotation = 0;
-		if (te.getWorldObj() != null) {
-			rotation = te.getBlockMetadata();
-		}
+        int rotation = 0;
+        if (te.getWorldObj() != null) {
+            rotation = te.getBlockMetadata();
+        }
 
-		this.model.setRotationForTarget(turretHead.rotationXY,
-				turretHead.rotationXZ);
-		ResourceLocation textures = (new ResourceLocation(ModInfo.ID
-				+ ":textures/blocks/teleporterTurret.png"));
-		Minecraft.getMinecraft().renderEngine.bindTexture(textures);
+        this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
+        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/teleporterTurret.png"));
+        Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
-		GL11.glScalef(1.0F, -1F, -1F);
-		GL11.glRotatef(rotation * 90, 0.0F, 1.0F, 0.0F);
+        GL11.glPushMatrix();
+        GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
+        GL11.glScalef(1.0F, -1F, -1F);
+        GL11.glRotatef(rotation * 90, 0.0F, 1.0F, 0.0F);
 
-		model.Base.rotateAngleX = turretHead.baseFitRotationX;
-		model.Base.rotateAngleY = turretHead.baseFitRotationZ;
+        model.Base.rotateAngleX = turretHead.baseFitRotationX;
+        model.Base.rotateAngleY = turretHead.baseFitRotationZ;
 
-		model.Spinner1.rotateAngleY = turretHead.rotationAnimation;
-		model.Spinner2.rotateAngleY = turretHead.rotationAnimation;
-		model.Spinner3.rotateAngleY = turretHead.rotationAnimation;
-		model.Spinner4.rotateAngleY = turretHead.rotationAnimation;
-		model.PillarLarge.rotateAngleY = (turretHead.rotationAnimation) * -1;
+        model.Spinner1.rotateAngleY = turretHead.rotationAnimation;
+        model.Spinner2.rotateAngleY = turretHead.rotationAnimation;
+        model.Spinner3.rotateAngleY = turretHead.rotationAnimation;
+        model.Spinner4.rotateAngleY = turretHead.rotationAnimation;
+        model.PillarLarge.rotateAngleY = (turretHead.rotationAnimation) * -1;
 
-		model.renderAll();
+        model.renderAll();
 
-		GL11.glPopMatrix();
-	}
+        GL11.glPopMatrix();
+    }
 }

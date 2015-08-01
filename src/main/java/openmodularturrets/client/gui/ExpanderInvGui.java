@@ -1,22 +1,12 @@
 package openmodularturrets.client.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiDispenser;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ContainerDispenser;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.client.gui.containers.ExpanderInvContainer;
-import openmodularturrets.client.gui.containers.TurretBaseTierFiveContainer;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.expander.AbstractInvExpander;
-import openmodularturrets.tileentity.turretbase.TrustedPlayer;
-import openmodularturrets.tileentity.turretbase.TurretBaseTierFiveTileEntity;
 import org.lwjgl.opengl.GL11;
-
-import java.util.ArrayList;
 
 public class ExpanderInvGui extends GuiContainer {
 
@@ -35,6 +25,4 @@ public class ExpanderInvGui extends GuiContainer {
 
         this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
     }
-
-
 }

@@ -8,7 +8,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.WorldServer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-
 /**
  * Created by nico on 6/4/15.
  */

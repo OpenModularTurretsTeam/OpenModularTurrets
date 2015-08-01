@@ -47,12 +47,9 @@ import static openmodularturrets.util.PlayerUtil.*;
         @Optional.Interface(iface = "thaumcraft.api.aspects.IAspectContainer", modid = "Thaumcraft"),
         @Optional.Interface(iface = "thaumcraft.api.aspects.IEssentiaTransport", modid = "Thaumcraft")})
 
-public abstract class TurretBase extends TileEntity implements IEnergyHandler,
-        IInventory, SimpleComponent, ISidedInventory, IEssentiaTransport,
-        IAspectContainer, IPeripheral {
+public abstract class TurretBase extends TileEntity implements IEnergyHandler, IInventory, SimpleComponent, ISidedInventory, IEssentiaTransport, IAspectContainer, IPeripheral {
 
     protected EnergyStorage storage;
-    protected int maxEnergyStorage;
     protected ItemStack[] inv;
     protected int yAxisDetect;
     protected boolean attacksMobs;
@@ -69,8 +66,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     protected boolean checkRedstone = false;
     protected boolean computerAccessable = false;
     protected float amountOfPotentia = 0F;
-    protected float maxAmountOfPotentia = ConfigHandler
-            .getPotentiaAddonCapacity();
+    protected float maxAmountOfPotentia = ConfigHandler.getPotentiaAddonCapacity();
     public ItemStack camoStack;
 
     //For concealment
@@ -97,30 +93,30 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             return;
         }
 
-        if (ConfigHandler.getRedstoneReactorAddonGen() < (base
-                .getMaxEnergyStored(ForgeDirection.UNKNOWN) - base
-                .getEnergyStored(ForgeDirection.UNKNOWN))) {
+        if (ConfigHandler.getRedstoneReactorAddonGen() < (base.getMaxEnergyStored(
+                ForgeDirection.UNKNOWN) - base.getEnergyStored(ForgeDirection.UNKNOWN))) {
 
             //Prioritise redstone blocks
-            ItemStack redstoneBlock = TurretHeadUtil.useSpecificItemStackBlockFromBase(base,
-                    new ItemStack(Blocks.redstone_block));
+            ItemStack redstoneBlock = TurretHeadUtil.useSpecificItemStackBlockFromBase(base, new ItemStack(
+                    Blocks.redstone_block));
 
             if (redstoneBlock == null) {
-                redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(), new ItemStack(Blocks.redstone_block), base);
+                redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(),
+                                                                               new ItemStack(Blocks.redstone_block),
+                                                                               base);
             }
 
-            if (redstoneBlock != null && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base
-                    .getMaxEnergyStored(ForgeDirection.UNKNOWN) - base
-                    .getEnergyStored(ForgeDirection.UNKNOWN))) {
+            if (redstoneBlock != null && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base.getMaxEnergyStored(
+                    ForgeDirection.UNKNOWN) - base.getEnergyStored(ForgeDirection.UNKNOWN))) {
                 base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen() * 9);
                 return;
             }
 
-            ItemStack redstone = TurretHeadUtil.useSpecificItemStackItemFromBase(base,
-                    Items.redstone);
+            ItemStack redstone = TurretHeadUtil.useSpecificItemStackItemFromBase(base, Items.redstone);
 
             if (redstone == null) {
-                redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(), new ItemStack(Items.redstone), base);
+                redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(),
+                                                                          new ItemStack(Items.redstone), base);
             }
 
             if (redstone != null) {
@@ -133,15 +129,20 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         int tier = getBaseTier();
         switch (tier) {
             case 1:
-                return ConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             case 2:
-                return ConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             case 3:
-                return ConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             case 4:
-                return ConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             case 5:
-                return ConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.worldObj, this.xCoord, this.yCoord, this.zCoord);
         }
         return 0;
     }
@@ -151,7 +152,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         trustedPlayer.uuid = getPlayerUUID(name);
         if (trustedPlayer.uuid != null) {
             for (TrustedPlayer player : trustedPlayers) {
-                if (player.getName().toLowerCase().equals(name.toLowerCase()) || trustedPlayer.uuid.toString().equals(owner)) {
+                if (player.getName().toLowerCase().equals(name.toLowerCase()) || trustedPlayer.uuid.toString().equals(
+                        owner)) {
                     return;
                 }
             }
@@ -196,10 +198,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             NBTTagCompound nbtPlayer = new NBTTagCompound();
             nbtPlayer.setString("name", trustedPlayer.name);
             nbtPlayer.setBoolean("canOpenGUI", trustedPlayer.canOpenGUI);
-            nbtPlayer.setBoolean("canChangeTargeting",
-                    trustedPlayer.canChangeTargeting);
-            nbtPlayer.setBoolean("admin",
-                    trustedPlayer.admin);
+            nbtPlayer.setBoolean("canChangeTargeting", trustedPlayer.canChangeTargeting);
+            nbtPlayer.setBoolean("admin", trustedPlayer.admin);
             if (trustedPlayer.uuid != null) {
                 nbtPlayer.setString("UUID", trustedPlayer.uuid.toString());
             } else if (getPlayerUUID(trustedPlayer.name) != null) {
@@ -215,13 +215,10 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         for (int i = 0; i < nbt.tagCount(); i++) {
             if (!nbt.getCompoundTagAt(i).getString("name").equals("")) {
                 NBTTagCompound nbtPlayer = nbt.getCompoundTagAt(i);
-                TrustedPlayer trustedPlayer = new TrustedPlayer(
-                        nbtPlayer.getString("name"));
+                TrustedPlayer trustedPlayer = new TrustedPlayer(nbtPlayer.getString("name"));
                 trustedPlayer.canOpenGUI = nbtPlayer.getBoolean("canOpenGUI");
-                trustedPlayer.canChangeTargeting = nbtPlayer
-                        .getBoolean("canChangeTargeting");
-                trustedPlayer.admin = nbtPlayer
-                        .getBoolean("admin");
+                trustedPlayer.canChangeTargeting = nbtPlayer.getBoolean("canChangeTargeting");
+                trustedPlayer.admin = nbtPlayer.getBoolean("admin");
                 if (nbtPlayer.hasKey("UUID")) {
                     trustedPlayer.uuid = getPlayerUIDUnstable(nbtPlayer.getString("UUID"));
                 } else {
@@ -231,11 +228,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                     trustedPlayers.add(trustedPlayer);
                 }
             } else if (nbt.getCompoundTagAt(i).getString("name").equals("")) {
-                TrustedPlayer trustedPlayer = new TrustedPlayer(
-                        nbt.getStringTagAt(i));
-                Logger.getGlobal()
-                        .info("found legacy trusted Player: "
-                                + nbt.getStringTagAt(i));
+                TrustedPlayer trustedPlayer = new TrustedPlayer(nbt.getStringTagAt(i));
+                Logger.getGlobal().info("found legacy trusted Player: " + nbt.getStringTagAt(i));
                 trustedPlayer.uuid = getPlayerUUID(trustedPlayer.name);
                 if (trustedPlayer.uuid != null) {
                     trustedPlayers.add(trustedPlayer);
@@ -248,8 +242,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     public Packet getDescriptionPacket() {
         NBTTagCompound var1 = new NBTTagCompound();
         this.writeToNBT(var1);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord,
-                this.zCoord, 2, var1);
+        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
     }
 
     @Override
@@ -257,8 +250,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         super.writeToNBT(par1);
 
         par1.setInteger("maxStorage", this.storage.getMaxEnergyStored());
-        par1.setInteger("energyStored",
-                this.getEnergyStored(ForgeDirection.UNKNOWN));
+        par1.setInteger("energyStored", this.getEnergyStored(ForgeDirection.UNKNOWN));
         par1.setFloat("amountOfPotentia", amountOfPotentia);
         par1.setInteger("maxIO", this.storage.getMaxReceive());
         par1.setInteger("yAxisDetect", this.yAxisDetect);
@@ -318,8 +310,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         } else if (getPlayerUUID(par1.getString("owner")) != null) {
             this.owner = getPlayerUUID(par1.getString("owner")).toString();
         } else {
-            Logger.getGlobal().info("Found non existent owner: " + par1.getString("owner") + "at coordinates: "
-                    + this.xCoord + "," + this.yCoord + "," + this.zCoord + ". Dropping Turretbase");
+            Logger.getGlobal().info("Found non existent owner: " + par1.getString(
+                    "owner") + "at coordinates: " + this.xCoord + "," + this.yCoord + "," + this.zCoord + ". Dropping Turretbase");
             worldObj.func_147480_a(this.xCoord, this.yCoord, this.zCoord, true);
             return;
         }
@@ -403,9 +395,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this
-                && player.getDistanceSq(xCoord + 0.5, yCoord + 0.5,
-                zCoord + 0.5) < 64;
+        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.getDistanceSq(xCoord + 0.5,
+                                                                                              yCoord + 0.5,
+                                                                                              zCoord + 0.5) < 64;
     }
 
     public void setyAxisDetect(int yAxisDetect) {
@@ -423,51 +415,38 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     @Optional.Method(modid = "Thaumcraft")
     private IEssentiaTransport getConnectableTileWithoutOrientation() {
         if (worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord) instanceof IEssentiaTransport) {
-            return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord + 1,
-                    this.yCoord, this.zCoord);
+            return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord);
         }
 
         if (worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord) instanceof IEssentiaTransport) {
-            return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord - 1,
-                    this.yCoord, this.zCoord);
+            return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord);
         }
 
         if (worldObj.getTileEntity(this.xCoord, this.yCoord + 1, this.zCoord) instanceof IEssentiaTransport) {
-            return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord,
-                    this.yCoord + 1, this.zCoord);
+            return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord, this.yCoord + 1, this.zCoord);
         }
 
         if (worldObj.getTileEntity(this.xCoord, this.yCoord - 1, this.zCoord) instanceof IEssentiaTransport) {
-            return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord,
-                    this.yCoord - 1, this.zCoord);
+            return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord, this.yCoord - 1, this.zCoord);
         }
 
         if (worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1) instanceof IEssentiaTransport) {
-            return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord,
-                    this.yCoord, this.zCoord + 1);
+            return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1);
         }
 
         if (worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1) instanceof IEssentiaTransport) {
-            return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord,
-                    this.yCoord, this.zCoord - 1);
+            return (IEssentiaTransport) worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1);
         }
         return null;
     }
 
     private void updateNeighboursRender() {
-        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(
-                xCoord + 1, yCoord, zCoord);
-        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(
-                xCoord - 1, yCoord, zCoord);
-        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord,
-                yCoord + 1, zCoord);
-        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord,
-                yCoord - 1, zCoord);
-        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord,
-                yCoord, zCoord + 1);
-        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord,
-                yCoord, zCoord - 1);
-
+        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord + 1, yCoord, zCoord);
+        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord - 1, yCoord, zCoord);
+        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord, yCoord + 1, zCoord);
+        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord, yCoord - 1, zCoord);
+        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord, yCoord, zCoord + 1);
+        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord, yCoord, zCoord - 1);
     }
 
     @Optional.Method(modid = "Thaumcraft")
@@ -484,8 +463,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     @Override
     public void updateEntity() {
         if (this.worldObj.isRemote) {
-            if (ticks % 10 == 0)
+            if (ticks % 10 == 0) {
                 updateNeighboursRender();
+            }
             ticks = 0;
             return;
         }
@@ -502,11 +482,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
 
             //Thaumcraft
             if (ModCompatibility.ThaumcraftLoaded && TurretHeadUtil.hasPotentiaUpgradeAddon(this)) {
-                if (amountOfPotentia > 0.05F
-                        && !(storage.getMaxEnergyStored()
-                        - storage.getEnergyStored() == 0)) {
-                    if (VisNetHandler.drainVis(worldObj, xCoord, yCoord, zCoord,
-                            Aspect.ORDER, 5) == 5) {
+                if (amountOfPotentia > 0.05F && !(storage.getMaxEnergyStored() - storage.getEnergyStored() == 0)) {
+                    if (VisNetHandler.drainVis(worldObj, xCoord, yCoord, zCoord, Aspect.ORDER, 5) == 5) {
                         this.amountOfPotentia = this.amountOfPotentia - 0.05F;
                         this.storage.modifyEnergyStored(Math.round(ConfigHandler.getPotentiaToRFRatio() * 5));
                     } else {
@@ -524,14 +501,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                 }
 
                 //Computers
-                if ((ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputercraftLoaded)
-                        && TurretHeadUtil.hasSerialPortAddon(this)) {
-                    this.computerAccessable = true;
-                } else {
-                    this.computerAccessable = false;
-
-                }
-
+                this.computerAccessable = (ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputercraftLoaded) && TurretHeadUtil.hasSerialPortAddon(
+                        this);
                 updateRedstoneReactor(this);
                 worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
             }
@@ -539,8 +510,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     }
 
     @Override
-    public void onDataPacket(NetworkManager net,
-                             S35PacketUpdateTileEntity packet) {
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
         super.onDataPacket(net, packet);
         readFromNBT(packet.func_148857_g());
     }
@@ -591,27 +561,17 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
         this.owner = owner;
     }
 
-    public boolean isComputerAccessable() {
-        return computerAccessable;
-    }
-
-    public void setComputerAccessable(boolean computerAccessable) {
-        this.computerAccessable = computerAccessable;
-    }
-
     public String getOwnerName() {
         return ownerName;
     }
 
     @Override
-    public int receiveEnergy(ForgeDirection from, int maxReceive,
-                             boolean simulate) {
+    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
         return storage.receiveEnergy(maxReceive, simulate);
     }
 
     @Override
-    public int extractEnergy(ForgeDirection from, int maxExtract,
-                             boolean simulate) {
+    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
         return 0;
     }
 
@@ -769,8 +729,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     @Override
     public AspectList getAspects() {
         if (TurretHeadUtil.hasPotentiaUpgradeAddon(this)) {
-            return new AspectList().add(Aspect.ENERGY,
-                    (int) Math.floor(amountOfPotentia));
+            return new AspectList().add(Aspect.ENERGY, (int) Math.floor(amountOfPotentia));
         } else {
             return null;
         }
@@ -921,15 +880,13 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     }
 
     @Optional.Method(modid = "OpenComputers")
-    @Callback(doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , "
-            + "admin:boolean]):string; adds Trusted player to Trustlist.")
+    @Callback(doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , " + "admin:boolean]):string; adds Trusted player to Trustlist.")
     public Object[] addTrustedPlayer(Context context, Arguments args) {
         if (!computerAccessable) {
             return new Object[]{"Computer access deactivated!"};
         }
         this.addTrustedPlayer(args.checkString(0));
-        TrustedPlayer trustedPlayer = this
-                .getTrustedPlayer(args.checkString(0));
+        TrustedPlayer trustedPlayer = this.getTrustedPlayer(args.checkString(0));
         trustedPlayer.canOpenGUI = args.optBoolean(1, false);
         trustedPlayer.canChangeTargeting = args.optBoolean(1, false);
         trustedPlayer.admin = args.optBoolean(1, false);
@@ -1022,27 +979,18 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
     @Override
     public String[] getMethodNames() {
         // list commands you want..
-        return new String[]{commands.getOwner.toString(),
-                commands.attacksPlayers.toString(),
-                commands.setAttacksPlayers.toString(),
-                commands.attacksMobs.toString(),
-                commands.setAttacksMobs.toString(),
-                commands.attacksNeutrals.toString(),
-                commands.setAttacksNeutrals.toString(),
-                commands.getTrustedPlayers.toString(),
-                commands.addTrustedPlayer.toString(),
-                commands.removeTrustedPlayer.toString(),
-                commands.getActive.toString(),
-                commands.getInverted.toString(),
-                commands.getRedstone.toString(),
-                commands.setInverted.toString()};
+        return new String[]{commands.getOwner.toString(), commands.attacksPlayers.toString(),
+                            commands.setAttacksPlayers.toString(), commands.attacksMobs.toString(),
+                            commands.setAttacksMobs.toString(), commands.attacksNeutrals.toString(),
+                            commands.setAttacksNeutrals.toString(), commands.getTrustedPlayers.toString(),
+                            commands.addTrustedPlayer.toString(), commands.removeTrustedPlayer.toString(),
+                            commands.getActive.toString(), commands.getInverted.toString(),
+                            commands.getRedstone.toString(), commands.setInverted.toString()};
     }
 
     @Optional.Method(modid = "ComputerCraft")
     @Override
-    public Object[] callMethod(IComputerAccess computer, ILuaContext context,
-                               int method, Object[] arguments) throws LuaException,
-            InterruptedException {
+    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
         // method is command
         boolean b;
         if (!computerAccessable) {
@@ -1054,8 +1002,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             case attacksPlayers:
                 return new Object[]{this.attacksPlayers};
             case setAttacksPlayers:
-                if (!(arguments[0].toString().equals("true") || arguments[0]
-                        .toString().equals("false"))) {
+                if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
                     return new Object[]{"wrong arguments"};
                 }
                 b = (arguments[0].toString().equals("true"));
@@ -1064,8 +1011,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             case attacksMobs:
                 return new Object[]{this.attacksMobs};
             case setAttacksMobs:
-                if (!(arguments[0].toString().equals("true") || arguments[0]
-                        .toString().equals("false"))) {
+                if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
                     return new Object[]{"wrong arguments"};
                 }
                 b = (arguments[0].toString().equals("true"));
@@ -1074,8 +1020,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             case attacksNeutrals:
                 return new Object[]{this.attacksNeutrals};
             case setAttacksNeutrals:
-                if (!(arguments[0].toString().equals("true") || arguments[0]
-                        .toString().equals("false"))) {
+                if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
                     return new Object[]{"wrong arguments"};
                 }
                 b = (arguments[0].toString().equals("true"));
@@ -1093,18 +1038,14 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
                     return new Object[]{"successfully added"};
                 }
                 for (int i = 1; i <= 4; i++) {
-                    if (!(arguments[i].toString().equals("true") || arguments[i]
-                            .toString().equals("false"))) {
+                    if (!(arguments[i].toString().equals("true") || arguments[i].toString().equals("false"))) {
                         return new Object[]{"wrong arguments"};
                     }
                 }
-                TrustedPlayer trustedPlayer = this.getTrustedPlayer(arguments[0]
-                        .toString());
+                TrustedPlayer trustedPlayer = this.getTrustedPlayer(arguments[0].toString());
                 trustedPlayer.canOpenGUI = arguments[1].toString().equals("true");
-                trustedPlayer.canChangeTargeting = arguments[2].toString().equals(
-                        "true");
-                trustedPlayer.admin = arguments[3].toString()
-                        .equals("true");
+                trustedPlayer.canChangeTargeting = arguments[2].toString().equals("true");
+                trustedPlayer.admin = arguments[3].toString().equals("true");
                 trustedPlayer.uuid = getPlayerUUID(arguments[0].toString());
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 return new Object[]{"succesfully added player to trust list with parameters"};
@@ -1123,8 +1064,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler,
             case getRedstone:
                 return new Object[]{this.redstone};
             case setInverted:
-                if (!(arguments[0].toString().equals("true") || arguments[0]
-                        .toString().equals("false"))) {
+                if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
                     return new Object[]{"wrong arguments"};
                 }
                 b = (arguments[0].toString().equals("true"));

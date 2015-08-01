@@ -9,7 +9,6 @@ import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
-import openmodularturrets.tileentity.expander.ExpanderPowerTierOneTileEntity;
 import openmodularturrets.tileentity.expander.ExpanderPowerTierTwoTileEntity;
 
 public class BlockExpanderPowerTierTwo extends BlockContainer {
