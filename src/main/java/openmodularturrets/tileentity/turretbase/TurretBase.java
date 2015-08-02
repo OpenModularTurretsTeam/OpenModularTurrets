@@ -48,6 +48,12 @@ import static openmodularturrets.util.PlayerUtil.*;
         @Optional.Interface(iface = "thaumcraft.api.aspects.IEssentiaTransport", modid = "Thaumcraft")})
 
 public abstract class TurretBase extends TileEntity implements IEnergyHandler, IInventory, SimpleComponent, ISidedInventory, IEssentiaTransport, IAspectContainer, IPeripheral {
+    public int trustedPlayerIndex = 0;
+    public ItemStack camoStack;
+    //For concealment
+    public boolean shouldConcealTurrets;
+    //For multiTargeting
+    public boolean multiTargeting = false;
     protected EnergyStorage storage;
     protected ItemStack[] inv;
     protected int yAxisDetect;
@@ -58,7 +64,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     protected String ownerName = "";
     protected List<TrustedPlayer> trustedPlayers;
     protected int ticks;
-    public int trustedPlayerIndex = 0;
     protected boolean active;
     protected boolean inverted;
     protected boolean redstone;
@@ -66,13 +71,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     protected boolean computerAccessible = false;
     protected float amountOfPotentia = 0F;
     protected float maxAmountOfPotentia = ConfigHandler.getPotentiaAddonCapacity();
-    public ItemStack camoStack;
-
-    //For concealment
-    public boolean shouldConcealTurrets;
-
-    //For multiTargeting
-    public boolean multiTargeting = false;
+    protected ArrayList<IComputerAccess> comp;
 
     public TurretBase(int MaxEnergyStorage, int MaxIO) {
         super();
@@ -398,18 +397,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
                                                                                               zCoord + 0.5) < 64;
     }
 
-    public void setyAxisDetect(int yAxisDetect) {
-        this.yAxisDetect = yAxisDetect;
-
-        if (this.yAxisDetect > 9) {
-            this.yAxisDetect = 9;
-        }
-
-        if (this.yAxisDetect < 0) {
-            this.yAxisDetect = 0;
-        }
-    }
-
     @Optional.Method(modid = "Thaumcraft")
     private IEssentiaTransport getConnectableTileWithoutOrientation() {
         if (worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord) instanceof IEssentiaTransport) {
@@ -510,18 +497,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
         super.onDataPacket(net, packet);
         readFromNBT(packet.func_148857_g());
-    }
-
-    public void setInverted(boolean inverted) {
-        this.inverted = inverted;
-        this.active = redstone ^ this.inverted;
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-    }
-
-    public void setRedstone(boolean redstone) {
-        this.redstone = redstone;
-        this.active = this.redstone ^ inverted;
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     public abstract int getBaseTier();
@@ -628,6 +603,18 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         return yAxisDetect;
     }
 
+    public void setyAxisDetect(int yAxisDetect) {
+        this.yAxisDetect = yAxisDetect;
+
+        if (this.yAxisDetect > 9) {
+            this.yAxisDetect = 9;
+        }
+
+        if (this.yAxisDetect < 0) {
+            this.yAxisDetect = 0;
+        }
+    }
+
     @Override
     public boolean canConnectEnergy(ForgeDirection from) {
         return true;
@@ -652,12 +639,28 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         return active;
     }
 
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public boolean getInverted() {
         return this.inverted;
     }
 
+    public void setInverted(boolean inverted) {
+        this.inverted = inverted;
+        this.active = redstone ^ this.inverted;
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
+
     public boolean getRedstone() {
         return this.redstone;
+    }
+
+    public void setRedstone(boolean redstone) {
+        this.redstone = redstone;
+        this.active = this.redstone ^ inverted;
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     @Optional.Method(modid = "Thaumcraft")
@@ -789,10 +792,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
             return Math.round(amountOfPotentia);
         }
         return 0;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     @Optional.Method(modid = "OpenComputers")
@@ -956,17 +955,11 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         return new Object[]{this.getRedstone()};
     }
 
-    ArrayList<IComputerAccess> comp;
-
     @Optional.Method(modid = "ComputerCraft")
     @Override
     public String getType() {
         // peripheral.getType returns whaaaaat?
         return "simpleBlock";
-    }
-
-    public enum commands {
-        getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals, getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getInverted, getRedstone, setInverted,
     }
 
     @Optional.Method(modid = "ComputerCraft")
@@ -1093,5 +1086,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Override
     public boolean equals(IPeripheral other) {
         return other.getType().equals(getType());
+    }
+
+    public enum commands {
+        getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals, getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getInverted, getRedstone, setInverted,
     }
 }

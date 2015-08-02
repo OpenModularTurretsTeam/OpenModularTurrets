@@ -16,12 +16,12 @@ import openmodularturrets.util.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
 public class PotatoCannonTurretRenderer extends TileEntitySpecialRenderer {
+    private ModelSolarPanelAddon solar;
+    private ModelDamageAmp amp;
+    private ModelRedstoneReactor reac;
+    private PotatoCannonTurretTileEntity turretHead;
+    private ResourceLocation textures;
     private ModelPotatoCannonTurret model;
-    ModelSolarPanelAddon solar;
-    ModelDamageAmp amp;
-    ModelRedstoneReactor reac;
-    PotatoCannonTurretTileEntity turretHead;
-    ResourceLocation textures;
 
     public PotatoCannonTurretRenderer() {
         model = new ModelPotatoCannonTurret();

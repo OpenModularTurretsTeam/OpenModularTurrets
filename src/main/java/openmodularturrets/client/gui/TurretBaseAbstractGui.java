@@ -26,10 +26,10 @@ import java.util.List;
 
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
 public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
-    TurretBase base;
     protected int mouseX;
     protected int mouseY;
     protected EntityPlayer player;
+    protected TurretBase base;
 
     public TurretBaseAbstractGui(InventoryPlayer inventoryPlayer, TurretBase tileEntity, Container container) {
         super(container);
@@ -38,6 +38,7 @@ public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandle
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void initGui() {
         super.initGui();
         int x = (width - xSize) / 2;
