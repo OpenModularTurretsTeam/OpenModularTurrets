@@ -5,6 +5,25 @@ import net.minecraftforge.common.config.Configuration;
 import java.io.File;
 
 public class ConfigHandler {
+    public static boolean turretAlarmSound;
+    public static boolean turretBreakable;
+    public static boolean turretWarnMessage;
+    public static boolean turretDamageTrustedPlayers;
+    public static boolean IGWNotification;
+    public static String recipes;
+    public static boolean shouldDoThaumcraftIntegration;
+    public static boolean shouldDoComputerIntegration;
+    public static boolean globalCanTargetPlayers;
+    public static boolean globalCanTargetNeutrals;
+    public static boolean globalCanTargetMobs;
+    public static int expanderPowerTierOneCapacity;
+    public static int expanderPowerTierTwoCapacity;
+    public static int expanderPowerTierThreeCapacity;
+    public static int expanderPowerTierFourCapacity;
+    public static int expanderPowerTierFiveCapacity;
+    public static int recyclerNegateChance;
+    public static int recyclerAddChance;
+    public static int turretTargetSearchTicks;
     private static int baseTierOneMaxCharge;
     private static int baseTierOneMaxIo;
     private static int baseTierTwoMaxCharge;
@@ -35,32 +54,7 @@ public class ConfigHandler {
     private static int redstoneReactorAddonGen;
     private static int damageAmpDmgBonus;
     private static int turretWarningDistance;
-    public static boolean turretAlarmSound;
-    public static boolean turretBreakable;
-    public static boolean turretWarnMessage;
-    public static boolean turretDamageTrustedPlayers;
-    public static boolean IGWNotification;
     private static float turretSoundVolume;
-
-    public static String recipes;
-
-    public static boolean shouldDoThaumcraftIntegration;
-    public static boolean shouldDoComputerIntegration;
-
-    public static boolean globalCanTargetPlayers;
-    public static boolean globalCanTargetNeutrals;
-    public static boolean globalCanTargetMobs;
-
-    public static int expanderPowerTierOneCapacity;
-    public static int expanderPowerTierTwoCapacity;
-    public static int expanderPowerTierThreeCapacity;
-    public static int expanderPowerTierFourCapacity;
-    public static int expanderPowerTierFiveCapacity;
-
-    public static int recyclerNegateChance;
-    public static int recyclerAddChance;
-
-    public static int turretTargetSearchTicks;
 
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
@@ -382,6 +376,38 @@ public class ConfigHandler {
         return turretSoundVolume;
     }
 
+    public static int getExpanderPowerTierOneCapacity() {
+        return expanderPowerTierOneCapacity;
+    }
+
+    public static int getExpanderPowerTierTwoCapacity() {
+        return expanderPowerTierTwoCapacity;
+    }
+
+    public static int getExpanderPowerTierThreeCapacity() {
+        return expanderPowerTierThreeCapacity;
+    }
+
+    public static int getExpanderPowerTierFourCapacity() {
+        return expanderPowerTierFourCapacity;
+    }
+
+    public static int getExpanderPowerTierFiveCapacity() {
+        return expanderPowerTierFiveCapacity;
+    }
+
+    public static int getRecyclerAddChance() {
+        return recyclerAddChance;
+    }
+
+    public static int getRecyclerNegateChance() {
+        return recyclerNegateChance;
+    }
+
+    public static int getTurretTargetSearchTicks() {
+        return turretTargetSearchTicks;
+    }
+
     public static class TurretSetting {
         private final int range;
         private final int rof;
@@ -422,37 +448,5 @@ public class ConfigHandler {
         public boolean isEnabled() {
             return enabled;
         }
-    }
-
-    public static int getExpanderPowerTierOneCapacity() {
-        return expanderPowerTierOneCapacity;
-    }
-
-    public static int getExpanderPowerTierTwoCapacity() {
-        return expanderPowerTierTwoCapacity;
-    }
-
-    public static int getExpanderPowerTierThreeCapacity() {
-        return expanderPowerTierThreeCapacity;
-    }
-
-    public static int getExpanderPowerTierFourCapacity() {
-        return expanderPowerTierFourCapacity;
-    }
-
-    public static int getExpanderPowerTierFiveCapacity() {
-        return expanderPowerTierFiveCapacity;
-    }
-
-    public static int getRecyclerAddChance() {
-        return recyclerAddChance;
-    }
-
-    public static int getRecyclerNegateChance() {
-        return recyclerNegateChance;
-    }
-
-    public static int getTurretTargetSearchTicks() {
-        return turretTargetSearchTicks;
     }
 }

@@ -29,8 +29,8 @@ public class ModularTurrets {
     public static CommonProxy proxy;
 
     public static SimpleNetworkWrapper networking;
-    public GuiHandler gui;
     public static CreativeTabs modularTurretsTab;
+    public GuiHandler gui;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
