@@ -6,7 +6,6 @@ import net.minecraft.inventory.Container;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class ConfigContainer extends Container {
-
     protected TurretBase tileEntity;
 
     public ConfigContainer(InventoryPlayer inventoryPlayer, TurretBase te) {

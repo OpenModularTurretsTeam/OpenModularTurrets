@@ -12,7 +12,6 @@ import openmodularturrets.tileentity.expander.AbstractInvExpander;
 import org.lwjgl.opengl.GL11;
 
 public class ExpanderInvTierTwoRenderer extends TileEntitySpecialRenderer {
-
     private ModelExpander model;
 
     public ExpanderInvTierTwoRenderer() {
@@ -22,7 +21,6 @@ public class ExpanderInvTierTwoRenderer extends TileEntitySpecialRenderer {
     @Override
     @SideOnly(Side.CLIENT)
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
-
         AbstractInvExpander expander = (AbstractInvExpander) te;
         ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/expanderInvTierTwo.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);

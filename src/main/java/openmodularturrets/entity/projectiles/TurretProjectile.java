@@ -10,7 +10,6 @@ import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.PlayerUtil;
 
 public abstract class TurretProjectile extends EntityThrowable {
-
     public float gravity;
     protected TurretBase turretBase;
 

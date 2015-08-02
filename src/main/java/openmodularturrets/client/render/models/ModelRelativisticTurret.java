@@ -92,6 +92,5 @@ public class ModelRelativisticTurret extends ModelBase {
     }
 
     public void setRotationForTarget(float y, float z) {
-
     }
 }

@@ -9,7 +9,6 @@ import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 
 public class TurretBaseTierOneContainer extends Container {
-
     protected TurretBase tileEntity;
 
     public TurretBaseTierOneContainer(InventoryPlayer inventoryPlayer, TurretBaseTierOneTileEntity te) {

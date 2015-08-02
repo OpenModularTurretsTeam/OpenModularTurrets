@@ -14,7 +14,6 @@ import openmodularturrets.reference.Names;
 import java.util.List;
 
 public class DamageAmpAddonItem extends AddonItem {
-
     public DamageAmpAddonItem() {
         super();
 

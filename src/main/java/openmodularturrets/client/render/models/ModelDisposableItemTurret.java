@@ -4,7 +4,6 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
 public class ModelDisposableItemTurret extends ModelBase {
-
     public ModelRenderer Base;
     public ModelRenderer Pole;
     public ModelRenderer BoxUnder;

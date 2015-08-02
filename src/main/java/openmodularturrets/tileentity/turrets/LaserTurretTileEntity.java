@@ -9,7 +9,6 @@ import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
 
 public class LaserTurretTileEntity extends TurretHead {
-
     public LaserTurretTileEntity() {
         super();
         this.turretTier = 5;

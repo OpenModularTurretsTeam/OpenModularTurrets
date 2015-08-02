@@ -9,7 +9,6 @@ import openmodularturrets.tileentity.expander.AbstractInvExpander;
 import org.lwjgl.opengl.GL11;
 
 public class ExpanderInvGui extends GuiContainer {
-
     public ExpanderInvGui(InventoryPlayer inventoryPlayer, AbstractInvExpander tileEntity) {
         super(new ExpanderInvContainer(inventoryPlayer, tileEntity));
     }

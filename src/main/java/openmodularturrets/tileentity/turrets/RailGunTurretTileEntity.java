@@ -10,7 +10,6 @@ import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.Items;
 
 public class RailGunTurretTileEntity extends TurretHead {
-
     public RailGunTurretTileEntity() {
         super();
         this.turretTier = 5;

@@ -8,7 +8,6 @@ import openmodularturrets.items.ammo.*;
 import openmodularturrets.items.upgrades.*;
 
 public class Items {
-
     public static Item bulletThrowable;
     public static Item grenadeThrowable;
     public static Item bulletCraftable;
@@ -50,14 +49,13 @@ public class Items {
     public static Item ioBus;
 
     public static void init() {
-
         bulletThrowable = new BulletThrowableItem();
         GameRegistry.registerItem(bulletThrowable, "bulletThrowable");
 
         grenadeThrowable = new GrenadeThrowableItem();
         GameRegistry.registerItem(grenadeThrowable, "grenadeThrowable");
 
-        accuraccyUpgradeItem = new AccuraccyUpgradeItem();
+        accuraccyUpgradeItem = new AccuracyUpgradeItem();
         GameRegistry.registerItem(accuraccyUpgradeItem, "accuraccyUpgradeItem");
 
         efficiencyUpgradeItem = new EfficiencyUpgradeItem();

@@ -14,7 +14,6 @@ import openmodularturrets.util.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
 public class IncendiaryTurretRenderer extends TileEntitySpecialRenderer {
-
     private ModelIncendiaryTurret model;
     ModelSolarPanelAddon solar;
     ModelDamageAmp amp;
@@ -29,7 +28,6 @@ public class IncendiaryTurretRenderer extends TileEntitySpecialRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
-
         TurretHead turretHead = (TurretHead) te;
         int rotation = 0;
         if (te.getWorldObj() != null) {

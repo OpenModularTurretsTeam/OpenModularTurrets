@@ -15,10 +15,10 @@ import openmodularturrets.util.TurretHeadUtil;
 public abstract class AbstractInvExpander extends TileEntity implements IInventory {
     public float baseFitRotationX;
     public float baseFitRotationZ;
-    public TurretBase base;
-    public boolean hasSetSide = false;
-    public ItemStack[] inv;
-    public int tier;
+    protected TurretBase base;
+    protected boolean hasSetSide = false;
+    protected ItemStack[] inv;
+    protected int tier;
 
     public AbstractInvExpander() {
         this.inv = new ItemStack[9];
@@ -73,7 +73,6 @@ public abstract class AbstractInvExpander extends TileEntity implements IInvento
     }
 
     public void setSide() {
-
         if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TurretBase) {
             this.baseFitRotationX = 0F;
             this.baseFitRotationZ = 4.705F;
@@ -118,7 +117,6 @@ public abstract class AbstractInvExpander extends TileEntity implements IInvento
 
     @Override
     public void updateEntity() {
-
         if (!hasSetSide) {
             setSide();
         }
@@ -196,12 +194,10 @@ public abstract class AbstractInvExpander extends TileEntity implements IInvento
 
     @Override
     public void openInventory() {
-
     }
 
     @Override
     public void closeInventory() {
-
     }
 
     @Override

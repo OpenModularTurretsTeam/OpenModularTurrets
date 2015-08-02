@@ -13,7 +13,6 @@ import openmodularturrets.tileentity.turrets.TurretHead;
 import org.lwjgl.opengl.GL11;
 
 public class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
-
     private ModelTeleporterTurret model;
     ModelSolarPanelAddon solar;
     ModelDamageAmp amp;
@@ -25,7 +24,6 @@ public class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
-
         TurretHead turretHead = (TurretHead) te;
 
         if (turretHead.shouldConceal) {

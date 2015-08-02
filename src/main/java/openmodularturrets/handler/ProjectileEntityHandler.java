@@ -5,7 +5,6 @@ import openmodularturrets.ModularTurrets;
 import openmodularturrets.entity.projectiles.*;
 
 public class ProjectileEntityHandler {
-
     public static void registerProjectiles(ModularTurrets turrets) {
         EntityRegistry.registerModEntity(RocketProjectile.class, "rocketProjectile", 1, turrets, 16, 1, true);
         EntityRegistry.registerModEntity(GrenadeProjectile.class, "grenadeProjectile", 2, turrets, 16, 5, true);

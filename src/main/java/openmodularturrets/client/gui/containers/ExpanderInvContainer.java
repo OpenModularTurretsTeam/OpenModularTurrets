@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import openmodularturrets.tileentity.expander.AbstractInvExpander;
 
 public class ExpanderInvContainer extends Container {
-
     protected AbstractInvExpander tileEntity;
 
     public ExpanderInvContainer(InventoryPlayer inventoryPlayer, AbstractInvExpander te) {

@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 import openmodularturrets.blocks.Blocks;
 
 public class ModularTurretsTab extends CreativeTabs {
-
     public ModularTurretsTab(String label) {
         super(label);
     }

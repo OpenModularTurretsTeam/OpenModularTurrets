@@ -12,7 +12,6 @@ import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
 public class BlockFenceTierTwo extends BlockPane {
-
     public BlockFenceTierTwo() {
         super("stone", "cobblestone", Material.rock, false);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);

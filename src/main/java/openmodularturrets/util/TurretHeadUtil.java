@@ -30,9 +30,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public class TurretHeadUtil {
-
     public static HashSet<EntityPlayerMP> warnedPlayers = new HashSet<EntityPlayerMP>();
-    private TurretHead turret;
 
     public static void warnPlayers(TurretBase base, World worldObj, int downLowAmount, int xCoord, int yCoord, int zCoord, int turretRange) {
         if (base.isAttacksPlayers()) {
@@ -72,7 +70,6 @@ public class TurretHeadUtil {
     }
 
     public static Entity getTarget(TurretBase base, World worldObj, int downLowAmount, int xCoord, int yCoord, int zCoord, int turretRange, TurretHead turret) {
-
         Entity target = null;
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
@@ -83,7 +80,6 @@ public class TurretHeadUtil {
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase target1 : targets) {
-
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAnimal && !target1.isDead) {
                         target = target1;
@@ -114,7 +110,6 @@ public class TurretHeadUtil {
                 }
 
                 if (target != null && turret != null) {
-
                     if (base.multiTargeting && isTargetAlreadyTargeted(base, target)) {
                         continue;
                     }
@@ -130,7 +125,6 @@ public class TurretHeadUtil {
     }
 
     public static Entity getTargetWithMinimumRange(TurretBase base, World worldObj, int downLowAmount, int xCoord, int yCoord, int zCoord, int turretRange, TurretHead turret) {
-
         Entity target = null;
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
@@ -141,7 +135,6 @@ public class TurretHeadUtil {
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase target1 : targets) {
-
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAnimal && !target1.isDead && target1.getDistance(xCoord, yCoord,
                                                                                                   zCoord) >= 3) {
@@ -177,7 +170,6 @@ public class TurretHeadUtil {
                 }
 
                 if (target != null && turret != null) {
-
                     if (base.multiTargeting && isTargetAlreadyTargeted(base, target)) {
                         continue;
                     }
@@ -194,7 +186,6 @@ public class TurretHeadUtil {
     }
 
     public static Entity getTargetWithoutSlowEffect(TurretBase base, World worldObj, int downLowAmount, int xCoord, int yCoord, int zCoord, int turretRange, TurretHead turret) {
-
         Entity target = null;
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
@@ -205,7 +196,6 @@ public class TurretHeadUtil {
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase target1 : targets) {
-
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAnimal && !target1.isDead && !target1.isPotionActive(
                             Potion.moveSlowdown.id)) {
@@ -239,7 +229,6 @@ public class TurretHeadUtil {
                 }
 
                 if (target != null && turret != null) {
-
                     EntityLivingBase targetELB = (EntityLivingBase) target;
 
                     if (base.multiTargeting && isTargetAlreadyTargeted(base, target)) {
@@ -674,7 +663,6 @@ public class TurretHeadUtil {
             ItemStack ammo_stack = base.getStackInSlot(i);
 
             if (ammo_stack != null && ammo_stack.stackSize > 0 && ammo_stack.getItem() == item) {
-
                 if (hasRecyclerAddon(base)) {
                     int chance = new Random().nextInt(99);
 
@@ -759,14 +747,14 @@ public class TurretHeadUtil {
 
         if (tier == 5) {
             if (base.getStackInSlot(12) != null) {
-                if (base.getStackInSlot(12).getItem() instanceof AccuraccyUpgradeItem) {
+                if (base.getStackInSlot(12).getItem() instanceof AccuracyUpgradeItem) {
                     accuracy += (ConfigHandler.getAccuracyUpgradeBoost() * base.getStackInSlot(12).stackSize);
                 }
             }
         }
 
         if (base.getStackInSlot(11) != null) {
-            if (base.getStackInSlot(11).getItem() instanceof AccuraccyUpgradeItem) {
+            if (base.getStackInSlot(11).getItem() instanceof AccuracyUpgradeItem) {
                 accuracy += (ConfigHandler.getAccuracyUpgradeBoost() * base.getStackInSlot(11).stackSize);
             }
         }
@@ -977,7 +965,6 @@ public class TurretHeadUtil {
     }
 
     public static boolean canTurretSeeTarget(TurretHead turret, EntityLivingBase target) {
-
         Vec3 traceStart = Vec3.createVectorHelper(turret.xCoord + 0.5F, turret.yCoord + 0.5F, turret.zCoord + 0.5F);
         Vec3 traceEnd = Vec3.createVectorHelper(target.posX, target.posY + target.getEyeHeight(), target.posZ);
         Vec3 vecDelta = Vec3.createVectorHelper(traceEnd.xCoord - traceStart.xCoord,

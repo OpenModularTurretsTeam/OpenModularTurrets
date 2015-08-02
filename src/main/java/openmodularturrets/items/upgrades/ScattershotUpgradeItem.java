@@ -13,7 +13,6 @@ import openmodularturrets.reference.Names;
 import java.util.List;
 
 public class ScattershotUpgradeItem extends UpgradeItem {
-
     public ScattershotUpgradeItem() {
         super();
         this.setUnlocalizedName(Names.Items.unlocalisedScattershotUpgrade);

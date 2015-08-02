@@ -16,7 +16,6 @@ import openmodularturrets.util.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
 public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
-
     private ModelRailgun model;
     ModelSolarPanelAddon solar;
     ModelDamageAmp amp;

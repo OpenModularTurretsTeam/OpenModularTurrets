@@ -15,12 +15,6 @@ import java.util.List;
 import java.util.Random;
 
 public class RocketProjectile extends TurretProjectile {
-
-    private int ticksAlive = 0;
-    private Entity target;
-    public float speed = 0.03F;
-    public int upwardsFirst = 15;
-    public float yaw;
     public int arrowShake;
     public float accuracy;
 
@@ -37,12 +31,10 @@ public class RocketProjectile extends TurretProjectile {
     public RocketProjectile(World par1World, Entity target, ItemStack ammo, TurretBase turretBase) {
         super(par1World, ammo, turretBase);
         this.gravity = 0.00F;
-        this.target = target;
     }
 
     @Override
     public void onEntityUpdate() {
-
         if (ticksExisted >= 100) {
             this.setDead();
         }
@@ -56,7 +48,6 @@ public class RocketProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(MovingObjectPosition movingobjectposition) {
-
         if (this.ticksExisted <= 1) {
             return;
         }
@@ -77,7 +68,6 @@ public class RocketProjectile extends TurretProjectile {
         }
 
         if (!worldObj.isRemote) {
-
             worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 5, this.posY - 5, this.posZ - 5,
                                                               this.posX + 5, this.posY + 5, this.posZ + 5);

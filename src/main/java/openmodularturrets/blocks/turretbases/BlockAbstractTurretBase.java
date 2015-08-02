@@ -20,7 +20,6 @@ import openmodularturrets.tileentity.turretbase.TurretBase;
 import java.util.Random;
 
 public abstract class BlockAbstractTurretBase extends BlockContainer {
-
     public BlockAbstractTurretBase() {
         super(Material.rock);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
@@ -33,7 +32,6 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float what, float these, float are) {
-
         if (!world.isRemote && player.isSneaking() && player.getCurrentEquippedItem() == null) {
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
             if (base != null) {

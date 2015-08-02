@@ -13,7 +13,6 @@ import openmodularturrets.reference.Names;
 import java.util.List;
 
 public class SerialPortAddonItem extends AddonItem {
-
     public SerialPortAddonItem() {
         super();
 

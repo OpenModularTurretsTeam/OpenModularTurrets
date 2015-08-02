@@ -14,7 +14,6 @@ import openmodularturrets.reference.Names;
 import java.util.List;
 
 public class RecyclerAddonItem extends AddonItem {
-
     public RecyclerAddonItem() {
         super();
 

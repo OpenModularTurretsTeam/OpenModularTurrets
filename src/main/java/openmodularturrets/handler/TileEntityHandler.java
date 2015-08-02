@@ -7,7 +7,6 @@ import openmodularturrets.tileentity.turretbase.*;
 import openmodularturrets.tileentity.turrets.*;
 
 public class TileEntityHandler {
-
     public static void init() {
         GameRegistry.registerTileEntity(TurretBase.class, "turretbase");
         GameRegistry.registerTileEntity(TurretBaseTierOneTileEntity.class, "turretWoodBase");

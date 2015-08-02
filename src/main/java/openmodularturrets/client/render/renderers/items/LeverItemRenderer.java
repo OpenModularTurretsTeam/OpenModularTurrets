@@ -8,7 +8,6 @@ import openmodularturrets.tileentity.LeverTileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class LeverItemRenderer implements IItemRenderer {
-
     private final LeverRenderer leverRenderer;
     private final LeverTileEntity leverTileEntity;
     private ModelLever model;

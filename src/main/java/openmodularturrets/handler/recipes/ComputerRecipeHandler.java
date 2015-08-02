@@ -6,11 +6,8 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import openmodularturrets.items.Items;
 
 public class ComputerRecipeHandler {
-
     public static void init() {
-
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.serialPortAddon, 1),
-                                                   new Object[]{" A ", "BAB", " A ", 'A',
-                                                                net.minecraft.init.Items.quartz, 'B', Items.ioBus}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.serialPortAddon, 1), " A ", "BAB", " A ", 'A',
+                                                   net.minecraft.init.Items.quartz, 'B', Items.ioBus));
     }
 }

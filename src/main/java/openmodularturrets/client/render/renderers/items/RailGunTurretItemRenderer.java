@@ -8,7 +8,6 @@ import openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class RailGunTurretItemRenderer implements IItemRenderer {
-
     private final RailGunTurretRenderer railGunTurretRenderer;
     private final RailGunTurretTileEntity railGunTurretTileEntity;
     private ModelLaserTurret model;
