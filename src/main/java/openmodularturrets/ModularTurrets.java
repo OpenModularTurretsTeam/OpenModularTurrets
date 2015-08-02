@@ -22,12 +22,12 @@ import openmodularturrets.util.CommandChangeOwner;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = ModInfo.DEPENDENCIES)
 public class ModularTurrets {
+    @Instance(ModInfo.ID)
+    public static ModularTurrets instance;
 
     @SidedProxy(clientSide = "openmodularturrets.proxy.ClientProxy", serverSide = "openmodularturrets.proxy" + "" + ".CommonProxy")
     public static CommonProxy proxy;
 
-    @Instance(ModInfo.ID)
-    public static ModularTurrets instance;
     public static SimpleNetworkWrapper networking;
     public GuiHandler gui;
     public static CreativeTabs modularTurretsTab;

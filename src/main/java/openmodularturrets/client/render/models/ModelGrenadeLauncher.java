@@ -108,7 +108,6 @@ public class ModelGrenadeLauncher extends ModelBase {
     }
 
     public void setRotationForTarget(float y, float z) {
-
         BoxUnder.rotateAngleY = z;
         BoxLeft.rotateAngleX = z;
         BoxRight.rotateAngleX = z;
@@ -123,7 +122,6 @@ public class ModelGrenadeLauncher extends ModelBase {
     }
 
     public void renderAll() {
-
         Base.render(0.0625F);
         Pole.render(0.0625F);
         BoxUnder.render(0.0625F);

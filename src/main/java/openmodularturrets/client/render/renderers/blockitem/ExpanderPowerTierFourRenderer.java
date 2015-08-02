@@ -12,7 +12,6 @@ import openmodularturrets.tileentity.expander.AbstractPowerExpander;
 import org.lwjgl.opengl.GL11;
 
 public class ExpanderPowerTierFourRenderer extends TileEntitySpecialRenderer {
-
     private ModelExpander model;
 
     public ExpanderPowerTierFourRenderer() {
@@ -22,7 +21,6 @@ public class ExpanderPowerTierFourRenderer extends TileEntitySpecialRenderer {
     @Override
     @SideOnly(Side.CLIENT)
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
-
         AbstractPowerExpander expander = (AbstractPowerExpander) te;
         ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/expanderPowerTierFour.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);

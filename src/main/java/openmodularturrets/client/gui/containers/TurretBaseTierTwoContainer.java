@@ -12,11 +12,9 @@ import openmodularturrets.items.upgrades.UpgradeItem;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class TurretBaseTierTwoContainer extends Container {
-
     protected TurretBase tileEntity;
 
     public TurretBaseTierTwoContainer(InventoryPlayer inventoryPlayer, TurretBase te) {
-
         this.tileEntity = te;
 
         for (int x = 0; x < 9; x++) {

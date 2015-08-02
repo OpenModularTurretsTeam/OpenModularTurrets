@@ -5,7 +5,6 @@ import net.minecraftforge.common.config.Configuration;
 import java.io.File;
 
 public class ConfigHandler {
-
     private static int baseTierOneMaxCharge;
     private static int baseTierOneMaxIo;
     private static int baseTierTwoMaxCharge;
@@ -176,15 +175,15 @@ public class ConfigHandler {
 
         rangeUpgradeBoost = config.get("upgrades", "range", 2, "Increases range in blocks linearly").getInt();
         fireRateUpgradeBoostPercentage = config.get("upgrades", "rateOfFire", 0.1D,
-                                                    "It's a double for some reason, " + "reduces cooldown").getDouble();
+                                                    "It's a double for some reason, reduces cooldown").getDouble();
         accuracyUpgradeBoost = config.get("upgrades", "accuracy", 0.2D, "Increases accuracy linearly").getDouble();
         efficiencyUpgradeBoostPercentage = config.get("upgrades", "efficiency", 0.08D,
-                                                      "Reduces power consumption " + "linearly").getDouble();
+                                                      "Reduces power consumption linearly").getDouble();
 
         solarPanelAddonGen = config.get("addons", "solar", 10,
                                         "Generates specified RF every tick in sunlight").getInt();
         redstoneReactorAddonGen = config.get("addons", "redstone", 1550,
-                                             "Generates RF from redstone dust/blocks in turret's " + "inventory").getInt();
+                                             "Generates RF from redstone dust/blocks in turret's inventory").getInt();
         damageAmpDmgBonus = config.get("addons", "damage", 2, "Increases damage linearly").getInt();
 
         recyclerNegateChance = config.get("addons", "recycler", 10, "Recycler ammo use negation % chance").getInt();
@@ -202,7 +201,7 @@ public class ConfigHandler {
                                      false).getBoolean();
 
         turretDamageTrustedPlayers = config.get("miscellaneous",
-                                                "Can turrets damage their trusted players when they " + "accidentally hit them?",
+                                                "Can turrets damage their trusted players when they accidentally hit them?",
                                                 true).getBoolean();
 
         recipes = config.get("miscellaneous",

@@ -9,7 +9,6 @@ import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
 public class ChamberTierThreeItem extends Item {
-
     public ChamberTierThreeItem() {
         super();
 

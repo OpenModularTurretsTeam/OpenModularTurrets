@@ -7,7 +7,6 @@ import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
 public class BlazingClayAmmoItem extends AmmoItem {
-
     public BlazingClayAmmoItem() {
         super();
 

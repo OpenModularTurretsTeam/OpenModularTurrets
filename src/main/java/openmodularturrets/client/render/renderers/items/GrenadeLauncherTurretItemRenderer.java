@@ -8,7 +8,6 @@ import openmodularturrets.tileentity.turrets.GrenadeLauncherTurretTileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class GrenadeLauncherTurretItemRenderer implements IItemRenderer {
-
     private final GrenadeLauncherTurretRenderer grenadeLauncherTurretRenderer;
     private final GrenadeLauncherTurretTileEntity grenadeLauncherTurretTileEntity;
     private ModelGrenadeLauncher model;

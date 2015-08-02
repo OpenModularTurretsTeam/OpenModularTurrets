@@ -15,7 +15,6 @@ import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
 public class LaserRenderer extends Render {
-
     private static final ResourceLocation laserTextures = new ResourceLocation(
             ModInfo.ID.toLowerCase() + ":textures/blocks/laser.png");
 

@@ -9,7 +9,6 @@ import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
 public class EnergeticBarrelItem extends Item {
-
     public EnergeticBarrelItem() {
         super();
 

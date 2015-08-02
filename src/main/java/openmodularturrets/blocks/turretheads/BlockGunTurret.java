@@ -7,7 +7,6 @@ import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.turrets.GunTurretTileEntity;
 
 public class BlockGunTurret extends BlockAbstractTurretHead {
-
     public BlockGunTurret() {
         super();
 

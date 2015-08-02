@@ -10,7 +10,6 @@ import openmodularturrets.tileentity.LeverTileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class LeverRenderer extends TileEntitySpecialRenderer {
-
     private ModelLever model;
 
     public LeverRenderer() {

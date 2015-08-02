@@ -14,7 +14,6 @@ import openmodularturrets.reference.Names;
 import java.util.List;
 
 public class PotentiaAddonItem extends AddonItem {
-
     public PotentiaAddonItem() {
         super();
 

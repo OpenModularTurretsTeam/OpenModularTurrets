@@ -7,7 +7,6 @@ import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.turrets.GrenadeLauncherTurretTileEntity;
 
 public class BlockGrenadeTurret extends BlockAbstractTurretHead {
-
     public BlockGrenadeTurret() {
         super();
 

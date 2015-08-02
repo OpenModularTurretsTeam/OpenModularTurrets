@@ -22,7 +22,6 @@ import static openmodularturrets.util.GeneralUtil.safeLocalize;
  */
 @Optional.Interface(iface = "mcp.mobius.waila.api.IWailaDataProvider", modid = "Waila")
 public class WailaTileHandler implements IWailaDataProvider {
-
     /**
      * Although this is likely not necessary, you can also use the Optional.Method interface to mark a
      * method to be stripped if a mod is not detected. In this case we're doing this for all methods
@@ -36,7 +35,6 @@ public class WailaTileHandler implements IWailaDataProvider {
      */
     @Optional.Method(modid = "Waila")
     public static void callbackRegister(IWailaRegistrar register) {
-
         WailaTileHandler instance = new WailaTileHandler();
 
         register.registerNBTProvider(instance, TurretBase.class);
@@ -53,7 +51,6 @@ public class WailaTileHandler implements IWailaDataProvider {
     @Override
     @Optional.Method(modid = "Waila")
     public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-
         return accessor.getStack();
     }
 
@@ -66,7 +63,6 @@ public class WailaTileHandler implements IWailaDataProvider {
     @Override
     @Optional.Method(modid = "Waila")
     public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-
         return currenttip;
     }
 
@@ -97,7 +93,6 @@ public class WailaTileHandler implements IWailaDataProvider {
     @Override
     @Optional.Method(modid = "Waila")
     public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-
         return currenttip;
     }
 
@@ -110,7 +105,6 @@ public class WailaTileHandler implements IWailaDataProvider {
 
     @Override
     public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z) {
-
         if (te != null) {
             te.writeToNBT(tag);
         }

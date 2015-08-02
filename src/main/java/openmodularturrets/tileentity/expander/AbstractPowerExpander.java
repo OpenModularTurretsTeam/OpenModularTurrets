@@ -8,8 +8,8 @@ import openmodularturrets.util.TurretHeadUtil;
 public abstract class AbstractPowerExpander extends TileEntity {
     public float baseFitRotationX;
     public float baseFitRotationZ;
-    public boolean hasSetSide = false;
-    public int tier;
+    protected boolean hasSetSide = false;
+    protected int tier;
 
     @Override
     public void writeToNBT(NBTTagCompound par1) {
@@ -22,7 +22,6 @@ public abstract class AbstractPowerExpander extends TileEntity {
     }
 
     public void setSide() {
-
         if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TurretBase) {
             this.baseFitRotationX = 0F;
             this.baseFitRotationZ = 4.705F;

@@ -9,7 +9,6 @@ import openmodularturrets.tileentity.turrets.TeleporterTurretTileEntity;
 import java.util.Random;
 
 public class BlockTeleporterTurret extends BlockAbstractTurretHead {
-
     public boolean shouldAnimate = false;
 
     public BlockTeleporterTurret() {
@@ -26,7 +25,6 @@ public class BlockTeleporterTurret extends BlockAbstractTurretHead {
 
     @Override
     public void randomDisplayTick(World p_149734_1_, int p_149734_2_, int p_149734_3_, int p_149734_4_, Random p_149734_5_) {
-
         if (shouldAnimate) {
             for (int i = 0; i <= 25; i++) {
                 float var21 = (p_149734_5_.nextFloat() - 0.5F) * 0.2F;

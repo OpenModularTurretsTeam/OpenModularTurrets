@@ -4,7 +4,6 @@ import cpw.mods.fml.common.Optional;
 import openmodularturrets.handler.ConfigHandler;
 
 public class TurretBaseTierTwoTileEntity extends TurretBase {
-
     public TurretBaseTierTwoTileEntity() {
         this(ConfigHandler.getBaseTierTwoMaxCharge(), ConfigHandler.getBaseTierTwoMaxIo());
     }
