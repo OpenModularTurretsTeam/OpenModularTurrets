@@ -13,10 +13,10 @@ import openmodularturrets.tileentity.turrets.TurretHead;
 import org.lwjgl.opengl.GL11;
 
 public class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
+    private ModelSolarPanelAddon solar;
+    private ModelDamageAmp amp;
+    private ModelRedstoneReactor reac;
     private ModelTeleporterTurret model;
-    ModelSolarPanelAddon solar;
-    ModelDamageAmp amp;
-    ModelRedstoneReactor reac;
 
     public TeleporterTurretRenderer() {
         model = new ModelTeleporterTurret();

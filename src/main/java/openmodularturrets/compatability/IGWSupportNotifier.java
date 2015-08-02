@@ -29,9 +29,9 @@ import java.util.List;
  * This Class
  */
 public class IGWSupportNotifier {
-    private String supportingMod;
     private static final String LATEST_DL_URL = "http://minecraft.curseforge" + "" +
             ".com/mc-mods/223815-in-game-wiki-mod/files/latest";
+    private String supportingMod;
 
     /**
      * Needs to be instantiated somewhere in your mod's loading stage.

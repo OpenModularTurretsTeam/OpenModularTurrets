@@ -7,9 +7,9 @@ import net.minecraft.tileentity.TileEntity;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 
 public class LeverTileEntity extends TileEntity {
-    TurretBaseTierOneTileEntity base;
     public float rotation = 0;
     public boolean isTurning = false;
+    private TurretBaseTierOneTileEntity base;
 
     public Packet getDescriptionPacket() {
         NBTTagCompound var1 = new NBTTagCompound();

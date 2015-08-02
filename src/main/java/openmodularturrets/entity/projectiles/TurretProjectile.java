@@ -11,6 +11,9 @@ import openmodularturrets.util.PlayerUtil;
 
 public abstract class TurretProjectile extends EntityThrowable {
     public float gravity;
+    public boolean isAmped;
+    public int amp_level;
+    public ItemStack ammo;
     protected TurretBase turretBase;
 
     public TurretProjectile(World p_i1776_1_) {
@@ -27,11 +30,6 @@ public abstract class TurretProjectile extends EntityThrowable {
         this.ammo = ammo;
         this.turretBase = turretBase;
     }
-
-    public boolean isAmped;
-    public int amp_level;
-
-    public ItemStack ammo;
 
     protected boolean canDamagePlayer(EntityPlayer entityPlayer) {
         if (!ConfigHandler.turretDamageTrustedPlayers) {

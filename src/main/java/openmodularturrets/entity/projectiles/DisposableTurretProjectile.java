@@ -11,8 +11,8 @@ import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class DisposableTurretProjectile extends TurretProjectile {
+    private EntityItem itemBound;
     private boolean spawned = false;
-    EntityItem itemBound;
 
     public DisposableTurretProjectile(World p_i1776_1_) {
         super(p_i1776_1_);
