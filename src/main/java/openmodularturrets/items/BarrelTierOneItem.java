@@ -9,7 +9,6 @@ import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
 public class BarrelTierOneItem extends Item {
-
     public BarrelTierOneItem() {
         super();
 

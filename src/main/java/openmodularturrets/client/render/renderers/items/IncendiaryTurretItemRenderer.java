@@ -8,7 +8,6 @@ import openmodularturrets.tileentity.turrets.IncendiaryTurretTileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class IncendiaryTurretItemRenderer implements IItemRenderer {
-
     private final IncendiaryTurretRenderer incendiaryTurretRenderer;
     private final IncendiaryTurretTileEntity incendiaryTurretTileEntity;
     private final ModelIncendiaryTurret model;

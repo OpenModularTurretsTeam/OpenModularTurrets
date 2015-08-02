@@ -11,7 +11,7 @@ import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class DisposableTurretProjectile extends TurretProjectile {
-    boolean spawned = false;
+    private boolean spawned = false;
     EntityItem itemBound;
 
     public DisposableTurretProjectile(World p_i1776_1_) {
@@ -43,7 +43,6 @@ public class DisposableTurretProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(MovingObjectPosition movingobjectposition) {
-
         if (this.ticksExisted <= 2) {
             return;
         }

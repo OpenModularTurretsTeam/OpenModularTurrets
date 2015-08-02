@@ -13,9 +13,8 @@ import openmodularturrets.reference.Names;
 
 import java.util.List;
 
-public class AccuraccyUpgradeItem extends UpgradeItem {
-
-    public AccuraccyUpgradeItem() {
+public class AccuracyUpgradeItem extends UpgradeItem {
+    public AccuracyUpgradeItem() {
         super();
 
         this.setUnlocalizedName(Names.Items.unlocalisedAccuraccyUpgrade);

@@ -6,7 +6,6 @@ import openmodularturrets.entity.projectiles.*;
 import openmodularturrets.items.Items;
 
 public class ProjectileRenderers {
-
     public static void init() {
         RenderingRegistry.registerEntityRenderingHandler(DisposableTurretProjectile.class,
                                                          new ItemProjectileRenderer(null));

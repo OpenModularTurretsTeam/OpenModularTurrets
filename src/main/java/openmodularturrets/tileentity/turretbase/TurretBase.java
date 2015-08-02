@@ -48,7 +48,6 @@ import static openmodularturrets.util.PlayerUtil.*;
         @Optional.Interface(iface = "thaumcraft.api.aspects.IEssentiaTransport", modid = "Thaumcraft")})
 
 public abstract class TurretBase extends TileEntity implements IEnergyHandler, IInventory, SimpleComponent, ISidedInventory, IEssentiaTransport, IAspectContainer, IPeripheral {
-
     protected EnergyStorage storage;
     protected ItemStack[] inv;
     protected int yAxisDetect;
@@ -64,7 +63,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     protected boolean inverted;
     protected boolean redstone;
     protected boolean checkRedstone = false;
-    protected boolean computerAccessable = false;
+    protected boolean computerAccessible = false;
     protected float amountOfPotentia = 0F;
     protected float maxAmountOfPotentia = ConfigHandler.getPotentiaAddonCapacity();
     public ItemStack camoStack;
@@ -95,7 +94,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
 
         if (ConfigHandler.getRedstoneReactorAddonGen() < (base.getMaxEnergyStored(
                 ForgeDirection.UNKNOWN) - base.getEnergyStored(ForgeDirection.UNKNOWN))) {
-
             //Prioritise redstone blocks
             ItemStack redstoneBlock = TurretHeadUtil.useSpecificItemStackBlockFromBase(base, new ItemStack(
                     Blocks.redstone_block));
@@ -266,7 +264,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         par1.setBoolean("active", active);
         par1.setBoolean("inverted", inverted);
         par1.setBoolean("redstone", redstone);
-        par1.setBoolean("computerAccessable", computerAccessable);
+        par1.setBoolean("computerAccessible", computerAccessible);
         par1.setBoolean("shouldConcealTurrets", shouldConcealTurrets);
         par1.setBoolean("multiTargeting", multiTargeting);
 
@@ -337,10 +335,10 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         } else {
             checkRedstone = true;
         }
-        if (par1.hasKey("computerAccessable")) {
-            this.computerAccessable = par1.getBoolean("computerAccessable");
+        if (par1.hasKey("computerAccessible")) {
+            this.computerAccessible = par1.getBoolean("computerAccessible");
         } else {
-            computerAccessable = false;
+            computerAccessible = false;
         }
 
         NBTTagList tagList = par1.getTagList("Inventory", 10);
@@ -473,7 +471,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         ticks++;
 
         if (ticks % 5 == 0) {
-
             //Concealment
             this.shouldConcealTurrets = TurretHeadUtil.hasConcealmentAddon(this);
 
@@ -501,7 +498,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
                 }
 
                 //Computers
-                this.computerAccessable = (ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputercraftLoaded) && TurretHeadUtil.hasSerialPortAddon(
+                this.computerAccessible = (ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputercraftLoaded) && TurretHeadUtil.hasSerialPortAddon(
                         this);
                 updateRedstoneReactor(this);
                 worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
@@ -616,12 +613,10 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
 
     @Override
     public void openInventory() {
-
     }
 
     @Override
     public void closeInventory() {
-
     }
 
     @Override
@@ -686,7 +681,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "Thaumcraft")
     @Override
     public void setSuction(Aspect aspect, int amount) {
-
     }
 
     @Optional.Method(modid = "Thaumcraft")
@@ -804,7 +798,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():string; returns owner of turret base.")
     public Object[] getOwner(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         return new Object[]{this.getOwner()};
@@ -813,7 +807,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack hostile mobs.")
     public Object[] isAttacksMobs(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         return new Object[]{this.isAttacksMobs()};
@@ -822,7 +816,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean;  sets to attack hostile mobs or not.")
     public Object[] setAttacksMobs(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         this.setAttacksMobs(args.checkBoolean(0));
@@ -833,7 +827,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack neutral mobs.")
     public Object[] isAttacksNeutrals(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         return new Object[]{this.isAttacksNeutrals()};
@@ -842,7 +836,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; sets to attack neutral mobs or not.")
     public Object[] setAttacksNeutrals(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         this.setAttacksNeutrals(args.checkBoolean(0));
@@ -853,7 +847,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack players.")
     public Object[] isAttacksPlayers(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         return new Object[]{this.isAttacksPlayers()};
@@ -862,7 +856,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; sets to attack players or not.")
     public Object[] setAttacksPlayers(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         this.setAttacksPlayers(args.checkBoolean(0));
@@ -873,7 +867,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():table; returns a table of trusted players on this base.")
     public Object[] getTrustedPlayers(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         return new Object[]{this.getTrustedPlayers()};
@@ -882,7 +876,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , " + "admin:boolean]):string; adds Trusted player to Trustlist.")
     public Object[] addTrustedPlayer(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         this.addTrustedPlayer(args.checkString(0));
@@ -898,7 +892,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():string; removes Trusted player from Trustlist.")
     public Object[] removeTrustedPlayer(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         this.removeTrustedPlayer(args.checkString(0));
@@ -909,7 +903,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():int; returns maxiumum energy storage.")
     public Object[] getMaxEnergyStorage(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         return new Object[]{this.storage.getMaxEnergyStored()};
@@ -918,7 +912,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():int; returns current energy stored.")
     public Object[] getCurrentEnergyStorage(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         return new Object[]{this.getEnergyStored(ForgeDirection.UNKNOWN)};
@@ -927,7 +921,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; returns if the turret is currently active.")
     public Object[] getActive(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         return new Object[]{this.isActive()};
@@ -936,7 +930,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; toggles turret inversion.")
     public Object[] setInverted(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         this.setInverted(args.checkBoolean(0));
@@ -947,7 +941,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; shows redstone invert state.")
     public Object[] getInverted(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         return new Object[]{this.getInverted()};
@@ -956,7 +950,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; shows redstone state.")
     public Object[] getRedstone(Context context, Arguments args) {
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         return new Object[]{this.getRedstone()};
@@ -993,7 +987,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
         // method is command
         boolean b;
-        if (!computerAccessable) {
+        if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
         switch (commands.values()[method]) {

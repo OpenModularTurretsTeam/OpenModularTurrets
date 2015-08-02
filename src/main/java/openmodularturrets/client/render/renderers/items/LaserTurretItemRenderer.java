@@ -8,7 +8,6 @@ import openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class LaserTurretItemRenderer implements IItemRenderer {
-
     private final LaserTurretRenderer laserTurretRenderer;
     private final LaserTurretTileEntity laserTurretTileEntity;
     private ModelLaserTurret model;

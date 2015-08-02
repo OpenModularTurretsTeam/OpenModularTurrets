@@ -8,7 +8,6 @@ import openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class DisposableItemTurretItemRenderer implements IItemRenderer {
-
     private final DisposableItemTurretRenderer disposableItemTurretRenderer;
     private final DisposableItemTurretTileEntity disposableItemTurretTileEntity;
     private final ModelDisposableItemTurret model;

@@ -12,7 +12,6 @@ import openmodularturrets.items.upgrades.UpgradeItem;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class TurretBaseTierThreeContainer extends Container {
-
     protected TurretBase tileEntity;
 
     public TurretBaseTierThreeContainer(InventoryPlayer inventoryPlayer, TurretBase te) {

@@ -7,7 +7,6 @@ import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
 
 public class BlockDisposableTurret extends BlockAbstractTurretHead {
-
     public BlockDisposableTurret() {
         super();
 

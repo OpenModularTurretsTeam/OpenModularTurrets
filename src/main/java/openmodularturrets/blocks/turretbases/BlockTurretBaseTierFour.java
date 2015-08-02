@@ -12,7 +12,6 @@ import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierFourTileEntity;
 
 public class BlockTurretBaseTierFour extends BlockAbstractTurretBase {
-
     public final int MaxCharge = ConfigHandler.getBaseTierFourMaxCharge();
     public final int MaxIO = ConfigHandler.getBaseTierFourMaxIo();
 

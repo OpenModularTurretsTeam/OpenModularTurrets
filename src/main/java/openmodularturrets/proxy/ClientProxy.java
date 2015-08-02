@@ -7,7 +7,6 @@ import openmodularturrets.compatability.IGWHandler;
 import openmodularturrets.compatability.ModCompatibility;
 
 public class ClientProxy extends CommonProxy {
-
     @Override
     public void initRenderers() {
         TileEntityRenderers.init();

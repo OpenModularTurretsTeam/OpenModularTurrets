@@ -20,7 +20,6 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 
 public class ConfigureGui extends GuiContainer {
-
     TurretBase base;
     GuiTextField textFieldAddTrustedPlayer;
     EntityPlayer player;
@@ -61,7 +60,6 @@ public class ConfigureGui extends GuiContainer {
         this.buttonList.add(new GuiButton(7, x + 145, y + 135, 20, 20, ">>"));
 
         if (this.base.getTrustedPlayers().size() > 0) {
-
             this.buttonList.add(new GuiButton(8, x + 70, y + 135, 23, 20, this.base.getTrustedPlayers().get(
                     base.trustedPlayerIndex).canOpenGUI ? "\u00A72Y" : "\u00A7cN"));
             this.buttonList.add(new GuiButton(9, x + 93, y + 135, 23, 20, this.base.getTrustedPlayers().get(

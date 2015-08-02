@@ -16,7 +16,6 @@ import openmodularturrets.util.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
 public class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
-
     private ModelDisposableItemTurret model;
     ModelSolarPanelAddon solar;
     ModelDamageAmp amp;

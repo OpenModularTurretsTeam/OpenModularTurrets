@@ -8,7 +8,6 @@ import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
 public class BlockHardWallTierFive extends Block {
-
     public BlockHardWallTierFive() {
         super(Material.rock);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);

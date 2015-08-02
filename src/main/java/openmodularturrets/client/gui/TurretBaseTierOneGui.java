@@ -14,7 +14,6 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 
 public class TurretBaseTierOneGui extends TurretBaseAbstractGui {
-
 	public TurretBaseTierOneGui(InventoryPlayer inventoryPlayer, TurretBaseTierOneTileEntity tileEntity) {
 		super(inventoryPlayer, tileEntity, new TurretBaseTierOneContainer(inventoryPlayer, tileEntity));
 	}

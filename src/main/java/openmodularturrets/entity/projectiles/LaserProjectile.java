@@ -38,7 +38,6 @@ public class LaserProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(MovingObjectPosition movingobjectposition) {
-
         if (this.ticksExisted <= 1) {
             return;
         }
@@ -52,7 +51,6 @@ public class LaserProjectile extends TurretProjectile {
         }
 
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
-
             Random random = new Random();
             worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:laserHit",
                                      ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);

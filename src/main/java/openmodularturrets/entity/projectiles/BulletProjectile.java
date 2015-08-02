@@ -12,7 +12,6 @@ import openmodularturrets.tileentity.turretbase.TurretBase;
 import java.util.Random;
 
 public class BulletProjectile extends TurretProjectile {
-
     public BulletProjectile(World p_i1776_1_) {
         super(p_i1776_1_);
         this.gravity = 0.00F;
@@ -32,7 +31,6 @@ public class BulletProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(MovingObjectPosition movingobjectposition) {
-
         if (this.ticksExisted <= 1) {
             return;
         }

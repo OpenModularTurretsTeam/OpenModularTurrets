@@ -14,7 +14,6 @@ import net.minecraft.util.StatCollector;
  * This Class
  */
 public class GeneralUtil {
-
     public static Item getMinecraftItem(String name) {
         Item item;
         item = GameData.getItemRegistry().getRaw("minecraft:" + name);

@@ -10,7 +10,6 @@ import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.Items;
 
 public class GrenadeLauncherTurretTileEntity extends TurretHead {
-
     public GrenadeLauncherTurretTileEntity() {
         super();
         this.turretTier = 3;

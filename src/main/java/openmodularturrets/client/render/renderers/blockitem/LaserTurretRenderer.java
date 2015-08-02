@@ -14,7 +14,6 @@ import openmodularturrets.util.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
 public class LaserTurretRenderer extends TileEntitySpecialRenderer {
-
     private ModelLaserTurret model;
     ModelSolarPanelAddon solar;
     ModelDamageAmp amp;
@@ -29,7 +28,6 @@ public class LaserTurretRenderer extends TileEntitySpecialRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
-
         TurretHead turretHead = (TurretHead) te;
         int rotation = 0;
 

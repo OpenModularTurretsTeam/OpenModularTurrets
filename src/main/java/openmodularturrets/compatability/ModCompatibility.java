@@ -11,7 +11,6 @@ import java.util.logging.Logger;
  * Created by Keridos on 23/01/2015. This Class
  */
 public class ModCompatibility {
-
     public static boolean IGWModLoaded = false;
     public static boolean ThermalExpansionLoaded = false;
     public static boolean EnderIOLoaded = false;

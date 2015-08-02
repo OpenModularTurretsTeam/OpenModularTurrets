@@ -26,7 +26,6 @@ import java.util.List;
 
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
 public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
-
     TurretBase base;
     protected int mouseX;
     protected int mouseY;
@@ -108,7 +107,6 @@ public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandle
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
-
     }
 
     public void sendChangeToServer() {

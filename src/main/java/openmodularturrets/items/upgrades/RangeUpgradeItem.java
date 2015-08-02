@@ -14,7 +14,6 @@ import openmodularturrets.reference.Names;
 import java.util.List;
 
 public class RangeUpgradeItem extends UpgradeItem {
-
     public RangeUpgradeItem() {
         super();
 

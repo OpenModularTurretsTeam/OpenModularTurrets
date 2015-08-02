@@ -6,9 +6,7 @@ import openmodularturrets.network.*;
 import openmodularturrets.reference.ModInfo;
 
 public class NetworkingHandler {
-
     public static SimpleNetworkWrapper initNetworking() {
-
         SimpleNetworkWrapper networking = new SimpleNetworkWrapper(ModInfo.ID);
 
         networking.registerMessage(AddTrustedPlayerMessage.class, AddTrustedPlayerMessage.class, 0, Side.SERVER);

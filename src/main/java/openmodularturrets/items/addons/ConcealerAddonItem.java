@@ -13,7 +13,6 @@ import openmodularturrets.reference.Names;
 import java.util.List;
 
 public class ConcealerAddonItem extends AddonItem {
-
     public ConcealerAddonItem() {
         super();
 

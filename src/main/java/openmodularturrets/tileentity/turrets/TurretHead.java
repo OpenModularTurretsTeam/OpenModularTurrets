@@ -187,12 +187,10 @@ public abstract class TurretHead extends TileEntity {
 
     @Override
     public void updateEntity() {
-
         setSide();
         this.base = getBase();
 
         if (worldObj.isRemote) {
-
             if (rotationAnimation >= 360F) {
                 rotationAnimation = 0F;
             }
@@ -309,7 +307,6 @@ public abstract class TurretHead extends TileEntity {
             base.setEnergyStored(base.getEnergyStored(ForgeDirection.UNKNOWN) - power_required);
 
             for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-
                 TurretProjectile projectile = this.createProjectile(this.getWorldObj(), target, ammo);
 
                 projectile.setPosition(this.xCoord + 0.5, this.yCoord + 0.5, this.zCoord + 0.5);
@@ -353,7 +350,6 @@ public abstract class TurretHead extends TileEntity {
 
     public void concealmentChecks() {
         if (base != null && base.shouldConcealTurrets) {
-
             if (!shouldConceal && target == null && ticksWithoutTarget >= 40) {
                 ticksWithoutTarget = 0;
                 shouldConceal = true;

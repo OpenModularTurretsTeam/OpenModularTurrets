@@ -7,7 +7,6 @@ import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
 public class RocketAmmoItem extends AmmoItem {
-
     public RocketAmmoItem() {
         super();
 

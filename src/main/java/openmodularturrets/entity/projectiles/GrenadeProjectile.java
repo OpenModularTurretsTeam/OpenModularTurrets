@@ -34,9 +34,7 @@ public class GrenadeProjectile extends TurretProjectile {
     @Override
     public void onEntityUpdate() {
         if (ticksExisted >= 50) {
-
             if (!worldObj.isRemote) {
-
                 worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
                 AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 3, this.posY - 3, this.posZ - 3,
                                                                   this.posX + 3, this.posY + 3, this.posZ + 3);
@@ -72,7 +70,6 @@ public class GrenadeProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(MovingObjectPosition movingobjectposition) {
-
         if (this.ticksExisted >= 2) {
             this.motionX = 0.0F;
             this.motionY = 0.0F;

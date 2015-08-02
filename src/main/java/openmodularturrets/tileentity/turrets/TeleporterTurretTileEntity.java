@@ -42,7 +42,6 @@ public class TeleporterTurretTileEntity extends TurretHead {
         if (base == null || base.getBaseTier() < this.turretTier) {
             this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);
         } else {
-
             concealmentChecks();
             TurretHeadUtil.updateSolarPanelAddon(base);
 

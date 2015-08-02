@@ -14,7 +14,6 @@ import openmodularturrets.reference.Names;
 import java.util.List;
 
 public class EfficiencyUpgradeItem extends UpgradeItem {
-
     public EfficiencyUpgradeItem() {
         super();
 

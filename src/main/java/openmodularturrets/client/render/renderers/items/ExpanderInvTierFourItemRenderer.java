@@ -8,7 +8,6 @@ import openmodularturrets.tileentity.expander.ExpanderInvTierFourTileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class ExpanderInvTierFourItemRenderer implements IItemRenderer {
-
     private final ExpanderInvTierFourRenderer expanderInvTierFourRenderer;
     private final ExpanderInvTierFourTileEntity expanderInvTierFourTileEntity;
     private final ModelExpander model;
