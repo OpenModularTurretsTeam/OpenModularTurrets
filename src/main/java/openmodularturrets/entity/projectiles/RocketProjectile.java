@@ -42,14 +42,14 @@ public class RocketProjectile extends TurretProjectile {
             this.setDead();
         }
         if (!worldObj.isRemote) {
-            if (ConfigHandler.rocketsCanHome && target != null) {
+            if (ConfigHandler.canRocketsHome && target != null) {
                 double d0 = target.posX - this.posX;
                 double d1 = target.posY + (double) target.getEyeHeight() - 1.1F - this.posY;
                 double d2 = target.posZ - this.posZ;
 
                 this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
                 speed = speed + 0.06F;
-            } else if (ConfigHandler.rocketsCanHome && target == null) {
+            } else if (ConfigHandler.canRocketsHome && target == null) {
                 this.setDead();
             }
         }
