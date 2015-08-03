@@ -16,6 +16,7 @@ public class ConfigHandler {
     public static boolean globalCanTargetPlayers;
     public static boolean globalCanTargetNeutrals;
     public static boolean globalCanTargetMobs;
+    public static boolean rocketsCanHome;
     public static int expanderPowerTierOneCapacity;
     public static int expanderPowerTierTwoCapacity;
     public static int expanderPowerTierThreeCapacity;
@@ -197,6 +198,10 @@ public class ConfigHandler {
         turretDamageTrustedPlayers = config.get("miscellaneous",
                                                 "Can turrets damage their trusted players when they accidentally hit them?",
                                                 true).getBoolean();
+
+        rocketsCanHome = config.get("miscellaneous",
+                                    "Can rockets fired by the rocket launcher turret home on targets ?",
+                                    false).getBoolean();
 
         recipes = config.get("miscellaneous",
                              "Which recipes should we do? (auto, enderio, thermalexpansion, mekanism, vanilla)",
