@@ -39,6 +39,23 @@ public class RocketProjectile extends TurretProjectile {
             this.setDead();
         }
 
+if (ConfigHandler.canRocketsHome) {
+if (target != null) {
+          double d0 = target.posX - this.posX;
+          double d1 = target.posY + (double) target.getEyeHeight() - 1.1F - this.posY;
+          double d2 = target.posZ - this.posZ;
+
+             this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
+             speed = speed + 0.3F;
+
+             double dX = (target.posX) - (this.posX);
+             double dZ = (target.posZ) - (this.posZ);
+             yaw = ((float) (Math.atan2(dZ, dX))) - 1.570796F;
+} else {
+return false;
+} 
+         }
+
         for (int i = 0; i <= 25; i++) {
             Random random = new Random();
             worldObj.spawnParticle("smoke", posX + (random.nextGaussian() / 10), posY + (random.nextGaussian() / 10),
