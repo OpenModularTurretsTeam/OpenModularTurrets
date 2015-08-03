@@ -16,7 +16,7 @@ public class ConfigHandler {
     public static boolean globalCanTargetPlayers;
     public static boolean globalCanTargetNeutrals;
     public static boolean globalCanTargetMobs;
-    public static boolean rocketsCanHome;
+    public static boolean canRocketsHome;
     public static int expanderPowerTierOneCapacity;
     public static int expanderPowerTierTwoCapacity;
     public static int expanderPowerTierThreeCapacity;
@@ -199,7 +199,7 @@ public class ConfigHandler {
                                                 "Can turrets damage their trusted players when they accidentally hit them?",
                                                 true).getBoolean();
 
-        rocketsCanHome = config.get("miscellaneous",
+        canRocketsHome = config.get("miscellaneous",
                                     "Can rockets fired by the rocket launcher turret home on targets ?",
                                     false).getBoolean();
 
