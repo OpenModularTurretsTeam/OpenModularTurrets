@@ -17,6 +17,8 @@ import java.util.Random;
 public class RocketProjectile extends TurretProjectile {
     public int arrowShake;
     public float accuracy;
+    private Entity target;
+    private float speed = 0.06F;
 
     public RocketProjectile(World par1World) {
         super(par1World);
@@ -31,32 +33,29 @@ public class RocketProjectile extends TurretProjectile {
     public RocketProjectile(World par1World, Entity target, ItemStack ammo, TurretBase turretBase) {
         super(par1World, ammo, turretBase);
         this.gravity = 0.00F;
+        this.target = target;
     }
 
     @Override
     public void onEntityUpdate() {
-        if (ticksExisted >= 100) {
-            this.setDead();
+        if (!worldObj.isRemote) {
+            if (ticksExisted >= 100) {
+                this.setDead();
+            }
+
+            if (ConfigHandler.rocketsCanHome && target != null) {
+                double d0 = target.posX - this.posX;
+                double d1 = target.posY + (double) target.getEyeHeight() - 1.1F - this.posY;
+                double d2 = target.posZ - this.posZ;
+
+                this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
+                speed = speed + 0.06F;
+            } else if (ConfigHandler.rocketsCanHome && target == null) {
+                this.setDead();
+            }
         }
 
-if (ConfigHandler.canRocketsHome) {
-if (target != null) {
-          double d0 = target.posX - this.posX;
-          double d1 = target.posY + (double) target.getEyeHeight() - 1.1F - this.posY;
-          double d2 = target.posZ - this.posZ;
-
-             this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
-             speed = speed + 0.3F;
-
-             double dX = (target.posX) - (this.posX);
-             double dZ = (target.posZ) - (this.posZ);
-             yaw = ((float) (Math.atan2(dZ, dX))) - 1.570796F;
-} else {
-return false;
-} 
-         }
-
-        for (int i = 0; i <= 25; i++) {
+        for (int i = 0; i <= 20; i++) {
             Random random = new Random();
             worldObj.spawnParticle("smoke", posX + (random.nextGaussian() / 10), posY + (random.nextGaussian() / 10),
                                    posZ + (random.nextGaussian() / 10), (0), (0), (0));
@@ -65,21 +64,15 @@ return false;
 
     @Override
     protected void onImpact(MovingObjectPosition movingobjectposition) {
-        if (this.ticksExisted <= 1) {
+        if (this.ticksExisted <= 5) {
             return;
         }
-        if (movingobjectposition.typeOfHit == movingobjectposition.typeOfHit.BLOCK) {
+        if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
                                                movingobjectposition.blockZ);
-            if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
+            if (hitBlock != null && !hitBlock.getMaterial().isSolid() || worldObj.isAirBlock(
+                    movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ)) {
                 // Go through non solid block
-                return;
-            }
-        }
-
-        if (movingobjectposition.typeOfHit.equals(0)) {
-            if (worldObj.isAirBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                    movingobjectposition.blockZ)) {
                 return;
             }
         }
