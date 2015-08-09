@@ -377,7 +377,7 @@ public class TurretHeadUtil {
                         int chance = new Random().nextInt(99);
 
                         //For negating
-                        if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
+                        if (chance >= 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
                             return new ItemStack(ammoCheck.getItem());
                             //For adding
                         } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
