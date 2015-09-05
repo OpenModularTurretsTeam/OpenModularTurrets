@@ -374,6 +374,7 @@ public abstract class TurretHead extends TileEntity {
             }
         } else {
             this.shouldConceal = false;
+            worldObj.getBlock(xCoord, yCoord, zCoord).setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 1F, 0.8F);
         }
     }
 }

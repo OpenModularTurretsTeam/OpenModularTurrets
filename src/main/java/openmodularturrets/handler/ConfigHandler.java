@@ -56,6 +56,7 @@ public class ConfigHandler {
     private static int damageAmpDmgBonus;
     private static int turretWarningDistance;
     private static float turretSoundVolume;
+    private static boolean allowBaseCamo;
 
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
@@ -81,7 +82,7 @@ public class ConfigHandler {
                 config.get("TurretDisposable", "FireRateCooldown", 25, "Number of ticks between firings").getInt(),
                 config.get("TurretDisposable", "Damage", 2, "Measured in half-hearts").getInt(),
                 config.get("TurretDisposable", "Accuracy", 50,
-                           "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
+                        "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretDisposable", "PowerUsage", 2, "RF used per shot").getInt(),
                 config.get("TurretDisposable", "Enabled", true, "Enabled?").getBoolean());
 
@@ -90,95 +91,95 @@ public class ConfigHandler {
                 config.get("TurretPotatoCannon", "FireRateCooldown", 35, "Number of ticks between firings").getInt(),
                 config.get("TurretPotatoCannon", "Damage", 3, "Measured in half-hearts").getInt(),
                 config.get("TurretPotatoCannon", "Accuracy", 30,
-                           "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
+                        "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretPotatoCannon", "PowerUsage", 10, "RF used per shot").getInt(),
                 config.get("TurretPotatoCannon", "Enabled", true, "Enabled?").getBoolean());
 
         gun_turret = new TurretSetting(config.get("TurretMachineGun", "Range", 18, "Turret range, in blocks").getInt(),
-                                       config.get("TurretMachineGun", "FireRateCooldown", 8,
-                                                  "Number of ticks between firings").getInt(),
-                                       config.get("TurretMachineGun", "Damage", 2, "Measured in half-hearts").getInt(),
-                                       config.get("TurretMachineGun", "Accuracy", 30,
-                                                  "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
-                                       config.get("TurretMachineGun", "PowerUsage", 100, "RF used per shot").getInt(),
-                                       config.get("TurretMachineGun", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretMachineGun", "FireRateCooldown", 8,
+                        "Number of ticks between firings").getInt(),
+                config.get("TurretMachineGun", "Damage", 2, "Measured in half-hearts").getInt(),
+                config.get("TurretMachineGun", "Accuracy", 30,
+                        "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
+                config.get("TurretMachineGun", "PowerUsage", 100, "RF used per shot").getInt(),
+                config.get("TurretMachineGun", "Enabled", true, "Enabled?").getBoolean());
 
         incendiary_turret = new TurretSetting(
                 config.get("TurretIncendiary", "Range", 12, "Turret range, in blocks").getInt(),
                 config.get("TurretIncendiary", "FireRateCooldown", 25, "Number of ticks between firings").getInt(),
                 config.get("TurretIncendiary", "Damage", 2, "Measured in half-hearts").getInt(),
                 config.get("TurretIncendiary", "Accuracy", 30,
-                           "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
+                        "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretIncendiary", "PowerUsage", 250, "RF used per shot").getInt(),
                 config.get("TurretIncendiary", "Enabled", true, "Enabled?").getBoolean());
 
         grenade_turret = new TurretSetting(config.get("TurretGrenade", "Range", 20, "Turret range, in blocks").getInt(),
-                                           config.get("TurretGrenade", "FireRateCooldown", 40,
-                                                      "Number of ticks between firings").getInt(),
-                                           config.get("TurretGrenade", "Damage", 8, "Measured in half-hearts").getInt(),
-                                           config.get("TurretGrenade", "Accuracy", 30,
-                                                      "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
-                                           config.get("TurretGrenade", "PowerUsage", 3000, "RF used per shot").getInt(),
-                                           config.get("TurretGrenade", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretGrenade", "FireRateCooldown", 40,
+                        "Number of ticks between firings").getInt(),
+                config.get("TurretGrenade", "Damage", 8, "Measured in half-hearts").getInt(),
+                config.get("TurretGrenade", "Accuracy", 30,
+                        "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
+                config.get("TurretGrenade", "PowerUsage", 3000, "RF used per shot").getInt(),
+                config.get("TurretGrenade", "Enabled", true, "Enabled?").getBoolean());
 
         relativistic_turret = new TurretSetting(
                 config.get("TurretRelativistic", "Range", 20, "Turret range, in blocks").getInt(),
                 config.get("TurretRelativistic", "FireRateCooldown", 100, "Number of ticks between firings").getInt(),
                 config.get("TurretRelativistic", "Damage", 0, "Measured in half-hearts").getInt(),
                 config.get("TurretRelativistic", "Accuracy", 0,
-                           "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
+                        "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretRelativistic", "PowerUsage", 5000, "RF used per shot").getInt(),
                 config.get("TurretRelativistic", "Enabled", true, "Enabled?").getBoolean());
 
         rocket_turret = new TurretSetting(config.get("TurretRocket", "Range", 30, "Turret range, in blocks").getInt(),
-                                          config.get("TurretRocket", "FireRateCooldown", 30,
-                                                     "Number of ticks between firings").getInt(),
-                                          config.get("TurretRocket", "Damage", 10, "Measured in half-hearts").getInt(),
-                                          config.get("TurretRocket", "Accuracy", 10,
-                                                     "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
-                                          config.get("TurretRocket", "PowerUsage", 5000, "RF used per shot").getInt(),
-                                          config.get("TurretRocket", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretRocket", "FireRateCooldown", 30,
+                        "Number of ticks between firings").getInt(),
+                config.get("TurretRocket", "Damage", 10, "Measured in half-hearts").getInt(),
+                config.get("TurretRocket", "Accuracy", 10,
+                        "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
+                config.get("TurretRocket", "PowerUsage", 5000, "RF used per shot").getInt(),
+                config.get("TurretRocket", "Enabled", true, "Enabled?").getBoolean());
 
         teleporter_turret = new TurretSetting(
                 config.get("TurretTeleporter", "Range", 20, "Turret range, in blocks").getInt(),
                 config.get("TurretTeleporter", "FireRateCooldown", 100, "Number of ticks between firings").getInt(),
                 config.get("TurretTeleporter", "Damage", 0, "Measured in half-hearts").getInt(),
                 config.get("TurretTeleporter", "Accuracy", 0,
-                           "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
+                        "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretTeleporter", "PowerUsage", 15000, "RF used per shot").getInt(),
                 config.get("TurretTeleporter", "Enabled", true, "Enabled?").getBoolean());
 
         laser_turret = new TurretSetting(config.get("TurretLaser", "Range", 25, "Turret range, in blocks").getInt(),
-                                         config.get("TurretLaser", "FireRateCooldown", 10,
-                                                    "Number of ticks between firings").getInt(),
-                                         config.get("TurretLaser", "Damage", 2, "Measured in half-hearts").getInt(),
-                                         config.get("TurretLaser", "Accuracy", 10,
-                                                    "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
-                                         config.get("TurretLaser", "PowerUsage", 10000, "RF used per shot").getInt(),
-                                         config.get("TurretLaser", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretLaser", "FireRateCooldown", 10,
+                        "Number of ticks between firings").getInt(),
+                config.get("TurretLaser", "Damage", 2, "Measured in half-hearts").getInt(),
+                config.get("TurretLaser", "Accuracy", 10,
+                        "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
+                config.get("TurretLaser", "PowerUsage", 10000, "RF used per shot").getInt(),
+                config.get("TurretLaser", "Enabled", true, "Enabled?").getBoolean());
 
         railgun_turret = new TurretSetting(config.get("TurretRailgun", "Range", 30, "Turret range, in blocks").getInt(),
-                                           config.get("TurretRailgun", "FireRateCooldown", 100,
-                                                      "Number of ticks between firings").getInt(),
-                                           config.get("TurretRailgun", "Damage", 25,
-                                                      "Measured in half-hearts").getInt(),
-                                           config.get("TurretRailgun", "Accuracy", 0,
-                                                      "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
-                                           config.get("TurretRailgun", "PowerUsage", 25000,
-                                                      "RF used per shot").getInt(),
-                                           config.get("TurretRailgun", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretRailgun", "FireRateCooldown", 100,
+                        "Number of ticks between firings").getInt(),
+                config.get("TurretRailgun", "Damage", 25,
+                        "Measured in half-hearts").getInt(),
+                config.get("TurretRailgun", "Accuracy", 0,
+                        "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
+                config.get("TurretRailgun", "PowerUsage", 25000,
+                        "RF used per shot").getInt(),
+                config.get("TurretRailgun", "Enabled", true, "Enabled?").getBoolean());
 
         rangeUpgradeBoost = config.get("upgrades", "range", 2, "Increases range in blocks linearly").getInt();
         fireRateUpgradeBoostPercentage = config.get("upgrades", "rateOfFire", 0.1D,
-                                                    "It's a double for some reason, reduces cooldown").getDouble();
+                "It's a double for some reason, reduces cooldown").getDouble();
         accuracyUpgradeBoost = config.get("upgrades", "accuracy", 0.2D, "Increases accuracy linearly").getDouble();
         efficiencyUpgradeBoostPercentage = config.get("upgrades", "efficiency", 0.08D,
-                                                      "Reduces power consumption linearly").getDouble();
+                "Reduces power consumption linearly").getDouble();
 
         solarPanelAddonGen = config.get("addons", "solar", 10,
-                                        "Generates specified RF every tick in sunlight").getInt();
+                "Generates specified RF every tick in sunlight").getInt();
         redstoneReactorAddonGen = config.get("addons", "redstone", 1550,
-                                             "Generates RF from redstone dust/blocks in turret's inventory").getInt();
+                "Generates RF from redstone dust/blocks in turret's inventory").getInt();
         damageAmpDmgBonus = config.get("addons", "damage", 2, "Increases damage linearly").getInt();
 
         recyclerNegateChance = config.get("addons", "recycler", 10, "Recycler ammo use negation % chance").getInt();
@@ -186,51 +187,54 @@ public class ConfigHandler {
         recyclerAddChance = config.get("addons", "recycler", 5, "Recycler ammo add % chance").getInt();
 
         turretWarningDistance = config.get("miscellaneous", "warningDistance", 5,
-                                           "Distance outside the max range of a turret players should be warned").getInt();
+                "Distance outside the max range of a turret players should be warned").getInt();
 
         turretAlarmSound = config.get("miscellaneous",
-                                      "Enable/Disable turret alarm sound. True=enabled, false=disabled",
-                                      true).getBoolean();
+                "Enable/Disable turret alarm sound. True=enabled, false=disabled",
+                true).getBoolean();
         turretWarnMessage = config.get("miscellaneous", "Should turret warn message be displayed?", true).getBoolean();
         turretBreakable = config.get("miscellaneous", "Are turrets/turret bases breakable by anyone?",
-                                     false).getBoolean();
+                false).getBoolean();
 
         turretDamageTrustedPlayers = config.get("miscellaneous",
-                                                "Can turrets damage their trusted players when they accidentally hit them?",
-                                                true).getBoolean();
+                "Can turrets damage their trusted players when they accidentally hit them?",
+                true).getBoolean();
 
         canRocketsHome = config.get("miscellaneous",
-                                    "Can rockets fired by the rocket launcher turret home on targets ?",
-                                    false).getBoolean();
+                "Can rockets fired by the rocket launcher turret home on targets ?",
+                false).getBoolean();
 
         recipes = config.get("miscellaneous",
-                             "Which recipes should we do? (auto, enderio, thermalexpansion, mekanism, vanilla)",
-                             "auto").getString();
+                "Which recipes should we do? (auto, enderio, thermalexpansion, mekanism, vanilla)",
+                "auto").getString();
 
         turretSoundVolume = config.get("miscellaneous", "Turret sound volume percentage (Between 0 - 100)",
-                                       40).getInt() / 10;
+                40).getInt() / 10;
+
+        allowBaseCamo = config.get("miscellaneous",
+                "Should turret bases be camouflage-able with normal blocks?", true).getBoolean();
 
         shouldDoThaumcraftIntegration = config.get("ModCompatability",
-                                                   "Should we enable items that integrate with Thaumcraft?",
-                                                   true).getBoolean();
+                "Should we enable items that integrate with Thaumcraft?",
+                true).getBoolean();
 
         shouldDoComputerIntegration = config.get("ModCompatability",
-                                                 "Should we enable items that integrate with ComputerCraft/OpenComputers?",
-                                                 true).getBoolean();
+                "Should we enable items that integrate with ComputerCraft/OpenComputers?",
+                true).getBoolean();
 
         IGWNotification = config.get("ModCompatability", "Enable IGW Mod notification", true).getBoolean();
 
         potentiaToRFRatio = config.get("ModCompatability", "Potentia Addons' RF conversion ratio per 1 essentia",
-                                       500).getInt();
+                500).getInt();
 
         potentiaAddonCapacity = config.get("ModCompatability", "How much essentia the Potentia Addon can store",
-                                           20).getInt();
+                20).getInt();
 
         globalCanTargetPlayers = config.get("GlobalTargetingParameters", "Can turrets attack players?",
-                                            true).getBoolean();
+                true).getBoolean();
 
         globalCanTargetNeutrals = config.get("GlobalTargetingParameters", "Can turrets attack neutrals?",
-                                             true).getBoolean();
+                true).getBoolean();
 
         globalCanTargetMobs = config.get("GlobalTargetingParameters", "Can turrets attack mobs?", true).getBoolean();
 
@@ -245,8 +249,9 @@ public class ConfigHandler {
         expanderPowerTierFiveCapacity = config.get("Expanders", "Power expander tier five capacity", 5000000).getInt();
 
         turretTargetSearchTicks = config.get("GlobalTargetingParameters",
-                                             "If a turret does not have a target, how many ticks should it wait before looking again?",
-                                             10).getInt();
+                "If a turret does not have a target, how many ticks should it wait before looking again?",
+                10).getInt();
+
 
         if (config.hasChanged()) {
             config.save();
@@ -412,6 +417,8 @@ public class ConfigHandler {
     public static int getTurretTargetSearchTicks() {
         return turretTargetSearchTicks;
     }
+
+    public static boolean isAllowBaseCamo() { return allowBaseCamo; }
 
     public static class TurretSetting {
         private final int range;
