@@ -425,15 +425,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         return null;
     }
 
-    private void updateNeighboursRender() {
-        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord + 1, yCoord, zCoord);
-        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord - 1, yCoord, zCoord);
-        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord, yCoord + 1, zCoord);
-        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord, yCoord - 1, zCoord);
-        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord, yCoord, zCoord + 1);
-        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(xCoord, yCoord, zCoord - 1);
-    }
-
     @Optional.Method(modid = "Thaumcraft")
     private int drawEssentia() {
         IEssentiaTransport ic = getConnectableTileWithoutOrientation();
@@ -447,15 +438,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
 
     @Override
     public void updateEntity() {
-        if (this.worldObj.isRemote) {
-            if (ticks % 10 == 0) {
-                updateNeighboursRender();
-            }
-            ticks = 0;
-            return;
-        }
-
-        ticks++;
 
         if (ticks % 5 == 0) {
             //Concealment

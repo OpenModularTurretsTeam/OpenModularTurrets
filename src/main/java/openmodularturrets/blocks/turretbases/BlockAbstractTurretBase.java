@@ -3,6 +3,7 @@ package openmodularturrets.blocks.turretbases;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,7 +33,7 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float what, float these, float are) {
-        if (!world.isRemote && player.isSneaking() && player.getCurrentEquippedItem() == null) {
+        if (!world.isRemote && player.isSneaking() && ConfigHandler.isAllowBaseCamo() && player.getCurrentEquippedItem() == null) {
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
             if (base != null) {
                 if (base != null) {
@@ -46,24 +47,22 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
             }
         }
 
-        if (!world.isRemote && !player.isSneaking() && player.getCurrentEquippedItem() != null) {
-            if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemBlock && Block.getBlockFromItem(
-                    player.getCurrentEquippedItem().getItem()).isNormalCube() && Block.getBlockFromItem(
-                    player.getCurrentEquippedItem().getItem()).isOpaqueCube() && !(Block.getBlockFromItem(
-                    player.getCurrentEquippedItem().getItem()) instanceof BlockAbstractTurretBase)) {
-                TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
-                if (base != null) {
-                    if (player.getUniqueID().toString().equals(base.getOwner())) {
-                        base.camoStack = player.getCurrentEquippedItem();
-                    } else {
-                        player.addChatMessage(
-                                new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
-                    }
+        if (!world.isRemote && !player.isSneaking() && ConfigHandler.isAllowBaseCamo() && player.getCurrentEquippedItem() != null &&
+                player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemBlock &&
+                Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()).isNormalCube() && Block.getBlockFromItem(
+                player.getCurrentEquippedItem().getItem()).isOpaqueCube() && !(Block.getBlockFromItem(
+                player.getCurrentEquippedItem().getItem()) instanceof BlockAbstractTurretBase)) {
+            TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
+            if (base != null) {
+                if (player.getUniqueID().toString().equals(base.getOwner())) {
+                    base.camoStack = player.getCurrentEquippedItem();
+                } else {
+                    player.addChatMessage(
+                            new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
                 }
             }
-        }
 
-        if (!world.isRemote && !player.isSneaking() && player.getCurrentEquippedItem() == null) {
+        } else if (!world.isRemote && !player.isSneaking()) {
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
             if (base.getTrustedPlayer(player.getUniqueID()) != null) {
                 if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI) {
@@ -126,8 +125,8 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
                     float rz = rand.nextFloat() * 0.8F + 0.1F;
 
                     EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz,
-                                                           new ItemStack(item.getItem(), item.stackSize,
-                                                                         item.getItemDamage()));
+                            new ItemStack(item.getItem(), item.stackSize,
+                                    item.getItemDamage()));
 
                     if (item.hasTagCompound()) {
                         entityItem.getEntityItem().setTagCompound((NBTTagCompound) item.getTagCompound().copy());
