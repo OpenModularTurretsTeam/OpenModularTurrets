@@ -80,6 +80,13 @@ public abstract class BlockAbstractTurretBase extends BlockContainer {
     }
 
     @Override
+    public void randomDisplayTick(World p_149734_1_, int p_149734_2_, int p_149734_3_, int p_149734_4_, Random p_149734_5_) {
+        if (p_149734_1_.isRemote) {
+            Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(p_149734_2_, p_149734_3_, p_149734_4_);
+        }
+    }
+
+    @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block par5) {
         if (!world.isRemote) {
             if (world.isBlockIndirectlyGettingPowered(x, y, z)) {

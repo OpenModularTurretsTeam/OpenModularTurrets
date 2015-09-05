@@ -99,8 +99,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
 
             if (redstoneBlock == null) {
                 redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(),
-                                                                               new ItemStack(Blocks.redstone_block),
-                                                                               base);
+                        new ItemStack(Blocks.redstone_block),
+                        base);
             }
 
             if (redstoneBlock != null && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base.getMaxEnergyStored(
@@ -113,7 +113,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
 
             if (redstone == null) {
                 redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(),
-                                                                          new ItemStack(Items.redstone), base);
+                        new ItemStack(Items.redstone), base);
             }
 
             if (redstone != null) {
@@ -393,8 +393,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
         return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.getDistanceSq(xCoord + 0.5,
-                                                                                              yCoord + 0.5,
-                                                                                              zCoord + 0.5) < 64;
+                yCoord + 0.5,
+                zCoord + 0.5) < 64;
     }
 
     @Optional.Method(modid = "Thaumcraft")
@@ -439,7 +439,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Override
     public void updateEntity() {
 
-        if (ticks % 5 == 0) {
+        if (!worldObj.isRemote && ticks % 5 == 0) {
+
             //Concealment
             this.shouldConcealTurrets = TurretHeadUtil.hasConcealmentAddon(this);
 
@@ -460,8 +461,16 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
                 }
             }
 
+            //Syncing
+            worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+
             if (ticks % 20 == 0) {
+
+                //General
                 ticks = 0;
+                updateRedstoneReactor(this);
+
+                //Thaumcraft
                 if (ModCompatibility.ThaumcraftLoaded && amountOfPotentia <= maxAmountOfPotentia) {
                     amountOfPotentia = amountOfPotentia + drawEssentia();
                 }
@@ -469,8 +478,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
                 //Computers
                 this.computerAccessible = (ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputercraftLoaded) && TurretHeadUtil.hasSerialPortAddon(
                         this);
-                updateRedstoneReactor(this);
-                worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
             }
         }
     }
@@ -949,12 +956,12 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     public String[] getMethodNames() {
         // list commands you want..
         return new String[]{commands.getOwner.toString(), commands.attacksPlayers.toString(),
-                            commands.setAttacksPlayers.toString(), commands.attacksMobs.toString(),
-                            commands.setAttacksMobs.toString(), commands.attacksNeutrals.toString(),
-                            commands.setAttacksNeutrals.toString(), commands.getTrustedPlayers.toString(),
-                            commands.addTrustedPlayer.toString(), commands.removeTrustedPlayer.toString(),
-                            commands.getActive.toString(), commands.getInverted.toString(),
-                            commands.getRedstone.toString(), commands.setInverted.toString()};
+                commands.setAttacksPlayers.toString(), commands.attacksMobs.toString(),
+                commands.setAttacksMobs.toString(), commands.attacksNeutrals.toString(),
+                commands.setAttacksNeutrals.toString(), commands.getTrustedPlayers.toString(),
+                commands.addTrustedPlayer.toString(), commands.removeTrustedPlayer.toString(),
+                commands.getActive.toString(), commands.getInverted.toString(),
+                commands.getRedstone.toString(), commands.setInverted.toString()};
     }
 
     @Optional.Method(modid = "ComputerCraft")
