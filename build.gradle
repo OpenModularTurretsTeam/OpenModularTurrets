@@ -88,6 +88,10 @@ repositories {
         name = 'ThaumCraft 4 API'
         artifactPattern 'https://dl.dropboxusercontent.com/u/47135879/[module](-[classifier])-1.7.10-[revision](.[ext])'
     }
+    maven {
+        name = "ic2"
+        url = "http://maven.ic2.player.to/"
+    }
 }
 
 dependencies {
@@ -98,6 +102,7 @@ dependencies {
     compile "codechicken:CodeChickenCore:${config.minecraft_version}-${config.ccc_version}:dev"
     compile "li.cil.oc:OpenComputers:MC${config.minecraft_version}-${config.oc_version}:dev"
     compile "Azanor:Thaumcraft:${config.tc_version}:deobf@jar"
+    compile "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
     runtime "com.github.azanor:baubles:${config.baubles_version}"
 }
 
