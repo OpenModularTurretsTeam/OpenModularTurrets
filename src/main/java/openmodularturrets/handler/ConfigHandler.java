@@ -25,6 +25,8 @@ public class ConfigHandler {
     public static int recyclerNegateChance;
     public static int recyclerAddChance;
     public static int turretTargetSearchTicks;
+    public static boolean EUSupport;
+    public static double EUtoRFRatio;
     private static int baseTierOneMaxCharge;
     private static int baseTierOneMaxIo;
     private static int baseTierTwoMaxCharge;
@@ -252,6 +254,8 @@ public class ConfigHandler {
                 "If a turret does not have a target, how many ticks should it wait before looking again?",
                 10).getInt();
 
+        EUSupport = config.get("ModCompatability", "Can turrets be powered with EU?", true).getBoolean();
+        EUtoRFRatio = config.get("ModCompatability", "EU to RF Ratio", 8.0D).getDouble();
 
         if (config.hasChanged()) {
             config.save();
