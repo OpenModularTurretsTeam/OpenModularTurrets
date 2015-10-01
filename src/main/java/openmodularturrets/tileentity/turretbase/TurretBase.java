@@ -7,11 +7,13 @@ import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergySink;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -24,9 +26,11 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.util.MathUtil;
 import openmodularturrets.util.TurretHeadUtil;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -45,9 +49,10 @@ import static openmodularturrets.util.PlayerUtil.*;
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft"),
         @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers"),
         @Optional.Interface(iface = "thaumcraft.api.aspects.IAspectContainer", modid = "Thaumcraft"),
-        @Optional.Interface(iface = "thaumcraft.api.aspects.IEssentiaTransport", modid = "Thaumcraft")})
+        @Optional.Interface(iface = "thaumcraft.api.aspects.IEssentiaTransport", modid = "Thaumcraft"),
+        @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2")})
 
-public abstract class TurretBase extends TileEntity implements IEnergyHandler, IInventory, SimpleComponent, ISidedInventory, IEssentiaTransport, IAspectContainer, IPeripheral {
+public abstract class TurretBase extends TileEntity implements IEnergyHandler, IInventory, SimpleComponent, ISidedInventory, IEssentiaTransport, IAspectContainer, IPeripheral, IEnergySink {
     public int trustedPlayerIndex = 0;
     public ItemStack camoStack;
     //For concealment
@@ -72,6 +77,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     protected float amountOfPotentia = 0F;
     protected float maxAmountOfPotentia = ConfigHandler.getPotentiaAddonCapacity();
     protected ArrayList<IComputerAccess> comp;
+    protected double storageEU;
+    protected boolean wasAddedToEnergyNet = false;
 
     public TurretBase(int MaxEnergyStorage, int MaxIO) {
         super();
@@ -99,8 +106,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
 
             if (redstoneBlock == null) {
                 redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(),
-                        new ItemStack(Blocks.redstone_block),
-                        base);
+                                                                               new ItemStack(Blocks.redstone_block),
+                                                                               base);
             }
 
             if (redstoneBlock != null && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base.getMaxEnergyStored(
@@ -113,12 +120,55 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
 
             if (redstone == null) {
                 redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(),
-                        new ItemStack(Items.redstone), base);
+                                                                          new ItemStack(Items.redstone), base);
             }
 
             if (redstone != null) {
                 base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen());
             }
+        }
+    }
+
+    @Optional.Method(modid = "IC2")
+    @Override
+    public double injectEnergy(ForgeDirection forgeDirection, double v, double v1) {
+        storageEU += v;
+        return 0.0D;
+    }
+
+    @Optional.Method(modid = "IC2")
+    @Override
+    public int getSinkTier() {
+        return 4;
+    }
+
+    @Optional.Method(modid = "IC2")
+    @Override
+    public double getDemandedEnergy() {
+        return Math.max(4000D - storageEU, 0.0D);
+    }
+
+    @Optional.Method(modid = "IC2")
+    @Override
+    public boolean acceptsEnergyFrom(TileEntity tileEntity, ForgeDirection forgeDirection) {
+        return true;
+    }
+
+    @Optional.Method(modid = "IC2")
+    public void addToIc2EnergyNetwork() {
+        if (!worldObj.isRemote) {
+            EnergyTileLoadEvent event = new EnergyTileLoadEvent(this);
+            MinecraftForge.EVENT_BUS.post(event);
+        }
+    }
+
+    @Optional.Method(modid = "IC2")
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        if (!worldObj.isRemote) {
+            EnergyTileUnloadEvent event = new EnergyTileUnloadEvent(this);
+            MinecraftForge.EVENT_BUS.post(event);
         }
     }
 
@@ -266,6 +316,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         par1.setBoolean("computerAccessible", computerAccessible);
         par1.setBoolean("shouldConcealTurrets", shouldConcealTurrets);
         par1.setBoolean("multiTargeting", multiTargeting);
+        par1.setDouble("storageEU", storageEU);
 
         NBTTagList itemList = new NBTTagList();
 
@@ -339,6 +390,11 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         } else {
             computerAccessible = false;
         }
+        if (par1.hasKey("storageEU")) {
+            this.storageEU = par1.getDouble("storageEU");
+        } else {
+            storageEU = 0;
+        }
 
         NBTTagList tagList = par1.getTagList("Inventory", 10);
 
@@ -393,8 +449,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
         return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.getDistanceSq(xCoord + 0.5,
-                yCoord + 0.5,
-                zCoord + 0.5) < 64;
+                                                                                              yCoord + 0.5,
+                                                                                              zCoord + 0.5) < 64;
     }
 
     @Optional.Method(modid = "Thaumcraft")
@@ -438,6 +494,10 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
 
     @Override
     public void updateEntity() {
+        if (ModCompatibility.IC2Loaded && ConfigHandler.EUSupport && !wasAddedToEnergyNet && !worldObj.isRemote) {
+            addToIc2EnergyNetwork();
+            wasAddedToEnergyNet = true;
+        }
 
         if (!worldObj.isRemote && ticks % 5 == 0) {
 
@@ -457,7 +517,17 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
                         this.amountOfPotentia = this.amountOfPotentia - 0.05F;
                         this.storage.modifyEnergyStored(Math.round(ConfigHandler.getPotentiaToRFRatio() / 2));
                     }
-                    worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+                }
+            }
+
+            if (ModCompatibility.IC2Loaded && ConfigHandler.EUSupport) {
+                if (storage.getMaxEnergyStored() != storage.getEnergyStored() && storageEU > 0) {
+                    storage.modifyEnergyStored(MathUtil.truncateDoubleToInt(
+                            Math.min(storage.getMaxEnergyStored() - storage.getEnergyStored(),
+                                     storageEU * ConfigHandler.EUtoRFRatio)));
+                    storageEU -= Math.min(
+                            (storage.getMaxEnergyStored() - storage.getEnergyStored()) / ConfigHandler.EUtoRFRatio,
+                            storageEU * ConfigHandler.EUtoRFRatio);
                 }
             }
 
@@ -956,12 +1026,12 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     public String[] getMethodNames() {
         // list commands you want..
         return new String[]{commands.getOwner.toString(), commands.attacksPlayers.toString(),
-                commands.setAttacksPlayers.toString(), commands.attacksMobs.toString(),
-                commands.setAttacksMobs.toString(), commands.attacksNeutrals.toString(),
-                commands.setAttacksNeutrals.toString(), commands.getTrustedPlayers.toString(),
-                commands.addTrustedPlayer.toString(), commands.removeTrustedPlayer.toString(),
-                commands.getActive.toString(), commands.getInverted.toString(),
-                commands.getRedstone.toString(), commands.setInverted.toString()};
+                            commands.setAttacksPlayers.toString(), commands.attacksMobs.toString(),
+                            commands.setAttacksMobs.toString(), commands.attacksNeutrals.toString(),
+                            commands.setAttacksNeutrals.toString(), commands.getTrustedPlayers.toString(),
+                            commands.addTrustedPlayer.toString(), commands.removeTrustedPlayer.toString(),
+                            commands.getActive.toString(), commands.getInverted.toString(),
+                            commands.getRedstone.toString(), commands.setInverted.toString()};
     }
 
     @Optional.Method(modid = "ComputerCraft")
