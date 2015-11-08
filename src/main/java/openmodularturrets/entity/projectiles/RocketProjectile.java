@@ -2,11 +2,16 @@ package openmodularturrets.entity.projectiles;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
@@ -57,7 +62,7 @@ public class RocketProjectile extends TurretProjectile {
         for (int i = 0; i <= 20; i++) {
             Random random = new Random();
             worldObj.spawnParticle("smoke", posX + (random.nextGaussian() / 10), posY + (random.nextGaussian() / 10),
-                                   posZ + (random.nextGaussian() / 10), (0), (0), (0));
+                    posZ + (random.nextGaussian() / 10), (0), (0), (0));
         }
     }
 
@@ -68,7 +73,7 @@ public class RocketProjectile extends TurretProjectile {
         }
         if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                               movingobjectposition.blockZ);
+                    movingobjectposition.blockZ);
             if (hitBlock != null && !hitBlock.getMaterial().isSolid() || worldObj.isAirBlock(
                     movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ)) {
                 // Go through non solid block
@@ -77,23 +82,30 @@ public class RocketProjectile extends TurretProjectile {
         }
 
         if (!worldObj.isRemote) {
+
+            int damage = ConfigHandler.getRocketTurretSettings().getDamage();
+
+            if (isAmped) {
+                damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
+            }
+
             worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 5, this.posY - 5, this.posZ - 5,
-                                                              this.posX + 5, this.posY + 5, this.posZ + 5);
+                    this.posX + 5, this.posY + 5, this.posZ + 5);
             List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
 
             for (Entity mob : targets) {
-                int damage = ConfigHandler.getRocketTurretSettings().getDamage();
-
-                if (isAmped) {
-                    damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
-                }
 
                 if (mob instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) mob)) {
                         mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
                         mob.hurtResistantTime = 0;
                     }
+                }
+
+                if (ConfigHandler.isCanRocketsHurtEnderDragon() && mob instanceof EntityDragon) {
+                    ((EntityDragon) mob).setHealth(((EntityDragon) mob).getHealth() - damage);
+                    mob.hurtResistantTime = 0;
                 } else {
                     mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
                     mob.hurtResistantTime = 0;
