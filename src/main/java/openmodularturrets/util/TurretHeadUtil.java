@@ -36,11 +36,11 @@ public class TurretHeadUtil {
         if (base.isAttacksPlayers()) {
             int warnDistance = ConfigHandler.getTurretWarningDistance();
             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(xCoord - turretRange - warnDistance,
-                                                              yCoord - downLowAmount - warnDistance,
-                                                              zCoord - turretRange - warnDistance,
-                                                              xCoord + turretRange + warnDistance,
-                                                              yCoord + turretRange + warnDistance,
-                                                              zCoord + turretRange + warnDistance);
+                    yCoord - downLowAmount - warnDistance,
+                    zCoord - turretRange - warnDistance,
+                    xCoord + turretRange + warnDistance,
+                    yCoord + turretRange + warnDistance,
+                    zCoord + turretRange + warnDistance);
 
             if (worldObj.getWorldTime() % 2000 == 0) {
                 warnedPlayers.clear();
@@ -50,7 +50,7 @@ public class TurretHeadUtil {
 
             for (EntityPlayerMP target : targets) {
                 if (!target.getUniqueID().toString().equals(base.getOwner()) && !isTrustedPlayer(target.getUniqueID(),
-                                                                                                 base) && !warnedPlayers.contains(
+                        base) && !warnedPlayers.contains(
                         target) && !target.capabilities.isCreativeMode) {
                     dispatchWarnMessage(target, worldObj);
                     warnedPlayers.add(target);
@@ -74,8 +74,8 @@ public class TurretHeadUtil {
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(xCoord - turretRange, yCoord - downLowAmount,
-                                                              zCoord - turretRange, xCoord + turretRange,
-                                                              yCoord + turretRange, zCoord + turretRange);
+                    zCoord - turretRange, xCoord + turretRange,
+                    yCoord + turretRange, zCoord + turretRange);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
@@ -129,37 +129,37 @@ public class TurretHeadUtil {
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(xCoord - turretRange, yCoord - downLowAmount,
-                                                              zCoord - turretRange, xCoord + turretRange,
-                                                              yCoord + turretRange, zCoord + turretRange);
+                    zCoord - turretRange, xCoord + turretRange,
+                    yCoord + turretRange, zCoord + turretRange);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase target1 : targets) {
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAnimal && !target1.isDead && target1.getDistance(xCoord, yCoord,
-                                                                                                  zCoord) >= 3) {
+                            zCoord) >= 3) {
                         target = target1;
                     }
                 }
 
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAmbientCreature && !target1.isDead && target1.getDistance(xCoord,
-                                                                                                           yCoord,
-                                                                                                           zCoord) >= 3) {
+                            yCoord,
+                            zCoord) >= 3) {
                         target = target1;
                     }
                 }
 
                 if (base.isAttacksMobs() && ConfigHandler.globalCanTargetMobs) {
                     if (target1 instanceof IMob && !target1.isDead && target1.getDistance(xCoord, yCoord,
-                                                                                          zCoord) >= 3) {
+                            zCoord) >= 3) {
                         target = target1;
                     }
                 }
 
                 if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetPlayers) {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead && target1.getDistance(xCoord, yCoord,
-                                                                                                    zCoord) >= 3) {
+                            zCoord) >= 3) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
                         if (!entity.getUniqueID().toString().equals(base.getOwner()) && !isTrustedPlayer(
@@ -190,8 +190,8 @@ public class TurretHeadUtil {
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(xCoord - turretRange, yCoord - downLowAmount,
-                                                              zCoord - turretRange, xCoord + turretRange,
-                                                              yCoord + turretRange, zCoord + turretRange);
+                    zCoord - turretRange, xCoord + turretRange,
+                    yCoord + turretRange, zCoord + turretRange);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
@@ -247,7 +247,7 @@ public class TurretHeadUtil {
     public static boolean isTargetAlreadyTargeted(TurretBase base, Entity entity) {
         if (base.getWorldObj().getTileEntity(base.xCoord + 1, base.yCoord, base.zCoord) instanceof TurretHead) {
             TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord + 1, base.yCoord,
-                                                                              base.zCoord);
+                    base.zCoord);
             if (turret.target != null && entity.equals(turret.target)) {
                 return true;
             }
@@ -255,7 +255,7 @@ public class TurretHeadUtil {
 
         if (base.getWorldObj().getTileEntity(base.xCoord - 1, base.yCoord, base.zCoord) instanceof TurretHead) {
             TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord - 1, base.yCoord,
-                                                                              base.zCoord);
+                    base.zCoord);
             if (turret.target != null && entity.equals(turret.target)) {
                 return true;
             }
@@ -263,7 +263,7 @@ public class TurretHeadUtil {
 
         if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord + 1, base.zCoord) instanceof TurretHead) {
             TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord + 1,
-                                                                              base.zCoord);
+                    base.zCoord);
             if (turret.target != null && entity.equals(turret.target)) {
                 return true;
             }
@@ -271,7 +271,7 @@ public class TurretHeadUtil {
 
         if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord - 1, base.zCoord) instanceof TurretHead) {
             TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord - 1,
-                                                                              base.zCoord);
+                    base.zCoord);
             if (turret.target != null && entity.equals(turret.target)) {
                 return true;
             }
@@ -279,7 +279,7 @@ public class TurretHeadUtil {
 
         if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord, base.zCoord + 1) instanceof TurretHead) {
             TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord,
-                                                                              base.zCoord + 1);
+                    base.zCoord + 1);
             if (turret.target != null && entity.equals(turret.target)) {
                 return true;
             }
@@ -287,7 +287,7 @@ public class TurretHeadUtil {
 
         if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord, base.zCoord - 1) instanceof TurretHead) {
             TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord,
-                                                                              base.zCoord - 1);
+                    base.zCoord - 1);
             if (turret.target != null && entity.equals(turret.target)) {
                 return true;
             }
@@ -336,6 +336,34 @@ public class TurretHeadUtil {
         return totalExtraCap;
     }
 
+    private static ItemStack deductFromInvExpander(ItemStack itemStack, AbstractInvExpander exp, TurretBase base) {
+
+        for (int i = 0; i < exp.getSizeInventory(); i++) {
+            ItemStack ammoCheck = exp.getStackInSlot(i);
+            if (ammoCheck != null && ammoCheck.getItem() == itemStack.getItem()) {
+                if (hasRecyclerAddon(base)) {
+                    int chance = new Random().nextInt(99);
+
+                    //For negating
+                    if (chance >= 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
+                        return new ItemStack(ammoCheck.getItem());
+                        //For adding
+                    } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
+                        exp.decrStackSize(i, -1);
+                        return new ItemStack(ammoCheck.getItem());
+                    } else {
+                        exp.decrStackSize(i, 1);
+                        return new ItemStack(ammoCheck.getItem());
+                    }
+                } else {
+                    exp.decrStackSize(i, 1);
+                    return new ItemStack(ammoCheck.getItem());
+                }
+            }
+        }
+        return null;
+    }
+
     public static ItemStack getSpecificItemFromInvExpanders(World world, ItemStack itemStack, TurretBase base) {
         int x = base.xCoord;
         int y = base.yCoord;
@@ -343,172 +371,60 @@ public class TurretHeadUtil {
 
         if (world.getTileEntity(x + 1, y, z) instanceof AbstractInvExpander) {
             AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x + 1, y, z);
-            for (int i = 0; i < exp.getSizeInventory(); i++) {
-                ItemStack ammoCheck = exp.getStackInSlot(i);
-                if (ammoCheck != null && ammoCheck.getItem() == itemStack.getItem()) {
-                    if (hasRecyclerAddon(base)) {
-                        int chance = new Random().nextInt(99);
-
-                        //For negating
-                        if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
-                            return new ItemStack(ammoCheck.getItem());
-                            //For adding
-                        } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
-                            exp.decrStackSize(i, -1);
-                            return new ItemStack(ammoCheck.getItem());
-                        } else {
-                            exp.decrStackSize(i, 1);
-                            return new ItemStack(ammoCheck.getItem());
-                        }
-                    } else {
-                        exp.decrStackSize(i, 1);
-                        return new ItemStack(ammoCheck.getItem());
-                    }
-                }
+            ItemStack stack = deductFromInvExpander(itemStack, exp, base);
+            if (stack != null) {
+                return stack;
             }
         }
 
         if (world.getTileEntity(x - 1, y, z) instanceof AbstractInvExpander) {
             AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x - 1, y, z);
-            for (int i = 0; i < exp.getSizeInventory(); i++) {
-                ItemStack ammoCheck = exp.getStackInSlot(i);
-                if (ammoCheck != null && ammoCheck.getItem() == itemStack.getItem()) {
-                    if (hasRecyclerAddon(base)) {
-                        int chance = new Random().nextInt(99);
-
-                        //For negating
-                        if (chance >= 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
-                            return new ItemStack(ammoCheck.getItem());
-                            //For adding
-                        } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
-                            exp.decrStackSize(i, -1);
-                            return new ItemStack(ammoCheck.getItem());
-                        } else {
-                            exp.decrStackSize(i, 1);
-                            return new ItemStack(ammoCheck.getItem());
-                        }
-                    } else {
-                        exp.decrStackSize(i, 1);
-                        return new ItemStack(ammoCheck.getItem());
-                    }
-                }
+            ItemStack stack = deductFromInvExpander(itemStack, exp, base);
+            if (stack != null) {
+                return stack;
             }
         }
 
         if (world.getTileEntity(x, y + 1, z) instanceof AbstractInvExpander) {
             AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y + 1, z);
-            for (int i = 0; i < exp.getSizeInventory(); i++) {
-                ItemStack ammoCheck = exp.getStackInSlot(i);
-                if (ammoCheck != null && ammoCheck.getItem() == itemStack.getItem()) {
-                    if (hasRecyclerAddon(base)) {
-                        int chance = new Random().nextInt(99);
-
-                        //For negating
-                        if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
-                            return new ItemStack(ammoCheck.getItem());
-                            //For adding
-                        } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
-                            exp.decrStackSize(i, -1);
-                            return new ItemStack(ammoCheck.getItem());
-                        } else {
-                            exp.decrStackSize(i, 1);
-                            return new ItemStack(ammoCheck.getItem());
-                        }
-                    } else {
-                        exp.decrStackSize(i, 1);
-                        return new ItemStack(ammoCheck.getItem());
-                    }
-                }
+            ItemStack stack = deductFromInvExpander(itemStack, exp, base);
+            if (stack != null) {
+                return stack;
             }
         }
 
         if (world.getTileEntity(x, y - 1, z) instanceof AbstractInvExpander) {
             AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y - 1, z);
-            for (int i = 0; i < exp.getSizeInventory(); i++) {
-                ItemStack ammoCheck = exp.getStackInSlot(i);
-                if (ammoCheck != null && ammoCheck.getItem() == itemStack.getItem()) {
-                    if (hasRecyclerAddon(base)) {
-                        int chance = new Random().nextInt(99);
-
-                        //For negating
-                        if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
-                            return new ItemStack(ammoCheck.getItem());
-                            //For adding
-                        } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
-                            exp.decrStackSize(i, -1);
-                            return new ItemStack(ammoCheck.getItem());
-                        } else {
-                            exp.decrStackSize(i, 1);
-                            return new ItemStack(ammoCheck.getItem());
-                        }
-                    } else {
-                        exp.decrStackSize(i, 1);
-                        return new ItemStack(ammoCheck.getItem());
-                    }
-                }
+            ItemStack stack = deductFromInvExpander(itemStack, exp, base);
+            if (stack != null) {
+                return stack;
             }
         }
 
         if (world.getTileEntity(x, y, z + 1) instanceof AbstractInvExpander) {
             AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y, z + 1);
-            for (int i = 0; i < exp.getSizeInventory(); i++) {
-                ItemStack ammoCheck = exp.getStackInSlot(i);
-                if (ammoCheck != null && ammoCheck.getItem() == itemStack.getItem()) {
-                    if (hasRecyclerAddon(base)) {
-                        int chance = new Random().nextInt(99);
-
-                        //For negating
-                        if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
-                            return new ItemStack(ammoCheck.getItem());
-                            //For adding
-                        } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
-                            exp.decrStackSize(i, -1);
-                            return new ItemStack(ammoCheck.getItem());
-                        } else {
-                            exp.decrStackSize(i, 1);
-                            return new ItemStack(ammoCheck.getItem());
-                        }
-                    } else {
-                        exp.decrStackSize(i, 1);
-                        return new ItemStack(ammoCheck.getItem());
-                    }
-                }
+            ItemStack stack = deductFromInvExpander(itemStack, exp, base);
+            if (stack != null) {
+                return stack;
             }
         }
 
         if (world.getTileEntity(x, y, z - 1) instanceof AbstractInvExpander) {
             AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y, z - 1);
-            for (int i = 0; i < exp.getSizeInventory(); i++) {
-                ItemStack ammoCheck = exp.getStackInSlot(i);
-                if (ammoCheck != null && ammoCheck.getItem() == itemStack.getItem()) {
-                    if (hasRecyclerAddon(base)) {
-                        int chance = new Random().nextInt(99);
-
-                        //For negating
-                        if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
-                            return new ItemStack(ammoCheck.getItem());
-                            //For adding
-                        } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
-                            exp.decrStackSize(i, -1);
-                            return new ItemStack(ammoCheck.getItem());
-                        } else {
-                            exp.decrStackSize(i, 1);
-                            return new ItemStack(ammoCheck.getItem());
-                        }
-                    } else {
-                        exp.decrStackSize(i, 1);
-                        return new ItemStack(ammoCheck.getItem());
-                    }
-                }
+            ItemStack stack = deductFromInvExpander(itemStack, exp, base);
+            if (stack != null) {
+                return stack;
             }
         }
         return null;
     }
 
     public static ItemStack getAnyItemFromInvExpanders(World world, TurretBase base) {
+
         int x = base.xCoord;
         int y = base.yCoord;
         int z = base.zCoord;
+
         if (world.getTileEntity(x + 1, y, z) instanceof AbstractInvExpander) {
             AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x + 1, y, z);
             for (int i = 0; i < exp.getSizeInventory(); i++) {
@@ -968,12 +884,12 @@ public class TurretHeadUtil {
         Vec3 traceStart = Vec3.createVectorHelper(turret.xCoord + 0.5F, turret.yCoord + 0.5F, turret.zCoord + 0.5F);
         Vec3 traceEnd = Vec3.createVectorHelper(target.posX, target.posY + target.getEyeHeight(), target.posZ);
         Vec3 vecDelta = Vec3.createVectorHelper(traceEnd.xCoord - traceStart.xCoord,
-                                                traceEnd.yCoord - traceStart.yCoord,
-                                                traceEnd.zCoord - traceStart.zCoord);
+                traceEnd.yCoord - traceStart.yCoord,
+                traceEnd.zCoord - traceStart.zCoord);
 
         // Normalize vector to the largest delta axis
         double vecDeltaLength = MathHelper.abs_max(vecDelta.xCoord,
-                                                   MathHelper.abs_max(vecDelta.yCoord, vecDelta.zCoord));
+                MathHelper.abs_max(vecDelta.yCoord, vecDelta.zCoord));
         vecDelta.xCoord /= vecDeltaLength;
         vecDelta.yCoord /= vecDeltaLength;
         vecDelta.zCoord /= vecDeltaLength;

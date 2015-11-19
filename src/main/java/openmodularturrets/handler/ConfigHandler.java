@@ -57,6 +57,7 @@ public class ConfigHandler {
     private static int turretWarningDistance;
     private static float turretSoundVolume;
     private static boolean allowBaseCamo;
+    private static boolean canRocketsHurtEnderDragon;
 
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
@@ -202,6 +203,10 @@ public class ConfigHandler {
 
         canRocketsHome = config.get("miscellaneous",
                 "Can rockets fired by the rocket launcher turret home on targets ?",
+                false).getBoolean();
+
+        canRocketsHurtEnderDragon  = config.get("miscellaneous",
+                "Can rockets fired by the rocket launcher turret hurt the Ender Dragon?",
                 false).getBoolean();
 
         recipes = config.get("miscellaneous",
@@ -420,6 +425,10 @@ public class ConfigHandler {
 
     public static boolean isAllowBaseCamo() { return allowBaseCamo; }
 
+    public static boolean isCanRocketsHurtEnderDragon() {
+        return canRocketsHurtEnderDragon;
+    }
+
     public static class TurretSetting {
         private final int range;
         private final int rof;
@@ -460,5 +469,6 @@ public class ConfigHandler {
         public boolean isEnabled() {
             return enabled;
         }
+
     }
 }
