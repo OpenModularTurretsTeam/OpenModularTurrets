@@ -17,5 +17,10 @@ If a you create a new issue that:
 the ticket will not be considered and be closed immediately. Make absolutely sure that the ticket you post adheres to the above.
 
 For new functionality requests, please contact one of the devs directly, or clone the repo and get your hands dirty. This project is, after all, open source.
+Additionally, for mod compatability request we have 3 requirements:
+
+1. The mod we should do compatability for should not be inactive
+2. It should be possible to contact one of the authors directly (from dev to dev)
+3. Obviously, the mod in question should be on the same version as OMT
   
 Dev-Builds are available here (be careful, those are experimental and can break your save): [Click here](https://www.ironhide.de/jenkins/job/OpenModularTurrets/)
