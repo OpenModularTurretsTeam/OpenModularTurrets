@@ -3,6 +3,7 @@ package openmodularturrets.util;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -93,7 +94,7 @@ public class TurretHeadUtil {
                 }
 
                 if (base.isAttacksMobs() && ConfigHandler.globalCanTargetMobs) {
-                    if (target1 instanceof IMob && !target1.isDead) {
+                    if (target1.isCreatureType(EnumCreatureType.monster, false) && !target1.isDead) {
                         target = target1;
                     }
                 }
