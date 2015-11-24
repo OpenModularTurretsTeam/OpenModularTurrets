@@ -11,7 +11,6 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -144,27 +143,30 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         return 0;
     }
 
-    public void addTrustedPlayer(String name) {
+    public boolean addTrustedPlayer(String name) {
         TrustedPlayer trustedPlayer = new TrustedPlayer(name);
         trustedPlayer.uuid = getPlayerUUID(name);
         if (trustedPlayer.uuid != null) {
             for (TrustedPlayer player : trustedPlayers) {
                 if (player.getName().toLowerCase().equals(name.toLowerCase()) || trustedPlayer.uuid.toString().equals(
                         owner)) {
-                    return;
+                    return true;
                 }
             }
             trustedPlayers.add(trustedPlayer);
+            return true;
         }
+        return false;
     }
 
-    public void removeTrustedPlayer(String name) {
+    public boolean removeTrustedPlayer(String name) {
         for (TrustedPlayer player : trustedPlayers) {
             if (player.getName().equals(name)) {
                 trustedPlayers.remove(player);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     public List<TrustedPlayer> getTrustedPlayers() {
@@ -867,12 +869,13 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
-        this.addTrustedPlayer(args.checkString(0));
+        if (!this.addTrustedPlayer(args.checkString(0))) {
+            return new Object[]{"Name not valid!"};
+        }
         TrustedPlayer trustedPlayer = this.getTrustedPlayer(args.checkString(0));
         trustedPlayer.canOpenGUI = args.optBoolean(1, false);
         trustedPlayer.canChangeTargeting = args.optBoolean(1, false);
         trustedPlayer.admin = args.optBoolean(1, false);
-        trustedPlayer.uuid = getPlayerUUID(args.checkString(0));
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         return null;
     }
@@ -916,7 +919,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     }
 
     @Optional.Method(modid = "OpenComputers")
-    @Callback(doc = "function():boolean; toggles turret inversion.")
+    @Callback(doc = "function():boolean; toggles turret redstone inversion state.")
     public Object[] setInverted(Context context, Arguments args) {
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
@@ -927,7 +930,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     }
 
     @Optional.Method(modid = "OpenComputers")
-    @Callback(doc = "function():boolean; shows redstone invert state.")
+    @Callback(doc = "function():boolean; shows redstone inversion state.")
     public Object[] getInverted(Context context, Arguments args) {
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
@@ -1009,7 +1012,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
                 if (!arguments[0].toString().equals("")) {
                     return new Object[]{"wrong arguments"};
                 }
-                this.addTrustedPlayer(arguments[0].toString());
+                if (!this.addTrustedPlayer(arguments[0].toString())) {
+                    return new Object[]{"Name not valid!"};
+                }
                 if (arguments[1].toString().equals("")) {
                     return new Object[]{"successfully added"};
                 }
