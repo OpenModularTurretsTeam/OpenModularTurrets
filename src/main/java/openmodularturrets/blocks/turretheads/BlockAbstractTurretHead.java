@@ -3,6 +3,8 @@ package openmodularturrets.blocks.turretheads;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.tileentity.turretbase.TurretBase;
@@ -38,6 +40,11 @@ public abstract class BlockAbstractTurretHead extends BlockContainer {
                 world.getTileEntity(x, y, z - 1) instanceof TurretBase) {
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
         return false;
     }
 }

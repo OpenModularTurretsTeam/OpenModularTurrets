@@ -13,6 +13,7 @@ public class EnderIORecipeHandler {
     public static void init() {
         ItemStack capacitorBank;
         ItemStack capacitorBankVibrant;
+        ItemStack capacitorBankBasic;
         ItemStack basicCapacitor;
         ItemStack doubleCapacitor;
         ItemStack octadicCapacitor;
@@ -23,6 +24,7 @@ public class EnderIORecipeHandler {
         Block capBankBlock = GameRegistry.findBlock("EnderIO", "blockCapBank");
         capacitorBank = new ItemStack(capBankBlock, 1, 2);
         capacitorBankVibrant = new ItemStack(capBankBlock, 1, 3);
+        capacitorBankBasic = new ItemStack(capBankBlock, 1, 1);
 
         Item capacitorItem = GameRegistry.findItem("EnderIO", "itemBasicCapacitor");
         basicCapacitor = new ItemStack(capacitorItem, 1, 0);
@@ -87,7 +89,7 @@ public class EnderIORecipeHandler {
 
         // Bases
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.turretBaseTierTwo, 1), "ABA", "ECE", "ADA", 'A',
-                                                   "ingotElectricalSteel", 'B', capacitorBank, 'C',
+                "ingotElectricalSteel", 'B', capacitorBankBasic, 'C',
                                                    Items.sensorTierTwoItem, 'D', basicCapacitor, 'E', Items.ioBus));
 
         GameRegistry.addRecipe(
