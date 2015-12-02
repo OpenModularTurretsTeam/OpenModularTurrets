@@ -154,6 +154,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
                 }
             }
             trustedPlayers.add(trustedPlayer);
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
             return true;
         }
         return false;
@@ -163,6 +164,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         for (TrustedPlayer player : trustedPlayers) {
             if (player.getName().equals(name)) {
                 trustedPlayers.remove(player);
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 return true;
             }
         }
