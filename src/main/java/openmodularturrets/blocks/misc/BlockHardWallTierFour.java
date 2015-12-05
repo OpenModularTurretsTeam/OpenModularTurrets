@@ -4,10 +4,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import openmodularturrets.ModularTurrets;
+import openmodularturrets.blocks.util.BlockAbstract;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
-public class BlockHardWallTierFour extends Block {
+public class BlockHardWallTierFour extends BlockAbstract {
     public BlockHardWallTierFour() {
         super(Material.rock);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
