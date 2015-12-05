@@ -1,17 +1,18 @@
 package openmodularturrets.blocks.expanders;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
+import openmodularturrets.blocks.util.BlockAbstract;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.expander.ExpanderPowerTierTwoTileEntity;
 
-public class BlockExpanderPowerTierTwo extends BlockContainer {
+public class BlockExpanderPowerTierTwo extends BlockAbstract implements ITileEntityProvider {
     public BlockExpanderPowerTierTwo() {
         super(Material.rock);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
