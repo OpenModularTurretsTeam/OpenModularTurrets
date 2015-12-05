@@ -1,7 +1,7 @@
 package openmodularturrets.blocks.turretheads;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.IBlockAccess;
@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-public abstract class BlockAbstractTurretHead extends BlockContainer {
+public abstract class BlockAbstractTurretHead extends Block implements ITileEntityProvider {
     public BlockAbstractTurretHead() {
         super(Material.rock);
 
