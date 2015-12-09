@@ -9,7 +9,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.blocks.util.BlockAbstractContainer;
@@ -115,5 +117,17 @@ public abstract class BlockAbstractTurretBase extends BlockAbstractContainer {
             dropItems(world, x, y, z);
             super.breakBlock(world, x, y, z, par5, par6);
         }
+    }
+
+    @Override
+    public IIcon getIcon(IBlockAccess p_149673_1_, int p_149673_2_, int p_149673_3_, int p_149673_4_, int p_149673_5_) {
+        TurretBase base = (TurretBase) p_149673_1_.getTileEntity(p_149673_2_, p_149673_3_, p_149673_4_);
+        if (base != null && base.camoStack != null) {
+            Block camoBlock = Block.getBlockFromItem(base.camoStack.getItem());
+            if (camoBlock != null && camoBlock.renderAsNormalBlock())
+                return camoBlock.getIcon(p_149673_5_, base.camoStack.getItemDamage());
+        }
+
+        return blockIcon;
     }
 }
