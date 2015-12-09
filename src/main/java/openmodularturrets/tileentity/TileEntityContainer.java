@@ -3,13 +3,12 @@ package openmodularturrets.tileentity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 
 /**
  * Created by Keridos on 05/12/2015.
  * This Class
  */
-public class TileEntityContainer extends TileEntity implements IInventory {
+public class TileEntityContainer extends TileEntityOMT implements IInventory {
     protected ItemStack[] inv;
 
     @Override
