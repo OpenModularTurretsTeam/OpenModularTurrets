@@ -16,7 +16,6 @@ public abstract class AbstractInvExpander extends TileEntityContainer {
     public float baseFitRotationZ;
     protected TurretBase base;
     protected boolean hasSetSide = false;
-    protected ItemStack[] inv;
     protected int tier;
 
     public AbstractInvExpander() {
