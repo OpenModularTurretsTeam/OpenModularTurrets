@@ -29,16 +29,6 @@ public class BlockTurretBaseTierFive extends BlockAbstractTurretBase {
     }
 
     @Override
-    public IIcon getIcon(IBlockAccess p_149673_1_, int p_149673_2_, int p_149673_3_, int p_149673_4_, int p_149673_5_) {
-        TurretBase base = (TurretBase) p_149673_1_.getTileEntity(p_149673_2_, p_149673_3_, p_149673_4_);
-        if (base != null && base.camoStack != null) {
-
-            return base.camoStack.getItem().getIconFromDamage(base.camoStack.getItemDamageForDisplay());
-        }
-        return blockIcon;
-    }
-
-    @Override
     public TileEntity createNewTileEntity(World world, int par2) {
         return new TurretBaseTierFiveTileEntity(this.MaxCharge, this.MaxIO);
     }
