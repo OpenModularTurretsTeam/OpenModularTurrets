@@ -23,4 +23,4 @@ Additionally, for mod compatability request we have 3 requirements:
 2. It should be possible to contact one of the authors directly (from dev to dev)
 3. Obviously, the mod in question should be on the same version as OMT
   
-Dev-Builds are available here (be careful, those are experimental and can break your save): [Click here](https://www.ironhide.de/jenkins/job/OpenModularTurrets/)
+Dev-Builds are available here (be careful, those are experimental and can break your save): [Click here](https://jenkins.ironhide.de/job/OpenModularTurrets/)
