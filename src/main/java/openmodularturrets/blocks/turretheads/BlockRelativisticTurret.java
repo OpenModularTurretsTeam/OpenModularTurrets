@@ -11,7 +11,6 @@ import java.util.Random;
 public class BlockRelativisticTurret extends BlockAbstractTurretHead {
     public BlockRelativisticTurret() {
         super();
-        this.setLightLevel(8.0F);
         this.setBlockName(Names.Blocks.unlocalisedRelativisticTurret);
         this.setBlockTextureName(ModInfo.ID + ":relativisticTurret");
     }
