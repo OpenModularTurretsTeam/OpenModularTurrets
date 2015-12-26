@@ -12,6 +12,7 @@ import openmodularturrets.tileentity.turretbase.TurretBaseTierFiveTileEntity;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class TurretBaseTierFiveGui extends TurretBaseAbstractGui {
     public TurretBaseTierFiveGui(InventoryPlayer inventoryPlayer, TurretBaseTierFiveTileEntity tileEntity) {
@@ -75,6 +76,19 @@ public class TurretBaseTierFiveGui extends TurretBaseAbstractGui {
                 ForgeDirection.UNKNOWN);
 
         drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
-        drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 68 - expression, 14, expression);
+
+        int next = new Random().nextInt(3);
+
+        if (next == 0) {
+            drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 68 - expression, 14, expression);
+        }
+
+        if (next == 1) {
+            drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 215, 68 - expression, 14, expression);
+        }
+
+        if (next == 2) {
+            drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 234, 68 - expression, 14, expression);
+        }
     }
 }
