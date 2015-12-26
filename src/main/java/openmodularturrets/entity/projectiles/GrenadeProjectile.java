@@ -1,6 +1,7 @@
 package openmodularturrets.entity.projectiles;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -37,14 +38,18 @@ public class GrenadeProjectile extends TurretProjectile {
             if (!worldObj.isRemote) {
                 worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
                 AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 3, this.posY - 3, this.posZ - 3,
-                                                                  this.posX + 3, this.posY + 3, this.posZ + 3);
-                List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
+                        this.posX + 3, this.posY + 3, this.posZ + 3);
+                List<Entity> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
                 for (Entity mob : targets) {
+
                     int damage = ConfigHandler.getGrenadeTurretSettings().getDamage();
 
                     if (isAmped) {
-                        damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
+                        if (mob instanceof EntityLivingBase) {
+                            EntityLivingBase elb = (EntityLivingBase) mob;
+                            damage += ((int) elb.getHealth() * (0.25 * amp_level));
+                        }
                     }
 
                     if (mob instanceof EntityPlayer) {
@@ -58,6 +63,7 @@ public class GrenadeProjectile extends TurretProjectile {
                         mob.attackEntityFrom(new ArmorBypassDamageSource("grenade"), damage * 0.1F);
                         mob.hurtResistantTime = 0;
                     }
+
                 }
             }
             this.setDead();

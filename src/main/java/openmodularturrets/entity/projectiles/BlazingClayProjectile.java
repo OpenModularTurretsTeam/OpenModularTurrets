@@ -2,6 +2,7 @@ package openmodularturrets.entity.projectiles;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -55,14 +56,18 @@ public class BlazingClayProjectile extends TurretProjectile {
         if (!worldObj.isRemote) {
             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 5, this.posY - 5, this.posZ - 5,
                                                               this.posX + 5, this.posY + 5, this.posZ + 5);
-            List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
+            List<Entity> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
+
+            int damage = ConfigHandler.getIncendiary_turret().getDamage();
+
+            if (isAmped) {
+                if (movingobjectposition.entityHit instanceof EntityLivingBase) {
+                    EntityLivingBase elb = (EntityLivingBase) movingobjectposition.entityHit;
+                    damage += ((int) elb.getHealth() * (0.05 * amp_level));
+                }
+            }
 
             for (Entity mob : targets) {
-                int damage = ConfigHandler.getIncendiary_turret().getDamage();
-
-                if (isAmped) {
-                    damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
-                }
 
                 if (mob instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) mob)) {
