@@ -53,7 +53,6 @@ public class ConfigHandler {
     private static double efficiencyUpgradeBoostPercentage;
     private static int solarPanelAddonGen;
     private static int redstoneReactorAddonGen;
-    private static int damageAmpDmgBonus;
     private static int turretWarningDistance;
     private static float turretSoundVolume;
     private static boolean allowBaseCamo;
@@ -181,7 +180,6 @@ public class ConfigHandler {
                 "Generates specified RF every tick in sunlight").getInt();
         redstoneReactorAddonGen = config.get("addons", "redstone", 1550,
                 "Generates RF from redstone dust/blocks in turret's inventory").getInt();
-        damageAmpDmgBonus = config.get("addons", "damage", 2, "Increases damage linearly").getInt();
 
         recyclerNegateChance = config.get("addons", "recycler", 10, "Recycler ammo use negation % chance").getInt();
 
@@ -357,10 +355,6 @@ public class ConfigHandler {
 
     public static int getRedstoneReactorAddonGen() {
         return redstoneReactorAddonGen;
-    }
-
-    public static int getDamageAmpDmgBonus() {
-        return damageAmpDmgBonus;
     }
 
     public static int getPotentiaToRFRatio() {

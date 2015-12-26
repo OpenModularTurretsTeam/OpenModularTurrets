@@ -849,6 +849,12 @@ public class TurretHeadUtil {
 
     public static int getAmpLevel(TurretBase base) {
         int amp_level = 0;
+
+        if(base == null)
+        {
+            return amp_level;
+        }
+
         int tier = base.getBaseTier();
 
         if (tier == 1) {
@@ -857,13 +863,13 @@ public class TurretHeadUtil {
 
         if (base.getStackInSlot(10) != null) {
             if (base.getStackInSlot(10).getItem() instanceof DamageAmpAddonItem) {
-                amp_level += (ConfigHandler.getDamageAmpDmgBonus() * base.getStackInSlot(10).stackSize);
+                amp_level += base.getStackInSlot(10).stackSize;
             }
         }
 
         if (base.getStackInSlot(9) != null) {
             if (base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem) {
-                amp_level += (ConfigHandler.getDamageAmpDmgBonus() * base.getStackInSlot(9).stackSize);
+                amp_level +=  base.getStackInSlot(9).stackSize;
             }
         }
 

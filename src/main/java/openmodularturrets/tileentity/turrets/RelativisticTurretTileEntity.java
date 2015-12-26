@@ -102,35 +102,15 @@ public class RelativisticTurretTileEntity extends TurretHead {
                 }
             }
 
-            ItemStack ammo = null;
-
-            if (this.requiresAmmo()) {
-                if (this.requiresSpecificAmmo()) {
-                    for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-                        ammo = TurretHeadUtil.useSpecificItemStackItemFromBase(base, this.getAmmo());
-                    }
-                } else {
-                    ammo = TurretHeadUtil.useAnyItemStackFromBase(base);
-                }
-
-                // Is there ammo?
-                if (ammo == null) {
-                    return;
-                }
-            }
-
             // Consume energy
             base.setEnergyStored(base.getEnergyStored(ForgeDirection.UNKNOWN) - power_required);
-
-            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200));
-            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.weakness.id, 200));
+            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200, 5, false));
+            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.weakness.id, 200, 5, false));
 
             target = null;
         }
 
-        this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord,
-                                           ModInfo.ID + ":" + this.getLaunchSoundEffect(), 0.6F, 1.0F);
-
+        this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":" + this.getLaunchSoundEffect(), 0.6F, 1.0F);
         ticks = 0;
     }
 

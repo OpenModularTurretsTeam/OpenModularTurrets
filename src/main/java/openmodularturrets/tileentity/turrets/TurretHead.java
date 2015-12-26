@@ -328,11 +328,11 @@ public abstract class TurretHead extends TileEntity {
 
                 Random random = new Random();
 
-                if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
-                    worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":amped",
-                            ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
-                    projectile.isAmped = true;
-                }
+//                if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
+//                    worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":amped",
+//                            ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
+//                    projectile.isAmped = true;
+//                }
 
                 double d0 = target.posX - projectile.posX;
                 double d1 = target.posY + (double) target.getEyeHeight() - projectile.posY;

@@ -52,6 +52,7 @@ public class ModularTurrets {
         proxy.initHandlers();
         RecipeHandler.initRecipes();
         ProjectileEntityHandler.registerProjectiles(this);
+        DungeonLootHandler.init();
     }
 
     @Mod.EventHandler

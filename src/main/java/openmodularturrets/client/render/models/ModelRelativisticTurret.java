@@ -91,6 +91,4 @@ public class ModelRelativisticTurret extends ModelBase {
         Crystal.render(0.0625F);
     }
 
-    public void setRotationForTarget(float y, float z) {
-    }
 }

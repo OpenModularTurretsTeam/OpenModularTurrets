@@ -35,8 +35,8 @@ public class TurretBaseTierThreeGui extends TurretBaseAbstractGui {
             if (mouseY > l + 17 && mouseY < l + 17 + 51) {
                 ArrayList list = new ArrayList();
                 list.add(base.getEnergyStored(ForgeDirection.UNKNOWN) + "/" + base.getMaxEnergyStored(
-                        ForgeDirection.UNKNOWN));
-                this.drawHoveringText(list, (int) mouseX - k, (int) mouseY - l, fontRenderer);
+                        ForgeDirection.UNKNOWN) + " RF");
+                this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
             }
         }
 
@@ -72,6 +72,6 @@ public class TurretBaseTierThreeGui extends TurretBaseAbstractGui {
         int expression = (base.getEnergyStored(ForgeDirection.UNKNOWN) * 51) / base.getMaxEnergyStored(
                 ForgeDirection.UNKNOWN);
         drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
-        drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 17, 14, expression);
+        drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 68 - expression, 14, expression);
     }
 }
