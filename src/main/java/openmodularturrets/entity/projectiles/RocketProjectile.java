@@ -2,6 +2,7 @@ package openmodularturrets.entity.projectiles;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -64,7 +65,7 @@ public class RocketProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(MovingObjectPosition movingobjectposition) {
-        if (this.ticksExisted <= 5) {
+        if (this.ticksExisted <= 2) {
             return;
         }
         if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
@@ -79,20 +80,23 @@ public class RocketProjectile extends TurretProjectile {
 
         if (!worldObj.isRemote) {
 
-            int damage = ConfigHandler.getRocketTurretSettings().getDamage();
-
-            if (isAmped) {
-                damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
-            }
-
             worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 5, this.posY - 5, this.posZ - 5,
                     this.posX + 5, this.posY + 5, this.posZ + 5);
-            List<Entity> targets = worldObj.getEntitiesWithinAABB(Entity.class, axis);
+            List<Entity> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (Entity mob : targets) {
 
-                if (mob instanceof EntityPlayer) {
+                int damage = ConfigHandler.getRocketTurretSettings().getDamage();
+
+                if (isAmped) {
+                    if (mob instanceof EntityLivingBase) {
+                        EntityLivingBase elb = (EntityLivingBase) mob;
+                        damage += ((int) elb.getHealth() * (0.25 * amp_level));
+                    }
+                }
+
+               if (mob instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) mob)) {
                         mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
                         mob.hurtResistantTime = 0;

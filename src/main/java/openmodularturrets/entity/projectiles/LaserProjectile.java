@@ -1,12 +1,14 @@
 package openmodularturrets.entity.projectiles;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.util.TurretHeadUtil;
 
 import java.util.Random;
 
@@ -57,9 +59,14 @@ public class LaserProjectile extends TurretProjectile {
 
             if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
                 int damage = ConfigHandler.getLaserTurretSettings().getDamage();
+
                 if (isAmped) {
-                    damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
+                    if (movingobjectposition.entityHit instanceof EntityLivingBase) {
+                        EntityLivingBase elb = (EntityLivingBase) movingobjectposition.entityHit;
+                        damage += ((int) elb.getHealth() * (0.1 * amp_level));
+                    }
                 }
+
                 if (movingobjectposition.entityHit instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) movingobjectposition.entityHit)) {
                         movingobjectposition.entityHit.setFire(2);

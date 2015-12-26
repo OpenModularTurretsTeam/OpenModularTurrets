@@ -128,7 +128,7 @@ public class ConfigureGui extends GuiContainer {
         if (guibutton.id == 4) { //add trusted player
             if (player.getUniqueID().toString().equals(base.getOwner())) {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
-                    base.addTrustedPlayer(textFieldAddTrustedPlayer.getText());
+                    this.base.addTrustedPlayer(textFieldAddTrustedPlayer.getText());
                     sendChangeToServerAddTrusted();
                     textFieldAddTrustedPlayer.setText("");
                     this.base.trustedPlayerIndex = 0;
