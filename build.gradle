@@ -16,6 +16,8 @@ buildscript {
 }
 
 apply plugin: 'forge'
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 // define the properties file
 ext.configFile = file "project.properties"
