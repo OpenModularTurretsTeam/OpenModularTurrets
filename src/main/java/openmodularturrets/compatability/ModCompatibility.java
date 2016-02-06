@@ -2,6 +2,7 @@ package openmodularturrets.compatability;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModAPIManager;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import dan200.computercraft.api.ComputerCraftAPI;
 import net.minecraft.nbt.NBTTagCompound;
@@ -82,7 +83,13 @@ public class ModCompatibility {
         new IGWSupportNotifier();
         addVersionCheckerInfo();
         if (ComputercraftLoaded && ModAPIManager.INSTANCE.hasAPI("ComputerCraft")) {
-            ComputerCraftAPI.registerPeripheralProvider(CCPeripheralProvider.getInstance());
+            Logger.getGlobal().severe("CC Loaded");
+            registerCCCompat();
         }
+    }
+
+    @Optional.Method(modid = "ComputerCraft")
+    public static void registerCCCompat() {
+        ComputerCraftAPI.registerPeripheralProvider(CCPeripheralProvider.getInstance());
     }
 }
