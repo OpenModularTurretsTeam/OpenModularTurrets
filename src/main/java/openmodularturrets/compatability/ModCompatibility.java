@@ -2,6 +2,7 @@ package openmodularturrets.compatability;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInterModComms;
+import dan200.computercraft.api.ComputerCraftAPI;
 import net.minecraft.nbt.NBTTagCompound;
 import openmodularturrets.reference.ModInfo;
 
@@ -48,6 +49,7 @@ public class ModCompatibility {
         ComputercraftLoaded = Loader.isModLoaded("ComputerCraft");
         if (OpenComputersLoaded || ComputercraftLoaded) {
             logger.info("Enabling LUA integration. (Found OpenComputers/ComputerCraft)");
+            ComputerCraftAPI.registerPeripheralProvider(CCPeripheralProvider.getInstance());
         }
 
         IGWModLoaded = Loader.isModLoaded("IGWMod");

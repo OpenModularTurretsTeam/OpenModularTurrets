@@ -1,4 +1,4 @@
-package openmodularturrets.network;
+package openmodularturrets.network.messages;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -8,14 +8,26 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.world.World;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-public class RemoveTrustedPlayerMessage implements IMessage, IMessageHandler<RemoveTrustedPlayerMessage, IMessage> {
+public class MessageRemoveTrustedPlayer implements IMessage {
     private int x, y, z;
     private String player;
 
-    public RemoveTrustedPlayerMessage() {
+    public MessageRemoveTrustedPlayer() {
     }
 
-    public RemoveTrustedPlayerMessage(int x, int y, int z, String player) {
+    public static class MessageHandlerRemoveTrustedPlayer implements IMessageHandler<MessageRemoveTrustedPlayer, IMessage> {
+        @Override
+        public IMessage onMessage(MessageRemoveTrustedPlayer message, MessageContext ctx) {
+            World world = ctx.getServerHandler().playerEntity.worldObj;
+            TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
+
+            turret.removeTrustedPlayer(message.getPlayer());
+            return null;
+        }
+
+    }
+
+    public MessageRemoveTrustedPlayer(int x, int y, int z, String player) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -38,15 +50,6 @@ public class RemoveTrustedPlayerMessage implements IMessage, IMessageHandler<Rem
         buf.writeInt(this.z);
 
         ByteBufUtils.writeUTF8String(buf, this.player);
-    }
-
-    @Override
-    public IMessage onMessage(RemoveTrustedPlayerMessage message, MessageContext ctx) {
-        World world = ctx.getServerHandler().playerEntity.worldObj;
-        TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
-
-        turret.removeTrustedPlayer(message.getPlayer());
-        return null;
     }
 
     public int getX() {

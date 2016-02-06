@@ -12,7 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.client.gui.containers.ConfigContainer;
-import openmodularturrets.network.*;
+import openmodularturrets.handler.NetworkingHandler;
+import openmodularturrets.network.messages.*;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import org.lwjgl.opengl.GL11;
@@ -349,42 +350,42 @@ public class ConfigureGui extends GuiContainer {
     }
 
     public void sendChangeToServerMobs(boolean setTo) {
-        ToggleAttackMobsMessage message = new ToggleAttackMobsMessage(base.xCoord, base.yCoord, base.zCoord, setTo);
-        ModularTurrets.networking.sendToServer(message);
+        MessageToggleAttackMobs message = new MessageToggleAttackMobs(base.xCoord, base.yCoord, base.zCoord, setTo);
+        NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     public void sendChangeToServerNeutrals(boolean setTo) {
-        ToggleAttackNeutralMobsMessage message = new ToggleAttackNeutralMobsMessage(base.xCoord, base.yCoord,
+        MessageToggleAttackNeutralMobs message = new MessageToggleAttackNeutralMobs(base.xCoord, base.yCoord,
                                                                                     base.zCoord, setTo);
-        ModularTurrets.networking.sendToServer(message);
+        NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     public void sendChangeToServerPlayers(boolean setTo) {
-        ToggleAttackPlayersMessage message = new ToggleAttackPlayersMessage(base.xCoord, base.yCoord, base.zCoord,
+        MessageToggleAttackPlayers message = new MessageToggleAttackPlayers(base.xCoord, base.yCoord, base.zCoord,
                                                                             setTo);
 
-        ModularTurrets.networking.sendToServer(message);
+        NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     public void sendChangeToServerAddTrusted() {
-        AddTrustedPlayerMessage message = new AddTrustedPlayerMessage(base.xCoord, base.yCoord, base.zCoord,
+        MessageAddTrustedPlayer message = new MessageAddTrustedPlayer(base.xCoord, base.yCoord, base.zCoord,
                                                                       textFieldAddTrustedPlayer.getText());
 
-        ModularTurrets.networking.sendToServer(message);
+        NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     public void sendChangeToServerRemoveTrusted() {
-        RemoveTrustedPlayerMessage message = new RemoveTrustedPlayerMessage(base.xCoord, base.yCoord, base.zCoord,
+        MessageRemoveTrustedPlayer message = new MessageRemoveTrustedPlayer(base.xCoord, base.yCoord, base.zCoord,
                                                                             base.getTrustedPlayers().get(
                                                                                     base.trustedPlayerIndex).getName());
 
-        ModularTurrets.networking.sendToServer(message);
+        NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     public void sendChangeToServerModifyPermissions(String player, String perm, boolean canDo) {
-        ModifyPermissionsMessage message = new ModifyPermissionsMessage(base.xCoord, base.yCoord, base.zCoord, player,
+        MessageModifyPermissions message = new MessageModifyPermissions(base.xCoord, base.yCoord, base.zCoord, player,
                                                                         perm, canDo);
 
-        ModularTurrets.networking.sendToServer(message);
+        NetworkingHandler.INSTANCE.sendToServer(message);
     }
 }
