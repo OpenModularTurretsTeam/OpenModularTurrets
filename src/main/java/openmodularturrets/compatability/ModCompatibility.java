@@ -1,6 +1,7 @@
 package openmodularturrets.compatability;
 
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import dan200.computercraft.api.ComputerCraftAPI;
 import net.minecraft.nbt.NBTTagCompound;
@@ -80,7 +81,7 @@ public class ModCompatibility {
                                      "openmodularturrets.compatability.WailaTileHandler.callbackRegister");
         new IGWSupportNotifier();
         addVersionCheckerInfo();
-        if (ComputercraftLoaded) {
+        if (ComputercraftLoaded && ModAPIManager.INSTANCE.hasAPI("ComputerCraft")) {
             ComputerCraftAPI.registerPeripheralProvider(CCPeripheralProvider.getInstance());
         }
     }
