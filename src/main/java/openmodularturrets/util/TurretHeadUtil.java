@@ -111,7 +111,7 @@ public class TurretHeadUtil {
                 }
 
                 if (target != null && turret != null) {
-                    if (base.multiTargeting && isTargetAlreadyTargeted(base, target)) {
+                    if (base.isMultiTargeting() && isTargetAlreadyTargeted(base, target)) {
                         continue;
                     }
 
@@ -171,7 +171,7 @@ public class TurretHeadUtil {
                 }
 
                 if (target != null && turret != null) {
-                    if (base.multiTargeting && isTargetAlreadyTargeted(base, target)) {
+                    if (base.isMultiTargeting() && isTargetAlreadyTargeted(base, target)) {
                         continue;
                     }
 
@@ -232,7 +232,7 @@ public class TurretHeadUtil {
                 if (target != null && turret != null) {
                     EntityLivingBase targetELB = (EntityLivingBase) target;
 
-                    if (base.multiTargeting && isTargetAlreadyTargeted(base, target)) {
+                    if (base.isMultiTargeting() && isTargetAlreadyTargeted(base, target)) {
                         continue;
                     }
 
