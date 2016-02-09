@@ -32,6 +32,7 @@ import thaumcraft.api.aspects.IEssentiaTransport;
 import thaumcraft.api.visnet.VisNetHandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -95,8 +96,8 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
             if (redstoneBlock == null) {
                 redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(),
-                        new ItemStack(Blocks.redstone_block),
-                        base);
+                                                                               new ItemStack(Blocks.redstone_block),
+                                                                               base);
             }
 
             if (redstoneBlock != null && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base.getMaxEnergyStored(
@@ -109,7 +110,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
             if (redstone == null) {
                 redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(),
-                        new ItemStack(Items.redstone), base);
+                                                                          new ItemStack(Items.redstone), base);
             }
 
             if (redstone != null) {
@@ -898,7 +899,8 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
                 commands.setAttacksNeutrals.toString(), commands.getTrustedPlayers.toString(),
                 commands.addTrustedPlayer.toString(), commands.removeTrustedPlayer.toString(),
                 commands.getActive.toString(), commands.getInverted.toString(),
-                commands.getRedstone.toString(), commands.setInverted.toString()};
+                commands.getRedstone.toString(), commands.setInverted.toString(),
+                commands.getType.toString()};
     }
 
     @Optional.Method(modid = "ComputerCraft")
@@ -941,11 +943,14 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
                 this.attacksNeutrals = b;
                 return new Object[]{true};
             case getTrustedPlayers:
-                Object[] result = new Object[this.getTrustedPlayers().size()];
-                for (TrustedPlayer trustedPlayer : this.getTrustedPlayers()) {
-                    result[i] = trustedPlayer.name + " " + trustedPlayer.canOpenGUI + " " + trustedPlayer.canChangeTargeting + " " + trustedPlayer.admin;
+                HashMap<String, Integer> result = new HashMap<>();
+                if (this.getTrustedPlayers() != null && this.getTrustedPlayers().size() > 0) {
+                    for (TrustedPlayer trustedPlayer : this.getTrustedPlayers()) {
+                        result.put(trustedPlayer.name,
+                                   (trustedPlayer.canOpenGUI ? 1 : 0) + (trustedPlayer.canChangeTargeting ? 2 : 0) + (trustedPlayer.admin ? 4 : 0));
+                    }
                 }
-                return new Object[]{this.getTrustedPlayers()};
+                return new Object[]{result};
             case addTrustedPlayer:
                 if (arguments[0].toString().equals("")) {
                     return new Object[]{"wrong arguments"};
@@ -990,6 +995,8 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
                 this.setInverted(b);
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 return new Object[]{true};
+            case getType:
+                return new Object[]{this.getType()};
             default:
                 break;
         }
@@ -1021,6 +1028,8 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     }
 
     public enum commands {
-        getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals, getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getInverted, getRedstone, setInverted,
+        getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals,
+        getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getInverted, getRedstone, setInverted,
+        getType
     }
 }

@@ -217,21 +217,21 @@ public class ConfigHandler {
         allowBaseCamo = config.get("miscellaneous",
                 "Should turret bases be camouflage-able with normal blocks?", true).getBoolean();
 
-        shouldDoThaumcraftIntegration = config.get("ModCompatability",
-                "Should we enable items that integrate with Thaumcraft?",
-                true).getBoolean();
+        shouldDoThaumcraftIntegration = config.get("ModCompatibility",
+                                                   "Should we enable items that integrate with Thaumcraft?",
+                                                   true).getBoolean();
 
-        shouldDoComputerIntegration = config.get("ModCompatability",
-                "Should we enable items that integrate with ComputerCraft/OpenComputers?",
-                true).getBoolean();
+        shouldDoComputerIntegration = config.get("ModCompatibility",
+                                                 "Should we enable items that integrate with ComputerCraft/OpenComputers?",
+                                                 true).getBoolean();
 
-        IGWNotification = config.get("ModCompatability", "Enable IGW Mod notification", true).getBoolean();
+        IGWNotification = config.get("ModCompatibility", "Enable IGW Mod notification", true).getBoolean();
 
-        potentiaToRFRatio = config.get("ModCompatability", "Potentia Addons' RF conversion ratio per 1 essentia",
-                500).getInt();
+        potentiaToRFRatio = config.get("ModCompatibility", "Potentia Addons' RF conversion ratio per 1 essentia",
+                                       500).getInt();
 
-        potentiaAddonCapacity = config.get("ModCompatability", "How much essentia the Potentia Addon can store",
-                20).getInt();
+        potentiaAddonCapacity = config.get("ModCompatibility", "How much essentia the Potentia Addon can store",
+                                           20).getInt();
 
         globalCanTargetPlayers = config.get("GlobalTargetingParameters", "Can turrets attack players?",
                 true).getBoolean();

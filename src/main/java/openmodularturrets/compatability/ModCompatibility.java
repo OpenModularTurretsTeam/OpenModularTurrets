@@ -1,11 +1,11 @@
 package openmodularturrets.compatability;
 
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import dan200.computercraft.api.ComputerCraftAPI;
 import net.minecraft.nbt.NBTTagCompound;
+import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.ModInfo;
 
 import java.util.logging.Logger;
@@ -56,18 +56,6 @@ public class ModCompatibility {
         IGWModLoaded = Loader.isModLoaded("IGWMod");
     }
 
-	/*public static String getBuildNumber() {
-        Map<String, ModContainer> modList = Loader.instance()
-				.getIndexedModList();
-		if (modList.get(ModInfo.ID).getProcessedVersion().getVersionString()
-				.split("-").length > 1) {
-			return modList.get(ModInfo.ID).getProcessedVersion()
-					.getVersionString().split("-")[1];
-		} else {
-			return "0";
-		}
-	}*/
-
     private static void addVersionCheckerInfo() {
         NBTTagCompound versionchecker = new NBTTagCompound();
         versionchecker.setString("curseProjectName", "224663-openmodularturrets");
@@ -80,10 +68,11 @@ public class ModCompatibility {
     public static void performModCompat() {
         FMLInterModComms.sendMessage("Waila", "register",
                                      "openmodularturrets.compatability.WailaTileHandler.callbackRegister");
-        new IGWSupportNotifier();
+        if (ConfigHandler.IGWNotification) {
+            new IGWSupportNotifier();
+        }
         addVersionCheckerInfo();
-        if (ComputercraftLoaded && ModAPIManager.INSTANCE.hasAPI("ComputerCraft")) {
-            Logger.getGlobal().severe("CC Loaded");
+        if (ComputercraftLoaded) {
             registerCCCompat();
         }
     }
