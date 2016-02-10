@@ -22,11 +22,6 @@ public class GrenadeProjectile extends TurretProjectile {
         this.gravity = 0.00F;
     }
 
-    public GrenadeProjectile(World world, TurretBase turretBase) {
-        super(world);
-        this.gravity = 0.03F;
-    }
-
     public GrenadeProjectile(World world, ItemStack ammo, TurretBase turretBase) {
         super(world, ammo, turretBase);
         this.gravity = 0.03F;

@@ -534,7 +534,7 @@ public class TurretHeadUtil {
         return null;
     }
 
-    public static float getAimYaw(Entity target, int xCoord, int yCoord, int zCoord) {
+    public static float getAimYaw(Entity target, int xCoord, int zCoord) {
         double dX = (target.posX) - (xCoord);
         double dZ = (target.posZ) - (zCoord);
         float yaw = (float) Math.atan2(dZ, dX);
@@ -911,7 +911,7 @@ public class TurretHeadUtil {
                     Vec3.createVectorHelper(traceStart.xCoord, traceStart.yCoord, traceStart.zCoord),
                     Vec3.createVectorHelper(traceEnd.xCoord, traceEnd.yCoord, traceEnd.zCoord));
 
-            if (traced != null && traced.typeOfHit == traced.typeOfHit.BLOCK) {
+            if (traced != null && traced.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
                 Block hitBlock = turret.getWorldObj().getBlock(traced.blockX, traced.blockY, traced.blockZ);
 
                 // If non solid block is in the way then proceed to continue
@@ -927,11 +927,7 @@ public class TurretHeadUtil {
 
             EntityLivingBase targeted = target != null && traced == null ? target : null;
 
-            if (targeted != null && targeted.equals(target)) {
-                return true;
-            } else {
-                return false;
-            }
+            return targeted != null && targeted.equals(target);
         }
 
         // If all above failed, the target cannot be seen

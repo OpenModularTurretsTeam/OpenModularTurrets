@@ -12,9 +12,6 @@ public class AddonSlot extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack par1ItemStack) {
-        if (par1ItemStack.getItem() instanceof AddonItem) {
-            return true;
-        }
-        return false;
+        return par1ItemStack.getItem() instanceof AddonItem;
     }
 }
