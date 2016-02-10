@@ -1,23 +1,21 @@
 package openmodularturrets.tileentity.expander;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import openmodularturrets.tileentity.TileEntityContainer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.TurretHeadUtil;
 
-public abstract class AbstractInvExpander extends TileEntity implements IInventory {
+public abstract class AbstractInvExpander extends TileEntityContainer {
     public float baseFitRotationX;
     public float baseFitRotationZ;
     protected TurretBase base;
     protected boolean hasSetSide = false;
-    protected ItemStack[] inv;
     protected int tier;
 
     public AbstractInvExpander() {
@@ -126,78 +124,12 @@ public abstract class AbstractInvExpander extends TileEntity implements IInvento
         }
     }
 
-    @Override
-    public ItemStack decrStackSize(int slot, int amt) {
-        ItemStack stack = getStackInSlot(slot);
-
-        if (stack != null) {
-            if (stack.stackSize <= amt) {
-                setInventorySlotContents(slot, null);
-            } else {
-                stack = stack.splitStack(amt);
-                if (stack.stackSize == 0) {
-                    setInventorySlotContents(slot, null);
-                }
-            }
-        }
-        return stack;
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
-        ItemStack stack = getStackInSlot(slot);
-        if (stack != null) {
-            setInventorySlotContents(slot, null);
-        }
-        return stack;
-    }
-
-    @Override
-    public void setInventorySlotContents(int slot, ItemStack stack) {
-        inv[slot] = stack;
-        if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-            stack.stackSize = getInventoryStackLimit();
-        }
-    }
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
         return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.getDistanceSq(xCoord + 0.5,
                                                                                               yCoord + 0.5,
                                                                                               zCoord + 0.5) < 64;
-    }
-
-    @Override
-    public int getSizeInventory() {
-        return inv.length;
-    }
-
-    @Override
-    public ItemStack getStackInSlot(int slot) {
-        return inv[slot];
-    }
-
-    @Override
-    public String getInventoryName() {
-        return null;
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 64;
-    }
-
-    @Override
-    public void openInventory() {
-    }
-
-    @Override
-    public void closeInventory() {
     }
 
     @Override

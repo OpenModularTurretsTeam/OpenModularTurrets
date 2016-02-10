@@ -55,10 +55,10 @@ public class ConfigHandler {
     private static double efficiencyUpgradeBoostPercentage;
     private static int solarPanelAddonGen;
     private static int redstoneReactorAddonGen;
-    private static int damageAmpDmgBonus;
     private static int turretWarningDistance;
     private static float turretSoundVolume;
     private static boolean allowBaseCamo;
+    private static boolean canRocketsHurtEnderDragon;
 
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
@@ -182,7 +182,6 @@ public class ConfigHandler {
                 "Generates specified RF every tick in sunlight").getInt();
         redstoneReactorAddonGen = config.get("addons", "redstone", 1550,
                 "Generates RF from redstone dust/blocks in turret's inventory").getInt();
-        damageAmpDmgBonus = config.get("addons", "damage", 2, "Increases damage linearly").getInt();
 
         recyclerNegateChance = config.get("addons", "recycler", 10, "Recycler ammo use negation % chance").getInt();
 
@@ -206,6 +205,10 @@ public class ConfigHandler {
                 "Can rockets fired by the rocket launcher turret home on targets ?",
                 false).getBoolean();
 
+        canRocketsHurtEnderDragon  = config.get("miscellaneous",
+                "Can rockets fired by the rocket launcher turret hurt the Ender Dragon?",
+                false).getBoolean();
+
         recipes = config.get("miscellaneous",
                 "Which recipes should we do? (auto, enderio, thermalexpansion, mekanism, vanilla)",
                 "auto").getString();
@@ -216,21 +219,21 @@ public class ConfigHandler {
         allowBaseCamo = config.get("miscellaneous",
                 "Should turret bases be camouflage-able with normal blocks?", true).getBoolean();
 
-        shouldDoThaumcraftIntegration = config.get("ModCompatability",
-                "Should we enable items that integrate with Thaumcraft?",
-                true).getBoolean();
+        shouldDoThaumcraftIntegration = config.get("ModCompatibility",
+                                                   "Should we enable items that integrate with Thaumcraft?",
+                                                   true).getBoolean();
 
-        shouldDoComputerIntegration = config.get("ModCompatability",
-                "Should we enable items that integrate with ComputerCraft/OpenComputers?",
-                true).getBoolean();
+        shouldDoComputerIntegration = config.get("ModCompatibility",
+                                                 "Should we enable items that integrate with ComputerCraft/OpenComputers?",
+                                                 true).getBoolean();
 
-        IGWNotification = config.get("ModCompatability", "Enable IGW Mod notification", true).getBoolean();
+        IGWNotification = config.get("ModCompatibility", "Enable IGW Mod notification", true).getBoolean();
 
-        potentiaToRFRatio = config.get("ModCompatability", "Potentia Addons' RF conversion ratio per 1 essentia",
-                500).getInt();
+        potentiaToRFRatio = config.get("ModCompatibility", "Potentia Addons' RF conversion ratio per 1 essentia",
+                                       500).getInt();
 
-        potentiaAddonCapacity = config.get("ModCompatability", "How much essentia the Potentia Addon can store",
-                20).getInt();
+        potentiaAddonCapacity = config.get("ModCompatibility", "How much essentia the Potentia Addon can store",
+                                           20).getInt();
 
         globalCanTargetPlayers = config.get("GlobalTargetingParameters", "Can turrets attack players?",
                 true).getBoolean();
@@ -358,10 +361,6 @@ public class ConfigHandler {
         return redstoneReactorAddonGen;
     }
 
-    public static int getDamageAmpDmgBonus() {
-        return damageAmpDmgBonus;
-    }
-
     public static int getPotentiaToRFRatio() {
         return potentiaToRFRatio;
     }
@@ -424,6 +423,10 @@ public class ConfigHandler {
 
     public static boolean isAllowBaseCamo() { return allowBaseCamo; }
 
+    public static boolean isCanRocketsHurtEnderDragon() {
+        return canRocketsHurtEnderDragon;
+    }
+
     public static class TurretSetting {
         private final int range;
         private final int rof;
@@ -464,5 +467,6 @@ public class ConfigHandler {
         public boolean isEnabled() {
             return enabled;
         }
+
     }
 }

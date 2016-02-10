@@ -2,6 +2,7 @@ package openmodularturrets.handler.recipes;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import openmodularturrets.blocks.Blocks;
 import openmodularturrets.handler.ConfigHandler;
@@ -25,6 +26,7 @@ public class MekanismRecipeHandler {
         alloyReinforced = GameRegistry.findItemStack(Mek, "ReinforcedAlloy", 1);
         alloyAtomic = GameRegistry.findItemStack(Mek, "AtomicAlloy", 1);
         energyTablet = GameRegistry.findItemStack(Mek, "EnergyTablet", 1);
+        energyTablet.setItemDamage(OreDictionary.WILDCARD_VALUE);
         controlCircuit = GameRegistry.findItemStack(Mek, "ControlCircuit", 1);
 
         // Items

@@ -8,7 +8,6 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraft.creativetab.CreativeTabs;
 import openmodularturrets.blocks.Blocks;
 import openmodularturrets.client.gui.ModularTurretsTab;
@@ -28,14 +27,12 @@ public class ModularTurrets {
     @SidedProxy(clientSide = "openmodularturrets.proxy.ClientProxy", serverSide = "openmodularturrets.proxy" + "" + ".CommonProxy")
     public static CommonProxy proxy;
 
-    public static SimpleNetworkWrapper networking;
     public static CreativeTabs modularTurretsTab;
     public GuiHandler gui;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.init(event.getSuggestedConfigurationFile());
-        networking = NetworkingHandler.initNetworking();
         gui = new GuiHandler();
         modularTurretsTab = new ModularTurretsTab(ModInfo.ID);
     }
@@ -46,12 +43,14 @@ public class ModularTurrets {
         ModCompatibility.performModCompat();
         Items.init();
         Blocks.init();
+        NetworkingHandler.initNetworking();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, gui);
         TileEntityHandler.init();
         proxy.initRenderers();
         proxy.initHandlers();
         RecipeHandler.initRecipes();
         ProjectileEntityHandler.registerProjectiles(this);
+        DungeonLootHandler.init();
     }
 
     @Mod.EventHandler

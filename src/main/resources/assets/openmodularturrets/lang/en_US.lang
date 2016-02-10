@@ -163,8 +163,7 @@ base.tier.4=Tier 4 Turret Base
 base.tier.5=Tier 5 Turret Base
 
 turret.addon.label=Turret Addon
-turret.addon.amp.a.label=Adds
-turret.addon.amp.b.label=damage per projectile.
+turret.addon.amp.a.label=Adds a health based percentage damage boost to each shot.
 turret.addon.amp.flavour=Here we are juggernaught.
 turret.addon.redstone.a=Generates
 turret.addon.redstone.b=RF per

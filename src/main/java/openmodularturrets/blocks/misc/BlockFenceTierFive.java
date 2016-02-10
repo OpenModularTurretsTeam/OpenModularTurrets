@@ -1,23 +1,22 @@
 package openmodularturrets.blocks.misc;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPane;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.blocks.Blocks;
+import openmodularturrets.blocks.util.BlockAbstractMiscPane;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
 import java.util.Random;
 
-public class BlockFenceTierFive extends BlockPane {
+public class BlockFenceTierFive extends BlockAbstractMiscPane {
     public BlockFenceTierFive() {
         super("stone", "cobblestone", Material.rock, false);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);

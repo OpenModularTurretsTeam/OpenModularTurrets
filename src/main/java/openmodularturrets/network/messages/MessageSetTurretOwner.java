@@ -1,4 +1,4 @@
-package openmodularturrets.network;
+package openmodularturrets.network.messages;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -8,14 +8,25 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.world.World;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-public class SetTurretOwnerMessage implements IMessage, IMessageHandler<SetTurretOwnerMessage, IMessage> {
+public class MessageSetTurretOwner implements IMessage {
     private int x, y, z;
     private String player;
 
-    public SetTurretOwnerMessage() {
+    public MessageSetTurretOwner() {
     }
 
-    public SetTurretOwnerMessage(int x, int y, int z, String player) {
+    public static class MessageHandlerSetTurretOwner implements IMessageHandler<MessageSetTurretOwner, IMessage> {
+        @Override
+        public IMessage onMessage(MessageSetTurretOwner message, MessageContext ctx) {
+            World world = ctx.getServerHandler().playerEntity.worldObj;
+            TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
+
+            turret.setOwner(message.getOwner());
+            return null;
+        }
+    }
+
+    public MessageSetTurretOwner(int x, int y, int z, String player) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -40,14 +51,6 @@ public class SetTurretOwnerMessage implements IMessage, IMessageHandler<SetTurre
         ByteBufUtils.writeUTF8String(buf, this.player);
     }
 
-    @Override
-    public IMessage onMessage(SetTurretOwnerMessage message, MessageContext ctx) {
-        World world = ctx.getServerHandler().playerEntity.worldObj;
-        TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
-
-        turret.setOwner(message.getOwner());
-        return null;
-    }
 
     public int getX() {
         return x;

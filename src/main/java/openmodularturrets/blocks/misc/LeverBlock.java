@@ -1,7 +1,7 @@
-package openmodularturrets.blocks;
+package openmodularturrets.blocks.misc;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,12 +12,13 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.ModularTurrets;
+import openmodularturrets.blocks.util.BlockAbstract;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.LeverTileEntity;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 
-public class LeverBlock extends BlockContainer {
+public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
     public LeverBlock() {
         super(Material.rock);
         this.setBlockName(Names.Blocks.unlocalisedLever);
@@ -39,25 +40,28 @@ public class LeverBlock extends BlockContainer {
     }
 
     @Override
+    public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+        return (world.getTileEntity(x + 1, y, z) instanceof TurretBaseTierOneTileEntity ||
+                world.getTileEntity(x - 1, y, z) instanceof TurretBaseTierOneTileEntity ||
+                world.getTileEntity(x, y, z + 1) instanceof TurretBaseTierOneTileEntity ||
+                world.getTileEntity(x, y, z - 1) instanceof TurretBaseTierOneTileEntity);
+    }
+
+    @Override
     public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
         float l = 0;
-
         if (par1World.getTileEntity(par2 + 1, par3, par4) instanceof TurretBaseTierOneTileEntity) {
             l = 270F;
         }
-
         if (par1World.getTileEntity(par2 - 1, par3, par4) instanceof TurretBaseTierOneTileEntity) {
             l = 90F;
         }
-
         if (par1World.getTileEntity(par2, par3, par4 + 1) instanceof TurretBaseTierOneTileEntity) {
             l = 0F;
         }
-
         if (par1World.getTileEntity(par2, par3, par4 - 1) instanceof TurretBaseTierOneTileEntity) {
             l = 180;
         }
-
         int shu = MathHelper.floor_double((double) (l * 4.0F / 360.0F) + 0.5D) & 3;
         par1World.setBlockMetadataWithNotify(par2, par3, par4, shu, 2);
     }
