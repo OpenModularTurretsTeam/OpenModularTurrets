@@ -1,6 +1,7 @@
 package openmodularturrets.entity.projectiles;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
@@ -54,7 +55,10 @@ public class BulletProjectile extends TurretProjectile {
             int damage = ConfigHandler.getGunTurretSettings().getDamage();
 
             if (isAmped) {
-                damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
+                if (movingobjectposition.entityHit instanceof EntityLivingBase) {
+                    EntityLivingBase elb = (EntityLivingBase) movingobjectposition.entityHit;
+                    damage += ((int) elb.getHealth() * (0.1 * amp_level));
+                }
             }
 
             if (movingobjectposition.entityHit instanceof EntityPlayer) {

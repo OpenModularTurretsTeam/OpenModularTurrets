@@ -1,4 +1,4 @@
-package openmodularturrets.network;
+package openmodularturrets.network.messages;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -7,18 +7,26 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.world.World;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-public class AdjustYAxisDetectMessage implements IMessage, IMessageHandler<AdjustYAxisDetectMessage, IMessage> {
+public class MessageSetBaseTargetingType implements IMessage {
     private int x, y, z;
-    private int y_axis_detect;
 
-    public AdjustYAxisDetectMessage() {
+    public MessageSetBaseTargetingType() {
     }
 
-    public AdjustYAxisDetectMessage(int x, int y, int z, int y_axis_detect) {
+    public static class MessageHandlerSetBaseTargetingType implements IMessageHandler<MessageSetBaseTargetingType, IMessage> {
+        @Override
+        public IMessage onMessage(MessageSetBaseTargetingType message, MessageContext ctx) {
+            World world = ctx.getServerHandler().playerEntity.worldObj;
+            TurretBase turretbase = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
+            turretbase.setMultiTargeting(!turretbase.isMultiTargeting());
+            return null;
+        }
+    }
+
+    public MessageSetBaseTargetingType(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.y_axis_detect = y_axis_detect;
     }
 
     @Override
@@ -26,8 +34,6 @@ public class AdjustYAxisDetectMessage implements IMessage, IMessageHandler<Adjus
         this.x = buf.readInt();
         this.y = buf.readInt();
         this.z = buf.readInt();
-
-        this.y_axis_detect = buf.readInt();
     }
 
     @Override
@@ -35,17 +41,6 @@ public class AdjustYAxisDetectMessage implements IMessage, IMessageHandler<Adjus
         buf.writeInt(this.x);
         buf.writeInt(this.y);
         buf.writeInt(this.z);
-
-        buf.writeInt(this.y_axis_detect);
-    }
-
-    @Override
-    public IMessage onMessage(AdjustYAxisDetectMessage message, MessageContext ctx) {
-        World world = ctx.getServerHandler().playerEntity.worldObj;
-        TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
-
-        turret.setyAxisDetect(message.getYAxisDetect());
-        return null;
     }
 
     public int getX() {
@@ -58,9 +53,5 @@ public class AdjustYAxisDetectMessage implements IMessage, IMessageHandler<Adjus
 
     public int getZ() {
         return z;
-    }
-
-    public int getYAxisDetect() {
-        return y_axis_detect;
     }
 }

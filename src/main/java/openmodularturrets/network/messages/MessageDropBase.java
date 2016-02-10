@@ -1,19 +1,30 @@
-package openmodularturrets.network;
+package openmodularturrets.network.messages;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.world.World;
-import openmodularturrets.tileentity.turretbase.TurretBase;
 
-public class SetBaseTargetingType implements IMessage, IMessageHandler<SetBaseTargetingType, IMessage> {
+public class MessageDropBase implements IMessage {
     private int x, y, z;
+    private String player;
 
-    public SetBaseTargetingType() {
+    public MessageDropBase() {
     }
 
-    public SetBaseTargetingType(int x, int y, int z) {
+    public static class MessageHandlerDropBase implements IMessageHandler<MessageDropBase, IMessage> {
+        @Override
+        public IMessage onMessage(MessageDropBase message, MessageContext ctx) {
+            World world = ctx.getServerHandler().playerEntity.worldObj;
+
+            world.func_147480_a(message.getX(), message.getY(), message.getZ(), true);
+
+            return null;
+        }
+    }
+
+    public MessageDropBase(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -33,14 +44,6 @@ public class SetBaseTargetingType implements IMessage, IMessageHandler<SetBaseTa
         buf.writeInt(this.z);
     }
 
-    @Override
-    public IMessage onMessage(SetBaseTargetingType message, MessageContext ctx) {
-        World world = ctx.getServerHandler().playerEntity.worldObj;
-        TurretBase turretbase = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
-        turretbase.multiTargeting = !turretbase.multiTargeting;
-        return null;
-    }
-
     public int getX() {
         return x;
     }
@@ -51,5 +54,9 @@ public class SetBaseTargetingType implements IMessage, IMessageHandler<SetBaseTa
 
     public int getZ() {
         return z;
+    }
+
+    public String getOwner() {
+        return player;
     }
 }

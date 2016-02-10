@@ -1,37 +1,53 @@
 package openmodularturrets.handler;
 
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
-import openmodularturrets.network.*;
+import openmodularturrets.network.messages.*;
 import openmodularturrets.reference.ModInfo;
 
+;
+
 public class NetworkingHandler {
-    public static SimpleNetworkWrapper initNetworking() {
-        SimpleNetworkWrapper networking = new SimpleNetworkWrapper(ModInfo.ID);
+    public final static SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.ID);
 
-        networking.registerMessage(AddTrustedPlayerMessage.class, AddTrustedPlayerMessage.class, 0, Side.SERVER);
+    public static void initNetworking() {
 
-        networking.registerMessage(RemoveTrustedPlayerMessage.class, RemoveTrustedPlayerMessage.class, 1, Side.SERVER);
 
-        networking.registerMessage(ToggleAttackMobsMessage.class, ToggleAttackMobsMessage.class, 2, Side.SERVER);
+        INSTANCE.registerMessage(MessageAddTrustedPlayer.MessageHandlerAddTrustedPlayer.class,
+                                 MessageAddTrustedPlayer.class, 0, Side.SERVER);
 
-        networking.registerMessage(ToggleAttackNeutralMobsMessage.class, ToggleAttackNeutralMobsMessage.class, 3,
+        INSTANCE.registerMessage(MessageRemoveTrustedPlayer.MessageHandlerRemoveTrustedPlayer.class,
+                                 MessageRemoveTrustedPlayer.class, 1, Side.SERVER);
+
+        INSTANCE.registerMessage(MessageToggleAttackMobs.MessageHandlerToggleAttackMobs.class,
+                                 MessageToggleAttackMobs.class, 2, Side.SERVER);
+
+        INSTANCE.registerMessage(MessageToggleAttackNeutralMobs.MessageHandlerToggleAttackNeutralMobs.class,
+                                 MessageToggleAttackNeutralMobs.class, 3,
                                    Side.SERVER);
 
-        networking.registerMessage(ToggleAttackPlayersMessage.class, ToggleAttackPlayersMessage.class, 4, Side.SERVER);
+        INSTANCE.registerMessage(MessageToggleAttackPlayers.MessageHandlerToggleAttackPlayers.class,
+                                 MessageToggleAttackPlayers.class, 4, Side.SERVER);
 
-        networking.registerMessage(SetTurretOwnerMessage.class, SetTurretOwnerMessage.class, 5, Side.SERVER);
+        INSTANCE.registerMessage(MessageSetTurretOwner.MessageHandlerSetTurretOwner.class, MessageSetTurretOwner.class,
+                                 5, Side.SERVER);
 
-        networking.registerMessage(AdjustYAxisDetectMessage.class, AdjustYAxisDetectMessage.class, 7, Side.SERVER);
+        INSTANCE.registerMessage(MessageAdjustYAxisDetect.MessageHandlerAdjustYAxisDetect.class,
+                                 MessageAdjustYAxisDetect.class, 7, Side.SERVER);
 
-        networking.registerMessage(DropTurretsMessage.class, DropTurretsMessage.class, 8, Side.SERVER);
+        INSTANCE.registerMessage(MessageDropTurrets.MessageHandlerDropTurrets.class, MessageDropTurrets.class, 8,
+                                 Side.SERVER);
 
-        networking.registerMessage(DropBaseMessage.class, DropBaseMessage.class, 9, Side.SERVER);
+        INSTANCE.registerMessage(MessageDropBase.MessageHandlerDropBase.class, MessageDropBase.class, 9, Side.SERVER);
 
-        networking.registerMessage(ModifyPermissionsMessage.class, ModifyPermissionsMessage.class, 10, Side.SERVER);
+        INSTANCE.registerMessage(MessageModifyPermissions.MessageHandlerModifyPermissions.class,
+                                 MessageModifyPermissions.class, 10, Side.SERVER);
 
-        networking.registerMessage(SetBaseTargetingType.class, SetBaseTargetingType.class, 11, Side.SERVER);
+        INSTANCE.registerMessage(MessageSetBaseTargetingType.MessageHandlerSetBaseTargetingType.class,
+                                 MessageSetBaseTargetingType.class, 11, Side.SERVER);
 
-        return networking;
+        INSTANCE.registerMessage(MessageTurretBase.MessageHandlerTurretBase.class, MessageTurretBase.class, 12,
+                                 Side.CLIENT);
     }
 }

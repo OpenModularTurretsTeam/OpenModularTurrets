@@ -101,23 +101,6 @@ public class TeleporterTurretTileEntity extends TurretHead {
                 }
             }
 
-            ItemStack ammo = null;
-
-            if (this.requiresAmmo()) {
-                if (this.requiresSpecificAmmo()) {
-                    for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-                        ammo = TurretHeadUtil.useSpecificItemStackItemFromBase(base, this.getAmmo());
-                    }
-                } else {
-                    ammo = TurretHeadUtil.useAnyItemStackFromBase(base);
-                }
-
-                // Is there ammo?
-                if (ammo == null) {
-                    return;
-                }
-            }
-
             // Consume energy
             base.setEnergyStored(base.getEnergyStored(ForgeDirection.UNKNOWN) - power_required);
 

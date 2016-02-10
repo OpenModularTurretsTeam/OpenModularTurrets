@@ -22,7 +22,7 @@ public class ExpanderInvTierOneRenderer extends TileEntitySpecialRenderer {
     @SideOnly(Side.CLIENT)
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
         AbstractInvExpander expander = (AbstractInvExpander) te;
-        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/expanderInvTierOne.png"));
+        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/ExpanderInvTierOne.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         int rotation = 0;

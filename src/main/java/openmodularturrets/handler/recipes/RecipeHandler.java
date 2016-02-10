@@ -107,6 +107,11 @@ public class RecipeHandler {
                                     net.minecraft.init.Items.magma_cream, 'C', net.minecraft.init.Blocks.ender_chest,
                                     'D', Items.ioBus));
 
+        GameRegistry.addRecipe(
+                new ShapedOreRecipe(new ItemStack(Items.concealerAddon, 1), "ABA", "BCD", "ABA", 'A', "ingotIron", 'B',
+                        net.minecraft.init.Items.quartz, 'C', net.minecraft.init.Blocks.chest,
+                        'D', Items.ioBus));
+
         //Fences
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.fenceTierOne, 16), "ABA", "BAB", "ABA", 'A',
                                                    net.minecraft.init.Blocks.iron_bars, 'B',

@@ -1,25 +1,14 @@
 package openmodularturrets.tileentity.expander;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
+import openmodularturrets.tileentity.TileEntityOMT;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.TurretHeadUtil;
 
-public abstract class AbstractPowerExpander extends TileEntity {
+public abstract class AbstractPowerExpander extends TileEntityOMT {
     public float baseFitRotationX;
     public float baseFitRotationZ;
     protected boolean hasSetSide = false;
     protected int tier;
-
-    @Override
-    public void writeToNBT(NBTTagCompound par1) {
-        super.writeToNBT(par1);
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound par1) {
-        super.readFromNBT(par1);
-    }
 
     public void setSide() {
         if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TurretBase) {

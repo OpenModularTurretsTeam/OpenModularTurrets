@@ -12,6 +12,7 @@ import openmodularturrets.tileentity.turretbase.TurretBaseTierTwoTileEntity;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class TurretBaseTierTwoGui extends TurretBaseAbstractGui {
     public TurretBaseTierTwoGui(InventoryPlayer inventoryPlayer, TurretBaseTierTwoTileEntity tileEntity) {
@@ -35,8 +36,8 @@ public class TurretBaseTierTwoGui extends TurretBaseAbstractGui {
             if (mouseY > l + 17 && mouseY < l + 17 + 51) {
                 ArrayList list = new ArrayList();
                 list.add(base.getEnergyStored(ForgeDirection.UNKNOWN) + "/" + base.getMaxEnergyStored(
-                        ForgeDirection.UNKNOWN));
-                this.drawHoveringText(list, (int) mouseX - k, (int) mouseY - l, fontRenderer);
+                        ForgeDirection.UNKNOWN) + " RF");
+                this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
             }
         }
 
@@ -72,6 +73,19 @@ public class TurretBaseTierTwoGui extends TurretBaseAbstractGui {
                 ForgeDirection.UNKNOWN);
 
         drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
-        drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 17, 14, expression);
+
+        int next = new Random().nextInt(3);
+
+        if (next == 0) {
+            drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 68 - expression, 14, expression);
+        }
+
+        if (next == 1) {
+            drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 215, 68 - expression, 14, expression);
+        }
+
+        if (next == 2) {
+            drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 234, 68 - expression, 14, expression);
+        }
     }
 }

@@ -1,7 +1,6 @@
 package openmodularturrets.blocks.expanders;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,13 +9,14 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
+import openmodularturrets.blocks.util.BlockAbstractContainer;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.expander.AbstractInvExpander;
 import openmodularturrets.tileentity.expander.ExpanderInvTierThreeTileEntity;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-public class BlockExpanderInvTierThree extends BlockContainer {
+public class BlockExpanderInvTierThree extends BlockAbstractContainer {
     public BlockExpanderInvTierThree() {
         super(Material.rock);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
@@ -48,6 +48,14 @@ public class BlockExpanderInvTierThree extends BlockContainer {
             player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
         }
         return true;
+    }
+
+    @Override
+    public void breakBlock(World world, int x, int y, int z, Block par5, int par6) {
+        if (!world.isRemote) {
+            dropItems(world, x, y, z);
+            super.breakBlock(world, x, y, z, par5, par6);
+        }
     }
 
     @Override
