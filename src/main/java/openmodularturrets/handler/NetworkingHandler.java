@@ -6,8 +6,6 @@ import cpw.mods.fml.relauncher.Side;
 import openmodularturrets.network.messages.*;
 import openmodularturrets.reference.ModInfo;
 
-;
-
 public class NetworkingHandler {
     public final static SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.ID);
 

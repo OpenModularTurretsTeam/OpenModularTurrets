@@ -26,7 +26,7 @@ public class GuiHandler implements IGuiHandler {
             case 5:
                 return new TurretBaseTierFiveContainer(player.inventory, (TurretBaseTierFiveTileEntity) tileEntity);
             case 6:
-                return new ConfigContainer(player.inventory, (TurretBase) tileEntity);
+                return new ConfigContainer((TurretBase) tileEntity);
             case 7:
                 return new ExpanderInvContainer(player.inventory, (AbstractInvExpander) tileEntity);
             default:

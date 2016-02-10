@@ -18,7 +18,7 @@ public class LaserRenderer extends Render {
     private static final ResourceLocation laserTextures = new ResourceLocation(
             ModInfo.ID.toLowerCase() + ":textures/blocks/laser.png");
 
-    public void renderLaser(LaserProjectile par1EntityRocket, double par2, double par4, double par6, float par8, float par9) {
+    public void renderLaser(LaserProjectile par1EntityRocket, double par2, double par4, double par6, float par9) {
         for (int i = 0; i <= 20; i++) {
             par1EntityRocket.worldObj.spawnParticle("reddust", par2, par4, par6, 1.0D, 1.0D, 1.0D);
         }
@@ -37,7 +37,7 @@ public class LaserRenderer extends Render {
         byte b0 = 0;
         float f2 = 0.0F;
         float f3 = 0.5F;
-        float f4 = (float) (0 + b0 * 10) / 32.0F;
+        float f4 = (float) (b0 * 10) / 32.0F;
         float f5 = (float) (5 + b0 * 10) / 32.0F;
 
         float f10 = 0.05625F;
@@ -73,7 +73,7 @@ public class LaserRenderer extends Render {
         GL11.glPopMatrix();
     }
 
-    protected ResourceLocation getLaserTextures(LaserProjectile par1EntityRocket) {
+    protected ResourceLocation getLaserTextures() {
         return laserTextures;
     }
 
@@ -82,7 +82,7 @@ public class LaserRenderer extends Render {
      * unless you call Render.bindEntityTexture.
      */
     protected ResourceLocation getEntityTexture(Entity par1Entity) {
-        return this.getLaserTextures((LaserProjectile) par1Entity);
+        return this.getLaserTextures();
     }
 
     /**
@@ -94,6 +94,6 @@ public class LaserRenderer extends Render {
      * f1). But JAD is pre 1.5 so doesn't do that.
      */
     public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9) {
-        this.renderLaser((LaserProjectile) par1Entity, par2, par4, par6, par8, par9);
+        this.renderLaser((LaserProjectile) par1Entity, par2, par4, par6, par9);
     }
 }

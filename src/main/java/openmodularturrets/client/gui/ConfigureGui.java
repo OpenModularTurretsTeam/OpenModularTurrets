@@ -28,7 +28,7 @@ public class ConfigureGui extends GuiContainer {
     private int mouseY;
 
     public ConfigureGui(InventoryPlayer inventoryPlayer, TurretBase tileEntity) {
-        super(new ConfigContainer(inventoryPlayer, tileEntity));
+        super(new ConfigContainer(tileEntity));
         this.base = tileEntity;
         player = inventoryPlayer.player;
     }

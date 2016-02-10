@@ -17,7 +17,7 @@ public class RocketRenderer extends Render {
     private static final ResourceLocation rocketTextures = new ResourceLocation(
             ModInfo.ID.toLowerCase() + ":textures/blocks/rocket.png");
 
-    public void renderRocket(RocketProjectile par1EntityRocket, double par2, double par4, double par6, float par8, float par9) {
+    public void renderRocket(RocketProjectile par1EntityRocket, double par2, double par4, double par6, float par9) {
         this.bindEntityTexture(par1EntityRocket);
         GL11.glPushMatrix();
         GL11.glTranslatef((float) par2, (float) par4, (float) par6);
@@ -31,7 +31,7 @@ public class RocketRenderer extends Render {
         byte b0 = 0;
         float f2 = 0.0F;
         float f3 = 0.5F;
-        float f4 = (float) (0 + b0 * 10) / 32.0F;
+        float f4 = (float) (b0 * 10) / 32.0F;
         float f5 = (float) (5 + b0 * 10) / 32.0F;
         float f6 = 0.0F;
         float f7 = 0.15625F;
@@ -79,7 +79,7 @@ public class RocketRenderer extends Render {
         GL11.glPopMatrix();
     }
 
-    protected ResourceLocation getRocketTextures(RocketProjectile par1EntityRocket) {
+    protected ResourceLocation getRocketTextures() {
         return rocketTextures;
     }
 
@@ -87,7 +87,7 @@ public class RocketRenderer extends Render {
      * Returns the location of an entity's texture. Doesn't seem to be called unless you call Render.bindEntityTexture.
      */
     protected ResourceLocation getEntityTexture(Entity par1Entity) {
-        return this.getRocketTextures((RocketProjectile) par1Entity);
+        return this.getRocketTextures();
     }
 
     /**
@@ -97,6 +97,6 @@ public class RocketRenderer extends Render {
      * double d2, float f, float f1). But JAD is pre 1.5 so doesn't do that.
      */
     public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9) {
-        this.renderRocket((RocketProjectile) par1Entity, par2, par4, par6, par8, par9);
+        this.renderRocket((RocketProjectile) par1Entity, par2, par4, par6, par9);
     }
 }
