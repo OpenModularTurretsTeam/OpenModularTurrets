@@ -89,7 +89,7 @@ public class EnderIORecipeHandler {
 
         // Bases
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.turretBaseTierTwo, 1), "ABA", "ECE", "ADA", 'A',
-                "ingotElectricalSteel", 'B', capacitorBankBasic, 'C',
+                                                   "ingotElectricalSteel", 'B', capacitorBankBasic, 'C',
                                                    Items.sensorTierTwoItem, 'D', basicCapacitor, 'E', Items.ioBus));
 
         GameRegistry.addRecipe(

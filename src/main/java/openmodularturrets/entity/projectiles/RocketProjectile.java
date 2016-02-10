@@ -59,7 +59,7 @@ public class RocketProjectile extends TurretProjectile {
         for (int i = 0; i <= 20; i++) {
             Random random = new Random();
             worldObj.spawnParticle("smoke", posX + (random.nextGaussian() / 10), posY + (random.nextGaussian() / 10),
-                    posZ + (random.nextGaussian() / 10), (0), (0), (0));
+                                   posZ + (random.nextGaussian() / 10), (0), (0), (0));
         }
     }
 
@@ -70,7 +70,7 @@ public class RocketProjectile extends TurretProjectile {
         }
         if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                    movingobjectposition.blockZ);
+                                               movingobjectposition.blockZ);
             if (hitBlock != null && !hitBlock.getMaterial().isSolid() || worldObj.isAirBlock(
                     movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ)) {
                 // Go through non solid block
@@ -82,7 +82,7 @@ public class RocketProjectile extends TurretProjectile {
 
             worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 5, this.posY - 5, this.posZ - 5,
-                    this.posX + 5, this.posY + 5, this.posZ + 5);
+                                                              this.posX + 5, this.posY + 5, this.posZ + 5);
             List<Entity> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (Entity mob : targets) {
@@ -96,7 +96,7 @@ public class RocketProjectile extends TurretProjectile {
                     }
                 }
 
-               if (mob instanceof EntityPlayer) {
+                if (mob instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) mob)) {
                         mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
                         mob.hurtResistantTime = 0;

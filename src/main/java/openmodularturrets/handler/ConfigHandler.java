@@ -205,9 +205,9 @@ public class ConfigHandler {
                 "Can rockets fired by the rocket launcher turret home on targets ?",
                 false).getBoolean();
 
-        canRocketsHurtEnderDragon  = config.get("miscellaneous",
-                "Can rockets fired by the rocket launcher turret hurt the Ender Dragon?",
-                false).getBoolean();
+        canRocketsHurtEnderDragon = config.get("miscellaneous",
+                                               "Can rockets fired by the rocket launcher turret hurt the Ender Dragon?",
+                                               false).getBoolean();
 
         recipes = config.get("miscellaneous",
                 "Which recipes should we do? (auto, enderio, thermalexpansion, mekanism, vanilla)",

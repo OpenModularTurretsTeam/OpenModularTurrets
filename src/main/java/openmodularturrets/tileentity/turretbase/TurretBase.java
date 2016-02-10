@@ -22,7 +22,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -31,6 +30,7 @@ import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.handler.NetworkingHandler;
 import openmodularturrets.network.messages.MessageTurretBase;
 import openmodularturrets.tileentity.TileEntityContainer;
+import openmodularturrets.util.MathUtil;
 import openmodularturrets.util.TurretHeadUtil;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -53,7 +53,7 @@ import static openmodularturrets.util.PlayerUtil.*;
         @Optional.Interface(iface = "thaumcraft.api.aspects.IEssentiaTransport", modid = "Thaumcraft"),
         @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2")})
 
-public abstract class TurretBase extends TileEntity implements IEnergyHandler, IInventory, SimpleComponent, ISidedInventory, IEssentiaTransport, IAspectContainer, IPeripheral, IEnergySink {
+public abstract class TurretBase extends TileEntityContainer implements IEnergyHandler, SimpleComponent, ISidedInventory, IEssentiaTransport, IAspectContainer, IPeripheral, IEnergySink {
     public int trustedPlayerIndex = 0;
     public ItemStack camoStack;
     //For concealment

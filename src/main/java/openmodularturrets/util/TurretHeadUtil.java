@@ -37,11 +37,11 @@ public class TurretHeadUtil {
         if (base.isAttacksPlayers()) {
             int warnDistance = ConfigHandler.getTurretWarningDistance();
             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(xCoord - turretRange - warnDistance,
-                    yCoord - downLowAmount - warnDistance,
-                    zCoord - turretRange - warnDistance,
-                    xCoord + turretRange + warnDistance,
-                    yCoord + turretRange + warnDistance,
-                    zCoord + turretRange + warnDistance);
+                                                              yCoord - downLowAmount - warnDistance,
+                                                              zCoord - turretRange - warnDistance,
+                                                              xCoord + turretRange + warnDistance,
+                                                              yCoord + turretRange + warnDistance,
+                                                              zCoord + turretRange + warnDistance);
 
             if (worldObj.getWorldTime() % 2000 == 0) {
                 warnedPlayers.clear();
@@ -51,7 +51,7 @@ public class TurretHeadUtil {
 
             for (EntityPlayerMP target : targets) {
                 if (!target.getUniqueID().toString().equals(base.getOwner()) && !isTrustedPlayer(target.getUniqueID(),
-                        base) && !warnedPlayers.contains(
+                                                                                                 base) && !warnedPlayers.contains(
                         target) && !target.capabilities.isCreativeMode) {
                     dispatchWarnMessage(target, worldObj);
                     warnedPlayers.add(target);
@@ -75,8 +75,8 @@ public class TurretHeadUtil {
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(xCoord - turretRange, yCoord - downLowAmount,
-                    zCoord - turretRange, xCoord + turretRange,
-                    yCoord + turretRange, zCoord + turretRange);
+                                                              zCoord - turretRange, xCoord + turretRange,
+                                                              yCoord + turretRange, zCoord + turretRange);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
@@ -130,37 +130,37 @@ public class TurretHeadUtil {
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(xCoord - turretRange, yCoord - downLowAmount,
-                    zCoord - turretRange, xCoord + turretRange,
-                    yCoord + turretRange, zCoord + turretRange);
+                                                              zCoord - turretRange, xCoord + turretRange,
+                                                              yCoord + turretRange, zCoord + turretRange);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase target1 : targets) {
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAnimal && !target1.isDead && target1.getDistance(xCoord, yCoord,
-                            zCoord) >= 3) {
+                                                                                                  zCoord) >= 3) {
                         target = target1;
                     }
                 }
 
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAmbientCreature && !target1.isDead && target1.getDistance(xCoord,
-                            yCoord,
-                            zCoord) >= 3) {
+                                                                                                           yCoord,
+                                                                                                           zCoord) >= 3) {
                         target = target1;
                     }
                 }
 
                 if (base.isAttacksMobs() && ConfigHandler.globalCanTargetMobs) {
                     if (target1 instanceof IMob && !target1.isDead && target1.getDistance(xCoord, yCoord,
-                            zCoord) >= 3) {
+                                                                                          zCoord) >= 3) {
                         target = target1;
                     }
                 }
 
                 if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetPlayers) {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead && target1.getDistance(xCoord, yCoord,
-                            zCoord) >= 3) {
+                                                                                                    zCoord) >= 3) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
                         if (!entity.getUniqueID().toString().equals(base.getOwner()) && !isTrustedPlayer(
@@ -191,8 +191,8 @@ public class TurretHeadUtil {
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
             AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(xCoord - turretRange, yCoord - downLowAmount,
-                    zCoord - turretRange, xCoord + turretRange,
-                    yCoord + turretRange, zCoord + turretRange);
+                                                              zCoord - turretRange, xCoord + turretRange,
+                                                              yCoord + turretRange, zCoord + turretRange);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
@@ -248,7 +248,7 @@ public class TurretHeadUtil {
     public static boolean isTargetAlreadyTargeted(TurretBase base, Entity entity) {
         if (base.getWorldObj().getTileEntity(base.xCoord + 1, base.yCoord, base.zCoord) instanceof TurretHead) {
             TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord + 1, base.yCoord,
-                    base.zCoord);
+                                                                              base.zCoord);
             if (turret.target != null && entity.equals(turret.target)) {
                 return true;
             }
@@ -256,7 +256,7 @@ public class TurretHeadUtil {
 
         if (base.getWorldObj().getTileEntity(base.xCoord - 1, base.yCoord, base.zCoord) instanceof TurretHead) {
             TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord - 1, base.yCoord,
-                    base.zCoord);
+                                                                              base.zCoord);
             if (turret.target != null && entity.equals(turret.target)) {
                 return true;
             }
@@ -264,7 +264,7 @@ public class TurretHeadUtil {
 
         if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord + 1, base.zCoord) instanceof TurretHead) {
             TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord + 1,
-                    base.zCoord);
+                                                                              base.zCoord);
             if (turret.target != null && entity.equals(turret.target)) {
                 return true;
             }
@@ -272,7 +272,7 @@ public class TurretHeadUtil {
 
         if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord - 1, base.zCoord) instanceof TurretHead) {
             TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord - 1,
-                    base.zCoord);
+                                                                              base.zCoord);
             if (turret.target != null && entity.equals(turret.target)) {
                 return true;
             }
@@ -280,7 +280,7 @@ public class TurretHeadUtil {
 
         if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord, base.zCoord + 1) instanceof TurretHead) {
             TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord,
-                    base.zCoord + 1);
+                                                                              base.zCoord + 1);
             if (turret.target != null && entity.equals(turret.target)) {
                 return true;
             }
@@ -288,7 +288,7 @@ public class TurretHeadUtil {
 
         if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord, base.zCoord - 1) instanceof TurretHead) {
             TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord,
-                    base.zCoord - 1);
+                                                                              base.zCoord - 1);
             if (turret.target != null && entity.equals(turret.target)) {
                 return true;
             }
@@ -850,8 +850,7 @@ public class TurretHeadUtil {
     public static int getAmpLevel(TurretBase base) {
         int amp_level = 0;
 
-        if(base == null)
-        {
+        if (base == null) {
             return amp_level;
         }
 
@@ -869,7 +868,7 @@ public class TurretHeadUtil {
 
         if (base.getStackInSlot(9) != null) {
             if (base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem) {
-                amp_level +=  base.getStackInSlot(9).stackSize;
+                amp_level += base.getStackInSlot(9).stackSize;
             }
         }
 
@@ -891,12 +890,12 @@ public class TurretHeadUtil {
         Vec3 traceStart = Vec3.createVectorHelper(turret.xCoord + 0.5F, turret.yCoord + 0.5F, turret.zCoord + 0.5F);
         Vec3 traceEnd = Vec3.createVectorHelper(target.posX, target.posY + target.getEyeHeight(), target.posZ);
         Vec3 vecDelta = Vec3.createVectorHelper(traceEnd.xCoord - traceStart.xCoord,
-                traceEnd.yCoord - traceStart.yCoord,
-                traceEnd.zCoord - traceStart.zCoord);
+                                                traceEnd.yCoord - traceStart.yCoord,
+                                                traceEnd.zCoord - traceStart.zCoord);
 
         // Normalize vector to the largest delta axis
         double vecDeltaLength = MathHelper.abs_max(vecDelta.xCoord,
-                MathHelper.abs_max(vecDelta.yCoord, vecDelta.zCoord));
+                                                   MathHelper.abs_max(vecDelta.yCoord, vecDelta.zCoord));
         vecDelta.xCoord /= vecDeltaLength;
         vecDelta.yCoord /= vecDeltaLength;
         vecDelta.zCoord /= vecDeltaLength;
