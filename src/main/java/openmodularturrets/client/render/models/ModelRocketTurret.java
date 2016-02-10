@@ -6,15 +6,15 @@ import net.minecraft.entity.Entity;
 
 public class ModelRocketTurret extends ModelBase {
     // fields
-    public ModelRenderer Base;
-    public ModelRenderer Pole;
-    public ModelRenderer BoxUnder;
-    public ModelRenderer BoxLeft;
-    public ModelRenderer BoxRight;
-    public ModelRenderer CrossBar;
-    public ModelRenderer Launcher;
-    public ModelRenderer Missile1;
-    public ModelRenderer Missile2;
+    public final ModelRenderer Base;
+    public final ModelRenderer Pole;
+    public final ModelRenderer BoxUnder;
+    private final ModelRenderer BoxLeft;
+    private final ModelRenderer BoxRight;
+    private final ModelRenderer CrossBar;
+    private final ModelRenderer Launcher;
+    private final ModelRenderer Missile1;
+    private final ModelRenderer Missile2;
 
     public ModelRocketTurret() {
         textureWidth = 64;

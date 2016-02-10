@@ -7,10 +7,10 @@ import openmodularturrets.client.render.renderers.blockitem.LeverRenderer;
 import openmodularturrets.tileentity.LeverTileEntity;
 import org.lwjgl.opengl.GL11;
 
-public class LeverItemRenderer implements IItemRenderer {
+class LeverItemRenderer implements IItemRenderer {
     private final LeverRenderer leverRenderer;
     private final LeverTileEntity leverTileEntity;
-    private ModelLever model;
+    private final ModelLever model;
 
     public LeverItemRenderer(LeverRenderer leverRenderer, LeverTileEntity leverTileEntity) {
         this.leverRenderer = leverRenderer;

@@ -8,7 +8,7 @@ import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
-public class BarrelTierThreeItem extends Item {
+class BarrelTierThreeItem extends Item {
     public BarrelTierThreeItem() {
         super();
 

@@ -13,11 +13,11 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
-public class RocketRenderer extends Render {
+class RocketRenderer extends Render {
     private static final ResourceLocation rocketTextures = new ResourceLocation(
             ModInfo.ID.toLowerCase() + ":textures/blocks/rocket.png");
 
-    public void renderRocket(RocketProjectile par1EntityRocket, double par2, double par4, double par6, float par9) {
+    private void renderRocket(RocketProjectile par1EntityRocket, double par2, double par4, double par6, float par9) {
         this.bindEntityTexture(par1EntityRocket);
         GL11.glPushMatrix();
         GL11.glTranslatef((float) par2, (float) par4, (float) par6);
@@ -79,7 +79,7 @@ public class RocketRenderer extends Render {
         GL11.glPopMatrix();
     }
 
-    protected ResourceLocation getRocketTextures() {
+    private ResourceLocation getRocketTextures() {
         return rocketTextures;
     }
 

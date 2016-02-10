@@ -7,10 +7,10 @@ import openmodularturrets.client.render.renderers.blockitem.LaserTurretRenderer;
 import openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
 import org.lwjgl.opengl.GL11;
 
-public class LaserTurretItemRenderer implements IItemRenderer {
+class LaserTurretItemRenderer implements IItemRenderer {
     private final LaserTurretRenderer laserTurretRenderer;
     private final LaserTurretTileEntity laserTurretTileEntity;
-    private ModelLaserTurret model;
+    private final ModelLaserTurret model;
 
     public LaserTurretItemRenderer(LaserTurretRenderer laserTurretRenderer, LaserTurretTileEntity laserTurretTileEntity) {
         this.laserTurretRenderer = laserTurretRenderer;

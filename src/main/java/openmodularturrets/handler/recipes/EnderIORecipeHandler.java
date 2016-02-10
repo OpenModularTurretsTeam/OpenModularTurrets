@@ -9,7 +9,7 @@ import openmodularturrets.blocks.Blocks;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.Items;
 
-public class EnderIORecipeHandler {
+class EnderIORecipeHandler {
     public static void init() {
         ItemStack capacitorBank;
         ItemStack capacitorBankVibrant;

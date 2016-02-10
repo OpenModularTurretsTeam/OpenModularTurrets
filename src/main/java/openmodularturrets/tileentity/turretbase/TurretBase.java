@@ -59,26 +59,26 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     //For concealment
     public boolean shouldConcealTurrets;
     //For multiTargeting
-    protected boolean multiTargeting = false;
-    protected EnergyStorage storage;
-    protected int yAxisDetect;
-    protected boolean attacksMobs;
-    protected boolean attacksNeutrals;
-    protected boolean attacksPlayers;
-    protected String owner = "";
-    protected String ownerName = "";
-    protected List<TrustedPlayer> trustedPlayers;
-    protected int ticks;
-    protected boolean active;
-    protected boolean inverted;
-    protected boolean redstone;
-    protected boolean checkRedstone = false;
-    protected boolean computerAccessible = false;
-    protected float amountOfPotentia = 0F;
-    protected float maxAmountOfPotentia = ConfigHandler.getPotentiaAddonCapacity();
-    protected ArrayList<IComputerAccess> comp;
-    protected double storageEU;
-    protected boolean wasAddedToEnergyNet = false;
+    private boolean multiTargeting = false;
+    private final EnergyStorage storage;
+    private int yAxisDetect;
+    private boolean attacksMobs;
+    private boolean attacksNeutrals;
+    private boolean attacksPlayers;
+    private String owner = "";
+    private String ownerName = "";
+    private List<TrustedPlayer> trustedPlayers;
+    private int ticks;
+    private boolean active;
+    private boolean inverted;
+    private boolean redstone;
+    private boolean checkRedstone = false;
+    private boolean computerAccessible = false;
+    private float amountOfPotentia = 0F;
+    private final float maxAmountOfPotentia = ConfigHandler.getPotentiaAddonCapacity();
+    private ArrayList<IComputerAccess> comp;
+    private double storageEU;
+    private boolean wasAddedToEnergyNet = false;
 
     public TurretBase(int MaxEnergyStorage, int MaxIO) {
         super();
@@ -93,7 +93,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         this.active = true;
     }
 
-    public static void updateRedstoneReactor(TurretBase base) {
+    private static void updateRedstoneReactor(TurretBase base) {
         if (!TurretHeadUtil.hasRedstoneReactor(base)) {
             return;
         }
@@ -155,7 +155,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     }
 
     @Optional.Method(modid = "IC2")
-    public void addToIc2EnergyNetwork() {
+    private void addToIc2EnergyNetwork() {
         if (!worldObj.isRemote) {
             EnergyTileLoadEvent event = new EnergyTileLoadEvent(this);
             MinecraftForge.EVENT_BUS.post(event);
@@ -683,17 +683,17 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         this.active = active;
     }
 
-    public boolean getInverted() {
+    private boolean getInverted() {
         return this.inverted;
     }
 
-    public void setInverted(boolean inverted) {
+    private void setInverted(boolean inverted) {
         this.inverted = inverted;
         this.active = redstone ^ this.inverted;
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
-    public boolean getRedstone() {
+    private boolean getRedstone() {
         return this.redstone;
     }
 
@@ -1023,7 +1023,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
         // method is command
         boolean b;
-        int i = 0;
+        int i;
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }

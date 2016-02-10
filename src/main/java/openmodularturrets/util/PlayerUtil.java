@@ -23,7 +23,7 @@ public class PlayerUtil {
         if (possibleUUID == null || possibleUUID.isEmpty()) {
             return null;
         }
-        UUID uuid = null;
+        UUID uuid;
         try {
             uuid = UUID.fromString(possibleUUID);
         } catch (IllegalArgumentException e) {

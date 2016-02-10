@@ -4,7 +4,7 @@ import net.minecraft.item.Item;
 import openmodularturrets.ModularTurrets;
 
 public abstract class AddonItem extends Item {
-    public AddonItem() {
+    AddonItem() {
         super();
 
         this.setCreativeTab(ModularTurrets.modularTurretsTab);

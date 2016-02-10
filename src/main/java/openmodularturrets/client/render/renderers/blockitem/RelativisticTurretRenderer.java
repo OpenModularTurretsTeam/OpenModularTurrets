@@ -16,7 +16,7 @@ public class RelativisticTurretRenderer extends TileEntitySpecialRenderer {
     private ModelSolarPanelAddon solar;
     private ModelDamageAmp amp;
     private ModelRedstoneReactor reac;
-    private ModelRelativisticTurret model;
+    private final ModelRelativisticTurret model;
 
     public RelativisticTurretRenderer() {
         model = new ModelRelativisticTurret();

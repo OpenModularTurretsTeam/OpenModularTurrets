@@ -4,13 +4,13 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
 public class ModelDisposableItemTurret extends ModelBase {
-    public ModelRenderer Base;
-    public ModelRenderer Pole;
-    public ModelRenderer BoxUnder;
-    public ModelRenderer BoxLeft;
-    public ModelRenderer BoxRight;
-    public ModelRenderer CrossBar;
-    public ModelRenderer Cannon;
+    public final ModelRenderer Base;
+    public final ModelRenderer Pole;
+    public final ModelRenderer BoxUnder;
+    private final ModelRenderer BoxLeft;
+    private final ModelRenderer BoxRight;
+    private final ModelRenderer CrossBar;
+    private final ModelRenderer Cannon;
 
     public ModelDisposableItemTurret() {
         textureWidth = 64;

@@ -6,13 +6,13 @@ import net.minecraft.entity.Entity;
 
 public class ModelRelativisticTurret extends ModelBase {
     // fields
-    public ModelRenderer Base;
-    public ModelRenderer Spike1;
-    public ModelRenderer Spike2;
-    public ModelRenderer Spike3;
-    public ModelRenderer Spike4;
-    public ModelRenderer Base2;
-    public ModelRenderer Crystal;
+    public final ModelRenderer Base;
+    public final ModelRenderer Spike1;
+    public final ModelRenderer Spike2;
+    public final ModelRenderer Spike3;
+    public final ModelRenderer Spike4;
+    public final ModelRenderer Base2;
+    public final ModelRenderer Crystal;
 
     public ModelRelativisticTurret() {
         textureWidth = 64;

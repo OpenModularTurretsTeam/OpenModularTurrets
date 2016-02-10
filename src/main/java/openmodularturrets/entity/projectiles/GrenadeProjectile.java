@@ -15,7 +15,7 @@ import openmodularturrets.tileentity.turretbase.TurretBase;
 import java.util.List;
 
 public class GrenadeProjectile extends TurretProjectile {
-    public boolean isAmped;
+    private boolean isAmped;
 
     public GrenadeProjectile(World par1World) {
         super(par1World);

@@ -15,10 +15,10 @@ public abstract class AbstractInvExpander extends TileEntityContainer {
     public float baseFitRotationX;
     public float baseFitRotationZ;
     protected TurretBase base;
-    protected boolean hasSetSide = false;
-    protected int tier;
+    private boolean hasSetSide = false;
+    private int tier;
 
-    public AbstractInvExpander() {
+    AbstractInvExpander() {
         this.inv = new ItemStack[9];
     }
 
@@ -70,7 +70,7 @@ public abstract class AbstractInvExpander extends TileEntityContainer {
         }
     }
 
-    public void setSide() {
+    private void setSide() {
         if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TurretBase) {
             this.baseFitRotationX = 0F;
             this.baseFitRotationZ = 4.705F;

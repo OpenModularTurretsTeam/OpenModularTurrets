@@ -12,7 +12,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class ItemBlockDisposableTurret extends ItemBlock {
-    public static final DecimalFormat df = new DecimalFormat("0.0");
+    private static final DecimalFormat df = new DecimalFormat("0.0");
 
     public ItemBlockDisposableTurret(Block p_i45328_1_) {
         super(p_i45328_1_);

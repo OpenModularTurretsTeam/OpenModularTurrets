@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
-public class BulletThrowableItem extends Item {
+class BulletThrowableItem extends Item {
     public BulletThrowableItem() {
         super();
         this.setUnlocalizedName(Names.Items.unlocalisedBulletThrowableItem);

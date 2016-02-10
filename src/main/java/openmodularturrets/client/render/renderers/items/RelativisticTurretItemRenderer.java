@@ -7,7 +7,7 @@ import openmodularturrets.client.render.renderers.blockitem.RelativisticTurretRe
 import openmodularturrets.tileentity.turrets.RelativisticTurretTileEntity;
 import org.lwjgl.opengl.GL11;
 
-public class RelativisticTurretItemRenderer implements IItemRenderer {
+class RelativisticTurretItemRenderer implements IItemRenderer {
     private final RelativisticTurretRenderer relativisticTurretRenderer;
     private final RelativisticTurretTileEntity relativisticTurretTileEntity;
     private final ModelRelativisticTurret model;

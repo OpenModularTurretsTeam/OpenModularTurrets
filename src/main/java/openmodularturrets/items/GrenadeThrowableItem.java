@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
-public class GrenadeThrowableItem extends Item {
+class GrenadeThrowableItem extends Item {
     public GrenadeThrowableItem() {
         super();
 

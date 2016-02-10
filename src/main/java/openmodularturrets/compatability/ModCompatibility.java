@@ -23,7 +23,7 @@ public class ModCompatibility {
     public static boolean ComputercraftLoaded = false;
     public static boolean IC2Loaded = false;
     public static IGWHandler igwHandler = null;
-    public static Logger logger;
+    private static Logger logger;
 
     public static void checkForMods() {
         logger = Logger.getLogger("OpenModularTurrets");
@@ -80,7 +80,7 @@ public class ModCompatibility {
     }
 
     @Optional.Method(modid = "ComputerCraft")
-    public static void registerCCCompat() {
+    private static void registerCCCompat() {
         ComputerCraftAPI.registerPeripheralProvider(CCPeripheralProvider.getInstance());
     }
 }

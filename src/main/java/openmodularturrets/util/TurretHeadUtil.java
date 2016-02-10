@@ -31,7 +31,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public class TurretHeadUtil {
-    public static HashSet<EntityPlayerMP> warnedPlayers = new HashSet<EntityPlayerMP>();
+    private static final HashSet<EntityPlayerMP> warnedPlayers = new HashSet<EntityPlayerMP>();
 
     public static void warnPlayers(TurretBase base, World worldObj, int downLowAmount, int xCoord, int yCoord, int zCoord, int turretRange) {
         if (base.isAttacksPlayers()) {
@@ -60,7 +60,7 @@ public class TurretHeadUtil {
         }
     }
 
-    public static void dispatchWarnMessage(EntityPlayerMP player, World worldObj) {
+    private static void dispatchWarnMessage(EntityPlayerMP player, World worldObj) {
         if (ConfigHandler.turretAlarmSound) {
             worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "openmodularturrets:warning", 1.0F, 1.0F);
         }
@@ -245,7 +245,7 @@ public class TurretHeadUtil {
         return null;
     }
 
-    public static boolean isTargetAlreadyTargeted(TurretBase base, Entity entity) {
+    private static boolean isTargetAlreadyTargeted(TurretBase base, Entity entity) {
         if (base.getWorldObj().getTileEntity(base.xCoord + 1, base.yCoord, base.zCoord) instanceof TurretHead) {
             TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord + 1, base.yCoord,
                                                                               base.zCoord);
@@ -832,7 +832,7 @@ public class TurretHeadUtil {
         return found;
     }
 
-    public static boolean hasRecyclerAddon(TurretBase base) {
+    private static boolean hasRecyclerAddon(TurretBase base) {
         boolean found = false;
         if (base instanceof TurretBaseTierOneTileEntity) {
             return false;

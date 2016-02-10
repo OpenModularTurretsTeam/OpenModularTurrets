@@ -7,7 +7,7 @@ import openmodularturrets.blocks.Blocks;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.Items;
 
-public class ThermalExpansionRecipeHandler {
+class ThermalExpansionRecipeHandler {
     public static void init() {
         String TE = "ThermalExpansion";
 

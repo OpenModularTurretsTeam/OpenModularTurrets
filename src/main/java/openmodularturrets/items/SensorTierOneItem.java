@@ -8,7 +8,7 @@ import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
-public class SensorTierOneItem extends Item {
+class SensorTierOneItem extends Item {
     public SensorTierOneItem() {
         super();
 

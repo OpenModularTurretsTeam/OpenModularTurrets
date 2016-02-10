@@ -6,17 +6,17 @@ import net.minecraft.entity.Entity;
 
 public class ModelRailgun extends ModelBase {
     // fields
-    public ModelRenderer Base;
-    ModelRenderer BarrelTop;
-    ModelRenderer BarrelBot;
-    ModelRenderer BarrelRight;
-    ModelRenderer BarrelLeft;
-    ModelRenderer BodyBot;
-    ModelRenderer BodyTop;
-    ModelRenderer Binder;
-    ModelRenderer RightGuard;
-    ModelRenderer LeftGuard;
-    ModelRenderer GuardBinder;
+    public final ModelRenderer Base;
+    private final ModelRenderer BarrelTop;
+    private final ModelRenderer BarrelBot;
+    private final ModelRenderer BarrelRight;
+    private final ModelRenderer BarrelLeft;
+    private final ModelRenderer BodyBot;
+    private final ModelRenderer BodyTop;
+    private final ModelRenderer Binder;
+    private final ModelRenderer RightGuard;
+    private final ModelRenderer LeftGuard;
+    private final ModelRenderer GuardBinder;
 
     public ModelRailgun() {
         textureWidth = 64;
@@ -112,7 +112,7 @@ public class ModelRailgun extends ModelBase {
         model.rotateAngleZ = z;
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {
+    private void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {
         setRotationAngles(f, f1, f2, f3, f4, f5);
     }
 

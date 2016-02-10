@@ -123,12 +123,12 @@ public class TeleporterTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public int getTurretPowerUsage() {
+    protected int getTurretPowerUsage() {
         return ConfigHandler.getTeleporter_turret().getPowerUsage();
     }
 
     @Override
-    public int getTurretFireRate() {
+    protected int getTurretFireRate() {
         return ConfigHandler.getTeleporter_turret().getFireRate();
     }
 
@@ -158,7 +158,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public String getLaunchSoundEffect() {
+    protected String getLaunchSoundEffect() {
         return "teleport";
     }
 }

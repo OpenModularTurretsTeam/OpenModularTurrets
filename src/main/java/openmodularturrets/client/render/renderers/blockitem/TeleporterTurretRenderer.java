@@ -16,7 +16,7 @@ public class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
     private ModelSolarPanelAddon solar;
     private ModelDamageAmp amp;
     private ModelRedstoneReactor reac;
-    private ModelTeleporterTurret model;
+    private final ModelTeleporterTurret model;
 
     public TeleporterTurretRenderer() {
         model = new ModelTeleporterTurret();

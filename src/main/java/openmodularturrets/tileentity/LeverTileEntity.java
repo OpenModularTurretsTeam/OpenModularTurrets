@@ -13,7 +13,7 @@ public class LeverTileEntity extends TileEntity {
 
     public Packet getDescriptionPacket() {
         NBTTagCompound var1 = new NBTTagCompound();
-        this.writeToNBT(var1);
+        super.writeToNBT(var1);
 
         return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
     }
@@ -52,8 +52,4 @@ public class LeverTileEntity extends TileEntity {
         super.writeToNBT(par1);
     }
 
-    @Override
-    public void readFromNBT(NBTTagCompound par1) {
-        super.readFromNBT(par1);
-    }
 }

@@ -18,7 +18,7 @@ import java.util.Random;
  * This Class
  */
 public abstract class BlockAbstractContainer extends BlockContainer {
-    public BlockAbstractContainer(Material material) {
+    protected BlockAbstractContainer(Material material) {
         super(material);
     }
 
@@ -29,7 +29,7 @@ public abstract class BlockAbstractContainer extends BlockContainer {
         return false;
     }
 
-    public void dropItems(World world, int x, int y, int z) {
+    protected void dropItems(World world, int x, int y, int z) {
         if (world.getTileEntity(x, y, z) instanceof TileEntityContainer) {
             TileEntityContainer entity = (TileEntityContainer) world.getTileEntity(x, y, z);
             Random rand = new Random();
