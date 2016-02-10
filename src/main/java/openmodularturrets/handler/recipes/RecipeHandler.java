@@ -109,8 +109,8 @@ public class RecipeHandler {
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(Items.concealerAddon, 1), "ABA", "BCD", "ABA", 'A', "ingotIron", 'B',
-                        net.minecraft.init.Items.quartz, 'C', net.minecraft.init.Blocks.chest,
-                        'D', Items.ioBus));
+                                    net.minecraft.init.Items.quartz, 'C', net.minecraft.init.Blocks.chest,
+                                    'D', Items.ioBus));
 
         //Fences
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.fenceTierOne, 16), "ABA", "BAB", "ABA", 'A',

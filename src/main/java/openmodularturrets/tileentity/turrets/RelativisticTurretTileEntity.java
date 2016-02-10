@@ -110,7 +110,8 @@ public class RelativisticTurretTileEntity extends TurretHead {
             target = null;
         }
 
-        this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":" + this.getLaunchSoundEffect(), 0.6F, 1.0F);
+        this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord,
+                                           ModInfo.ID + ":" + this.getLaunchSoundEffect(), 0.6F, 1.0F);
         ticks = 0;
     }
 
