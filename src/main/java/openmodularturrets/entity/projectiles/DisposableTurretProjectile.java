@@ -1,6 +1,7 @@
 package openmodularturrets.entity.projectiles;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -66,7 +67,10 @@ public class DisposableTurretProjectile extends TurretProjectile {
             int damage = ConfigHandler.getDisposableTurretSettings().getDamage();
 
             if (isAmped) {
-                damage += ConfigHandler.getDamageAmpDmgBonus() * amp_level;
+                if (movingobjectposition.entityHit instanceof EntityLivingBase) {
+                    EntityLivingBase elb = (EntityLivingBase) movingobjectposition.entityHit;
+                    damage += ((int) elb.getHealth() * (0.05 * amp_level));
+                }
             }
 
             if (movingobjectposition.entityHit instanceof EntityPlayer) {

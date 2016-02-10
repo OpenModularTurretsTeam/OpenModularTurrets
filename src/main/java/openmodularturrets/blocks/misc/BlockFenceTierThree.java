@@ -1,7 +1,6 @@
 package openmodularturrets.blocks.misc;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPane;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -11,12 +10,13 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.blocks.Blocks;
+import openmodularturrets.blocks.util.BlockAbstractMiscPane;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
 import java.util.Random;
 
-public class BlockFenceTierThree extends BlockPane {
+public class BlockFenceTierThree extends BlockAbstractMiscPane {
     public BlockFenceTierThree() {
         super("stone", "cobblestone", Material.rock, false);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);

@@ -1,4 +1,4 @@
-package openmodularturrets.network;
+package openmodularturrets.network.messages;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -8,15 +8,36 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.world.World;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-public class ModifyPermissionsMessage implements IMessage, IMessageHandler<ModifyPermissionsMessage, IMessage> {
+public class MessageModifyPermissions implements IMessage {
     private int x, y, z;
     private String player, perm;
     private boolean canDo;
 
-    public ModifyPermissionsMessage() {
+    public MessageModifyPermissions() {
     }
 
-    public ModifyPermissionsMessage(int x, int y, int z, String player, String perm, boolean canDo) {
+    public static class MessageHandlerModifyPermissions implements IMessageHandler<MessageModifyPermissions, IMessage> {
+        @Override
+        public IMessage onMessage(MessageModifyPermissions message, MessageContext ctx) {
+            World world = ctx.getServerHandler().playerEntity.worldObj;
+            TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
+
+            if (message.getPerm().equals("gui")) {
+                turret.getTrustedPlayer(message.getPlayer()).setCanOpenGUI(message.canDo);
+            }
+
+            if (message.getPerm().equals("targeting")) {
+                turret.getTrustedPlayer(message.getPlayer()).setCanChangeTargeting(message.canDo);
+            }
+
+            if (message.getPerm().equals("isAdmin")) {
+                turret.getTrustedPlayer(message.getPlayer()).setAdmin(message.canDo);
+            }
+            return null;
+        }
+    }
+
+    public MessageModifyPermissions(int x, int y, int z, String player, String perm, boolean canDo) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -43,25 +64,6 @@ public class ModifyPermissionsMessage implements IMessage, IMessageHandler<Modif
         ByteBufUtils.writeUTF8String(buf, this.player);
         ByteBufUtils.writeUTF8String(buf, this.perm);
         buf.writeBoolean(canDo);
-    }
-
-    @Override
-    public IMessage onMessage(ModifyPermissionsMessage message, MessageContext ctx) {
-        World world = ctx.getServerHandler().playerEntity.worldObj;
-        TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
-
-        if (message.getPerm().equals("gui")) {
-            turret.getTrustedPlayer(message.getPlayer()).setCanOpenGUI(message.canDo);
-        }
-
-        if (message.getPerm().equals("targeting")) {
-            turret.getTrustedPlayer(message.getPlayer()).setCanChangeTargeting(message.canDo);
-        }
-
-        if (message.getPerm().equals("isAdmin")) {
-            turret.getTrustedPlayer(message.getPlayer()).setAdmin(message.canDo);
-        }
-        return null;
     }
 
     public int getX() {

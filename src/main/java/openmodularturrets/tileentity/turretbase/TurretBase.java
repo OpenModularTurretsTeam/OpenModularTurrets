@@ -17,12 +17,10 @@ import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -30,7 +28,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.util.MathUtil;
+import openmodularturrets.handler.NetworkingHandler;
+import openmodularturrets.network.messages.MessageTurretBase;
+import openmodularturrets.tileentity.TileEntityContainer;
 import openmodularturrets.util.TurretHeadUtil;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -39,6 +39,7 @@ import thaumcraft.api.aspects.IEssentiaTransport;
 import thaumcraft.api.visnet.VisNetHandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -58,9 +59,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     //For concealment
     public boolean shouldConcealTurrets;
     //For multiTargeting
-    public boolean multiTargeting = false;
+    protected boolean multiTargeting = false;
     protected EnergyStorage storage;
-    protected ItemStack[] inv;
     protected int yAxisDetect;
     protected boolean attacksMobs;
     protected boolean attacksNeutrals;
@@ -87,7 +87,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         this.attacksMobs = true;
         this.attacksNeutrals = true;
         this.attacksPlayers = false;
-        this.trustedPlayers = new ArrayList<TrustedPlayer>();
+        this.trustedPlayers = new ArrayList<>();
         this.inv = new ItemStack[this.getSizeInventory()];
         this.inverted = true;
         this.active = true;
@@ -194,27 +194,32 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         return 0;
     }
 
-    public void addTrustedPlayer(String name) {
+    public boolean addTrustedPlayer(String name) {
         TrustedPlayer trustedPlayer = new TrustedPlayer(name);
         trustedPlayer.uuid = getPlayerUUID(name);
         if (trustedPlayer.uuid != null) {
             for (TrustedPlayer player : trustedPlayers) {
                 if (player.getName().toLowerCase().equals(name.toLowerCase()) || trustedPlayer.uuid.toString().equals(
                         owner)) {
-                    return;
+                    return true;
                 }
             }
             trustedPlayers.add(trustedPlayer);
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            return true;
         }
+        return false;
     }
 
-    public void removeTrustedPlayer(String name) {
+    public boolean removeTrustedPlayer(String name) {
         for (TrustedPlayer player : trustedPlayers) {
             if (player.getName().equals(name)) {
                 trustedPlayers.remove(player);
-                return;
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                return true;
             }
         }
+        return false;
     }
 
     public List<TrustedPlayer> getTrustedPlayers() {
@@ -237,6 +242,10 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
             }
         }
         return null;
+    }
+
+    public void setTrustedPlayers(List<TrustedPlayer> list) {
+        this.trustedPlayers = list;
     }
 
     private NBTTagList getTrustedPlayersAsNBT() {
@@ -283,13 +292,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
                 }
             }
         }
-    }
-
-    @Override
-    public Packet getDescriptionPacket() {
-        NBTTagCompound var1 = new NBTTagCompound();
-        this.writeToNBT(var1);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
     }
 
     @Override
@@ -553,9 +555,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
-        super.onDataPacket(net, packet);
-        readFromNBT(packet.func_148857_g());
+    public Packet getDescriptionPacket() {
+        return NetworkingHandler.INSTANCE.getPacketFrom(new MessageTurretBase(this));
     }
 
     public abstract int getBaseTier();
@@ -596,6 +597,19 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         return ownerName;
     }
 
+    public void setOwnerName(String name) {
+        ownerName = name;
+    }
+
+
+    public boolean isMultiTargeting() {
+        return multiTargeting;
+    }
+
+    public void setMultiTargeting(boolean multiTargeting) {
+        this.multiTargeting = multiTargeting;
+    }
+
     @Override
     public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
         return storage.receiveEnergy(maxReceive, simulate);
@@ -618,39 +632,6 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
 
     public void setEnergyStored(int energy) {
         storage.setEnergyStored(energy);
-    }
-
-    @Override
-    public int getSizeInventory() {
-        return inv.length;
-    }
-
-    @Override
-    public ItemStack getStackInSlot(int slot) {
-        return inv[slot];
-    }
-
-    @Override
-    public String getInventoryName() {
-        return null;
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 64;
-    }
-
-    @Override
-    public void openInventory() {
-    }
-
-    @Override
-    public void closeInventory() {
     }
 
     @Override
@@ -937,7 +918,9 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
-        this.addTrustedPlayer(args.checkString(0));
+        if (!this.addTrustedPlayer(args.checkString(0))) {
+            return new Object[]{"Name not valid!"};
+        }
         TrustedPlayer trustedPlayer = this.getTrustedPlayer(args.checkString(0));
         trustedPlayer.canOpenGUI = args.optBoolean(1, false);
         trustedPlayer.canChangeTargeting = args.optBoolean(1, false);
@@ -986,7 +969,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     }
 
     @Optional.Method(modid = "OpenComputers")
-    @Callback(doc = "function():boolean; toggles turret inversion.")
+    @Callback(doc = "function():boolean; toggles turret redstone inversion state.")
     public Object[] setInverted(Context context, Arguments args) {
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
@@ -997,7 +980,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     }
 
     @Optional.Method(modid = "OpenComputers")
-    @Callback(doc = "function():boolean; shows redstone invert state.")
+    @Callback(doc = "function():boolean; shows redstone inversion state.")
     public Object[] getInverted(Context context, Arguments args) {
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
@@ -1018,7 +1001,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     @Override
     public String getType() {
         // peripheral.getType returns whaaaaat?
-        return "simpleBlock";
+        return "OMTBase";
     }
 
     @Optional.Method(modid = "ComputerCraft")
@@ -1026,12 +1009,13 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     public String[] getMethodNames() {
         // list commands you want..
         return new String[]{commands.getOwner.toString(), commands.attacksPlayers.toString(),
-                            commands.setAttacksPlayers.toString(), commands.attacksMobs.toString(),
-                            commands.setAttacksMobs.toString(), commands.attacksNeutrals.toString(),
-                            commands.setAttacksNeutrals.toString(), commands.getTrustedPlayers.toString(),
-                            commands.addTrustedPlayer.toString(), commands.removeTrustedPlayer.toString(),
-                            commands.getActive.toString(), commands.getInverted.toString(),
-                            commands.getRedstone.toString(), commands.setInverted.toString()};
+                commands.setAttacksPlayers.toString(), commands.attacksMobs.toString(),
+                commands.setAttacksMobs.toString(), commands.attacksNeutrals.toString(),
+                commands.setAttacksNeutrals.toString(), commands.getTrustedPlayers.toString(),
+                commands.addTrustedPlayer.toString(), commands.removeTrustedPlayer.toString(),
+                commands.getActive.toString(), commands.getInverted.toString(),
+                commands.getRedstone.toString(), commands.setInverted.toString(),
+                commands.getType.toString()};
     }
 
     @Optional.Method(modid = "ComputerCraft")
@@ -1039,6 +1023,7 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
         // method is command
         boolean b;
+        int i = 0;
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
@@ -1073,18 +1058,27 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
                 this.attacksNeutrals = b;
                 return new Object[]{true};
             case getTrustedPlayers:
-                return new Object[]{this.getTrustedPlayers()};
+                HashMap<String, Integer> result = new HashMap<>();
+                if (this.getTrustedPlayers() != null && this.getTrustedPlayers().size() > 0) {
+                    for (TrustedPlayer trustedPlayer : this.getTrustedPlayers()) {
+                        result.put(trustedPlayer.name,
+                                   (trustedPlayer.canOpenGUI ? 1 : 0) + (trustedPlayer.canChangeTargeting ? 2 : 0) + (trustedPlayer.admin ? 4 : 0));
+                    }
+                }
+                return new Object[]{result};
             case addTrustedPlayer:
-
-                if (!arguments[0].toString().equals("")) {
+                if (arguments[0].toString().equals("")) {
                     return new Object[]{"wrong arguments"};
                 }
-                this.addTrustedPlayer(arguments[0].toString());
+                if (!this.addTrustedPlayer(arguments[0].toString())) {
+                    return new Object[]{"Name not valid!"};
+                }
                 if (arguments[1].toString().equals("")) {
                     return new Object[]{"successfully added"};
                 }
-                for (int i = 1; i <= 4; i++) {
-                    if (!(arguments[i].toString().equals("true") || arguments[i].toString().equals("false"))) {
+                for (i = 1; i <= 4; i++) {
+                    if (arguments.length > i && !(arguments[i].toString().equals(
+                            "true") || arguments[i].toString().equals("false"))) {
                         return new Object[]{"wrong arguments"};
                     }
                 }
@@ -1096,13 +1090,12 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 return new Object[]{"succesfully added player to trust list with parameters"};
             case removeTrustedPlayer:
-                if (!arguments[0].toString().equals("")) {
+                if (arguments[0].toString().equals("")) {
                     return new Object[]{"wrong arguments"};
                 }
                 this.removeTrustedPlayer(arguments[0].toString());
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 return new Object[]{"removed player from trusted list"};
-
             case getActive:
                 return new Object[]{this.active};
             case getInverted:
@@ -1117,6 +1110,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
                 this.setInverted(b);
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 return new Object[]{true};
+            case getType:
+                return new Object[]{this.getType()};
             default:
                 break;
         }
@@ -1148,6 +1143,8 @@ public abstract class TurretBase extends TileEntity implements IEnergyHandler, I
     }
 
     public enum commands {
-        getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals, getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getInverted, getRedstone, setInverted,
+        getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals,
+        getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getInverted, getRedstone, setInverted,
+        getType
     }
 }

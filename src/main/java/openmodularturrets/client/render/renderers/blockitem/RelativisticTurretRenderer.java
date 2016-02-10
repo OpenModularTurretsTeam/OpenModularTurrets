@@ -34,7 +34,6 @@ public class RelativisticTurretRenderer extends TileEntitySpecialRenderer {
             return;
         }
 
-        this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
         ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/relativisticTurret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
@@ -57,7 +56,6 @@ public class RelativisticTurretRenderer extends TileEntitySpecialRenderer {
         model.Base2.rotateAngleY = turretHead.baseFitRotationZ;
         model.Crystal.rotateAngleX = turretHead.baseFitRotationX;
         model.Crystal.rotateAngleY = turretHead.baseFitRotationZ;
-
         model.Crystal.rotateAngleX = turretHead.rotationAnimation;
         model.Crystal.rotateAngleY = turretHead.rotationAnimation;
         model.Crystal.rotateAngleZ = turretHead.rotationAnimation;
