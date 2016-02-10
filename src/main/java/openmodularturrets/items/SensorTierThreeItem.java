@@ -8,7 +8,7 @@ import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
-public class SensorTierThreeItem extends Item {
+class SensorTierThreeItem extends Item {
     public SensorTierThreeItem() {
         super();
         this.setUnlocalizedName(Names.Items.unlocalisedSensorTierThree);

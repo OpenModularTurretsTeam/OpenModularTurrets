@@ -22,20 +22,20 @@ import openmodularturrets.util.TurretHeadUtil;
 import java.util.Random;
 
 public abstract class TurretHead extends TileEntity {
-    public int ticks;
-    public int targetingTicks;
+    int ticks;
+    int targetingTicks;
     public float rotationXY;
     public float rotationXZ;
     public float baseFitRotationX;
     public float baseFitRotationZ;
-    public int turretTier;
+    int turretTier;
     public TurretBase base;
-    public boolean hasSetSide = false;
+    private boolean hasSetSide = false;
     public Entity target = null;
     public float rotationAnimation = 0.00F;
     public boolean shouldConceal = false;
-    public boolean playedDeploy = false;
-    public int ticksWithoutTarget;
+    private boolean playedDeploy = false;
+    private int ticksWithoutTarget;
 
     @Override
     public Packet getDescriptionPacket() {
@@ -67,7 +67,7 @@ public abstract class TurretHead extends TileEntity {
         this.shouldConceal = par1.getBoolean("shouldConceal");
     }
 
-    public void setSide() {
+    void setSide() {
         if (hasSetSide) {
             return;
         }
@@ -114,25 +114,25 @@ public abstract class TurretHead extends TileEntity {
         }
     }
 
-    public Entity getTargetWithMinRange() {
+    Entity getTargetWithMinRange() {
         return TurretHeadUtil.getTargetWithMinimumRange(base, worldObj, base.getyAxisDetect(), xCoord, yCoord, zCoord,
                                                         getTurretRange() + TurretHeadUtil.getRangeUpgrades(base), this);
     }
 
-    public Entity getTargetWithoutEffect() {
+    Entity getTargetWithoutEffect() {
         return TurretHeadUtil.getTargetWithoutSlowEffect(base, worldObj, base.getyAxisDetect(), xCoord, yCoord, zCoord,
                                                          getTurretRange() + TurretHeadUtil.getRangeUpgrades(base),
                                                          this);
     }
 
-    public Entity getTarget() {
+    private Entity getTarget() {
         return TurretHeadUtil.getTarget(base, worldObj, base.getyAxisDetect(), xCoord, yCoord, zCoord,
                                         getTurretRange() + TurretHeadUtil.getRangeUpgrades(base), this);
     }
 
-    public abstract int getTurretRange();
+    protected abstract int getTurretRange();
 
-    public TurretBase getBase() {
+    TurretBase getBase() {
         return TurretHeadUtil.getTurretBase(worldObj, xCoord, yCoord, zCoord);
     }
 
@@ -152,30 +152,30 @@ public abstract class TurretHead extends TileEntity {
         this.rotationXZ = rotationXZ;
     }
 
-    public float getDistanceToEntity(Entity p_70032_1_) {
+    private float getDistanceToEntity(Entity p_70032_1_) {
         float f = (float) (this.xCoord - p_70032_1_.posX);
         float f1 = (float) (this.yCoord - p_70032_1_.posY);
         float f2 = (float) (this.zCoord - p_70032_1_.posZ);
         return MathHelper.sqrt_float(f * f + f1 * f1 + f2 * f2);
     }
 
-    public abstract int getTurretPowerUsage();
+    protected abstract int getTurretPowerUsage();
 
-    public abstract int getTurretFireRate();
+    protected abstract int getTurretFireRate();
 
-    public abstract double getTurretAccuracy();
+    protected abstract double getTurretAccuracy();
 
-    public abstract boolean requiresAmmo();
+    protected abstract boolean requiresAmmo();
 
-    public abstract boolean requiresSpecificAmmo();
+    protected abstract boolean requiresSpecificAmmo();
 
-    public abstract Item getAmmo();
+    protected abstract Item getAmmo();
 
-    public abstract TurretProjectile createProjectile(World world, Entity target, ItemStack ammo);
+    protected abstract TurretProjectile createProjectile(World world, Entity target, ItemStack ammo);
 
-    public abstract String getLaunchSoundEffect();
+    protected abstract String getLaunchSoundEffect();
 
-    public boolean chebyshevDistance(Entity target, TurretBase base) {
+    boolean chebyshevDistance(Entity target, TurretBase base) {
         return MathHelper.abs_max(MathHelper.abs_max(target.posX - this.xCoord, target.posY - this.yCoord),
                                   target.posZ - this.zCoord) > (getTurretRange() + TurretHeadUtil.getRangeUpgrades(
                 base));
@@ -357,7 +357,7 @@ public abstract class TurretHead extends TileEntity {
         }
     }
 
-    public void concealmentChecks() {
+    void concealmentChecks() {
         if (base != null && base.shouldConcealTurrets) {
             if (!shouldConceal && target == null && ticksWithoutTarget >= 40) {
                 ticksWithoutTarget = 0;

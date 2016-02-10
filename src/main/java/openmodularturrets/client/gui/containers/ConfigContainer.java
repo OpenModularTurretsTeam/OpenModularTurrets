@@ -5,7 +5,7 @@ import net.minecraft.inventory.Container;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class ConfigContainer extends Container {
-    protected TurretBase tileEntity;
+    private final TurretBase tileEntity;
 
     public ConfigContainer(TurretBase te) {
         this.tileEntity = te;

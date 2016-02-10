@@ -10,7 +10,7 @@ import net.minecraft.world.IBlockAccess;
  * This Class
  */
 public abstract class BlockAbstract extends Block {
-    public BlockAbstract(Material material) {
+    protected BlockAbstract(Material material) {
         super(material);
     }
 

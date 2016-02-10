@@ -12,7 +12,7 @@ import openmodularturrets.tileentity.expander.AbstractPowerExpander;
 import org.lwjgl.opengl.GL11;
 
 public class ExpanderPowerTierTwoRenderer extends TileEntitySpecialRenderer {
-    private ModelExpander model;
+    private final ModelExpander model;
 
     public ExpanderPowerTierTwoRenderer() {
         model = new ModelExpander();

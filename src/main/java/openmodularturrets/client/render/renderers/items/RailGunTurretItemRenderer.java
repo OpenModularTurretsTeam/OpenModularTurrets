@@ -7,10 +7,10 @@ import openmodularturrets.client.render.renderers.blockitem.RailGunTurretRendere
 import openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
 import org.lwjgl.opengl.GL11;
 
-public class RailGunTurretItemRenderer implements IItemRenderer {
+class RailGunTurretItemRenderer implements IItemRenderer {
     private final RailGunTurretRenderer railGunTurretRenderer;
     private final RailGunTurretTileEntity railGunTurretTileEntity;
-    private ModelLaserTurret model;
+    private final ModelLaserTurret model;
 
     public RailGunTurretItemRenderer(RailGunTurretRenderer railGunTurretRenderer, RailGunTurretTileEntity railGunTurretTileEntity) {
         this.railGunTurretRenderer = railGunTurretRenderer;

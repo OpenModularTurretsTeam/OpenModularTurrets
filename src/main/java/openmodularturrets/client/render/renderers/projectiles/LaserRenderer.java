@@ -14,11 +14,11 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
-public class LaserRenderer extends Render {
+class LaserRenderer extends Render {
     private static final ResourceLocation laserTextures = new ResourceLocation(
             ModInfo.ID.toLowerCase() + ":textures/blocks/laser.png");
 
-    public void renderLaser(LaserProjectile par1EntityRocket, double par2, double par4, double par6, float par9) {
+    private void renderLaser(LaserProjectile par1EntityRocket, double par2, double par4, double par6, float par9) {
         for (int i = 0; i <= 20; i++) {
             par1EntityRocket.worldObj.spawnParticle("reddust", par2, par4, par6, 1.0D, 1.0D, 1.0D);
         }
@@ -73,7 +73,7 @@ public class LaserRenderer extends Render {
         GL11.glPopMatrix();
     }
 
-    protected ResourceLocation getLaserTextures() {
+    private ResourceLocation getLaserTextures() {
         return laserTextures;
     }
 

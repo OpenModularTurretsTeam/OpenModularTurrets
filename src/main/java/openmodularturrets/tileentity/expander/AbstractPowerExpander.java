@@ -7,10 +7,10 @@ import openmodularturrets.util.TurretHeadUtil;
 public abstract class AbstractPowerExpander extends TileEntityOMT {
     public float baseFitRotationX;
     public float baseFitRotationZ;
-    protected boolean hasSetSide = false;
-    protected int tier;
+    private boolean hasSetSide = false;
+    private int tier;
 
-    public void setSide() {
+    private void setSide() {
         if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TurretBase) {
             this.baseFitRotationX = 0F;
             this.baseFitRotationZ = 4.705F;
@@ -72,7 +72,7 @@ public abstract class AbstractPowerExpander extends TileEntityOMT {
         this.tier = tier;
     }
 
-    public TurretBase getBase() {
+    private TurretBase getBase() {
         return TurretHeadUtil.getTurretBase(worldObj, xCoord, yCoord, zCoord);
     }
 }

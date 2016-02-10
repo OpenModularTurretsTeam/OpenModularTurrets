@@ -121,12 +121,12 @@ public class RelativisticTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public int getTurretPowerUsage() {
+    protected int getTurretPowerUsage() {
         return ConfigHandler.getRelativistic_turret().getPowerUsage();
     }
 
     @Override
-    public int getTurretFireRate() {
+    protected int getTurretFireRate() {
         return ConfigHandler.getRelativistic_turret().getFireRate();
     }
 
@@ -156,7 +156,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public String getLaunchSoundEffect() {
+    protected String getLaunchSoundEffect() {
         return "relativistic";
     }
 }

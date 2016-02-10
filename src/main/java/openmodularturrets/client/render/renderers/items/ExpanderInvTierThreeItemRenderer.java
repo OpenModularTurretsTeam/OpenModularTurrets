@@ -7,7 +7,7 @@ import openmodularturrets.client.render.renderers.blockitem.ExpanderInvTierThree
 import openmodularturrets.tileentity.expander.ExpanderInvTierThreeTileEntity;
 import org.lwjgl.opengl.GL11;
 
-public class ExpanderInvTierThreeItemRenderer implements IItemRenderer {
+class ExpanderInvTierThreeItemRenderer implements IItemRenderer {
     private final ExpanderInvTierThreeRenderer expanderInvTierThreeRenderer;
     private final ExpanderInvTierThreeTileEntity expanderInvTierThreeTileEntity;
     private final ModelExpander model;

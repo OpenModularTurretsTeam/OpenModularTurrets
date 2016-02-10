@@ -8,7 +8,7 @@ import openmodularturrets.blocks.Blocks;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.Items;
 
-public class MekanismRecipeHandler {
+class MekanismRecipeHandler {
     public static void init() {
         String Mek = "Mekanism";
 

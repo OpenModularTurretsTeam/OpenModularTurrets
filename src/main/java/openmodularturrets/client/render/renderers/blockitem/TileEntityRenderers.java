@@ -8,31 +8,31 @@ import openmodularturrets.tileentity.expander.*;
 import openmodularturrets.tileentity.turrets.*;
 
 public class TileEntityRenderers {
-    public static DisposableItemTurretRenderer disposableItemTurretRenderer = new DisposableItemTurretRenderer();
-    public static PotatoCannonTurretRenderer potatoCannonTurretRenderer = new PotatoCannonTurretRenderer();
-    public static RocketTurretRenderer rocketTurretRenderer = new RocketTurretRenderer();
-    public static MachineGunTurretRenderer machineGunTurretRenderer = new MachineGunTurretRenderer();
-    public static GrenadeLauncherTurretRenderer grenadeLauncherTurretRenderer = new GrenadeLauncherTurretRenderer();
-    public static LaserTurretRenderer laserTurretRenderer = new LaserTurretRenderer();
-    public static RailGunTurretRenderer railGunTurretRenderer = new RailGunTurretRenderer();
+    public static final DisposableItemTurretRenderer disposableItemTurretRenderer = new DisposableItemTurretRenderer();
+    public static final PotatoCannonTurretRenderer potatoCannonTurretRenderer = new PotatoCannonTurretRenderer();
+    public static final RocketTurretRenderer rocketTurretRenderer = new RocketTurretRenderer();
+    public static final MachineGunTurretRenderer machineGunTurretRenderer = new MachineGunTurretRenderer();
+    public static final GrenadeLauncherTurretRenderer grenadeLauncherTurretRenderer = new GrenadeLauncherTurretRenderer();
+    public static final LaserTurretRenderer laserTurretRenderer = new LaserTurretRenderer();
+    public static final RailGunTurretRenderer railGunTurretRenderer = new RailGunTurretRenderer();
 
-    public static IncendiaryTurretRenderer incendiaryTurretRenderer = new IncendiaryTurretRenderer();
-    public static RelativisticTurretRenderer relativisticTurretRenderer = new RelativisticTurretRenderer();
-    public static TeleporterTurretRenderer teleporterTurretRenderer = new TeleporterTurretRenderer();
+    public static final IncendiaryTurretRenderer incendiaryTurretRenderer = new IncendiaryTurretRenderer();
+    public static final RelativisticTurretRenderer relativisticTurretRenderer = new RelativisticTurretRenderer();
+    public static final TeleporterTurretRenderer teleporterTurretRenderer = new TeleporterTurretRenderer();
 
-    public static ExpanderPowerTierOneRenderer expanderPowerTierOneRenderer = new ExpanderPowerTierOneRenderer();
-    public static ExpanderPowerTierTwoRenderer expanderPowerTierTwoRenderer = new ExpanderPowerTierTwoRenderer();
-    public static ExpanderPowerTierThreeRenderer expanderPowerTierThreeRenderer = new ExpanderPowerTierThreeRenderer();
-    public static ExpanderPowerTierFourRenderer expanderPowerTierFourRenderer = new ExpanderPowerTierFourRenderer();
-    public static ExpanderPowerTierFiveRenderer expanderPowerTierFiveRenderer = new ExpanderPowerTierFiveRenderer();
+    public static final ExpanderPowerTierOneRenderer expanderPowerTierOneRenderer = new ExpanderPowerTierOneRenderer();
+    public static final ExpanderPowerTierTwoRenderer expanderPowerTierTwoRenderer = new ExpanderPowerTierTwoRenderer();
+    public static final ExpanderPowerTierThreeRenderer expanderPowerTierThreeRenderer = new ExpanderPowerTierThreeRenderer();
+    public static final ExpanderPowerTierFourRenderer expanderPowerTierFourRenderer = new ExpanderPowerTierFourRenderer();
+    public static final ExpanderPowerTierFiveRenderer expanderPowerTierFiveRenderer = new ExpanderPowerTierFiveRenderer();
 
-    public static ExpanderInvTierOneRenderer expanderInvTierOneRenderer = new ExpanderInvTierOneRenderer();
-    public static ExpanderInvTierTwoRenderer expanderInvTierTwoRenderer = new ExpanderInvTierTwoRenderer();
-    public static ExpanderInvTierThreeRenderer expanderInvTierThreeRenderer = new ExpanderInvTierThreeRenderer();
-    public static ExpanderInvTierFourRenderer expanderInvTierFourRenderer = new ExpanderInvTierFourRenderer();
-    public static ExpanderInvTierFiveRenderer expanderInvTierFiveRenderer = new ExpanderInvTierFiveRenderer();
+    public static final ExpanderInvTierOneRenderer expanderInvTierOneRenderer = new ExpanderInvTierOneRenderer();
+    public static final ExpanderInvTierTwoRenderer expanderInvTierTwoRenderer = new ExpanderInvTierTwoRenderer();
+    public static final ExpanderInvTierThreeRenderer expanderInvTierThreeRenderer = new ExpanderInvTierThreeRenderer();
+    public static final ExpanderInvTierFourRenderer expanderInvTierFourRenderer = new ExpanderInvTierFourRenderer();
+    public static final ExpanderInvTierFiveRenderer expanderInvTierFiveRenderer = new ExpanderInvTierFiveRenderer();
 
-    public static LeverRenderer leverRenderer = new LeverRenderer();
+    public static final LeverRenderer leverRenderer = new LeverRenderer();
 
     @SideOnly(Side.CLIENT)
     public static void init() {

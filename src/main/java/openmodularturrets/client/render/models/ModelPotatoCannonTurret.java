@@ -5,14 +5,14 @@ import net.minecraft.client.model.ModelRenderer;
 
 public class ModelPotatoCannonTurret extends ModelBase {
     // fields
-    public ModelRenderer Base;
-    public ModelRenderer Pole;
-    public ModelRenderer BoxUnder;
-    public ModelRenderer BoxLeft;
-    public ModelRenderer BoxRight;
-    public ModelRenderer CrossBar;
-    public ModelRenderer Barrel;
-    public ModelRenderer Chamber;
+    public final ModelRenderer Base;
+    public final ModelRenderer Pole;
+    public final ModelRenderer BoxUnder;
+    private final ModelRenderer BoxLeft;
+    private final ModelRenderer BoxRight;
+    private final ModelRenderer CrossBar;
+    private final ModelRenderer Barrel;
+    private final ModelRenderer Chamber;
 
     public ModelPotatoCannonTurret() {
         textureWidth = 64;

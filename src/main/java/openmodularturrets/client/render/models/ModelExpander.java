@@ -11,7 +11,7 @@ import net.minecraft.client.model.ModelRenderer;
 
 public class ModelExpander extends ModelBase {
     //fields
-    public ModelRenderer expander;
+    public final ModelRenderer expander;
 
     public ModelExpander() {
         textureWidth = 64;

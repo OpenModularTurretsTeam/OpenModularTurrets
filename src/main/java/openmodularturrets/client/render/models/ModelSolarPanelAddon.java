@@ -12,9 +12,9 @@ import net.minecraft.entity.Entity;
 
 public class ModelSolarPanelAddon extends ModelBase {
     //fields
-    ModelRenderer Shape1;
-    ModelRenderer Shape2;
-    ModelRenderer Shape3;
+    private final ModelRenderer Shape1;
+    private final ModelRenderer Shape2;
+    private final ModelRenderer Shape3;
 
     public ModelSolarPanelAddon() {
         textureWidth = 64;

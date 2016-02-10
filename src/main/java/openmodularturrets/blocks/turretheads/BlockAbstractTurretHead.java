@@ -9,8 +9,8 @@ import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-public abstract class BlockAbstractTurretHead extends Block implements ITileEntityProvider {
-    public BlockAbstractTurretHead() {
+abstract class BlockAbstractTurretHead extends Block implements ITileEntityProvider {
+    BlockAbstractTurretHead() {
         super(Material.rock);
 
         this.setCreativeTab(ModularTurrets.modularTurretsTab);

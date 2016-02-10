@@ -6,13 +6,13 @@ import net.minecraft.entity.Entity;
 
 public class ModelTeleporterTurret extends ModelBase {
     //fields
-    public ModelRenderer Base;
-    public ModelRenderer BaseStand;
-    public ModelRenderer PillarLarge;
-    public ModelRenderer Spinner1;
-    public ModelRenderer Spinner2;
-    public ModelRenderer Spinner3;
-    public ModelRenderer Spinner4;
+    public final ModelRenderer Base;
+    private final ModelRenderer BaseStand;
+    public final ModelRenderer PillarLarge;
+    public final ModelRenderer Spinner1;
+    public final ModelRenderer Spinner2;
+    public final ModelRenderer Spinner3;
+    public final ModelRenderer Spinner4;
 
     public ModelTeleporterTurret() {
         textureWidth = 64;

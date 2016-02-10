@@ -12,7 +12,7 @@ import openmodularturrets.tileentity.expander.AbstractInvExpander;
 import org.lwjgl.opengl.GL11;
 
 public class ExpanderInvTierTwoRenderer extends TileEntitySpecialRenderer {
-    private ModelExpander model;
+    private final ModelExpander model;
 
     public ExpanderInvTierTwoRenderer() {
         model = new ModelExpander();

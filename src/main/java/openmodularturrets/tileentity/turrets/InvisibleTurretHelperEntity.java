@@ -4,7 +4,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class InvisibleTurretHelperEntity extends EntityLivingBase {
+class InvisibleTurretHelperEntity extends EntityLivingBase {
     public InvisibleTurretHelperEntity(World p_i1594_1_) {
         super(p_i1594_1_);
     }

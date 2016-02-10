@@ -51,19 +51,19 @@ public class MessageToggleAttackMobs implements IMessage {
         buf.writeBoolean(this.attack_mobs);
     }
 
-    public int getX() {
+    private int getX() {
         return x;
     }
 
-    public int getY() {
+    private int getY() {
         return y;
     }
 
-    public int getZ() {
+    private int getZ() {
         return z;
     }
 
-    public boolean doAttackMobs() {
+    private boolean doAttackMobs() {
         return attack_mobs;
     }
 }

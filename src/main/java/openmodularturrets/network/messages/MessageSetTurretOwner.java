@@ -52,19 +52,19 @@ public class MessageSetTurretOwner implements IMessage {
     }
 
 
-    public int getX() {
+    private int getX() {
         return x;
     }
 
-    public int getY() {
+    private int getY() {
         return y;
     }
 
-    public int getZ() {
+    private int getZ() {
         return z;
     }
 
-    public String getOwner() {
+    private String getOwner() {
         return player;
     }
 }

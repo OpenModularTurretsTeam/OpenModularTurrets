@@ -21,9 +21,9 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 
 public class ConfigureGui extends GuiContainer {
-    TurretBase base;
-    GuiTextField textFieldAddTrustedPlayer;
-    EntityPlayer player;
+    private final TurretBase base;
+    private GuiTextField textFieldAddTrustedPlayer;
+    private final EntityPlayer player;
     private int mouseX;
     private int mouseY;
 
@@ -349,32 +349,32 @@ public class ConfigureGui extends GuiContainer {
         super.drawScreen(par1, par2, par3);
     }
 
-    public void sendChangeToServerMobs(boolean setTo) {
+    private void sendChangeToServerMobs(boolean setTo) {
         MessageToggleAttackMobs message = new MessageToggleAttackMobs(base.xCoord, base.yCoord, base.zCoord, setTo);
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
-    public void sendChangeToServerNeutrals(boolean setTo) {
+    private void sendChangeToServerNeutrals(boolean setTo) {
         MessageToggleAttackNeutralMobs message = new MessageToggleAttackNeutralMobs(base.xCoord, base.yCoord,
                                                                                     base.zCoord, setTo);
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
-    public void sendChangeToServerPlayers(boolean setTo) {
+    private void sendChangeToServerPlayers(boolean setTo) {
         MessageToggleAttackPlayers message = new MessageToggleAttackPlayers(base.xCoord, base.yCoord, base.zCoord,
                                                                             setTo);
 
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
-    public void sendChangeToServerAddTrusted() {
+    private void sendChangeToServerAddTrusted() {
         MessageAddTrustedPlayer message = new MessageAddTrustedPlayer(base.xCoord, base.yCoord, base.zCoord,
                                                                       textFieldAddTrustedPlayer.getText());
 
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
-    public void sendChangeToServerRemoveTrusted() {
+    private void sendChangeToServerRemoveTrusted() {
         MessageRemoveTrustedPlayer message = new MessageRemoveTrustedPlayer(base.xCoord, base.yCoord, base.zCoord,
                                                                             base.getTrustedPlayers().get(
                                                                                     base.trustedPlayerIndex).getName());
@@ -382,7 +382,7 @@ public class ConfigureGui extends GuiContainer {
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
-    public void sendChangeToServerModifyPermissions(String player, String perm, boolean canDo) {
+    private void sendChangeToServerModifyPermissions(String player, String perm, boolean canDo) {
         MessageModifyPermissions message = new MessageModifyPermissions(base.xCoord, base.yCoord, base.zCoord, player,
                                                                         perm, canDo);
 

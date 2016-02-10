@@ -7,7 +7,7 @@ import openmodularturrets.client.render.renderers.blockitem.ExpanderPowerTierFiv
 import openmodularturrets.tileentity.expander.ExpanderPowerTierFiveTileEntity;
 import org.lwjgl.opengl.GL11;
 
-public class ExpanderPowerTierFiveItemRenderer implements IItemRenderer {
+class ExpanderPowerTierFiveItemRenderer implements IItemRenderer {
     private final ExpanderPowerTierFiveRenderer expanderPowerTierFiveRenderer;
     private final ExpanderPowerTierFiveTileEntity expanderPowerTierFiveTileEntity;
     private final ModelExpander model;

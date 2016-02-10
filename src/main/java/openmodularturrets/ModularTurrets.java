@@ -25,10 +25,10 @@ public class ModularTurrets {
     public static ModularTurrets instance;
 
     @SidedProxy(clientSide = "openmodularturrets.proxy.ClientProxy", serverSide = "openmodularturrets.proxy" + "" + ".CommonProxy")
-    public static CommonProxy proxy;
+    private static CommonProxy proxy;
 
     public static CreativeTabs modularTurretsTab;
-    public GuiHandler gui;
+    private GuiHandler gui;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {

@@ -6,15 +6,15 @@ import net.minecraft.entity.Entity;
 
 public class ModelIncendiaryTurret extends ModelBase {
     // fields
-    public ModelRenderer Base;
-    public ModelRenderer Pole;
-    public ModelRenderer BoxUnder;
-    public ModelRenderer BoxLeft;
-    public ModelRenderer BoxRight;
-    public ModelRenderer CrossBar;
-    public ModelRenderer Barrel1;
-    public ModelRenderer Barrel2;
-    public ModelRenderer Tank;
+    public final ModelRenderer Base;
+    public final ModelRenderer Pole;
+    public final ModelRenderer BoxUnder;
+    private final ModelRenderer BoxLeft;
+    private final ModelRenderer BoxRight;
+    private final ModelRenderer CrossBar;
+    private final ModelRenderer Barrel1;
+    private final ModelRenderer Barrel2;
+    private final ModelRenderer Tank;
 
     public ModelIncendiaryTurret() {
         textureWidth = 64;

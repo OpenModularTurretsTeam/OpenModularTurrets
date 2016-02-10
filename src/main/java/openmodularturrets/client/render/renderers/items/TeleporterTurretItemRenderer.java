@@ -7,7 +7,7 @@ import openmodularturrets.client.render.renderers.blockitem.TeleporterTurretRend
 import openmodularturrets.tileentity.turrets.TeleporterTurretTileEntity;
 import org.lwjgl.opengl.GL11;
 
-public class TeleporterTurretItemRenderer implements IItemRenderer {
+class TeleporterTurretItemRenderer implements IItemRenderer {
     private final TeleporterTurretRenderer teleporterTurretRenderer;
     private final TeleporterTurretTileEntity teleporterTurretTileEntity;
     private final ModelTeleporterTurret model;

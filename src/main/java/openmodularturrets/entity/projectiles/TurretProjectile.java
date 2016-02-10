@@ -12,16 +12,16 @@ import openmodularturrets.util.TurretHeadUtil;
 
 public abstract class TurretProjectile extends EntityThrowable {
     public float gravity;
-    public boolean isAmped;
-    public int amp_level;
-    public ItemStack ammo;
-    protected TurretBase turretBase;
+    boolean isAmped;
+    int amp_level;
+    ItemStack ammo;
+    private TurretBase turretBase;
 
-    public TurretProjectile(World p_i1776_1_) {
+    TurretProjectile(World p_i1776_1_) {
         super(p_i1776_1_);
     }
 
-    public TurretProjectile(World p_i1776_1_, TurretBase turretBase) {
+    TurretProjectile(World p_i1776_1_, TurretBase turretBase) {
         super(p_i1776_1_);
         this.turretBase = turretBase;
         if (TurretHeadUtil.getAmpLevel(turretBase) > 0) {
@@ -30,7 +30,7 @@ public abstract class TurretProjectile extends EntityThrowable {
         }
     }
 
-    protected TurretProjectile(World p_i1776_1_, ItemStack ammo, TurretBase turretBase) {
+    TurretProjectile(World p_i1776_1_, ItemStack ammo, TurretBase turretBase) {
         super(p_i1776_1_);
         this.ammo = ammo;
         this.turretBase = turretBase;
@@ -40,7 +40,7 @@ public abstract class TurretProjectile extends EntityThrowable {
         }
     }
 
-    protected boolean canDamagePlayer(EntityPlayer entityPlayer) {
+    boolean canDamagePlayer(EntityPlayer entityPlayer) {
         if (!ConfigHandler.turretDamageTrustedPlayers) {
             if (this.turretBase.getTrustedPlayer(entityPlayer.getUniqueID()) != null || PlayerUtil.getPlayerUIDUnstable(
                     this.turretBase.getOwner()).equals(entityPlayer.getUniqueID())) {
