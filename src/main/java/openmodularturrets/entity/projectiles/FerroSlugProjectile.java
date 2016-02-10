@@ -35,7 +35,7 @@ public class FerroSlugProjectile extends TurretProjectile {
         if (this.ticksExisted <= 1) {
             return;
         }
-        if (movingobjectposition.typeOfHit == movingobjectposition.typeOfHit.BLOCK) {
+        if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
                                                movingobjectposition.blockZ);
             if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {

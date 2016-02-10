@@ -32,15 +32,12 @@ public abstract class BlockAbstractTurretHead extends Block implements ITileEnti
 
     @Override
     public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-        if (world.getTileEntity(x + 1, y, z) instanceof TurretBase ||
+        return world.getTileEntity(x + 1, y, z) instanceof TurretBase ||
                 world.getTileEntity(x - 1, y, z) instanceof TurretBase ||
                 world.getTileEntity(x, y + 1, z) instanceof TurretBase ||
                 world.getTileEntity(x, y - 1, z) instanceof TurretBase ||
                 world.getTileEntity(x, y, z + 1) instanceof TurretBase ||
-                world.getTileEntity(x, y, z - 1) instanceof TurretBase) {
-            return true;
-        }
-        return false;
+                world.getTileEntity(x, y, z - 1) instanceof TurretBase;
     }
 
     @Override

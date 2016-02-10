@@ -72,7 +72,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
                 return;
             }
 
-            this.rotationXZ = TurretHeadUtil.getAimYaw(target, xCoord, yCoord, zCoord) + 3.2F;
+            this.rotationXZ = TurretHeadUtil.getAimYaw(target, xCoord, zCoord) + 3.2F;
             this.rotationXY = TurretHeadUtil.getAimPitch(target, xCoord, yCoord, zCoord);
 
             // has cooldown passed?

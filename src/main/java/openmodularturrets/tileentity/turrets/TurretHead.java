@@ -176,13 +176,9 @@ public abstract class TurretHead extends TileEntity {
     public abstract String getLaunchSoundEffect();
 
     public boolean chebyshevDistance(Entity target, TurretBase base) {
-        if (MathHelper.abs_max(MathHelper.abs_max(target.posX - this.xCoord, target.posY - this.yCoord),
-                               target.posZ - this.zCoord) > (getTurretRange() + TurretHeadUtil.getRangeUpgrades(
-                base))) {
-            return true;
-        } else {
-            return false;
-        }
+        return MathHelper.abs_max(MathHelper.abs_max(target.posX - this.xCoord, target.posY - this.yCoord),
+                                  target.posZ - this.zCoord) > (getTurretRange() + TurretHeadUtil.getRangeUpgrades(
+                base));
     }
 
     private int getPowerRequiredForNextShot() {
@@ -217,8 +213,6 @@ public abstract class TurretHead extends TileEntity {
         //Base checks
         if (base == null || base.getBaseTier() < this.turretTier) {
             this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);
-            return;
-
         } else {
             if (base.isAttacksPlayers() && base.isActive() && ConfigHandler.globalCanTargetPlayers) {
                 TurretHeadUtil.warnPlayers(base, base.getWorldObj(), base.getyAxisDetect(), this.xCoord, this.yCoord,
@@ -257,7 +251,7 @@ public abstract class TurretHead extends TileEntity {
             }
 
             //set where the turret is aiming at.
-            this.rotationXZ = TurretHeadUtil.getAimYaw(target, xCoord, yCoord, zCoord) + 3.2F;
+            this.rotationXZ = TurretHeadUtil.getAimYaw(target, xCoord, zCoord) + 3.2F;
             this.rotationXY = TurretHeadUtil.getAimPitch(target, xCoord, yCoord, zCoord);
 
             // has cooldown passed?
