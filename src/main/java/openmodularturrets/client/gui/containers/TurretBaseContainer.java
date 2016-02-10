@@ -14,8 +14,8 @@ import openmodularturrets.tileentity.turretbase.TurretBase;
  * Created by Keridos on 09/12/2015.
  * This Class
  */
-public class TurretBaseContainer extends Container {
-    protected TurretBase tileEntity;
+class TurretBaseContainer extends Container {
+    TurretBase tileEntity;
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {

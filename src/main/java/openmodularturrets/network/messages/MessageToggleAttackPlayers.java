@@ -50,19 +50,19 @@ public class MessageToggleAttackPlayers implements IMessage {
         buf.writeBoolean(this.attack_players);
     }
 
-    public int getX() {
+    private int getX() {
         return x;
     }
 
-    public int getY() {
+    private int getY() {
         return y;
     }
 
-    public int getZ() {
+    private int getZ() {
         return z;
     }
 
-    public boolean doAttackPlayers() {
+    private boolean doAttackPlayers() {
         return attack_players;
     }
 }

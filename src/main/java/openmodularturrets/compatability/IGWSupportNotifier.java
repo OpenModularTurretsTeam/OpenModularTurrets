@@ -27,7 +27,7 @@ import java.util.List;
  * Created by Keridos on 23/01/2015.
  * This Class
  */
-public class IGWSupportNotifier {
+class IGWSupportNotifier {
     private String supportingMod;
     private static final String LATEST_DL_URL = "http://minecraft.curseforge.com/mc-mods/223815-in-game-wiki-mod/files/latest";
 

@@ -50,19 +50,19 @@ public class MessageAdjustYAxisDetect implements IMessage {
         buf.writeInt(this.y_axis_detect);
     }
 
-    public int getX() {
+    private int getX() {
         return x;
     }
 
-    public int getY() {
+    private int getY() {
         return y;
     }
 
-    public int getZ() {
+    private int getZ() {
         return z;
     }
 
-    public int getYAxisDetect() {
+    private int getYAxisDetect() {
         return y_axis_detect;
     }
 }

@@ -7,7 +7,7 @@ import openmodularturrets.client.render.renderers.blockitem.MachineGunTurretRend
 import openmodularturrets.tileentity.turrets.GunTurretTileEntity;
 import org.lwjgl.opengl.GL11;
 
-public class MachineGunTurretItemRenderer implements IItemRenderer {
+class MachineGunTurretItemRenderer implements IItemRenderer {
     private final MachineGunTurretRenderer machineGunTurretRenderer;
     private final GunTurretTileEntity gunTurretTileEntity;
     private final ModelMachineGun model;

@@ -7,10 +7,10 @@ import openmodularturrets.client.render.renderers.blockitem.GrenadeLauncherTurre
 import openmodularturrets.tileentity.turrets.GrenadeLauncherTurretTileEntity;
 import org.lwjgl.opengl.GL11;
 
-public class GrenadeLauncherTurretItemRenderer implements IItemRenderer {
+class GrenadeLauncherTurretItemRenderer implements IItemRenderer {
     private final GrenadeLauncherTurretRenderer grenadeLauncherTurretRenderer;
     private final GrenadeLauncherTurretTileEntity grenadeLauncherTurretTileEntity;
-    private ModelGrenadeLauncher model;
+    private final ModelGrenadeLauncher model;
 
     public GrenadeLauncherTurretItemRenderer(GrenadeLauncherTurretRenderer grenadeLauncherTurretRenderer, GrenadeLauncherTurretTileEntity grenadeLauncherTurretTileEntity) {
         this.grenadeLauncherTurretRenderer = grenadeLauncherTurretRenderer;

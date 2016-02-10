@@ -12,11 +12,11 @@ import net.minecraft.entity.Entity;
 
 public class ModelRedstoneReactor extends ModelBase {
     //fields
-    ModelRenderer Shape2;
-    ModelRenderer Shape1;
-    ModelRenderer Shape3;
-    ModelRenderer Shape4;
-    ModelRenderer Shape5;
+    private final ModelRenderer Shape2;
+    private final ModelRenderer Shape1;
+    private final ModelRenderer Shape3;
+    private final ModelRenderer Shape4;
+    private final ModelRenderer Shape5;
 
     public ModelRedstoneReactor() {
         textureWidth = 64;

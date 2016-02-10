@@ -8,7 +8,7 @@ import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
-public class IOBusItem extends Item {
+class IOBusItem extends Item {
     public IOBusItem() {
         super();
 

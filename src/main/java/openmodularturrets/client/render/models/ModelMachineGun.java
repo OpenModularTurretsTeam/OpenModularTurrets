@@ -6,14 +6,14 @@ import net.minecraft.entity.Entity;
 
 public class ModelMachineGun extends ModelBase {
     // fields
-    public ModelRenderer Base;
-    public ModelRenderer Pole;
-    public ModelRenderer BoxUnder;
-    public ModelRenderer BoxLeft;
-    public ModelRenderer BoxRight;
-    public ModelRenderer CrossBar;
-    public ModelRenderer GunStock;
-    public ModelRenderer Shape1;
+    public final ModelRenderer Base;
+    public final ModelRenderer Pole;
+    public final ModelRenderer BoxUnder;
+    private final ModelRenderer BoxLeft;
+    private final ModelRenderer BoxRight;
+    private final ModelRenderer CrossBar;
+    private final ModelRenderer GunStock;
+    private final ModelRenderer Shape1;
 
     public ModelMachineGun() {
         textureWidth = 64;

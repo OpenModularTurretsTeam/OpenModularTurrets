@@ -12,17 +12,17 @@ import net.minecraft.entity.Entity;
 
 public class ModelLaserTurret extends ModelBase {
     // fields
-    public ModelRenderer Base;
-    public ModelRenderer Pole;
-    public ModelRenderer BoxUnder;
-    public ModelRenderer BoxLeft;
-    public ModelRenderer BoxRight;
-    public ModelRenderer CrossBar;
-    public ModelRenderer Chamber;
-    public ModelRenderer BarUnder;
-    public ModelRenderer BarMiddle;
-    public ModelRenderer BarTop;
-    public ModelRenderer CounterWeight;
+    public final ModelRenderer Base;
+    public final ModelRenderer Pole;
+    public final ModelRenderer BoxUnder;
+    private final ModelRenderer BoxLeft;
+    private final ModelRenderer BoxRight;
+    private final ModelRenderer CrossBar;
+    private final ModelRenderer Chamber;
+    private final ModelRenderer BarUnder;
+    private final ModelRenderer BarMiddle;
+    private final ModelRenderer BarTop;
+    private final ModelRenderer CounterWeight;
 
     public ModelLaserTurret() {
         textureWidth = 64;

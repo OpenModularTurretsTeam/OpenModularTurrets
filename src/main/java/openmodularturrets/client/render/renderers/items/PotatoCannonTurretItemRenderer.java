@@ -7,7 +7,7 @@ import openmodularturrets.client.render.renderers.blockitem.PotatoCannonTurretRe
 import openmodularturrets.tileentity.turrets.PotatoCannonTurretTileEntity;
 import org.lwjgl.opengl.GL11;
 
-public class PotatoCannonTurretItemRenderer implements IItemRenderer {
+class PotatoCannonTurretItemRenderer implements IItemRenderer {
     private final PotatoCannonTurretRenderer potatoCannonTurretRenderer;
     private final PotatoCannonTurretTileEntity potatoCannonTurretTileEntity;
     private final ModelDisposableItemTurret model;

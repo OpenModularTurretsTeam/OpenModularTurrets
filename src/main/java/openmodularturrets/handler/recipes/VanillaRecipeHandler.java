@@ -7,7 +7,7 @@ import openmodularturrets.blocks.Blocks;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.Items;
 
-public class VanillaRecipeHandler {
+class VanillaRecipeHandler {
     public static void init() {
         // Items
         // Barrels

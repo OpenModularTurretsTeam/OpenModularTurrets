@@ -5,8 +5,8 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelLever extends ModelBase {
-    public ModelRenderer Shape1;
-    public ModelRenderer Shape2;
+    public final ModelRenderer Shape1;
+    public final ModelRenderer Shape2;
 
     public ModelLever() {
         textureWidth = 32;

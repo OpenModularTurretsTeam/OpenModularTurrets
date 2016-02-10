@@ -10,7 +10,7 @@ import net.minecraft.world.IBlockAccess;
  * This Class
  */
 public abstract class BlockAbstractMiscPane extends BlockPane {
-    public BlockAbstractMiscPane(String par1, String par2, Material material, boolean par4) {
+    protected BlockAbstractMiscPane(String par1, String par2, Material material, boolean par4) {
         super(par1, par2, material, par4);
     }
 

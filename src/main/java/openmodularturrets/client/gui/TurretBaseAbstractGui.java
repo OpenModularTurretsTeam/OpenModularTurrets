@@ -26,13 +26,13 @@ import java.util.List;
  */
 
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
-public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
-    protected int mouseX;
-    protected int mouseY;
-    protected EntityPlayer player;
-    protected TurretBase base;
+class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
+    int mouseX;
+    int mouseY;
+    private final EntityPlayer player;
+    final TurretBase base;
 
-    public TurretBaseAbstractGui(InventoryPlayer inventoryPlayer, TurretBase tileEntity, Container container) {
+    TurretBaseAbstractGui(InventoryPlayer inventoryPlayer, TurretBase tileEntity, Container container) {
         super(container);
         this.base = tileEntity;
         player = inventoryPlayer.player;
@@ -111,24 +111,24 @@ public class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandle
     protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
     }
 
-    public void sendChangeToServer() {
+    private void sendChangeToServer() {
         MessageAdjustYAxisDetect message = new MessageAdjustYAxisDetect(base.xCoord, base.yCoord, base.zCoord,
                                                                         base.getyAxisDetect());
 
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
-    public void sendDropTurretsToServer() {
+    private void sendDropTurretsToServer() {
         MessageDropTurrets message = new MessageDropTurrets(base.xCoord, base.yCoord, base.zCoord);
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
-    public void sendDropBaseToServer() {
+    private void sendDropBaseToServer() {
         MessageDropBase message = new MessageDropBase(base.xCoord, base.yCoord, base.zCoord);
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
-    public void sendSetBaseTargetingToServer() {
+    private void sendSetBaseTargetingToServer() {
         MessageSetBaseTargetingType message = new MessageSetBaseTargetingType(base.xCoord, base.yCoord, base.zCoord);
         NetworkingHandler.INSTANCE.sendToServer(message);
     }

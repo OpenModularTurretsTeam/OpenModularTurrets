@@ -44,15 +44,15 @@ public class MessageDropBase implements IMessage {
         buf.writeInt(this.z);
     }
 
-    public int getX() {
+    private int getX() {
         return x;
     }
 
-    public int getY() {
+    private int getY() {
         return y;
     }
 
-    public int getZ() {
+    private int getZ() {
         return z;
     }
 

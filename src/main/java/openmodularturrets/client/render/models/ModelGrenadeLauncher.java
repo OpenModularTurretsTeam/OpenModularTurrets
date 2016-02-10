@@ -12,15 +12,15 @@ import net.minecraft.entity.Entity;
 
 public class ModelGrenadeLauncher extends ModelBase {
     // fields
-    public ModelRenderer Base;
-    public ModelRenderer Pole;
-    public ModelRenderer BoxUnder;
-    public ModelRenderer BoxLeft;
-    public ModelRenderer BoxRight;
-    public ModelRenderer CrossBar;
-    public ModelRenderer Barrel;
-    public ModelRenderer Chamber;
-    public ModelRenderer Shape1;
+    public final ModelRenderer Base;
+    public final ModelRenderer Pole;
+    public final ModelRenderer BoxUnder;
+    private final ModelRenderer BoxLeft;
+    private final ModelRenderer BoxRight;
+    private final ModelRenderer CrossBar;
+    private final ModelRenderer Barrel;
+    private final ModelRenderer Chamber;
+    private final ModelRenderer Shape1;
 
     public ModelGrenadeLauncher() {
         textureWidth = 64;
@@ -103,7 +103,7 @@ public class ModelGrenadeLauncher extends ModelBase {
         model.rotateAngleZ = z;
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {
+    private void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {
         setRotationAngles(f, f1, f2, f3, f4, f5);
     }
 
