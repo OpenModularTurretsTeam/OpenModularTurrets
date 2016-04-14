@@ -29,14 +29,19 @@ public class ConfigHandler {
     public static double EUtoRFRatio;
     private static int baseTierOneMaxCharge;
     private static int baseTierOneMaxIo;
+    private static int baseTierOneBlastResistance;
     private static int baseTierTwoMaxCharge;
     private static int baseTierTwoMaxIo;
+    private static int baseTierTwoBlastResistance;
     private static int baseTierThreeMaxCharge;
     private static int baseTierThreeMaxIo;
+    private static int baseTierThreeBlastResistance;
     private static int baseTierFourMaxCharge;
     private static int baseTierFourMaxIo;
+    private static int baseTierFourBlastResistance;
     private static int baseTierFiveMaxCharge;
     private static int baseTierFiveMaxIo;
+    private static int baseTierFiveBlastResistance;
     private static int potentiaToRFRatio;
     private static int potentiaAddonCapacity;
     private static TurretSetting disposable_turret;
@@ -59,6 +64,7 @@ public class ConfigHandler {
     private static float turretSoundVolume;
     private static boolean allowBaseCamo;
     private static boolean canRocketsHurtEnderDragon;
+    private static boolean shouldSpawnDungeonLoot;
 
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
@@ -66,18 +72,23 @@ public class ConfigHandler {
 
         baseTierOneMaxCharge = config.get("TurretBaseTierOne", "MaxCharge", 500).getInt();
         baseTierOneMaxIo = config.get("TurretBaseTierOne", "MaxIo", 50).getInt();
+        baseTierOneBlastResistance = config.get("TurretBaseTierOne", "BlastResistance", 10).getInt();
 
         baseTierTwoMaxCharge = config.get("TurretBaseTierTwo", "MaxCharge", 50000).getInt();
         baseTierTwoMaxIo = config.get("TurretBaseTierTwo", "MaxIo", 100).getInt();
+        baseTierTwoBlastResistance = config.get("TurretBaseTierTwo", "BlastResistance", 10).getInt();
 
         baseTierThreeMaxCharge = config.get("TurretBaseTierThree", "MaxCharge", 150000).getInt();
         baseTierThreeMaxIo = config.get("TurretBaseTierThree", "MaxIo", 500).getInt();
+        baseTierThreeBlastResistance = config.get("TurretBaseTierThree", "BlastResistance", 10).getInt();
 
         baseTierFourMaxCharge = config.get("TurretBaseTierFour", "MaxCharge", 500000).getInt();
         baseTierFourMaxIo = config.get("TurretBaseTierFour", "MaxIo", 1500).getInt();
+        baseTierFourBlastResistance = config.get("TurretBaseTierFour", "BlastResistance", 10).getInt();
 
         baseTierFiveMaxCharge = config.get("TurretBaseTierFive", "MaxCharge", 10000000).getInt();
         baseTierFiveMaxIo = config.get("TurretBaseTierFive", "MaxIo", 5000).getInt();
+        baseTierFiveBlastResistance = config.get("TurretBaseTierFive", "BlastResistance", 10).getInt();
 
         disposable_turret = new TurretSetting(
                 config.get("TurretDisposable", "Range", 10, "Turret range, in blocks").getInt(),
@@ -209,6 +220,10 @@ public class ConfigHandler {
                                                "Can rockets fired by the rocket launcher turret hurt the Ender Dragon?",
                                                false).getBoolean();
 
+        shouldSpawnDungeonLoot = config.get("miscellaneous",
+                "Should we generate dungeon loot?",
+                true).getBoolean();
+
         recipes = config.get("miscellaneous",
                 "Which recipes should we do? (auto, enderio, thermalexpansion, mekanism, vanilla)",
                 "auto").getString();
@@ -303,6 +318,26 @@ public class ConfigHandler {
 
     public static int getBaseTierOneMaxCharge() {
         return baseTierOneMaxCharge;
+    }
+
+    public static int getBaseTierOneBlastResistance() {
+        return baseTierOneBlastResistance;
+    }
+
+    public static int getBaseTierTwoBlastResistance() {
+        return baseTierTwoBlastResistance;
+    }
+
+    public static int getBaseTierThreeBlastResistance() {
+        return baseTierThreeBlastResistance;
+    }
+
+    public static int getBaseTierFourBlastResistance() {
+        return baseTierFourBlastResistance;
+    }
+
+    public static int getBaseTierFiveBlastResistance() {
+        return baseTierFiveBlastResistance;
     }
 
     public static int getTurretWarningDistance() {
@@ -425,6 +460,10 @@ public class ConfigHandler {
 
     public static boolean isCanRocketsHurtEnderDragon() {
         return canRocketsHurtEnderDragon;
+    }
+
+    public static boolean isShouldSpawnDungeonLoot() {
+        return shouldSpawnDungeonLoot;
     }
 
     public static class TurretSetting {
