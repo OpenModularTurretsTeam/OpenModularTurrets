@@ -14,7 +14,7 @@ public class BlockTurretBaseTierThree extends BlockAbstractTurretBase {
 
     public BlockTurretBaseTierThree() {
         super();
-
+        this.setResistance(ConfigHandler.getBaseTierThreeBlastResistance());
         this.setBlockName(Names.Blocks.unlocalisedTurretBaseTierThree);
         this.setBlockTextureName(ModInfo.ID + ":turretBaseTierThree");
     }

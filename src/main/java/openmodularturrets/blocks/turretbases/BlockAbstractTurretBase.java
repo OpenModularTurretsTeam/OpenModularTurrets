@@ -27,7 +27,6 @@ public abstract class BlockAbstractTurretBase extends BlockAbstractContainer {
         if (!ConfigHandler.turretBreakable) {
             this.setBlockUnbreakable();
         }
-        this.setResistance(3.0F);
         this.setStepSound(Block.soundTypeStone);
     }
 

@@ -21,14 +21,14 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.handler.NetworkingHandler;
-import openmodularturrets.network.messages.MessageTurretBase;
 import openmodularturrets.tileentity.TileEntityContainer;
 import openmodularturrets.util.MathUtil;
 import openmodularturrets.util.TurretHeadUtil;
@@ -56,10 +56,13 @@ import static openmodularturrets.util.PlayerUtil.*;
 public abstract class TurretBase extends TileEntityContainer implements IEnergyHandler, SimpleComponent, ISidedInventory, IEssentiaTransport, IAspectContainer, IPeripheral, IEnergySink {
     public int trustedPlayerIndex = 0;
     public ItemStack camoStack;
+
     //For concealment
     public boolean shouldConcealTurrets;
+
     //For multiTargeting
     private boolean multiTargeting = false;
+
     private final EnergyStorage storage;
     private int yAxisDetect;
     private boolean attacksMobs;
@@ -100,14 +103,15 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
         if (ConfigHandler.getRedstoneReactorAddonGen() < (base.getMaxEnergyStored(
                 ForgeDirection.UNKNOWN) - base.getEnergyStored(ForgeDirection.UNKNOWN))) {
+
             //Prioritise redstone blocks
             ItemStack redstoneBlock = TurretHeadUtil.useSpecificItemStackBlockFromBase(base, new ItemStack(
                     Blocks.redstone_block));
 
             if (redstoneBlock == null) {
                 redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(),
-                                                                               new ItemStack(Blocks.redstone_block),
-                                                                               base);
+                        new ItemStack(Blocks.redstone_block),
+                        base);
             }
 
             if (redstoneBlock != null && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base.getMaxEnergyStored(
@@ -120,7 +124,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
             if (redstone == null) {
                 redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(),
-                                                                          new ItemStack(Items.redstone), base);
+                        new ItemStack(Items.redstone), base);
             }
 
             if (redstone != null) {
@@ -451,8 +455,8 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
         return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.getDistanceSq(xCoord + 0.5,
-                                                                                              yCoord + 0.5,
-                                                                                              zCoord + 0.5) < 64;
+                yCoord + 0.5,
+                zCoord + 0.5) < 64;
     }
 
     @Optional.Method(modid = "Thaumcraft")
@@ -526,7 +530,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
                 if (storage.getMaxEnergyStored() != storage.getEnergyStored() && storageEU > 0) {
                     storage.modifyEnergyStored(MathUtil.truncateDoubleToInt(
                             Math.min(storage.getMaxEnergyStored() - storage.getEnergyStored(),
-                                     storageEU * ConfigHandler.EUtoRFRatio)));
+                                    storageEU * ConfigHandler.EUtoRFRatio)));
                     storageEU -= Math.min(
                             (storage.getMaxEnergyStored() - storage.getEnergyStored()) / ConfigHandler.EUtoRFRatio,
                             storageEU * ConfigHandler.EUtoRFRatio);
@@ -556,7 +560,16 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
     @Override
     public Packet getDescriptionPacket() {
-        return NetworkingHandler.INSTANCE.getPacketFrom(new MessageTurretBase(this));
+        NBTTagCompound var1 = new NBTTagCompound();
+        super.writeToNBT(var1);
+        this.writeToNBT(var1);
+        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+        super.readFromNBT(pkt.func_148857_g());
+        this.readFromNBT(pkt.func_148857_g());
     }
 
     public abstract int getBaseTier();
@@ -1062,7 +1075,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
                 if (this.getTrustedPlayers() != null && this.getTrustedPlayers().size() > 0) {
                     for (TrustedPlayer trustedPlayer : this.getTrustedPlayers()) {
                         result.put(trustedPlayer.name,
-                                   (trustedPlayer.canOpenGUI ? 1 : 0) + (trustedPlayer.canChangeTargeting ? 2 : 0) + (trustedPlayer.admin ? 4 : 0));
+                                (trustedPlayer.canOpenGUI ? 1 : 0) + (trustedPlayer.canChangeTargeting ? 2 : 0) + (trustedPlayer.admin ? 4 : 0));
                     }
                 }
                 return new Object[]{result};
