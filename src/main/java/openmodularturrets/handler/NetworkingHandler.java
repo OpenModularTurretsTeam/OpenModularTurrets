@@ -44,5 +44,8 @@ public class NetworkingHandler {
 
         INSTANCE.registerMessage(MessageSetBaseTargetingType.MessageHandlerSetBaseTargetingType.class,
                                  MessageSetBaseTargetingType.class, 11, Side.SERVER);
+
+        INSTANCE.registerMessage(MessageTurretBase.MessageHandlerTurretBase.class, MessageTurretBase.class, 12,
+                                 Side.CLIENT);
     }
 }
