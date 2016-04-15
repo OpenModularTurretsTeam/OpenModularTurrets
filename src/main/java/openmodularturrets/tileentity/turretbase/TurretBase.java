@@ -21,14 +21,14 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.handler.NetworkingHandler;
+import openmodularturrets.network.messages.MessageTurretBase;
 import openmodularturrets.tileentity.TileEntityContainer;
 import openmodularturrets.util.MathUtil;
 import openmodularturrets.util.TurretHeadUtil;
@@ -560,16 +560,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
     @Override
     public Packet getDescriptionPacket() {
-        NBTTagCompound var1 = new NBTTagCompound();
-        super.writeToNBT(var1);
-        this.writeToNBT(var1);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-        super.readFromNBT(pkt.func_148857_g());
-        this.readFromNBT(pkt.func_148857_g());
+        return NetworkingHandler.INSTANCE.getPacketFrom(new MessageTurretBase(this));
     }
 
     public abstract int getBaseTier();
