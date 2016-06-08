@@ -121,8 +121,8 @@ task deobfJar(type: Jar) {
 build.dependsOn sourceJar, deobfJar
 
 // this fixes dev environments for IDEA 14 users.
-sourceSets {
-    main {
-        output.resourcesDir = output.classesDir
+idea {
+    module {
+        outputDir = file('build/classes/main')
     }
 }
