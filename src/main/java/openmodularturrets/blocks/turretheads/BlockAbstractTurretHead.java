@@ -11,7 +11,7 @@ import openmodularturrets.tileentity.turretbase.TurretBase;
 
 abstract class BlockAbstractTurretHead extends Block implements ITileEntityProvider {
     BlockAbstractTurretHead() {
-        super(Material.rock);
+        super(Material.glass);
 
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setBlockUnbreakable();
