@@ -1,7 +1,7 @@
 # Created by .gitignore support plugin (hsz.mobi)
 ### Gradle template
 .gradle
-build/
+/build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -15,9 +15,12 @@ eclipse
 .classpath
 .project
 .settings
-.idea
 bin
-logs
+/.idea/
+/libs/
+/run/
+/classes/
+out/
 
 # Other Stuff
 Thumbs.db
