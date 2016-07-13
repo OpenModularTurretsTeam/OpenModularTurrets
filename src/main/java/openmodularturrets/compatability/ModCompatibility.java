@@ -79,6 +79,16 @@ public class ModCompatibility {
         }
     }
 
+    public static void fixIC2Loading() {
+        if (IC2Loaded) {
+            try {
+                Class.forName("ic2.api.energy.tile.IEnergySink", false, ClassLoader.getSystemClassLoader());
+            } catch (ClassNotFoundException e) {
+                IC2Loaded = false;
+            }
+        }
+    }
+
     @Optional.Method(modid = "ComputerCraft")
     private static void registerCCCompat() {
         ComputerCraftAPI.registerPeripheralProvider(CCPeripheralProvider.getInstance());

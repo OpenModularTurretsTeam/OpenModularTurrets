@@ -21,7 +21,7 @@ import java.util.UUID;
  * This Class is the Message that the electric floodlights TileEntity uses.
  */
 public class MessageTurretBase implements IMessage {
-    private int x, y, z, rfStorage;
+    private int x, y, z, rfStorage, yAxisDetect;
     private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting;
     private String owner, ownerName;
     private List<TrustedPlayer> trustedPlayers = new ArrayList<>();
@@ -39,6 +39,7 @@ public class MessageTurretBase implements IMessage {
                 ((TurretBase) tileEntity).setOwner(message.owner);
                 ((TurretBase) tileEntity).setOwnerName(message.ownerName);
                 ((TurretBase) tileEntity).setEnergyStored(message.rfStorage);
+                ((TurretBase) tileEntity).setyAxisDetect(message.yAxisDetect);
                 ((TurretBase) tileEntity).setAttacksMobs(message.attacksMobs);
                 ((TurretBase) tileEntity).setAttacksNeutrals(message.attacksNeutrals);
                 ((TurretBase) tileEntity).setAttacksPlayers(message.attacksPlayers);
@@ -59,6 +60,7 @@ public class MessageTurretBase implements IMessage {
             this.owner = TurretBase.getOwner();
             this.ownerName = TurretBase.getOwnerName();
             this.rfStorage = TurretBase.getEnergyStored(ForgeDirection.UNKNOWN);
+            this.yAxisDetect = TurretBase.getyAxisDetect();
             this.attacksMobs = TurretBase.isAttacksMobs();
             this.attacksNeutrals = TurretBase.isAttacksNeutrals();
             this.attacksPlayers = TurretBase.isAttacksPlayers();
@@ -78,6 +80,7 @@ public class MessageTurretBase implements IMessage {
         int ownerNameLength = buf.readInt();
         this.ownerName = new String(buf.readBytes(ownerNameLength).array());
         this.rfStorage = buf.readInt();
+        this.yAxisDetect = buf.readInt();
         this.attacksMobs = buf.readBoolean();
         this.attacksNeutrals = buf.readBoolean();
         this.attacksPlayers = buf.readBoolean();
@@ -109,6 +112,7 @@ public class MessageTurretBase implements IMessage {
         buf.writeInt(ownerName.length());
         buf.writeBytes(ownerName.getBytes());
         buf.writeInt(rfStorage);
+        buf.writeInt(yAxisDetect);
         buf.writeBoolean(attacksMobs);
         buf.writeBoolean(attacksNeutrals);
         buf.writeBoolean(attacksPlayers);

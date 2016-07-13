@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
@@ -69,7 +70,9 @@ public abstract class BlockAbstractTurretBase extends BlockAbstractContainer {
                     return true;
                 }
             }
-            if (player.getUniqueID().toString().equals(base.getOwner())) {
+            if (player.getUniqueID().toString().equals(base.getOwner()) ||
+                    (ConfigHandler.canOPAccessTurrets && MinecraftServer.getServer().getConfigurationManager().func_152596_g(
+                            player.getGameProfile()))) {
                 player.openGui(ModularTurrets.instance, base.getBaseTier(), world, x, y, z);
             } else {
                 player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));

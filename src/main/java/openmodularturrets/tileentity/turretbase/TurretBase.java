@@ -301,7 +301,6 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     @Override
     public void writeToNBT(NBTTagCompound par1) {
         super.writeToNBT(par1);
-
         par1.setInteger("maxStorage", this.storage.getMaxEnergyStored());
         par1.setInteger("energyStored", this.getEnergyStored(ForgeDirection.UNKNOWN));
         par1.setFloat("amountOfPotentia", amountOfPotentia);
@@ -328,7 +327,6 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
         for (int i = 0; i < this.inv.length; i++) {
             ItemStack stack = this.getStackInSlot(i);
-
             if (stack != null) {
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setByte("Slot", (byte) i);
