@@ -65,9 +65,15 @@ public class RocketProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(MovingObjectPosition movingobjectposition) {
-        if (this.ticksExisted <= 2) {
+
+        if (ConfigHandler.canRocketsHome && this.ticksExisted <= 5) {
             return;
         }
+
+        if (!ConfigHandler.canRocketsHome && this.ticksExisted <= 2) {
+            return;
+        }
+
         if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
                                                movingobjectposition.blockZ);
