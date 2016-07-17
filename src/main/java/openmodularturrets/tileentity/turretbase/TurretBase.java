@@ -1,5 +1,7 @@
 package openmodularturrets.tileentity.turretbase;
 
+import api.undercurrent.iface.IUCTile;
+import api.undercurrent.iface.UCTileDefinition;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.Optional;
@@ -30,6 +32,7 @@ import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.handler.NetworkingHandler;
 import openmodularturrets.network.messages.MessageTurretBase;
 import openmodularturrets.tileentity.TileEntityContainer;
+import openmodularturrets.ucdefinitions.TurretBaseUCDefinition;
 import openmodularturrets.util.MathUtil;
 import openmodularturrets.util.TurretHeadUtil;
 import thaumcraft.api.aspects.Aspect;
@@ -53,7 +56,7 @@ import static openmodularturrets.util.PlayerUtil.*;
         @Optional.Interface(iface = "thaumcraft.api.aspects.IEssentiaTransport", modid = "Thaumcraft"),
         @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2")})
 
-public abstract class TurretBase extends TileEntityContainer implements IEnergyHandler, SimpleComponent, ISidedInventory, IEssentiaTransport, IAspectContainer, IPeripheral, IEnergySink {
+public abstract class TurretBase extends TileEntityContainer implements IEnergyHandler, SimpleComponent, ISidedInventory, IEssentiaTransport, IAspectContainer, IPeripheral, IEnergySink, IUCTile {
     public int trustedPlayerIndex = 0;
     public ItemStack camoStack;
 
@@ -1148,5 +1151,10 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals,
         getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getInverted, getRedstone, setInverted,
         getType
+    }
+
+    @Override
+    public UCTileDefinition getTileDefinition() throws Exception {
+        return new TurretBaseUCDefinition(this);
     }
 }
