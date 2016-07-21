@@ -1,16 +1,10 @@
 package openmodularturrets.client.gui;
 
-import codechicken.lib.vec.Rectangle4i;
-import codechicken.nei.VisiblityData;
-import codechicken.nei.api.INEIGuiHandler;
-import codechicken.nei.api.TaggedInventoryArea;
-import cpw.mods.fml.common.Optional;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.handler.NetworkingHandler;
 import openmodularturrets.network.messages.MessageAdjustYAxisDetect;
@@ -19,14 +13,12 @@ import openmodularturrets.network.messages.MessageDropTurrets;
 import openmodularturrets.network.messages.MessageSetBaseTargetingType;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-import java.util.List;
 
 /**
  * Created by nico on 6/4/15.
  */
 
-@Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
-class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
+class TurretBaseAbstractGui extends GuiContainer  {
     int mouseX;
     int mouseY;
     private final EntityPlayer player;
@@ -93,7 +85,7 @@ class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
         }
 
         if (guibutton.id == 5) {
-            player.openGui(ModularTurrets.instance, 6, player.worldObj, base.xCoord, base.yCoord, base.zCoord);
+            player.openGui(ModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
         }
 
         if (guibutton.id == 6) {
@@ -112,27 +104,28 @@ class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
     }
 
     private void sendChangeToServer() {
-        MessageAdjustYAxisDetect message = new MessageAdjustYAxisDetect(base.xCoord, base.yCoord, base.zCoord,
+        MessageAdjustYAxisDetect message = new MessageAdjustYAxisDetect(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
                                                                         base.getyAxisDetect());
 
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendDropTurretsToServer() {
-        MessageDropTurrets message = new MessageDropTurrets(base.xCoord, base.yCoord, base.zCoord);
+        MessageDropTurrets message = new MessageDropTurrets(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendDropBaseToServer() {
-        MessageDropBase message = new MessageDropBase(base.xCoord, base.yCoord, base.zCoord);
+        MessageDropBase message = new MessageDropBase(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendSetBaseTargetingToServer() {
-        MessageSetBaseTargetingType message = new MessageSetBaseTargetingType(base.xCoord, base.yCoord, base.zCoord);
+        MessageSetBaseTargetingType message = new MessageSetBaseTargetingType(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
+    /*
     @Optional.Method(modid = "NotEnoughItems")
     @Override
     public VisiblityData modifyVisiblity(GuiContainer guiContainer, VisiblityData visiblityData) {
@@ -182,5 +175,5 @@ class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
             }
         }
         return intersects;
-    }
+    }   */
 }

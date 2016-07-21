@@ -11,9 +11,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.addons.*;
@@ -33,15 +33,15 @@ import java.util.UUID;
 public class TurretHeadUtil {
     private static final HashSet<EntityPlayerMP> warnedPlayers = new HashSet<EntityPlayerMP>();
 
-    public static void warnPlayers(TurretBase base, World worldObj, int downLowAmount, int xCoord, int yCoord, int zCoord, int turretRange) {
+    public static void warnPlayers(TurretBase base, World worldObj, int downLowAmount, BlockPos pos, int turretRange) {
         if (base.isAttacksPlayers()) {
             int warnDistance = ConfigHandler.getTurretWarningDistance();
-            AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(xCoord - turretRange - warnDistance,
-                                                              yCoord - downLowAmount - warnDistance,
-                                                              zCoord - turretRange - warnDistance,
-                                                              xCoord + turretRange + warnDistance,
-                                                              yCoord + turretRange + warnDistance,
-                                                              zCoord + turretRange + warnDistance);
+            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - warnDistance,
+                    pos.getY() - downLowAmount - warnDistance,
+                    pos.getZ() - turretRange - warnDistance,
+                    pos.getX() + turretRange + warnDistance,
+                    pos.getY() + turretRange + warnDistance,
+                    pos.getZ() + turretRange + warnDistance);
 
             if (worldObj.getWorldTime() % 2000 == 0) {
                 warnedPlayers.clear();
@@ -51,7 +51,7 @@ public class TurretHeadUtil {
 
             for (EntityPlayerMP target : targets) {
                 if (!target.getUniqueID().toString().equals(base.getOwner()) && !isTrustedPlayer(target.getUniqueID(),
-                                                                                                 base) && !warnedPlayers.contains(
+                        base) && !warnedPlayers.contains(
                         target) && !target.capabilities.isCreativeMode) {
                     dispatchWarnMessage(target, worldObj);
                     warnedPlayers.add(target);
@@ -70,13 +70,13 @@ public class TurretHeadUtil {
         }
     }
 
-    public static Entity getTarget(TurretBase base, World worldObj, int downLowAmount, int xCoord, int yCoord, int zCoord, int turretRange, TurretHead turret) {
+    public static Entity getTarget(TurretBase base, World worldObj, int downLowAmount, BlockPos pos, int turretRange, TurretHead turret) {
         Entity target = null;
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
-            AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(xCoord - turretRange, yCoord - downLowAmount,
-                                                              zCoord - turretRange, xCoord + turretRange,
-                                                              yCoord + turretRange, zCoord + turretRange);
+            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange, pos.getY() - downLowAmount,
+                    pos.getZ() - turretRange, pos.getX() + turretRange,
+                    pos.getY() + turretRange, pos.getZ() + turretRange);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
@@ -94,7 +94,7 @@ public class TurretHeadUtil {
                 }
 
                 if (base.isAttacksMobs() && ConfigHandler.globalCanTargetMobs) {
-                    if (target1.isCreatureType(EnumCreatureType.monster, false) && !target1.isDead) {
+                    if (target1.isCreatureType(EnumCreatureType.MONSTER, false) && !target1.isDead) {
                         target = target1;
                     }
                 }
@@ -125,42 +125,42 @@ public class TurretHeadUtil {
         return null;
     }
 
-    public static Entity getTargetWithMinimumRange(TurretBase base, World worldObj, int downLowAmount, int xCoord, int yCoord, int zCoord, int turretRange, TurretHead turret) {
+    public static Entity getTargetWithMinimumRange(TurretBase base, World worldObj, int downLowAmount, BlockPos pos, int turretRange, TurretHead turret) {
         Entity target = null;
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
-            AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(xCoord - turretRange, yCoord - downLowAmount,
-                                                              zCoord - turretRange, xCoord + turretRange,
-                                                              yCoord + turretRange, zCoord + turretRange);
+            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange, pos.getY() - downLowAmount,
+                    pos.getZ() - turretRange, pos.getX() + turretRange,
+                    pos.getY() + turretRange, pos.getZ() + turretRange);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase target1 : targets) {
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
-                    if (target1 instanceof EntityAnimal && !target1.isDead && target1.getDistance(xCoord, yCoord,
-                                                                                                  zCoord) >= 3) {
+                    if (target1 instanceof EntityAnimal && !target1.isDead && target1.getDistance(pos.getX(), pos.getY(),
+                            pos.getZ()) >= 3) {
                         target = target1;
                     }
                 }
 
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
-                    if (target1 instanceof EntityAmbientCreature && !target1.isDead && target1.getDistance(xCoord,
-                                                                                                           yCoord,
-                                                                                                           zCoord) >= 3) {
+                    if (target1 instanceof EntityAmbientCreature && !target1.isDead && target1.getDistance(pos.getX(),
+                            pos.getY(),
+                            pos.getZ()) >= 3) {
                         target = target1;
                     }
                 }
 
                 if (base.isAttacksMobs() && ConfigHandler.globalCanTargetMobs) {
-                    if (target1 instanceof IMob && !target1.isDead && target1.getDistance(xCoord, yCoord,
-                                                                                          zCoord) >= 3) {
+                    if (target1 instanceof IMob && !target1.isDead && target1.getDistance(pos.getX(), pos.getY(),
+                            pos.getZ()) >= 3) {
                         target = target1;
                     }
                 }
 
                 if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetPlayers) {
-                    if (target1 instanceof EntityPlayerMP && !target1.isDead && target1.getDistance(xCoord, yCoord,
-                                                                                                    zCoord) >= 3) {
+                    if (target1 instanceof EntityPlayerMP && !target1.isDead && target1.getDistance(pos.getX(), pos.getY(),
+                            pos.getZ()) >= 3) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
                         if (!entity.getUniqueID().toString().equals(base.getOwner()) && !isTrustedPlayer(
@@ -186,13 +186,13 @@ public class TurretHeadUtil {
         return null;
     }
 
-    public static Entity getTargetWithoutSlowEffect(TurretBase base, World worldObj, int downLowAmount, int xCoord, int yCoord, int zCoord, int turretRange, TurretHead turret) {
+    public static Entity getTargetWithoutSlowEffect(TurretBase base, World worldObj, int downLowAmount, BlockPos pos, int turretRange, TurretHead turret) {
         Entity target = null;
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
-            AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(xCoord - turretRange, yCoord - downLowAmount,
-                                                              zCoord - turretRange, xCoord + turretRange,
-                                                              yCoord + turretRange, zCoord + turretRange);
+            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange, pos.getY() - downLowAmount,
+                    pos.getZ() - turretRange, pos.getX() + turretRange,
+                    pos.getY() + turretRange, pos.getZ() + turretRange);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
@@ -246,54 +246,13 @@ public class TurretHeadUtil {
     }
 
     private static boolean isTargetAlreadyTargeted(TurretBase base, Entity entity) {
-        if (base.getWorldObj().getTileEntity(base.xCoord + 1, base.yCoord, base.zCoord) instanceof TurretHead) {
-            TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord + 1, base.yCoord,
-                                                                              base.zCoord);
-            if (turret.target != null && entity.equals(turret.target)) {
-                return true;
+        for (TileEntity tileEntity: WorldUtil.getTouchingTileEntities(base.getWorld(),base.getPos())) {
+            if (tileEntity instanceof TurretHead) {
+                if (((TurretHead)tileEntity).target != null && entity.equals(((TurretHead)tileEntity).target)) {
+                    return true;
+                }
             }
         }
-
-        if (base.getWorldObj().getTileEntity(base.xCoord - 1, base.yCoord, base.zCoord) instanceof TurretHead) {
-            TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord - 1, base.yCoord,
-                                                                              base.zCoord);
-            if (turret.target != null && entity.equals(turret.target)) {
-                return true;
-            }
-        }
-
-        if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord + 1, base.zCoord) instanceof TurretHead) {
-            TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord + 1,
-                                                                              base.zCoord);
-            if (turret.target != null && entity.equals(turret.target)) {
-                return true;
-            }
-        }
-
-        if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord - 1, base.zCoord) instanceof TurretHead) {
-            TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord - 1,
-                                                                              base.zCoord);
-            if (turret.target != null && entity.equals(turret.target)) {
-                return true;
-            }
-        }
-
-        if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord, base.zCoord + 1) instanceof TurretHead) {
-            TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord,
-                                                                              base.zCoord + 1);
-            if (turret.target != null && entity.equals(turret.target)) {
-                return true;
-            }
-        }
-
-        if (base.getWorldObj().getTileEntity(base.xCoord, base.yCoord, base.zCoord - 1) instanceof TurretHead) {
-            TurretHead turret = (TurretHead) base.getWorldObj().getTileEntity(base.xCoord, base.yCoord,
-                                                                              base.zCoord - 1);
-            if (turret.target != null && entity.equals(turret.target)) {
-                return true;
-            }
-        }
-
         return false;
     }
 
@@ -307,33 +266,14 @@ public class TurretHeadUtil {
         return false;
     }
 
-    public static int getPowerExpanderTotalExtraCapacity(World world, int x, int y, int z) {
+    public static int getPowerExpanderTotalExtraCapacity(World world, BlockPos pos) {
         int totalExtraCap = 0;
-        if (world.getTileEntity(x + 1, y, z) instanceof AbstractPowerExpander) {
-            totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue(
-                    (AbstractPowerExpander) world.getTileEntity(x + 1, y, z));
+        for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, pos)) {
+            if (tileEntity instanceof AbstractPowerExpander) {
+                totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue(
+                        (AbstractPowerExpander) tileEntity);
+            }
         }
-        if (world.getTileEntity(x - 1, y, z) instanceof AbstractPowerExpander) {
-            totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue(
-                    (AbstractPowerExpander) world.getTileEntity(x - 1, y, z));
-        }
-        if (world.getTileEntity(x, y + 1, z) instanceof AbstractPowerExpander) {
-            totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue(
-                    (AbstractPowerExpander) world.getTileEntity(x, y + 1, z));
-        }
-        if (world.getTileEntity(x, y - 1, z) instanceof AbstractPowerExpander) {
-            totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue(
-                    (AbstractPowerExpander) world.getTileEntity(x, y - 1, z));
-        }
-        if (world.getTileEntity(x, y, z + 1) instanceof AbstractPowerExpander) {
-            totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue(
-                    (AbstractPowerExpander) world.getTileEntity(x, y, z + 1));
-        }
-        if (world.getTileEntity(x, y, z - 1) instanceof AbstractPowerExpander) {
-            totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue(
-                    (AbstractPowerExpander) world.getTileEntity(x, y, z - 1));
-        }
-
         return totalExtraCap;
     }
 
@@ -366,128 +306,28 @@ public class TurretHeadUtil {
     }
 
     public static ItemStack getSpecificItemFromInvExpanders(World world, ItemStack itemStack, TurretBase base) {
-        int x = base.xCoord;
-        int y = base.yCoord;
-        int z = base.zCoord;
-
-        if (world.getTileEntity(x + 1, y, z) instanceof AbstractInvExpander) {
-            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x + 1, y, z);
-            ItemStack stack = deductFromInvExpander(itemStack, exp, base);
-            if (stack != null) {
-                return stack;
-            }
-        }
-
-        if (world.getTileEntity(x - 1, y, z) instanceof AbstractInvExpander) {
-            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x - 1, y, z);
-            ItemStack stack = deductFromInvExpander(itemStack, exp, base);
-            if (stack != null) {
-                return stack;
-            }
-        }
-
-        if (world.getTileEntity(x, y + 1, z) instanceof AbstractInvExpander) {
-            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y + 1, z);
-            ItemStack stack = deductFromInvExpander(itemStack, exp, base);
-            if (stack != null) {
-                return stack;
-            }
-        }
-
-        if (world.getTileEntity(x, y - 1, z) instanceof AbstractInvExpander) {
-            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y - 1, z);
-            ItemStack stack = deductFromInvExpander(itemStack, exp, base);
-            if (stack != null) {
-                return stack;
-            }
-        }
-
-        if (world.getTileEntity(x, y, z + 1) instanceof AbstractInvExpander) {
-            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y, z + 1);
-            ItemStack stack = deductFromInvExpander(itemStack, exp, base);
-            if (stack != null) {
-                return stack;
-            }
-        }
-
-        if (world.getTileEntity(x, y, z - 1) instanceof AbstractInvExpander) {
-            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y, z - 1);
-            ItemStack stack = deductFromInvExpander(itemStack, exp, base);
-            if (stack != null) {
-                return stack;
+        for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, base.getPos())) {
+            if (tileEntity instanceof AbstractInvExpander) {
+                AbstractInvExpander exp = (AbstractInvExpander) tileEntity;
+                ItemStack stack = deductFromInvExpander(itemStack, exp, base);
+                if (stack != null) {
+                    return stack;
+                }
             }
         }
         return null;
     }
 
     public static ItemStack getAnyItemFromInvExpanders(World world, TurretBase base) {
-
-        int x = base.xCoord;
-        int y = base.yCoord;
-        int z = base.zCoord;
-
-        if (world.getTileEntity(x + 1, y, z) instanceof AbstractInvExpander) {
-            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x + 1, y, z);
-            for (int i = 0; i < exp.getSizeInventory(); i++) {
-                ItemStack itemCheck = exp.getStackInSlot(i);
-                if (itemCheck != null) {
-                    exp.decrStackSize(i, 1);
-                    return new ItemStack(itemCheck.getItem());
-                }
-            }
-        }
-
-        if (world.getTileEntity(x - 1, y, z) instanceof AbstractInvExpander) {
-            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x - 1, y, z);
-            for (int i = 0; i < exp.getSizeInventory(); i++) {
-                ItemStack itemCheck = exp.getStackInSlot(i);
-                if (itemCheck != null) {
-                    exp.decrStackSize(i, 1);
-                    return new ItemStack(itemCheck.getItem());
-                }
-            }
-        }
-
-        if (world.getTileEntity(x, y + 1, z) instanceof AbstractInvExpander) {
-            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y + 1, z);
-            for (int i = 0; i < exp.getSizeInventory(); i++) {
-                ItemStack itemCheck = exp.getStackInSlot(i);
-                if (itemCheck != null) {
-                    exp.decrStackSize(i, 1);
-                    return new ItemStack(itemCheck.getItem());
-                }
-            }
-        }
-
-        if (world.getTileEntity(x, y - 1, z) instanceof AbstractInvExpander) {
-            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y - 1, z);
-            for (int i = 0; i < exp.getSizeInventory(); i++) {
-                ItemStack itemCheck = exp.getStackInSlot(i);
-                if (itemCheck != null) {
-                    exp.decrStackSize(i, 1);
-                    return new ItemStack(itemCheck.getItem());
-                }
-            }
-        }
-
-        if (world.getTileEntity(x, y, z + 1) instanceof AbstractInvExpander) {
-            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y, z + 1);
-            for (int i = 0; i < exp.getSizeInventory(); i++) {
-                ItemStack itemCheck = exp.getStackInSlot(i);
-                if (itemCheck != null) {
-                    exp.decrStackSize(i, 1);
-                    return new ItemStack(itemCheck.getItem());
-                }
-            }
-        }
-
-        if (world.getTileEntity(x, y, z - 1) instanceof AbstractInvExpander) {
-            AbstractInvExpander exp = (AbstractInvExpander) world.getTileEntity(x, y, z - 1);
-            for (int i = 0; i < exp.getSizeInventory(); i++) {
-                ItemStack itemCheck = exp.getStackInSlot(i);
-                if (itemCheck != null) {
-                    exp.decrStackSize(i, 1);
-                    return new ItemStack(itemCheck.getItem());
+        for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, base.getPos())) {
+            if (tileEntity instanceof AbstractInvExpander) {
+                AbstractInvExpander exp = (AbstractInvExpander) tileEntity;
+                for (int i = 0; i < exp.getSizeInventory(); i++) {
+                    ItemStack itemCheck = exp.getStackInSlot(i);
+                    if (itemCheck != null) {
+                        exp.decrStackSize(i, 1);
+                        return new ItemStack(itemCheck.getItem());
+                    }
                 }
             }
         }
@@ -516,36 +356,34 @@ public class TurretHeadUtil {
         return 0;
     }
 
-    public static TurretBase getTurretBase(World world, int x, int y, int z) {
+    public static TurretBase getTurretBase(World world, BlockPos pos) {
         if (world == null) {
             return null;
         }
 
-        for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
-            int offsetX = x + direction.offsetX;
-            int offsetY = y + direction.offsetY;
-            int offsetZ = z + direction.offsetZ;
+        for (EnumFacing facing : EnumFacing.values()) {
+            BlockPos offsetPos = new BlockPos(pos.getX() + facing.getFrontOffsetX(), pos.getY() + facing.getFrontOffsetY(), pos.getZ() + facing.getFrontOffsetZ());
 
-            if (world.getTileEntity(offsetX, offsetY, offsetZ) instanceof TurretBase) {
-                return (TurretBase) world.getTileEntity(offsetX, offsetY, offsetZ);
+            if (world.getTileEntity(offsetPos) instanceof TurretBase) {
+                return (TurretBase) world.getTileEntity(offsetPos);
             }
         }
 
         return null;
     }
 
-    public static float getAimYaw(Entity target, int xCoord, int zCoord) {
-        double dX = (target.posX) - (xCoord);
-        double dZ = (target.posZ) - (zCoord);
+    public static float getAimYaw(Entity target, BlockPos pos) {
+        double dX = (target.posX) - (pos.getX());
+        double dZ = (target.posZ) - (pos.getZ());
         float yaw = (float) Math.atan2(dZ, dX);
         yaw = yaw - 1.570796F + 3.1F;
         return yaw;
     }
 
-    public static float getAimPitch(Entity target, int xCoord, int yCoord, int zCoord) {
-        double dX = (target.posX - 0.2F) - (xCoord + 0.6F);
-        double dY = (target.posY + 0.6F) - (yCoord - 0.6F);
-        double dZ = (target.posZ - 0.2F) - (zCoord + 0.6F);
+    public static float getAimPitch(Entity target, BlockPos pos) {
+        double dX = (target.posX - 0.2F) - (pos.getX() + 0.6F);
+        double dY = (target.posY + 0.6F) - (pos.getY() - 0.6F);
+        double dZ = (target.posZ - 0.2F) - (pos.getZ() + 0.6F);
         float pitch = (float) (Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY) + Math.PI);
         pitch = pitch + 1.65F;
         return pitch;
@@ -880,39 +718,32 @@ public class TurretHeadUtil {
             return;
         }
 
-        if (base.getWorldObj().isDaytime() && !base.getWorldObj().isRaining() && base.getWorldObj().canBlockSeeTheSky(
-                base.xCoord, base.yCoord + 2, base.zCoord)) {
-            base.receiveEnergy(ForgeDirection.UNKNOWN, ConfigHandler.getSolarPanelAddonGen(), false);
+        if (base.getWorld().isDaytime() && !base.getWorld().isRaining() && base.getWorld().canBlockSeeSky(base.getPos().up(2))) {
+            base.receiveEnergy(EnumFacing.DOWN, ConfigHandler.getSolarPanelAddonGen(), false);
         }
     }
 
     public static boolean canTurretSeeTarget(TurretHead turret, EntityLivingBase target) {
-        Vec3 traceStart = Vec3.createVectorHelper(turret.xCoord + 0.5F, turret.yCoord + 0.5F, turret.zCoord + 0.5F);
-        Vec3 traceEnd = Vec3.createVectorHelper(target.posX, target.posY + target.getEyeHeight(), target.posZ);
-        Vec3 vecDelta = Vec3.createVectorHelper(traceEnd.xCoord - traceStart.xCoord,
-                                                traceEnd.yCoord - traceStart.yCoord,
-                                                traceEnd.zCoord - traceStart.zCoord);
+        Vec3 traceStart = new Vec3(turret.getPos().getX() + 0.5F, turret.getPos().getY() + 0.5F, turret.getPos().getZ() + 0.5F);
+        Vec3 traceEnd = new Vec3(target.posX, target.posY + target.getEyeHeight(), target.posZ);
+        Vec3 vecDelta = new Vec3(traceEnd.xCoord - traceStart.xCoord,
+                traceEnd.yCoord - traceStart.yCoord,
+                traceEnd.zCoord - traceStart.zCoord);
 
         // Normalize vector to the largest delta axis
-        double vecDeltaLength = MathHelper.abs_max(vecDelta.xCoord,
-                                                   MathHelper.abs_max(vecDelta.yCoord, vecDelta.zCoord));
-        vecDelta.xCoord /= vecDeltaLength;
-        vecDelta.yCoord /= vecDeltaLength;
-        vecDelta.zCoord /= vecDeltaLength;
+        vecDelta.normalize();
 
         // Limit how many non solid block a turret can see through
         for (int i = 0; i < 10; i++) {
             // Offset start position toward the target to prevent self collision
-            traceStart.xCoord += vecDelta.xCoord;
-            traceStart.yCoord += vecDelta.yCoord;
-            traceStart.zCoord += vecDelta.zCoord;
+            traceStart.addVector(vecDelta.xCoord, vecDelta.yCoord,vecDelta.zCoord);
 
-            MovingObjectPosition traced = turret.getWorldObj().rayTraceBlocks(
-                    Vec3.createVectorHelper(traceStart.xCoord, traceStart.yCoord, traceStart.zCoord),
-                    Vec3.createVectorHelper(traceEnd.xCoord, traceEnd.yCoord, traceEnd.zCoord));
+            MovingObjectPosition traced = turret.getWorld().rayTraceBlocks(
+                    new Vec3(traceStart.xCoord, traceStart.yCoord, traceStart.zCoord),
+                    new Vec3(traceEnd.xCoord, traceEnd.yCoord, traceEnd.zCoord));
 
             if (traced != null && traced.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-                Block hitBlock = turret.getWorldObj().getBlock(traced.blockX, traced.blockY, traced.blockZ);
+                Block hitBlock = turret.getWorld().getBlockState(traced.getBlockPos()).getBlock();
 
                 // If non solid block is in the way then proceed to continue
                 // tracing

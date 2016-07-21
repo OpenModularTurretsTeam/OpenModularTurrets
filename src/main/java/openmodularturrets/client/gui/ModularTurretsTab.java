@@ -3,7 +3,7 @@ package openmodularturrets.client.gui;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import openmodularturrets.blocks.Blocks;
+import openmodularturrets.blocks.ModBlocks;
 
 public class ModularTurretsTab extends CreativeTabs {
     public ModularTurretsTab(String label) {
@@ -12,7 +12,7 @@ public class ModularTurretsTab extends CreativeTabs {
 
     @Override
     public ItemStack getIconItemStack() {
-        return new ItemStack(Blocks.machineGunTurret);
+        return new ItemStack(ModBlocks.machineGunTurret);
     }
 
     @Override

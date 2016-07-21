@@ -8,7 +8,7 @@ import openmodularturrets.client.render.models.ModelDamageAmp;
 import openmodularturrets.client.render.models.ModelRedstoneReactor;
 import openmodularturrets.client.render.models.ModelSolarPanelAddon;
 import openmodularturrets.client.render.models.ModelTeleporterTurret;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 import openmodularturrets.tileentity.turrets.TurretHead;
 import org.lwjgl.opengl.GL11;
 
@@ -23,7 +23,7 @@ public class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage)  {
         TurretHead turretHead = (TurretHead) te;
 
         if (turretHead.shouldConceal) {
@@ -31,12 +31,12 @@ public class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
         }
 
         int rotation = 0;
-        if (te.getWorldObj() != null) {
+        if (te.getWorld() != null) {
             rotation = te.getBlockMetadata();
         }
 
         this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
-        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/teleporterTurret.png"));
+        ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/teleporterTurret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         GL11.glPushMatrix();

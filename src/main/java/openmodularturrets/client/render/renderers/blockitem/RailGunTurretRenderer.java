@@ -1,16 +1,16 @@
 package openmodularturrets.client.render.renderers.blockitem;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openmodularturrets.client.render.models.ModelDamageAmp;
 import openmodularturrets.client.render.models.ModelRailgun;
 import openmodularturrets.client.render.models.ModelRedstoneReactor;
 import openmodularturrets.client.render.models.ModelSolarPanelAddon;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 import openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
 import openmodularturrets.util.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
@@ -32,11 +32,11 @@ public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage)  {
         turretHead = (RailGunTurretTileEntity) te;
 
         int rotation = 0;
-        if (te.getWorldObj() != null) {
+        if (te.getWorld() != null) {
             rotation = te.getBlockMetadata();
         }
 
@@ -45,7 +45,7 @@ public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
         }
 
         this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
-        textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/railGunTurret.png"));
+        textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/railGunTurret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         GL11.glPushMatrix();
@@ -59,7 +59,7 @@ public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
 
         if (turretHead.base != null) {
             if (TurretHeadUtil.hasSolarPanelAddon(turretHead.base)) {
-                ResourceLocation texturesSolar = (new ResourceLocation(ModInfo.ID + ":textures/blocks/solarPanelAddon" +
+                ResourceLocation texturesSolar = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/solarPanelAddon" +
                                                                                ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
                 solar.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
@@ -67,7 +67,7 @@ public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
             }
 
             if (TurretHeadUtil.hasDamageAmpAddon(turretHead.base)) {
-                ResourceLocation texturesAmp = (new ResourceLocation(ModInfo.ID + ":textures/blocks/damageAmpAddon" +
+                ResourceLocation texturesAmp = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/damageAmpAddon" +
                                                                              ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
                 amp.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
@@ -75,7 +75,7 @@ public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
             }
 
             if (TurretHeadUtil.hasRedstoneReactor(turretHead.base)) {
-                ResourceLocation texturesReac = (new ResourceLocation(ModInfo.ID + ":textures/blocks/redstoneReactor" +
+                ResourceLocation texturesReac = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/redstoneReactor" +
                                                                               ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesReac);
                 reac.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);

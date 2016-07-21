@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
@@ -38,8 +39,7 @@ public class BlazingClayProjectile extends TurretProjectile {
             return;
         }
         if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                               movingobjectposition.blockZ);
+            Block hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos()).getBlock();
             if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;
@@ -47,16 +47,15 @@ public class BlazingClayProjectile extends TurretProjectile {
         }
 
         if (movingobjectposition.typeOfHit.equals(0)) {
-            if (worldObj.isAirBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                    movingobjectposition.blockZ)) {
+            if (worldObj.isAirBlock(movingobjectposition.getBlockPos())) {
                 return;
             }
         }
 
         if (!worldObj.isRemote) {
-            AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 5, this.posY - 5, this.posZ - 5,
+            AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
                                                               this.posX + 5, this.posY + 5, this.posZ + 5);
-            List<Entity> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
+            List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             int damage = ConfigHandler.getIncendiary_turret().getDamage();
 
@@ -86,7 +85,7 @@ public class BlazingClayProjectile extends TurretProjectile {
     }
 
     @Override
-    protected void updateFallState(double par1, boolean par3) {
+    protected void updateFallState(double y, boolean onGroundIn, Block blockIn, BlockPos pos) {
         this.posY = posY + 12F;
     }
 

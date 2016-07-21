@@ -1,13 +1,14 @@
 package openmodularturrets.items;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.items.addons.*;
 import openmodularturrets.items.ammo.*;
 import openmodularturrets.items.upgrades.*;
 
-public class Items {
+public class ModItems {
     public static Item bulletThrowable;
     public static Item grenadeThrowable;
     public static Item bulletCraftable;

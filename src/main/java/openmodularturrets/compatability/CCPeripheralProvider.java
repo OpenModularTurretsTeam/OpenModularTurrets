@@ -1,9 +1,12 @@
 package openmodularturrets.compatability;
 
-import cpw.mods.fml.common.Optional;
+
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 /**
@@ -27,9 +30,9 @@ public class CCPeripheralProvider implements IPeripheralProvider {
 
     @Optional.Method(modid = "ComputerCraft")
     @Override
-    public IPeripheral getPeripheral(World world, int x, int y, int z, int side) {
-        if (world.getTileEntity(x, y, z) instanceof TurretBase) {
-            return (IPeripheral) world.getTileEntity(x, y, z);
+    public IPeripheral getPeripheral(World world, BlockPos pos, EnumFacing side) {
+        if (world.getTileEntity(pos) instanceof TurretBase) {
+            return (IPeripheral) world.getTileEntity(pos);
         }
         return null;
     }

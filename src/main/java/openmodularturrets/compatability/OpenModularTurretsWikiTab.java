@@ -4,7 +4,7 @@ import igwmod.gui.GuiWiki;
 import igwmod.gui.tabs.BaseWikiTab;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import openmodularturrets.blocks.Blocks;
+import openmodularturrets.blocks.ModBlocks;
 import openmodularturrets.handler.ConfigHandler;
 
 /**
@@ -63,7 +63,7 @@ class OpenModularTurretsWikiTab extends BaseWikiTab {
 
     @Override
     public ItemStack renderTabIcon(GuiWiki gui) {
-        return new ItemStack(Blocks.machineGunTurret);
+        return new ItemStack(ModBlocks.machineGunTurret);
     }
 
     @Override

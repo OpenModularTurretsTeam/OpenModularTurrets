@@ -3,10 +3,10 @@ package openmodularturrets.client.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.client.gui.containers.TurretBaseTierFiveContainer;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierFiveTileEntity;
 import org.lwjgl.opengl.GL11;
@@ -22,7 +22,7 @@ public class TurretBaseTierFiveGui extends TurretBaseAbstractGui {
     @SuppressWarnings("unchecked")
     @Override
     protected void drawGuiContainerForegroundLayer(int param1, int param2) {
-        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 
         fontRenderer.drawString("Addons:", 71, 6, 0);
         fontRenderer.drawString("Ammo", 8, 6, 0);
@@ -35,8 +35,8 @@ public class TurretBaseTierFiveGui extends TurretBaseAbstractGui {
         if (mouseX > k + 153 && mouseX < k + 153 + 14) {
             if (mouseY > l + 17 && mouseY < l + 17 + 51) {
                 ArrayList list = new ArrayList();
-                list.add(base.getEnergyStored(ForgeDirection.UNKNOWN) + "/" + base.getMaxEnergyStored(
-                        ForgeDirection.UNKNOWN) + " RF");
+                list.add(base.getEnergyStored(EnumFacing.DOWN) + "/" + base.getMaxEnergyStored(
+                        EnumFacing.DOWN) + " RF");
                 this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
             }
         }
@@ -63,7 +63,7 @@ public class TurretBaseTierFiveGui extends TurretBaseAbstractGui {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-        ResourceLocation texture = (new ResourceLocation(ModInfo.ID + ":textures/gui/baseInvTier4.png"));
+        ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/gui/baseInvTier4.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
 
@@ -72,8 +72,8 @@ public class TurretBaseTierFiveGui extends TurretBaseAbstractGui {
 
         this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 
-        int expression = (base.getEnergyStored(ForgeDirection.UNKNOWN) * 51) / base.getMaxEnergyStored(
-                ForgeDirection.UNKNOWN);
+        int expression = (base.getEnergyStored(EnumFacing.DOWN) * 51) / base.getMaxEnergyStored(
+                EnumFacing.DOWN);
 
         drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
 

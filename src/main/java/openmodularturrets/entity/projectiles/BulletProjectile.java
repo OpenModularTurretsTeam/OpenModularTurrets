@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
@@ -36,8 +37,7 @@ public class BulletProjectile extends TurretProjectile {
             return;
         }
         if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                               movingobjectposition.blockZ);
+            Block hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos()).getBlock();
             if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;
@@ -46,8 +46,7 @@ public class BulletProjectile extends TurretProjectile {
 
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
             if (movingobjectposition.typeOfHit.equals(0)) {
-                if (worldObj.isAirBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                        movingobjectposition.blockZ)) {
+                if (worldObj.isAirBlock(movingobjectposition.getBlockPos())) {
                     return;
                 }
             }
@@ -81,7 +80,7 @@ public class BulletProjectile extends TurretProjectile {
     }
 
     @Override
-    protected void updateFallState(double par1, boolean par3) {
+    protected void updateFallState(double y, boolean onGroundIn, Block blockIn, BlockPos pos) {
         this.posY = posY + 12F;
     }
 

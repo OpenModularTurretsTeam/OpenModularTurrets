@@ -4,7 +4,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import openmodularturrets.client.gui.containers.ExpanderInvContainer;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 import openmodularturrets.tileentity.expander.AbstractInvExpander;
 import org.lwjgl.opengl.GL11;
 
@@ -15,7 +15,7 @@ public class ExpanderInvGui extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-        ResourceLocation texture = (new ResourceLocation(ModInfo.ID + ":textures/gui/extenderInv.png"));
+        ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/gui/extenderInv.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
 

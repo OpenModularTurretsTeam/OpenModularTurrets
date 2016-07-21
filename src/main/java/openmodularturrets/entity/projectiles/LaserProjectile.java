@@ -43,8 +43,7 @@ public class LaserProjectile extends TurretProjectile {
             return;
         }
         if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                               movingobjectposition.blockZ);
+            Block hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos()).getBlock();
             if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;

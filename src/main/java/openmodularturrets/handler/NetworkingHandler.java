@@ -1,19 +1,18 @@
 package openmodularturrets.handler;
 
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 import openmodularturrets.network.messages.*;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 
 public class NetworkingHandler {
-    public final static SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.ID);
+    public final static SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
 
     public static void initNetworking() {
 
 
-        INSTANCE.registerMessage(MessageAddTrustedPlayer.MessageHandlerAddTrustedPlayer.class,
-                                 MessageAddTrustedPlayer.class, 0, Side.SERVER);
+        INSTANCE.registerMessage(MessageAddTrustedPlayer.MessageHandlerAddTrustedPlayer.class, MessageAddTrustedPlayer.class, 0, Side.SERVER);
 
         INSTANCE.registerMessage(MessageRemoveTrustedPlayer.MessageHandlerRemoveTrustedPlayer.class,
                                  MessageRemoveTrustedPlayer.class, 1, Side.SERVER);

@@ -4,9 +4,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 
-public class LeverTileEntity extends TileEntity {
+public class LeverTileEntity extends TileEntity implements ITickable {
     public float rotation = 0;
     public boolean isTurning = false;
     private TurretBaseTierOneTileEntity base;
@@ -15,26 +16,26 @@ public class LeverTileEntity extends TileEntity {
         NBTTagCompound var1 = new NBTTagCompound();
         super.writeToNBT(var1);
 
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
+        return new S35PacketUpdateTileEntity(this.pos, 2, var1);
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if (base == null) {
-            if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TurretBaseTierOneTileEntity) {
-                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(xCoord + 1, yCoord, zCoord);
+            if (worldObj.getTileEntity(this.pos.east()) instanceof TurretBaseTierOneTileEntity) {
+                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(this.pos.east());
             }
 
-            if (worldObj.getTileEntity(xCoord - 1, yCoord, zCoord) instanceof TurretBaseTierOneTileEntity) {
-                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(xCoord - 1, yCoord, zCoord);
+            if (worldObj.getTileEntity(this.pos.west()) instanceof TurretBaseTierOneTileEntity) {
+                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(this.pos.west());
             }
 
-            if (worldObj.getTileEntity(xCoord, yCoord, zCoord + 1) instanceof TurretBaseTierOneTileEntity) {
-                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(xCoord, yCoord, zCoord + 1);
+            if (worldObj.getTileEntity(this.pos.south()) instanceof TurretBaseTierOneTileEntity) {
+                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(this.pos.south());
             }
 
-            if (worldObj.getTileEntity(xCoord, yCoord, zCoord - 1) instanceof TurretBaseTierOneTileEntity) {
-                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(xCoord, yCoord, zCoord - 1);
+            if (worldObj.getTileEntity(this.pos.north()) instanceof TurretBaseTierOneTileEntity) {
+                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(this.pos.north());
             }
         }
 

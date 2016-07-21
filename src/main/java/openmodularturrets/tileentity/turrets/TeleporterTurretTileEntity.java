@@ -5,12 +5,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.blocks.turretheads.BlockTeleporterTurret;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 import openmodularturrets.util.TurretHeadUtil;
 
 public class TeleporterTurretTileEntity extends TurretHead {
@@ -20,7 +20,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         setSide();
         this.base = getBase();
 
@@ -33,14 +33,14 @@ public class TeleporterTurretTileEntity extends TurretHead {
         }
 
         if (ticks % 5 == 0) {
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            worldObj.markBlockForUpdate(this.pos);
         }
 
         ticks++;
 
         // BASE IS OKAY
         if (base == null || base.getBaseTier() < this.turretTier) {
-            this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);
+            this.getWorld().destroyBlock(this.pos, true);
         } else {
             concealmentChecks();
             TurretHeadUtil.updateSolarPanelAddon(base);
@@ -56,12 +56,12 @@ public class TeleporterTurretTileEntity extends TurretHead {
                     base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
 
             // power check
-            if ((base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required) || (!base.isActive())) {
+            if ((base.getEnergyStored(EnumFacing.DOWN) < power_required) || (!base.isActive())) {
                 return;
             }
 
             // is there a target, and has it died in the previous tick?
-            if (target == null || target.isDead || this.getWorldObj().getEntityByID(
+            if (target == null || target.isDead || this.getWorld().getEntityByID(
                     target.getEntityId()) == null || ((EntityLivingBase) target).getHealth() <= 0.0F) {
                 target = getTargetWithMinRange();
             }
@@ -71,8 +71,8 @@ public class TeleporterTurretTileEntity extends TurretHead {
                 return;
             }
 
-            this.rotationXZ = TurretHeadUtil.getAimYaw(target, xCoord, zCoord) + 3.2F;
-            this.rotationXY = TurretHeadUtil.getAimPitch(target, xCoord, yCoord, zCoord);
+            this.rotationXZ = TurretHeadUtil.getAimYaw(target, this.pos) + 3.2F;
+            this.rotationXY = TurretHeadUtil.getAimPitch(target, this.pos);
 
             // has cooldown passed?
             if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
@@ -102,17 +102,17 @@ public class TeleporterTurretTileEntity extends TurretHead {
             }
 
             // Consume energy
-            base.setEnergyStored(base.getEnergyStored(ForgeDirection.UNKNOWN) - power_required);
+            base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - power_required);
 
             EntityLivingBase base = (EntityLivingBase) target;
-            base.setPositionAndUpdate(this.xCoord + 0.5F, this.yCoord + 1.0F, zCoord + 0.5F);
+            base.setPositionAndUpdate(this.getPos().getX() + 0.5F, this.getPos().getY() + 1.0F, this.getPos().getZ() + 0.5F);
 
-            ((BlockTeleporterTurret) worldObj.getBlock(xCoord, yCoord, zCoord)).shouldAnimate = true;
+            ((BlockTeleporterTurret) worldObj.getBlockState(this.pos)).shouldAnimate = true;
             target = null;
         }
 
-        this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord,
-                                           ModInfo.ID + ":" + this.getLaunchSoundEffect(), 0.6F, 1.0F);
+        this.getWorld().playSoundEffect(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(),
+                                           Reference.MOD_ID + ":" + this.getLaunchSoundEffect(), 0.6F, 1.0F);
 
         ticks = 0;
     }

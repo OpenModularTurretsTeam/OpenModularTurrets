@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import openmodularturrets.client.render.models.ModelLever;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 import openmodularturrets.tileentity.LeverTileEntity;
 import org.lwjgl.opengl.GL11;
 
@@ -17,14 +17,14 @@ public class LeverRenderer extends TileEntitySpecialRenderer {
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage)  {
         LeverTileEntity lever = (LeverTileEntity) te;
         int rotation = 0;
-        if (te.getWorldObj() != null) {
+        if (te.getWorld() != null) {
             rotation = te.getBlockMetadata();
         }
 
-        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/leverBlock.png"));
+        ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/leverBlock.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         GL11.glPushMatrix();
