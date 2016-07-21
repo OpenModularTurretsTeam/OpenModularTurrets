@@ -32,7 +32,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
             itemBound.motionX = this.motionX;
             itemBound.motionY = this.motionY + 0.1F;
             itemBound.motionZ = this.motionZ;
-            itemBound.delayBeforeCanPickup = 100;
+            itemBound.setPickupDelay(100);
             this.worldObj.spawnEntityInWorld(itemBound);
             spawned = true;
         }
@@ -48,8 +48,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
             return;
         }
         if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                               movingobjectposition.blockZ);
+            Block hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos()).getBlock();
             if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;
@@ -58,8 +57,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
 
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
             if (movingobjectposition.typeOfHit.equals(0)) {
-                if (worldObj.isAirBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                        movingobjectposition.blockZ)) {
+                if (worldObj.isAirBlock(movingobjectposition.getBlockPos())) {
                     return;
                 }
             }

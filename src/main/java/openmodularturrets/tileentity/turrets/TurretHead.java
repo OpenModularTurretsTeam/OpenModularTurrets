@@ -10,18 +10,19 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.TurretHeadUtil;
 
 import java.util.Random;
 
-public abstract class TurretHead extends TileEntity {
+public abstract class TurretHead extends TileEntity implements ITickable {
     int ticks;
     int targetingTicks;
     public float rotationXY;
@@ -41,12 +42,12 @@ public abstract class TurretHead extends TileEntity {
     public Packet getDescriptionPacket() {
         NBTTagCompound var1 = new NBTTagCompound();
         this.writeToNBT(var1);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
+        return new S35PacketUpdateTileEntity(this.pos, 2, var1);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-        NBTTagCompound var1 = pkt.func_148857_g();
+        NBTTagCompound var1 = pkt.getNbtCompound();
         readFromNBT(var1);
     }
 
@@ -72,42 +73,42 @@ public abstract class TurretHead extends TileEntity {
             return;
         }
 
-        if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TurretBase) {
+        if (worldObj.getTileEntity(this.pos.east()) instanceof TurretBase) {
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 1.565F;
             this.hasSetSide = true;
             return;
         }
 
-        if (worldObj.getTileEntity(xCoord - 1, yCoord, zCoord) instanceof TurretBase) {
+        if (worldObj.getTileEntity(this.pos.west()) instanceof TurretBase) {
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 4.705F;
             this.hasSetSide = true;
             return;
         }
 
-        if (worldObj.getTileEntity(xCoord, yCoord, zCoord + 1) instanceof TurretBase) {
+        if (worldObj.getTileEntity(this.pos.south()) instanceof TurretBase) {
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 3.145F;
             this.hasSetSide = true;
             return;
         }
 
-        if (worldObj.getTileEntity(xCoord, yCoord, zCoord - 1) instanceof TurretBase) {
+        if (worldObj.getTileEntity(this.pos.north()) instanceof TurretBase) {
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 0F;
             this.hasSetSide = true;
             return;
         }
 
-        if (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof TurretBase) {
+        if (worldObj.getTileEntity(this.pos.up()) instanceof TurretBase) {
             this.baseFitRotationX = 3.145F;
             this.baseFitRotationZ = 0F;
             this.hasSetSide = true;
             return;
         }
 
-        if (worldObj.getTileEntity(xCoord, yCoord - 1, zCoord) instanceof TurretBase) {
+        if (worldObj.getTileEntity(this.pos.down()) instanceof TurretBase) {
             this.baseFitRotationX = 0F;
             this.baseFitRotationZ = 0F;
             this.hasSetSide = true;
@@ -115,25 +116,25 @@ public abstract class TurretHead extends TileEntity {
     }
 
     Entity getTargetWithMinRange() {
-        return TurretHeadUtil.getTargetWithMinimumRange(base, worldObj, base.getyAxisDetect(), xCoord, yCoord, zCoord,
+        return TurretHeadUtil.getTargetWithMinimumRange(base, worldObj, base.getyAxisDetect(), this.pos,
                                                         getTurretRange() + TurretHeadUtil.getRangeUpgrades(base), this);
     }
 
     Entity getTargetWithoutEffect() {
-        return TurretHeadUtil.getTargetWithoutSlowEffect(base, worldObj, base.getyAxisDetect(), xCoord, yCoord, zCoord,
+        return TurretHeadUtil.getTargetWithoutSlowEffect(base, worldObj, base.getyAxisDetect(), this.pos,
                                                          getTurretRange() + TurretHeadUtil.getRangeUpgrades(base),
                                                          this);
     }
 
     private Entity getTarget() {
-        return TurretHeadUtil.getTarget(base, worldObj, base.getyAxisDetect(), xCoord, yCoord, zCoord,
+        return TurretHeadUtil.getTarget(base, worldObj, base.getyAxisDetect(), this.pos,
                                         getTurretRange() + TurretHeadUtil.getRangeUpgrades(base), this);
     }
 
     protected abstract int getTurretRange();
 
     TurretBase getBase() {
-        return TurretHeadUtil.getTurretBase(worldObj, xCoord, yCoord, zCoord);
+        return TurretHeadUtil.getTurretBase(worldObj, this.pos);
     }
 
     public float getRotationXY() {
@@ -153,9 +154,9 @@ public abstract class TurretHead extends TileEntity {
     }
 
     private float getDistanceToEntity(Entity p_70032_1_) {
-        float f = (float) (this.xCoord - p_70032_1_.posX);
-        float f1 = (float) (this.yCoord - p_70032_1_.posY);
-        float f2 = (float) (this.zCoord - p_70032_1_.posZ);
+        float f = (float) (this.getPos().getX() - p_70032_1_.posX);
+        float f1 = (float) (this.getPos().getY() - p_70032_1_.posY);
+        float f2 = (float) (this.getPos().getZ() - p_70032_1_.posZ);
         return MathHelper.sqrt_float(f * f + f1 * f1 + f2 * f2);
     }
 
@@ -176,8 +177,8 @@ public abstract class TurretHead extends TileEntity {
     protected abstract String getLaunchSoundEffect();
 
     boolean chebyshevDistance(Entity target, TurretBase base) {
-        return MathHelper.abs_max(MathHelper.abs_max(target.posX - this.xCoord, target.posY - this.yCoord),
-                                  target.posZ - this.zCoord) > (getTurretRange() + TurretHeadUtil.getRangeUpgrades(
+        return MathHelper.abs_max(MathHelper.abs_max(target.posX - this.getPos().getX(), target.posY - this.getPos().getY()),
+                                  target.posZ - this.getPos().getZ()) > (getTurretRange() + TurretHeadUtil.getRangeUpgrades(
                 base));
     }
 
@@ -194,7 +195,7 @@ public abstract class TurretHead extends TileEntity {
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
 
         setSide();
         this.base = getBase();
@@ -205,18 +206,17 @@ public abstract class TurretHead extends TileEntity {
         }
 
         if (ticks % 5 == 0) {
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            worldObj.markBlockForUpdate(this.pos);
         }
 
         ticks++;
 
         //Base checks
         if (base == null || base.getBaseTier() < this.turretTier) {
-            this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);
+            this.getWorld().destroyBlock(this.pos, true);
         } else {
             if (base.isAttacksPlayers() && base.isActive() && ConfigHandler.globalCanTargetPlayers) {
-                TurretHeadUtil.warnPlayers(base, base.getWorldObj(), base.getyAxisDetect(), this.xCoord, this.yCoord,
-                                           this.zCoord, getTurretRange());
+                TurretHeadUtil.warnPlayers(base, base.getWorld(), base.getyAxisDetect(), this.pos, getTurretRange());
             }
 
             //Real time tick updates
@@ -235,12 +235,12 @@ public abstract class TurretHead extends TileEntity {
             targetingTicks = 0;
 
             // power check
-            if ((base.getEnergyStored(ForgeDirection.UNKNOWN) < getPowerRequiredForNextShot())) {
+            if ((base.getEnergyStored(EnumFacing.DOWN) < getPowerRequiredForNextShot())) {
                 return;
             }
 
             // is there a target, and Has it died in the previous tick?
-            if (target == null || target.isDead || this.getWorldObj().getEntityByID(
+            if (target == null || target.isDead || this.getWorld().getEntityByID(
                     target.getEntityId()) == null || ((EntityLivingBase) target).getHealth() <= 0.0F) {
                 target = getTarget();
             }
@@ -251,8 +251,8 @@ public abstract class TurretHead extends TileEntity {
             }
 
             //set where the turret is aiming at.
-            this.rotationXZ = TurretHeadUtil.getAimYaw(target, xCoord, zCoord) + 3.2F;
-            this.rotationXY = TurretHeadUtil.getAimPitch(target, xCoord, yCoord, zCoord);
+            this.rotationXZ = TurretHeadUtil.getAimYaw(target, this.pos) + 3.2F;
+            this.rotationXY = TurretHeadUtil.getAimPitch(target, this.pos);
 
             // has cooldown passed?
             if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
@@ -313,17 +313,17 @@ public abstract class TurretHead extends TileEntity {
             }
 
             // Consume energy
-            base.setEnergyStored(base.getEnergyStored(ForgeDirection.UNKNOWN) - getPowerRequiredForNextShot());
+            base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot());
 
             for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-                TurretProjectile projectile = this.createProjectile(this.getWorldObj(), target, ammo);
+                TurretProjectile projectile = this.createProjectile(this.getWorld(), target, ammo);
 
-                projectile.setPosition(this.xCoord + 0.5, this.yCoord + 0.5, this.zCoord + 0.5);
+                projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
 
                 Random random = new Random();
 
 //                if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
-//                    worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":amped",
+//                    worldObj.playSoundEffect(this.pos.getX(), this.pos.getY(), this.pos.getZ(), Reference.MOD_ID + ":amped",
 //                            ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
 //                    projectile.isAmped = true;
 //                }
@@ -348,10 +348,10 @@ public abstract class TurretHead extends TileEntity {
                                                    d2 + target.motionZ * time, 1.6F, (float) accuraccy);
                 }
 
-                this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord,
-                                                   ModInfo.ID + ":" + this.getLaunchSoundEffect(),
+                this.getWorld().playSoundEffect(this.pos.getX(), this.pos.getY(), this.pos.getZ(),
+                                                   Reference.MOD_ID + ":" + this.getLaunchSoundEffect(),
                                                    ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
-                this.getWorldObj().spawnEntityInWorld(projectile);
+                this.getWorld().spawnEntityInWorld(projectile);
             }
             ticks = 0;
         }
@@ -363,9 +363,9 @@ public abstract class TurretHead extends TileEntity {
                 ticksWithoutTarget = 0;
                 shouldConceal = true;
                 playedDeploy = false;
-                worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":turretRetract",
+                worldObj.playSoundEffect(this.pos.getX(), this.pos.getY(), this.pos.getZ(), Reference.MOD_ID + ":turretRetract",
                                          ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
-                worldObj.getBlock(xCoord, yCoord, zCoord).setBlockBounds(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+                worldObj.getBlockState(this.pos).getBlock().setBlockBounds(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
             } else {
                 ticksWithoutTarget++;
             }
@@ -375,15 +375,15 @@ public abstract class TurretHead extends TileEntity {
                 shouldConceal = false;
 
                 if (!playedDeploy) {
-                    worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, ModInfo.ID + ":turretDeploy",
+                    worldObj.playSoundEffect(this.pos.getX(), this.pos.getY(), this.pos.getZ(), Reference.MOD_ID + ":turretDeploy",
                                              ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
                     playedDeploy = true;
-                    worldObj.getBlock(xCoord, yCoord, zCoord).setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 1F, 0.8F);
+                    worldObj.getBlockState(this.pos).getBlock().setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 1F, 0.8F);
                 }
             }
         } else {
             this.shouldConceal = false;
-            worldObj.getBlock(xCoord, yCoord, zCoord).setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 1F, 0.8F);
+            worldObj.getBlockState(this.pos).getBlock().setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 1F, 0.8F);
         }
     }
 }

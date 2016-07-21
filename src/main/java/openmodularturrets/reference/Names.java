@@ -7,11 +7,8 @@ package openmodularturrets.reference;
 public class Names {
     public static class Blocks {
         // Unlocalized
-        public static final String unlocalisedTurretBaseTierOne = "baseTierWood";
-        public static final String unlocalisedTurretBaseTierTwo = "baseTierOneBlock";
-        public static final String unlocalisedTurretBaseTierThree = "baseTierTwoBlock";
-        public static final String unlocalisedTurretBaseTierFour = "baseTierThreeBlock";
-        public static final String unlocalisedTurretBaseTierFive = "baseTierFourBlock";
+        public static final String unlocalisedTurretBase = "turretBase";
+        public static final String unlocalisedTurret = "turret";
         public static final String unlocalisedDisposableItemTurret = "disposeItemTurret";
         public static final String unlocalisedRocketTurret = "rocketTurret";
         public static final String unlocalisedGunTurret = "machineGunTurret";

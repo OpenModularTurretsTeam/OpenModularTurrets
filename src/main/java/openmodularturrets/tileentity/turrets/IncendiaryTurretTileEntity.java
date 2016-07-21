@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.BlazingClayProjectile;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.items.Items;
+import openmodularturrets.items.ModItems;
 
 public class IncendiaryTurretTileEntity extends TurretHead {
     public IncendiaryTurretTileEntity() {
@@ -47,7 +47,7 @@ public class IncendiaryTurretTileEntity extends TurretHead {
 
     @Override
     public Item getAmmo() {
-        return Items.blazingClayCraftable;
+        return ModItems.blazingClayCraftable;
     }
 
     @Override

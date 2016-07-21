@@ -1,21 +1,16 @@
 package openmodularturrets.blocks;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import openmodularturrets.blocks.expanders.*;
 import openmodularturrets.blocks.misc.*;
-import openmodularturrets.blocks.turretbases.*;
 import openmodularturrets.blocks.turretheads.*;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.blocks.*;
 import openmodularturrets.reference.Names;
 
-public class Blocks {
-    public static Block turretBaseTierOne;
-    public static Block turretBaseTierTwo;
-    public static Block turretBaseTierThree;
-    public static Block turretBaseTierFour;
-    public static Block turretBaseTierFive;
+public class ModBlocks {
+    public static Block turretBase;
     public static Block disposableItemTurret;
     public static Block potatoCannonTurret;
 
@@ -58,25 +53,9 @@ public class Blocks {
     public static Block fenceTierFive;
 
     public static void init() {
-        turretBaseTierOne = new BlockTurretBaseTierOne();
-        GameRegistry.registerBlock(turretBaseTierOne, ItemBlockTurretBaseTierOne.class,
-                                   Names.Blocks.unlocalisedTurretBaseTierOne);
-
-        turretBaseTierTwo = new BlockTurretBaseTierTwo();
-        GameRegistry.registerBlock(turretBaseTierTwo, ItemBlockTurretBaseTierTwo.class,
-                                   Names.Blocks.unlocalisedTurretBaseTierTwo);
-
-        turretBaseTierThree = new BlockTurretBaseTierThree();
-        GameRegistry.registerBlock(turretBaseTierThree, ItemBlockTurretBaseTierThree.class,
-                                   Names.Blocks.unlocalisedTurretBaseTierThree);
-
-        turretBaseTierFour = new BlockTurretBaseTierFour();
-        GameRegistry.registerBlock(turretBaseTierFour, ItemBlockTurretBaseTierFour.class,
-                                   Names.Blocks.unlocalisedTurretBaseTierFour);
-
-        turretBaseTierFive = new BlockTurretBaseTierFive();
-        GameRegistry.registerBlock(turretBaseTierFive, ItemBlockTurretBaseTierFive.class,
-                                   Names.Blocks.unlocalisedTurretBaseTierFive);
+        turretBase = new BlockTurretBase();
+        GameRegistry.registerBlock(turretBase, ItemBlockTurretBase.class,
+                                   Names.Blocks.unlocalisedTurretBase);
 
         expanderPowerTierOne = new BlockExpanderPowerTierOne();
         GameRegistry.registerBlock(expanderPowerTierOne, ItemBlockExpanderPowerTierOne.class,

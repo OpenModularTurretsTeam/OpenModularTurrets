@@ -1,6 +1,7 @@
 package openmodularturrets.tileentity.turretbase;
 
-import cpw.mods.fml.common.Optional;
+
+import net.minecraftforge.fml.common.Optional;
 import openmodularturrets.handler.ConfigHandler;
 
 public class TurretBaseTierThreeTileEntity extends TurretBase {
@@ -20,11 +21,6 @@ public class TurretBaseTierThreeTileEntity extends TurretBase {
     @Override
     public int getSizeInventory() {
         return 12;
-    }
-
-    @Override
-    public String getInventoryName() {
-        return "modtur.turretbasethree";
     }
 
     @Optional.Method(modid = "OpenComputers")

@@ -8,7 +8,7 @@ import openmodularturrets.client.render.models.ModelDamageAmp;
 import openmodularturrets.client.render.models.ModelRedstoneReactor;
 import openmodularturrets.client.render.models.ModelRelativisticTurret;
 import openmodularturrets.client.render.models.ModelSolarPanelAddon;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 import openmodularturrets.tileentity.turrets.TurretHead;
 import org.lwjgl.opengl.GL11;
 
@@ -23,10 +23,10 @@ public class RelativisticTurretRenderer extends TileEntitySpecialRenderer {
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage)  {
         TurretHead turretHead = (TurretHead) te;
         int rotation = 0;
-        if (te.getWorldObj() != null) {
+        if (te.getWorld() != null) {
             rotation = te.getBlockMetadata();
         }
 
@@ -34,7 +34,7 @@ public class RelativisticTurretRenderer extends TileEntitySpecialRenderer {
             return;
         }
 
-        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/relativisticTurret.png"));
+        ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/relativisticTurret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         GL11.glPushMatrix();

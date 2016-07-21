@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.RocketProjectile;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.items.Items;
+import openmodularturrets.items.ModItems;
 
 public class RocketTurretTileEntity extends TurretHead {
     public RocketTurretTileEntity() {
@@ -47,7 +47,7 @@ public class RocketTurretTileEntity extends TurretHead {
 
     @Override
     public Item getAmmo() {
-        return Items.rocketCraftable;
+        return ModItems.rocketCraftable;
     }
 
     @Override

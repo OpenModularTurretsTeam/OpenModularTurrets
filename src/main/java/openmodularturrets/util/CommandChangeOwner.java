@@ -4,6 +4,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.WorldServer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
@@ -40,7 +41,7 @@ public class CommandChangeOwner extends CommandBase {
                 sender.addChatMessage(new ChatComponentText("Invalid dimension"));
                 return;
             }
-            TileEntity tileEntity = worldserver.getTileEntity(x, y, z);
+            TileEntity tileEntity = worldserver.getTileEntity(new BlockPos(x, y, z));
             if (tileEntity instanceof TurretBase) {
                 TurretBase turret = (TurretBase) tileEntity;
                 turret.setOwner(ownerName);

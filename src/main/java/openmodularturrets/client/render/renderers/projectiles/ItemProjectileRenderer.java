@@ -1,12 +1,13 @@
 package openmodularturrets.client.render.renderers.projectiles;
 
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 
 class ItemProjectileRenderer extends RenderSnowball {
-    public ItemProjectileRenderer(Item par1Item) {
-        super(par1Item);
+    public ItemProjectileRenderer(Item par1Item, RenderManager renderManager) {
+        super(renderManager,par1Item, null); //TODO: fixme
     }
 
     @Override

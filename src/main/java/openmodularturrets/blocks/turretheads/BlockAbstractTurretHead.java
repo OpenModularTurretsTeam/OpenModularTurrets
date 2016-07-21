@@ -3,7 +3,8 @@ package openmodularturrets.blocks.turretheads;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
@@ -31,17 +32,17 @@ abstract class BlockAbstractTurretHead extends Block implements ITileEntityProvi
     }
 
     @Override
-    public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-        return world.getTileEntity(x + 1, y, z) instanceof TurretBase ||
-                world.getTileEntity(x - 1, y, z) instanceof TurretBase ||
-                world.getTileEntity(x, y + 1, z) instanceof TurretBase ||
-                world.getTileEntity(x, y - 1, z) instanceof TurretBase ||
-                world.getTileEntity(x, y, z + 1) instanceof TurretBase ||
-                world.getTileEntity(x, y, z - 1) instanceof TurretBase;
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        return worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())) instanceof TurretBase ||
+                worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())) instanceof TurretBase ||
+                worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())) instanceof TurretBase ||
+                worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())) instanceof TurretBase ||
+                worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)) instanceof TurretBase ||
+                worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1)) instanceof TurretBase;
     }
 
     @Override
-    public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
+    public boolean canCreatureSpawn(IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
         return false;
     }
 }

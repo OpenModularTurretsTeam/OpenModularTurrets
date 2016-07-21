@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity;
  * Created by Keridos on 05/12/2015.
  * This Class
  */
-public class TileEntityOMT extends TileEntity {
+public abstract class TileEntityOMT extends TileEntity {
 
     @Override
     public void writeToNBT(NBTTagCompound par1) {
@@ -25,6 +25,6 @@ public class TileEntityOMT extends TileEntity {
     public Packet getDescriptionPacket() {
         NBTTagCompound var1 = new NBTTagCompound();
         this.writeToNBT(var1);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
+        return new S35PacketUpdateTileEntity(this.pos, 2, var1);
     }
 }

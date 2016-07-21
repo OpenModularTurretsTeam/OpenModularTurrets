@@ -8,7 +8,7 @@ import openmodularturrets.client.render.models.ModelDamageAmp;
 import openmodularturrets.client.render.models.ModelIncendiaryTurret;
 import openmodularturrets.client.render.models.ModelRedstoneReactor;
 import openmodularturrets.client.render.models.ModelSolarPanelAddon;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 import openmodularturrets.tileentity.turrets.TurretHead;
 import openmodularturrets.util.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
@@ -27,10 +27,10 @@ public class IncendiaryTurretRenderer extends TileEntitySpecialRenderer {
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage)  {
         TurretHead turretHead = (TurretHead) te;
         int rotation = 0;
-        if (te.getWorldObj() != null) {
+        if (te.getWorld() != null) {
             rotation = te.getBlockMetadata();
         }
 
@@ -39,7 +39,7 @@ public class IncendiaryTurretRenderer extends TileEntitySpecialRenderer {
         }
 
         this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
-        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/incendiaryTurret.png"));
+        ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/incendiaryTurret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         GL11.glPushMatrix();
@@ -57,7 +57,7 @@ public class IncendiaryTurretRenderer extends TileEntitySpecialRenderer {
 
         if (turretHead.base != null) {
             if (TurretHeadUtil.hasSolarPanelAddon(turretHead.base)) {
-                ResourceLocation texturesSolar = (new ResourceLocation(ModInfo.ID + ":textures/blocks/solarPanelAddon" +
+                ResourceLocation texturesSolar = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/solarPanelAddon" +
                                                                                ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
                 solar.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
@@ -65,7 +65,7 @@ public class IncendiaryTurretRenderer extends TileEntitySpecialRenderer {
             }
 
             if (TurretHeadUtil.hasDamageAmpAddon(turretHead.base)) {
-                ResourceLocation texturesAmp = (new ResourceLocation(ModInfo.ID + ":textures/blocks/damageAmpAddon" +
+                ResourceLocation texturesAmp = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/damageAmpAddon" +
                                                                              ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
                 amp.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
@@ -73,7 +73,7 @@ public class IncendiaryTurretRenderer extends TileEntitySpecialRenderer {
             }
 
             if (TurretHeadUtil.hasRedstoneReactor(turretHead.base)) {
-                ResourceLocation texturesReac = (new ResourceLocation(ModInfo.ID + ":textures/blocks/redstoneReactor" +
+                ResourceLocation texturesReac = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/redstoneReactor" +
                                                                               ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesReac);
                 reac.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);

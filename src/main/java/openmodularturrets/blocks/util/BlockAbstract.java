@@ -2,7 +2,8 @@ package openmodularturrets.blocks.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 /**
@@ -15,7 +16,7 @@ public abstract class BlockAbstract extends Block {
     }
 
     @Override
-    public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
+    public boolean canCreatureSpawn(IBlockAccess worldIn, BlockPos pos, EntityLiving.SpawnPlacementType type) {
         return false;
     }
 }

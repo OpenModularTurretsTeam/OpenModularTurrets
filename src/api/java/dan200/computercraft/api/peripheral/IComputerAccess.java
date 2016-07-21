@@ -1,6 +1,6 @@
 /**
  * This file is part of the public ComputerCraft API - http://www.computercraft.info
- * Copyright Daniel Ratcliffe, 2011-2015. This API may be redistributed unmodified and in full only.
+ * Copyright Daniel Ratcliffe, 2011-2016. This API may be redistributed unmodified and in full only.
  * For help using the API, and posting your mods, visit the forums at computercraft.info.
  */
 
@@ -21,36 +21,34 @@ public interface IComputerAccess
 	 * @param desiredLocation The location on the computercraft's file system where you would like the mount to be mounted.
 	 * @param mount The mount object to mount on the computercraft. These can be obtained by calling ComputerCraftAPI.createSaveDirMount(), ComputerCraftAPI.createResourceMount() or by creating your own objects that implement the IMount interface.
 	 * @return The location on the computercraft's file system where you the mount mounted, or null if there was already a file in the desired location. Store this value if you wish to unmount the mount later.
-	 * @see dan200.computercraft.api.ComputerCraftAPI#createSaveDirMount(World, String)
 	 * @see dan200.computercraft.api.ComputerCraftAPI#createResourceMount(Class, String, String)
-	 * @see #mountWritable(String, dan200.computercraft.api.filesystem.IWritableMount)
+	 * @see #mountWritable(String, IWritableMount)
 	 * @see #unmount(String)
-	 * @see dan200.computercraft.api.filesystem.IMount
+	 * @see IMount
 	 */
-	public String mount( String desiredLocation, IMount mount );
+	public String mount(String desiredLocation, IMount mount);
 
     /**
      * TODO: Document me
      */
-    public String mount( String desiredLocation, IMount mount, String driveName );
+    public String mount(String desiredLocation, IMount mount, String driveName);
 
 	/**
 	 * Mount a mount onto the computers' file system in a writable mode.<br>
 	 * @param desiredLocation The location on the computercraft's file system where you would like the mount to be mounted.
 	 * @param mount The mount object to mount on the computercraft. These can be obtained by calling ComputerCraftAPI.createSaveDirMount() or by creating your own objects that implement the IWritableMount interface.
 	 * @return The location on the computercraft's file system where you the mount mounted, or null if there was already a file in the desired location. Store this value if you wish to unmount the mount later.
-	 * @see dan200.computercraft.api.ComputerCraftAPI#createSaveDirMount(World, String)
 	 * @see dan200.computercraft.api.ComputerCraftAPI#createResourceMount(Class, String, String)
 	 * @see #mount(String, IMount)
 	 * @see #unmount(String)
 	 * @see IMount
 	 */
-	public String mountWritable( String desiredLocation, IWritableMount mount );
+	public String mountWritable(String desiredLocation, IWritableMount mount);
 
     /**
      * TODO: Document me
      */
-    public String mountWritable( String desiredLocation, IWritableMount mount, String driveName );
+    public String mountWritable(String desiredLocation, IWritableMount mount, String driveName);
 
 	/**
 	 * Unmounts a directory previously mounted onto the computers file system by mount() or mountWritable().<br>
@@ -63,7 +61,7 @@ public interface IComputerAccess
 	 * @see	#mount(String, IMount)
 	 * @see	#mountWritable(String, IWritableMount)
 	 */
-	public void unmount( String location );
+	public void unmount(String location);
 	
 	/**
 	 * Returns the numerical ID of this computercraft.<br>
@@ -86,9 +84,9 @@ public interface IComputerAccess
 	 *					be supplied as extra return values to os.pullEvent(). Objects in the array will be converted
 	 *					to lua data types in the same fashion as the return values of IPeripheral.callMethod().<br>
 	 *					You may supply null to indicate that no arguments are to be supplied.
-	 * @see dan200.computercraft.api.peripheral.IPeripheral#callMethod
+	 * @see IPeripheral#callMethod
 	 */
-	public void queueEvent( String event, Object[] arguments );
+	public void queueEvent(String event, Object[] arguments);
 
 	/**
 	 * Get a string, unique to the computercraft, by which the computercraft refers to this peripheral.

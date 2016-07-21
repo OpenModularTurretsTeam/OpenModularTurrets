@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.GrenadeProjectile;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.items.Items;
+import openmodularturrets.items.ModItems;
 
 public class GrenadeLauncherTurretTileEntity extends TurretHead {
     public GrenadeLauncherTurretTileEntity() {
@@ -47,7 +47,7 @@ public class GrenadeLauncherTurretTileEntity extends TurretHead {
 
     @Override
     public Item getAmmo() {
-        return Items.grenadeCraftable;
+        return ModItems.grenadeCraftable;
     }
 
     @Override
