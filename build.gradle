@@ -100,10 +100,6 @@ repositories {
         name  "OC repo"
         url  "http://maven.cil.li/"
     }
-    ivy {
-        name "ThaumCraft 4 API"
-        artifactPattern 'https://dl.dropboxusercontent.com/u/47135879/[module](-[classifier])-1.7.10-[revision](.[ext])'
-    }
     maven {
         name  "ic2"
         url  "http://maven.ic2.player.to/"
@@ -121,9 +117,9 @@ dependencies {
     //compile "codechicken:CodeChickenLib:${config.minecraft_version}-${config.ccl_version}:dev"
     //compile "codechicken:CodeChickenCore:${config.minecraft_version}-${config.ccc_version}:dev"
     deobfCompile "li.cil.oc:OpenComputers:MC${config.minecraft_version}-${config.oc_version}"
-    compile "Azanor:Thaumcraft:${config.tc_version}:deobf@jar"
+    //compile "Azanor:Thaumcraft:${config.tc_version}:deobf@jar"
     compile "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
-    runtime "com.github.azanor:baubles:${config.baubles_version}"
+    //runtime "com.github.azanor:baubles:${config.baubles_version}"
 }
 
 

@@ -1,6 +1,6 @@
 package openmodularturrets.handler;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.entity.projectiles.*;
 

@@ -1,12 +1,13 @@
 package openmodularturrets.compatability;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.common.event.FMLInterModComms;
+
 import dan200.computercraft.api.ComputerCraftAPI;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 
 import java.util.logging.Logger;
 
@@ -63,7 +64,7 @@ public class ModCompatibility {
         versionchecker.setString("curseProjectName", "224663-openmodularturrets");
         versionchecker.setString("curseFilenameParser", "OpenModularTurrets-1.7.10-[].jar");
         versionchecker.setString("modDisplayName", "OpenModularTurrets");
-        versionchecker.setString("oldVersion", ModInfo.VERSION);
+        versionchecker.setString("oldVersion", Reference.VERSION);
         FMLInterModComms.sendRuntimeMessage("openmodularturrets", "VersionChecker", "addCurseCheck", versionchecker);
     }
 

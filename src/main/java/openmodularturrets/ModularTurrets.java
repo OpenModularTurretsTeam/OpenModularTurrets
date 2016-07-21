@@ -1,27 +1,26 @@
 package openmodularturrets;
 
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
+
 import net.minecraft.creativetab.CreativeTabs;
-import openmodularturrets.blocks.Blocks;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import openmodularturrets.blocks.ModBlocks;
 import openmodularturrets.client.gui.ModularTurretsTab;
 import openmodularturrets.compatability.ModCompatibility;
-import openmodularturrets.handler.*;
-import openmodularturrets.handler.recipes.RecipeHandler;
-import openmodularturrets.items.Items;
+import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.handler.GuiHandler;
+import openmodularturrets.items.ModItems;
 import openmodularturrets.proxy.CommonProxy;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 import openmodularturrets.util.CommandChangeOwner;
 
-@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = ModInfo.DEPENDENCIES)
+@Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = Reference.DEPENDENCIES)
 public class ModularTurrets {
-    @Instance(ModInfo.ID)
+    @Mod.Instance(Reference.MOD_ID)
     public static ModularTurrets instance;
 
     @SidedProxy(clientSide = "openmodularturrets.proxy.ClientProxy", serverSide = "openmodularturrets.proxy" + "" + ".CommonProxy")
@@ -30,27 +29,22 @@ public class ModularTurrets {
     public static CreativeTabs modularTurretsTab;
     private GuiHandler gui;
 
-    @EventHandler
+    @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         gui = new GuiHandler();
-        modularTurretsTab = new ModularTurretsTab(ModInfo.ID);
+        modularTurretsTab = new ModularTurretsTab(Reference.MOD_ID);
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         ModCompatibility.checkForMods();
         ModCompatibility.performModCompat();
-        Items.init();
-        Blocks.init();
-        NetworkingHandler.initNetworking();
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, gui);
-        TileEntityHandler.init();
+        ModItems.init();
+        ModBlocks.init();
         proxy.initRenderers();
         proxy.initHandlers();
-        RecipeHandler.initRecipes();
-        ProjectileEntityHandler.registerProjectiles(this);
-        DungeonLootHandler.init();
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, gui);
     }
 
     @Mod.EventHandler

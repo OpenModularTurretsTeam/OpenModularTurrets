@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.FerroSlugProjectile;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.items.Items;
+import openmodularturrets.items.ModItems;
 
 public class RailGunTurretTileEntity extends TurretHead {
     public RailGunTurretTileEntity() {
@@ -47,7 +47,7 @@ public class RailGunTurretTileEntity extends TurretHead {
 
     @Override
     public Item getAmmo() {
-        return Items.ferroSlug;
+        return ModItems.ferroSlug;
     }
 
     @Override

@@ -1,17 +1,19 @@
 package openmodularturrets.tileentity.expander;
 
-import net.minecraft.entity.player.EntityPlayer;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import openmodularturrets.tileentity.TileEntityContainer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.TurretHeadUtil;
 
-public abstract class AbstractInvExpander extends TileEntityContainer {
+public abstract class AbstractInvExpander extends TileEntityContainer implements ITickable {
     public float baseFitRotationX;
     public float baseFitRotationZ;
     protected TurretBase base;
@@ -26,12 +28,12 @@ public abstract class AbstractInvExpander extends TileEntityContainer {
     public Packet getDescriptionPacket() {
         NBTTagCompound var1 = new NBTTagCompound();
         this.writeToNBT(var1);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, var1);
+        return new S35PacketUpdateTileEntity(this.pos, 2, var1);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-        NBTTagCompound var1 = pkt.func_148857_g();
+        NBTTagCompound var1 = pkt.getNbtCompound();
         readFromNBT(var1);
     }
 
@@ -71,42 +73,42 @@ public abstract class AbstractInvExpander extends TileEntityContainer {
     }
 
     private void setSide() {
-        if (worldObj.getTileEntity(xCoord + 1, yCoord, zCoord) instanceof TurretBase) {
+        if (worldObj.getTileEntity(this.pos.east()) instanceof TurretBase) {
             this.baseFitRotationX = 0F;
             this.baseFitRotationZ = 4.705F;
             this.hasSetSide = true;
             return;
         }
 
-        if (worldObj.getTileEntity(xCoord - 1, yCoord, zCoord) instanceof TurretBase) {
+        if (worldObj.getTileEntity(this.pos.west()) instanceof TurretBase) {
             this.baseFitRotationX = 0F;
             this.baseFitRotationZ = 1.56F;
             this.hasSetSide = true;
             return;
         }
 
-        if (worldObj.getTileEntity(xCoord, yCoord - 1, zCoord) instanceof TurretBase) {
+        if (worldObj.getTileEntity(this.pos.down()) instanceof TurretBase) {
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 4.705F;
             this.hasSetSide = true;
             return;
         }
 
-        if (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof TurretBase) {
+        if (worldObj.getTileEntity(this.pos.up()) instanceof TurretBase) {
             this.baseFitRotationX = 4.705F;
             this.baseFitRotationZ = 0F;
             this.hasSetSide = true;
             return;
         }
 
-        if (worldObj.getTileEntity(xCoord, yCoord, zCoord - 1) instanceof TurretBase) {
+        if (worldObj.getTileEntity(this.pos.north()) instanceof TurretBase) {
             this.baseFitRotationX = 3.145F;
             this.baseFitRotationZ = 0F;
             this.hasSetSide = true;
             return;
         }
 
-        if (worldObj.getTileEntity(xCoord, yCoord, zCoord + 1) instanceof TurretBase) {
+        if (worldObj.getTileEntity(this.pos.south()) instanceof TurretBase) {
             this.baseFitRotationX = 0F;
             this.baseFitRotationZ = 0F;
             this.hasSetSide = true;
@@ -114,23 +116,16 @@ public abstract class AbstractInvExpander extends TileEntityContainer {
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if (!hasSetSide) {
             setSide();
         }
 
         if (getBase() == null) {
-            this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);
+            this.getWorld().destroyBlock(this.pos, true);
         }
     }
 
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.getDistanceSq(xCoord + 0.5,
-                                                                                              yCoord + 0.5,
-                                                                                              zCoord + 0.5) < 64;
-    }
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -146,6 +141,21 @@ public abstract class AbstractInvExpander extends TileEntityContainer {
     }
 
     public TurretBase getBase() {
-        return TurretHeadUtil.getTurretBase(worldObj, xCoord, yCoord, zCoord);
+        return TurretHeadUtil.getTurretBase(worldObj, this.pos);
+    }
+
+    @Override
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        return false;
+    }
+
+    @Override
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return false;
+    }
+
+    @Override
+    public int[] getSlotsForFace(EnumFacing side) {
+        return new int[]{0,1,2,3,4,5,6,7,8};
     }
 }

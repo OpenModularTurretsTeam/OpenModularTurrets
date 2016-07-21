@@ -7,11 +7,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 import openmodularturrets.util.TurretHeadUtil;
 
 public class RelativisticTurretTileEntity extends TurretHead {
@@ -21,7 +21,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         setSide();
         this.base = getBase();
 
@@ -34,14 +34,14 @@ public class RelativisticTurretTileEntity extends TurretHead {
         }
 
         if (ticks % 5 == 0) {
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            worldObj.markBlockForUpdate(this.pos);
         }
 
         ticks++;
 
         // BASE IS OKAY
         if (base == null || base.getBaseTier() < this.turretTier) {
-            this.getWorldObj().func_147480_a(xCoord, yCoord, zCoord, true);
+            this.getWorld().destroyBlock(this.pos, true);
         } else {
             concealmentChecks();
             TurretHeadUtil.updateSolarPanelAddon(base);
@@ -57,12 +57,12 @@ public class RelativisticTurretTileEntity extends TurretHead {
                     base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
 
             // power check
-            if ((base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required) || (!base.isActive())) {
+            if ((base.getEnergyStored(EnumFacing.DOWN) < power_required) || (!base.isActive())) {
                 return;
             }
 
             // is there a target, and Has it died in the previous tick?
-            if (target == null || target.isDead || this.getWorldObj().getEntityByID(
+            if (target == null || target.isDead || this.getWorld().getEntityByID(
                     target.getEntityId()) == null || ((EntityLivingBase) target).getHealth() <= 0.0F) {
                 target = getTargetWithoutEffect();
             }
@@ -72,8 +72,8 @@ public class RelativisticTurretTileEntity extends TurretHead {
                 return;
             }
 
-            this.rotationXZ = TurretHeadUtil.getAimYaw(target, xCoord, zCoord) + 3.2F;
-            this.rotationXY = TurretHeadUtil.getAimPitch(target, xCoord, yCoord, zCoord);
+            this.rotationXZ = TurretHeadUtil.getAimYaw(target, this.pos) + 3.2F;
+            this.rotationXY = TurretHeadUtil.getAimPitch(target, this.pos);
 
             // has cooldown passed?
             if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
@@ -103,15 +103,15 @@ public class RelativisticTurretTileEntity extends TurretHead {
             }
 
             // Consume energy
-            base.setEnergyStored(base.getEnergyStored(ForgeDirection.UNKNOWN) - power_required);
-            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200, 5, false));
-            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.weakness.id, 200, 5, false));
+            base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - power_required);
+            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200, 5,false, false));
+            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.weakness.id, 200, 5,false, false));
 
             target = null;
         }
 
-        this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord,
-                                           ModInfo.ID + ":" + this.getLaunchSoundEffect(), 0.6F, 1.0F);
+        this.getWorld().playSoundEffect(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(),
+                                           Reference.MOD_ID + ":" + this.getLaunchSoundEffect(), 0.6F, 1.0F);
         ticks = 0;
     }
 

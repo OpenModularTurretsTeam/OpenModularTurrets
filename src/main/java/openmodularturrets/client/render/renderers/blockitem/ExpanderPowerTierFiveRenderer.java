@@ -1,13 +1,13 @@
 package openmodularturrets.client.render.renderers.blockitem;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openmodularturrets.client.render.models.ModelExpander;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 import openmodularturrets.tileentity.expander.AbstractPowerExpander;
 import org.lwjgl.opengl.GL11;
 
@@ -20,13 +20,13 @@ public class ExpanderPowerTierFiveRenderer extends TileEntitySpecialRenderer {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage)  {
         AbstractPowerExpander expander = (AbstractPowerExpander) te;
-        ResourceLocation textures = (new ResourceLocation(ModInfo.ID + ":textures/blocks/expanderPowerTierFive.png"));
+        ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/expanderPowerTierFive.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         int rotation = 0;
-        if (te.getWorldObj() != null) {
+        if (te.getWorld() != null) {
             rotation = te.getBlockMetadata();
         }
 

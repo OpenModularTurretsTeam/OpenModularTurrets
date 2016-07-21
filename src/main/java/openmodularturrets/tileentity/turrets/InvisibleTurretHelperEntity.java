@@ -1,10 +1,6 @@
 package openmodularturrets.tileentity.turrets;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
-class InvisibleTurretHelperEntity extends EntityLivingBase {
+/*class InvisibleTurretHelperEntity extends EntityLivingBase {
     public InvisibleTurretHelperEntity(World p_i1594_1_) {
         super(p_i1594_1_);
     }
@@ -24,7 +20,12 @@ class InvisibleTurretHelperEntity extends EntityLivingBase {
     }
 
     @Override
-    public ItemStack[] getLastActiveItems() {
+    public ItemStack getCurrentArmor(int slotIn) {
         return null;
     }
-}
+
+    @Override
+    public ItemStack[] getInventory() {
+        return new ItemStack[0];
+    }
+}  */

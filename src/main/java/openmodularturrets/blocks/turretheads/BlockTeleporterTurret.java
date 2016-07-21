@@ -1,8 +1,10 @@
 package openmodularturrets.blocks.turretheads;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
-import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.turrets.TeleporterTurretTileEntity;
 
@@ -14,8 +16,7 @@ public class BlockTeleporterTurret extends BlockAbstractTurretHead {
     public BlockTeleporterTurret() {
         super();
 
-        this.setBlockName(Names.Blocks.unlocalisedTeleporterTurret);
-        this.setBlockTextureName(ModInfo.ID + ":teleporterTurret");
+        this.setUnlocalizedName(Names.Blocks.unlocalisedTeleporterTurret);
     }
 
     @Override
@@ -23,16 +24,20 @@ public class BlockTeleporterTurret extends BlockAbstractTurretHead {
         return new TeleporterTurretTileEntity();
     }
 
+
+
+
     @Override
-    public void randomDisplayTick(World p_149734_1_, int p_149734_2_, int p_149734_3_, int p_149734_4_, Random p_149734_5_) {
+    //public void randomDisplayTick(World p_149734_1_, int p_149734_2_, int p_149734_3_, int p_149734_4_, Random p_149734_5_)
+    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
         if (shouldAnimate) {
             for (int i = 0; i <= 25; i++) {
-                float var21 = (p_149734_5_.nextFloat() - 0.5F) * 0.2F;
-                float var22 = (p_149734_5_.nextFloat() - 0.5F) * 0.2F;
-                float var23 = (p_149734_5_.nextFloat() - 0.5F) * 0.2F;
-                p_149734_1_.spawnParticle("portal", p_149734_2_ + 0.5f + p_149734_5_.nextGaussian(),
-                                          p_149734_3_ + 0.5f + p_149734_5_.nextGaussian(),
-                                          p_149734_4_ + 0.5f + p_149734_5_.nextGaussian(), (double) var21,
+                float var21 = (rand.nextFloat() - 0.5F) * 0.2F;
+                float var22 = (rand.nextFloat() - 0.5F) * 0.2F;
+                float var23 = (rand.nextFloat() - 0.5F) * 0.2F;
+                worldIn.spawnParticle(EnumParticleTypes.PORTAL, pos.getX() + 0.5f + rand.nextGaussian(),
+                        pos.getY() + 0.5f + rand.nextGaussian(),
+                        pos.getZ() + 0.5f + rand.nextGaussian(), (double) var21,
                                           (double) var22, (double) var23);
             }
             shouldAnimate = false;

@@ -1,14 +1,16 @@
 package openmodularturrets.network.messages;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
@@ -33,8 +35,8 @@ public class MessageTurretBase implements IMessage {
     public static class MessageHandlerTurretBase implements IMessageHandler<MessageTurretBase, IMessage> {
         @Override
         public IMessage onMessage(MessageTurretBase message, MessageContext ctx) {
-            TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x, message.y,
-                                                                                                   message.z);
+            TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(new BlockPos(message.x, message.y,
+                                                                                                   message.z));
             if (tileEntity instanceof TurretBase) {
                 ((TurretBase) tileEntity).setOwner(message.owner);
                 ((TurretBase) tileEntity).setOwnerName(message.ownerName);
@@ -53,12 +55,12 @@ public class MessageTurretBase implements IMessage {
     public MessageTurretBase(TileEntity tileEntity) {
         if (tileEntity instanceof TurretBase) {
             TurretBase TurretBase = (TurretBase) tileEntity;
-            this.x = TurretBase.xCoord;
-            this.y = TurretBase.yCoord;
-            this.z = TurretBase.zCoord;
+            this.x = TurretBase.getPos().getX();
+            this.y = TurretBase.getPos().getY();
+            this.z = TurretBase.getPos().getZ();
             this.owner = TurretBase.getOwner();
             this.ownerName = TurretBase.getOwnerName();
-            this.rfStorage = TurretBase.getEnergyStored(ForgeDirection.UNKNOWN);
+            this.rfStorage = TurretBase.getEnergyStored(EnumFacing.DOWN);
             this.attacksMobs = TurretBase.isAttacksMobs();
             this.attacksNeutrals = TurretBase.isAttacksNeutrals();
             this.attacksPlayers = TurretBase.isAttacksPlayers();

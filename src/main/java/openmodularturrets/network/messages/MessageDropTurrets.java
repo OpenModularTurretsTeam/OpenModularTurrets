@@ -1,10 +1,11 @@
 package openmodularturrets.network.messages;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import openmodularturrets.tileentity.turrets.TurretHead;
 
 public class MessageDropTurrets implements IMessage {
@@ -18,28 +19,28 @@ public class MessageDropTurrets implements IMessage {
         public IMessage onMessage(MessageDropTurrets message, MessageContext ctx) {
             World world = ctx.getServerHandler().playerEntity.worldObj;
 
-            if (world.getTileEntity(message.getX() + 1, message.getY(), message.getZ()) instanceof TurretHead) {
-                world.func_147480_a(message.getX() + 1, message.getY(), message.getZ(), true);
+            if (world.getTileEntity(new BlockPos(message.getX() + 1, message.getY(), message.getZ())) instanceof TurretHead) {
+                world.destroyBlock(new BlockPos(message.getX() + 1, message.getY(), message.getZ()), true);
             }
 
-            if (world.getTileEntity(message.getX() - 1, message.getY(), message.getZ()) instanceof TurretHead) {
-                world.func_147480_a(message.getX() - 1, message.getY(), message.getZ(), true);
+            if (world.getTileEntity(new BlockPos(message.getX() - 1, message.getY(), message.getZ())) instanceof TurretHead) {
+                world.destroyBlock(new BlockPos(message.getX() - 1, message.getY(), message.getZ()), true);
             }
 
-            if (world.getTileEntity(message.getX(), message.getY() + 1, message.getZ()) instanceof TurretHead) {
-                world.func_147480_a(message.getX(), message.getY() + 1, message.getZ(), true);
+            if (world.getTileEntity(new BlockPos(message.getX(), message.getY() + 1, message.getZ())) instanceof TurretHead) {
+                world.destroyBlock(new BlockPos(message.getX(), message.getY() + 1, message.getZ()), true);
             }
 
-            if (world.getTileEntity(message.getX(), message.getY() - 1, message.getZ()) instanceof TurretHead) {
-                world.func_147480_a(message.getX(), message.getY() - 1, message.getZ(), true);
+            if (world.getTileEntity(new BlockPos(message.getX(), message.getY() - 1, message.getZ())) instanceof TurretHead) {
+                world.destroyBlock(new BlockPos(message.getX(), message.getY() - 1, message.getZ()), true);
             }
 
-            if (world.getTileEntity(message.getX(), message.getY(), message.getZ() + 1) instanceof TurretHead) {
-                world.func_147480_a(message.getX(), message.getY(), message.getZ() + 1, true);
+            if (world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ() + 1)) instanceof TurretHead) {
+                world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ() + 1), true);
             }
 
-            if (world.getTileEntity(message.getX(), message.getY(), message.getZ() - 1) instanceof TurretHead) {
-                world.func_147480_a(message.getX(), message.getY(), message.getZ() - 1, true);
+            if (world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ() - 1)) instanceof TurretHead) {
+                world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ() - 1), true);
             }
 
             return null;

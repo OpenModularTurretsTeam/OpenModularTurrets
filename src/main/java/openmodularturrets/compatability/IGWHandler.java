@@ -1,7 +1,7 @@
 package openmodularturrets.compatability;
 
 import igwmod.api.WikiRegistry;
-import openmodularturrets.blocks.Blocks;
+import openmodularturrets.blocks.ModBlocks;
 
 /**
  * Created by Keridos on 23/01/2015.
@@ -24,10 +24,6 @@ public class IGWHandler {
     private void initTab() {
         WikiRegistry.registerWikiTab(new OpenModularTurretsWikiTab());
 
-        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierOne, "block/turretBase");
-        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierTwo, "block/turretBase");
-        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierThree, "block/turretBase");
-        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierFour, "block/turretBase");
-        WikiRegistry.registerBlockAndItemPageEntry(Blocks.turretBaseTierFive, "block/turretBase");
+        WikiRegistry.registerBlockAndItemPageEntry(ModBlocks.turretBase, "block/turretBase");
     }
 }

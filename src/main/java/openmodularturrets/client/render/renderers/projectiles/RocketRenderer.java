@@ -1,21 +1,29 @@
 package openmodularturrets.client.render.renderers.projectiles;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openmodularturrets.entity.projectiles.RocketProjectile;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
 class RocketRenderer extends Render {
+
+    public RocketRenderer(RenderManager renderManager) {
+        super(renderManager);
+    }
+
     private static final ResourceLocation rocketTextures = new ResourceLocation(
-            ModInfo.ID.toLowerCase() + ":textures/blocks/rocket.png");
+            Reference.MOD_ID.toLowerCase() + ":textures/blocks/rocket.png");
 
     private void renderRocket(RocketProjectile par1EntityRocket, double par2, double par4, double par6, float par9) {
         this.bindEntityTexture(par1EntityRocket);
@@ -27,7 +35,7 @@ class RocketRenderer extends Render {
         GL11.glRotatef(
                 par1EntityRocket.prevRotationPitch + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch) * par9,
                 0.0F, 0.0F, 1.0F);
-        Tessellator tessellator = Tessellator.instance;
+        WorldRenderer tessellator = Tessellator.getInstance().getWorldRenderer();
         byte b0 = 0;
         float f2 = 0.0F;
         float f3 = 0.5F;
@@ -50,7 +58,7 @@ class RocketRenderer extends Render {
         GL11.glScalef(f10, f10, f10);
         GL11.glTranslatef(-4.0F, 0.0F, 0.0F);
         GL11.glNormal3f(f10, 0.0F, 0.0F);
-        tessellator.startDrawingQuads();
+        /*tessellator.startDrawingQuads();
         tessellator.addVertexWithUV(-7.0D, -2.0D, -2.0D, (double) f6, (double) f8);
         tessellator.addVertexWithUV(-7.0D, -2.0D, 2.0D, (double) f7, (double) f8);
         tessellator.addVertexWithUV(-7.0D, 2.0D, 2.0D, (double) f7, (double) f9);
@@ -71,9 +79,9 @@ class RocketRenderer extends Render {
             tessellator.addVertexWithUV(-8.0D, -2.0D, 0.0D, (double) f2, (double) f4);
             tessellator.addVertexWithUV(8.0D, -2.0D, 0.0D, (double) f3, (double) f4);
             tessellator.addVertexWithUV(8.0D, 2.0D, 0.0D, (double) f3, (double) f5);
-            tessellator.addVertexWithUV(-8.0D, 2.0D, 0.0D, (double) f2, (double) f5);
-            tessellator.draw();
-        }
+            tessellator.addVertexWithUV(-8.0D, 2.0D, 0.0D, (double) f2, (double) f5); */
+            //tessellator.draw();
+        //}
 
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         GL11.glPopMatrix();

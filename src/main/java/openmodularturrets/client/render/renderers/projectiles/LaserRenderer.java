@@ -1,26 +1,34 @@
 package openmodularturrets.client.render.renderers.projectiles;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openmodularturrets.entity.projectiles.LaserProjectile;
-import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Reference;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
 class LaserRenderer extends Render {
+     protected LaserRenderer(RenderManager renderManager)
+    {
+        super(renderManager);
+    }
+
     private static final ResourceLocation laserTextures = new ResourceLocation(
-            ModInfo.ID.toLowerCase() + ":textures/blocks/laser.png");
+            Reference.MOD_ID.toLowerCase() + ":textures/blocks/laser.png");
 
     private void renderLaser(LaserProjectile par1EntityRocket, double par2, double par4, double par6, float par9) {
         for (int i = 0; i <= 20; i++) {
-            par1EntityRocket.worldObj.spawnParticle("reddust", par2, par4, par6, 1.0D, 1.0D, 1.0D);
+            par1EntityRocket.worldObj.spawnParticle(EnumParticleTypes.REDSTONE, par2, par4, par6, 1.0D, 1.0D, 1.0D);
         }
 
         this.bindEntityTexture(par1EntityRocket);
@@ -33,7 +41,7 @@ class LaserRenderer extends Render {
                 par1EntityRocket.prevRotationPitch + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch) * par9,
                 0.0F, 0.0F, 1.0F);
 
-        Tessellator tessellator = Tessellator.instance;
+        Tessellator tessellator = Tessellator.getInstance();
         byte b0 = 0;
         float f2 = 0.0F;
         float f3 = 0.5F;
@@ -57,7 +65,7 @@ class LaserRenderer extends Render {
         GL11.glTranslatef(0.0F, 0.0F, 0.0F);
         GL11.glNormal3f(f10, 0.0F, 0.0F);
 
-        for (int i = 0; i < 4; ++i) {
+        /*for (int i = 0; i < 4; ++i) {
             GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
             GL11.glNormal3f(0.0F, 0.0F, f10);
             tessellator.startDrawingQuads();
@@ -66,7 +74,7 @@ class LaserRenderer extends Render {
             tessellator.addVertexWithUV(16.0D, 2.0D, 0.0D, (double) f3, (double) f5);
             tessellator.addVertexWithUV(-16.0D, 2.0D, 0.0D, (double) f2, (double) f5);
             tessellator.draw();
-        }
+        } */ //TODO: fixme
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);

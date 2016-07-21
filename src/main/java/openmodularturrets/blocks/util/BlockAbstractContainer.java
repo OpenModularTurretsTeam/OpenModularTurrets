@@ -2,11 +2,12 @@ package openmodularturrets.blocks.util;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openmodularturrets.tileentity.TileEntityContainer;
@@ -25,13 +26,13 @@ public abstract class BlockAbstractContainer extends BlockContainer {
     public abstract TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_);
 
     @Override
-    public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
+    public boolean canCreatureSpawn(IBlockAccess worldIn, BlockPos pos, EntityLiving.SpawnPlacementType type) {
         return false;
     }
 
-    protected void dropItems(World world, int x, int y, int z) {
-        if (world.getTileEntity(x, y, z) instanceof TileEntityContainer) {
-            TileEntityContainer entity = (TileEntityContainer) world.getTileEntity(x, y, z);
+    protected void dropItems(World worldIn, BlockPos pos) {
+        if (worldIn.getTileEntity(pos) instanceof TileEntityContainer) {
+            TileEntityContainer entity = (TileEntityContainer) worldIn.getTileEntity(pos);
             Random rand = new Random();
             for (int i = 0; i < entity.getSizeInventory(); i++) {
                 ItemStack item = entity.getStackInSlot(i);
@@ -41,7 +42,7 @@ public abstract class BlockAbstractContainer extends BlockContainer {
                     float ry = rand.nextFloat() * 0.8F + 0.1F;
                     float rz = rand.nextFloat() * 0.8F + 0.1F;
 
-                    EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz,
+                    EntityItem entityItem = new EntityItem(worldIn, pos.getX() + rx, pos.getY() + ry, pos.getZ() + rz,
                                                            new ItemStack(item.getItem(), item.stackSize,
                                                                          item.getItemDamage()));
 
@@ -53,7 +54,7 @@ public abstract class BlockAbstractContainer extends BlockContainer {
                     entityItem.motionX = rand.nextGaussian() * factor;
                     entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
                     entityItem.motionZ = rand.nextGaussian() * factor;
-                    world.spawnEntityInWorld(entityItem);
+                    worldIn.spawnEntityInWorld(entityItem);
                     item.stackSize = 0;
                 }
             }

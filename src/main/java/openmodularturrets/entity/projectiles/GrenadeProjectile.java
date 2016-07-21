@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
@@ -32,9 +33,9 @@ public class GrenadeProjectile extends TurretProjectile {
         if (ticksExisted >= 50) {
             if (!worldObj.isRemote) {
                 worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
-                AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 3, this.posY - 3, this.posZ - 3,
+                AxisAlignedBB axis = new AxisAlignedBB(this.posX - 3, this.posY - 3, this.posZ - 3,
                                                                   this.posX + 3, this.posY + 3, this.posZ + 3);
-                List<Entity> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
+                List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
                 for (Entity mob : targets) {
 
@@ -65,7 +66,7 @@ public class GrenadeProjectile extends TurretProjectile {
         }
 
         for (int i = 0; i <= 20; i++) {
-            worldObj.spawnParticle("reddust", posX, posY, posZ, 1.0D, 1.0D, 1.0D);
+            worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, 1.0D, 1.0D, 1.0D);
         }
     }
 

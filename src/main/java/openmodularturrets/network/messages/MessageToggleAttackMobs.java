@@ -1,11 +1,14 @@
 package openmodularturrets.network.messages;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import openmodularturrets.tileentity.turretbase.TurretBase;
+
+
 
 public class MessageToggleAttackMobs implements IMessage {
     private int x, y, z;
@@ -18,7 +21,7 @@ public class MessageToggleAttackMobs implements IMessage {
         @Override
         public IMessage onMessage(MessageToggleAttackMobs message, MessageContext ctx) {
             World world = ctx.getServerHandler().playerEntity.worldObj;
-            TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
+            TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
 
             turret.setAttacksMobs(message.doAttackMobs());
             return null;

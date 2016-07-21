@@ -1,14 +1,10 @@
 package openmodularturrets.items.addons;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
 import java.util.List;
@@ -18,11 +14,6 @@ public class RedstoneReactorAddonItem extends AddonItem {
         super();
 
         this.setUnlocalizedName(Names.Items.unlocalisedRedReactorAddon);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister par1IconRegister) {
-        this.itemIcon = par1IconRegister.registerIcon(ModInfo.ID.toLowerCase() + ":redstoneProductionAddon");
     }
 
     @Override
