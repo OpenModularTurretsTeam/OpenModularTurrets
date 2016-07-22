@@ -13,7 +13,7 @@ public class SolarPanelAddonItem extends AddonItem {
     public SolarPanelAddonItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedSolarPanelAddon);
+        this.setUnlocalizedName(Names.Items.solarPanelAddon);
     }
 
     @Override

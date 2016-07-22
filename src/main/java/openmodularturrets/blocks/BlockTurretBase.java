@@ -5,9 +5,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -17,11 +19,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.blocks.util.BlockAbstractContainer;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.Names;
-import openmodularturrets.tileentity.turretbase.*;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +40,7 @@ public class BlockTurretBase extends BlockAbstractContainer {
             this.setBlockUnbreakable();
         }
         this.setStepSound(Block.soundTypeStone);
-        this.setUnlocalizedName(Names.Blocks.unlocalisedTurretBase);
+        this.setUnlocalizedName(Names.Blocks.turretBase);
     }
 
     @Override
@@ -47,25 +51,30 @@ public class BlockTurretBase extends BlockAbstractContainer {
             case 0:
                 MaxCharge = ConfigHandler.getBaseTierOneMaxCharge();
                 MaxIO = ConfigHandler.getBaseTierOneMaxIo();
-                return new TurretBaseTierOneTileEntity(MaxCharge, MaxIO);
+                return new TurretBase(MaxCharge, MaxIO, 1);
             case 1:
                 MaxCharge = ConfigHandler.getBaseTierTwoMaxCharge();
                 MaxIO = ConfigHandler.getBaseTierTwoMaxIo();
-                return new TurretBaseTierTwoTileEntity(MaxCharge, MaxIO);
+                return new TurretBase(MaxCharge, MaxIO, 2);
             case 2:
                 MaxCharge = ConfigHandler.getBaseTierThreeMaxCharge();
                 MaxIO = ConfigHandler.getBaseTierThreeMaxIo();
-                return new TurretBaseTierThreeTileEntity(MaxCharge, MaxIO);
+                return new TurretBase(MaxCharge, MaxIO, 3);
             case 3:
                 MaxCharge = ConfigHandler.getBaseTierFourMaxCharge();
                 MaxIO = ConfigHandler.getBaseTierFourMaxIo();
-                return new TurretBaseTierFourTileEntity(MaxCharge, MaxIO);
+                return new TurretBase(MaxCharge, MaxIO, 4);
             case 4:
                 MaxCharge = ConfigHandler.getBaseTierFiveMaxCharge();
                 MaxIO = ConfigHandler.getBaseTierFiveMaxIo();
-                return new TurretBaseTierFiveTileEntity(MaxCharge, MaxIO);
+                return new TurretBase(MaxCharge, MaxIO, 5);
         }
         return null;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return true;
     }
 
     @Override
@@ -130,25 +139,22 @@ public class BlockTurretBase extends BlockAbstractContainer {
         return true;
     }
 
-
     @Override
     public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
-        {
-            if (!worldIn.isRemote) {
+
+            if (!worldIn.isRemote && worldIn.getTileEntity(pos) instanceof TurretBase) {
                 if (worldIn.isBlockIndirectlyGettingPowered(pos) > 0) {
                     ((TurretBase) worldIn.getTileEntity(pos)).setRedstone(true);
                 } else if (worldIn.isBlockIndirectlyGettingPowered(pos) == 0) {
                     ((TurretBase) worldIn.getTileEntity(pos)).setRedstone(false);
                 }
             }
-        }
+
     }
 
-
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack
-            stack) {
-        if (!worldIn.isRemote) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        if (!worldIn.isRemote && worldIn.getTileEntity(pos) instanceof TurretBase) {
             EntityPlayerMP player = (EntityPlayerMP) placer;
             TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
             base.setOwner(player.getUniqueID().toString());
@@ -185,5 +191,19 @@ public class BlockTurretBase extends BlockAbstractContainer {
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
         drops.add(0, new ItemStack(ModBlocks.turretBase, 1, this.getMetaFromState(state)));
         return drops;
+    }
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        return super.damageDropped(state);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
+    public void getSubBlocks(Item item, CreativeTabs tab, List subItems) {
+        for (int i = 0; i < 5; i++) {
+            subItems.add(new ItemStack(ModBlocks.turretBase, 1, i));
+        }
     }
 }

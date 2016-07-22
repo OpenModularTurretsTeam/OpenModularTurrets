@@ -13,7 +13,7 @@ public class FireRateUpgradeItem extends UpgradeItem {
     public FireRateUpgradeItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedFireRateUpgrade);
+        this.setUnlocalizedName(Names.Items.fireRateUpgrade);
     }
 
 

@@ -5,12 +5,12 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
-import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class LeverTileEntity extends TileEntity implements ITickable {
     public float rotation = 0;
     public boolean isTurning = false;
-    private TurretBaseTierOneTileEntity base;
+    private TurretBase base;
 
     public Packet getDescriptionPacket() {
         NBTTagCompound var1 = new NBTTagCompound();
@@ -22,20 +22,20 @@ public class LeverTileEntity extends TileEntity implements ITickable {
     @Override
     public void update() {
         if (base == null) {
-            if (worldObj.getTileEntity(this.pos.east()) instanceof TurretBaseTierOneTileEntity) {
-                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(this.pos.east());
+            if (worldObj.getTileEntity(this.pos.east()) instanceof TurretBase && ((TurretBase)worldObj.getTileEntity(this.pos.east())).getBaseTier() == 1) {
+                this.base = (TurretBase) worldObj.getTileEntity(this.pos.east());
             }
 
-            if (worldObj.getTileEntity(this.pos.west()) instanceof TurretBaseTierOneTileEntity) {
-                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(this.pos.west());
+            if (worldObj.getTileEntity(this.pos.west()) instanceof TurretBase && ((TurretBase)worldObj.getTileEntity(this.pos.east())).getBaseTier() == 1) {
+                this.base = (TurretBase) worldObj.getTileEntity(this.pos.west());
             }
 
-            if (worldObj.getTileEntity(this.pos.south()) instanceof TurretBaseTierOneTileEntity) {
-                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(this.pos.south());
+            if (worldObj.getTileEntity(this.pos.south()) instanceof TurretBase && ((TurretBase)worldObj.getTileEntity(this.pos.east())).getBaseTier() == 1) {
+                this.base = (TurretBase) worldObj.getTileEntity(this.pos.south());
             }
 
-            if (worldObj.getTileEntity(this.pos.north()) instanceof TurretBaseTierOneTileEntity) {
-                this.base = (TurretBaseTierOneTileEntity) worldObj.getTileEntity(this.pos.north());
+            if (worldObj.getTileEntity(this.pos.north()) instanceof TurretBase && ((TurretBase)worldObj.getTileEntity(this.pos.east())).getBaseTier() == 1) {
+                this.base = (TurretBase) worldObj.getTileEntity(this.pos.north());
             }
         }
 

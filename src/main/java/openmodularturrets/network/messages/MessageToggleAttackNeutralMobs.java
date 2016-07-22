@@ -2,6 +2,7 @@ package openmodularturrets.network.messages;
 
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -18,14 +19,19 @@ public class MessageToggleAttackNeutralMobs implements IMessage {
 
     public static class MessageHandlerToggleAttackNeutralMobs implements IMessageHandler<MessageToggleAttackNeutralMobs, IMessage> {
         @Override
-        public IMessage onMessage(MessageToggleAttackNeutralMobs message, MessageContext ctx) {
-            World world = ctx.getServerHandler().playerEntity.worldObj;
-            TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+        public IMessage onMessage(MessageToggleAttackNeutralMobs messageIn, MessageContext ctxIn) {
+            final MessageToggleAttackNeutralMobs message = messageIn;
+            final MessageContext ctx = ctxIn;
+            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    World world = ctx.getServerHandler().playerEntity.worldObj;
+                    TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
 
-            turret.setAttacksNeutrals(message.doAttackNeutrals());
-            return message;
+                    turret.setAttacksNeutrals(message.doAttackNeutrals());
+                }});
+            return null;
         }
-
     }
 
     public MessageToggleAttackNeutralMobs(int x, int y, int z, boolean attack_neutrals) {

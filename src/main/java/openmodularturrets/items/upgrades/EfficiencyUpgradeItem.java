@@ -13,7 +13,7 @@ public class EfficiencyUpgradeItem extends UpgradeItem {
     public EfficiencyUpgradeItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedEfficiencyUpgrade);
+        this.setUnlocalizedName(Names.Items.efficiencyUpgrade);
     }
 
     @Override

@@ -13,7 +13,7 @@ public class AccuracyUpgradeItem extends UpgradeItem {
     public AccuracyUpgradeItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedAccuraccyUpgrade);
+        this.setUnlocalizedName(Names.Items.accuraccyUpgrade);
     }
 
     @Override

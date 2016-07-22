@@ -18,7 +18,7 @@ public class ItemBlockTurretBase extends ItemBlock {
         setHasSubtypes(true);
     }
 
-    private final static String[] subNames = {
+    public final static String[] subNames = {
             "TierOne", "TierTwo", "TierThree","TierFour","TierFive"
     };
 

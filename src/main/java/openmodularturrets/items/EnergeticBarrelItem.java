@@ -8,7 +8,7 @@ class EnergeticBarrelItem extends Item {
     public EnergeticBarrelItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedEnergeticBarrel);
+        this.setUnlocalizedName(Names.Items.energeticBarrel);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
     }
 }

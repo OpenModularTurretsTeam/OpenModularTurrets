@@ -1,6 +1,7 @@
 package openmodularturrets.network.messages;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -16,10 +17,17 @@ public class MessageSetBaseTargetingType implements IMessage {
 
     public static class MessageHandlerSetBaseTargetingType implements IMessageHandler<MessageSetBaseTargetingType, IMessage> {
         @Override
-        public IMessage onMessage(MessageSetBaseTargetingType message, MessageContext ctx) {
-            World world = ctx.getServerHandler().playerEntity.worldObj;
-            TurretBase turretbase = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-            turretbase.setMultiTargeting(!turretbase.isMultiTargeting());
+        public IMessage onMessage(MessageSetBaseTargetingType messageIn, MessageContext ctxIn) {
+            final MessageSetBaseTargetingType message = messageIn;
+            final MessageContext ctx = ctxIn;
+            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    World world = ctx.getServerHandler().playerEntity.worldObj;
+                    TurretBase turretbase = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+                    turretbase.setMultiTargeting(!turretbase.isMultiTargeting());
+                }
+            });
             return null;
         }
     }

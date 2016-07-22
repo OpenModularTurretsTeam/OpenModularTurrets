@@ -13,7 +13,7 @@ public class RecyclerAddonItem extends AddonItem {
     public RecyclerAddonItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedRecyclerAddon);
+        this.setUnlocalizedName(Names.Items.recyclerAddon);
     }
 
     @Override

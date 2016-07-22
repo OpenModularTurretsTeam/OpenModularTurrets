@@ -16,7 +16,6 @@ import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -29,6 +28,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.handler.NetworkingHandler;
+import openmodularturrets.items.blocks.ItemBlockTurretBase;
 import openmodularturrets.network.messages.MessageTurretBase;
 import openmodularturrets.tileentity.TileEntityContainer;
 import openmodularturrets.util.MathUtil;
@@ -49,7 +49,7 @@ import static openmodularturrets.util.PlayerUtil.*;
         @Optional.Interface(iface = "thaumcraft.api.aspects.IEssentiaTransport", modid = "Thaumcraft"),
         @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2")})
 
-public abstract class TurretBase extends TileEntityContainer implements IEnergyReceiver, SimpleComponent, ISidedInventory, IPeripheral, IEnergySink, ITickable {
+public class TurretBase extends TileEntityContainer implements IEnergyReceiver, SimpleComponent, IPeripheral, IEnergySink, ITickable {
     public int trustedPlayerIndex = 0;
     public ItemStack camoStack;
 
@@ -59,7 +59,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyR
     //For multiTargeting
     private boolean multiTargeting = false;
 
-    private final EnergyStorage storage;
+    private EnergyStorage storage = new EnergyStorage(10, 10);;
     private int yAxisDetect;
     private boolean attacksMobs;
     private boolean attacksNeutrals;
@@ -68,18 +68,26 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyR
     private String ownerName = "";
     private List<TrustedPlayer> trustedPlayers;
     private int ticks;
+    private int tier;
     private boolean active;
     private boolean inverted;
     private boolean redstone;
     private boolean checkRedstone = false;
     private boolean computerAccessible = false;
+    private boolean dropBase = false;
     //private float amountOfPotentia = 0F;
     //private final float maxAmountOfPotentia = ConfigHandler.getPotentiaAddonCapacity();
     private ArrayList<IComputerAccess> comp;
     private double storageEU;
     private boolean wasAddedToEnergyNet = false;
 
-    public TurretBase(int MaxEnergyStorage, int MaxIO) {
+    public TurretBase() {
+        super();
+        this.trustedPlayers = new ArrayList<>();
+        this.inv = new ItemStack[13];
+    }
+
+    public TurretBase(int MaxEnergyStorage, int MaxIO, int tier) {
         super();
         this.yAxisDetect = 2;
         this.storage = new EnergyStorage(MaxEnergyStorage, MaxIO);
@@ -87,9 +95,15 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyR
         this.attacksNeutrals = true;
         this.attacksPlayers = false;
         this.trustedPlayers = new ArrayList<>();
-        this.inv = new ItemStack[this.getSizeInventory()];
+        this.inv = new ItemStack[tier == 5 ? 13 : tier == 4 ? 12 : tier == 3 ? 12 : tier == 2 ? 12 : 9];
         this.inverted = true;
         this.active = true;
+        this.tier = tier;
+    }
+
+    @Override
+    public String getName() {
+        return super.getName().concat(ItemBlockTurretBase.subNames[tier-1]);
     }
 
     private static void updateRedstoneReactor(TurretBase base) {
@@ -183,7 +197,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyR
                         this.worldObj, this.pos);
             case 3:
                 return ConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj,this.pos);
+                        this.worldObj, this.pos);
             case 4:
                 return ConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.worldObj, this.pos);
@@ -319,20 +333,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyR
         par1.setBoolean("shouldConcealTurrets", shouldConcealTurrets);
         par1.setBoolean("multiTargeting", multiTargeting);
         par1.setDouble("storageEU", storageEU);
-
-        NBTTagList itemList = new NBTTagList();
-
-        for (int i = 0; i < this.inv.length; i++) {
-            ItemStack stack = this.getStackInSlot(i);
-
-            if (stack != null) {
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setByte("Slot", (byte) i);
-                stack.writeToNBT(tag);
-                itemList.appendTag(tag);
-            }
-        }
-        par1.setTag("Inventory", itemList);
+        par1.setInteger("tier", tier);
 
         if (camoStack != null) {
             NBTTagCompound tag2 = new NBTTagCompound();
@@ -343,8 +344,6 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyR
 
     @Override
     public void readFromNBT(NBTTagCompound par1) {
-        super.readFromNBT(par1);
-
         this.storage.setCapacity(par1.getInteger("maxStorage"));
         this.storage.setEnergyStored(par1.getInteger("energyStored"));
         this.storage.setMaxReceive(par1.getInteger("maxIO"));
@@ -361,8 +360,8 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyR
             this.owner = getPlayerUUID(par1.getString("owner")).toString();
         } else {
             Logger.getGlobal().info("Found non existent owner: " + par1.getString(
-                    "owner") + "at coordinates: " + this.pos.getX() + "," + this.pos.getY()  + "," + this.pos.getZ()  + ". Dropping Turretbase");
-            worldObj.destroyBlock(this.pos, true);
+                    "owner") + "at coordinates: " + this.pos.getX() + "," + this.pos.getY() + "," + this.pos.getZ() + ". Dropping Turretbase");
+            dropBase = true;
             return;
         }
         if (par1.hasKey("ownerName")) {
@@ -397,21 +396,19 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyR
         } else {
             storageEU = 0;
         }
-
-        NBTTagList tagList = par1.getTagList("Inventory", 10);
-
-        for (int i = 0; i < tagList.tagCount(); i++) {
-            NBTTagCompound tag = tagList.getCompoundTagAt(i);
-            byte slot = tag.getByte("Slot");
-            if (slot >= 0 && slot < inv.length) {
-                inv[slot] = ItemStack.loadItemStackFromNBT(tag);
-            }
+        if (par1.hasKey("tier")) {
+            this.tier = par1.getInteger("tier");
+        } else {
+            Logger.getGlobal().info("Found bugged turretBase (no tier) at coordinates: " + this.pos.getX() + "," + this.pos.getY() + "," + this.pos.getZ() + ". Dropping Turretbase");
+            dropBase = true;
         }
+        this.inv = new ItemStack[tier == 5 ? 13 : tier == 4 ? 12 : tier == 3 ? 12 : tier == 2 ? 12 : 9];
 
         NBTTagCompound tag2 = par1.getCompoundTag("CamoStack");
         if (tag2 != null) {
             camoStack = ItemStack.loadItemStackFromNBT(tag2);
         }
+        super.readFromNBT(par1);
     }
 
     /*
@@ -452,15 +449,17 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyR
             }
         }
         return 0;
-    }
-     */
+    }*/
+
     @Override
     public void update() {
-        if (ModCompatibility.IC2Loaded && ConfigHandler.EUSupport && !wasAddedToEnergyNet && !worldObj.isRemote) {
+        if (!worldObj.isRemote && dropBase) {
+            worldObj.destroyBlock(this.pos, true);
+            return;
+        } else if (ModCompatibility.IC2Loaded && ConfigHandler.EUSupport && !wasAddedToEnergyNet && !worldObj.isRemote) {
             addToIc2EnergyNetwork();
             wasAddedToEnergyNet = true;
         }
-
         if (!worldObj.isRemote && ticks % 5 == 0) {
 
             //Concealment
@@ -519,7 +518,9 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyR
         return NetworkingHandler.INSTANCE.getPacketFrom((IMessage) new MessageTurretBase(this));
     }
 
-    public abstract int getBaseTier();
+    public int getBaseTier() {
+        return tier;
+    }
 
     public boolean isAttacksMobs() {
         return attacksMobs;
@@ -788,8 +789,22 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyR
             return Math.round(amountOfPotentia);
         }
         return 0;
+    } */
+
+    @Optional.Method(modid = "OpenComputers")
+    @Override
+    public String getComponentName() {
+        return "turretBase";
     }
-    */
+
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function():string; returns owner of turret base.")
+    public Object[] getTier(Context context, Arguments args) {
+        if (!computerAccessible) {
+            return new Object[]{this.getBaseTier()};
+        }
+        return new Object[]{this.getOwner()};
+    }
 
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():string; returns owner of turret base.")

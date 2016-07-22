@@ -33,15 +33,16 @@ public class ModularTurrets {
     public void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         gui = new GuiHandler();
+        ModItems.init();
+        ModBlocks.init();
         modularTurretsTab = new ModularTurretsTab(Reference.MOD_ID);
+        proxy.preInit();
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         ModCompatibility.checkForMods();
         ModCompatibility.performModCompat();
-        ModItems.init();
-        ModBlocks.init();
         proxy.initRenderers();
         proxy.initHandlers();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, gui);

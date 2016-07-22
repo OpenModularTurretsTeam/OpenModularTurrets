@@ -16,7 +16,7 @@ public class BlockExpanderPowerTierFour extends BlockAbstract implements ITileEn
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setResistance(3.0F);
         this.setStepSound(Block.soundTypeStone);
-        this.setUnlocalizedName(Names.Blocks.unlocalisedExpanderPowerTierFour);
+        this.setUnlocalizedName(Names.Blocks.expanderPowerTierFour);
         this.setBlockBounds(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
     }
 

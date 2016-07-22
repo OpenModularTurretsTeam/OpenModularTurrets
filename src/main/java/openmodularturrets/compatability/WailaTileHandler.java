@@ -42,6 +42,9 @@ public class WailaTileHandler implements IWailaDataProvider {
 
         register.registerNBTProvider(instance, TurretBase.class);
         register.registerBodyProvider(instance, TurretBase.class);
+        register.registerTailProvider(instance, TurretBase.class);
+        register.registerHeadProvider(instance, TurretBase.class);
+        register.registerStackProvider(instance, TurretBase.class);
     }
 
     /**
@@ -54,7 +57,7 @@ public class WailaTileHandler implements IWailaDataProvider {
     @Override
     @Optional.Method(modid = "Waila")
     public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        return accessor.getStack();
+        return new ItemStack(accessor.getStack().getItem(),1,accessor.getNBTData().getInteger("tier") -1);
     }
 
     /**

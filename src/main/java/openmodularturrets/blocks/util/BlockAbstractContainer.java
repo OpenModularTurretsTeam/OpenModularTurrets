@@ -30,6 +30,11 @@ public abstract class BlockAbstractContainer extends BlockContainer {
         return false;
     }
 
+    @Override
+    public int getRenderType() {
+        return 3;
+    }
+
     protected void dropItems(World worldIn, BlockPos pos) {
         if (worldIn.getTileEntity(pos) instanceof TileEntityContainer) {
             TileEntityContainer entity = (TileEntityContainer) worldIn.getTileEntity(pos);
