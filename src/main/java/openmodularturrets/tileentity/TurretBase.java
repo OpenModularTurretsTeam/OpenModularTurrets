@@ -28,7 +28,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.handler.NetworkingHandler;
-import openmodularturrets.items.blocks.ItemBlockTurretBase;
 import openmodularturrets.network.messages.MessageTurretBase;
 import openmodularturrets.util.MathUtil;
 import openmodularturrets.util.TrustedPlayer;
@@ -59,7 +58,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     //For multiTargeting
     private boolean multiTargeting = false;
 
-    private EnergyStorage storage = new EnergyStorage(10, 10);;
+    private EnergyStorage storage = new EnergyStorage(10, 10);
     private int yAxisDetect;
     private boolean attacksMobs;
     private boolean attacksNeutrals;
@@ -100,12 +99,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         this.tier = tier;
     }
 
-    @Override
-    public String getName() {
-        return super.getName().concat(ItemBlockTurretBase.subNames[tier-1]);
-    }
-
-    private static void updateRedstoneReactor(TurretBase base) {
+   private static void updateRedstoneReactor(TurretBase base) {
         if (!TurretHeadUtil.hasRedstoneReactor(base)) {
             return;
         }
@@ -342,6 +336,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
 
     @Override
     public void readFromNBT(NBTTagCompound par1) {
+        super.readFromNBT(par1);
         this.storage.setCapacity(par1.getInteger("maxStorage"));
         this.storage.setEnergyStored(par1.getInteger("energyStored"));
         this.storage.setMaxReceive(par1.getInteger("maxIO"));
@@ -394,13 +389,17 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         } else {
             storageEU = 0;
         }
-        this.inv = new ItemStack[tier == 5 ? 13 : tier == 4 ? 12 : tier == 3 ? 12 : tier == 2 ? 12 : 9];
+        ItemStack[] invtemp = inv;         //to properly restore the original inventory.
+        this.inv = new ItemStack[tier == 5 ? 13 : tier > 1 ? 12 : 9];
+        for (int i = 0; i < inv.length; i++) {
+            inv[i] = invtemp[i];
+        }
 
         NBTTagCompound tag2 = par1.getCompoundTag("CamoStack");
         if (tag2 != null) {
             camoStack = ItemStack.loadItemStackFromNBT(tag2);
         }
-        super.readFromNBT(par1);
+
     }
 
     /*
@@ -793,9 +792,9 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     @Callback(doc = "function():string; returns owner of turret base.")
     public Object[] getTier(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{this.getBaseTier()};
+            return new Object[]{"Computer access deactivated!"};
         }
-        return new Object[]{this.getOwner()};
+        return new Object[]{this.getBaseTier()};
     }
 
     @Optional.Method(modid = "OpenComputers")
