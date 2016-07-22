@@ -5,11 +5,11 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
-import openmodularturrets.blocks.ModBlocks;
+import openmodularturrets.init.ModBlocks;
 import openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
 import openmodularturrets.client.render.renderers.projectiles.ProjectileRenderers;
 import openmodularturrets.items.IntermediateProductTiered;
-import openmodularturrets.items.ModItems;
+import openmodularturrets.init.ModItems;
 import openmodularturrets.reference.Names;
 import openmodularturrets.reference.Reference;
 

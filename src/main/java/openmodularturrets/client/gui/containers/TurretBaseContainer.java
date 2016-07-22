@@ -8,7 +8,7 @@ import openmodularturrets.client.gui.customSlot.AddonSlot;
 import openmodularturrets.client.gui.customSlot.UpgradeSlot;
 import openmodularturrets.items.addons.AddonItem;
 import openmodularturrets.items.upgrades.UpgradeItem;
-import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.TurretBase;
 
 /**
  * Created by Keridos on 09/12/2015.

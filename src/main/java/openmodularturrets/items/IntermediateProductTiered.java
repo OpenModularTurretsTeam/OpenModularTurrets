@@ -4,6 +4,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import openmodularturrets.ModularTurrets;
+import openmodularturrets.init.ModItems;
 import openmodularturrets.reference.Names;
 
 import java.util.List;

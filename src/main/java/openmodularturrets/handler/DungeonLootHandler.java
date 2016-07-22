@@ -3,7 +3,7 @@ package openmodularturrets.handler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
-import openmodularturrets.blocks.ModBlocks;
+import openmodularturrets.init.ModBlocks;
 
 /**
  * Created by Niel on 12/26/2015.

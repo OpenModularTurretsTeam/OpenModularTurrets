@@ -18,10 +18,8 @@ import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.addons.*;
 import openmodularturrets.items.upgrades.*;
-import openmodularturrets.tileentity.expander.AbstractInvExpander;
-import openmodularturrets.tileentity.expander.AbstractPowerExpander;
-import openmodularturrets.tileentity.turretbase.TrustedPlayer;
-import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.Expander;
+import openmodularturrets.tileentity.TurretBase;
 import openmodularturrets.tileentity.turrets.TurretHead;
 
 import java.util.HashSet;
@@ -268,15 +266,15 @@ public class TurretHeadUtil {
     public static int getPowerExpanderTotalExtraCapacity(World world, BlockPos pos) {
         int totalExtraCap = 0;
         for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, pos)) {
-            if (tileEntity instanceof AbstractPowerExpander) {
+            if (tileEntity instanceof Expander && ((Expander)tileEntity).isPowerExpander()) {
                 totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue(
-                        (AbstractPowerExpander) tileEntity);
+                        (Expander) tileEntity);
             }
         }
         return totalExtraCap;
     }
 
-    private static ItemStack deductFromInvExpander(ItemStack itemStack, AbstractInvExpander exp, TurretBase base) {
+    private static ItemStack deductFromInvExpander(ItemStack itemStack, Expander exp, TurretBase base) {
 
         for (int i = 0; i < exp.getSizeInventory(); i++) {
             ItemStack ammoCheck = exp.getStackInSlot(i);
@@ -306,8 +304,8 @@ public class TurretHeadUtil {
 
     public static ItemStack getSpecificItemFromInvExpanders(World world, ItemStack itemStack, TurretBase base) {
         for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, base.getPos())) {
-            if (tileEntity instanceof AbstractInvExpander) {
-                AbstractInvExpander exp = (AbstractInvExpander) tileEntity;
+            if (tileEntity instanceof Expander && !((Expander)tileEntity).isPowerExpander()) {
+                Expander exp = (Expander) tileEntity;
                 ItemStack stack = deductFromInvExpander(itemStack, exp, base);
                 if (stack != null) {
                     return stack;
@@ -319,8 +317,8 @@ public class TurretHeadUtil {
 
     public static ItemStack getAnyItemFromInvExpanders(World world, TurretBase base) {
         for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, base.getPos())) {
-            if (tileEntity instanceof AbstractInvExpander) {
-                AbstractInvExpander exp = (AbstractInvExpander) tileEntity;
+            if (tileEntity instanceof Expander && !((Expander)tileEntity).isPowerExpander()) {
+                Expander exp = (Expander) tileEntity;
                 for (int i = 0; i < exp.getSizeInventory(); i++) {
                     ItemStack itemCheck = exp.getStackInSlot(i);
                     if (itemCheck != null) {
@@ -333,8 +331,9 @@ public class TurretHeadUtil {
         return null;
     }
 
-    private static int getPowerExtenderCapacityValue(AbstractPowerExpander expander) {
+    private static int getPowerExtenderCapacityValue(Expander expander) {
         if (expander != null) {
+            if (!expander.isPowerExpander()) return 0;
             int tier = expander.getTier();
 
             switch (tier) {

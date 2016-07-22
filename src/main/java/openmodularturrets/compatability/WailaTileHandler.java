@@ -12,7 +12,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import openmodularturrets.reference.Names;
-import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.TurretBase;
 
 import java.util.List;
 
@@ -42,9 +42,6 @@ public class WailaTileHandler implements IWailaDataProvider {
 
         register.registerNBTProvider(instance, TurretBase.class);
         register.registerBodyProvider(instance, TurretBase.class);
-        register.registerTailProvider(instance, TurretBase.class);
-        register.registerHeadProvider(instance, TurretBase.class);
-        register.registerStackProvider(instance, TurretBase.class);
     }
 
     /**
@@ -57,7 +54,7 @@ public class WailaTileHandler implements IWailaDataProvider {
     @Override
     @Optional.Method(modid = "Waila")
     public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        return new ItemStack(accessor.getStack().getItem(),1,accessor.getNBTData().getInteger("tier") -1);
+        return accessor.getStack();
     }
 
     /**

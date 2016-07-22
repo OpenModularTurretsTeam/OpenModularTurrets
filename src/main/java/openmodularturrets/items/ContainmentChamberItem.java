@@ -4,7 +4,7 @@ import net.minecraft.item.Item;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.Names;
 
-class ContainmentChamberItem extends Item {
+public class ContainmentChamberItem extends Item {
     public ContainmentChamberItem() {
         super();
 

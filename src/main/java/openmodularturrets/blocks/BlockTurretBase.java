@@ -24,8 +24,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.blocks.util.BlockAbstractContainer;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.init.ModBlocks;
 import openmodularturrets.reference.Names;
-import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.TurretBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -195,7 +196,7 @@ public class BlockTurretBase extends BlockAbstractContainer {
 
     @Override
     public int damageDropped(IBlockState state) {
-        return super.damageDropped(state);
+        return state.getValue(TIER)-1;
     }
 
     @Override

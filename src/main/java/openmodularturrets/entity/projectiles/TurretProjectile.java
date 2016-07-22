@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.TurretBase;
 import openmodularturrets.util.PlayerUtil;
 import openmodularturrets.util.TurretHeadUtil;
 

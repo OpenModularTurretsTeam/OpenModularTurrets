@@ -4,7 +4,7 @@ import igwmod.gui.GuiWiki;
 import igwmod.gui.tabs.BaseWikiTab;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import openmodularturrets.blocks.ModBlocks;
+import openmodularturrets.init.ModBlocks;
 import openmodularturrets.handler.ConfigHandler;
 
 /**

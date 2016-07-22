@@ -7,8 +7,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import openmodularturrets.client.gui.containers.TurretBaseTierThreeContainer;
 import openmodularturrets.reference.Reference;
-import openmodularturrets.tileentity.turretbase.TrustedPlayer;
-import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.util.TrustedPlayer;
+import openmodularturrets.tileentity.TurretBase;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
