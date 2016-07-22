@@ -82,7 +82,6 @@ public abstract class TileEntityContainer extends TileEntityOMT implements ISide
         return inv[slot];
     }
 
-
     @Override
     public int getInventoryStackLimit() {
         return 64;

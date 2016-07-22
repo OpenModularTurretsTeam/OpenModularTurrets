@@ -116,15 +116,11 @@ public class Expander extends TileEntityContainer implements ITickable {
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-        return true;
+        return !isPowerExpander();
     }
 
     public int getTier() {
         return tier;
-    }
-
-    public void setTier(int tier) {
-        this.tier = tier;
     }
 
     public TurretBase getBase() {
