@@ -6,6 +6,6 @@ import openmodularturrets.reference.Names;
 class BulletThrowableItem extends Item {
     public BulletThrowableItem() {
         super();
-        this.setUnlocalizedName(Names.Items.unlocalisedBulletThrowableItem);
+        this.setUnlocalizedName(Names.Items.bulletThrowableItem);
     }
 }

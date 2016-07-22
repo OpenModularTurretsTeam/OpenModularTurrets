@@ -12,7 +12,7 @@ public class ConcealerAddonItem extends AddonItem {
     public ConcealerAddonItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedConcealerAddon);
+        this.setUnlocalizedName(Names.Items.concealerAddon);
     }
 
     @Override

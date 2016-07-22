@@ -8,7 +8,7 @@ class IOBusItem extends Item {
     public IOBusItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedIOBus);
+        this.setUnlocalizedName(Names.Items.ioBus);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
     }
 }

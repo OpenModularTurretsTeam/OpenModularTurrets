@@ -24,7 +24,7 @@ public class BlockFenceTierFour extends BlockAbstractMiscPane {
         this.setHardness(50.0F);
         this.setHarvestLevel("pickaxe", 2);
         this.setStepSound(Block.soundTypeStone);
-        this.setUnlocalizedName(Names.Blocks.unlocalisedFenceTierFour);
+        this.setUnlocalizedName(Names.Blocks.fenceTierFour);
     }
 
     @Override

@@ -6,6 +6,6 @@ public class BulletAmmoItem extends AmmoItem {
     public BulletAmmoItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedBulletCraftableItem);
+        this.setUnlocalizedName(Names.Items.bulletCraftableItem);
     }
 }

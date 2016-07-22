@@ -18,13 +18,14 @@ import openmodularturrets.ModularTurrets;
 import openmodularturrets.blocks.util.BlockAbstract;
 import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.LeverTileEntity;
-import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
     public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 16);
+
     public LeverBlock() {
         super(Material.rock);
-        this.setUnlocalizedName(Names.Blocks.unlocalisedLever);
+        this.setUnlocalizedName(Names.Blocks.lever);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setHardness(2F);
         this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
@@ -35,7 +36,7 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-            return this.getDefaultState().withProperty(ROTATION, meta);
+        return this.getDefaultState().withProperty(ROTATION, meta);
 
     }
 
@@ -50,33 +51,39 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
     }
 
 
-
     @Override
     public TileEntity createNewTileEntity(World worldIn, int par2) {
         return new LeverTileEntity();
     }
 
+    private boolean isBaseValid(TileEntity base) {
+        if (base instanceof TurretBase) {
+            return ((TurretBase) base).getBaseTier() == 1;
+        }
+        return false;
+    }
+
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        return (worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())) instanceof TurretBaseTierOneTileEntity ||
-                worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())) instanceof TurretBaseTierOneTileEntity ||
-                worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)) instanceof TurretBaseTierOneTileEntity ||
-                worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1)) instanceof TurretBaseTierOneTileEntity);
+        return (isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()))) ||
+                isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()))) ||
+                isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1))) ||
+                isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1))));
     }
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         float l = 0;
-        if (worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())) instanceof TurretBaseTierOneTileEntity) {
+        if (isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())))) {
             l = 270F;
         }
-        if (worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())) instanceof TurretBaseTierOneTileEntity) {
+        if (isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())))) {
             l = 90F;
         }
-        if (worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)) instanceof TurretBaseTierOneTileEntity) {
+        if (isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)))) {
             l = 0F;
         }
-        if (worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1)) instanceof TurretBaseTierOneTileEntity) {
+        if (isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1)))) {
             l = 180;
         }
         int shu = MathHelper.floor_double((double) (l * 4.0F / 360.0F) + 0.5D) & 3;
@@ -85,11 +92,11 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
-        TurretBaseTierOneTileEntity base;
+        TurretBase base;
         LeverTileEntity lever = (LeverTileEntity) worldIn.getTileEntity(pos);
-        if ((worldIn.getBlockState(pos).getValue(ROTATION)* 90) == 0 && worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
-                pos.getZ() + 1)) instanceof TurretBaseTierOneTileEntity) {
-            base = (TurretBaseTierOneTileEntity) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
+        if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 0 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
+                pos.getZ() + 1)) )) {
+            base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
                     pos.getZ() + 1));
             if (base != null) {
                 lever.isTurning = true;
@@ -100,9 +107,9 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
             }
         }
 
-        if ((worldIn.getBlockState(pos).getValue(ROTATION)* 90) == 90 && worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(),
-                pos.getZ())) instanceof TurretBaseTierOneTileEntity) {
-            base = (TurretBaseTierOneTileEntity) worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()));
+        if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 90 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(),
+                pos.getZ())) )) {
+            base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()));
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
@@ -112,9 +119,9 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
             }
         }
 
-        if ((worldIn.getBlockState(pos).getValue(ROTATION)* 90) == 180 && worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
-                pos.getZ() - 1)) instanceof TurretBaseTierOneTileEntity) {
-            base = (TurretBaseTierOneTileEntity) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
+        if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 180 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
+                pos.getZ() - 1)) )) {
+            base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
                     pos.getZ() - 1));
             if (base != null) {
                 lever.isTurning = true;
@@ -125,9 +132,9 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
             }
         }
 
-        if ((worldIn.getBlockState(pos).getValue(ROTATION)* 90) == 270 && worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(),
-                pos.getZ())) instanceof TurretBaseTierOneTileEntity) {
-            base = (TurretBaseTierOneTileEntity) worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()));
+        if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 270 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(),
+                pos.getZ())) )) {
+            base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()));
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {

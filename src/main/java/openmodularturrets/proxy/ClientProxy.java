@@ -8,35 +8,45 @@ import net.minecraftforge.client.model.ModelLoader;
 import openmodularturrets.blocks.ModBlocks;
 import openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
 import openmodularturrets.client.render.renderers.projectiles.ProjectileRenderers;
+import openmodularturrets.items.IntermediateProductTiered;
 import openmodularturrets.items.ModItems;
 import openmodularturrets.reference.Names;
 import openmodularturrets.reference.Reference;
 
 public class ClientProxy extends CommonProxy {
 
-    public void registerItemModel(final Item item, int meta) {
-        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName().toString().toLowerCase()));
+    private void registerItemModel(final Item item, int meta) {
+        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName().toLowerCase()));
     }
 
-    public void registerItemModel(final Item item, int meta, final String variantName) {
-        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(new ResourceLocation(item.getRegistryName().toString().toLowerCase()), variantName));
+    private void registerItemModel(final Item item, int meta, final String variantName) {
+        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(new ResourceLocation(item.getRegistryName().toLowerCase()), variantName));
     }
 
-    public void registerBlockModelAsItem(final Block block, int meta, final String blockName) {
+    private void registerItemModel(final Item item, int meta, final String customName, boolean useCustomName) {
+        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + customName.toLowerCase()));
+    }
+
+    private void registerBlockModelAsItem(final Block block, int meta, final String blockName) {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + blockName, "inventory"));
     }
 
-    public void registerBlockModelAsItem(final Block block, int meta, final String blockName, String variantName) {
+    private void registerBlockModelAsItem(final Block block, int meta, final String blockName, String variantName) {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + blockName, variantName));
     }
 
     @Override
     public void preInit() {
         super.preInit();
-
-        registerBlockModelAsItem(ModBlocks.turretBase, 0, Names.Blocks.unlocalisedTurretBase);
-
+        for (int i = 0; i < 5; i++) {
+            registerBlockModelAsItem(ModBlocks.turretBase, i, Names.Blocks.turretBase, "tier=" + (i + 1));
+        }
+        for (int i = 0; i < 15; i++) {
+            registerItemModel(ModItems.intermediateProductTiered, i, IntermediateProductTiered.subNames[i], true);
+        }
         registerItemModel(ModItems.ioBus, 0);
+        registerItemModel(ModItems.grenadeThrowable, 0);
+        registerItemModel(ModItems.bulletThrowable, 0);
     }
 
     @Override

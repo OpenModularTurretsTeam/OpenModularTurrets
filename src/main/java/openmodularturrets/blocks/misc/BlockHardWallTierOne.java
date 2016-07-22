@@ -14,7 +14,7 @@ public class BlockHardWallTierOne extends BlockAbstract {
         this.setHardness(10.0F);
         this.setHarvestLevel("pickaxe", 3);
         this.setStepSound(Block.soundTypeStone);
-        this.setUnlocalizedName(Names.Blocks.unlocalisedHardWallTierOne);
+        this.setUnlocalizedName(Names.Blocks.hardWallTierOne);
     }
 
     @Override

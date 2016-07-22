@@ -13,7 +13,7 @@ import java.util.Random;
 public class BlockRelativisticTurret extends BlockAbstractTurretHead {
     public BlockRelativisticTurret() {
         super();
-        this.setUnlocalizedName(Names.Blocks.unlocalisedRelativisticTurret);
+        this.setUnlocalizedName(Names.Blocks.relativisticTurret);
     }
 
     @Override

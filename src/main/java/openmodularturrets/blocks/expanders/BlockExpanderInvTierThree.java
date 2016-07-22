@@ -14,7 +14,7 @@ public class BlockExpanderInvTierThree extends BlockExpanderInvAbstract {
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setResistance(3.0F);
         this.setStepSound(Block.soundTypeStone);
-        this.setUnlocalizedName(Names.Blocks.unlocalisedExpanderInvTierThree);
+        this.setUnlocalizedName(Names.Blocks.expanderInvTierThree);
         this.setBlockBounds(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
     }
 

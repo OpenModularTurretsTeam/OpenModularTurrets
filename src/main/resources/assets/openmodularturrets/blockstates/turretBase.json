@@ -1,22 +1,15 @@
 {
   "forge_marker": 1,
   "defaults": {
-	"model": "minecraft:cube_all",
-	"transform": "forge:default-block",
-	"textures": {
-	  "all": "openmodularturrets:blocks/turretBaseTierOne"
-	}
+	"model": "minecraft:cube_all"
   },
   "variants": {
-	"normal": [
-	  {}
-	],
-	"inventory": [
-	  {
-		"x": 90
-	  }
-	],
 	"tier": {
+	  "1": {
+		"textures": {
+		  "all": "openmodularturrets:blocks/turretBaseTierOne"
+		}
+	  },
 	  "2": {
 		"textures": {
 		  "all": "openmodularturrets:blocks/turretBaseTierTwo"

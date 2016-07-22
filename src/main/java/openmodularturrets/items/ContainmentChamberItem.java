@@ -8,7 +8,9 @@ class ContainmentChamberItem extends Item {
     public ContainmentChamberItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedContainmentChamber);
+        this.setUnlocalizedName(Names.Items.containmentChamber);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
     }
+
+
 }

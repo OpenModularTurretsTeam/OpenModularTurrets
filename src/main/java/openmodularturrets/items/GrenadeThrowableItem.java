@@ -7,6 +7,6 @@ class GrenadeThrowableItem extends Item {
     public GrenadeThrowableItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedGrenadeThrowableItem);
+        this.setUnlocalizedName(Names.Items.grenadeThrowableItem);
     }
 }

@@ -13,7 +13,7 @@ public class RangeUpgradeItem extends UpgradeItem {
     public RangeUpgradeItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedRangeUpgrade);
+        this.setUnlocalizedName(Names.Items.rangeUpgrade);
     }
 
     @Override

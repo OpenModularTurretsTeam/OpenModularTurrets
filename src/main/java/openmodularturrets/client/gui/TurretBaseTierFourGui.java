@@ -8,14 +8,14 @@ import net.minecraft.util.ResourceLocation;
 import openmodularturrets.client.gui.containers.TurretBaseTierFourContainer;
 import openmodularturrets.reference.Reference;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
-import openmodularturrets.tileentity.turretbase.TurretBaseTierFourTileEntity;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class TurretBaseTierFourGui extends TurretBaseAbstractGui {
-    public TurretBaseTierFourGui(InventoryPlayer inventoryPlayer, TurretBaseTierFourTileEntity tileEntity) {
+    public TurretBaseTierFourGui(InventoryPlayer inventoryPlayer, TurretBase tileEntity) {
         super(inventoryPlayer, tileEntity, new TurretBaseTierFourContainer(inventoryPlayer, tileEntity));
     }
 

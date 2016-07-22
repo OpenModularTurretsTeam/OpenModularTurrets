@@ -16,7 +16,7 @@ public class BlockTeleporterTurret extends BlockAbstractTurretHead {
     public BlockTeleporterTurret() {
         super();
 
-        this.setUnlocalizedName(Names.Blocks.unlocalisedTeleporterTurret);
+        this.setUnlocalizedName(Names.Blocks.teleporterTurret);
     }
 
     @Override

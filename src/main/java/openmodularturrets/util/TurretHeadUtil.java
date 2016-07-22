@@ -22,7 +22,6 @@ import openmodularturrets.tileentity.expander.AbstractInvExpander;
 import openmodularturrets.tileentity.expander.AbstractPowerExpander;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
-import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 import openmodularturrets.tileentity.turrets.TurretHead;
 
 import java.util.HashSet;
@@ -570,7 +569,7 @@ public class TurretHeadUtil {
 
     public static boolean hasRedstoneReactor(TurretBase base) {
         boolean found = false;
-        if (base instanceof TurretBaseTierOneTileEntity) {
+        if (base.getBaseTier() == 1) {
             return false;
         }
 
@@ -586,7 +585,7 @@ public class TurretHeadUtil {
 
     public static boolean hasDamageAmpAddon(TurretBase base) {
         boolean found = false;
-        if (base instanceof TurretBaseTierOneTileEntity) {
+        if (base.getBaseTier() == 1) {
             return false;
         }
 
@@ -602,7 +601,7 @@ public class TurretHeadUtil {
 
     public static boolean hasConcealmentAddon(TurretBase base) {
         boolean found = false;
-        if (base instanceof TurretBaseTierOneTileEntity) {
+        if (base.getBaseTier() == 1) {
             return false;
         }
 
@@ -618,7 +617,7 @@ public class TurretHeadUtil {
 
     public static boolean hasSolarPanelAddon(TurretBase base) {
         boolean found = false;
-        if (base instanceof TurretBaseTierOneTileEntity) {
+        if (base.getBaseTier() == 1) {
             return false;
         }
 
@@ -634,7 +633,7 @@ public class TurretHeadUtil {
 
     public static boolean hasPotentiaUpgradeAddon(TurretBase base) {
         boolean found = false;
-        if (base instanceof TurretBaseTierOneTileEntity) {
+        if (base.getBaseTier() == 1) {
             return false;
         }
         if (!ModCompatibility.ThaumcraftLoaded) {
@@ -653,7 +652,7 @@ public class TurretHeadUtil {
 
     public static boolean hasSerialPortAddon(TurretBase base) {
         boolean found = false;
-        if (base instanceof TurretBaseTierOneTileEntity) {
+        if (base.getBaseTier() == 1) {
             return false;
         }
         if (!ModCompatibility.OpenComputersLoaded && !ModCompatibility.ComputercraftLoaded) {
@@ -672,7 +671,7 @@ public class TurretHeadUtil {
 
     private static boolean hasRecyclerAddon(TurretBase base) {
         boolean found = false;
-        if (base instanceof TurretBaseTierOneTileEntity) {
+        if (base.getBaseTier() == 1) {
             return false;
         }
         if (base.getStackInSlot(9) != null) {

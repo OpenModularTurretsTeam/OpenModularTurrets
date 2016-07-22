@@ -1,6 +1,7 @@
 package openmodularturrets.network.messages;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -19,21 +20,28 @@ public class MessageModifyPermissions implements IMessage {
 
     public static class MessageHandlerModifyPermissions implements IMessageHandler<MessageModifyPermissions, IMessage> {
         @Override
-        public IMessage onMessage(MessageModifyPermissions message, MessageContext ctx) {
-            World world = ctx.getServerHandler().playerEntity.worldObj;
-            TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+        public IMessage onMessage(MessageModifyPermissions messageIn, MessageContext ctxIn) {
+            final MessageModifyPermissions message = messageIn;
+            final MessageContext ctx = ctxIn;
+            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    World world = ctx.getServerHandler().playerEntity.worldObj;
+                    TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
 
-            if (message.getPerm().equals("gui")) {
-                turret.getTrustedPlayer(message.getPlayer()).setCanOpenGUI(message.canDo);
-            }
+                    if (message.getPerm().equals("gui")) {
+                        turret.getTrustedPlayer(message.getPlayer()).setCanOpenGUI(message.canDo);
+                    }
 
-            if (message.getPerm().equals("targeting")) {
-                turret.getTrustedPlayer(message.getPlayer()).setCanChangeTargeting(message.canDo);
-            }
+                    if (message.getPerm().equals("targeting")) {
+                        turret.getTrustedPlayer(message.getPlayer()).setCanChangeTargeting(message.canDo);
+                    }
 
-            if (message.getPerm().equals("isAdmin")) {
-                turret.getTrustedPlayer(message.getPlayer()).setAdmin(message.canDo);
-            }
+                    if (message.getPerm().equals("isAdmin")) {
+                        turret.getTrustedPlayer(message.getPlayer()).setAdmin(message.canDo);
+                    }
+                }
+            });
             return null;
         }
     }

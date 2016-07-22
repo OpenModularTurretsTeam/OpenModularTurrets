@@ -1,6 +1,7 @@
 package openmodularturrets.network.messages;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -16,11 +17,17 @@ public class MessageDropBase implements IMessage {
 
     public static class MessageHandlerDropBase implements IMessageHandler<MessageDropBase, IMessage> {
         @Override
-        public IMessage onMessage(MessageDropBase message, MessageContext ctx) {
-            World world = ctx.getServerHandler().playerEntity.worldObj;
+        public IMessage onMessage(MessageDropBase messageIn, MessageContext ctxIn) {
+            final MessageDropBase message = messageIn;
+            final MessageContext ctx = ctxIn;
+            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    World world = ctx.getServerHandler().playerEntity.worldObj;
 
-            world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ()), true);
-
+                    world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ()), true);
+                }
+            });
             return null;
         }
     }

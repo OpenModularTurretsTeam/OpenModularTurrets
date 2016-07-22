@@ -2,6 +2,7 @@ package openmodularturrets.network.messages;
 
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -19,11 +20,19 @@ public class MessageAddTrustedPlayer implements IMessage {
 
     public static class MessageHandlerAddTrustedPlayer implements IMessageHandler<MessageAddTrustedPlayer, IMessage> {
         @Override
-        public IMessage onMessage(MessageAddTrustedPlayer message, MessageContext ctx) {
-            World world = ctx.getServerHandler().playerEntity.worldObj;
-            TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-            turret.addTrustedPlayer(message.getPlayer());
-            world.markBlockForUpdate(new BlockPos(message.getX(), message.getY(), message.getZ()));
+        public IMessage onMessage(MessageAddTrustedPlayer messageIn, MessageContext ctxIn) {
+            final MessageAddTrustedPlayer message = messageIn;
+            final MessageContext ctx = ctxIn;
+            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    World world = ctx.getServerHandler().playerEntity.worldObj;
+                    TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+                    turret.addTrustedPlayer(message.getPlayer());
+                    world.markBlockForUpdate(new BlockPos(message.getX(), message.getY(), message.getZ()));
+
+                }
+            });
             return null;
         }
     }

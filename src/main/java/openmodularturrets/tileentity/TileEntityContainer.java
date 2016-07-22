@@ -3,6 +3,8 @@ package openmodularturrets.tileentity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.IChatComponent;
 
 /**
@@ -11,6 +13,39 @@ import net.minecraft.util.IChatComponent;
  */
 public abstract class TileEntityContainer extends TileEntityOMT implements ISidedInventory {
     protected ItemStack[] inv;
+
+    @Override
+    public void writeToNBT(NBTTagCompound par1) {
+        super.writeToNBT(par1);
+
+        NBTTagList itemList = new NBTTagList();
+
+        for (int i = 0; i < this.inv.length; i++) {
+            ItemStack stack = this.getStackInSlot(i);
+
+            if (stack != null) {
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setByte("Slot", (byte) i);
+                stack.writeToNBT(tag);
+                itemList.appendTag(tag);
+            }
+        }
+        par1.setTag("Inventory", itemList);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound par1) {
+        super.readFromNBT(par1);
+        NBTTagList tagList = par1.getTagList("Inventory", 10);
+
+        for (int i = 0; i < tagList.tagCount(); i++) {
+            NBTTagCompound tag = tagList.getCompoundTagAt(i);
+            byte slot = tag.getByte("Slot");
+            if (slot >= 0 && slot < inv.length) {
+                inv[slot] = ItemStack.loadItemStackFromNBT(tag);
+            }
+        }
+    }
 
     @Override
     public ItemStack decrStackSize(int slot, int amt) {
