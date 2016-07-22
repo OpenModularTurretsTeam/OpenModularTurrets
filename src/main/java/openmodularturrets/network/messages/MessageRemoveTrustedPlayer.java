@@ -1,6 +1,7 @@
 package openmodularturrets.network.messages;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -18,14 +19,20 @@ public class MessageRemoveTrustedPlayer implements IMessage {
 
     public static class MessageHandlerRemoveTrustedPlayer implements IMessageHandler<MessageRemoveTrustedPlayer, IMessage> {
         @Override
-        public IMessage onMessage(MessageRemoveTrustedPlayer message, MessageContext ctx) {
-            World world = ctx.getServerHandler().playerEntity.worldObj;
-            TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+        public IMessage onMessage(MessageRemoveTrustedPlayer messageIn, MessageContext ctxIn) {
+            final MessageRemoveTrustedPlayer message = messageIn;
+            final MessageContext ctx = ctxIn;
+            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    World world = ctx.getServerHandler().playerEntity.worldObj;
+                    TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
 
-            turret.removeTrustedPlayer(message.getPlayer());
+                    turret.removeTrustedPlayer(message.getPlayer());
+                }
+            });
             return null;
         }
-
     }
 
     public MessageRemoveTrustedPlayer(int x, int y, int z, String player) {

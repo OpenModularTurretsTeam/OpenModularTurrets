@@ -13,7 +13,7 @@ public class PotentiaAddonItem extends AddonItem {
     public PotentiaAddonItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedPotentiaAddon);
+        this.setUnlocalizedName(Names.Items.potentiaAddon);
     }
 
     @Override

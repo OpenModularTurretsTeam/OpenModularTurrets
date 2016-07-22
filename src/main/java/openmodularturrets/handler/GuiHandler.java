@@ -18,15 +18,15 @@ public class GuiHandler implements IGuiHandler {
 
         switch (id) {
             case 1:
-                return new TurretBaseTierOneContainer(player.inventory, (TurretBaseTierOneTileEntity) tileEntity);
+                return new TurretBaseTierOneContainer(player.inventory, (TurretBase) tileEntity);
             case 2:
-                return new TurretBaseTierTwoContainer(player.inventory, (TurretBaseTierTwoTileEntity) tileEntity);
+                return new TurretBaseTierTwoContainer(player.inventory, (TurretBase) tileEntity);
             case 3:
-                return new TurretBaseTierThreeContainer(player.inventory, (TurretBaseTierThreeTileEntity) tileEntity);
+                return new TurretBaseTierThreeContainer(player.inventory, (TurretBase) tileEntity);
             case 4:
-                return new TurretBaseTierFourContainer(player.inventory, (TurretBaseTierFourTileEntity) tileEntity);
+                return new TurretBaseTierFourContainer(player.inventory, (TurretBase) tileEntity);
             case 5:
-                return new TurretBaseTierFiveContainer(player.inventory, (TurretBaseTierFiveTileEntity) tileEntity);
+                return new TurretBaseTierFiveContainer(player.inventory, (TurretBase) tileEntity);
             case 6:
                 return new ConfigContainer((TurretBase) tileEntity);
             case 7:
@@ -42,15 +42,15 @@ public class GuiHandler implements IGuiHandler {
 
         switch (id) {
             case 1:
-                return new TurretBaseTierOneGui(player.inventory, (TurretBaseTierOneTileEntity) tileEntity);
+                return new TurretBaseTierOneGui(player.inventory, (TurretBase) tileEntity);
             case 2:
-                return new TurretBaseTierTwoGui(player.inventory, (TurretBaseTierTwoTileEntity) tileEntity);
+                return new TurretBaseTierTwoGui(player.inventory, (TurretBase) tileEntity);
             case 3:
-                return new TurretBaseTierThreeGui(player.inventory, (TurretBaseTierThreeTileEntity) tileEntity);
+                return new TurretBaseTierThreeGui(player.inventory, (TurretBase) tileEntity);
             case 4:
-                return new TurretBaseTierFourGui(player.inventory, (TurretBaseTierFourTileEntity) tileEntity);
+                return new TurretBaseTierFourGui(player.inventory, (TurretBase) tileEntity);
             case 5:
-                return new TurretBaseTierFiveGui(player.inventory, (TurretBaseTierFiveTileEntity) tileEntity);
+                return new TurretBaseTierFiveGui(player.inventory, (TurretBase) tileEntity);
             case 6:
                 return new ConfigureGui(player.inventory, (TurretBase) tileEntity);
             case 7:

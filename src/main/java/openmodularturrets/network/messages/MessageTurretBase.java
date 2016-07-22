@@ -2,6 +2,7 @@ package openmodularturrets.network.messages;
 
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -34,23 +35,32 @@ public class MessageTurretBase implements IMessage {
 
     public static class MessageHandlerTurretBase implements IMessageHandler<MessageTurretBase, IMessage> {
         @Override
-        public IMessage onMessage(MessageTurretBase message, MessageContext ctx) {
-            TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(new BlockPos(message.x, message.y,
-                                                                                                   message.z));
-            if (tileEntity instanceof TurretBase) {
-                ((TurretBase) tileEntity).setOwner(message.owner);
-                ((TurretBase) tileEntity).setOwnerName(message.ownerName);
-                ((TurretBase) tileEntity).setEnergyStored(message.rfStorage);
-                ((TurretBase) tileEntity).setAttacksMobs(message.attacksMobs);
-                ((TurretBase) tileEntity).setAttacksNeutrals(message.attacksNeutrals);
-                ((TurretBase) tileEntity).setAttacksPlayers(message.attacksPlayers);
-                ((TurretBase) tileEntity).setMultiTargeting(message.multiTargeting);
-                ((TurretBase) tileEntity).setTrustedPlayers(message.trustedPlayers);
-                ((TurretBase) tileEntity).camoStack = message.camoStack;
-            }
+        public IMessage onMessage(MessageTurretBase messageIn, MessageContext ctx) {
+            final MessageTurretBase message = messageIn;
+            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+
+                    TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(new BlockPos(message.x, message.y,
+                            message.z));
+                    if (tileEntity instanceof TurretBase) {
+                        ((TurretBase) tileEntity).setOwner(message.owner);
+                        ((TurretBase) tileEntity).setOwnerName(message.ownerName);
+                        ((TurretBase) tileEntity).setEnergyStored(message.rfStorage);
+                        ((TurretBase) tileEntity).setAttacksMobs(message.attacksMobs);
+                        ((TurretBase) tileEntity).setAttacksNeutrals(message.attacksNeutrals);
+                        ((TurretBase) tileEntity).setAttacksPlayers(message.attacksPlayers);
+                        ((TurretBase) tileEntity).setMultiTargeting(message.multiTargeting);
+                        ((TurretBase) tileEntity).setTrustedPlayers(message.trustedPlayers);
+                        ((TurretBase) tileEntity).camoStack = message.camoStack;
+
+                    }
+                }
+            });
             return null;
         }
     }
+
 
     public MessageTurretBase(TileEntity tileEntity) {
         if (tileEntity instanceof TurretBase) {

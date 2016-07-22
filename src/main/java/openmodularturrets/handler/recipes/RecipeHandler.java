@@ -1,13 +1,8 @@
 package openmodularturrets.handler.recipes;
 
 
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import openmodularturrets.blocks.ModBlocks;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.items.ModItems;
 
 public class RecipeHandler {
     public static void initRecipes() {
@@ -46,19 +41,19 @@ public class RecipeHandler {
 
         //RECIPES THAT DON'T CHANGE BASED ON MODS LOADED:
         //Tier 1 static recipes (Because they shouldn't use expensive mod items, only redstone, cobblestone and planks)
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.barrelTierOneItem, 1), "AAA", " B ", "AAA", 'A',
+        /*GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,10), "AAA", " B ", "AAA", 'A',
                                                    net.minecraft.init.Blocks.cobblestone, 'B', "plankWood"));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.chamberTierOneItem, 1), "AAA", " BC", "AAA", 'A',
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,5), "AAA", " BC", "AAA", 'A',
                                                    net.minecraft.init.Blocks.cobblestone, 'B', "plankWood", 'C',
                                                    net.minecraft.init.Items.redstone));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.sensorTierOneItem, 1), " A ", "ABA", " A ", 'A',
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,0), " A ", "ABA", " A ", 'A',
                                                    net.minecraft.init.Items.redstone, 'B', "plankWood"));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,1), "ABA", "BCB", "ABA", 'A',
                                                    net.minecraft.init.Blocks.cobblestone, 'B', "plankWood", 'C',
-                                                   ModItems.sensorTierOneItem));
+                                                   new ItemStack(ModItems.intermediateProductTiered, 1 ,0)));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModBlocks.expanderPowerTierOne, 1), "ABA", "DCD", "ADA", 'A',
@@ -73,14 +68,14 @@ public class RecipeHandler {
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.disposableItemTurret, 1), " A ", "CBC", "CDC", 'A',
-                                        ModItems.barrelTierOneItem, 'B', ModItems.chamberTierOneItem, 'C',
+                                        new ItemStack(ModItems.intermediateProductTiered, 1 ,10), 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,5), 'C',
                                         net.minecraft.init.Blocks.cobblestone, 'D', net.minecraft.init.Items.redstone));
         }
 
         if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.potatoCannonTurret, 1), "CAC", "CAC", "DBD", 'A',
-                                        ModItems.barrelTierOneItem, 'B', ModItems.chamberTierOneItem, 'C',
+                                        new ItemStack(ModItems.intermediateProductTiered, 1 ,10), 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,5), 'C',
                                         net.minecraft.init.Blocks.cobblestone, 'D', net.minecraft.init.Items.redstone));
         }
 
@@ -168,7 +163,7 @@ public class RecipeHandler {
                                     ModItems.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.accuraccyUpgradeItem, 1), " A ", "ABA", " C ", 'A',
+                new ShapedOreRecipe(new ItemStack(ModItems.accuracyUpgradeItem, 1), " A ", "ABA", " C ", 'A',
                                     net.minecraft.init.Items.quartz, 'B', "ingotGold", 'C', ModItems.ioBus));
 
         GameRegistry.addRecipe(
@@ -194,5 +189,6 @@ public class RecipeHandler {
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.ioBus, 1), " A ", "BBB", " C ", 'A', "ingotGold", 'B',
                                     net.minecraft.init.Items.redstone, 'C', "ingotIron"));
+                                    */
     }
 }

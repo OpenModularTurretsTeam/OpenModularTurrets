@@ -1,6 +1,7 @@
 package openmodularturrets.network.messages;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -17,11 +18,18 @@ public class MessageAdjustYAxisDetect implements IMessage {
 
     public static class MessageHandlerAdjustYAxisDetect implements IMessageHandler<MessageAdjustYAxisDetect, IMessage> {
         @Override
-        public IMessage onMessage(MessageAdjustYAxisDetect message, MessageContext ctx) {
-            World world = ctx.getServerHandler().playerEntity.worldObj;
-            TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+        public IMessage onMessage(MessageAdjustYAxisDetect messageIn, MessageContext ctxIn) {
+            final MessageAdjustYAxisDetect message = messageIn;
+            final MessageContext ctx = ctxIn;
+            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    World world = ctx.getServerHandler().playerEntity.worldObj;
+                    TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
 
-            turret.setyAxisDetect(message.getYAxisDetect());
+                    turret.setyAxisDetect(message.getYAxisDetect());
+                }
+            });
             return null;
         }
     }

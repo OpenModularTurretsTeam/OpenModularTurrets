@@ -11,7 +11,7 @@ import java.util.List;
 public class ScattershotUpgradeItem extends UpgradeItem {
     public ScattershotUpgradeItem() {
         super();
-        this.setUnlocalizedName(Names.Items.unlocalisedScattershotUpgrade);
+        this.setUnlocalizedName(Names.Items.scattershotUpgrade);
         this.setMaxStackSize(2);
     }
     @Override

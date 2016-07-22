@@ -12,7 +12,7 @@ public class DamageAmpAddonItem extends AddonItem {
     public DamageAmpAddonItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedDamageAmpAddon);
+        this.setUnlocalizedName(Names.Items.damageAmpAddon);
     }
 
     @Override

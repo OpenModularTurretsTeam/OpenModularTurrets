@@ -1,6 +1,7 @@
 package openmodularturrets.network.messages;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -16,33 +17,38 @@ public class MessageDropTurrets implements IMessage {
 
     public static class MessageHandlerDropTurrets implements IMessageHandler<MessageDropTurrets, IMessage> {
         @Override
-        public IMessage onMessage(MessageDropTurrets message, MessageContext ctx) {
-            World world = ctx.getServerHandler().playerEntity.worldObj;
+        public IMessage onMessage(MessageDropTurrets messageIn, MessageContext ctxIn) {
+            final MessageDropTurrets message = messageIn;
+            final MessageContext ctx = ctxIn;
+            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    World world = ctx.getServerHandler().playerEntity.worldObj;
 
-            if (world.getTileEntity(new BlockPos(message.getX() + 1, message.getY(), message.getZ())) instanceof TurretHead) {
-                world.destroyBlock(new BlockPos(message.getX() + 1, message.getY(), message.getZ()), true);
-            }
+                    if (world.getTileEntity(new BlockPos(message.getX() + 1, message.getY(), message.getZ())) instanceof TurretHead) {
+                        world.destroyBlock(new BlockPos(message.getX() + 1, message.getY(), message.getZ()), true);
+                    }
 
-            if (world.getTileEntity(new BlockPos(message.getX() - 1, message.getY(), message.getZ())) instanceof TurretHead) {
-                world.destroyBlock(new BlockPos(message.getX() - 1, message.getY(), message.getZ()), true);
-            }
+                    if (world.getTileEntity(new BlockPos(message.getX() - 1, message.getY(), message.getZ())) instanceof TurretHead) {
+                        world.destroyBlock(new BlockPos(message.getX() - 1, message.getY(), message.getZ()), true);
+                    }
 
-            if (world.getTileEntity(new BlockPos(message.getX(), message.getY() + 1, message.getZ())) instanceof TurretHead) {
-                world.destroyBlock(new BlockPos(message.getX(), message.getY() + 1, message.getZ()), true);
-            }
+                    if (world.getTileEntity(new BlockPos(message.getX(), message.getY() + 1, message.getZ())) instanceof TurretHead) {
+                        world.destroyBlock(new BlockPos(message.getX(), message.getY() + 1, message.getZ()), true);
+                    }
 
-            if (world.getTileEntity(new BlockPos(message.getX(), message.getY() - 1, message.getZ())) instanceof TurretHead) {
-                world.destroyBlock(new BlockPos(message.getX(), message.getY() - 1, message.getZ()), true);
-            }
+                    if (world.getTileEntity(new BlockPos(message.getX(), message.getY() - 1, message.getZ())) instanceof TurretHead) {
+                        world.destroyBlock(new BlockPos(message.getX(), message.getY() - 1, message.getZ()), true);
+                    }
 
-            if (world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ() + 1)) instanceof TurretHead) {
-                world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ() + 1), true);
-            }
+                    if (world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ() + 1)) instanceof TurretHead) {
+                        world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ() + 1), true);
+                    }
 
-            if (world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ() - 1)) instanceof TurretHead) {
-                world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ() - 1), true);
-            }
-
+                    if (world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ() - 1)) instanceof TurretHead) {
+                        world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ() - 1), true);
+                    }
+                }});
             return null;
         }
     }

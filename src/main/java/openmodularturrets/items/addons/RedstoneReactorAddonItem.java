@@ -13,7 +13,7 @@ public class RedstoneReactorAddonItem extends AddonItem {
     public RedstoneReactorAddonItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedRedReactorAddon);
+        this.setUnlocalizedName(Names.Items.redReactorAddon);
     }
 
     @Override

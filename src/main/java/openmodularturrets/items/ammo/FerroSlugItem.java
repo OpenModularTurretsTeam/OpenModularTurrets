@@ -8,7 +8,7 @@ public class FerroSlugItem extends Item {
     public FerroSlugItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedFerroSlug);
+        this.setUnlocalizedName(Names.Items.ferroSlug);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
     }
 }

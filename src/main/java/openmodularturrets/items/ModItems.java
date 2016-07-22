@@ -3,10 +3,7 @@ package openmodularturrets.items;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import openmodularturrets.compatability.ModCompatibility;
-import openmodularturrets.items.addons.*;
-import openmodularturrets.items.ammo.*;
-import openmodularturrets.items.upgrades.*;
+import openmodularturrets.reference.Names;
 
 public class ModItems {
     public static Item bulletThrowable;
@@ -16,7 +13,7 @@ public class ModItems {
     public static Item grenadeCraftable;
     public static Item rocketCraftable;
     public static Item ferroSlug;
-    public static Item accuraccyUpgradeItem;
+    public static Item accuracyUpgradeItem;
     public static Item efficiencyUpgradeItem;
     public static Item fireRateUpgradeItem;
     public static Item rangeUpgradeItem;
@@ -29,38 +26,21 @@ public class ModItems {
     public static Item recyclerAddon;
     public static Item concealerAddon;
 
-    public static Item sensorTierOneItem;
-    public static Item sensorTierTwoItem;
-    public static Item sensorTierThreeItem;
-    public static Item sensorTierFourItem;
-    public static Item sensorTierFiveItem;
-
-    public static Item barrelTierOneItem;
-    public static Item barrelTierTwoItem;
-    public static Item barrelTierThreeItem;
-    public static Item barrelTierFourItem;
-    public static Item barrelTierFiveItem;
-
-    public static Item chamberTierOneItem;
-    public static Item chamberTierTwoItem;
-    public static Item chamberTierThreeItem;
-    public static Item chamberTierFourItem;
-    public static Item chamberTierFiveItem;
-
+    public static Item intermediateProductTiered;
     public static Item ioBus;
 
     public static void init() {
         bulletThrowable = new BulletThrowableItem();
-        GameRegistry.registerItem(bulletThrowable, "bulletThrowable");
+        GameRegistry.registerItem(bulletThrowable, Names.Items.bulletThrowableItem);
 
         grenadeThrowable = new GrenadeThrowableItem();
-        GameRegistry.registerItem(grenadeThrowable, "grenadeThrowable");
+        GameRegistry.registerItem(grenadeThrowable, Names.Items.grenadeThrowableItem);
 
-        accuraccyUpgradeItem = new AccuracyUpgradeItem();
-        GameRegistry.registerItem(accuraccyUpgradeItem, "accuraccyUpgradeItem");
+        /*accuracyUpgradeItem = new AccuracyUpgradeItem();
+        GameRegistry.registerItem(accuracyUpgradeItem, Names.Items.accuraccyUpgrade);
 
         efficiencyUpgradeItem = new EfficiencyUpgradeItem();
-        GameRegistry.registerItem(efficiencyUpgradeItem, "efficiencyUpgradeItem");
+        GameRegistry.registerItem(efficiencyUpgradeItem, Names.Items.bulletThrowableItem);
 
         fireRateUpgradeItem = new FireRateUpgradeItem();
         GameRegistry.registerItem(fireRateUpgradeItem, "fireRateUpgradeItem");
@@ -111,54 +91,12 @@ public class ModItems {
         GameRegistry.registerItem(rocketCraftable, "rocketCraftable");
 
         ferroSlug = new FerroSlugItem();
-        GameRegistry.registerItem(ferroSlug, "ferroSlug");
+        GameRegistry.registerItem(ferroSlug, "ferroSlug"); */
 
-        sensorTierOneItem = new SensorTierOneItem();
-        GameRegistry.registerItem(sensorTierOneItem, "sensorTierOneItem");
-
-        sensorTierTwoItem = new SensorTierTwoItem();
-        GameRegistry.registerItem(sensorTierTwoItem, "sensorTierTwoItem");
-
-        sensorTierThreeItem = new SensorTierThreeItem();
-        GameRegistry.registerItem(sensorTierThreeItem, "sensorTierThreeItem");
-
-        sensorTierFourItem = new SensorTierFourItem();
-        GameRegistry.registerItem(sensorTierFourItem, "sensorTierFourItem");
-
-        sensorTierFiveItem = new SensorTierFiveItem();
-        GameRegistry.registerItem(sensorTierFiveItem, "sensorTierFiveItem");
-
-        barrelTierOneItem = new BarrelTierOneItem();
-        GameRegistry.registerItem(barrelTierOneItem, "barrelTierOne");
-
-        barrelTierTwoItem = new BarrelTierTwoItem();
-        GameRegistry.registerItem(barrelTierTwoItem, "barrelTierTwo");
-
-        barrelTierThreeItem = new BarrelTierThreeItem();
-        GameRegistry.registerItem(barrelTierThreeItem, "barrelTierThree");
-
-        barrelTierFourItem = new BarrelTierFourItem();
-        GameRegistry.registerItem(barrelTierFourItem, "barrelTierFour");
-
-        barrelTierFiveItem = new BarrelTierFiveItem();
-        GameRegistry.registerItem(barrelTierFiveItem, "barrelTierFive");
-
-        chamberTierOneItem = new ChamberTierOneItem();
-        GameRegistry.registerItem(chamberTierOneItem, "chamberTierOne");
-
-        chamberTierTwoItem = new ChamberTierTwoItem();
-        GameRegistry.registerItem(chamberTierTwoItem, "chamberTierTwo");
-
-        chamberTierThreeItem = new ChamberTierThreeItem();
-        GameRegistry.registerItem(chamberTierThreeItem, "chamberTierThree");
-
-        chamberTierFourItem = new ChamberTierFourItem();
-        GameRegistry.registerItem(chamberTierFourItem, "chamberTierFour");
-
-        chamberTierFiveItem = new ChamberTierFiveItem();
-        GameRegistry.registerItem(chamberTierFiveItem, "chamberTierFive");
+        intermediateProductTiered = new IntermediateProductTiered();
+        GameRegistry.registerItem(intermediateProductTiered, Names.Items.intermediateOneItem);
 
         ioBus = new IOBusItem();
-        GameRegistry.registerItem(ioBus, "ioBus");
+        GameRegistry.registerItem(ioBus, Names.Items.ioBus);
     }
 }

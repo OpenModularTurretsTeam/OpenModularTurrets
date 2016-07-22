@@ -9,7 +9,7 @@ public class BlockDisposableTurret extends BlockAbstractTurretHead {
     public BlockDisposableTurret() {
         super();
 
-        this.setUnlocalizedName(Names.Blocks.unlocalisedDisposableItemTurret);
+        this.setUnlocalizedName(Names.Blocks.disposableItemTurret);
     }
 
     @Override

@@ -9,7 +9,7 @@ public class BlockPotatoCannonTurret extends BlockAbstractTurretHead {
     public BlockPotatoCannonTurret() {
         super();
 
-        this.setUnlocalizedName(Names.Blocks.unlocalisedPotatoCannonTurret);
+        this.setUnlocalizedName(Names.Blocks.potatoCannonTurret);
     }
 
     @Override

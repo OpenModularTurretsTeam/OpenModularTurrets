@@ -1,15 +1,16 @@
 package openmodularturrets.handler;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import openmodularturrets.reference.Names;
+import openmodularturrets.reference.Reference;
 import openmodularturrets.tileentity.LeverTileEntity;
 import openmodularturrets.tileentity.expander.*;
-import openmodularturrets.tileentity.turretbase.*;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.tileentity.turrets.*;
 
 public class TileEntityHandler {
     public static void init() {
-        GameRegistry.registerTileEntity(TurretBase.class, "turretbase");
-        GameRegistry.registerTileEntity(TurretBaseTierOneTileEntity.class, "turretWoodBase");
+        GameRegistry.registerTileEntity(TurretBase.class, Reference.MOD_ID.toLowerCase() + ":" + Names.Blocks.turretBase);
         GameRegistry.registerTileEntity(DisposableItemTurretTileEntity.class, "disposableItemTurret");
         GameRegistry.registerTileEntity(PotatoCannonTurretTileEntity.class, "potatoCannonTurret");
         GameRegistry.registerTileEntity(RocketTurretTileEntity.class, "rocketTurret");
@@ -17,10 +18,6 @@ public class TileEntityHandler {
         GameRegistry.registerTileEntity(GrenadeLauncherTurretTileEntity.class, "grenadeTurret");
         GameRegistry.registerTileEntity(LaserTurretTileEntity.class, "laserTurret");
         GameRegistry.registerTileEntity(LeverTileEntity.class, "leverTileEntity");
-        GameRegistry.registerTileEntity(TurretBaseTierTwoTileEntity.class, "turretBaseOne");
-        GameRegistry.registerTileEntity(TurretBaseTierThreeTileEntity.class, "turretBaseTwo");
-        GameRegistry.registerTileEntity(TurretBaseTierFourTileEntity.class, "turretBaseThree");
-        GameRegistry.registerTileEntity(TurretBaseTierFiveTileEntity.class, "turretBaseFour");
         GameRegistry.registerTileEntity(RailGunTurretTileEntity.class, "railGunTurret");
         GameRegistry.registerTileEntity(IncendiaryTurretTileEntity.class, "incendiaryTurret");
         GameRegistry.registerTileEntity(RelativisticTurretTileEntity.class, "relativisticTurret");

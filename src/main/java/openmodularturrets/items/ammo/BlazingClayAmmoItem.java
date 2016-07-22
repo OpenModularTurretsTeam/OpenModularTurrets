@@ -6,6 +6,6 @@ public class BlazingClayAmmoItem extends AmmoItem {
     public BlazingClayAmmoItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedBlazingClayItem);
+        this.setUnlocalizedName(Names.Items.blazingClayItem);
     }
 }

@@ -12,7 +12,7 @@ public class SerialPortAddonItem extends AddonItem {
     public SerialPortAddonItem() {
         super();
 
-        this.setUnlocalizedName(Names.Items.unlocalisedSerialPortAddon);
+        this.setUnlocalizedName(Names.Items.serialPortAddon);
     }
 
     @Override

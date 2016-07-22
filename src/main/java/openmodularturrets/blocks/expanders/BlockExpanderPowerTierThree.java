@@ -16,7 +16,7 @@ public class BlockExpanderPowerTierThree extends BlockAbstract implements ITileE
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setResistance(3.0F);
         this.setStepSound(Block.soundTypeStone);
-        this.setUnlocalizedName(Names.Blocks.unlocalisedExpanderPowerTierThree);
+        this.setUnlocalizedName(Names.Blocks.expanderPowerTierThree);
         this.setBlockBounds(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
     }
 

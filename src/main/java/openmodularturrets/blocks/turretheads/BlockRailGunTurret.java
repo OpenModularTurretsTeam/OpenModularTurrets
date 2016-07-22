@@ -14,7 +14,7 @@ public class BlockRailGunTurret extends BlockAbstractTurretHead {
     public BlockRailGunTurret() {
         super();
 
-        this.setUnlocalizedName(Names.Blocks.unlocalisedRailGunTurret);
+        this.setUnlocalizedName(Names.Blocks.railGunTurret);
     }
 
     @Override
