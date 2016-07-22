@@ -7,7 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.WorldServer;
-import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.TurretBase;
 
 /**
  * Created by nico on 6/4/15.

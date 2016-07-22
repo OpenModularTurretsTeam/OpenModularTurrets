@@ -4,7 +4,7 @@ import net.minecraft.item.Item;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.Names;
 
-class EnergeticBarrelItem extends Item {
+public class EnergeticBarrelItem extends Item {
     public EnergeticBarrelItem() {
         super();
 

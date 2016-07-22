@@ -8,8 +8,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import openmodularturrets.client.gui.*;
 import openmodularturrets.client.gui.containers.*;
-import openmodularturrets.tileentity.expander.AbstractInvExpander;
-import openmodularturrets.tileentity.turretbase.*;
+import openmodularturrets.tileentity.Expander;
+import openmodularturrets.tileentity.TurretBase;
 
 public class GuiHandler implements IGuiHandler {
     @Override
@@ -30,7 +30,7 @@ public class GuiHandler implements IGuiHandler {
             case 6:
                 return new ConfigContainer((TurretBase) tileEntity);
             case 7:
-                return new ExpanderInvContainer(player.inventory, (AbstractInvExpander) tileEntity);
+                return new ExpanderInvContainer(player.inventory, (Expander) tileEntity);
             default:
                 return null;
         }
@@ -54,7 +54,7 @@ public class GuiHandler implements IGuiHandler {
             case 6:
                 return new ConfigureGui(player.inventory, (TurretBase) tileEntity);
             case 7:
-                return new ExpanderInvGui(player.inventory, (AbstractInvExpander) tileEntity);
+                return new ExpanderInvGui(player.inventory, (Expander) tileEntity);
             default:
                 return null;
         }

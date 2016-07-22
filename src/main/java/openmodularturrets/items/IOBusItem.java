@@ -4,7 +4,7 @@ import net.minecraft.item.Item;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.Names;
 
-class IOBusItem extends Item {
+public class IOBusItem extends Item {
     public IOBusItem() {
         super();
 

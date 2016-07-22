@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.Reference;
-import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.TurretBase;
 import openmodularturrets.util.TurretHeadUtil;
 
 import java.util.Random;

@@ -1,4 +1,4 @@
-package openmodularturrets.tileentity.turretbase;
+package openmodularturrets.util;
 
 import java.util.UUID;
 

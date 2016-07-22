@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.BulletProjectile;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.items.ModItems;
+import openmodularturrets.init.ModItems;
 
 public class GunTurretTileEntity extends TurretHead {
     public GunTurretTileEntity() {

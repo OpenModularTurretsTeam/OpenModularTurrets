@@ -8,7 +8,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
-import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.TurretBase;
 
 abstract class BlockAbstractTurretHead extends Block implements ITileEntityProvider {
     BlockAbstractTurretHead() {

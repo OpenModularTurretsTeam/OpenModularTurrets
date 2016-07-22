@@ -1,9 +1,17 @@
-package openmodularturrets.blocks;
+package openmodularturrets.init;
 
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import openmodularturrets.blocks.BlockTurretBase;
+import openmodularturrets.blocks.BlockExpander;
+import openmodularturrets.items.blocks.ItemBlockExpander;
 import openmodularturrets.items.blocks.ItemBlockTurretBase;
 import openmodularturrets.reference.Names;
+import openmodularturrets.reference.Reference;
+import openmodularturrets.tileentity.Expander;
+import openmodularturrets.tileentity.LeverTileEntity;
+import openmodularturrets.tileentity.TurretBase;
+import openmodularturrets.tileentity.turrets.*;
 
 public class ModBlocks {
     public static Block turretBase;
@@ -24,17 +32,8 @@ public class ModBlocks {
     public static Block railGunTurret;
     public static Block leverBlock;
 
-    public static Block expanderPowerTierOne;
-    public static Block expanderPowerTierTwo;
-    public static Block expanderPowerTierThree;
-    public static Block expanderPowerTierFour;
-    public static Block expanderPowerTierFive;
+    public static Block expander;
 
-    public static Block expanderInvTierOne;
-    public static Block expanderInvTierTwo;
-    public static Block expanderInvTierThree;
-    public static Block expanderInvTierFour;
-    public static Block expanderInvTierFive;
 
     public static Block hardWallTierOne;
     public static Block hardWallTierTwo;
@@ -48,51 +47,15 @@ public class ModBlocks {
     public static Block fenceTierFour;
     public static Block fenceTierFive;
 
-    public static void init() {
+    public static void initBlocks() {
         turretBase = new BlockTurretBase();
         GameRegistry.registerBlock(turretBase, ItemBlockTurretBase.class, Names.Blocks.turretBase);
 
-        /*expanderPowerTierOne = new BlockExpanderPowerTierOne();
-        GameRegistry.registerBlock(expanderPowerTierOne, ItemBlockExpanderPowerTierOne.class,
-                                   Names.Blocks.expanderPowerTierOne);
+        expander = new BlockExpander();
+        GameRegistry.registerBlock(expander, ItemBlockExpander.class,Names.Blocks.expander);
 
-        expanderPowerTierTwo = new BlockExpanderPowerTierTwo();
-        GameRegistry.registerBlock(expanderPowerTierTwo, ItemBlockExpanderPowerTierTwo.class,
-                                   Names.Blocks.expanderPowerTierTwo);
 
-        expanderPowerTierThree = new BlockExpanderPowerTierThree();
-        GameRegistry.registerBlock(expanderPowerTierThree, ItemBlockExpanderPowerTierThree.class,
-                                   Names.Blocks.expanderPowerTierThree);
-
-        expanderPowerTierFour = new BlockExpanderPowerTierFour();
-        GameRegistry.registerBlock(expanderPowerTierFour, ItemBlockExpanderPowerTierFour.class,
-                                   Names.Blocks.expanderPowerTierFour);
-
-        expanderPowerTierFive = new BlockExpanderPowerTierFive();
-        GameRegistry.registerBlock(expanderPowerTierFive, ItemBlockExpanderPowerTierFive.class,
-                                   Names.Blocks.expanderPowerTierFive);
-
-        expanderInvTierOne = new BlockExpanderInvTierOne();
-        GameRegistry.registerBlock(expanderInvTierOne, ItemBlockExpanderInvTierOne.class,
-                                   Names.Blocks.expanderInvTierOne);
-
-        expanderInvTierTwo = new BlockExpanderInvTierTwo();
-        GameRegistry.registerBlock(expanderInvTierTwo, ItemBlockExpanderInvTierTwo.class,
-                                   Names.Blocks.expanderInvTierTwo);
-
-        expanderInvTierThree = new BlockExpanderInvTierThree();
-        GameRegistry.registerBlock(expanderInvTierThree, ItemBlockExpanderInvTierThree.class,
-                                   Names.Blocks.expanderInvTierThree);
-
-        expanderInvTierFour = new BlockExpanderInvTierFour();
-        GameRegistry.registerBlock(expanderInvTierFour, ItemBlockExpanderInvTierFour.class,
-                                   Names.Blocks.expanderInvTierFour);
-
-        expanderInvTierFive = new BlockExpanderInvTierFive();
-        GameRegistry.registerBlock(expanderInvTierFive, ItemBlockExpanderInvTierFive.class,
-                                   Names.Blocks.expanderInvTierFive);
-
-        hardWallTierOne = new BlockHardWallTierOne();
+        /*hardWallTierOne = new BlockHardWallTierOne();
         GameRegistry.registerBlock(hardWallTierOne, Names.Blocks.hardWallTierOne);
 
         hardWallTierTwo = new BlockHardWallTierTwo();
@@ -183,5 +146,22 @@ public class ModBlocks {
         leverBlock = new LeverBlock();
         GameRegistry.registerBlock(leverBlock, Names.Blocks.lever);
         */
+    }
+
+    public static void initTileEntities() {
+        GameRegistry.registerTileEntity(TurretBase.class, Reference.MOD_ID.toLowerCase() + ":" + Names.Blocks.turretBase);
+        GameRegistry.registerTileEntity(DisposableItemTurretTileEntity.class, "disposableItemTurret");
+        GameRegistry.registerTileEntity(PotatoCannonTurretTileEntity.class, "potatoCannonTurret");
+        GameRegistry.registerTileEntity(RocketTurretTileEntity.class, "rocketTurret");
+        GameRegistry.registerTileEntity(GunTurretTileEntity.class, "machineGunTurret");
+        GameRegistry.registerTileEntity(GrenadeLauncherTurretTileEntity.class, "grenadeTurret");
+        GameRegistry.registerTileEntity(LaserTurretTileEntity.class, "laserTurret");
+        GameRegistry.registerTileEntity(LeverTileEntity.class, "leverTileEntity");
+        GameRegistry.registerTileEntity(RailGunTurretTileEntity.class, "railGunTurret");
+        GameRegistry.registerTileEntity(IncendiaryTurretTileEntity.class, "incendiaryTurret");
+        GameRegistry.registerTileEntity(RelativisticTurretTileEntity.class, "relativisticTurret");
+        GameRegistry.registerTileEntity(TeleporterTurretTileEntity.class, "teleporterTurret");
+        GameRegistry.registerTileEntity(Expander.class, Names.Blocks.expander);
+
     }
 }

@@ -18,7 +18,7 @@ import openmodularturrets.ModularTurrets;
 import openmodularturrets.blocks.util.BlockAbstract;
 import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.LeverTileEntity;
-import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.TurretBase;
 
 public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
     public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 16);

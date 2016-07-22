@@ -21,6 +21,7 @@ public class Names {
         public static final String railGunTurret = "railGunTurret";
         public static final String lever = "leverBlock";
 
+        public static final String expander = "expander";
         public static final String expanderPowerTierOne = "expanderPowerTierOne";
         public static final String expanderPowerTierTwo = "expanderPowerTierTwo";
         public static final String expanderPowerTierThree = "expanderPowerTierThree";

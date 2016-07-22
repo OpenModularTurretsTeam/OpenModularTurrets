@@ -1,8 +1,12 @@
-package openmodularturrets.items;
+package openmodularturrets.init;
 
 
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import openmodularturrets.items.BulletThrowableItem;
+import openmodularturrets.items.GrenadeThrowableItem;
+import openmodularturrets.items.IOBusItem;
+import openmodularturrets.items.IntermediateProductTiered;
 import openmodularturrets.reference.Names;
 
 public class ModItems {

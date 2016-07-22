@@ -5,11 +5,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import openmodularturrets.client.gui.containers.ExpanderInvContainer;
 import openmodularturrets.reference.Reference;
-import openmodularturrets.tileentity.expander.AbstractInvExpander;
+import openmodularturrets.tileentity.Expander;
 import org.lwjgl.opengl.GL11;
 
 public class ExpanderInvGui extends GuiContainer {
-    public ExpanderInvGui(InventoryPlayer inventoryPlayer, AbstractInvExpander tileEntity) {
+    public ExpanderInvGui(InventoryPlayer inventoryPlayer, Expander tileEntity) {
         super(new ExpanderInvContainer(inventoryPlayer, tileEntity));
     }
 

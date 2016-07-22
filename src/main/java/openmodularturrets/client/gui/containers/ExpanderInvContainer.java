@@ -5,12 +5,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import openmodularturrets.tileentity.expander.AbstractInvExpander;
+import openmodularturrets.tileentity.Expander;
 
 public class ExpanderInvContainer extends Container {
-    private final AbstractInvExpander tileEntity;
+    private final Expander tileEntity;
 
-    public ExpanderInvContainer(InventoryPlayer inventoryPlayer, AbstractInvExpander te) {
+    public ExpanderInvContainer(InventoryPlayer inventoryPlayer, Expander te) {
         this.tileEntity = te;
 
         int i;

@@ -1,27 +1,49 @@
-package openmodularturrets.tileentity.expander;
+package openmodularturrets.tileentity;
 
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import openmodularturrets.tileentity.TileEntityContainer;
-import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.TurretHeadUtil;
 
-public abstract class AbstractInvExpander extends TileEntityContainer implements ITickable {
+import static openmodularturrets.util.MathUtil.truncateDoubleToInt;
+
+public class Expander extends TileEntityContainer implements ITickable {
     public float baseFitRotationX;
     public float baseFitRotationZ;
     protected TurretBase base;
     private boolean hasSetSide = false;
-    private int tier;
+    private boolean powerExpander;
 
-    AbstractInvExpander() {
+    public Expander() {
         this.inv = new ItemStack[9];
+    }
+
+    public Expander(int tier, boolean powerExpander) {
+        this.inv = new ItemStack[9];
+        this.tier = tier;
+        this.powerExpander = powerExpander;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbtTagCompound) {
+        super.writeToNBT(nbtTagCompound);
+        nbtTagCompound.setBoolean("powerExpander", powerExpander);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbtTagCompound) {
+        super.readFromNBT(nbtTagCompound);
+        this.powerExpander= nbtTagCompound.getBoolean("powerExpander");
+    }
+
+    @Override
+    public int getInventoryStackLimit() {
+        return truncateDoubleToInt(Math.pow(2,tier+1));
     }
 
     @Override
@@ -35,41 +57,6 @@ public abstract class AbstractInvExpander extends TileEntityContainer implements
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
         NBTTagCompound var1 = pkt.getNbtCompound();
         readFromNBT(var1);
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound par1) {
-        super.writeToNBT(par1);
-
-        NBTTagList itemList = new NBTTagList();
-
-        for (int i = 0; i < this.inv.length; i++) {
-            ItemStack stack = this.getStackInSlot(i);
-
-            if (stack != null) {
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setByte("Slot", (byte) i);
-                stack.writeToNBT(tag);
-                itemList.appendTag(tag);
-            }
-        }
-        par1.setTag("Inventory", itemList);
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound par1) {
-        super.readFromNBT(par1);
-
-        NBTTagList tagList = par1.getTagList("Inventory", 10);
-
-        for (int i = 0; i < tagList.tagCount(); i++) {
-            NBTTagCompound tag = tagList.getCompoundTagAt(i);
-            byte slot = tag.getByte("Slot");
-
-            if (slot >= 0 && slot < inv.length) {
-                inv[slot] = ItemStack.loadItemStackFromNBT(tag);
-            }
-        }
     }
 
     private void setSide() {
@@ -157,5 +144,9 @@ public abstract class AbstractInvExpander extends TileEntityContainer implements
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
         return new int[]{0,1,2,3,4,5,6,7,8};
+    }
+
+    public boolean isPowerExpander() {
+        return powerExpander;
     }
 }

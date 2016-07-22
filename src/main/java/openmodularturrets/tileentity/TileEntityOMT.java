@@ -13,15 +13,18 @@ import net.minecraft.world.World;
  * This Class
  */
 public abstract class TileEntityOMT extends TileEntity {
+    protected int tier = 0;
 
     @Override
-    public void writeToNBT(NBTTagCompound par1) {
-        super.writeToNBT(par1);
+    public void writeToNBT(NBTTagCompound nbtTagCompound) {
+        super.writeToNBT(nbtTagCompound);
+        nbtTagCompound.setInteger("tier", tier);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound par1) {
-        super.readFromNBT(par1);
+    public void readFromNBT(NBTTagCompound nbtTagCompound) {
+        super.readFromNBT(nbtTagCompound);
+        tier = nbtTagCompound.getInteger("tier");
     }
 
     @Override
