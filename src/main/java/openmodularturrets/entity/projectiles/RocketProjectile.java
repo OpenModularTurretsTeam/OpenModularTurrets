@@ -60,13 +60,17 @@ public class RocketProjectile extends TurretProjectile {
         for (int i = 0; i <= 20; i++) {
             Random random = new Random();
             worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX + (random.nextGaussian() / 10), posY + (random.nextGaussian() / 10),
-                                   posZ + (random.nextGaussian() / 10), (0), (0), (0));
+                    posZ + (random.nextGaussian() / 10), (0), (0), (0));
         }
     }
 
     @Override
     protected void onImpact(MovingObjectPosition movingobjectposition) {
-        if (this.ticksExisted <= 2) {
+        if (ConfigHandler.canRocketsHome && this.ticksExisted <= 5) {
+            return;
+        }
+
+        if (!ConfigHandler.canRocketsHome && this.ticksExisted <= 2) {
             return;
         }
         if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
@@ -82,7 +86,7 @@ public class RocketProjectile extends TurretProjectile {
 
             worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
-                                                              this.posX + 5, this.posY + 5, this.posZ + 5);
+                    this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (Entity mob : targets) {
