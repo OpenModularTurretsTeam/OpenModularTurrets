@@ -8,6 +8,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import openmodularturrets.init.ModBlocks;
 import openmodularturrets.handler.ConfigHandler;
 
 import java.util.List;
@@ -24,7 +25,9 @@ public class ItemBlockTurretBase extends ItemBlock {
 
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-        super.getSubItems(itemIn, tab, subItems);
+        for (int i = 0; i < 5; i++) {
+            subItems.add(new ItemStack(ModBlocks.turretBase, 1, i));
+        }
     }
 
     @Override

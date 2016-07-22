@@ -4,7 +4,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openmodularturrets.tileentity.LeverTileEntity;
-import openmodularturrets.tileentity.expander.*;
+
 import openmodularturrets.tileentity.turrets.*;
 
 public class TileEntityRenderers {
@@ -19,18 +19,6 @@ public class TileEntityRenderers {
     public static final IncendiaryTurretRenderer incendiaryTurretRenderer = new IncendiaryTurretRenderer();
     public static final RelativisticTurretRenderer relativisticTurretRenderer = new RelativisticTurretRenderer();
     public static final TeleporterTurretRenderer teleporterTurretRenderer = new TeleporterTurretRenderer();
-
-    public static final ExpanderPowerTierOneRenderer expanderPowerTierOneRenderer = new ExpanderPowerTierOneRenderer();
-    public static final ExpanderPowerTierTwoRenderer expanderPowerTierTwoRenderer = new ExpanderPowerTierTwoRenderer();
-    public static final ExpanderPowerTierThreeRenderer expanderPowerTierThreeRenderer = new ExpanderPowerTierThreeRenderer();
-    public static final ExpanderPowerTierFourRenderer expanderPowerTierFourRenderer = new ExpanderPowerTierFourRenderer();
-    public static final ExpanderPowerTierFiveRenderer expanderPowerTierFiveRenderer = new ExpanderPowerTierFiveRenderer();
-
-    public static final ExpanderInvTierOneRenderer expanderInvTierOneRenderer = new ExpanderInvTierOneRenderer();
-    public static final ExpanderInvTierTwoRenderer expanderInvTierTwoRenderer = new ExpanderInvTierTwoRenderer();
-    public static final ExpanderInvTierThreeRenderer expanderInvTierThreeRenderer = new ExpanderInvTierThreeRenderer();
-    public static final ExpanderInvTierFourRenderer expanderInvTierFourRenderer = new ExpanderInvTierFourRenderer();
-    public static final ExpanderInvTierFiveRenderer expanderInvTierFiveRenderer = new ExpanderInvTierFiveRenderer();
 
     public static final LeverRenderer leverRenderer = new LeverRenderer();
 
@@ -49,22 +37,5 @@ public class TileEntityRenderers {
         ClientRegistry.bindTileEntitySpecialRenderer(RelativisticTurretTileEntity.class, relativisticTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(TeleporterTurretTileEntity.class, teleporterTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(LeverTileEntity.class, leverRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierOneTileEntity.class,
-                                                     expanderPowerTierOneRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierTwoTileEntity.class,
-                                                     expanderPowerTierTwoRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierThreeTileEntity.class,
-                                                     expanderPowerTierThreeRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierFourTileEntity.class,
-                                                     expanderPowerTierFourRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderPowerTierFiveTileEntity.class,
-                                                     expanderPowerTierFiveRenderer);
-
-        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierOneTileEntity.class, expanderInvTierOneRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierTwoTileEntity.class, expanderInvTierTwoRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierThreeTileEntity.class,
-                                                     expanderInvTierThreeRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierFourTileEntity.class, expanderInvTierFourRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(ExpanderInvTierFiveTileEntity.class, expanderInvTierFiveRenderer);
     }
 }

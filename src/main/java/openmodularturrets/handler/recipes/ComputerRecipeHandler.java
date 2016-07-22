@@ -4,7 +4,7 @@ package openmodularturrets.handler.recipes;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import openmodularturrets.items.ModItems;
+import openmodularturrets.init.ModItems;
 
 class ComputerRecipeHandler {
     public static void init() {

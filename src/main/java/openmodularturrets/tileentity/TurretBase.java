@@ -1,4 +1,4 @@
-package openmodularturrets.tileentity.turretbase;
+package openmodularturrets.tileentity;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
@@ -30,8 +30,8 @@ import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.handler.NetworkingHandler;
 import openmodularturrets.items.blocks.ItemBlockTurretBase;
 import openmodularturrets.network.messages.MessageTurretBase;
-import openmodularturrets.tileentity.TileEntityContainer;
 import openmodularturrets.util.MathUtil;
+import openmodularturrets.util.TrustedPlayer;
 import openmodularturrets.util.TurretHeadUtil;
 
 import java.util.ArrayList;
@@ -68,7 +68,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     private String ownerName = "";
     private List<TrustedPlayer> trustedPlayers;
     private int ticks;
-    private int tier;
     private boolean active;
     private boolean inverted;
     private boolean redstone;
@@ -332,8 +331,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         par1.setBoolean("computerAccessible", computerAccessible);
         par1.setBoolean("shouldConcealTurrets", shouldConcealTurrets);
         par1.setBoolean("multiTargeting", multiTargeting);
-        par1.setDouble("storageEU", storageEU);
-        par1.setInteger("tier", tier);
+        par1.setDouble("storageEU", storageEU);;
 
         if (camoStack != null) {
             NBTTagCompound tag2 = new NBTTagCompound();
@@ -395,12 +393,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
             this.storageEU = par1.getDouble("storageEU");
         } else {
             storageEU = 0;
-        }
-        if (par1.hasKey("tier")) {
-            this.tier = par1.getInteger("tier");
-        } else {
-            Logger.getGlobal().info("Found bugged turretBase (no tier) at coordinates: " + this.pos.getX() + "," + this.pos.getY() + "," + this.pos.getZ() + ". Dropping Turretbase");
-            dropBase = true;
         }
         this.inv = new ItemStack[tier == 5 ? 13 : tier == 4 ? 12 : tier == 3 ? 12 : tier == 2 ? 12 : 9];
 

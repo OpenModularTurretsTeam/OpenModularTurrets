@@ -15,7 +15,7 @@ import openmodularturrets.client.gui.containers.ConfigContainer;
 import openmodularturrets.handler.NetworkingHandler;
 import openmodularturrets.network.messages.*;
 import openmodularturrets.reference.Reference;
-import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.TurretBase;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;

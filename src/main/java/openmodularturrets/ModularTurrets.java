@@ -8,12 +8,10 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import openmodularturrets.blocks.ModBlocks;
 import openmodularturrets.client.gui.ModularTurretsTab;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.handler.GuiHandler;
-import openmodularturrets.items.ModItems;
 import openmodularturrets.proxy.CommonProxy;
 import openmodularturrets.reference.Reference;
 import openmodularturrets.util.CommandChangeOwner;
@@ -33,8 +31,6 @@ public class ModularTurrets {
     public void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         gui = new GuiHandler();
-        ModItems.init();
-        ModBlocks.init();
         modularTurretsTab = new ModularTurretsTab(Reference.MOD_ID);
         proxy.preInit();
     }

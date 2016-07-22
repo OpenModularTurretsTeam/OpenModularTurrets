@@ -11,7 +11,7 @@ import openmodularturrets.network.messages.MessageAdjustYAxisDetect;
 import openmodularturrets.network.messages.MessageDropBase;
 import openmodularturrets.network.messages.MessageDropTurrets;
 import openmodularturrets.network.messages.MessageSetBaseTargetingType;
-import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.TurretBase;
 
 
 /**

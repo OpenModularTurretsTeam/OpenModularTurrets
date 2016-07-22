@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.FerroSlugProjectile;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.items.ModItems;
+import openmodularturrets.init.ModItems;
 
 public class RailGunTurretTileEntity extends TurretHead {
     public RailGunTurretTileEntity() {

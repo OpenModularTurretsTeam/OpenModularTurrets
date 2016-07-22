@@ -10,7 +10,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
-import openmodularturrets.blocks.ModBlocks;
+import openmodularturrets.init.ModBlocks;
 import openmodularturrets.blocks.util.BlockAbstractMiscPane;
 import openmodularturrets.reference.Names;
 

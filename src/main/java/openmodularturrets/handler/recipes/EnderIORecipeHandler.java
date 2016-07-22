@@ -6,9 +6,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import openmodularturrets.blocks.ModBlocks;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.items.ModItems;
+import openmodularturrets.init.ModBlocks;
+import openmodularturrets.init.ModItems;
 
 class EnderIORecipeHandler {
     public static void init() {
@@ -110,43 +110,43 @@ class EnderIORecipeHandler {
 
         //Power Expanders
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.expanderPowerTierTwo, 1), "ABA", "ECE", "ADA", 'A',
+                new ShapedOreRecipe(RecipeHandler.expanderPowerTierTwo, "ABA", "ECE", "ADA", 'A',
                                     "ingotElectricalSteel", 'B', capacitorBank, 'C',
                                     net.minecraft.init.Blocks.redstone_block, 'D', basicCapacitor, 'E', ModItems.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.expanderPowerTierThree, 1), "ABA", "ECE", "ADA", 'A',
+                new ShapedOreRecipe(RecipeHandler.expanderPowerTierThree, "ABA", "ECE", "ADA", 'A',
                                     "ingotDarkSteel", 'B', capacitorBank, 'C', net.minecraft.init.Blocks.redstone_block,
                                     'D', basicCapacitor, 'E', ModItems.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.expanderPowerTierFour, 1), "ABA", "ECE", "ADA", 'A',
+                new ShapedOreRecipe(RecipeHandler.expanderPowerTierFour, "ABA", "ECE", "ADA", 'A',
                                     "ingotSoularium", 'B', capacitorBankVibrant, 'C',
                                     net.minecraft.init.Blocks.redstone_block, 'D', doubleCapacitor, 'E', ModItems.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.expanderPowerTierFive, 1), "ABA", "ECE", "ADA", 'A',
+                new ShapedOreRecipe(RecipeHandler.expanderPowerTierFive, "ABA", "ECE", "ADA", 'A',
                                     net.minecraft.init.Blocks.obsidian, 'B', capacitorBankVibrant, 'C',
                                     net.minecraft.init.Blocks.redstone_block, 'D', octadicCapacitor, 'E', ModItems.ioBus));
 
         //Inventory Expanders
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.expanderInvTierTwo, 1), "ABA", "ECE", "ADA", 'A',
+                new ShapedOreRecipe(RecipeHandler.expanderInvTierTwo, "ABA", "ECE", "ADA", 'A',
                                     "ingotElectricalSteel", 'B', capacitorBank, 'C', net.minecraft.init.Blocks.chest,
                                     'D', basicCapacitor, 'E', ModItems.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.expanderInvTierThree, 1), "ABA", "ECE", "ADA", 'A',
+                new ShapedOreRecipe(RecipeHandler.expanderInvTierThree, "ABA", "ECE", "ADA", 'A',
                                     "ingotDarkSteel", 'B', capacitorBank, 'C', net.minecraft.init.Blocks.chest, 'D',
                                     basicCapacitor, 'E', ModItems.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.expanderInvTierFour, 1), "ABA", "ECE", "ADA", 'A',
+                new ShapedOreRecipe(RecipeHandler.expanderInvTierFour, "ABA", "ECE", "ADA", 'A',
                                     "ingotSoularium", 'B', capacitorBankVibrant, 'C', net.minecraft.init.Blocks.chest,
                                     'D', doubleCapacitor, 'E', ModItems.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.expanderInvTierFive, 1), "ABA", "ECE", "ADA", 'A',
+                new ShapedOreRecipe(RecipeHandler.expanderInvTierFive, "ABA", "ECE", "ADA", 'A',
                                     net.minecraft.init.Blocks.obsidian, 'B', capacitorBankVibrant, 'C',
                                     net.minecraft.init.Blocks.chest, 'D', octadicCapacitor, 'E', ModItems.ioBus));
 
