@@ -538,9 +538,6 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
                 }
             }
 
-            //Syncing
-            worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
-
             if (ticks % 20 == 0) {
 
                 //General
