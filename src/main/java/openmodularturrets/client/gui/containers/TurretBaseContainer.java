@@ -1,13 +1,16 @@
 package openmodularturrets.client.gui.containers;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import openmodularturrets.client.gui.customSlot.AddonSlot;
 import openmodularturrets.client.gui.customSlot.UpgradeSlot;
+import openmodularturrets.handler.NetworkingHandler;
 import openmodularturrets.items.addons.AddonItem;
 import openmodularturrets.items.upgrades.UpgradeItem;
+import openmodularturrets.network.messages.MessageTurretBase;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 /**
@@ -86,5 +89,15 @@ class TurretBaseContainer extends Container {
             slotObject.onPickupFromSlot(player, stackInSlot);
         }
         return stack;
+    }
+
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+        for (Object crafter : crafters) {
+            if (crafter instanceof EntityPlayerMP) {
+                NetworkingHandler.INSTANCE.sendTo(new MessageTurretBase(this.tileEntity), (EntityPlayerMP) crafter);
+            }
+        }
     }
 }

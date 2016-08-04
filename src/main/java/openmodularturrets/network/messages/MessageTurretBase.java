@@ -1,6 +1,5 @@
 package openmodularturrets.network.messages;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -9,6 +8,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmodularturrets.ModularTurrets;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
@@ -33,8 +33,7 @@ public class MessageTurretBase implements IMessage {
     public static class MessageHandlerTurretBase implements IMessageHandler<MessageTurretBase, IMessage> {
         @Override
         public IMessage onMessage(MessageTurretBase message, MessageContext ctx) {
-            TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x, message.y,
-                                                                                                   message.z);
+            TileEntity tileEntity = ModularTurrets.proxy.getWorld().getTileEntity(message.x, message.y, message.z);
             if (tileEntity instanceof TurretBase) {
                 ((TurretBase) tileEntity).setOwner(message.owner);
                 ((TurretBase) tileEntity).setOwnerName(message.ownerName);

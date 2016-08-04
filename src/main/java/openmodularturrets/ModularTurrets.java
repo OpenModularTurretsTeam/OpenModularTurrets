@@ -26,7 +26,7 @@ public class ModularTurrets {
     public static ModularTurrets instance;
 
     @SidedProxy(clientSide = "openmodularturrets.proxy.ClientProxy", serverSide = "openmodularturrets.proxy" + "" + ".CommonProxy")
-    private static CommonProxy proxy;
+    public static CommonProxy proxy;
 
     public static CreativeTabs modularTurretsTab;
     private GuiHandler gui;
