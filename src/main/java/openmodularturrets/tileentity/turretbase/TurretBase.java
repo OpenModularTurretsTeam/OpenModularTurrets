@@ -97,6 +97,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         this.inv = new ItemStack[this.getSizeInventory()];
         this.inverted = true;
         this.active = true;
+        this.ticks = 0;
     }
 
     private static void updateRedstoneReactor(TurretBase base) {
@@ -162,7 +163,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     }
 
     @Optional.Method(modid = "IC2")
-    private void addToIc2EnergyNetwork() {
+    protected void addToIc2EnergyNetwork() {
         if (!worldObj.isRemote) {
             EnergyTileLoadEvent event = new EnergyTileLoadEvent(this);
             MinecraftForge.EVENT_BUS.post(event);
@@ -170,12 +171,23 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     }
 
     @Optional.Method(modid = "IC2")
+    protected void removeFromIc2EnergyNetwork() {
+        MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+    }
+
     @Override
     public void invalidate() {
         super.invalidate();
-        if (!worldObj.isRemote) {
-            EnergyTileUnloadEvent event = new EnergyTileUnloadEvent(this);
-            MinecraftForge.EVENT_BUS.post(event);
+        onChunkUnload();
+    }
+
+    @Override
+    public void onChunkUnload() {
+        if (wasAddedToEnergyNet &&
+                ModCompatibility.IC2Loaded) {
+            removeFromIc2EnergyNetwork();
+
+            wasAddedToEnergyNet = false;
         }
     }
 
@@ -212,7 +224,6 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
                 }
             }
             trustedPlayers.add(trustedPlayer);
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
             return true;
         }
         return false;
@@ -222,7 +233,6 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         for (TrustedPlayer player : trustedPlayers) {
             if (player.getName().equals(name)) {
                 trustedPlayers.remove(player);
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 return true;
             }
         }
@@ -538,7 +548,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
                 }
             }
 
-            if (ticks % 20 == 0) {
+            if (ticks == 20) {
 
                 //General
                 ticks = 0;
@@ -692,7 +702,6 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     private void setInverted(boolean inverted) {
         this.inverted = inverted;
         this.active = redstone ^ this.inverted;
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     private boolean getRedstone() {
@@ -702,7 +711,6 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     public void setRedstone(boolean redstone) {
         this.redstone = redstone;
         this.active = this.redstone ^ inverted;
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     @Optional.Method(modid = "Thaumcraft")

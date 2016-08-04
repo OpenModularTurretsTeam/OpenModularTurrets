@@ -131,11 +131,5 @@ public class MessageTurretBase implements IMessage {
             }
         }
     }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "MessageTurretBase - x:%s, y:%s, z:%s, owner:%s, rfstorage:%s", x, y, z, owner, rfStorage);
-    }
 }
 
