@@ -49,7 +49,10 @@ public class Names {
 
     public static class Items {
         //Unlocalised
-        public static final String intermediateOneItem = "intermediateOne";
+        public static final String addonMetaItem = "addonMeta";
+        public static final String upgradeMetaItem = "upgradeMeta";
+        public static final String intermediateTieredItem = "intermediateTiered";
+        public static final String intermediateRegularItem = "intermediateRegular";
         public static final String bulletThrowableItem = "bulletThrowable";
         public static final String grenadeThrowableItem = "grenadeThrowable";
         public static final String ferroSlug = "ferroSlug";

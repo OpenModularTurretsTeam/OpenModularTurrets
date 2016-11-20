@@ -16,8 +16,6 @@ import net.minecraft.util.*;
 import net.minecraft.world.World;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.items.addons.*;
-import openmodularturrets.items.upgrades.*;
 import openmodularturrets.tileentity.Expander;
 import openmodularturrets.tileentity.TurretBase;
 import openmodularturrets.tileentity.turrets.TurretHead;
@@ -450,14 +448,14 @@ public class TurretHeadUtil {
 
         if (tier == 5) {
             if (base.getStackInSlot(12) != null) {
-                if (base.getStackInSlot(12).getItem() instanceof RangeUpgradeItem) {
+                if (base.getStackInSlot(12).getItemDamage() == 3) {
                     value += (ConfigHandler.getRangeUpgradeBoost() * base.getStackInSlot(12).stackSize);
                 }
             }
         }
 
         if (base.getStackInSlot(11) != null) {
-            if (base.getStackInSlot(11).getItem() instanceof RangeUpgradeItem) {
+            if (base.getStackInSlot(11).getItemDamage() == 3) {
                 value += (ConfigHandler.getRangeUpgradeBoost() * base.getStackInSlot(11).stackSize);
             }
         }
@@ -475,15 +473,15 @@ public class TurretHeadUtil {
 
         if (tier == 5) {
             if (base.getStackInSlot(12) != null) {
-                if (base.getStackInSlot(12).getItem() instanceof ScattershotUpgradeItem) {
-                    value += (ConfigHandler.getRangeUpgradeBoost() * base.getStackInSlot(12).stackSize);
+                if (base.getStackInSlot(12).getItemDamage() == 4){
+                    value += base.getStackInSlot(12).stackSize;
                 }
             }
         }
 
         if (base.getStackInSlot(11) != null) {
-            if (base.getStackInSlot(11).getItem() instanceof ScattershotUpgradeItem) {
-                value += (ConfigHandler.getRangeUpgradeBoost() * base.getStackInSlot(11).stackSize);
+            if (base.getStackInSlot(11).getItemDamage() == 4){
+                value += base.getStackInSlot(11).stackSize;
             }
         }
 
@@ -500,14 +498,14 @@ public class TurretHeadUtil {
 
         if (tier == 5) {
             if (base.getStackInSlot(12) != null) {
-                if (base.getStackInSlot(12).getItem() instanceof AccuracyUpgradeItem) {
+                if (base.getStackInSlot(12).getItemDamage() == 0) {
                     accuracy += (ConfigHandler.getAccuracyUpgradeBoost() * base.getStackInSlot(12).stackSize);
                 }
             }
         }
 
         if (base.getStackInSlot(11) != null) {
-            if (base.getStackInSlot(11).getItem() instanceof AccuracyUpgradeItem) {
+            if (base.getStackInSlot(11).getItemDamage() == 0) {
                 accuracy += (ConfigHandler.getAccuracyUpgradeBoost() * base.getStackInSlot(11).stackSize);
             }
         }
@@ -525,7 +523,7 @@ public class TurretHeadUtil {
 
         if (tier == 5) {
             if (base.getStackInSlot(12) != null) {
-                if (base.getStackInSlot(12).getItem() instanceof EfficiencyUpgradeItem) {
+                if (base.getStackInSlot(12).getItemDamage() == 1) {
                     efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * base.getStackInSlot(
                             12).stackSize);
                 }
@@ -533,7 +531,7 @@ public class TurretHeadUtil {
         }
 
         if (base.getStackInSlot(11) != null) {
-            if (base.getStackInSlot(11).getItem() instanceof EfficiencyUpgradeItem) {
+            if (base.getStackInSlot(11).getItemDamage() == 1) {
                 efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * base.getStackInSlot(11).stackSize);
             }
         }
@@ -551,14 +549,14 @@ public class TurretHeadUtil {
 
         if (tier == 5) {
             if (base.getStackInSlot(12) != null) {
-                if (base.getStackInSlot(12).getItem() instanceof FireRateUpgradeItem) {
+                if (base.getStackInSlot(12).getItemDamage() == 2) {
                     rof += (ConfigHandler.getFireRateUpgradeBoostPercentage() * base.getStackInSlot(12).stackSize);
                 }
             }
         }
 
         if (base.getStackInSlot(11) != null) {
-            if (base.getStackInSlot(11).getItem() instanceof FireRateUpgradeItem) {
+            if (base.getStackInSlot(11).getItemDamage() == 2) {
                 rof += (ConfigHandler.getFireRateUpgradeBoostPercentage() * base.getStackInSlot(11).stackSize);
             }
         }
@@ -573,11 +571,11 @@ public class TurretHeadUtil {
         }
 
         if (base.getStackInSlot(9) != null) {
-            found = base.getStackInSlot(9).getItem() instanceof RedstoneReactorAddonItem;
+            found = base.getStackInSlot(9).getItemDamage() == 4;
         }
 
         if (base.getStackInSlot(10) != null && !found) {
-            found = base.getStackInSlot(10).getItem() instanceof RedstoneReactorAddonItem;
+            found =  base.getStackInSlot(10).getItemDamage() == 4;
         }
         return found;
     }
@@ -589,11 +587,11 @@ public class TurretHeadUtil {
         }
 
         if (base.getStackInSlot(9) != null) {
-            found = base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem;
+            found = base.getStackInSlot(9).getItemDamage() == 1;
         }
 
         if (base.getStackInSlot(10) != null && !found) {
-            found = base.getStackInSlot(10).getItem() instanceof DamageAmpAddonItem;
+            found =  base.getStackInSlot(10).getItemDamage() == 1;
         }
         return found;
     }
@@ -605,11 +603,11 @@ public class TurretHeadUtil {
         }
 
         if (base.getStackInSlot(9) != null) {
-            found = base.getStackInSlot(9).getItem() instanceof ConcealerAddonItem;
+            found = base.getStackInSlot(9).getItemDamage() == 0;
         }
 
         if (base.getStackInSlot(10) != null && !found) {
-            found = base.getStackInSlot(10).getItem() instanceof ConcealerAddonItem;
+            found = base.getStackInSlot(10).getItemDamage() == 0;
         }
         return found;
     }
@@ -621,11 +619,11 @@ public class TurretHeadUtil {
         }
 
         if (base.getStackInSlot(9) != null) {
-            found = base.getStackInSlot(9).getItem() instanceof SolarPanelAddonItem;
+            found = base.getStackInSlot(9).getItemDamage() == 6;
         }
 
         if (base.getStackInSlot(10) != null && !found) {
-            found = base.getStackInSlot(10).getItem() instanceof SolarPanelAddonItem;
+            found = base.getStackInSlot(10).getItemDamage() == 6;
         }
         return found;
     }
@@ -640,11 +638,11 @@ public class TurretHeadUtil {
         }
 
         if (base.getStackInSlot(9) != null) {
-            found = base.getStackInSlot(9).getItem() instanceof PotentiaAddonItem;
+            found = base.getStackInSlot(9).getItemDamage() == 2;
         }
 
         if (base.getStackInSlot(10) != null && !found) {
-            found = base.getStackInSlot(10).getItem() instanceof PotentiaAddonItem;
+            found = base.getStackInSlot(10).getItemDamage() == 2;
         }
         return found;
     }
@@ -659,11 +657,11 @@ public class TurretHeadUtil {
         }
 
         if (base.getStackInSlot(9) != null) {
-            found = base.getStackInSlot(9).getItem() instanceof SerialPortAddonItem;
+            found = base.getStackInSlot(9).getItemDamage() == 5;
         }
 
         if (base.getStackInSlot(10) != null && !found) {
-            found = base.getStackInSlot(10).getItem() instanceof SerialPortAddonItem;
+            found = base.getStackInSlot(10).getItemDamage() == 5;
         }
         return found;
     }
@@ -674,11 +672,11 @@ public class TurretHeadUtil {
             return false;
         }
         if (base.getStackInSlot(9) != null) {
-            found = base.getStackInSlot(9).getItem() instanceof RecyclerAddonItem;
+            found = base.getStackInSlot(9).getItemDamage() == 3;
         }
 
         if (base.getStackInSlot(10) != null && !found) {
-            found = base.getStackInSlot(10).getItem() instanceof RecyclerAddonItem;
+            found = base.getStackInSlot(10).getItemDamage() == 3;
         }
         return found;
     }
@@ -697,13 +695,13 @@ public class TurretHeadUtil {
         }
 
         if (base.getStackInSlot(10) != null) {
-            if (base.getStackInSlot(10).getItem() instanceof DamageAmpAddonItem) {
+            if (base.getStackInSlot(10).getItemDamage() == 1) {
                 amp_level += base.getStackInSlot(10).stackSize;
             }
         }
 
         if (base.getStackInSlot(9) != null) {
-            if (base.getStackInSlot(9).getItem() instanceof DamageAmpAddonItem) {
+            if (base.getStackInSlot(10).getItemDamage() == 1) {
                 amp_level += base.getStackInSlot(9).stackSize;
             }
         }
