@@ -2,10 +2,12 @@ package openmodularturrets.init;
 
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import openmodularturrets.blocks.BlockTurretBase;
 import openmodularturrets.blocks.BlockExpander;
-import openmodularturrets.items.blocks.ItemBlockExpander;
-import openmodularturrets.items.blocks.ItemBlockTurretBase;
+import openmodularturrets.blocks.BlockTurretBase;
+import openmodularturrets.blocks.misc.LeverBlock;
+import openmodularturrets.blocks.turretheads.*;
+import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.items.blocks.*;
 import openmodularturrets.reference.Names;
 import openmodularturrets.reference.Reference;
 import openmodularturrets.tileentity.Expander;
@@ -83,7 +85,7 @@ public class ModBlocks {
         GameRegistry.registerBlock(fenceTierFour, Names.Blocks.fenceTierFour);
 
         fenceTierFive = new BlockFenceTierFive();
-        GameRegistry.registerBlock(fenceTierFive, Names.Blocks.fenceTierFive);
+        GameRegistry.registerBlock(fenceTierFive, Names.Blocks.fenceTierFive);    */
 
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
             disposableItemTurret = new BlockDisposableTurret();
@@ -145,7 +147,7 @@ public class ModBlocks {
 
         leverBlock = new LeverBlock();
         GameRegistry.registerBlock(leverBlock, Names.Blocks.lever);
-        */
+
     }
 
     public static void initTileEntities() {

@@ -3,10 +3,7 @@ package openmodularturrets.init;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import openmodularturrets.items.BulletThrowableItem;
-import openmodularturrets.items.GrenadeThrowableItem;
-import openmodularturrets.items.IOBusItem;
-import openmodularturrets.items.IntermediateProductTiered;
+import openmodularturrets.items.*;
 import openmodularturrets.reference.Names;
 
 public class ModItems {
@@ -22,16 +19,12 @@ public class ModItems {
     public static Item fireRateUpgradeItem;
     public static Item rangeUpgradeItem;
     public static Item scattershotUpgradeItem;
-    public static Item redstoneReactorAddon;
-    public static Item damageAmpAddon;
-    public static Item solarPanelAddon;
-    public static Item potentiaAddon;
-    public static Item serialPortAddon;
-    public static Item recyclerAddon;
-    public static Item concealerAddon;
 
+    public static Item addonMetaItem;
+    public static Item upgradeMetaItem;
     public static Item intermediateProductTiered;
-    public static Item ioBus;
+    public static Item intermediateProductRegular;
+
 
     public static void init() {
         bulletThrowable = new BulletThrowableItem();
@@ -40,49 +33,7 @@ public class ModItems {
         grenadeThrowable = new GrenadeThrowableItem();
         GameRegistry.registerItem(grenadeThrowable, Names.Items.grenadeThrowableItem);
 
-        /*accuracyUpgradeItem = new AccuracyUpgradeItem();
-        GameRegistry.registerItem(accuracyUpgradeItem, Names.Items.accuraccyUpgrade);
-
-        efficiencyUpgradeItem = new EfficiencyUpgradeItem();
-        GameRegistry.registerItem(efficiencyUpgradeItem, Names.Items.bulletThrowableItem);
-
-        fireRateUpgradeItem = new FireRateUpgradeItem();
-        GameRegistry.registerItem(fireRateUpgradeItem, "fireRateUpgradeItem");
-
-        rangeUpgradeItem = new RangeUpgradeItem();
-        GameRegistry.registerItem(rangeUpgradeItem, "rangeUpgradeItem");
-
-        scattershotUpgradeItem = new ScattershotUpgradeItem();
-        GameRegistry.registerItem(scattershotUpgradeItem, "scattershotUpgradeItem");
-
-        redstoneReactorAddon = new RedstoneReactorAddonItem();
-        GameRegistry.registerItem(redstoneReactorAddon, "redstoneReactorAddon");
-
-        damageAmpAddon = new DamageAmpAddonItem();
-        GameRegistry.registerItem(damageAmpAddon, "damageAmpAddon");
-
-        solarPanelAddon = new SolarPanelAddonItem();
-        GameRegistry.registerItem(solarPanelAddon, "solarPanelAddon");
-
-        recyclerAddon = new RecyclerAddonItem();
-        GameRegistry.registerItem(recyclerAddon, "recyclerAddon");
-
-        concealerAddon = new ConcealerAddonItem();
-        GameRegistry.registerItem(concealerAddon, "concealerAddon");
-
-        // Thaumcraft Only
-        if (ModCompatibility.ThaumcraftLoaded) {
-            potentiaAddon = new PotentiaAddonItem();
-            GameRegistry.registerItem(potentiaAddon, "potentiaAddon");
-        }
-
-        //Computer mods Only
-        if (ModCompatibility.ComputercraftLoaded || ModCompatibility.OpenComputersLoaded) {
-            serialPortAddon = new SerialPortAddonItem();
-            GameRegistry.registerItem(serialPortAddon, "serialPortAddon");
-        }
-
-        bulletCraftable = new BulletAmmoItem();
+        /*bulletCraftable = new BulletAmmoItem();
         GameRegistry.registerItem(bulletCraftable, "bulletCraftable");
 
         blazingClayCraftable = new BlazingClayAmmoItem();
@@ -98,9 +49,16 @@ public class ModItems {
         GameRegistry.registerItem(ferroSlug, "ferroSlug"); */
 
         intermediateProductTiered = new IntermediateProductTiered();
-        GameRegistry.registerItem(intermediateProductTiered, Names.Items.intermediateOneItem);
+        GameRegistry.registerItem(intermediateProductTiered, Names.Items.intermediateTieredItem);
 
-        ioBus = new IOBusItem();
-        GameRegistry.registerItem(ioBus, Names.Items.ioBus);
+        intermediateProductRegular = new IntermediateProductRegular();
+        GameRegistry.registerItem(intermediateProductRegular, Names.Items.intermediateRegularItem);
+
+        addonMetaItem = new AddonMetaItem();
+        GameRegistry.registerItem(addonMetaItem, Names.Items.addonMetaItem);
+
+        upgradeMetaItem = new UpgradeMetaItem();
+        GameRegistry.registerItem(upgradeMetaItem, Names.Items.upgradeMetaItem);
+
     }
 }

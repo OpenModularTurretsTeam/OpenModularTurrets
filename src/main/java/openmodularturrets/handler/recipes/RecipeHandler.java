@@ -1,28 +1,77 @@
 package openmodularturrets.handler.recipes;
 
 
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.init.ModBlocks;
+import openmodularturrets.init.ModItems;
 
 public class RecipeHandler {
-    public static ItemStack expanderInvTierOne = new ItemStack(ModBlocks.expander,1 ,0);
-    public static ItemStack expanderInvTierTwo = new ItemStack(ModBlocks.expander,1 ,0);
-    public static ItemStack expanderInvTierThree = new ItemStack(ModBlocks.expander,1 ,0);
-    public static ItemStack expanderInvTierFour = new ItemStack(ModBlocks.expander,1 ,0);
-    public static ItemStack expanderInvTierFive = new ItemStack(ModBlocks.expander,1 ,0);
-    public static ItemStack expanderPowerTierOne = new ItemStack(ModBlocks.expander,1 ,0);
-    public static ItemStack expanderPowerTierTwo = new ItemStack(ModBlocks.expander,1 ,0);
-    public static ItemStack expanderPowerTierThree = new ItemStack(ModBlocks.expander,1 ,0);
-    public static ItemStack expanderPowerTierFour = new ItemStack(ModBlocks.expander,1 ,0);
-    public static ItemStack expanderPowerTierFive = new ItemStack(ModBlocks.expander,1 ,0);
+    public static ItemStack expanderInvTierOne;
+    public static ItemStack expanderInvTierTwo;
+    public static ItemStack expanderInvTierThree;
+    public static ItemStack expanderInvTierFour;
+    public static ItemStack expanderInvTierFive;
+    public static ItemStack expanderPowerTierOne;
+    public static ItemStack expanderPowerTierTwo;
+    public static ItemStack expanderPowerTierThree;
+    public static ItemStack expanderPowerTierFour;
+    public static ItemStack expanderPowerTierFive;
+    public static ItemStack concealerAddon;
+    public static ItemStack damageAmpAddon;
+    public static ItemStack potentiaAddon;
+    public static ItemStack recyclerAddon;
+    public static ItemStack redReactorAddon;
+    public static ItemStack serialPortAddon;
+    public static ItemStack solarPanelAddon;
+    public static ItemStack accuraccyUpgrade;
+    public static ItemStack efficiencyUpgrade;
+    public static ItemStack fireRateUpgrade;
+    public static ItemStack rangeUpgrade;
+    public static ItemStack scattershotUpgrade;
+    public static ItemStack containmentChamber;
+    public static ItemStack energeticBarrel;
+    public static ItemStack ioBus;
+
+
     public static void initRecipes() {
+
+        expanderInvTierOne = new ItemStack(ModBlocks.expander, 1, 0);
+        expanderInvTierTwo = new ItemStack(ModBlocks.expander, 1, 1);
+        expanderInvTierThree = new ItemStack(ModBlocks.expander, 1, 2);
+        expanderInvTierFour = new ItemStack(ModBlocks.expander, 1, 3);
+        expanderInvTierFive = new ItemStack(ModBlocks.expander, 1, 4);
+        expanderPowerTierOne = new ItemStack(ModBlocks.expander, 1, 5);
+        expanderPowerTierTwo = new ItemStack(ModBlocks.expander, 1, 6);
+        expanderPowerTierThree = new ItemStack(ModBlocks.expander, 1, 7);
+        expanderPowerTierFour = new ItemStack(ModBlocks.expander, 1, 8);
+        expanderPowerTierFive = new ItemStack(ModBlocks.expander, 1, 9);
+        concealerAddon = new ItemStack(ModItems.addonMetaItem, 1, 0);
+        damageAmpAddon = new ItemStack(ModItems.addonMetaItem, 1, 1);
+        potentiaAddon = new ItemStack(ModItems.addonMetaItem, 1, 2);
+        recyclerAddon = new ItemStack(ModItems.addonMetaItem, 1, 3);
+        redReactorAddon = new ItemStack(ModItems.addonMetaItem, 1, 4);
+        serialPortAddon = new ItemStack(ModItems.addonMetaItem, 1, 5);
+        solarPanelAddon = new ItemStack(ModItems.addonMetaItem, 1, 6);
+        accuraccyUpgrade = new ItemStack(ModItems.upgradeMetaItem, 1, 0);
+        efficiencyUpgrade = new ItemStack(ModItems.upgradeMetaItem, 1, 1);
+        fireRateUpgrade = new ItemStack(ModItems.upgradeMetaItem, 1, 2);
+        rangeUpgrade = new ItemStack(ModItems.upgradeMetaItem, 1, 3);
+        scattershotUpgrade = new ItemStack(ModItems.upgradeMetaItem, 1, 4);
+        containmentChamber = new ItemStack(ModItems.intermediateProductRegular, 1, 0);
+        energeticBarrel = new ItemStack(ModItems.intermediateProductRegular, 1, 1);
+        ioBus = new ItemStack(ModItems.intermediateProductRegular, 1, 2);
+
         boolean recipesDone = false;
         // Recipes
 
         if (ModCompatibility.ThermalExpansionLoaded && ConfigHandler.recipes.equals("thermalexpansion")) {
-            //ThermalExpansionRecipeHandler.initBlocks();
+            //ThermalExpansionRecipeHandler.init();
             recipesDone = true;
         } else if (ModCompatibility.EnderIOLoaded && ConfigHandler.recipes.equals("enderio")) {
             EnderIORecipeHandler.init();
@@ -37,7 +86,7 @@ public class RecipeHandler {
             if (ModCompatibility.EnderIOLoaded) {
                 EnderIORecipeHandler.init();
             } else if (ModCompatibility.ThermalExpansionLoaded) {
-                //ThermalExpansionRecipeHandler.initBlocks();
+                //ThermalExpansionRecipeHandler.init();
             } else if (ModCompatibility.MekanismLoaded) {
                 MekanismRecipeHandler.init();
             } else {
@@ -53,154 +102,154 @@ public class RecipeHandler {
 
         //RECIPES THAT DON'T CHANGE BASED ON MODS LOADED:
         //Tier 1 static recipes (Because they shouldn't use expensive mod items, only redstone, cobblestone and planks)
-        /*GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,10), "AAA", " B ", "AAA", 'A',
-                                                   net.minecraft.initBlocks.Blocks.cobblestone, 'B', "plankWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1, 10), "AAA", " B ", "AAA", 'A',
+                Blocks.cobblestone, 'B', "plankWood"));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,5), "AAA", " BC", "AAA", 'A',
-                                                   net.minecraft.initBlocks.Blocks.cobblestone, 'B', "plankWood", 'C',
-                                                   net.minecraft.initBlocks.Items.redstone));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1, 5), "AAA", " BC", "AAA", 'A',
+                Blocks.cobblestone, 'B', "plankWood", 'C',
+                Items.redstone));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,0), " A ", "ABA", " A ", 'A',
-                                                   net.minecraft.initBlocks.Items.redstone, 'B', "plankWood"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1, 0), " A ", "ABA", " A ", 'A',
+                Items.redstone, 'B', "plankWood"));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,1), "ABA", "BCB", "ABA", 'A',
-                                                   net.minecraft.initBlocks.Blocks.cobblestone, 'B', "plankWood", 'C',
-                                                   new ItemStack(ModItems.intermediateProductTiered, 1 ,0)));
-
-        GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.expanderPowerTierOne, 1), "ABA", "DCD", "ADA", 'A',
-                                    net.minecraft.initBlocks.Blocks.cobblestone, 'B', "plankWood", 'C',
-                                    net.minecraft.initBlocks.Items.redstone, 'D', ModItems.ioBus));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1, 1), "ABA", "BCB", "ABA", 'A',
+                Blocks.cobblestone, 'B', "plankWood", 'C',
+                new ItemStack(ModItems.intermediateProductTiered, 1, 0)));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.expanderInvTierOne, 1), "ABA", "DCD", "ADA", 'A',
-                                    net.minecraft.initBlocks.Blocks.cobblestone, 'B', "plankWood", 'C',
-                                    net.minecraft.initBlocks.Blocks.chest, 'D', ModItems.ioBus));
+                new ShapedOreRecipe(expanderPowerTierOne, "ABA", "DCD", "ADA", 'A',
+                        Blocks.cobblestone, 'B', "plankWood", 'C',
+                        Items.redstone, 'D', ioBus));
+
+        GameRegistry.addRecipe(
+                new ShapedOreRecipe(expanderInvTierOne, "ABA", "DCD", "ADA", 'A',
+                        Blocks.cobblestone, 'B', "plankWood", 'C',
+                        Blocks.chest, 'D', ioBus));
 
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.disposableItemTurret, 1), " A ", "CBC", "CDC", 'A',
-                                        new ItemStack(ModItems.intermediateProductTiered, 1 ,10), 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,5), 'C',
-                                        net.minecraft.initBlocks.Blocks.cobblestone, 'D', net.minecraft.initBlocks.Items.redstone));
+                            new ItemStack(ModItems.intermediateProductTiered, 1, 10), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 5), 'C',
+                            Blocks.cobblestone, 'D', Items.redstone));
         }
 
         if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.potatoCannonTurret, 1), "CAC", "CAC", "DBD", 'A',
-                                        new ItemStack(ModItems.intermediateProductTiered, 1 ,10), 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,5), 'C',
-                                        net.minecraft.initBlocks.Blocks.cobblestone, 'D', net.minecraft.initBlocks.Items.redstone));
+                            new ItemStack(ModItems.intermediateProductTiered, 1, 10), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 5), 'C',
+                            Blocks.cobblestone, 'D', Items.redstone));
         }
 
         GameRegistry.addRecipe(new ItemStack(ModBlocks.leverBlock, 1), "AAA", "A  ", "A  ", 'A',
-                               net.minecraft.initBlocks.Blocks.cobblestone);
+                Blocks.cobblestone);
 
         // Addons
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.solarPanelAddon, 1), "AAA", "CBC", "DED", 'A',
-                                                   net.minecraft.initBlocks.Blocks.glass_pane, 'B',
-                                                   net.minecraft.initBlocks.Blocks.lapis_block, 'C',
-                                                   net.minecraft.initBlocks.Items.redstone, 'D', "ingotIron", 'E',
-                                                   ModItems.ioBus));
+        GameRegistry.addRecipe(solarPanelAddon, "AAA", "CBC", "DED", 'A',
+                Blocks.glass_pane, 'B',
+                Blocks.lapis_block, 'C',
+                Items.redstone, 'D', Items.iron_ingot, 'E',
+                ioBus);
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.redstoneReactorAddon, 1), "CAC", "ABD", "CAC", 'A', "ingotIron",
-                                    'B', net.minecraft.initBlocks.Items.ender_eye, 'C', net.minecraft.initBlocks.Items.quartz, 'D',
-                                    ModItems.ioBus));
+                new ShapedOreRecipe(redReactorAddon, "CAC", "ABD", "CAC", 'A', Items.iron_ingot,
+                        'B', Items.ender_eye, 'C', Items.quartz, 'D',
+                        ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.damageAmpAddon, 1), "AAA", "B B", "AAA", 'A', "ingotIron", 'B',
-                                    net.minecraft.initBlocks.Items.ender_pearl));
+                new ShapedOreRecipe(damageAmpAddon, "AAA", "B B", "AAA", 'A', Items.iron_ingot, 'B',
+                        Items.ender_pearl));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.recyclerAddon, 1), "ABA", "BCD", "ABA", 'A', "ingotGold", 'B',
-                                    net.minecraft.initBlocks.Items.magma_cream, 'C', net.minecraft.initBlocks.Blocks.ender_chest,
-                                    'D', ModItems.ioBus));
+                new ShapedOreRecipe(recyclerAddon, "ABA", "BCD", "ABA", 'A', "ingotGold", 'B',
+                        Items.magma_cream, 'C', Blocks.ender_chest,
+                        'D', ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.concealerAddon, 1), "ABA", "BCD", "ABA", 'A', "ingotIron", 'B',
-                                    net.minecraft.initBlocks.Items.quartz, 'C', net.minecraft.initBlocks.Blocks.chest,
-                                    'D', ModItems.ioBus));
+                new ShapedOreRecipe(concealerAddon, "ABA", "BCD", "ABA", 'A', Items.iron_ingot, 'B',
+                        Items.quartz, 'C', Blocks.chest,
+                        'D', ioBus));
 
-        //Fences
+        /*//Fences
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierOne, 16), "ABA", "BAB", "ABA", 'A',
-                                                   net.minecraft.initBlocks.Blocks.iron_bars, 'B',
-                                                   net.minecraft.initBlocks.Blocks.cobblestone));
+                Blocks.iron_bars, 'B',
+                Blocks.cobblestone));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierTwo, 16), "ABA", "BAB", "ABA", 'A',
-                                                   net.minecraft.initBlocks.Blocks.iron_bars, 'B', "ingotIron"));
+                Blocks.iron_bars, 'B', Items.iron_ingot));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierThree, 16), "ABA", "BAB", "ABA", 'A',
-                                                   net.minecraft.initBlocks.Blocks.iron_bars, 'B', "ingotGold"));
+                Blocks.iron_bars, 'B', "ingotGold"));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierFour, 16), "ABA", "BAB", "ABA", 'A',
-                                                   net.minecraft.initBlocks.Blocks.iron_bars, 'B',
-                                                   net.minecraft.initBlocks.Items.diamond));
+                Blocks.iron_bars, 'B',
+                Items.diamond));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierFive, 16), "ABA", "BAB", "ABA", 'A',
-                                                   net.minecraft.initBlocks.Blocks.iron_bars, 'B',
-                                                   net.minecraft.initBlocks.Blocks.obsidian));
+                Blocks.iron_bars, 'B',
+                Blocks.obsidian));
 
         //Hard Walls
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.hardWallTierOne, 16), "ABA", "BCB", "ABA", 'A',
-                                                   net.minecraft.initBlocks.Blocks.gravel, 'B',
-                                                   net.minecraft.initBlocks.Blocks.cobblestone, 'C',
-                                                   net.minecraft.initBlocks.Blocks.sand));
+                Blocks.gravel, 'B',
+                Blocks.cobblestone, 'C',
+                Blocks.sand));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.hardWallTierTwo, 16), "ABA", "BAB", "ABA", 'A',
-                                                   ModBlocks.hardWallTierOne, 'B', net.minecraft.initBlocks.Blocks.stone));
+                ModBlocks.hardWallTierOne, 'B', Blocks.stone));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModBlocks.hardWallTierThree, 16), "ABA", "BAB", "ABA", 'A',
-                                    ModBlocks.hardWallTierTwo, 'B', net.minecraft.initBlocks.Blocks.brick_block));
+                        ModBlocks.hardWallTierTwo, 'B', Blocks.brick_block));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.hardWallTierFour, 16), "ABA", "BAB", "ABA", 'A',
-                                                   ModBlocks.hardWallTierThree, 'B',
-                                                   net.minecraft.initBlocks.Blocks.nether_brick));
+                ModBlocks.hardWallTierThree, 'B',
+                Blocks.nether_brick));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.hardWallTierFive, 16), "ABA", "BAB", "ABA", 'A',
-                                                   ModBlocks.hardWallTierThree, 'B', net.minecraft.initBlocks.Blocks.obsidian));
-
+                ModBlocks.hardWallTierThree, 'B', Blocks.obsidian));
+                   */
         // Integration
         if (ModCompatibility.ThaumcraftLoaded && ConfigHandler.shouldDoThaumcraftIntegration) {
-            //ThaumcraftRecipeHandler.initBlocks();
+            //ThaumcraftRecipeHandler.init();
         }
 
         if ((ModCompatibility.ComputercraftLoaded || ModCompatibility.OpenComputersLoaded) && ConfigHandler.shouldDoThaumcraftIntegration) {
-            ComputerRecipeHandler.initBlocks();
+            ComputerRecipeHandler.init();
         }
 
         // Upgrades
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.efficiencyUpgradeItem, 1), " A ", "ABA", " C ", 'A',
-                                    net.minecraft.initBlocks.Items.quartz, 'B', net.minecraft.initBlocks.Items.ender_eye, 'C',
-                                    ModItems.ioBus));
+                        Items.quartz, 'B', Items.ender_eye, 'C',
+                        ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.accuracyUpgradeItem, 1), " A ", "ABA", " C ", 'A',
-                                    net.minecraft.initBlocks.Items.quartz, 'B', "ingotGold", 'C', ModItems.ioBus));
+                        Items.quartz, 'B', "ingotGold", 'C', ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.fireRateUpgradeItem, 1), " A ", "ABA", " C ", 'A',
-                                    net.minecraft.initBlocks.Items.quartz, 'B', net.minecraft.initBlocks.Items.blaze_powder, 'C',
-                                    ModItems.ioBus));
+                        Items.quartz, 'B', Items.blaze_powder, 'C',
+                        ioBus));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.rangeUpgradeItem, 1), " A ", "ABA", " C ", 'A',
-                                                   net.minecraft.initBlocks.Items.quartz, 'B',
-                                                   net.minecraft.initBlocks.Items.diamond, 'C', ModItems.ioBus));
+                Items.quartz, 'B',
+                Items.diamond, 'C', ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.scattershotUpgradeItem, 1), " A ", "ABA", " C ", 'A',
-                                    net.minecraft.initBlocks.Items.quartz, 'B', net.minecraft.initBlocks.Items.flint, 'C',
-                                    ModItems.ioBus));
+                        Items.quartz, 'B', Items.flint, 'C',
+                        ioBus));
 
         //Ammo
         GameRegistry.addRecipe(new ItemStack(ModItems.blazingClayCraftable, 32), "BCB", "CAC", "BCB", 'A',
-                               net.minecraft.initBlocks.Items.blaze_powder, 'B', net.minecraft.initBlocks.Items.clay_ball, 'C',
-                               net.minecraft.initBlocks.Items.redstone);
+                Items.blaze_powder, 'B', Items.clay_ball, 'C',
+                Items.redstone);
 
         //Other
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.ioBus, 1), " A ", "BBB", " C ", 'A', "ingotGold", 'B',
-                                    net.minecraft.initBlocks.Items.redstone, 'C', "ingotIron"));
-                                    */
+                new ShapedOreRecipe(ioBus, " A ", "BBB", " C ", 'A', "ingotGold", 'B',
+                        Items.redstone, 'C', Items.iron_ingot));
+
     }
 }
