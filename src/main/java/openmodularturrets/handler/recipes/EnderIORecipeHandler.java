@@ -74,115 +74,115 @@ class EnderIORecipeHandler {
         // Sensors
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,1), " A ", "ABA", " C ", 'A',
                                                    "ingotElectricalSteel", 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,0), 'C',
-                                                   ModItems.ioBus));
+                                                   RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,2), " C ", "ABA", " C ", 'A',
-                                    "ingotDarkSteel", 'B',new ItemStack(ModItems.intermediateProductTiered, 1 ,1), 'C', ModItems.ioBus));
+                                    "ingotDarkSteel", 'B',new ItemStack(ModItems.intermediateProductTiered, 1 ,1), 'C', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,3), "EDE", "CBC", "EDE", 'B',
-                                                   new ItemStack(ModItems.intermediateProductTiered, 1 ,2), 'C', ModItems.ioBus, 'D',
+                                                   new ItemStack(ModItems.intermediateProductTiered, 1 ,2), 'C', RecipeHandler.ioBus, 'D',
                                                    net.minecraft.init.Items.diamond, 'E', "ingotSoularium"));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,4), "EDE", "CBC", "EDE", 'B',
-                                                   new ItemStack(ModItems.intermediateProductTiered, 1 ,3), 'C', ModItems.ioBus, 'D',
+                                                   new ItemStack(ModItems.intermediateProductTiered, 1 ,3), 'C', RecipeHandler.ioBus, 'D',
                                                    net.minecraft.init.Blocks.obsidian, 'E', vibrantCrystal));
 
         // Bases
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,2), "ABA", "ECE", "ADA", 'A',
                                                    "ingotElectricalSteel", 'B', capacitorBankBasic, 'C',
-                                                   new ItemStack(ModItems.intermediateProductTiered, 1 ,1), 'D', basicCapacitor, 'E', ModItems.ioBus));
+                                                   new ItemStack(ModItems.intermediateProductTiered, 1 ,1), 'D', basicCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,3), "ABA", "ECE", "ADA", 'A',
                                     "ingotDarkSteel", 'B', capacitorBank, 'C', new ItemStack(ModItems.intermediateProductTiered, 1 ,2), 'D',
-                                    basicCapacitor, 'E', ModItems.ioBus));
+                                    basicCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,4), "ABA", "ECE", "ADA", 'A',
                                     "ingotSoularium", 'B', capacitorBankVibrant, 'C', new ItemStack(ModItems.intermediateProductTiered, 1 ,3), 'D',
-                                    doubleCapacitor, 'E', ModItems.ioBus));
+                                    doubleCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,5), "ABA", "ECE", "ADA", 'A',
                                     net.minecraft.init.Blocks.obsidian, 'B', capacitorBankVibrant, 'C',
-                                    new ItemStack(ModItems.intermediateProductTiered, 1 ,4), 'D', octadicCapacitor, 'E', ModItems.ioBus));
+                                    new ItemStack(ModItems.intermediateProductTiered, 1 ,4), 'D', octadicCapacitor, 'E', RecipeHandler.ioBus));
 
         //Power Expanders
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.expanderPowerTierTwo, "ABA", "ECE", "ADA", 'A',
                                     "ingotElectricalSteel", 'B', capacitorBank, 'C',
-                                    net.minecraft.init.Blocks.redstone_block, 'D', basicCapacitor, 'E', ModItems.ioBus));
+                                    net.minecraft.init.Blocks.redstone_block, 'D', basicCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.expanderPowerTierThree, "ABA", "ECE", "ADA", 'A',
                                     "ingotDarkSteel", 'B', capacitorBank, 'C', net.minecraft.init.Blocks.redstone_block,
-                                    'D', basicCapacitor, 'E', ModItems.ioBus));
+                                    'D', basicCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.expanderPowerTierFour, "ABA", "ECE", "ADA", 'A',
                                     "ingotSoularium", 'B', capacitorBankVibrant, 'C',
-                                    net.minecraft.init.Blocks.redstone_block, 'D', doubleCapacitor, 'E', ModItems.ioBus));
+                                    net.minecraft.init.Blocks.redstone_block, 'D', doubleCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.expanderPowerTierFive, "ABA", "ECE", "ADA", 'A',
                                     net.minecraft.init.Blocks.obsidian, 'B', capacitorBankVibrant, 'C',
-                                    net.minecraft.init.Blocks.redstone_block, 'D', octadicCapacitor, 'E', ModItems.ioBus));
+                                    net.minecraft.init.Blocks.redstone_block, 'D', octadicCapacitor, 'E', RecipeHandler.ioBus));
 
         //Inventory Expanders
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.expanderInvTierTwo, "ABA", "ECE", "ADA", 'A',
                                     "ingotElectricalSteel", 'B', capacitorBank, 'C', net.minecraft.init.Blocks.chest,
-                                    'D', basicCapacitor, 'E', ModItems.ioBus));
+                                    'D', basicCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.expanderInvTierThree, "ABA", "ECE", "ADA", 'A',
                                     "ingotDarkSteel", 'B', capacitorBank, 'C', net.minecraft.init.Blocks.chest, 'D',
-                                    basicCapacitor, 'E', ModItems.ioBus));
+                                    basicCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.expanderInvTierFour, "ABA", "ECE", "ADA", 'A',
                                     "ingotSoularium", 'B', capacitorBankVibrant, 'C', net.minecraft.init.Blocks.chest,
-                                    'D', doubleCapacitor, 'E', ModItems.ioBus));
+                                    'D', doubleCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.expanderInvTierFive, "ABA", "ECE", "ADA", 'A',
                                     net.minecraft.init.Blocks.obsidian, 'B', capacitorBankVibrant, 'C',
-                                    net.minecraft.init.Blocks.chest, 'D', octadicCapacitor, 'E', ModItems.ioBus));
+                                    net.minecraft.init.Blocks.chest, 'D', octadicCapacitor, 'E', RecipeHandler.ioBus));
 
         // Turrets
         if (ConfigHandler.getGunTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.machineGunTurret, 1), " A ", "CAC", "DBD", 'A',
                                         new ItemStack(ModItems.intermediateProductTiered, 1 ,11), 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,6), 'C',
-                                        "ingotElectricalSteel", 'D', ModItems.ioBus));
+                                        "ingotElectricalSteel", 'D', RecipeHandler.ioBus));
         }
 
         if (ConfigHandler.getIncendiary_turret().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.incendiaryTurret, 1), "A A", "BCB", "DCD", 'A',
                                         new ItemStack(ModItems.intermediateProductTiered, 1 ,11), 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,6), 'C',
-                                        "ingotElectricalSteel", 'D', ModItems.ioBus));
+                                        "ingotElectricalSteel", 'D', RecipeHandler.ioBus));
         }
 
         if (ConfigHandler.getGrenadeTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.grenadeLauncherTurret, 1), " A ", "CBC", "CDC", 'A',
                                         new ItemStack(ModItems.intermediateProductTiered, 1 ,12), 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,7), 'C',
-                                        "ingotDarkSteel", 'D', ModItems.ioBus));
+                                        "ingotDarkSteel", 'D', RecipeHandler.ioBus));
         }
 
         if (ConfigHandler.getRelativistic_turret().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.relativisticTurret, 1), "CAC", "ABA", "CDC", 'A',
                                         net.minecraft.init.Items.ender_pearl, 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,2), 'C',
-                                        "ingotDarkSteel", 'D', ModItems.ioBus));
+                                        "ingotDarkSteel", 'D', RecipeHandler.ioBus));
         }
 
         if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.rocketTurret, 1), "CAC", "CAC", "EDE", 'A',
                                                        new ItemStack(ModItems.intermediateProductTiered, 1 ,13), 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,8), 'C',
-                                                       "ingotSoularium", 'D', ModItems.ioBus, 'E',
+                                                       "ingotSoularium", 'D', RecipeHandler.ioBus, 'E',
                                                        net.minecraft.init.Items.diamond));
         }
 
@@ -190,21 +190,21 @@ class EnderIORecipeHandler {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.teleporterTurret, 1), "CEC", "ABA", "CDC", 'A',
                                         net.minecraft.init.Items.diamond, 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,3), 'C',
-                                        net.minecraft.init.Items.ender_eye, 'D', ModItems.ioBus, 'E',
+                                        net.minecraft.init.Items.ender_eye, 'D', RecipeHandler.ioBus, 'E',
                                         net.minecraft.init.Items.diamond));
         }
 
         if (ConfigHandler.getLaserTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.laserTurret, 1), "EAE", "CBC", "DCD", 'A',
                                                        new ItemStack(ModItems.intermediateProductTiered, 1 ,14), 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,9), 'C',
-                                                       net.minecraft.init.Blocks.obsidian, 'D', ModItems.ioBus, 'E',
+                                                       net.minecraft.init.Blocks.obsidian, 'D', RecipeHandler.ioBus, 'E',
                                                        vibrantCrystal));
         }
 
         if (ConfigHandler.getRailgun_turret().isEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.railGunTurret, 1), "EAE", "CAC", "DBD", 'A',
                                                        new ItemStack(ModItems.intermediateProductTiered, 1 ,14), 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,9), 'C',
-                                                       net.minecraft.init.Blocks.obsidian, 'D', ModItems.ioBus, 'E',
+                                                       net.minecraft.init.Blocks.obsidian, 'D', RecipeHandler.ioBus, 'E',
                                                        vibrantCrystal));
         }
 

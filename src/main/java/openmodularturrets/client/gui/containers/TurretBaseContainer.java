@@ -6,8 +6,8 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import openmodularturrets.client.gui.customSlot.AddonSlot;
 import openmodularturrets.client.gui.customSlot.UpgradeSlot;
-import openmodularturrets.items.addons.AddonItem;
-import openmodularturrets.items.upgrades.UpgradeItem;
+import openmodularturrets.items.AddonMetaItem;
+import openmodularturrets.items.UpgradeMetaItem;
 import openmodularturrets.tileentity.TurretBase;
 
 /**
@@ -54,11 +54,11 @@ class TurretBaseContainer extends Container {
             // Transfer from player inventory
             if (slot < slotStart) {
                 // Priority addon and upgrade slot first
-                if (stackInSlot.getItem() instanceof AddonItem) {
+                if (stackInSlot.getItem() instanceof AddonMetaItem) {
                     if (!mergeItemStack(stackInSlot, addonSlotStart, addonSlotEnd, false)) {
                         return null;
                     }
-                } else if (stackInSlot.getItem() instanceof UpgradeItem) {
+                } else if (stackInSlot.getItem() instanceof UpgradeMetaItem) {
                     if (!mergeItemStack(stackInSlot, upgSlotStart, upgSlotEnd, false)) {
                         return null;
                     }
