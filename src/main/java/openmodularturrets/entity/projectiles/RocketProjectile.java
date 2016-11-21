@@ -1,14 +1,15 @@
 package openmodularturrets.entity.projectiles;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import openmodularturrets.handler.ConfigHandler;
@@ -65,7 +66,7 @@ public class RocketProjectile extends TurretProjectile {
     }
 
     @Override
-    protected void onImpact(MovingObjectPosition movingobjectposition) {
+    protected void onImpact(RayTraceResult movingobjectposition) {
         if (ConfigHandler.canRocketsHome && this.ticksExisted <= 5) {
             return;
         }
@@ -73,10 +74,9 @@ public class RocketProjectile extends TurretProjectile {
         if (!ConfigHandler.canRocketsHome && this.ticksExisted <= 2) {
             return;
         }
-        if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            Block hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos()).getBlock();
-            if (hitBlock != null && !hitBlock.getMaterial().isSolid() || worldObj.isAirBlock(
-                    movingobjectposition.getBlockPos())) {
+        if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
+            IBlockState hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos());
+            if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;
             }

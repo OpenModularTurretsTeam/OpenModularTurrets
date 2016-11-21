@@ -4,9 +4,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
@@ -71,7 +71,7 @@ public class GrenadeProjectile extends TurretProjectile {
     }
 
     @Override
-    protected void onImpact(MovingObjectPosition movingobjectposition) {
+    protected void onImpact(RayTraceResult movingobjectposition) {
         if (this.ticksExisted >= 2) {
             this.motionX = 0.0F;
             this.motionY = 0.0F;

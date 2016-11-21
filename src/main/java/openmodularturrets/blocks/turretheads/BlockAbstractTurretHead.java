@@ -2,9 +2,12 @@ package openmodularturrets.blocks.turretheads;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
@@ -12,22 +15,23 @@ import openmodularturrets.tileentity.TurretBase;
 
 abstract class BlockAbstractTurretHead extends Block implements ITileEntityProvider {
     BlockAbstractTurretHead() {
-        super(Material.glass);
+        super(Material.GLASS);
 
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setBlockUnbreakable();
         this.setResistance(6000000.0F);
-        this.setStepSound(Block.soundTypeStone);
-        this.setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 1F, 0.8F);
+        this.setSoundType(SoundType.STONE);
+        //this.boun(0.2F, 0.0F, 0.2F, 0.8F, 1F, 0.8F);
     }
 
     @Override
-    public int getRenderType() {
-        return -1;
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.INVISIBLE;
     }
 
+
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
@@ -42,7 +46,7 @@ abstract class BlockAbstractTurretHead extends Block implements ITileEntityProvi
     }
 
     @Override
-    public boolean canCreatureSpawn(IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
         return false;
     }
 }

@@ -2,10 +2,10 @@ package openmodularturrets.tileentity;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
-import dan200.computercraft.api.lua.ILuaContext;
+/*import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
-import dan200.computercraft.api.peripheral.IPeripheral;
+import dan200.computercraft.api.peripheral.IPeripheral;*/
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyEmitter;
@@ -48,7 +48,7 @@ import static openmodularturrets.util.PlayerUtil.*;
         @Optional.Interface(iface = "thaumcraft.api.aspects.IEssentiaTransport", modid = "Thaumcraft"),
         @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2")})
 
-public class TurretBase extends TileEntityContainer implements IEnergyReceiver, SimpleComponent, IPeripheral, IEnergySink, ITickable {
+public class TurretBase extends TileEntityContainer implements IEnergyReceiver, SimpleComponent, /*IPeripheral,*/ IEnergySink, ITickable {
     public int trustedPlayerIndex = 0;
     public ItemStack camoStack;
 
@@ -75,7 +75,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     private boolean dropBase = false;
     //private float amountOfPotentia = 0F;
     //private final float maxAmountOfPotentia = ConfigHandler.getPotentiaAddonCapacity();
-    private ArrayList<IComputerAccess> comp;
+    //private ArrayList<IComputerAccess> comp;
     private double storageEU;
     private boolean wasAddedToEnergyNet = false;
 
@@ -109,11 +109,11 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
 
             //Prioritise redstone blocks
             ItemStack redstoneBlock = TurretHeadUtil.useSpecificItemStackBlockFromBase(base, new ItemStack(
-                    Blocks.redstone_block));
+                    Blocks.REDSTONE_BLOCK));
 
             if (redstoneBlock == null) {
                 redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
-                        new ItemStack(Blocks.redstone_block),
+                        new ItemStack(Blocks.REDSTONE_BLOCK),
                         base);
             }
 
@@ -123,11 +123,11 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
                 return;
             }
 
-            ItemStack redstone = TurretHeadUtil.useSpecificItemStackItemFromBase(base, Items.redstone);
+            ItemStack redstone = TurretHeadUtil.useSpecificItemStackItemFromBase(base, Items.REDSTONE);
 
             if (redstone == null) {
                 redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
-                        new ItemStack(Items.redstone), base);
+                        new ItemStack(Items.REDSTONE), base);
             }
 
             if (redstone != null) {
@@ -212,7 +212,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
                 }
             }
             trustedPlayers.add(trustedPlayer);
-            worldObj.markBlockForUpdate(this.pos);
             return true;
         }
         return false;
@@ -222,7 +221,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         for (TrustedPlayer player : trustedPlayers) {
             if (player.getName().equals(name)) {
                 trustedPlayers.remove(player);
-                worldObj.markBlockForUpdate(this.pos);
                 return true;
             }
         }
@@ -302,90 +300,91 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound par1) {
-        super.writeToNBT(par1);
+    public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
+        super.writeToNBT(nbtTagCompound);
 
-        par1.setInteger("maxStorage", this.storage.getMaxEnergyStored());
-        par1.setInteger("energyStored", this.getEnergyStored(EnumFacing.DOWN));
-        //par1.setFloat("amountOfPotentia", amountOfPotentia);
-        par1.setInteger("maxIO", this.storage.getMaxReceive());
-        par1.setInteger("yAxisDetect", this.yAxisDetect);
-        par1.setBoolean("attacksMobs", attacksMobs);
-        par1.setBoolean("attacksNeutrals", attacksNeutrals);
-        par1.setBoolean("attacksPlayers", attacksPlayers);
-        par1.setString("owner", owner);
+        nbtTagCompound.setInteger("maxStorage", this.storage.getMaxEnergyStored());
+        nbtTagCompound.setInteger("energyStored", this.getEnergyStored(EnumFacing.DOWN));
+        //nbtTagCompound.setFloat("amountOfPotentia", amountOfPotentia);
+        nbtTagCompound.setInteger("maxIO", this.storage.getMaxReceive());
+        nbtTagCompound.setInteger("yAxisDetect", this.yAxisDetect);
+        nbtTagCompound.setBoolean("attacksMobs", attacksMobs);
+        nbtTagCompound.setBoolean("attacksNeutrals", attacksNeutrals);
+        nbtTagCompound.setBoolean("attacksPlayers", attacksPlayers);
+        nbtTagCompound.setString("owner", owner);
         if (ownerName.isEmpty() && getPlayerNameFromUUID(owner) != null) {
             ownerName = getPlayerNameFromUUID(owner);
         }
-        par1.setString("ownerName", ownerName);
-        par1.setTag("trustedPlayers", getTrustedPlayersAsNBT());
-        par1.setBoolean("active", active);
-        par1.setBoolean("inverted", inverted);
-        par1.setBoolean("redstone", redstone);
-        par1.setBoolean("computerAccessible", computerAccessible);
-        par1.setBoolean("shouldConcealTurrets", shouldConcealTurrets);
-        par1.setBoolean("multiTargeting", multiTargeting);
-        par1.setDouble("storageEU", storageEU);;
+        nbtTagCompound.setString("ownerName", ownerName);
+        nbtTagCompound.setTag("trustedPlayers", getTrustedPlayersAsNBT());
+        nbtTagCompound.setBoolean("active", active);
+        nbtTagCompound.setBoolean("inverted", inverted);
+        nbtTagCompound.setBoolean("redstone", redstone);
+        nbtTagCompound.setBoolean("computerAccessible", computerAccessible);
+        nbtTagCompound.setBoolean("shouldConcealTurrets", shouldConcealTurrets);
+        nbtTagCompound.setBoolean("multiTargeting", multiTargeting);
+        nbtTagCompound.setDouble("storageEU", storageEU);;
 
         if (camoStack != null) {
             NBTTagCompound tag2 = new NBTTagCompound();
             camoStack.writeToNBT(tag2);
-            par1.setTag("CamoStack", tag2);
+            nbtTagCompound.setTag("CamoStack", tag2);
         }
+        return nbtTagCompound;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound par1) {
-        super.readFromNBT(par1);
-        this.storage.setCapacity(par1.getInteger("maxStorage"));
-        this.storage.setEnergyStored(par1.getInteger("energyStored"));
-        this.storage.setMaxReceive(par1.getInteger("maxIO"));
-        //this.amountOfPotentia = par1.getFloat("amountOfPotentia");
-        this.yAxisDetect = par1.getInteger("yAxisDetect");
-        this.attacksMobs = par1.getBoolean("attacksMobs");
-        this.attacksNeutrals = par1.getBoolean("attacksNeutrals");
-        this.attacksPlayers = par1.getBoolean("attacksPlayers");
-        this.shouldConcealTurrets = par1.getBoolean("shouldConcealTurrets");
-        this.multiTargeting = par1.getBoolean("multiTargeting");
-        if (getPlayerUIDUnstable(par1.getString("owner")) != null) {
-            this.owner = getPlayerUIDUnstable(par1.getString("owner")).toString();
-        } else if (getPlayerUUID(par1.getString("owner")) != null) {
-            this.owner = getPlayerUUID(par1.getString("owner")).toString();
+    public void readFromNBT(NBTTagCompound nbtTagCompound) {
+        super.readFromNBT(nbtTagCompound);
+        this.storage.setCapacity(nbtTagCompound.getInteger("maxStorage"));
+        this.storage.setEnergyStored(nbtTagCompound.getInteger("energyStored"));
+        this.storage.setMaxReceive(nbtTagCompound.getInteger("maxIO"));
+        //this.amountOfPotentia = nbtTagCompound.getFloat("amountOfPotentia");
+        this.yAxisDetect = nbtTagCompound.getInteger("yAxisDetect");
+        this.attacksMobs = nbtTagCompound.getBoolean("attacksMobs");
+        this.attacksNeutrals = nbtTagCompound.getBoolean("attacksNeutrals");
+        this.attacksPlayers = nbtTagCompound.getBoolean("attacksPlayers");
+        this.shouldConcealTurrets = nbtTagCompound.getBoolean("shouldConcealTurrets");
+        this.multiTargeting = nbtTagCompound.getBoolean("multiTargeting");
+        if (getPlayerUIDUnstable(nbtTagCompound.getString("owner")) != null) {
+            this.owner = getPlayerUIDUnstable(nbtTagCompound.getString("owner")).toString();
+        } else if (getPlayerUUID(nbtTagCompound.getString("owner")) != null) {
+            this.owner = getPlayerUUID(nbtTagCompound.getString("owner")).toString();
         } else {
-            Logger.getGlobal().info("Found non existent owner: " + par1.getString(
+            Logger.getGlobal().info("Found non existent owner: " + nbtTagCompound.getString(
                     "owner") + "at coordinates: " + this.pos.getX() + "," + this.pos.getY() + "," + this.pos.getZ() + ". Dropping Turretbase");
             dropBase = true;
             return;
         }
-        if (par1.hasKey("ownerName")) {
-            this.ownerName = par1.getString("ownerName");
+        if (nbtTagCompound.hasKey("ownerName")) {
+            this.ownerName = nbtTagCompound.getString("ownerName");
         }
-        buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 10));
+        buildTrustedPlayersFromNBT(nbtTagCompound.getTagList("trustedPlayers", 10));
         if (trustedPlayers.size() == 0) {
-            buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 8));
+            buildTrustedPlayersFromNBT(nbtTagCompound.getTagList("trustedPlayers", 8));
         }
-        if (par1.hasKey("active")) {
-            this.active = par1.getBoolean("active");
+        if (nbtTagCompound.hasKey("active")) {
+            this.active = nbtTagCompound.getBoolean("active");
         } else {
             active = true;
         }
-        if (par1.hasKey("inverted")) {
-            this.inverted = par1.getBoolean("inverted");
+        if (nbtTagCompound.hasKey("inverted")) {
+            this.inverted = nbtTagCompound.getBoolean("inverted");
         } else {
             inverted = true;
         }
-        if (par1.hasKey("redstone")) {
-            this.redstone = par1.getBoolean("redstone");
+        if (nbtTagCompound.hasKey("redstone")) {
+            this.redstone = nbtTagCompound.getBoolean("redstone");
         } else {
             checkRedstone = true;
         }
-        if (par1.hasKey("computerAccessible")) {
-            this.computerAccessible = par1.getBoolean("computerAccessible");
+        if (nbtTagCompound.hasKey("computerAccessible")) {
+            this.computerAccessible = nbtTagCompound.getBoolean("computerAccessible");
         } else {
             computerAccessible = false;
         }
-        if (par1.hasKey("storageEU")) {
-            this.storageEU = par1.getDouble("storageEU");
+        if (nbtTagCompound.hasKey("storageEU")) {
+            this.storageEU = nbtTagCompound.getDouble("storageEU");
         } else {
             storageEU = 0;
         }
@@ -395,7 +394,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
             inv[i] = invtemp[i];
         }
 
-        NBTTagCompound tag2 = par1.getCompoundTag("CamoStack");
+        NBTTagCompound tag2 = nbtTagCompound.getCompoundTag("CamoStack");
         if (tag2 != null) {
             camoStack = ItemStack.loadItemStackFromNBT(tag2);
         }
@@ -484,7 +483,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
             }
 
             //Syncing
-            worldObj.markBlockForUpdate(this.pos);
+            //worldObj.markBlockForUpdate(this.pos);
 
             if (ticks % 20 == 0) {
 
@@ -502,11 +501,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
                         this);
             }
         }
-    }
-
-    @Override
-    public Packet getDescriptionPacket() {
-        return NetworkingHandler.INSTANCE.getPacketFrom((IMessage) new MessageTurretBase(this));
     }
 
     public int getBaseTier() {
@@ -638,7 +632,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     private void setInverted(boolean inverted) {
         this.inverted = inverted;
         this.active = redstone ^ this.inverted;
-        worldObj.markBlockForUpdate(this.pos);
     }
 
     private boolean getRedstone() {
@@ -648,7 +641,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     public void setRedstone(boolean redstone) {
         this.redstone = redstone;
         this.active = this.redstone ^ inverted;
-        worldObj.markBlockForUpdate(this.pos);
     }
     /*
     @Optional.Method(modid = "Thaumcraft")
@@ -822,7 +814,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
             return new Object[]{"Computer access deactivated!"};
         }
         this.setAttacksMobs(args.checkBoolean(0));
-        worldObj.markBlockForUpdate(this.pos);
         return null;
     }
 
@@ -842,7 +833,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
             return new Object[]{"Computer access deactivated!"};
         }
         this.setAttacksNeutrals(args.checkBoolean(0));
-        worldObj.markBlockForUpdate(this.pos);
         return null;
     }
 
@@ -862,7 +852,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
             return new Object[]{"Computer access deactivated!"};
         }
         this.setAttacksPlayers(args.checkBoolean(0));
-        worldObj.markBlockForUpdate(this.pos);
         return null;
     }
 
@@ -889,7 +878,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         trustedPlayer.canChangeTargeting = args.optBoolean(1, false);
         trustedPlayer.admin = args.optBoolean(1, false);
         trustedPlayer.uuid = getPlayerUUID(args.checkString(0));
-        worldObj.markBlockForUpdate(this.pos);
         return null;
     }
 
@@ -900,7 +888,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
             return new Object[]{"Computer access deactivated!"};
         }
         this.removeTrustedPlayer(args.checkString(0));
-        worldObj.markBlockForUpdate(this.pos);
         return null;
     }
 
@@ -938,7 +925,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
             return new Object[]{"Computer access deactivated!"};
         }
         this.setInverted(args.checkBoolean(0));
-        worldObj.markBlockForUpdate(this.pos);
         return null;
     }
 
@@ -960,7 +946,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         return new Object[]{this.getRedstone()};
     }
 
-    @Optional.Method(modid = "ComputerCraft")
+    /*@Optional.Method(modid = "ComputerCraft")
     @Override
     public String getType() {
         // peripheral.getType returns whaaaaat?
@@ -1109,5 +1095,5 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals,
         getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getInverted, getRedstone, setInverted,
         getType
-    }
+    }*/
 }

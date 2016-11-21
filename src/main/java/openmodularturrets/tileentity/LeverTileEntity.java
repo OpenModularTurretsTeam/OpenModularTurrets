@@ -2,7 +2,7 @@ package openmodularturrets.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 
@@ -15,7 +15,7 @@ public class LeverTileEntity extends TileEntity implements ITickable {
         NBTTagCompound var1 = new NBTTagCompound();
         super.writeToNBT(var1);
 
-        return new S35PacketUpdateTileEntity(this.pos, 2, var1);
+        return new SPacketUpdateTileEntity(this.pos, 2, var1);
     }
 
     @Override

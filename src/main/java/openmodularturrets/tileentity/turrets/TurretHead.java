@@ -8,11 +8,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
@@ -20,6 +20,7 @@ import openmodularturrets.reference.Reference;
 import openmodularturrets.tileentity.TurretBase;
 import openmodularturrets.util.TurretHeadUtil;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 public abstract class TurretHead extends TileEntity implements ITickable {
@@ -38,26 +39,28 @@ public abstract class TurretHead extends TileEntity implements ITickable {
     private boolean playedDeploy = false;
     private int ticksWithoutTarget;
 
+    @Nullable
     @Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound var1 = new NBTTagCompound();
         this.writeToNBT(var1);
-        return new S35PacketUpdateTileEntity(this.pos, 2, var1);
+        return new SPacketUpdateTileEntity(this.pos, 2, var1);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         NBTTagCompound var1 = pkt.getNbtCompound();
         readFromNBT(var1);
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound par1) {
-        par1.setFloat("rotationXY", rotationXY);
-        par1.setFloat("rotationXZ", rotationXZ);
-        par1.setInteger("ticksBeforeFire", ticks);
-        par1.setBoolean("shouldConceal", shouldConceal);
-        super.writeToNBT(par1);
+    public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
+        nbtTagCompound.setFloat("rotationXY", rotationXY);
+        nbtTagCompound.setFloat("rotationXZ", rotationXZ);
+        nbtTagCompound.setInteger("ticksBeforeFire", ticks);
+        nbtTagCompound.setBoolean("shouldConceal", shouldConceal);
+        super.writeToNBT(nbtTagCompound);
+        return nbtTagCompound;
     }
 
     @Override
@@ -206,7 +209,7 @@ public abstract class TurretHead extends TileEntity implements ITickable {
         }
 
         if (ticks % 5 == 0) {
-            worldObj.markBlockForUpdate(this.pos);
+            //worldObj.markBlockForUpdate(this.pos);
         }
 
         ticks++;

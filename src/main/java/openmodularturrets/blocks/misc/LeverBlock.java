@@ -2,17 +2,20 @@ package openmodularturrets.blocks.misc;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.blocks.util.BlockAbstract;
@@ -20,17 +23,19 @@ import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.LeverTileEntity;
 import openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.Nullable;
+
 public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
     public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 16);
 
     public LeverBlock() {
-        super(Material.rock);
+        super(Material.ROCK);
         this.setUnlocalizedName(Names.Blocks.lever);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setHardness(2F);
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+        //this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         this.setResistance(15F);
-        this.setStepSound(Block.soundTypeStone);
+        this.setSoundType(SoundType.STONE);
         setDefaultState(this.blockState.getBaseState().withProperty(ROTATION, 0));
     }
 
@@ -46,8 +51,8 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
     }
 
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, ROTATION);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, ROTATION);
     }
 
 
@@ -91,54 +96,54 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         TurretBase base;
         LeverTileEntity lever = (LeverTileEntity) worldIn.getTileEntity(pos);
         if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 0 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
-                pos.getZ() + 1)) )) {
+                pos.getZ() + 1)))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
                     pos.getZ() + 1));
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
-                    worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "openmodularturrets:windup", 1.0F, 1.0F);
+                    //worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), "openmodularturrets:windup", 1.0F, 1.0F);
                     base.receiveEnergy(EnumFacing.DOWN, 50, false);
                 }
             }
         }
 
         if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 90 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(),
-                pos.getZ())) )) {
+                pos.getZ())))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()));
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
-                    worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "openmodularturrets:windup", 1.0F, 1.0F);
+                    //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "openmodularturrets:windup", 1.0F, 1.0F);
                     base.receiveEnergy(EnumFacing.DOWN, 50, false);
                 }
             }
         }
 
         if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 180 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
-                pos.getZ() - 1)) )) {
+                pos.getZ() - 1)))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
                     pos.getZ() - 1));
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
-                    worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "openmodularturrets:windup", 1.0F, 1.0F);
+                    //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "openmodularturrets:windup", 1.0F, 1.0F);
                     base.receiveEnergy(EnumFacing.DOWN, 50, false);
                 }
             }
         }
 
         if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 270 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(),
-                pos.getZ())) )) {
+                pos.getZ())))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()));
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
-                    worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "openmodularturrets:windup", 1.0F, 1.0F);
+                    //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "openmodularturrets:windup", 1.0F, 1.0F);
                     base.receiveEnergy(EnumFacing.DOWN, 50, false);
                 }
             }
@@ -147,12 +152,13 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
     }
 
     @Override
-    public int getRenderType() {
-        return -1;
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.INVISIBLE;
     }
 
+
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 }

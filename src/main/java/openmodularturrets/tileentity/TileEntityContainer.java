@@ -5,7 +5,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * Created by Keridos on 05/12/2015.
@@ -15,8 +15,8 @@ public abstract class TileEntityContainer extends TileEntityOMT implements ISide
     protected ItemStack[] inv;
 
     @Override
-    public void writeToNBT(NBTTagCompound par1) {
-        super.writeToNBT(par1);
+    public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
+        super.writeToNBT(nbtTagCompound);
 
         NBTTagList itemList = new NBTTagList();
 
@@ -30,7 +30,8 @@ public abstract class TileEntityContainer extends TileEntityOMT implements ISide
                 itemList.appendTag(tag);
             }
         }
-        par1.setTag("Inventory", itemList);
+        nbtTagCompound.setTag("Inventory", itemList);
+        return nbtTagCompound;
     }
 
     @Override
@@ -128,7 +129,7 @@ public abstract class TileEntityContainer extends TileEntityOMT implements ISide
     }
 
     @Override
-    public IChatComponent getDisplayName() {
+    public ITextComponent getDisplayName() {
         return null;
     }
 

@@ -1,18 +1,13 @@
 package openmodularturrets.compatability;
 
 
-import dan200.computercraft.api.peripheral.IPeripheral;
+/*import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import openmodularturrets.tileentity.TurretBase;
-
-/**
- * Created by Keridos on 05/02/2016.
- * This Class
- */
 
 @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheralProvider", modid = "ComputerCraft")
 public class CCPeripheralProvider implements IPeripheralProvider {
@@ -37,3 +32,4 @@ public class CCPeripheralProvider implements IPeripheralProvider {
         return null;
     }
 }
+*/
