@@ -3,10 +3,12 @@ package openmodularturrets.tileentity;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by Keridos on 05/12/2015.
@@ -16,9 +18,10 @@ public abstract class TileEntityOMT extends TileEntity {
     protected int tier = 0;
 
     @Override
-    public void writeToNBT(NBTTagCompound nbtTagCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
         nbtTagCompound.setInteger("tier", tier);
+        return nbtTagCompound;
     }
 
     @Override
@@ -27,11 +30,12 @@ public abstract class TileEntityOMT extends TileEntity {
         tier = nbtTagCompound.getInteger("tier");
     }
 
+    @Nullable
     @Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound var1 = new NBTTagCompound();
         this.writeToNBT(var1);
-        return new S35PacketUpdateTileEntity(this.pos, 2, var1);
+        return new SPacketUpdateTileEntity(this.pos, 2, var1);
     }
 
     @Override

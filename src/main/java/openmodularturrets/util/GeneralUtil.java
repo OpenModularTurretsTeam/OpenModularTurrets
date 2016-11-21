@@ -2,7 +2,7 @@ package openmodularturrets.util;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.registry.GameData;
 
 /**
@@ -17,10 +17,10 @@ public class GeneralUtil {
     }
 
     public static String safeLocalize(String text) {
-        if (StatCollector.translateToLocal(text) != null) {
-            return StatCollector.translateToLocal(text);
+        if (I18n.translateToLocal(text) != null) {
+            return I18n.translateToLocal(text);
         } else {
-            return StatCollector.translateToFallback(text);
+            return I18n.translateToFallback(text);
         }
     }
 }

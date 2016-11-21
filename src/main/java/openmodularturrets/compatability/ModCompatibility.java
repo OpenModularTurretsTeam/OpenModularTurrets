@@ -1,7 +1,5 @@
 package openmodularturrets.compatability;
 
-
-import dan200.computercraft.api.ComputerCraftAPI;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
@@ -82,6 +80,7 @@ public class ModCompatibility {
 
     @Optional.Method(modid = "ComputerCraft")
     private static void registerCCCompat() {
-        ComputerCraftAPI.registerPeripheralProvider(CCPeripheralProvider.getInstance());
+        //ComputerCraftAPI.registerPeripheralProvider(CCPeripheralProvider.getInstance());
     }
+
 }

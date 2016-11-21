@@ -1,12 +1,13 @@
 package openmodularturrets.blocks.misc;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
@@ -18,12 +19,12 @@ import java.util.Random;
 
 public class BlockFenceTierThree extends BlockAbstractMiscPane {
     public BlockFenceTierThree() {
-        super("stone", "cobblestone", Material.rock, false);
+        super("stone", "cobblestone", Material.ROCK, false);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setResistance(30.0F);
         this.setHardness(30.0F);
         this.setHarvestLevel("pickaxe", 2);
-        this.setStepSound(Block.soundTypeStone);
+        this.setSoundType(SoundType.STONE);
         this.setUnlocalizedName(Names.Blocks.fenceTierThree);
     }
 
@@ -33,7 +34,7 @@ public class BlockFenceTierThree extends BlockAbstractMiscPane {
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, Entity entityIn) {
-        if(!(entityIn instanceof EntityItem)) entityIn.attackEntityFrom(DamageSource.cactus, 3);
+    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+        if(!(entityIn instanceof EntityItem)) entityIn.attackEntityFrom(DamageSource.cactus, 5);
     }
 }

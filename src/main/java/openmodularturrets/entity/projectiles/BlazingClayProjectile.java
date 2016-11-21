@@ -1,13 +1,15 @@
 package openmodularturrets.entity.projectiles;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import openmodularturrets.handler.ConfigHandler;
@@ -34,12 +36,12 @@ public class BlazingClayProjectile extends TurretProjectile {
     }
 
     @Override
-    protected void onImpact(MovingObjectPosition movingobjectposition) {
+    protected void onImpact(RayTraceResult movingobjectposition) {
         if (this.ticksExisted <= 1) {
             return;
         }
-        if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            Block hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos()).getBlock();
+        if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
+            IBlockState hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos());
             if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;

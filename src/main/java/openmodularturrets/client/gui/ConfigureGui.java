@@ -7,9 +7,9 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.client.gui.containers.ConfigContainer;
 import openmodularturrets.handler.NetworkingHandler;
@@ -108,7 +108,7 @@ public class ConfigureGui extends GuiContainer {
                 sendChangeToServerMobs(!base.isAttacksMobs());
                 guibutton.displayString = "Attack Mobs: " + (!base.isAttacksMobs() ? "\u00A72Yes" : "\u00A7cNo");
             } else {
-                player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
+                player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
             }
         }
 
@@ -120,7 +120,7 @@ public class ConfigureGui extends GuiContainer {
                 sendChangeToServerNeutrals(!base.isAttacksNeutrals());
                 guibutton.displayString = "Attack Neutrals: " + (!base.isAttacksNeutrals() ? "\u00A72Yes" : "\u00A7cNo");
             } else {
-                player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
+                player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
             }
         }
 
@@ -132,7 +132,7 @@ public class ConfigureGui extends GuiContainer {
                 sendChangeToServerPlayers(!base.isAttacksPlayers());
                 guibutton.displayString = "Attack Players: " + (!base.isAttacksPlayers() ? "\u00A72Yes" : "\u00A7cNo");
             } else {
-                player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
+                player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
             }
         }
 
@@ -154,7 +154,7 @@ public class ConfigureGui extends GuiContainer {
                     player.openGui(ModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
                 }
             } else {
-                player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
+                player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
             }
         }
 
@@ -183,7 +183,7 @@ public class ConfigureGui extends GuiContainer {
                                 base.getPos().getZ());
                     }
                 } else {
-                    player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
+                    player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
                 }
             }
         }
@@ -218,7 +218,7 @@ public class ConfigureGui extends GuiContainer {
                 guibutton.displayString = !base.getTrustedPlayers().get(
                         base.trustedPlayerIndex).canOpenGUI ? "\u00A72Y" : "\u00A7cN";
             } else {
-                player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
+                player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
             }
         }
 
@@ -238,7 +238,7 @@ public class ConfigureGui extends GuiContainer {
                 guibutton.displayString = !base.getTrustedPlayers().get(
                         base.trustedPlayerIndex).canChangeTargeting ? "\u00A72Y" : "\u00A7cN";
             } else {
-                player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
+                player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
             }
         }
 
@@ -258,7 +258,7 @@ public class ConfigureGui extends GuiContainer {
                 guibutton.displayString = !base.getTrustedPlayers().get(
                         base.trustedPlayerIndex).admin ? "\u00A72Y" : "\u00A7cN";
             } else {
-                player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
+                player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
             }
         }
     }

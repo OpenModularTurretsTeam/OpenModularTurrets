@@ -13,6 +13,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
+import net.minecraft.util.math.*;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
@@ -60,8 +64,8 @@ public class TurretHeadUtil {
             worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "openmodularturrets:warning", 1.0F, 1.0F);
         }
         if (ConfigHandler.turretWarnMessage) {
-            player.addChatMessage(new ChatComponentText(
-                    EnumChatFormatting.DARK_RED + StatCollector.translateToLocal("status.warning")));
+            player.addChatMessage(new TextComponentString(
+                    TextFormatting.DARK_RED + I18n.translateToLocal("status.warning")));
         }
     }
 
@@ -720,9 +724,9 @@ public class TurretHeadUtil {
     }
 
     public static boolean canTurretSeeTarget(TurretHead turret, EntityLivingBase target) {
-        Vec3 traceStart = new Vec3(turret.getPos().getX() + 0.5F, turret.getPos().getY() + 0.5F, turret.getPos().getZ() + 0.5F);
-        Vec3 traceEnd = new Vec3(target.posX, target.posY + target.getEyeHeight(), target.posZ);
-        Vec3 vecDelta = new Vec3(traceEnd.xCoord - traceStart.xCoord,
+        Vec3d traceStart = new Vec3d(turret.getPos().getX() + 0.5F, turret.getPos().getY() + 0.5F, turret.getPos().getZ() + 0.5F);
+        Vec3d traceEnd = new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ);
+        Vec3d vecDelta = new Vec3d(traceEnd.xCoord - traceStart.xCoord,
                 traceEnd.yCoord - traceStart.yCoord,
                 traceEnd.zCoord - traceStart.zCoord);
 
@@ -734,11 +738,11 @@ public class TurretHeadUtil {
             // Offset start position toward the target to prevent self collision
             traceStart.addVector(vecDelta.xCoord, vecDelta.yCoord,vecDelta.zCoord);
 
-            MovingObjectPosition traced = turret.getWorld().rayTraceBlocks(
-                    new Vec3(traceStart.xCoord, traceStart.yCoord, traceStart.zCoord),
-                    new Vec3(traceEnd.xCoord, traceEnd.yCoord, traceEnd.zCoord));
+            RayTraceResult traced = turret.getWorld().rayTraceBlocks(
+                    new Vec3d(traceStart.xCoord, traceStart.yCoord, traceStart.zCoord),
+                    new Vec3d(traceEnd.xCoord, traceEnd.yCoord, traceEnd.zCoord));
 
-            if (traced != null && traced.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+            if (traced != null && traced.typeOfHit == RayTraceResult.MovingObjectType.BLOCK) {
                 Block hitBlock = turret.getWorld().getBlockState(traced.getBlockPos()).getBlock();
 
                 // If non solid block is in the way then proceed to continue

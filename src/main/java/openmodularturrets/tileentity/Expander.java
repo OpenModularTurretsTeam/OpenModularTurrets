@@ -5,10 +5,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import openmodularturrets.util.TurretHeadUtil;
+
+import javax.annotation.Nullable;
 
 import static openmodularturrets.util.MathUtil.truncateDoubleToInt;
 
@@ -30,9 +32,10 @@ public class Expander extends TileEntityContainer implements ITickable {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbtTagCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
         nbtTagCompound.setBoolean("powerExpander", powerExpander);
+        return nbtTagCompound;
     }
 
     @Override
@@ -46,17 +49,18 @@ public class Expander extends TileEntityContainer implements ITickable {
         return truncateDoubleToInt(Math.pow(2,tier+1));
     }
 
+    @Nullable
     @Override
-    public Packet getDescriptionPacket() {
-        NBTTagCompound var1 = new NBTTagCompound();
-        this.writeToNBT(var1);
-        return new S35PacketUpdateTileEntity(this.pos, 2, var1);
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        NBTTagCompound nbtTagCompound = new NBTTagCompound();
+        this.writeToNBT(nbtTagCompound);
+        return new SPacketUpdateTileEntity(this.pos, 2, nbtTagCompound);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-        NBTTagCompound var1 = pkt.getNbtCompound();
-        readFromNBT(var1);
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        NBTTagCompound nbtTagCompound = pkt.getNbtCompound();
+        readFromNBT(nbtTagCompound);
     }
 
     private void setSide() {
