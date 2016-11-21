@@ -4,8 +4,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.init.ModItems;
@@ -49,57 +49,57 @@ public class UpgradeMetaItem extends Item {
         switch (stack.getMetadata()) {
             case 0:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("turret.upgrade.label"));
+                tooltip.add(TextFormatting.BLUE + I18n.translateToLocal("turret.upgrade.label"));
                 tooltip.add("");
-                tooltip.add("+ " + ConfigHandler.getAccuracyUpgradeBoost() * 100 + "% " + StatCollector.translateToLocal(
+                tooltip.add("+ " + ConfigHandler.getAccuracyUpgradeBoost() * 100 + "% " + I18n.translateToLocal(
                         "turret.upgrade.acc"));
-                tooltip.add(StatCollector.translateToLocal("turret.upgrade.stacks"));
+                tooltip.add(I18n.translateToLocal("turret.upgrade.stacks"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.upgrade.acc.flavour.a"));
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.upgrade.acc.flavour.b"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("turret.upgrade.acc.flavour.a"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("turret.upgrade.acc.flavour.b"));
                 return;
             case 1:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("turret.upgrade.label"));
+                tooltip.add(TextFormatting.BLUE + I18n.translateToLocal("turret.upgrade.label"));
                 tooltip.add("");
                 tooltip.add(
-                        "- " + ConfigHandler.getEfficiencyUpgradeBoostPercentage() * 100 + "% " + StatCollector.translateToLocal(
+                        "- " + ConfigHandler.getEfficiencyUpgradeBoostPercentage() * 100 + "% " + I18n.translateToLocal(
                                 "turret.upgrade.eff"));
-                tooltip.add(StatCollector.translateToLocal("turret.upgrade.stacks"));
+                tooltip.add(I18n.translateToLocal("turret.upgrade.stacks"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.upgrade.eff.flavour"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("turret.upgrade.eff.flavour"));
                 return;
             case 2:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("turret.upgrade.label"));
+                tooltip.add(TextFormatting.BLUE + I18n.translateToLocal("turret.upgrade.label"));
                 tooltip.add("");
                 tooltip.add(
-                        "+ " + ConfigHandler.getFireRateUpgradeBoostPercentage() * 100 + "% " + StatCollector.translateToLocal(
+                        "+ " + ConfigHandler.getFireRateUpgradeBoostPercentage() * 100 + "% " + I18n.translateToLocal(
                                 "turret.upgrade.rof"));
-                tooltip.add(StatCollector.translateToLocal("turret.upgrade.stacks"));
+                tooltip.add(I18n.translateToLocal("turret.upgrade.stacks"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.upgrade.rof.flavour"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("turret.upgrade.rof.flavour"));
                 return;
             case 3:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("turret.upgrade.label"));
+                tooltip.add(TextFormatting.BLUE + I18n.translateToLocal("turret.upgrade.label"));
                 tooltip.add("");
-                tooltip.add("+ " + ConfigHandler.getRangeUpgradeBoost() + " " + StatCollector.translateToLocal(
+                tooltip.add("+ " + ConfigHandler.getRangeUpgradeBoost() + " " + I18n.translateToLocal(
                         "turret" + ".upgrade.range"));
-                tooltip.add(StatCollector.translateToLocal("turret.upgrade.stacks"));
+                tooltip.add(I18n.translateToLocal("turret.upgrade.stacks"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.upgrade.range.flavour"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("turret.upgrade.range.flavour"));
                 return;
             case 4:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("turret.upgrade.label"));
+                tooltip.add(TextFormatting.BLUE + I18n.translateToLocal("turret.upgrade.label"));
                 tooltip.add("");
-                tooltip.add(StatCollector.translateToLocal("turret.upgrade.scatter.a"));
-                tooltip.add(StatCollector.translateToLocal("turret.upgrade.scatter.b"));
+                tooltip.add(I18n.translateToLocal("turret.upgrade.scatter.a"));
+                tooltip.add(I18n.translateToLocal("turret.upgrade.scatter.b"));
                 tooltip.add("");
-                tooltip.add(StatCollector.translateToLocal("turret.upgrade.stacks"));
+                tooltip.add(I18n.translateToLocal("turret.upgrade.stacks"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.upgrade.scatter.flavour"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("turret.upgrade.scatter.flavour"));
         }
     }
 }

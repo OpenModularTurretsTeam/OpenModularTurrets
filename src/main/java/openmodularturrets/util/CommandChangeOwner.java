@@ -1,12 +1,14 @@
 package openmodularturrets.util;
 
+import com.sun.xml.internal.fastinfoset.algorithm.BuiltInEncodingAlgorithm;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.DimensionManager;
 import openmodularturrets.tileentity.TurretBase;
 
 /**
@@ -25,9 +27,9 @@ public class CommandChangeOwner extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] params) {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] params) {
         if (params.length != 5) {
-            sender.addChatMessage(new ChatComponentText(getCommandUsage(sender)));
+            sender.addChatMessage(new TextComponentString(getCommandUsage(sender)));
             return;
         }
         try {
@@ -36,21 +38,22 @@ public class CommandChangeOwner extends CommandBase {
             int y = Integer.parseInt(params[2]);
             int z = Integer.parseInt(params[3]);
             String ownerName = params[4];
-            WorldServer worldserver = MinecraftServer.getServer().worldServerForDimension(dimension);
-            if (worldserver == null) {
-                sender.addChatMessage(new ChatComponentText("Invalid dimension"));
+            if (DimensionManager.getWorld(dimension) == null) {
+                sender.addChatMessage(new TextComponentString("Invalid dimension"));
                 return;
             }
+            WorldServer worldserver = server.worldServerForDimension(dimension);
+
             TileEntity tileEntity = worldserver.getTileEntity(new BlockPos(x, y, z));
             if (tileEntity instanceof TurretBase) {
                 TurretBase turret = (TurretBase) tileEntity;
                 turret.setOwner(ownerName);
-                sender.addChatMessage(new ChatComponentText("Turret ownership has been updated"));
+                sender.addChatMessage(new TextComponentString("Turret ownership has been updated"));
             } else {
-                sender.addChatMessage(new ChatComponentText("No turret base was found at that location"));
+                sender.addChatMessage(new TextComponentString("No turret base was found at that location"));
             }
         } catch (NumberFormatException e) {
-            sender.addChatMessage(new ChatComponentText("Dimension and coordinates must be numbers"));
+            sender.addChatMessage(new TextComponentString("Dimension and coordinates must be numbers"));
         }
     }
 }

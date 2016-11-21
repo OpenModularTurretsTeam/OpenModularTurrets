@@ -2,12 +2,14 @@ package openmodularturrets.blocks.util;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openmodularturrets.tileentity.TileEntityContainer;
@@ -26,14 +28,15 @@ public abstract class BlockAbstractContainer extends BlockContainer {
     public abstract TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_);
 
     @Override
-    public boolean canCreatureSpawn(IBlockAccess worldIn, BlockPos pos, EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
         return false;
     }
 
     @Override
-    public int getRenderType() {
-        return 3;
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
+
 
     protected void dropItems(World worldIn, BlockPos pos) {
         if (worldIn.getTileEntity(pos) instanceof TileEntityContainer) {

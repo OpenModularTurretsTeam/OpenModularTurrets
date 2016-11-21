@@ -103,95 +103,95 @@ public class RecipeHandler {
         //RECIPES THAT DON'T CHANGE BASED ON MODS LOADED:
         //Tier 1 static recipes (Because they shouldn't use expensive mod items, only redstone, cobblestone and planks)
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1, 10), "AAA", " B ", "AAA", 'A',
-                Blocks.cobblestone, 'B', "plankWood"));
+                Blocks.COBBLESTONE, 'B', "plankWood"));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1, 5), "AAA", " BC", "AAA", 'A',
-                Blocks.cobblestone, 'B', "plankWood", 'C',
-                Items.redstone));
+                Blocks.COBBLESTONE, 'B', "plankWood", 'C',
+                Items.REDSTONE));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1, 0), " A ", "ABA", " A ", 'A',
-                Items.redstone, 'B', "plankWood"));
+                Items.REDSTONE, 'B', "plankWood"));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1, 1), "ABA", "BCB", "ABA", 'A',
-                Blocks.cobblestone, 'B', "plankWood", 'C',
+                Blocks.COBBLESTONE, 'B', "plankWood", 'C',
                 new ItemStack(ModItems.intermediateProductTiered, 1, 0)));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(expanderPowerTierOne, "ABA", "DCD", "ADA", 'A',
-                        Blocks.cobblestone, 'B', "plankWood", 'C',
-                        Items.redstone, 'D', ioBus));
+                        Blocks.COBBLESTONE, 'B', "plankWood", 'C',
+                        Items.REDSTONE, 'D', ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(expanderInvTierOne, "ABA", "DCD", "ADA", 'A',
-                        Blocks.cobblestone, 'B', "plankWood", 'C',
-                        Blocks.chest, 'D', ioBus));
+                        Blocks.COBBLESTONE, 'B', "plankWood", 'C',
+                        Blocks.CHEST, 'D', ioBus));
 
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.disposableItemTurret, 1), " A ", "CBC", "CDC", 'A',
                             new ItemStack(ModItems.intermediateProductTiered, 1, 10), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 5), 'C',
-                            Blocks.cobblestone, 'D', Items.redstone));
+                            Blocks.COBBLESTONE, 'D', Items.REDSTONE));
         }
 
         if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.potatoCannonTurret, 1), "CAC", "CAC", "DBD", 'A',
                             new ItemStack(ModItems.intermediateProductTiered, 1, 10), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 5), 'C',
-                            Blocks.cobblestone, 'D', Items.redstone));
+                            Blocks.COBBLESTONE, 'D', Items.REDSTONE));
         }
 
         GameRegistry.addRecipe(new ItemStack(ModBlocks.leverBlock, 1), "AAA", "A  ", "A  ", 'A',
-                Blocks.cobblestone);
+                Blocks.COBBLESTONE);
 
         // Addons
         GameRegistry.addRecipe(solarPanelAddon, "AAA", "CBC", "DED", 'A',
-                Blocks.glass_pane, 'B',
-                Blocks.lapis_block, 'C',
-                Items.redstone, 'D', Items.iron_ingot, 'E',
+                Blocks.GLASS_PANE, 'B',
+                Blocks.LAPIS_BLOCK, 'C',
+                Items.REDSTONE, 'D', Items.IRON_INGOT, 'E',
                 ioBus);
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(redReactorAddon, "CAC", "ABD", "CAC", 'A', Items.iron_ingot,
-                        'B', Items.ender_eye, 'C', Items.quartz, 'D',
+                new ShapedOreRecipe(redReactorAddon, "CAC", "ABD", "CAC", 'A', Items.IRON_INGOT,
+                        'B', Items.ENDER_EYE, 'C', Items.QUARTZ, 'D',
                         ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(damageAmpAddon, "AAA", "B B", "AAA", 'A', Items.iron_ingot, 'B',
-                        Items.ender_pearl));
+                new ShapedOreRecipe(damageAmpAddon, "AAA", "B B", "AAA", 'A', Items.IRON_INGOT, 'B',
+                        Items.ENDER_PEARL));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(recyclerAddon, "ABA", "BCD", "ABA", 'A', "ingotGold", 'B',
-                        Items.magma_cream, 'C', Blocks.ender_chest,
+                        Items.MAGMA_CREAM, 'C', Blocks.ENDER_CHEST,
                         'D', ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(concealerAddon, "ABA", "BCD", "ABA", 'A', Items.iron_ingot, 'B',
-                        Items.quartz, 'C', Blocks.chest,
+                new ShapedOreRecipe(concealerAddon, "ABA", "BCD", "ABA", 'A', Items.IRON_INGOT, 'B',
+                        Items.QUARTZ, 'C', Blocks.CHEST,
                         'D', ioBus));
 
         /*//Fences
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierOne, 16), "ABA", "BAB", "ABA", 'A',
-                Blocks.iron_bars, 'B',
-                Blocks.cobblestone));
+                Blocks.IRON_BARS, 'B',
+                Blocks.COBBLESTONE));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierTwo, 16), "ABA", "BAB", "ABA", 'A',
-                Blocks.iron_bars, 'B', Items.iron_ingot));
+                Blocks.IRON_BARS, 'B', Items.IRON_INGOT));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierThree, 16), "ABA", "BAB", "ABA", 'A',
-                Blocks.iron_bars, 'B', "ingotGold"));
+                Blocks.IRON_BARS, 'B', "ingotGold"));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierFour, 16), "ABA", "BAB", "ABA", 'A',
-                Blocks.iron_bars, 'B',
-                Items.diamond));
+                Blocks.IRON_BARS, 'B',
+                Items.DIAMOND));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierFive, 16), "ABA", "BAB", "ABA", 'A',
-                Blocks.iron_bars, 'B',
+                Blocks.IRON_BARS, 'B',
                 Blocks.obsidian));
 
         //Hard Walls
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.hardWallTierOne, 16), "ABA", "BCB", "ABA", 'A',
-                Blocks.gravel, 'B',
-                Blocks.cobblestone, 'C',
+                Blocks.GRAVEL, 'B',
+                Blocks.COBBLESTONE, 'C',
                 Blocks.sand));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.hardWallTierTwo, 16), "ABA", "BAB", "ABA", 'A',
@@ -220,36 +220,36 @@ public class RecipeHandler {
         // Upgrades
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.efficiencyUpgradeItem, 1), " A ", "ABA", " C ", 'A',
-                        Items.quartz, 'B', Items.ender_eye, 'C',
+                        Items.QUARTZ, 'B', Items.ENDER_EYE, 'C',
                         ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.accuracyUpgradeItem, 1), " A ", "ABA", " C ", 'A',
-                        Items.quartz, 'B', "ingotGold", 'C', ioBus));
+                        Items.QUARTZ, 'B', "ingotGold", 'C', ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.fireRateUpgradeItem, 1), " A ", "ABA", " C ", 'A',
-                        Items.quartz, 'B', Items.blaze_powder, 'C',
+                        Items.QUARTZ, 'B', Items.BLAZE_POWDER, 'C',
                         ioBus));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.rangeUpgradeItem, 1), " A ", "ABA", " C ", 'A',
-                Items.quartz, 'B',
-                Items.diamond, 'C', ioBus));
+                Items.QUARTZ, 'B',
+                Items.DIAMOND, 'C', ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.scattershotUpgradeItem, 1), " A ", "ABA", " C ", 'A',
-                        Items.quartz, 'B', Items.flint, 'C',
+                        Items.QUARTZ, 'B', Items.FLINT, 'C',
                         ioBus));
 
         //Ammo
         GameRegistry.addRecipe(new ItemStack(ModItems.blazingClayCraftable, 32), "BCB", "CAC", "BCB", 'A',
-                Items.blaze_powder, 'B', Items.clay_ball, 'C',
-                Items.redstone);
+                Items.BLAZE_POWDER, 'B', Items.CLAY_BALL, 'C',
+                Items.REDSTONE);
 
         //Other
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(ioBus, " A ", "BBB", " C ", 'A', "ingotGold", 'B',
-                        Items.redstone, 'C', Items.iron_ingot));
+                        Items.REDSTONE, 'C', Items.IRON_INGOT));
 
     }
 }

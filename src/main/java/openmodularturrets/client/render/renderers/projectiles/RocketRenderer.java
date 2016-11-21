@@ -2,11 +2,11 @@ package openmodularturrets.client.render.renderers.projectiles;
 
 
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,7 +35,7 @@ class RocketRenderer extends Render {
         GL11.glRotatef(
                 par1EntityRocket.prevRotationPitch + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch) * par9,
                 0.0F, 0.0F, 1.0F);
-        WorldRenderer tessellator = Tessellator.getInstance().getWorldRenderer();
+        VertexBuffer tessellator = Tessellator.getInstance().getWorldRenderer();
         byte b0 = 0;
         float f2 = 0.0F;
         float f3 = 0.5F;

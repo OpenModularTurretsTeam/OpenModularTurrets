@@ -6,8 +6,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.init.ModItems;
 import openmodularturrets.reference.Names;
@@ -53,98 +53,98 @@ public class ItemBlockExpander extends ItemBlock {
         switch (stack.getMetadata()) {
             case 0:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.expander.inv1"));
+                tooltip.add(TextFormatting.GOLD + I18n.translateToLocal("tooltip.expander.inv1"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal("tooltip.expander.inv2"));
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal("tooltip.expander.inv3") + " 4.");
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv2"));
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv3") + " 4.");
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.expander.inv.1"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inv.1"));
                 return;
             case 1:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.expander.inv1"));
+                tooltip.add(TextFormatting.GOLD + I18n.translateToLocal("tooltip.expander.inv1"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal("tooltip.expander.inv2"));
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal("tooltip.expander.inv3") + " 8.");
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv2"));
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv3") + " 8.");
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.expander.inv.2"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inv.2"));
                 return;
             case 2:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.expander.inv1"));
+                tooltip.add(TextFormatting.GOLD + I18n.translateToLocal("tooltip.expander.inv1"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal("tooltip.expander.inv2"));
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal("tooltip.expander.inv3") + " 16.");
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv2"));
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv3") + " 16.");
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.expander.inv.3"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inv.3"));
                 return;
             case 3:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.expander.inv1"));
+                tooltip.add(TextFormatting.GOLD + I18n.translateToLocal("tooltip.expander.inv1"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal("tooltip.expander.inv2"));
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal("tooltip.expander.inv3") + " 32.");
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv2"));
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv3") + " 32.");
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.expander.inv.4"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inv.4"));
                 return;
             case 4:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.expander.inv1"));
+                tooltip.add(TextFormatting.GOLD + I18n.translateToLocal("tooltip.expander.inv1"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal("tooltip.expander.inv2"));
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal("tooltip.expander.inv3") + " 64.");
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv2"));
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv3") + " 64.");
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.expander.inv.5"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inv.5"));
                 return;
             case 5:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.expander.power1"));
+                tooltip.add(TextFormatting.GOLD + I18n.translateToLocal("tooltip.expander.power1"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierOneCapacity() + " " + StatCollector.translateToLocal(
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal(
+                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierOneCapacity() + " " + I18n.translateToLocal(
                         "tooltip.expander.power3"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.expander.power.1"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.power.1"));
                 return;
             case 6:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.expander.power1"));
+                tooltip.add(TextFormatting.GOLD + I18n.translateToLocal("tooltip.expander.power1"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierTwoCapacity() + " " + StatCollector.translateToLocal(
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal(
+                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierTwoCapacity() + " " + I18n.translateToLocal(
                         "tooltip.expander.power3"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.expander.power.2"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.power.2"));
                 return;
             case 7:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.expander.power1"));
+                tooltip.add(TextFormatting.GOLD + I18n.translateToLocal("tooltip.expander.power1"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierThreeCapacity() + " " + StatCollector.translateToLocal(
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal(
+                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierThreeCapacity() + " " + I18n.translateToLocal(
                         "tooltip.expander.power3"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.expander.power.3"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.power.3"));
                 return;
             case 8:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.expander.power1"));
+                tooltip.add(TextFormatting.GOLD + I18n.translateToLocal("tooltip.expander.power1"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierFourCapacity() + " " + StatCollector.translateToLocal(
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal(
+                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierFourCapacity() + " " + I18n.translateToLocal(
                         "tooltip.expander.power3"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.expander.power.4"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.power.4"));
                 return;
             case 9:
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tooltip.expander.power1"));
+                tooltip.add(TextFormatting.GOLD + I18n.translateToLocal("tooltip.expander.power1"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.WHITE + StatCollector.translateToLocal(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierFiveCapacity() + " " + StatCollector.translateToLocal(
+                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal(
+                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierFiveCapacity() + " " + I18n.translateToLocal(
                         "tooltip.expander.power3"));
                 tooltip.add("");
-                tooltip.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.expander.power.5")); 
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.power.5"));
         }
     }
 }
