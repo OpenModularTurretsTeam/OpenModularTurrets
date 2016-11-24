@@ -1,6 +1,6 @@
 # Created by .gitignore support plugin (hsz.mobi)
 ### Gradle template
-.gradle
+/.gradle/
 /build/
 
 # Ignore Gradle GUI config
