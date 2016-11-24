@@ -11,13 +11,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -99,8 +98,8 @@ public class BlockTurretBase extends BlockAbstractContainer {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        /*if (!worldIn.isRemote && player.isSneaking() && ConfigHandler.isAllowBaseCamo() && player.getCurrentEquippedItem() == null) {
-            TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
+        /*if (!world.isRemote && player.isSneaking() && ConfigHandler.isAllowBaseCamo() && player.getCurrentEquippedItem() == null) {
+            TurretBase base = (TurretBase) world.getTileEntity(pos);
             if (base != null) {
                 if (player.getUniqueID().toString().equals(base.getOwner())) {
                     base.camoStack = null;
@@ -111,7 +110,7 @@ public class BlockTurretBase extends BlockAbstractContainer {
             }
         }
 
-        if (!worldIn.isRemote && !player.isSneaking() && ConfigHandler.isAllowBaseCamo() && player.getCurrentEquippedItem() != null &&
+        if (!world.isRemote && !player.isSneaking() && ConfigHandler.isAllowBaseCamo() && player.getCurrentEquippedItem() != null &&
                 player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemBlock &&
                 Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()).isNormalCube() && Block.getBlockFromItem(
                 player.getCurrentEquippedItem().getItem()).isOpaqueCube() && !(Block.getBlockFromItem(
@@ -126,7 +125,7 @@ public class BlockTurretBase extends BlockAbstractContainer {
                 }
             }
 
-        } else */
+        } else  */
         if (!world.isRemote && !player.isSneaking()) {
             TurretBase base = (TurretBase) world.getTileEntity(pos);
             if (base.getTrustedPlayer(player.getUniqueID()) != null) {
@@ -169,12 +168,16 @@ public class BlockTurretBase extends BlockAbstractContainer {
             switch (state.getValue(TIER)) {
                 case 1:
                     this.setResistance(ConfigHandler.getBaseTierOneBlastResistance());
+                    break;
                 case 2:
                     this.setResistance(ConfigHandler.getBaseTierTwoBlastResistance());
+                    break;
                 case 3:
                     this.setResistance(ConfigHandler.getBaseTierThreeBlastResistance());
+                    break;
                 case 4:
                     this.setResistance(ConfigHandler.getBaseTierFourBlastResistance());
+                    break;
                 case 5:
                     this.setResistance(ConfigHandler.getBaseTierFiveBlastResistance());
             }

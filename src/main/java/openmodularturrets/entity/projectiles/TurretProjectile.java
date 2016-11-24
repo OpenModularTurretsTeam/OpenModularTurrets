@@ -17,12 +17,12 @@ public abstract class TurretProjectile extends EntityThrowable {
     ItemStack ammo;
     private TurretBase turretBase;
 
-    TurretProjectile(World p_i1776_1_) {
-        super(p_i1776_1_);
+    TurretProjectile(World world) {
+        super(world);
     }
 
-    TurretProjectile(World p_i1776_1_, TurretBase turretBase) {
-        super(p_i1776_1_);
+    TurretProjectile(World world, TurretBase turretBase) {
+        super(world);
         this.turretBase = turretBase;
         if (TurretHeadUtil.getAmpLevel(turretBase) > 0) {
             isAmped = true;
@@ -30,8 +30,8 @@ public abstract class TurretProjectile extends EntityThrowable {
         }
     }
 
-    TurretProjectile(World p_i1776_1_, ItemStack ammo, TurretBase turretBase) {
-        super(p_i1776_1_);
+    TurretProjectile(World world, ItemStack ammo, TurretBase turretBase) {
+        super(world);
         this.ammo = ammo;
         this.turretBase = turretBase;
         if (TurretHeadUtil.getAmpLevel(turretBase) > 0) {
@@ -51,7 +51,7 @@ public abstract class TurretProjectile extends EntityThrowable {
     }
 
     @Override
-    public boolean writeToNBTOptional(NBTTagCompound p_70039_1_) {
+    public boolean writeToNBTOptional(NBTTagCompound nbtTagCompound) {
         this.setDead();
         return false;
     }

@@ -72,8 +72,8 @@ public class TurretBaseTierFiveGui extends TurretBaseAbstractGui {
 
         this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 
-        int expression = (base.getEnergyStored(EnumFacing.DOWN) * 51) / base.getMaxEnergyStored(
-                EnumFacing.DOWN);
+        int expression = (base.getEnergyStored(EnumFacing.DOWN) * 51) / (base.getMaxEnergyStored(
+                EnumFacing.DOWN) == 0 ? 1 : base.getMaxEnergyStored(EnumFacing.DOWN));
 
         drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
 

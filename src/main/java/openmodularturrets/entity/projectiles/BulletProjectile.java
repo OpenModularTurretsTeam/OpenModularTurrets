@@ -1,15 +1,16 @@
 package openmodularturrets.entity.projectiles;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.init.ModSounds;
 import openmodularturrets.tileentity.TurretBase;
 
 import java.util.Random;
@@ -74,14 +75,14 @@ public class BulletProjectile extends TurretProjectile {
 
         if (movingobjectposition.entityHit == null && !worldObj.isRemote) {
             Random random = new Random();
-            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:bulletHit",
+            worldObj.playSound(null, new BlockPos(posX, posY, posZ), ModSounds.bulletHitSound, SoundCategory.AMBIENT,
                                      ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
         }
         this.setDead();
     }
 
     @Override
-    protected void updateFallState(double y, boolean onGroundIn, Block blockIn, BlockPos pos) {
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
         this.posY = posY + 12F;
     }
 

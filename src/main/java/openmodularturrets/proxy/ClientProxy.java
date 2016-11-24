@@ -19,11 +19,11 @@ import openmodularturrets.reference.Reference;
 public class ClientProxy extends CommonProxy {
 
     private void registerItemModel(final Item item, int meta) {
-        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName().toLowerCase()));
+        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName().toString().toLowerCase()));
     }
 
     private void registerItemModel(final Item item, int meta, final String variantName) {
-        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(new ResourceLocation(item.getRegistryName().toLowerCase()), variantName));
+        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(new ResourceLocation(item.getRegistryName().toString().toLowerCase()), variantName));
     }
 
     private void registerItemModel(final Item item, int meta, final String customName, boolean useCustomName) {

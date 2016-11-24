@@ -3,11 +3,13 @@ package openmodularturrets.tileentity.turrets;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.BlazingClayProjectile;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.init.ModItems;
+import openmodularturrets.init.ModSounds;
 
 public class IncendiaryTurretTileEntity extends TurretHead {
     public IncendiaryTurretTileEntity() {
@@ -56,7 +58,7 @@ public class IncendiaryTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public String getLaunchSoundEffect() {
-        return "incendiary";
+    public SoundEvent getLaunchSoundEffect() {
+        return ModSounds.incendiaryLaunchSound;
     }
 }

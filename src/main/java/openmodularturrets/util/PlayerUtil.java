@@ -36,11 +36,6 @@ public class PlayerUtil {
         if (possibleUUID == null || possibleUUID.isEmpty()) {
             return null;
         }
-        for (Map.Entry<UUID, String> entry : UsernameCache.getMap().entrySet()) {
-            if (entry.getKey().toString().equals(possibleUUID)) {
-                return entry.getValue();
-            }
-        }
-        return null;
+        return UsernameCache.getLastKnownUsername(UUID.fromString(possibleUUID));
     }
 }

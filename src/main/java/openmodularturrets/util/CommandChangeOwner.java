@@ -1,6 +1,5 @@
 package openmodularturrets.util;
 
-import com.sun.xml.internal.fastinfoset.algorithm.BuiltInEncodingAlgorithm;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -10,6 +9,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import openmodularturrets.tileentity.TurretBase;
+
+import static ic2.core.network.DataEncoder.EncodedType.BlockPos;
 
 /**
  * Created by nico on 6/4/15.

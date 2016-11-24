@@ -1,15 +1,16 @@
 package openmodularturrets.entity.projectiles;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.init.ModSounds;
 import openmodularturrets.tileentity.TurretBase;
 
 import java.util.Random;
@@ -62,8 +63,8 @@ public class FerroSlugProjectile extends TurretProjectile {
             }
 
             Random random = new Random();
-            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:railGunHit",
-                                     ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
+            worldObj.playSound(null, new BlockPos(posX, posY, posZ), ModSounds.railGunHitSound, SoundCategory.AMBIENT,
+                    ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
 
             if (movingobjectposition.entityHit instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) movingobjectposition.entityHit)) {
@@ -80,7 +81,7 @@ public class FerroSlugProjectile extends TurretProjectile {
     }
 
     @Override
-    protected void updateFallState(double y, boolean onGroundIn, Block blockIn, BlockPos pos) {
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
         this.posY = posY + 12F;
     }
 

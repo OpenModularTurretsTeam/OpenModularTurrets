@@ -1,6 +1,5 @@
 package openmodularturrets.blocks.misc;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -12,9 +11,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
@@ -26,7 +25,7 @@ import openmodularturrets.tileentity.TurretBase;
 import javax.annotation.Nullable;
 
 public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
-    public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 16);
+    public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 5);
 
     public LeverBlock() {
         super(Material.ROCK);

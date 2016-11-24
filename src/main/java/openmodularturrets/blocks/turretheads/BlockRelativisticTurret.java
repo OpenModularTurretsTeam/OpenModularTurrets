@@ -22,11 +22,11 @@ public class BlockRelativisticTurret extends BlockAbstractTurretHead {
     }
 
     @Override
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i <= 5; i++) {
             Random random = new Random();
             worldIn.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX() + (random.nextGaussian() / 10) + 0.5F, pos.getY() + 0.5F,
-                                      pos.getZ() + (random.nextGaussian() / 10) + 0.5F, (200), (200), (200));
+                    pos.getZ() + (random.nextGaussian() / 10) + 0.5F, (200), (200), (200));
         }
     }
 }

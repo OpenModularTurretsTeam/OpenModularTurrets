@@ -35,7 +35,7 @@ class RocketRenderer extends Render {
         GL11.glRotatef(
                 par1EntityRocket.prevRotationPitch + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch) * par9,
                 0.0F, 0.0F, 1.0F);
-        VertexBuffer tessellator = Tessellator.getInstance().getWorldRenderer();
+        VertexBuffer tessellator = Tessellator.getInstance().getBuffer();
         byte b0 = 0;
         float f2 = 0.0F;
         float f3 = 0.5F;

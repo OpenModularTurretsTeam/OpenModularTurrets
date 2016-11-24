@@ -3,11 +3,13 @@ package openmodularturrets.tileentity.turrets;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.GrenadeProjectile;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.init.ModItems;
+import openmodularturrets.init.ModSounds;
 
 public class GrenadeLauncherTurretTileEntity extends TurretHead {
     public GrenadeLauncherTurretTileEntity() {
@@ -56,7 +58,7 @@ public class GrenadeLauncherTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public String getLaunchSoundEffect() {
-        return "grenade";
+    public SoundEvent getLaunchSoundEffect() {
+        return ModSounds.grenadeLaunchSound;
     }
 }

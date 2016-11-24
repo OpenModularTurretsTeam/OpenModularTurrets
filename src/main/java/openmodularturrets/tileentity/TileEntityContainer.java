@@ -152,5 +152,4 @@ public abstract class TileEntityContainer extends TileEntityOMT implements ISide
     public void clear() {
 
     }
-
 }
