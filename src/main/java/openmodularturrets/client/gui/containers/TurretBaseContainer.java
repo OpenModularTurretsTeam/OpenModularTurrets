@@ -1,20 +1,23 @@
 package openmodularturrets.client.gui.containers;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import openmodularturrets.client.gui.customSlot.AddonSlot;
 import openmodularturrets.client.gui.customSlot.UpgradeSlot;
+import openmodularturrets.handler.NetworkingHandler;
 import openmodularturrets.items.AddonMetaItem;
 import openmodularturrets.items.UpgradeMetaItem;
+import openmodularturrets.network.messages.MessageTurretBase;
 import openmodularturrets.tileentity.TurretBase;
 
 /**
  * Created by Keridos on 09/12/2015.
  * This Class
  */
-class TurretBaseContainer extends Container {
+abstract class TurretBaseContainer extends Container {
     TurretBase tileEntity;
 
     @Override
@@ -86,5 +89,15 @@ class TurretBaseContainer extends Container {
             slotObject.onPickupFromSlot(player, stackInSlot);
         }
         return stack;
+    }
+
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+        for (Object listener : this.listeners) {
+            if (listener instanceof EntityPlayerMP) {
+                NetworkingHandler.INSTANCE.sendTo(new MessageTurretBase(this.tileEntity), (EntityPlayerMP) listener);
+            }
+        }
     }
 }

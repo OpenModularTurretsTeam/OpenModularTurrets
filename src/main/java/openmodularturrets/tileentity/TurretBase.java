@@ -2,10 +2,6 @@ package openmodularturrets.tileentity;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
-/*import dan200.computercraft.api.lua.ILuaContext;
-import dan200.computercraft.api.lua.LuaException;
-import dan200.computercraft.api.peripheral.IComputerAccess;
-import dan200.computercraft.api.peripheral.IPeripheral;*/
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyEmitter;
@@ -19,27 +15,29 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.handler.NetworkingHandler;
-import openmodularturrets.network.messages.MessageTurretBase;
 import openmodularturrets.util.MathUtil;
 import openmodularturrets.util.TrustedPlayer;
 import openmodularturrets.util.TurretHeadUtil;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 import static openmodularturrets.util.PlayerUtil.*;
+
+/*import dan200.computercraft.api.lua.ILuaContext;
+import dan200.computercraft.api.lua.LuaException;
+import dan200.computercraft.api.peripheral.IComputerAccess;
+import dan200.computercraft.api.peripheral.IPeripheral;*/
 
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft"),
@@ -249,6 +247,14 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         return null;
     }
 
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        NBTTagCompound var1 = new NBTTagCompound();
+        this.writeToNBT(var1);
+        return new SPacketUpdateTileEntity(this.pos, 2, var1);
+    }
+
     public void setTrustedPlayers(List<TrustedPlayer> list) {
         this.trustedPlayers = list;
     }
@@ -323,7 +329,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         nbtTagCompound.setBoolean("computerAccessible", computerAccessible);
         nbtTagCompound.setBoolean("shouldConcealTurrets", shouldConcealTurrets);
         nbtTagCompound.setBoolean("multiTargeting", multiTargeting);
-        nbtTagCompound.setDouble("storageEU", storageEU);;
+        nbtTagCompound.setDouble("storageEU", storageEU);
 
         if (camoStack != null) {
             NBTTagCompound tag2 = new NBTTagCompound();

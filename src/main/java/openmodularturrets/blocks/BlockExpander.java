@@ -1,6 +1,6 @@
 package openmodularturrets.blocks;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
@@ -10,9 +10,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -24,6 +26,7 @@ import openmodularturrets.init.ModBlocks;
 import openmodularturrets.tileentity.Expander;
 import openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,11 +37,11 @@ import java.util.List;
 public class BlockExpander extends BlockAbstractContainer {
     public static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
     public BlockExpander() {
-        super(Material.rock);
+        super(Material.ROCK);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setResistance(3.0F);
-        this.setStepSound(Block.soundTypeStone);
-        this.setBlockBounds(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
+        this.setSoundType(SoundType.STONE);
+
     }
 
     @Override
@@ -67,18 +70,23 @@ public class BlockExpander extends BlockAbstractContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return new AxisAlignedBB(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (state.getValue(META) > 4) return true;
-        Expander expander = (Expander) worldIn.getTileEntity(pos);
+        Expander expander = (Expander) world.getTileEntity(pos);
         TurretBase base = expander.getBase();
         if (base != null && base.getTrustedPlayer(player.getUniqueID()) != null) {
             if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI) {
-                player.openGui(ModularTurrets.instance, 7, worldIn, pos.getX(), pos.getX(), pos.getZ());
+                player.openGui(ModularTurrets.instance, 7, world, pos.getX(), pos.getX(), pos.getZ());
                 return true;
             }
         }
         if (base != null && player.getUniqueID().toString().equals(base.getOwner())) {
-            player.openGui(ModularTurrets.instance, 7, worldIn, pos.getX(), pos.getX(), pos.getZ());
+            player.openGui(ModularTurrets.instance, 7, world, pos.getX(), pos.getX(), pos.getZ());
         } else {
             player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
         }
