@@ -10,6 +10,4 @@ jdk:
   - oraclejdk8
 before_install:
   - chmod a+x gradlew
-script: gradle clean check
-after_script:
-  - rm -rf libs/
+script: ./gradlew clean check
