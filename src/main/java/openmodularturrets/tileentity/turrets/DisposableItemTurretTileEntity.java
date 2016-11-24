@@ -3,10 +3,12 @@ package openmodularturrets.tileentity.turrets;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.DisposableTurretProjectile;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.init.ModSounds;
 
 public class DisposableItemTurretTileEntity extends TurretHead {
     public DisposableItemTurretTileEntity() {
@@ -55,7 +57,7 @@ public class DisposableItemTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public String getLaunchSoundEffect() {
-        return "disposable";
+    public SoundEvent getLaunchSoundEffect() {
+        return ModSounds.disposableLaunchSound;
     }
 }

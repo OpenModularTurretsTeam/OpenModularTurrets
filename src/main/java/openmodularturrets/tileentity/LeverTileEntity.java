@@ -46,10 +46,4 @@ public class LeverTileEntity extends TileEntity implements ITickable {
             }
         }
     }
-
-    @Override
-    public void writeToNBT(NBTTagCompound par1) {
-        super.writeToNBT(par1);
-    }
-
 }

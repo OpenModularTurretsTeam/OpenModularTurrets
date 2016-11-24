@@ -4,10 +4,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.DisposableTurretProjectile;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.init.ModSounds;
 
 public class PotatoCannonTurretTileEntity extends TurretHead {
     public PotatoCannonTurretTileEntity() {
@@ -47,7 +49,7 @@ public class PotatoCannonTurretTileEntity extends TurretHead {
 
     @Override
     public Item getAmmo() {
-        return Items.potato;
+        return Items.POTATO;
     }
 
     @Override
@@ -56,7 +58,7 @@ public class PotatoCannonTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public String getLaunchSoundEffect() {
-        return "potato";
+    public SoundEvent getLaunchSoundEffect() {
+        return ModSounds.potatoLaunchSound;
     }
 }

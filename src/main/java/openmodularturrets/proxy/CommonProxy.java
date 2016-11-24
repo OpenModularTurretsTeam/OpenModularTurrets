@@ -7,12 +7,14 @@ import openmodularturrets.handler.ProjectileEntityHandler;
 import openmodularturrets.handler.recipes.RecipeHandler;
 import openmodularturrets.init.ModBlocks;
 import openmodularturrets.init.ModItems;
+import openmodularturrets.init.ModSounds;
 
 public class CommonProxy {
     public void preInit(){
         ModItems.init();
         ModBlocks.initTileEntities();
         ModBlocks.initBlocks();
+        ModSounds.init();
         RecipeHandler.initRecipes();
         ProjectileEntityHandler.registerProjectiles(ModularTurrets.instance);
     }

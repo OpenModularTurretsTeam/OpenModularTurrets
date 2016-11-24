@@ -3,10 +3,12 @@ package openmodularturrets.tileentity.turrets;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.LaserProjectile;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.init.ModSounds;
 
 public class LaserTurretTileEntity extends TurretHead {
     public LaserTurretTileEntity() {
@@ -55,7 +57,7 @@ public class LaserTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public String getLaunchSoundEffect() {
-        return "laser";
+    public SoundEvent getLaunchSoundEffect() {
+        return ModSounds.laserLaunchSound;
     }
 }

@@ -8,10 +8,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.reference.Reference;
+import openmodularturrets.init.ModSounds;
 import openmodularturrets.util.TurretHeadUtil;
 
 public class RelativisticTurretTileEntity extends TurretHead {
@@ -31,10 +33,6 @@ public class RelativisticTurretTileEntity extends TurretHead {
             }
             rotationAnimation = rotationAnimation + 0.03F;
             return;
-        }
-
-        if (ticks % 5 == 0) {
-            worldObj.markBlockForUpdate(this.pos);
         }
 
         ticks++;
@@ -104,14 +102,13 @@ public class RelativisticTurretTileEntity extends TurretHead {
 
             // Consume energy
             base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - power_required);
-            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200, 5,false, false));
-            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.weakness.id, 200, 5,false, false));
+            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 5,false, false));
+            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.getPotionById(18), 200, 5,false, false));
 
             target = null;
         }
 
-        this.getWorld().playSoundEffect(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(),
-                                           Reference.MOD_ID + ":" + this.getLaunchSoundEffect(), 0.6F, 1.0F);
+        this.getWorld().playSound(null, this.getPos(), this.getLaunchSoundEffect(), SoundCategory.BLOCKS, 0.6F, 1.0F);
         ticks = 0;
     }
 
@@ -156,7 +153,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
     }
 
     @Override
-    protected String getLaunchSoundEffect() {
-        return "relativistic";
+    public SoundEvent getLaunchSoundEffect() {
+        return ModSounds.relativisticLaunchSound;
     }
 }

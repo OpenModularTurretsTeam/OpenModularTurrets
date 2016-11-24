@@ -1,6 +1,6 @@
 package openmodularturrets.util;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
@@ -12,7 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -20,6 +20,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.init.ModSounds;
 import openmodularturrets.tileentity.Expander;
 import openmodularturrets.tileentity.TurretBase;
 import openmodularturrets.tileentity.turrets.TurretHead;
@@ -61,7 +62,7 @@ public class TurretHeadUtil {
 
     private static void dispatchWarnMessage(EntityPlayerMP player, World worldObj) {
         if (ConfigHandler.turretAlarmSound) {
-            worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "openmodularturrets:warning", 1.0F, 1.0F);
+            player.playSound(ModSounds.turretWarnSound, 1.0F, 1.0F);
         }
         if (ConfigHandler.turretWarnMessage) {
             player.addChatMessage(new TextComponentString(
@@ -198,27 +199,27 @@ public class TurretHeadUtil {
             for (EntityLivingBase target1 : targets) {
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAnimal && !target1.isDead && !target1.isPotionActive(
-                            Potion.moveSlowdown.id)) {
+                            Potion.getPotionById(2))) {
                         target = target1;
                     }
                 }
 
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAmbientCreature && !target1.isDead && !target1.isPotionActive(
-                            Potion.moveSlowdown.id)) {
+                            Potion.getPotionById(2))) {
                         target = target1;
                     }
                 }
 
                 if (base.isAttacksMobs() && ConfigHandler.globalCanTargetMobs) {
-                    if (target1 instanceof IMob && !target1.isDead && !target1.isPotionActive(Potion.moveSlowdown.id)) {
+                    if (target1 instanceof IMob && !target1.isDead && !target1.isPotionActive(Potion.getPotionById(2))) {
                         target = target1;
                     }
                 }
 
                 if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetPlayers) {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead && !target1.isPotionActive(
-                            Potion.moveSlowdown.id)) {
+                            Potion.getPotionById(2))) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
                         if (!entity.getUniqueID().toString().equals(base.getOwner()) && !isTrustedPlayer(
@@ -742,12 +743,12 @@ public class TurretHeadUtil {
                     new Vec3d(traceStart.xCoord, traceStart.yCoord, traceStart.zCoord),
                     new Vec3d(traceEnd.xCoord, traceEnd.yCoord, traceEnd.zCoord));
 
-            if (traced != null && traced.typeOfHit == RayTraceResult.MovingObjectType.BLOCK) {
-                Block hitBlock = turret.getWorld().getBlockState(traced.getBlockPos()).getBlock();
+            if (traced != null && traced.typeOfHit == RayTraceResult.Type.BLOCK) {
+                IBlockState hitBlock = turret.getWorld().getBlockState(traced.getBlockPos());
 
                 // If non solid block is in the way then proceed to continue
                 // tracing
-                if (hitBlock != null && !hitBlock.getMaterial().isSolid() && MathHelper.abs_max(
+                if (!hitBlock.getMaterial().isSolid() && MathHelper.abs_max(
                         MathHelper.abs_max(traceStart.xCoord - traceEnd.xCoord, traceStart.yCoord - traceEnd.yCoord),
                         traceStart.zCoord - traceEnd.zCoord) > 1) {
                     // Start at new position and continue

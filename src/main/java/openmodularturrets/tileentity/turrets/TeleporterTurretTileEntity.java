@@ -6,11 +6,13 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import openmodularturrets.blocks.turretheads.BlockTeleporterTurret;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
-import openmodularturrets.reference.Reference;
+import openmodularturrets.init.ModSounds;
 import openmodularturrets.util.TurretHeadUtil;
 
 public class TeleporterTurretTileEntity extends TurretHead {
@@ -30,10 +32,6 @@ public class TeleporterTurretTileEntity extends TurretHead {
             }
             rotationAnimation = rotationAnimation + 0.03F;
             return;
-        }
-
-        if (ticks % 5 == 0) {
-            worldObj.markBlockForUpdate(this.pos);
         }
 
         ticks++;
@@ -111,8 +109,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
             target = null;
         }
 
-        this.getWorld().playSoundEffect(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(),
-                                           Reference.MOD_ID + ":" + this.getLaunchSoundEffect(), 0.6F, 1.0F);
+        this.getWorld().playSound(null, this.getPos(), this.getLaunchSoundEffect(), SoundCategory.BLOCKS, 0.6F, 1.0F);
 
         ticks = 0;
     }
@@ -158,7 +155,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
     }
 
     @Override
-    protected String getLaunchSoundEffect() {
-        return "teleport";
+    public SoundEvent getLaunchSoundEffect() {
+        return ModSounds.teleportLaunchSound;
     }
 }
