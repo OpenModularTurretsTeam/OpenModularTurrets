@@ -1,7 +1,6 @@
 package openmodularturrets.tileentity.turrets;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -48,8 +47,8 @@ public class GrenadeLauncherTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public Item getAmmo() {
-        return ModItems.grenadeCraftable;
+    public ItemStack getAmmo() {
+        return new ItemStack(ModItems.ammoMetaItem,1,3);
     }
 
     @Override

@@ -25,7 +25,7 @@ public class ItemBlockExpander extends ItemBlock {
     }
 
     public final static String[] subNames = {
-            Names.Blocks.expanderInvTierOne, Names.Blocks.expanderInvTierTwo, Names.Blocks.expanderInvTierTwo,
+            Names.Blocks.expanderInvTierOne, Names.Blocks.expanderInvTierTwo, Names.Blocks.expanderInvTierThree,
             Names.Blocks.expanderInvTierFour, Names.Blocks.expanderInvTierFive, Names.Blocks.expanderPowerTierOne,
             Names.Blocks.expanderPowerTierTwo, Names.Blocks.expanderPowerTierThree, Names.Blocks.expanderPowerTierFour,
             Names.Blocks.expanderPowerTierFive,

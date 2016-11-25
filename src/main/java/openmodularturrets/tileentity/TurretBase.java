@@ -121,7 +121,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
                 return;
             }
 
-            ItemStack redstone = TurretHeadUtil.useSpecificItemStackItemFromBase(base, Items.REDSTONE);
+            ItemStack redstone = TurretHeadUtil.useSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE));
 
             if (redstone == null) {
                 redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),

@@ -18,12 +18,12 @@ public class IntermediateProductRegular extends Item {
     }
 
     public final static String[] subNames = {
-            Names.Items.containmentChamber, Names.Items.energeticBarrel, Names.Items.ioBus
+            Names.Items.ioBus
     };
 
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 1; i++) {
             subItems.add(new ItemStack(ModItems.intermediateProductRegular, 1, i));
         }
     }

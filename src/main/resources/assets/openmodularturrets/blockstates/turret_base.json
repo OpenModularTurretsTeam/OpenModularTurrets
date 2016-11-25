@@ -1,0 +1,35 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+	"model": "minecraft:cube_all"
+  },
+  "variants": {
+	"tier": {
+	  "1": {
+		"textures": {
+		  "all": "openmodularturrets:blocks/turret_base_tier_one"
+		}
+	  },
+	  "2": {
+		"textures": {
+		  "all": "openmodularturrets:blocks/turret_base_tier_two"
+		}
+	  },
+	  "3": {
+		"textures": {
+		  "all": "openmodularturrets:blocks/turret_base_tier_three"
+		}
+	  },
+	  "4": {
+		"textures": {
+		  "all": "openmodularturrets:blocks/turret_base_tier_four"
+		}
+	  },
+	  "5": {
+		"textures": {
+		  "all": "openmodularturrets:blocks/turret_base_tier_five"
+		}
+	  }
+	}
+  }
+}

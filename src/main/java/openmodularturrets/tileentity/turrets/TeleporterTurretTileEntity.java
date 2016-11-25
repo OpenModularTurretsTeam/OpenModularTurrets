@@ -3,7 +3,6 @@ package openmodularturrets.tileentity.turrets;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
@@ -145,7 +144,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public Item getAmmo() {
+    public ItemStack getAmmo() {
         return null;
     }
 

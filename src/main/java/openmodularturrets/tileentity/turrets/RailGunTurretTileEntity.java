@@ -1,7 +1,6 @@
 package openmodularturrets.tileentity.turrets;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -48,8 +47,8 @@ public class RailGunTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public Item getAmmo() {
-        return ModItems.ferroSlug;
+    public ItemStack getAmmo() {
+        return new ItemStack(ModItems.ammoMetaItem,1,2);
     }
 
     @Override

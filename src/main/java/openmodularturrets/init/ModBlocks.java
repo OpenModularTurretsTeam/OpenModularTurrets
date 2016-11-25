@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import openmodularturrets.blocks.BlockExpander;
 import openmodularturrets.blocks.BlockTurretBase;
-import openmodularturrets.blocks.misc.LeverBlock;
+import openmodularturrets.blocks.LeverBlock;
 import openmodularturrets.blocks.turretheads.*;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.blocks.*;

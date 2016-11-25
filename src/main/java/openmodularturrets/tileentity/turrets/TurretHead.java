@@ -3,7 +3,6 @@ package openmodularturrets.tileentity.turrets;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -177,7 +176,7 @@ public abstract class TurretHead extends TileEntity implements ITickable {
 
     protected abstract boolean requiresSpecificAmmo();
 
-    protected abstract Item getAmmo();
+    protected abstract ItemStack getAmmo();
 
     protected abstract TurretProjectile createProjectile(World world, Entity target, ItemStack ammo);
 
@@ -319,8 +318,7 @@ public abstract class TurretHead extends TileEntity implements ITickable {
                     for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
                         ammo = TurretHeadUtil.useSpecificItemStackItemFromBase(base, this.getAmmo());
                         if (ammo == null) {
-                            ammo = TurretHeadUtil.getSpecificItemFromInvExpanders(worldObj,
-                                    new ItemStack(this.getAmmo()), base);
+                            ammo = TurretHeadUtil.getSpecificItemFromInvExpanders(worldObj, this.getAmmo(), base);
                         }
                     }
                 } else {
