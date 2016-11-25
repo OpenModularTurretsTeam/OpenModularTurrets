@@ -445,7 +445,7 @@ public class TurretHeadUtil {
 
     public static int getRangeUpgrades(TurretBase base) {
         int value = 0;
-        int tier = base.getBaseTier();
+        int tier = base.getTier();
 
         if (tier == 1) {
             return value;
@@ -470,7 +470,7 @@ public class TurretHeadUtil {
 
     public static int getScattershotUpgrades(TurretBase base) {
         int value = 0;
-        int tier = base.getBaseTier();
+        int tier = base.getTier();
 
         if (tier == 1) {
             return value;
@@ -495,7 +495,7 @@ public class TurretHeadUtil {
 
     public static float getAccuraccyUpgrades(TurretBase base) {
         float accuracy = 0.0F;
-        int tier = base.getBaseTier();
+        int tier = base.getTier();
 
         if (tier == 1) {
             return accuracy;
@@ -520,7 +520,7 @@ public class TurretHeadUtil {
 
     public static float getEfficiencyUpgrades(TurretBase base) {
         float efficiency = 0.0F;
-        int tier = base.getBaseTier();
+        int tier = base.getTier();
 
         if (tier == 1) {
             return efficiency;
@@ -546,7 +546,7 @@ public class TurretHeadUtil {
 
     public static float getFireRateUpgrades(TurretBase base) {
         float rof = 0.0F;
-        int tier = base.getBaseTier();
+        int tier = base.getTier();
 
         if (tier == 1) {
             return rof;
@@ -571,7 +571,7 @@ public class TurretHeadUtil {
 
     public static boolean hasRedstoneReactor(TurretBase base) {
         boolean found = false;
-        if (base.getBaseTier() == 1) {
+        if (base.getTier() == 1) {
             return false;
         }
 
@@ -587,7 +587,7 @@ public class TurretHeadUtil {
 
     public static boolean hasDamageAmpAddon(TurretBase base) {
         boolean found = false;
-        if (base.getBaseTier() == 1) {
+        if (base.getTier() == 1) {
             return false;
         }
 
@@ -603,7 +603,7 @@ public class TurretHeadUtil {
 
     public static boolean hasConcealmentAddon(TurretBase base) {
         boolean found = false;
-        if (base.getBaseTier() == 1) {
+        if (base.getTier() == 1) {
             return false;
         }
 
@@ -619,7 +619,7 @@ public class TurretHeadUtil {
 
     public static boolean hasSolarPanelAddon(TurretBase base) {
         boolean found = false;
-        if (base.getBaseTier() == 1) {
+        if (base.getTier() == 1) {
             return false;
         }
 
@@ -635,7 +635,7 @@ public class TurretHeadUtil {
 
     public static boolean hasPotentiaUpgradeAddon(TurretBase base) {
         boolean found = false;
-        if (base.getBaseTier() == 1) {
+        if (base.getTier() == 1) {
             return false;
         }
         if (!ModCompatibility.ThaumcraftLoaded) {
@@ -654,7 +654,7 @@ public class TurretHeadUtil {
 
     public static boolean hasSerialPortAddon(TurretBase base) {
         boolean found = false;
-        if (base.getBaseTier() == 1) {
+        if (base.getTier() == 1) {
             return false;
         }
         if (!ModCompatibility.OpenComputersLoaded && !ModCompatibility.ComputercraftLoaded) {
@@ -673,7 +673,7 @@ public class TurretHeadUtil {
 
     private static boolean hasRecyclerAddon(TurretBase base) {
         boolean found = false;
-        if (base.getBaseTier() == 1) {
+        if (base.getTier() == 1) {
             return false;
         }
         if (base.getStackInSlot(9) != null) {
@@ -693,7 +693,7 @@ public class TurretHeadUtil {
             return amp_level;
         }
 
-        int tier = base.getBaseTier();
+        int tier = base.getTier();
 
         if (tier == 1) {
             return amp_level;

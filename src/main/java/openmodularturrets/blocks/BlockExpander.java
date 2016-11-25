@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openmodularturrets.ModularTurrets;
-import openmodularturrets.blocks.util.BlockAbstractContainer;
+import openmodularturrets.blocks.util.BlockAbstractTileEntity;
 import openmodularturrets.init.ModBlocks;
 import openmodularturrets.tileentity.Expander;
 import openmodularturrets.tileentity.TurretBase;
@@ -34,8 +34,8 @@ import java.util.List;
  * Created by Keridos on 19/07/16.
  * This Class
  */
-public class BlockExpander extends BlockAbstractContainer {
-    public static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
+public class BlockExpander extends BlockAbstractTileEntity {
+    private static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
     public BlockExpander() {
         super(Material.ROCK);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
@@ -61,11 +61,11 @@ public class BlockExpander extends BlockAbstractContainer {
     }
 
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
-        if (meta < 5) {
-            return new Expander(meta, false);
+    public TileEntity createTileEntity(World world, IBlockState state) {
+        if (state.getValue(META) < 5) {
+            return new Expander(state.getValue(META), false);
         }else {
-            return new Expander(meta, true);
+            return new Expander(state.getValue(META), true);
         }
     }
 

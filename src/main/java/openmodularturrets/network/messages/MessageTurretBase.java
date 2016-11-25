@@ -24,7 +24,7 @@ import java.util.UUID;
  * This Class is the Message that the electric floodlights TileEntity uses.
  */
 public class MessageTurretBase implements IMessage {
-    private int x, y, z, rfStorage;
+    private int x, y, z, rfStorage, tier;
     private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting;
     private String owner, ownerName;
     private List<TrustedPlayer> trustedPlayers = new ArrayList<>();
@@ -53,7 +53,7 @@ public class MessageTurretBase implements IMessage {
                         ((TurretBase) tileEntity).setMultiTargeting(message.multiTargeting);
                         ((TurretBase) tileEntity).setTrustedPlayers(message.trustedPlayers);
                         ((TurretBase) tileEntity).camoStack = message.camoStack;
-
+                        ((TurretBase) tileEntity).setTier(message.tier);
                     }
                 }
             });
@@ -68,6 +68,7 @@ public class MessageTurretBase implements IMessage {
             this.x = TurretBase.getPos().getX();
             this.y = TurretBase.getPos().getY();
             this.z = TurretBase.getPos().getZ();
+            this.tier = TurretBase.getTier();
             this.owner = TurretBase.getOwner();
             this.ownerName = TurretBase.getOwnerName();
             this.rfStorage = TurretBase.getEnergyStored(EnumFacing.DOWN);
@@ -85,6 +86,7 @@ public class MessageTurretBase implements IMessage {
         this.x = buf.readInt();
         this.y = buf.readInt();
         this.z = buf.readInt();
+        this.tier = buf.readInt();
         int ownerLength = buf.readInt();
         this.owner = new String(buf.readBytes(ownerLength).array());
         int ownerNameLength = buf.readInt();
@@ -116,6 +118,7 @@ public class MessageTurretBase implements IMessage {
         buf.writeInt(x);
         buf.writeInt(y);
         buf.writeInt(z);
+        buf.writeInt(tier);
         buf.writeInt(owner.length());
         buf.writeBytes(owner.getBytes());
         buf.writeInt(ownerName.length());
