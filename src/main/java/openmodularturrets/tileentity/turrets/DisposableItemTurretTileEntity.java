@@ -1,7 +1,6 @@
 package openmodularturrets.tileentity.turrets;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -47,7 +46,7 @@ public class DisposableItemTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public Item getAmmo() {
+    public ItemStack getAmmo() {
         return null;
     }
 

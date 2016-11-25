@@ -6,9 +6,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import openmodularturrets.client.gui.containers.TurretBaseTierOneContainer;
-import openmodularturrets.reference.Reference;
-import openmodularturrets.util.TrustedPlayer;
+import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.TurretBase;
+import openmodularturrets.util.TrustedPlayer;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class TurretBaseTierOneGui extends TurretBaseAbstractGui {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-        ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/gui/baseInvWood.png"));
+        ResourceLocation texture = (new ResourceLocation(Names.Textures.turretBaseTierOneGUI));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
         int x = (width - xSize) / 2;

@@ -10,6 +10,8 @@ import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.init.ModBlocks;
 import openmodularturrets.init.ModItems;
 
+import static openmodularturrets.handler.recipes.RecipeHandler.*;
+
 
 class VanillaRecipeHandler {
     public static void init() {
@@ -187,19 +189,19 @@ class VanillaRecipeHandler {
         }
 
         // Ammo
-        GameRegistry.addRecipe(new ItemStack(ModItems.rocketCraftable, 32), " A ", "ABA", "ACA", 'A',
+        GameRegistry.addRecipe(ammoRocket, " A ", "ABA", "ACA", 'A',
                                Items.IRON_INGOT, 'B', Items.GUNPOWDER, 'C',
                                Items.REDSTONE);
 
-        GameRegistry.addRecipe(new ItemStack(ModItems.bulletCraftable, 64), " A ", "BC ", " A ", 'A',
+        GameRegistry.addRecipe(ammoBullet, " A ", "BC ", " A ", 'A',
                                Items.IRON_INGOT, 'B', Items.GUNPOWDER, 'C',
                                Items.REDSTONE);
 
-        GameRegistry.addRecipe(new ItemStack(ModItems.grenadeCraftable, 32), " C ", "ABA", " A ", 'A',
+        GameRegistry.addRecipe(ammoGrenade, " C ", "ABA", " A ", 'A',
                                Items.IRON_INGOT, 'B', Items.GUNPOWDER, 'C',
                                Items.REDSTONE);
 
-        GameRegistry.addRecipe(new ItemStack(ModItems.ferroSlug, 16), " C ", "CBC", " A ", 'A',
+        GameRegistry.addRecipe(ammoFerroSlug, " C ", "CBC", " A ", 'A',
                                Items.IRON_INGOT, 'B', Items.FLINT, 'C',
                                Items.REDSTONE);    
     }

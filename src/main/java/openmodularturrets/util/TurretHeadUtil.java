@@ -8,7 +8,6 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
@@ -246,9 +245,9 @@ public class TurretHeadUtil {
     }
 
     private static boolean isTargetAlreadyTargeted(TurretBase base, Entity entity) {
-        for (TileEntity tileEntity: WorldUtil.getTouchingTileEntities(base.getWorld(),base.getPos())) {
+        for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(base.getWorld(), base.getPos())) {
             if (tileEntity instanceof TurretHead) {
-                if (((TurretHead)tileEntity).target != null && entity.equals(((TurretHead)tileEntity).target)) {
+                if (((TurretHead) tileEntity).target != null && entity.equals(((TurretHead) tileEntity).target)) {
                     return true;
                 }
             }
@@ -269,7 +268,7 @@ public class TurretHeadUtil {
     public static int getPowerExpanderTotalExtraCapacity(World world, BlockPos pos) {
         int totalExtraCap = 0;
         for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, pos)) {
-            if (tileEntity instanceof Expander && ((Expander)tileEntity).isPowerExpander()) {
+            if (tileEntity instanceof Expander && ((Expander) tileEntity).isPowerExpander()) {
                 totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue(
                         (Expander) tileEntity);
             }
@@ -307,7 +306,7 @@ public class TurretHeadUtil {
 
     public static ItemStack getSpecificItemFromInvExpanders(World world, ItemStack itemStack, TurretBase base) {
         for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, base.getPos())) {
-            if (tileEntity instanceof Expander && !((Expander)tileEntity).isPowerExpander()) {
+            if (tileEntity instanceof Expander && !((Expander) tileEntity).isPowerExpander()) {
                 Expander exp = (Expander) tileEntity;
                 ItemStack stack = deductFromInvExpander(itemStack, exp, base);
                 if (stack != null) {
@@ -320,7 +319,7 @@ public class TurretHeadUtil {
 
     public static ItemStack getAnyItemFromInvExpanders(World world, TurretBase base) {
         for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, base.getPos())) {
-            if (tileEntity instanceof Expander && !((Expander)tileEntity).isPowerExpander()) {
+            if (tileEntity instanceof Expander && !((Expander) tileEntity).isPowerExpander()) {
                 Expander exp = (Expander) tileEntity;
                 for (int i = 0; i < exp.getSizeInventory(); i++) {
                     ItemStack itemCheck = exp.getStackInSlot(i);
@@ -414,11 +413,12 @@ public class TurretHeadUtil {
         return null;
     }
 
-    public static ItemStack useSpecificItemStackItemFromBase(TurretBase base, Item item) {
+    public static ItemStack useSpecificItemStackItemFromBase(TurretBase base, ItemStack ammoStackRequired) {
         for (int i = 0; i <= 8; i++) {
             ItemStack ammo_stack = base.getStackInSlot(i);
 
-            if (ammo_stack != null && ammo_stack.stackSize > 0 && ammo_stack.getItem() == item) {
+            if (ammo_stack != null && ammo_stack.stackSize > 0 && ammo_stack.getItem() == ammoStackRequired.getItem()
+                    && ammo_stack.getMetadata() == ammoStackRequired.getMetadata()) {
                 if (hasRecyclerAddon(base)) {
                     int chance = new Random().nextInt(99);
 
@@ -478,14 +478,14 @@ public class TurretHeadUtil {
 
         if (tier == 5) {
             if (base.getStackInSlot(12) != null) {
-                if (base.getStackInSlot(12).getItemDamage() == 4){
+                if (base.getStackInSlot(12).getItemDamage() == 4) {
                     value += base.getStackInSlot(12).stackSize;
                 }
             }
         }
 
         if (base.getStackInSlot(11) != null) {
-            if (base.getStackInSlot(11).getItemDamage() == 4){
+            if (base.getStackInSlot(11).getItemDamage() == 4) {
                 value += base.getStackInSlot(11).stackSize;
             }
         }
@@ -580,7 +580,7 @@ public class TurretHeadUtil {
         }
 
         if (base.getStackInSlot(10) != null && !found) {
-            found =  base.getStackInSlot(10).getItemDamage() == 4;
+            found = base.getStackInSlot(10).getItemDamage() == 4;
         }
         return found;
     }
@@ -596,7 +596,7 @@ public class TurretHeadUtil {
         }
 
         if (base.getStackInSlot(10) != null && !found) {
-            found =  base.getStackInSlot(10).getItemDamage() == 1;
+            found = base.getStackInSlot(10).getItemDamage() == 1;
         }
         return found;
     }
@@ -737,7 +737,7 @@ public class TurretHeadUtil {
         // Limit how many non solid block a turret can see through
         for (int i = 0; i < 10; i++) {
             // Offset start position toward the target to prevent self collision
-            traceStart.addVector(vecDelta.xCoord, vecDelta.yCoord,vecDelta.zCoord);
+            traceStart.addVector(vecDelta.xCoord, vecDelta.yCoord, vecDelta.zCoord);
 
             RayTraceResult traced = turret.getWorld().rayTraceBlocks(
                     new Vec3d(traceStart.xCoord, traceStart.yCoord, traceStart.zCoord),

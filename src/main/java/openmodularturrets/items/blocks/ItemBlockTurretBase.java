@@ -20,7 +20,7 @@ public class ItemBlockTurretBase extends ItemBlock {
     }
 
     public final static String[] subNames = {
-            "TierOne", "TierTwo", "TierThree","TierFour","TierFive"
+            "_tier_one", "_tier_two", "_tier_three","_tier_four","_tier_five"
     };
 
     @Override

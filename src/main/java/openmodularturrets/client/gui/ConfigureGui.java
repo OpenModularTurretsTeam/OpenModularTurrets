@@ -7,14 +7,14 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.client.gui.containers.ConfigContainer;
 import openmodularturrets.handler.NetworkingHandler;
 import openmodularturrets.network.messages.*;
-import openmodularturrets.reference.Reference;
+import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.TurretBase;
 import org.lwjgl.opengl.GL11;
 
@@ -344,7 +344,7 @@ public class ConfigureGui extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-        ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/gui/configure.png"));
+        ResourceLocation texture = (new ResourceLocation(Names.Textures.configureGUI));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
         int x = (width - xSize) / 2;

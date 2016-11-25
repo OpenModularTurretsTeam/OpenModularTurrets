@@ -211,20 +211,20 @@ class EnderIORecipeHandler {
         }
 
         // Ammo
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.rocketCraftable, 64), " A ", "ABA", "ACA", 'A',
+        GameRegistry.addRecipe(new ShapedOreRecipe(RecipeHandler.ammoRocket, " A ", "ABA", "C", 'A',
                                                    "ingotElectricalSteel", 'B', Items.GUNPOWDER, 'C',
                                                    Items.REDSTONE));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.bulletCraftable, 64), " A ", " B ", " C ", 'A',
+        GameRegistry.addRecipe(new ShapedOreRecipe(RecipeHandler.ammoBullet, " A ", " B ", " C ", 'A',
                                                    "ingotElectricalSteel", 'B', Items.GUNPOWDER, 'C',
                                                    "ingotIron"));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.grenadeCraftable, 32), " C ", "ABA", " A ", 'A', "ingotIron",
+                new ShapedOreRecipe(RecipeHandler.ammoGrenade, " C ", "ABA", " A ", 'A', "ingotIron",
                                     'B', Items.GUNPOWDER, 'C', Items.REDSTONE));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.ferroSlug, 16), " C ", "CBC", " A ", 'A', "ingotDarkSteel", 'B',
+                new ShapedOreRecipe(RecipeHandler.ammoFerroSlug, " C ", "CBC", " A ", 'A', "ingotDarkSteel", 'B',
                                     Items.FLINT, 'C', Items.REDSTONE));
     }
 }

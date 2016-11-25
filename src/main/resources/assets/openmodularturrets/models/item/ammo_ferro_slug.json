@@ -1,0 +1,6 @@
+{
+  "parent": "openmodularturrets:item/default_item",
+  "textures": {
+	"layer0": "openmodularturrets:items/ammo_ferro_slug"
+  }
+}
