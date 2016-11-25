@@ -1,6 +1,5 @@
 package openmodularturrets.blocks;
 
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -13,26 +12,27 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
-import openmodularturrets.blocks.util.BlockAbstract;
+import openmodularturrets.blocks.util.BlockAbstractTileEntity;
 import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.LeverTileEntity;
 import openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.Nullable;
 
-public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
-    public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 5);
+public class LeverBlock extends BlockAbstractTileEntity {
+    public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 4);
 
     public LeverBlock() {
         super(Material.ROCK);
         this.setUnlocalizedName(Names.Blocks.lever);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setHardness(2F);
-        //this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         this.setResistance(15F);
         this.setSoundType(SoundType.STONE);
         setDefaultState(this.blockState.getBaseState().withProperty(ROTATION, 0));
@@ -56,15 +56,12 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
 
 
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int par2) {
+    public TileEntity createTileEntity(World worldIn, IBlockState blockState) {
         return new LeverTileEntity();
     }
 
     private boolean isBaseValid(TileEntity base) {
-        if (base instanceof TurretBase) {
-            return ((TurretBase) base).getTier() == 1;
-        }
-        return false;
+            return base instanceof TurretBase && ((TurretBase) base).getTier() == 1;
     }
 
     @Override
@@ -92,6 +89,7 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
         }
         int shu = MathHelper.floor_double((double) (l * 4.0F / 360.0F) + 0.5D) & 3;
         worldIn.setBlockState(pos, worldIn.getBlockState(pos).withProperty(ROTATION, shu), 2);
+
     }
 
     @Override
@@ -159,5 +157,10 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return new AxisAlignedBB(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
     }
 }
