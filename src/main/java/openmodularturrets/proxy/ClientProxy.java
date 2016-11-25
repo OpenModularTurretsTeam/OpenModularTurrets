@@ -5,11 +5,11 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
-import openmodularturrets.init.ModBlocks;
 import openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
 import openmodularturrets.client.render.renderers.projectiles.ProjectileRenderers;
-import openmodularturrets.items.*;
+import openmodularturrets.init.ModBlocks;
 import openmodularturrets.init.ModItems;
+import openmodularturrets.items.*;
 import openmodularturrets.reference.Names;
 import openmodularturrets.reference.Reference;
 
@@ -40,6 +40,9 @@ public class ClientProxy extends CommonProxy {
         super.preInit();
         for (int i = 0; i < 5; i++) {
             registerBlockModelAsItem(ModBlocks.turretBase, i, Names.Blocks.turretBase, "tier=" + (i + 1));
+        }
+        for (int i = 0; i < 10; i++) {
+            registerBlockModelAsItem(ModBlocks.expander, i, Names.Blocks.expander,"facing=north,meta=" + i);
         }
         for (int i = 0; i < 15; i++) {
             registerItemModel(ModItems.intermediateProductTiered, i, IntermediateProductTiered.subNames[i], true);

@@ -11,7 +11,7 @@ import openmodularturrets.handler.ConfigHandler;
  * Created by Keridos on 23/01/2015.
  * This Class
  */
-class OpenModularTurretsWikiTab extends BaseWikiTab {
+public class OpenModularTurretsWikiTab extends BaseWikiTab {
     public OpenModularTurretsWikiTab() {
         pageEntries.add("block/turret_base");
         pageEntries.add("block/lever_block");
