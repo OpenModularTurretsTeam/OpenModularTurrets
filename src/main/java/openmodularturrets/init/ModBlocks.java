@@ -9,7 +9,6 @@ import openmodularturrets.blocks.turretheads.*;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.blocks.*;
 import openmodularturrets.reference.Names;
-import openmodularturrets.reference.Reference;
 import openmodularturrets.tileentity.Expander;
 import openmodularturrets.tileentity.LeverTileEntity;
 import openmodularturrets.tileentity.TurretBase;
@@ -140,18 +139,18 @@ public class ModBlocks {
     }
 
     public static void initTileEntities() {
-        GameRegistry.registerTileEntity(TurretBase.class, Reference.MOD_ID.toLowerCase() + ":" + Names.Blocks.turretBase);
-        GameRegistry.registerTileEntity(DisposableItemTurretTileEntity.class, "disposableItemTurret");
-        GameRegistry.registerTileEntity(PotatoCannonTurretTileEntity.class, "potatoCannonTurret");
-        GameRegistry.registerTileEntity(RocketTurretTileEntity.class, "rocketTurret");
-        GameRegistry.registerTileEntity(GunTurretTileEntity.class, "machineGunTurret");
-        GameRegistry.registerTileEntity(GrenadeLauncherTurretTileEntity.class, "grenadeTurret");
-        GameRegistry.registerTileEntity(LaserTurretTileEntity.class, "laserTurret");
-        GameRegistry.registerTileEntity(LeverTileEntity.class, "leverTileEntity");
-        GameRegistry.registerTileEntity(RailGunTurretTileEntity.class, "railGunTurret");
-        GameRegistry.registerTileEntity(IncendiaryTurretTileEntity.class, "incendiaryTurret");
-        GameRegistry.registerTileEntity(RelativisticTurretTileEntity.class, "relativisticTurret");
-        GameRegistry.registerTileEntity(TeleporterTurretTileEntity.class, "teleporterTurret");
+        GameRegistry.registerTileEntity(TurretBase.class, Names.Blocks.turretBase);
+        GameRegistry.registerTileEntity(DisposableItemTurretTileEntity.class, Names.Blocks.disposableItemTurret);
+        GameRegistry.registerTileEntity(PotatoCannonTurretTileEntity.class, Names.Blocks.potatoCannonTurret);
+        GameRegistry.registerTileEntity(RocketTurretTileEntity.class, Names.Blocks.rocketTurret);
+        GameRegistry.registerTileEntity(GunTurretTileEntity.class, Names.Blocks.gunTurret);
+        GameRegistry.registerTileEntity(GrenadeLauncherTurretTileEntity.class, Names.Blocks.grenadeTurret);
+        GameRegistry.registerTileEntity(LaserTurretTileEntity.class, Names.Blocks.laserTurret);
+        GameRegistry.registerTileEntity(LeverTileEntity.class, Names.Blocks.lever);
+        GameRegistry.registerTileEntity(RailGunTurretTileEntity.class, Names.Blocks.railGunTurret);
+        GameRegistry.registerTileEntity(IncendiaryTurretTileEntity.class, Names.Blocks.incendiaryTurret);
+        GameRegistry.registerTileEntity(RelativisticTurretTileEntity.class, Names.Blocks.relativisticTurret);
+        GameRegistry.registerTileEntity(TeleporterTurretTileEntity.class,  Names.Blocks.teleporterTurret);
         GameRegistry.registerTileEntity(Expander.class, Names.Blocks.expander);
 
     }

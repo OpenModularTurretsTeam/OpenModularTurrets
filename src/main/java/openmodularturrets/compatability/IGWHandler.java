@@ -24,6 +24,6 @@ public class IGWHandler {
     private void initTab() {
         WikiRegistry.registerWikiTab(new OpenModularTurretsWikiTab());
 
-        WikiRegistry.registerBlockAndItemPageEntry(ModBlocks.turretBase, "block/turretBase");
+        WikiRegistry.registerBlockAndItemPageEntry(ModBlocks.turretBase, "block/turret_base");
     }
 }
