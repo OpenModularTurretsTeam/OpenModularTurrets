@@ -7,93 +7,81 @@ package openmodularturrets.reference;
 public class Names {
     public static class Blocks {
         // Unlocalized
-        public static final String turretBase = "turretBase";
+        public static final String turretBase = "turret_base";
         public static final String turret = "turret";
-        public static final String disposableItemTurret = "disposeItemTurret";
-        public static final String rocketTurret = "rocketTurret";
-        public static final String gunTurret = "machineGunTurret";
-        public static final String grenadeTurret = "grenadeTurret";
-        public static final String laserTurret = "laserTurret";
-        public static final String potatoCannonTurret = "potatoCannonTurret";
-        public static final String incendiaryTurret = "incendiaryTurret";
-        public static final String relativisticTurret = "relativisticTurret";
-        public static final String teleporterTurret = "teleporterTurret";
-        public static final String railGunTurret = "railGunTurret";
-        public static final String lever = "leverBlock";
+        public static final String disposableItemTurret = "disposable_item_turret";
+        public static final String rocketTurret = "rocket_turret";
+        public static final String gunTurret = "machine_gun_turret";
+        public static final String grenadeTurret = "grenade_turret";
+        public static final String laserTurret = "laser_turret";
+        public static final String potatoCannonTurret = "potato_cannon_turret";
+        public static final String incendiaryTurret = "incendiary_turret";
+        public static final String relativisticTurret = "relativistic_turret";
+        public static final String teleporterTurret = "teleporter_turret";
+        public static final String railGunTurret = "rail_gun_turret";
+        public static final String lever = "lever_block";
 
         public static final String expander = "expander";
-        public static final String expanderPowerTierOne = "expanderPowerTierOne";
-        public static final String expanderPowerTierTwo = "expanderPowerTierTwo";
-        public static final String expanderPowerTierThree = "expanderPowerTierThree";
-        public static final String expanderPowerTierFour = "expanderPowerTierFour";
-        public static final String expanderPowerTierFive = "expanderPowerTierFive";
+        public static final String expanderPowerTierOne = "expander_power_tier_one";
+        public static final String expanderPowerTierTwo = "expander_power_tier_two";
+        public static final String expanderPowerTierThree = "expander_power_tier_three";
+        public static final String expanderPowerTierFour = "expander_power_tier_four";
+        public static final String expanderPowerTierFive = "expander_power_tier_five";
 
-        public static final String expanderInvTierOne = "expanderInvTierOne";
-        public static final String expanderInvTierTwo = "expanderInvTierTwo";
-        public static final String expanderInvTierThree = "expanderInvTierThree";
-        public static final String expanderInvTierFour = "expanderInvTierFour";
-        public static final String expanderInvTierFive = "expanderInvTierFive";
-
-        public static final String hardWallTierOne = "hardWallTierOne";
-        public static final String hardWallTierTwo = "hardWallTierTwo";
-        public static final String hardWallTierThree = "hardWallTierThree";
-        public static final String hardWallTierFour = "hardWallTierFour";
-        public static final String hardWallTierFive = "hardWallTierFive";
-
-        public static final String fenceTierOne = "fenceTierOne";
-        public static final String fenceTierTwo = "fenceTierTwo";
-        public static final String fenceTierThree = "fenceTierThree";
-        public static final String fenceTierFour = "fenceTierFour";
-        public static final String fenceTierFive = "fenceTierFive";
+        public static final String expanderInvTierOne = "expander_inv_tier_one";
+        public static final String expanderInvTierTwo = "expander_inv_tier_two";
+        public static final String expanderInvTierThree = "expander_inv_tier_three";
+        public static final String expanderInvTierFour = "expander_inv_tier_four";
+        public static final String expanderInvTierFive = "expander_inv_tier_five";
     }
 
     public static class Items {
         //Unlocalised
-        public static final String addonMetaItem = "addonMeta";
-        public static final String upgradeMetaItem = "upgradeMeta";
-        public static final String intermediateTieredItem = "intermediateTiered";
-        public static final String intermediateRegularItem = "intermediateRegular";
-        public static final String bulletThrowableItem = "bulletThrowable";
-        public static final String grenadeThrowableItem = "grenadeThrowable";
-        public static final String ferroSlug = "ferroSlug";
-        public static final String bulletCraftableItem = "bulletCraftable";
-        public static final String grenadeCraftableItem = "grenadeCraftable";
-        public static final String rocketCraftableItem = "rocketCraftable";
-        public static final String blazingClayItem = "blazingClayCraftable";
-        public static final String fireRateUpgrade = "upgFire";
-        public static final String efficiencyUpgrade = "upgEff";
-        public static final String rangeUpgrade = "upgRan";
-        public static final String accuraccyUpgrade = "upgAcc";
-        public static final String scattershotUpgrade = "upgScatter";
-        public static final String redReactorAddon = "addonReactor";
-        public static final String damageAmpAddon = "addonDam";
-        public static final String solarPanelAddon = "addonSolar";
-        public static final String potentiaAddon = "addonPotentia";
-        public static final String serialPortAddon = "addonSerialPort";
-        public static final String recyclerAddon = "addonRecycler";
-        public static final String concealerAddon = "addonConcealer";
+        public static final String addonMetaItem = "addon_meta";
+        public static final String upgradeMetaItem = "upgrade_meta";
+        public static final String throwableMetaItem = "throwable_meta";
+        public static final String intermediateTieredItem = "intermediate_tiered";
+        public static final String intermediateRegularItem = "intermediate_regular";
+        public static final String ammoMetaItem = "ammo_meta";
+        public static final String bulletThrowableItem = "throwable_bullet";
+        public static final String grenadeThrowableItem = "throwable_grenade";
+        public static final String ferroSlug = "ferro_slug";
+        public static final String bulletCraftableItem = "ammo_bullet";
+        public static final String grenadeCraftableItem = "ammo_grenade";
+        public static final String rocketCraftableItem = "ammo_rocket";
+        public static final String blazingClayItem = "ammo_blazing_clay";
+        public static final String fireRateUpgrade = "upgrade_fire_rate";
+        public static final String efficiencyUpgrade = "upgrade_efficiency";
+        public static final String rangeUpgrade = "upgrade_range";
+        public static final String accuraccyUpgrade = "upgrade_accuracy";
+        public static final String scattershotUpgrade = "upgrade_scatter_shot";
+        public static final String redReactorAddon = "addon_redstone_reactor";
+        public static final String damageAmpAddon = "addon_damage_amp";
+        public static final String solarPanelAddon = "addon_solar_panelr";
+        public static final String potentiaAddon = "addon_potentia";
+        public static final String serialPortAddon = "addon_serial_port";
+        public static final String recyclerAddon = "addon_recycler";
+        public static final String concealerAddon = "addon_concealer";
 
-        public static final String sensorTierOne = "sensorTierOne";
-        public static final String sensorTierTwo = "sensorTierTwo";
-        public static final String sensorTierThree = "sensorTierThree";
-        public static final String sensorTierFour = "sensorTierFour";
-        public static final String sensorTierFive = "sensorTierFive";
+        public static final String sensorTierOne = "sensor_tier_one";
+        public static final String sensorTierTwo = "sensor_tier_two";
+        public static final String sensorTierThree = "sensor_tier_three";
+        public static final String sensorTierFour = "sensor_tier_four";
+        public static final String sensorTierFive = "sensor_tier_five";
 
-        public static final String chamberTierOne = "chamberTierOne";
-        public static final String chamberTierTwo = "chamberTierTwo";
-        public static final String chamberTierThree = "chamberTierThree";
-        public static final String chamberTierFour = "chamberTierFour";
-        public static final String chamberTierFive = "chamberTierFive";
+        public static final String chamberTierOne = "chamber_tier_one";
+        public static final String chamberTierTwo = "chamber_tier_two";
+        public static final String chamberTierThree = "chamber_tier_three";
+        public static final String chamberTierFour = "chamber_tier_four";
+        public static final String chamberTierFive = "chamber_tier_five";
 
-        public static final String barrelTierOne = "barrelTierOne";
-        public static final String barrelTierTwo = "barrelTierTwo";
-        public static final String barrelTierThree = "barrelTierThree";
-        public static final String barrelTierFour = "barrelTierFour";
-        public static final String barrelTierFive = "barrelTierFive";
+        public static final String barrelTierOne = "barrel_tier_one";
+        public static final String barrelTierTwo = "barrel_tier_two";
+        public static final String barrelTierThree = "barrel_tier_three";
+        public static final String barrelTierFour = "barrel_tier_four";
+        public static final String barrelTierFive = "barrel_tier_five";
 
-        public static final String ioBus = "ioBus";
-        public static final String containmentChamber = "containmentChamber";
-        public static final String energeticBarrel = "energeticBarrel";
+        public static final String ioBus = "io_bus";
     }
 
     public static class Localizations {
@@ -102,5 +90,13 @@ public class Names {
         public static final String ACTIVE = "gui.openmodularturrets:active";
         public static final String TRUE = "gui.openmodularturrets:true";
         public static final String FALSE = "gui.openmodularturrets:false";
+    }
+    public static class Textures {
+        public static final String turretBaseTierOneGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_one.png";
+        public static final String turretBaseTierTwoGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_two.png";
+        public static final String turretBaseTierThreeGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_three.png";;
+        public static final String turretBaseTierFourGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_four.png";
+        public static final String turretBaseTierFiveGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_five.png";
+        public static final String configureGUI = Reference.MOD_ID + ":textures/gui/configure.png";
     }
 }

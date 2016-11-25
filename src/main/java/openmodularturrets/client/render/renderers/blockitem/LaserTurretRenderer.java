@@ -57,7 +57,7 @@ public class LaserTurretRenderer extends TileEntitySpecialRenderer {
         model.renderAll();
         if (turretHead.base != null) {
             if (TurretHeadUtil.hasSolarPanelAddon(turretHead.base)) {
-                ResourceLocation texturesSolar = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/solarPanelAddon" +
+                ResourceLocation texturesSolar = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addonSolarPanel" +
                                                                                ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
                 solar.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
@@ -65,7 +65,7 @@ public class LaserTurretRenderer extends TileEntitySpecialRenderer {
             }
 
             if (TurretHeadUtil.hasDamageAmpAddon(turretHead.base)) {
-                ResourceLocation texturesAmp = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/damageAmpAddon" +
+                ResourceLocation texturesAmp = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addonDamageAmp" +
                                                                              ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
                 amp.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);

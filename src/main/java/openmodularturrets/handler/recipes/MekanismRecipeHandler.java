@@ -11,6 +11,8 @@ import openmodularturrets.init.ModBlocks;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.init.ModItems;
 
+import static openmodularturrets.handler.recipes.RecipeHandler.*;
+
 class MekanismRecipeHandler {
     public static void init() {
         String Mek = "Mekanism";
@@ -210,19 +212,19 @@ class MekanismRecipeHandler {
 
         // Ammo
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.rocketCraftable, 32), " A ", "ABA", "ACA", 'A', "ingotTin", 'B',
+                new ShapedOreRecipe(ammoRocket, " A ", "ABA", "ACA", 'A', "ingotTin", 'B',
                                     Items.GUNPOWDER, 'C', Items.REDSTONE));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.bulletCraftable, 64), " A ", " B ", " C ", 'A', "ingotOsmium",
+                new ShapedOreRecipe(ammoBullet, " A ", " B ", " C ", 'A', "ingotOsmium",
                                     'B', Items.GUNPOWDER, 'C', "ingotIron"));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.grenadeCraftable, 32), " C ", "ABA", " A ", 'A', "ingotIron",
+                new ShapedOreRecipe(ammoGrenade, " C ", "ABA", " A ", 'A', "ingotIron",
                                     'B', Items.GUNPOWDER, 'C', Items.REDSTONE));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.ferroSlug, 16), " C ", "CBC", " A ", 'A', alloyEnriched, 'B',
+                new ShapedOreRecipe(ammoFerroSlug, " C ", "CBC", " A ", 'A', alloyEnriched, 'B',
                                     Items.FLINT, 'C', Items.REDSTONE));
     }
 }

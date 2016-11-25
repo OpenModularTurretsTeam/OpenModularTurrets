@@ -12,6 +12,12 @@ import openmodularturrets.init.ModBlocks;
 import openmodularturrets.init.ModItems;
 
 public class RecipeHandler {
+    public static ItemStack ammoBlazingClay;
+    public static ItemStack ammoBullet;
+    public static ItemStack ammoFerroSlug;
+    public static ItemStack ammoGrenade;
+    public static ItemStack ammoRocket;
+
     public static ItemStack expanderInvTierOne;
     public static ItemStack expanderInvTierTwo;
     public static ItemStack expanderInvTierThree;
@@ -22,25 +28,31 @@ public class RecipeHandler {
     public static ItemStack expanderPowerTierThree;
     public static ItemStack expanderPowerTierFour;
     public static ItemStack expanderPowerTierFive;
-    public static ItemStack concealerAddon;
-    public static ItemStack damageAmpAddon;
-    public static ItemStack potentiaAddon;
-    public static ItemStack recyclerAddon;
-    public static ItemStack redReactorAddon;
-    public static ItemStack serialPortAddon;
-    public static ItemStack solarPanelAddon;
-    public static ItemStack accuraccyUpgrade;
-    public static ItemStack efficiencyUpgrade;
-    public static ItemStack fireRateUpgrade;
-    public static ItemStack rangeUpgrade;
-    public static ItemStack scattershotUpgrade;
-    public static ItemStack containmentChamber;
-    public static ItemStack energeticBarrel;
+
+    public static ItemStack addonConcealer;
+    public static ItemStack addonDamageAmp;
+    public static ItemStack addonPotentia;
+    public static ItemStack addonRecycler;
+    public static ItemStack addonRedstoneReactor;
+    public static ItemStack addonSerialPort;
+    public static ItemStack addonSolarPanel;
+
+    public static ItemStack upgradeAccuracy;
+    public static ItemStack upgradeEfficiency;
+    public static ItemStack upgradeFireRate;
+    public static ItemStack upgradeRange;
+    public static ItemStack upgradeScatterShot;
+
     public static ItemStack ioBus;
 
 
     public static void initRecipes() {
 
+        ammoBlazingClay = new ItemStack(ModItems.ammoMetaItem, 32, 0);
+        ammoBullet = new ItemStack(ModItems.ammoMetaItem, 64, 0);
+        ammoFerroSlug = new ItemStack(ModItems.ammoMetaItem, 16, 0);
+        ammoGrenade = new ItemStack(ModItems.ammoMetaItem, 32, 0);
+        ammoRocket = new ItemStack(ModItems.ammoMetaItem, 32, 0);
         expanderInvTierOne = new ItemStack(ModBlocks.expander, 1, 0);
         expanderInvTierTwo = new ItemStack(ModBlocks.expander, 1, 1);
         expanderInvTierThree = new ItemStack(ModBlocks.expander, 1, 2);
@@ -51,20 +63,18 @@ public class RecipeHandler {
         expanderPowerTierThree = new ItemStack(ModBlocks.expander, 1, 7);
         expanderPowerTierFour = new ItemStack(ModBlocks.expander, 1, 8);
         expanderPowerTierFive = new ItemStack(ModBlocks.expander, 1, 9);
-        concealerAddon = new ItemStack(ModItems.addonMetaItem, 1, 0);
-        damageAmpAddon = new ItemStack(ModItems.addonMetaItem, 1, 1);
-        potentiaAddon = new ItemStack(ModItems.addonMetaItem, 1, 2);
-        recyclerAddon = new ItemStack(ModItems.addonMetaItem, 1, 3);
-        redReactorAddon = new ItemStack(ModItems.addonMetaItem, 1, 4);
-        serialPortAddon = new ItemStack(ModItems.addonMetaItem, 1, 5);
-        solarPanelAddon = new ItemStack(ModItems.addonMetaItem, 1, 6);
-        accuraccyUpgrade = new ItemStack(ModItems.upgradeMetaItem, 1, 0);
-        efficiencyUpgrade = new ItemStack(ModItems.upgradeMetaItem, 1, 1);
-        fireRateUpgrade = new ItemStack(ModItems.upgradeMetaItem, 1, 2);
-        rangeUpgrade = new ItemStack(ModItems.upgradeMetaItem, 1, 3);
-        scattershotUpgrade = new ItemStack(ModItems.upgradeMetaItem, 1, 4);
-        containmentChamber = new ItemStack(ModItems.intermediateProductRegular, 1, 0);
-        energeticBarrel = new ItemStack(ModItems.intermediateProductRegular, 1, 1);
+        addonConcealer = new ItemStack(ModItems.addonMetaItem, 1, 0);
+        addonDamageAmp = new ItemStack(ModItems.addonMetaItem, 1, 1);
+        addonPotentia = new ItemStack(ModItems.addonMetaItem, 1, 2);
+        addonRecycler = new ItemStack(ModItems.addonMetaItem, 1, 3);
+        addonRedstoneReactor = new ItemStack(ModItems.addonMetaItem, 1, 4);
+        addonSerialPort = new ItemStack(ModItems.addonMetaItem, 1, 5);
+        addonSolarPanel = new ItemStack(ModItems.addonMetaItem, 1, 6);
+        upgradeAccuracy = new ItemStack(ModItems.upgradeMetaItem, 1, 0);
+        upgradeEfficiency = new ItemStack(ModItems.upgradeMetaItem, 1, 1);
+        upgradeFireRate = new ItemStack(ModItems.upgradeMetaItem, 1, 2);
+        upgradeRange = new ItemStack(ModItems.upgradeMetaItem, 1, 3);
+        upgradeScatterShot = new ItemStack(ModItems.upgradeMetaItem, 1, 4);
         ioBus = new ItemStack(ModItems.intermediateProductRegular, 1, 2);
 
         boolean recipesDone = false;
@@ -144,70 +154,31 @@ public class RecipeHandler {
                 Blocks.COBBLESTONE);
 
         // Addons
-        GameRegistry.addRecipe(solarPanelAddon, "AAA", "CBC", "DED", 'A',
+        GameRegistry.addRecipe(addonSolarPanel, "AAA", "CBC", "DED", 'A',
                 Blocks.GLASS_PANE, 'B',
                 Blocks.LAPIS_BLOCK, 'C',
                 Items.REDSTONE, 'D', Items.IRON_INGOT, 'E',
                 ioBus);
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(redReactorAddon, "CAC", "ABD", "CAC", 'A', Items.IRON_INGOT,
+                new ShapedOreRecipe(addonRedstoneReactor, "CAC", "ABD", "CAC", 'A', Items.IRON_INGOT,
                         'B', Items.ENDER_EYE, 'C', Items.QUARTZ, 'D',
                         ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(damageAmpAddon, "AAA", "B B", "AAA", 'A', Items.IRON_INGOT, 'B',
+                new ShapedOreRecipe(addonDamageAmp, "AAA", "B B", "AAA", 'A', Items.IRON_INGOT, 'B',
                         Items.ENDER_PEARL));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(recyclerAddon, "ABA", "BCD", "ABA", 'A', "ingotGold", 'B',
+                new ShapedOreRecipe(addonRecycler, "ABA", "BCD", "ABA", 'A', "ingotGold", 'B',
                         Items.MAGMA_CREAM, 'C', Blocks.ENDER_CHEST,
                         'D', ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(concealerAddon, "ABA", "BCD", "ABA", 'A', Items.IRON_INGOT, 'B',
+                new ShapedOreRecipe(addonConcealer, "ABA", "BCD", "ABA", 'A', Items.IRON_INGOT, 'B',
                         Items.QUARTZ, 'C', Blocks.CHEST,
                         'D', ioBus));
 
-        /*//Fences
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierOne, 16), "ABA", "BAB", "ABA", 'A',
-                Blocks.IRON_BARS, 'B',
-                Blocks.COBBLESTONE));
-
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierTwo, 16), "ABA", "BAB", "ABA", 'A',
-                Blocks.IRON_BARS, 'B', Items.IRON_INGOT));
-
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierThree, 16), "ABA", "BAB", "ABA", 'A',
-                Blocks.IRON_BARS, 'B', "ingotGold"));
-
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierFour, 16), "ABA", "BAB", "ABA", 'A',
-                Blocks.IRON_BARS, 'B',
-                Items.DIAMOND));
-
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.fenceTierFive, 16), "ABA", "BAB", "ABA", 'A',
-                Blocks.IRON_BARS, 'B',
-                Blocks.obsidian));
-
-        //Hard Walls
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.hardWallTierOne, 16), "ABA", "BCB", "ABA", 'A',
-                Blocks.GRAVEL, 'B',
-                Blocks.COBBLESTONE, 'C',
-                Blocks.sand));
-
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.hardWallTierTwo, 16), "ABA", "BAB", "ABA", 'A',
-                ModBlocks.hardWallTierOne, 'B', Blocks.stone));
-
-        GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.hardWallTierThree, 16), "ABA", "BAB", "ABA", 'A',
-                        ModBlocks.hardWallTierTwo, 'B', Blocks.brick_block));
-
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.hardWallTierFour, 16), "ABA", "BAB", "ABA", 'A',
-                ModBlocks.hardWallTierThree, 'B',
-                Blocks.nether_brick));
-
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.hardWallTierFive, 16), "ABA", "BAB", "ABA", 'A',
-                ModBlocks.hardWallTierThree, 'B', Blocks.obsidian));
-                   */
         // Integration
         if (ModCompatibility.ThaumcraftLoaded && ConfigHandler.shouldDoThaumcraftIntegration) {
             //ThaumcraftRecipeHandler.init();
@@ -219,30 +190,30 @@ public class RecipeHandler {
 
         // Upgrades
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.efficiencyUpgradeItem, 1), " A ", "ABA", " C ", 'A',
+                new ShapedOreRecipe(upgradeEfficiency, " A ", "ABA", " C ", 'A',
                         Items.QUARTZ, 'B', Items.ENDER_EYE, 'C',
                         ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.accuracyUpgradeItem, 1), " A ", "ABA", " C ", 'A',
+                new ShapedOreRecipe(upgradeAccuracy, " A ", "ABA", " C ", 'A',
                         Items.QUARTZ, 'B', "ingotGold", 'C', ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.fireRateUpgradeItem, 1), " A ", "ABA", " C ", 'A',
+                new ShapedOreRecipe(upgradeFireRate, " A ", "ABA", " C ", 'A',
                         Items.QUARTZ, 'B', Items.BLAZE_POWDER, 'C',
                         ioBus));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.rangeUpgradeItem, 1), " A ", "ABA", " C ", 'A',
+        GameRegistry.addRecipe(upgradeRange, " A ", "ABA", " C ", 'A',
                 Items.QUARTZ, 'B',
-                Items.DIAMOND, 'C', ioBus));
+                Items.DIAMOND, 'C', ioBus);
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModItems.scattershotUpgradeItem, 1), " A ", "ABA", " C ", 'A',
+                new ShapedOreRecipe(upgradeScatterShot, " A ", "ABA", " C ", 'A',
                         Items.QUARTZ, 'B', Items.FLINT, 'C',
                         ioBus));
 
         //Ammo
-        GameRegistry.addRecipe(new ItemStack(ModItems.blazingClayCraftable, 32), "BCB", "CAC", "BCB", 'A',
+        GameRegistry.addRecipe(ammoBlazingClay, "BCB", "CAC", "BCB", 'A',
                 Items.BLAZE_POWDER, 'B', Items.CLAY_BALL, 'C',
                 Items.REDSTONE);
 
