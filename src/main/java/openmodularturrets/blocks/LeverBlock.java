@@ -62,7 +62,7 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
 
     private boolean isBaseValid(TileEntity base) {
         if (base instanceof TurretBase) {
-            return ((TurretBase) base).getBaseTier() == 1;
+            return ((TurretBase) base).getTier() == 1;
         }
         return false;
     }

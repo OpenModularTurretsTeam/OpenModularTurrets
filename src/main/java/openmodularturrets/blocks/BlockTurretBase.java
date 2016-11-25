@@ -16,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
@@ -23,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openmodularturrets.ModularTurrets;
-import openmodularturrets.blocks.util.BlockAbstractContainer;
+import openmodularturrets.blocks.util.BlockAbstractTileEntity;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.init.ModBlocks;
 import openmodularturrets.reference.Names;
@@ -33,7 +34,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockTurretBase extends BlockAbstractContainer {
+public class BlockTurretBase extends BlockAbstractTileEntity {
     public static final PropertyInteger TIER = PropertyInteger.create("tier", 1, 5);
 
     public BlockTurretBase() {
@@ -42,15 +43,16 @@ public class BlockTurretBase extends BlockAbstractContainer {
         if (!ConfigHandler.turretBreakable) {
             this.setBlockUnbreakable();
         }
+        setDefaultState(this.blockState.getBaseState().withProperty(TIER, 1));
         this.setSoundType(SoundType.STONE);
         this.setUnlocalizedName(Names.Blocks.turretBase);
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world, int meta) {
+    public TileEntity createTileEntity(World world, IBlockState state) {
         int MaxCharge;
         int MaxIO;
-        switch (meta) {
+        switch (state.getValue(TIER) - 1) {
             case 0:
                 MaxCharge = ConfigHandler.getBaseTierOneMaxCharge();
                 MaxIO = ConfigHandler.getBaseTierOneMaxIo();
@@ -81,7 +83,6 @@ public class BlockTurretBase extends BlockAbstractContainer {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(TIER, meta + 1);
     }
@@ -130,12 +131,12 @@ public class BlockTurretBase extends BlockAbstractContainer {
             TurretBase base = (TurretBase) world.getTileEntity(pos);
             if (base.getTrustedPlayer(player.getUniqueID()) != null) {
                 if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI) {
-                    player.openGui(ModularTurrets.instance, base.getBaseTier(), world, pos.getX(), pos.getY(), pos.getZ());
+                    player.openGui(ModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
                     return true;
                 }
             }
             if (player.getUniqueID().toString().equals(base.getOwner())) {
-                player.openGui(ModularTurrets.instance, base.getBaseTier(), world, pos.getX(), pos.getY(), pos.getZ());
+                player.openGui(ModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
             } else {
                 player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
             }
@@ -201,7 +202,12 @@ public class BlockTurretBase extends BlockAbstractContainer {
 
     @Override
     public int damageDropped(IBlockState state) {
-        return state.getValue(TIER)-1;
+        return this.getMetaFromState(state);
+    }
+
+    @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        return new ItemStack(ModBlocks.turretBase, 1, state.getValue(TIER) - 1);
     }
 
     @Override

@@ -37,17 +37,6 @@ public class ModBlocks {
     public static Block expander;
 
 
-    public static Block hardWallTierOne;
-    public static Block hardWallTierTwo;
-    public static Block hardWallTierThree;
-    public static Block hardWallTierFour;
-    public static Block hardWallTierFive;
-
-    public static Block fenceTierOne;
-    public static Block fenceTierTwo;
-    public static Block fenceTierThree;
-    public static Block fenceTierFour;
-    public static Block fenceTierFive;
 
     public static void initBlocks() {
         turretBase = new BlockTurretBase();

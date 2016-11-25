@@ -218,7 +218,7 @@ public abstract class TurretHead extends TileEntity implements ITickable {
         ticks++;
 
         //Base checks
-        if (base == null || base.getBaseTier() < this.turretTier) {
+        if (base == null || base.getTier() < this.turretTier) {
             this.getWorld().destroyBlock(this.pos, true);
         } else {
             if (base.isAttacksPlayers() && base.isActive() && ConfigHandler.globalCanTargetPlayers) {
