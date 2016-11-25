@@ -36,7 +36,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
         ticks++;
 
         // BASE IS OKAY
-        if (base == null || base.getBaseTier() < this.turretTier) {
+        if (base == null || base.getTier() < this.turretTier) {
             this.getWorld().destroyBlock(this.pos, true);
         } else {
             concealmentChecks();

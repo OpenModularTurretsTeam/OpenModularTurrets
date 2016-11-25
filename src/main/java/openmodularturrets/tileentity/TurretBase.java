@@ -15,7 +15,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,7 +25,6 @@ import openmodularturrets.util.MathUtil;
 import openmodularturrets.util.TrustedPlayer;
 import openmodularturrets.util.TurretHeadUtil;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -178,7 +176,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     }
 
     private int getMaxEnergyStorageWithExtenders() {
-        int tier = getBaseTier();
+        int tier = getTier();
         switch (tier) {
             case 1:
                 return ConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
@@ -245,14 +243,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
             }
         }
         return null;
-    }
-
-    @Nullable
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound var1 = new NBTTagCompound();
-        this.writeToNBT(var1);
-        return new SPacketUpdateTileEntity(this.pos, 2, var1);
     }
 
     public void setTrustedPlayers(List<TrustedPlayer> list) {
@@ -507,10 +497,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
                         this);
             }
         }
-    }
-
-    public int getBaseTier() {
-        return tier;
     }
 
     public boolean isAttacksMobs() {
@@ -792,7 +778,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
-        return new Object[]{this.getBaseTier()};
+        return new Object[]{this.getTier()};
     }
 
     @Optional.Method(modid = "OpenComputers")

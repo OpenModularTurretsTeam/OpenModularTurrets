@@ -54,6 +54,9 @@ public class WailaTileHandler implements IWailaDataProvider {
     @Override
     @Optional.Method(modid = "Waila")
     public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
+        /*ItemStack itemStack = accessor.getStack();
+        itemStack.setItemDamage(accessor.getBlockState().getValue(TIER)-1);
+        return itemStack; */
         return accessor.getStack();
     }
 

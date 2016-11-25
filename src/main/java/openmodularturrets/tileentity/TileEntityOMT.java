@@ -2,6 +2,7 @@ package openmodularturrets.tileentity;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -14,7 +15,7 @@ import javax.annotation.Nullable;
  * This Class
  */
 public abstract class TileEntityOMT extends TileEntity {
-    protected int tier = 0;
+    protected int tier;
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
@@ -38,9 +39,8 @@ public abstract class TileEntityOMT extends TileEntity {
     }
 
     @Override
-    public void handleUpdateTag(NBTTagCompound tag) {
-        super.handleUpdateTag(tag);
-        this.readFromNBT(tag);
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        this.readFromNBT(pkt.getNbtCompound());
     }
 
     @Override
@@ -51,5 +51,13 @@ public abstract class TileEntityOMT extends TileEntity {
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
         return oldState.getBlock() != newState.getBlock();
+    }
+
+    public int getTier() {
+        return tier;
+    }
+
+    public void setTier(int tier) {
+        this.tier = tier;
     }
 }
