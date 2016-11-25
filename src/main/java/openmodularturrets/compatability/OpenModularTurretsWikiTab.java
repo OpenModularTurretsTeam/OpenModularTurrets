@@ -13,46 +13,46 @@ import openmodularturrets.handler.ConfigHandler;
  */
 class OpenModularTurretsWikiTab extends BaseWikiTab {
     public OpenModularTurretsWikiTab() {
-        pageEntries.add("block/turretBase");
-        pageEntries.add("block/leverBlock");
+        pageEntries.add("block/turret_base");
+        pageEntries.add("block/lever_block");
 
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
-            pageEntries.add("block/disposeItemTurret");
+            pageEntries.add("block/disposable_item_turret");
         }
 
         if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
-            pageEntries.add("block/potatoCannonTurret");
+            pageEntries.add("block/potato_cannon_turret");
         }
 
         if (ConfigHandler.getGunTurretSettings().isEnabled()) {
-            pageEntries.add("block/machineGunTurret");
+            pageEntries.add("block/machine_gun_turret");
         }
 
         if (ConfigHandler.getIncendiary_turret().isEnabled()) {
-            pageEntries.add("block/incendiaryTurret");
+            pageEntries.add("block/incendiary_turret");
         }
 
         if (ConfigHandler.getGrenadeTurretSettings().isEnabled()) {
-            pageEntries.add("block/grenadeTurret");
+            pageEntries.add("block/grenade_turret");
         }
 
         if (ConfigHandler.getRelativistic_turret().isEnabled()) {
-            pageEntries.add("block/relativisticTurret");
+            pageEntries.add("block/relativistic_turret");
         }
         if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
-            pageEntries.add("block/rocketTurret");
+            pageEntries.add("block/rocket_turret");
         }
 
         if (ConfigHandler.getTeleporter_turret().isEnabled()) {
-            pageEntries.add("block/teleporterTurret");
+            pageEntries.add("block/teleporter_turret");
         }
 
         if (ConfigHandler.getLaserTurretSettings().isEnabled()) {
-            pageEntries.add("block/laserTurret");
+            pageEntries.add("block/laser_turret");
         }
 
         if (ConfigHandler.getRailgun_turret().isEnabled()) {
-            pageEntries.add("block/railGunTurret");
+            pageEntries.add("block/rail_gun_turret");
         }
     }
 

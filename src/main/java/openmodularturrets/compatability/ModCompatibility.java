@@ -72,6 +72,9 @@ public class ModCompatibility {
         if (ConfigHandler.IGWNotification) {
             new IGWSupportNotifier();
         }
+        if (IGWModLoaded) {
+            igwHandler = IGWHandler.getInstance();
+        }
         addVersionCheckerInfo();
         if (ComputercraftLoaded) {
             registerCCCompat();
