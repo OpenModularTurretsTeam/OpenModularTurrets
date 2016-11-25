@@ -8,8 +8,9 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
-import openmodularturrets.init.ModBlocks;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.init.ModBlocks;
+import openmodularturrets.reference.Names;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class ItemBlockTurretBase extends ItemBlock {
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
-        return this.getUnlocalizedName() + subNames[itemStack.getItemDamage()];
+        return "tile." + Names.Blocks.turretBase + "_" + subNames[itemStack.getItemDamage()];
     }
 
     @Override

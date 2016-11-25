@@ -3,13 +3,9 @@ package openmodularturrets.tileentity;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import openmodularturrets.util.TurretHeadUtil;
-
-import javax.annotation.Nullable;
 
 import static openmodularturrets.util.MathUtil.truncateDoubleToInt;
 
@@ -19,21 +15,25 @@ public class Expander extends TileEntityContainer implements ITickable {
     protected TurretBase base;
     private boolean hasSetSide = false;
     private boolean powerExpander;
+    private EnumFacing orientation;
 
     public Expander() {
         this.inv = new ItemStack[9];
+        this.orientation = EnumFacing.NORTH;
     }
 
     public Expander(int tier, boolean powerExpander) {
         this.inv = new ItemStack[9];
         this.tier = tier;
         this.powerExpander = powerExpander;
+        this.orientation = EnumFacing.NORTH;
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
         nbtTagCompound.setBoolean("powerExpander", powerExpander);
+        nbtTagCompound.setByte("direction", (byte) orientation.ordinal());
         return nbtTagCompound;
     }
 
@@ -41,6 +41,9 @@ public class Expander extends TileEntityContainer implements ITickable {
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
         super.readFromNBT(nbtTagCompound);
         this.powerExpander= nbtTagCompound.getBoolean("powerExpander");
+        if (nbtTagCompound.hasKey("direction")) {
+            this.orientation = EnumFacing.getFront(nbtTagCompound.getByte("direction"));
+        }
     }
 
     @Override
@@ -48,61 +51,42 @@ public class Expander extends TileEntityContainer implements ITickable {
         return truncateDoubleToInt(Math.pow(2,tier+1));
     }
 
-    @Nullable
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound nbtTagCompound = new NBTTagCompound();
-        this.writeToNBT(nbtTagCompound);
-        return new SPacketUpdateTileEntity(this.pos, 2, nbtTagCompound);
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-        NBTTagCompound nbtTagCompound = pkt.getNbtCompound();
-        readFromNBT(nbtTagCompound);
-    }
-
     private void setSide() {
         if (worldObj.getTileEntity(this.pos.east()) instanceof TurretBase) {
-            this.baseFitRotationX = 0F;
-            this.baseFitRotationZ = 4.705F;
+            this.orientation = EnumFacing.EAST;
             this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.west()) instanceof TurretBase) {
-            this.baseFitRotationX = 0F;
-            this.baseFitRotationZ = 1.56F;
+            this.orientation = EnumFacing.WEST;
             this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.down()) instanceof TurretBase) {
-            this.baseFitRotationX = 1.56F;
-            this.baseFitRotationZ = 4.705F;
+            this.orientation = EnumFacing.DOWN;
             this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.up()) instanceof TurretBase) {
-            this.baseFitRotationX = 4.705F;
-            this.baseFitRotationZ = 0F;
+            this.orientation = EnumFacing.UP;
             this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.north()) instanceof TurretBase) {
-            this.baseFitRotationX = 3.145F;
-            this.baseFitRotationZ = 0F;
+            this.orientation = EnumFacing.NORTH;
             this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.south()) instanceof TurretBase) {
-            this.baseFitRotationX = 0F;
-            this.baseFitRotationZ = 0F;
+            this.orientation = EnumFacing.SOUTH;
             this.hasSetSide = true;
         }
+        this.markDirty();
     }
 
     @Override
@@ -147,5 +131,13 @@ public class Expander extends TileEntityContainer implements ITickable {
 
     public boolean isPowerExpander() {
         return powerExpander;
+    }
+
+    public EnumFacing getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(EnumFacing orientation) {
+        this.orientation = orientation;
     }
 }

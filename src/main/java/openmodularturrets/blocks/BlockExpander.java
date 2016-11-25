@@ -2,6 +2,7 @@ package openmodularturrets.blocks;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -35,13 +36,15 @@ import java.util.List;
  * This Class
  */
 public class BlockExpander extends BlockAbstractTileEntity {
-    private static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
+    public static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
+    public static final PropertyDirection FACING = PropertyDirection.create("facing");
+
     public BlockExpander() {
         super(Material.ROCK);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setResistance(3.0F);
         this.setSoundType(SoundType.STONE);
-
+        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(META, 0));
     }
 
     @Override
@@ -57,7 +60,15 @@ public class BlockExpander extends BlockAbstractTileEntity {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, META);
+        return new BlockStateContainer(this, META, FACING);
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        if (worldIn.getTileEntity(pos) instanceof Expander) {
+            Expander te = ((Expander) worldIn.getTileEntity(pos));
+            return state.withProperty(FACING, te.getOrientation());
+        } else return state.withProperty(FACING, EnumFacing.NORTH);
     }
 
     @Override
@@ -72,6 +83,11 @@ public class BlockExpander extends BlockAbstractTileEntity {
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return new AxisAlignedBB(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
     }
 
     @Override
@@ -104,7 +120,7 @@ public class BlockExpander extends BlockAbstractTileEntity {
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-        drops.add(0, new ItemStack(ModBlocks.turretBase, 1, this.getMetaFromState(state)));
+        drops.add(0, new ItemStack(ModBlocks.expander, 1, this.getMetaFromState(state)));
         return drops;
     }
 
