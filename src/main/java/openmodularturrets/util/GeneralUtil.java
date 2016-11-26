@@ -17,7 +17,7 @@ public class GeneralUtil {
     }
 
     public static String safeLocalize(String text) {
-        if (I18n.translateToLocal(text) != null) {
+        if (!I18n.translateToLocal(text).equals(text)) {
             return I18n.translateToLocal(text);
         } else {
             return I18n.translateToFallback(text);

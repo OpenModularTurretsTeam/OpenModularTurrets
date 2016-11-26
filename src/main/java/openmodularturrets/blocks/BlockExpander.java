@@ -57,7 +57,7 @@ public class BlockExpander extends BlockAbstractTileEntity {
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(META) ;
+        return state.getValue(META);
     }
 
     @Override
@@ -67,8 +67,8 @@ public class BlockExpander extends BlockAbstractTileEntity {
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        if (worldIn.getTileEntity(pos) instanceof Expander) {
-            Expander te = ((Expander) worldIn.getTileEntity(pos));
+        Expander te = ((Expander) worldIn.getTileEntity(pos));
+        if (te != null) {
             return state.withProperty(FACING, te.getOrientation());
         } else return state.withProperty(FACING, EnumFacing.NORTH);
     }
@@ -77,7 +77,7 @@ public class BlockExpander extends BlockAbstractTileEntity {
     public TileEntity createTileEntity(World world, IBlockState state) {
         if (state.getValue(META) < 5) {
             return new Expander(state.getValue(META), false);
-        }else {
+        } else {
             return new Expander(state.getValue(META), true);
         }
     }
@@ -96,6 +96,9 @@ public class BlockExpander extends BlockAbstractTileEntity {
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (state.getValue(META) > 4) return true;
         Expander expander = (Expander) world.getTileEntity(pos);
+        if (expander == null) {
+            return true;
+        }
         TurretBase base = expander.getBase();
         if (base != null && base.getTrustedPlayer(player.getUniqueID()) != null) {
             if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI) {
@@ -113,7 +116,7 @@ public class BlockExpander extends BlockAbstractTileEntity {
 
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        for (TileEntity tileEntity: getTouchingTileEntities(worldIn, pos)){
+        for (TileEntity tileEntity : getTouchingTileEntities(worldIn, pos)) {
             if (tileEntity instanceof TurretBase) return true;
         }
         return false;
