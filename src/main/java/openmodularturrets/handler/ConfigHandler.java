@@ -17,6 +17,7 @@ public class ConfigHandler {
     public static boolean globalCanTargetNeutrals;
     public static boolean globalCanTargetMobs;
     public static boolean canRocketsHome;
+    public static boolean offlineModeSupport;
     private static int expanderPowerTierOneCapacity;
     private static int expanderPowerTierTwoCapacity;
     private static int expanderPowerTierThreeCapacity;
@@ -276,7 +277,8 @@ public class ConfigHandler {
                 10).getInt();
 
         EUSupport = config.get("ModCompatability", "Can turrets be powered with EU?", true).getBoolean();
-        EUtoRFRatio = config.get("ModCompatability", "EU to RF Ratio", 8.0D).getDouble();
+        offlineModeSupport = config.get("ModCompatability", "Enable offline mode support?(warning, makes turrets fairly unsafe)", false).getBoolean();
+        EUtoRFRatio = config.get("ModCompatability", "EU to RF Ratio", 4.0D).getDouble();
 
         if (config.hasChanged()) {
             config.save();

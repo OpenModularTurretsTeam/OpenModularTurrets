@@ -66,7 +66,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     private boolean active;
     private boolean inverted;
     private boolean redstone;
-    private boolean checkRedstone = false;
     private boolean computerAccessible = false;
     private boolean dropBase = false;
     //private float amountOfPotentia = 0F;
@@ -95,7 +94,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         this.tier = tier;
     }
 
-   private static void updateRedstoneReactor(TurretBase base) {
+    private static void updateRedstoneReactor(TurretBase base) {
         if (!TurretHeadUtil.hasRedstoneReactor(base)) {
             return;
         }
@@ -132,49 +131,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         }
     }
 
-    @Optional.Method(modid = "IC2")
-    @Override
-    public double injectEnergy(EnumFacing facing, double v, double v1) {
-        storageEU += v;
-        return 0.0D;
-    }
-
-    @Optional.Method(modid = "IC2")
-    @Override
-    public int getSinkTier() {
-        return 4;
-    }
-
-    @Optional.Method(modid = "IC2")
-    @Override
-    public double getDemandedEnergy() {
-        return Math.max(4000D - storageEU, 0.0D);
-    }
-
-    @Optional.Method(modid = "IC2")
-    @Override
-    public boolean acceptsEnergyFrom(IEnergyEmitter tileEntity, EnumFacing facing) {
-        return true;
-    }
-
-    @Optional.Method(modid = "IC2")
-    private void addToIc2EnergyNetwork() {
-        if (!worldObj.isRemote) {
-            EnergyTileLoadEvent event = new EnergyTileLoadEvent(this);
-            MinecraftForge.EVENT_BUS.post(event);
-        }
-    }
-
-    @Optional.Method(modid = "IC2")
-    @Override
-    public void invalidate() {
-        super.invalidate();
-        if (!worldObj.isRemote) {
-            EnergyTileUnloadEvent event = new EnergyTileUnloadEvent(this);
-            MinecraftForge.EVENT_BUS.post(event);
-        }
-    }
-
     private int getMaxEnergyStorageWithExtenders() {
         int tier = getTier();
         switch (tier) {
@@ -200,7 +156,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     public boolean addTrustedPlayer(String name) {
         TrustedPlayer trustedPlayer = new TrustedPlayer(name);
         trustedPlayer.uuid = getPlayerUUID(name);
-        if (trustedPlayer.uuid != null) {
+        if (trustedPlayer.uuid != null || ConfigHandler.offlineModeSupport) {
             for (TrustedPlayer player : trustedPlayers) {
                 if (player.getName().toLowerCase().equals(name.toLowerCase()) || trustedPlayer.uuid.toString().equals(
                         owner)) {
@@ -260,6 +216,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
             if (trustedPlayer.uuid != null) {
                 nbtPlayer.setString("UUID", trustedPlayer.uuid.toString());
             } else if (getPlayerUUID(trustedPlayer.name) != null) {
+                //noinspection ConstantConditions
                 nbtPlayer.setString("UUID", getPlayerUUID(trustedPlayer.name).toString());
             }
             nbt.appendTag(nbtPlayer);
@@ -345,6 +302,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         if (getPlayerUIDUnstable(nbtTagCompound.getString("owner")) != null) {
             this.owner = getPlayerUIDUnstable(nbtTagCompound.getString("owner")).toString();
         } else if (getPlayerUUID(nbtTagCompound.getString("owner")) != null) {
+            //noinspection ConstantConditions
             this.owner = getPlayerUUID(nbtTagCompound.getString("owner")).toString();
         } else {
             Logger.getGlobal().info("Found non existent owner: " + nbtTagCompound.getString(
@@ -359,42 +317,21 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         if (trustedPlayers.size() == 0) {
             buildTrustedPlayersFromNBT(nbtTagCompound.getTagList("trustedPlayers", 8));
         }
-        if (nbtTagCompound.hasKey("active")) {
-            this.active = nbtTagCompound.getBoolean("active");
-        } else {
-            active = true;
-        }
-        if (nbtTagCompound.hasKey("inverted")) {
-            this.inverted = nbtTagCompound.getBoolean("inverted");
-        } else {
-            inverted = true;
-        }
+        this.active = !nbtTagCompound.hasKey("active") || nbtTagCompound.getBoolean("active");
+        this.inverted = !nbtTagCompound.hasKey("inverted") || nbtTagCompound.getBoolean("inverted");
         if (nbtTagCompound.hasKey("redstone")) {
             this.redstone = nbtTagCompound.getBoolean("redstone");
-        } else {
-            checkRedstone = true;
         }
-        if (nbtTagCompound.hasKey("computerAccessible")) {
-            this.computerAccessible = nbtTagCompound.getBoolean("computerAccessible");
-        } else {
-            computerAccessible = false;
-        }
+        this.computerAccessible = nbtTagCompound.hasKey("computerAccessible") && nbtTagCompound.getBoolean("computerAccessible");
         if (nbtTagCompound.hasKey("storageEU")) {
             this.storageEU = nbtTagCompound.getDouble("storageEU");
         } else {
             storageEU = 0;
         }
-        ItemStack[] invtemp = inventory;         //to properly restore the original inventory.
+        ItemStack[] invTemp = inventory;         //to properly restore the original inventory.
         this.inventory = new ItemStack[tier == 5 ? 13 : tier > 1 ? 12 : 9];
-        for (int i = 0; i < inventory.length; i++) {
-            inventory[i] = invtemp[i];
-        }
-
-        NBTTagCompound tag2 = nbtTagCompound.getCompoundTag("CamoStack");
-        if (tag2 != null) {
-            camoStack = ItemStack.loadItemStackFromNBT(tag2);
-        }
-
+        System.arraycopy(invTemp, 0, inventory, 0, inventory.length);
+        camoStack = ItemStack.loadItemStackFromNBT(nbtTagCompound.getCompoundTag("CamoStack"));
     }
 
     /*
@@ -478,9 +415,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
                 }
             }
 
-            //Syncing
-            //worldObj.markBlockForUpdate(this.pos);
-
             if (ticks % 20 == 0) {
 
                 //General
@@ -493,7 +427,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
                 } */
 
                 //Computers
-                this.computerAccessible = (ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputercraftLoaded) && TurretHeadUtil.hasSerialPortAddon(
+                this.computerAccessible = (ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputerCraftLoaded) && TurretHeadUtil.hasSerialPortAddon(
                         this);
             }
         }
@@ -538,7 +472,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     public void setOwnerName(String name) {
         ownerName = name;
     }
-
 
     public boolean isMultiTargeting() {
         return multiTargeting;
@@ -593,17 +526,20 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         return true;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
         return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
     }
 
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public boolean canExtractItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return true;
@@ -633,6 +569,49 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     public void setRedstone(boolean redstone) {
         this.redstone = redstone;
         this.active = this.redstone ^ inverted;
+    }
+
+    @Optional.Method(modid = "IC2")
+    @Override
+    public double injectEnergy(EnumFacing facing, double v, double v1) {
+        storageEU += v;
+        return 0.0D;
+    }
+
+    @Optional.Method(modid = "IC2")
+    @Override
+    public int getSinkTier() {
+        return 4;
+    }
+
+    @Optional.Method(modid = "IC2")
+    @Override
+    public double getDemandedEnergy() {
+        return Math.max(4000D - storageEU, 0.0D);
+    }
+
+    @Optional.Method(modid = "IC2")
+    @Override
+    public boolean acceptsEnergyFrom(IEnergyEmitter tileEntity, EnumFacing facing) {
+        return true;
+    }
+
+    @Optional.Method(modid = "IC2")
+    private void addToIc2EnergyNetwork() {
+        if (!worldObj.isRemote) {
+            EnergyTileLoadEvent event = new EnergyTileLoadEvent(this);
+            MinecraftForge.EVENT_BUS.post(event);
+        }
+    }
+
+    @Optional.Method(modid = "IC2")
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        if (!worldObj.isRemote) {
+            EnergyTileUnloadEvent event = new EnergyTileUnloadEvent(this);
+            MinecraftForge.EVENT_BUS.post(event);
+        }
     }
     /*
     @Optional.Method(modid = "Thaumcraft")
@@ -774,15 +753,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
 
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():string; returns owner of turret base.")
-    public Object[] getTier(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        return new Object[]{this.getTier()};
-    }
-
-    @Optional.Method(modid = "OpenComputers")
-    @Callback(doc = "function():string; returns owner of turret base.")
     public Object[] getOwner(Context context, Arguments args) {
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
@@ -874,7 +844,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     }
 
     @Optional.Method(modid = "OpenComputers")
-    @Callback(doc = "function():string; removes Trusted player from Trustlist.")
+    @Callback(doc = "function():string; removes trusted player from trust list.")
     public Object[] removeTrustedPlayer(Context context, Arguments args) {
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
@@ -884,7 +854,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     }
 
     @Optional.Method(modid = "OpenComputers")
-    @Callback(doc = "function():int; returns maxiumum energy storage.")
+    @Callback(doc = "function():int; returns maximum energy storage.")
     public Object[] getMaxEnergyStorage(Context context, Arguments args) {
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
@@ -1029,7 +999,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
                 trustedPlayer.admin = arguments[3].toString().equals("true");
                 trustedPlayer.uuid = getPlayerUUID(arguments[0].toString());
                 worldObj.markBlockForUpdate(this.pos);
-                return new Object[]{"succesfully added player to trust list with parameters"};
+                return new Object[]{"successfully added player to trust list with parameters"};
             case removeTrustedPlayer:
                 if (arguments[0].toString().equals("")) {
                     return new Object[]{"wrong arguments"};
