@@ -96,7 +96,7 @@ public class LeverBlock extends BlockAbstractTileEntity {
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         TurretBase base;
         LeverTileEntity lever = (LeverTileEntity) worldIn.getTileEntity(pos);
-        if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 0 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
+        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 0 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
                 pos.getZ() + 1)))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
                     pos.getZ() + 1));
@@ -109,7 +109,7 @@ public class LeverBlock extends BlockAbstractTileEntity {
             }
         }
 
-        if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 90 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(),
+        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 90 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(),
                 pos.getZ())))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()));
             if (base != null) {
@@ -121,7 +121,7 @@ public class LeverBlock extends BlockAbstractTileEntity {
             }
         }
 
-        if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 180 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
+        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 180 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
                 pos.getZ() - 1)))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
                     pos.getZ() - 1));
@@ -134,7 +134,7 @@ public class LeverBlock extends BlockAbstractTileEntity {
             }
         }
 
-        if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 270 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(),
+        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 270 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(),
                 pos.getZ())))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()));
             if (base != null) {

@@ -30,7 +30,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public class TurretHeadUtil {
-    private static final HashSet<EntityPlayerMP> warnedPlayers = new HashSet<EntityPlayerMP>();
+    private static final HashSet<EntityPlayerMP> warnedPlayers = new HashSet<>();
 
     public static void warnPlayers(TurretBase base, World worldObj, int downLowAmount, BlockPos pos, int turretRange) {
         if (base.isAttacksPlayers()) {
@@ -59,6 +59,7 @@ public class TurretHeadUtil {
         }
     }
 
+    @SuppressWarnings({"deprecation", "unused"})
     private static void dispatchWarnMessage(EntityPlayerMP player, World worldObj) {
         if (ConfigHandler.turretAlarmSound) {
             player.playSound(ModSounds.turretWarnSound, 1.0F, 1.0F);
@@ -362,7 +363,7 @@ public class TurretHeadUtil {
         }
 
         for (EnumFacing facing : EnumFacing.values()) {
-            BlockPos offsetPos = new BlockPos(pos.getX() + facing.getFrontOffsetX(), pos.getY() + facing.getFrontOffsetY(), pos.getZ() + facing.getFrontOffsetZ());
+            BlockPos offsetPos = pos.offset(facing);
 
             if (world.getTileEntity(offsetPos) instanceof TurretBase) {
                 return (TurretBase) world.getTileEntity(offsetPos);
@@ -392,7 +393,7 @@ public class TurretHeadUtil {
     public static ItemStack useAnyItemStackFromBase(TurretBase base) {
         for (int i = 0; i <= 8; i++) {
             ItemStack ammoCheck = base.getStackInSlot(i);
-            if (ammoCheck != null && ammoCheck.stackSize > 0 && ammoCheck.getItem() != null) {
+            if (ammoCheck != null && ammoCheck.stackSize > 0) {
                 base.decrStackSize(i, 1);
                 return new ItemStack(ammoCheck.getItem());
             }
@@ -529,8 +530,7 @@ public class TurretHeadUtil {
         if (tier == 5) {
             if (base.getStackInSlot(12) != null) {
                 if (base.getStackInSlot(12).getItemDamage() == 1) {
-                    efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * base.getStackInSlot(
-                            12).stackSize);
+                    efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * base.getStackInSlot(12).stackSize);
                 }
             }
         }
@@ -633,6 +633,7 @@ public class TurretHeadUtil {
         return found;
     }
 
+    @SuppressWarnings("unused")
     public static boolean hasPotentiaUpgradeAddon(TurretBase base) {
         boolean found = false;
         if (base.getTier() == 1) {
@@ -699,13 +700,13 @@ public class TurretHeadUtil {
             return amp_level;
         }
 
-        if (base.getStackInSlot(10) != null) {
-            if (base.getStackInSlot(10).getItemDamage() == 1) {
+        if (base.getStackInSlot(9) != null) {
+            if (base.getStackInSlot(9).getItemDamage() == 1) {
                 amp_level += base.getStackInSlot(10).stackSize;
             }
         }
 
-        if (base.getStackInSlot(9) != null) {
+        if (base.getStackInSlot(10) != null) {
             if (base.getStackInSlot(10).getItemDamage() == 1) {
                 amp_level += base.getStackInSlot(9).stackSize;
             }
