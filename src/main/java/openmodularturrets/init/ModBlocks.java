@@ -36,48 +36,47 @@ public class ModBlocks {
     public static Block expander;
 
 
-
     public static void initBlocks() {
         turretBase = new BlockTurretBase();
         GameRegistry.registerBlock(turretBase, ItemBlockTurretBase.class, Names.Blocks.turretBase);
 
         expander = new BlockExpander();
-        GameRegistry.registerBlock(expander, ItemBlockExpander.class,Names.Blocks.expander);
+        GameRegistry.registerBlock(expander, ItemBlockExpander.class, Names.Blocks.expander);
 
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
             disposableItemTurret = new BlockDisposableTurret();
             GameRegistry.registerBlock(disposableItemTurret, ItemBlockDisposableTurret.class,
-                                       Names.Blocks.disposableItemTurret);
+                    Names.Blocks.disposableItemTurret);
         }
 
         if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
             potatoCannonTurret = new BlockPotatoCannonTurret();
             GameRegistry.registerBlock(potatoCannonTurret, ItemBlockPotatoCannonTurret.class,
-                                       Names.Blocks.potatoCannonTurret);
+                    Names.Blocks.potatoCannonTurret);
         }
 
         if (ConfigHandler.getGunTurretSettings().isEnabled()) {
             machineGunTurret = new BlockGunTurret();
             GameRegistry.registerBlock(machineGunTurret, ItemBlockMachineGunTurret.class,
-                                       Names.Blocks.gunTurret);
+                    Names.Blocks.gunTurret);
         }
 
         if (ConfigHandler.getIncendiary_turret().isEnabled()) {
             incendiaryTurret = new BlockIncendiaryTurret();
             GameRegistry.registerBlock(incendiaryTurret, ItemBlockIncendiaryTurret.class,
-                                       Names.Blocks.incendiaryTurret);
+                    Names.Blocks.incendiaryTurret);
         }
 
         if (ConfigHandler.getGrenadeTurretSettings().isEnabled()) {
             grenadeLauncherTurret = new BlockGrenadeTurret();
             GameRegistry.registerBlock(grenadeLauncherTurret, ItemBlockGrenadeLauncherTurret.class,
-                                       Names.Blocks.grenadeTurret);
+                    Names.Blocks.grenadeTurret);
         }
 
         if (ConfigHandler.getRelativistic_turret().isEnabled()) {
             relativisticTurret = new BlockRelativisticTurret();
             GameRegistry.registerBlock(relativisticTurret, ItemBlockRelativisticTurret.class,
-                                       Names.Blocks.relativisticTurret);
+                    Names.Blocks.relativisticTurret);
         }
 
         if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
@@ -88,7 +87,7 @@ public class ModBlocks {
         if (ConfigHandler.getTeleporter_turret().isEnabled()) {
             teleporterTurret = new BlockTeleporterTurret();
             GameRegistry.registerBlock(teleporterTurret, ItemBlockTeleporterTurret.class,
-                                       Names.Blocks.teleporterTurret);
+                    Names.Blocks.teleporterTurret);
         }
 
         if (ConfigHandler.getLaserTurretSettings().isEnabled()) {
@@ -99,7 +98,7 @@ public class ModBlocks {
         if (ConfigHandler.getRailgun_turret().isEnabled()) {
             railGunTurret = new BlockRailGunTurret();
             GameRegistry.registerBlock(railGunTurret, ItemBlockRailGunTurret.class,
-                                       Names.Blocks.railGunTurret);
+                    Names.Blocks.railGunTurret);
         }
 
         leverBlock = new LeverBlock();
@@ -119,7 +118,7 @@ public class ModBlocks {
         GameRegistry.registerTileEntity(RailGunTurretTileEntity.class, Names.Blocks.railGunTurret);
         GameRegistry.registerTileEntity(IncendiaryTurretTileEntity.class, Names.Blocks.incendiaryTurret);
         GameRegistry.registerTileEntity(RelativisticTurretTileEntity.class, Names.Blocks.relativisticTurret);
-        GameRegistry.registerTileEntity(TeleporterTurretTileEntity.class,  Names.Blocks.teleporterTurret);
+        GameRegistry.registerTileEntity(TeleporterTurretTileEntity.class, Names.Blocks.teleporterTurret);
         GameRegistry.registerTileEntity(Expander.class, Names.Blocks.expander);
     }
 }

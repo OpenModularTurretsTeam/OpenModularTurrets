@@ -29,7 +29,7 @@ public class ItemBlockPotatoCannonTurret extends ItemBlock {
                                I18n.translateToLocal("turret.accuracy.medium"));
         p_77624_3_.add(I18n.translateToLocal("tooltip.ammo") + ": " + TextFormatting.WHITE +
                                I18n.translateToLocal("turret.ammo.6"));
-        p_77624_3_.add(I18n.translateToLocal("tooltip.tierRequired") + ": " + TextFormatting.WHITE +
+        p_77624_3_.add(I18n.translateToLocal("tooltip.tier_required") + ": " + TextFormatting.WHITE +
                                I18n.translateToLocal("base.tier.1"));
         p_77624_3_.add("");
         p_77624_3_.add(
@@ -38,7 +38,7 @@ public class ItemBlockPotatoCannonTurret extends ItemBlock {
                                (ConfigHandler.getPotatoCannonTurretSettings().getDamage() / 2F) + " " + I18n.translateToLocal(
                 "tooltip.health"));
         p_77624_3_.add(I18n.translateToLocal("tooltip.aoe") + ": " + TextFormatting.WHITE + "0");
-        p_77624_3_.add(I18n.translateToLocal("tooltip.firerate") + ": " + TextFormatting.WHITE + df.format(
+        p_77624_3_.add(I18n.translateToLocal("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
                 20.0F / ConfigHandler.getPotatoCannonTurretSettings().getFireRate()));
         p_77624_3_.add(I18n.translateToLocal("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
                                ConfigHandler.getPotatoCannonTurretSettings().getPowerUsage() + " RF");

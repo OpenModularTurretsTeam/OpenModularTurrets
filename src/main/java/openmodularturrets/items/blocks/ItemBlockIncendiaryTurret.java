@@ -29,7 +29,7 @@ public class ItemBlockIncendiaryTurret extends ItemBlock {
                                I18n.translateToLocal("turret.accuracy.medium"));
         p_77624_3_.add(I18n.translateToLocal("tooltip.ammo") + ": " + TextFormatting.WHITE +
                                I18n.translateToLocal("turret.ammo.7"));
-        p_77624_3_.add(I18n.translateToLocal("tooltip.tierRequired") + ": " + TextFormatting.WHITE +
+        p_77624_3_.add(I18n.translateToLocal("tooltip.tier_required") + ": " + TextFormatting.WHITE +
                                I18n.translateToLocal("base.tier.2"));
         p_77624_3_.add("");
         p_77624_3_.add(
@@ -38,7 +38,7 @@ public class ItemBlockIncendiaryTurret extends ItemBlock {
                                (ConfigHandler.getIncendiary_turret().getDamage() / 2F) + " " + I18n.translateToLocal(
                 "tooltip.health"));
         p_77624_3_.add(I18n.translateToLocal("tooltip.aoe") + ": " + TextFormatting.WHITE + "5");
-        p_77624_3_.add(I18n.translateToLocal("tooltip.firerate") + ": " + TextFormatting.WHITE + df.format(
+        p_77624_3_.add(I18n.translateToLocal("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
                 20.0F / ConfigHandler.getIncendiary_turret().getFireRate()));
         p_77624_3_.add(I18n.translateToLocal("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
                                ConfigHandler.getIncendiary_turret().getPowerUsage() + " RF");

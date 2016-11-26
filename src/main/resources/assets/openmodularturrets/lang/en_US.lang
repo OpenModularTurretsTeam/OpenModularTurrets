@@ -38,7 +38,7 @@ tile.turret_base_tier_three.name=Turret Base (Tier 3)
 tile.turret_base_tier_four.name=Turret Base (Tier 4)
 tile.turret_base_tier_five.name=Turret Base (Tier 5)
 
-tile.disposable_item_turret.name=Disposable Item Turret
+tile.dispose_item_turret.name=Disposable Item Turret
 tile.potato_cannon_turret.name=Potato Cannon Turret
 tile.rocket_turret.name=Rocket Launcher Turret
 tile.teleporter_turret.name=Teleporter Turret
@@ -60,8 +60,6 @@ tile.expander_inv_tier_three.name=Base Inventory Expander (Tier 3)
 tile.expander_inv_tier_four.name=Base Inventory Expander (Tier 4)
 tile.expander_inv_tier_five.name=Base Inventory Expander (Tier 5)
 
-
-
 #for IGWMod
 tile.turret_base.name=Turret Base
 
@@ -75,7 +73,7 @@ tooltip.tier_required=Base Minimum Tier
 tooltip.damage.label=Damage Output
 tooltip.damage.stat=Projectile Damage
 tooltip.aoe=AOE Radius
-tooltip.firerate=Shots/s
+tooltip.fire_rate=Shots/s
 tooltip.energy.stat=Energy usage per shot
 tooltip.info=Info
 tooltip.health=Hearts
@@ -111,12 +109,12 @@ flavour.expander.inv.3=Hair, heir and hare.
 flavour.expander.inv.4=Can be used as a floatation device.
 flavour.expander.inv.5=Very space, much inventory.
 
-flavour.base.0=There are trees, everywhere...
-flavour.base.1=I'll draw your blood.
-flavour.base.2=I said good day sir!
-flavour.base.3=Press the attack!
-flavour.base.4a=I wonder if this thing
-flavour.base.4b=can do a barrel-roll...
+flavour.base.1=There are trees, everywhere...
+flavour.base.2=I'll draw your blood.
+flavour.base.3=I said good day sir!
+flavour.base.4=Press the attack!
+flavour.base.5a=I wonder if this thing
+flavour.base.5b=can do a barrel-roll...
 
 flavour.turret.0=Poor man's sleeping aid.
 flavour.turret.1=TRRRAA!! TRRAATRRAA!!
@@ -168,7 +166,7 @@ turret.addon.potentia.c=Adds an internal Potentia capacity of
 turret.addon.potentia.d=Adding Ordo vis through a network
 turret.addon.potentia.e=multiplies RF conversion rate x10.
 turret.addon.potentia.flavour=Because Eskom can't get it right...
-turret.addon.serial.a=Enables Open_computers and Computer_craft
+turret.addon.serial.a=Enables OpenComputers and ComputerCraft
 turret.addon.serial.b=compatibility.
 turret.addon.serial.flavour=Who needs OOP?
 turret.addon.recycler.1=Adds a chance for a turret to not use ammo,
