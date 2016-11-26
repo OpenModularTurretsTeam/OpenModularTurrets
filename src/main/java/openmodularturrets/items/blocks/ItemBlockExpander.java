@@ -58,7 +58,7 @@ public class ItemBlockExpander extends ItemBlock {
                 tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv2"));
                 tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv3") + " 4.");
                 tooltip.add("");
-                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inv.1"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inventory.1"));
                 return;
             case 1:
                 tooltip.add("");
@@ -67,7 +67,7 @@ public class ItemBlockExpander extends ItemBlock {
                 tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv2"));
                 tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv3") + " 8.");
                 tooltip.add("");
-                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inv.2"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inventory.2"));
                 return;
             case 2:
                 tooltip.add("");
@@ -76,7 +76,7 @@ public class ItemBlockExpander extends ItemBlock {
                 tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv2"));
                 tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv3") + " 16.");
                 tooltip.add("");
-                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inv.3"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inventory.3"));
                 return;
             case 3:
                 tooltip.add("");
@@ -85,7 +85,7 @@ public class ItemBlockExpander extends ItemBlock {
                 tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv2"));
                 tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv3") + " 32.");
                 tooltip.add("");
-                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inv.4"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inventory.4"));
                 return;
             case 4:
                 tooltip.add("");
@@ -94,7 +94,7 @@ public class ItemBlockExpander extends ItemBlock {
                 tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv2"));
                 tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("tooltip.expander.inv3") + " 64.");
                 tooltip.add("");
-                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inv.5"));
+                tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.expander.inventory.5"));
                 return;
             case 5:
                 tooltip.add("");

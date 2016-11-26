@@ -18,12 +18,12 @@ public class Expander extends TileEntityContainer implements ITickable {
     private EnumFacing orientation;
 
     public Expander() {
-        this.inv = new ItemStack[9];
+        this.inventory = new ItemStack[9];
         this.orientation = EnumFacing.NORTH;
     }
 
     public Expander(int tier, boolean powerExpander) {
-        this.inv = new ItemStack[9];
+        this.inventory = new ItemStack[9];
         this.tier = tier;
         this.powerExpander = powerExpander;
         this.orientation = EnumFacing.NORTH;
@@ -86,13 +86,13 @@ public class Expander extends TileEntityContainer implements ITickable {
             this.orientation = EnumFacing.SOUTH;
             this.hasSetSide = true;
         }
-        this.markDirty();
     }
 
     @Override
     public void update() {
         if (!hasSetSide) {
             setSide();
+            this.getWorld().notifyBlockUpdate(this.pos, this.getWorld().getBlockState(this.pos),this.getWorld().getBlockState(this.pos),2);
         }
 
         if (getBase() == null) {

@@ -13,23 +13,20 @@ public class ExpanderInvContainer extends Container {
     public ExpanderInvContainer(InventoryPlayer inventoryPlayer, Expander te) {
         this.tileEntity = te;
 
-        int i;
-        int j;
-
-        for (i = 0; i < 3; ++i) {
-            for (j = 0; j < 3; ++j) {
-                this.addSlotToContainer(new Slot(te, j + i * 3, 62 + j * 18, 17 + i * 18));
+        for (int x = 0; x < 3; x++) {
+            for (int y = 0; y < 3; y++) {
+                this.addSlotToContainer(new Slot(te, y + x * 3, 62 + y * 18, 17 + x * 18));
             }
         }
 
-        for (i = 0; i < 3; ++i) {
-            for (j = 0; j < 9; ++j) {
-                this.addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
-            }
+        for (int x = 0; x < 9; x++) {
+            this.addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 142));
         }
 
-        for (i = 0; i < 9; ++i) {
-            this.addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 9; x++) {
+                this.addSlotToContainer(new Slot(inventoryPlayer, 9 + x + y * 9, 8 + x * 18, 84 + y * 18));
+            }
         }
     }
 
@@ -39,36 +36,36 @@ public class ExpanderInvContainer extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_) {
-        ItemStack itemstack = null;
-        Slot slot = (Slot) this.inventorySlots.get(p_82846_2_);
+    public ItemStack transferStackInSlot(EntityPlayer playerIn, int slot) {
+        ItemStack itemStack = null;
+        Slot invSlot = this.inventorySlots.get(slot);
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
-            itemstack = itemstack1.copy();
+        if (invSlot != null && invSlot.getHasStack()) {
+            ItemStack itemStack1 = invSlot.getStack();
+            itemStack = itemStack1.copy();
 
-            if (p_82846_2_ < 9) {
-                if (!this.mergeItemStack(itemstack1, 9, 45, true)) {
+            if (slot < 9) {
+                if (!this.mergeItemStack(itemStack1, 9, 45, true)) {
                     return null;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, 9, false)) {
+            } else if (!this.mergeItemStack(itemStack1, 0, 9, false)) {
                 return null;
             }
 
-            if (itemstack1.stackSize == 0) {
-                slot.putStack(null);
+            if (itemStack1.stackSize == 0) {
+                invSlot.putStack(null);
             } else {
-                slot.onSlotChanged();
+                invSlot.onSlotChanged();
             }
 
-            if (itemstack1.stackSize == itemstack.stackSize) {
+            if (itemStack1.stackSize == itemStack.stackSize) {
                 return null;
             }
 
-            slot.onPickupFromSlot(p_82846_1_, itemstack1);
+            invSlot.onPickupFromSlot(playerIn, itemStack1);
         }
 
-        return itemstack;
+        return itemStack;
     }
 
     @Override
@@ -78,8 +75,8 @@ public class ExpanderInvContainer extends Container {
         while (stack.stackSize > 0 && i >= begin && i < end) {
             Slot slot = this.getSlot(i);
             ItemStack slotStack = slot.getStack();
-            int slotStacklimit = i < tileEntity.getSizeInventory() ? tileEntity.getInventoryStackLimit() : 64;
-            int totalLimit = slotStacklimit < stack.getMaxStackSize() ? slotStacklimit : stack.getMaxStackSize();
+            int slotStackLimit = i < tileEntity.getSizeInventory() ? tileEntity.getInventoryStackLimit() : 64;
+            int totalLimit = slotStackLimit < stack.getMaxStackSize() ? slotStackLimit : stack.getMaxStackSize();
 
             if (slotStack == null) {
                 int transfer = totalLimit < stack.stackSize ? totalLimit : stack.stackSize;
