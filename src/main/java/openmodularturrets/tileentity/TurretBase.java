@@ -10,6 +10,7 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
+import net.darkhax.tesla.capability.TeslaCapabilities;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -18,7 +19,9 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.Optional;
+import openmodularturrets.capabilities.BaseOMTTeslaContainer;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.util.MathUtil;
@@ -30,6 +33,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import static openmodularturrets.compatability.ModCompatibility.TeslaLoaded;
 import static openmodularturrets.util.PlayerUtil.*;
 
 /*import dan200.computercraft.api.lua.ILuaContext;
@@ -55,6 +59,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     private boolean multiTargeting = false;
 
     private EnergyStorage storage = new EnergyStorage(10, 10);
+    private Object teslaContainer;
     private int yAxisDetect;
     private boolean attacksMobs;
     private boolean attacksNeutrals;
@@ -613,6 +618,48 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
             MinecraftForge.EVENT_BUS.post(event);
         }
     }
+
+    @Optional.Method(modid = "tesla")
+    public BaseOMTTeslaContainer getTeslaContainer(Object container) {
+        if (container instanceof BaseOMTTeslaContainer) {
+            return (BaseOMTTeslaContainer) container;
+        } else {
+            container = new BaseOMTTeslaContainer();
+            return (BaseOMTTeslaContainer) container;
+        }
+
+    }
+
+    @Optional.Method(modid = "tesla")
+    public void moveEnergyFromTeslaToRF() {
+        if (teslaContainer instanceof BaseOMTTeslaContainer) {
+            int energyNeeded = storage.getEnergyStored() - storage.getMaxEnergyStored();
+            if (energyNeeded > 0) {
+                storage.modifyEnergyStored((int) ((BaseOMTTeslaContainer) teslaContainer).takePower(energyNeeded, false));
+            }
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+
+        // This method is where other things will try to access your TileEntity's Tesla
+        // capability. In the case of the analyzer, is a consumer, producer and holder so we
+        // can allow requests that are looking for any of those things. This example also does
+        // not care about which side is being accessed, however if you wanted to restrict which
+        // side can be used, for example only allow power input through the back, that could be
+        // done here.
+        if (capability == TeslaCapabilities.CAPABILITY_CONSUMER || capability == TeslaCapabilities.CAPABILITY_HOLDER) {
+            if (TeslaLoaded) {
+                moveEnergyFromTeslaToRF();
+                return (T) getTeslaContainer(this.teslaContainer);
+            }
+        }
+
+        return super.getCapability(capability, facing);
+    }
+    
     /*
     @Optional.Method(modid = "Thaumcraft")
     @Override
