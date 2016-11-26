@@ -24,3 +24,4 @@ out/
 
 # Other Stuff
 Thumbs.db
+*.hprof

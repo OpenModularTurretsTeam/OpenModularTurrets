@@ -15,7 +15,7 @@ public class ExpanderInvGui extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-        ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/gui/extenderInv.png"));
+        ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/gui/extender_inv.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
 
