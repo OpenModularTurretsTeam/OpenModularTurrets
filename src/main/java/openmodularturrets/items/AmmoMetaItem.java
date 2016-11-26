@@ -25,7 +25,7 @@ public class AmmoMetaItem extends Item {
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         for (int i = 0; i < 5; i++) {
-            subItems.add(new ItemStack(ModItems.upgradeMetaItem, 1, i));
+            subItems.add(new ItemStack(ModItems.addonMetaItem, 1, i));
         }
     }
 
