@@ -2,6 +2,7 @@ package openmodularturrets.util;
 
 /**
  * Created by nico on 6/4/15.
+ * A lib for all player based functions.
  */
 
 import net.minecraft.entity.player.EntityPlayer;
