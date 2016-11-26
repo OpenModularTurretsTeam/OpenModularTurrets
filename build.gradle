@@ -27,7 +27,7 @@ configFile.withReader {
     project.ext.config = new ConfigSlurper().parse prop
 }
 
-version = "${config.mod_version}"
+version = "${config.minecraft_version}-${config.mod_version}"
 if (hasProperty('appendBuildNumber')) {
     version = version + "-" + appendBuildNumber.toString()
 } else {
@@ -35,7 +35,7 @@ if (hasProperty('appendBuildNumber')) {
 }
 
 group = "${config.group_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "${config.mod_id}-${config.minecraft_version}"
+archivesBaseName = "${config.mod_id}"
 
 minecraft {
     version = "${config.forge_version}"
