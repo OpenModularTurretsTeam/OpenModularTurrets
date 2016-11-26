@@ -657,7 +657,7 @@ public class TurretHeadUtil {
         if (base.getTier() == 1) {
             return false;
         }
-        if (!ModCompatibility.OpenComputersLoaded && !ModCompatibility.ComputercraftLoaded) {
+        if (!ModCompatibility.OpenComputersLoaded && !ModCompatibility.ComputerCraftLoaded) {
             return false;
         }
 

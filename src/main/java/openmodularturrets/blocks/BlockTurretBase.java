@@ -29,6 +29,8 @@ import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.init.ModBlocks;
 import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.TurretBase;
+import openmodularturrets.util.PlayerUtil;
+import openmodularturrets.util.TrustedPlayer;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -99,6 +101,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        TurretBase base = (TurretBase) world.getTileEntity(pos);
         /*if (!world.isRemote && player.isSneaking() && ConfigHandler.isAllowBaseCamo() && player.getCurrentEquippedItem() == null) {
             TurretBase base = (TurretBase) world.getTileEntity(pos);
             if (base != null) {
@@ -128,21 +131,18 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
 
         } else  */
         if (!world.isRemote && !player.isSneaking()) {
-            TurretBase base = (TurretBase) world.getTileEntity(pos);
-            if (base.getTrustedPlayer(player.getUniqueID()) != null) {
-                if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI) {
-                    player.openGui(ModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
-                    return true;
-                }
-            }
-            if (player.getUniqueID().toString().equals(base.getOwner())) {
+            TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
+            if (trustedPlayer != null && trustedPlayer.canOpenGUI) {
                 player.openGui(ModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
-            } else {
-                player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
+                return true;
             }
+        } else if (PlayerUtil.isPlayerOwner(player, base)) {
+            player.openGui(ModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
+        } else {
+            player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
         }
         return true;
-    }
+}
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {

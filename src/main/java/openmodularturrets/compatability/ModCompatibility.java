@@ -19,7 +19,7 @@ public class ModCompatibility {
     public static boolean MekanismLoaded = false;
     public static boolean ThaumcraftLoaded = false;
     public static boolean OpenComputersLoaded = false;
-    public static boolean ComputercraftLoaded = false;
+    public static boolean ComputerCraftLoaded = false;
     public static boolean IC2Loaded = false;
     public static IGWHandler igwHandler = null;
     private static Logger logger;
@@ -48,8 +48,8 @@ public class ModCompatibility {
         }
 
         OpenComputersLoaded = Loader.isModLoaded("OpenComputers");
-        ComputercraftLoaded = Loader.isModLoaded("ComputerCraft");
-        if (OpenComputersLoaded || ComputercraftLoaded) {
+        ComputerCraftLoaded = Loader.isModLoaded("ComputerCraft");
+        if (OpenComputersLoaded || ComputerCraftLoaded) {
             logger.info("Enabling LUA integration. (Found OpenComputers/ComputerCraft)");
         }
         IC2Loaded = Loader.isModLoaded("IC2");
@@ -60,7 +60,7 @@ public class ModCompatibility {
     private static void addVersionCheckerInfo() {
         NBTTagCompound versionchecker = new NBTTagCompound();
         versionchecker.setString("curseProjectName", "224663-openmodularturrets");
-        versionchecker.setString("curseFilenameParser", "OpenModularTurrets-1.7.10-[].jar");
+        versionchecker.setString("curseFilenameParser", "OpenModularTurrets-1.10.2-[].jar");
         versionchecker.setString("modDisplayName", "OpenModularTurrets");
         versionchecker.setString("oldVersion", Reference.VERSION);
         FMLInterModComms.sendRuntimeMessage("openmodularturrets", "VersionChecker", "addCurseCheck", versionchecker);
@@ -72,11 +72,8 @@ public class ModCompatibility {
         if (ConfigHandler.IGWNotification) {
             new IGWSupportNotifier();
         }
-        if (IGWModLoaded) {
-            igwHandler = IGWHandler.getInstance();
-        }
         addVersionCheckerInfo();
-        if (ComputercraftLoaded) {
+        if (ComputerCraftLoaded) {
             registerCCCompat();
         }
     }
@@ -85,5 +82,4 @@ public class ModCompatibility {
     private static void registerCCCompat() {
         //ComputerCraftAPI.registerPeripheralProvider(CCPeripheralProvider.getInstance());
     }
-
 }
