@@ -4,7 +4,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
@@ -18,7 +17,7 @@ import java.util.Random;
  * This Class
  */
 public abstract class BlockAbstractTileEntity extends BlockAbstract {
-    public BlockAbstractTileEntity(Material material) {
+    protected BlockAbstractTileEntity(Material material) {
         super(material);
     }
 
@@ -38,6 +37,9 @@ public abstract class BlockAbstractTileEntity extends BlockAbstract {
     protected void dropItems(World worldIn, BlockPos pos) {
         if (worldIn.getTileEntity(pos) instanceof TileEntityContainer) {
             TileEntityContainer entity = (TileEntityContainer) worldIn.getTileEntity(pos);
+            if (entity == null) {
+                return;
+            }
             Random rand = new Random();
             for (int i = 0; i < entity.getSizeInventory(); i++) {
                 ItemStack item = entity.getStackInSlot(i);
@@ -51,8 +53,8 @@ public abstract class BlockAbstractTileEntity extends BlockAbstract {
                                                            new ItemStack(item.getItem(), item.stackSize,
                                                                          item.getItemDamage()));
 
-                    if (item.hasTagCompound()) {
-                        entityItem.getEntityItem().setTagCompound((NBTTagCompound) item.getTagCompound().copy());
+                    if (item.getTagCompound() != null) {
+                        entityItem.getEntityItem().setTagCompound(item.getTagCompound().copy());
                     }
 
                     float factor = 0.05F;

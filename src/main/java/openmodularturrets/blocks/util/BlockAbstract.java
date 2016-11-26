@@ -11,8 +11,8 @@ import net.minecraft.world.IBlockAccess;
  * Created by Keridos on 05/12/2015.
  * This Class
  */
-public abstract class BlockAbstract extends Block {
-    protected BlockAbstract(Material material) {
+abstract class BlockAbstract extends Block {
+    BlockAbstract(Material material) {
         super(material);
     }
 

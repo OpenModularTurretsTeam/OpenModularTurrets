@@ -554,10 +554,6 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         return active;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     private boolean getInverted() {
         return this.inverted;
     }
@@ -620,7 +616,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     }
 
     @Optional.Method(modid = "tesla")
-    public BaseOMTTeslaContainer getTeslaContainer(Object container) {
+    private BaseOMTTeslaContainer getTeslaContainer(Object container) {
         if (container instanceof BaseOMTTeslaContainer) {
             return (BaseOMTTeslaContainer) container;
         } else {
@@ -631,7 +627,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     }
 
     @Optional.Method(modid = "tesla")
-    public void moveEnergyFromTeslaToRF() {
+    private void moveEnergyFromTeslaToRF() {
         if (teslaContainer instanceof BaseOMTTeslaContainer) {
             int energyNeeded = storage.getEnergyStored() - storage.getMaxEnergyStored();
             if (energyNeeded > 0) {

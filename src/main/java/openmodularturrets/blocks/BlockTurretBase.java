@@ -130,13 +130,13 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
             }
 
         } else  */
-        if (!world.isRemote && !player.isSneaking()) {
+        if (!world.isRemote && !player.isSneaking()  && base != null) {
             TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
             if (trustedPlayer != null && trustedPlayer.canOpenGUI) {
                 player.openGui(ModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
-        } else if (PlayerUtil.isPlayerOwner(player, base)) {
+        } else if (base != null && PlayerUtil.isPlayerOwner(player, base)) {
             player.openGui(ModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
         } else {
             player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
@@ -146,11 +146,12 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-        if (!worldIn.isRemote && worldIn.getTileEntity(pos) instanceof TurretBase) {
-            if (worldIn.isBlockIndirectlyGettingPowered(pos) > 0) {
-                ((TurretBase) worldIn.getTileEntity(pos)).setRedstone(true);
-            } else if (worldIn.isBlockIndirectlyGettingPowered(pos) == 0) {
-                ((TurretBase) worldIn.getTileEntity(pos)).setRedstone(false);
+        if (!worldIn.isRemote) {
+            TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
+            if (base != null && worldIn.isBlockIndirectlyGettingPowered(pos) > 0) {
+                base.setRedstone(true);
+            } else if (base != null && worldIn.isBlockIndirectlyGettingPowered(pos) == 0) {
+                base.setRedstone(false);
             }
         }
     }
@@ -160,6 +161,9 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
         if (!worldIn.isRemote && worldIn.getTileEntity(pos) instanceof TurretBase) {
             EntityPlayerMP player = (EntityPlayerMP) placer;
             TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
+            if (base == null) {
+                return;
+            }
             base.setOwner(player.getUniqueID().toString());
             if (worldIn.isBlockIndirectlyGettingPowered(pos) > 0) {
                 base.setRedstone(true);
@@ -195,7 +199,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> drops = new ArrayList<>();
         drops.add(0, new ItemStack(ModBlocks.turretBase, 1, this.getMetaFromState(state)));
         return drops;
     }
