@@ -7,6 +7,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
 import openmodularturrets.client.render.renderers.projectiles.ProjectileRenderers;
+import openmodularturrets.compatability.IGWHandler;
+import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.init.ModBlocks;
 import openmodularturrets.init.ModItems;
 import openmodularturrets.items.*;
@@ -77,5 +79,8 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void initHandlers() {
         super.initHandlers();
+        if (ModCompatibility.IGWModLoaded) {
+            ModCompatibility.igwHandler = IGWHandler.getInstance();
+        }
     }
 }

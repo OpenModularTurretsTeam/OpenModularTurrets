@@ -184,7 +184,7 @@ public class RecipeHandler {
             //ThaumcraftRecipeHandler.init();
         }
 
-        if ((ModCompatibility.ComputercraftLoaded || ModCompatibility.OpenComputersLoaded) && ConfigHandler.shouldDoThaumcraftIntegration) {
+        if ((ModCompatibility.ComputerCraftLoaded || ModCompatibility.OpenComputersLoaded) && ConfigHandler.shouldDoThaumcraftIntegration) {
             ComputerRecipeHandler.init();
         }
 
