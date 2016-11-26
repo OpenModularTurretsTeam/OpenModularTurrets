@@ -30,6 +30,9 @@ import openmodularturrets.tileentity.TurretBase;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
+import static openmodularturrets.util.WorldUtil.getTouchingTileEntities;
 
 /**
  * Created by Keridos on 19/07/16.
@@ -65,6 +68,7 @@ public class BlockExpander extends BlockAbstractTileEntity {
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        Logger.getGlobal().info("TE: "+worldIn.getTileEntity(pos).toString());
         if (worldIn.getTileEntity(pos) instanceof Expander) {
             Expander te = ((Expander) worldIn.getTileEntity(pos));
             return state.withProperty(FACING, te.getOrientation());
@@ -97,16 +101,24 @@ public class BlockExpander extends BlockAbstractTileEntity {
         TurretBase base = expander.getBase();
         if (base != null && base.getTrustedPlayer(player.getUniqueID()) != null) {
             if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI) {
-                player.openGui(ModularTurrets.instance, 7, world, pos.getX(), pos.getX(), pos.getZ());
+                player.openGui(ModularTurrets.instance, 7, world, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
         }
         if (base != null && player.getUniqueID().toString().equals(base.getOwner())) {
-            player.openGui(ModularTurrets.instance, 7, world, pos.getX(), pos.getX(), pos.getZ());
+            player.openGui(ModularTurrets.instance, 7, world, pos.getX(), pos.getY(), pos.getZ());
         } else {
             player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
         }
         return true;
+    }
+
+    @Override
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        for (TileEntity tileEntity: getTouchingTileEntities(worldIn, pos)){
+            if (tileEntity instanceof TurretBase) return true;
+        }
+        return false;
     }
 
     @Override

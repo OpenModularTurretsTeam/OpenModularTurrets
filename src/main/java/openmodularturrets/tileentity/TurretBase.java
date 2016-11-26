@@ -78,7 +78,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
     public TurretBase() {
         super();
         this.trustedPlayers = new ArrayList<>();
-        this.inv = new ItemStack[13];
+        this.inventory = new ItemStack[13];
     }
 
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier) {
@@ -89,7 +89,7 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         this.attacksNeutrals = true;
         this.attacksPlayers = false;
         this.trustedPlayers = new ArrayList<>();
-        this.inv = new ItemStack[tier == 5 ? 13 : tier == 4 ? 12 : tier == 3 ? 12 : tier == 2 ? 12 : 9];
+        this.inventory = new ItemStack[tier == 5 ? 13 : tier == 4 ? 12 : tier == 3 ? 12 : tier == 2 ? 12 : 9];
         this.inverted = true;
         this.active = true;
         this.tier = tier;
@@ -384,10 +384,10 @@ public class TurretBase extends TileEntityContainer implements IEnergyReceiver, 
         } else {
             storageEU = 0;
         }
-        ItemStack[] invtemp = inv;         //to properly restore the original inventory.
-        this.inv = new ItemStack[tier == 5 ? 13 : tier > 1 ? 12 : 9];
-        for (int i = 0; i < inv.length; i++) {
-            inv[i] = invtemp[i];
+        ItemStack[] invtemp = inventory;         //to properly restore the original inventory.
+        this.inventory = new ItemStack[tier == 5 ? 13 : tier > 1 ? 12 : 9];
+        for (int i = 0; i < inventory.length; i++) {
+            inventory[i] = invtemp[i];
         }
 
         NBTTagCompound tag2 = nbtTagCompound.getCompoundTag("CamoStack");

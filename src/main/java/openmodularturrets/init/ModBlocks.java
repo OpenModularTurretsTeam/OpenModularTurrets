@@ -44,37 +44,6 @@ public class ModBlocks {
         expander = new BlockExpander();
         GameRegistry.registerBlock(expander, ItemBlockExpander.class,Names.Blocks.expander);
 
-
-        /*hardWallTierOne = new BlockHardWallTierOne();
-        GameRegistry.registerBlock(hardWallTierOne, Names.Blocks.hardWallTierOne);
-
-        hardWallTierTwo = new BlockHardWallTierTwo();
-        GameRegistry.registerBlock(hardWallTierTwo, Names.Blocks.hardWallTierTwo);
-
-        hardWallTierThree = new BlockHardWallTierThree();
-        GameRegistry.registerBlock(hardWallTierThree, Names.Blocks.hardWallTierThree);
-
-        hardWallTierFour = new BlockHardWallTierFour();
-        GameRegistry.registerBlock(hardWallTierFour, Names.Blocks.hardWallTierFour);
-
-        hardWallTierFive = new BlockHardWallTierFive();
-        GameRegistry.registerBlock(hardWallTierFive, Names.Blocks.hardWallTierFive);
-
-        fenceTierOne = new BlockFenceTierOne();
-        GameRegistry.registerBlock(fenceTierOne, Names.Blocks.fenceTierOne);
-
-        fenceTierTwo = new BlockFenceTierTwo();
-        GameRegistry.registerBlock(fenceTierTwo, Names.Blocks.fenceTierTwo);
-
-        fenceTierThree = new BlockFenceTierThree();
-        GameRegistry.registerBlock(fenceTierThree, Names.Blocks.fenceTierThree);
-
-        fenceTierFour = new BlockFenceTierFour();
-        GameRegistry.registerBlock(fenceTierFour, Names.Blocks.fenceTierFour);
-
-        fenceTierFive = new BlockFenceTierFive();
-        GameRegistry.registerBlock(fenceTierFive, Names.Blocks.fenceTierFive);    */
-
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
             disposableItemTurret = new BlockDisposableTurret();
             GameRegistry.registerBlock(disposableItemTurret, ItemBlockDisposableTurret.class,
@@ -152,6 +121,5 @@ public class ModBlocks {
         GameRegistry.registerTileEntity(RelativisticTurretTileEntity.class, Names.Blocks.relativisticTurret);
         GameRegistry.registerTileEntity(TeleporterTurretTileEntity.class,  Names.Blocks.teleporterTurret);
         GameRegistry.registerTileEntity(Expander.class, Names.Blocks.expander);
-
     }
 }

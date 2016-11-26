@@ -12,7 +12,7 @@ import net.minecraft.util.text.ITextComponent;
  * This Class
  */
 public abstract class TileEntityContainer extends TileEntityOMT implements ISidedInventory {
-    protected ItemStack[] inv;
+    protected ItemStack[] inventory;
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
@@ -20,7 +20,7 @@ public abstract class TileEntityContainer extends TileEntityOMT implements ISide
 
         NBTTagList itemList = new NBTTagList();
 
-        for (int i = 0; i < this.inv.length; i++) {
+        for (int i = 0; i < this.inventory.length; i++) {
             ItemStack stack = this.getStackInSlot(i);
 
             if (stack != null) {
@@ -42,8 +42,8 @@ public abstract class TileEntityContainer extends TileEntityOMT implements ISide
         for (int i = 0; i < tagList.tagCount(); i++) {
             NBTTagCompound tag = tagList.getCompoundTagAt(i);
             byte slot = tag.getByte("Slot");
-            if (slot >= 0 && slot < inv.length) {
-                inv[slot] = ItemStack.loadItemStackFromNBT(tag);
+            if (slot >= 0 && slot < inventory.length) {
+                inventory[slot] = ItemStack.loadItemStackFromNBT(tag);
             }
         }
     }
@@ -67,7 +67,7 @@ public abstract class TileEntityContainer extends TileEntityOMT implements ISide
 
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
-        inv[slot] = stack;
+        inventory[slot] = stack;
         if (stack != null && stack.stackSize > getInventoryStackLimit()) {
             stack.stackSize = getInventoryStackLimit();
         }
@@ -75,12 +75,12 @@ public abstract class TileEntityContainer extends TileEntityOMT implements ISide
 
     @Override
     public int getSizeInventory() {
-        return inv.length;
+        return inventory.length;
     }
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-        return inv[slot];
+        return inventory[slot];
     }
 
     @Override
