@@ -28,9 +28,7 @@ import openmodularturrets.tileentity.Expander;
 import openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import static openmodularturrets.util.WorldUtil.getTouchingTileEntities;
 
@@ -46,6 +44,7 @@ public class BlockExpander extends BlockAbstractTileEntity {
         super(Material.ROCK);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
         this.setResistance(3.0F);
+        this.setHardness(3.0F);
         this.setSoundType(SoundType.STONE);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(META, 0));
     }
@@ -68,7 +67,6 @@ public class BlockExpander extends BlockAbstractTileEntity {
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        Logger.getGlobal().info("TE: "+worldIn.getTileEntity(pos).toString());
         if (worldIn.getTileEntity(pos) instanceof Expander) {
             Expander te = ((Expander) worldIn.getTileEntity(pos));
             return state.withProperty(FACING, te.getOrientation());
@@ -127,13 +125,6 @@ public class BlockExpander extends BlockAbstractTileEntity {
             dropItems(worldIn, pos);
             super.breakBlock(worldIn, pos, state);
         }
-    }
-
-    @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-        drops.add(0, new ItemStack(ModBlocks.expander, 1, this.getMetaFromState(state)));
-        return drops;
     }
 
     @Override
