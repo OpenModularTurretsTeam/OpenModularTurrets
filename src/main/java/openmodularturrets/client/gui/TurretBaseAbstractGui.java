@@ -17,7 +17,9 @@ import openmodularturrets.network.messages.MessageAdjustYAxisDetect;
 import openmodularturrets.network.messages.MessageDropBase;
 import openmodularturrets.network.messages.MessageDropTurrets;
 import openmodularturrets.network.messages.MessageSetBaseTargetingType;
+import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.util.PlayerUtil;
 
 import java.util.List;
 
@@ -44,22 +46,22 @@ class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
         super.initGui();
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
+        TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
 
         this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "-"));
         this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "+"));
-        if (player.getUniqueID().toString().equals(base.getOwner())) {
+        if (PlayerUtil.isPlayerOwner(player, base)) {
             this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
             this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
             this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
             this.buttonList.add(new GuiButton(6, x + 180, y + 75, 80, 20,
-                                              base.isMultiTargeting() ? "Target: Multi" : "Target: Single"));
-        } else if (base.getTrustedPlayer(player.getUniqueID()) != null) {
-            if (base.getTrustedPlayer(player.getUniqueID()).admin) {
+                    base.isMultiTargeting() ? "Target: Multi" : "Target: Single"));
+        } else if (trustedPlayer != null) {
+            if (trustedPlayer.admin) {
                 this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
                 this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
             }
-            if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting || base.getTrustedPlayer(
-                    player.getUniqueID()).admin) {
+            if (trustedPlayer.canChangeTargeting || trustedPlayer.admin) {
                 this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
             }
         }
@@ -113,7 +115,7 @@ class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
 
     private void sendChangeToServer() {
         MessageAdjustYAxisDetect message = new MessageAdjustYAxisDetect(base.xCoord, base.yCoord, base.zCoord,
-                                                                        base.getyAxisDetect());
+                base.getyAxisDetect());
 
         NetworkingHandler.INSTANCE.sendToServer(message);
     }

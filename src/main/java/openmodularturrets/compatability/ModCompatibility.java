@@ -5,7 +5,6 @@ import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import dan200.computercraft.api.ComputerCraftAPI;
 import net.minecraft.nbt.NBTTagCompound;
-import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.ModInfo;
 
 import java.util.logging.Logger;
@@ -22,7 +21,7 @@ public class ModCompatibility {
     public static boolean OpenComputersLoaded = false;
     public static boolean ComputercraftLoaded = false;
     public static boolean IC2Loaded = false;
-    public static IGWHandler igwHandler = null;
+    public static IGWHandler igwHandler;
     private static Logger logger;
 
     public static void checkForMods() {
@@ -70,9 +69,6 @@ public class ModCompatibility {
     public static void performModCompat() {
         FMLInterModComms.sendMessage("Waila", "register",
                                      "openmodularturrets.compatability.WailaTileHandler.callbackRegister");
-        if (ConfigHandler.IGWNotification) {
-            new IGWSupportNotifier();
-        }
         addVersionCheckerInfo();
         if (ComputercraftLoaded) {
             registerCCCompat();

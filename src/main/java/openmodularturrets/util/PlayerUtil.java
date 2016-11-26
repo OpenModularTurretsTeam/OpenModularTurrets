@@ -4,7 +4,11 @@ package openmodularturrets.util;
  * Created by nico on 6/4/15.
  */
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.UsernameCache;
+import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.tileentity.turretbase.TrustedPlayer;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 
 import java.util.Map;
 import java.util.UUID;
@@ -42,5 +46,18 @@ public class PlayerUtil {
             }
         }
         return null;
+    }
+
+    public static TrustedPlayer getTrustedPlayer(EntityPlayer player, TurretBase base) {
+        if (base.getTrustedPlayer(player.getUniqueID()) != null || (ConfigHandler.offlineModeSupport && base.getTrustedPlayer(player.getDisplayName()) != null)) {
+            return (base.getTrustedPlayer(player.getUniqueID()) == null ? base.getTrustedPlayer(player.getDisplayName()) : base.getTrustedPlayer(player.getUniqueID()));
+        } else {
+            return null;
+        }
+    }
+
+    public static boolean isPlayerOwner(EntityPlayer player, TurretBase base) {
+        return (base.getOwner().equals(player.getUniqueID().toString()) ||
+                (ConfigHandler.offlineModeSupport && base.getOwnerName().equals(player.getDisplayName())));
     }
 }

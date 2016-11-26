@@ -36,14 +36,14 @@ public class ModularTurrets {
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         gui = new GuiHandler();
         modularTurretsTab = new ModularTurretsTab(ModInfo.ID);
+        Items.init();
+        Blocks.init();
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
         ModCompatibility.checkForMods();
         ModCompatibility.performModCompat();
-        Items.init();
-        Blocks.init();
         NetworkingHandler.initNetworking();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, gui);
         TileEntityHandler.init();

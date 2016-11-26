@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
@@ -17,7 +16,9 @@ import net.minecraft.world.World;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.blocks.util.BlockAbstractContainer;
 import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.util.PlayerUtil;
 
 import java.util.Random;
 
@@ -36,13 +37,11 @@ public abstract class BlockAbstractTurretBase extends BlockAbstractContainer {
         if (!world.isRemote && player.isSneaking() && ConfigHandler.isAllowBaseCamo() && player.getCurrentEquippedItem() == null) {
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
             if (base != null) {
-                if (base != null) {
-                    if (player.getUniqueID().toString().equals(base.getOwner())) {
-                        base.camoStack = null;
-                    } else {
-                        player.addChatMessage(
-                                new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
-                    }
+                if (player.getUniqueID().toString().equals(base.getOwner())) {
+                    base.camoStack = null;
+                } else {
+                    player.addChatMessage(
+                            new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
                 }
             }
         }
@@ -64,15 +63,14 @@ public abstract class BlockAbstractTurretBase extends BlockAbstractContainer {
 
         } else if (!world.isRemote && !player.isSneaking()) {
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
-            if (base.getTrustedPlayer(player.getUniqueID()) != null) {
-                if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI) {
+            TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
+
+            if (trustedPlayer != null) {
+                if (trustedPlayer.canOpenGUI) {
                     player.openGui(ModularTurrets.instance, base.getBaseTier(), world, x, y, z);
                     return true;
                 }
-            }
-            if (player.getUniqueID().toString().equals(base.getOwner()) ||
-                    (ConfigHandler.canOPAccessTurrets && MinecraftServer.getServer().getConfigurationManager().func_152596_g(
-                            player.getGameProfile()))) {
+            } else if (PlayerUtil.isPlayerOwner(player, base)) {
                 player.openGui(ModularTurrets.instance, base.getBaseTier(), world, x, y, z);
             } else {
                 player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
@@ -105,6 +103,7 @@ public abstract class BlockAbstractTurretBase extends BlockAbstractContainer {
             EntityPlayerMP player = (EntityPlayerMP) elb;
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
             base.setOwner(player.getUniqueID().toString());
+            base.setOwnerName(player.getDisplayName());
             if (world.isBlockIndirectlyGettingPowered(x, y, z)) {
                 base.setRedstone(true);
             } else if (!world.isBlockIndirectlyGettingPowered(x, y, z)) {

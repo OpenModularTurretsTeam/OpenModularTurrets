@@ -216,7 +216,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     public boolean addTrustedPlayer(String name) {
         TrustedPlayer trustedPlayer = new TrustedPlayer(name);
         trustedPlayer.uuid = getPlayerUUID(name);
-        if (trustedPlayer.uuid != null) {
+        if (trustedPlayer.uuid != null || ConfigHandler.offlineModeSupport) {
             for (TrustedPlayer player : trustedPlayers) {
                 if (player.getName().toLowerCase().equals(name.toLowerCase()) || trustedPlayer.uuid.toString().equals(
                         owner)) {
