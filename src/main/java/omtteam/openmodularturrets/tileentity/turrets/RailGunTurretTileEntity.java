@@ -1,0 +1,63 @@
+package omtteam.openmodularturrets.tileentity.turrets;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.world.World;
+import omtteam.openmodularturrets.entity.projectiles.FerroSlugProjectile;
+import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
+import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.init.ModItems;
+import omtteam.openmodularturrets.init.ModSounds;
+
+public class RailGunTurretTileEntity extends TurretHead {
+    public RailGunTurretTileEntity() {
+        super();
+        this.turretTier = 5;
+    }
+
+    @Override
+    public int getTurretRange() {
+        return ConfigHandler.getRailgun_turret().getRange();
+    }
+
+    @Override
+    public int getTurretPowerUsage() {
+        return ConfigHandler.getRailgun_turret().getPowerUsage();
+    }
+
+    @Override
+    public int getTurretFireRate() {
+        return ConfigHandler.getRailgun_turret().getFireRate();
+    }
+
+    @Override
+    public double getTurretAccuracy() {
+        return ConfigHandler.getRailgun_turret().getAccuracy() / 10;
+    }
+
+    @Override
+    public boolean requiresAmmo() {
+        return true;
+    }
+
+    @Override
+    public boolean requiresSpecificAmmo() {
+        return true;
+    }
+
+    @Override
+    public ItemStack getAmmo() {
+        return new ItemStack(ModItems.ammoMetaItem,1,2);
+    }
+
+    @Override
+    public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
+        return new FerroSlugProjectile(world, ammo, this.getBase());
+    }
+
+    @Override
+    public SoundEvent getLaunchSoundEffect() {
+        return ModSounds.railgunLaunchSound;
+    }
+}

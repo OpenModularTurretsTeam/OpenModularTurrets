@@ -52,7 +52,7 @@ tile.lever_block.name=Hebel für Tier 1 Turm Basis
 #for IGWMod
 tile.turret_base.name=Turm Basis
 
-item_group.openmodularturrets=Open Modular Turrets
+item_group.omtteam.openmodularturrets=Open Modular Turrets
 
 tooltip.tier=Tier
 tooltip.range=Reichweite (in Blocks)
@@ -163,12 +163,12 @@ status.ownership=Du besitzt diesen Turm nicht, oder hast dazu keine Berechtigung
 status.missing_base=Dort ist keine Turm Basis.
 status.warning=Du betrittst einen turmgesicherten Bereich. Weitergehen auf eigene Gefahr.
 
-gui.openmodularturrets:owner=Besitzer
-gui.openmodularturrets:invert=Invertiert
-gui.openmodularturrets:active=Aktiv
-gui.openmodularturrets:mode=Modus
-gui.openmodularturrets:true=ja
-gui.openmodularturrets:false=nein
+gui.omtteam.openmodularturrets:owner=Besitzer
+gui.omtteam.openmodularturrets:invert=Invertiert
+gui.omtteam.openmodularturrets:active=Aktiv
+gui.omtteam.openmodularturrets:mode=Modus
+gui.omtteam.openmodularturrets:true=ja
+gui.omtteam.openmodularturrets:false=nein
 
 death.attack.disposable=Very %s, much dead, such wow...
 death.attack.bullet=%s aß zu viel leckeres Blei.

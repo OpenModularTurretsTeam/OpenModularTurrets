@@ -35,7 +35,7 @@ tile.laser_turret.name=Лазерная турель
 tile.rail_gun_turret.name=Рельсовая турель
 tile.lever_block.name=Базовая турельная ручка
 
-item_group.openmodularturrets=Open Modular Turrets
+item_group.omtteam.openmodularturrets=Open Modular Turrets
 
 tooltip.tier=Уровень
 tooltip.range=Дистанция (в блоках)
