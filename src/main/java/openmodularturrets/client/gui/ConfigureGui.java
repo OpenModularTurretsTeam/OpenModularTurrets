@@ -16,6 +16,7 @@ import openmodularturrets.handler.NetworkingHandler;
 import openmodularturrets.network.messages.*;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.util.PlayerUtil;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -91,10 +92,10 @@ public class ConfigureGui extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 1) { //change Attack Mobs
-            if (player.getUniqueID().toString().equals(base.getOwner())) {
+            if (PlayerUtil.isPlayerOwner(player, base)) {
                 sendChangeToServerMobs(!base.isAttacksMobs());
                 guibutton.displayString = "Attack Mobs: " + (!base.isAttacksMobs() ? "\u00A72Yes" : "\u00A7cNo");
-            } else if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting) {
+            } else if (PlayerUtil.getTrustedPlayer(player, base).canChangeTargeting) {
                 sendChangeToServerMobs(!base.isAttacksMobs());
                 guibutton.displayString = "Attack Mobs: " + (!base.isAttacksMobs() ? "\u00A72Yes" : "\u00A7cNo");
             } else {
@@ -103,10 +104,10 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 2) { //change Attack Neutrals
-            if (player.getUniqueID().toString().equals(base.getOwner())) {
+            if (PlayerUtil.isPlayerOwner(player, base)) {
                 sendChangeToServerNeutrals(!base.isAttacksNeutrals());
                 guibutton.displayString = "Attack Neutrals: " + (!base.isAttacksNeutrals() ? "\u00A72Yes" : "\u00A7cNo");
-            } else if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting) {
+            } else if (PlayerUtil.getTrustedPlayer(player, base).canChangeTargeting) {
                 sendChangeToServerNeutrals(!base.isAttacksNeutrals());
                 guibutton.displayString = "Attack Neutrals: " + (!base.isAttacksNeutrals() ? "\u00A72Yes" : "\u00A7cNo");
             } else {
@@ -115,10 +116,10 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 3) { // change Attack Players
-            if (player.getUniqueID().toString().equals(base.getOwner())) {
+            if (PlayerUtil.isPlayerOwner(player, base)) {
                 sendChangeToServerPlayers(!base.isAttacksPlayers());
                 guibutton.displayString = "Attack Players: " + (!base.isAttacksPlayers() ? "\u00A72Yes" : "\u00A7cNo");
-            } else if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting) {
+            } else if (PlayerUtil.getTrustedPlayer(player, base).canChangeTargeting) {
                 sendChangeToServerPlayers(!base.isAttacksPlayers());
                 guibutton.displayString = "Attack Players: " + (!base.isAttacksPlayers() ? "\u00A72Yes" : "\u00A7cNo");
             } else {
@@ -127,7 +128,7 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 4) { //add trusted player
-            if (player.getUniqueID().toString().equals(base.getOwner())) {
+            if (PlayerUtil.isPlayerOwner(player, base)) {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
                     this.base.addTrustedPlayer(textFieldAddTrustedPlayer.getText());
                     sendChangeToServerAddTrusted();
@@ -135,7 +136,7 @@ public class ConfigureGui extends GuiContainer {
                     this.base.trustedPlayerIndex = 0;
                     player.openGui(ModularTurrets.instance, 6, player.worldObj, base.xCoord, base.yCoord, base.zCoord);
                 }
-            } else if (base.getTrustedPlayer(player.getUniqueID()).admin) {
+            } else if (PlayerUtil.getTrustedPlayer(player, base).admin) {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
                     base.addTrustedPlayer(textFieldAddTrustedPlayer.getText());
                     sendChangeToServerAddTrusted();
@@ -170,7 +171,7 @@ public class ConfigureGui extends GuiContainer {
                             return;
                         }
                         player.openGui(ModularTurrets.instance, 6, player.worldObj, base.xCoord, base.yCoord,
-                                       base.zCoord);
+                                base.zCoord);
                     }
                 } else {
                     player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
@@ -193,7 +194,7 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 8) { //change trusted player permission for GUI opening
-            if (player.getUniqueID().toString().equals(base.getOwner()) && this.base.getTrustedPlayers().get(
+            if (PlayerUtil.isPlayerOwner(player, base) && this.base.getTrustedPlayers().get(
                     base.trustedPlayerIndex) != null) {
                 sendChangeToServerModifyPermissions(
                         this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "gui",
@@ -213,15 +214,14 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 9) { //change trusted player permission for targeting
-            if (player.getUniqueID().toString().equals(base.getOwner()) && this.base.getTrustedPlayers().get(
+            if (PlayerUtil.isPlayerOwner(player, base) && this.base.getTrustedPlayers().get(
                     base.trustedPlayerIndex) != null) {
                 sendChangeToServerModifyPermissions(
                         this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "targeting",
                         !base.getTrustedPlayers().get(base.trustedPlayerIndex).canChangeTargeting);
                 guibutton.displayString = !base.getTrustedPlayers().get(
                         base.trustedPlayerIndex).canChangeTargeting ? "\u00A72Y" : "\u00A7cN";
-            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && base.getTrustedPlayer(
-                    player.getUniqueID()).admin) {
+            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && PlayerUtil.getTrustedPlayer(player, base).admin) {
                 sendChangeToServerModifyPermissions(
                         this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "targeting",
                         !base.getTrustedPlayers().get(base.trustedPlayerIndex).canChangeTargeting);
@@ -233,15 +233,14 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 10) { //change trusted player permission for administering
-            if (player.getUniqueID().toString().equals(base.getOwner()) && this.base.getTrustedPlayers().get(
+            if (PlayerUtil.isPlayerOwner(player, base) && this.base.getTrustedPlayers().get(
                     base.trustedPlayerIndex) != null) {
                 sendChangeToServerModifyPermissions(
                         this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "isAdmin",
                         !base.getTrustedPlayers().get(base.trustedPlayerIndex).admin);
                 guibutton.displayString = !base.getTrustedPlayers().get(
                         base.trustedPlayerIndex).admin ? "\u00A72Y" : "\u00A7cN";
-            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && base.getTrustedPlayer(
-                    player.getUniqueID()).admin) {
+            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && PlayerUtil.getTrustedPlayer(player, base).admin) {
                 sendChangeToServerModifyPermissions(
                         this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "isAdmin",
                         !base.getTrustedPlayers().get(base.trustedPlayerIndex).admin);
@@ -263,7 +262,7 @@ public class ConfigureGui extends GuiContainer {
             fontRenderer.drawString("\u00A7f<No trusted players to edit>", 10, 124, 0);
         } else {
             fontRenderer.drawString(base.getTrustedPlayers().get(base.trustedPlayerIndex).getName() + "'s Permissions:",
-                                    10, 124, 0);
+                    10, 124, 0);
         }
 
         textFieldAddTrustedPlayer.drawTextBox();
@@ -356,35 +355,35 @@ public class ConfigureGui extends GuiContainer {
 
     private void sendChangeToServerNeutrals(boolean setTo) {
         MessageToggleAttackNeutralMobs message = new MessageToggleAttackNeutralMobs(base.xCoord, base.yCoord,
-                                                                                    base.zCoord, setTo);
+                base.zCoord, setTo);
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendChangeToServerPlayers(boolean setTo) {
         MessageToggleAttackPlayers message = new MessageToggleAttackPlayers(base.xCoord, base.yCoord, base.zCoord,
-                                                                            setTo);
+                setTo);
 
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendChangeToServerAddTrusted() {
         MessageAddTrustedPlayer message = new MessageAddTrustedPlayer(base.xCoord, base.yCoord, base.zCoord,
-                                                                      textFieldAddTrustedPlayer.getText());
+                textFieldAddTrustedPlayer.getText());
 
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendChangeToServerRemoveTrusted() {
         MessageRemoveTrustedPlayer message = new MessageRemoveTrustedPlayer(base.xCoord, base.yCoord, base.zCoord,
-                                                                            base.getTrustedPlayers().get(
-                                                                                    base.trustedPlayerIndex).getName());
+                base.getTrustedPlayers().get(
+                        base.trustedPlayerIndex).getName());
 
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendChangeToServerModifyPermissions(String player, String perm, boolean canDo) {
         MessageModifyPermissions message = new MessageModifyPermissions(base.xCoord, base.yCoord, base.zCoord, player,
-                                                                        perm, canDo);
+                perm, canDo);
 
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
