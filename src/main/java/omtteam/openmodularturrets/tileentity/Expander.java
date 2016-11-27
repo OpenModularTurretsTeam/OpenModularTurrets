@@ -99,7 +99,7 @@ public class Expander extends TileEntityContainer implements ITickable {
             this.getWorld().notifyBlockUpdate(this.pos, this.getWorld().getBlockState(this.pos),this.getWorld().getBlockState(this.pos),2);
         }
 
-        if (getBase() == null) {
+        if (getBase() == null || dropBlock) {
             this.getWorld().destroyBlock(this.pos, true);
         }
     }
