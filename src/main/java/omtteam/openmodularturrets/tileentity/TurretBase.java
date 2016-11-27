@@ -13,7 +13,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.common.Optional;
 import omtteam.omlib.tileentity.TileEntityMachine;
-import omtteam.omlib.util.MathUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -188,7 +187,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
 
     @Override
     public void update() {
-        if (!worldObj.isRemote && dropMachine) {
+        if (!worldObj.isRemote && dropBlock) {
             worldObj.destroyBlock(this.pos, true);
             return;
         } else if (ModCompatibility.IC2Loaded && ConfigHandler.EUSupport && !wasAddedToEnergyNet && !worldObj.isRemote) {
@@ -215,17 +214,6 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
                     }
                 }
             }*/
-
-            if (ModCompatibility.IC2Loaded && ConfigHandler.EUSupport) {
-                if (storage.getMaxEnergyStored() != storage.getEnergyStored() && storageEU > 0) {
-                    storage.modifyEnergyStored(MathUtil.truncateDoubleToInt(
-                            Math.min(storage.getMaxEnergyStored() - storage.getEnergyStored(),
-                                    storageEU * ConfigHandler.EUtoRFRatio)));
-                    storageEU -= Math.min(
-                            (storage.getMaxEnergyStored() - storage.getEnergyStored()) / ConfigHandler.EUtoRFRatio,
-                            storageEU * ConfigHandler.EUtoRFRatio);
-                }
-            }
 
             if (ticks % 20 == 0) {
 
