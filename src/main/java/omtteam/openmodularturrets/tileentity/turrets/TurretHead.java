@@ -7,13 +7,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
@@ -23,7 +23,7 @@ import omtteam.openmodularturrets.util.TurretHeadUtil;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public abstract class TurretHead extends TileEntity implements ITickable {
+public abstract class TurretHead extends TileEntityBase implements ITickable {
     int ticks;
     int targetingTicks;
     public float rotationXY;

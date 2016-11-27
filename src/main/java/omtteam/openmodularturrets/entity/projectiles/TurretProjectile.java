@@ -5,9 +5,9 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import omtteam.omlib.util.PlayerUtil;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.util.PlayerUtil;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 public abstract class TurretProjectile extends EntityThrowable {

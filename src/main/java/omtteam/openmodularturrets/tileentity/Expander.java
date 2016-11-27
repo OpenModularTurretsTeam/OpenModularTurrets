@@ -5,9 +5,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import omtteam.omlib.tileentity.TileEntityContainer;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
-import static omtteam.openmodularturrets.util.MathUtil.truncateDoubleToInt;
+import static omtteam.omlib.util.MathUtil.truncateDoubleToInt;
 
 public class Expander extends TileEntityContainer implements ITickable {
     public float baseFitRotationX;
@@ -16,6 +17,7 @@ public class Expander extends TileEntityContainer implements ITickable {
     private boolean hasSetSide = false;
     private boolean powerExpander;
     private EnumFacing orientation;
+    protected int tier;
 
     public Expander() {
         this.inventory = new ItemStack[9];
@@ -34,6 +36,7 @@ public class Expander extends TileEntityContainer implements ITickable {
         super.writeToNBT(nbtTagCompound);
         nbtTagCompound.setBoolean("powerExpander", powerExpander);
         nbtTagCompound.setByte("direction", (byte) orientation.ordinal());
+        nbtTagCompound.setInteger("tier", tier);
         return nbtTagCompound;
     }
 
@@ -41,6 +44,7 @@ public class Expander extends TileEntityContainer implements ITickable {
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
         super.readFromNBT(nbtTagCompound);
         this.powerExpander= nbtTagCompound.getBoolean("powerExpander");
+        this.tier = nbtTagCompound.getInteger("tier");
         if (nbtTagCompound.hasKey("direction")) {
             this.orientation = EnumFacing.getFront(nbtTagCompound.getByte("direction"));
         }
