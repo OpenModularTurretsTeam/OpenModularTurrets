@@ -30,7 +30,7 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static omtteam.openmodularturrets.util.WorldUtil.getTouchingTileEntities;
+import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 
 /**
  * Created by Keridos on 19/07/16.

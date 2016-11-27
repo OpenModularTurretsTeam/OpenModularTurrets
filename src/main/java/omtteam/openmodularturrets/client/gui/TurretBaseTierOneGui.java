@@ -5,10 +5,10 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.client.gui.containers.TurretBaseTierOneContainer;
 import omtteam.openmodularturrets.reference.Names;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.util.TrustedPlayer;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
