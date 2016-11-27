@@ -131,6 +131,8 @@ publishing {
     tasks.publish.dependsOn 'build'
     publications {
         mavenJava(MavenPublication) {
+            groupId config.group_prefix
+            artifactId config.mod_id
             artifact jar
             artifact sourceJar
         }
