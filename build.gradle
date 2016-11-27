@@ -106,6 +106,9 @@ repositories {
     maven {
         url "http://tehnut.info/maven"
     }
+    maven {
+        url "https://maven.ironhide.de/"
+    }
 }
 
 dependencies {
@@ -116,6 +119,7 @@ dependencies {
     //compile "Azanor:Thaumcraft:${config.tc_version}:deobf@jar"
     compile "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
     compile "net.darkhax.tesla:Tesla:${config.minecraft_version_short}-${config.tesla_version}"
+    deobfCompile "omtteam:omlib:${config.minecraft_version}-${config.omlib_version}"
     //runtime "com.github.azanor:baubles:${config.baubles_version}"
 }
 

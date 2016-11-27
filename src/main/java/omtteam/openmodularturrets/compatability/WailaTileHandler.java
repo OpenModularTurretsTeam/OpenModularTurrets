@@ -16,7 +16,7 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import java.util.List;
 
-import static omtteam.openmodularturrets.util.GeneralUtil.safeLocalize;
+import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 ;
 

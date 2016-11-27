@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import omtteam.openmodularturrets.tileentity.TileEntityContainer;
+import omtteam.omlib.tileentity.TileEntityContainer;
 
 import java.util.Random;
 

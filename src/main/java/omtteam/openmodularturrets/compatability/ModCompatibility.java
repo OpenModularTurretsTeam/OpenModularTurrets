@@ -54,7 +54,7 @@ public class ModCompatibility {
             logger.info("Enabling LUA integration. (Found OpenComputers/ComputerCraft)");
         }
         IC2Loaded = Loader.isModLoaded("IC2");
-        ComputerCraftLoaded = Loader.isModLoaded("tesla");
+        TeslaLoaded = Loader.isModLoaded("tesla");
 
         IGWModLoaded = Loader.isModLoaded("IGWMod");
     }

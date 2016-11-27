@@ -17,6 +17,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import omtteam.omlib.util.TrustedPlayer;
+import omtteam.omlib.util.WorldUtil;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;

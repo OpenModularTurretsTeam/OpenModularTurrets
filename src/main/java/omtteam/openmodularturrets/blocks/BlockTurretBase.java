@@ -23,14 +23,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.omlib.util.PlayerUtil;
+import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.ModularTurrets;
 import omtteam.openmodularturrets.blocks.util.BlockAbstractTileEntity;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.reference.Names;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.util.PlayerUtil;
-import omtteam.openmodularturrets.util.TrustedPlayer;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -131,12 +131,12 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
 
         } else  */
         if (!world.isRemote && !player.isSneaking()  && base != null) {
-            TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
+            TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base, ConfigHandler.offlineModeSupport);
             if (trustedPlayer != null && trustedPlayer.canOpenGUI) {
                 player.openGui(ModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
-        } else if (base != null && PlayerUtil.isPlayerOwner(player, base)) {
+        } else if (base != null && PlayerUtil.isPlayerOwner(player, base, ConfigHandler.offlineModeSupport)) {
             player.openGui(ModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
         } else {
             player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));

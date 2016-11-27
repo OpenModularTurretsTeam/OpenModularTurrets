@@ -1,9 +1,9 @@
 package omtteam.openmodularturrets.tileentity;
 
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import omtteam.omlib.tileentity.TileEntityBase;
 
-public class LeverTileEntity extends TileEntity implements ITickable {
+public class LeverTileEntity extends TileEntityBase implements ITickable {
     public float rotation = 0;
     public boolean isTurning = false;
     private TurretBase base;
