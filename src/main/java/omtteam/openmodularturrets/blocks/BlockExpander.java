@@ -7,6 +7,7 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -127,6 +128,15 @@ public class BlockExpander extends BlockAbstractTileEntity {
         if (!worldIn.isRemote) {
             dropItems(worldIn, pos);
             super.breakBlock(worldIn, pos, state);
+        }
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        Expander expander = (Expander) worldIn.getTileEntity(pos);
+        if (expander != null) {
+            expander.setOwnerName(expander.getBase().getOwnerName());
+            expander.setOwner(expander.getBase().getOwner());
         }
     }
 
