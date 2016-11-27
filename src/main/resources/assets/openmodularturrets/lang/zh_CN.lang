@@ -75,7 +75,7 @@ tile.hard_wall_tier_five.name=坚固墙壁(五级)
 #for IGWMod
 tile.turret_base.name=炮塔基座
 
-item_group.openmodularturrets=模块化炮塔
+item_group.omtteam.openmodularturrets=模块化炮塔
 
 tooltip.tier=等级
 tooltip.range=范围
@@ -211,12 +211,12 @@ status.ownership=这架炮塔不属于你
 status.missing_base=炮塔需放置在炮塔基座上.
 status.warning=你进入了炮塔攻击范围,谁都保不住你
 
-gui.openmodularturrets:owner=拥有者
-gui.openmodularturrets:invert=反相
-gui.openmodularturrets:active=激活
-gui.openmodularturrets:mode=模式
-gui.openmodularturrets:true=是
-gui.openmodularturrets:false=否
+gui.omtteam.openmodularturrets:owner=拥有者
+gui.omtteam.openmodularturrets:invert=反相
+gui.omtteam.openmodularturrets:active=激活
+gui.omtteam.openmodularturrets:mode=模式
+gui.omtteam.openmodularturrets:true=是
+gui.omtteam.openmodularturrets:false=否
 
 death.attack.disposable=那个 %s死的好惨...
 death.attack.bullet=%s 尝到了一些美味的铅弹.
