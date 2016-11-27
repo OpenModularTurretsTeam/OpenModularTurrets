@@ -56,6 +56,14 @@ public class PlayerUtil {
         }
     }
 
+    public static void setBaseOwnerUUID(EntityPlayer player, TurretBase base) {
+        if (ConfigHandler.offlineModeSupport) {
+            base.setOwner(player.getDisplayName());
+        } else {
+           base.setOwner(player.getUniqueID().toString());
+        }
+    }
+
     public static boolean isPlayerOwner(EntityPlayer player, TurretBase base) {
         return (base.getOwner().equals(player.getUniqueID().toString()) ||
                 (ConfigHandler.offlineModeSupport && base.getOwnerName().equals(player.getDisplayName())));

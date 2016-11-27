@@ -128,6 +128,7 @@ public class MessageTurretBase implements IMessage {
                 buf.writeBoolean(trustedPlayer.canChangeTargeting);
                 buf.writeBoolean(trustedPlayer.admin);
             }
+
         }
     }
 }
