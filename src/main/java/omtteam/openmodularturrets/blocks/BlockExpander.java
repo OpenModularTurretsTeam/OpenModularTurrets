@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.openmodularturrets.ModularTurrets;
-import omtteam.openmodularturrets.blocks.util.BlockAbstractTileEntity;
+import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;

@@ -1,7 +1,5 @@
 package omtteam.openmodularturrets.blocks.turretheads;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -11,10 +9,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.openmodularturrets.ModularTurrets;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
-abstract class BlockAbstractTurretHead extends Block implements ITileEntityProvider {
+abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity {
     BlockAbstractTurretHead() {
         super(Material.GLASS);
 
