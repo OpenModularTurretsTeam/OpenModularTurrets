@@ -18,7 +18,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.ModularTurrets;
-import omtteam.openmodularturrets.blocks.util.BlockAbstractTileEntity;
+import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.openmodularturrets.reference.Names;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
