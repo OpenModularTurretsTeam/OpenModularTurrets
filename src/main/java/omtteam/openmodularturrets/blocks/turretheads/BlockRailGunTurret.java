@@ -18,7 +18,7 @@ public class BlockRailGunTurret extends BlockAbstractTurretHead {
     }
 
     @Override
-    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+    public TileEntity createTileEntity(World world, IBlockState state) {
         return new RailGunTurretTileEntity();
     }
 

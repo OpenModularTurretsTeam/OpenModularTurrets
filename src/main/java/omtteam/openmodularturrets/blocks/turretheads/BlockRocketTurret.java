@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.blocks.turretheads;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.reference.Names;
@@ -13,7 +14,7 @@ public class BlockRocketTurret extends BlockAbstractTurretHead {
     }
 
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int par2) {
+    public TileEntity createTileEntity(World world, IBlockState state) {
         return new RocketTurretTileEntity();
     }
 }
