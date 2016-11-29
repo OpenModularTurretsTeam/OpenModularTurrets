@@ -24,7 +24,7 @@ public class LeverRenderer extends TileEntitySpecialRenderer {
             rotation = te.getBlockMetadata();
         }
 
-        ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/leverBlock.png"));
+        ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/lever_block.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         GL11.glPushMatrix();

@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
 import omtteam.openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
 import omtteam.openmodularturrets.client.render.renderers.projectiles.ProjectileRenderers;
@@ -14,6 +15,8 @@ import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.items.*;
 import omtteam.openmodularturrets.reference.Names;
 import omtteam.openmodularturrets.reference.Reference;
+import omtteam.openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
+import omtteam.openmodularturrets.tileentity.turrets.PotatoCannonTurretTileEntity;
 
 public class ClientProxy extends CommonProxy {
 

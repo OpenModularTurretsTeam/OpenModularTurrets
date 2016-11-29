@@ -31,12 +31,9 @@ public class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
         }
 
         int rotation = 0;
-        if (te.getWorld() != null) {
-            rotation = te.getBlockMetadata();
-        }
 
         this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
-        ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/teleporterTurret.png"));
+        ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/teleporter_turret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         GL11.glPushMatrix();
