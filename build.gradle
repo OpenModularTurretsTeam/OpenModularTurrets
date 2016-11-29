@@ -107,7 +107,7 @@ repositories {
         url "http://tehnut.info/maven"
     }
     maven {
-        url "https://maven.ironhide.de/"
+        url "http://maven.ironhide.de/"
     }
 }
 
