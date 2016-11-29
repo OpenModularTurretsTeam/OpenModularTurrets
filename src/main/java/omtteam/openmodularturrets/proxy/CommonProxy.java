@@ -12,6 +12,7 @@ import omtteam.openmodularturrets.handler.recipes.RecipeHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
+import omtteam.openmodularturrets.init.ModTESRItems;
 import omtteam.openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
 import omtteam.openmodularturrets.tileentity.turrets.PotatoCannonTurretTileEntity;
 
@@ -23,12 +24,9 @@ public class CommonProxy {
         ModSounds.init();
         RecipeHandler.initRecipes();
         ProjectileEntityHandler.registerProjectiles(ModularTurrets.instance);
+        ModTESRItems.init();
 
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.disposableItemTurret), 0, DisposableItemTurretTileEntity.class);
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.disposableItemTurret), 0, new ModelResourceLocation(ModBlocks.disposableItemTurret.getRegistryName(), "inventory"));
 
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.potatoCannonTurret), 0, PotatoCannonTurretTileEntity.class);
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.potatoCannonTurret), 0, new ModelResourceLocation(ModBlocks.potatoCannonTurret.getRegistryName(), "inventory"));
     }
     public void initRenderers() {
 
