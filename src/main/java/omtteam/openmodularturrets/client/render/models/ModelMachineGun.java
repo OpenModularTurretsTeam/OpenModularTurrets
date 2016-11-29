@@ -33,7 +33,7 @@ public class ModelMachineGun extends ModelBase {
         Pole.mirror = true;
         setRotation(Pole, 0F, 0F, 0F);
 
-        BoxUnder = new ModelRenderer(this, 0, 15);
+        BoxUnder = new ModelRenderer(this, 0, 19);
         BoxUnder.addBox(-4F, 3F, -4F, 8, 1, 8);
         BoxUnder.setRotationPoint(0F, 16F, 0F);
         BoxUnder.setTextureSize(64, 32);

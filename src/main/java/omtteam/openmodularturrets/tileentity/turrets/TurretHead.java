@@ -75,7 +75,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     }
 
     void setSide() {
-        if (hasSetSide) {
+        if (hasSetSide || worldObj == null) {
             return;
         }
 

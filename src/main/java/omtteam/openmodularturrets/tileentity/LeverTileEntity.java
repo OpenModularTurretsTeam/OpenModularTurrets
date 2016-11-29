@@ -15,15 +15,15 @@ public class LeverTileEntity extends TileEntityBase implements ITickable {
                 this.base = (TurretBase) worldObj.getTileEntity(this.pos.east());
             }
 
-            if (worldObj.getTileEntity(this.pos.west()) instanceof TurretBase && ((TurretBase)worldObj.getTileEntity(this.pos.east())).getTier() == 1) {
+            if (worldObj.getTileEntity(this.pos.west()) instanceof TurretBase && ((TurretBase)worldObj.getTileEntity(this.pos.west())).getTier() == 1) {
                 this.base = (TurretBase) worldObj.getTileEntity(this.pos.west());
             }
 
-            if (worldObj.getTileEntity(this.pos.south()) instanceof TurretBase && ((TurretBase)worldObj.getTileEntity(this.pos.east())).getTier() == 1) {
+            if (worldObj.getTileEntity(this.pos.south()) instanceof TurretBase && ((TurretBase)worldObj.getTileEntity(this.pos.south())).getTier() == 1) {
                 this.base = (TurretBase) worldObj.getTileEntity(this.pos.south());
             }
 
-            if (worldObj.getTileEntity(this.pos.north()) instanceof TurretBase && ((TurretBase)worldObj.getTileEntity(this.pos.east())).getTier() == 1) {
+            if (worldObj.getTileEntity(this.pos.north()) instanceof TurretBase && ((TurretBase)worldObj.getTileEntity(this.pos.north())).getTier() == 1) {
                 this.base = (TurretBase) worldObj.getTileEntity(this.pos.north());
             }
         }

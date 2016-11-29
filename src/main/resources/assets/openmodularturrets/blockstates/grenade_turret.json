@@ -1,0 +1,10 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+	"model": "openmodularturrets:grenade_turret"
+  },
+  "variants": {
+	"normal": [{}],
+	"inventory": [{}]
+  }
+}

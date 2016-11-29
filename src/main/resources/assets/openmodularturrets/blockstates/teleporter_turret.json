@@ -1,0 +1,10 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+	"model": "openmodularturrets:teleporter_turret"
+  },
+  "variants": {
+	"normal": [{}],
+	"inventory": [{}]
+  }
+}
