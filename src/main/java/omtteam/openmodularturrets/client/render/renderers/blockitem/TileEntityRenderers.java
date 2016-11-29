@@ -1,8 +1,15 @@
 package omtteam.openmodularturrets.client.render.renderers.blockitem;
 
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.openmodularturrets.init.ModBlocks;
+import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 
 import omtteam.openmodularturrets.tileentity.turrets.*;
@@ -25,17 +32,18 @@ public class TileEntityRenderers {
     @SideOnly(Side.CLIENT)
     public static void init() {
         ClientRegistry.bindTileEntitySpecialRenderer(DisposableItemTurretTileEntity.class,
-                                                     disposableItemTurretRenderer);
+                disposableItemTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(PotatoCannonTurretTileEntity.class, potatoCannonTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(RocketTurretTileEntity.class, rocketTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(GunTurretTileEntity.class, machineGunTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(GrenadeLauncherTurretTileEntity.class,
-                                                     grenadeLauncherTurretRenderer);
+                grenadeLauncherTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(LaserTurretTileEntity.class, laserTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(RailGunTurretTileEntity.class, railGunTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(IncendiaryTurretTileEntity.class, incendiaryTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(RelativisticTurretTileEntity.class, relativisticTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(TeleporterTurretTileEntity.class, teleporterTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(LeverTileEntity.class, leverRenderer);
+
     }
 }
