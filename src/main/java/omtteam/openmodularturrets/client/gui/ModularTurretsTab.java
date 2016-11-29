@@ -12,7 +12,7 @@ public class ModularTurretsTab extends CreativeTabs {
 
     @Override
     public ItemStack getIconItemStack() {
-        return new ItemStack(ModBlocks.machineGunTurret);
+        return new ItemStack(ModBlocks.laserTurret);
     }
 
     @Override

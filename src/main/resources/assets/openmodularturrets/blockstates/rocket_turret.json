@@ -1,0 +1,10 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+	"model": "openmodularturrets:rocket_turret"
+  },
+  "variants": {
+	"normal": [{}],
+	"inventory": [{}]
+  }
+}
