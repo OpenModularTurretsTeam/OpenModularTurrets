@@ -37,16 +37,13 @@ public class PotatoCannonTurretRenderer extends TileEntitySpecialRenderer {
         turretHead = (PotatoCannonTurretTileEntity) te;
 
         int rotation = 0;
-        if (te.getWorld() != null) {
-            rotation = te.getBlockMetadata();
-        }
 
         if (turretHead.shouldConceal) {
             return;
         }
 
         this.model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
-        textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/potatoCannonTurret.png"));
+        textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/potato_cannon_turret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         GL11.glPushMatrix();
@@ -63,24 +60,21 @@ public class PotatoCannonTurretRenderer extends TileEntitySpecialRenderer {
 
         if (turretHead.base != null) {
             if (TurretHeadUtil.hasSolarPanelAddon(turretHead.base)) {
-                ResourceLocation texturesSolar = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addonSolarPanel" +
-                                                                               ".png"));
+                ResourceLocation texturesSolar = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_solar_panel.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
                 solar.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 solar.renderAll();
             }
 
             if (TurretHeadUtil.hasDamageAmpAddon(turretHead.base)) {
-                ResourceLocation texturesAmp = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addonDamageAmp" +
-                                                                             ".png"));
+                ResourceLocation texturesAmp = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_damage_amp.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
                 amp.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 amp.renderAll();
             }
 
             if (TurretHeadUtil.hasRedstoneReactor(turretHead.base)) {
-                ResourceLocation texturesReac = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/redstoneReactor" +
-                                                                              ".png"));
+                ResourceLocation texturesReac = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/redstone_reactor.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesReac);
                 reac.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 reac.renderAll();
