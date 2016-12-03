@@ -26,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
-import omtteam.openmodularturrets.ModularTurrets;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.reference.Names;
@@ -41,7 +41,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
 
     public BlockTurretBase() {
         super(Material.ROCK);
-        this.setCreativeTab(ModularTurrets.modularTurretsTab);
+        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         if (!ConfigHandler.turretBreakable) {
             this.setBlockUnbreakable();
         }
@@ -106,7 +106,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
             TurretBase base = (TurretBase) world.getTileEntity(pos);
             if (base != null) {
                 if (player.getUniqueID().toString().equals(base.getOwner())) {
-                    base.camoStack = null;
+                    base.camoBlockState = null;
                 } else {
                     player.addChatMessage(
                             new TextComponentString(I18n.translateToLocal("status.ownership")));
@@ -122,7 +122,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
             TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
             if (base != null) {
                 if (player.getUniqueID().toString().equals(base.getOwner())) {
-                    base.camoStack = player.getCurrentEquippedItem();
+                    base.camoBlockState = player.getCurrentEquippedItem();
                 } else {
                     player.addChatMessage(
                             new TextComponentString(I18n.translateToLocal("status.ownership")));
@@ -130,19 +130,21 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
             }
 
         } else  */
-        if (!world.isRemote && !player.isSneaking()  && base != null) {
-            TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base, ConfigHandler.offlineModeSupport);
+        if (!world.isRemote && !player.isSneaking() && base != null) {
+            TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
             if (trustedPlayer != null && trustedPlayer.canOpenGUI) {
-                player.openGui(ModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
+                world.notifyBlockUpdate(pos, state, state, 6);
+                player.openGui(OpenModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
                 return true;
+            } else if (PlayerUtil.isPlayerOwner(player, base)) {
+                world.notifyBlockUpdate(pos, state, state, 6);
+                player.openGui(OpenModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
+            } else {
+                player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
             }
-        } else if (base != null && PlayerUtil.isPlayerOwner(player, base, ConfigHandler.offlineModeSupport)) {
-            player.openGui(ModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
-        } else {
-            player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
         }
         return true;
-}
+    }
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
@@ -157,7 +159,8 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack
+            stack) {
         if (!worldIn.isRemote && worldIn.getTileEntity(pos) instanceof TurretBase) {
             EntityPlayerMP player = (EntityPlayerMP) placer;
             TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
@@ -170,6 +173,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
             } else if (worldIn.isBlockIndirectlyGettingPowered(pos) == 0) {
                 base.setRedstone(false);
             }
+            base.markDirty();
             switch (state.getValue(TIER)) {
                 case 1:
                     this.setResistance(ConfigHandler.getBaseTierOneBlastResistance());
@@ -206,11 +210,12 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
 
     @Override
     public int damageDropped(IBlockState state) {
-        return this.getMetaFromState(state);
+        return state.getValue(TIER) - 1;
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer
+            player) {
         return new ItemStack(ModBlocks.turretBase, 1, state.getValue(TIER) - 1);
     }
 

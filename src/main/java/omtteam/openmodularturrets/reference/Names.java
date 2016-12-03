@@ -45,7 +45,7 @@ public class Names {
         public static final String ammoMetaItem = "ammo_meta";
         public static final String bulletThrowableItem = "throwable_bullet";
         public static final String grenadeThrowableItem = "throwable_grenade";
-        public static final String ferroSlug = "ferro_slug";
+        public static final String ferroSlug = "ammo_ferro_slug";
         public static final String bulletCraftableItem = "ammo_bullet";
         public static final String grenadeCraftableItem = "ammo_grenade";
         public static final String rocketCraftableItem = "ammo_rocket";
@@ -57,7 +57,7 @@ public class Names {
         public static final String scattershotUpgrade = "upgrade_scatter_shot";
         public static final String redReactorAddon = "addon_redstone_reactor";
         public static final String damageAmpAddon = "addon_damage_amp";
-        public static final String solarPanelAddon = "addon_solar_panelr";
+        public static final String solarPanelAddon = "addon_solar_panel";
         public static final String potentiaAddon = "addon_potentia";
         public static final String serialPortAddon = "addon_serial_port";
         public static final String recyclerAddon = "addon_recycler";

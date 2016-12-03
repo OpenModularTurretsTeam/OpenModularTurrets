@@ -49,10 +49,10 @@ public class RecipeHandler {
     public static void initRecipes() {
 
         ammoBlazingClay = new ItemStack(ModItems.ammoMetaItem, 32, 0);
-        ammoBullet = new ItemStack(ModItems.ammoMetaItem, 64, 0);
-        ammoFerroSlug = new ItemStack(ModItems.ammoMetaItem, 16, 0);
-        ammoGrenade = new ItemStack(ModItems.ammoMetaItem, 32, 0);
-        ammoRocket = new ItemStack(ModItems.ammoMetaItem, 32, 0);
+        ammoBullet = new ItemStack(ModItems.ammoMetaItem, 64, 1);
+        ammoFerroSlug = new ItemStack(ModItems.ammoMetaItem, 16, 2);
+        ammoGrenade = new ItemStack(ModItems.ammoMetaItem, 32, 3);
+        ammoRocket = new ItemStack(ModItems.ammoMetaItem, 32, 4);
         expanderInvTierOne = new ItemStack(ModBlocks.expander, 1, 0);
         expanderInvTierTwo = new ItemStack(ModBlocks.expander, 1, 1);
         expanderInvTierThree = new ItemStack(ModBlocks.expander, 1, 2);

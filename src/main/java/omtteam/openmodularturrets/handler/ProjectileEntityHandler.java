@@ -1,11 +1,11 @@
 package omtteam.openmodularturrets.handler;
 
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import omtteam.openmodularturrets.ModularTurrets;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.entity.projectiles.*;
 
 public class ProjectileEntityHandler {
-    public static void registerProjectiles(ModularTurrets turrets) {
+    public static void registerProjectiles(OpenModularTurrets turrets) {
         EntityRegistry.registerModEntity(RocketProjectile.class, "rocketProjectile", 1, turrets, 16, 1, true);
         EntityRegistry.registerModEntity(GrenadeProjectile.class, "grenadeProjectile", 2, turrets, 16, 5, true);
         EntityRegistry.registerModEntity(BulletProjectile.class, "bulletProjectile", 3, turrets, 16, 5, true);

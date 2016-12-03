@@ -5,6 +5,7 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -33,7 +34,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;*/
 
 public class TurretBase extends TileEntityMachine implements SimpleComponent, /*IPeripheral,*/ ITickable {
     public int trustedPlayerIndex = 0;
-    public ItemStack camoStack;
+    public IBlockState camoBlockState;
 
     //For concealment
     public boolean shouldConcealTurrets;
@@ -41,27 +42,18 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
     //For multiTargeting
     private boolean multiTargeting = false;
 
-    private EnergyStorage storage = new EnergyStorage(10, 10);
-    private Object teslaContainer;
     private int yAxisDetect;
     private boolean attacksMobs;
     private boolean attacksNeutrals;
     private boolean attacksPlayers;
     private int ticks;
-    private boolean active;
-    private boolean inverted;
-    private boolean redstone;
     private boolean computerAccessible = false;
-    //private float amountOfPotentia = 0F;
-    //private final float maxAmountOfPotentia = ConfigHandler.getPotentiaAddonCapacity();
     //private ArrayList<IComputerAccess> comp;
-    private double storageEU;
     private boolean wasAddedToEnergyNet = false;
     protected int tier;
 
-    public TurretBase() {
+    public TurretBase(){
         super();
-        this.inventory = new ItemStack[13];
     }
 
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier) {
@@ -72,8 +64,6 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         this.attacksNeutrals = true;
         this.attacksPlayers = false;
         this.inventory = new ItemStack[tier == 5 ? 13 : tier == 4 ? 12 : tier == 3 ? 12 : tier == 2 ? 12 : 9];
-        this.inverted = true;
-        this.active = true;
         this.tier = tier;
     }
 
@@ -136,7 +126,6 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         return 0;
     }
 
-
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
@@ -144,18 +133,13 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         nbtTagCompound.setBoolean("attacksMobs", attacksMobs);
         nbtTagCompound.setBoolean("attacksNeutrals", attacksNeutrals);
         nbtTagCompound.setBoolean("attacksPlayers", attacksPlayers);
-        nbtTagCompound.setBoolean("active", active);
-        nbtTagCompound.setBoolean("inverted", inverted);
-        nbtTagCompound.setBoolean("redstone", redstone);
         nbtTagCompound.setBoolean("computerAccessible", computerAccessible);
         nbtTagCompound.setBoolean("shouldConcealTurrets", shouldConcealTurrets);
         nbtTagCompound.setBoolean("multiTargeting", multiTargeting);
         nbtTagCompound.setInteger("tier", tier);
 
-        if (camoStack != null) {
-            NBTTagCompound tag2 = new NBTTagCompound();
-            camoStack.writeToNBT(tag2);
-            nbtTagCompound.setTag("CamoStack", tag2);
+        if (camoBlockState != null) {
+            nbtTagCompound.setString("camoBlockState", camoBlockState.toString());
         }
         return nbtTagCompound;
     }
@@ -164,24 +148,15 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
         super.readFromNBT(nbtTagCompound);
 
-        //this.amountOfPotentia = nbtTagCompound.getFloat("amountOfPotentia");
         this.yAxisDetect = nbtTagCompound.getInteger("yAxisDetect");
         this.attacksMobs = nbtTagCompound.getBoolean("attacksMobs");
         this.attacksNeutrals = nbtTagCompound.getBoolean("attacksNeutrals");
         this.attacksPlayers = nbtTagCompound.getBoolean("attacksPlayers");
         this.shouldConcealTurrets = nbtTagCompound.getBoolean("shouldConcealTurrets");
         this.multiTargeting = nbtTagCompound.getBoolean("multiTargeting");
-        this.active = !nbtTagCompound.hasKey("active") || nbtTagCompound.getBoolean("active");
-        this.inverted = !nbtTagCompound.hasKey("inverted") || nbtTagCompound.getBoolean("inverted");
         this.tier = nbtTagCompound.getInteger("tier");
-        if (nbtTagCompound.hasKey("redstone")) {
-            this.redstone = nbtTagCompound.getBoolean("redstone");
-        }
         this.computerAccessible = nbtTagCompound.hasKey("computerAccessible") && nbtTagCompound.getBoolean("computerAccessible");
-        ItemStack[] invTemp = inventory;         //to properly restore the original inventory.
-        this.inventory = new ItemStack[tier == 5 ? 13 : tier > 1 ? 12 : 9];
-        System.arraycopy(invTemp, 0, inventory, 0, inventory.length);
-        camoStack = ItemStack.loadItemStackFromNBT(nbtTagCompound.getCompoundTag("CamoStack"));
+        //camoBlockState = BlockStateBase.(nbtTagCompound.getCompoundTag("CamoStack"));
     }
 
 
@@ -294,11 +269,6 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         }
     }
 
-    @Override
-    public boolean canConnectEnergy(EnumFacing from) {
-        return true;
-    }
-
     @SuppressWarnings("NullableProblems")
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
@@ -317,27 +287,6 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         return true;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    private boolean getInverted() {
-        return this.inverted;
-    }
-
-    private void setInverted(boolean inverted) {
-        this.inverted = inverted;
-        this.active = redstone ^ this.inverted;
-    }
-
-    private boolean getRedstone() {
-        return this.redstone;
-    }
-
-    public void setRedstone(boolean redstone) {
-        this.redstone = redstone;
-        this.active = this.redstone ^ inverted;
-    }
 
     @Optional.Method(modid = "OpenComputers")
     @Override

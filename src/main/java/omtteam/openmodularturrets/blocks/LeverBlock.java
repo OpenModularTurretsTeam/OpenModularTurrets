@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import omtteam.openmodularturrets.ModularTurrets;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.openmodularturrets.reference.Names;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
@@ -31,7 +31,7 @@ public class LeverBlock extends BlockAbstractTileEntity {
     public LeverBlock() {
         super(Material.ROCK);
         this.setUnlocalizedName(Names.Blocks.lever);
-        this.setCreativeTab(ModularTurrets.modularTurretsTab);
+        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setHardness(2F);
         this.setResistance(15F);
         this.setSoundType(SoundType.STONE);

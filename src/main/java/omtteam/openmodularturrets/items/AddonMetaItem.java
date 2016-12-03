@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
-import omtteam.openmodularturrets.ModularTurrets;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.Names;
@@ -18,8 +18,7 @@ public class AddonMetaItem extends Item {
         super();
 
         this.setHasSubtypes(true);
-        this.setCreativeTab(ModularTurrets.modularTurretsTab);
-        this.setMaxStackSize(1);
+        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
     }
 
     public final static String[] subNames = {
@@ -31,7 +30,7 @@ public class AddonMetaItem extends Item {
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         for (int i = 0; i < 7; i++) {
-            subItems.add(new ItemStack(ModItems.intermediateProductTiered, 1, i));
+            subItems.add(new ItemStack(ModItems.addonMetaItem, 1, i));
         }
     }
 

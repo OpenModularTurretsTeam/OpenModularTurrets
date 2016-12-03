@@ -8,11 +8,11 @@
             }
         ]
     },
-    "bulletHit": {
+    "bullet_hit": {
         "category": "neutral",
         "sounds": [
             {
-                "name": "bulletHit",
+                "name": "bullet_hit",
                 "stream": false
             }
         ]
@@ -62,11 +62,11 @@
             }
         ]
     },
-    "laserHit": {
+    "laser_hit": {
         "category": "neutral",
         "sounds": [
             {
-               "name": "laserHit",
+               "name": "laser_hit",
               "stream": false
             }
         ]
@@ -125,38 +125,38 @@
             }
         ]
     },
-     "railGun": {
+     "rail_gun": {
         "category": "neutral",
         "sounds": [
             {
-               "name": "railGun",
+               "name": "rail_gun",
               "stream": false
             }
         ]
     },
-     "railGunHit": {
+     "rail_gun_hit": {
         "category": "neutral",
         "sounds": [
             {
-               "name": "railGunHit",
+               "name": "rail_gun_hit",
               "stream": false
             }
         ]
     },
-    "turretDeploy": {
+    "turret_deploy": {
         "category": "neutral",
         "sounds": [
             {
-                "name": "turretDeploy",
+                "name": "turret_deploy",
                 "stream": false
             }
         ]
     },
-    "turretRetract": {
+    "turret_retract": {
         "category": "neutral",
         "sounds": [
             {
-                "name": "turretRetract",
+                "name": "turret_retract",
                 "stream": false
             }
         ]

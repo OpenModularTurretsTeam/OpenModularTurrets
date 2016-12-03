@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
-import omtteam.openmodularturrets.ModularTurrets;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.Names;
@@ -18,8 +18,7 @@ public class UpgradeMetaItem extends Item {
         super();
 
         this.setHasSubtypes(true);
-        this.setCreativeTab(ModularTurrets.modularTurretsTab);
-        this.setMaxStackSize(4);
+        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
     }
 
     public final static String[] subNames = {

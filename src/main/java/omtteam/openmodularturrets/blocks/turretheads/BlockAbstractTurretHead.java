@@ -10,14 +10,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
-import omtteam.openmodularturrets.ModularTurrets;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity {
     BlockAbstractTurretHead() {
         super(Material.GLASS);
 
-        this.setCreativeTab(ModularTurrets.modularTurretsTab);
+        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setBlockUnbreakable();
         this.setResistance(6000000.0F);
         this.setSoundType(SoundType.STONE);

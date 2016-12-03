@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.items;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import omtteam.openmodularturrets.ModularTurrets;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.Names;
 
@@ -14,7 +14,7 @@ public class AmmoMetaItem extends Item {
         super();
 
         this.setHasSubtypes(true);
-        this.setCreativeTab(ModularTurrets.modularTurretsTab);
+        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
     }
 
     public final static String[] subNames = {
@@ -25,7 +25,7 @@ public class AmmoMetaItem extends Item {
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         for (int i = 0; i < 5; i++) {
-            subItems.add(new ItemStack(ModItems.addonMetaItem, 1, i));
+            subItems.add(new ItemStack(ModItems.ammoMetaItem, 1, i));
         }
     }
 

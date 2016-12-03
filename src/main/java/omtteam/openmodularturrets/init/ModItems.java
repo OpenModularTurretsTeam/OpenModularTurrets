@@ -32,6 +32,5 @@ public class ModItems {
 
         throwableMetaItem = new ThrowableMetaItem();
         GameRegistry.registerItem(throwableMetaItem, Names.Items.throwableMetaItem);
-
     }
 }
