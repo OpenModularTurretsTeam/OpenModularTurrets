@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.items;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import omtteam.openmodularturrets.ModularTurrets;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.Names;
 
@@ -14,7 +14,7 @@ public class ThrowableMetaItem extends Item {
         super();
 
         this.setHasSubtypes(true);
-        this.setCreativeTab(ModularTurrets.modularTurretsTab);
+        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
     }
 
     public final static String[] subNames = {

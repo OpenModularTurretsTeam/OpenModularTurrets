@@ -15,4 +15,14 @@ public class UpgradeSlot extends Slot {
     public boolean isItemValid(ItemStack par1ItemStack) {
         return par1ItemStack.getItem() instanceof UpgradeMetaItem;
     }
+
+    @Override
+    public int getItemStackLimit(ItemStack stack) {
+        return 4;
+    }
+
+    @Override
+    public int getSlotStackLimit() {
+        return 4;
+    }
 }

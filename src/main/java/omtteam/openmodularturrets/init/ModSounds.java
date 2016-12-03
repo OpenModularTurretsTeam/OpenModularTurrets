@@ -28,21 +28,21 @@ public class ModSounds {
 
 
     public static void init(){
-        turretDeploySound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "turretdeploy"));
-        turretRetractSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "turretretract"));
-        bulletHitSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "bullethit"));
-        railGunHitSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "railgunhit"));
-        laserHitSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "laserhit"));
-        disposableLaunchSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "disposable"));
-        grenadeLaunchSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "grenade"));
-        machinegunLaunchSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "machinegun"));
-        incendiaryLaunchSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "incendiary"));
-        laserLaunchSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "laser"));
-        potatoLaunchSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "potato"));
-        railgunLaunchSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "railgun"));
-        relativisticLaunchSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "relativistic"));
-        rocketLaunchSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "rocket"));
-        teleportLaunchSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "teleport"));
-        teleportLaunchSound = new SoundEvent(new ResourceLocation("omtteam/openmodularturrets", "teleport"));
+        turretDeploySound = new SoundEvent(new ResourceLocation("openmodularturrets", "turret_deploy"));
+        turretRetractSound = new SoundEvent(new ResourceLocation("openmodularturrets", "turret_retract"));
+        bulletHitSound = new SoundEvent(new ResourceLocation("openmodularturrets", "bullet_hit"));
+        railGunHitSound = new SoundEvent(new ResourceLocation("openmodularturrets", "rail_gun_hit"));
+        laserHitSound = new SoundEvent(new ResourceLocation("openmodularturrets", "laser_hit"));
+        disposableLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "disposable"));
+        grenadeLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "grenade"));
+        machinegunLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "machine_gun"));
+        incendiaryLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "incendiary"));
+        laserLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "laser"));
+        potatoLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "potato"));
+        railgunLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "rail_gun"));
+        relativisticLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "relativistic"));
+        rocketLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "rocket"));
+        teleportLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "teleport"));
+        teleportLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "teleport"));
     }
 }

@@ -22,7 +22,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.openmodularturrets.ModularTurrets;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.tileentity.Expander;
@@ -43,7 +43,7 @@ public class BlockExpander extends BlockAbstractTileEntity {
 
     public BlockExpander() {
         super(Material.ROCK);
-        this.setCreativeTab(ModularTurrets.modularTurretsTab);
+        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setResistance(3.0F);
         this.setHardness(3.0F);
         this.setSoundType(SoundType.STONE);
@@ -103,12 +103,12 @@ public class BlockExpander extends BlockAbstractTileEntity {
         TurretBase base = expander.getBase();
         if (base != null && base.getTrustedPlayer(player.getUniqueID()) != null) {
             if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI) {
-                player.openGui(ModularTurrets.instance, 7, world, pos.getX(), pos.getY(), pos.getZ());
+                player.openGui(OpenModularTurrets.instance, 7, world, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
         }
         if (base != null && player.getUniqueID().toString().equals(base.getOwner())) {
-            player.openGui(ModularTurrets.instance, 7, world, pos.getX(), pos.getY(), pos.getZ());
+            player.openGui(OpenModularTurrets.instance, 7, world, pos.getX(), pos.getY(), pos.getZ());
         } else {
             player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
         }
