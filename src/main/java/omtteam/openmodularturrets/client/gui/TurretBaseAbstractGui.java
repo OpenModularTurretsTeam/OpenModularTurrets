@@ -10,8 +10,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.util.EnumFacing;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
-import omtteam.openmodularturrets.ModularTurrets;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.NetworkingHandler;
 import omtteam.openmodularturrets.network.messages.MessageAdjustYAxisDetect;
 import omtteam.openmodularturrets.network.messages.MessageDropBase;
@@ -44,11 +43,11 @@ class TurretBaseAbstractGui extends GuiContainer  {
         super.initGui();
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
-        TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base, ConfigHandler.offlineModeSupport);
+        TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
 
         this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "-"));
         this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "+"));
-        if (PlayerUtil.isPlayerOwner(player, base, ConfigHandler.offlineModeSupport)) {
+        if (PlayerUtil.isPlayerOwner(player, base)) {
             this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
             this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
             this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
@@ -93,7 +92,7 @@ class TurretBaseAbstractGui extends GuiContainer  {
         }
 
         if (guibutton.id == 5) {
-            player.openGui(ModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
+            player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
         }
 
         if (guibutton.id == 6) {

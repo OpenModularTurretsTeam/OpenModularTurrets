@@ -14,4 +14,9 @@ public class AddonSlot extends Slot {
     public boolean isItemValid(ItemStack par1ItemStack) {
         return par1ItemStack.getItem() instanceof AddonMetaItem;
     }
+
+    @Override
+    public int getItemStackLimit(ItemStack stack) {
+        return (stack.getItemDamage() == 1 ? 4 : 1);
+    }
 }

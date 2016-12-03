@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.client.gui.containers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import omtteam.openmodularturrets.client.gui.customSlot.AddonSlot;
@@ -12,6 +13,8 @@ import omtteam.openmodularturrets.items.AddonMetaItem;
 import omtteam.openmodularturrets.items.UpgradeMetaItem;
 import omtteam.openmodularturrets.network.messages.MessageTurretBase;
 import omtteam.openmodularturrets.tileentity.TurretBase;
+
+import static omtteam.omlib.util.InvUtil.mergeItemStackWithStackLimit;
 
 /**
  * Created by Keridos on 09/12/2015.
@@ -58,21 +61,21 @@ abstract class TurretBaseContainer extends Container {
             if (slot < slotStart) {
                 // Priority addon and upgrade slot first
                 if (stackInSlot.getItem() instanceof AddonMetaItem) {
-                    if (!mergeItemStack(stackInSlot, addonSlotStart, addonSlotEnd, false)) {
+                    if (!mergeItemStackWithStackLimit(stackInSlot, addonSlotStart, addonSlotEnd, false, this)) {
                         return null;
                     }
                 } else if (stackInSlot.getItem() instanceof UpgradeMetaItem) {
-                    if (!mergeItemStack(stackInSlot, upgSlotStart, upgSlotEnd, false)) {
+                    if (!mergeItemStackWithStackLimit(stackInSlot, upgSlotStart, upgSlotEnd, false, this)) {
                         return null;
                     }
                 } else {
-                    if (!mergeItemStack(stackInSlot, slotStart, slotStart + 9, false)) {
+                    if (!mergeItemStackWithStackLimit(stackInSlot, slotStart, slotStart + 9, false, this)) {
                         return null;
                     }
                 }
             } else // Transfer from turret base inventory
             {
-                if (!mergeItemStack(stackInSlot, 0, slotStart, false)) {
+                if (!mergeItemStackWithStackLimit(stackInSlot, 0, slotStart, false, this)) {
                     return null;
                 }
             }
@@ -94,7 +97,7 @@ abstract class TurretBaseContainer extends Container {
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
-        for (Object listener : this.listeners) {
+        for (IContainerListener listener : this.listeners) {
             if (listener instanceof EntityPlayerMP) {
                 NetworkingHandler.INSTANCE.sendTo(new MessageTurretBase(this.tileEntity), (EntityPlayerMP) listener);
             }

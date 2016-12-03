@@ -52,7 +52,7 @@ public class MessageTurretBase implements IMessage {
                         ((TurretBase) tileEntity).setAttacksPlayers(message.attacksPlayers);
                         ((TurretBase) tileEntity).setMultiTargeting(message.multiTargeting);
                         ((TurretBase) tileEntity).setTrustedPlayers(message.trustedPlayers);
-                        ((TurretBase) tileEntity).camoStack = message.camoStack;
+                        //((TurretBase) tileEntity).camoBlockState = message.camoStack;
                         ((TurretBase) tileEntity).setTier(message.tier);
                     }
                 }
@@ -77,7 +77,7 @@ public class MessageTurretBase implements IMessage {
             this.attacksPlayers = TurretBase.isAttacksPlayers();
             this.multiTargeting = TurretBase.isMultiTargeting();
             this.trustedPlayers = TurretBase.getTrustedPlayers();
-            this.camoStack = TurretBase.camoStack;
+            //this.camoStack = TurretBase.camoBlockState;
         }
     }
 
@@ -96,7 +96,7 @@ public class MessageTurretBase implements IMessage {
         this.attacksNeutrals = buf.readBoolean();
         this.attacksPlayers = buf.readBoolean();
         this.multiTargeting = buf.readBoolean();
-        this.camoStack = ByteBufUtils.readItemStack(buf);
+        //this.camoStack = ByteBufUtils.readItemStack(buf);
         int lengthOfTPList = buf.readInt();
         if (lengthOfTPList > 0) {
             for (int i = 0; i < lengthOfTPList; i++) {

@@ -10,7 +10,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
-import omtteam.openmodularturrets.ModularTurrets;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.client.gui.containers.ConfigContainer;
 import omtteam.openmodularturrets.handler.NetworkingHandler;
 import omtteam.openmodularturrets.network.messages.*;
@@ -143,7 +143,7 @@ public class ConfigureGui extends GuiContainer {
                     sendChangeToServerAddTrusted();
                     textFieldAddTrustedPlayer.setText("");
                     this.base.trustedPlayerIndex = 0;
-                    player.openGui(ModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
+                    player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
                 }
             } else if (base.getTrustedPlayer(player.getUniqueID()).admin) {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
@@ -151,7 +151,7 @@ public class ConfigureGui extends GuiContainer {
                     sendChangeToServerAddTrusted();
                     textFieldAddTrustedPlayer.setText("");
                     this.base.trustedPlayerIndex = 0;
-                    player.openGui(ModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
+                    player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
                 }
             } else {
                 player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
@@ -166,7 +166,7 @@ public class ConfigureGui extends GuiContainer {
                     base.removeTrustedPlayer(base.getTrustedPlayers().get(base.trustedPlayerIndex).getName());
                     textFieldAddTrustedPlayer.setText("");
                     this.base.trustedPlayerIndex = 0;
-                    player.openGui(ModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
+                    player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
                 } else if (base.getTrustedPlayer(player.getUniqueID()).admin) {
                     if (this.base.getTrustedPlayers().get(
                             base.trustedPlayerIndex) != null && this.base.getTrustedPlayers().size() > 0) {
@@ -179,7 +179,7 @@ public class ConfigureGui extends GuiContainer {
                             mc.displayGuiScreen(null);
                             return;
                         }
-                        player.openGui(ModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(),
+                        player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(),
                                 base.getPos().getZ());
                     }
                 } else {
@@ -191,14 +191,14 @@ public class ConfigureGui extends GuiContainer {
         if (guibutton.id == 6) { //decrease index of trusted player list
             if ((this.base.trustedPlayerIndex - 1 >= 0)) {
                 this.base.trustedPlayerIndex--;
-                player.openGui(ModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
+                player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
             }
         }
 
         if (guibutton.id == 7) { //increase index of trusted player list
             if (!((this.base.trustedPlayerIndex + 1) > (base.getTrustedPlayers().size() - 1))) {
                 this.base.trustedPlayerIndex++;
-                player.openGui(ModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
+                player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
             }
         }
 
