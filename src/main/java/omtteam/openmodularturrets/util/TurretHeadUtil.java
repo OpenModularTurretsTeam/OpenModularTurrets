@@ -735,32 +735,30 @@ public class TurretHeadUtil {
                 traceEnd.zCoord - traceStart.zCoord);
 
         // Normalize vector to the largest delta axis
-        vecDelta.normalize();
+        vecDelta = vecDelta.normalize();
 
         // Limit how many non solid block a turret can see through
         for (int i = 0; i < 10; i++) {
             // Offset start position toward the target to prevent self collision
-            traceStart.addVector(vecDelta.xCoord, vecDelta.yCoord, vecDelta.zCoord);
+            traceStart = traceStart.add(vecDelta);
 
-            RayTraceResult traced = turret.getWorld().rayTraceBlocks(
-                    new Vec3d(traceStart.xCoord, traceStart.yCoord, traceStart.zCoord),
-                    new Vec3d(traceEnd.xCoord, traceEnd.yCoord, traceEnd.zCoord));
+            RayTraceResult traced = turret.getWorld().rayTraceBlocks(traceStart, traceEnd);
 
             if (traced != null && traced.typeOfHit == RayTraceResult.Type.BLOCK) {
                 IBlockState hitBlock = turret.getWorld().getBlockState(traced.getBlockPos());
 
                 // If non solid block is in the way then proceed to continue
                 // tracing
-                if (!hitBlock.getMaterial().isSolid() && MathHelper.abs_max(
+                if ((traced.getBlockPos().equals(turret.getPos())) || (!hitBlock.getMaterial().isSolid() && MathHelper.abs_max(
                         MathHelper.abs_max(traceStart.xCoord - traceEnd.xCoord, traceStart.yCoord - traceEnd.yCoord),
-                        traceStart.zCoord - traceEnd.zCoord) > 1) {
+                        traceStart.zCoord - traceEnd.zCoord) > 1)) {
                     // Start at new position and continue
                     traceStart = traced.hitVec;
                     continue;
                 }
             }
 
-            EntityLivingBase targeted = target != null && traced == null ? target : null;
+            EntityLivingBase targeted = traced == null ? target : null;
 
             return targeted != null && targeted.equals(target);
         }
