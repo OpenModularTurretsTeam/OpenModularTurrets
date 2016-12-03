@@ -212,7 +212,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         }
 
         if (ticks % 5 == 0) {
-            //worldObj.markBlockForUpdate(this.pos);
+            worldObj.notifyBlockUpdate(this.pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos),3);
         }
 
         ticks++;
