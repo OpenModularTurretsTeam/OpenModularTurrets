@@ -20,8 +20,6 @@ public class ModCompatibility {
     public static boolean ThaumcraftLoaded = false;
     public static boolean OpenComputersLoaded = false;
     public static boolean ComputerCraftLoaded = false;
-    public static boolean IC2Loaded = false;
-    public static boolean TeslaLoaded = false;
     public static IGWHandler igwHandler = null;
     private static Logger logger;
 
@@ -53,8 +51,6 @@ public class ModCompatibility {
         if (OpenComputersLoaded || ComputerCraftLoaded) {
             logger.info("Enabling LUA integration. (Found OpenComputers/ComputerCraft)");
         }
-        IC2Loaded = Loader.isModLoaded("IC2");
-        TeslaLoaded = Loader.isModLoaded("tesla");
 
         IGWModLoaded = Loader.isModLoaded("IGWMod");
     }

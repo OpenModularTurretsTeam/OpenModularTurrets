@@ -19,6 +19,8 @@ import omtteam.openmodularturrets.compatability.ModCompatibility;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
+import static omtteam.omlib.compatability.ModCompatibility.IC2Loaded;
+import static omtteam.omlib.handler.ConfigHandler.EUSupport;
 import static omtteam.omlib.util.PlayerUtil.getPlayerUUID;
 
 
@@ -49,7 +51,6 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
     private int ticks;
     private boolean computerAccessible = false;
     //private ArrayList<IComputerAccess> comp;
-    private boolean wasAddedToEnergyNet = false;
     protected int tier;
 
     public TurretBase(){
@@ -165,7 +166,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         if (!worldObj.isRemote && dropBlock) {
             worldObj.destroyBlock(this.pos, true);
             return;
-        } else if (ModCompatibility.IC2Loaded && ConfigHandler.EUSupport && !wasAddedToEnergyNet && !worldObj.isRemote) {
+        } else if (IC2Loaded && EUSupport && !wasAddedToEnergyNet && !worldObj.isRemote) {
             addToIc2EnergyNetwork();
             wasAddedToEnergyNet = true;
         }

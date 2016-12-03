@@ -20,7 +20,7 @@ import static omtteam.omlib.util.InvUtil.mergeItemStackWithStackLimit;
  * Created by Keridos on 09/12/2015.
  * This Class
  */
-abstract class TurretBaseContainer extends Container {
+public abstract class TurretBaseContainer extends Container {
     TurretBase tileEntity;
 
     @Override
