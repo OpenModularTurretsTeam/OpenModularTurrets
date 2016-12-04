@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
 import omtteam.openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
 import omtteam.openmodularturrets.client.render.renderers.projectiles.ProjectileRenderers;
@@ -12,11 +11,10 @@ import omtteam.openmodularturrets.compatability.IGWHandler;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
+import omtteam.openmodularturrets.init.ModTESRItems;
 import omtteam.openmodularturrets.items.*;
 import omtteam.openmodularturrets.reference.Names;
 import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
-import omtteam.openmodularturrets.tileentity.turrets.PotatoCannonTurretTileEntity;
 
 public class ClientProxy extends CommonProxy {
 
@@ -74,9 +72,7 @@ public class ClientProxy extends CommonProxy {
         super.initRenderers();
         TileEntityRenderers.init();
         ProjectileRenderers.init();
-
-        //ToolTips tooltips = new ToolTips();
-        //MinecraftForge.EVENT_BUS.register(tooltips);
+        ModTESRItems.init();
     }
 
     @Override

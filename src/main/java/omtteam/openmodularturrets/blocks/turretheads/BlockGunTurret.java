@@ -4,6 +4,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.GunTurretTileEntity;
 
 public class BlockGunTurret extends BlockAbstractTurretHead {
@@ -11,6 +12,7 @@ public class BlockGunTurret extends BlockAbstractTurretHead {
         super();
 
         this.setUnlocalizedName(Names.Blocks.gunTurret);
+        this.setRegistryName(Reference.MOD_ID, Names.Blocks.gunTurret);
     }
 
     @Override

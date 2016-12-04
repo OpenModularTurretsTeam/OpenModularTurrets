@@ -22,9 +22,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.init.ModBlocks;
+import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
@@ -48,6 +50,7 @@ public class BlockExpander extends BlockAbstractTileEntity {
         this.setHardness(3.0F);
         this.setSoundType(SoundType.STONE);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(META, 0));
+        this.setRegistryName(Reference.MOD_ID, Names.Blocks.expander);
     }
 
     @Override

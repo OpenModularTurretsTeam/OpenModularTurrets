@@ -11,6 +11,7 @@ import net.minecraft.util.text.translation.I18n;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.Reference;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class ItemBlockTurretBase extends ItemBlock {
     public ItemBlockTurretBase(Block block) {
         super(block);
         setHasSubtypes(true);
+        this.setRegistryName(Reference.MOD_ID, Names.Blocks.turretBase);
     }
 
     public final static String[] subNames = {

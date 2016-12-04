@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
@@ -36,6 +37,7 @@ public class LeverBlock extends BlockAbstractTileEntity {
         this.setResistance(15F);
         this.setSoundType(SoundType.STONE);
         setDefaultState(this.blockState.getBaseState().withProperty(ROTATION, 0));
+        this.setRegistryName(Reference.MOD_ID, Names.Blocks.lever);
     }
 
     @Override

@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.Reference;
 
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class IntermediateProductRegular extends Item {
 
         this.setHasSubtypes(true);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
+        this.setRegistryName(Reference.MOD_ID, Names.Items.intermediateRegularItem);
+        this.setUnlocalizedName(Names.Items.intermediateRegularItem);
     }
 
     public final static String[] subNames = {
