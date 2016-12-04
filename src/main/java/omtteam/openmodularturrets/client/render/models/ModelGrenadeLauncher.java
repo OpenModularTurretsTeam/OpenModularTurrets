@@ -6,11 +6,10 @@
 
 package omtteam.openmodularturrets.client.render.models;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelGrenadeLauncher extends ModelBase {
+public class ModelGrenadeLauncher extends ModelAbstractTurret {
     // fields
     public final ModelRenderer Base;
     public final ModelRenderer Pole;
@@ -97,7 +96,7 @@ public class ModelGrenadeLauncher extends ModelBase {
         Shape1.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z) {
+    protected void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;

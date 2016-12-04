@@ -52,6 +52,7 @@ public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
         }
 
         if (turretHead.shouldConceal) {
+            GL11.glPopMatrix();
             return;
         }
 

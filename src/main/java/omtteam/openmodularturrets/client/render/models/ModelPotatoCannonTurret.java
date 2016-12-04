@@ -1,9 +1,8 @@
 package omtteam.openmodularturrets.client.render.models;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-public class ModelPotatoCannonTurret extends ModelBase {
+public class ModelPotatoCannonTurret extends ModelAbstractTurret {
     // fields
     public final ModelRenderer Base;
     public final ModelRenderer Pole;
@@ -82,7 +81,7 @@ public class ModelPotatoCannonTurret extends ModelBase {
         Chamber.rotateAngleY = z;
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z) {
+    protected void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
