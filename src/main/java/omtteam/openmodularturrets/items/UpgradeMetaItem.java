@@ -10,6 +10,7 @@ import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.Reference;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class UpgradeMetaItem extends Item {
 
         this.setHasSubtypes(true);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
+        this.setRegistryName(Reference.MOD_ID, Names.Items.upgradeMetaItem);
+        this.setUnlocalizedName(Names.Items.upgradeMetaItem);
     }
 
     public final static String[] subNames = {

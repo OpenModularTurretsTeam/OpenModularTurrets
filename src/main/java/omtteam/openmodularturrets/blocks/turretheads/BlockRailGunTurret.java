@@ -6,6 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
 
 import java.util.Random;
@@ -15,6 +16,7 @@ public class BlockRailGunTurret extends BlockAbstractTurretHead {
         super();
 
         this.setUnlocalizedName(Names.Blocks.railGunTurret);
+        this.setRegistryName(Reference.MOD_ID, Names.Blocks.railGunTurret);
     }
 
     @Override

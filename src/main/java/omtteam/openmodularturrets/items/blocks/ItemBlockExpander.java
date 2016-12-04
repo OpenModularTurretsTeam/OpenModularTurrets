@@ -11,6 +11,7 @@ import net.minecraft.util.text.translation.I18n;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.Reference;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class ItemBlockExpander extends ItemBlock {
     public ItemBlockExpander(Block block) {
         super(block);
         setHasSubtypes(true);
+        this.setRegistryName(Reference.MOD_ID, Names.Blocks.expander);
     }
 
     public final static String[] subNames = {

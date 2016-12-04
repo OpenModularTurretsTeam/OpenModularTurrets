@@ -4,7 +4,6 @@ package omtteam.openmodularturrets.init;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import omtteam.openmodularturrets.items.*;
-import omtteam.openmodularturrets.reference.Names;
 
 public class ModItems {
     public static Item addonMetaItem;
@@ -16,21 +15,21 @@ public class ModItems {
 
     public static void init() {
         intermediateProductTiered = new IntermediateProductTiered();
-        GameRegistry.registerItem(intermediateProductTiered, Names.Items.intermediateTieredItem);
+        GameRegistry.register(intermediateProductTiered);
 
         intermediateProductRegular = new IntermediateProductRegular();
-        GameRegistry.registerItem(intermediateProductRegular, Names.Items.intermediateRegularItem);
+        GameRegistry.register(intermediateProductRegular);
 
         addonMetaItem = new AddonMetaItem();
-        GameRegistry.registerItem(addonMetaItem, Names.Items.addonMetaItem);
+        GameRegistry.register(addonMetaItem);
 
         upgradeMetaItem = new UpgradeMetaItem();
-        GameRegistry.registerItem(upgradeMetaItem, Names.Items.upgradeMetaItem);
+        GameRegistry.register(upgradeMetaItem);
 
         ammoMetaItem = new AmmoMetaItem();
-        GameRegistry.registerItem(ammoMetaItem, Names.Items.ammoMetaItem);
+        GameRegistry.register(ammoMetaItem);
 
         throwableMetaItem = new ThrowableMetaItem();
-        GameRegistry.registerItem(throwableMetaItem, Names.Items.throwableMetaItem);
+        GameRegistry.register(throwableMetaItem);
     }
 }

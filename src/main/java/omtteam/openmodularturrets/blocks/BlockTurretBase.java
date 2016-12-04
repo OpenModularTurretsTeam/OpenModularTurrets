@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
+import omtteam.openmodularturrets.reference.Reference;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
@@ -48,6 +49,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
         setDefaultState(this.blockState.getBaseState().withProperty(TIER, 1));
         this.setSoundType(SoundType.STONE);
         this.setUnlocalizedName(Names.Blocks.turretBase);
+        this.setRegistryName(Reference.MOD_ID, Names.Blocks.turretBase);
     }
 
     @Override
