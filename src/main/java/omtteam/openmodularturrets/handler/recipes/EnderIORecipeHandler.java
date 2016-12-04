@@ -21,7 +21,11 @@ class EnderIORecipeHandler {
         ItemStack doubleCapacitor;
         ItemStack octadicCapacitor;
         ItemStack vibrantCrystal;
-
+        ItemStack electricalSteel;
+        ItemStack darkSteel;
+        ItemStack conductiveIron;
+        ItemStack soularium;
+        
 		/* ModItems */
 
         Block capBankBlock = GameRegistry.findBlock("EnderIO", "blockCapBank");
@@ -37,18 +41,23 @@ class EnderIORecipeHandler {
         Item materialsItem = GameRegistry.findItem("EnderIO", "itemMaterial");
         vibrantCrystal = new ItemStack(materialsItem, 1, 6);
 
+        Item alloyItem = GameRegistry.findItem("EnderIO", "itemAlloy");
+        electricalSteel = new ItemStack(alloyItem, 1, 0);
+        darkSteel = new ItemStack(alloyItem, 1, 6);
+        conductiveIron = new ItemStack(alloyItem, 1, 4);
+        soularium = new ItemStack(alloyItem, 1, 7);
         // ModItems
         // Barrels
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,11), "AAA", " B ", "AAA", 'A',
-                                                   "ingotElectricalSteel", 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,10)));
+                                                   electricalSteel, 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,10)));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,12), "AAA", " B ", "AAA", 'A',
-                                    "ingotDarkSteel", 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,11)));
+                                    darkSteel, 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,11)));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,13), "CAC", " B ", "CAC", 'A',
                                                    Items.DIAMOND, 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,12),
-                                                   'C', "ingotSoularium"));
+                                                   'C', soularium));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,14), "AAA", "CBC", "AAA", 'A',
                                                    Blocks.OBSIDIAN, 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,13),
@@ -56,17 +65,17 @@ class EnderIORecipeHandler {
 
         // Chambers
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,6), "AAA", " BC", "AAA", 'A',
-                                                   "ingotElectricalSteel", 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,5), 'C',
+                                                   electricalSteel, 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,5), 'C',
                                                    basicCapacitor));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,7), "AAA", " BC", "AAA", 'A',
-                                    "ingotDarkSteel", 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,6), 'C', basicCapacitor));
+                                    darkSteel, 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,6), 'C', basicCapacitor));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,8), "DAD", " BC", "DAD", 'A',
                                     Items.DIAMOND, 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,7), 'C',
-                                    doubleCapacitor, 'D', "ingotSoularium"));
+                                    doubleCapacitor, 'D', soularium));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,9), "ADA", " BC", "ADA", 'A',
@@ -75,16 +84,16 @@ class EnderIORecipeHandler {
 
         // Sensors
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,1), " A ", "ABA", " C ", 'A',
-                                                   "ingotElectricalSteel", 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,0), 'C',
+                                                   electricalSteel, 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,0), 'C',
                                                    RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,2), " C ", "ABA", " C ", 'A',
-                                    "ingotDarkSteel", 'B',new ItemStack(ModItems.intermediateProductTiered, 1 ,1), 'C', RecipeHandler.ioBus));
+                                    darkSteel, 'B',new ItemStack(ModItems.intermediateProductTiered, 1 ,1), 'C', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,3), "EDE", "CBC", "EDE", 'B',
                                                    new ItemStack(ModItems.intermediateProductTiered, 1 ,2), 'C', RecipeHandler.ioBus, 'D',
-                                                   Items.DIAMOND, 'E', "ingotSoularium"));
+                                                   Items.DIAMOND, 'E', soularium));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1 ,4), "EDE", "CBC", "EDE", 'B',
                                                    new ItemStack(ModItems.intermediateProductTiered, 1 ,3), 'C', RecipeHandler.ioBus, 'D',
@@ -92,17 +101,17 @@ class EnderIORecipeHandler {
 
         // Bases
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,2), "ABA", "ECE", "ADA", 'A',
-                                                   "ingotElectricalSteel", 'B', capacitorBankBasic, 'C',
+                                                   electricalSteel, 'B', capacitorBankBasic, 'C',
                                                    new ItemStack(ModItems.intermediateProductTiered, 1 ,1), 'D', basicCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,3), "ABA", "ECE", "ADA", 'A',
-                                    "ingotDarkSteel", 'B', capacitorBank, 'C', new ItemStack(ModItems.intermediateProductTiered, 1 ,2), 'D',
+                                    darkSteel, 'B', capacitorBank, 'C', new ItemStack(ModItems.intermediateProductTiered, 1 ,2), 'D',
                                     basicCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,4), "ABA", "ECE", "ADA", 'A',
-                                    "ingotSoularium", 'B', capacitorBankVibrant, 'C', new ItemStack(ModItems.intermediateProductTiered, 1 ,3), 'D',
+                                    soularium, 'B', capacitorBankVibrant, 'C', new ItemStack(ModItems.intermediateProductTiered, 1 ,3), 'D',
                                     doubleCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
@@ -113,17 +122,17 @@ class EnderIORecipeHandler {
         //Power Expanders
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.expanderPowerTierTwo, "ABA", "ECE", "ADA", 'A',
-                                    "ingotElectricalSteel", 'B', capacitorBank, 'C',
+                                    electricalSteel, 'B', capacitorBank, 'C',
                                     Blocks.REDSTONE_BLOCK, 'D', basicCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.expanderPowerTierThree, "ABA", "ECE", "ADA", 'A',
-                                    "ingotDarkSteel", 'B', capacitorBank, 'C', Blocks.REDSTONE_BLOCK,
+                                    darkSteel, 'B', capacitorBank, 'C', Blocks.REDSTONE_BLOCK,
                                     'D', basicCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.expanderPowerTierFour, "ABA", "ECE", "ADA", 'A',
-                                    "ingotSoularium", 'B', capacitorBankVibrant, 'C',
+                                    soularium, 'B', capacitorBankVibrant, 'C',
                                     Blocks.REDSTONE_BLOCK, 'D', doubleCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
@@ -134,17 +143,17 @@ class EnderIORecipeHandler {
         //Inventory Expanders
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.expanderInvTierTwo, "ABA", "ECE", "ADA", 'A',
-                                    "ingotElectricalSteel", 'B', capacitorBank, 'C', Blocks.CHEST,
+                                    electricalSteel, 'B', capacitorBank, 'C', Blocks.CHEST,
                                     'D', basicCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.expanderInvTierThree, "ABA", "ECE", "ADA", 'A',
-                                    "ingotDarkSteel", 'B', capacitorBank, 'C', Blocks.CHEST, 'D',
+                                    darkSteel, 'B', capacitorBank, 'C', Blocks.CHEST, 'D',
                                     basicCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.expanderInvTierFour, "ABA", "ECE", "ADA", 'A',
-                                    "ingotSoularium", 'B', capacitorBankVibrant, 'C', Blocks.CHEST,
+                                    soularium, 'B', capacitorBankVibrant, 'C', Blocks.CHEST,
                                     'D', doubleCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
@@ -157,34 +166,34 @@ class EnderIORecipeHandler {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.machineGunTurret, 1), " A ", "CAC", "DBD", 'A',
                                         new ItemStack(ModItems.intermediateProductTiered, 1 ,11), 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,6), 'C',
-                                        "ingotElectricalSteel", 'D', RecipeHandler.ioBus));
+                                        electricalSteel, 'D', RecipeHandler.ioBus));
         }
 
         if (ConfigHandler.getIncendiary_turret().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.incendiaryTurret, 1), "A A", "BCB", "DCD", 'A',
                                         new ItemStack(ModItems.intermediateProductTiered, 1 ,11), 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,6), 'C',
-                                        "ingotElectricalSteel", 'D', RecipeHandler.ioBus));
+                                        electricalSteel, 'D', RecipeHandler.ioBus));
         }
 
         if (ConfigHandler.getGrenadeTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.grenadeLauncherTurret, 1), " A ", "CBC", "CDC", 'A',
                                         new ItemStack(ModItems.intermediateProductTiered, 1 ,12), 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,7), 'C',
-                                        "ingotDarkSteel", 'D', RecipeHandler.ioBus));
+                                        darkSteel, 'D', RecipeHandler.ioBus));
         }
 
         if (ConfigHandler.getRelativistic_turret().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.relativisticTurret, 1), "CAC", "ABA", "CDC", 'A',
                                         Items.ENDER_PEARL, 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,2), 'C',
-                                        "ingotDarkSteel", 'D', RecipeHandler.ioBus));
+                                        darkSteel, 'D', RecipeHandler.ioBus));
         }
 
         if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.rocketTurret, 1), "CAC", "CAC", "EDE", 'A',
                                                        new ItemStack(ModItems.intermediateProductTiered, 1 ,13), 'B', new ItemStack(ModItems.intermediateProductTiered, 1 ,8), 'C',
-                                                       "ingotSoularium", 'D', RecipeHandler.ioBus, 'E',
+                                                       soularium, 'D', RecipeHandler.ioBus, 'E',
                                                        Items.DIAMOND));
         }
 
@@ -212,19 +221,19 @@ class EnderIORecipeHandler {
 
         // Ammo
         GameRegistry.addRecipe(new ShapedOreRecipe(RecipeHandler.ammoRocket, " A ", "ABA", "C", 'A',
-                                                   "ingotElectricalSteel", 'B', Items.GUNPOWDER, 'C',
+                                                   electricalSteel, 'B', Items.GUNPOWDER, 'C',
                                                    Items.REDSTONE));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(RecipeHandler.ammoBullet, " A ", " B ", " C ", 'A',
-                                                   "ingotElectricalSteel", 'B', Items.GUNPOWDER, 'C',
-                                                   "ingotIron"));
+                                                   electricalSteel, 'B', Items.GUNPOWDER, 'C',
+                                                   conductiveIron));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(RecipeHandler.ammoGrenade, " C ", "ABA", " A ", 'A', "ingotIron",
+                new ShapedOreRecipe(RecipeHandler.ammoGrenade, " C ", "ABA", " A ", 'A', conductiveIron,
                                     'B', Items.GUNPOWDER, 'C', Items.REDSTONE));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(RecipeHandler.ammoFerroSlug, " C ", "CBC", " A ", 'A', "ingotDarkSteel", 'B',
+                new ShapedOreRecipe(RecipeHandler.ammoFerroSlug, " C ", "CBC", " A ", 'A', darkSteel, 'B',
                                     Items.FLINT, 'C', Items.REDSTONE));
     }
 }

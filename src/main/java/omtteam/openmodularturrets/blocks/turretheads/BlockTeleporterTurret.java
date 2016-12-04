@@ -6,6 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.TeleporterTurretTileEntity;
 
 import java.util.Random;
@@ -17,6 +18,7 @@ public class BlockTeleporterTurret extends BlockAbstractTurretHead {
         super();
 
         this.setUnlocalizedName(Names.Blocks.teleporterTurret);
+        this.setRegistryName(Reference.MOD_ID, Names.Blocks.teleporterTurret);
     }
 
     @Override

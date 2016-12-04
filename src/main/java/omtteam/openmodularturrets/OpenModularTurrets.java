@@ -30,7 +30,7 @@ public class OpenModularTurrets {
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         gui = new GuiHandler();
         modularTurretsTab = new ModularTurretsTab(Reference.MOD_ID);
-
+        ModCompatibility.checkForMods();
         proxy.preInit();
         proxy.initRenderers();
         proxy.initHandlers();
@@ -39,7 +39,6 @@ public class OpenModularTurrets {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        ModCompatibility.checkForMods();
         ModCompatibility.performModCompat();
     }
 }
