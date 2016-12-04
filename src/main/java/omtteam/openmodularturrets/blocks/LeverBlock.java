@@ -68,25 +68,25 @@ public class LeverBlock extends BlockAbstractTileEntity {
 
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        return (isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()))) ||
-                isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()))) ||
-                isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1))) ||
-                isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1))));
+        return (isBaseValid(worldIn.getTileEntity(pos.north())) ||
+                isBaseValid(worldIn.getTileEntity(pos.east())) ||
+                isBaseValid(worldIn.getTileEntity(pos.south())) ||
+                isBaseValid(worldIn.getTileEntity(pos.west())));
     }
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         float l = 0;
-        if (isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())))) {
+        if (isBaseValid(worldIn.getTileEntity(pos.north()))) {
             l = 270F;
         }
-        if (isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())))) {
+        if (isBaseValid(worldIn.getTileEntity(pos.east()))) {
             l = 90F;
         }
-        if (isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)))) {
+        if (isBaseValid(worldIn.getTileEntity(pos.south()))) {
             l = 0F;
         }
-        if (isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1)))) {
+        if (isBaseValid(worldIn.getTileEntity(pos.west()))) {
             l = 180;
         }
         int shu = MathHelper.floor_double((double) (l * 4.0F / 360.0F) + 0.5D) & 3;

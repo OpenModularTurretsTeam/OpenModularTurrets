@@ -220,7 +220,7 @@ class EnderIORecipeHandler {
         }
 
         // Ammo
-        GameRegistry.addRecipe(new ShapedOreRecipe(RecipeHandler.ammoRocket, " A ", "ABA", "C", 'A',
+        GameRegistry.addRecipe(new ShapedOreRecipe(RecipeHandler.ammoRocket, " A ", "ABA", " C ", 'A',
                                                    electricalSteel, 'B', Items.GUNPOWDER, 'C',
                                                    Items.REDSTONE));
 
