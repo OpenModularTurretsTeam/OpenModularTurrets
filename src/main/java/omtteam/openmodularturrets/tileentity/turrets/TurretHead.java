@@ -23,6 +23,8 @@ import omtteam.openmodularturrets.util.TurretHeadUtil;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
+
 public abstract class TurretHead extends TileEntityBase implements ITickable {
     int ticks;
     int targetingTicks;
@@ -397,7 +399,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
                 playedDeploy = false;
                 worldObj.playSound(null, this.pos, ModSounds.turretRetractSound, SoundCategory.BLOCKS,
                         ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
-                //worldObj.getBlockState(this.pos).getBlock(),(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F); //TODO: replace this with blockstate based
+                worldObj.setBlockState(this.pos,worldObj.getBlockState(pos).withProperty(CONCEALED, true), 3);
             } else {
                 ticksWithoutTarget++;
             }
@@ -410,12 +412,12 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
                     worldObj.playSound(null, this.pos, ModSounds.turretDeploySound, SoundCategory.BLOCKS,
                             ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
                     playedDeploy = true;
-                    //worldObj.getBlockState(this.pos).getBlock().setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 1F, 0.8F);
+                    worldObj.setBlockState(this.pos,worldObj.getBlockState(pos).withProperty(CONCEALED, false), 3);
                 }
             }
         } else {
             this.shouldConceal = false;
-            //worldObj.getBlockState(this.pos).getBlock().setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 1F, 0.8F);
+            worldObj.setBlockState(this.pos,worldObj.getBlockState(pos).withProperty(CONCEALED, false), 3);
         }
     }
 }
