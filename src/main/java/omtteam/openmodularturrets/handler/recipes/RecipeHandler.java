@@ -122,7 +122,7 @@ public class RecipeHandler {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.intermediateProductTiered, 1, 0), " A ", "ABA", " A ", 'A',
                 Items.REDSTONE, 'B', "plankWood"));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1, 1), "ABA", "BCB", "ABA", 'A',
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1, 0), "ABA", "BCB", "ABA", 'A',
                 Blocks.COBBLESTONE, 'B', "plankWood", 'C',
                 new ItemStack(ModItems.intermediateProductTiered, 1, 0)));
 
