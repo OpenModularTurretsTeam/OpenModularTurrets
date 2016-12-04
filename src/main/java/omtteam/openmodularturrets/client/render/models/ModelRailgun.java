@@ -1,10 +1,9 @@
 package omtteam.openmodularturrets.client.render.models;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelRailgun extends ModelBase {
+public class ModelRailgun extends ModelAbstractTurret {
     // fields
     public final ModelRenderer Base;
     private final ModelRenderer BarrelTop;
@@ -106,7 +105,7 @@ public class ModelRailgun extends ModelBase {
         GuardBinder.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z) {
+    protected void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;

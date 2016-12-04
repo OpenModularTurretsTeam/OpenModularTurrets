@@ -47,6 +47,7 @@ public class LaserTurretRenderer extends TileEntitySpecialRenderer {
         }
 
         if (turretHead.shouldConceal) {
+            GL11.glPopMatrix();
             return;
         }
 

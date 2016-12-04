@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelMachineGun extends ModelBase {
+public class ModelMachineGun extends ModelAbstractTurret {
     // fields
     public final ModelRenderer Base;
     public final ModelRenderer Pole;
@@ -90,7 +90,7 @@ public class ModelMachineGun extends ModelBase {
         Shape1.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z) {
+    protected void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
