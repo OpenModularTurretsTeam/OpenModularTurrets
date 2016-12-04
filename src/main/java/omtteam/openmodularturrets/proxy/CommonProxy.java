@@ -14,14 +14,19 @@ public class CommonProxy {
         ModBlocks.initBlocks();
         ModBlocks.initTileEntities();
         ModSounds.init();
-        RecipeHandler.initRecipes();
         ProjectileEntityHandler.registerProjectiles(OpenModularTurrets.instance);
+        initRenderers();
+        initHandlers();
     }
-    public void initRenderers() {
+    protected void initRenderers() {
 
     }
 
-    public void initHandlers() {
+    protected void initHandlers() {
         NetworkingHandler.initNetworking();
+    }
+
+    public void init() {
+        RecipeHandler.initRecipes();
     }
 }

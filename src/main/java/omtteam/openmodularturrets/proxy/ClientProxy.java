@@ -2,9 +2,11 @@ package omtteam.openmodularturrets.proxy;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import omtteam.openmodularturrets.blocks.LeverBlock;
 import omtteam.openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
 import omtteam.openmodularturrets.client.render.renderers.projectiles.ProjectileRenderers;
 import omtteam.openmodularturrets.compatability.IGWHandler;
@@ -65,6 +67,9 @@ public class ClientProxy extends CommonProxy {
         for (int i = 0; i < 2; i++) {
             registerItemModel(ModItems.throwableMetaItem, i, AmmoMetaItem.subNames[i], true);
         }
+
+        StateMap ignoreRotation = new StateMap.Builder().ignore(LeverBlock.ROTATION).build();
+        ModelLoader.setCustomStateMapper(ModBlocks.leverBlock, ignoreRotation);
     }
 
     @Override

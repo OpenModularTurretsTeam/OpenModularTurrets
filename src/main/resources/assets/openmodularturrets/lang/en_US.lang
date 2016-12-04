@@ -38,7 +38,7 @@ tile.turret_base_tier_three.name=Turret Base (Tier 3)
 tile.turret_base_tier_four.name=Turret Base (Tier 4)
 tile.turret_base_tier_five.name=Turret Base (Tier 5)
 
-tile.dispose_item_turret.name=Disposable Item Turret
+tile.disposable_item_turret.name=Disposable Item Turret
 tile.potato_cannon_turret.name=Potato Cannon Turret
 tile.rocket_turret.name=Rocket Launcher Turret
 tile.teleporter_turret.name=Teleporter Turret
