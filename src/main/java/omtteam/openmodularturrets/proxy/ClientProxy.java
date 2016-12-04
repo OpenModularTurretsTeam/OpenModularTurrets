@@ -65,7 +65,7 @@ public class ClientProxy extends CommonProxy {
             registerItemModel(ModItems.ammoMetaItem, i, AmmoMetaItem.subNames[i], true);
         }
         for (int i = 0; i < 2; i++) {
-            registerItemModel(ModItems.throwableMetaItem, i, AmmoMetaItem.subNames[i], true);
+            registerItemModel(ModItems.throwableMetaItem, i, ThrowableMetaItem.subNames[i], true);
         }
 
         StateMap ignoreRotation = new StateMap.Builder().ignore(LeverBlock.ROTATION).build();
