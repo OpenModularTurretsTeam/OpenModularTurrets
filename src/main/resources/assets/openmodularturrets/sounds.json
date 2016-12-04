@@ -1,162 +1,162 @@
 {
     "amped": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-                "name": "amped",
+                "name": "openmodularturrets:amped",
                 "stream": false
             }
         ]
     },
     "bullet_hit": {
-        "category": "neutral",
+        "category": "ambient",
         "sounds": [
             {
-                "name": "bullet_hit",
+                "name": "openmodularturrets:bullet_hit",
                 "stream": false
             }
         ]
     },
     "windup": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-                "name": "windup",
+                "name": "openmodularturrets:windup",
                 "stream": false
             }
         ]
     },
     "grenade": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-                "name": "grenade",
+                "name": "openmodularturrets:grenade",
                 "stream": false
             }
         ]
     },
     "machinegun": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-                "name": "machinegun",
+                "name": "openmodularturrets:machinegun",
                 "stream": false
             }
         ]
     },
     "laser": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-                "name": "laser",
+                "name": "openmodularturrets:laser",
                 "stream": false
             }
         ]
     },
     "warning": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-                "name": "warning",
+                "name": "openmodularturrets:warning",
                 "stream": false
             }
         ]
     },
     "laser_hit": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-               "name": "laser_hit",
+               "name": "openmodularturrets:laser_hit",
               "stream": false
             }
         ]
     },
     "rocket": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-               "name": "rocket",
+               "name": "openmodularturrets:rocket",
               "stream": false
             }
         ]
     },
     "disposable": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-               "name": "disposable",
+               "name": "openmodularturrets:disposable",
               "stream": false
             }
         ]
     },
     "potato": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-               "name": "potato",
+               "name": "openmodularturrets:potato",
               "stream": false
             }
         ]
     },
     "incendiary": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-               "name": "incendiary",
+               "name": "openmodularturrets:incendiary",
               "stream": false
             }
         ]
     },
     "relativistic": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-               "name": "relativistic",
+               "name": "openmodularturrets:relativistic",
               "stream": false
             }
         ]
     },
     "teleport": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-               "name": "teleport",
+               "name": "openmodularturrets:teleport",
               "stream": false
             }
         ]
     },
      "rail_gun": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-               "name": "rail_gun",
+               "name": "openmodularturrets:rail_gun",
               "stream": false
             }
         ]
     },
      "rail_gun_hit": {
-        "category": "neutral",
+        "category": "ambient",
         "sounds": [
             {
-               "name": "rail_gun_hit",
+               "name": "openmodularturrets:rail_gun_hit",
               "stream": false
             }
         ]
     },
     "turret_deploy": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-                "name": "turret_deploy",
+                "name": "openmodularturrets:turret_deploy",
                 "stream": false
             }
         ]
     },
     "turret_retract": {
-        "category": "neutral",
+        "category": "block",
         "sounds": [
             {
-                "name": "turret_retract",
+                "name": "openmodularturrets:turret_retract",
                 "stream": false
             }
         ]
