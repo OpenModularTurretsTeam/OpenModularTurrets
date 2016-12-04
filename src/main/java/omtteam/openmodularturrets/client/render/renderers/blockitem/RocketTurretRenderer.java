@@ -47,6 +47,7 @@ public class RocketTurretRenderer extends TileEntitySpecialRenderer {
         }
 
         if (turretHead.shouldConceal) {
+            GL11.glPopMatrix();
             return;
         }
 

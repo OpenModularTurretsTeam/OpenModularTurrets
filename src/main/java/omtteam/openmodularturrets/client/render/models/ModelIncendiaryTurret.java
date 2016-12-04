@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelIncendiaryTurret extends ModelBase {
+public class ModelIncendiaryTurret extends ModelAbstractTurret {
     // fields
     public final ModelRenderer Base;
     public final ModelRenderer Pole;
@@ -91,7 +91,7 @@ public class ModelIncendiaryTurret extends ModelBase {
         Tank.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z) {
+    protected void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;

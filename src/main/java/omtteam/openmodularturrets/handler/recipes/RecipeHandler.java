@@ -75,7 +75,7 @@ public class RecipeHandler {
         upgradeFireRate = new ItemStack(ModItems.upgradeMetaItem, 1, 2);
         upgradeRange = new ItemStack(ModItems.upgradeMetaItem, 1, 3);
         upgradeScatterShot = new ItemStack(ModItems.upgradeMetaItem, 1, 4);
-        ioBus = new ItemStack(ModItems.intermediateProductRegular, 1, 2);
+        ioBus = new ItemStack(ModItems.intermediateProductRegular, 1, 0);
 
         boolean recipesDone = false;
         // Recipes

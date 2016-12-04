@@ -42,6 +42,7 @@ public class RelativisticTurretRenderer extends TileEntitySpecialRenderer {
         }
 
         if (turretHead.shouldConceal) {
+            GL11.glPopMatrix();
             return;
         }
 
