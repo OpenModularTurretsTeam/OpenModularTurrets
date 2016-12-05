@@ -24,7 +24,7 @@ public class MessageDropBase implements IMessage {
                 @Override
                 public void run() {
                     World world = ctx.getServerHandler().playerEntity.worldObj;
-
+                    world.removeTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
                     world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ()), true);
                 }
             });
