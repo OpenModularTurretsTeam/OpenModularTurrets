@@ -23,7 +23,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
+import omtteam.omlib.util.MathUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.reference.Names;
 import omtteam.openmodularturrets.reference.Reference;
@@ -44,12 +46,15 @@ public class BlockExpander extends BlockAbstractTileEntity {
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
     public BlockExpander() {
-        super(Material.ROCK);
+        super(Material.GLASS);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
+        if (!ConfigHandler.turretBreakable) {
+            this.setBlockUnbreakable();
+        }
         this.setResistance(3.0F);
         this.setHardness(3.0F);
         this.setSoundType(SoundType.STONE);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(META, 0));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(META, 0));
         this.setRegistryName(Reference.MOD_ID, Names.Blocks.expander);
     }
 
@@ -88,7 +93,23 @@ public class BlockExpander extends BlockAbstractTileEntity {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
+        IBlockState blockState = this.getActualState(state, source,pos);
+        return MathUtil.rotateAABB(new AxisAlignedBB(1/8F, 1/8F, 0F, 7/8F, 7/8F, 3/8F), blockState.getValue(FACING).getOpposite());
+    }
+
+    @Override
+    public boolean isFullBlock(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return false;
+    }
+
+    @Override
+    public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+        return false;
     }
 
     @Override
@@ -98,20 +119,26 @@ public class BlockExpander extends BlockAbstractTileEntity {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (state.getValue(META) > 4) return true;
+        if (hand.equals(EnumHand.OFF_HAND)) return true;
         Expander expander = (Expander) world.getTileEntity(pos);
         if (expander == null) {
             return true;
         }
         TurretBase base = expander.getBase();
         if (base != null && base.getTrustedPlayer(player.getUniqueID()) != null) {
-            if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI) {
+            if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI && state.getValue(META) < 4) {
                 player.openGui(OpenModularTurrets.instance, 7, world, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
         }
         if (base != null && player.getUniqueID().toString().equals(base.getOwner())) {
-            player.openGui(OpenModularTurrets.instance, 7, world, pos.getX(), pos.getY(), pos.getZ());
+            if (player.isSneaking() && player.getHeldItemMainhand() == null) {
+                world.destroyBlock(pos, true);
+            } else if (state.getValue(META) < 4){
+                player.openGui(OpenModularTurrets.instance, 7, world, pos.getX(), pos.getY(), pos.getZ());
+            } else {
+                return true;
+            }
         } else {
             player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
         }
@@ -140,8 +167,11 @@ public class BlockExpander extends BlockAbstractTileEntity {
         if (expander != null) {
             expander.setOwnerName(expander.getBase().getOwnerName());
             expander.setOwner(expander.getBase().getOwner());
+            expander.setSide();
         }
     }
+
+
 
     @Override
     public int damageDropped(IBlockState state) {
