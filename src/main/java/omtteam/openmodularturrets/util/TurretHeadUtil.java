@@ -704,13 +704,13 @@ public class TurretHeadUtil {
 
         if (base.getStackInSlot(9) != null) {
             if (base.getStackInSlot(9).getItemDamage() == 1) {
-                amp_level += base.getStackInSlot(10).stackSize;
+                amp_level += base.getStackInSlot(9).stackSize;
             }
         }
 
         if (base.getStackInSlot(10) != null) {
             if (base.getStackInSlot(10).getItemDamage() == 1) {
-                amp_level += base.getStackInSlot(9).stackSize;
+                amp_level += base.getStackInSlot(10).stackSize;
             }
         }
 
