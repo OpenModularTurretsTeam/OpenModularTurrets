@@ -9,7 +9,6 @@ public class ConfigHandler {
     public static boolean turretBreakable;
     public static boolean turretWarnMessage;
     public static boolean turretDamageTrustedPlayers;
-    public static boolean IGWNotification;
     public static String recipes;
     public static boolean shouldDoThaumcraftIntegration;
     public static boolean shouldDoComputerIntegration;
@@ -240,8 +239,6 @@ public class ConfigHandler {
         shouldDoComputerIntegration = config.get("ModCompatibility",
                                                  "Should we enable items that integrate with ComputerCraft/OpenComputers?",
                                                  true).getBoolean();
-
-        IGWNotification = config.get("ModCompatibility", "Enable IGW Mod notification", true).getBoolean();
 
         potentiaToRFRatio = config.get("ModCompatibility", "Potentia Addons' RF conversion ratio per 1 essentia",
                                        500).getInt();
