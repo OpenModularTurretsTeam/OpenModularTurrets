@@ -14,7 +14,6 @@ public class Expander extends TileEntityContainer implements ITickable {
     public float baseFitRotationX;
     public float baseFitRotationZ;
     protected TurretBase base;
-    private boolean hasSetSide = false;
     private boolean powerExpander;
     private EnumFacing orientation;
     protected int tier;
@@ -58,37 +57,31 @@ public class Expander extends TileEntityContainer implements ITickable {
     public void setSide() {
         if (worldObj.getTileEntity(this.pos.east()) instanceof TurretBase) {
             this.setOrientation(EnumFacing.EAST);
-            this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.west()) instanceof TurretBase) {
             this.setOrientation(EnumFacing.WEST);
-            this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.down()) instanceof TurretBase) {
             this.setOrientation(EnumFacing.DOWN);
-            this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.up()) instanceof TurretBase) {
             this.setOrientation(EnumFacing.UP);
-            this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.north()) instanceof TurretBase) {
             this.setOrientation(EnumFacing.NORTH);
-            this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.south()) instanceof TurretBase) {
             this.setOrientation(EnumFacing.SOUTH);
-            this.hasSetSide = true;
         }
     }
 
