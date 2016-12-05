@@ -9,16 +9,21 @@ import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
 
 public class CommonProxy {
-    public void preInit(){
+    public void preInit() {
         ModItems.init();
         ModBlocks.initBlocks();
         ModBlocks.initTileEntities();
         ModSounds.init();
         ProjectileEntityHandler.registerProjectiles(OpenModularTurrets.instance);
-        initRenderers();
+        initTileRenderers();
         initHandlers();
     }
-    protected void initRenderers() {
+
+    protected void initTileRenderers() {
+
+    }
+
+    protected void initEntityRenderers() {
 
     }
 
@@ -28,5 +33,6 @@ public class CommonProxy {
 
     public void init() {
         RecipeHandler.initRecipes();
+        initEntityRenderers();
     }
 }
