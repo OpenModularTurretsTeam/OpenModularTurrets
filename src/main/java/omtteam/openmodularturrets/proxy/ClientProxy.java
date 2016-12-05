@@ -73,12 +73,18 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void initRenderers() {
-        super.initRenderers();
+    protected void initTileRenderers() {
+        super.initTileRenderers();
         TileEntityRenderers.init();
-        ProjectileRenderers.init();
         ModTESRItems.init();
     }
+
+    @Override
+    protected void initEntityRenderers() {
+        super.initEntityRenderers();
+        ProjectileRenderers.init();
+    }
+
 
     @Override
     public void initHandlers() {
