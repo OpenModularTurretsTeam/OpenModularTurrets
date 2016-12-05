@@ -18,7 +18,7 @@ public class UpgradeSlot extends Slot {
 
     @Override
     public int getItemStackLimit(ItemStack stack) {
-        return 4;
+        return (stack.getItemDamage() == 4 ? 2 : 4);
     }
 
     @Override
