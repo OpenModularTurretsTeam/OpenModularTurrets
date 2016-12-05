@@ -5,14 +5,20 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockStateBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.tileentity.TileEntityMachine;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
@@ -35,7 +41,8 @@ import dan200.computercraft.api.peripheral.IPeripheral;*/
 )
 public class TurretBase extends TileEntityMachine implements SimpleComponent, /*IPeripheral,*/ ITickable {
     public int trustedPlayerIndex = 0;
-    public IBlockState camoBlockState;
+    public String camoBlockRegName = "";
+    public int camoBlockMeta = 0;
 
     //For concealment
     public boolean shouldConcealTurrets;
@@ -52,7 +59,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
     //private ArrayList<IComputerAccess> comp;
     protected int tier;
 
-    public TurretBase(){
+    public TurretBase() {
         super();
     }
 
@@ -138,8 +145,9 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         nbtTagCompound.setBoolean("multiTargeting", multiTargeting);
         nbtTagCompound.setInteger("tier", tier);
 
-        if (camoBlockState != null) {
-            nbtTagCompound.setString("camoBlockState", camoBlockState.toString());
+        if (camoBlockRegName != null && !camoBlockRegName.isEmpty()) {
+            nbtTagCompound.setString("camoBlockRegName", camoBlockRegName);
+            nbtTagCompound.setInteger("camoBlockMeta", camoBlockMeta);
         }
         return nbtTagCompound;
     }
@@ -156,7 +164,8 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         this.multiTargeting = nbtTagCompound.getBoolean("multiTargeting");
         this.tier = nbtTagCompound.getInteger("tier");
         this.computerAccessible = nbtTagCompound.hasKey("computerAccessible") && nbtTagCompound.getBoolean("computerAccessible");
-        //camoBlockState = BlockStateBase.(nbtTagCompound.getCompoundTag("CamoStack"));
+        this.camoBlockRegName = nbtTagCompound.getString("camoBlockRegName");
+        this.camoBlockMeta = nbtTagCompound.getInteger("camoBlockMeta");
     }
 
 
@@ -450,6 +459,20 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         }
         return new Object[]{this.getRedstone()};
     }
+
+    public void setCamoBlock(ItemStack camoBlock) {
+
+        if (camoBlock == null) {
+            this.camoBlockRegName = "";
+            this.camoBlockMeta = 0;
+            return;
+        }
+
+        this.camoBlockRegName = camoBlock.getItem().getRegistryName().toString();
+        this.camoBlockMeta = camoBlock.getMetadata();
+    }
+
+
 
     /*@Optional.Method(modid = "ComputerCraft")
     @Override
