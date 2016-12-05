@@ -328,7 +328,7 @@ public class TurretHeadUtil {
                     ItemStack itemCheck = exp.getStackInSlot(i);
                     if (itemCheck != null) {
                         exp.decrStackSize(i, 1);
-                        return new ItemStack(itemCheck.getItem());
+                        return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
                     }
                 }
             }
@@ -394,10 +394,10 @@ public class TurretHeadUtil {
 
     public static ItemStack useAnyItemStackFromBase(TurretBase base) {
         for (int i = 0; i <= 8; i++) {
-            ItemStack ammoCheck = base.getStackInSlot(i);
-            if (ammoCheck != null && ammoCheck.stackSize > 0) {
+            ItemStack itemCheck = base.getStackInSlot(i);
+            if (itemCheck != null && itemCheck.stackSize > 0) {
                 base.decrStackSize(i, 1);
-                return new ItemStack(ammoCheck.getItem());
+                return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
             }
         }
         return null;

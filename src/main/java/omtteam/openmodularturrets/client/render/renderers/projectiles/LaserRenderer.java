@@ -1,10 +1,14 @@
 package omtteam.openmodularturrets.client.render.renderers.projectiles;
 
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
@@ -18,90 +22,84 @@ import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
 class LaserRenderer extends Render {
-     protected LaserRenderer(RenderManager renderManager)
-    {
-        super(renderManager);
+    protected LaserRenderer() {
+        super(Minecraft.getMinecraft().getRenderManager());
     }
 
-    private static final ResourceLocation laserTextures = new ResourceLocation(
-            Reference.MOD_ID.toLowerCase() + ":textures/blocks/laser.png");
+    private ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/laser.png"));
 
-    private void renderLaser(LaserProjectile par1EntityRocket, double par2, double par4, double par6, float par9) {
+    private void renderLaser(LaserProjectile par1EntityRocket, double x, double y, double z, float entityYaw, float partialTicks) {
         for (int i = 0; i <= 20; i++) {
-            par1EntityRocket.worldObj.spawnParticle(EnumParticleTypes.REDSTONE, par2, par4, par6, 1.0D, 1.0D, 1.0D);
+            par1EntityRocket.worldObj.spawnParticle(EnumParticleTypes.REDSTONE, x, y, z, 1.0D, 1.0D, 1.0D);
         }
 
-        this.bindEntityTexture(par1EntityRocket);
-        GL11.glPushMatrix();
-        GL11.glTranslatef((float) par2, (float) par4 + 0.30F, (float) par6);
-        GL11.glRotatef(
-                par1EntityRocket.prevRotationYaw + (par1EntityRocket.rotationYaw - par1EntityRocket.prevRotationYaw) * par9 - 90.0F,
-                0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(
-                par1EntityRocket.prevRotationPitch + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch) * par9,
-                0.0F, 0.0F, 1.0F);
-
+        Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.pushMatrix();
+        GlStateManager.disableLighting();
+        GlStateManager.translate((float) x, (float) y, (float) z);
+        GlStateManager.rotate(par1EntityRocket.prevRotationYaw + (par1EntityRocket.rotationYaw - par1EntityRocket.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(par1EntityRocket.prevRotationPitch + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
         Tessellator tessellator = Tessellator.getInstance();
-        byte b0 = 0;
+        VertexBuffer vertexbuffer = tessellator.getBuffer();
+        int i = 0;
+        float f = 0.0F;
+        float f1 = 0.5F;
         float f2 = 0.0F;
-        float f3 = 0.5F;
-        float f4 = (float) (b0 * 10) / 32.0F;
-        float f5 = (float) (5 + b0 * 10) / 32.0F;
+        float f3 = 0.15625F;
+        float f4 = 0.0F;
+        float f5 = 0.15625F;
+        float f6 = 0.15625F;
+        float f7 = 0.3125F;
+        float f8 = 0.05625F;
+        GlStateManager.enableRescaleNormal();
+        float f9 = (float) par1EntityRocket.arrowShake - partialTicks;
 
-        float f10 = 0.05625F;
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        float f11 = (float) par1EntityRocket.arrowShake - par9;
-
-        if (f11 > 0.0F) {
-            float f12 = -MathHelper.sin(f11 * 3.0F) * f11;
-            GL11.glRotatef(f12, 0.0F, 0.0F, 1.0F);
+        if (f9 > 0.0F) {
+            float f10 = -MathHelper.sin(f9 * 3.0F) * f9;
+            GlStateManager.rotate(f10, 0.0F, 0.0F, 1.0F);
         }
 
-        GL11.glDisable(GL11.GL_LIGHTING);
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+        GlStateManager.rotate(45.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.scale(0.05625F, 0.05625F, 0.05625F);
+        GlStateManager.translate(-4.0F, 0.0F, 0.0F);
 
-        GL11.glRotatef(45.0F, 1.0F, 0.0F, 0.0F);
-        GL11.glScalef(f10, f10, f10);
-        GL11.glTranslatef(0.0F, 0.0F, 0.0F);
-        GL11.glNormal3f(f10, 0.0F, 0.0F);
+        GlStateManager.glNormal3f(0.05625F, 0.0F, 0.0F);
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.pos(-7.0D, -2.0D, -2.0D).tex(0.0D, 0.15625D).endVertex();
+        vertexbuffer.pos(-7.0D, -2.0D, 2.0D).tex(0.15625D, 0.15625D).endVertex();
+        vertexbuffer.pos(-7.0D, 2.0D, 2.0D).tex(0.15625D, 0.3125D).endVertex();
+        vertexbuffer.pos(-7.0D, 2.0D, -2.0D).tex(0.0D, 0.3125D).endVertex();
+        tessellator.draw();
+        GlStateManager.glNormal3f(-0.05625F, 0.0F, 0.0F);
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.pos(-7.0D, 2.0D, -2.0D).tex(0.0D, 0.15625D).endVertex();
+        vertexbuffer.pos(-7.0D, 2.0D, 2.0D).tex(0.15625D, 0.15625D).endVertex();
+        vertexbuffer.pos(-7.0D, -2.0D, 2.0D).tex(0.15625D, 0.3125D).endVertex();
+        vertexbuffer.pos(-7.0D, -2.0D, -2.0D).tex(0.0D, 0.3125D).endVertex();
+        tessellator.draw();
 
-        /*for (int i = 0; i < 4; ++i) {
-            GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
-            GL11.glNormal3f(0.0F, 0.0F, f10);
-            tessellator.startDrawingQuads();
-            tessellator.addVertexWithUV(-16.0D, -2.0D, 0.0D, (double) f2, (double) f4);
-            tessellator.addVertexWithUV(16.0D, -2.0D, 0.0D, (double) f3, (double) f4);
-            tessellator.addVertexWithUV(16.0D, 2.0D, 0.0D, (double) f3, (double) f5);
-            tessellator.addVertexWithUV(-16.0D, 2.0D, 0.0D, (double) f2, (double) f5);
+        for (int j = 0; j < 4; ++j) {
+            GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.glNormal3f(0.0F, 0.0F, 0.05625F);
+            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+            vertexbuffer.pos(-8.0D, -2.0D, 0.0D).tex(0.0D, 0.0D).endVertex();
+            vertexbuffer.pos(8.0D, -2.0D, 0.0D).tex(0.5D, 0.0D).endVertex();
+            vertexbuffer.pos(8.0D, 2.0D, 0.0D).tex(0.5D, 0.15625D).endVertex();
+            vertexbuffer.pos(-8.0D, 2.0D, 0.0D).tex(0.0D, 0.15625D).endVertex();
             tessellator.draw();
-        } */ //TODO: fixme
+        }
 
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        GL11.glPopMatrix();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.enableLighting();
+        GlStateManager.popMatrix();
     }
 
-    private ResourceLocation getLaserTextures() {
-        return laserTextures;
-    }
-
-    /**
-     * Returns the location of an entity's texture. Doesn't seem to be called
-     * unless you call Render.bindEntityTexture.
-     */
     protected ResourceLocation getEntityTexture(Entity par1Entity) {
-        return this.getLaserTextures();
+        return texture;
     }
 
-    /**
-     * Actually renders the given argument. This is a synthetic bridge method,
-     * always casting down its argument and then handing it off to a worker
-     * function which does the actual work. In all probabilty, the class Render
-     * is generic (Render<T extends Entity) and this method has signature public
-     * void doRender(T entity, double d, double d1, double d2, float f, float
-     * f1). But JAD is pre 1.5 so doesn't do that.
-     */
     public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9) {
-        this.renderLaser((LaserProjectile) par1Entity, par2, par4, par6, par9);
+        this.renderLaser((LaserProjectile) par1Entity, par2, par4, par6, par8, par9);
     }
 }

@@ -88,6 +88,10 @@ public class DisposableTurretProjectile extends TurretProjectile {
         this.setDead();
     }
 
+    public EntityItem getItemBound() {
+        return itemBound;
+    }
+
     @Override
     protected float getGravityVelocity() {
         return this.gravity;
