@@ -104,7 +104,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
             EntityLivingBase base = (EntityLivingBase) target;
             base.setPositionAndUpdate(this.getPos().getX() + 0.5F, this.getPos().getY() + 1.0F, this.getPos().getZ() + 0.5F);
 
-            ((BlockTeleporterTurret) worldObj.getBlockState(this.pos)).shouldAnimate = true;
+            ((BlockTeleporterTurret) worldObj.getBlockState(this.pos).getBlock()).shouldAnimate = true;
             target = null;
         }
 
