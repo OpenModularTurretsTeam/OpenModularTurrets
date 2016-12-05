@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.tileentity.turrets;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -209,6 +210,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         this.base = getBase();
 
         if (worldObj.isRemote) {
+            Minecraft.getMinecraft().renderGlobal.markBlockRangeForRenderUpdate(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY(), pos.getZ());
             updateRotationAnimation();
             return;
         }
