@@ -46,7 +46,7 @@ public class Expander extends TileEntityContainer implements ITickable {
         this.powerExpander= nbtTagCompound.getBoolean("powerExpander");
         this.tier = nbtTagCompound.getInteger("tier");
         if (nbtTagCompound.hasKey("direction")) {
-            this.orientation = EnumFacing.getFront(nbtTagCompound.getByte("direction"));
+            this.setOrientation(EnumFacing.getFront(nbtTagCompound.getByte("direction")));
         }
     }
 
@@ -55,51 +55,46 @@ public class Expander extends TileEntityContainer implements ITickable {
         return truncateDoubleToInt(Math.pow(2,tier+1));
     }
 
-    private void setSide() {
+    public void setSide() {
         if (worldObj.getTileEntity(this.pos.east()) instanceof TurretBase) {
-            this.orientation = EnumFacing.EAST;
+            this.setOrientation(EnumFacing.EAST);
             this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.west()) instanceof TurretBase) {
-            this.orientation = EnumFacing.WEST;
+            this.setOrientation(EnumFacing.WEST);
             this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.down()) instanceof TurretBase) {
-            this.orientation = EnumFacing.DOWN;
+            this.setOrientation(EnumFacing.DOWN);
             this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.up()) instanceof TurretBase) {
-            this.orientation = EnumFacing.UP;
+            this.setOrientation(EnumFacing.UP);
             this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.north()) instanceof TurretBase) {
-            this.orientation = EnumFacing.NORTH;
+            this.setOrientation(EnumFacing.NORTH);
             this.hasSetSide = true;
             return;
         }
 
         if (worldObj.getTileEntity(this.pos.south()) instanceof TurretBase) {
-            this.orientation = EnumFacing.SOUTH;
+            this.setOrientation(EnumFacing.SOUTH);
             this.hasSetSide = true;
         }
     }
 
     @Override
     public void update() {
-        if (!hasSetSide) {
-            setSide();
-            this.getWorld().notifyBlockUpdate(this.pos, this.getWorld().getBlockState(this.pos),this.getWorld().getBlockState(this.pos),2);
-        }
-
-        if (getBase() == null || dropBlock) {
+        if (worldObj.getWorldTime() % 15 == 0 && getBase() == null || dropBlock) {
             this.getWorld().destroyBlock(this.pos, true);
         }
     }
@@ -141,7 +136,7 @@ public class Expander extends TileEntityContainer implements ITickable {
         return orientation;
     }
 
-    public void setOrientation(EnumFacing orientation) {
+    private void setOrientation(EnumFacing orientation) {
         this.orientation = orientation;
     }
 }

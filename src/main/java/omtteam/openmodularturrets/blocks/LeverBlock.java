@@ -30,7 +30,7 @@ public class LeverBlock extends BlockAbstractTileEntity {
     public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 4);
 
     public LeverBlock() {
-        super(Material.ROCK);
+        super(Material.GLASS);
         this.setUnlocalizedName(Names.Blocks.lever);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setHardness(2F);
