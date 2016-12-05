@@ -11,16 +11,20 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
@@ -104,11 +108,10 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         TurretBase base = (TurretBase) world.getTileEntity(pos);
-        /*if (!world.isRemote && player.isSneaking() && ConfigHandler.isAllowBaseCamo() && player.getCurrentEquippedItem() == null) {
-            TurretBase base = (TurretBase) world.getTileEntity(pos);
+        if (!world.isRemote && player.isSneaking() && ConfigHandler.isAllowBaseCamo() && heldItem == null) {
             if (base != null) {
                 if (player.getUniqueID().toString().equals(base.getOwner())) {
-                    base.camoBlockState = null;
+                    base.setCamoBlock(null);
                 } else {
                     player.addChatMessage(
                             new TextComponentString(I18n.translateToLocal("status.ownership")));
@@ -116,23 +119,27 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
             }
         }
 
-        if (!world.isRemote && !player.isSneaking() && ConfigHandler.isAllowBaseCamo() && player.getCurrentEquippedItem() != null &&
-                player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemBlock &&
-                Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()).isNormalCube() && Block.getBlockFromItem(
-                player.getCurrentEquippedItem().getItem()).isOpaqueCube() && !(Block.getBlockFromItem(
-                player.getCurrentEquippedItem().getItem()) instanceof BlockTurretBase)) {
-            TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
+        Block heldItemBlock = null;
+
+        if (heldItem != null) {
+            heldItemBlock = Block.getBlockFromItem(heldItem.getItem());
+        }
+
+        if (!world.isRemote && !player.isSneaking() && ConfigHandler.isAllowBaseCamo() && heldItem != null &&
+                heldItemBlock != null && heldItem.getItem() instanceof ItemBlock &&
+                heldItemBlock.isNormalCube(heldItemBlock.getStateFromMeta(heldItem.getMetadata())) && Block.getBlockFromItem(
+                heldItem.getItem()).isOpaqueCube(heldItemBlock.getStateFromMeta(heldItem.getMetadata())) && !(Block.getBlockFromItem(
+                heldItem.getItem()) instanceof BlockTurretBase)) {
             if (base != null) {
                 if (player.getUniqueID().toString().equals(base.getOwner())) {
-                    base.camoBlockState = player.getCurrentEquippedItem();
+                    base.setCamoBlock(heldItem);
                 } else {
                     player.addChatMessage(
                             new TextComponentString(I18n.translateToLocal("status.ownership")));
                 }
             }
 
-        } else  */
-        if (!world.isRemote && !player.isSneaking() && base != null) {
+        } else if (!world.isRemote && !player.isSneaking() && base != null) {
             TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
             if (trustedPlayer != null && trustedPlayer.canOpenGUI) {
                 world.notifyBlockUpdate(pos, state, state, 6);
@@ -222,6 +229,37 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
     }
 
     @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        if (((TurretBase) worldIn.getTileEntity(pos)).camoBlockRegName != null && !((TurretBase) worldIn.getTileEntity(pos)).camoBlockRegName.isEmpty()) {
+            return ForgeRegistries.BLOCKS.getValue(new ResourceLocation(((TurretBase) worldIn.getTileEntity(pos)).camoBlockRegName)).getStateFromMeta(((TurretBase) worldIn.getTileEntity(pos)).camoBlockMeta);
+        }
+
+        return super.getActualState(state, worldIn, pos);
+
+    }
+
+    @Override
+    public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
+        worldIn.destroyBlock(pos, true);
+        worldIn.removeTileEntity(pos);
+        super.onBlockHarvested(worldIn, pos, state, player);
+    }
+
+    @Override
+    public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn) {
+        worldIn.destroyBlock(pos, true);
+        worldIn.removeTileEntity(pos);
+        super.onBlockDestroyedByExplosion(worldIn, pos, explosionIn);
+    }
+
+    @Override
+    public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
+        worldIn.destroyBlock(pos, true);
+        worldIn.removeTileEntity(pos);
+        super.onBlockDestroyedByPlayer(worldIn, pos, state);
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     public void getSubBlocks(Item item, CreativeTabs tab, List subItems) {
@@ -229,4 +267,5 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
             subItems.add(new ItemStack(ModBlocks.turretBase, 1, i));
         }
     }
+
 }
