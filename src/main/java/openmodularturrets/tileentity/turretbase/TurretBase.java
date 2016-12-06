@@ -16,6 +16,7 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -24,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -34,6 +36,7 @@ import openmodularturrets.network.messages.MessageTurretBase;
 import openmodularturrets.tileentity.TileEntityContainer;
 import openmodularturrets.ucdefinitions.TurretBaseUCDefinition;
 import openmodularturrets.util.MathUtil;
+import openmodularturrets.util.PlayerUtil;
 import openmodularturrets.util.TurretHeadUtil;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -214,20 +217,62 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     }
 
     public boolean addTrustedPlayer(String name) {
+
         TrustedPlayer trustedPlayer = new TrustedPlayer(name);
         trustedPlayer.uuid = getPlayerUUID(name);
+
+        if (!worldObj.isRemote) {
+            boolean foundPlayer = false;
+            for (String servername : MinecraftServer.getServer().getAllUsernames()) {
+                if (name.equals(servername)) {
+                    foundPlayer = true;
+                    break;
+                }
+            }
+
+            if (foundPlayer == false) {
+                return false;
+            }
+        }
+
+        if(trustedPlayer.uuid == null)
+        {
+            return false;
+        }
+
+        if (ConfigHandler.offlineModeSupport) {
+            if (trustedPlayer.getName().equals(getOwner())) {
+                return false;
+            }
+
+        } else {
+            if (trustedPlayer.uuid.toString().equals(getOwner())) {
+                return false;
+            }
+        }
+
         if (trustedPlayer.uuid != null || ConfigHandler.offlineModeSupport) {
             for (TrustedPlayer player : trustedPlayers) {
-                if (player.getName().toLowerCase().equals(name.toLowerCase()) || trustedPlayer.uuid.toString().equals(
-                        owner)) {
-                    return true;
+                if (ConfigHandler.offlineModeSupport) {
+                    if (player.getName().toLowerCase().equals(name.toLowerCase()) || player.getName().equals(getOwner())) {
+                        return false;
+                    }
+                } else {
+                    if (player.getName().toLowerCase().equals(name.toLowerCase()) || trustedPlayer.uuid.toString().equals(
+                            owner)) {
+                        return false;
+                    }
                 }
+            }
+            if (ConfigHandler.offlineModeSupport) {
+
             }
             trustedPlayers.add(trustedPlayer);
             return true;
         }
         return false;
     }
+
 
     public boolean removeTrustedPlayer(String name) {
         for (TrustedPlayer player : trustedPlayers) {
