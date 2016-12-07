@@ -73,21 +73,21 @@ class VanillaRecipeHandler {
 
         // Bases
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,2), "ABA", "DCD", "ADA", 'A', "ingotIron",
-                                    'B', new ItemStack(ModBlocks.turretBase,1,1), 'C',new ItemStack(ModItems.intermediateProductTiered, 1 ,1), 'D', RecipeHandler.ioBus));
+                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,1), "ABA", "DCD", "ADA", 'A', "ingotIron",
+                                    'B', new ItemStack(ModBlocks.turretBase,1,0), 'C',new ItemStack(ModItems.intermediateProductTiered, 1 ,1), 'D', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,3), "ABA", "DCD", "ADA", 'A', "ingotGold",
-                                    'B', new ItemStack(ModBlocks.turretBase,1,2), 'C', new ItemStack(ModItems.intermediateProductTiered, 1 ,2), 'D', RecipeHandler.ioBus));
+                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,2), "ABA", "DCD", "ADA", 'A', "ingotGold",
+                                    'B', new ItemStack(ModBlocks.turretBase,1,1), 'C', new ItemStack(ModItems.intermediateProductTiered, 1 ,2), 'D', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,4), "ABA", "DCD", "ADA", 'A',
-                                    Items.DIAMOND, 'B', new ItemStack(ModBlocks.turretBase,1,3), 'C',
+                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,3), "ABA", "DCD", "ADA", 'A',
+                                    Items.DIAMOND, 'B', new ItemStack(ModBlocks.turretBase,1,2), 'C',
                                     new ItemStack(ModItems.intermediateProductTiered, 1 ,3), 'D', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,5), "ABA", "DCD", "ADA", 'A',
-                                    Blocks.OBSIDIAN, 'B', new ItemStack(ModBlocks.turretBase,1,4), 'C',
+                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,4), "ABA", "DCD", "ADA", 'A',
+                                    Blocks.OBSIDIAN, 'B', new ItemStack(ModBlocks.turretBase,1,3), 'C',
                                     new ItemStack(ModItems.intermediateProductTiered, 1 ,4), 'D', RecipeHandler.ioBus));
 
         // Power Expanders

@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -10,6 +11,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -23,10 +25,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
+import omtteam.omlib.util.IHasItemBlock;
 import omtteam.omlib.util.MathUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
+import omtteam.openmodularturrets.items.blocks.ItemBlockExpander;
 import omtteam.openmodularturrets.reference.Names;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.Expander;
@@ -41,7 +45,7 @@ import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
  * Created by Keridos on 19/07/16.
  * This Class
  */
-public class BlockExpander extends BlockAbstractTileEntity {
+public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBlock {
     public static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
@@ -56,6 +60,11 @@ public class BlockExpander extends BlockAbstractTileEntity {
         this.setSoundType(SoundType.STONE);
         this.setDefaultState(this.blockState.getBaseState().withProperty(META, 0));
         this.setRegistryName(Reference.MOD_ID, Names.Blocks.expander);
+    }
+
+    @Override
+    public ItemBlock getItemBlock(Block block) {
+        return new ItemBlockExpander(block);
     }
 
     @Override
@@ -93,8 +102,8 @@ public class BlockExpander extends BlockAbstractTileEntity {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        IBlockState blockState = this.getActualState(state, source,pos);
-        return MathUtil.rotateAABB(new AxisAlignedBB(1/8F, 1/8F, 0F, 7/8F, 7/8F, 3/8F), blockState.getValue(FACING).getOpposite());
+        IBlockState blockState = this.getActualState(state, source, pos);
+        return MathUtil.rotateAABB(new AxisAlignedBB(1 / 8F, 1 / 8F, 0F, 7 / 8F, 7 / 8F, 3 / 8F), blockState.getValue(FACING).getOpposite());
     }
 
     @Override
@@ -134,7 +143,7 @@ public class BlockExpander extends BlockAbstractTileEntity {
         if (base != null && player.getUniqueID().toString().equals(base.getOwner())) {
             if (player.isSneaking() && player.getHeldItemMainhand() == null) {
                 world.destroyBlock(pos, true);
-            } else if (state.getValue(META) < 4){
+            } else if (state.getValue(META) < 4) {
                 player.openGui(OpenModularTurrets.instance, 7, world, pos.getX(), pos.getY(), pos.getZ());
             } else {
                 return true;
@@ -170,7 +179,6 @@ public class BlockExpander extends BlockAbstractTileEntity {
             expander.setSide();
         }
     }
-
 
 
     @Override

@@ -100,22 +100,22 @@ class EnderIORecipeHandler {
                                                    Blocks.OBSIDIAN, 'E', vibrantCrystal));
 
         // Bases
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,2), "ABA", "ECE", "ADA", 'A',
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,1), "ABA", "ECE", "ADA", 'A',
                                                    electricalSteel, 'B', capacitorBankBasic, 'C',
                                                    new ItemStack(ModItems.intermediateProductTiered, 1 ,1), 'D', basicCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,3), "ABA", "ECE", "ADA", 'A',
+                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,2), "ABA", "ECE", "ADA", 'A',
                                     darkSteel, 'B', capacitorBank, 'C', new ItemStack(ModItems.intermediateProductTiered, 1 ,2), 'D',
                                     basicCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,4), "ABA", "ECE", "ADA", 'A',
+                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,3), "ABA", "ECE", "ADA", 'A',
                                     soularium, 'B', capacitorBankVibrant, 'C', new ItemStack(ModItems.intermediateProductTiered, 1 ,3), 'D',
                                     doubleCapacitor, 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,5), "ABA", "ECE", "ADA", 'A',
+                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,4), "ABA", "ECE", "ADA", 'A',
                                     Blocks.OBSIDIAN, 'B', capacitorBankVibrant, 'C',
                                     new ItemStack(ModItems.intermediateProductTiered, 1 ,4), 'D', octadicCapacitor, 'E', RecipeHandler.ioBus));
 

@@ -223,7 +223,7 @@ public class ConfigHandler {
                 true).getBoolean();
 
         recipes = config.get("miscellaneous",
-                "Which recipes should we do? (auto, enderio, thermalexpansion, mekanism, vanilla)",
+                "Which recipes should we do? (auto, enderio, mekanism, vanilla)",
                 "auto").getString();
 
         turretSoundVolume = config.get("miscellaneous", "Turret sound volume percentage (Between 0 - 100)",
