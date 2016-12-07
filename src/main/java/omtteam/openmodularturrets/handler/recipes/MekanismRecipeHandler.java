@@ -90,22 +90,22 @@ class MekanismRecipeHandler {
 
         // Bases
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,2), "ABA", "ECE", "ADA", 'A', ironEnriched,
+                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,1), "ABA", "ECE", "ADA", 'A', ironEnriched,
                                     'B', energyTablet, 'C',new ItemStack(ModItems.intermediateProductTiered, 1 ,1), 'D', "ingotTin", 'E',
                                     RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,3), "ABA", "ECE", "ADA", 'A',
+                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,2), "ABA", "ECE", "ADA", 'A',
                                     alloyEnriched, 'B', energyTablet, 'C', new ItemStack(ModItems.intermediateProductTiered, 1 ,2), 'D', "ingotSteel",
                                     'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,4), "ABA", "ECE", "ADA", 'A',
+                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,3), "ABA", "ECE", "ADA", 'A',
                                     alloyReinforced, 'B', energyTablet, 'C', new ItemStack(ModItems.intermediateProductTiered, 1 ,3), 'D',
                                     "ingotRefinedGlowstone", 'E', RecipeHandler.ioBus));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,5), "ABA", "ECE", "ADA", 'A',
+                new ShapedOreRecipe(new ItemStack(ModBlocks.turretBase, 1,4), "ABA", "ECE", "ADA", 'A',
                                     Blocks.OBSIDIAN, 'B', energyTablet, 'C',
                                     new ItemStack(ModItems.intermediateProductTiered, 1 ,4), 'D', "ingotRefinedObsidian", 'E', RecipeHandler.ioBus));
 

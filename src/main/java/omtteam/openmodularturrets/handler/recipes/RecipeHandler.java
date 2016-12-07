@@ -80,10 +80,7 @@ public class RecipeHandler {
         boolean recipesDone = false;
         // Recipes
 
-        if (ModCompatibility.ThermalExpansionLoaded && ConfigHandler.recipes.equals("thermalexpansion")) {
-            //ThermalExpansionRecipeHandler.init();
-            recipesDone = true;
-        } else if (ModCompatibility.EnderIOLoaded && ConfigHandler.recipes.equals("enderio")) {
+        if (ModCompatibility.EnderIOLoaded && ConfigHandler.recipes.equals("enderio")) {
             EnderIORecipeHandler.init();
             recipesDone = true;
         } else if (ModCompatibility.MekanismLoaded && ConfigHandler.recipes.equals("mekanism")) {
@@ -95,8 +92,6 @@ public class RecipeHandler {
         } else if (ConfigHandler.recipes.equals("auto")) {
             if (ModCompatibility.EnderIOLoaded) {
                 EnderIORecipeHandler.init();
-            } else if (ModCompatibility.ThermalExpansionLoaded) {
-                //ThermalExpansionRecipeHandler.init();
             } else if (ModCompatibility.MekanismLoaded) {
                 MekanismRecipeHandler.init();
             } else {

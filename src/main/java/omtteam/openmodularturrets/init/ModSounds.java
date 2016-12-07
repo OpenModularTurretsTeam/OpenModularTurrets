@@ -3,10 +3,12 @@ package omtteam.openmodularturrets.init;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 
+import static omtteam.omlib.util.ReflectionInitHelper.registerSounds;
+
 
 /**
  * Created by Keridos on 24/11/16.
- * This Class
+ * This Class handles all the sounds in the mod.
  */
 public class ModSounds {
     public static SoundEvent turretDeploySound;
@@ -27,7 +29,7 @@ public class ModSounds {
     public static SoundEvent turretWarnSound;
 
 
-    public static void init(){
+    public static void init() {
         turretDeploySound = new SoundEvent(new ResourceLocation("openmodularturrets", "turret_deploy"));
         turretRetractSound = new SoundEvent(new ResourceLocation("openmodularturrets", "turret_retract"));
         bulletHitSound = new SoundEvent(new ResourceLocation("openmodularturrets", "bullet_hit"));
@@ -43,6 +45,9 @@ public class ModSounds {
         relativisticLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "relativistic"));
         rocketLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "rocket"));
         teleportLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "teleport"));
-        teleportLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "teleport"));
+
+        registerSounds(ModSounds.class);
     }
+
+
 }

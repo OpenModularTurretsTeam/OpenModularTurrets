@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -7,6 +8,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -17,8 +19,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
+import omtteam.omlib.util.IHasItemBlock;
+import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.openmodularturrets.items.blocks.ItemBlockLever;
 import omtteam.openmodularturrets.reference.Names;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
@@ -26,7 +30,7 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.Nullable;
 
-public class LeverBlock extends BlockAbstractTileEntity {
+public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock {
     public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 4);
 
     public LeverBlock() {
@@ -38,6 +42,11 @@ public class LeverBlock extends BlockAbstractTileEntity {
         this.setSoundType(SoundType.STONE);
         setDefaultState(this.blockState.getBaseState().withProperty(ROTATION, 0));
         this.setRegistryName(Reference.MOD_ID, Names.Blocks.lever);
+    }
+
+    @Override
+    public ItemBlock getItemBlock(Block block) {
+        return new ItemBlockLever(block);
     }
 
     @Override
@@ -63,7 +72,7 @@ public class LeverBlock extends BlockAbstractTileEntity {
     }
 
     private boolean isBaseValid(TileEntity base) {
-            return base instanceof TurretBase && ((TurretBase) base).getTier() == 1;
+        return base instanceof TurretBase && ((TurretBase) base).getTier() == 1;
     }
 
     @Override

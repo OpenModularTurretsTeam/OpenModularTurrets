@@ -119,9 +119,9 @@ repositories {
         }
     }
 }
-project.ext.omlib_local = false
+def omlib_local = false
 configure(subprojects.findAll {it.name == 'OMLib'}) {
-   project.ext.omlib_local = true
+   omlib_local = true
 }
 
 dependencies {
@@ -132,7 +132,7 @@ dependencies {
     //compile "Azanor:Thaumcraft:${config.tc_version}:deobf@jar"
     compile "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
     compile "net.darkhax.tesla:Tesla:${config.minecraft_version}-${config.tesla_version}"
-    if (!project.ext.omlib_local) {
+    if (!omlib_local) {
         compile "omtteam:omlib:${config.minecraft_version}-${config.omlib_version}:dev"
     } else {
         compile project(':OMLib')

@@ -12,10 +12,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
+import omtteam.omlib.util.IHasItemBlock;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
-public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity {
+public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity implements IHasItemBlock {
     public static final PropertyBool CONCEALED = PropertyBool.create("concealed");
 
     BlockAbstractTurretHead() {

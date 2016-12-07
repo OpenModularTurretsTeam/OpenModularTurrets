@@ -2,8 +2,10 @@ package omtteam.openmodularturrets.init;
 
 
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import omtteam.openmodularturrets.items.*;
+
+import static omtteam.omlib.util.ReflectionInitHelper.registerItems;
+
 
 public class ModItems {
     public static Item addonMetaItem;
@@ -15,21 +17,11 @@ public class ModItems {
 
     public static void init() {
         intermediateProductTiered = new IntermediateProductTiered();
-        GameRegistry.register(intermediateProductTiered);
-
         intermediateProductRegular = new IntermediateProductRegular();
-        GameRegistry.register(intermediateProductRegular);
-
         addonMetaItem = new AddonMetaItem();
-        GameRegistry.register(addonMetaItem);
-
         upgradeMetaItem = new UpgradeMetaItem();
-        GameRegistry.register(upgradeMetaItem);
-
         ammoMetaItem = new AmmoMetaItem();
-        GameRegistry.register(ammoMetaItem);
-
         throwableMetaItem = new ThrowableMetaItem();
-        GameRegistry.register(throwableMetaItem);
+        registerItems(ModItems.class);
     }
 }

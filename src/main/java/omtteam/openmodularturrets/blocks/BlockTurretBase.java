@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -24,11 +25,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
+import omtteam.omlib.util.IHasItemBlock;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
+import omtteam.openmodularturrets.items.blocks.ItemBlockTurretBase;
 import omtteam.openmodularturrets.reference.Names;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.TurretBase;
@@ -37,7 +40,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockTurretBase extends BlockAbstractTileEntity {
+public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItemBlock {
     public static final PropertyInteger TIER = PropertyInteger.create("tier", 1, 5);
 
     IBlockState camoBlockState = null;
@@ -54,6 +57,11 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
         this.setSoundType(SoundType.STONE);
         this.setUnlocalizedName(Names.Blocks.turretBase);
         this.setRegistryName(Reference.MOD_ID, Names.Blocks.turretBase);
+    }
+
+    @Override
+    public ItemBlock getItemBlock(Block block) {
+        return new ItemBlockTurretBase(block);
     }
 
     @Override
