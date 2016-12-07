@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.tileentity.turrets;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -215,7 +214,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         }
 
         if (ticks % 5 == 0) {
-            worldObj.notifyBlockUpdate(this.pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos),3);
+            worldObj.notifyBlockUpdate(this.pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
         }
 
         ticks++;
@@ -400,7 +399,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
                 playedDeploy = false;
                 worldObj.playSound(null, this.pos, ModSounds.turretRetractSound, SoundCategory.BLOCKS,
                         ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
-                worldObj.setBlockState(this.pos,worldObj.getBlockState(pos).withProperty(CONCEALED, true), 3);
+                worldObj.setBlockState(this.pos, worldObj.getBlockState(pos).withProperty(CONCEALED, true), 3);
             } else {
                 ticksWithoutTarget++;
             }
@@ -413,12 +412,12 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
                     worldObj.playSound(null, this.pos, ModSounds.turretDeploySound, SoundCategory.BLOCKS,
                             ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
                     playedDeploy = true;
-                    worldObj.setBlockState(this.pos,worldObj.getBlockState(pos).withProperty(CONCEALED, false), 3);
+                    worldObj.setBlockState(this.pos, worldObj.getBlockState(pos).withProperty(CONCEALED, false), 3);
                 }
             }
         } else {
             this.shouldConceal = false;
-            worldObj.setBlockState(this.pos,worldObj.getBlockState(pos).withProperty(CONCEALED, false), 3);
+            worldObj.setBlockState(this.pos, worldObj.getBlockState(pos).withProperty(CONCEALED, false), 3);
         }
     }
 }

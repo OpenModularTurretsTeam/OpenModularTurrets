@@ -25,3 +25,5 @@ out/
 # Other Stuff
 Thumbs.db
 *.hprof
+ignoreOMLib
+settings.gradle
