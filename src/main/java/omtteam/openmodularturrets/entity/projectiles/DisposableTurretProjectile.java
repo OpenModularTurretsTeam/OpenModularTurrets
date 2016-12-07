@@ -7,6 +7,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import omtteam.openmodularturrets.blocks.BlockTurretBase;
+import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
@@ -44,11 +46,14 @@ public class DisposableTurretProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(RayTraceResult movingobjectposition) {
-        if (this.ticksExisted <= 2) {
-            return;
-        }
+
         if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
             IBlockState hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos());
+
+            if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
+                return;
+            }
+
             if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;

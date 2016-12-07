@@ -9,6 +9,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import omtteam.openmodularturrets.blocks.BlockTurretBase;
+import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
@@ -40,6 +42,11 @@ public class BlazingClayProjectile extends TurretProjectile {
         }
         if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
             IBlockState hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos());
+
+            if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
+                return;
+            }
+
             if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;
@@ -54,7 +61,7 @@ public class BlazingClayProjectile extends TurretProjectile {
 
         if (!worldObj.isRemote) {
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
-                                                              this.posX + 5, this.posY + 5, this.posZ + 5);
+                    this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             int damage = ConfigHandler.getIncendiary_turret().getDamage();
