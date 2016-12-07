@@ -8,6 +8,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import omtteam.openmodularturrets.blocks.BlockTurretBase;
+import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
@@ -35,11 +37,15 @@ public class FerroSlugProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(RayTraceResult movingobjectposition) {
-        if (this.ticksExisted <= 1) {
-            return;
-        }
+
         if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
             IBlockState hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos());
+
+            if( hitBlock.getBlock() instanceof BlockAbstractTurretHead)
+            {
+                return;
+            }
+
             if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;

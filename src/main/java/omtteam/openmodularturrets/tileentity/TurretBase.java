@@ -8,6 +8,7 @@ import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockStateBase;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -15,8 +16,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.tileentity.TileEntityMachine;
@@ -167,7 +171,6 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         this.camoBlockRegName = nbtTagCompound.getString("camoBlockRegName");
         this.camoBlockMeta = nbtTagCompound.getInteger("camoBlockMeta");
     }
-
 
     @Override
     public void update() {
@@ -471,6 +474,8 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         this.camoBlockRegName = camoBlock.getItem().getRegistryName().toString();
         this.camoBlockMeta = camoBlock.getMetadata();
     }
+
+
 
 
 
