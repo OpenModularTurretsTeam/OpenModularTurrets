@@ -24,7 +24,7 @@ import java.util.UUID;
  * This Class is the Message that the electric floodlights TileEntity uses.
  */
 public class MessageTurretBase implements IMessage {
-    private int x, y, z, rfStorage, tier;
+    private int x, y, z, rfStorageCurrent, rfStorageMax, tier;
     private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting;
     private String owner, ownerName;
     private List<TrustedPlayer> trustedPlayers = new ArrayList<>();
@@ -46,7 +46,8 @@ public class MessageTurretBase implements IMessage {
                     if (tileEntity instanceof TurretBase) {
                         ((TurretBase) tileEntity).setOwner(message.owner);
                         ((TurretBase) tileEntity).setOwnerName(message.ownerName);
-                        ((TurretBase) tileEntity).setEnergyStored(message.rfStorage);
+                        ((TurretBase) tileEntity).setEnergyStored(message.rfStorageCurrent);
+                        ((TurretBase) tileEntity).setMaxEnergyStored(message.rfStorageMax);
                         ((TurretBase) tileEntity).setAttacksMobs(message.attacksMobs);
                         ((TurretBase) tileEntity).setAttacksNeutrals(message.attacksNeutrals);
                         ((TurretBase) tileEntity).setAttacksPlayers(message.attacksPlayers);
@@ -59,6 +60,7 @@ public class MessageTurretBase implements IMessage {
             });
             return null;
         }
+
     }
 
 
@@ -71,7 +73,8 @@ public class MessageTurretBase implements IMessage {
             this.tier = TurretBase.getTier();
             this.owner = TurretBase.getOwner();
             this.ownerName = TurretBase.getOwnerName();
-            this.rfStorage = TurretBase.getEnergyStored(EnumFacing.DOWN);
+            this.rfStorageCurrent = TurretBase.getEnergyStored(EnumFacing.DOWN);
+            this.rfStorageMax = TurretBase.getMaxEnergyStored(EnumFacing.DOWN);
             this.attacksMobs = TurretBase.isAttacksMobs();
             this.attacksNeutrals = TurretBase.isAttacksNeutrals();
             this.attacksPlayers = TurretBase.isAttacksPlayers();
@@ -91,7 +94,8 @@ public class MessageTurretBase implements IMessage {
         this.owner = new String(buf.readBytes(ownerLength).array());
         int ownerNameLength = buf.readInt();
         this.ownerName = new String(buf.readBytes(ownerNameLength).array());
-        this.rfStorage = buf.readInt();
+        this.rfStorageCurrent = buf.readInt();
+        this.rfStorageMax = buf.readInt();
         this.attacksMobs = buf.readBoolean();
         this.attacksNeutrals = buf.readBoolean();
         this.attacksPlayers = buf.readBoolean();
@@ -123,7 +127,8 @@ public class MessageTurretBase implements IMessage {
         buf.writeBytes(owner.getBytes());
         buf.writeInt(ownerName.length());
         buf.writeBytes(ownerName.getBytes());
-        buf.writeInt(rfStorage);
+        buf.writeInt(rfStorageCurrent);
+        buf.writeInt(rfStorageMax);
         buf.writeBoolean(attacksMobs);
         buf.writeBoolean(attacksNeutrals);
         buf.writeBoolean(attacksPlayers);
@@ -146,7 +151,7 @@ public class MessageTurretBase implements IMessage {
     @Override
     public String toString() {
         return String.format(
-                "MessageTurretBase - x:%s, y:%s, z:%s, owner:%s, rfstorage:%s", x, y, z, owner, rfStorage);
+                "MessageTurretBase - x:%s, y:%s, z:%s, owner:%s, rfstorage:%s", x, y, z, owner, rfStorageCurrent);
     }
 }
 

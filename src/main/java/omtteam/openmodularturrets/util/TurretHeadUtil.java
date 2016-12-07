@@ -339,7 +339,7 @@ public class TurretHeadUtil {
     private static int getPowerExtenderCapacityValue(Expander expander) {
         if (expander != null) {
             if (!expander.isPowerExpander()) return 0;
-            int tier = expander.getTier();
+            int tier = (expander.getTier() > 4?expander.getTier()-4: 0);
 
             switch (tier) {
                 case 1:
