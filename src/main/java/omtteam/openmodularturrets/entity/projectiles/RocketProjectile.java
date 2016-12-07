@@ -10,6 +10,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import omtteam.openmodularturrets.blocks.BlockTurretBase;
+import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
@@ -51,7 +53,6 @@ public class RocketProjectile extends TurretProjectile {
                 double d2 = target.posZ - this.posZ;
 
                 this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
-                speed = speed + 0.06F;
             } else if (ConfigHandler.canRocketsHome && target == null) {
                 this.setDead();
             }
@@ -66,15 +67,15 @@ public class RocketProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(RayTraceResult movingobjectposition) {
-        if (ConfigHandler.canRocketsHome && this.ticksExisted <= 5) {
-            return;
-        }
 
-        if (!ConfigHandler.canRocketsHome && this.ticksExisted <= 2) {
-            return;
-        }
         if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
             IBlockState hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos());
+
+            if( hitBlock.getBlock() instanceof BlockAbstractTurretHead)
+            {
+                return;
+            }
+
             if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;

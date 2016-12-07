@@ -210,7 +210,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         this.base = getBase();
 
         if (worldObj.isRemote) {
-            Minecraft.getMinecraft().renderGlobal.markBlockRangeForRenderUpdate(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY(), pos.getZ());
             updateRotationAnimation();
             return;
         }

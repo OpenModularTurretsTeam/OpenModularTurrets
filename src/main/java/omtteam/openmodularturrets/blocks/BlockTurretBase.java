@@ -6,6 +6,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.texture.ITickableTextureObject;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -24,6 +32,9 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,6 +54,10 @@ import java.util.List;
 
 public class BlockTurretBase extends BlockAbstractTileEntity {
     public static final PropertyInteger TIER = PropertyInteger.create("tier", 1, 5);
+
+    IBlockState camoBlockState = null;
+
+    boolean wasBroken = false;
 
     public BlockTurretBase() {
         super(Material.ROCK);
@@ -112,6 +127,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
             if (base != null) {
                 if (player.getUniqueID().toString().equals(base.getOwner())) {
                     base.setCamoBlock(null);
+                    camoBlockState = null;
                 } else {
                     player.addChatMessage(
                             new TextComponentString(I18n.translateToLocal("status.ownership")));
@@ -133,6 +149,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
             if (base != null) {
                 if (player.getUniqueID().toString().equals(base.getOwner())) {
                     base.setCamoBlock(heldItem);
+                    camoBlockState = heldItemBlock.getStateFromMeta(heldItem.getMetadata());
                 } else {
                     player.addChatMessage(
                             new TextComponentString(I18n.translateToLocal("status.ownership")));
@@ -170,6 +187,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack
             stack) {
+
         if (!worldIn.isRemote && worldIn.getTileEntity(pos) instanceof TurretBase) {
             EntityPlayerMP player = (EntityPlayerMP) placer;
             TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
@@ -205,8 +223,9 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         if (!worldIn.isRemote) {
+            wasBroken = true;
+            worldIn.removeTileEntity(pos);
             dropItems(worldIn, pos);
-            super.breakBlock(worldIn, pos, state);
         }
     }
 
@@ -228,36 +247,6 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
         return new ItemStack(ModBlocks.turretBase, 1, state.getValue(TIER) - 1);
     }
 
-    @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        if (((TurretBase) worldIn.getTileEntity(pos)).camoBlockRegName != null && !((TurretBase) worldIn.getTileEntity(pos)).camoBlockRegName.isEmpty()) {
-            return ForgeRegistries.BLOCKS.getValue(new ResourceLocation(((TurretBase) worldIn.getTileEntity(pos)).camoBlockRegName)).getStateFromMeta(((TurretBase) worldIn.getTileEntity(pos)).camoBlockMeta);
-        }
-
-        return super.getActualState(state, worldIn, pos);
-
-    }
-
-    @Override
-    public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
-        worldIn.destroyBlock(pos, true);
-        worldIn.removeTileEntity(pos);
-        super.onBlockHarvested(worldIn, pos, state, player);
-    }
-
-    @Override
-    public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn) {
-        worldIn.destroyBlock(pos, true);
-        worldIn.removeTileEntity(pos);
-        super.onBlockDestroyedByExplosion(worldIn, pos, explosionIn);
-    }
-
-    @Override
-    public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
-        worldIn.destroyBlock(pos, true);
-        worldIn.removeTileEntity(pos);
-        super.onBlockDestroyedByPlayer(worldIn, pos, state);
-    }
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -267,5 +256,4 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
             subItems.add(new ItemStack(ModBlocks.turretBase, 1, i));
         }
     }
-
 }
