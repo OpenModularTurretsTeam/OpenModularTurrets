@@ -14,6 +14,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven-publish'
+apply plugin: 'idea'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
@@ -33,6 +34,8 @@ if (hasProperty('appendBuildNumber')) {
 } else {
     version = version + "-0"
 }
+
+
 
 group = "${config.group_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${config.mod_id}"
@@ -116,6 +119,10 @@ repositories {
         }
     }
 }
+project.ext.omlib_local = false
+configure(subprojects.findAll {it.name == 'OMLib'}) {
+   project.ext.omlib_local = true
+}
 
 dependencies {
     deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.jei_version}"
@@ -125,7 +132,11 @@ dependencies {
     //compile "Azanor:Thaumcraft:${config.tc_version}:deobf@jar"
     compile "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
     compile "net.darkhax.tesla:Tesla:${config.minecraft_version}-${config.tesla_version}"
-    compile "omtteam:omlib:${config.minecraft_version}-${config.omlib_version}:dev"
+    if (!project.ext.omlib_local) {
+        compile "omtteam:omlib:${config.minecraft_version}-${config.omlib_version}:dev"
+    } else {
+        compile project(':OMLib')
+    }
     runtime "com.enderio:EnderIO:${config.minecraft_version}-${config.enderio_version}"
     runtime "com.enderio.core:EnderCore:${config.minecraft_version}-${config.endercore_version}"
     //runtime "com.github.azanor:baubles:${config.baubles_version}"
@@ -152,4 +163,6 @@ publishing {
     repositories {
             mavenLocal()
     }
+
+
 }
