@@ -6,46 +6,31 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
-import net.minecraft.client.renderer.texture.ITickableTextureObject;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
-import omtteam.openmodularturrets.reference.Reference;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.Nullable;
@@ -123,7 +108,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         TurretBase base = (TurretBase) world.getTileEntity(pos);
-        if (!world.isRemote && player.isSneaking() && ConfigHandler.isAllowBaseCamo() && heldItem == null) {
+        /*if (!world.isRemote && player.isSneaking() && ConfigHandler.isAllowBaseCamo() && heldItem == null) {
             if (base != null) {
                 if (player.getUniqueID().toString().equals(base.getOwner())) {
                     base.setCamoBlock(null);
@@ -156,7 +141,8 @@ public class BlockTurretBase extends BlockAbstractTileEntity {
                 }
             }
 
-        } else if (!world.isRemote && !player.isSneaking() && base != null) {
+        } else*/
+        if (!world.isRemote && !player.isSneaking() && base != null) {
             TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
             if (trustedPlayer != null && trustedPlayer.canOpenGUI) {
                 world.notifyBlockUpdate(pos, state, state, 6);
