@@ -86,8 +86,6 @@ public class ModBlocks {
         registerBlocks(ModBlocks.class);
     }
 
-
-
     public static void initTileEntities() {
         GameRegistry.registerTileEntity(TurretBase.class, Names.Blocks.turretBase);
         GameRegistry.registerTileEntity(DisposableItemTurretTileEntity.class, Names.Blocks.disposableItemTurret);
