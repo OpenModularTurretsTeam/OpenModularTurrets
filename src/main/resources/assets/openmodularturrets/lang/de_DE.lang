@@ -16,6 +16,7 @@ item.addon_solar_panel.name=Addon - Solar Panel
 item.addon_potentia.name=Addon - Potentia Konverter
 item.addon_serial_port.name=Addon - Serieller Port
 item.addon_concealer.name=Addon - Turm Verberger
+item.addon_recycler.name=Addon - Recycler
 item.sensor_tier_one.name=Sensor (Tier 1)
 item.sensor_tier_two.name=Sensor (Tier 2)
 item.sensor_tier_three.name=Sensor (Tier 3)
