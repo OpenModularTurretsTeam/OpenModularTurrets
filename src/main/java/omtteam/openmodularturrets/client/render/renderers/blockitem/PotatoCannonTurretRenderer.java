@@ -88,7 +88,7 @@ public class PotatoCannonTurretRenderer extends TileEntitySpecialRenderer {
             }
 
             if (TurretHeadUtil.hasRedstoneReactor(turretHead.base)) {
-                ResourceLocation texturesReac = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/redstone_reactor.png"));
+                ResourceLocation texturesReac = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_redstone_reactor.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesReac);
                 reac.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 reac.renderAll();
