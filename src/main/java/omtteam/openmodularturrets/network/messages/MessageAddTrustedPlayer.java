@@ -2,9 +2,9 @@ package omtteam.openmodularturrets.network.messages;
 
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -23,7 +23,7 @@ public class MessageAddTrustedPlayer implements IMessage {
         public IMessage onMessage(MessageAddTrustedPlayer messageIn, MessageContext ctxIn) {
             final MessageAddTrustedPlayer message = messageIn;
             final MessageContext ctx = ctxIn;
-            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+            ((WorldServer) ctx.getServerHandler().playerEntity.worldObj).addScheduledTask(new Runnable() {
                 @Override
                 public void run() {
                     World world = ctx.getServerHandler().playerEntity.worldObj;

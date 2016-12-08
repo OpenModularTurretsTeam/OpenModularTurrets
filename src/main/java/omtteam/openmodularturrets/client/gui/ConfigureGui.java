@@ -27,6 +27,7 @@ public class ConfigureGui extends GuiContainer {
     private final EntityPlayer player;
     private int mouseX;
     private int mouseY;
+    private int waitForServerTrustedPlayers = -1;
 
     public ConfigureGui(InventoryPlayer inventoryPlayer, TurretBase tileEntity) {
         super(new ConfigContainer(tileEntity));
@@ -137,20 +138,11 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 4) { //add trusted player
-            if (player.getUniqueID().toString().equals(base.getOwner())) {
+            if (player.getUniqueID().toString().equals(base.getOwner()) || base.getTrustedPlayer(player.getUniqueID()).admin) {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
-                    this.base.addTrustedPlayer(textFieldAddTrustedPlayer.getText());
                     sendChangeToServerAddTrusted();
                     textFieldAddTrustedPlayer.setText("");
-                    this.base.trustedPlayerIndex = 0;
-                    player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
-                }
-            } else if (base.getTrustedPlayer(player.getUniqueID()).admin) {
-                if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
-                    base.addTrustedPlayer(textFieldAddTrustedPlayer.getText());
-                    sendChangeToServerAddTrusted();
-                    textFieldAddTrustedPlayer.setText("");
-                    this.base.trustedPlayerIndex = 0;
+                    waitForServerTrustedPlayers = 5;
                     player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
                 }
             } else {
@@ -200,6 +192,9 @@ public class ConfigureGui extends GuiContainer {
                 this.base.trustedPlayerIndex++;
                 player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
             }
+        }
+        if (base.getTrustedPlayers().size() == 0) {
+            return;
         }
 
         if (guibutton.id == 8) { //change trusted player permission for GUI opening
@@ -397,5 +392,19 @@ public class ConfigureGui extends GuiContainer {
                 perm, canDo);
 
         NetworkingHandler.INSTANCE.sendToServer(message);
+    }
+
+    @Override
+    public void updateScreen() {
+        super.updateScreen();
+        if (this.base.getTrustedPlayers().size() == 0 && this.buttonList.size() > 9 && !this.buttonList.get(9).displayString.equals("?")) {
+            this.initGui();
+        } else if (waitForServerTrustedPlayers >= 0 && this.base.getTrustedPlayers().size() > 0) {
+            waitForServerTrustedPlayers = -1;
+            this.base.trustedPlayerIndex = 0;
+            this.initGui();
+        } else if (waitForServerTrustedPlayers >= 0) {
+            waitForServerTrustedPlayers--;
+        }
     }
 }
