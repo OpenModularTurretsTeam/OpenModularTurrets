@@ -1,9 +1,9 @@
 package omtteam.openmodularturrets.network.messages;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -20,7 +20,7 @@ public class MessageDropTurrets implements IMessage {
         public IMessage onMessage(MessageDropTurrets messageIn, MessageContext ctxIn) {
             final MessageDropTurrets message = messageIn;
             final MessageContext ctx = ctxIn;
-            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+            ((WorldServer) ctx.getServerHandler().playerEntity.worldObj).addScheduledTask(new Runnable() {
                 @Override
                 public void run() {
                     World world = ctx.getServerHandler().playerEntity.worldObj;
