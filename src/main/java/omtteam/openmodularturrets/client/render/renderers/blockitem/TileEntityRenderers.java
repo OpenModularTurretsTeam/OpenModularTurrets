@@ -1,15 +1,8 @@
 package omtteam.openmodularturrets.client.render.renderers.blockitem;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.openmodularturrets.init.ModBlocks;
-import omtteam.openmodularturrets.reference.Names;
-import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 
 import omtteam.openmodularturrets.tileentity.turrets.*;

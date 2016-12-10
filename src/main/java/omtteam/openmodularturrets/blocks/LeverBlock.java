@@ -23,7 +23,7 @@ import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.omlib.util.IHasItemBlock;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.items.blocks.ItemBlockLever;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
@@ -35,13 +35,13 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
 
     public LeverBlock() {
         super(Material.GLASS);
-        this.setUnlocalizedName(Names.Blocks.lever);
+        this.setUnlocalizedName(OMTNames.Blocks.lever);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setHardness(2F);
         this.setResistance(15F);
         this.setSoundType(SoundType.STONE);
         setDefaultState(this.blockState.getBaseState().withProperty(ROTATION, 0));
-        this.setRegistryName(Reference.MOD_ID, Names.Blocks.lever);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.lever);
     }
 
     @Override

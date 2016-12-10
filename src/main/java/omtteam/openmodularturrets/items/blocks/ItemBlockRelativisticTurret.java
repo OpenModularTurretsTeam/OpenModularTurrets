@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import omtteam.openmodularturrets.handler.ConfigHandler;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
 import java.text.DecimalFormat;
@@ -18,10 +18,11 @@ public class ItemBlockRelativisticTurret extends ItemBlock {
 
     public ItemBlockRelativisticTurret(Block block) {
         super(block);
-        this.setRegistryName(Reference.MOD_ID, Names.Blocks.relativisticTurret);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.relativisticTurret);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void addInformation(ItemStack itemStack, EntityPlayer player, List tooltip, boolean advanced) {
         tooltip.add("");
         tooltip.add(TextFormatting.GOLD + "--" + I18n.translateToLocal("tooltip.info") + "--");

@@ -6,7 +6,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.items.blocks.ItemBlockGrenadeLauncherTurret;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.GrenadeLauncherTurretTileEntity;
 
@@ -14,8 +14,8 @@ public class BlockGrenadeTurret extends BlockAbstractTurretHead {
     public BlockGrenadeTurret() {
         super();
 
-        this.setUnlocalizedName(Names.Blocks.grenadeTurret);
-        this.setRegistryName(Reference.MOD_ID, Names.Blocks.grenadeTurret);
+        this.setUnlocalizedName(OMTNames.Blocks.grenadeTurret);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.grenadeTurret);
     }
 
     @Override

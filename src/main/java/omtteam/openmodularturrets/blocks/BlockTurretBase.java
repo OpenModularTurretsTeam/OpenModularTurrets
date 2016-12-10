@@ -33,7 +33,7 @@ import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.items.UsableMetaItem;
 import omtteam.openmodularturrets.items.blocks.ItemBlockTurretBase;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
@@ -56,8 +56,8 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
         }
         setDefaultState(this.blockState.getBaseState().withProperty(TIER, 1));
         this.setSoundType(SoundType.STONE);
-        this.setUnlocalizedName(Names.Blocks.turretBase);
-        this.setRegistryName(Reference.MOD_ID, Names.Blocks.turretBase);
+        this.setUnlocalizedName(OMTNames.Blocks.turretBase);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.turretBase);
     }
 
     @Override
@@ -154,11 +154,11 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
         } else*/
             if (player.isSneaking() && base != null && player.getHeldItemMainhand() != null &&
                     player.getHeldItemMainhand().getItem() instanceof UsableMetaItem && player.getHeldItemMainhand().getItemDamage() == 2) {
-                player.getHeldItemMainhand().setTagCompound(base.writeMemoryCardNBT());
+                ((UsableMetaItem) player.getHeldItemMainhand().getItem()).setDataStored(player.getHeldItemMainhand(),base.writeMemoryCardNBT());
             } else if ( !player.isSneaking() && base != null && player.getHeldItemMainhand() != null &&
                     player.getHeldItemMainhand().getItem() instanceof UsableMetaItem && player.getHeldItemMainhand().getItemDamage() == 2 &&
-                    player.getHeldItemMainhand().hasTagCompound()) {
-                base.readMemoryCardNBT(player.getHeldItemMainhand().getTagCompound());
+                    ((UsableMetaItem) player.getHeldItemMainhand().getItem()).hasDataStored(player.getHeldItemMainhand())) {
+                base.readMemoryCardNBT(((UsableMetaItem) player.getHeldItemMainhand().getItem()).getDataStored(player.getHeldItemMainhand()));
             } else if ( !player.isSneaking() && base != null) {
                 TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
                 if (trustedPlayer != null && trustedPlayer.canOpenGUI) {

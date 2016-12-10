@@ -6,7 +6,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.items.blocks.ItemBlockRocketTurret;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.RocketTurretTileEntity;
 
@@ -14,8 +14,8 @@ public class BlockRocketTurret extends BlockAbstractTurretHead {
     public BlockRocketTurret() {
         super();
 
-        this.setUnlocalizedName(Names.Blocks.rocketTurret);
-        this.setRegistryName(Reference.MOD_ID, Names.Blocks.rocketTurret);
+        this.setUnlocalizedName(OMTNames.Blocks.rocketTurret);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.rocketTurret);
     }
 
     @Override

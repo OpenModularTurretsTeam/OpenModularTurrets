@@ -31,7 +31,7 @@ import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.items.blocks.ItemBlockExpander;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
@@ -59,7 +59,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
         this.setHardness(3.0F);
         this.setSoundType(SoundType.STONE);
         this.setDefaultState(this.blockState.getBaseState().withProperty(META, 0));
-        this.setRegistryName(Reference.MOD_ID, Names.Blocks.expander);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.expander);
     }
 
     @Override
