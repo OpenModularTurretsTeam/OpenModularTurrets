@@ -6,11 +6,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import omtteam.openmodularturrets.blocks.BlockTurretBase;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -96,7 +95,7 @@ public class RocketProjectile extends TurretProjectile {
                 if (isAmped) {
                     if (mob instanceof EntityLivingBase) {
                         EntityLivingBase elb = (EntityLivingBase) mob;
-                        damage += ((int) elb.getHealth() * (0.25 * amp_level));
+                        damage += ((int) elb.getHealth() * (0.08F * amp_level));
                     }
                 }
 

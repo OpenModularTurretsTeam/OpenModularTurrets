@@ -44,7 +44,7 @@ public class GrenadeProjectile extends TurretProjectile {
                     if (isAmped) {
                         if (mob instanceof EntityLivingBase) {
                             EntityLivingBase elb = (EntityLivingBase) mob;
-                            damage += ((int) elb.getHealth() * (0.25 * amp_level));
+                            damage += ((int) elb.getHealth() * (0.08F * amp_level));
                         }
                     }
 
