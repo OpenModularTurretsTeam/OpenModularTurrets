@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import java.util.List;
@@ -79,12 +79,12 @@ public class WailaTileHandler implements IWailaDataProvider {
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         boolean invert = accessor.getNBTData().getBoolean("inverted");
         boolean active = accessor.getNBTData().getBoolean("inverted") ^ accessor.getNBTData().getBoolean("redstone");
-        String inverted = (invert ? Names.Localizations.TRUE : Names.Localizations.FALSE);
-        String isActive = (active ? Names.Localizations.TRUE : Names.Localizations.FALSE);
-        currenttip.add(safeLocalize(Names.Localizations.INVERT) + ": " + safeLocalize(inverted));
-        currenttip.add(safeLocalize(Names.Localizations.ACTIVE) + ": " + safeLocalize(isActive));
+        String inverted = (invert ? OMTNames.Localizations.TRUE : OMTNames.Localizations.FALSE);
+        String isActive = (active ? OMTNames.Localizations.TRUE : OMTNames.Localizations.FALSE);
+        currenttip.add(safeLocalize(OMTNames.Localizations.INVERT) + ": " + safeLocalize(inverted));
+        currenttip.add(safeLocalize(OMTNames.Localizations.ACTIVE) + ": " + safeLocalize(isActive));
         String ownerName = accessor.getNBTData().getString("ownerName");
-        currenttip.add(safeLocalize(Names.Localizations.OWNER) + ": " + ownerName);
+        currenttip.add(safeLocalize(OMTNames.Localizations.OWNER) + ": " + ownerName);
         return currenttip;
     }
 

@@ -10,7 +10,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModItems;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
 import java.util.List;
@@ -23,14 +23,14 @@ public class ItemBlockExpander extends ItemBlock {
     public ItemBlockExpander(Block block) {
         super(block);
         setHasSubtypes(true);
-        this.setRegistryName(Reference.MOD_ID, Names.Blocks.expander);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.expander);
     }
 
     public final static String[] subNames = {
-            Names.Blocks.expanderInvTierOne, Names.Blocks.expanderInvTierTwo, Names.Blocks.expanderInvTierThree,
-            Names.Blocks.expanderInvTierFour, Names.Blocks.expanderInvTierFive, Names.Blocks.expanderPowerTierOne,
-            Names.Blocks.expanderPowerTierTwo, Names.Blocks.expanderPowerTierThree, Names.Blocks.expanderPowerTierFour,
-            Names.Blocks.expanderPowerTierFive,
+            OMTNames.Blocks.expanderInvTierOne, OMTNames.Blocks.expanderInvTierTwo, OMTNames.Blocks.expanderInvTierThree,
+            OMTNames.Blocks.expanderInvTierFour, OMTNames.Blocks.expanderInvTierFive, OMTNames.Blocks.expanderPowerTierOne,
+            OMTNames.Blocks.expanderPowerTierTwo, OMTNames.Blocks.expanderPowerTierThree, OMTNames.Blocks.expanderPowerTierFour,
+            OMTNames.Blocks.expanderPowerTierFive,
     };
 
     @Override
@@ -51,6 +51,7 @@ public class ItemBlockExpander extends ItemBlock {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
         switch (stack.getMetadata()) {
             case 0:

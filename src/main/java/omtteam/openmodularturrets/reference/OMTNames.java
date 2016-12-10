@@ -4,9 +4,8 @@ package omtteam.openmodularturrets.reference;
  * Created by Keridos on 17.05.2015.
  * This Class
  */
-public class Names {
+public class OMTNames {
     public static class Blocks {
-        // Unlocalized
         public static final String turretBase = "turret_base";
         public static final String turret = "turret";
         public static final String disposableItemTurret = "disposable_item_turret";
@@ -36,7 +35,6 @@ public class Names {
     }
 
     public static class Items {
-        //Unlocalised
         public static final String addonMetaItem = "addon_meta";
         public static final String upgradeMetaItem = "upgrade_meta";
         public static final String usableMetaItem = "usable_meta";
@@ -91,13 +89,11 @@ public class Names {
         public static final String ACTIVE = "gui.omtteam.openmodularturrets:active";
         public static final String TRUE = "gui.omtteam.openmodularturrets:true";
         public static final String FALSE = "gui.omtteam.openmodularturrets:false";
-        public static final String YES = "gui.omtteam.openmodularturrets:yes";
-        public static final String NO = "gui.omtteam.openmodularturrets:no";
         public static final String TRUSTED_PLAYERS = "gui.omtteam.openmodularturrets:trusted_players";
         public static final String ATTACK_PLAYERS = "gui.omtteam.openmodularturrets:attack_players";
         public static final String ATTACK_MOBS = "gui.omtteam.openmodularturrets:attack_mobs";
         public static final String ATTACK_NEUTRALS = "gui.omtteam.openmodularturrets:attack_neutrals";
-
+        public static final String MULTI_TARGETING = "gui.omtteam.openmodularturrets:multi_targeting";
     }
 
     public static class Textures {

@@ -10,7 +10,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class ItemBlockTurretBase extends ItemBlock {
     public ItemBlockTurretBase(Block block) {
         super(block);
         setHasSubtypes(true);
-        this.setRegistryName(Reference.MOD_ID, Names.Blocks.turretBase);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.turretBase);
     }
 
     public final static String[] subNames = {
@@ -35,7 +35,7 @@ public class ItemBlockTurretBase extends ItemBlock {
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
-        return "tile." + Names.Blocks.turretBase + subNames[itemStack.getItemDamage()];
+        return "tile." + OMTNames.Blocks.turretBase + subNames[itemStack.getItemDamage()];
     }
 
     @Override
@@ -44,6 +44,7 @@ public class ItemBlockTurretBase extends ItemBlock {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
         switch (stack.getMetadata()) {
             case 0:

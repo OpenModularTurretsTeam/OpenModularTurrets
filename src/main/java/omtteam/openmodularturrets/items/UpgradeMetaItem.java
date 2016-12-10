@@ -9,7 +9,7 @@ import net.minecraft.util.text.translation.I18n;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModItems;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
 import java.util.List;
@@ -20,13 +20,13 @@ public class UpgradeMetaItem extends Item {
 
         this.setHasSubtypes(true);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
-        this.setRegistryName(Reference.MOD_ID, Names.Items.upgradeMetaItem);
-        this.setUnlocalizedName(Names.Items.upgradeMetaItem);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Items.upgradeMetaItem);
+        this.setUnlocalizedName(OMTNames.Items.upgradeMetaItem);
     }
 
     public final static String[] subNames = {
-            Names.Items.accuraccyUpgrade, Names.Items.efficiencyUpgrade, Names.Items.fireRateUpgrade,
-            Names.Items.rangeUpgrade, Names.Items.scattershotUpgrade
+            OMTNames.Items.accuraccyUpgrade, OMTNames.Items.efficiencyUpgrade, OMTNames.Items.fireRateUpgrade,
+            OMTNames.Items.rangeUpgrade, OMTNames.Items.scattershotUpgrade
     };
 
     @Override
@@ -47,6 +47,7 @@ public class UpgradeMetaItem extends Item {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
         switch (stack.getMetadata()) {
             case 0:

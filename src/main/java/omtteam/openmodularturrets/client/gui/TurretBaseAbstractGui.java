@@ -16,7 +16,7 @@ import omtteam.openmodularturrets.network.messages.MessageAdjustYAxisDetect;
 import omtteam.openmodularturrets.network.messages.MessageDropBase;
 import omtteam.openmodularturrets.network.messages.MessageDropTurrets;
 import omtteam.openmodularturrets.network.messages.MessageSetBaseTargetingType;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import java.awt.*;
@@ -139,23 +139,23 @@ public class TurretBaseAbstractGui extends GuiContainer {
 
         ArrayList targetInfo = new ArrayList();
 
-        targetInfo.add("\u00A76" + safeLocalize(Names.Localizations.OWNER) + ": \u00A7f" + base.getOwnerName());
+        targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.OWNER) + ": \u00A7f" + base.getOwnerName());
         boolean isCurrentlyOn = base.isActive();
-        targetInfo.add("\u00A76" + safeLocalize(Names.Localizations.ACTIVE) + ": " + (getColoredBooleanLocalizationYesNo(isCurrentlyOn)));
+        targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.ACTIVE) + ": " + (getColoredBooleanLocalizationYesNo(isCurrentlyOn)));
         targetInfo.add("");
         if (base.getTrustedPlayers().size() != 0) {
-            targetInfo.add("\u00A75" + safeLocalize(Names.Localizations.TRUSTED_PLAYERS) + ":");
+            targetInfo.add("\u00A75" + safeLocalize(OMTNames.Localizations.TRUSTED_PLAYERS) + ":");
             for (TrustedPlayer trusted_player : base.getTrustedPlayers()) {
                 targetInfo.add("\u00A7b" + trusted_player.name);
             }
         } else {
-            targetInfo.add("\u00A75" + safeLocalize(Names.Localizations.TRUSTED_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(false));
+            targetInfo.add("\u00A75" + safeLocalize(OMTNames.Localizations.TRUSTED_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(false));
         }
 
         targetInfo.add("");
-        targetInfo.add("\u00A77" + safeLocalize(Names.Localizations.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
-        targetInfo.add("\u00A77" + safeLocalize(Names.Localizations.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
-        targetInfo.add("\u00A77" + safeLocalize(Names.Localizations.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
+        targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
+        targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
+        targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
 
         this.drawHoveringText(targetInfo, -128, 17, fontRenderer);
     }

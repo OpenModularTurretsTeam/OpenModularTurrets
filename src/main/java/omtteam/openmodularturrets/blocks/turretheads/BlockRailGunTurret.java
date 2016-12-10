@@ -8,7 +8,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.items.blocks.ItemBlockRailGunTurret;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
 
@@ -18,8 +18,8 @@ public class BlockRailGunTurret extends BlockAbstractTurretHead {
     public BlockRailGunTurret() {
         super();
 
-        this.setUnlocalizedName(Names.Blocks.railGunTurret);
-        this.setRegistryName(Reference.MOD_ID, Names.Blocks.railGunTurret);
+        this.setUnlocalizedName(OMTNames.Blocks.railGunTurret);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.railGunTurret);
     }
 
     @Override

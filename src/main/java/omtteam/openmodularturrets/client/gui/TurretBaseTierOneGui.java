@@ -7,7 +7,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.client.gui.containers.TurretBaseTierOneContainer;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import org.lwjgl.opengl.GL11;
 
@@ -62,7 +62,7 @@ public class TurretBaseTierOneGui extends TurretBaseAbstractGui {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-        ResourceLocation texture = (new ResourceLocation(Names.Textures.turretBaseTierOneGUI));
+        ResourceLocation texture = (new ResourceLocation(OMTNames.Textures.turretBaseTierOneGUI));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
         int x = (width - xSize) / 2;
