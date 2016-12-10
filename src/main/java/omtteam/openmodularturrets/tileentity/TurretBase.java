@@ -5,24 +5,13 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockStateBase;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.tileentity.TileEntityMachine;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
@@ -279,6 +268,28 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         if (this.yAxisDetect < 0) {
             this.yAxisDetect = 0;
         }
+    }
+
+    public NBTTagCompound writeMemoryCardNBT() {
+        NBTTagCompound nbtTagCompound = new NBTTagCompound();
+        nbtTagCompound.setBoolean("inverted", inverted);
+        nbtTagCompound.setInteger("yAxisDetect", this.yAxisDetect);
+        nbtTagCompound.setBoolean("attacksMobs", attacksMobs);
+        nbtTagCompound.setBoolean("attacksNeutrals", attacksNeutrals);
+        nbtTagCompound.setBoolean("attacksPlayers", attacksPlayers);
+        nbtTagCompound.setBoolean("multiTargeting", multiTargeting);
+        nbtTagCompound.setTag("trustedPlayers", getTrustedPlayersAsNBT());
+        return nbtTagCompound;
+    }
+
+    public void readMemoryCardNBT(NBTTagCompound nbtTagCompound){
+        this.yAxisDetect = nbtTagCompound.getInteger("yAxisDetect");
+        this.attacksMobs = nbtTagCompound.getBoolean("attacksMobs");
+        this.attacksNeutrals = nbtTagCompound.getBoolean("attacksNeutrals");
+        this.attacksPlayers = nbtTagCompound.getBoolean("attacksPlayers");
+        this.multiTargeting = nbtTagCompound.getBoolean("multiTargeting");
+        this.setInverted(nbtTagCompound.getBoolean("inverted"));
+        buildTrustedPlayersFromNBT(nbtTagCompound.getTagList("trustedPlayers", 10));
     }
 
     @SuppressWarnings("NullableProblems")

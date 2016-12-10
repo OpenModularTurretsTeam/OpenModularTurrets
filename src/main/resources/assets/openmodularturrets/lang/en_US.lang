@@ -206,6 +206,12 @@ gui.omtteam.openmodularturrets:active=Active
 gui.omtteam.openmodularturrets:mode=Mode
 gui.omtteam.openmodularturrets:true=true
 gui.omtteam.openmodularturrets:false=false
+gui.omtteam.openmodularturrets:yes=yes
+gui.omtteam.openmodularturrets:no=no
+gui.omtteam.openmodularturrets:trusted_players=Trusted Players
+gui.omtteam.openmodularturrets:attack_mobs=Attack Mobs
+gui.omtteam.openmodularturrets:attack_neutrals=Attack Neutrals
+gui.omtteam.openmodularturrets:attack_players=Attack Players
 
 death.attack.disposable=Very %s, much dead, such wow...
 death.attack.bullet=%s ate some delicious lead.
