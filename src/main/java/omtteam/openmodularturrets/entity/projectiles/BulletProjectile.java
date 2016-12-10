@@ -8,7 +8,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import omtteam.openmodularturrets.blocks.BlockTurretBase;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -65,7 +64,7 @@ public class BulletProjectile extends TurretProjectile {
             if (isAmped) {
                 if (movingobjectposition.entityHit instanceof EntityLivingBase) {
                     EntityLivingBase elb = (EntityLivingBase) movingobjectposition.entityHit;
-                    damage += ((int) elb.getHealth() * (0.1 * amp_level));
+                    damage += ((int) elb.getHealth() * (0.06F * amp_level));
                 }
             }
 
