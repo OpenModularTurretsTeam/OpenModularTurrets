@@ -12,7 +12,7 @@ public class ProjectileRenderers {
     public static void init() {
         RenderingRegistry.registerEntityRenderingHandler(DisposableTurretProjectile.class, new ItemProjectileRenderer(Minecraft.getMinecraft().getRenderManager(), Minecraft.getMinecraft().getRenderItem()));
         RenderingRegistry.registerEntityRenderingHandler(RocketProjectile.class, new RocketRenderer());
-        RenderingRegistry.registerEntityRenderingHandler(BulletProjectile.class, new RenderSnowball(Minecraft.getMinecraft().getRenderManager(), new ItemStack(ModItems.throwableMetaItem, 1, 0).getItem(), Minecraft.getMinecraft().getRenderItem()));
+        RenderingRegistry.registerEntityRenderingHandler(BulletProjectile.class, new RenderSnowball(Minecraft.getMinecraft().getRenderManager(), new ItemStack(ModItems.usableMetaItem, 1, 0).getItem(), Minecraft.getMinecraft().getRenderItem()));
         RenderingRegistry.registerEntityRenderingHandler(GrenadeProjectile.class, new RenderSnowball(Minecraft.getMinecraft().getRenderManager(), new ItemStack(ModItems.ammoMetaItem, 1, 3).getItem(), Minecraft.getMinecraft().getRenderItem()));
         RenderingRegistry.registerEntityRenderingHandler(BlazingClayProjectile.class, new RenderSnowball(Minecraft.getMinecraft().getRenderManager(), new ItemStack(ModItems.ammoMetaItem, 1, 0).getItem(), Minecraft.getMinecraft().getRenderItem()));
         RenderingRegistry.registerEntityRenderingHandler(LaserProjectile.class, new LaserRenderer());

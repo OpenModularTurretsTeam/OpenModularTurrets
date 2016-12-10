@@ -13,7 +13,7 @@ public class ModItems {
     public static Item intermediateProductTiered;
     public static Item intermediateProductRegular;
     public static Item ammoMetaItem;
-    public static Item throwableMetaItem;
+    public static Item usableMetaItem;
 
     public static void init() {
         intermediateProductTiered = new IntermediateProductTiered();
@@ -21,7 +21,7 @@ public class ModItems {
         addonMetaItem = new AddonMetaItem();
         upgradeMetaItem = new UpgradeMetaItem();
         ammoMetaItem = new AmmoMetaItem();
-        throwableMetaItem = new ThrowableMetaItem();
+        usableMetaItem = new UsableMetaItem();
         registerItems(ModItems.class);
     }
 }
