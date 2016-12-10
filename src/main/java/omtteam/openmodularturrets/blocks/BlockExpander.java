@@ -135,7 +135,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
         }
         TurretBase base = expander.getBase();
         if (base != null && base.getTrustedPlayer(player.getUniqueID()) != null) {
-            if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI && state.getValue(META) < 4) {
+            if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI && state.getValue(META) < 5) {
                 player.openGui(OpenModularTurrets.instance, 7, world, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
@@ -143,7 +143,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
         if (base != null && player.getUniqueID().toString().equals(base.getOwner())) {
             if (player.isSneaking() && player.getHeldItemMainhand() == null) {
                 world.destroyBlock(pos, true);
-            } else if (state.getValue(META) < 4) {
+            } else if (state.getValue(META) < 5) {
                 player.openGui(OpenModularTurrets.instance, 7, world, pos.getX(), pos.getY(), pos.getZ());
             } else {
                 return true;
