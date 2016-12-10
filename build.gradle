@@ -119,6 +119,7 @@ repositories {
         }
     }
 }
+
 def omlib_local = false
 configure(subprojects.findAll {it.name == 'OMLib'}) {
    omlib_local = true
@@ -163,6 +164,4 @@ publishing {
     repositories {
             mavenLocal()
     }
-
-
 }
