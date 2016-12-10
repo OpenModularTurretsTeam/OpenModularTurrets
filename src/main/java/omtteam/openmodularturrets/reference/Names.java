@@ -39,12 +39,13 @@ public class Names {
         //Unlocalised
         public static final String addonMetaItem = "addon_meta";
         public static final String upgradeMetaItem = "upgrade_meta";
-        public static final String throwableMetaItem = "throwable_meta";
+        public static final String usableMetaItem = "usable_meta";
         public static final String intermediateTieredItem = "intermediate_tiered";
         public static final String intermediateRegularItem = "intermediate_regular";
         public static final String ammoMetaItem = "ammo_meta";
         public static final String bulletThrowableItem = "throwable_bullet";
         public static final String grenadeThrowableItem = "throwable_grenade";
+        public static final String memoryCard = "memory_card";
         public static final String ferroSlug = "ammo_ferro_slug";
         public static final String bulletCraftableItem = "ammo_bullet";
         public static final String grenadeCraftableItem = "ammo_grenade";
@@ -90,11 +91,20 @@ public class Names {
         public static final String ACTIVE = "gui.omtteam.openmodularturrets:active";
         public static final String TRUE = "gui.omtteam.openmodularturrets:true";
         public static final String FALSE = "gui.omtteam.openmodularturrets:false";
+        public static final String YES = "gui.omtteam.openmodularturrets:yes";
+        public static final String NO = "gui.omtteam.openmodularturrets:no";
+        public static final String TRUSTED_PLAYERS = "gui.omtteam.openmodularturrets:trusted_players";
+        public static final String ATTACK_PLAYERS = "gui.omtteam.openmodularturrets:attack_players";
+        public static final String ATTACK_MOBS = "gui.omtteam.openmodularturrets:attack_mobs";
+        public static final String ATTACK_NEUTRALS = "gui.omtteam.openmodularturrets:attack_neutrals";
+
     }
+
     public static class Textures {
         public static final String turretBaseTierOneGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_one.png";
         public static final String turretBaseTierTwoGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_two.png";
-        public static final String turretBaseTierThreeGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_three.png";;
+        public static final String turretBaseTierThreeGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_three.png";
+        ;
         public static final String turretBaseTierFourGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_four.png";
         public static final String turretBaseTierFiveGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_five.png";
         public static final String configureGUI = Reference.MOD_ID + ":textures/gui/configure.png";

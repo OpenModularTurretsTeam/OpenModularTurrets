@@ -16,17 +16,21 @@ import omtteam.openmodularturrets.network.messages.MessageAdjustYAxisDetect;
 import omtteam.openmodularturrets.network.messages.MessageDropBase;
 import omtteam.openmodularturrets.network.messages.MessageDropTurrets;
 import omtteam.openmodularturrets.network.messages.MessageSetBaseTargetingType;
+import omtteam.openmodularturrets.reference.Names;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import java.awt.*;
 import java.util.ArrayList;
+
+import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
+import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 
 /**
  * Created by nico on 6/4/15.
  */
 
-public class TurretBaseAbstractGui extends GuiContainer{
+public class TurretBaseAbstractGui extends GuiContainer {
     int mouseX;
     int mouseY;
     private final EntityPlayer player;
@@ -53,7 +57,7 @@ public class TurretBaseAbstractGui extends GuiContainer{
             this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
             this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
             this.buttonList.add(new GuiButton(6, x + 180, y + 75, 80, 20,
-                                              base.isMultiTargeting() ? "Target: Multi" : "Target: Single"));
+                    base.isMultiTargeting() ? "Target: Multi" : "Target: Single"));
         } else if (trustedPlayer != null) {
             if (trustedPlayer.admin) {
                 this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
@@ -135,27 +139,30 @@ public class TurretBaseAbstractGui extends GuiContainer{
 
         ArrayList targetInfo = new ArrayList();
 
-        targetInfo.add("\u00A76Owner: \u00A7f" + base.getOwnerName());
+        targetInfo.add("\u00A76" + safeLocalize(Names.Localizations.OWNER) + ": \u00A7f" + base.getOwnerName());
         boolean isCurrentlyOn = base.isActive();
-        targetInfo.add("\u00A76Active: " + (isCurrentlyOn ? "\u00A72Yes" : "\u00A7cNo"));
+        targetInfo.add("\u00A76" + safeLocalize(Names.Localizations.ACTIVE) + ": " + (getColoredBooleanLocalizationYesNo(isCurrentlyOn)));
         targetInfo.add("");
-        targetInfo.add("\u00A75-Trusted Players-");
-
-        for (TrustedPlayer trusted_player : base.getTrustedPlayers()) {
-            targetInfo.add("\u00A7b" + trusted_player.name);
+        if (base.getTrustedPlayers().size() != 0) {
+            targetInfo.add("\u00A75" + safeLocalize(Names.Localizations.TRUSTED_PLAYERS) + ":");
+            for (TrustedPlayer trusted_player : base.getTrustedPlayers()) {
+                targetInfo.add("\u00A7b" + trusted_player.name);
+            }
+        } else {
+            targetInfo.add("\u00A75" + safeLocalize(Names.Localizations.TRUSTED_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(false));
         }
 
         targetInfo.add("");
-        targetInfo.add("\u00A77Attack Mobs: \u00A7b" + base.isAttacksMobs());
-        targetInfo.add("\u00A77Attack Neutrals: \u00A7b" + base.isAttacksNeutrals());
-        targetInfo.add("\u00A77Attack Players: \u00A7b" + base.isAttacksPlayers());
+        targetInfo.add("\u00A77" + safeLocalize(Names.Localizations.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
+        targetInfo.add("\u00A77" + safeLocalize(Names.Localizations.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
+        targetInfo.add("\u00A77" + safeLocalize(Names.Localizations.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
 
         this.drawHoveringText(targetInfo, -128, 17, fontRenderer);
     }
 
     private void sendChangeToServer() {
         MessageAdjustYAxisDetect message = new MessageAdjustYAxisDetect(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
-                                                                        base.getyAxisDetect());
+                base.getyAxisDetect());
 
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
@@ -175,21 +182,21 @@ public class TurretBaseAbstractGui extends GuiContainer{
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
-    public ArrayList<Rectangle> getBlockingAreas(){
+    public ArrayList<Rectangle> getBlockingAreas() {
         ArrayList<Rectangle> list = new ArrayList<>();
-            Rectangle rectangleGUI = new Rectangle(0,0,0,0);
-            if (player.getUniqueID().toString().equals(base.getOwner())) {
-                rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 95);
-            } else if (base.getTrustedPlayer(player.getUniqueID()) != null) {
-                if (base.getTrustedPlayer(player.getUniqueID()).admin) {
-                    rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 45);
-                }
-                if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting || base.getTrustedPlayer(
-                        player.getUniqueID()).admin) {
-                    rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2 + 50, 80, 20);
-                }
+        Rectangle rectangleGUI = new Rectangle(0, 0, 0, 0);
+        if (player.getUniqueID().toString().equals(base.getOwner())) {
+            rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 95);
+        } else if (base.getTrustedPlayer(player.getUniqueID()) != null) {
+            if (base.getTrustedPlayer(player.getUniqueID()).admin) {
+                rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 45);
             }
-            list.add(rectangleGUI);
+            if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting || base.getTrustedPlayer(
+                    player.getUniqueID()).admin) {
+                rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2 + 50, 80, 20);
+            }
+        }
+        list.add(rectangleGUI);
         return list;
     }
 }
