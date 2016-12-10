@@ -16,7 +16,7 @@ import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModTESRItems;
 import omtteam.openmodularturrets.items.*;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
 public class ClientProxy extends CommonProxy {
@@ -45,10 +45,10 @@ public class ClientProxy extends CommonProxy {
     public void preInit() {
         super.preInit();
         for (int i = 0; i < 5; i++) {
-            registerBlockModelAsItem(ModBlocks.turretBase, i, Names.Blocks.turretBase, "tier=" + (i + 1));
+            registerBlockModelAsItem(ModBlocks.turretBase, i, OMTNames.Blocks.turretBase, "tier=" + (i + 1));
         }
         for (int i = 0; i < 10; i++) {
-            registerBlockModelAsItem(ModBlocks.expander, i, Names.Blocks.expander, "facing=north,meta=" + i);
+            registerBlockModelAsItem(ModBlocks.expander, i, OMTNames.Blocks.expander, "facing=north,meta=" + i);
         }
         for (int i = 0; i < 15; i++) {
             registerItemModel(ModItems.intermediateProductTiered, i, IntermediateProductTiered.subNames[i], true);
@@ -65,7 +65,7 @@ public class ClientProxy extends CommonProxy {
         for (int i = 0; i < 5; i++) {
             registerItemModel(ModItems.ammoMetaItem, i, AmmoMetaItem.subNames[i], true);
         }
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             registerItemModel(ModItems.usableMetaItem, i, UsableMetaItem.subNames[i], true);
         }
 

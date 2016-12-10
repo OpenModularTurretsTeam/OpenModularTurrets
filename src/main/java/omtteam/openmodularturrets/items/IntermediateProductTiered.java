@@ -5,7 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.init.ModItems;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
 import java.util.List;
@@ -16,16 +16,16 @@ public class IntermediateProductTiered extends Item {
 
         this.setHasSubtypes(true);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
-        this.setRegistryName(Reference.MOD_ID, Names.Items.intermediateTieredItem);
-        this.setUnlocalizedName(Names.Items.intermediateTieredItem);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Items.intermediateTieredItem);
+        this.setUnlocalizedName(OMTNames.Items.intermediateTieredItem);
     }
 
     public final static String[] subNames = {
-            Names.Items.sensorTierOne, Names.Items.sensorTierTwo, Names.Items.sensorTierThree,
-            Names.Items.sensorTierFour, Names.Items.sensorTierFive, Names.Items.chamberTierOne,
-            Names.Items.chamberTierTwo, Names.Items.chamberTierThree, Names.Items.chamberTierFour,
-            Names.Items.chamberTierFive, Names.Items.barrelTierOne, Names.Items.barrelTierTwo,
-            Names.Items.barrelTierThree, Names.Items.barrelTierFour, Names.Items.barrelTierFive,
+            OMTNames.Items.sensorTierOne, OMTNames.Items.sensorTierTwo, OMTNames.Items.sensorTierThree,
+            OMTNames.Items.sensorTierFour, OMTNames.Items.sensorTierFive, OMTNames.Items.chamberTierOne,
+            OMTNames.Items.chamberTierTwo, OMTNames.Items.chamberTierThree, OMTNames.Items.chamberTierFour,
+            OMTNames.Items.chamberTierFive, OMTNames.Items.barrelTierOne, OMTNames.Items.barrelTierTwo,
+            OMTNames.Items.barrelTierThree, OMTNames.Items.barrelTierFour, OMTNames.Items.barrelTierFive,
     };
 
     @Override

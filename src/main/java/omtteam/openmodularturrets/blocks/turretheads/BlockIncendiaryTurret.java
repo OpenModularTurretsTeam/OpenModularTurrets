@@ -6,7 +6,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.items.blocks.ItemBlockIncendiaryTurret;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.IncendiaryTurretTileEntity;
 
@@ -14,8 +14,8 @@ public class BlockIncendiaryTurret extends BlockAbstractTurretHead {
     public BlockIncendiaryTurret() {
         super();
 
-        this.setUnlocalizedName(Names.Blocks.incendiaryTurret);
-        this.setRegistryName(Reference.MOD_ID, Names.Blocks.incendiaryTurret);
+        this.setUnlocalizedName(OMTNames.Blocks.incendiaryTurret);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.incendiaryTurret);
     }
 
     @Override

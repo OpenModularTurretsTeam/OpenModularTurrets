@@ -9,7 +9,7 @@ import net.minecraft.util.text.translation.I18n;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModItems;
-import omtteam.openmodularturrets.reference.Names;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
 import java.util.List;
@@ -20,14 +20,14 @@ public class AddonMetaItem extends Item {
 
         this.setHasSubtypes(true);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
-        this.setRegistryName(Reference.MOD_ID, Names.Items.addonMetaItem);
-        this.setUnlocalizedName(Names.Items.addonMetaItem);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Items.addonMetaItem);
+        this.setUnlocalizedName(OMTNames.Items.addonMetaItem);
     }
 
     public final static String[] subNames = {
-            Names.Items.concealerAddon, Names.Items.damageAmpAddon, Names.Items.potentiaAddon,
-            Names.Items.recyclerAddon, Names.Items.redReactorAddon, Names.Items.serialPortAddon,
-            Names.Items.solarPanelAddon
+            OMTNames.Items.concealerAddon, OMTNames.Items.damageAmpAddon, OMTNames.Items.potentiaAddon,
+            OMTNames.Items.recyclerAddon, OMTNames.Items.redReactorAddon, OMTNames.Items.serialPortAddon,
+            OMTNames.Items.solarPanelAddon
     };
 
     @Override
@@ -48,6 +48,7 @@ public class AddonMetaItem extends Item {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
         switch (stack.getMetadata()) {
             case 0:

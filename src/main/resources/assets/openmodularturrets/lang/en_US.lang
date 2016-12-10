@@ -33,6 +33,7 @@ item.barrel_tier_three.name=Barrel (Tier 3)
 item.barrel_tier_four.name=Barrel (Tier 4)
 item.barrel_tier_five.name=Barrel (Tier 5)
 item.io_bus.name=IO Bus
+item.memory_card.name=Turret Memory Card
 tile.turret_base_tier_one.name=Turret Base (Tier 1)
 tile.turret_base_tier_two.name=Turret Base (Tier 2)
 tile.turret_base_tier_three.name=Turret Base (Tier 3)
@@ -97,6 +98,10 @@ tooltip.expander.power3=RF capacity to a turret base.
 tooltip.expander.inv1=Turret Base Inventory Expander
 tooltip.expander.inv2=Adds 9 slots of inventory space that the turret base can use.
 tooltip.expander.inv3=Each slot can only accept a max stack size of
+
+tooltip.openmodularturrets.memory_card.desc1=Shift-RightClick base stores data
+tooltip.openmodularturrets.memory_card.desc2=Shift-RightClick anywhere else to clear
+tooltip.openmodularturrets.memory_card.desc3=RightClick base copies data from card
 
 flavour.expander.power.1=Now with flavour!
 flavour.expander.power.2=Kinetic expansion.
@@ -192,8 +197,8 @@ turret.upgrade.acc=accuracy per upgrade.
 turret.upgrade.acc.flavour.a=Good eye sniper,
 turret.upgrade.acc.flavour.b=I'll shoot, you run.
 
-turret.upgrade.scatter.a=Adds 2 projectiles to each shot, at the cost of 
-turret.upgrade.scatter.b=+2 ammo usage, decreased accuracy, and increased RF usage. 
+turret.upgrade.scatter.a=Adds 2 projectiles to each shot, at the cost of
+turret.upgrade.scatter.b=+2 ammo usage, decreased accuracy, and increased RF usage.
 turret.upgrade.scatter.flavour=You just need to shoot more bullets.
 
 status.ownership=You do not own this turret, or you don't have permission to do that.
@@ -212,6 +217,7 @@ gui.omtteam.openmodularturrets:trusted_players=Trusted Players
 gui.omtteam.openmodularturrets:attack_mobs=Attack Mobs
 gui.omtteam.openmodularturrets:attack_neutrals=Attack Neutrals
 gui.omtteam.openmodularturrets:attack_players=Attack Players
+gui.omtteam.openmodularturrets:multi_targeting=Multi Targeting
 
 death.attack.disposable=Very %s, much dead, such wow...
 death.attack.bullet=%s ate some delicious lead.
