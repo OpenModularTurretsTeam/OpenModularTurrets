@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.items;
 
-import com.sun.istack.internal.NotNull;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -91,7 +90,7 @@ public class UsableMetaItem extends Item {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public void setDataStored(ItemStack stack, @NotNull NBTTagCompound nbtTagCompound){
+    public void setDataStored(ItemStack stack, NBTTagCompound nbtTagCompound){
         if (stack.hasTagCompound()) {
             stack.getTagCompound().setTag("data", nbtTagCompound);
         } else {
