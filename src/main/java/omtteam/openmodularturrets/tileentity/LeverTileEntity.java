@@ -8,6 +8,7 @@ public class LeverTileEntity extends TileEntityBase implements ITickable {
     public boolean isTurning = false;
     private TurretBase base;
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void update() {
         if (base == null) {
