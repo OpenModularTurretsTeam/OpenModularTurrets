@@ -8,6 +8,9 @@ import net.minecraft.util.ITickable;
 import omtteam.omlib.tileentity.TileEntityContainer;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static omtteam.omlib.util.MathUtil.truncateDoubleToInt;
 
 public class Expander extends TileEntityContainer implements ITickable {
@@ -94,7 +97,7 @@ public class Expander extends TileEntityContainer implements ITickable {
 
 
     @Override
-    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+    public boolean isItemValidForSlot(int i, ItemStack stack) {
         return !isPowerExpander();
     }
 
@@ -107,16 +110,20 @@ public class Expander extends TileEntityContainer implements ITickable {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
+    @Nonnull
     public int[] getSlotsForFace(EnumFacing side) {
         return new int[]{0,1,2,3,4,5,6,7,8};
     }
