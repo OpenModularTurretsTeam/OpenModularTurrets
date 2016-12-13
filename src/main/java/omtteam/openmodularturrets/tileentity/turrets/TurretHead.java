@@ -58,6 +58,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         readFromNBT(var1);
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
         nbtTagCompound.setFloat("rotationXY", rotationXY);
@@ -145,27 +146,24 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         return TurretHeadUtil.getTurretBase(worldObj, this.pos);
     }
 
+    @SuppressWarnings("unused")
     public float getRotationXY() {
         return rotationXY;
     }
 
+    @SuppressWarnings("unused")
     public void setRotationXY(float rotationXY) {
         this.rotationXY = rotationXY;
     }
 
+    @SuppressWarnings("unused")
     public float getRotationXZ() {
         return rotationXZ;
     }
 
+    @SuppressWarnings("unused")
     public void setRotationXZ(float rotationXZ) {
         this.rotationXZ = rotationXZ;
-    }
-
-    private float getDistanceToEntity(Entity p_70032_1_) {
-        float f = (float) (this.getPos().getX() - p_70032_1_.posX);
-        float f1 = (float) (this.getPos().getY() - p_70032_1_.posY);
-        float f2 = (float) (this.getPos().getZ() - p_70032_1_.posZ);
-        return MathHelper.sqrt_float(f * f + f1 * f1 + f2 * f2);
     }
 
     protected abstract int getTurretPowerUsage();
@@ -346,7 +344,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
                 projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
 
-                Random random = new Random();
 
 //                if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
 //                    worldObj.playSoundEffect(this.pos.getX(), this.pos.getY(), this.pos.getZ(), Reference.MOD_ID + ":amped",
@@ -362,7 +359,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
                 double d1 = target.posY + (double) target.getEyeHeight() - projectile.posY;
                 double d2 = target.posZ - projectile.posZ;
                 double dist = MathHelper.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
-                float f1 = (float) dist * (0.2F * (getDistanceToEntity(target) * 0.04F));
                 double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(
                         base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
 
