@@ -15,7 +15,6 @@ public class TurretBaseTierFourGui extends TurretBaseAbstractGui {
         super(inventoryPlayer, tileEntity, new TurretBaseTierFourContainer(inventoryPlayer, tileEntity));
     }
 
-
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
         ResourceLocation texture = (new ResourceLocation(OMTNames.Textures.turretBaseTierFourGUI));

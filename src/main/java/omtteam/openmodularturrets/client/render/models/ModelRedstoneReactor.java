@@ -69,12 +69,14 @@ public class ModelRedstoneReactor extends ModelBase {
         Shape5.render(f5);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public void setRotationForTarget(float y, float z) {
         Shape1.rotateAngleX = y;
         Shape1.rotateAngleY = z;

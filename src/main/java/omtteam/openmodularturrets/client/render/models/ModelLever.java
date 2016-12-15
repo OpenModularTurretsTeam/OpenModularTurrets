@@ -35,6 +35,7 @@ public class ModelLever extends ModelBase {
         Shape2.render(f5);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;

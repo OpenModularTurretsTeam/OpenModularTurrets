@@ -12,10 +12,13 @@ import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageS
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 public class DisposableTurretProjectile extends TurretProjectile {
     private EntityItem itemBound;
     private boolean spawned = false;
 
+    @SuppressWarnings("unused")
     public DisposableTurretProjectile(World p_i1776_1_) {
         super(p_i1776_1_);
         this.gravity = 0.03F;
@@ -44,6 +47,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult movingobjectposition) {
 
         if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -53,14 +57,14 @@ public class DisposableTurretProjectile extends TurretProjectile {
                 return;
             }
 
-            if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
+            if (!hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;
             }
         }
 
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
-            if (movingobjectposition.typeOfHit.equals(0)) {
+            if (movingobjectposition.typeOfHit.equals(RayTraceResult.Type.MISS)) {
                 if (worldObj.isAirBlock(movingobjectposition.getBlockPos())) {
                     return;
                 }

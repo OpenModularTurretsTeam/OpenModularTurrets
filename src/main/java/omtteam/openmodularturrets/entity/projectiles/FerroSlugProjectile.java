@@ -14,9 +14,11 @@ import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
 public class FerroSlugProjectile extends TurretProjectile {
+    @SuppressWarnings("unused")
     public FerroSlugProjectile(World p_i1776_1_) {
         super(p_i1776_1_);
         this.gravity = 0.00F;
@@ -35,6 +37,7 @@ public class FerroSlugProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult movingobjectposition) {
 
         if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -45,14 +48,14 @@ public class FerroSlugProjectile extends TurretProjectile {
                 return;
             }
 
-            if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
+            if (!hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;
             }
         }
 
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
-            if (movingobjectposition.typeOfHit.equals(0)) {
+            if (movingobjectposition.typeOfHit.equals(RayTraceResult.Type.MISS)) {
                 if (worldObj.isAirBlock(movingobjectposition.getBlockPos())) {
                     return;
                 }
@@ -86,6 +89,7 @@ public class FerroSlugProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
         this.posY = posY + 12F;
     }

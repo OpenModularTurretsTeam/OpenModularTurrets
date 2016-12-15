@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+@SuppressWarnings("unused")
 public class MessageSetTurretOwner implements IMessage {
     private int x, y, z;
     private String player;
@@ -17,6 +18,7 @@ public class MessageSetTurretOwner implements IMessage {
     public MessageSetTurretOwner() {
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static class MessageHandlerSetTurretOwner implements IMessageHandler<MessageSetTurretOwner, IMessage> {
         @Override
         public IMessage onMessage(MessageSetTurretOwner messageIn, MessageContext ctxIn) {

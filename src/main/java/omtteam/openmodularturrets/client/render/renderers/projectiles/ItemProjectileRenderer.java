@@ -5,13 +5,13 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import omtteam.openmodularturrets.entity.projectiles.DisposableTurretProjectile;
+
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 class ItemProjectileRenderer extends Render
 {
@@ -27,6 +27,7 @@ class ItemProjectileRenderer extends Render
      * Renders the desired {@code T} type Entity.
      */
 
+    @SuppressWarnings({"unchecked", "unused"})
     public void doRender(DisposableTurretProjectile entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
         GlStateManager.pushMatrix();
@@ -57,8 +58,10 @@ class ItemProjectileRenderer extends Render
 
 
     @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
     protected ResourceLocation getEntityTexture(Entity entity) {
-        return null;
+        return new ResourceLocation("");
     }
 
 }

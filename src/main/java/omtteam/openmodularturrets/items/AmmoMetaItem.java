@@ -8,6 +8,8 @@ import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 public class AmmoMetaItem extends Item {
@@ -26,6 +28,7 @@ public class AmmoMetaItem extends Item {
     };
 
     @Override
+    @ParametersAreNonnullByDefault
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         for (int i = 0; i < 5; i++) {
             subItems.add(new ItemStack(ModItems.ammoMetaItem, 1, i));
@@ -33,6 +36,7 @@ public class AmmoMetaItem extends Item {
     }
 
     @Override
+    @Nonnull
     public String getUnlocalizedName(ItemStack itemStack) {
         return "item." + subNames[itemStack.getItemDamage()];
     }

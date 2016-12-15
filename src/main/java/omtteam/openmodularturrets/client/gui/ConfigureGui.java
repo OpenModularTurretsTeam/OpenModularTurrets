@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import omtteam.omlib.util.PlayerUtil;
+import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.client.gui.containers.ConfigContainer;
 import omtteam.openmodularturrets.handler.NetworkingHandler;
@@ -77,6 +78,7 @@ public class ConfigureGui extends GuiContainer {
         }
     }
 
+    @SuppressWarnings("EmptyCatchBlock")
     @Override
     public void mouseClicked(int i, int j, int k) {
         try {
@@ -87,6 +89,7 @@ public class ConfigureGui extends GuiContainer {
         textFieldAddTrustedPlayer.mouseClicked(i - guiLeft, j - guiTop, k);
     }
 
+    @SuppressWarnings("EmptyCatchBlock")
     @Override
     protected void keyTyped(char par1, int par2) {
         if (!textFieldAddTrustedPlayer.isFocused()) {
@@ -100,13 +103,15 @@ public class ConfigureGui extends GuiContainer {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void actionPerformed(GuiButton guibutton) {
+        TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
         if (guibutton.id == 1) { //change Attack Mobs
             if (PlayerUtil.isPlayerOwner(player, base)) {
                 sendChangeToServerMobs(!base.isAttacksMobs());
                 guibutton.displayString = "Attack Mobs: " + (!base.isAttacksMobs() ? "\u00A72Yes" : "\u00A7cNo");
-            } else if (PlayerUtil.getTrustedPlayer(player, base).canChangeTargeting) {
+            } else if (trustedPlayer != null && trustedPlayer.canChangeTargeting) {
                 sendChangeToServerMobs(!base.isAttacksMobs());
                 guibutton.displayString = "Attack Mobs: " + (!base.isAttacksMobs() ? "\u00A72Yes" : "\u00A7cNo");
             } else {
@@ -118,7 +123,7 @@ public class ConfigureGui extends GuiContainer {
             if (PlayerUtil.isPlayerOwner(player, base)) {
                 sendChangeToServerNeutrals(!base.isAttacksNeutrals());
                 guibutton.displayString = "Attack Neutrals: " + (!base.isAttacksNeutrals() ? "\u00A72Yes" : "\u00A7cNo");
-            } else if (PlayerUtil.getTrustedPlayer(player, base).canChangeTargeting) {
+            } else if (trustedPlayer != null && trustedPlayer.canChangeTargeting) {
                 sendChangeToServerNeutrals(!base.isAttacksNeutrals());
                 guibutton.displayString = "Attack Neutrals: " + (!base.isAttacksNeutrals() ? "\u00A72Yes" : "\u00A7cNo");
             } else {
@@ -130,7 +135,7 @@ public class ConfigureGui extends GuiContainer {
             if (PlayerUtil.isPlayerOwner(player, base)) {
                 sendChangeToServerPlayers(!base.isAttacksPlayers());
                 guibutton.displayString = "Attack Players: " + (!base.isAttacksPlayers() ? "\u00A72Yes" : "\u00A7cNo");
-            } else if (PlayerUtil.getTrustedPlayer(player, base).canChangeTargeting) {
+            } else if (trustedPlayer != null && trustedPlayer.canChangeTargeting) {
                 sendChangeToServerPlayers(!base.isAttacksPlayers());
                 guibutton.displayString = "Attack Players: " + (!base.isAttacksPlayers() ? "\u00A72Yes" : "\u00A7cNo");
             } else {
@@ -149,7 +154,7 @@ public class ConfigureGui extends GuiContainer {
                         player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
                     }
                 }
-            } else if (PlayerUtil.getTrustedPlayer(player, base).admin) {
+            } else if (trustedPlayer != null && trustedPlayer.admin) {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
 
                     if (base.addTrustedPlayer(textFieldAddTrustedPlayer.getText())) {
@@ -220,7 +225,7 @@ public class ConfigureGui extends GuiContainer {
                         !base.getTrustedPlayers().get(base.trustedPlayerIndex).canOpenGUI);
                 guibutton.displayString = !base.getTrustedPlayers().get(
                         base.trustedPlayerIndex).canOpenGUI ? "\u00A72Y" : "\u00A7cN";
-            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && PlayerUtil.getTrustedPlayer(player, base).admin) {
+            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && trustedPlayer != null && trustedPlayer.admin) {
                 sendChangeToServerModifyPermissions(
                         this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "gui",
                         !base.getTrustedPlayers().get(base.trustedPlayerIndex).canOpenGUI);
@@ -239,7 +244,7 @@ public class ConfigureGui extends GuiContainer {
                         !base.getTrustedPlayers().get(base.trustedPlayerIndex).canChangeTargeting);
                 guibutton.displayString = !base.getTrustedPlayers().get(
                         base.trustedPlayerIndex).canChangeTargeting ? "\u00A72Y" : "\u00A7cN";
-            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && PlayerUtil.getTrustedPlayer(player, base).admin) {
+            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && trustedPlayer != null && trustedPlayer.admin) {
                 sendChangeToServerModifyPermissions(
                         this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "targeting",
                         !base.getTrustedPlayers().get(base.trustedPlayerIndex).canChangeTargeting);
@@ -258,7 +263,7 @@ public class ConfigureGui extends GuiContainer {
                         !base.getTrustedPlayers().get(base.trustedPlayerIndex).admin);
                 guibutton.displayString = !base.getTrustedPlayers().get(
                         base.trustedPlayerIndex).admin ? "\u00A72Y" : "\u00A7cN";
-            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && PlayerUtil.getTrustedPlayer(player, base).admin) {
+            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && trustedPlayer != null && trustedPlayer.admin) {
                 sendChangeToServerModifyPermissions(
                         this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "isAdmin",
                         !base.getTrustedPlayers().get(base.trustedPlayerIndex).admin);
@@ -270,6 +275,7 @@ public class ConfigureGui extends GuiContainer {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void drawGuiContainerForegroundLayer(int param1, int param2) {
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;

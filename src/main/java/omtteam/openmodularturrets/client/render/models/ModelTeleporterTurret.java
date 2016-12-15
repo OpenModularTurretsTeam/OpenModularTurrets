@@ -75,6 +75,7 @@ public class ModelTeleporterTurret extends ModelBase {
         Spinner4.render(f5);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
@@ -91,6 +92,7 @@ public class ModelTeleporterTurret extends ModelBase {
         Spinner4.render(0.0625F);
     }
 
+    @SuppressWarnings({"EmptyMethod", "unused"})
     public void setRotationForTarget(float y, float z) {
     }
 }

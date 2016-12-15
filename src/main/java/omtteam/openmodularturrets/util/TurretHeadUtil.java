@@ -72,6 +72,7 @@ public class TurretHeadUtil {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static Entity getTarget(TurretBase base, World worldObj, int downLowAmount, BlockPos pos, int turretRange, TurretHead turret) {
         Entity target = null;
 
@@ -127,6 +128,7 @@ public class TurretHeadUtil {
         return null;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static Entity getTargetWithMinimumRange(TurretBase base, World worldObj, int downLowAmount, BlockPos pos, int turretRange, TurretHead turret) {
         Entity target = null;
 
@@ -188,6 +190,7 @@ public class TurretHeadUtil {
         return null;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static Entity getTargetWithoutSlowEffect(TurretBase base, World worldObj, int downLowAmount, BlockPos pos, int turretRange, TurretHead turret) {
         Entity target = null;
 
@@ -446,6 +449,7 @@ public class TurretHeadUtil {
         return null;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static int getRangeUpgrades(TurretBase base) {
         int value = 0;
         int tier = base.getTier();
@@ -471,6 +475,7 @@ public class TurretHeadUtil {
         return value;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static int getScattershotUpgrades(TurretBase base) {
         int value = 0;
         int tier = base.getTier();
@@ -496,6 +501,7 @@ public class TurretHeadUtil {
         return value;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static float getAccuraccyUpgrades(TurretBase base) {
         float accuracy = 0.0F;
         int tier = base.getTier();
@@ -521,6 +527,7 @@ public class TurretHeadUtil {
         return accuracy;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static float getEfficiencyUpgrades(TurretBase base) {
         float efficiency = 0.0F;
         int tier = base.getTier();
@@ -546,6 +553,7 @@ public class TurretHeadUtil {
         return efficiency;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static float getFireRateUpgrades(TurretBase base) {
         float rof = 0.0F;
         int tier = base.getTier();
@@ -571,6 +579,7 @@ public class TurretHeadUtil {
         return rof;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static boolean hasRedstoneReactor(TurretBase base) {
         boolean found = false;
         if (base.getTier() == 1) {
@@ -587,6 +596,7 @@ public class TurretHeadUtil {
         return found;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static boolean hasDamageAmpAddon(TurretBase base) {
         boolean found = false;
         if (base.getTier() == 1) {
@@ -603,6 +613,7 @@ public class TurretHeadUtil {
         return found;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static boolean hasConcealmentAddon(TurretBase base) {
         boolean found = false;
         if (base.getTier() == 1) {
@@ -619,6 +630,7 @@ public class TurretHeadUtil {
         return found;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static boolean hasSolarPanelAddon(TurretBase base) {
         boolean found = false;
         if (base.getTier() == 1) {
@@ -635,7 +647,7 @@ public class TurretHeadUtil {
         return found;
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "ConstantConditions"})
     public static boolean hasPotentiaUpgradeAddon(TurretBase base) {
         boolean found = false;
         if (base.getTier() == 1) {
@@ -655,6 +667,7 @@ public class TurretHeadUtil {
         return found;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static boolean hasSerialPortAddon(TurretBase base) {
         boolean found = false;
         if (base.getTier() == 1) {
@@ -674,6 +687,7 @@ public class TurretHeadUtil {
         return found;
     }
 
+    @SuppressWarnings("ConstantConditions")
     private static boolean hasRecyclerAddon(TurretBase base) {
         boolean found = false;
         if (base.getTier() == 1) {
@@ -689,6 +703,7 @@ public class TurretHeadUtil {
         return found;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static int getAmpLevel(TurretBase base) {
         int amp_level = 0;
 

@@ -16,15 +16,19 @@ import omtteam.openmodularturrets.reference.Reference;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = Reference.DEPENDENCIES)
 public class OpenModularTurrets {
+    @SuppressWarnings("unused")
     @Mod.Instance(Reference.MOD_ID)
     public static OpenModularTurrets instance;
 
+    @SuppressWarnings({"CanBeFinal", "unused"})
     @SidedProxy(clientSide = "omtteam.openmodularturrets.proxy.ClientProxy", serverSide = "omtteam.openmodularturrets.proxy" + "" + ".CommonProxy")
     private static CommonProxy proxy;
 
     public static CreativeTabs modularTurretsTab;
+    @SuppressWarnings("FieldCanBeLocal")
     private GuiHandler gui;
 
+    @SuppressWarnings("unused")
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.init(event.getSuggestedConfigurationFile());
@@ -34,6 +38,7 @@ public class OpenModularTurrets {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, gui);
     }
 
+    @SuppressWarnings("unused")
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         ModCompatibility.checkForMods();

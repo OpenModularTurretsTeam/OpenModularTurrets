@@ -19,8 +19,6 @@ public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
     private final ModelSolarPanelAddon solar;
     private final ModelDamageAmp amp;
     private final ModelRedstoneReactor reac;
-    private RailGunTurretTileEntity turretHead;
-    private ResourceLocation textures;
     private final ModelRailgun model;
 
     public RailGunTurretRenderer() {
@@ -30,15 +28,16 @@ public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
         reac = new ModelRedstoneReactor();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     @SideOnly(Side.CLIENT)
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage)  {
-        turretHead = (RailGunTurretTileEntity) te;
+        RailGunTurretTileEntity turretHead = (RailGunTurretTileEntity) te;
 
-        textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/rail_gun_turret.png"));
+        ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/rail_gun_turret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
-        int rotation = 0;
+        int rotation;
         GL11.glPushMatrix();
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 

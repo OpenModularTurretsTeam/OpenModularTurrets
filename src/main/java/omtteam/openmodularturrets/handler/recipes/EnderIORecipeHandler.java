@@ -12,6 +12,7 @@ import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 
+@SuppressWarnings("deprecation")
 class EnderIORecipeHandler {
     public static void init() {
         ItemStack capacitorBank;

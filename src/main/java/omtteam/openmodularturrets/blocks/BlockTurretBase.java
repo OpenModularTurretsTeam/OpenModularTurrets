@@ -37,16 +37,17 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItemBlock {
     public static final PropertyInteger TIER = PropertyInteger.create("tier", 1, 5);
 
-    IBlockState camoBlockState = null;
-
-    boolean wasBroken = false;
+    //IBlockState camoBlockState = null;
 
     public BlockTurretBase() {
         super(Material.ROCK);
@@ -95,11 +96,13 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
     }
 
     @Override
+
     public boolean isOpaqueCube(IBlockState blockState) {
         return true;
     }
 
     @Override
+    @Nonnull
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(TIER, meta + 1);
     }
@@ -110,6 +113,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
     }
 
     @Override
+    @Nonnull
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, TIER);
     }
@@ -225,15 +229,17 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         if (!worldIn.isRemote) {
-            wasBroken = true;
             worldIn.removeTileEntity(pos);
             dropItems(worldIn, pos);
         }
     }
 
     @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> drops = new ArrayList<>();
         drops.add(0, new ItemStack(ModBlocks.turretBase, 1, this.getMetaFromState(state)));
@@ -246,6 +252,8 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
     }
 
     @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer
             player) {
         return new ItemStack(ModBlocks.turretBase, 1, state.getValue(TIER) - 1);
@@ -255,6 +263,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
+    @ParametersAreNonnullByDefault
     public void getSubBlocks(Item item, CreativeTabs tab, List subItems) {
         for (int i = 0; i < 5; i++) {
             subItems.add(new ItemStack(ModBlocks.turretBase, 1, i));

@@ -11,6 +11,7 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 
 
 
+@SuppressWarnings("unused")
 public class MessageToggleAttackMobs implements IMessage {
     private int x, y, z;
     private boolean attack_mobs;
@@ -18,6 +19,7 @@ public class MessageToggleAttackMobs implements IMessage {
     public MessageToggleAttackMobs() {
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static class MessageHandlerToggleAttackMobs implements IMessageHandler<MessageToggleAttackMobs, IMessage> {
         @Override
         public IMessage onMessage(MessageToggleAttackMobs messageIn, MessageContext ctxIn) {

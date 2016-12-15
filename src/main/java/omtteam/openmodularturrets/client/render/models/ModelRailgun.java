@@ -91,7 +91,6 @@ public class ModelRailgun extends ModelAbstractTurret {
 
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
-        setRotationAngles(f, f1, f2, f3, f4, f5);
         Base.render(f5);
         BarrelTop.render(f5);
         BarrelBot.render(f5);
@@ -111,10 +110,7 @@ public class ModelRailgun extends ModelAbstractTurret {
         model.rotateAngleZ = z;
     }
 
-    private void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {
-        setRotationAngles(f, f1, f2, f3, f4, f5);
-    }
-
+    @SuppressWarnings("SuspiciousNameCombination")
     public void setRotationForTarget(float y, float z) {
         BarrelTop.rotateAngleY = z;
         BarrelTop.rotateAngleX = y;

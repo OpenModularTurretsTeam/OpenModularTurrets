@@ -28,6 +28,7 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 /**
  * Created by nico on 6/4/15.
+ * Abstract class for all turret base GUIs.
  */
 
 public class TurretBaseAbstractGui extends GuiContainer {

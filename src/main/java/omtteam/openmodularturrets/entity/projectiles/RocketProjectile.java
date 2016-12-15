@@ -15,20 +15,22 @@ import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageS
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Random;
 
 public class RocketProjectile extends TurretProjectile {
+    @SuppressWarnings("unused")
     public int arrowShake;
-    public float accuracy;
     private Entity target;
-    private float speed = 0.06F;
 
+    @SuppressWarnings("unused")
     public RocketProjectile(World par1World) {
         super(par1World);
         this.gravity = 0.00F;
     }
 
+    @SuppressWarnings("unused")
     public RocketProjectile(World p_i1776_1_, TurretBase turretBase) {
         super(p_i1776_1_, turretBase);
         this.gravity = 0.00F;
@@ -51,6 +53,7 @@ public class RocketProjectile extends TurretProjectile {
                 double d1 = target.posY + (double) target.getEyeHeight() - 1.1F - this.posY;
                 double d2 = target.posZ - this.posZ;
 
+                float speed = 0.06F;
                 this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
             } else if (ConfigHandler.canRocketsHome && target == null) {
                 this.setDead();
@@ -65,8 +68,8 @@ public class RocketProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult movingobjectposition) {
-
         if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
             IBlockState hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos());
 
@@ -75,7 +78,7 @@ public class RocketProjectile extends TurretProjectile {
                 return;
             }
 
-            if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
+            if (!hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;
             }

@@ -31,6 +31,7 @@ public class RecipeHandler {
 
     public static ItemStack addonConcealer;
     public static ItemStack addonDamageAmp;
+    @SuppressWarnings("unused")
     public static ItemStack addonPotentia;
     public static ItemStack addonRecycler;
     public static ItemStack addonRedstoneReactor;
@@ -47,6 +48,7 @@ public class RecipeHandler {
     public static ItemStack memoryCard;
 
 
+    @SuppressWarnings("StatementWithEmptyBody")
     public static void initRecipes() {
 
         ammoBlazingClay = new ItemStack(ModItems.ammoMetaItem, 32, 0);

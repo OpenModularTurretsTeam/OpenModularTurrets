@@ -10,8 +10,10 @@ import omtteam.openmodularturrets.tileentity.turrets.*;
 /**
  * Created by Niel Verster on 11/29/2016.
  */
+@SuppressWarnings({"DefaultFileTemplate", "deprecation"})
 public class ModTESRItems {
 
+    @SuppressWarnings("ConstantConditions")
     public static void init() {
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.disposableItemTurret), 0, DisposableItemTurretTileEntity.class);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.disposableItemTurret), 0, new ModelResourceLocation(ModBlocks.disposableItemTurret.getRegistryName(), "inventory"));

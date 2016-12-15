@@ -20,11 +20,14 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
+@SuppressWarnings("ConstantConditions")
 public class UsableMetaItem extends Item {
     public UsableMetaItem() {
         super();
@@ -42,13 +45,11 @@ public class UsableMetaItem extends Item {
 
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
-        if (stack.getItemDamage() == 2 && world.getTileEntity(pos) instanceof TurretBase) {
-            return true;
-        }
-        return super.doesSneakBypassUse(stack, world, pos, player);
+        return stack.getItemDamage() == 2 && world.getTileEntity(pos) instanceof TurretBase || super.doesSneakBypassUse(stack, world, pos, player);
     }
 
     @Override
+    @Nonnull
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (stack.getItemDamage() == 2 && playerIn.isSneaking()) {
             stack.getTagCompound().getKeySet().clear();
@@ -57,6 +58,8 @@ public class UsableMetaItem extends Item {
     }
 
     @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
         if (itemStackIn.getItemDamage() == 2 && playerIn.isSneaking()) {
             itemStackIn.getTagCompound().getKeySet().clear();
@@ -65,6 +68,7 @@ public class UsableMetaItem extends Item {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         for (int i = 0; i < 3; i++) {
             subItems.add(new ItemStack(ModItems.usableMetaItem, 1, i));
@@ -72,6 +76,7 @@ public class UsableMetaItem extends Item {
     }
 
     @Override
+    @Nonnull
     public String getUnlocalizedName(ItemStack itemStack) {
         return "item." + subNames[itemStack.getItemDamage()];
     }

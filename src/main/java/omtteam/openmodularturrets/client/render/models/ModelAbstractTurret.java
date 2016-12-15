@@ -8,7 +8,10 @@ import net.minecraft.client.model.ModelRenderer;
  * This Class
  */
 public abstract class ModelAbstractTurret extends ModelBase{
+    @SuppressWarnings({"SameParameterValue", "unused"})
     protected abstract void setRotation(ModelRenderer model, float x, float y, float z);
+    @SuppressWarnings("unused")
     public abstract void renderAll();
+    @SuppressWarnings("unused")
     protected abstract void setRotationForTarget(float y, float z);
 }
