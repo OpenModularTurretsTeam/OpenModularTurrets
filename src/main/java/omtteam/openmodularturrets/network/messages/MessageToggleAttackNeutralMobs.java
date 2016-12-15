@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+@SuppressWarnings("unused")
 public class MessageToggleAttackNeutralMobs implements IMessage {
     private int x, y, z;
     private boolean attack_neutrals;
@@ -17,6 +18,7 @@ public class MessageToggleAttackNeutralMobs implements IMessage {
     public MessageToggleAttackNeutralMobs() {
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static class MessageHandlerToggleAttackNeutralMobs implements IMessageHandler<MessageToggleAttackNeutralMobs, IMessage> {
         @Override
         public IMessage onMessage(MessageToggleAttackNeutralMobs messageIn, MessageContext ctxIn) {

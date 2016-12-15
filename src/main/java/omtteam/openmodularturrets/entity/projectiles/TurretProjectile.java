@@ -10,6 +10,8 @@ import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 public abstract class TurretProjectile extends EntityThrowable {
     public float gravity;
     boolean isAmped;
@@ -40,6 +42,7 @@ public abstract class TurretProjectile extends EntityThrowable {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     boolean canDamagePlayer(EntityPlayer entityPlayer) {
         if (!ConfigHandler.turretDamageTrustedPlayers) {
             if (this.turretBase.getTrustedPlayer(entityPlayer.getUniqueID()) != null || PlayerUtil.getPlayerUIDUnstable(
@@ -51,6 +54,7 @@ public abstract class TurretProjectile extends EntityThrowable {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean writeToNBTOptional(NBTTagCompound nbtTagCompound) {
         this.setDead();
         return false;

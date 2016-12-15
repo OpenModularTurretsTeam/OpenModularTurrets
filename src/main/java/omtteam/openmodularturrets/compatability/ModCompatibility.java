@@ -19,11 +19,11 @@ public class ModCompatibility {
     public static boolean ThaumcraftLoaded = false;
     public static boolean OpenComputersLoaded = false;
     public static boolean ComputerCraftLoaded = false;
+    @SuppressWarnings("unused")
     public static IGWHandler igwHandler = null;
-    private static Logger logger;
 
     public static void checkForMods() {
-        logger = Logger.getLogger("OpenModularTurrets");
+        Logger logger = Logger.getLogger("OpenModularTurrets");
 
         ThermalExpansionLoaded = Loader.isModLoaded("ThermalExpansion");
         if (ThermalExpansionLoaded) {
@@ -72,6 +72,7 @@ public class ModCompatibility {
         }
     }
 
+    @SuppressWarnings("EmptyMethod")
     @Optional.Method(modid = "ComputerCraft")
     private static void registerCCCompat() {
         //ComputerCraftAPI.registerPeripheralProvider(CCPeripheralProvider.getInstance());

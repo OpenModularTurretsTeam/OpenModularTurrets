@@ -7,6 +7,7 @@ package omtteam.openmodularturrets.reference;
 public class OMTNames {
     public static class Blocks {
         public static final String turretBase = "turret_base";
+        @SuppressWarnings("unused")
         public static final String turret = "turret";
         public static final String disposableItemTurret = "disposable_item_turret";
         public static final String rocketTurret = "rocket_turret";
@@ -100,7 +101,6 @@ public class OMTNames {
         public static final String turretBaseTierOneGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_one.png";
         public static final String turretBaseTierTwoGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_two.png";
         public static final String turretBaseTierThreeGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_three.png";
-        ;
         public static final String turretBaseTierFourGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_four.png";
         public static final String turretBaseTierFiveGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_five.png";
         public static final String configureGUI = Reference.MOD_ID + ":textures/gui/configure.png";

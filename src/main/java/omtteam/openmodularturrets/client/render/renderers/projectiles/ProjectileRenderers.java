@@ -8,7 +8,9 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import omtteam.openmodularturrets.entity.projectiles.*;
 import omtteam.openmodularturrets.init.ModItems;
 
+@SuppressWarnings("deprecation")
 public class ProjectileRenderers {
+    @SuppressWarnings("unchecked")
     public static void init() {
         RenderingRegistry.registerEntityRenderingHandler(DisposableTurretProjectile.class, new ItemProjectileRenderer(Minecraft.getMinecraft().getRenderManager(), Minecraft.getMinecraft().getRenderItem()));
         RenderingRegistry.registerEntityRenderingHandler(RocketProjectile.class, new RocketRenderer());

@@ -11,6 +11,7 @@ public class ConfigHandler {
     public static boolean turretDamageTrustedPlayers;
     public static String recipes;
     public static boolean shouldDoThaumcraftIntegration;
+    @SuppressWarnings("unused")
     public static boolean shouldDoComputerIntegration;
     public static boolean globalCanTargetPlayers;
     public static boolean globalCanTargetNeutrals;
@@ -62,6 +63,7 @@ public class ConfigHandler {
     private static boolean allowBaseCamo;
     private static boolean canRocketsHurtEnderDragon;
     private static boolean shouldSpawnDungeonLoot;
+    @SuppressWarnings("unused")
     public static boolean canOPAccessTurrets;
 
     public static void init(File configFile) {
@@ -399,6 +401,7 @@ public class ConfigHandler {
         return potentiaAddonCapacity;
     }
 
+    @SuppressWarnings("unused")
     public static TurretSetting getPotato_cannon_turret() {
         return potato_cannon_turret;
     }
@@ -451,12 +454,14 @@ public class ConfigHandler {
         return turretTargetSearchTicks;
     }
 
+    @SuppressWarnings("unused")
     public static boolean isAllowBaseCamo() { return allowBaseCamo; }
 
     public static boolean isCanRocketsHurtEnderDragon() {
         return canRocketsHurtEnderDragon;
     }
 
+    @SuppressWarnings("unused")
     public static boolean isShouldSpawnDungeonLoot() {
         return shouldSpawnDungeonLoot;
     }

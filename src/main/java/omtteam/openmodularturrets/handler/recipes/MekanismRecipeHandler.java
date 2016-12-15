@@ -13,6 +13,7 @@ import omtteam.openmodularturrets.init.ModItems;
 
 import static omtteam.openmodularturrets.handler.recipes.RecipeHandler.*;
 
+@SuppressWarnings("deprecation")
 class MekanismRecipeHandler {
     public static void init() {
         String Mek = "Mekanism";

@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.client.render.models;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
@@ -109,6 +108,7 @@ public class ModelIncendiaryTurret extends ModelAbstractTurret {
         Tank.render(0.0625F);
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public void setRotationForTarget(float y, float z) {
         BoxUnder.rotateAngleY = z;
         BoxLeft.rotateAngleX = z;

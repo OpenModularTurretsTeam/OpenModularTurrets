@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+@SuppressWarnings("unused")
 public class MessageAddTrustedPlayer implements IMessage {
     private int x, y, z;
     private String player;
@@ -18,6 +19,7 @@ public class MessageAddTrustedPlayer implements IMessage {
     public MessageAddTrustedPlayer() {
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static class MessageHandlerAddTrustedPlayer implements IMessageHandler<MessageAddTrustedPlayer, IMessage> {
         @Override
         public IMessage onMessage(MessageAddTrustedPlayer messageIn, MessageContext ctxIn) {

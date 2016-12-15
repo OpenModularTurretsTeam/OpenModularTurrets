@@ -3,22 +3,21 @@ package omtteam.openmodularturrets.client.render.renderers.projectiles;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.openmodularturrets.entity.projectiles.LaserProjectile;
 import omtteam.openmodularturrets.reference.Reference;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
+
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 @SideOnly(Side.CLIENT)
 class LaserRenderer extends Render {
@@ -28,6 +27,7 @@ class LaserRenderer extends Render {
 
     private ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/laser.png"));
 
+    @SuppressWarnings("unused")
     private void renderLaser(LaserProjectile par1EntityRocket, double x, double y, double z, float entityYaw, float partialTicks) {
         for (int i = 0; i <= 20; i++) {
             par1EntityRocket.worldObj.spawnParticle(EnumParticleTypes.REDSTONE, x, y, z, 1.0D, 1.0D, 1.0D);
@@ -42,16 +42,7 @@ class LaserRenderer extends Render {
         GlStateManager.rotate(par1EntityRocket.prevRotationPitch + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexbuffer = tessellator.getBuffer();
-        int i = 0;
-        float f = 0.0F;
-        float f1 = 0.5F;
-        float f2 = 0.0F;
-        float f3 = 0.15625F;
-        float f4 = 0.0F;
-        float f5 = 0.15625F;
-        float f6 = 0.15625F;
-        float f7 = 0.3125F;
-        float f8 = 0.05625F;
+
         GlStateManager.enableRescaleNormal();
         float f9 = (float) par1EntityRocket.arrowShake - partialTicks;
 
@@ -95,10 +86,15 @@ class LaserRenderer extends Render {
         GlStateManager.popMatrix();
     }
 
+    @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
     protected ResourceLocation getEntityTexture(Entity par1Entity) {
         return texture;
     }
 
+    @Override
+    @ParametersAreNonnullByDefault
     public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9) {
         this.renderLaser((LaserProjectile) par1Entity, par2, par4, par6, par8, par9);
     }

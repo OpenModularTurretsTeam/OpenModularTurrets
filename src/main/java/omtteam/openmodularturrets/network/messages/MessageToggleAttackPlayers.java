@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+@SuppressWarnings("unused")
 public class MessageToggleAttackPlayers implements IMessage {
     private int x, y, z;
     private boolean attack_players;
@@ -16,6 +17,7 @@ public class MessageToggleAttackPlayers implements IMessage {
     public MessageToggleAttackPlayers() {
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static class MessageHandlerToggleAttackPlayers implements IMessageHandler<MessageToggleAttackPlayers, IMessage> {
         @Override
         public IMessage onMessage(MessageToggleAttackPlayers messageIn, MessageContext ctxIn) {

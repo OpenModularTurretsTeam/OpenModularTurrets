@@ -16,6 +16,10 @@ import omtteam.omlib.util.IHasItemBlock;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@SuppressWarnings("deprecation")
 public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity implements IHasItemBlock {
     public static final PropertyBool CONCEALED = PropertyBool.create("concealed");
 
@@ -35,6 +39,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     }
 
     @Override
+    @Nonnull
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         if (state.getValue(CONCEALED)) {
             return new AxisAlignedBB(0F, 0F, 0F, 0F, 0F, 0F);
@@ -43,6 +48,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     }
 
     @Override
+    @Nonnull
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(CONCEALED, meta == 1);
     }
@@ -53,6 +59,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     }
 
     @Override
+    @Nonnull
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, CONCEALED);
     }
@@ -63,6 +70,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         return worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())) instanceof TurretBase ||
                 worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())) instanceof TurretBase ||

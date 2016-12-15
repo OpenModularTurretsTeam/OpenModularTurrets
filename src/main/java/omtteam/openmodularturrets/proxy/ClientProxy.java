@@ -19,6 +19,7 @@ import omtteam.openmodularturrets.items.*;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
+@SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
 
     private void registerItemModel(final Item item, int meta) {
@@ -29,14 +30,17 @@ public class ClientProxy extends CommonProxy {
         ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(new ResourceLocation(item.getRegistryName().toString().toLowerCase()), variantName));
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void registerItemModel(final Item item, int meta, final String customName, boolean useCustomName) {
         ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + customName.toLowerCase()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void registerBlockModelAsItem(final Block block, int meta, final String blockName) {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + blockName, "inventory"));
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void registerBlockModelAsItem(final Block block, int meta, final String blockName, String variantName) {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + blockName, variantName));
     }

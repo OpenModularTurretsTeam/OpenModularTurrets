@@ -28,8 +28,11 @@ import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@SuppressWarnings("deprecation")
 public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock {
     public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 4);
 
@@ -50,6 +53,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
+    @Nonnull
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(ROTATION, meta);
 
@@ -61,6 +65,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
+    @Nonnull
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, ROTATION);
     }
@@ -76,6 +81,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         return (isBaseValid(worldIn.getTileEntity(pos.north())) ||
                 isBaseValid(worldIn.getTileEntity(pos.east())) ||
@@ -171,6 +177,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
+    @Nonnull
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return new AxisAlignedBB(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
     }

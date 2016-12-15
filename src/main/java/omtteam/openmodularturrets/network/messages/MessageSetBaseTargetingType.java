@@ -9,12 +9,14 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+@SuppressWarnings("unused")
 public class MessageSetBaseTargetingType implements IMessage {
     private int x, y, z;
 
     public MessageSetBaseTargetingType() {
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static class MessageHandlerSetBaseTargetingType implements IMessageHandler<MessageSetBaseTargetingType, IMessage> {
         @Override
         public IMessage onMessage(MessageSetBaseTargetingType messageIn, MessageContext ctxIn) {

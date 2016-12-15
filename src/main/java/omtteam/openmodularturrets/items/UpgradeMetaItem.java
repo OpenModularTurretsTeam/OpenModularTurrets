@@ -12,8 +12,11 @@ import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class UpgradeMetaItem extends Item {
     public UpgradeMetaItem() {
         super();
@@ -30,6 +33,7 @@ public class UpgradeMetaItem extends Item {
     };
 
     @Override
+    @ParametersAreNonnullByDefault
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         for (int i = 0; i < 5; i++) {
             subItems.add(new ItemStack(ModItems.upgradeMetaItem, 1, i));
@@ -37,6 +41,7 @@ public class UpgradeMetaItem extends Item {
     }
 
     @Override
+    @Nonnull
     public String getUnlocalizedName(ItemStack itemStack) {
         return "item." + subNames[itemStack.getItemDamage()];
     }

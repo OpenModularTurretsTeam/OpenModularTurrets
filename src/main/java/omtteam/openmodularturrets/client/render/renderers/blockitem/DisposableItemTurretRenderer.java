@@ -20,8 +20,6 @@ public class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
     private final ModelSolarPanelAddon solar;
     private final ModelDamageAmp amp;
     private final ModelRedstoneReactor reac;
-    private DisposableItemTurretTileEntity turretHead;
-    private ResourceLocation textures;
     private final ModelDisposableItemTurret model;
 
     public DisposableItemTurretRenderer() {
@@ -31,13 +29,14 @@ public class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
         reac = new ModelRedstoneReactor();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     @SideOnly(Side.CLIENT)
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage) {
-        turretHead = (DisposableItemTurretTileEntity) te;
-        int rotation = 0;
+        DisposableItemTurretTileEntity turretHead = (DisposableItemTurretTileEntity) te;
+        int rotation;
 
-        textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/dispose_item_turret.png"));
+        ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/dispose_item_turret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         GL11.glPushMatrix();

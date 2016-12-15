@@ -26,6 +26,7 @@ public class ModSounds {
     public static SoundEvent relativisticLaunchSound;
     public static SoundEvent rocketLaunchSound;
     public static SoundEvent teleportLaunchSound;
+    @SuppressWarnings("unused")
     public static SoundEvent turretWarnSound;
 
 

@@ -10,9 +10,11 @@ import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.text.DecimalFormat;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class ItemBlockRailGunTurret extends ItemBlock {
     private static final DecimalFormat df = new DecimalFormat("0.0");
 
@@ -23,6 +25,7 @@ public class ItemBlockRailGunTurret extends ItemBlock {
 
     @Override
     @SuppressWarnings("unchecked")
+    @ParametersAreNonnullByDefault
     public void addInformation(ItemStack itemStack, EntityPlayer player, List tooltip, boolean advanced) {
         tooltip.add("");
         tooltip.add(TextFormatting.GOLD + "--" + I18n.translateToLocal("tooltip.info") + "--");

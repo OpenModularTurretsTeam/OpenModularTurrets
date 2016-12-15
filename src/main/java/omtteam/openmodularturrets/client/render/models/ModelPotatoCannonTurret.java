@@ -69,6 +69,7 @@ public class ModelPotatoCannonTurret extends ModelAbstractTurret {
         setRotation(Chamber, 0F, 0F, 0F);
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public void setRotationForTarget(float y, float z) {
         BoxUnder.rotateAngleY = z;
         BoxLeft.rotateAngleX = z;

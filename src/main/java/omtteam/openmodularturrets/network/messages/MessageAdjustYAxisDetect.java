@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+@SuppressWarnings("unused")
 public class MessageAdjustYAxisDetect implements IMessage {
     private int x, y, z;
     private int y_axis_detect;
@@ -16,6 +17,7 @@ public class MessageAdjustYAxisDetect implements IMessage {
     public MessageAdjustYAxisDetect() {
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static class MessageHandlerAdjustYAxisDetect implements IMessageHandler<MessageAdjustYAxisDetect, IMessage> {
         @Override
         public IMessage onMessage(MessageAdjustYAxisDetect messageIn, MessageContext ctxIn) {

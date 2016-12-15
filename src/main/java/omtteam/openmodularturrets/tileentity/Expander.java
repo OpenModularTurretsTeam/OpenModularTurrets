@@ -14,8 +14,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static omtteam.omlib.util.MathUtil.truncateDoubleToInt;
 
 public class Expander extends TileEntityContainer implements ITickable {
-    public float baseFitRotationX;
-    public float baseFitRotationZ;
+    @SuppressWarnings("unused")
     protected TurretBase base;
     private boolean powerExpander;
     private EnumFacing orientation;

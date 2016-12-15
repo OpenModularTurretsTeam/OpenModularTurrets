@@ -118,6 +118,7 @@ public class ModelLaserTurret extends ModelAbstractTurret {
         model.rotateAngleZ = z;
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public void setRotationForTarget(float y, float z) {
         BoxUnder.rotateAngleY = z;
         BoxLeft.rotateAngleX = z;
