@@ -14,16 +14,18 @@ import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageS
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 public class BlazingClayProjectile extends TurretProjectile {
-    public BlazingClayProjectile(World p_i1776_1_) {
-        super(p_i1776_1_);
+    @SuppressWarnings("unused")
+    public BlazingClayProjectile(World world) {
+        super(world);
         this.gravity = 0.00F;
     }
 
-    public BlazingClayProjectile(World par1World, ItemStack ammo, TurretBase turretBase) {
-        super(par1World, ammo, turretBase);
+    public BlazingClayProjectile(World world, ItemStack ammo, TurretBase turretBase) {
+        super(world, ammo, turretBase);
         this.gravity = 0.00F;
     }
 
@@ -35,6 +37,7 @@ public class BlazingClayProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult movingobjectposition) {
         if (this.ticksExisted <= 1) {
             return;
@@ -46,13 +49,13 @@ public class BlazingClayProjectile extends TurretProjectile {
                 return;
             }
 
-            if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
+            if (!hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;
             }
         }
 
-        if (movingobjectposition.typeOfHit.equals(0)) {
+        if (movingobjectposition.typeOfHit.equals(RayTraceResult.Type.MISS)) {
             if (worldObj.isAirBlock(movingobjectposition.getBlockPos())) {
                 return;
             }
@@ -91,6 +94,7 @@ public class BlazingClayProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
         this.posY = posY + 12F;
     }

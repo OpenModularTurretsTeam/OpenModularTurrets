@@ -8,6 +8,8 @@ import omtteam.openmodularturrets.handler.NetworkingHandler;
 import omtteam.openmodularturrets.network.messages.MessageTurretBase;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 public class ConfigContainer extends Container {
     private final TurretBase tileEntity;
 
@@ -16,6 +18,7 @@ public class ConfigContainer extends Container {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean canInteractWith(EntityPlayer player) {
         return tileEntity.isUseableByPlayer(player);
     }

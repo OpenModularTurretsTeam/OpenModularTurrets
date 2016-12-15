@@ -22,6 +22,7 @@ public class TileEntityRenderers {
 
     public static final LeverRenderer leverRenderer = new LeverRenderer();
 
+    @SuppressWarnings("unchecked")
     @SideOnly(Side.CLIENT)
     public static void init() {
         ClientRegistry.bindTileEntitySpecialRenderer(DisposableItemTurretTileEntity.class,

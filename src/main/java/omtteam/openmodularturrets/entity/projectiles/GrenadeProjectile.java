@@ -4,8 +4,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
@@ -13,11 +13,11 @@ import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageS
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 public class GrenadeProjectile extends TurretProjectile {
-    private boolean isAmped;
-
+    @SuppressWarnings("unused")
     public GrenadeProjectile(World par1World) {
         super(par1World);
         this.gravity = 0.00F;
@@ -71,6 +71,7 @@ public class GrenadeProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult movingobjectposition) {
         if (this.ticksExisted >= 2) {
             this.motionX = 0.0F;

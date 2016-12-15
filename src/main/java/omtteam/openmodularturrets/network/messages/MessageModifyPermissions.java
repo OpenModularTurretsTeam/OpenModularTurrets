@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+@SuppressWarnings("unused")
 public class MessageModifyPermissions implements IMessage {
     private int x, y, z;
     private String player, perm;
@@ -18,6 +19,7 @@ public class MessageModifyPermissions implements IMessage {
     public MessageModifyPermissions() {
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static class MessageHandlerModifyPermissions implements IMessageHandler<MessageModifyPermissions, IMessage> {
         @Override
         public IMessage onMessage(MessageModifyPermissions messageIn, MessageContext ctxIn) {

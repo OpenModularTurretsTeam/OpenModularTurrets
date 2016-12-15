@@ -21,6 +21,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
         this.turretTier = 3;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void update() {
         setSide();

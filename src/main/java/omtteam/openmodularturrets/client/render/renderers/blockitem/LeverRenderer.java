@@ -16,10 +16,11 @@ public class LeverRenderer extends TileEntitySpecialRenderer {
         model = new ModelLever();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage) {
         LeverTileEntity lever = (LeverTileEntity) te;
-        int rotation = 0;
+        int rotation;
         ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/lever_block.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 

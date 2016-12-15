@@ -6,15 +6,17 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.openmodularturrets.entity.projectiles.RocketProjectile;
 import omtteam.openmodularturrets.reference.Reference;
+
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 @SideOnly(Side.CLIENT)
 class RocketRenderer extends Render {
@@ -25,6 +27,7 @@ class RocketRenderer extends Render {
         super(Minecraft.getMinecraft().getRenderManager());
     }
 
+    @SuppressWarnings("unused")
     private void renderRocket(RocketProjectile par1EntityRocket, double x, double y, double z, float entityYaw, float partialTicks) {
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -35,16 +38,7 @@ class RocketRenderer extends Render {
         GlStateManager.rotate(par1EntityRocket.prevRotationPitch + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexbuffer = tessellator.getBuffer();
-        int i = 0;
-        float f = 0.0F;
-        float f1 = 0.5F;
-        float f2 = 0.0F;
-        float f3 = 0.15625F;
-        float f4 = 0.0F;
-        float f5 = 0.15625F;
-        float f6 = 0.15625F;
-        float f7 = 0.3125F;
-        float f8 = 0.05625F;
+
         GlStateManager.enableRescaleNormal();
         float f9 = (float) par1EntityRocket.arrowShake - partialTicks;
 
@@ -88,12 +82,15 @@ class RocketRenderer extends Render {
         GlStateManager.popMatrix();
     }
 
-
+    @Override
+    @ParametersAreNonnullByDefault
     public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9) {
         this.renderRocket((RocketProjectile) par1Entity, par2, par4, par6, par8, par9);
     }
 
     @Override
+    @ParametersAreNonnullByDefault
+    @Nonnull
     protected ResourceLocation getEntityTexture(Entity entity) {
         return texture;
     }

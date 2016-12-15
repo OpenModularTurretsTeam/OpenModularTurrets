@@ -13,11 +13,14 @@ import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
 public class LaserProjectile extends TurretProjectile {
+    @SuppressWarnings("unused")
     public int arrowShake;
 
+    @SuppressWarnings("unused")
     public LaserProjectile(World par1World) {
         super(par1World);
         this.gravity = 0.00F;
@@ -42,6 +45,7 @@ public class LaserProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult movingobjectposition) {
         if (this.ticksExisted <= 1) {
             return;
@@ -53,7 +57,7 @@ public class LaserProjectile extends TurretProjectile {
                 return;
             }
 
-            if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
+            if (!hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;
             }

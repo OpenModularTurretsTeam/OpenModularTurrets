@@ -8,6 +8,8 @@ import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 public class IntermediateProductTiered extends Item {
@@ -29,6 +31,7 @@ public class IntermediateProductTiered extends Item {
     };
 
     @Override
+    @ParametersAreNonnullByDefault
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         for (int i = 0; i < 15; i++) {
             subItems.add(new ItemStack(ModItems.intermediateProductTiered, 1, i));
@@ -36,6 +39,7 @@ public class IntermediateProductTiered extends Item {
     }
 
     @Override
+    @Nonnull
     public String getUnlocalizedName(ItemStack itemStack) {
         return "item." + subNames[itemStack.getItemDamage()];
     }

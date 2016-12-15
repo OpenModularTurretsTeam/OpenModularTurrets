@@ -36,7 +36,9 @@ import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
@@ -45,6 +47,7 @@ import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
  * Created by Keridos on 19/07/16.
  * This Class
  */
+@SuppressWarnings("deprecation")
 public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBlock {
     public static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
@@ -69,6 +72,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
 
     @Override
     @SuppressWarnings("unchecked")
+    @Nonnull
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(META, meta);
     }
@@ -79,11 +83,14 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     }
 
     @Override
+    @Nonnull
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, META, FACING);
     }
 
     @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         Expander te = ((Expander) worldIn.getTileEntity(pos));
         if (te != null) {
@@ -101,6 +108,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     }
 
     @Override
+    @Nonnull
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         IBlockState blockState = this.getActualState(state, source, pos);
         return MathUtil.rotateAABB(new AxisAlignedBB(1 / 8F, 1 / 8F, 0F, 7 / 8F, 7 / 8F, 3 / 8F), blockState.getValue(FACING).getOpposite());
@@ -117,6 +125,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
         return false;
     }
@@ -155,6 +164,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         for (TileEntity tileEntity : getTouchingTileEntities(worldIn, pos)) {
             if (tileEntity instanceof TurretBase) return true;
@@ -163,6 +173,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         if (!worldIn.isRemote) {
             dropItems(worldIn, pos);
@@ -189,6 +200,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
+    @ParametersAreNonnullByDefault
     public void getSubBlocks(Item item, CreativeTabs tab, List subItems) {
         for (int i = 0; i < 10; i++) {
             subItems.add(new ItemStack(ModBlocks.expander, 1, i));

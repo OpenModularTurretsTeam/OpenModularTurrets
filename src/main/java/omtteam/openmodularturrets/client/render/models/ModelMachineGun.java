@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.client.render.models;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
@@ -96,6 +95,7 @@ public class ModelMachineGun extends ModelAbstractTurret {
         model.rotateAngleZ = z;
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public void setRotationForTarget(float y, float z) {
         BoxUnder.rotateAngleY = z;
         BoxLeft.rotateAngleX = z;

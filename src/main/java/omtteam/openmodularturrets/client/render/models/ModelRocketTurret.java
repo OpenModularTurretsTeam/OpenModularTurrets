@@ -116,6 +116,7 @@ public class ModelRocketTurret extends ModelAbstractTurret {
         Missile2.render(0.0625F);
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public void setRotationForTarget(float y, float z) {
         BoxUnder.rotateAngleY = z;
         BoxLeft.rotateAngleX = z;

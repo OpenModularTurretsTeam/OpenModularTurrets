@@ -13,12 +13,15 @@ import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 /**
  * Created by Keridos on 22/07/16.
  * This Class
  */
+@SuppressWarnings("deprecation")
 public class ItemBlockExpander extends ItemBlock {
     public ItemBlockExpander(Block block) {
         super(block);
@@ -34,6 +37,7 @@ public class ItemBlockExpander extends ItemBlock {
     };
 
     @Override
+    @ParametersAreNonnullByDefault
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         for (int i = 0; i < 15; i++) {
             subItems.add(new ItemStack(ModItems.intermediateProductTiered, 1, i));
@@ -41,6 +45,7 @@ public class ItemBlockExpander extends ItemBlock {
     }
 
     @Override
+    @Nonnull
     public String getUnlocalizedName(ItemStack itemStack) {
         return "tile." + subNames[itemStack.getItemDamage()];
     }
@@ -52,6 +57,7 @@ public class ItemBlockExpander extends ItemBlock {
 
     @Override
     @SuppressWarnings("unchecked")
+    @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
         switch (stack.getMetadata()) {
             case 0:

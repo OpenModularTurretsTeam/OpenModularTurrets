@@ -7,6 +7,8 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import omtteam.openmodularturrets.tileentity.Expander;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 public class ExpanderInvContainer extends Container {
     private final Expander tileEntity;
 
@@ -31,10 +33,12 @@ public class ExpanderInvContainer extends Container {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean canInteractWith(EntityPlayer player) {
         return tileEntity.isUseableByPlayer(player);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int slot) {
         ItemStack itemStack = null;

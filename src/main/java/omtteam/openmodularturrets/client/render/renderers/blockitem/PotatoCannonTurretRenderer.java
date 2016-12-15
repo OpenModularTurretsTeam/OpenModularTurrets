@@ -20,8 +20,6 @@ public class PotatoCannonTurretRenderer extends TileEntitySpecialRenderer {
     private final ModelSolarPanelAddon solar;
     private final ModelDamageAmp amp;
     private final ModelRedstoneReactor reac;
-    private PotatoCannonTurretTileEntity turretHead;
-    private ResourceLocation textures;
     private final ModelPotatoCannonTurret model;
 
     public PotatoCannonTurretRenderer() {
@@ -31,15 +29,16 @@ public class PotatoCannonTurretRenderer extends TileEntitySpecialRenderer {
         reac = new ModelRedstoneReactor();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     @SideOnly(Side.CLIENT)
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage)  {
-        turretHead = (PotatoCannonTurretTileEntity) te;
+        PotatoCannonTurretTileEntity turretHead = (PotatoCannonTurretTileEntity) te;
 
-        textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/potato_cannon_turret.png"));
+        ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/potato_cannon_turret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
-        int rotation = 0;
+        int rotation;
         GL11.glPushMatrix();
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 

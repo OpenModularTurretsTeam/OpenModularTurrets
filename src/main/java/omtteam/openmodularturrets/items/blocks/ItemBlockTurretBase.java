@@ -13,8 +13,11 @@ import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class ItemBlockTurretBase extends ItemBlock {
     public ItemBlockTurretBase(Block block) {
         super(block);
@@ -27,6 +30,7 @@ public class ItemBlockTurretBase extends ItemBlock {
     };
 
     @Override
+    @ParametersAreNonnullByDefault
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         for (int i = 0; i < 5; i++) {
             subItems.add(new ItemStack(ModBlocks.turretBase, 1, i));
@@ -34,6 +38,7 @@ public class ItemBlockTurretBase extends ItemBlock {
     }
 
     @Override
+    @Nonnull
     public String getUnlocalizedName(ItemStack itemStack) {
         return "tile." + OMTNames.Blocks.turretBase + subNames[itemStack.getItemDamage()];
     }
@@ -45,6 +50,7 @@ public class ItemBlockTurretBase extends ItemBlock {
 
     @Override
     @SuppressWarnings("unchecked")
+    @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
         switch (stack.getMetadata()) {
             case 0:

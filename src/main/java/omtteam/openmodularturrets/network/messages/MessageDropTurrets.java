@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 
+@SuppressWarnings("unused")
 public class MessageDropTurrets implements IMessage {
     private int x, y, z;
 

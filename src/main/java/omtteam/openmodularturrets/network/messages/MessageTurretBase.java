@@ -23,6 +23,7 @@ import java.util.UUID;
  * Created by Keridos on 05.10.14.
  * This Class is the Message that the electric floodlights TileEntity uses.
  */
+@SuppressWarnings("unused")
 public class MessageTurretBase implements IMessage {
     private int x, y, z, rfStorageCurrent, rfStorageMax, tier;
     private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting;

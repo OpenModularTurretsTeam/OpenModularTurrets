@@ -1,11 +1,15 @@
 package omtteam.openmodularturrets.client.gui;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import omtteam.openmodularturrets.init.ModBlocks;
+import omtteam.openmodularturrets.items.blocks.ItemBlockLaserTurret;
 
+@MethodsReturnNonnullByDefault
 public class ModularTurretsTab extends CreativeTabs {
+    @SuppressWarnings("SameParameterValue")
     public ModularTurretsTab(String label) {
         super(label);
     }
@@ -17,6 +21,6 @@ public class ModularTurretsTab extends CreativeTabs {
 
     @Override
     public Item getTabIconItem() {
-        return null;
+        return new ItemBlockLaserTurret(ModBlocks.laserTurret);
     }
 }

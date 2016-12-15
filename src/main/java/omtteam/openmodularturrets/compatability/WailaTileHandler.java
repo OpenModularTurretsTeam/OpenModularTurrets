@@ -18,11 +18,12 @@ import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
-;
-
 /**
  * Created by nico on 5/23/15.
+ * Waila/Hwyla Interface.
  */
+
+@SuppressWarnings("unused")
 @Optional.Interface(iface = "mcp.mobius.waila.api.IWailaDataProvider", modid = "Waila")
 public class WailaTileHandler implements IWailaDataProvider {
     /**
