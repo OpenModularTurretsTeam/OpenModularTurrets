@@ -181,6 +181,23 @@ gui.omtteam.openmodularturrets:attack_mobs=Attackiert Mobs
 gui.omtteam.openmodularturrets:attack_neutrals=Attackiert Neutrale
 gui.omtteam.openmodularturrets:attack_players=Attackiert Spieler
 gui.omtteam.openmodularturrets:multi_targeting=Multiple Ziele
+gui.omtteam.openmodularturrets:addons=Addons
+gui.omtteam.openmodularturrets:upgrades=Upgr.
+gui.omtteam.openmodularturrets:ammo=Munition
+gui.omtteam.openmodularturrets:inventory=Inventar
+gui.omtteam.openmodularturrets:target=Ziel
+gui.omtteam.openmodularturrets:add_trusted_player=Füge vertr. Spieler hinzu
+gui.omtteam.openmodularturrets:no_trusted_players=Keine vertrauten. Spieler
+gui.omtteam.openmodularturrets:targeting_options=Ziel-Optionen
+gui.omtteam.openmodularturrets:permissions=Berechtigungen
+
+tooltip.omtteam.openmodularturrets:add_trusted_player=Fügt den angegebenen Spieler der vertrauten Spieler Liste hinzu.
+tooltip.omtteam.openmodularturrets:remove_trusted_player=Entfernt den angezeigten Spieler aus der Liste.
+tooltip.omtteam.openmodularturrets:view_previous_trusted_player=Schaue vorherigen vertrauten Spieler an.
+tooltip.omtteam.openmodularturrets:view_next_trusted_player=Schaue nächsten vertrauten Spieler an..
+tooltip.omtteam.openmodularturrets:tp_can_open_gui=Ob der angezeigt Spieler das GUI öffnen kann.
+tooltip.omtteam.openmodularturrets:tp_can_change_targeting=Ob der angezeigt Spieler die Ziel-Optionen ändern kann.
+tooltip.omtteam.openmodularturrets:tp_can_administer=Ob der angezeigt Spieler den Turm administrieren kann (vertraute Spieler und Turm abbauen).
 
 death.attack.disposable=Very %s, much dead, such wow...
 death.attack.bullet=%s aß zu viel leckeres Blei.

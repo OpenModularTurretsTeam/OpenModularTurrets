@@ -23,6 +23,9 @@ import org.lwjgl.opengl.GL11;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
+import static omtteam.omlib.util.GeneralUtil.safeLocalize;
+
 public class ConfigureGui extends GuiContainer {
     private final TurretBase base;
     private GuiTextField textFieldAddTrustedPlayer;
@@ -45,9 +48,9 @@ public class ConfigureGui extends GuiContainer {
 
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 
-        String mobsButton = "Attack Mobs: " + (base.isAttacksMobs() ? "\u00A72Yes" : "\u00A7cNo");
-        String neutralsButton = "Attack Neutrals: " + (base.isAttacksNeutrals() ? "\u00A72Yes" : "\u00A7cNo");
-        String playersButton = "Attack Players: " + (base.isAttacksPlayers() ? "\u00A72Yes" : "\u00A7cNo");
+        String mobsButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
+        String neutralsButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
+        String playersButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
 
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
@@ -110,10 +113,10 @@ public class ConfigureGui extends GuiContainer {
         if (guibutton.id == 1) { //change Attack Mobs
             if (PlayerUtil.isPlayerOwner(player, base)) {
                 sendChangeToServerMobs(!base.isAttacksMobs());
-                guibutton.displayString = "Attack Mobs: " + (!base.isAttacksMobs() ? "\u00A72Yes" : "\u00A7cNo");
+                guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksMobs()));
             } else if (trustedPlayer != null && trustedPlayer.canChangeTargeting) {
                 sendChangeToServerMobs(!base.isAttacksMobs());
-                guibutton.displayString = "Attack Mobs: " + (!base.isAttacksMobs() ? "\u00A72Yes" : "\u00A7cNo");
+                guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksMobs()));
             } else {
                 player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
             }
@@ -122,10 +125,10 @@ public class ConfigureGui extends GuiContainer {
         if (guibutton.id == 2) { //change Attack Neutrals
             if (PlayerUtil.isPlayerOwner(player, base)) {
                 sendChangeToServerNeutrals(!base.isAttacksNeutrals());
-                guibutton.displayString = "Attack Neutrals: " + (!base.isAttacksNeutrals() ? "\u00A72Yes" : "\u00A7cNo");
+                guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksNeutrals()));
             } else if (trustedPlayer != null && trustedPlayer.canChangeTargeting) {
                 sendChangeToServerNeutrals(!base.isAttacksNeutrals());
-                guibutton.displayString = "Attack Neutrals: " + (!base.isAttacksNeutrals() ? "\u00A72Yes" : "\u00A7cNo");
+                guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksNeutrals()));
             } else {
                 player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
             }
@@ -134,10 +137,10 @@ public class ConfigureGui extends GuiContainer {
         if (guibutton.id == 3) { // change Attack Players
             if (PlayerUtil.isPlayerOwner(player, base)) {
                 sendChangeToServerPlayers(!base.isAttacksPlayers());
-                guibutton.displayString = "Attack Players: " + (!base.isAttacksPlayers() ? "\u00A72Yes" : "\u00A7cNo");
+                guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksPlayers()));
             } else if (trustedPlayer != null && trustedPlayer.canChangeTargeting) {
                 sendChangeToServerPlayers(!base.isAttacksPlayers());
-                guibutton.displayString = "Attack Players: " + (!base.isAttacksPlayers() ? "\u00A72Yes" : "\u00A7cNo");
+                guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksPlayers()));
             } else {
                 player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
             }
@@ -152,6 +155,8 @@ public class ConfigureGui extends GuiContainer {
                         textFieldAddTrustedPlayer.setText("");
                         waitForServerTrustedPlayers = 5;
                         player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
+                    } else {
+                        textFieldAddTrustedPlayer.setText("");
                     }
                 }
             } else if (trustedPlayer != null && trustedPlayer.admin) {
@@ -162,6 +167,8 @@ public class ConfigureGui extends GuiContainer {
                         textFieldAddTrustedPlayer.setText("");
                         waitForServerTrustedPlayers = 5;
                         player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
+                    } else {
+                        textFieldAddTrustedPlayer.setText("");
                     }
                 }
             } else {
@@ -212,8 +219,7 @@ public class ConfigureGui extends GuiContainer {
                 player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
             }
         }
-        if(this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex)
-        {
+        if (this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex) {
             return;
         }
 
@@ -279,13 +285,13 @@ public class ConfigureGui extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int param1, int param2) {
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
-        fontRenderer.drawString("Targeting options:", 10, 8, 0);
-        fontRenderer.drawString("Add Trusted Player:", 10, 87, 0);
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.TARGETING_OPTIONS) + ": ", 10, 8, 0);
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.ADD_TRUSTED_PLAYER) + ": ", 10, 87, 0);
 
         if (this.base.getTrustedPlayers().size() == 0) {
-            fontRenderer.drawString("\u00A7f<No trusted players to edit>", 10, 124, 0);
+            fontRenderer.drawString("\u00A7f" + safeLocalize(OMTNames.Localizations.GUI.NO_TRUSTED_PLAYERS), 10, 124, 0);
         } else {
-            fontRenderer.drawString(base.getTrustedPlayers().get(base.trustedPlayerIndex).getName() + "'s Permissions:",
+            fontRenderer.drawString(base.getTrustedPlayers().get(base.trustedPlayerIndex).getName() + "'s " + safeLocalize(OMTNames.Localizations.GUI.PERMISSIONS),
                     10, 124, 0);
         }
 
@@ -298,7 +304,7 @@ public class ConfigureGui extends GuiContainer {
         if (mouseX > k + 114 && mouseX < k + 114 + 51) {
             if (mouseY > l + 98 && mouseY < l + 98 + 20) {
                 ArrayList list = new ArrayList();
-                list.add("Adds the given player to the turret's trusted list.");
+                list.add(safeLocalize(OMTNames.Localizations.Tooltip.ADD_TRUSTED_PLAYER));
                 this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
             }
         }
@@ -306,7 +312,7 @@ public class ConfigureGui extends GuiContainer {
         if (mouseX > k + 35 && mouseX < k + 35 + 30) {
             if (mouseY > l + 135 && mouseY < l + 135 + 20) {
                 ArrayList list = new ArrayList();
-                list.add("Removes the viewed trusted player from the turret's trusted player list.");
+                list.add(safeLocalize(OMTNames.Localizations.Tooltip.REMOVE_TRUSTED_PLAYER));
                 this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
             }
         }
@@ -314,7 +320,7 @@ public class ConfigureGui extends GuiContainer {
         if (mouseX > k + 10 && mouseX < k + 10 + 20) {
             if (mouseY > l + 135 && mouseY < l + 135 + 20) {
                 ArrayList list = new ArrayList();
-                list.add("View previous trusted player.");
+                list.add(safeLocalize(OMTNames.Localizations.Tooltip.VIEW_PREVIOUS_TRUSTED_PLAYER));
                 this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
             }
         }
@@ -322,7 +328,7 @@ public class ConfigureGui extends GuiContainer {
         if (mouseX > k + 145 && mouseX < k + 145 + 20) {
             if (mouseY > l + 135 && mouseY < l + 135 + 20) {
                 ArrayList list = new ArrayList();
-                list.add("View next trusted player.");
+                list.add(safeLocalize(OMTNames.Localizations.Tooltip.VIEW_NEXT_TRUSTED_PLAYER));
                 this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
             }
         }
@@ -331,7 +337,7 @@ public class ConfigureGui extends GuiContainer {
         if (mouseX > k + 70 && mouseX < k + 70 + 23) {
             if (mouseY > l + 135 && mouseY < l + 135 + 20) {
                 ArrayList list = new ArrayList();
-                list.add("If the viewed trusted player can open this turret base's gui.");
+                list.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_OPEN_GUI));
                 this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
             }
         }
@@ -340,7 +346,7 @@ public class ConfigureGui extends GuiContainer {
         if (mouseX > k + 93 && mouseX < k + 93 + 23) {
             if (mouseY > l + 135 && mouseY < l + 135 + 20) {
                 ArrayList list = new ArrayList();
-                list.add("If the viewed trusted player can change the base's targeting parameters.");
+                list.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_CHANGE_TARGETING));
                 this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
             }
         }
@@ -349,7 +355,7 @@ public class ConfigureGui extends GuiContainer {
         if (mouseX > k + 116 && mouseX < k + 116 + 23) {
             if (mouseY > l + 135 && mouseY < l + 135 + 20) {
                 ArrayList list = new ArrayList();
-                list.add("If the viewed trusted player can administer this turret (trusted players and dropping it).");
+                list.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_ADMINISTER));
                 this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
             }
         }
