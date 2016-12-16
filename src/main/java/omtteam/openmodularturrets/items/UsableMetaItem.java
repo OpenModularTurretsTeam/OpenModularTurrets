@@ -115,11 +115,11 @@ public class UsableMetaItem extends Item {
                 tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc2"));
                 tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc3"));
                 tooltip.add("\u00A76-Y: \u00A7b" + nbtTagCompound.getInteger("yAxisDetect"));
-                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.INVERT) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("inverted")));
-                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.MULTI_TARGETING) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("multiTargeting")));
-                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksMobs")));
-                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksNeutrals")));
-                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksPlayers")));
+                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.GUI.INVERT) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("inverted")));
+                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.GUI.MULTI_TARGETING) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("multiTargeting")));
+                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksMobs")));
+                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksNeutrals")));
+                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksPlayers")));
             } else // If the stack does not have valid tag data, a default message
             {
                 tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc1"));

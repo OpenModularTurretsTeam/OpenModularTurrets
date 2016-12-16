@@ -62,7 +62,6 @@ public class MessageAddTrustedPlayer implements IMessage {
         ByteBufUtils.writeUTF8String(buf, this.player);
     }
 
-
     private int getX() {
         return x;
     }
