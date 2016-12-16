@@ -58,7 +58,7 @@ public class TurretBaseAbstractGui extends GuiContainer {
             this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
             this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
             this.buttonList.add(new GuiButton(6, x + 180, y + 75, 80, 20,
-                    base.isMultiTargeting() ? "Target: Multi" : "Target: Single"));
+                    base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": " + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE)));
         } else if (trustedPlayer != null) {
             if (trustedPlayer.admin) {
                 this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
@@ -106,7 +106,7 @@ public class TurretBaseAbstractGui extends GuiContainer {
             for (Object button : buttonList) {
                 if (((GuiButton) button).id == 6) {
                     this.base.setMultiTargeting(!this.base.isMultiTargeting());
-                    ((GuiButton) button).displayString = base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET)+": Multi" : safeLocalize(OMTNames.Localizations.GUI.TARGET)+": Single";
+                    ((GuiButton) button).displayString = base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": " + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE);
                 }
             }
         }

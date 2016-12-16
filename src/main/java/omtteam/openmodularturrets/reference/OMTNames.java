@@ -105,6 +105,8 @@ public class OMTNames {
             public static final String NO_TRUSTED_PLAYERS = "gui.omtteam.openmodularturrets:no_trusted_players";
             public static final String TARGETING_OPTIONS = "gui.omtteam.openmodularturrets:targeting_options";
             public static final String PERMISSIONS = "gui.omtteam.openmodularturrets:permissions";
+            public static final String MULTI = "gui.omtteam.openmodularturrets:multi";
+            public static final String SINGLE = "gui.omtteam.openmodularturrets:single";
         }
         public static class Tooltip {
             public static final String ADD_TRUSTED_PLAYER = "tooltip.omtteam.openmodularturrets:add_trusted_player";
