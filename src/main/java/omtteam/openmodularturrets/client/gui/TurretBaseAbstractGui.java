@@ -106,7 +106,7 @@ public class TurretBaseAbstractGui extends GuiContainer {
             for (Object button : buttonList) {
                 if (((GuiButton) button).id == 6) {
                     this.base.setMultiTargeting(!this.base.isMultiTargeting());
-                    ((GuiButton) button).displayString = base.isMultiTargeting() ? "Target: Multi" : "Target: Single";
+                    ((GuiButton) button).displayString = base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET)+": Multi" : safeLocalize(OMTNames.Localizations.GUI.TARGET)+": Single";
                 }
             }
         }
@@ -121,9 +121,10 @@ public class TurretBaseAbstractGui extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int param1, int param2) {
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 
-        fontRenderer.drawString("Addons:", 71, 6, 0);
-        fontRenderer.drawString("Ammo", 8, 6, 0);
-        fontRenderer.drawString("Inventory", 8, ySize - 97 + 4, 0);
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.ADDONS), 71, 6, 0);
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.UPGRADES), 71, 39, 0);
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.AMMO) , 8, 6, 0);
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.INVENTORY), 8, ySize - 97 + 4, 0);
         fontRenderer.drawStringWithShadow("" + base.getyAxisDetect(), 127, 39, 40000);
         fontRenderer.drawString("-Y", 123, 6, 0);
 
@@ -140,23 +141,23 @@ public class TurretBaseAbstractGui extends GuiContainer {
 
         ArrayList targetInfo = new ArrayList();
 
-        targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.OWNER) + ": \u00A7f" + base.getOwnerName());
+        targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.OWNER) + ": \u00A7f" + base.getOwnerName());
         boolean isCurrentlyOn = base.isActive();
-        targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.ACTIVE) + ": " + (getColoredBooleanLocalizationYesNo(isCurrentlyOn)));
+        targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ACTIVE) + ": " + (getColoredBooleanLocalizationYesNo(isCurrentlyOn)));
         targetInfo.add("");
         if (base.getTrustedPlayers().size() != 0) {
-            targetInfo.add("\u00A75" + safeLocalize(OMTNames.Localizations.TRUSTED_PLAYERS) + ":");
+            targetInfo.add("\u00A75" + safeLocalize(OMTNames.Localizations.GUI.TRUSTED_PLAYERS) + ":");
             for (TrustedPlayer trusted_player : base.getTrustedPlayers()) {
                 targetInfo.add("\u00A7b" + trusted_player.name);
             }
         } else {
-            targetInfo.add("\u00A75" + safeLocalize(OMTNames.Localizations.TRUSTED_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(false));
+            targetInfo.add("\u00A75" + safeLocalize(OMTNames.Localizations.GUI.TRUSTED_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(false));
         }
 
         targetInfo.add("");
-        targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
-        targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
-        targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
+        targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
+        targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
+        targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
 
         this.drawHoveringText(targetInfo, -128, 17, fontRenderer);
     }
