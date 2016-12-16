@@ -50,6 +50,17 @@ tile.relativistic_turret.name=Relativistischer Turm
 tile.laser_turret.name=Laser Turm
 tile.rail_gun_turret.name=Rail Gun Turm
 tile.lever_block.name=Hebel für Tier 1 Turm Basis
+tile.expander_power_tier_one.name=Basis Energie Erweiterung (Stufe 1)
+tile.expander_power_tier_two.name=Basis Energie Erweiterung (Stufe 2)
+tile.expander_power_tier_three.name=Basis Energie Erweiterung (Stufe 3)
+tile.expander_power_tier_four.name=Basis Energie Erweiterung (Stufe 4)
+tile.expander_power_tier_five.name=Basis Energie Erweiterung (Stufe 5)
+tile.expander_inv_tier_one.name=Basis Inventar Erweiterung (Stufe 1)
+tile.expander_inv_tier_two.name=Basis Inventar Erweiterung (Stufe 2)
+tile.expander_inv_tier_three.name=Basis Inventar Erweiterung (Stufe 3)
+tile.expander_inv_tier_four.name=Basis Inventar Erweiterung (Stufe 4)
+tile.expander_inv_tier_five.name=Basis Inventar Erweiterung (Stufe 5)
+
 #for IGWMod
 tile.turret_base.name=Turm Basis
 
