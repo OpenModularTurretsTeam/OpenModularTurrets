@@ -232,8 +232,8 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
     @ParametersAreNonnullByDefault
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         if (!worldIn.isRemote) {
-            worldIn.removeTileEntity(pos);
             dropItems(worldIn, pos);
+            worldIn.removeTileEntity(pos);
         }
     }
 
