@@ -81,11 +81,10 @@ public class WailaTileHandler implements IWailaDataProvider {
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         boolean invert = accessor.getNBTData().getBoolean("inverted");
         boolean active = accessor.getNBTData().getBoolean("inverted") ^ accessor.getNBTData().getBoolean("redstone");
-
-        currenttip.add(safeLocalize(OMTNames.Localizations.GUI.INVERT) + ": " + getColoredBooleanLocalizationYesNo(invert));
-        currenttip.add(safeLocalize(OMTNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
+        currenttip.add("\u00A76" +safeLocalize(OMTNames.Localizations.GUI.INVERT) + ": " + getColoredBooleanLocalizationYesNo(invert));
+        currenttip.add("\u00A76" +safeLocalize(OMTNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
         String ownerName = accessor.getNBTData().getString("ownerName");
-        currenttip.add(safeLocalize(OMTNames.Localizations.GUI.OWNER) + ": " + ownerName);
+        currenttip.add("\u00A76" +safeLocalize(OMTNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
         return currenttip;
     }
 
