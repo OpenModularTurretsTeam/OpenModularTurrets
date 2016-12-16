@@ -16,6 +16,7 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import java.util.List;
 
+import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 /**
@@ -80,10 +81,9 @@ public class WailaTileHandler implements IWailaDataProvider {
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         boolean invert = accessor.getNBTData().getBoolean("inverted");
         boolean active = accessor.getNBTData().getBoolean("inverted") ^ accessor.getNBTData().getBoolean("redstone");
-        String inverted = (invert ? OMTNames.Localizations.GUI.TRUE : OMTNames.Localizations.GUI.FALSE);
-        String isActive = (active ? OMTNames.Localizations.GUI.TRUE : OMTNames.Localizations.GUI.FALSE);
-        currenttip.add(safeLocalize(OMTNames.Localizations.GUI.INVERT) + ": " + safeLocalize(inverted));
-        currenttip.add(safeLocalize(OMTNames.Localizations.GUI.ACTIVE) + ": " + safeLocalize(isActive));
+
+        currenttip.add(safeLocalize(OMTNames.Localizations.GUI.INVERT) + ": " + getColoredBooleanLocalizationYesNo(invert));
+        currenttip.add(safeLocalize(OMTNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
         String ownerName = accessor.getNBTData().getString("ownerName");
         currenttip.add(safeLocalize(OMTNames.Localizations.GUI.OWNER) + ": " + ownerName);
         return currenttip;

@@ -224,7 +224,11 @@ gui.omtteam.openmodularturrets:ammo=Ammo
 gui.omtteam.openmodularturrets:inventory=Inventory
 gui.omtteam.openmodularturrets:target=Target
 gui.omtteam.openmodularturrets:add_trusted_player=Add trusted player
+gui.omtteam.openmodularturrets:no_trusted_players=No trusted players to edit
 gui.omtteam.openmodularturrets:targeting_options=Targeting Options
+gui.omtteam.openmodularturrets:permissions=Permissions
+gui.omtteam.openmodularturrets:multi=Multi
+gui.omtteam.openmodularturrets:single=Single
 
 tooltip.omtteam.openmodularturrets:add_trusted_player=Adds the given player to the turret's trusted list.
 tooltip.omtteam.openmodularturrets:remove_trusted_player=Removes the viewed trusted player from the turret's trusted player list.
