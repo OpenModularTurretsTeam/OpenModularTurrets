@@ -99,6 +99,8 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     }
 
     @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
     public TileEntity createTileEntity(World world, IBlockState state) {
         if (state.getValue(META) < 5) {
             return new Expander(state.getValue(META), false);

@@ -34,6 +34,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     }
 
     @Override
+    @Nonnull
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }

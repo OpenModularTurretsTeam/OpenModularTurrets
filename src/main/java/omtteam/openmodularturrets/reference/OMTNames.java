@@ -85,6 +85,7 @@ public class OMTNames {
     }
 
     public static class Localizations {
+        @SuppressWarnings("unused")
         public static class GUI {
             public static final String OWNER = "gui.omtteam.openmodularturrets:owner";
             public static final String INVERT = "gui.omtteam.openmodularturrets:invert";
