@@ -72,6 +72,8 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
 
 
     @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
     public TileEntity createTileEntity(World worldIn, IBlockState blockState) {
         return new LeverTileEntity();
     }
@@ -166,6 +168,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
+    @Nonnull
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }

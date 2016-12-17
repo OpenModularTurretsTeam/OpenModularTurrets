@@ -67,6 +67,8 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
     }
 
     @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
     public TileEntity createTileEntity(World world, IBlockState state) {
         int MaxCharge;
         int MaxIO;
@@ -91,8 +93,9 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
                 MaxCharge = ConfigHandler.getBaseTierFiveMaxCharge();
                 MaxIO = ConfigHandler.getBaseTierFiveMaxIo();
                 return new TurretBase(MaxCharge, MaxIO, 5);
+            default:
+                return new TurretBase(1,1,1);
         }
-        return null;
     }
 
     @Override
