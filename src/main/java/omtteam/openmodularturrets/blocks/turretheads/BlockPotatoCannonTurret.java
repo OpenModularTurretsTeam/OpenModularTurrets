@@ -10,6 +10,9 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.PotatoCannonTurretTileEntity;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 public class BlockPotatoCannonTurret extends BlockAbstractTurretHead {
     public BlockPotatoCannonTurret() {
         super();
@@ -24,6 +27,8 @@ public class BlockPotatoCannonTurret extends BlockAbstractTurretHead {
     }
 
     @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
     public TileEntity createTileEntity(World world, IBlockState state) {
         return new PotatoCannonTurretTileEntity();
     }

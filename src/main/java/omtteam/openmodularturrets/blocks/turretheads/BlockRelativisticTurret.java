@@ -12,6 +12,8 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.RelativisticTurretTileEntity;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
 public class BlockRelativisticTurret extends BlockAbstractTurretHead {
@@ -27,6 +29,8 @@ public class BlockRelativisticTurret extends BlockAbstractTurretHead {
     }
 
     @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
     public TileEntity createTileEntity(World world, IBlockState state) {
         return new RelativisticTurretTileEntity();
     }
