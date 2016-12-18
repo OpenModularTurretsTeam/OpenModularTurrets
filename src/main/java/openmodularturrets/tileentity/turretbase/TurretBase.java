@@ -16,7 +16,6 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -36,7 +35,6 @@ import openmodularturrets.network.messages.MessageTurretBase;
 import openmodularturrets.tileentity.TileEntityContainer;
 import openmodularturrets.ucdefinitions.TurretBaseUCDefinition;
 import openmodularturrets.util.MathUtil;
-import openmodularturrets.util.PlayerUtil;
 import openmodularturrets.util.TurretHeadUtil;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -230,14 +228,9 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
                 }
             }
 
-            if (foundPlayer == false) {
+            if (!foundPlayer) {
                 return false;
             }
-        }
-
-        if(trustedPlayer.uuid == null)
-        {
-            return false;
         }
 
         if (ConfigHandler.offlineModeSupport) {
@@ -246,7 +239,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
             }
 
         } else {
-            if (trustedPlayer.uuid.toString().equals(getOwner())) {
+            if (trustedPlayer.uuid == null || trustedPlayer.uuid.toString().equals(getOwner())) {
                 return false;
             }
         }
