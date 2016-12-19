@@ -153,8 +153,7 @@ public class ConfigureGui extends GuiContainer {
                     if (this.base.addTrustedPlayer(textFieldAddTrustedPlayer.getText())) {
                         sendChangeToServerAddTrusted();
                         textFieldAddTrustedPlayer.setText("");
-                        waitForServerTrustedPlayers = 5;
-                        player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
+                        waitForServerTrustedPlayers = 20;
                     } else {
                         textFieldAddTrustedPlayer.setText("");
                     }
@@ -165,8 +164,8 @@ public class ConfigureGui extends GuiContainer {
                     if (base.addTrustedPlayer(textFieldAddTrustedPlayer.getText())) {
                         sendChangeToServerAddTrusted();
                         textFieldAddTrustedPlayer.setText("");
-                        waitForServerTrustedPlayers = 5;
-                        player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
+                        waitForServerTrustedPlayers = 20;
+
                     } else {
                         textFieldAddTrustedPlayer.setText("");
                     }
