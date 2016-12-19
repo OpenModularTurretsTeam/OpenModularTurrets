@@ -68,4 +68,13 @@ public class PlayerUtil {
         return (base.getOwner().equals(player.getUniqueID().toString()) ||
                 (ConfigHandler.offlineModeSupport && base.getOwnerName().equals(player.getDisplayName())));
     }
+
+    public static boolean isPlayerNameValid(String name){
+        for (Map.Entry<UUID, String> entry : UsernameCache.getMap().entrySet()) {
+            if (entry.getValue().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

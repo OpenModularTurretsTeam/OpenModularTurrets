@@ -24,7 +24,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -215,23 +214,12 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     }
 
     public boolean addTrustedPlayer(String name) {
-
         TrustedPlayer trustedPlayer = new TrustedPlayer(name);
         trustedPlayer.uuid = getPlayerUUID(name);
-
-        if (!worldObj.isRemote) {
-            boolean foundPlayer = false;
-            for (String servername : MinecraftServer.getServer().getAllUsernames()) {
-                if (name.equals(servername)) {
-                    foundPlayer = true;
-                    break;
-                }
-            }
-
-            if (!foundPlayer) {
-                return false;
-            }
+        if (!isPlayerNameValid(name)) {
+            return false;
         }
+
 
         if (ConfigHandler.offlineModeSupport) {
             if (trustedPlayer.getName().equals(getOwner())) {
@@ -256,9 +244,6 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
                         return false;
                     }
                 }
-            }
-            if (ConfigHandler.offlineModeSupport) {
-
             }
             trustedPlayers.add(trustedPlayer);
             return true;
