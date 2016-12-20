@@ -149,26 +149,16 @@ public class ConfigureGui extends GuiContainer {
         if (guibutton.id == 4) { //add trusted player
             if (PlayerUtil.isPlayerOwner(player, base)) {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
+                    sendChangeToServerAddTrusted();
+                    textFieldAddTrustedPlayer.setText("");
+                    waitForServerTrustedPlayers = 20;
 
-                    if (this.base.addTrustedPlayer(textFieldAddTrustedPlayer.getText())) {
-                        sendChangeToServerAddTrusted();
-                        textFieldAddTrustedPlayer.setText("");
-                        waitForServerTrustedPlayers = 20;
-                    } else {
-                        textFieldAddTrustedPlayer.setText("");
-                    }
                 }
             } else if (trustedPlayer != null && trustedPlayer.admin) {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
-
-                    if (base.addTrustedPlayer(textFieldAddTrustedPlayer.getText())) {
-                        sendChangeToServerAddTrusted();
-                        textFieldAddTrustedPlayer.setText("");
-                        waitForServerTrustedPlayers = 20;
-
-                    } else {
-                        textFieldAddTrustedPlayer.setText("");
-                    }
+                    sendChangeToServerAddTrusted();
+                    textFieldAddTrustedPlayer.setText("");
+                    waitForServerTrustedPlayers = 20;
                 }
             } else {
                 player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
