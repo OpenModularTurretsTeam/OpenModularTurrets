@@ -131,21 +131,16 @@ public class ConfigureGui extends GuiContainer {
         if (guibutton.id == 4) { //add trusted player
             if (PlayerUtil.isPlayerOwner(player, base)) {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
+                    sendChangeToServerAddTrusted();
+                    textFieldAddTrustedPlayer.setText("");
+                    waitForServerTrustedPlayers = 20;
 
-                    if (PlayerUtil.isPlayerNameValid(textFieldAddTrustedPlayer.getText())) {
-                        sendChangeToServerAddTrusted();
-                        textFieldAddTrustedPlayer.setText("");
-                        waitForServerTrustedPlayers = 20;
-                    }
                 }
             } else if (PlayerUtil.getTrustedPlayer(player, base).admin) {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
-
-                    if (base.addTrustedPlayer(textFieldAddTrustedPlayer.getText())) {
-                        sendChangeToServerAddTrusted();
-                        textFieldAddTrustedPlayer.setText("");
-                        waitForServerTrustedPlayers = 20;
-                    }
+                    sendChangeToServerAddTrusted();
+                    textFieldAddTrustedPlayer.setText("");
+                    waitForServerTrustedPlayers = 20;
                 }
             } else {
                 player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
@@ -154,8 +149,7 @@ public class ConfigureGui extends GuiContainer {
 
         if (guibutton.id == 5) { //remove trusted player
 
-            if(this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex)
-            {
+            if (this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex) {
                 return;
             }
 
@@ -204,8 +198,7 @@ public class ConfigureGui extends GuiContainer {
 
         if (guibutton.id == 8) { //change trusted player permission for GUI opening
 
-            if(this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex)
-            {
+            if (this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex) {
                 return;
             }
 
@@ -230,8 +223,7 @@ public class ConfigureGui extends GuiContainer {
 
         if (guibutton.id == 9) { //change trusted player permission for targeting
 
-            if(this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex)
-            {
+            if (this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex) {
                 return;
             }
 
@@ -255,8 +247,7 @@ public class ConfigureGui extends GuiContainer {
 
         if (guibutton.id == 10) { //change trusted player permission for administering
 
-            if(this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex)
-            {
+            if (this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex) {
                 return;
             }
 
@@ -418,7 +409,7 @@ public class ConfigureGui extends GuiContainer {
     @Override
     public void updateScreen() {
         super.updateScreen();
-        if (this.base.getTrustedPlayers().size() == 0 && this.buttonList.size() > 9 && !((GuiButton)this.buttonList.get(9)).displayString.equals("?")) {
+        if (this.base.getTrustedPlayers().size() == 0 && this.buttonList.size() > 9 && !((GuiButton) this.buttonList.get(9)).displayString.equals("?")) {
             this.initGui();
         } else if (waitForServerTrustedPlayers >= 0 && this.base.getTrustedPlayers().size() > 0) {
             waitForServerTrustedPlayers = -1;
