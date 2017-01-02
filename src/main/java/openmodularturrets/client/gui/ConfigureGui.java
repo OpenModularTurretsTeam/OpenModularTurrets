@@ -27,7 +27,7 @@ public class ConfigureGui extends GuiContainer {
     private final EntityPlayer player;
     private int mouseX;
     private int mouseY;
-    private int waitForServerTrustedPlayers = -1;
+    private boolean waitForServerTrustedPlayers = false;
 
     public ConfigureGui(InventoryPlayer inventoryPlayer, TurretBase tileEntity) {
         super(new ConfigContainer(tileEntity));
@@ -133,14 +133,15 @@ public class ConfigureGui extends GuiContainer {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
                     sendChangeToServerAddTrusted();
                     textFieldAddTrustedPlayer.setText("");
-                    waitForServerTrustedPlayers = 20;
-
+                    base.waitForServerPacket = true;
+                    this.waitForServerTrustedPlayers = true;
                 }
             } else if (PlayerUtil.getTrustedPlayer(player, base).admin) {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
                     sendChangeToServerAddTrusted();
                     textFieldAddTrustedPlayer.setText("");
-                    waitForServerTrustedPlayers = 20;
+                    base.waitForServerPacket = true;
+                    this.waitForServerTrustedPlayers = true;
                 }
             } else {
                 player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("status.ownership")));
@@ -411,12 +412,10 @@ public class ConfigureGui extends GuiContainer {
         super.updateScreen();
         if (this.base.getTrustedPlayers().size() == 0 && this.buttonList.size() > 9 && !((GuiButton) this.buttonList.get(9)).displayString.equals("?")) {
             this.initGui();
-        } else if (waitForServerTrustedPlayers >= 0 && this.base.getTrustedPlayers().size() > 0) {
-            waitForServerTrustedPlayers = -1;
+        } else if (waitForServerTrustedPlayers && this.base.getTrustedPlayers().size() > 0 && !base.waitForServerPacket) {
+            waitForServerTrustedPlayers = false;
             this.base.trustedPlayerIndex = 0;
             this.initGui();
-        } else if (waitForServerTrustedPlayers >= 0) {
-            waitForServerTrustedPlayers--;
         }
     }
 }

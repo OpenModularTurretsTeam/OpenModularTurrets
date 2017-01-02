@@ -22,7 +22,7 @@ import java.util.UUID;
  */
 public class MessageTurretBase implements IMessage {
     private int x, y, z, rfStorage, yAxisDetect;
-    private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting;
+    private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting, waitForTrustedPlayer;
     private String owner, ownerName;
     private List<TrustedPlayer> trustedPlayers = new ArrayList<>();
     private ItemStack camoStack;
@@ -44,6 +44,7 @@ public class MessageTurretBase implements IMessage {
                 ((TurretBase) tileEntity).setAttacksPlayers(message.attacksPlayers);
                 ((TurretBase) tileEntity).setMultiTargeting(message.multiTargeting);
                 ((TurretBase) tileEntity).setTrustedPlayers(message.trustedPlayers);
+                ((TurretBase) tileEntity).waitForTrustedPlayer = message.waitForTrustedPlayer;
                 ((TurretBase) tileEntity).camoStack = message.camoStack;
             }
             return null;
@@ -65,6 +66,7 @@ public class MessageTurretBase implements IMessage {
             this.attacksPlayers = TurretBase.isAttacksPlayers();
             this.multiTargeting = TurretBase.isMultiTargeting();
             this.trustedPlayers = TurretBase.getTrustedPlayers();
+            this.waitForTrustedPlayer = TurretBase.waitForTrustedPlayer;
             this.camoStack = TurretBase.camoStack;
         }
     }
@@ -84,6 +86,7 @@ public class MessageTurretBase implements IMessage {
         this.attacksNeutrals = buf.readBoolean();
         this.attacksPlayers = buf.readBoolean();
         this.multiTargeting = buf.readBoolean();
+        this.waitForTrustedPlayer = buf.readBoolean();
         this.camoStack = ByteBufUtils.readItemStack(buf);
         int lengthOfTPList = buf.readInt();
         if (lengthOfTPList > 0) {
@@ -116,6 +119,7 @@ public class MessageTurretBase implements IMessage {
         buf.writeBoolean(attacksNeutrals);
         buf.writeBoolean(attacksPlayers);
         buf.writeBoolean(multiTargeting);
+        buf.writeBoolean(waitForTrustedPlayer);
         ByteBufUtils.writeItemStack(buf, camoStack);
         buf.writeInt(trustedPlayers.size());
         if (trustedPlayers.size() > 0) {

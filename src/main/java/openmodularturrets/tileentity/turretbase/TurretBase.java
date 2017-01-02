@@ -85,6 +85,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     private ArrayList<IComputerAccess> comp;
     private double storageEU;
     private boolean wasAddedToEnergyNet = false;
+    public boolean waitForTrustedPlayer = false;
 
     public TurretBase(int MaxEnergyStorage, int MaxIO) {
         super();
@@ -214,6 +215,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     }
 
     public boolean addTrustedPlayer(String name) {
+        waitForTrustedPlayer = false;
         TrustedPlayer trustedPlayer = new TrustedPlayer(name);
         trustedPlayer.uuid = getPlayerUUID(name);
         if (!isPlayerNameValid(name)) {
