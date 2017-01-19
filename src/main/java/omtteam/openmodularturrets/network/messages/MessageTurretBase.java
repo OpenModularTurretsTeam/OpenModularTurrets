@@ -8,7 +8,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -63,7 +62,6 @@ public class MessageTurretBase implements IMessage {
         }
 
     }
-
 
     public MessageTurretBase(TileEntity tileEntity) {
         if (tileEntity instanceof TurretBase) {
@@ -134,7 +132,7 @@ public class MessageTurretBase implements IMessage {
         buf.writeBoolean(attacksNeutrals);
         buf.writeBoolean(attacksPlayers);
         buf.writeBoolean(multiTargeting);
-        ByteBufUtils.writeItemStack(buf, camoStack);
+        //ByteBufUtils.writeItemStack(buf, camoStack);
         buf.writeInt(trustedPlayers.size());
         if (trustedPlayers.size() > 0) {
             for (TrustedPlayer trustedPlayer : trustedPlayers) {

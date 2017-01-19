@@ -22,6 +22,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
@@ -152,7 +153,6 @@ public class ConfigureGui extends GuiContainer {
                     sendChangeToServerAddTrusted();
                     textFieldAddTrustedPlayer.setText("");
                     waitForServerTrustedPlayers = 20;
-
                 }
             } else if (trustedPlayer != null && trustedPlayer.admin) {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
@@ -166,6 +166,11 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 5) { //remove trusted player
+
+            if (this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex) {
+                return;
+            }
+
             if (base.getTrustedPlayers().size() > 0) {
                 if (this.base.getTrustedPlayers().get(
                         base.trustedPlayerIndex) != null && player.getUniqueID().toString().equals(base.getOwner())) {
@@ -232,6 +237,11 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 9) { //change trusted player permission for targeting
+
+            if (this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex) {
+                return;
+            }
+
             if (PlayerUtil.isPlayerOwner(player, base) && this.base.getTrustedPlayers().get(
                     base.trustedPlayerIndex) != null) {
                 sendChangeToServerModifyPermissions(
@@ -251,7 +261,12 @@ public class ConfigureGui extends GuiContainer {
         }
 
         if (guibutton.id == 10) { //change trusted player permission for administering
-            if (player.getUniqueID().toString().equals(base.getOwner()) && this.base.getTrustedPlayers().get(
+
+            if (this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex) {
+                return;
+            }
+
+            if (PlayerUtil.isPlayerOwner(player, base) && this.base.getTrustedPlayers().get(
                     base.trustedPlayerIndex) != null) {
                 sendChangeToServerModifyPermissions(
                         this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "isAdmin",
@@ -410,6 +425,7 @@ public class ConfigureGui extends GuiContainer {
     @Override
     public void updateScreen() {
         super.updateScreen();
+        Logger.getGlobal().info("waitforserver: "+waitForServerTrustedPlayers);
         if (this.base.getTrustedPlayers().size() == 0 && this.buttonList.size() > 9 && !this.buttonList.get(9).displayString.equals("?")) {
             this.initGui();
         } else if (waitForServerTrustedPlayers >= 0 && this.base.getTrustedPlayers().size() > 0) {
