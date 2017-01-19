@@ -63,8 +63,6 @@ public class ConfigHandler {
     private static boolean allowBaseCamo;
     private static boolean canRocketsHurtEnderDragon;
     private static boolean shouldSpawnDungeonLoot;
-    @SuppressWarnings("unused")
-    public static boolean canOPAccessTurrets;
 
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
@@ -255,8 +253,6 @@ public class ConfigHandler {
                 true).getBoolean();
 
         globalCanTargetMobs = config.get("GlobalTargetingParameters", "Can turrets attack mobs?", true).getBoolean();
-
-        canOPAccessTurrets = config.get("miscellaneous", "Can OPs access all turrets?", false).getBoolean();
 
         expanderPowerTierOneCapacity = config.get("Expanders", "Power expander tier one capacity", 250).getInt();
 
