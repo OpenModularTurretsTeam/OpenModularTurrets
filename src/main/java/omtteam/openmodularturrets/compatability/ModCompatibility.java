@@ -4,9 +4,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.reference.Reference;
-
-import java.util.logging.Logger;
 
 /**
  * Created by Keridos on 23/01/2015. This Class
@@ -23,32 +22,30 @@ public class ModCompatibility {
     public static IGWHandler igwHandler = null;
 
     public static void checkForMods() {
-        Logger logger = Logger.getLogger("OpenModularTurrets");
-
         ThermalExpansionLoaded = Loader.isModLoaded("ThermalExpansion");
         if (ThermalExpansionLoaded) {
-            logger.info("Hi there, dV=V0B(t1-t0)! (Found ThermalExpansion)");
+            OpenModularTurrets.getLogger().info("Hi there, dV=V0B(t1-t0)! (Found ThermalExpansion)");
         }
 
         EnderIOLoaded = Loader.isModLoaded("EnderIO");
         if (EnderIOLoaded) {
-            logger.info("Not sure if iron ingot, or electrical steel ingot... (Found EnderIO)");
+            OpenModularTurrets.getLogger().info("Not sure if iron ingot, or electrical steel ingot... (Found EnderIO)");
         }
 
         MekanismLoaded = Loader.isModLoaded("Mekanism");
         if (MekanismLoaded) {
-            logger.info("Mur omsimu, plz. (Found Mekanism)");
+            OpenModularTurrets.getLogger().info("Mur omsimu, plz. (Found Mekanism)");
         }
 
         ThaumcraftLoaded = Loader.isModLoaded("Thaumcraft");
         if (ThaumcraftLoaded) {
-            logger.info("Afrikaners is plesierig. (Found Thaumcraft)");
+            OpenModularTurrets.getLogger().info("Afrikaners is plesierig. (Found Thaumcraft)");
         }
 
         OpenComputersLoaded = Loader.isModLoaded("OpenComputers");
         ComputerCraftLoaded = Loader.isModLoaded("ComputerCraft");
         if (OpenComputersLoaded || ComputerCraftLoaded) {
-            logger.info("Enabling LUA integration. (Found OpenComputers/ComputerCraft)");
+            OpenModularTurrets.getLogger().info("Enabling LUA integration. (Found OpenComputers/ComputerCraft)");
         }
 
         IGWModLoaded = Loader.isModLoaded("IGWMod");

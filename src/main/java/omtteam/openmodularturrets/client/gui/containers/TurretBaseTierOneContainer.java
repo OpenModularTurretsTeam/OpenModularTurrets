@@ -2,6 +2,7 @@ package omtteam.openmodularturrets.client.gui.containers;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
+import omtteam.openmodularturrets.client.gui.customSlot.AmmoSlot;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 public class TurretBaseTierOneContainer extends TurretBaseContainer {
@@ -21,7 +22,7 @@ public class TurretBaseTierOneContainer extends TurretBaseContainer {
 
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
-                addSlotToContainer(new Slot(tileEntity, x + y * 3, 8 + x * 18, 17 + y * 18));
+                addSlotToContainer(new AmmoSlot(tileEntity, x + y * 3, 8 + x * 18, 17 + y * 18));
             }
         }
     }

@@ -1,8 +1,18 @@
 package omtteam.openmodularturrets.handler;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
+import omtteam.openmodularturrets.OpenModularTurrets;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import static omtteam.omlib.util.GeneralUtil.getItem;
 
 public class ConfigHandler {
     public static boolean turretAlarmSound;
@@ -42,6 +52,9 @@ public class ConfigHandler {
     private static int baseTierFiveBlastResistance;
     private static int potentiaToRFRatio;
     private static int potentiaAddonCapacity;
+    private static List<String> stringAmmoAllowList;
+    private static List<String> stringMobBlackList;
+    public static List<String> validMobBlacklist = new ArrayList<>();
     private static TurretSetting disposable_turret;
     private static TurretSetting potato_cannon_turret;
     private static TurretSetting gun_turret;
@@ -62,7 +75,8 @@ public class ConfigHandler {
     private static float turretSoundVolume;
     private static boolean allowBaseCamo;
     private static boolean canRocketsHurtEnderDragon;
-    private static boolean shouldSpawnDungeonLoot;
+
+    public static List<ItemStack> disposableAmmoList = new ArrayList<>();
 
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
@@ -213,14 +227,18 @@ public class ConfigHandler {
         canRocketsHome = config.get("miscellaneous",
                 "Can rockets fired by the rocket launcher turret home on targets ?",
                 false).getBoolean();
+        stringMobBlackList = Arrays.asList(config.getStringList("mobBlackList", "miscellaneous",
+                new String[]{"ArmorStand"},
+                "Which Entities should not be targetable by turrets? String is the name used by the /summon command."));
+
+
+        stringAmmoAllowList = Arrays.asList(config.getStringList("disposableAmmoList", "miscellaneous",
+                new String[]{"minecraft:cobblestone", "minecraft:planks"},
+                "Which Items should be usable as disp. ammo (modid:itemname[:meta], if meta is omitted it enables all subitems/blocks)"));
 
         canRocketsHurtEnderDragon = config.get("miscellaneous",
-                                               "Can rockets fired by the rocket launcher turret hurt the Ender Dragon?",
-                                               false).getBoolean();
-
-        shouldSpawnDungeonLoot = config.get("miscellaneous",
-                "Should we generate dungeon loot?",
-                true).getBoolean();
+                "Can rockets fired by the rocket launcher turret hurt the Ender Dragon?",
+                false).getBoolean();
 
         recipes = config.get("miscellaneous",
                 "Which recipes should we do? (auto, enderio, mekanism, vanilla)",
@@ -233,18 +251,18 @@ public class ConfigHandler {
                 "Should turret bases be camouflage-able with normal blocks?", true).getBoolean();
 
         shouldDoThaumcraftIntegration = config.get("ModCompatibility",
-                                                   "Should we enable items that integrate with Thaumcraft?",
-                                                   true).getBoolean();
+                "Should we enable items that integrate with Thaumcraft?",
+                true).getBoolean();
 
         shouldDoComputerIntegration = config.get("ModCompatibility",
-                                                 "Should we enable items that integrate with ComputerCraft/OpenComputers?",
-                                                 true).getBoolean();
+                "Should we enable items that integrate with ComputerCraft/OpenComputers?",
+                true).getBoolean();
 
         potentiaToRFRatio = config.get("ModCompatibility", "Potentia Addons' RF conversion ratio per 1 essentia",
-                                       500).getInt();
+                500).getInt();
 
         potentiaAddonCapacity = config.get("ModCompatibility", "How much essentia the Potentia Addon can store",
-                                           20).getInt();
+                20).getInt();
 
         globalCanTargetPlayers = config.get("GlobalTargetingParameters", "Can turrets attack players?",
                 true).getBoolean();
@@ -271,6 +289,11 @@ public class ConfigHandler {
         if (config.hasChanged()) {
             config.save();
         }
+    }
+
+    public static void parseLists() {
+        parseDisposableAmmoList();
+        parseMobBlacklist();
     }
 
     public static int getBaseTierOneMaxIo() {
@@ -451,15 +474,12 @@ public class ConfigHandler {
     }
 
     @SuppressWarnings("unused")
-    public static boolean isAllowBaseCamo() { return allowBaseCamo; }
+    public static boolean isAllowBaseCamo() {
+        return allowBaseCamo;
+    }
 
     public static boolean isCanRocketsHurtEnderDragon() {
         return canRocketsHurtEnderDragon;
-    }
-
-    @SuppressWarnings("unused")
-    public static boolean isShouldSpawnDungeonLoot() {
-        return shouldSpawnDungeonLoot;
     }
 
     public static class TurretSetting {
@@ -503,5 +523,38 @@ public class ConfigHandler {
             return enabled;
         }
 
+    }
+
+    private static void parseDisposableAmmoList() {
+        try {
+            for (String itemListEntry : stringAmmoAllowList) {
+                String[] item = itemListEntry.split(":");
+                if (item.length == 3) {
+                    disposableAmmoList.add(new ItemStack(getItem(item[0], item[1]), 1, Integer.parseInt(item[2])));
+                } else {
+                    disposableAmmoList.add(new ItemStack(getItem(item[0], item[1]), 2));
+                }
+            }
+        } catch (Exception e) {
+            OpenModularTurrets.getLogger().severe("error while parsing disp. ammo list config!");
+            e.printStackTrace();
+        }
+    }
+
+    private static void parseMobBlacklist() {
+        try {
+            if (stringMobBlackList.isEmpty()) return;
+            for (String itemListEntry : stringMobBlackList) {
+                for (Map.Entry<Class<? extends Entity>, String> entry : EntityList.CLASS_TO_NAME.entrySet()) {
+                    if (itemListEntry.contains(entry.getValue())) {
+                        validMobBlacklist.add(entry.getValue());
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            OpenModularTurrets.getLogger().severe("error while parsing mob blacklist config!");
+            e.printStackTrace();
+        }
     }
 }
