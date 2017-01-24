@@ -5,9 +5,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import omtteam.openmodularturrets.client.gui.customSlot.AmmoSlot;
 import omtteam.openmodularturrets.tileentity.Expander;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import static omtteam.omlib.util.InvUtil.mergeItemStackWithStackLimit;
 
 public class ExpanderInvContainer extends Container {
     private final Expander tileEntity;
@@ -17,7 +20,7 @@ public class ExpanderInvContainer extends Container {
 
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 3; y++) {
-                this.addSlotToContainer(new Slot(te, y + x * 3, 62 + y * 18, 17 + x * 18));
+                this.addSlotToContainer(new AmmoSlot(te, y + x * 3, 62 + y * 18, 17 + x * 18));
             }
         }
 
@@ -49,10 +52,10 @@ public class ExpanderInvContainer extends Container {
             itemStack = itemStack1.copy();
 
             if (slot < 9) {
-                if (!this.mergeItemStack(itemStack1, 9, 45, true)) {
+                if (!mergeItemStackWithStackLimit(itemStack1, 9, 45, true, this)) {
                     return null;
                 }
-            } else if (!this.mergeItemStack(itemStack1, 0, 9, false)) {
+            } else if (!mergeItemStackWithStackLimit(itemStack1, 0, 9, false, this)) {
                 return null;
             }
 

@@ -2,6 +2,7 @@ package omtteam.openmodularturrets.util;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.IMob;
@@ -84,6 +85,10 @@ public class TurretHeadUtil {
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase target1 : targets) {
+                if (target1 != null && EntityList.getEntityString(target1) != null) {
+                    if (ConfigHandler.validMobBlacklist.contains(EntityList.getEntityString(target1))) continue;
+                }
+                
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
                     if (target1 instanceof EntityAnimal && !target1.isDead) {
                         target = target1;
