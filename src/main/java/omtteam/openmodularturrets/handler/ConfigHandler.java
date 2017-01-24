@@ -27,6 +27,11 @@ public class ConfigHandler {
     public static boolean globalCanTargetNeutrals;
     public static boolean globalCanTargetMobs;
     public static boolean canRocketsHome;
+    public static boolean useWhitelistForAmmo;
+    private static List<String> stringAmmoAllowList;
+    private static List<String> stringMobBlackList;
+    public static List<ItemStack> disposableAmmoList = new ArrayList<>();
+    public static List<String> validMobBlacklist = new ArrayList<>();
     private static int expanderPowerTierOneCapacity;
     private static int expanderPowerTierTwoCapacity;
     private static int expanderPowerTierThreeCapacity;
@@ -52,9 +57,6 @@ public class ConfigHandler {
     private static int baseTierFiveBlastResistance;
     private static int potentiaToRFRatio;
     private static int potentiaAddonCapacity;
-    private static List<String> stringAmmoAllowList;
-    private static List<String> stringMobBlackList;
-    public static List<String> validMobBlacklist = new ArrayList<>();
     private static TurretSetting disposable_turret;
     private static TurretSetting potato_cannon_turret;
     private static TurretSetting gun_turret;
@@ -76,7 +78,7 @@ public class ConfigHandler {
     private static boolean allowBaseCamo;
     private static boolean canRocketsHurtEnderDragon;
 
-    public static List<ItemStack> disposableAmmoList = new ArrayList<>();
+
 
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
@@ -227,6 +229,11 @@ public class ConfigHandler {
         canRocketsHome = config.get("miscellaneous",
                 "Can rockets fired by the rocket launcher turret home on targets ?",
                 false).getBoolean();
+
+        useWhitelistForAmmo = config.get("miscellaneous",
+                "whitelistForAmmo",
+                true,"Use Whitelist for ammo slots?").getBoolean();
+
         stringMobBlackList = Arrays.asList(config.getStringList("mobBlackList", "miscellaneous",
                 new String[]{"ArmorStand"},
                 "Which Entities should not be targetable by turrets? String is the name used by the /summon command."));
