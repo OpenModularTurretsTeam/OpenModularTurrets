@@ -389,17 +389,38 @@ public class TurretHeadUtil {
     }
 
     public static float getAimYaw(Entity target, BlockPos pos) {
-        double dX = (target.posX) - (pos.getX());
-        double dZ = (target.posZ) - (pos.getZ());
+    	Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
+    	
+    	if(ModCompatibility.ValkyrienWarfareLoaded){
+    		Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(target.worldObj, pos);
+    		//We're in Ship space, convert target coords to local coords
+    		if(shipEntity != null){
+    			targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
+    		}
+    	}
+    	
+        double dX = (targetPos.xCoord) - (pos.getX());
+        double dZ = (targetPos.zCoord) - (pos.getZ());
         float yaw = (float) Math.atan2(dZ, dX);
         yaw = yaw - 1.570796F + 3.1F;
         return yaw;
     }
 
     public static float getAimPitch(Entity target, BlockPos pos) {
-        double dX = (target.posX - 0.2F) - (pos.getX() + 0.6F);
-        double dY = (target.posY + 0.6F) - (pos.getY() - 0.6F);
-        double dZ = (target.posZ - 0.2F) - (pos.getZ() + 0.6F);
+    	Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
+    	
+    	if(ModCompatibility.ValkyrienWarfareLoaded){
+    		Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(target.worldObj, pos);
+    		//We're in Ship space, convert target coords to local coords
+    		if(shipEntity != null){
+    			targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
+    		}
+    	}
+    	
+    	
+        double dX = (targetPos.xCoord - 0.2F) - (pos.getX() + 0.6F);
+        double dY = (targetPos.yCoord + 0.6F) - (pos.getY() - 0.6F);
+        double dZ = (targetPos.zCoord - 0.2F) - (pos.getZ() + 0.6F);
         float pitch = (float) (Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY) + Math.PI);
         pitch = pitch + 1.65F;
         return pitch;

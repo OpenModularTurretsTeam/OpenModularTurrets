@@ -187,22 +187,19 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     protected abstract SoundEvent getLaunchSoundEffect();
 
     boolean chebyshevDistance(Entity target, TurretBase base) {
+    	Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
+    	
     	if(ModCompatibility.ValkyrienWarfareLoaded){
     		Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(worldObj, this.getPos());
     		
     		if(shipEntity != null){
-    			//The turret is on a Ship, time to convert the coordinates
-    			Vec3d inShipPos = new Vec3d(this.getPos().getX(),this.getPos().getY(),this.getPos().getZ());
-    			Vec3d inWorldPos = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, inShipPos);
-    			
-    			return MathHelper.abs_max(MathHelper.abs_max(target.posX - inWorldPos.xCoord, target.posY - inWorldPos.yCoord),
-    	                target.posZ - inWorldPos.zCoord) > (getTurretRange() + TurretHeadUtil.getRangeUpgrades(
-    	                base));
+    			//The turret is on a Ship, time to convert the coordinates; converting the target positions to local ship space
+    			targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
     		}
     	}
     	
-        return MathHelper.abs_max(MathHelper.abs_max(target.posX - this.getPos().getX(), target.posY - this.getPos().getY()),
-                target.posZ - this.getPos().getZ()) > (getTurretRange() + TurretHeadUtil.getRangeUpgrades(
+        return MathHelper.abs_max(MathHelper.abs_max(targetPos.xCoord - this.getPos().getX(), targetPos.yCoord - this.getPos().getY()),
+        		targetPos.zCoord - this.getPos().getZ()) > (getTurretRange() + TurretHeadUtil.getRangeUpgrades(
                 base));
     }
 
