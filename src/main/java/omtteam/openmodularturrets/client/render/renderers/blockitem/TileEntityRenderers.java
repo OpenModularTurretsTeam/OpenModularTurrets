@@ -4,27 +4,26 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
-
 import omtteam.openmodularturrets.tileentity.turrets.*;
 
 public class TileEntityRenderers {
-    public static final DisposableItemTurretRenderer disposableItemTurretRenderer = new DisposableItemTurretRenderer();
-    public static final PotatoCannonTurretRenderer potatoCannonTurretRenderer = new PotatoCannonTurretRenderer();
-    public static final RocketTurretRenderer rocketTurretRenderer = new RocketTurretRenderer();
-    public static final MachineGunTurretRenderer machineGunTurretRenderer = new MachineGunTurretRenderer();
-    public static final GrenadeLauncherTurretRenderer grenadeLauncherTurretRenderer = new GrenadeLauncherTurretRenderer();
-    public static final LaserTurretRenderer laserTurretRenderer = new LaserTurretRenderer();
-    public static final RailGunTurretRenderer railGunTurretRenderer = new RailGunTurretRenderer();
-
-    public static final IncendiaryTurretRenderer incendiaryTurretRenderer = new IncendiaryTurretRenderer();
-    public static final RelativisticTurretRenderer relativisticTurretRenderer = new RelativisticTurretRenderer();
-    public static final TeleporterTurretRenderer teleporterTurretRenderer = new TeleporterTurretRenderer();
-
-    public static final LeverRenderer leverRenderer = new LeverRenderer();
-
     @SuppressWarnings("unchecked")
     @SideOnly(Side.CLIENT)
     public static void init() {
+        final DisposableItemTurretRenderer disposableItemTurretRenderer = new DisposableItemTurretRenderer();
+        final PotatoCannonTurretRenderer potatoCannonTurretRenderer = new PotatoCannonTurretRenderer();
+        final RocketTurretRenderer rocketTurretRenderer = new RocketTurretRenderer();
+        final MachineGunTurretRenderer machineGunTurretRenderer = new MachineGunTurretRenderer();
+        final GrenadeLauncherTurretRenderer grenadeLauncherTurretRenderer = new GrenadeLauncherTurretRenderer();
+        final LaserTurretRenderer laserTurretRenderer = new LaserTurretRenderer();
+        final RailGunTurretRenderer railGunTurretRenderer = new RailGunTurretRenderer();
+
+        final IncendiaryTurretRenderer incendiaryTurretRenderer = new IncendiaryTurretRenderer();
+        final RelativisticTurretRenderer relativisticTurretRenderer = new RelativisticTurretRenderer();
+        final TeleporterTurretRenderer teleporterTurretRenderer = new TeleporterTurretRenderer();
+
+        final LeverRenderer leverRenderer = new LeverRenderer();
+
         ClientRegistry.bindTileEntitySpecialRenderer(DisposableItemTurretTileEntity.class,
                 disposableItemTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(PotatoCannonTurretTileEntity.class, potatoCannonTurretRenderer);

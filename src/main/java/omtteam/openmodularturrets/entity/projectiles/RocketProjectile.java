@@ -73,8 +73,7 @@ public class RocketProjectile extends TurretProjectile {
         if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
             IBlockState hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos());
 
-            if( hitBlock.getBlock() instanceof BlockAbstractTurretHead)
-            {
+            if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
                 return;
             }
 

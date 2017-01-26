@@ -425,7 +425,7 @@ public class ConfigureGui extends GuiContainer {
     @Override
     public void updateScreen() {
         super.updateScreen();
-        Logger.getGlobal().info("waitforserver: "+waitForServerTrustedPlayers);
+        Logger.getGlobal().info("waitforserver: " + waitForServerTrustedPlayers);
         if (this.base.getTrustedPlayers().size() == 0 && this.buttonList.size() > 9 && !this.buttonList.get(9).displayString.equals("?")) {
             this.initGui();
         } else if (waitForServerTrustedPlayers >= 0 && this.base.getTrustedPlayers().size() > 0) {

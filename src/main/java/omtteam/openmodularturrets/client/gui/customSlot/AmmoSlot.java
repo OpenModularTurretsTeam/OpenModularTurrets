@@ -15,7 +15,7 @@ public class AmmoSlot extends Slot {
     @Override
     public boolean isItemValid(ItemStack par1ItemStack) {
         if (!ConfigHandler.useWhitelistForAmmo) return true;
-        for (ItemStack itemStack: ConfigHandler.disposableAmmoList) {
+        for (ItemStack itemStack : ConfigHandler.disposableAmmoList) {
             if (itemStack.getItem() == par1ItemStack.getItem() && (itemStack.stackSize == 2 ||
                     itemStack.getItemDamage() == par1ItemStack.getItemDamage())) {
                 return true;

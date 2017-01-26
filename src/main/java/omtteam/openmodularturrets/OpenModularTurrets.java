@@ -33,7 +33,7 @@ public class OpenModularTurrets {
     private static Logger logger;
 
     public static Logger getLogger() {
-         return logger;
+        return logger;
     }
 
     @SuppressWarnings("unused")

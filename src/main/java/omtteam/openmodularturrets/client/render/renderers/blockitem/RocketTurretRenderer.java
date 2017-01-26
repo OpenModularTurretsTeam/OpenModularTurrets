@@ -28,7 +28,7 @@ public class RocketTurretRenderer extends TileEntitySpecialRenderer {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage)  {
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage) {
         TurretHead turretHead = (TurretHead) te;
 
         int rotation;

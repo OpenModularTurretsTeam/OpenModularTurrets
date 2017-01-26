@@ -9,7 +9,7 @@ import mezz.jei.api.JEIPlugin;
  * This Class
  */
 @JEIPlugin
-public class JEIPluginOMT extends BlankModPlugin{
+public class JEIPluginOMT extends BlankModPlugin {
     @Override
     public void register(IModRegistry registry) {
         registry.addAdvancedGuiHandlers(new AdvancedGuiHandlerOMT());

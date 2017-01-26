@@ -49,7 +49,8 @@ public class MessageDropTurrets implements IMessage {
                     if (world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ() - 1)) instanceof TurretHead) {
                         world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ() - 1), true);
                     }
-                }});
+                }
+            });
             return null;
         }
     }

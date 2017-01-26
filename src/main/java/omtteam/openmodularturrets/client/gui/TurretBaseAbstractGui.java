@@ -129,7 +129,7 @@ public class TurretBaseAbstractGui extends GuiContainer {
 
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.ADDONS), 71, 6, 0);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.UPGRADES), 71, 39, 0);
-        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.AMMO) , 8, 6, 0);
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.AMMO), 8, 6, 0);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.INVENTORY), 8, ySize - 97 + 4, 0);
         fontRenderer.drawStringWithShadow("" + base.getyAxisDetect(), 127, 39, 40000);
         fontRenderer.drawString("-Y", 123, 6, 0);

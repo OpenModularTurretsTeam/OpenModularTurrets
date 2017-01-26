@@ -44,7 +44,7 @@ public class Expander extends TileEntityContainer implements ITickable {
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
         super.readFromNBT(nbtTagCompound);
-        this.powerExpander= nbtTagCompound.getBoolean("powerExpander");
+        this.powerExpander = nbtTagCompound.getBoolean("powerExpander");
         this.tier = nbtTagCompound.getInteger("tier");
         if (nbtTagCompound.hasKey("direction")) {
             this.setOrientation(EnumFacing.getFront(nbtTagCompound.getByte("direction")));
@@ -53,7 +53,7 @@ public class Expander extends TileEntityContainer implements ITickable {
 
     @Override
     public int getInventoryStackLimit() {
-        return truncateDoubleToInt(Math.pow(2,tier+1));
+        return truncateDoubleToInt(Math.pow(2, tier + 1));
     }
 
     public void setSide() {
@@ -124,7 +124,7 @@ public class Expander extends TileEntityContainer implements ITickable {
     @ParametersAreNonnullByDefault
     @Nonnull
     public int[] getSlotsForFace(EnumFacing side) {
-        return new int[]{0,1,2,3,4,5,6,7,8};
+        return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
     }
 
     public boolean isPowerExpander() {
