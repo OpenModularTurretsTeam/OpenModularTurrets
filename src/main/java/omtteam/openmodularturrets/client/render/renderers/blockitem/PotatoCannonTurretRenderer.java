@@ -32,7 +32,7 @@ public class PotatoCannonTurretRenderer extends TileEntitySpecialRenderer {
     @SuppressWarnings("ConstantConditions")
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage)  {
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage) {
         PotatoCannonTurretTileEntity turretHead = (PotatoCannonTurretTileEntity) te;
 
         ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/potato_cannon_turret.png"));
@@ -68,7 +68,6 @@ public class PotatoCannonTurretRenderer extends TileEntitySpecialRenderer {
             model.BoxUnder.rotateAngleX = turretHead.baseFitRotationX;
             model.renderAll();
         }
-
 
 
         if (turretHead.base != null) {

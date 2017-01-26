@@ -8,6 +8,6 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 class ComputerRecipeHandler {
     public static void init() {
         GameRegistry.addRecipe(new ShapedOreRecipe(RecipeHandler.addonSerialPort, " A ", "BAB", " A ", 'A',
-                                                   Items.QUARTZ, 'B', RecipeHandler.ioBus));
+                Items.QUARTZ, 'B', RecipeHandler.ioBus));
     }
 }

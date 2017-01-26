@@ -4,8 +4,10 @@ import igwmod.gui.GuiWiki;
 import igwmod.gui.tabs.BaseWikiTab;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import omtteam.openmodularturrets.init.ModBlocks;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.init.ModBlocks;
 
 /**
  * Created by Keridos on 23/01/2015.
@@ -67,6 +69,7 @@ public class OpenModularTurretsWikiTab extends BaseWikiTab {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected String getPageName(String pageEntry) {
         if (pageEntry.startsWith("item") || pageEntry.startsWith("block")) {
             return I18n.format(pageEntry.replace("/", ".").replace("block", "tile") + ".name");

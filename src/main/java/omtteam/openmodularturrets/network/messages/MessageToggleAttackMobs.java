@@ -10,7 +10,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 
-
 @SuppressWarnings("unused")
 public class MessageToggleAttackMobs implements IMessage {
     private int x, y, z;
@@ -32,7 +31,8 @@ public class MessageToggleAttackMobs implements IMessage {
                     TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
 
                     turret.setAttacksMobs(message.doAttackMobs());
-                }});
+                }
+            });
             return null;
         }
     }

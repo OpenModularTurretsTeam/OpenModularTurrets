@@ -48,7 +48,7 @@ public class GunTurretTileEntity extends TurretHead {
 
     @Override
     public ItemStack getAmmo() {
-        return new  ItemStack(ModItems.ammoMetaItem,1,1);
+        return new ItemStack(ModItems.ammoMetaItem, 1, 1);
     }
 
     @Override

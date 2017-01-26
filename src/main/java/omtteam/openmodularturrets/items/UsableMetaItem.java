@@ -86,16 +86,16 @@ public class UsableMetaItem extends Item {
         return damage;
     }
 
-    public boolean hasDataStored(ItemStack stack){
+    public boolean hasDataStored(ItemStack stack) {
         return stack.hasTagCompound() && stack.getTagCompound().hasKey("data");
     }
 
-    public NBTTagCompound getDataStored(ItemStack stack){
+    public NBTTagCompound getDataStored(ItemStack stack) {
         return stack.hasTagCompound() ? stack.getTagCompound().getCompoundTag("data") : null;
     }
 
     @SuppressWarnings("ConstantConditions")
-    public void setDataStored(ItemStack stack, NBTTagCompound nbtTagCompound){
+    public void setDataStored(ItemStack stack, NBTTagCompound nbtTagCompound) {
         if (stack.hasTagCompound()) {
             stack.getTagCompound().setTag("data", nbtTagCompound);
         } else {
@@ -108,18 +108,18 @@ public class UsableMetaItem extends Item {
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean isAdvanced) {
-        if (stack.getItemDamage() ==2) {
+        if (stack.getItemDamage() == 2) {
             if (hasDataStored(stack)) {
                 NBTTagCompound nbtTagCompound = getDataStored(stack);
                 tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc1"));
                 tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc2"));
                 tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc3"));
                 tooltip.add("\u00A76-Y: \u00A7b" + nbtTagCompound.getInteger("yAxisDetect"));
-                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.GUI.INVERT) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("inverted")));
-                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.GUI.MULTI_TARGETING) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("multiTargeting")));
-                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksMobs")));
-                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksNeutrals")));
-                tooltip.add("\u00A76"+safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksPlayers")));
+                tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.INVERT) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("inverted")));
+                tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.MULTI_TARGETING) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("multiTargeting")));
+                tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksMobs")));
+                tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksNeutrals")));
+                tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksPlayers")));
             } else // If the stack does not have valid tag data, a default message
             {
                 tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc1"));

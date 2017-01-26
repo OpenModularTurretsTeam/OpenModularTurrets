@@ -79,7 +79,6 @@ public class ConfigHandler {
     private static boolean canRocketsHurtEnderDragon;
 
 
-
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
         config.load();
@@ -232,7 +231,7 @@ public class ConfigHandler {
 
         useWhitelistForAmmo = config.get("miscellaneous",
                 "whitelistForAmmo",
-                true,"Use Whitelist for ammo slots?").getBoolean();
+                true, "Use Whitelist for ammo slots?").getBoolean();
 
         stringMobBlackList = Arrays.asList(config.getStringList("mobBlackList", "miscellaneous",
                 new String[]{"ArmorStand"},
