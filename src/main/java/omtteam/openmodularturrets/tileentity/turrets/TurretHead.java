@@ -1,5 +1,11 @@
 package omtteam.openmodularturrets.tileentity.turrets;
 
+import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
+
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -12,18 +18,16 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import omtteam.omlib.tileentity.TileEntityBase;
+import omtteam.openmodularturrets.compatability.ModCompatibility;
+import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
-
-import javax.annotation.Nullable;
-import java.util.Random;
-
-import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
 public abstract class TurretHead extends TileEntityBase implements ITickable {
     int ticks;
@@ -183,8 +187,19 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     protected abstract SoundEvent getLaunchSoundEffect();
 
     boolean chebyshevDistance(Entity target, TurretBase base) {
-        return MathHelper.abs_max(MathHelper.abs_max(target.posX - this.getPos().getX(), target.posY - this.getPos().getY()),
-                target.posZ - this.getPos().getZ()) > (getTurretRange() + TurretHeadUtil.getRangeUpgrades(
+    	Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
+    	
+    	if(ModCompatibility.ValkyrienWarfareLoaded){
+    		Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(worldObj, this.getPos());
+    		
+    		if(shipEntity != null){
+    			//The turret is on a Ship, time to convert the coordinates; converting the target positions to local ship space
+    			targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
+    		}
+    	}
+    	
+        return MathHelper.abs_max(MathHelper.abs_max(targetPos.xCoord - this.getPos().getX(), targetPos.yCoord - this.getPos().getY()),
+        		targetPos.zCoord - this.getPos().getZ()) > (getTurretRange() + TurretHeadUtil.getRangeUpgrades(
                 base));
     }
 
@@ -344,7 +359,16 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
                 projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
 
-
+                //If the turret is on a Ship, it needs to change to World coordinates from Ship coordinates
+                if(ModCompatibility.ValkyrienWarfareLoaded){
+            		Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(worldObj, this.getPos());
+            		if(shipEntity != null){
+            			Vec3d inShipPos = new Vec3d(this.getPos().getX() + 0.5,this.getPos().getY() + 0.5,this.getPos().getZ() + 0.5);
+            			Vec3d inWorldPos = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, inShipPos);
+            			projectile.setPosition(inWorldPos.xCoord, inWorldPos.yCoord, inWorldPos.zCoord);
+            		}
+                }
+                
 //                if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
 //                    worldObj.playSoundEffect(this.pos.getX(), this.pos.getY(), this.pos.getZ(), Reference.MOD_ID + ":amped",
 //                            ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
