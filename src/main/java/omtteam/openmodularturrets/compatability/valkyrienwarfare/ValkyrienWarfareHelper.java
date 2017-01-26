@@ -15,30 +15,37 @@ import net.minecraftforge.fml.common.Loader;
 
 public class ValkyrienWarfareHelper {
 
-	public static boolean isBlockPosInShipSpace(World worldObj, BlockPos pos){
-		return ValkyrienWarfareHooks.isBlockPartOfShip(worldObj, pos);
-	}
-	
-	public static void doSomething(Entity shipEntity){
-		PhysicsWrapperEntity wrapper = (PhysicsWrapperEntity) shipEntity;
-		
-	}
-	
+	/**
+	 * If the given BlockPos is part of an existing Ship, this returns the Ship Entity that it is managing
+	 * @param worldFor
+	 * @param pos
+	 * @return
+	 */
 	public static Entity getShipManagingBlock(World worldFor, BlockPos pos){
 		return ValkyrienWarfareMod.physicsManager.getObjectManagingPos(worldFor, pos);
 	}
-	
-	public static AxisAlignedBB getAABBInWorldSpaceFromShipSpace(Entity shipEntity, AxisAlignedBB aabbInShip){
-		PhysicsWrapperEntity wrapper = (PhysicsWrapperEntity) shipEntity;
-		//Makes a Polygon representing the input AABB, then applies all the vertices through a rotation matrix
-		Polygon aabbPoly = new Polygon(aabbInShip, wrapper.wrapping.coordTransform.lToWTransform);
-		//Even though the aabbPoly isn't axis aligned anymore, its fine to just make a new AABB using the max coords of it
-		return aabbPoly.getEnclosedAABB();
-	}
-	
+
+	/**
+	 * Converts the inputed Vec3d coordinate from World space to Ship space
+	 * @param shipEntity
+	 * @param inShip
+	 * @return
+	 */
 	public static Vec3d getVec3InWorldSpaceFromShipSpace(Entity shipEntity, Vec3d inShip){
 		PhysicsWrapperEntity physicsWrapper = (PhysicsWrapperEntity) shipEntity;
 		Vec3d inWorld = RotationMatrices.applyTransform(physicsWrapper.wrapping.coordTransform.lToWTransform, inShip);
 		return inWorld;
+	}
+	
+	/**
+	 * Converts the inputed Vec3d coordinate from Ship space to World space
+	 * @param shipEntity
+	 * @param inWorld
+	 * @return
+	 */
+	public static Vec3d getVec3InShipSpaceFromWorldSpace(Entity shipEntity, Vec3d inWorld){
+		PhysicsWrapperEntity physicsWrapper = (PhysicsWrapperEntity) shipEntity;
+		Vec3d inShip = RotationMatrices.applyTransform(physicsWrapper.wrapping.coordTransform.wToLTransform, inWorld);
+		return inShip;
 	}
 }
