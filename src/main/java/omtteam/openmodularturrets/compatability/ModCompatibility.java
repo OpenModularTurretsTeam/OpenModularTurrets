@@ -18,6 +18,7 @@ public class ModCompatibility {
     public static boolean ThaumcraftLoaded = false;
     public static boolean OpenComputersLoaded = false;
     public static boolean ComputerCraftLoaded = false;
+    public static boolean ValkyrienWarfareLoaded = false;
     @SuppressWarnings("unused")
     public static IGWHandler igwHandler = null;
 
@@ -46,6 +47,11 @@ public class ModCompatibility {
         ComputerCraftLoaded = Loader.isModLoaded("ComputerCraft");
         if (OpenComputersLoaded || ComputerCraftLoaded) {
             OpenModularTurrets.getLogger().info("Enabling LUA integration. (Found OpenComputers/ComputerCraft)");
+        }
+        
+        ValkyrienWarfareLoaded = Loader.isModLoaded("valkyrienwarfare");
+        if(ValkyrienWarfareLoaded){
+        	OpenModularTurrets.getLogger().info("Valkyrien Warfare Found! You have a good taste in mods");
         }
 
         IGWModLoaded = Loader.isModLoaded("IGWMod");
