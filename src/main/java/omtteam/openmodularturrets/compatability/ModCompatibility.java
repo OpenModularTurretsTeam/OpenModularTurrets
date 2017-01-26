@@ -48,10 +48,10 @@ public class ModCompatibility {
         if (OpenComputersLoaded || ComputerCraftLoaded) {
             OpenModularTurrets.getLogger().info("Enabling LUA integration. (Found OpenComputers/ComputerCraft)");
         }
-        
+
         ValkyrienWarfareLoaded = Loader.isModLoaded("valkyrienwarfare");
-        if(ValkyrienWarfareLoaded){
-        	OpenModularTurrets.getLogger().info("Valkyrien Warfare Found! You have a good taste in mods");
+        if (ValkyrienWarfareLoaded) {
+            OpenModularTurrets.getLogger().info("Valkyrien Warfare Found! You have a good taste in mods");
         }
 
         IGWModLoaded = Loader.isModLoaded("IGWMod");
@@ -68,7 +68,7 @@ public class ModCompatibility {
 
     public static void performModCompat() {
         FMLInterModComms.sendMessage("Waila", "register",
-                                     "omtteam.openmodularturrets.compatability.WailaTileHandler.callbackRegister");
+                "omtteam.openmodularturrets.compatability.WailaTileHandler.callbackRegister");
         addVersionCheckerInfo();
         if (ComputerCraftLoaded) {
             registerCCCompat();

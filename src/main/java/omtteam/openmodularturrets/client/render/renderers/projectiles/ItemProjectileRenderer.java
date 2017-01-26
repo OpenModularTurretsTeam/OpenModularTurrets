@@ -13,12 +13,10 @@ import omtteam.openmodularturrets.entity.projectiles.DisposableTurretProjectile;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-class ItemProjectileRenderer extends Render
-{
+class ItemProjectileRenderer extends Render {
     private final RenderItem itemRenderer;
 
-    public ItemProjectileRenderer(RenderManager renderManagerIn, RenderItem itemRendererIn)
-    {
+    public ItemProjectileRenderer(RenderManager renderManagerIn, RenderItem itemRendererIn) {
         super(renderManagerIn);
         this.itemRenderer = itemRendererIn;
     }
@@ -28,26 +26,23 @@ class ItemProjectileRenderer extends Render
      */
 
     @SuppressWarnings({"unchecked", "unused"})
-    public void doRender(DisposableTurretProjectile entity, double x, double y, double z, float entityYaw, float partialTicks)
-    {
+    public void doRender(DisposableTurretProjectile entity, double x, double y, double z, float entityYaw, float partialTicks) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float)x, (float)y, (float)z);
+        GlStateManager.translate((float) x, (float) y, (float) z);
         GlStateManager.enableRescaleNormal();
         GlStateManager.rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate((float)(this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate((float) (this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
         this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
-        if (this.renderOutlines)
-        {
+        if (this.renderOutlines) {
             GlStateManager.enableColorMaterial();
             GlStateManager.enableOutlineMode(this.getTeamColor(entity));
         }
 
         this.itemRenderer.renderItem(entity.getItemBound().getEntityItem(), ItemCameraTransforms.TransformType.GROUND);
 
-        if (this.renderOutlines)
-        {
+        if (this.renderOutlines) {
             GlStateManager.disableOutlineMode();
             GlStateManager.disableColorMaterial();
         }

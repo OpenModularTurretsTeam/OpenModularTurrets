@@ -109,6 +109,7 @@ public class OMTNames {
             public static final String MULTI = "gui.omtteam.openmodularturrets:multi";
             public static final String SINGLE = "gui.omtteam.openmodularturrets:single";
         }
+
         public static class Tooltip {
             public static final String ADD_TRUSTED_PLAYER = "tooltip.omtteam.openmodularturrets:add_trusted_player";
             public static final String REMOVE_TRUSTED_PLAYER = "tooltip.omtteam.openmodularturrets:remove_trusted_player";

@@ -102,8 +102,8 @@ public class RelativisticTurretTileEntity extends TurretHead {
 
             // Consume energy
             base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - power_required);
-            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 5,false, false));
-            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.getPotionById(18), 200, 5,false, false));
+            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 5, false, false));
+            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.getPotionById(18), 200, 5, false, false));
 
             target = null;
         }

@@ -2,6 +2,8 @@ package omtteam.openmodularturrets.compatability.jei;
 
 import mcp.MethodsReturnNonnullByDefault;
 import mezz.jei.api.gui.IAdvancedGuiHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.openmodularturrets.client.gui.TurretBaseAbstractGui;
 
 import javax.annotation.Nullable;
@@ -22,8 +24,9 @@ public class AdvancedGuiHandlerOMT implements IAdvancedGuiHandler<TurretBaseAbst
     @Nullable
     @Override
     @ParametersAreNonnullByDefault
+    @SideOnly(Side.CLIENT)
     public java.util.List<Rectangle> getGuiExtraAreas(TurretBaseAbstractGui guiContainer) {
-         return guiContainer.getBlockingAreas();
+        return guiContainer.getBlockingAreas();
     }
 
     @Nullable

@@ -94,7 +94,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
                 MaxIO = ConfigHandler.getBaseTierFiveMaxIo();
                 return new TurretBase(MaxCharge, MaxIO, 5);
             default:
-                return new TurretBase(1,1,1);
+                return new TurretBase(1, 1, 1);
         }
     }
 
@@ -161,12 +161,12 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
         } else*/
             if (player.isSneaking() && base != null && player.getHeldItemMainhand() != null &&
                     player.getHeldItemMainhand().getItem() instanceof UsableMetaItem && player.getHeldItemMainhand().getItemDamage() == 2) {
-                ((UsableMetaItem) player.getHeldItemMainhand().getItem()).setDataStored(player.getHeldItemMainhand(),base.writeMemoryCardNBT());
-            } else if ( !player.isSneaking() && base != null && player.getHeldItemMainhand() != null &&
+                ((UsableMetaItem) player.getHeldItemMainhand().getItem()).setDataStored(player.getHeldItemMainhand(), base.writeMemoryCardNBT());
+            } else if (!player.isSneaking() && base != null && player.getHeldItemMainhand() != null &&
                     player.getHeldItemMainhand().getItem() instanceof UsableMetaItem && player.getHeldItemMainhand().getItemDamage() == 2 &&
                     ((UsableMetaItem) player.getHeldItemMainhand().getItem()).hasDataStored(player.getHeldItemMainhand())) {
                 base.readMemoryCardNBT(((UsableMetaItem) player.getHeldItemMainhand().getItem()).getDataStored(player.getHeldItemMainhand()));
-            } else if ( !player.isSneaking() && base != null) {
+            } else if (!player.isSneaking() && base != null) {
                 TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
                 if (trustedPlayer != null && trustedPlayer.canOpenGUI) {
                     world.notifyBlockUpdate(pos, state, state, 6);

@@ -31,7 +31,7 @@ public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
     @SuppressWarnings("ConstantConditions")
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage)  {
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage) {
         RailGunTurretTileEntity turretHead = (RailGunTurretTileEntity) te;
 
         ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/rail_gun_turret.png"));

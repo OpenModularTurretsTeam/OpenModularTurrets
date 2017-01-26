@@ -31,7 +31,8 @@ public class MessageToggleAttackNeutralMobs implements IMessage {
                     TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
 
                     turret.setAttacksNeutrals(message.doAttackNeutrals());
-                }});
+                }
+            });
             return null;
         }
     }

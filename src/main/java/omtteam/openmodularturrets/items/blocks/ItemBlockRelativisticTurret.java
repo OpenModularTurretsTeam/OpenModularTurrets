@@ -31,24 +31,24 @@ public class ItemBlockRelativisticTurret extends ItemBlock {
         tooltip.add(TextFormatting.GOLD + "--" + I18n.translateToLocal("tooltip.info") + "--");
         tooltip.add(I18n.translateToLocal("tooltip.tier") + ": " + TextFormatting.WHITE + "3");
         tooltip.add(I18n.translateToLocal("tooltip.range") + ": " + TextFormatting.WHITE +
-                               ConfigHandler.getRelativistic_turret().getRange());
+                ConfigHandler.getRelativistic_turret().getRange());
         tooltip.add(I18n.translateToLocal("tooltip.accuracy") + ": " + TextFormatting.WHITE +
-                               I18n.translateToLocal("turret.accuracy.high"));
+                I18n.translateToLocal("turret.accuracy.high"));
         tooltip.add(I18n.translateToLocal("tooltip.ammo") + ": " + TextFormatting.WHITE +
-                               I18n.translateToLocal("turret.ammo.4"));
+                I18n.translateToLocal("turret.ammo.4"));
         tooltip.add(I18n.translateToLocal("tooltip.tier_required") + ": " + TextFormatting.WHITE +
-                               I18n.translateToLocal("base.tier.3"));
+                I18n.translateToLocal("base.tier.3"));
         tooltip.add("");
         tooltip.add(
                 TextFormatting.DARK_PURPLE + "--" + I18n.translateToLocal("tooltip.damage.label") + "--");
         tooltip.add(I18n.translateToLocal("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
-                               (ConfigHandler.getRelativistic_turret().getDamage() / 2F) + " " + I18n.translateToLocal(
+                (ConfigHandler.getRelativistic_turret().getDamage() / 2F) + " " + I18n.translateToLocal(
                 "tooltip.health"));
         tooltip.add(I18n.translateToLocal("tooltip.aoe") + ": " + TextFormatting.WHITE + "0");
         tooltip.add(I18n.translateToLocal("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
                 20.0F / ConfigHandler.getRelativistic_turret().getFireRate()));
         tooltip.add(I18n.translateToLocal("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
-                               ConfigHandler.getRelativistic_turret().getPowerUsage() + " RF");
+                ConfigHandler.getRelativistic_turret().getPowerUsage() + " RF");
         tooltip.add("");
         tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.turret.8"));
     }

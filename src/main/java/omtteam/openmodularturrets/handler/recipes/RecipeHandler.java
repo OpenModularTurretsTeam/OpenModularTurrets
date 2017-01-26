@@ -79,7 +79,7 @@ public class RecipeHandler {
         upgradeRange = new ItemStack(ModItems.upgradeMetaItem, 1, 3);
         upgradeScatterShot = new ItemStack(ModItems.upgradeMetaItem, 1, 4);
         ioBus = new ItemStack(ModItems.intermediateProductRegular, 1, 0);
-        memoryCard = new ItemStack(ModItems.usableMetaItem,1,2);
+        memoryCard = new ItemStack(ModItems.usableMetaItem, 1, 2);
 
         boolean recipesDone = false;
         // Recipes
@@ -223,8 +223,8 @@ public class RecipeHandler {
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(memoryCard, "BAB", "CEC", "FDF", 'A', "ingotGold", 'B',
-                        Items.REDSTONE, 'C', Items.IRON_INGOT,'D',RecipeHandler.ioBus ,'E', Items.PAPER,
-                        'F', new ItemStack(Items.DYE,1,4)));
+                        Items.REDSTONE, 'C', Items.IRON_INGOT, 'D', RecipeHandler.ioBus, 'E', Items.PAPER,
+                        'F', new ItemStack(Items.DYE, 1, 4)));
 
     }
 }

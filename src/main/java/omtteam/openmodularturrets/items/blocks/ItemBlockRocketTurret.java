@@ -31,24 +31,24 @@ public class ItemBlockRocketTurret extends ItemBlock {
         tooltip.add(TextFormatting.GOLD + "--" + I18n.translateToLocal("tooltip.info") + "--");
         tooltip.add(I18n.translateToLocal("tooltip.tier") + ": " + TextFormatting.WHITE + "4");
         tooltip.add(I18n.translateToLocal("tooltip.range") + ": " + TextFormatting.WHITE +
-                               ConfigHandler.getRocketTurretSettings().getRange());
+                ConfigHandler.getRocketTurretSettings().getRange());
         tooltip.add(I18n.translateToLocal("tooltip.accuracy") + ": " + TextFormatting.WHITE +
-                               I18n.translateToLocal("turret.accuracy.exact"));
+                I18n.translateToLocal("turret.accuracy.exact"));
         tooltip.add(I18n.translateToLocal("tooltip.ammo") + ": " + TextFormatting.WHITE +
-                               I18n.translateToLocal("turret.ammo.3"));
+                I18n.translateToLocal("turret.ammo.3"));
         tooltip.add(I18n.translateToLocal("tooltip.tier_required") + ": " + TextFormatting.WHITE +
-                               I18n.translateToLocal("base.tier.4"));
+                I18n.translateToLocal("base.tier.4"));
         tooltip.add("");
         tooltip.add(
                 TextFormatting.DARK_PURPLE + "--" + I18n.translateToLocal("tooltip.damage.label") + "--");
         tooltip.add(I18n.translateToLocal("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
-                               (ConfigHandler.getRocketTurretSettings().getDamage() / 2F) + " " + I18n.translateToLocal(
+                (ConfigHandler.getRocketTurretSettings().getDamage() / 2F) + " " + I18n.translateToLocal(
                 "tooltip.health"));
         tooltip.add(I18n.translateToLocal("tooltip.aoe") + ": " + TextFormatting.WHITE + "5");
         tooltip.add(I18n.translateToLocal("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
                 20.0F / ConfigHandler.getRocketTurretSettings().getFireRate()));
         tooltip.add(I18n.translateToLocal("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
-                               ConfigHandler.getRocketTurretSettings().getPowerUsage() + " RF");
+                ConfigHandler.getRocketTurretSettings().getPowerUsage() + " RF");
         tooltip.add("");
         tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.turret.3"));
     }
