@@ -6,8 +6,12 @@ import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.openmodularturrets.blocks.LeverBlock;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
+import omtteam.openmodularturrets.client.render.models.CamoBakedModel;
 import omtteam.openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
 import omtteam.openmodularturrets.client.render.renderers.projectiles.ProjectileRenderers;
 import omtteam.openmodularturrets.compatability.IGWHandler;
@@ -20,6 +24,7 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
 @SuppressWarnings("unused")
+@SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
 
     private void registerItemModel(final Item item, int meta) {
@@ -48,8 +53,25 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit() {
         super.preInit();
+
+        StateMap ignoreRotation = new StateMap.Builder().ignore(LeverBlock.ROTATION).build();
+        StateMap ignoreConcealed = new StateMap.Builder().ignore(BlockAbstractTurretHead.CONCEALED).build();
+        ModelLoader.setCustomStateMapper(ModBlocks.leverBlock, ignoreRotation);
+        ModelLoader.setCustomStateMapper(ModBlocks.disposableItemTurret, ignoreConcealed);
+        ModelLoader.setCustomStateMapper(ModBlocks.grenadeLauncherTurret, ignoreConcealed);
+        ModelLoader.setCustomStateMapper(ModBlocks.teleporterTurret, ignoreConcealed);
+        ModelLoader.setCustomStateMapper(ModBlocks.incendiaryTurret, ignoreConcealed);
+        ModelLoader.setCustomStateMapper(ModBlocks.laserTurret, ignoreConcealed);
+        ModelLoader.setCustomStateMapper(ModBlocks.railGunTurret, ignoreConcealed);
+        ModelLoader.setCustomStateMapper(ModBlocks.relativisticTurret, ignoreConcealed);
+        ModelLoader.setCustomStateMapper(ModBlocks.rocketTurret, ignoreConcealed);
+        ModelLoader.setCustomStateMapper(ModBlocks.machineGunTurret, ignoreConcealed);
+        ModelLoader.setCustomStateMapper(ModBlocks.potatoCannonTurret, ignoreConcealed);
+        ModelLoaderRegistry.registerLoader(new CamoBakedModel.ModelLoader());
+        ModelLoader.setCustomStateMapper(ModBlocks.turretBase, new CamoBakedModel.Statemapper());
+
         for (int i = 0; i < 5; i++) {
-            registerBlockModelAsItem(ModBlocks.turretBase, i, OMTNames.Blocks.turretBase, "tier=" + (i + 1));
+            registerBlockModelAsItem(ModBlocks.turretBase, i, OMTNames.Blocks.turretBase + "_normal", "tier=" + (i + 1));
         }
         for (int i = 0; i < 10; i++) {
             registerBlockModelAsItem(ModBlocks.expander, i, OMTNames.Blocks.expander, "facing=north,meta=" + i);
@@ -72,20 +94,6 @@ public class ClientProxy extends CommonProxy {
         for (int i = 0; i < 3; i++) {
             registerItemModel(ModItems.usableMetaItem, i, UsableMetaItem.subNames[i], true);
         }
-
-        StateMap ignoreRotation = new StateMap.Builder().ignore(LeverBlock.ROTATION).build();
-        StateMap ignoreConcealed = new StateMap.Builder().ignore(BlockAbstractTurretHead.CONCEALED).build();
-        ModelLoader.setCustomStateMapper(ModBlocks.leverBlock, ignoreRotation);
-        ModelLoader.setCustomStateMapper(ModBlocks.disposableItemTurret, ignoreConcealed);
-        ModelLoader.setCustomStateMapper(ModBlocks.grenadeLauncherTurret, ignoreConcealed);
-        ModelLoader.setCustomStateMapper(ModBlocks.teleporterTurret, ignoreConcealed);
-        ModelLoader.setCustomStateMapper(ModBlocks.incendiaryTurret, ignoreConcealed);
-        ModelLoader.setCustomStateMapper(ModBlocks.laserTurret, ignoreConcealed);
-        ModelLoader.setCustomStateMapper(ModBlocks.railGunTurret, ignoreConcealed);
-        ModelLoader.setCustomStateMapper(ModBlocks.relativisticTurret, ignoreConcealed);
-        ModelLoader.setCustomStateMapper(ModBlocks.rocketTurret, ignoreConcealed);
-        ModelLoader.setCustomStateMapper(ModBlocks.machineGunTurret, ignoreConcealed);
-        ModelLoader.setCustomStateMapper(ModBlocks.potatoCannonTurret, ignoreConcealed);
     }
 
     @Override

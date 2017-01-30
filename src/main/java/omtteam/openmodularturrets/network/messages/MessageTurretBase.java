@@ -3,14 +3,17 @@ package omtteam.openmodularturrets.network.messages;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
@@ -24,17 +27,17 @@ import java.util.UUID;
  */
 @SuppressWarnings("unused")
 public class MessageTurretBase implements IMessage {
-    private int x, y, z, rfStorageCurrent, rfStorageMax, tier;
+    private int x, y, z, rfStorageCurrent, rfStorageMax, tier, camoBlockMeta;
     private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting;
-    private String owner, ownerName;
+    private String owner, ownerName, camoBlockRegName;
     private List<TrustedPlayer> trustedPlayers = new ArrayList<>();
-    private ItemStack camoStack;
 
     public MessageTurretBase() {
     }
 
     public static class MessageHandlerTurretBase implements IMessageHandler<MessageTurretBase, IMessage> {
         @Override
+        @SideOnly(Side.CLIENT)
         public IMessage onMessage(MessageTurretBase messageIn, MessageContext ctx) {
             final MessageTurretBase message = messageIn;
             Minecraft.getMinecraft().addScheduledTask(new Runnable() {
@@ -53,8 +56,10 @@ public class MessageTurretBase implements IMessage {
                         ((TurretBase) tileEntity).setAttacksPlayers(message.attacksPlayers);
                         ((TurretBase) tileEntity).setMultiTargeting(message.multiTargeting);
                         ((TurretBase) tileEntity).setTrustedPlayers(message.trustedPlayers);
-                        //((TurretBase) tileEntity).camoBlockState = message.camoStack;
                         ((TurretBase) tileEntity).setTier(message.tier);
+                        ((TurretBase) tileEntity).setCamoBlockState(ForgeRegistries.BLOCKS.getValue(
+                                new ResourceLocation(message.camoBlockRegName)).getStateFromMeta(message.camoBlockMeta));
+
                     }
                 }
             });
@@ -79,7 +84,8 @@ public class MessageTurretBase implements IMessage {
             this.attacksPlayers = TurretBase.isAttacksPlayers();
             this.multiTargeting = TurretBase.isMultiTargeting();
             this.trustedPlayers = TurretBase.getTrustedPlayers();
-            //this.camoStack = TurretBase.camoBlockState;
+            this.camoBlockRegName = TurretBase.getCamoBlockState().getBlock().getRegistryName().toString();
+            this.camoBlockMeta = TurretBase.getCamoBlockState().getBlock().getMetaFromState(TurretBase.getCamoBlockState());
         }
     }
 
@@ -99,7 +105,9 @@ public class MessageTurretBase implements IMessage {
         this.attacksNeutrals = buf.readBoolean();
         this.attacksPlayers = buf.readBoolean();
         this.multiTargeting = buf.readBoolean();
-        //this.camoStack = ByteBufUtils.readItemStack(buf);
+        int camoBlockRegNameLength = buf.readInt();
+        this.camoBlockRegName = new String(buf.readBytes(camoBlockRegNameLength).array());
+        this.camoBlockMeta = buf.readInt();
         int lengthOfTPList = buf.readInt();
         if (lengthOfTPList > 0) {
             for (int i = 0; i < lengthOfTPList; i++) {
@@ -132,7 +140,9 @@ public class MessageTurretBase implements IMessage {
         buf.writeBoolean(attacksNeutrals);
         buf.writeBoolean(attacksPlayers);
         buf.writeBoolean(multiTargeting);
-        //ByteBufUtils.writeItemStack(buf, camoStack);
+        buf.writeInt(camoBlockRegName.length());
+        buf.writeBytes(camoBlockRegName.getBytes());
+        buf.writeInt(camoBlockMeta);
         buf.writeInt(trustedPlayers.size());
         if (trustedPlayers.size() > 0) {
             for (TrustedPlayer trustedPlayer : trustedPlayers) {
