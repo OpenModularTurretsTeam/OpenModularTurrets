@@ -57,7 +57,7 @@ public class MessageTurretBase implements IMessage {
                         ((TurretBase) tileEntity).setMultiTargeting(message.multiTargeting);
                         ((TurretBase) tileEntity).setTrustedPlayers(message.trustedPlayers);
                         ((TurretBase) tileEntity).setTier(message.tier);
-                        ((TurretBase) tileEntity).setCamoBlockState(ForgeRegistries.BLOCKS.getValue(
+                        ((TurretBase) tileEntity).setCamoState(ForgeRegistries.BLOCKS.getValue(
                                 new ResourceLocation(message.camoBlockRegName)).getStateFromMeta(message.camoBlockMeta));
 
                     }
@@ -84,8 +84,8 @@ public class MessageTurretBase implements IMessage {
             this.attacksPlayers = TurretBase.isAttacksPlayers();
             this.multiTargeting = TurretBase.isMultiTargeting();
             this.trustedPlayers = TurretBase.getTrustedPlayers();
-            this.camoBlockRegName = TurretBase.getCamoBlockState().getBlock().getRegistryName().toString();
-            this.camoBlockMeta = TurretBase.getCamoBlockState().getBlock().getMetaFromState(TurretBase.getCamoBlockState());
+            this.camoBlockRegName = TurretBase.getCamoState().getBlock().getRegistryName().toString();
+            this.camoBlockMeta = TurretBase.getCamoState().getBlock().getMetaFromState(TurretBase.getCamoState());
         }
     }
 

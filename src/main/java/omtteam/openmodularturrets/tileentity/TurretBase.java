@@ -16,10 +16,13 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityMachine;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
 import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.reference.OMTNames;
+import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
@@ -28,6 +31,8 @@ import java.util.List;
 
 import static omtteam.omlib.compatability.ModCompatibility.IC2Loaded;
 import static omtteam.omlib.handler.ConfigHandler.EUSupport;
+import static omtteam.omlib.util.BlockUtil.getBlockStateFromNBT;
+import static omtteam.omlib.util.BlockUtil.writeBlockFromStateToNBT;
 import static omtteam.omlib.util.MathUtil.getRotationXYFromYawPitch;
 import static omtteam.omlib.util.MathUtil.getRotationXZFromYawPitch;
 import static omtteam.omlib.util.PlayerUtil.getPlayerUUID;
@@ -44,7 +49,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;*/
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft"),
         @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")}
 )
-public class TurretBase extends TileEntityMachine implements SimpleComponent, /*IPeripheral,*/ ITickable {
+public class TurretBase extends TileEntityMachine implements SimpleComponent, /*IPeripheral,*/ ITickable, ICamoSupport {
     public int trustedPlayerIndex = 0;
     protected IBlockState camoBlockState;
 
@@ -80,63 +85,10 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         this.camoBlockState = state;
     }
 
-    private static void updateRedstoneReactor(TurretBase base) {
-        if (!TurretHeadUtil.hasRedstoneReactor(base)) {
-            return;
-        }
-
-        if (ConfigHandler.getRedstoneReactorAddonGen() < (base.getMaxEnergyStored(
-                EnumFacing.DOWN) - base.getEnergyStored(EnumFacing.DOWN))) {
-
-            //Prioritise redstone blocks
-            ItemStack redstoneBlock = TurretHeadUtil.useSpecificItemStackBlockFromBase(base, new ItemStack(
-                    Blocks.REDSTONE_BLOCK));
-
-            if (redstoneBlock == null) {
-                redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
-                        new ItemStack(Blocks.REDSTONE_BLOCK),
-                        base);
-            }
-
-            if (redstoneBlock != null && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base.getMaxEnergyStored(
-                    EnumFacing.DOWN) - base.getEnergyStored(EnumFacing.DOWN))) {
-                base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen() * 9);
-                return;
-            }
-
-            ItemStack redstone = TurretHeadUtil.useSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE));
-
-            if (redstone == null) {
-                redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
-                        new ItemStack(Items.REDSTONE), base);
-            }
-
-            if (redstone != null) {
-                base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen());
-            }
-        }
-    }
-
-    private int getMaxEnergyStorageWithExtenders() {
-        int tier = getTier();
-        switch (tier) {
-            case 1:
-                return ConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.pos);
-            case 2:
-                return ConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.pos);
-            case 3:
-                return ConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.pos);
-            case 4:
-                return ConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.pos);
-            case 5:
-                return ConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.pos);
-        }
-        return 0;
+    @Override
+    public IBlockState getDefaultCamoState() {
+        return ForgeRegistries.BLOCKS.getValue(
+                new ResourceLocation(Reference.MOD_ID + ":" + OMTNames.Blocks.turretBase)).getStateFromMeta(this.tier - 1);
     }
 
     @Override
@@ -151,18 +103,13 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         nbtTagCompound.setBoolean("multiTargeting", multiTargeting);
         nbtTagCompound.setBoolean("forceFire", forceFire);
         nbtTagCompound.setInteger("tier", tier);
-
-        if (camoBlockState != null) {
-            nbtTagCompound.setString("camoBlockRegName", camoBlockState.getBlock().getRegistryName().toString());
-            nbtTagCompound.setInteger("camoBlockMeta", camoBlockState.getBlock().getMetaFromState(camoBlockState));
-        }
+        writeBlockFromStateToNBT(nbtTagCompound, this.camoBlockState);
         return nbtTagCompound;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
         super.readFromNBT(nbtTagCompound);
-
         this.yAxisDetect = nbtTagCompound.getInteger("yAxisDetect");
         this.attacksMobs = nbtTagCompound.getBoolean("attacksMobs");
         this.attacksNeutrals = nbtTagCompound.getBoolean("attacksNeutrals");
@@ -172,11 +119,10 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         this.forceFire = nbtTagCompound.getBoolean("forceFire");
         this.tier = nbtTagCompound.getInteger("tier");
         this.computerAccessible = nbtTagCompound.hasKey("computerAccessible") && nbtTagCompound.getBoolean("computerAccessible");
-        if (nbtTagCompound.hasKey("camoBlockRegName") && nbtTagCompound.hasKey("camoBlockMeta")) {
-            this.camoBlockState = ForgeRegistries.BLOCKS.getValue(
-                    new ResourceLocation(nbtTagCompound.getString("camoBlockRegName"))).getStateFromMeta(nbtTagCompound.getInteger("camoBlockMeta"));
+        if (getBlockStateFromNBT(nbtTagCompound) != null) {
+            this.camoBlockState = getBlockStateFromNBT(nbtTagCompound);
         } else {
-            camoBlockState = worldObj.getBlockState(this.pos);
+            this.camoBlockState = getDefaultCamoState();
         }
     }
 
@@ -341,13 +287,74 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         buildTrustedPlayersFromNBT(nbtTagCompound.getTagList("trustedPlayers", 10));
     }
 
+    private static void updateRedstoneReactor(TurretBase base) {
+        if (!TurretHeadUtil.hasRedstoneReactor(base)) {
+            return;
+        }
+
+        if (ConfigHandler.getRedstoneReactorAddonGen() < (base.getMaxEnergyStored(
+                EnumFacing.DOWN) - base.getEnergyStored(EnumFacing.DOWN))) {
+
+            //Prioritise redstone blocks
+            ItemStack redstoneBlock = TurretHeadUtil.useSpecificItemStackBlockFromBase(base, new ItemStack(
+                    Blocks.REDSTONE_BLOCK));
+
+            if (redstoneBlock == null) {
+                redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
+                        new ItemStack(Blocks.REDSTONE_BLOCK),
+                        base);
+            }
+
+            if (redstoneBlock != null && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base.getMaxEnergyStored(
+                    EnumFacing.DOWN) - base.getEnergyStored(EnumFacing.DOWN))) {
+                base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen() * 9);
+                return;
+            }
+
+            ItemStack redstone = TurretHeadUtil.useSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE));
+
+            if (redstone == null) {
+                redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
+                        new ItemStack(Items.REDSTONE), base);
+            }
+
+            if (redstone != null) {
+                base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen());
+            }
+        }
+    }
+
+    private int getMaxEnergyStorageWithExtenders() {
+        int tier = getTier();
+        switch (tier) {
+            case 1:
+                return ConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.worldObj, this.pos);
+            case 2:
+                return ConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.worldObj, this.pos);
+            case 3:
+                return ConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.worldObj, this.pos);
+            case 4:
+                return ConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.worldObj, this.pos);
+            case 5:
+                return ConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.worldObj, this.pos);
+        }
+        return 0;
+    }
+
     @Nonnull
-    public IBlockState getCamoBlockState() {
+    @Override
+    public IBlockState getCamoState() {
         return camoBlockState;
     }
 
-    public void setCamoBlockState(IBlockState camoBlockState) {
-        this.camoBlockState = camoBlockState;
+    @Override
+    public void setCamoState(IBlockState state) {
+        this.camoBlockState = state;
     }
 
     @SuppressWarnings("NullableProblems")
