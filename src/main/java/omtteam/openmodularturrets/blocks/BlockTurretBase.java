@@ -24,12 +24,10 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.omlib.blocks.BlockAbstractTileEntity;
-import omtteam.omlib.render.RenderBlockStateContainer;
+import omtteam.omlib.blocks.BlockAbstractCamoTileEntity;
 import omtteam.omlib.util.IHasItemBlock;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
@@ -49,30 +47,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItemBlock {
+public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHasItemBlock {
     public static final PropertyInteger TIER = PropertyInteger.create("tier", 1, 5);
-    public static final IUnlistedProperty<RenderBlockStateContainer> RENDERBLOCKSTATE = new IUnlistedProperty<RenderBlockStateContainer>() {
-
-        public String getName() {
-            return "openmodularturrets:camo_property";
-        }
-
-        @Override
-        public boolean isValid(RenderBlockStateContainer value) {
-            return true;
-        }
-
-        @Override
-        public Class<RenderBlockStateContainer> getType() {
-            return RenderBlockStateContainer.class;
-        }
-
-        @Override
-        public String valueToString(RenderBlockStateContainer value) {
-            return value.toString();
-        }
-    };
-
 
     public BlockTurretBase() {
         super(Material.ROCK);
@@ -147,21 +123,14 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
     }
 
     @Override
-    @Nonnull
-    public IBlockState getExtendedState(@Nonnull IBlockState state, IBlockAccess world, BlockPos pos) {
-        TurretBase base = (TurretBase) world.getTileEntity(pos);
-        return ((IExtendedBlockState) state).withProperty(RENDERBLOCKSTATE, new RenderBlockStateContainer(base.getCamoBlockState()));
-    }
-
-    @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote && hand == EnumHand.MAIN_HAND) {
             TurretBase base = (TurretBase) world.getTileEntity(pos);
             if (player.isSneaking() && ConfigHandler.isAllowBaseCamo() && heldItem == null) {
                 if (base != null) {
                     if (player.getUniqueID().toString().equals(base.getOwner())) {
-                        base.setCamoBlockState(state);
-                        world.notifyBlockUpdate(pos,state,state,3);
+                        base.setCamoState(state);
+                        world.notifyBlockUpdate(pos, state, state, 3);
                     } else {
                         player.addChatMessage(
                                 new TextComponentString(I18n.translateToLocal("status.ownership")));
@@ -175,15 +144,14 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
                 heldItemBlock = Block.getBlockFromItem(heldItem.getItem());
             }
 
-            if (!player.isSneaking() && ConfigHandler.isAllowBaseCamo() && heldItem != null &&
-                    heldItemBlock != null && heldItem.getItem() instanceof ItemBlock &&
+            if (!player.isSneaking() && ConfigHandler.isAllowBaseCamo() && heldItem != null && heldItem.getItem() instanceof ItemBlock &&
                     heldItemBlock.isNormalCube(heldItemBlock.getStateFromMeta(heldItem.getMetadata())) && Block.getBlockFromItem(
                     heldItem.getItem()).isOpaqueCube(heldItemBlock.getStateFromMeta(heldItem.getMetadata())) && !(Block.getBlockFromItem(
                     heldItem.getItem()) instanceof BlockTurretBase)) {
                 if (base != null) {
                     if (player.getUniqueID().toString().equals(base.getOwner())) {
-                        base.setCamoBlockState(heldItemBlock.getStateFromMeta(heldItem.getItemDamage()));
-                        world.notifyBlockUpdate(pos,state,state,3);
+                        base.setCamoState(heldItemBlock.getStateFromMeta(heldItem.getItemDamage()));
+                        world.notifyBlockUpdate(pos, state, state, 3);
                     } else {
                         player.addChatMessage(
                                 new TextComponentString(I18n.translateToLocal("status.ownership")));
@@ -236,7 +204,7 @@ public class BlockTurretBase extends BlockAbstractTileEntity implements IHasItem
             if (base == null) {
                 return;
             }
-            base.setCamoBlockState(state);
+            base.setCamoState(state);
             base.setOwner(player.getUniqueID().toString());
             if (worldIn.isBlockIndirectlyGettingPowered(pos) > 0) {
                 base.setRedstone(true);
