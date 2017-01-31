@@ -1,6 +1,7 @@
 package omtteam.openmodularturrets.proxy;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
@@ -9,9 +10,10 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.omlib.render.CamoBlockColor;
 import omtteam.openmodularturrets.blocks.LeverBlock;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
-import omtteam.openmodularturrets.client.render.models.CamoBakedModel;
+import omtteam.openmodularturrets.client.render.models.TurretBaseBakedModel;
 import omtteam.openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
 import omtteam.openmodularturrets.client.render.renderers.projectiles.ProjectileRenderers;
 import omtteam.openmodularturrets.compatability.IGWHandler;
@@ -67,8 +69,8 @@ public class ClientProxy extends CommonProxy {
         ModelLoader.setCustomStateMapper(ModBlocks.rocketTurret, ignoreConcealed);
         ModelLoader.setCustomStateMapper(ModBlocks.machineGunTurret, ignoreConcealed);
         ModelLoader.setCustomStateMapper(ModBlocks.potatoCannonTurret, ignoreConcealed);
-        ModelLoaderRegistry.registerLoader(new CamoBakedModel.ModelLoader());
-        ModelLoader.setCustomStateMapper(ModBlocks.turretBase, new CamoBakedModel.Statemapper());
+        ModelLoaderRegistry.registerLoader(new TurretBaseBakedModel.ModelLoader());
+        ModelLoader.setCustomStateMapper(ModBlocks.turretBase, new TurretBaseBakedModel.Statemapper());
 
         for (int i = 0; i < 5; i++) {
             registerBlockModelAsItem(ModBlocks.turretBase, i, OMTNames.Blocks.turretBase + "_normal", "tier=" + (i + 1));
@@ -94,6 +96,11 @@ public class ClientProxy extends CommonProxy {
         for (int i = 0; i < 3; i++) {
             registerItemModel(ModItems.usableMetaItem, i, UsableMetaItem.subNames[i], true);
         }
+    }
+
+    @Override
+    public void init(){
+        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new CamoBlockColor(),ModBlocks.turretBase );
     }
 
     @Override
