@@ -79,7 +79,7 @@ public class TurretBaseBakedModel extends CamoBakedModel {
 
         @Override
         public boolean accepts(ResourceLocation modelLocation) {
-            return (!modelLocation.getResourceDomain().equals(Reference.MOD_ID) && modelLocation.equals(FAKE_LOCATION));
+            return (modelLocation.getResourceDomain().equals(Reference.MOD_ID) && modelLocation.equals(FAKE_LOCATION));
         }
 
         @Override
