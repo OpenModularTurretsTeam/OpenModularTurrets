@@ -395,7 +395,9 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         this.attacksPlayers = par1.getBoolean("attacksPlayers");
         this.shouldConcealTurrets = par1.getBoolean("shouldConcealTurrets");
         this.multiTargeting = par1.getBoolean("multiTargeting");
-        if (getPlayerUIDUnstable(par1.getString("owner")) != null) {
+        if (ConfigHandler.offlineModeSupport) {
+            this.owner = par1.getString("owner");
+        } else if (getPlayerUIDUnstable(par1.getString("owner")) != null) {
             this.owner = getPlayerUIDUnstable(par1.getString("owner")).toString();
         } else if (getPlayerUUID(par1.getString("owner")) != null) {
             this.owner = getPlayerUUID(par1.getString("owner")).toString();
@@ -637,8 +639,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     public void setOwnerName(String name) {
         ownerName = name;
     }
-
-
+    
     public boolean isMultiTargeting() {
         return multiTargeting;
     }

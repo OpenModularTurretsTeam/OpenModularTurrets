@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class PlayerUtil {
+
     public static UUID getPlayerUUID(String username) {
         for (Map.Entry<UUID, String> entry : UsernameCache.getMap().entrySet()) {
             if (entry.getValue().equalsIgnoreCase(username)) {
@@ -60,16 +61,16 @@ public class PlayerUtil {
         if (ConfigHandler.offlineModeSupport) {
             base.setOwner(player.getDisplayName());
         } else {
-           base.setOwner(player.getUniqueID().toString());
+            base.setOwner(player.getUniqueID().toString());
         }
     }
 
     public static boolean isPlayerOwner(EntityPlayer player, TurretBase base) {
         return (base.getOwner().equals(player.getUniqueID().toString()) ||
-                (ConfigHandler.offlineModeSupport && base.getOwnerName().equals(player.getDisplayName())));
+                (ConfigHandler.offlineModeSupport && base.getOwner().equals(player.getDisplayName())));
     }
 
-    public static boolean isPlayerNameValid(String name){
+    public static boolean isPlayerNameValid(String name) {
         for (Map.Entry<UUID, String> entry : UsernameCache.getMap().entrySet()) {
             if (entry.getValue().equalsIgnoreCase(name)) {
                 return true;

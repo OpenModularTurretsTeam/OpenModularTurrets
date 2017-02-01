@@ -109,6 +109,7 @@ public abstract class BlockAbstractTurretBase extends BlockAbstractContainer {
             } else if (!world.isBlockIndirectlyGettingPowered(x, y, z)) {
                 base.setRedstone(false);
             }
+            world.markBlockForUpdate(x,y,z);
         }
     }
 
