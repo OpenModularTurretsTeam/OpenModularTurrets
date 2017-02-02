@@ -347,7 +347,11 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         par1.setBoolean("attacksMobs", attacksMobs);
         par1.setBoolean("attacksNeutrals", attacksNeutrals);
         par1.setBoolean("attacksPlayers", attacksPlayers);
-        par1.setString("owner", owner);
+        if (ConfigHandler.offlineModeSupport && !ownerName.isEmpty()) {
+            par1.setString("owner", ownerName);
+        } else if (!ConfigHandler.offlineModeSupport){
+            par1.setString("owner", owner);
+        }
         if (ownerName.isEmpty() && getPlayerNameFromUUID(owner) != null) {
             ownerName = getPlayerNameFromUUID(owner);
         }
