@@ -77,7 +77,9 @@ public class ConfigHandler {
     private static float turretSoundVolume;
     private static boolean allowBaseCamo;
     private static boolean canRocketsHurtEnderDragon;
-
+    public static boolean canRocketsDestroyBlocks;
+    public static boolean canGrenadesDestroyBlocks;
+    public static boolean canRailgunDestroyBlocks;
 
     public static void init(File configFile) {
         Configuration config = new Configuration(configFile);
@@ -255,6 +257,15 @@ public class ConfigHandler {
 
         allowBaseCamo = config.get("miscellaneous",
                 "Should turret bases be camouflage-able with normal blocks?", true).getBoolean();
+
+        canRocketsDestroyBlocks = config.get("miscellaneous",
+                "Can rockets destroy normal blocks?", false).getBoolean();
+
+        canGrenadesDestroyBlocks = config.get("miscellaneous",
+                "Can grenades destroy normal blocks?", false).getBoolean();
+
+        canRailgunDestroyBlocks = config.get("miscellaneous",
+                "Can the railgun destroy normal blocks?", false).getBoolean();
 
         shouldDoThaumcraftIntegration = config.get("ModCompatibility",
                 "Should we enable items that integrate with Thaumcraft?",

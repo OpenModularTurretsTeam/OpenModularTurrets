@@ -32,7 +32,8 @@ public class GrenadeProjectile extends TurretProjectile {
     public void onEntityUpdate() {
         if (ticksExisted >= 50) {
             if (!worldObj.isRemote) {
-                worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
+                float strength = ConfigHandler.canGrenadesDestroyBlocks ? 1.4F : 0.1F;
+                worldObj.createExplosion(null, posX, posY, posZ, strength, true);
                 AxisAlignedBB axis = new AxisAlignedBB(this.posX - 3, this.posY - 3, this.posZ - 3,
                         this.posX + 3, this.posY + 3, this.posZ + 3);
                 List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);

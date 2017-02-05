@@ -84,8 +84,8 @@ public class RocketProjectile extends TurretProjectile {
         }
 
         if (!worldObj.isRemote) {
-
-            worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
+            float strength = ConfigHandler.canRocketsDestroyBlocks ? 2.3F : 0.1F;
+            worldObj.createExplosion(null, posX, posY, posZ, strength, true);
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
                     this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
