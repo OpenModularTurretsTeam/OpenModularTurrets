@@ -50,6 +50,8 @@ public class FerroSlugProjectile extends TurretProjectile {
             if (!hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;
+            } else if (ConfigHandler.canRailgunDestroyBlocks){
+                worldObj.destroyBlock(movingobjectposition.getBlockPos(),false);
             }
         }
 

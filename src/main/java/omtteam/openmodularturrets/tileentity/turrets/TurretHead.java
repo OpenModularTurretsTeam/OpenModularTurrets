@@ -70,12 +70,12 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     @SuppressWarnings("NullableProblems")
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
+        super.writeToNBT(nbtTagCompound);
         nbtTagCompound.setFloat("rotationXY", rotationXY);
         nbtTagCompound.setFloat("rotationXZ", rotationXZ);
         nbtTagCompound.setInteger("ticksBeforeFire", ticks);
         nbtTagCompound.setBoolean("shouldConceal", shouldConceal);
         nbtTagCompound.setBoolean("forceFire", forceFire);
-        super.writeToNBT(nbtTagCompound);
         return nbtTagCompound;
     }
 
