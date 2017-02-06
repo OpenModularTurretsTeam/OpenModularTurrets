@@ -21,6 +21,8 @@ import omtteam.omlib.tileentity.TileEntityMachine;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
 import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.items.AddonMetaItem;
+import omtteam.openmodularturrets.items.UpgradeMetaItem;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
@@ -37,6 +39,7 @@ import static omtteam.omlib.util.MathUtil.getRotationXYFromYawPitch;
 import static omtteam.omlib.util.MathUtil.getRotationXZFromYawPitch;
 import static omtteam.omlib.util.PlayerUtil.getPlayerUUID;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
+import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 
 
 /*import dan200.computercraft.api.lua.ILuaContext;
@@ -85,6 +88,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         this.camoBlockState = state;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getDefaultCamoState() {
         return ForgeRegistries.BLOCKS.getValue(
@@ -174,6 +178,18 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         }
     }
 
+    @Override
+    public boolean isItemValidForSlot(int i, ItemStack stack) {
+        if (i < 9) {
+            return isItemStackValidAmmo(stack);
+        } else if (i >= 9 && i <= 10) {
+            return stack.getItem() instanceof AddonMetaItem;
+        } else if (i >= 11 && i <= 12) {
+            return stack.getItem() instanceof UpgradeMetaItem;
+        }
+        return false;
+    }
+
     public boolean isAttacksMobs() {
         return attacksMobs;
     }
@@ -214,11 +230,6 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         this.tier = tier;
     }
 
-    @Override
-    public boolean isItemValidForSlot(int i, ItemStack stack) {
-        return true;
-    }
-
     public int getyAxisDetect() {
         return yAxisDetect;
     }
@@ -235,7 +246,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         }
     }
 
-    protected void setAllTurretsYawPitch(float yaw, float pitch) {
+    public void setAllTurretsYawPitch(float yaw, float pitch) {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.worldObj, this.pos);
         for (TileEntity te : tileEntities) {
             if (te != null && te instanceof TurretHead) {
@@ -245,7 +256,17 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         }
     }
 
-    protected void setAllTurretsForceFire(boolean state) {
+    public boolean setTurretYawPitch(EnumFacing facing, float yaw, float pitch) {
+        TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
+        if (turretHead != null && turretHead instanceof TurretHead) {
+            ((TurretHead) turretHead).setRotationXY(getRotationXYFromYawPitch(yaw, pitch));
+            ((TurretHead) turretHead).setRotationXZ(getRotationXZFromYawPitch(yaw, pitch));
+            return true;
+        }
+        return false;
+    }
+
+    public void setAllTurretsForceFire(boolean state) {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.worldObj, this.pos);
         for (TileEntity te : tileEntities) {
             if (te != null && te instanceof TurretHead) {
@@ -254,7 +275,21 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         }
     }
 
-    protected int forceShootAllTurrets() {
+    public boolean setTurretForceFire(EnumFacing facing, boolean state) {
+        TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
+        if (turretHead != null && turretHead instanceof TurretHead) {
+            ((TurretHead) turretHead).forceFire = state;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean forceShootTurret(EnumFacing facing) {
+        TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
+        return (turretHead != null && turretHead instanceof TurretHead && ((TurretHead) turretHead).forceShot());
+    }
+
+    public int forceShootAllTurrets() {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.worldObj, this.pos);
         int successes = 0;
         for (TileEntity te : tileEntities) {
@@ -539,7 +574,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
     }
 
     @Optional.Method(modid = "OpenComputers")
-    @Callback(doc = "function(yaw:double, pitch:double):void; Set yaw and pitch for all turrets (deact. auto targ. before).")
+    @Callback(doc = "function(side:int, yaw:double, pitch:double):void; Set yaw and pitch for all turrets (deact. auto targ. before).")
     public Object[] setAllYawPitch(Context context, Arguments args) {
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
@@ -547,6 +582,18 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         if (!args.isDouble(0) || !args.isDouble(1)) return new Object[]{"Wrong parameters!"};
         setAllTurretsYawPitch((float) args.checkDouble(0), (float) args.checkDouble(1));
         return new Object[]{};
+    }
+
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function(yaw:double, pitch:double):boolean; Set yaw and pitch for a turret (deact. auto targ. before).")
+    public Object[] setTurretYawPitch(Context context, Arguments args) {
+        if (!computerAccessible) {
+            return new Object[]{"Computer access deactivated!"};
+        }
+        if (!args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0 && !args.isDouble(1) || !args.isDouble(2))
+            return new Object[]{"Wrong parameters!"};
+
+        return new Object[]{setTurretYawPitch(EnumFacing.getFront(args.checkInteger(0)), (float) args.checkDouble(0), (float) args.checkDouble(1))};
     }
 
     @Optional.Method(modid = "OpenComputers")
@@ -561,6 +608,17 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
     }
 
     @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function(state:boolean):boolean; Enable auto firing for specified Turret (deact. auto targ. before).")
+    public Object[] setTurretAutoForceFire(Context context, Arguments args) {
+        if (!computerAccessible) {
+            return new Object[]{"Computer access deactivated!"};
+        }
+        if (!args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0 && !args.isBoolean(1))
+            return new Object[]{"Wrong parameters!"};
+        return new Object[]{setTurretForceFire(EnumFacing.getFront(args.checkInteger(0)), args.checkBoolean(1))};
+    }
+
+    @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():int; Try to shoot all turrets, returns successful shots")
     public Object[] forceShootAll(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -568,6 +626,17 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         }
 
         return new Object[]{this.forceShootAllTurrets()};
+    }
+
+    @Optional.Method(modid = "OpenComputers")
+    @Callback(doc = "function(side:int):int; Try to shoot specified turret, returns true if successfully shot")
+    public Object[] forceShootTurret(Context context, Arguments args) {
+        if (!computerAccessible) {
+            return new Object[]{"Computer access deactivated!"};
+        }
+        if (!args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0)
+            return new Object[]{"Wrong parameters!"};
+        return new Object[]{this.forceShootTurret(EnumFacing.getFront(args.checkInteger(0)))};
     }
 
 

@@ -25,7 +25,7 @@ class LaserRenderer extends Render {
         super(Minecraft.getMinecraft().getRenderManager());
     }
 
-    private ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/laser.png"));
+    private final ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/laser.png"));
 
     @SuppressWarnings("unused")
     private void renderLaser(LaserProjectile par1EntityRocket, double x, double y, double z, float entityYaw, float partialTicks) {

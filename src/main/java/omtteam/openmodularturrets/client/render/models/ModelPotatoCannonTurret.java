@@ -1,7 +1,10 @@
 package omtteam.openmodularturrets.client.render.models;
 
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ModelPotatoCannonTurret extends ModelAbstractTurret {
     // fields
     public final ModelRenderer Base;

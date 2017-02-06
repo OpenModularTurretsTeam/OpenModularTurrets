@@ -15,7 +15,7 @@ import java.awt.*;
  * This Class
  */
 @MethodsReturnNonnullByDefault
-public class AdvancedGuiHandlerOMT implements IAdvancedGuiHandler<BlockingAbstractGui> {
+class AdvancedGuiHandlerOMT implements IAdvancedGuiHandler<BlockingAbstractGui> {
     @Override
     public Class<BlockingAbstractGui> getGuiContainerClass() {
         return BlockingAbstractGui.class;
