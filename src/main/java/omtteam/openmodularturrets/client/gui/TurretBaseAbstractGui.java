@@ -3,11 +3,11 @@ package omtteam.openmodularturrets.client.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.EnumFacing;
+import omtteam.omlib.client.gui.BlockingAbstractGui;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
@@ -25,13 +25,12 @@ import java.util.ArrayList;
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
-
 /**
  * Created by nico on 6/4/15.
  * Abstract class for all turret base GUIs.
  */
 
-public class TurretBaseAbstractGui extends GuiContainer {
+public class TurretBaseAbstractGui extends BlockingAbstractGui {
     int mouseX;
     int mouseY;
     private final EntityPlayer player;

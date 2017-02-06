@@ -4,7 +4,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import mezz.jei.api.gui.IAdvancedGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.openmodularturrets.client.gui.TurretBaseAbstractGui;
+import omtteam.omlib.client.gui.BlockingAbstractGui;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -15,24 +15,24 @@ import java.awt.*;
  * This Class
  */
 @MethodsReturnNonnullByDefault
-public class AdvancedGuiHandlerOMT implements IAdvancedGuiHandler<TurretBaseAbstractGui> {
+public class AdvancedGuiHandlerOMT implements IAdvancedGuiHandler<BlockingAbstractGui> {
     @Override
-    public Class<TurretBaseAbstractGui> getGuiContainerClass() {
-        return TurretBaseAbstractGui.class;
+    public Class<BlockingAbstractGui> getGuiContainerClass() {
+        return BlockingAbstractGui.class;
     }
 
     @Nullable
     @Override
     @ParametersAreNonnullByDefault
     @SideOnly(Side.CLIENT)
-    public java.util.List<Rectangle> getGuiExtraAreas(TurretBaseAbstractGui guiContainer) {
+    public java.util.List<Rectangle> getGuiExtraAreas(BlockingAbstractGui guiContainer) {
         return guiContainer.getBlockingAreas();
     }
 
     @Nullable
     @Override
     @ParametersAreNonnullByDefault
-    public Object getIngredientUnderMouse(TurretBaseAbstractGui guiContainer, int mouseX, int mouseY) {
+    public Object getIngredientUnderMouse(BlockingAbstractGui guiContainer, int mouseX, int mouseY) {
         return null;
     }
 }
