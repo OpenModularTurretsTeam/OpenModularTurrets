@@ -21,7 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @SideOnly(Side.CLIENT)
 class RocketRenderer extends Render {
 
-    private ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/rocket.png"));
+    private final ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/rocket.png"));
 
     public RocketRenderer() {
         super(Minecraft.getMinecraft().getRenderManager());

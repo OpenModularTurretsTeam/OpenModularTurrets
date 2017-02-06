@@ -13,6 +13,8 @@ import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.IModelState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.render.CamoBakedModel;
 import omtteam.openmodularturrets.reference.Reference;
 
@@ -29,6 +31,8 @@ import static omtteam.openmodularturrets.blocks.BlockTurretBase.TIER;
  * Created by Keridos on 29/01/17.
  * This Class
  */
+
+@SideOnly(Side.CLIENT)
 public class TurretBaseBakedModel extends CamoBakedModel {
     public static final ResourceLocation FAKE_LOCATION = new ResourceLocation("openmodularturrets", "models/block/custom/turret_base");
 

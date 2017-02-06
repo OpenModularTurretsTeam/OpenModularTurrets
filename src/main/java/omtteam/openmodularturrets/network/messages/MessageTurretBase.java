@@ -35,12 +35,15 @@ public class MessageTurretBase implements IMessage {
     public MessageTurretBase() {
     }
 
+
     public static class MessageHandlerTurretBase implements IMessageHandler<MessageTurretBase, IMessage> {
         @Override
         @SideOnly(Side.CLIENT)
+        @SuppressWarnings("deprecation")
         public IMessage onMessage(MessageTurretBase messageIn, MessageContext ctx) {
             final MessageTurretBase message = messageIn;
             Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+                @SuppressWarnings("deprecation")
                 @Override
                 public void run() {
 
