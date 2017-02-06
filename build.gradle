@@ -160,6 +160,7 @@ publishing {
             artifactId config.mod_id
             artifact jar
             artifact sourceJar
+            artifact deobfJar
         }
     }
     repositories {
