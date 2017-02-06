@@ -30,8 +30,8 @@ public class ConfigHandler {
     public static boolean useWhitelistForAmmo;
     private static List<String> stringAmmoAllowList;
     private static List<String> stringMobBlackList;
-    public static List<ItemStack> disposableAmmoList = new ArrayList<>();
-    public static List<String> validMobBlacklist = new ArrayList<>();
+    public static final List<ItemStack> disposableAmmoList = new ArrayList<>();
+    public static final List<String> validMobBlacklist = new ArrayList<>();
     private static int expanderPowerTierOneCapacity;
     private static int expanderPowerTierTwoCapacity;
     private static int expanderPowerTierThreeCapacity;

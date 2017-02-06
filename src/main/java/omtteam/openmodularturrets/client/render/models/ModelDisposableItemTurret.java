@@ -1,7 +1,10 @@
 package omtteam.openmodularturrets.client.render.models;
 
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ModelDisposableItemTurret extends ModelAbstractTurret {
     public final ModelRenderer Base;
     public final ModelRenderer Pole;

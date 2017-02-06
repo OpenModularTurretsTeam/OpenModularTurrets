@@ -5,12 +5,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.openmodularturrets.entity.projectiles.*;
 import omtteam.openmodularturrets.init.ModItems;
 
 @SuppressWarnings("deprecation")
 public class ProjectileRenderers {
     @SuppressWarnings("unchecked")
+    @SideOnly(Side.CLIENT)
     public static void init() {
         RenderingRegistry.registerEntityRenderingHandler(DisposableTurretProjectile.class, new ItemProjectileRenderer(Minecraft.getMinecraft().getRenderManager(), Minecraft.getMinecraft().getRenderItem()));
         RenderingRegistry.registerEntityRenderingHandler(RocketProjectile.class, new RocketRenderer());

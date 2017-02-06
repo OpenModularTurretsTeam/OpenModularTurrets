@@ -3,8 +3,8 @@ package omtteam.openmodularturrets.client.gui.customSlot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import omtteam.openmodularturrets.handler.ConfigHandler;
-import omtteam.openmodularturrets.items.AmmoMetaItem;
+
+import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 
 public class AmmoSlot extends Slot {
     @SuppressWarnings("SameParameterValue")
@@ -13,15 +13,8 @@ public class AmmoSlot extends Slot {
     }
 
     @Override
-    public boolean isItemValid(ItemStack par1ItemStack) {
-        if (!ConfigHandler.useWhitelistForAmmo) return true;
-        for (ItemStack itemStack : ConfigHandler.disposableAmmoList) {
-            if (itemStack.getItem() == par1ItemStack.getItem() && (itemStack.stackSize == 2 ||
-                    itemStack.getItemDamage() == par1ItemStack.getItemDamage())) {
-                return true;
-            }
-        }
-        return par1ItemStack.getItem() instanceof AmmoMetaItem;
+    public boolean isItemValid(ItemStack itemStack) {
+        return isItemStackValidAmmo(itemStack);
     }
 
     @Override
