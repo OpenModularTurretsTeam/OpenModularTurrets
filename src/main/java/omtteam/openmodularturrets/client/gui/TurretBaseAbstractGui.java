@@ -31,8 +31,8 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
  */
 
 public class TurretBaseAbstractGui extends BlockingAbstractGui {
-    int mouseX;
-    int mouseY;
+    private int mouseX;
+    private int mouseY;
     private final EntityPlayer player;
     final TurretBase base;
 
@@ -189,6 +189,7 @@ public class TurretBaseAbstractGui extends BlockingAbstractGui {
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
+    @Override
     public ArrayList<Rectangle> getBlockingAreas() {
         ArrayList<Rectangle> list = new ArrayList<>();
         Rectangle rectangleGUI = new Rectangle(0, 0, 0, 0);
