@@ -19,7 +19,8 @@ public class ModCompatibility {
     public static boolean OpenComputersLoaded = false;
     public static boolean ComputerCraftLoaded = false;
     public static boolean ValkyrienWarfareLoaded = false;
-
+    @SuppressWarnings("unused")
+    public static IGWHandler igwHandler = null;
 
     public static void checkForMods() {
         ThermalExpansionLoaded = Loader.isModLoaded("ThermalExpansion");

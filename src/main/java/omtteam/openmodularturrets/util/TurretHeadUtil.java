@@ -13,7 +13,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
@@ -23,7 +26,7 @@ import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.omlib.util.compat.MathTools;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
-//import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
+import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.Expander;
@@ -37,6 +40,7 @@ import java.util.UUID;
 
 import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
+
 
 public class TurretHeadUtil {
     private static final HashSet<EntityPlayerMP> warnedPlayers = new HashSet<>();
@@ -74,7 +78,7 @@ public class TurretHeadUtil {
             player.playSound(ModSounds.turretWarnSound, 1.0F, 1.0F);
         }
         if (ConfigHandler.turretWarnMessage) {
-            addChatMessage(player,new TextComponentString(
+            addChatMessage(player, new TextComponentString(
                     TextFormatting.DARK_RED + I18n.translateToLocal("status.warning")));
         }
     }
@@ -392,13 +396,13 @@ public class TurretHeadUtil {
     public static float getAimYaw(Entity target, BlockPos pos) {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
 
-        /*if (ModCompatibility.ValkyrienWarfareLoaded) {
+        if (ModCompatibility.ValkyrienWarfareLoaded) {
             Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(target.getEntityWorld(), pos);
             //We're in Ship space, convert target coords to local coords
             if (shipEntity != null) {
                 targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
             }
-        }*/
+        }
 
         double dX = (targetPos.xCoord) - (pos.getX());
         double dZ = (targetPos.zCoord) - (pos.getZ());
@@ -410,13 +414,13 @@ public class TurretHeadUtil {
     public static float getAimPitch(Entity target, BlockPos pos) {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
 
-        /*if (ModCompatibility.ValkyrienWarfareLoaded) {
+        if (ModCompatibility.ValkyrienWarfareLoaded) {
             Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(target.getEntityWorld(), pos);
             //We're in Ship space, convert target coords to local coords
             if (shipEntity != null) {
                 targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
             }
-        }*/
+        }
 
 
         double dX = (targetPos.xCoord - 0.2F) - (pos.getX() + 0.6F);
@@ -777,13 +781,13 @@ public class TurretHeadUtil {
     public static boolean canTurretSeeTarget(TurretHead turret, EntityLivingBase target) {
         Vec3d traceStart = new Vec3d(turret.getPos().getX() + 0.5F, turret.getPos().getY() + 0.5F, turret.getPos().getZ() + 0.5F);
 
-//        if (ModCompatibility.ValkyrienWarfareLoaded) {
-//            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(turret.getWorld(), turret.getPos());
-//            //Then the turret must be in Ship Space
-//            if (shipEntity != null) {
-//                traceStart = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, traceStart);
-//            }
-//        }
+        if (ModCompatibility.ValkyrienWarfareLoaded) {
+            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(turret.getWorld(), turret.getPos());
+            //Then the turret must be in Ship Space
+            if (shipEntity != null) {
+                traceStart = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, traceStart);
+            }
+        }
 
 
         Vec3d traceEnd = new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ);

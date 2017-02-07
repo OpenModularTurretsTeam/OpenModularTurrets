@@ -14,8 +14,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 public abstract class TurretProjectile extends EntityThrowable {
     public float gravity;
-    boolean isAmped;
-    int amp_level;
+    public boolean isAmped;
+    public int amp_level;
     ItemStack ammo;
     private TurretBase turretBase;
 
