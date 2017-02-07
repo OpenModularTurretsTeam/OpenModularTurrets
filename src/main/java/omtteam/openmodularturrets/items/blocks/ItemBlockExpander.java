@@ -4,10 +4,10 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
+import omtteam.omlib.compatability.minecraft.CompatItemBlock;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
@@ -22,7 +22,7 @@ import java.util.List;
  * This Class
  */
 @SuppressWarnings("deprecation")
-public class ItemBlockExpander extends ItemBlock {
+public class ItemBlockExpander extends CompatItemBlock {
     public ItemBlockExpander(Block block) {
         super(block);
         setHasSubtypes(true);
@@ -38,7 +38,7 @@ public class ItemBlockExpander extends ItemBlock {
 
     @Override
     @ParametersAreNonnullByDefault
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void clGetSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         for (int i = 0; i < 15; i++) {
             subItems.add(new ItemStack(ModItems.intermediateProductTiered, 1, i));
         }

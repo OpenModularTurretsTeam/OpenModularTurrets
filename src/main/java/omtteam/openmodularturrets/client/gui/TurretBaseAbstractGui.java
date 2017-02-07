@@ -103,7 +103,7 @@ public class TurretBaseAbstractGui extends BlockingAbstractGui {
         }
 
         if (guibutton.id == 5) {
-            player.openGui(OpenModularTurrets.instance, 6, player.worldObj, base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
+            player.openGui(OpenModularTurrets.instance, 6, player.getEntityWorld(), base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
         }
 
         if (guibutton.id == 6) {

@@ -18,11 +18,12 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import omtteam.omlib.util.ItemStackUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
+import omtteam.omlib.util.compat.ItemStackTools;
+import omtteam.omlib.util.compat.MathTools;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
-import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
+//import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.Expander;
@@ -34,7 +35,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import static omtteam.omlib.util.ChatUtil.addChatMessage;
+import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
+import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
 
 public class TurretHeadUtil {
     private static final HashSet<EntityPlayerMP> warnedPlayers = new HashSet<>();
@@ -316,7 +318,7 @@ public class TurretHeadUtil {
                 }
             }
         }
-        return ItemStackUtil.getEmptyStack();
+        return ItemStackTools.getEmptyStack();
     }
 
     public static ItemStack getSpecificItemFromInvExpanders(World world, ItemStack itemStack, TurretBase base) {
@@ -324,12 +326,12 @@ public class TurretHeadUtil {
             if (tileEntity instanceof Expander && !((Expander) tileEntity).isPowerExpander()) {
                 Expander exp = (Expander) tileEntity;
                 ItemStack stack = deductFromInvExpander(itemStack, exp, base);
-                if (stack != ItemStackUtil.getEmptyStack()) {
+                if (stack != ItemStackTools.getEmptyStack()) {
                     return stack;
                 }
             }
         }
-        return ItemStackUtil.getEmptyStack();
+        return ItemStackTools.getEmptyStack();
     }
 
     public static ItemStack getAnyItemFromInvExpanders(World world, TurretBase base) {
@@ -338,14 +340,14 @@ public class TurretHeadUtil {
                 Expander exp = (Expander) tileEntity;
                 for (int i = 0; i < exp.getSizeInventory(); i++) {
                     ItemStack itemCheck = exp.getStackInSlot(i);
-                    if (itemCheck != ItemStackUtil.getEmptyStack()) {
+                    if (itemCheck != ItemStackTools.getEmptyStack()) {
                         exp.decrStackSize(i, 1);
                         return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
                     }
                 }
             }
         }
-        return ItemStackUtil.getEmptyStack();
+        return ItemStackTools.getEmptyStack();
     }
 
     private static int getPowerExtenderCapacityValue(Expander expander) {
@@ -390,13 +392,13 @@ public class TurretHeadUtil {
     public static float getAimYaw(Entity target, BlockPos pos) {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
 
-        if (ModCompatibility.ValkyrienWarfareLoaded) {
-            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(target.worldObj, pos);
+        /*if (ModCompatibility.ValkyrienWarfareLoaded) {
+            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(target.getEntityWorld(), pos);
             //We're in Ship space, convert target coords to local coords
             if (shipEntity != null) {
                 targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
             }
-        }
+        }*/
 
         double dX = (targetPos.xCoord) - (pos.getX());
         double dZ = (targetPos.zCoord) - (pos.getZ());
@@ -408,13 +410,13 @@ public class TurretHeadUtil {
     public static float getAimPitch(Entity target, BlockPos pos) {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
 
-        if (ModCompatibility.ValkyrienWarfareLoaded) {
-            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(target.worldObj, pos);
+        /*if (ModCompatibility.ValkyrienWarfareLoaded) {
+            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(target.getEntityWorld(), pos);
             //We're in Ship space, convert target coords to local coords
             if (shipEntity != null) {
                 targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
             }
-        }
+        }*/
 
 
         double dX = (targetPos.xCoord - 0.2F) - (pos.getX() + 0.6F);
@@ -428,7 +430,7 @@ public class TurretHeadUtil {
     public static ItemStack useAnyItemStackFromBase(TurretBase base) {
         for (int i = 0; i <= 8; i++) {
             ItemStack itemCheck = base.getStackInSlot(i);
-            if (itemCheck != ItemStackUtil.getEmptyStack() && itemCheck.stackSize > 0) {
+            if (itemCheck != ItemStackTools.getEmptyStack() && getStackSize(itemCheck) > 0) {
                 base.decrStackSize(i, 1);
                 return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
             }
@@ -440,7 +442,7 @@ public class TurretHeadUtil {
         for (int i = 0; i <= 8; i++) {
             ItemStack ammo_stack = base.getStackInSlot(i);
 
-            if (ammo_stack != ItemStackUtil.getEmptyStack() && ItemStackUtil.getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == stack.getItem()) {
+            if (ammo_stack != ItemStackTools.getEmptyStack() && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == stack.getItem()) {
                 base.decrStackSize(i, 1);
                 return new ItemStack(ammo_stack.getItem());
             }
@@ -453,7 +455,7 @@ public class TurretHeadUtil {
         for (int i = 0; i <= 8; i++) {
             ItemStack ammo_stack = base.getStackInSlot(i);
 
-            if (ammo_stack != ItemStackUtil.getEmptyStack() && ItemStackUtil.getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == ammoStackRequired.getItem()
+            if (ammo_stack != ItemStackTools.getEmptyStack() && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == ammoStackRequired.getItem()
                     && ammo_stack.getMetadata() == ammoStackRequired.getMetadata()) {
                 if (hasRecyclerAddon(base)) {
                     int chance = new Random().nextInt(99);
@@ -489,16 +491,16 @@ public class TurretHeadUtil {
         }
 
         if (tier == 5) {
-            if (base.getStackInSlot(12) != ItemStackUtil.getEmptyStack()) {
+            if (base.getStackInSlot(12) != ItemStackTools.getEmptyStack()) {
                 if (base.getStackInSlot(12).getItemDamage() == 3) {
-                    value += (ConfigHandler.getRangeUpgradeBoost() * base.getStackInSlot(12).stackSize);
+                    value += (ConfigHandler.getRangeUpgradeBoost() * getStackSize(base.getStackInSlot(12)));
                 }
             }
         }
 
-        if (base.getStackInSlot(11) != ItemStackUtil.getEmptyStack()) {
+        if (base.getStackInSlot(11) != ItemStackTools.getEmptyStack()) {
             if (base.getStackInSlot(11).getItemDamage() == 3) {
-                value += (ConfigHandler.getRangeUpgradeBoost() * base.getStackInSlot(11).stackSize);
+                value += (ConfigHandler.getRangeUpgradeBoost() * getStackSize(base.getStackInSlot(11)));
             }
         }
 
@@ -515,16 +517,16 @@ public class TurretHeadUtil {
         }
 
         if (tier == 5) {
-            if (base.getStackInSlot(12) != ItemStackUtil.getEmptyStack()) {
+            if (base.getStackInSlot(12) != ItemStackTools.getEmptyStack()) {
                 if (base.getStackInSlot(12).getItemDamage() == 4) {
-                    value += base.getStackInSlot(12).stackSize;
+                    value += getStackSize(base.getStackInSlot(12));
                 }
             }
         }
 
-        if (base.getStackInSlot(11) != ItemStackUtil.getEmptyStack()) {
+        if (base.getStackInSlot(11) != ItemStackTools.getEmptyStack()) {
             if (base.getStackInSlot(11).getItemDamage() == 4) {
-                value += base.getStackInSlot(11).stackSize;
+                value += getStackSize(base.getStackInSlot(11));
             }
         }
 
@@ -541,16 +543,16 @@ public class TurretHeadUtil {
         }
 
         if (tier == 5) {
-            if (base.getStackInSlot(12) != ItemStackUtil.getEmptyStack()) {
+            if (base.getStackInSlot(12) != ItemStackTools.getEmptyStack()) {
                 if (base.getStackInSlot(12).getItemDamage() == 0) {
-                    accuracy += (ConfigHandler.getAccuracyUpgradeBoost() * base.getStackInSlot(12).stackSize);
+                    accuracy += (ConfigHandler.getAccuracyUpgradeBoost() * getStackSize(base.getStackInSlot(12)));
                 }
             }
         }
 
-        if (base.getStackInSlot(11) != ItemStackUtil.getEmptyStack()) {
+        if (base.getStackInSlot(11) != ItemStackTools.getEmptyStack()) {
             if (base.getStackInSlot(11).getItemDamage() == 0) {
-                accuracy += (ConfigHandler.getAccuracyUpgradeBoost() * base.getStackInSlot(11).stackSize);
+                accuracy += (ConfigHandler.getAccuracyUpgradeBoost() * getStackSize(base.getStackInSlot(11)));
             }
         }
 
@@ -567,16 +569,16 @@ public class TurretHeadUtil {
         }
 
         if (tier == 5) {
-            if (base.getStackInSlot(12) != ItemStackUtil.getEmptyStack()) {
+            if (base.getStackInSlot(12) != ItemStackTools.getEmptyStack()) {
                 if (base.getStackInSlot(12).getItemDamage() == 1) {
-                    efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * base.getStackInSlot(12).stackSize);
+                    efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(12)));
                 }
             }
         }
 
-        if (base.getStackInSlot(11) != ItemStackUtil.getEmptyStack()) {
+        if (base.getStackInSlot(11) != ItemStackTools.getEmptyStack()) {
             if (base.getStackInSlot(11).getItemDamage() == 1) {
-                efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * base.getStackInSlot(11).stackSize);
+                efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(11)));
             }
         }
 
@@ -593,16 +595,16 @@ public class TurretHeadUtil {
         }
 
         if (tier == 5) {
-            if (base.getStackInSlot(12) != ItemStackUtil.getEmptyStack()) {
+            if (base.getStackInSlot(12) != ItemStackTools.getEmptyStack()) {
                 if (base.getStackInSlot(12).getItemDamage() == 2) {
-                    rof += (ConfigHandler.getFireRateUpgradeBoostPercentage() * base.getStackInSlot(12).stackSize);
+                    rof += (ConfigHandler.getFireRateUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(12)));
                 }
             }
         }
 
-        if (base.getStackInSlot(11) != ItemStackUtil.getEmptyStack()) {
+        if (base.getStackInSlot(11) != ItemStackTools.getEmptyStack()) {
             if (base.getStackInSlot(11).getItemDamage() == 2) {
-                rof += (ConfigHandler.getFireRateUpgradeBoostPercentage() * base.getStackInSlot(11).stackSize);
+                rof += (ConfigHandler.getFireRateUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(11)));
             }
         }
 
@@ -616,11 +618,11 @@ public class TurretHeadUtil {
             return false;
         }
 
-        if (base.getStackInSlot(9) != ItemStackUtil.getEmptyStack()) {
+        if (base.getStackInSlot(9) != ItemStackTools.getEmptyStack()) {
             found = base.getStackInSlot(9).getItemDamage() == 4;
         }
 
-        if (base.getStackInSlot(10) != ItemStackUtil.getEmptyStack() && !found) {
+        if (base.getStackInSlot(10) != ItemStackTools.getEmptyStack() && !found) {
             found = base.getStackInSlot(10).getItemDamage() == 4;
         }
         return found;
@@ -633,11 +635,11 @@ public class TurretHeadUtil {
             return false;
         }
 
-        if (base.getStackInSlot(9) != ItemStackUtil.getEmptyStack()) {
+        if (base.getStackInSlot(9) != ItemStackTools.getEmptyStack()) {
             found = base.getStackInSlot(9).getItemDamage() == 1;
         }
 
-        if (base.getStackInSlot(10) != ItemStackUtil.getEmptyStack() && !found) {
+        if (base.getStackInSlot(10) != ItemStackTools.getEmptyStack() && !found) {
             found = base.getStackInSlot(10).getItemDamage() == 1;
         }
         return found;
@@ -650,11 +652,11 @@ public class TurretHeadUtil {
             return false;
         }
 
-        if (base.getStackInSlot(9) != ItemStackUtil.getEmptyStack()) {
+        if (base.getStackInSlot(9) != ItemStackTools.getEmptyStack()) {
             found = base.getStackInSlot(9).getItemDamage() == 0;
         }
 
-        if (base.getStackInSlot(10) != ItemStackUtil.getEmptyStack() && !found) {
+        if (base.getStackInSlot(10) != ItemStackTools.getEmptyStack() && !found) {
             found = base.getStackInSlot(10).getItemDamage() == 0;
         }
         return found;
@@ -667,11 +669,11 @@ public class TurretHeadUtil {
             return false;
         }
 
-        if (base.getStackInSlot(9) != ItemStackUtil.getEmptyStack()) {
+        if (base.getStackInSlot(9) != ItemStackTools.getEmptyStack()) {
             found = base.getStackInSlot(9).getItemDamage() == 6;
         }
 
-        if (base.getStackInSlot(10) != ItemStackUtil.getEmptyStack() && !found) {
+        if (base.getStackInSlot(10) != ItemStackTools.getEmptyStack() && !found) {
             found = base.getStackInSlot(10).getItemDamage() == 6;
         }
         return found;
@@ -687,11 +689,11 @@ public class TurretHeadUtil {
             return false;
         }
 
-        if (base.getStackInSlot(9) != ItemStackUtil.getEmptyStack()) {
+        if (base.getStackInSlot(9) != ItemStackTools.getEmptyStack()) {
             found = base.getStackInSlot(9).getItemDamage() == 2;
         }
 
-        if (base.getStackInSlot(10) != ItemStackUtil.getEmptyStack() && !found) {
+        if (base.getStackInSlot(10) != ItemStackTools.getEmptyStack() && !found) {
             found = base.getStackInSlot(10).getItemDamage() == 2;
         }
         return found;
@@ -707,11 +709,11 @@ public class TurretHeadUtil {
             return false;
         }
 
-        if (base.getStackInSlot(9) != ItemStackUtil.getEmptyStack()) {
+        if (base.getStackInSlot(9) != ItemStackTools.getEmptyStack()) {
             found = base.getStackInSlot(9).getItemDamage() == 5;
         }
 
-        if (base.getStackInSlot(10) != ItemStackUtil.getEmptyStack() && !found) {
+        if (base.getStackInSlot(10) != ItemStackTools.getEmptyStack() && !found) {
             found = base.getStackInSlot(10).getItemDamage() == 5;
         }
         return found;
@@ -723,11 +725,11 @@ public class TurretHeadUtil {
         if (base.getTier() == 1) {
             return false;
         }
-        if (base.getStackInSlot(9) != ItemStackUtil.getEmptyStack()) {
+        if (base.getStackInSlot(9) != ItemStackTools.getEmptyStack()) {
             found = base.getStackInSlot(9).getItemDamage() == 3;
         }
 
-        if (base.getStackInSlot(10) != ItemStackUtil.getEmptyStack() && !found) {
+        if (base.getStackInSlot(10) != ItemStackTools.getEmptyStack() && !found) {
             found = base.getStackInSlot(10).getItemDamage() == 3;
         }
         return found;
@@ -747,15 +749,15 @@ public class TurretHeadUtil {
             return amp_level;
         }
 
-        if (base.getStackInSlot(9) != ItemStackUtil.getEmptyStack()) {
+        if (base.getStackInSlot(9) != ItemStackTools.getEmptyStack()) {
             if (base.getStackInSlot(9).getItemDamage() == 1) {
-                amp_level += base.getStackInSlot(9).stackSize;
+                amp_level += getStackSize(base.getStackInSlot(9));
             }
         }
 
-        if (base.getStackInSlot(10) != ItemStackUtil.getEmptyStack()) {
+        if (base.getStackInSlot(10) != ItemStackTools.getEmptyStack()) {
             if (base.getStackInSlot(10).getItemDamage() == 1) {
-                amp_level += base.getStackInSlot(10).stackSize;
+                amp_level += getStackSize(base.getStackInSlot(10));
             }
         }
 
@@ -775,13 +777,13 @@ public class TurretHeadUtil {
     public static boolean canTurretSeeTarget(TurretHead turret, EntityLivingBase target) {
         Vec3d traceStart = new Vec3d(turret.getPos().getX() + 0.5F, turret.getPos().getY() + 0.5F, turret.getPos().getZ() + 0.5F);
 
-        if (ModCompatibility.ValkyrienWarfareLoaded) {
-            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(turret.getWorld(), turret.getPos());
-            //Then the turret must be in Ship Space
-            if (shipEntity != null) {
-                traceStart = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, traceStart);
-            }
-        }
+//        if (ModCompatibility.ValkyrienWarfareLoaded) {
+//            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(turret.getWorld(), turret.getPos());
+//            //Then the turret must be in Ship Space
+//            if (shipEntity != null) {
+//                traceStart = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, traceStart);
+//            }
+//        }
 
 
         Vec3d traceEnd = new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ);
@@ -804,8 +806,8 @@ public class TurretHeadUtil {
 
                 // If non solid block is in the way then proceed to continue
                 // tracing
-                if ((traced.getBlockPos().equals(turret.getPos())) || (!hitBlock.getMaterial().isSolid() && MathHelper.abs_max(
-                        MathHelper.abs_max(traceStart.xCoord - traceEnd.xCoord, traceStart.yCoord - traceEnd.yCoord),
+                if ((traced.getBlockPos().equals(turret.getPos())) || (!hitBlock.getMaterial().isSolid() && MathTools.abs_max(
+                        MathTools.abs_max(traceStart.xCoord - traceEnd.xCoord, traceStart.yCoord - traceEnd.yCoord),
                         traceStart.zCoord - traceEnd.zCoord) > 1)) {
                     // Start at new position and continue
                     traceStart = traced.hitVec;

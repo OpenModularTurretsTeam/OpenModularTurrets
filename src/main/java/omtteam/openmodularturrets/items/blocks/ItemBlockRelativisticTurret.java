@@ -2,10 +2,10 @@ package omtteam.openmodularturrets.items.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
+import omtteam.omlib.compatability.minecraft.CompatItemBlock;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class ItemBlockRelativisticTurret extends ItemBlock {
+public class ItemBlockRelativisticTurret extends CompatItemBlock {
     private static final DecimalFormat df = new DecimalFormat("0.0");
 
     public ItemBlockRelativisticTurret(Block block) {

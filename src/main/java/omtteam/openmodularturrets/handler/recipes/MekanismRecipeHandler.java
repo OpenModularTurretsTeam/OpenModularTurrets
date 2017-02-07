@@ -1,17 +1,7 @@
 package omtteam.openmodularturrets.handler.recipes;
 
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import omtteam.openmodularturrets.handler.ConfigHandler;
-import omtteam.openmodularturrets.init.ModBlocks;
-import omtteam.openmodularturrets.init.ModItems;
-
-import static omtteam.openmodularturrets.handler.recipes.RecipeHandler.*;
 
 @SuppressWarnings("deprecation")
 class MekanismRecipeHandler {
@@ -27,6 +17,7 @@ class MekanismRecipeHandler {
 
 
 		/* ModItems */
+        /*
         ironEnriched = new ItemStack(GameRegistry.findItem(Mek, "EnrichedIron"), 1);
         alloyEnriched = new ItemStack(GameRegistry.findItem(Mek, "EnrichedAlloy"), 1);
         alloyReinforced = new ItemStack(GameRegistry.findItem(Mek, "ReinforcedAlloy"), 1);
@@ -226,6 +217,6 @@ class MekanismRecipeHandler {
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(ammoFerroSlug, " C ", "CBC", " A ", 'A', alloyEnriched, 'B',
-                        Items.FLINT, 'C', Items.REDSTONE));
+                        Items.FLINT, 'C', Items.REDSTONE));   */
     }
 }

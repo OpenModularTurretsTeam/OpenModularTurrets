@@ -47,7 +47,7 @@ public class RocketProjectile extends TurretProjectile {
         if (ticksExisted >= 100) {
             this.setDead();
         }
-        if (!worldObj.isRemote) {
+        if (!getEntityWorld().isRemote) {
             if (ConfigHandler.canRocketsHome && target != null) {
                 double d0 = target.posX - this.posX;
                 double d1 = target.posY + (double) target.getEyeHeight() - 1.1F - this.posY;
@@ -62,7 +62,7 @@ public class RocketProjectile extends TurretProjectile {
 
         for (int i = 0; i <= 20; i++) {
             Random random = new Random();
-            worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX + (random.nextGaussian() / 10), posY + (random.nextGaussian() / 10),
+            getEntityWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX + (random.nextGaussian() / 10), posY + (random.nextGaussian() / 10),
                     posZ + (random.nextGaussian() / 10), (0), (0), (0));
         }
     }
@@ -71,7 +71,7 @@ public class RocketProjectile extends TurretProjectile {
     @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult movingobjectposition) {
         if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
-            IBlockState hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos());
+            IBlockState hitBlock = getEntityWorld().getBlockState(movingobjectposition.getBlockPos());
 
             if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
                 return;
@@ -83,12 +83,12 @@ public class RocketProjectile extends TurretProjectile {
             }
         }
 
-        if (!worldObj.isRemote) {
+        if (!getEntityWorld().isRemote) {
             float strength = ConfigHandler.canRocketsDestroyBlocks ? 2.3F : 0.1F;
-            worldObj.createExplosion(null, posX, posY, posZ, strength, true);
+            getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
                     this.posX + 5, this.posY + 5, this.posZ + 5);
-            List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
+            List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (Entity mob : targets) {
 

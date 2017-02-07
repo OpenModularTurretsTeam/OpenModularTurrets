@@ -1,7 +1,5 @@
 package omtteam.openmodularturrets.handler;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import omtteam.openmodularturrets.OpenModularTurrets;
@@ -10,9 +8,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static omtteam.omlib.util.GeneralUtil.getItem;
+import static omtteam.omlib.util.compat.EntityTools.findClassById;
 
 public class ConfigHandler {
     public static boolean turretAlarmSound;
@@ -562,11 +560,8 @@ public class ConfigHandler {
         try {
             if (stringMobBlackList.isEmpty()) return;
             for (String itemListEntry : stringMobBlackList) {
-                for (Map.Entry<Class<? extends Entity>, String> entry : EntityList.CLASS_TO_NAME.entrySet()) {
-                    if (itemListEntry.contains(entry.getValue())) {
-                        validMobBlacklist.add(entry.getValue());
-                        break;
-                    }
+                if (findClassById(itemListEntry) != null) {
+                    validMobBlacklist.add(itemListEntry);
                 }
             }
         } catch (Exception e) {

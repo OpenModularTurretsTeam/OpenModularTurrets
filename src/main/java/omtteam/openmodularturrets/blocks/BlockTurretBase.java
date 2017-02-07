@@ -45,7 +45,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
-import static omtteam.omlib.util.ChatUtil.addChatMessage;
+import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 
 @SuppressWarnings("deprecation")
 public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHasItemBlock {
@@ -266,7 +266,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
-    public void getSubBlocks(Item item, CreativeTabs tab, List subItems) {
+    public void clGetSubBlocks(Item item, CreativeTabs tab, List subItems) {
         for (int i = 0; i < 5; i++) {
             subItems.add(new ItemStack(ModBlocks.turretBase, 1, i));
         }

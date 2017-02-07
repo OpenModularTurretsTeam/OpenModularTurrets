@@ -41,7 +41,7 @@ public class FerroSlugProjectile extends TurretProjectile {
     protected void onImpact(RayTraceResult movingobjectposition) {
 
         if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
-            IBlockState hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos());
+            IBlockState hitBlock = getEntityWorld().getBlockState(movingobjectposition.getBlockPos());
 
             if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
                 return;
@@ -51,13 +51,13 @@ public class FerroSlugProjectile extends TurretProjectile {
                 // Go through non solid block
                 return;
             } else if (ConfigHandler.canRailgunDestroyBlocks){
-                worldObj.destroyBlock(movingobjectposition.getBlockPos(),false);
+                getEntityWorld().destroyBlock(movingobjectposition.getBlockPos(), false);
             }
         }
 
-        if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
+        if (movingobjectposition.entityHit != null && !getEntityWorld().isRemote) {
             if (movingobjectposition.typeOfHit.equals(RayTraceResult.Type.MISS)) {
-                if (worldObj.isAirBlock(movingobjectposition.getBlockPos())) {
+                if (getEntityWorld().isAirBlock(movingobjectposition.getBlockPos())) {
                     return;
                 }
             }
@@ -72,7 +72,7 @@ public class FerroSlugProjectile extends TurretProjectile {
             }
 
             Random random = new Random();
-            worldObj.playSound(null, new BlockPos(posX, posY, posZ), ModSounds.railGunHitSound, SoundCategory.AMBIENT,
+            getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.railGunHitSound, SoundCategory.AMBIENT,
                     ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
 
             if (movingobjectposition.entityHit instanceof EntityPlayer) {
