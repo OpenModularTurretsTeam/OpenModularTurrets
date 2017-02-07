@@ -14,6 +14,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import static omtteam.omlib.util.GeneralUtil.safeLocalize;
+
 @SuppressWarnings("deprecation")
 public class ItemBlockLaserTurret extends CompatItemBlock {
     private static final DecimalFormat df = new DecimalFormat("0.0");
@@ -28,28 +30,28 @@ public class ItemBlockLaserTurret extends CompatItemBlock {
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack itemStack, EntityPlayer player, List tooltip, boolean advanced) {
         tooltip.add("");
-        tooltip.add(TextFormatting.GOLD + "--" + I18n.translateToLocal("tooltip.info") + "--");
-        tooltip.add(I18n.translateToLocal("tooltip.tier") + ": " + TextFormatting.WHITE + "5");
-        tooltip.add(I18n.translateToLocal("tooltip.range") + ": " + TextFormatting.WHITE +
+        tooltip.add(TextFormatting.GOLD + "--" + safeLocalize("tooltip.info") + "--");
+        tooltip.add(safeLocalize("tooltip.tier") + ": " + TextFormatting.WHITE + "5");
+        tooltip.add(safeLocalize("tooltip.range") + ": " + TextFormatting.WHITE +
                 ConfigHandler.getLaserTurretSettings().getRange());
-        tooltip.add(I18n.translateToLocal("tooltip.accuracy") + ": " + TextFormatting.WHITE +
-                I18n.translateToLocal("turret.accuracy.high"));
-        tooltip.add(I18n.translateToLocal("tooltip.ammo") + ": " + TextFormatting.WHITE +
-                I18n.translateToLocal("turret.ammo.4"));
-        tooltip.add(I18n.translateToLocal("tooltip.tier_required") + ": " + TextFormatting.WHITE +
-                I18n.translateToLocal("base.tier.5"));
+        tooltip.add(safeLocalize("tooltip.accuracy") + ": " + TextFormatting.WHITE +
+                safeLocalize("turret.accuracy.high"));
+        tooltip.add(safeLocalize("tooltip.ammo") + ": " + TextFormatting.WHITE +
+                safeLocalize("turret.ammo.4"));
+        tooltip.add(safeLocalize("tooltip.tier_required") + ": " + TextFormatting.WHITE +
+                safeLocalize("base.tier.5"));
         tooltip.add("");
         tooltip.add(
-                TextFormatting.DARK_PURPLE + "--" + I18n.translateToLocal("tooltip.damage.label") + "--");
-        tooltip.add(I18n.translateToLocal("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
+                TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");
+        tooltip.add(safeLocalize("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
                 (ConfigHandler.getLaserTurretSettings().getDamage() / 2F) + " " + I18n.translateToLocal(
                 "tooltip.health"));
-        tooltip.add(I18n.translateToLocal("tooltip.aoe") + ": " + TextFormatting.WHITE + "0");
-        tooltip.add(I18n.translateToLocal("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
+        tooltip.add(safeLocalize("tooltip.aoe") + ": " + TextFormatting.WHITE + "0");
+        tooltip.add(safeLocalize("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
                 20.0F / ConfigHandler.getLaserTurretSettings().getFireRate()));
-        tooltip.add(I18n.translateToLocal("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
+        tooltip.add(safeLocalize("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
                 ConfigHandler.getLaserTurretSettings().getPowerUsage() + " RF");
         tooltip.add("");
-        tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("flavour.turret.4"));
+        tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.turret.4"));
     }
 }

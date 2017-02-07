@@ -19,7 +19,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,8 +39,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
+import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
+import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 
 /**
  * Created by Keridos on 19/07/16.
@@ -136,7 +136,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-    
+
     @Override
     protected boolean clOnBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (hand.equals(EnumHand.OFF_HAND)) return true;
@@ -160,7 +160,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
                 return true;
             }
         } else {
-            addChatMessage(playerIn,new TextComponentString(I18n.translateToLocal("status.ownership")));
+            addChatMessage(playerIn, new TextComponentString(safeLocalize("status.ownership")));
         }
         return true;
     }

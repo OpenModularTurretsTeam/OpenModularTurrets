@@ -170,7 +170,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }
-    
+
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;

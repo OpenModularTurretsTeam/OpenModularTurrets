@@ -30,8 +30,7 @@ public class ValkyrienWarfareHelper {
      */
     public static Vec3d getVec3InWorldSpaceFromShipSpace(Entity shipEntity, Vec3d inShip) {
         PhysicsWrapperEntity physicsWrapper = (PhysicsWrapperEntity) shipEntity;
-        Vec3d inWorld = RotationMatrices.applyTransform(physicsWrapper.wrapping.coordTransform.lToWTransform, inShip);
-        return inWorld;
+        return RotationMatrices.applyTransform(physicsWrapper.wrapping.coordTransform.lToWTransform, inShip);
     }
 
     /**
@@ -43,7 +42,6 @@ public class ValkyrienWarfareHelper {
      */
     public static Vec3d getVec3InShipSpaceFromWorldSpace(Entity shipEntity, Vec3d inWorld) {
         PhysicsWrapperEntity physicsWrapper = (PhysicsWrapperEntity) shipEntity;
-        Vec3d inShip = RotationMatrices.applyTransform(physicsWrapper.wrapping.coordTransform.wToLTransform, inWorld);
-        return inShip;
+        return RotationMatrices.applyTransform(physicsWrapper.wrapping.coordTransform.wToLTransform, inWorld);
     }
 }

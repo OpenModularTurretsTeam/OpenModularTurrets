@@ -92,7 +92,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     }
 
     void setSide() {
-        if (hasSetSide || this.getWorld() == null) {
+        if (hasSetSide) {
             return;
         }
 
@@ -507,7 +507,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
                 projectile.prevRotationPitch = projectile.rotationPitch;
             }
             spawnEntity(this.getWorld(), projectile);
-            ;
         }
         this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
                 ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
