@@ -1,7 +1,17 @@
 package omtteam.openmodularturrets.handler.recipes;
 
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.init.ModBlocks;
+import omtteam.openmodularturrets.init.ModItems;
 
 @SuppressWarnings("deprecation")
 class EnderIORecipeHandler {
@@ -19,21 +29,21 @@ class EnderIORecipeHandler {
         ItemStack soularium;
         
 		/* ModItems */
-        /*
-        Block capBankBlock = GameRegistry.findBlock("EnderIO", "blockCapBank");
+
+        Block capBankBlock = Block.REGISTRY.getObject(new ResourceLocation("EnderIO", "blockCapBank"));
         capacitorBank = new ItemStack(capBankBlock, 1, 2);
         capacitorBankVibrant = new ItemStack(capBankBlock, 1, 3);
         capacitorBankBasic = new ItemStack(capBankBlock, 1, 1);
 
-        Item capacitorItem = GameRegistry.findItem("EnderIO", "itemBasicCapacitor");
+        Item capacitorItem = Item.REGISTRY.getObject(new ResourceLocation("EnderIO", "itemBasicCapacitor"));
         basicCapacitor = new ItemStack(capacitorItem, 1, 0);
         doubleCapacitor = new ItemStack(capacitorItem, 1, 1);
         octadicCapacitor = new ItemStack(capacitorItem, 1, 2);
 
-        Item materialsItem = GameRegistry.findItem("EnderIO", "itemMaterial");
+        Item materialsItem = Item.REGISTRY.getObject(new ResourceLocation("EnderIO", "itemMaterial"));
         vibrantCrystal = new ItemStack(materialsItem, 1, 6);
 
-        Item alloyItem = GameRegistry.findItem("EnderIO", "itemAlloy");
+        Item alloyItem = Item.REGISTRY.getObject(new ResourceLocation("EnderIO", "itemAlloy"));
         electricalSteel = new ItemStack(alloyItem, 1, 0);
         darkSteel = new ItemStack(alloyItem, 1, 6);
         conductiveIron = new ItemStack(alloyItem, 1, 4);
@@ -226,6 +236,6 @@ class EnderIORecipeHandler {
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(RecipeHandler.ammoFerroSlug, " C ", "CBC", " A ", 'A', darkSteel, 'B',
-                        Items.FLINT, 'C', Items.REDSTONE));        */
+                        Items.FLINT, 'C', Items.REDSTONE));
     }
 }
