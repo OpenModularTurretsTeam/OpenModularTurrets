@@ -35,8 +35,6 @@ if (hasProperty('appendBuildNumber')) {
     version = version + "-0"
 }
 
-
-
 group = "${config.group_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${config.mod_id}"
 
@@ -125,8 +123,11 @@ configurations {
 }
 
 def omlib_local = false
-configure(allprojects.findAll {it.name == 'OMLib'}) {
+configure(projects.findAll( {it.name == 'OMLib'})) {
    omlib_local = true
+}
+if (rootProject.name == "OMTControl"){
+    omlib_local = true
 }
 
 dependencies {
