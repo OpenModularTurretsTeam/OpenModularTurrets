@@ -23,14 +23,11 @@ public class MessageToggleAttackPlayers implements IMessage {
         public IMessage onMessage(MessageToggleAttackPlayers messageIn, MessageContext ctxIn) {
             final MessageToggleAttackPlayers message = messageIn;
             final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(new Runnable() {
-                @Override
-                public void run() {
-                    World world = ctx.getServerHandler().playerEntity.getEntityWorld();
-                    TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().playerEntity.getEntityWorld();
+                TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
 
-                    turret.setAttacksPlayers(message.doAttackPlayers());
-                }
+                turret.setAttacksPlayers(message.doAttackPlayers());
             });
             return null;
         }

@@ -24,14 +24,11 @@ public class MessageRemoveTrustedPlayer implements IMessage {
         public IMessage onMessage(MessageRemoveTrustedPlayer messageIn, MessageContext ctxIn) {
             final MessageRemoveTrustedPlayer message = messageIn;
             final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(new Runnable() {
-                @Override
-                public void run() {
-                    World world = ctx.getServerHandler().playerEntity.getEntityWorld();
-                    TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().playerEntity.getEntityWorld();
+                TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
 
-                    turret.removeTrustedPlayer(message.getPlayer());
-                }
+                turret.removeTrustedPlayer(message.getPlayer());
             });
             return null;
         }

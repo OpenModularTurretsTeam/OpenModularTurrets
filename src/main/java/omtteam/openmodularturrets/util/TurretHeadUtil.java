@@ -19,7 +19,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
@@ -38,6 +37,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
 
@@ -79,7 +79,7 @@ public class TurretHeadUtil {
         }
         if (ConfigHandler.turretWarnMessage) {
             addChatMessage(player, new TextComponentString(
-                    TextFormatting.DARK_RED + I18n.translateToLocal("status.warning")));
+                    TextFormatting.DARK_RED + safeLocalize("status.warning")));
         }
     }
 
