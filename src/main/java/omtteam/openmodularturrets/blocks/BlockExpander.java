@@ -40,7 +40,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-import static omtteam.omlib.util.ChatUtil.addChatMessage;
+import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 
 /**
@@ -202,7 +202,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
-    public void getSubBlocks(Item item, CreativeTabs tab, List subItems) {
+    public void clGetSubBlocks(Item item, CreativeTabs tab, List subItems) {
         for (int i = 0; i < 10; i++) {
             subItems.add(new ItemStack(ModBlocks.expander, 1, i));
         }

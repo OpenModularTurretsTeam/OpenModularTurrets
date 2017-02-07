@@ -16,8 +16,6 @@ import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.client.render.models.TurretBaseBakedModel;
 import omtteam.openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
 import omtteam.openmodularturrets.client.render.renderers.projectiles.ProjectileRenderers;
-import omtteam.openmodularturrets.compatability.IGWHandler;
-import omtteam.openmodularturrets.compatability.ModCompatibility;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModTESRItems;
@@ -121,8 +119,5 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void initHandlers() {
         super.initHandlers();
-        if (ModCompatibility.IGWModLoaded) {
-            ModCompatibility.igwHandler = IGWHandler.getInstance();
-        }
     }
 }

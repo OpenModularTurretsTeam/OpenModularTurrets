@@ -14,6 +14,8 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static omtteam.omlib.util.compat.WorldTools.spawnEntity;
+
 public class DisposableTurretProjectile extends TurretProjectile {
     private EntityItem itemBound;
     private boolean spawned = false;
@@ -31,13 +33,13 @@ public class DisposableTurretProjectile extends TurretProjectile {
 
     @Override
     public void onEntityUpdate() {
-        if (!spawned && !this.worldObj.isRemote && ticksExisted >= 2) {
-            itemBound = new EntityItem(this.worldObj, posX, posY, posZ, ammo);
+        if (!spawned && !this.getEntityWorld().isRemote && ticksExisted >= 2) {
+            itemBound = new EntityItem(this.getEntityWorld(), posX, posY, posZ, ammo);
             itemBound.motionX = this.motionX;
             itemBound.motionY = this.motionY + 0.1F;
             itemBound.motionZ = this.motionZ;
             itemBound.setPickupDelay(100);
-            this.worldObj.spawnEntityInWorld(itemBound);
+            spawnEntity(this.getEntityWorld(), itemBound);
             spawned = true;
         }
 
@@ -51,7 +53,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
     protected void onImpact(RayTraceResult movingobjectposition) {
 
         if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
-            IBlockState hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos());
+            IBlockState hitBlock = getEntityWorld().getBlockState(movingobjectposition.getBlockPos());
 
             if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
                 return;
@@ -63,9 +65,9 @@ public class DisposableTurretProjectile extends TurretProjectile {
             }
         }
 
-        if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
+        if (movingobjectposition.entityHit != null && !getEntityWorld().isRemote) {
             if (movingobjectposition.typeOfHit.equals(RayTraceResult.Type.MISS)) {
-                if (worldObj.isAirBlock(movingobjectposition.getBlockPos())) {
+                if (getEntityWorld().isAirBlock(movingobjectposition.getBlockPos())) {
                     return;
                 }
             }

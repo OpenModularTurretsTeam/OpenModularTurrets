@@ -5,12 +5,16 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import omtteam.omlib.compatability.minecraft.CompatSlot;
 import omtteam.openmodularturrets.client.gui.customSlot.AmmoSlot;
 import omtteam.openmodularturrets.tileentity.Expander;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.util.InvUtil.mergeItemStackWithStackLimit;
+import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
+import static omtteam.omlib.util.compat.ItemStackTools.incStackSize;
+import static omtteam.omlib.util.compat.ItemStackTools.setStackSize;
 
 public class ExpanderInvContainer extends Container {
     private final Expander tileEntity;
@@ -38,14 +42,14 @@ public class ExpanderInvContainer extends Container {
     @Override
     @ParametersAreNonnullByDefault
     public boolean canInteractWith(EntityPlayer player) {
-        return tileEntity.isUseableByPlayer(player);
+        return tileEntity.isUsableByPlayer(player);
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int slot) {
         ItemStack itemStack = null;
-        Slot invSlot = this.inventorySlots.get(slot);
+        CompatSlot invSlot = (CompatSlot) this.inventorySlots.get(slot);
 
         if (invSlot != null && invSlot.getHasStack()) {
             ItemStack itemStack1 = invSlot.getStack();
@@ -59,17 +63,17 @@ public class ExpanderInvContainer extends Container {
                 return null;
             }
 
-            if (itemStack1.stackSize == 0) {
+            if (getStackSize(itemStack1) == 0) {
                 invSlot.putStack(null);
             } else {
                 invSlot.onSlotChanged();
             }
 
-            if (itemStack1.stackSize == itemStack.stackSize) {
+            if (getStackSize(itemStack1) == getStackSize(itemStack)) {
                 return null;
             }
 
-            invSlot.onPickupFromSlot(playerIn, itemStack1);
+            invSlot.onPickup(playerIn, itemStack1);
         }
 
         return itemStack;
@@ -79,27 +83,27 @@ public class ExpanderInvContainer extends Container {
     public boolean mergeItemStack(ItemStack stack, int begin, int end, boolean backwards) {
         int i = backwards ? end - 1 : begin, increment = backwards ? -1 : 1;
         boolean flag = false;
-        while (stack.stackSize > 0 && i >= begin && i < end) {
+        while (getStackSize(stack) > 0 && i >= begin && i < end) {
             Slot slot = this.getSlot(i);
             ItemStack slotStack = slot.getStack();
             int slotStackLimit = i < tileEntity.getSizeInventory() ? tileEntity.getInventoryStackLimit() : 64;
             int totalLimit = slotStackLimit < stack.getMaxStackSize() ? slotStackLimit : stack.getMaxStackSize();
 
             if (slotStack == null) {
-                int transfer = totalLimit < stack.stackSize ? totalLimit : stack.stackSize;
+                int transfer = totalLimit < getStackSize(stack) ? totalLimit : getStackSize(stack);
                 ItemStack stackToPut = stack.copy();
-                stackToPut.stackSize = transfer;
+                setStackSize(stackToPut, transfer);
                 slot.putStack(stackToPut);
                 slot.onSlotChanged();
-                stack.stackSize -= transfer;
+                setStackSize(stack, getStackSize(stack) - transfer);
                 flag = true;
             } else if (slotStack.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getItemDamage() == slotStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(
                     stack, slotStack)) {
-                int maxTransfer = totalLimit - slotStack.stackSize;
-                int transfer = maxTransfer > stack.stackSize ? stack.stackSize : maxTransfer;
-                slotStack.stackSize += transfer;
+                int maxTransfer = totalLimit - getStackSize(slotStack);
+                int transfer = maxTransfer > getStackSize(stack) ? getStackSize(stack) : maxTransfer;
+                incStackSize(slotStack, transfer);
                 slot.onSlotChanged();
-                stack.stackSize -= transfer;
+                setStackSize(stack, getStackSize(stack) - transfer);
                 flag = true;
             }
 

@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static omtteam.omlib.util.compat.MinecraftTools.getWorld;
+
 /**
  * Created by Keridos on 05.10.14.
  * This Class is the Message that the electric floodlights TileEntity uses.
@@ -47,7 +49,7 @@ public class MessageTurretBase implements IMessage {
                 @Override
                 public void run() {
 
-                    TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(new BlockPos(message.x, message.y,
+                    TileEntity tileEntity = getWorld(FMLClientHandler.instance().getClient()).getTileEntity(new BlockPos(message.x, message.y,
                             message.z));
                     if (tileEntity instanceof TurretBase) {
                         ((TurretBase) tileEntity).setOwner(message.owner);

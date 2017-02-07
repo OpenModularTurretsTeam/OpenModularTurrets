@@ -11,16 +11,16 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.tileentity.TileEntityBase;
-import omtteam.omlib.util.ItemStackUtil;
 import omtteam.omlib.util.RandomUtil;
+import omtteam.omlib.util.compat.ItemStackTools;
+import omtteam.omlib.util.compat.MathTools;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
-import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
+//import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 import static omtteam.omlib.util.MathUtil.*;
+import static omtteam.omlib.util.compat.WorldTools.spawnEntity;
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
 public abstract class TurretHead extends TileEntityBase implements ITickable {
@@ -198,15 +199,15 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
 
         if (ModCompatibility.ValkyrienWarfareLoaded) {
-            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
+            //  Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
 
-            if (shipEntity != null) {
-                //The turret is on a Ship, time to convert the coordinates; converting the target positions to local ship space
-                targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
-            }
+            //     if (shipEntity != null) {
+            //          //The turret is on a Ship, time to convert the coordinates; converting the target positions to local ship space
+            //         targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
+            // }
         }
 
-        return MathHelper.abs_max(MathHelper.abs_max(targetPos.xCoord - this.getPos().getX(), targetPos.yCoord - this.getPos().getY()),
+        return MathTools.abs_max(MathTools.abs_max(targetPos.xCoord - this.getPos().getX(), targetPos.yCoord - this.getPos().getY()),
                 targetPos.zCoord - this.getPos().getZ()) > (getTurretRange() + TurretHeadUtil.getRangeUpgrades(
                 base));
     }
@@ -341,26 +342,26 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
             }
 
             //Finally, try to shoot if criteria is met.
-            ItemStack ammo = ItemStackUtil.getEmptyStack();
+            ItemStack ammo = ItemStackTools.getEmptyStack();
             if (this.requiresAmmo()) {
                 if (this.requiresSpecificAmmo()) {
                     for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
                         ammo = TurretHeadUtil.useSpecificItemStackItemFromBase(base, this.getAmmo());
-                        if (ammo == ItemStackUtil.getEmptyStack()) {
+                        if (ammo == ItemStackTools.getEmptyStack()) {
                             ammo = TurretHeadUtil.getSpecificItemFromInvExpanders(this.getWorld(), this.getAmmo(), base);
                         }
                     }
                 } else {
                     for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
                         ammo = TurretHeadUtil.useAnyItemStackFromBase(base);
-                        if (ammo == ItemStackUtil.getEmptyStack()) {
+                        if (ammo == ItemStackTools.getEmptyStack()) {
                             ammo = TurretHeadUtil.getAnyItemFromInvExpanders(this.getWorld(), base);
                         }
                     }
                 }
 
                 // Is there ammo?
-                if (ammo == ItemStackUtil.getEmptyStack()) {
+                if (ammo == ItemStackTools.getEmptyStack()) {
                     return;
                 }
             }
@@ -375,12 +376,12 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
                 //If the turret is on a Ship, it needs to change to World coordinates from Ship coordinates
                 if (ModCompatibility.ValkyrienWarfareLoaded) {
-                    Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
-                    if (shipEntity != null) {
+                    //  Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
+                    // if (shipEntity != null) {
                         Vec3d inShipPos = new Vec3d(this.getPos().getX() + 0.5, this.getPos().getY() + 0.5, this.getPos().getZ() + 0.5);
-                        Vec3d inWorldPos = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, inShipPos);
-                        projectile.setPosition(inWorldPos.xCoord, inWorldPos.yCoord, inWorldPos.zCoord);
-                    }
+                    //       Vec3d inWorldPos = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, inShipPos);
+                    //      projectile.setPosition(inWorldPos.xCoord, inWorldPos.yCoord, inWorldPos.zCoord);
+                    //  }
                 }
 
 //                if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
@@ -396,7 +397,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
                 double d0 = target.posX - projectile.posX;
                 double d1 = target.posY + (double) target.getEyeHeight() - projectile.posY;
                 double d2 = target.posZ - projectile.posZ;
-                double dist = MathHelper.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
+                double dist = MathTools.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
                 double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(
                         base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
 
@@ -407,7 +408,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
                 double adjustedZ = d2 + speedZ * time;
 
                 // Calculate projectile speed scaling factor to travel to adjusted destination on time
-                double dist2 = MathHelper.sqrt_double(adjustedX * adjustedX + adjustedY * adjustedY + adjustedZ * adjustedZ);
+                double dist2 = MathTools.sqrt_double(adjustedX * adjustedX + adjustedY * adjustedY + adjustedZ * adjustedZ);
                 float speedFactor = (float) (dist2 / dist);
 
                 if (projectile.gravity == 0.00F) {
@@ -419,7 +420,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
                 }
                 this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
                         ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
-                this.getWorld().spawnEntityInWorld(projectile);
+                spawnEntity(this.getWorld(), projectile);
             }
             ticks = 0;
         }
@@ -460,26 +461,26 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
             return false;
         }
-        ItemStack ammo = ItemStackUtil.getEmptyStack();
+        ItemStack ammo = ItemStackTools.getEmptyStack();
         if (this.requiresAmmo()) {
             if (this.requiresSpecificAmmo()) {
                 for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
                     ammo = TurretHeadUtil.useSpecificItemStackItemFromBase(base, this.getAmmo());
-                    if (ammo == ItemStackUtil.getEmptyStack()) {
+                    if (ammo == ItemStackTools.getEmptyStack()) {
                         ammo = TurretHeadUtil.getSpecificItemFromInvExpanders(this.getWorld(), this.getAmmo(), base);
                     }
                 }
             } else {
                 for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
                     ammo = TurretHeadUtil.useAnyItemStackFromBase(base);
-                    if (ammo == ItemStackUtil.getEmptyStack()) {
+                    if (ammo == ItemStackTools.getEmptyStack()) {
                         ammo = TurretHeadUtil.getAnyItemFromInvExpanders(this.getWorld(), base);
                     }
                 }
             }
 
             // Is there ammo?
-            if (ammo == ItemStackUtil.getEmptyStack()) {
+            if (ammo == ItemStackTools.getEmptyStack()) {
                 return false;
             }
         }
@@ -504,7 +505,8 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
                 projectile.prevRotationYaw = projectile.rotationYaw;
                 projectile.prevRotationPitch = projectile.rotationPitch;
             }
-            this.getWorld().spawnEntityInWorld(projectile);
+            spawnEntity(this.getWorld(), projectile);
+            ;
         }
         this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
                 ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
