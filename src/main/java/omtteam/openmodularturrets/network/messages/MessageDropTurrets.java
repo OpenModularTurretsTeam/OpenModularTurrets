@@ -21,10 +21,10 @@ public class MessageDropTurrets implements IMessage {
         public IMessage onMessage(MessageDropTurrets messageIn, MessageContext ctxIn) {
             final MessageDropTurrets message = messageIn;
             final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().playerEntity.worldObj).addScheduledTask(new Runnable() {
+            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(new Runnable() {
                 @Override
                 public void run() {
-                    World world = ctx.getServerHandler().playerEntity.worldObj;
+                    World world = ctx.getServerHandler().playerEntity.getEntityWorld();
 
                     if (world.getTileEntity(new BlockPos(message.getX() + 1, message.getY(), message.getZ())) instanceof TurretHead) {
                         world.destroyBlock(new BlockPos(message.getX() + 1, message.getY(), message.getZ()), true);

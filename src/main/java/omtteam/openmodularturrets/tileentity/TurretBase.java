@@ -29,6 +29,7 @@ import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static omtteam.omlib.compatability.ModCompatibility.IC2Loaded;
@@ -74,9 +75,10 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
 
     public TurretBase() {
         super();
+        this.inventory = new ItemStack[13];
     }
 
-    public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState state) {
+    public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
         super();
         this.yAxisDetect = 2;
         this.storage = new EnergyStorage(MaxEnergyStorage, MaxIO);
@@ -85,7 +87,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         this.attacksPlayers = false;
         this.inventory = new ItemStack[tier == 5 ? 13 : tier == 4 ? 12 : tier == 3 ? 12 : tier == 2 ? 12 : 9];
         this.tier = tier;
-        this.camoBlockState = state;
+        this.camoBlockState = camoState;
     }
 
     @SuppressWarnings("deprecation")
@@ -132,14 +134,14 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
 
     @Override
     public void update() {
-        if (!worldObj.isRemote && dropBlock) {
-            worldObj.destroyBlock(this.pos, true);
+        if (!this.getWorld().isRemote && dropBlock) {
+            this.getWorld().destroyBlock(this.pos, true);
             return;
-        } else if (IC2Loaded && EUSupport && !wasAddedToEnergyNet && !worldObj.isRemote) {
+        } else if (IC2Loaded && EUSupport && !wasAddedToEnergyNet && !this.getWorld().isRemote) {
             addToIc2EnergyNetwork();
             wasAddedToEnergyNet = true;
         }
-        if (!worldObj.isRemote && ticks % 5 == 0) {
+        if (!this.getWorld().isRemote && ticks % 5 == 0) {
 
             //Concealment
             this.shouldConcealTurrets = TurretHeadUtil.hasConcealmentAddon(this);
@@ -150,7 +152,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
             //Thaumcraft
             /*if (ModCompatibility.ThaumcraftLoaded && TurretHeadUtil.hasPotentiaUpgradeAddon(this)) {
                 if (amountOfPotentia > 0.05F && !(storage.getMaxEnergyStored() - storage.getEnergyStored() == 0)) {
-                    if (VisNetHandler.drainVis(worldObj, xCoord, yCoord, zCoord, Aspect.ORDER, 5) == 5) {
+                    if (VisNetHandler.drainVis(this.getWorld(), xCoord, yCoord, zCoord, Aspect.ORDER, 5) == 5) {
                         this.amountOfPotentia = this.amountOfPotentia - 0.05F;
                         this.storage.modifyEnergyStored(Math.round(ConfigHandler.getPotentiaToRFRatio() * 5));
                     } else {
@@ -247,7 +249,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
     }
 
     public void setAllTurretsYawPitch(float yaw, float pitch) {
-        List<TileEntity> tileEntities = getTouchingTileEntities(this.worldObj, this.pos);
+        List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         for (TileEntity te : tileEntities) {
             if (te != null && te instanceof TurretHead) {
                 ((TurretHead) te).setRotationXY(getRotationXYFromYawPitch(yaw, pitch));
@@ -267,7 +269,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
     }
 
     public void setAllTurretsForceFire(boolean state) {
-        List<TileEntity> tileEntities = getTouchingTileEntities(this.worldObj, this.pos);
+        List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         for (TileEntity te : tileEntities) {
             if (te != null && te instanceof TurretHead) {
                 ((TurretHead) te).forceFire = state;
@@ -290,7 +292,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
     }
 
     public int forceShootAllTurrets() {
-        List<TileEntity> tileEntities = getTouchingTileEntities(this.worldObj, this.pos);
+        List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         int successes = 0;
         for (TileEntity te : tileEntities) {
             if (te != null && te instanceof TurretHead) {
@@ -364,19 +366,19 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         switch (tier) {
             case 1:
                 return ConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.pos);
+                        this.getWorld(), this.pos);
             case 2:
                 return ConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.pos);
+                        this.getWorld(), this.pos);
             case 3:
                 return ConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.pos);
+                        this.getWorld(), this.pos);
             case 4:
                 return ConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.pos);
+                        this.getWorld(), this.pos);
             case 5:
                 return ConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.pos);
+                        this.getWorld(), this.pos);
         }
         return 0;
     }
@@ -392,20 +394,21 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         this.camoBlockState = state;
     }
 
-    @SuppressWarnings("NullableProblems")
     @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
     public int[] getSlotsForFace(EnumFacing side) {
         return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
     }
 
-    @SuppressWarnings("NullableProblems")
     @Override
+    @ParametersAreNonnullByDefault
     public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
-    @SuppressWarnings("NullableProblems")
     @Override
+    @ParametersAreNonnullByDefault
     public boolean canExtractItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return true;
     }
@@ -629,7 +632,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
     }
 
     @Optional.Method(modid = "OpenComputers")
-    @Callback(doc = "function(side:int):int; Try to shoot specified turret, returns true if successfully shot")
+    @Callback(doc = "function(side:int):boolean; Try to shoot specified turret, returns true if successfully shot")
     public Object[] forceShootTurret(Context context, Arguments args) {
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
@@ -731,14 +734,14 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
                 trustedPlayer.canChangeTargeting = arguments[2].toString().equals("true");
                 trustedPlayer.admin = arguments[3].toString().equals("true");
                 trustedPlayer.uuid = getPlayerUUID(arguments[0].toString());
-                worldObj.markBlockForUpdate(this.pos);
+                this.getWorld().markBlockForUpdate(this.pos);
                 return new Object[]{"successfully added player to trust list with parameters"};
             case removeTrustedPlayer:
                 if (arguments[0].toString().equals("")) {
                     return new Object[]{"wrong arguments"};
                 }
                 this.removeTrustedPlayer(arguments[0].toString());
-                worldObj.markBlockForUpdate(this.pos);
+                this.getWorld().markBlockForUpdate(this.pos);
                 return new Object[]{"removed player from trusted list"};
             case getActive:
                 return new Object[]{this.active};
@@ -752,7 +755,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
                 }
                 b = (arguments[0].toString().equals("true"));
                 this.setInverted(b);
-                worldObj.markBlockForUpdate(this.pos);
+                this.getWorld().markBlockForUpdate(this.pos);
                 return new Object[]{true};
             case getType:
                 return new Object[]{this.getType()};

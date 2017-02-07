@@ -29,7 +29,6 @@ import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @SuppressWarnings("deprecation")
@@ -69,7 +68,6 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, ROTATION);
     }
-
 
     @Override
     @Nonnull
@@ -112,7 +110,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    protected boolean clOnBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         TurretBase base;
         LeverTileEntity lever = (LeverTileEntity) worldIn.getTileEntity(pos);
         if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 0 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
@@ -172,8 +170,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }
-
-
+    
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;

@@ -37,10 +37,10 @@ import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static omtteam.omlib.util.ChatUtil.addChatMessage;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 
 /**
@@ -136,31 +136,31 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
+    
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    protected boolean clOnBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (hand.equals(EnumHand.OFF_HAND)) return true;
-        Expander expander = (Expander) world.getTileEntity(pos);
+        Expander expander = (Expander) worldIn.getTileEntity(pos);
         if (expander == null) {
             return true;
         }
         TurretBase base = expander.getBase();
-        if (base != null && base.getTrustedPlayer(player.getUniqueID()) != null) {
-            if (base.getTrustedPlayer(player.getUniqueID()).canOpenGUI && state.getValue(META) < 5) {
-                player.openGui(OpenModularTurrets.instance, 7, world, pos.getX(), pos.getY(), pos.getZ());
+        if (base != null && base.getTrustedPlayer(playerIn.getUniqueID()) != null) {
+            if (base.getTrustedPlayer(playerIn.getUniqueID()).canOpenGUI && state.getValue(META) < 5) {
+                playerIn.openGui(OpenModularTurrets.instance, 7, worldIn, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
         }
-        if (base != null && player.getUniqueID().toString().equals(base.getOwner())) {
-            if (player.isSneaking() && player.getHeldItemMainhand() == null) {
-                world.destroyBlock(pos, true);
+        if (base != null && playerIn.getUniqueID().toString().equals(base.getOwner())) {
+            if (playerIn.isSneaking() && playerIn.getHeldItemMainhand() == null) {
+                worldIn.destroyBlock(pos, true);
             } else if (state.getValue(META) < 5) {
-                player.openGui(OpenModularTurrets.instance, 7, world, pos.getX(), pos.getY(), pos.getZ());
+                playerIn.openGui(OpenModularTurrets.instance, 7, worldIn, pos.getX(), pos.getY(), pos.getZ());
             } else {
                 return true;
             }
         } else {
-            player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
+            addChatMessage(playerIn,new TextComponentString(I18n.translateToLocal("status.ownership")));
         }
         return true;
     }
@@ -192,7 +192,6 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
             expander.setSide();
         }
     }
-
 
     @Override
     public int damageDropped(IBlockState state) {

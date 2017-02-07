@@ -24,10 +24,10 @@ public class MessageSetTurretOwner implements IMessage {
         public IMessage onMessage(MessageSetTurretOwner messageIn, MessageContext ctxIn) {
             final MessageSetTurretOwner message = messageIn;
             final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().playerEntity.worldObj).addScheduledTask(new Runnable() {
+            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(new Runnable() {
                 @Override
                 public void run() {
-                    World world = ctx.getServerHandler().playerEntity.worldObj;
+                    World world = ctx.getServerHandler().playerEntity.getEntityWorld();
                     TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
 
                     turret.setOwner(message.getOwner());

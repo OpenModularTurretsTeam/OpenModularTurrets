@@ -28,7 +28,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
         setSide();
         this.base = getBase();
 
-        if (worldObj.isRemote) {
+        if (this.getWorld().isRemote) {
             if (rotationAnimation >= 360F) {
                 rotationAnimation = 0F;
             }
@@ -119,7 +119,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
 
             base.setPositionAndUpdate(basePositionToSet.xCoord, basePositionToSet.yCoord, basePositionToSet.zCoord);
 
-            ((BlockTeleporterTurret) worldObj.getBlockState(this.pos).getBlock()).shouldAnimate = true;
+            ((BlockTeleporterTurret) this.getWorld().getBlockState(this.pos).getBlock()).shouldAnimate = true;
             target = null;
         }
 
