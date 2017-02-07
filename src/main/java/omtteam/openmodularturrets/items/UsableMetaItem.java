@@ -14,6 +14,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.omlib.item.CompatItem;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
@@ -28,7 +29,7 @@ import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 @SuppressWarnings("ConstantConditions")
-public class UsableMetaItem extends Item {
+public class UsableMetaItem extends CompatItem {
     public UsableMetaItem() {
         super();
 
@@ -41,7 +42,6 @@ public class UsableMetaItem extends Item {
     public final static String[] subNames = {
             OMTNames.Items.bulletThrowableItem, OMTNames.Items.grenadeThrowableItem, OMTNames.Items.memoryCard
     };
-
 
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
@@ -58,9 +58,8 @@ public class UsableMetaItem extends Item {
     }
 
     @Override
-    @Nonnull
-    @ParametersAreNonnullByDefault
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    protected ActionResult<ItemStack> clOnItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+        ItemStack itemStackIn = playerIn.getHeldItemMainhand();
         if (itemStackIn.getItemDamage() == 2 && playerIn.isSneaking()) {
             itemStackIn.getTagCompound().getKeySet().clear();
         }

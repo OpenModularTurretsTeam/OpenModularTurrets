@@ -41,10 +41,11 @@ import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+
+import static omtteam.omlib.util.ChatUtil.addChatMessage;
 
 @SuppressWarnings("deprecation")
 public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHasItemBlock {
@@ -121,10 +122,11 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     protected BlockStateContainer createBlockState() {
         return new ExtendedBlockState(this, new IProperty[]{TIER}, new IUnlistedProperty[]{RENDERBLOCKSTATE});
     }
-
+    
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    protected boolean clOnBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote && hand == EnumHand.MAIN_HAND) {
+            ItemStack heldItem = player.getHeldItemMainhand();
             TurretBase base = (TurretBase) world.getTileEntity(pos);
             if (player.isSneaking() && ConfigHandler.isAllowBaseCamo() && heldItem == null) {
                 if (base != null) {
@@ -132,8 +134,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                         base.setCamoState(state);
                         world.notifyBlockUpdate(pos, state, state, 3);
                     } else {
-                        player.addChatMessage(
-                                new TextComponentString(I18n.translateToLocal("status.ownership")));
+                        addChatMessage(player, new TextComponentString(I18n.translateToLocal("status.ownership")));
                     }
                 }
             }
@@ -153,8 +154,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                         base.setCamoState(heldItemBlock.getStateFromMeta(heldItem.getItemDamage()));
                         world.notifyBlockUpdate(pos, state, state, 3);
                     } else {
-                        player.addChatMessage(
-                                new TextComponentString(I18n.translateToLocal("status.ownership")));
+                        addChatMessage(player, new TextComponentString(I18n.translateToLocal("status.ownership")));
                     }
                 }
 
@@ -175,7 +175,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                     world.notifyBlockUpdate(pos, state, state, 6);
                     player.openGui(OpenModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
                 } else {
-                    player.addChatMessage(new TextComponentString(I18n.translateToLocal("status.ownership")));
+                    addChatMessage(player, new TextComponentString(I18n.translateToLocal("status.ownership")));
                 }
             }
         }
@@ -183,7 +183,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    protected void clOnNeighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
         if (!worldIn.isRemote) {
             TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
             if (base != null && worldIn.isBlockIndirectlyGettingPowered(pos) > 0) {
@@ -261,7 +261,6 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             player) {
         return new ItemStack(ModBlocks.turretBase, 1, state.getValue(TIER) - 1);
     }
-
 
     @Override
     @SideOnly(Side.CLIENT)

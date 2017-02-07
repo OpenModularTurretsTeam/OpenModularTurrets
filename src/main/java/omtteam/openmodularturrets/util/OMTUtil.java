@@ -9,7 +9,6 @@ import omtteam.openmodularturrets.items.AmmoMetaItem;
  * This Class
  */
 public class OMTUtil {
-
     public static boolean isItemStackValidAmmo(ItemStack itemStack) {
         if (!ConfigHandler.useWhitelistForAmmo) return true;
         for (ItemStack itemStackAllowed : ConfigHandler.disposableAmmoList) {

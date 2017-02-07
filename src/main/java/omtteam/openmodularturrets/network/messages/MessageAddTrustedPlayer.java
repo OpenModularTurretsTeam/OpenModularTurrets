@@ -25,10 +25,10 @@ public class MessageAddTrustedPlayer implements IMessage {
         public IMessage onMessage(MessageAddTrustedPlayer messageIn, MessageContext ctxIn) {
             final MessageAddTrustedPlayer message = messageIn;
             final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().playerEntity.worldObj).addScheduledTask(new Runnable() {
+            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(new Runnable() {
                 @Override
                 public void run() {
-                    World world = ctx.getServerHandler().playerEntity.worldObj;
+                    World world = ctx.getServerHandler().playerEntity.getEntityWorld();
                     TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
                     turret.addTrustedPlayer(message.getPlayer());
                 }
@@ -58,7 +58,6 @@ public class MessageAddTrustedPlayer implements IMessage {
         buf.writeInt(this.x);
         buf.writeInt(this.y);
         buf.writeInt(this.z);
-
         ByteBufUtils.writeUTF8String(buf, this.player);
     }
 

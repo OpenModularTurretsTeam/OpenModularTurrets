@@ -1,24 +1,24 @@
 [
     {
-        "modid": "openmodularturrets",
-        "name": "Open Modular Turrets",
-        "description": "All a man needs are meat ingots, and big ass turrets. Adds a heap of new turrets and upgrades!",
+        "modid": "omtcontrol",
+        "name": "OMTControl",
+        "description": "Control all the turrets!",
         "version": "${version}",
         "mcversion": "${mcversion}",
-        "credits": "Poenjabiesous",
-        "logoFile": "/mods/thermalexpansion/textures/logo.png",
+        "credits": "Keridos, Peonjabiesous",
+        "logoFile": "",
         "url": "",
         "updateUrl": "",
         "authors": [
-            "Poenjabiesous", "UntouchedWagons", "Keridos"
+            "Poenjabiesous", "Keridos"
         ],
         "parent":"",
         "screenshots": [],
         "requiredMods": [
-            "MinecraftForge,ThermalExpansion"
+            "MinecraftForge,omlib,openmodularturrets"
         ],
         "dependencies": [
-            "MinecraftForge,ThermalExpansion"
+            "MinecraftForge,omlib,openmodularturrets"
         ]
     }
 ]

@@ -27,7 +27,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
         setSide();
         this.base = getBase();
 
-        if (worldObj.isRemote) {
+        if (this.getWorld().isRemote) {
             if (rotationAnimation >= 360F) {
                 rotationAnimation = 0F;
             }

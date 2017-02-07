@@ -23,12 +23,11 @@ public class MessageAdjustYAxisDetect implements IMessage {
         public IMessage onMessage(MessageAdjustYAxisDetect messageIn, MessageContext ctxIn) {
             final MessageAdjustYAxisDetect message = messageIn;
             final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().playerEntity.worldObj).addScheduledTask(new Runnable() {
+            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(new Runnable() {
                 @Override
                 public void run() {
-                    World world = ctx.getServerHandler().playerEntity.worldObj;
+                    World world = ctx.getServerHandler().playerEntity.getEntityWorld();
                     TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-
                     turret.setyAxisDetect(message.getYAxisDetect());
                 }
             });
@@ -48,7 +47,6 @@ public class MessageAdjustYAxisDetect implements IMessage {
         this.x = buf.readInt();
         this.y = buf.readInt();
         this.z = buf.readInt();
-
         this.y_axis_detect = buf.readInt();
     }
 
@@ -57,7 +55,6 @@ public class MessageAdjustYAxisDetect implements IMessage {
         buf.writeInt(this.x);
         buf.writeInt(this.y);
         buf.writeInt(this.z);
-
         buf.writeInt(this.y_axis_detect);
     }
 
