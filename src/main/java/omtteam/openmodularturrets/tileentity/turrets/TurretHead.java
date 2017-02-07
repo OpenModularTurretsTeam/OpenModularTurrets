@@ -20,7 +20,7 @@ import omtteam.omlib.util.RandomUtil;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.omlib.util.compat.MathTools;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
-//import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
+import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
@@ -33,6 +33,7 @@ import java.util.Random;
 import static omtteam.omlib.util.MathUtil.*;
 import static omtteam.omlib.util.compat.WorldTools.spawnEntity;
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
+
 
 public abstract class TurretHead extends TileEntityBase implements ITickable {
     int ticks;
@@ -199,12 +200,12 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
 
         if (ModCompatibility.ValkyrienWarfareLoaded) {
-            //  Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
+            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
 
-            //     if (shipEntity != null) {
-            //          //The turret is on a Ship, time to convert the coordinates; converting the target positions to local ship space
-            //         targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
-            // }
+            if (shipEntity != null) {
+                //The turret is on a Ship, time to convert the coordinates; converting the target positions to local ship space
+                targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
+            }
         }
 
         return MathTools.abs_max(MathTools.abs_max(targetPos.xCoord - this.getPos().getX(), targetPos.yCoord - this.getPos().getY()),
@@ -376,19 +377,19 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
                 //If the turret is on a Ship, it needs to change to World coordinates from Ship coordinates
                 if (ModCompatibility.ValkyrienWarfareLoaded) {
-                    //  Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
-                    // if (shipEntity != null) {
+                    Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
+                    if (shipEntity != null) {
                         Vec3d inShipPos = new Vec3d(this.getPos().getX() + 0.5, this.getPos().getY() + 0.5, this.getPos().getZ() + 0.5);
-                    //       Vec3d inWorldPos = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, inShipPos);
-                    //      projectile.setPosition(inWorldPos.xCoord, inWorldPos.yCoord, inWorldPos.zCoord);
-                    //  }
+                        Vec3d inWorldPos = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, inShipPos);
+                        projectile.setPosition(inWorldPos.xCoord, inWorldPos.yCoord, inWorldPos.zCoord);
+                    }
                 }
 
-//                if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
-//                    this.getWorld().playSoundEffect(this.pos.getX(), this.pos.getY(), this.pos.getZ(), Reference.MOD_ID + ":amped",
-//                            ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
-//                    projectile.isAmped = true;
-//                }
+                if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
+                    this.getWorld().playSound(null, this.pos, ModSounds.amped, SoundCategory.BLOCKS,
+                            ConfigHandler.getTurretSoundVolume(), RandomUtil.random.nextFloat() + 0.5F);
+                    projectile.isAmped = true;
+                }
 
                 // Calculate speed from displacement from last tick (Or use tracking data if target is player)
                 double speedX = target instanceof EntityPlayerMP ? targetSpeedX : target.posX - target.prevPosX;

@@ -42,7 +42,7 @@ public class ExpanderInvContainer extends Container {
     @Override
     @ParametersAreNonnullByDefault
     public boolean canInteractWith(EntityPlayer player) {
-        return tileEntity.isUsableByPlayer(player);
+        return tileEntity.isUsable(player);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -73,7 +73,7 @@ public class ExpanderInvContainer extends Container {
                 return null;
             }
 
-            invSlot.onPickup(playerIn, itemStack1);
+            invSlot.onPickupFromSlot(playerIn, itemStack1);
         }
 
         return itemStack;
