@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.items;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import omtteam.omlib.item.CompatItem;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
@@ -12,7 +13,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-public class IntermediateProductTiered extends Item {
+public class IntermediateProductTiered extends CompatItem {
     public IntermediateProductTiered() {
         super();
 

@@ -121,7 +121,7 @@ repositories {
 }
 
 def omlib_local = false
-configure(subprojects.findAll {it.name == 'OMLib'}) {
+configure(allprojects.any {it.name == 'OMLib'}) {
    omlib_local = true
 }
 

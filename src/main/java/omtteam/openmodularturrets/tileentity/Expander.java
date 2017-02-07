@@ -57,43 +57,42 @@ public class Expander extends TileEntityContainer implements ITickable {
     }
 
     public void setSide() {
-        if (worldObj.getTileEntity(this.pos.east()) instanceof TurretBase) {
+        if (this.getWorld().getTileEntity(this.pos.east()) instanceof TurretBase) {
             this.setOrientation(EnumFacing.EAST);
             return;
         }
 
-        if (worldObj.getTileEntity(this.pos.west()) instanceof TurretBase) {
+        if (this.getWorld().getTileEntity(this.pos.west()) instanceof TurretBase) {
             this.setOrientation(EnumFacing.WEST);
             return;
         }
 
-        if (worldObj.getTileEntity(this.pos.down()) instanceof TurretBase) {
+        if (this.getWorld().getTileEntity(this.pos.down()) instanceof TurretBase) {
             this.setOrientation(EnumFacing.DOWN);
             return;
         }
 
-        if (worldObj.getTileEntity(this.pos.up()) instanceof TurretBase) {
+        if (this.getWorld().getTileEntity(this.pos.up()) instanceof TurretBase) {
             this.setOrientation(EnumFacing.UP);
             return;
         }
 
-        if (worldObj.getTileEntity(this.pos.north()) instanceof TurretBase) {
+        if (this.getWorld().getTileEntity(this.pos.north()) instanceof TurretBase) {
             this.setOrientation(EnumFacing.NORTH);
             return;
         }
 
-        if (worldObj.getTileEntity(this.pos.south()) instanceof TurretBase) {
+        if (this.getWorld().getTileEntity(this.pos.south()) instanceof TurretBase) {
             this.setOrientation(EnumFacing.SOUTH);
         }
     }
 
     @Override
     public void update() {
-        if (worldObj.getWorldTime() % 15 == 0 && getBase() == null || dropBlock) {
+        if (this.getWorld().getWorldTime() % 15 == 0 && getBase() == null || dropBlock) {
             this.getWorld().destroyBlock(this.pos, true);
         }
     }
-
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack stack) {
@@ -105,7 +104,7 @@ public class Expander extends TileEntityContainer implements ITickable {
     }
 
     public TurretBase getBase() {
-        return TurretHeadUtil.getTurretBase(worldObj, this.pos);
+        return TurretHeadUtil.getTurretBase(this.getWorld(), this.pos);
     }
 
     @Override
