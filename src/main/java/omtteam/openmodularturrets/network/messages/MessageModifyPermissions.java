@@ -25,23 +25,20 @@ public class MessageModifyPermissions implements IMessage {
         public IMessage onMessage(MessageModifyPermissions messageIn, MessageContext ctxIn) {
             final MessageModifyPermissions message = messageIn;
             final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(new Runnable() {
-                @Override
-                public void run() {
-                    World world = ctx.getServerHandler().playerEntity.getEntityWorld();
-                    TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().playerEntity.getEntityWorld();
+                TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
 
-                    if (message.getPerm().equals("gui")) {
-                        turret.getTrustedPlayer(message.getPlayer()).setCanOpenGUI(message.canDo);
-                    }
+                if (message.getPerm().equals("gui")) {
+                    turret.getTrustedPlayer(message.getPlayer()).setCanOpenGUI(message.canDo);
+                }
 
-                    if (message.getPerm().equals("targeting")) {
-                        turret.getTrustedPlayer(message.getPlayer()).setCanChangeTargeting(message.canDo);
-                    }
+                if (message.getPerm().equals("targeting")) {
+                    turret.getTrustedPlayer(message.getPlayer()).setCanChangeTargeting(message.canDo);
+                }
 
-                    if (message.getPerm().equals("isAdmin")) {
-                        turret.getTrustedPlayer(message.getPlayer()).setAdmin(message.canDo);
-                    }
+                if (message.getPerm().equals("isAdmin")) {
+                    turret.getTrustedPlayer(message.getPlayer()).setAdmin(message.canDo);
                 }
             });
             return null;

@@ -44,28 +44,24 @@ public class MessageTurretBase implements IMessage {
         @SuppressWarnings("deprecation")
         public IMessage onMessage(MessageTurretBase messageIn, MessageContext ctx) {
             final MessageTurretBase message = messageIn;
-            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
-                @SuppressWarnings("deprecation")
-                @Override
-                public void run() {
+            Minecraft.getMinecraft().addScheduledTask(() -> {
 
-                    TileEntity tileEntity = getWorld(FMLClientHandler.instance().getClient()).getTileEntity(new BlockPos(message.x, message.y,
-                            message.z));
-                    if (tileEntity instanceof TurretBase) {
-                        ((TurretBase) tileEntity).setOwner(message.owner);
-                        ((TurretBase) tileEntity).setOwnerName(message.ownerName);
-                        ((TurretBase) tileEntity).setEnergyStored(message.rfStorageCurrent);
-                        ((TurretBase) tileEntity).setMaxEnergyStored(message.rfStorageMax);
-                        ((TurretBase) tileEntity).setAttacksMobs(message.attacksMobs);
-                        ((TurretBase) tileEntity).setAttacksNeutrals(message.attacksNeutrals);
-                        ((TurretBase) tileEntity).setAttacksPlayers(message.attacksPlayers);
-                        ((TurretBase) tileEntity).setMultiTargeting(message.multiTargeting);
-                        ((TurretBase) tileEntity).setTrustedPlayers(message.trustedPlayers);
-                        ((TurretBase) tileEntity).setTier(message.tier);
-                        ((TurretBase) tileEntity).setCamoState(ForgeRegistries.BLOCKS.getValue(
-                                new ResourceLocation(message.camoBlockRegName)).getStateFromMeta(message.camoBlockMeta));
+                TileEntity tileEntity = getWorld(FMLClientHandler.instance().getClient()).getTileEntity(new BlockPos(message.x, message.y,
+                        message.z));
+                if (tileEntity instanceof TurretBase) {
+                    ((TurretBase) tileEntity).setOwner(message.owner);
+                    ((TurretBase) tileEntity).setOwnerName(message.ownerName);
+                    ((TurretBase) tileEntity).setEnergyStored(message.rfStorageCurrent);
+                    ((TurretBase) tileEntity).setMaxEnergyStored(message.rfStorageMax);
+                    ((TurretBase) tileEntity).setAttacksMobs(message.attacksMobs);
+                    ((TurretBase) tileEntity).setAttacksNeutrals(message.attacksNeutrals);
+                    ((TurretBase) tileEntity).setAttacksPlayers(message.attacksPlayers);
+                    ((TurretBase) tileEntity).setMultiTargeting(message.multiTargeting);
+                    ((TurretBase) tileEntity).setTrustedPlayers(message.trustedPlayers);
+                    ((TurretBase) tileEntity).setTier(message.tier);
+                    ((TurretBase) tileEntity).setCamoState(ForgeRegistries.BLOCKS.getValue(
+                            new ResourceLocation(message.camoBlockRegName)).getStateFromMeta(message.camoBlockMeta));
 
-                    }
                 }
             });
             return null;

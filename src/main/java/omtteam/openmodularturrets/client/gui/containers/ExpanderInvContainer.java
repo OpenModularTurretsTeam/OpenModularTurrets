@@ -12,9 +12,7 @@ import omtteam.openmodularturrets.tileentity.Expander;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.util.InvUtil.mergeItemStackWithStackLimit;
-import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
-import static omtteam.omlib.util.compat.ItemStackTools.incStackSize;
-import static omtteam.omlib.util.compat.ItemStackTools.setStackSize;
+import static omtteam.omlib.util.compat.ItemStackTools.*;
 
 public class ExpanderInvContainer extends Container {
     private final Expander tileEntity;

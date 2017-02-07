@@ -31,7 +31,6 @@ public class ModSounds {
     public static SoundEvent amped;
 
 
-
     public static void init() {
         turretDeploySound = new SoundEvent(new ResourceLocation("openmodularturrets", "turret_deploy")).setRegistryName("openmodularturrets", "turret_deploy");
         turretRetractSound = new SoundEvent(new ResourceLocation("openmodularturrets", "turret_retract")).setRegistryName("openmodularturrets", "turret_retract");

@@ -99,9 +99,9 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void init(){
+    public void init() {
         super.init();
-        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new CamoBlockColor(),ModBlocks.turretBase );
+        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new CamoBlockColor(), ModBlocks.turretBase);
     }
 
     @Override
