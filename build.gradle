@@ -50,7 +50,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20161227"
+    mappings = "snapshot_20160916"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
@@ -130,15 +130,22 @@ configure(allprojects.any {it.name == 'OMLib'}) {
 }
 
 dependencies {
-    deobfCompile "mcp.mobius.waila:Hwyla:${config.hwyla_version}_${config.minecraft_version_short}"
-    //provided "li.cil.oc:OpenComputers:MC1.10.2-${config.oc_version}"
+    deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.jei_version}"
+    compile "igwmod:IGW-Mod-${config.igwmod_version}:userdev"
+    deobfCompile "mcp.mobius.waila:Hwyla:${config.hwyla_version}_${config.minecraft_version}"
+    deobfCompile "li.cil.oc:OpenComputers:MC${config.minecraft_version}-${config.oc_version}"
+    //compile "Azanor:Thaumcraft:${config.tc_version}:deobf@jar"
+    compile "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
+    compile "net.darkhax.tesla:Tesla:${config.minecraft_version}-${config.tesla_version}"
 	compileOnly "ValkyrienWarfareRevamped:valkyrienwarfare:${config.valkyrienwarfare_version}:dev"
     if (!omlib_local) {
         compile "omtteam:omlib:${config.minecraft_version}-${config.omlib_version}:dev"
     } else {
         compile project(':OMLib')
     }
-
+    runtime "com.enderio:EnderIO:${config.minecraft_version}-${config.enderio_version}"
+    runtime "com.enderio.core:EnderCore:${config.minecraft_version}-${config.endercore_version}"
+    //runtime "com.github.azanor:baubles:${config.baubles_version}"
 }
 
 task deobfJar(type: Jar) {

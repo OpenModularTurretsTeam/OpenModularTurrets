@@ -30,7 +30,7 @@ public abstract class TurretBaseContainer extends Container {
     @Override
     @ParametersAreNonnullByDefault
     public boolean canInteractWith(EntityPlayer player) {
-        return tileEntity.isUsableByPlayer(player);
+        return tileEntity.isUsable(player);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -95,7 +95,7 @@ public abstract class TurretBaseContainer extends Container {
             if (getStackSize(stackInSlot) == getStackSize(stack)) {
                 return null;
             }
-            slotObject.onPickup(player, stackInSlot);
+            slotObject.onPickupFromSlot(player, stackInSlot);
         }
         return stack;
     }

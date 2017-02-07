@@ -28,6 +28,8 @@ public class ModSounds {
     public static SoundEvent teleportLaunchSound;
     @SuppressWarnings("unused")
     public static SoundEvent turretWarnSound;
+    public static SoundEvent amped;
+
 
 
     public static void init() {
@@ -46,6 +48,7 @@ public class ModSounds {
         relativisticLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "relativistic")).setRegistryName("openmodularturrets", "relativistic");
         rocketLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "rocket")).setRegistryName("openmodularturrets", "rocket");
         teleportLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "teleport")).setRegistryName("openmodularturrets", "teleport");
+        amped = new SoundEvent(new ResourceLocation("openmodularturrets", "amped")).setRegistryName("openmodularturrets", "amped");
 
         registerSounds(ModSounds.class);
     }
