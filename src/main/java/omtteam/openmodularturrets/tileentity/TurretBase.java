@@ -1,10 +1,6 @@
 package omtteam.openmodularturrets.tileentity;
 
 import cofh.api.energy.EnergyStorage;
-import li.cil.oc.api.machine.Arguments;
-import li.cil.oc.api.machine.Callback;
-import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -18,7 +14,7 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityMachine;
-import omtteam.omlib.util.TrustedPlayer;
+import omtteam.omlib.util.compat.ItemStackList;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.items.AddonMetaItem;
@@ -32,13 +28,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-import static omtteam.omlib.compatability.ModCompatibility.IC2Loaded;
-import static omtteam.omlib.handler.ConfigHandler.EUSupport;
 import static omtteam.omlib.util.BlockUtil.getBlockStateFromNBT;
 import static omtteam.omlib.util.BlockUtil.writeBlockFromStateToNBT;
 import static omtteam.omlib.util.MathUtil.getRotationXYFromYawPitch;
 import static omtteam.omlib.util.MathUtil.getRotationXZFromYawPitch;
-import static omtteam.omlib.util.PlayerUtil.getPlayerUUID;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 
@@ -53,7 +46,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;*/
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft"),
         @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")}
 )
-public class TurretBase extends TileEntityMachine implements SimpleComponent, /*IPeripheral,*/ ITickable, ICamoSupport {
+public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ ITickable, ICamoSupport {
     public int trustedPlayerIndex = 0;
     protected IBlockState camoBlockState;
 
@@ -75,7 +68,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
 
     public TurretBase() {
         super();
-        this.inventory = new ItemStack[13];
+        this.inventory = ItemStackList.create(13);
     }
 
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
@@ -85,7 +78,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         this.attacksMobs = true;
         this.attacksNeutrals = true;
         this.attacksPlayers = false;
-        this.inventory = new ItemStack[tier == 5 ? 13 : tier == 4 ? 12 : tier == 3 ? 12 : tier == 2 ? 12 : 9];
+        this.inventory = ItemStackList.create(tier == 5 ? 13 : tier == 4 ? 12 : tier == 3 ? 12 : tier == 2 ? 12 : 9);
         this.tier = tier;
         this.camoBlockState = camoState;
     }
@@ -137,9 +130,6 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         if (!this.getWorld().isRemote && dropBlock) {
             this.getWorld().destroyBlock(this.pos, true);
             return;
-        } else if (IC2Loaded && EUSupport && !wasAddedToEnergyNet && !this.getWorld().isRemote) {
-            addToIc2EnergyNetwork();
-            wasAddedToEnergyNet = true;
         }
         if (!this.getWorld().isRemote && ticks % 5 == 0) {
 
@@ -412,7 +402,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
     public boolean canExtractItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return true;
     }
-
+    /*
     @Optional.Method(modid = "OpenComputers")
     @Override
     public String getComponentName() {
@@ -640,9 +630,7 @@ public class TurretBase extends TileEntityMachine implements SimpleComponent, /*
         if (!args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0)
             return new Object[]{"Wrong parameters!"};
         return new Object[]{this.forceShootTurret(EnumFacing.getFront(args.checkInteger(0)))};
-    }
-
-
+    }*/
 
     /*@Optional.Method(modid = "ComputerCraft")
     @Override

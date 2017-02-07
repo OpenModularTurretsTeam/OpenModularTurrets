@@ -43,7 +43,7 @@ public class BlazingClayProjectile extends TurretProjectile {
             return;
         }
         if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
-            IBlockState hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos());
+            IBlockState hitBlock = getEntityWorld().getBlockState(movingobjectposition.getBlockPos());
 
             if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
                 return;
@@ -56,15 +56,15 @@ public class BlazingClayProjectile extends TurretProjectile {
         }
 
         if (movingobjectposition.typeOfHit.equals(RayTraceResult.Type.MISS)) {
-            if (worldObj.isAirBlock(movingobjectposition.getBlockPos())) {
+            if (getEntityWorld().isAirBlock(movingobjectposition.getBlockPos())) {
                 return;
             }
         }
 
-        if (!worldObj.isRemote) {
+        if (!getEntityWorld().isRemote) {
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
                     this.posX + 5, this.posY + 5, this.posZ + 5);
-            List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
+            List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             int damage = ConfigHandler.getIncendiary_turret().getDamage();
 

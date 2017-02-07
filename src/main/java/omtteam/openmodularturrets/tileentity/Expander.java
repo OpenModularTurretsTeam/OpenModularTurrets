@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import omtteam.omlib.tileentity.TileEntityContainer;
+import omtteam.omlib.util.compat.ItemStackList;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
@@ -21,12 +22,12 @@ public class Expander extends TileEntityContainer implements ITickable {
     protected int tier;
 
     public Expander() {
-        this.inventory = new ItemStack[9];
+        this.inventory = ItemStackList.create(9);
         this.orientation = EnumFacing.NORTH;
     }
 
     public Expander(int tier, boolean powerExpander) {
-        this.inventory = new ItemStack[9];
+        this.inventory = ItemStackList.create(9);
         this.tier = tier;
         this.powerExpander = powerExpander;
         this.orientation = EnumFacing.NORTH;

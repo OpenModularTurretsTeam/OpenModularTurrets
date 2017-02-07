@@ -14,7 +14,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.omlib.item.CompatItem;
+import omtteam.omlib.compatability.minecraft.CompatItem;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
@@ -50,11 +50,12 @@ public class UsableMetaItem extends CompatItem {
 
     @Override
     @Nonnull
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (stack.getItemDamage() == 2 && playerIn.isSneaking()) {
+    public EnumActionResult clOnItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (stack.getItemDamage() == 2 && player.isSneaking()) {
             stack.getTagCompound().getKeySet().clear();
         }
-        return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+        return super.clOnItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
     }
 
     @Override
@@ -63,12 +64,12 @@ public class UsableMetaItem extends CompatItem {
         if (itemStackIn.getItemDamage() == 2 && playerIn.isSneaking()) {
             itemStackIn.getTagCompound().getKeySet().clear();
         }
-        return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+        return super.clOnItemRightClick(worldIn, playerIn, hand);
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void clGetSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         for (int i = 0; i < 3; i++) {
             subItems.add(new ItemStack(ModItems.usableMetaItem, 1, i));
         }

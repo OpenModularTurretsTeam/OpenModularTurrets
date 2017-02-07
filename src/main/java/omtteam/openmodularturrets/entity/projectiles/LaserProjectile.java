@@ -51,7 +51,7 @@ public class LaserProjectile extends TurretProjectile {
             return;
         }
         if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
-            IBlockState hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos());
+            IBlockState hitBlock = getEntityWorld().getBlockState(movingobjectposition.getBlockPos());
 
             if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
                 return;
@@ -63,12 +63,12 @@ public class LaserProjectile extends TurretProjectile {
             }
         }
 
-        if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
+        if (movingobjectposition.entityHit != null && !getEntityWorld().isRemote) {
             Random random = new Random();
-            worldObj.playSound(null, new BlockPos(posX, posY, posZ), ModSounds.laserHitSound, SoundCategory.AMBIENT,
+            getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.laserHitSound, SoundCategory.AMBIENT,
                     ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
 
-            if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
+            if (movingobjectposition.entityHit != null && !getEntityWorld().isRemote) {
                 int damage = ConfigHandler.getLaserTurretSettings().getDamage();
 
                 if (isAmped) {

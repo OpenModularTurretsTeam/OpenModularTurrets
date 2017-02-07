@@ -30,7 +30,7 @@ class LaserRenderer extends Render {
     @SuppressWarnings("unused")
     private void renderLaser(LaserProjectile par1EntityRocket, double x, double y, double z, float entityYaw, float partialTicks) {
         for (int i = 0; i <= 20; i++) {
-            par1EntityRocket.worldObj.spawnParticle(EnumParticleTypes.REDSTONE, x, y, z, 1.0D, 1.0D, 1.0D);
+            par1EntityRocket.getEntityWorld().spawnParticle(EnumParticleTypes.REDSTONE, x, y, z, 1.0D, 1.0D, 1.0D);
         }
 
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);

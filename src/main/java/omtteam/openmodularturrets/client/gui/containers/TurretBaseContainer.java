@@ -6,6 +6,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import omtteam.omlib.compatability.minecraft.CompatSlot;
 import omtteam.openmodularturrets.client.gui.customSlot.AddonSlot;
 import omtteam.openmodularturrets.client.gui.customSlot.UpgradeSlot;
 import omtteam.openmodularturrets.handler.NetworkingHandler;
@@ -17,6 +18,7 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.util.InvUtil.mergeItemStackWithStackLimit;
+import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
 
 /**
  * Created by Keridos on 09/12/2015.
@@ -28,14 +30,14 @@ public abstract class TurretBaseContainer extends Container {
     @Override
     @ParametersAreNonnullByDefault
     public boolean canInteractWith(EntityPlayer player) {
-        return tileEntity.isUseableByPlayer(player);
+        return tileEntity.isUsableByPlayer(player);
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
         ItemStack stack = null;
-        Slot slotObject = inventorySlots.get(slot);
+        CompatSlot slotObject = (CompatSlot) inventorySlots.get(slot);
 
         // null checks and checks if the item can be stacked (maxStackSize > 1)
         if (slotObject != null && slotObject.getHasStack()) {
@@ -84,16 +86,16 @@ public abstract class TurretBaseContainer extends Container {
                 }
             }
 
-            if (stackInSlot.stackSize == 0) {
+            if (getStackSize(stackInSlot) == 0) {
                 slotObject.putStack(null);
             } else {
                 slotObject.onSlotChanged();
             }
 
-            if (stackInSlot.stackSize == stack.stackSize) {
+            if (getStackSize(stackInSlot) == getStackSize(stack)) {
                 return null;
             }
-            slotObject.onPickupFromSlot(player, stackInSlot);
+            slotObject.onPickup(player, stackInSlot);
         }
         return stack;
     }

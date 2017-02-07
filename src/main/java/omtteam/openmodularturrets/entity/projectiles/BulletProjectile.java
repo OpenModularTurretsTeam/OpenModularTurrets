@@ -43,7 +43,7 @@ public class BulletProjectile extends TurretProjectile {
             return;
         }
         if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
-            IBlockState hitBlock = worldObj.getBlockState(movingobjectposition.getBlockPos());
+            IBlockState hitBlock = getEntityWorld().getBlockState(movingobjectposition.getBlockPos());
 
             if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
                 return;
@@ -55,9 +55,9 @@ public class BulletProjectile extends TurretProjectile {
             }
         }
 
-        if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
+        if (movingobjectposition.entityHit != null && !getEntityWorld().isRemote) {
             if (movingobjectposition.typeOfHit.equals(RayTraceResult.Type.MISS)) {
-                if (worldObj.isAirBlock(movingobjectposition.getBlockPos())) {
+                if (getEntityWorld().isAirBlock(movingobjectposition.getBlockPos())) {
                     return;
                 }
             }
@@ -82,9 +82,9 @@ public class BulletProjectile extends TurretProjectile {
             }
         }
 
-        if (movingobjectposition.entityHit == null && !worldObj.isRemote) {
+        if (movingobjectposition.entityHit == null && !getEntityWorld().isRemote) {
             Random random = new Random();
-            worldObj.playSound(null, new BlockPos(posX, posY, posZ), ModSounds.bulletHitSound, SoundCategory.AMBIENT,
+            getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.bulletHitSound, SoundCategory.AMBIENT,
                     ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
         }
         this.setDead();

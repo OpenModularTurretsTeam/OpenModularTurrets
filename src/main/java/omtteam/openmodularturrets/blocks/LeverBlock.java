@@ -16,11 +16,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.omlib.util.IHasItemBlock;
+import omtteam.omlib.util.compat.MathTools;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.items.blocks.ItemBlockLever;
 import omtteam.openmodularturrets.reference.OMTNames;
@@ -104,7 +104,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
         if (isBaseValid(worldIn.getTileEntity(pos.west()))) {
             l = 180;
         }
-        int shu = MathHelper.floor_double((double) (l * 4.0F / 360.0F) + 0.5D) & 3;
+        int shu = MathTools.floor_double((double) (l * 4.0F / 360.0F) + 0.5D) & 3;
         worldIn.setBlockState(pos, worldIn.getBlockState(pos).withProperty(ROTATION, shu), 2);
 
     }
