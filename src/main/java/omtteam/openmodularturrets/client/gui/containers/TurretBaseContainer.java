@@ -6,7 +6,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import omtteam.omlib.compatability.minecraft.CompatSlot;
+import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.openmodularturrets.client.gui.customSlot.AddonSlot;
 import omtteam.openmodularturrets.client.gui.customSlot.UpgradeSlot;
 import omtteam.openmodularturrets.handler.NetworkingHandler;
@@ -15,6 +15,7 @@ import omtteam.openmodularturrets.items.UpgradeMetaItem;
 import omtteam.openmodularturrets.network.messages.MessageTurretBase;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.util.InvUtil.mergeItemStackWithStackLimit;
@@ -34,15 +35,17 @@ public abstract class TurretBaseContainer extends Container {
     }
 
     @SuppressWarnings("ConstantConditions")
+    @Nonnull
+    @ParametersAreNonnullByDefault
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-        ItemStack stack = null;
-        CompatSlot slotObject = (CompatSlot) inventorySlots.get(slot);
+        ItemStack stack = ItemStackTools.getEmptyStack();
+        Slot slotObject = inventorySlots.get(slot);
 
         // null checks and checks if the item can be stacked (maxStackSize > 1)
         if (slotObject != null && slotObject.getHasStack()) {
             ItemStack stackInSlot = slotObject.getStack();
-            stack = stackInSlot.copy();
+            stack = ItemStackTools.safeCopy(stackInSlot);
 
             // Actual slot start index of turret base
             int slotStart = 36;
@@ -68,34 +71,34 @@ public abstract class TurretBaseContainer extends Container {
                 // Priority addon and upgrade slot first
                 if (stackInSlot.getItem() instanceof AddonMetaItem) {
                     if (!mergeItemStackWithStackLimit(stackInSlot, addonSlotStart, addonSlotEnd, false, this)) {
-                        return null;
+                        return ItemStackTools.getEmptyStack();
                     }
                 } else if (stackInSlot.getItem() instanceof UpgradeMetaItem) {
                     if (!mergeItemStackWithStackLimit(stackInSlot, upgSlotStart, upgSlotEnd, false, this)) {
-                        return null;
+                        return ItemStackTools.getEmptyStack();
                     }
                 } else {
                     if (!mergeItemStackWithStackLimit(stackInSlot, slotStart, slotStart + 9, false, this)) {
-                        return null;
+                        return ItemStackTools.getEmptyStack();
                     }
                 }
             } else // Transfer from turret base inventory
             {
                 if (!mergeItemStackWithStackLimit(stackInSlot, 0, slotStart, false, this)) {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
             }
 
             if (getStackSize(stackInSlot) == 0) {
-                slotObject.putStack(null);
+                slotObject.putStack(ItemStackTools.getEmptyStack());
             } else {
                 slotObject.onSlotChanged();
             }
 
             if (getStackSize(stackInSlot) == getStackSize(stack)) {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
-            slotObject.onPickupFromSlot(player, stackInSlot);
+            slotObject.onSlotChanged();
         }
         return stack;
     }

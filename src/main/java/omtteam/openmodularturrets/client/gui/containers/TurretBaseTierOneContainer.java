@@ -6,7 +6,6 @@ import omtteam.openmodularturrets.client.gui.customSlot.AmmoSlot;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 public class TurretBaseTierOneContainer extends TurretBaseContainer {
-
     public TurretBaseTierOneContainer(InventoryPlayer inventoryPlayer, TurretBase te) {
         this.tileEntity = te;
 
