@@ -15,7 +15,6 @@ import omtteam.openmodularturrets.items.UpgradeMetaItem;
 import omtteam.openmodularturrets.network.messages.MessageTurretBase;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.util.InvUtil.mergeItemStackWithStackLimit;
@@ -35,7 +34,6 @@ public abstract class TurretBaseContainer extends Container {
     }
 
     @SuppressWarnings("ConstantConditions")
-    @Nonnull
     @ParametersAreNonnullByDefault
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
