@@ -35,11 +35,11 @@
             }
         ]
     },
-    "machinegun": {
+    "machine_gun": {
         "category": "block",
         "sounds": [
             {
-                "name": "openmodularturrets:machinegun",
+                "name": "openmodularturrets:machine_gun",
                 "stream": false
             }
         ]

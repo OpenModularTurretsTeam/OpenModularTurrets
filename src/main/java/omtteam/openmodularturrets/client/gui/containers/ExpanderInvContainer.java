@@ -6,6 +6,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import omtteam.omlib.compatability.minecraft.CompatSlot;
+import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.openmodularturrets.client.gui.customSlot.AmmoSlot;
 import omtteam.openmodularturrets.tileentity.Expander;
 
@@ -46,7 +47,7 @@ public class ExpanderInvContainer extends Container {
     @SuppressWarnings("ConstantConditions")
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int slot) {
-        ItemStack itemStack = null;
+        ItemStack itemStack = ItemStackTools.getEmptyStack();
         CompatSlot invSlot = (CompatSlot) this.inventorySlots.get(slot);
 
         if (invSlot != null && invSlot.getHasStack()) {
@@ -55,23 +56,23 @@ public class ExpanderInvContainer extends Container {
 
             if (slot < 9) {
                 if (!mergeItemStackWithStackLimit(itemStack1, 9, 45, true, this)) {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
             } else if (!mergeItemStackWithStackLimit(itemStack1, 0, 9, false, this)) {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
 
             if (getStackSize(itemStack1) == 0) {
-                invSlot.putStack(null);
+                invSlot.putStack(ItemStackTools.getEmptyStack());
             } else {
                 invSlot.onSlotChanged();
             }
 
             if (getStackSize(itemStack1) == getStackSize(itemStack)) {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
 
-            invSlot.onPickupFromSlot(playerIn, itemStack1);
+            invSlot.onSlotChanged();
         }
 
         return itemStack;
@@ -87,7 +88,7 @@ public class ExpanderInvContainer extends Container {
             int slotStackLimit = i < tileEntity.getSizeInventory() ? tileEntity.getInventoryStackLimit() : 64;
             int totalLimit = slotStackLimit < stack.getMaxStackSize() ? slotStackLimit : stack.getMaxStackSize();
 
-            if (slotStack == null) {
+            if (slotStack == ItemStackTools.getEmptyStack()) {
                 int transfer = totalLimit < getStackSize(stack) ? totalLimit : getStackSize(stack);
                 ItemStack stackToPut = stack.copy();
                 setStackSize(stackToPut, transfer);
