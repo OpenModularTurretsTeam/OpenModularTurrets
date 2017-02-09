@@ -400,7 +400,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         this.shouldConcealTurrets = par1.getBoolean("shouldConcealTurrets");
         this.multiTargeting = par1.getBoolean("multiTargeting");
         if (ConfigHandler.offlineModeSupport) {
-            this.owner = par1.getString("owner");
+            this.owner = par1.getString("ownerName");
         } else if (getPlayerUIDUnstable(par1.getString("owner")) != null) {
             this.owner = getPlayerUIDUnstable(par1.getString("owner")).toString();
         } else if (getPlayerUUID(par1.getString("owner")) != null) {
