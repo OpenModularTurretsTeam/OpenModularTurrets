@@ -26,7 +26,6 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
 @SuppressWarnings("unused")
-@SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
 
     private void registerItemModel(final Item item, int meta) {

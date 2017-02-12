@@ -203,6 +203,12 @@ gui.omtteam.openmodularturrets:targeting_options=Ziel-Optionen
 gui.omtteam.openmodularturrets:permissions=Berechtigungen
 gui.omtteam.openmodularturrets:multi=Multi
 gui.omtteam.openmodularturrets:single=Einzel
+gui.omtteam.openmodularturrets:yaw=Yaw
+gui.omtteam.openmodularturrets:pitch=Pitch
+gui.omtteam.openmodularturrets:toggle=Wechsel
+gui.omtteam.openmodularturrets:auto_fire=Auto-Schießen
+gui.omtteam.openmodularturrets:turret=Turm
+
 
 tooltip.omtteam.openmodularturrets:add_trusted_player=Fügt den angegebenen Spieler der vertrauten Spieler Liste hinzu.
 tooltip.omtteam.openmodularturrets:remove_trusted_player=Entfernt den angezeigten Spieler aus der Liste.

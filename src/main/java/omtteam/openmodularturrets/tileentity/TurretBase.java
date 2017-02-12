@@ -273,7 +273,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         for (TileEntity te : tileEntities) {
             if (te != null && te instanceof TurretHead) {
-                ((TurretHead) te).forceFire = state;
+                ((TurretHead) te).setAutoFire(state);
             }
         }
     }
@@ -281,7 +281,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
     public boolean setTurretForceFire(EnumFacing facing, boolean state) {
         TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
         if (turretHead != null && turretHead instanceof TurretHead) {
-            ((TurretHead) turretHead).forceFire = state;
+            ((TurretHead) turretHead).setAutoFire(state);
             return true;
         }
         return false;
