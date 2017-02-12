@@ -13,7 +13,7 @@ import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.*;
 
-import static omtteam.omlib.util.ReflectionInitHelper.registerBlocks;
+import static omtteam.omlib.util.InitHelper.registerBlock;
 
 
 public class ModBlocks {
@@ -39,51 +39,51 @@ public class ModBlocks {
 
 
     public static void initBlocks() {
-        turretBase = new BlockTurretBase();
-        expander = new BlockExpander();
+        turretBase = registerBlock(new BlockTurretBase());
+        expander = registerBlock(new BlockExpander());
 
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
-            disposableItemTurret = new BlockDisposableTurret();
+            disposableItemTurret = registerBlock(new BlockDisposableTurret());
         }
 
         if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
-            potatoCannonTurret = new BlockPotatoCannonTurret();
+            potatoCannonTurret = registerBlock(new BlockPotatoCannonTurret());
         }
 
         if (ConfigHandler.getGunTurretSettings().isEnabled()) {
-            machineGunTurret = new BlockGunTurret();
+            machineGunTurret = registerBlock(new BlockGunTurret());
         }
 
         if (ConfigHandler.getIncendiary_turret().isEnabled()) {
-            incendiaryTurret = new BlockIncendiaryTurret();
+            incendiaryTurret = registerBlock(new BlockIncendiaryTurret());
         }
 
         if (ConfigHandler.getGrenadeTurretSettings().isEnabled()) {
-            grenadeLauncherTurret = new BlockGrenadeTurret();
+            grenadeLauncherTurret = registerBlock(new BlockGrenadeTurret());
         }
 
         if (ConfigHandler.getRelativistic_turret().isEnabled()) {
-            relativisticTurret = new BlockRelativisticTurret();
+            relativisticTurret = registerBlock(new BlockRelativisticTurret());
         }
 
         if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
-            rocketTurret = new BlockRocketTurret();
+            rocketTurret = registerBlock(new BlockRocketTurret());
         }
 
         if (ConfigHandler.getTeleporter_turret().isEnabled()) {
-            teleporterTurret = new BlockTeleporterTurret();
+            teleporterTurret = registerBlock(new BlockTeleporterTurret());
         }
 
         if (ConfigHandler.getLaserTurretSettings().isEnabled()) {
-            laserTurret = new BlockLaserTurret();
+            laserTurret = registerBlock(new BlockLaserTurret());
         }
 
         if (ConfigHandler.getRailgun_turret().isEnabled()) {
-            railGunTurret = new BlockRailGunTurret();
+            railGunTurret = registerBlock(new BlockRailGunTurret());
         }
 
-        leverBlock = new LeverBlock();
-        registerBlocks(ModBlocks.class);
+        leverBlock = registerBlock(new LeverBlock());
+
     }
 
     public static void initTileEntities() {

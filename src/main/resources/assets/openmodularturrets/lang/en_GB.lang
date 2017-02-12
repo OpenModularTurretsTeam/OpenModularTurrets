@@ -229,6 +229,11 @@ gui.omtteam.openmodularturrets:targeting_options=Targeting Options
 gui.omtteam.openmodularturrets:permissions=Permissions
 gui.omtteam.openmodularturrets:multi=Multi
 gui.omtteam.openmodularturrets:single=Single
+gui.omtteam.openmodularturrets:yaw=Yaw
+gui.omtteam.openmodularturrets:pitch=Pitch
+gui.omtteam.openmodularturrets:toggle=Toggle
+gui.omtteam.openmodularturrets:auto_fire=Auto-Fire
+gui.omtteam.openmodularturrets:turret=Turret
 
 tooltip.omtteam.openmodularturrets:add_trusted_player=Adds the given player to the turret's trusted list.
 tooltip.omtteam.openmodularturrets:remove_trusted_player=Removes the viewed trusted player from the turret's trusted player list.

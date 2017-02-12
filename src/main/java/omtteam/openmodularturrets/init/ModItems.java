@@ -4,7 +4,7 @@ package omtteam.openmodularturrets.init;
 import net.minecraft.item.Item;
 import omtteam.openmodularturrets.items.*;
 
-import static omtteam.omlib.util.ReflectionInitHelper.registerItems;
+import static omtteam.omlib.util.InitHelper.registerItem;
 
 
 public class ModItems {
@@ -16,12 +16,11 @@ public class ModItems {
     public static Item usableMetaItem;
 
     public static void init() {
-        intermediateProductTiered = new IntermediateProductTiered();
-        intermediateProductRegular = new IntermediateProductRegular();
-        addonMetaItem = new AddonMetaItem();
-        upgradeMetaItem = new UpgradeMetaItem();
-        ammoMetaItem = new AmmoMetaItem();
-        usableMetaItem = new UsableMetaItem();
-        registerItems(ModItems.class);
+        intermediateProductTiered = registerItem(new IntermediateProductTiered());
+        intermediateProductRegular = registerItem(new IntermediateProductRegular());
+        addonMetaItem = registerItem(new AddonMetaItem());
+        upgradeMetaItem = registerItem(new UpgradeMetaItem());
+        ammoMetaItem = registerItem(new AmmoMetaItem());
+        usableMetaItem = registerItem(new UsableMetaItem());
     }
 }

@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.init;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 
-import static omtteam.omlib.util.ReflectionInitHelper.registerSounds;
+import static omtteam.omlib.util.InitHelper.registerSound;
 
 
 /**
@@ -30,26 +30,23 @@ public class ModSounds {
     public static SoundEvent turretWarnSound;
     public static SoundEvent amped;
 
-
     public static void init() {
-        turretDeploySound = new SoundEvent(new ResourceLocation("openmodularturrets", "turret_deploy")).setRegistryName("openmodularturrets", "turret_deploy");
-        turretRetractSound = new SoundEvent(new ResourceLocation("openmodularturrets", "turret_retract")).setRegistryName("openmodularturrets", "turret_retract");
-        bulletHitSound = new SoundEvent(new ResourceLocation("openmodularturrets", "bullet_hit")).setRegistryName("openmodularturrets", "bullet_hit");
-        railGunHitSound = new SoundEvent(new ResourceLocation("openmodularturrets", "rail_gun_hit")).setRegistryName("openmodularturrets", "rail_gun_hit");
-        laserHitSound = new SoundEvent(new ResourceLocation("openmodularturrets", "laser_hit")).setRegistryName("openmodularturrets", "laser_hit");
-        disposableLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "disposable")).setRegistryName("openmodularturrets", "disposable");
-        grenadeLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "grenade")).setRegistryName("openmodularturrets", "grenade");
-        machinegunLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "machine_gun")).setRegistryName("openmodularturrets", "machine_gun");
-        incendiaryLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "incendiary")).setRegistryName("openmodularturrets", "incendiary");
-        laserLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "laser")).setRegistryName("openmodularturrets", "laser");
-        potatoLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "potato")).setRegistryName("openmodularturrets", "potato");
-        railgunLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "rail_gun")).setRegistryName("openmodularturrets", "rail_gun");
-        relativisticLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "relativistic")).setRegistryName("openmodularturrets", "relativistic");
-        rocketLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "rocket")).setRegistryName("openmodularturrets", "rocket");
-        teleportLaunchSound = new SoundEvent(new ResourceLocation("openmodularturrets", "teleport")).setRegistryName("openmodularturrets", "teleport");
-        amped = new SoundEvent(new ResourceLocation("openmodularturrets", "amped")).setRegistryName("openmodularturrets", "amped");
-
-        registerSounds(ModSounds.class);
+        turretDeploySound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "turret_deploy")).setRegistryName("openmodularturrets", "turret_deploy"));
+        turretRetractSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "turret_retract")).setRegistryName("openmodularturrets", "turret_retract"));
+        bulletHitSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "bullet_hit")).setRegistryName("openmodularturrets", "bullet_hit"));
+        railGunHitSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "rail_gun_hit")).setRegistryName("openmodularturrets", "rail_gun_hit"));
+        laserHitSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "laser_hit")).setRegistryName("openmodularturrets", "laser_hit"));
+        disposableLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "disposable")).setRegistryName("openmodularturrets", "disposable"));
+        grenadeLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "grenade")).setRegistryName("openmodularturrets", "grenade"));
+        machinegunLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "machine_gun")).setRegistryName("openmodularturrets", "machine_gun"));
+        incendiaryLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "incendiary")).setRegistryName("openmodularturrets", "incendiary"));
+        laserLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "laser")).setRegistryName("openmodularturrets", "laser"));
+        potatoLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "potato")).setRegistryName("openmodularturrets", "potato"));
+        railgunLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "rail_gun")).setRegistryName("openmodularturrets", "rail_gun"));
+        relativisticLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "relativistic")).setRegistryName("openmodularturrets", "relativistic"));
+        rocketLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "rocket")).setRegistryName("openmodularturrets", "rocket"));
+        teleportLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "teleport")).setRegistryName("openmodularturrets", "teleport"));
+        amped = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "amped")).setRegistryName("openmodularturrets", "amped"));
     }
 
 
