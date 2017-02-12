@@ -49,7 +49,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     public float rotationAnimation = 0.00F;
     public boolean shouldConceal = false;
     private boolean playedDeploy = false;
-    public boolean forceFire = false;
+    private boolean autoFire = false;
     private int ticksWithoutTarget;
     private double targetLastX = 0;
     private double targetLastY = 0;
@@ -78,7 +78,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         nbtTagCompound.setFloat("rotationXZ", rotationXZ);
         nbtTagCompound.setInteger("ticksBeforeFire", ticks);
         nbtTagCompound.setBoolean("shouldConceal", shouldConceal);
-        nbtTagCompound.setBoolean("forceFire", forceFire);
+        nbtTagCompound.setBoolean("autoFire", autoFire);
         return nbtTagCompound;
     }
 
@@ -88,7 +88,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         this.rotationXY = par1.getFloat("rotationXY");
         this.rotationXZ = par1.getFloat("rotationXZ");
         this.shouldConceal = par1.getBoolean("shouldConceal");
-        this.forceFire = par1.getBoolean("forceFire");
+        this.autoFire = par1.getBoolean("autoFire");
     }
 
     void setSide() {
@@ -180,6 +180,22 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         this.rotationXZ = rotationXZ;
     }
 
+    public float getYaw() {
+        return getYawFromXYXZ(this.rotationXY, this.rotationXZ);
+    }
+
+    public float getPitch() {
+        return getPitchFromXYXZ(this.rotationXY, this.rotationXZ);
+    }
+
+    public boolean getAutoFire() {
+        return autoFire;
+    }
+
+    public void setAutoFire(boolean autoFire) {
+        this.autoFire = autoFire;
+    }
+
     protected abstract int getTurretPowerUsage();
 
     protected abstract int getTurretFireRate();
@@ -263,7 +279,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
                 return;
             }
 
-            if (this.forceFire) {
+            if (this.autoFire) {
                 forceShot();
                 return;
             }

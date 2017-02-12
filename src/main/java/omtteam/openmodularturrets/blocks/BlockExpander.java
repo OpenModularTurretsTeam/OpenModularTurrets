@@ -26,6 +26,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.omlib.util.IHasItemBlock;
 import omtteam.omlib.util.MathUtil;
+import omtteam.omlib.util.PlayerUtil;
+import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
@@ -145,13 +147,18 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
             return true;
         }
         TurretBase base = expander.getBase();
-        if (base != null && base.getTrustedPlayer(playerIn.getUniqueID()) != null) {
+        if (base == null) {
+            worldIn.destroyBlock(pos, true);
+            return true;
+        }
+        TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(playerIn, base);
+        if (trustedPlayer != null) {
             if (base.getTrustedPlayer(playerIn.getUniqueID()).canOpenGUI && state.getValue(META) < 5) {
                 playerIn.openGui(OpenModularTurrets.instance, 7, worldIn, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
         }
-        if (base != null && playerIn.getUniqueID().toString().equals(base.getOwner())) {
+        if (PlayerUtil.isPlayerOwner(playerIn, base)) {
             if (playerIn.isSneaking() && playerIn.getHeldItemMainhand() == null) {
                 worldIn.destroyBlock(pos, true);
             } else if (state.getValue(META) < 5) {

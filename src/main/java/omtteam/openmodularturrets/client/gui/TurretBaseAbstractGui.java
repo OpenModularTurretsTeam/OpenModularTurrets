@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.EnumFacing;
-import omtteam.omlib.client.gui.BlockingAbstractGui;
+import omtteam.omlib.client.gui.BlockingAbstractGuiContainer;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
@@ -30,7 +30,7 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
  * Abstract class for all turret base GUIs.
  */
 
-public class TurretBaseAbstractGui extends BlockingAbstractGui {
+public class TurretBaseAbstractGui extends BlockingAbstractGuiContainer {
     private int mouseX;
     private int mouseY;
     private final EntityPlayer player;

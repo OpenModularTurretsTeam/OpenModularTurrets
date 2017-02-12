@@ -108,6 +108,11 @@ public class OMTNames {
             public static final String PERMISSIONS = "gui.omtteam.openmodularturrets:permissions";
             public static final String MULTI = "gui.omtteam.openmodularturrets:multi";
             public static final String SINGLE = "gui.omtteam.openmodularturrets:single";
+            public static final String YAW = "gui.omtteam.openmodularturrets:yaw";
+            public static final String PITCH = "gui.omtteam.openmodularturrets:pitch";
+            public static final String AUTO_FIRE = "gui.omtteam.openmodularturrets:auto_fire";
+            public static final String TOGGLE = "gui.omtteam.openmodularturrets:toggle";
+            public static final String TURRET = "gui.omtteam.openmodularturrets:turret";
         }
 
         public static class Tooltip {

@@ -32,10 +32,7 @@ import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
@@ -44,6 +41,7 @@ import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
 
 public class TurretHeadUtil {
     private static final HashSet<EntityPlayerMP> warnedPlayers = new HashSet<>();
+
 
     public static void warnPlayers(TurretBase base, World worldObj, int downLowAmount, BlockPos pos, int turretRange) {
         if (base.isAttacksPlayers()) {
@@ -391,6 +389,39 @@ public class TurretHeadUtil {
         }
 
         return null;
+    }
+
+    public static EnumFacing getTurretBaseFacing(World world, BlockPos pos) {
+        if (world == null) {
+            return null;
+        }
+
+        for (EnumFacing facing : EnumFacing.values()) {
+            BlockPos offsetPos = pos.offset(facing);
+
+            if (world.getTileEntity(offsetPos) instanceof TurretBase) {
+                return facing;
+            }
+        }
+
+        return null;
+    }
+
+    public static Map<EnumFacing, TurretHead> getBaseTurrets(World world, BlockPos pos) {
+        if (world == null) {
+            return null;
+        }
+        Map<EnumFacing, TurretHead> map = new HashMap<>();
+
+        for (EnumFacing facing : EnumFacing.values()) {
+            BlockPos offsetPos = pos.offset(facing);
+
+            if (world.getTileEntity(offsetPos) instanceof TurretHead) {
+                map.put(facing, (TurretHead) world.getTileEntity(offsetPos));
+            }
+        }
+
+        return map;
     }
 
     public static float getAimYaw(Entity target, BlockPos pos) {
