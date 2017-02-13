@@ -38,10 +38,8 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
 
-
 public class TurretHeadUtil {
     private static final HashSet<EntityPlayerMP> warnedPlayers = new HashSet<>();
-
 
     public static void warnPlayers(TurretBase base, World worldObj, int downLowAmount, BlockPos pos, int turretRange) {
         if (base.isAttacksPlayers()) {
@@ -299,7 +297,7 @@ public class TurretHeadUtil {
 
         for (int i = 0; i < exp.getSizeInventory(); i++) {
             ItemStack ammoCheck = exp.getStackInSlot(i);
-            if (ammoCheck != null && ammoCheck.getItem() == itemStack.getItem()) {
+            if (ammoCheck != ItemStackTools.getEmptyStack() && ammoCheck.getItem() == itemStack.getItem()) {
                 if (hasRecyclerAddon(base)) {
                     int chance = new Random().nextInt(99);
 
@@ -483,7 +481,7 @@ public class TurretHeadUtil {
             }
         }
 
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
 
     public static ItemStack useSpecificItemStackItemFromBase(TurretBase base, ItemStack ammoStackRequired) {
@@ -513,7 +511,7 @@ public class TurretHeadUtil {
             }
         }
 
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
 
     @SuppressWarnings("ConstantConditions")

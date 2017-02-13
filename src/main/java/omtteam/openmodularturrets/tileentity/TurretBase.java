@@ -20,6 +20,7 @@ import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityMachine;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.compat.ItemStackList;
+import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.items.AddonMetaItem;
@@ -337,13 +338,13 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
             ItemStack redstoneBlock = TurretHeadUtil.useSpecificItemStackBlockFromBase(base, new ItemStack(
                     Blocks.REDSTONE_BLOCK));
 
-            if (redstoneBlock == null) {
+            if (redstoneBlock == ItemStackTools.getEmptyStack()) {
                 redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
                         new ItemStack(Blocks.REDSTONE_BLOCK),
                         base);
             }
 
-            if (redstoneBlock != null && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base.getMaxEnergyStored(
+            if (redstoneBlock != ItemStackTools.getEmptyStack() && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base.getMaxEnergyStored(
                     EnumFacing.DOWN) - base.getEnergyStored(EnumFacing.DOWN))) {
                 base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen() * 9);
                 return;
@@ -351,12 +352,12 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
 
             ItemStack redstone = TurretHeadUtil.useSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE));
 
-            if (redstone == null) {
+            if (redstone == ItemStackTools.getEmptyStack()) {
                 redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
                         new ItemStack(Items.REDSTONE), base);
             }
 
-            if (redstone != null) {
+            if (redstone != ItemStackTools.getEmptyStack()) {
                 base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen());
             }
         }
