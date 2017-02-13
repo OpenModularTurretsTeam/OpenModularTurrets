@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import omtteam.omlib.compatability.minecraft.CompatItemBlock;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
@@ -29,6 +28,7 @@ public class ItemBlockRocketTurret extends CompatItemBlock {
     @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack itemStack, EntityPlayer player, List tooltip, boolean advanced) {
+        tooltip.add(safeLocalize(OMTNames.Localizations.GUI.TURRET_HEAD_DESCRIPTION));
         tooltip.add("");
         tooltip.add(TextFormatting.GOLD + "--" + safeLocalize("tooltip.info") + "--");
         tooltip.add(safeLocalize("tooltip.tier") + ": " + TextFormatting.WHITE + "4");
@@ -44,7 +44,7 @@ public class ItemBlockRocketTurret extends CompatItemBlock {
         tooltip.add(
                 TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");
         tooltip.add(safeLocalize("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
-                (ConfigHandler.getRocketTurretSettings().getDamage() / 2F) + " " + I18n.translateToLocal(
+                (ConfigHandler.getRocketTurretSettings().getDamage() / 2F) + " " + safeLocalize(
                 "tooltip.health"));
         tooltip.add(safeLocalize("tooltip.aoe") + ": " + TextFormatting.WHITE + "5");
         tooltip.add(safeLocalize("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(

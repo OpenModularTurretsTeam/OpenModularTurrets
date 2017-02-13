@@ -53,6 +53,8 @@ public class ItemBlockTurretBase extends CompatItemBlock {
     @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
+        tooltip.add(safeLocalize(OMTNames.Localizations.GUI.TURRET_BASE_DESCRIPTION));
+
         switch (stack.getMetadata()) {
             case 0:
                 tooltip.add("");

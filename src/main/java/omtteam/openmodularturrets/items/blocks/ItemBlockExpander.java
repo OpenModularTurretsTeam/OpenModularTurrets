@@ -111,8 +111,8 @@ public class ItemBlockExpander extends CompatItemBlock {
                 tooltip.add("");
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
-                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierOneCapacity() + " " + I18n.translateToLocal(
+                tooltip.add(TextFormatting.WHITE + safeLocalize(
+                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierOneCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.1"));
@@ -121,8 +121,8 @@ public class ItemBlockExpander extends CompatItemBlock {
                 tooltip.add("");
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
-                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierTwoCapacity() + " " + I18n.translateToLocal(
+                tooltip.add(TextFormatting.WHITE + safeLocalize(
+                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierTwoCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.2"));
@@ -131,8 +131,8 @@ public class ItemBlockExpander extends CompatItemBlock {
                 tooltip.add("");
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
-                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierThreeCapacity() + " " + I18n.translateToLocal(
+                tooltip.add(TextFormatting.WHITE + safeLocalize(
+                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierThreeCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.3"));
@@ -141,8 +141,8 @@ public class ItemBlockExpander extends CompatItemBlock {
                 tooltip.add("");
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
-                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierFourCapacity() + " " + I18n.translateToLocal(
+                tooltip.add(TextFormatting.WHITE + safeLocalize(
+                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierFourCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.4"));
@@ -151,8 +151,8 @@ public class ItemBlockExpander extends CompatItemBlock {
                 tooltip.add("");
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
-                tooltip.add(TextFormatting.WHITE + I18n.translateToLocal(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierFiveCapacity() + " " + I18n.translateToLocal(
+                tooltip.add(TextFormatting.WHITE + safeLocalize(
+                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierFiveCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.5"));

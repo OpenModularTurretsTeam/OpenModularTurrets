@@ -85,13 +85,11 @@ public class OMTNames {
     }
 
     public static class Localizations {
-        @SuppressWarnings("unused")
         public static class GUI {
+            public static final String BASE = "gui.omtteam.openmodularturrets:base";
             public static final String OWNER = "gui.omtteam.openmodularturrets:owner";
             public static final String INVERT = "gui.omtteam.openmodularturrets:invert";
             public static final String ACTIVE = "gui.omtteam.openmodularturrets:active";
-            public static final String TRUE = "gui.omtteam.openmodularturrets:true";
-            public static final String FALSE = "gui.omtteam.openmodularturrets:false";
             public static final String TRUSTED_PLAYERS = "gui.omtteam.openmodularturrets:trusted_players";
             public static final String ATTACK_PLAYERS = "gui.omtteam.openmodularturrets:attack_players";
             public static final String ATTACK_MOBS = "gui.omtteam.openmodularturrets:attack_mobs";
@@ -113,6 +111,11 @@ public class OMTNames {
             public static final String AUTO_FIRE = "gui.omtteam.openmodularturrets:auto_fire";
             public static final String TOGGLE = "gui.omtteam.openmodularturrets:toggle";
             public static final String TURRET = "gui.omtteam.openmodularturrets:turret";
+            public static final String TURRET_BASE_DESCRIPTION = "gui.omtteam.openmodularturrets:turret_base_description";
+            public static final String TURRET_HEAD_DESCRIPTION = "gui.omtteam.openmodularturrets:turret_head_description";
+            public static final String TURRET_LEVER_DESCRIPTION = "gui.omtteam.openmodularturrets:turret_lever_description";
+            public static final String NO_TURRET = "gui.omtteam.openmodularturrets:no_turret";
+            public static final String TYPE = "gui.omtteam.openmodularturrets:type";
         }
 
         public static class Tooltip {
@@ -123,6 +126,17 @@ public class OMTNames {
             public static final String TP_CAN_OPEN_GUI = "tooltip.omtteam.openmodularturrets:tp_can_open_gui";
             public static final String TP_CAN_CHANGE_TARGETING = "tooltip.omtteam.openmodularturrets:tp_can_change_targeting";
             public static final String TP_CAN_ADMINISTER = "tooltip.omtteam.openmodularturrets:tp_can_administer";
+            public static final String TEXT_TRUSTED_PLAYER = "tooltip.omtteam.openmodularturrets:tp_text_field";
+            public static final String TARGET_NEUTRALS = "tooltip.omtteam.openmodularturrets:target_neutrals";
+            public static final String TARGET_MOBS = "tooltip.omtteam.openmodularturrets:target_mobs";
+            public static final String TARGET_PLAYERS = "tooltip.omtteam.openmodularturrets:target_players";
+            public static final String MINUS_Y = "tooltip.omtteam.openmodularturrets:minus_y";
+            public static final String PLUS_Y = "tooltip.omtteam.openmodularturrets:plus_y";
+            public static final String CONFIGURE_BASE = "tooltip.omtteam.openmodularturrets:configure_base";
+            public static final String MULTI_TARGETING = "tooltip.omtteam.openmodularturrets:multi_targeting";
+            public static final String AMMO_SLOT = "tooltip.omtteam.openmodularturrets:ammo_slot";
+            public static final String ADDON_SLOT = "tooltip.omtteam.openmodularturrets:addon_slot";
+            public static final String UPGRADE_SLOT = "tooltip.omtteam.openmodularturrets:upgrade_slot";
         }
     }
 
