@@ -8,6 +8,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.EnumFacing;
 import omtteam.omlib.client.gui.BlockingAbstractGuiContainer;
+import omtteam.omlib.client.gui.IHasTooltips;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
@@ -30,7 +31,7 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
  * Abstract class for all turret base GUIs.
  */
 
-public class TurretBaseAbstractGui extends BlockingAbstractGuiContainer {
+public class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHasTooltips {
     private int mouseX;
     private int mouseY;
     private final EntityPlayer player;
@@ -132,17 +133,8 @@ public class TurretBaseAbstractGui extends BlockingAbstractGuiContainer {
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.INVENTORY), 8, ySize - 97 + 4, 0);
         fontRenderer.drawStringWithShadow("" + base.getyAxisDetect(), 127, 39, 40000);
         fontRenderer.drawString("-Y", 123, 6, 0);
+        ;
 
-        int k = (this.width - this.xSize) / 2;
-        int l = (this.height - this.ySize) / 2;
-        if (mouseX > k + 153 && mouseX < k + 153 + 14) {
-            if (mouseY > l + 17 && mouseY < l + 17 + 51) {
-                ArrayList list = new ArrayList();
-                list.add(base.getEnergyStored(EnumFacing.DOWN) + "/" + base.getMaxEnergyStored(
-                        EnumFacing.DOWN) + " RF");
-                this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
-            }
-        }
 
         ArrayList targetInfo = new ArrayList();
 
@@ -165,7 +157,48 @@ public class TurretBaseAbstractGui extends BlockingAbstractGuiContainer {
         targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
 
         this.drawHoveringText(targetInfo, -128, 17, fontRenderer);
+
+        drawTooltips();
     }
+
+    @Override
+    public void drawTooltips() {
+        int k = (this.width - this.xSize) / 2;
+        int l = (this.height - this.ySize) / 2;
+        int tooltipToDraw = buttonList.stream().filter(GuiButton::isMouseOver).mapToInt(s -> s.id).sum();
+        ArrayList<String> tooltip = new ArrayList<>();
+        switch (tooltipToDraw) {
+            case 1:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.MINUS_Y));
+                break;
+            case 2:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.PLUS_Y));
+                break;
+            case 5:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.CONFIGURE_BASE));
+                break;
+            case 6:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.MULTI_TARGETING));
+                break;
+        }
+
+        if (mouseX > k + 153 && mouseX < k + 153 + 14 && mouseY > l + 17 && mouseY < l + 17 + 51) {
+            tooltip.add(base.getEnergyStored(EnumFacing.DOWN) + "/" + base.getMaxEnergyStored(
+                    EnumFacing.DOWN) + " RF");
+        }
+        if (mouseX > k + 71 && mouseX < k + 71 + 40 && mouseY > l + 6 && mouseY < l + 6 + 14) {
+            tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.ADDON_SLOT));
+        }
+        if (mouseX > k + 71 && mouseX < k + 71 + 40 && mouseY > l + 39 && mouseY < l + 39 + 14) {
+            tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.UPGRADE_SLOT));
+        }
+        if (mouseX > k + 8 && mouseX < k + 8 + 40 && mouseY > l + 6 && mouseY < l + 6 + 14) {
+            tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.AMMO_SLOT));
+        }
+        if (!tooltip.isEmpty())
+            this.drawHoveringText(tooltip, mouseX - k, mouseY - l, Minecraft.getMinecraft().fontRendererObj);
+    }
+
 
     private void sendChangeToServer() {
         MessageAdjustYAxisDetect message = new MessageAdjustYAxisDetect(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),

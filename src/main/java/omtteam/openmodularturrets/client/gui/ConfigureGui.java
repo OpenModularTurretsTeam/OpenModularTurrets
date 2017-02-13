@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
+import omtteam.omlib.client.gui.IHasTooltips;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
@@ -21,13 +22,12 @@ import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 
-public class ConfigureGui extends GuiContainer {
+public class ConfigureGui extends GuiContainer implements IHasTooltips {
     private final TurretBase base;
     private GuiTextField textFieldAddTrustedPlayer;
     private final EntityPlayer player;
@@ -76,10 +76,58 @@ public class ConfigureGui extends GuiContainer {
             this.buttonList.add(new GuiButton(10, x + 116, y + 135, 23, 20, this.base.getTrustedPlayers().get(
                     base.trustedPlayerIndex).admin ? "\u00A72Y" : "\u00A7cN"));
         } else {
-            this.buttonList.add(new GuiButton(999, x + 70, y + 135, 23, 20, "?"));
-            this.buttonList.add(new GuiButton(999, x + 93, y + 135, 23, 20, "?"));
-            this.buttonList.add(new GuiButton(999, x + 116, y + 135, 23, 20, "?"));
+            this.buttonList.add(new GuiButton(8, x + 70, y + 135, 23, 20, "?"));
+            this.buttonList.add(new GuiButton(9, x + 93, y + 135, 23, 20, "?"));
+            this.buttonList.add(new GuiButton(10, x + 116, y + 135, 23, 20, "?"));
         }
+    }
+
+    @Override
+    public void drawTooltips() {
+        int k = (this.width - this.xSize) / 2;
+        int l = (this.height - this.ySize) / 2;
+        int tooltipToDraw = buttonList.stream().filter(GuiButton::isMouseOver).mapToInt(s -> s.id).sum();
+        if (tooltipToDraw == 0) {
+            tooltipToDraw = isMouseOverTextField(textFieldAddTrustedPlayer, mouseX - this.guiLeft, mouseY - this.guiTop) ? 11 : 0;
+        }
+        ArrayList<String> tooltip = new ArrayList<>();
+        switch (tooltipToDraw) {
+            case 1:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TARGET_MOBS));
+                break;
+            case 2:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TARGET_NEUTRALS));
+                break;
+            case 3:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TARGET_PLAYERS));
+                break;
+            case 4:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.ADD_TRUSTED_PLAYER));
+                break;
+            case 5:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.REMOVE_TRUSTED_PLAYER));
+                break;
+            case 6:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.VIEW_NEXT_TRUSTED_PLAYER));
+                break;
+            case 7:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.VIEW_PREVIOUS_TRUSTED_PLAYER));
+                break;
+            case 8:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_OPEN_GUI));
+                break;
+            case 9:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_CHANGE_TARGETING));
+                break;
+            case 10:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_ADMINISTER));
+                break;
+            case 11:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TEXT_TRUSTED_PLAYER));
+                break;
+        }
+        if (!tooltip.isEmpty())
+            this.drawHoveringText(tooltip, mouseX - k, mouseY - l, Minecraft.getMinecraft().fontRendererObj);
     }
 
     @SuppressWarnings("EmptyCatchBlock")
@@ -95,15 +143,19 @@ public class ConfigureGui extends GuiContainer {
 
     @SuppressWarnings("EmptyCatchBlock")
     @Override
-    protected void keyTyped(char par1, int par2) {
+    protected void keyTyped(char typedChar, int keyCode) {
+        if (keyCode == 1 || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(keyCode)) {
+            this.mc.thePlayer.closeScreen();
+            return;
+        }
         if (!textFieldAddTrustedPlayer.isFocused()) {
             try {
-                super.keyTyped(par1, par2);
+                super.keyTyped(typedChar, keyCode);
             } catch (IOException e) {
 
             }
         } else {
-            textFieldAddTrustedPlayer.textboxKeyTyped(par1, par2);
+            textFieldAddTrustedPlayer.textboxKeyTyped(typedChar, keyCode);
         }
     }
 
@@ -300,69 +352,7 @@ public class ConfigureGui extends GuiContainer {
         }
 
         textFieldAddTrustedPlayer.drawTextBox();
-
-        int k = (this.width - this.xSize) / 2;
-        int l = (this.height - this.ySize) / 2;
-
-        // x + 114, y + 98, 51, 20
-        if (mouseX > k + 114 && mouseX < k + 114 + 51) {
-            if (mouseY > l + 98 && mouseY < l + 98 + 20) {
-                ArrayList list = new ArrayList();
-                list.add(safeLocalize(OMTNames.Localizations.Tooltip.ADD_TRUSTED_PLAYER));
-                this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
-            }
-        }
-
-        if (mouseX > k + 35 && mouseX < k + 35 + 30) {
-            if (mouseY > l + 135 && mouseY < l + 135 + 20) {
-                ArrayList list = new ArrayList();
-                list.add(safeLocalize(OMTNames.Localizations.Tooltip.REMOVE_TRUSTED_PLAYER));
-                this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
-            }
-        }
-
-        if (mouseX > k + 10 && mouseX < k + 10 + 20) {
-            if (mouseY > l + 135 && mouseY < l + 135 + 20) {
-                ArrayList list = new ArrayList();
-                list.add(safeLocalize(OMTNames.Localizations.Tooltip.VIEW_PREVIOUS_TRUSTED_PLAYER));
-                this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
-            }
-        }
-
-        if (mouseX > k + 145 && mouseX < k + 145 + 20) {
-            if (mouseY > l + 135 && mouseY < l + 135 + 20) {
-                ArrayList list = new ArrayList();
-                list.add(safeLocalize(OMTNames.Localizations.Tooltip.VIEW_NEXT_TRUSTED_PLAYER));
-                this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
-            }
-        }
-
-        // x + 70,y + 135,23,20,
-        if (mouseX > k + 70 && mouseX < k + 70 + 23) {
-            if (mouseY > l + 135 && mouseY < l + 135 + 20) {
-                ArrayList list = new ArrayList();
-                list.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_OPEN_GUI));
-                this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
-            }
-        }
-
-        // x + 93,y + 135,23,20,
-        if (mouseX > k + 93 && mouseX < k + 93 + 23) {
-            if (mouseY > l + 135 && mouseY < l + 135 + 20) {
-                ArrayList list = new ArrayList();
-                list.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_CHANGE_TARGETING));
-                this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
-            }
-        }
-
-        // x + 116,y + 135,23,20,
-        if (mouseX > k + 116 && mouseX < k + 116 + 23) {
-            if (mouseY > l + 135 && mouseY < l + 135 + 20) {
-                ArrayList list = new ArrayList();
-                list.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_ADMINISTER));
-                this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
-            }
-        }
+        drawTooltips();
     }
 
     @Override
@@ -425,7 +415,6 @@ public class ConfigureGui extends GuiContainer {
     @Override
     public void updateScreen() {
         super.updateScreen();
-        Logger.getGlobal().info("waitforserver: " + waitForServerTrustedPlayers);
         if (this.base.getTrustedPlayers().size() == 0 && this.buttonList.size() > 9 && !this.buttonList.get(9).displayString.equals("?")) {
             this.initGui();
         } else if (waitForServerTrustedPlayers >= 0 && this.base.getTrustedPlayers().size() > 0) {
