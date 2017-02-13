@@ -29,6 +29,7 @@ public class ItemBlockIncendiaryTurret extends CompatItemBlock {
     @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack itemStack, EntityPlayer player, List tooltip, boolean advanced) {
+        tooltip.add(safeLocalize(OMTNames.Localizations.GUI.TURRET_HEAD_DESCRIPTION));
         tooltip.add("");
         tooltip.add(TextFormatting.GOLD + "--" + safeLocalize("tooltip.info") + "--");
         tooltip.add(safeLocalize("tooltip.tier") + ": " + TextFormatting.WHITE + "2");
@@ -44,7 +45,7 @@ public class ItemBlockIncendiaryTurret extends CompatItemBlock {
         tooltip.add(
                 TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");
         tooltip.add(safeLocalize("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
-                (ConfigHandler.getIncendiary_turret().getDamage() / 2F) + " " + I18n.translateToLocal(
+                (ConfigHandler.getIncendiary_turret().getDamage() / 2F) + " " + safeLocalize(
                 "tooltip.health"));
         tooltip.add(safeLocalize("tooltip.aoe") + ": " + TextFormatting.WHITE + "5");
         tooltip.add(safeLocalize("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
