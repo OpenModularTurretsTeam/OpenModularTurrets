@@ -13,7 +13,7 @@ import omtteam.openmodularturrets.init.ModBlocks;
  * Created by Keridos on 23/01/2015.
  * This Class
  */
-public class OpenModularTurretsWikiTab extends BaseWikiTab {
+class OpenModularTurretsWikiTab extends BaseWikiTab {
     public OpenModularTurretsWikiTab() {
         pageEntries.add("block/turret_base");
         pageEntries.add("block/lever_block");

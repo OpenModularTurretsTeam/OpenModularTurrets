@@ -31,7 +31,7 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
  * Abstract class for all turret base GUIs.
  */
 
-public class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHasTooltips {
+class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHasTooltips {
     private int mouseX;
     private int mouseY;
     private final EntityPlayer player;
@@ -133,7 +133,6 @@ public class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implemen
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.INVENTORY), 8, ySize - 97 + 4, 0);
         fontRenderer.drawStringWithShadow("" + base.getyAxisDetect(), 127, 39, 40000);
         fontRenderer.drawString("-Y", 123, 6, 0);
-        ;
 
 
         ArrayList targetInfo = new ArrayList();

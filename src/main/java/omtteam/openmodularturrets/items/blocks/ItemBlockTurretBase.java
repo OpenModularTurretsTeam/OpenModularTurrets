@@ -26,7 +26,7 @@ public class ItemBlockTurretBase extends CompatItemBlock {
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.turretBase);
     }
 
-    public final static String[] subNames = {
+    private final static String[] subNames = {
             "_tier_one", "_tier_two", "_tier_three", "_tier_four", "_tier_five"
     };
 

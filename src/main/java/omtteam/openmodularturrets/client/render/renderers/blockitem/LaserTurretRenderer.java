@@ -13,7 +13,7 @@ import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
-public class LaserTurretRenderer extends TileEntitySpecialRenderer {
+class LaserTurretRenderer extends TileEntitySpecialRenderer {
     private final ModelSolarPanelAddon solar;
     private final ModelDamageAmp amp;
     private final ModelRedstoneReactor reac;

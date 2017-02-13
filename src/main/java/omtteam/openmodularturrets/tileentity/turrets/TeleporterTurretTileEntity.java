@@ -171,7 +171,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public SoundEvent getLaunchSoundEffect() {
+    protected SoundEvent getLaunchSoundEffect() {
         return ModSounds.teleportLaunchSound;
     }
 }

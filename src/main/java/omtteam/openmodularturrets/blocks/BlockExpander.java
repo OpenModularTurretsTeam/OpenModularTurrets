@@ -51,8 +51,8 @@ import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
  */
 @SuppressWarnings("deprecation")
 public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBlock {
-    public static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
-    public static final PropertyDirection FACING = PropertyDirection.create("facing");
+    private static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
+    private static final PropertyDirection FACING = PropertyDirection.create("facing");
 
     public BlockExpander() {
         super(Material.GLASS);

@@ -12,7 +12,7 @@ import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 
 public class RecipeHandler {
-    public static ItemStack ammoBlazingClay;
+    private static ItemStack ammoBlazingClay;
     public static ItemStack ammoBullet;
     public static ItemStack ammoFerroSlug;
     public static ItemStack ammoGrenade;
@@ -29,23 +29,23 @@ public class RecipeHandler {
     public static ItemStack expanderPowerTierFour;
     public static ItemStack expanderPowerTierFive;
 
-    public static ItemStack addonConcealer;
-    public static ItemStack addonDamageAmp;
+    private static ItemStack addonConcealer;
+    private static ItemStack addonDamageAmp;
     @SuppressWarnings("unused")
     public static ItemStack addonPotentia;
-    public static ItemStack addonRecycler;
-    public static ItemStack addonRedstoneReactor;
+    private static ItemStack addonRecycler;
+    private static ItemStack addonRedstoneReactor;
     public static ItemStack addonSerialPort;
-    public static ItemStack addonSolarPanel;
+    private static ItemStack addonSolarPanel;
 
-    public static ItemStack upgradeAccuracy;
-    public static ItemStack upgradeEfficiency;
-    public static ItemStack upgradeFireRate;
-    public static ItemStack upgradeRange;
-    public static ItemStack upgradeScatterShot;
+    private static ItemStack upgradeAccuracy;
+    private static ItemStack upgradeEfficiency;
+    private static ItemStack upgradeFireRate;
+    private static ItemStack upgradeRange;
+    private static ItemStack upgradeScatterShot;
 
     public static ItemStack ioBus;
-    public static ItemStack memoryCard;
+    private static ItemStack memoryCard;
 
 
     @SuppressWarnings("StatementWithEmptyBody")

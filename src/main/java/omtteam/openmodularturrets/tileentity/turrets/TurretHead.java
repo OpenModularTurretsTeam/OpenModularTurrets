@@ -160,22 +160,18 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         return TurretHeadUtil.getTurretBase(this.getWorld(), this.pos);
     }
 
-    @SuppressWarnings("unused")
     public float getRotationXY() {
         return rotationXY;
     }
 
-    @SuppressWarnings("unused")
     public void setRotationXY(float rotationXY) {
         this.rotationXY = rotationXY;
     }
 
-    @SuppressWarnings("unused")
     public float getRotationXZ() {
         return rotationXZ;
     }
 
-    @SuppressWarnings("unused")
     public void setRotationXZ(float rotationXZ) {
         this.rotationXZ = rotationXZ;
     }
@@ -241,9 +237,30 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         rotationAnimation = rotationAnimation + 0.03F;
     }
 
+    private ItemStack getAmmoStack() {
+        ItemStack ammo = ItemStackTools.getEmptyStack();
+        if (this.requiresAmmo()) {
+            if (this.requiresSpecificAmmo()) {
+                for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
+                    ammo = TurretHeadUtil.useSpecificItemStackItemFromBase(base, this.getAmmo());
+                    if (ammo == ItemStackTools.getEmptyStack()) {
+                        ammo = TurretHeadUtil.getSpecificItemFromInvExpanders(this.getWorld(), this.getAmmo(), base);
+                    }
+                }
+            } else {
+                for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
+                    ammo = TurretHeadUtil.useAnyItemStackFromBase(base);
+                    if (ammo == ItemStackTools.getEmptyStack()) {
+                        ammo = TurretHeadUtil.getAnyItemFromInvExpanders(this.getWorld(), base);
+                    }
+                }
+            }
+        }
+        return ammo;
+    }
+
     @Override
     public void update() {
-
         setSide();
         this.base = getBase();
 
@@ -359,29 +376,13 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
             }
 
             //Finally, try to shoot if criteria is met.
-            ItemStack ammo = ItemStackTools.getEmptyStack();
-            if (this.requiresAmmo()) {
-                if (this.requiresSpecificAmmo()) {
-                    for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-                        ammo = TurretHeadUtil.useSpecificItemStackItemFromBase(base, this.getAmmo());
-                        if (ammo == ItemStackTools.getEmptyStack()) {
-                            ammo = TurretHeadUtil.getSpecificItemFromInvExpanders(this.getWorld(), this.getAmmo(), base);
-                        }
-                    }
-                } else {
-                    for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-                        ammo = TurretHeadUtil.useAnyItemStackFromBase(base);
-                        if (ammo == ItemStackTools.getEmptyStack()) {
-                            ammo = TurretHeadUtil.getAnyItemFromInvExpanders(this.getWorld(), base);
-                        }
-                    }
-                }
+            ItemStack ammo = getAmmoStack();
 
-                // Is there ammo?
-                if (ammo == ItemStackTools.getEmptyStack()) {
-                    return;
-                }
+            // Is there ammo?
+            if (ammo == ItemStackTools.getEmptyStack() && this.requiresAmmo()) {
+                return;
             }
+
 
             // Consume energy
             base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot());
@@ -478,28 +479,12 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
             return false;
         }
-        ItemStack ammo = ItemStackTools.getEmptyStack();
-        if (this.requiresAmmo()) {
-            if (this.requiresSpecificAmmo()) {
-                for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-                    ammo = TurretHeadUtil.useSpecificItemStackItemFromBase(base, this.getAmmo());
-                    if (ammo == ItemStackTools.getEmptyStack()) {
-                        ammo = TurretHeadUtil.getSpecificItemFromInvExpanders(this.getWorld(), this.getAmmo(), base);
-                    }
-                }
-            } else {
-                for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-                    ammo = TurretHeadUtil.useAnyItemStackFromBase(base);
-                    if (ammo == ItemStackTools.getEmptyStack()) {
-                        ammo = TurretHeadUtil.getAnyItemFromInvExpanders(this.getWorld(), base);
-                    }
-                }
-            }
+        //Finally, try to shoot if criteria is met.
+        ItemStack ammo = getAmmoStack();
 
-            // Is there ammo?
-            if (ammo == ItemStackTools.getEmptyStack()) {
-                return false;
-            }
+        // Is there ammo?
+        if (ammo == ItemStackTools.getEmptyStack() && this.requiresAmmo()) {
+            return false;
         }
 
         base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot());

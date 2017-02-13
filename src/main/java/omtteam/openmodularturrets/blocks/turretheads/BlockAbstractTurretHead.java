@@ -71,6 +71,11 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     }
 
     @Override
+    public boolean isFullBlock(IBlockState state) {
+        return false;
+    }
+
+    @Override
     @ParametersAreNonnullByDefault
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         return worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())) instanceof TurretBase ||

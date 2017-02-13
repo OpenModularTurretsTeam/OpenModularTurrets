@@ -9,7 +9,7 @@ import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import org.lwjgl.opengl.GL11;
 
-public class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
+class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
     private final ModelTeleporterTurret model;
 
     public TeleporterTurretRenderer() {
