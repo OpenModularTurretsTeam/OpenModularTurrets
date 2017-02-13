@@ -500,7 +500,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
             } else {
                 projectile.rotationYaw = getYawFromXYXZ(this.getRotationXY(), this.getRotationXZ());
                 projectile.rotationPitch = getPitchFromXYXZ(this.getRotationXY(), this.getRotationXZ());
-                Vec3d velocity = getVelocityVectorFromYawPitch(this.getRotationXZ(), this.getRotationXY(), 1.6F);
+                Vec3d velocity = getVelocityVectorFromYawPitch(projectile.rotationYaw, projectile.rotationPitch, 1.6F);
                 projectile.motionX = velocity.xCoord + RandomUtil.random.nextGaussian() * 0.007499999832361937D * accuracy;
                 projectile.motionY = velocity.yCoord + RandomUtil.random.nextGaussian() * 0.007499999832361937D * accuracy;
                 projectile.motionZ = velocity.zCoord + RandomUtil.random.nextGaussian() * 0.007499999832361937D * accuracy;
