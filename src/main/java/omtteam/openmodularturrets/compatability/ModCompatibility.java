@@ -12,7 +12,7 @@ import omtteam.openmodularturrets.reference.Reference;
  */
 public class ModCompatibility {
     public static boolean IGWModLoaded = false;
-    public static boolean ThermalExpansionLoaded = false;
+    private static boolean ThermalExpansionLoaded = false;
     public static boolean EnderIOLoaded = false;
     public static boolean MekanismLoaded = false;
     public static boolean ThaumcraftLoaded = false;

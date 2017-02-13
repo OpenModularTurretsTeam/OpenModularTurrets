@@ -9,7 +9,7 @@ import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import org.lwjgl.opengl.GL11;
 
-public class LeverRenderer extends TileEntitySpecialRenderer {
+class LeverRenderer extends TileEntitySpecialRenderer {
     private final ModelLever model;
 
     public LeverRenderer() {

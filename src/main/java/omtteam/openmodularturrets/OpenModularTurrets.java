@@ -17,7 +17,7 @@ import omtteam.openmodularturrets.reference.Reference;
 
 import java.util.logging.Logger;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION, acceptedMinecraftVersions = "[1.9,1.12)", dependencies = Reference.DEPENDENCIES)
+@Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION, acceptedMinecraftVersions = Reference.ACCEPTED_MINECRAFT_VERSION, dependencies = Reference.DEPENDENCIES)
 public class OpenModularTurrets {
     @SuppressWarnings("unused")
     @Mod.Instance(Reference.MOD_ID)
@@ -30,7 +30,7 @@ public class OpenModularTurrets {
     public static CreativeTabs modularTurretsTab;
     @SuppressWarnings("FieldCanBeLocal")
     private GuiHandler gui;
-    private static Logger logger;
+    private static final Logger logger = Logger.getLogger(Reference.NAME);
 
     public static Logger getLogger() {
         return logger;
@@ -39,7 +39,6 @@ public class OpenModularTurrets {
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        logger = Logger.getLogger(Reference.NAME);
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         gui = new GuiHandler();
         modularTurretsTab = new ModularTurretsTab(Reference.MOD_ID);

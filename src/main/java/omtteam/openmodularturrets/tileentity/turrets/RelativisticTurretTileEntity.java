@@ -153,7 +153,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public SoundEvent getLaunchSoundEffect() {
+    protected SoundEvent getLaunchSoundEffect() {
         return ModSounds.relativisticLaunchSound;
     }
 }

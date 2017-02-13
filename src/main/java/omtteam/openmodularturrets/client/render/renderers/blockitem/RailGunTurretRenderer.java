@@ -15,7 +15,7 @@ import omtteam.openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
-public class RailGunTurretRenderer extends TileEntitySpecialRenderer {
+class RailGunTurretRenderer extends TileEntitySpecialRenderer {
     private final ModelSolarPanelAddon solar;
     private final ModelDamageAmp amp;
     private final ModelRedstoneReactor reac;

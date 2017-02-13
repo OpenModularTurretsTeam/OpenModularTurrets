@@ -16,7 +16,7 @@ import omtteam.openmodularturrets.tileentity.turrets.DisposableItemTurretTileEnt
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
-public class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
+class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
     private final ModelSolarPanelAddon solar;
     private final ModelDamageAmp amp;
     private final ModelRedstoneReactor reac;
