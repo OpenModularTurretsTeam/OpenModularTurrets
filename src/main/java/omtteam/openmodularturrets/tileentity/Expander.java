@@ -19,7 +19,7 @@ public class Expander extends TileEntityContainer implements ITickable {
     protected TurretBase base;
     private boolean powerExpander;
     private EnumFacing orientation;
-    protected int tier;
+    private int tier;
 
     public Expander() {
         this.inventory = ItemStackList.create(9);

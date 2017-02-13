@@ -19,15 +19,15 @@ public class CommonProxy {
         initHandlers();
     }
 
-    protected void initTileRenderers() {
+    void initTileRenderers() {
 
     }
 
-    protected void initEntityRenderers() {
+    void initEntityRenderers() {
 
     }
 
-    protected void initHandlers() {
+    void initHandlers() {
         NetworkingHandler.initNetworking();
     }
 

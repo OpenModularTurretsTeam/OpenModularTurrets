@@ -21,7 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @SideOnly(Side.CLIENT)
 class LaserRenderer extends Render {
-    protected LaserRenderer() {
+    LaserRenderer() {
         super(Minecraft.getMinecraft().getRenderManager());
     }
 

@@ -34,9 +34,9 @@ import static omtteam.openmodularturrets.blocks.BlockTurretBase.TIER;
 
 @SideOnly(Side.CLIENT)
 public class TurretBaseBakedModel extends CamoBakedModel {
-    public static final ResourceLocation FAKE_LOCATION = new ResourceLocation("openmodularturrets", "models/block/custom/turret_base");
+    private static final ResourceLocation FAKE_LOCATION = new ResourceLocation("openmodularturrets", "models/block/custom/turret_base");
 
-    public TurretBaseBakedModel(List<IBakedModel> list) {
+    private TurretBaseBakedModel(List<IBakedModel> list) {
         super(list);
     }
 

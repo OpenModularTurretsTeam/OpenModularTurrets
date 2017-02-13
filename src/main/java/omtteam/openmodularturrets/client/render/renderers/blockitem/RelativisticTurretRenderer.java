@@ -9,7 +9,7 @@ import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import org.lwjgl.opengl.GL11;
 
-public class RelativisticTurretRenderer extends TileEntitySpecialRenderer {
+class RelativisticTurretRenderer extends TileEntitySpecialRenderer {
     private final ModelRelativisticTurret model;
 
     public RelativisticTurretRenderer() {

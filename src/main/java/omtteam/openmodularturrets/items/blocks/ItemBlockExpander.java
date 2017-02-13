@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import omtteam.omlib.compatability.minecraft.CompatItemBlock;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModItems;
@@ -31,7 +30,7 @@ public class ItemBlockExpander extends CompatItemBlock {
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.expander);
     }
 
-    public final static String[] subNames = {
+    private final static String[] subNames = {
             OMTNames.Blocks.expanderInvTierOne, OMTNames.Blocks.expanderInvTierTwo, OMTNames.Blocks.expanderInvTierThree,
             OMTNames.Blocks.expanderInvTierFour, OMTNames.Blocks.expanderInvTierFive, OMTNames.Blocks.expanderPowerTierOne,
             OMTNames.Blocks.expanderPowerTierTwo, OMTNames.Blocks.expanderPowerTierThree, OMTNames.Blocks.expanderPowerTierFour,
