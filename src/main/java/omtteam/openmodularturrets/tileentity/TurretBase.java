@@ -59,12 +59,8 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
     public int trustedPlayerIndex = 0;
     protected IBlockState camoBlockState;
 
-    //For concealment
     public boolean shouldConcealTurrets;
-
-    //For multiTargeting
     private boolean multiTargeting = false;
-
     private int yAxisDetect;
     private boolean attacksMobs;
     private boolean attacksNeutrals;
