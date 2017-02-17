@@ -91,22 +91,21 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        float l = 0;
-        if (isBaseValid(worldIn.getTileEntity(pos.north()))) {
+        float l = 0F;
+        if (isBaseValid(worldIn.getTileEntity(pos.east()))) {
             l = 270F;
         }
-        if (isBaseValid(worldIn.getTileEntity(pos.east()))) {
+        if (isBaseValid(worldIn.getTileEntity(pos.west()))) {
             l = 90F;
         }
         if (isBaseValid(worldIn.getTileEntity(pos.south()))) {
             l = 0F;
         }
-        if (isBaseValid(worldIn.getTileEntity(pos.west()))) {
-            l = 180;
+        if (isBaseValid(worldIn.getTileEntity(pos.north()))) {
+            l = 180F;
         }
         int shu = MathTools.floor_double((double) (l * 4.0F / 360.0F) + 0.5D) & 3;
-        worldIn.setBlockState(pos, worldIn.getBlockState(pos).withProperty(ROTATION, shu), 2);
-
+        worldIn.setBlockState(pos, worldIn.getBlockState(pos).withProperty(ROTATION, shu), 3);
     }
 
     @Override
@@ -180,5 +179,15 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     @Nonnull
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return new AxisAlignedBB(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
+    }
+
+    @Override
+    protected void clOnNeighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+        if (!(isBaseValid(worldIn.getTileEntity(pos.north())) ||
+                isBaseValid(worldIn.getTileEntity(pos.east())) ||
+                isBaseValid(worldIn.getTileEntity(pos.south())) ||
+                isBaseValid(worldIn.getTileEntity(pos.west())))) {
+            worldIn.destroyBlock(pos, true);
+        }
     }
 }
