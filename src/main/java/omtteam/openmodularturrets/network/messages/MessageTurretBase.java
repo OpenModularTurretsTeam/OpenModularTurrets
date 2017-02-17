@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static omtteam.omlib.util.compat.MinecraftTools.getWorld;
+import static omtteam.omlib.proxy.ClientProxy.getWorld;
+
 
 /**
  * Created by Keridos on 05.10.14.
