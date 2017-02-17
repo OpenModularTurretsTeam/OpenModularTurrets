@@ -119,7 +119,7 @@ turret.accuracy.medium=Mittel
 turret.accuracy.high=Hoch
 turret.accuracy.exact=Exakt
 
-turret.ammo.0=Jeder Block/Item
+turret.ammo.0=Siehe Config File,standard: bretter, kieselstein.
 turret.ammo.1=Gewehrkugel
 turret.ammo.2=Granate
 turret.ammo.3=Zielsuchende Rakete
