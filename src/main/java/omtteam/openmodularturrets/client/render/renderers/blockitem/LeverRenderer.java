@@ -38,7 +38,7 @@ class LeverRenderer extends TileEntitySpecialRenderer {
 
         if (te.getWorld() != null) {
             rotation = te.getBlockMetadata();
-            GL11.glRotatef(rotation * 90, 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(rotation * -90F, 0.0F, 1.0F, 0.0F);
             GL11.glScalef(1.0F, -1F, -1F);
             model.Shape1.rotateAngleZ = (lever.rotation / 55);
             model.Shape2.rotateAngleZ = (lever.rotation / 55);
