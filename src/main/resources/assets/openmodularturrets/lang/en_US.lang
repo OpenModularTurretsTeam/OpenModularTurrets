@@ -140,7 +140,7 @@ turret.accuracy.medium=Medium
 turret.accuracy.high=High
 turret.accuracy.exact=Pin Point
 
-turret.ammo.0=Any Block/Item
+turret.ammo.0=See config file, default: cobble/planks
 turret.ammo.1=Bullet
 turret.ammo.2=Grenade
 turret.ammo.3=Homing Rocket
