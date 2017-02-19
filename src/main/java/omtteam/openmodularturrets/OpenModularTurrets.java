@@ -28,8 +28,6 @@ public class OpenModularTurrets {
     private static CommonProxy proxy;
 
     public static CreativeTabs modularTurretsTab;
-    @SuppressWarnings("FieldCanBeLocal")
-    private GuiHandler gui;
     private static final Logger logger = Logger.getLogger(Reference.NAME);
 
     public static Logger getLogger() {
@@ -40,10 +38,9 @@ public class OpenModularTurrets {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.init(event.getSuggestedConfigurationFile());
-        gui = new GuiHandler();
-        modularTurretsTab = new ModularTurretsTab(Reference.MOD_ID);
         proxy.preInit();
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, gui);
+        modularTurretsTab = ModularTurretsTab.getInstance();
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, GuiHandler.getInstance());
     }
 
     @SuppressWarnings("unused")
