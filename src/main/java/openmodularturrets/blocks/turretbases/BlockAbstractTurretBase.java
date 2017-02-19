@@ -102,7 +102,7 @@ public abstract class BlockAbstractTurretBase extends BlockAbstractContainer {
         if (!world.isRemote) {
             EntityPlayerMP player = (EntityPlayerMP) elb;
             TurretBase base = (TurretBase) world.getTileEntity(x, y, z);
-            PlayerUtil.setBaseOwnerUUID(player, base);
+            PlayerUtil.setBaseOwner(player, base);
             base.setOwnerName(player.getDisplayName());
             if (world.isBlockIndirectlyGettingPowered(x, y, z)) {
                 base.setRedstone(true);

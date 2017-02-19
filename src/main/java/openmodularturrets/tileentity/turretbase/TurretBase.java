@@ -399,13 +399,14 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         this.attacksPlayers = par1.getBoolean("attacksPlayers");
         this.shouldConcealTurrets = par1.getBoolean("shouldConcealTurrets");
         this.multiTargeting = par1.getBoolean("multiTargeting");
-        if (ConfigHandler.offlineModeSupport) {
-            this.owner = par1.getString("ownerName");
-        } else if (getPlayerUIDUnstable(par1.getString("owner")) != null) {
+
+        if (getPlayerUIDUnstable(par1.getString("owner")) != null) {
             this.owner = getPlayerUIDUnstable(par1.getString("owner")).toString();
         } else if (getPlayerUUID(par1.getString("owner")) != null) {
             this.owner = getPlayerUUID(par1.getString("owner")).toString();
-        } else {
+        } else if (getPlayerUUID(par1.getString("ownerName")) != null) {
+            this.owner = getPlayerUUID(par1.getString("ownerName")).toString();
+        } else if (!ConfigHandler.offlineModeSupport) {
             Logger.getGlobal().info("Found non existent owner: " + par1.getString(
                     "owner") + "at coordinates: " + this.xCoord + "," + this.yCoord + "," + this.zCoord + ". Dropping Turretbase");
             worldObj.func_147480_a(this.xCoord, this.yCoord, this.zCoord, true);
@@ -418,26 +419,14 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         if (trustedPlayers.size() == 0) {
             buildTrustedPlayersFromNBT(par1.getTagList("trustedPlayers", 8));
         }
-        if (par1.hasKey("active")) {
-            this.active = par1.getBoolean("active");
-        } else {
-            active = true;
-        }
-        if (par1.hasKey("inverted")) {
-            this.inverted = par1.getBoolean("inverted");
-        } else {
-            inverted = true;
-        }
+        this.active = !par1.hasKey("active") || par1.getBoolean("active");
+        this.inverted = !par1.hasKey("inverted") || par1.getBoolean("inverted");
         if (par1.hasKey("redstone")) {
             this.redstone = par1.getBoolean("redstone");
         } else {
             checkRedstone = true;
         }
-        if (par1.hasKey("computerAccessible")) {
-            this.computerAccessible = par1.getBoolean("computerAccessible");
-        } else {
-            computerAccessible = false;
-        }
+        this.computerAccessible = par1.hasKey("computerAccessible") && par1.getBoolean("computerAccessible");
         if (par1.hasKey("storageEU")) {
             this.storageEU = par1.getDouble("storageEU");
         } else {
@@ -1162,7 +1151,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     @Override
     public void attach(IComputerAccess computer) {
         if (comp == null) {
-            comp = new ArrayList<IComputerAccess>();
+            comp = new ArrayList<>();
         }
         comp.add(computer);
     }
@@ -1171,7 +1160,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     @Override
     public void detach(IComputerAccess computer) {
         if (comp == null) {
-            comp = new ArrayList<IComputerAccess>();
+            comp = new ArrayList<>();
         }
         comp.remove(computer);
     }

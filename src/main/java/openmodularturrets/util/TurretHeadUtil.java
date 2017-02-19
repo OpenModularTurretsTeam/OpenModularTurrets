@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static openmodularturrets.util.PlayerUtil.isPlayerOwner;
+
 public class TurretHeadUtil {
     private static final HashSet<EntityPlayerMP> warnedPlayers = new HashSet<EntityPlayerMP>();
 
@@ -103,7 +105,7 @@ public class TurretHeadUtil {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
-                        if (!entity.getUniqueID().toString().equals(base.getOwner()) && !isTrustedPlayer(
+                        if (!isPlayerOwner(entity, base) && !isTrustedPlayer(
                                 entity.getUniqueID(), base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
                         }
