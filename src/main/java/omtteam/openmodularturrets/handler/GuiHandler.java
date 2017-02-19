@@ -14,6 +14,18 @@ import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 public class GuiHandler implements IGuiHandler {
+    private static GuiHandler instance;
+
+    private GuiHandler() {
+    }
+
+    public static GuiHandler getInstance() {
+        if (instance == null) {
+            instance = new GuiHandler();
+        }
+        return instance;
+    }
+
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
