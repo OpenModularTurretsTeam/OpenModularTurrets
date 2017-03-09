@@ -28,6 +28,7 @@ import omtteam.openmodularturrets.compatability.ModCompatibility;
 import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
+import omtteam.openmodularturrets.items.AmmoMetaItem;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
@@ -37,6 +38,7 @@ import java.util.*;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
+import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 
 public class TurretHeadUtil {
     private static final HashSet<EntityPlayerMP> warnedPlayers = new HashSet<>();
@@ -334,19 +336,73 @@ public class TurretHeadUtil {
         return ItemStackTools.getEmptyStack();
     }
 
-    public static ItemStack getAnyItemFromInvExpanders(World world, TurretBase base) {
+    public static ItemStack getDisposableAmmoFromInvExpander(World world, TurretBase base) {
         for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, base.getPos())) {
             if (tileEntity instanceof Expander && !((Expander) tileEntity).isPowerExpander()) {
                 Expander exp = (Expander) tileEntity;
                 for (int i = 0; i < exp.getSizeInventory(); i++) {
                     ItemStack itemCheck = exp.getStackInSlot(i);
-                    if (itemCheck != ItemStackTools.getEmptyStack()) {
+                    if (itemCheck != ItemStackTools.getEmptyStack() && isItemStackValidAmmo(itemCheck) && !(itemCheck.getItem() instanceof AmmoMetaItem)) {
                         exp.decrStackSize(i, 1);
                         return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
                     }
                 }
             }
         }
+        return ItemStackTools.getEmptyStack();
+    }
+
+    public static ItemStack getDisposableAmmoFromBase(TurretBase base) {
+        for (int i = 0; i <= 8; i++) {
+            ItemStack itemCheck = base.getStackInSlot(i);
+            if (itemCheck != ItemStackTools.getEmptyStack() && isItemStackValidAmmo(itemCheck) && !(itemCheck.getItem() instanceof AmmoMetaItem)) {
+                base.decrStackSize(i, 1);
+                return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
+            }
+        }
+        return ItemStackTools.getEmptyStack();
+    }
+
+    public static ItemStack getSpecificItemStackBlockFromBase(TurretBase base, ItemStack stack) {
+        for (int i = 0; i <= 8; i++) {
+            ItemStack ammo_stack = base.getStackInSlot(i);
+
+            if (ammo_stack != ItemStackTools.getEmptyStack() && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == stack.getItem()) {
+                base.decrStackSize(i, 1);
+                return new ItemStack(ammo_stack.getItem());
+            }
+        }
+
+        return ItemStackTools.getEmptyStack();
+    }
+
+    public static ItemStack getSpecificItemStackItemFromBase(TurretBase base, ItemStack ammoStackRequired) {
+        for (int i = 0; i <= 8; i++) {
+            ItemStack ammo_stack = base.getStackInSlot(i);
+
+            if (ammo_stack != ItemStackTools.getEmptyStack() && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == ammoStackRequired.getItem()
+                    && ammo_stack.getMetadata() == ammoStackRequired.getMetadata()) {
+                if (hasRecyclerAddon(base)) {
+                    int chance = new Random().nextInt(99);
+
+                    //For negating
+                    if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
+                        return new ItemStack(ammo_stack.getItem());
+                        //For adding
+                    } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
+                        base.decrStackSize(i, -1);
+                        return new ItemStack(ammo_stack.getItem());
+                    } else {
+                        base.decrStackSize(i, 1);
+                        return new ItemStack(ammo_stack.getItem());
+                    }
+                } else {
+                    base.decrStackSize(i, 1);
+                    return new ItemStack(ammo_stack.getItem());
+                }
+            }
+        }
+
         return ItemStackTools.getEmptyStack();
     }
 
@@ -458,60 +514,6 @@ public class TurretHeadUtil {
         float pitch = (float) (Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY) + Math.PI);
         pitch = pitch + 1.65F;
         return pitch;
-    }
-
-    public static ItemStack useAnyItemStackFromBase(TurretBase base) {
-        for (int i = 0; i <= 8; i++) {
-            ItemStack itemCheck = base.getStackInSlot(i);
-            if (itemCheck != ItemStackTools.getEmptyStack() && getStackSize(itemCheck) > 0) {
-                base.decrStackSize(i, 1);
-                return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
-            }
-        }
-        return null;
-    }
-
-    public static ItemStack useSpecificItemStackBlockFromBase(TurretBase base, ItemStack stack) {
-        for (int i = 0; i <= 8; i++) {
-            ItemStack ammo_stack = base.getStackInSlot(i);
-
-            if (ammo_stack != ItemStackTools.getEmptyStack() && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == stack.getItem()) {
-                base.decrStackSize(i, 1);
-                return new ItemStack(ammo_stack.getItem());
-            }
-        }
-
-        return ItemStackTools.getEmptyStack();
-    }
-
-    public static ItemStack useSpecificItemStackItemFromBase(TurretBase base, ItemStack ammoStackRequired) {
-        for (int i = 0; i <= 8; i++) {
-            ItemStack ammo_stack = base.getStackInSlot(i);
-
-            if (ammo_stack != ItemStackTools.getEmptyStack() && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == ammoStackRequired.getItem()
-                    && ammo_stack.getMetadata() == ammoStackRequired.getMetadata()) {
-                if (hasRecyclerAddon(base)) {
-                    int chance = new Random().nextInt(99);
-
-                    //For negating
-                    if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
-                        return new ItemStack(ammo_stack.getItem());
-                        //For adding
-                    } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
-                        base.decrStackSize(i, -1);
-                        return new ItemStack(ammo_stack.getItem());
-                    } else {
-                        base.decrStackSize(i, 1);
-                        return new ItemStack(ammo_stack.getItem());
-                    }
-                } else {
-                    base.decrStackSize(i, 1);
-                    return new ItemStack(ammo_stack.getItem());
-                }
-            }
-        }
-
-        return ItemStackTools.getEmptyStack();
     }
 
     @SuppressWarnings("ConstantConditions")
