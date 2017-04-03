@@ -38,8 +38,8 @@ public class OpenModularTurrets {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.init(event.getSuggestedConfigurationFile());
-        proxy.preInit();
         modularTurretsTab = ModularTurretsTab.getInstance();
+        proxy.preInit();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, GuiHandler.getInstance());
     }
 
