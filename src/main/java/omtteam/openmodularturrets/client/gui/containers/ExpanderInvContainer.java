@@ -5,7 +5,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import omtteam.omlib.compatability.minecraft.CompatSlot;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.openmodularturrets.client.gui.customSlot.AmmoSlot;
 import omtteam.openmodularturrets.tileentity.Expander;
@@ -48,7 +47,7 @@ public class ExpanderInvContainer extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int slot) {
         ItemStack itemStack = ItemStackTools.getEmptyStack();
-        CompatSlot invSlot = (CompatSlot) this.inventorySlots.get(slot);
+        Slot invSlot = this.inventorySlots.get(slot);
 
         if (invSlot != null && invSlot.getHasStack()) {
             ItemStack itemStack1 = invSlot.getStack();
