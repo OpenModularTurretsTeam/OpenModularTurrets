@@ -1,6 +1,7 @@
 package omtteam.openmodularturrets.entity.projectiles;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -30,43 +31,34 @@ public class FerroSlugProjectile extends TurretProjectile {
     }
 
     @Override
-    public void onEntityUpdate() {
-        if (ticksExisted >= 50) {
-            this.setDead();
+    @ParametersAreNonnullByDefault
+    public void onHitBlock(IBlockState hitBlock, BlockPos pos) {
+
+
+        if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
+            return;
         }
+
+        if (!hitBlock.getMaterial().isSolid()) {
+            // Go through non solid block
+            return;
+        } else if (ConfigHandler.canRailgunDestroyBlocks) {
+            getEntityWorld().destroyBlock(pos, false);
+        }
+
+        this.setDead();
     }
 
     @Override
-    @ParametersAreNonnullByDefault
-    protected void onImpact(RayTraceResult movingobjectposition) {
+    public void onHitEntity(Entity entity) {
 
-        if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
-            IBlockState hitBlock = getEntityWorld().getBlockState(movingobjectposition.getBlockPos());
-
-            if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
-                return;
-            }
-
-            if (!hitBlock.getMaterial().isSolid()) {
-                // Go through non solid block
-                return;
-            } else if (ConfigHandler.canRailgunDestroyBlocks) {
-                getEntityWorld().destroyBlock(movingobjectposition.getBlockPos(), false);
-            }
-        }
-
-        if (movingobjectposition.entityHit != null && !getEntityWorld().isRemote) {
-            if (movingobjectposition.typeOfHit.equals(RayTraceResult.Type.MISS)) {
-                if (getEntityWorld().isAirBlock(movingobjectposition.getBlockPos())) {
-                    return;
-                }
-            }
+        if (entity != null && !getEntityWorld().isRemote) {
 
             int damage = ConfigHandler.getRailgun_turret().getDamage();
 
             if (isAmped) {
-                if (movingobjectposition.entityHit instanceof EntityLivingBase) {
-                    EntityLivingBase elb = (EntityLivingBase) movingobjectposition.entityHit;
+                if (entity instanceof EntityLivingBase) {
+                    EntityLivingBase elb = (EntityLivingBase) entity;
                     damage += ((int) elb.getHealth() * (0.10F * amp_level));
                 }
             }
@@ -75,17 +67,17 @@ public class FerroSlugProjectile extends TurretProjectile {
             getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.railGunHitSound, SoundCategory.AMBIENT,
                     ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
 
-            if (movingobjectposition.entityHit instanceof EntityPlayer) {
-                if (canDamagePlayer((EntityPlayer) movingobjectposition.entityHit)) {
-                    movingobjectposition.entityHit.attackEntityFrom(new ArmorBypassDamageSource("ferroslug"), damage);
-                    movingobjectposition.entityHit.hurtResistantTime = 0;
+            if (entity instanceof EntityPlayer) {
+                if (canDamagePlayer((EntityPlayer) entity)) {
+                    entity.attackEntityFrom(new ArmorBypassDamageSource("ferroslug"), damage);
+                    entity.hurtResistantTime = 0;
                 }
             } else {
-                movingobjectposition.entityHit.attackEntityFrom(new ArmorBypassDamageSource("ferroslug"), damage);
-                movingobjectposition.entityHit.hurtResistantTime = 0;
+                entity.attackEntityFrom(new ArmorBypassDamageSource("ferroslug"), damage);
+                entity.hurtResistantTime = 0;
             }
-        }
 
+        }
         this.setDead();
     }
 
@@ -98,5 +90,9 @@ public class FerroSlugProjectile extends TurretProjectile {
     @Override
     protected float getGravityVelocity() {
         return this.gravity;
+    }
+
+    @Override
+    protected void onImpact(RayTraceResult result) {
     }
 }

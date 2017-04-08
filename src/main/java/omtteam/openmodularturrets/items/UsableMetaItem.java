@@ -114,7 +114,7 @@ public class UsableMetaItem extends CompatItem {
                 tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc1"));
                 tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc2"));
                 tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc3"));
-                tooltip.add("\u00A76-Y: \u00A7b" + nbtTagCompound.getInteger("yAxisDetect"));
+                tooltip.add("\u00A76: \u00A7b" + nbtTagCompound.getInteger("currentMaxRange"));
                 tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.INVERT) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("inverted")));
                 tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.MULTI_TARGETING) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("multiTargeting")));
                 tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksMobs")));
