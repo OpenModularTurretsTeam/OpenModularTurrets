@@ -340,7 +340,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
                 EnumFacing.DOWN) - base.getEnergyStored(EnumFacing.DOWN))) {
 
             //Prioritise redstone blocks
-            ItemStack redstoneBlock = TurretHeadUtil.useSpecificItemStackBlockFromBase(base, new ItemStack(
+            ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackBlockFromBase(base, new ItemStack(
                     Blocks.REDSTONE_BLOCK));
 
             if (redstoneBlock == ItemStackTools.getEmptyStack()) {
@@ -355,7 +355,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
                 return;
             }
 
-            ItemStack redstone = TurretHeadUtil.useSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE));
+            ItemStack redstone = TurretHeadUtil.getSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE));
 
             if (redstone == ItemStackTools.getEmptyStack()) {
                 redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
