@@ -1,13 +1,16 @@
 package omtteam.openmodularturrets.entity.projectiles;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -20,7 +23,7 @@ public class GrenadeProjectile extends TurretProjectile {
     @SuppressWarnings("unused")
     public GrenadeProjectile(World par1World) {
         super(par1World);
-        this.gravity = 0.00F;
+        this.gravity = 0.03F;
     }
 
     public GrenadeProjectile(World world, ItemStack ammo, TurretBase turretBase) {
@@ -30,37 +33,37 @@ public class GrenadeProjectile extends TurretProjectile {
 
     @Override
     public void onEntityUpdate() {
-        if (ticksExisted >= 50) {
-            if (!getEntityWorld().isRemote) {
-                float strength = ConfigHandler.canGrenadesDestroyBlocks ? 1.4F : 0.1F;
-                getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
-                AxisAlignedBB axis = new AxisAlignedBB(this.posX - 3, this.posY - 3, this.posZ - 3,
-                        this.posX + 3, this.posY + 3, this.posZ + 3);
-                List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-                for (Entity mob : targets) {
+        super.onEntityUpdate();
 
-                    int damage = ConfigHandler.getGrenadeTurretSettings().getDamage();
+        if (!getEntityWorld().isRemote) {
+            float strength = ConfigHandler.canGrenadesDestroyBlocks ? 1.4F : 0.1F;
+            getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
+            AxisAlignedBB axis = new AxisAlignedBB(this.posX - 3, this.posY - 3, this.posZ - 3,
+                    this.posX + 3, this.posY + 3, this.posZ + 3);
+            List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-                    if (isAmped) {
-                        if (mob instanceof EntityLivingBase) {
-                            EntityLivingBase elb = (EntityLivingBase) mob;
-                            damage += ((int) elb.getHealth() * (0.08F * amp_level));
-                        }
+            for (Entity mob : targets) {
+
+                int damage = ConfigHandler.getGrenadeTurretSettings().getDamage();
+
+                if (isAmped) {
+                    if (mob instanceof EntityLivingBase) {
+                        EntityLivingBase elb = (EntityLivingBase) mob;
+                        damage += ((int) elb.getHealth() * (0.08F * amp_level));
                     }
+                }
 
-                    if (mob instanceof EntityPlayer) {
-                        if (canDamagePlayer((EntityPlayer) mob)) {
-                            mob.attackEntityFrom(new NormalDamageSource("grenade"), damage * 0.9F);
-                            mob.attackEntityFrom(new ArmorBypassDamageSource("grenade"), damage * 0.1F);
-                            mob.hurtResistantTime = 0;
-                        }
-                    } else {
+                if (mob instanceof EntityPlayer) {
+                    if (canDamagePlayer((EntityPlayer) mob)) {
                         mob.attackEntityFrom(new NormalDamageSource("grenade"), damage * 0.9F);
                         mob.attackEntityFrom(new ArmorBypassDamageSource("grenade"), damage * 0.1F);
                         mob.hurtResistantTime = 0;
                     }
-
+                } else {
+                    mob.attackEntityFrom(new NormalDamageSource("grenade"), damage * 0.9F);
+                    mob.attackEntityFrom(new ArmorBypassDamageSource("grenade"), damage * 0.1F);
+                    mob.hurtResistantTime = 0;
                 }
             }
             this.setDead();
@@ -73,16 +76,35 @@ public class GrenadeProjectile extends TurretProjectile {
 
     @Override
     @ParametersAreNonnullByDefault
-    protected void onImpact(RayTraceResult movingobjectposition) {
-        if (this.ticksExisted >= 2) {
-            this.motionX = 0.0F;
-            this.motionY = 0.0F;
-            this.motionZ = 0.0F;
+    public void onHitBlock(IBlockState hitBlock, BlockPos pos) {
+
+        if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
+            return;
         }
+
+        if (!hitBlock.getMaterial().isSolid()) {
+            // Go through non solid block
+            return;
+        }
+
+        this.motionX = 0.0F;
+        this.motionY = 0.0F;
+        this.motionZ = 0.0F;
+    }
+
+    @Override
+    public void onHitEntity(Entity entity) {
+        this.motionX = 0.0F;
+        this.motionY = 0.0F;
+        this.motionZ = 0.0F;
     }
 
     @Override
     protected float getGravityVelocity() {
         return this.gravity;
+    }
+
+    @Override
+    protected void onImpact(RayTraceResult result) {
     }
 }

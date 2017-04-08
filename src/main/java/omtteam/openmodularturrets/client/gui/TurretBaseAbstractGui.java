@@ -6,22 +6,27 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import omtteam.omlib.client.gui.BlockingAbstractGuiContainer;
 import omtteam.omlib.client.gui.IHasTooltips;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
+import omtteam.omlib.util.WorldUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.NetworkingHandler;
-import omtteam.openmodularturrets.network.messages.MessageAdjustYAxisDetect;
+import omtteam.openmodularturrets.network.messages.MessageAdjustMaxRange;
 import omtteam.openmodularturrets.network.messages.MessageDropBase;
 import omtteam.openmodularturrets.network.messages.MessageDropTurrets;
 import omtteam.openmodularturrets.network.messages.MessageSetBaseTargetingType;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
@@ -51,8 +56,8 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         int y = (height - ySize) / 2;
         TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
 
-        this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "-"));
-        this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "+"));
+        this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "+"));
+        this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "-"));
         if (PlayerUtil.isPlayerOwner(player, base)) {
             this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
             this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
@@ -86,12 +91,12 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
     @Override
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 1) {
-            this.base.setyAxisDetect(this.base.getyAxisDetect() - 1);
+            this.base.setCurrentMaxRange((this.base.getCurrentMaxRange() + 1));
             sendChangeToServer();
         }
 
         if (guibutton.id == 2) {
-            this.base.setyAxisDetect(this.base.getyAxisDetect() + 1);
+            this.base.setCurrentMaxRange((this.base.getCurrentMaxRange() - 1));
             sendChangeToServer();
         }
 
@@ -131,9 +136,10 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.UPGRADES), 71, 39, 0);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.AMMO), 8, 6, 0);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.INVENTORY), 8, ySize - 97 + 4, 0);
-        fontRenderer.drawStringWithShadow("" + base.getyAxisDetect(), 127, 39, 40000);
-        fontRenderer.drawString("-Y", 123, 6, 0);
 
+        int rangeStringLength = ("" + base.getCurrentMaxRange() + "/" + getBaseUpperBoundRange()).length();
+        fontRenderer.drawStringWithShadow("" + base.getCurrentMaxRange() + "/" + getBaseUpperBoundRange(), 116, 39, 40000);
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.RANGE), 117 + ((rangeStringLength - 3) * 3), 6, 0);
 
         ArrayList targetInfo = new ArrayList();
 
@@ -168,10 +174,10 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         ArrayList<String> tooltip = new ArrayList<>();
         switch (tooltipToDraw) {
             case 1:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.MINUS_Y));
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.PLUS_RANGE));
                 break;
             case 2:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.PLUS_Y));
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.MINUS_RANGE));
                 break;
             case 5:
                 tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.CONFIGURE_BASE));
@@ -200,8 +206,8 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
 
 
     private void sendChangeToServer() {
-        MessageAdjustYAxisDetect message = new MessageAdjustYAxisDetect(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
-                base.getyAxisDetect());
+        MessageAdjustMaxRange message = new MessageAdjustMaxRange(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
+                base.getCurrentMaxRange());
 
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
@@ -238,5 +244,16 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         }
         list.add(rectangleGUI);
         return list;
+    }
+
+    private int getBaseUpperBoundRange() {
+        int maxRange = 0;
+        List<TileEntity> tileEntities = WorldUtil.getTouchingTileEntities(base.getWorld(), base.getPos());
+        for (TileEntity te : tileEntities) {
+            if (te != null && te instanceof TurretHead) {
+                maxRange = Math.max(((TurretHead) te).getTurretRange() + TurretHeadUtil.getRangeUpgrades(base), maxRange);
+            }
+        }
+        return maxRange;
     }
 }

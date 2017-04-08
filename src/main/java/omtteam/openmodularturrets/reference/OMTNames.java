@@ -90,6 +90,7 @@ public class OMTNames {
             public static final String OWNER = "gui.omtteam.openmodularturrets:owner";
             public static final String INVERT = "gui.omtteam.openmodularturrets:invert";
             public static final String ACTIVE = "gui.omtteam.openmodularturrets:active";
+            public static final String RANGE = "gui.omtteam.openmodularturrets:range";
             public static final String TRUSTED_PLAYERS = "gui.omtteam.openmodularturrets:trusted_players";
             public static final String ATTACK_PLAYERS = "gui.omtteam.openmodularturrets:attack_players";
             public static final String ATTACK_MOBS = "gui.omtteam.openmodularturrets:attack_mobs";
@@ -130,8 +131,8 @@ public class OMTNames {
             public static final String TARGET_NEUTRALS = "tooltip.omtteam.openmodularturrets:target_neutrals";
             public static final String TARGET_MOBS = "tooltip.omtteam.openmodularturrets:target_mobs";
             public static final String TARGET_PLAYERS = "tooltip.omtteam.openmodularturrets:target_players";
-            public static final String MINUS_Y = "tooltip.omtteam.openmodularturrets:minus_y";
-            public static final String PLUS_Y = "tooltip.omtteam.openmodularturrets:plus_y";
+            public static final String MINUS_RANGE = "tooltip.omtteam.openmodularturrets:minus_range";
+            public static final String PLUS_RANGE = "tooltip.omtteam.openmodularturrets:plus_range";
             public static final String CONFIGURE_BASE = "tooltip.omtteam.openmodularturrets:configure_base";
             public static final String MULTI_TARGETING = "tooltip.omtteam.openmodularturrets:multi_targeting";
             public static final String AMMO_SLOT = "tooltip.omtteam.openmodularturrets:ammo_slot";

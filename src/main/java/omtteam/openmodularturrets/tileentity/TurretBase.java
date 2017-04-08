@@ -61,7 +61,9 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
 
     public boolean shouldConcealTurrets;
     private boolean multiTargeting = false;
-    private int yAxisDetect;
+    private int currentMaxRange;
+    private int upperBoundMaxRange;
+    private boolean rangeOverridden;
     private boolean attacksMobs;
     private boolean attacksNeutrals;
     private boolean attacksPlayers;
@@ -78,7 +80,9 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
 
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
         super();
-        this.yAxisDetect = 2;
+        this.currentMaxRange = 0;
+        this.upperBoundMaxRange = 0;
+        this.rangeOverridden = false;
         this.storage = new EnergyStorage(MaxEnergyStorage, MaxIO);
         this.attacksMobs = true;
         this.attacksNeutrals = true;
@@ -98,7 +102,9 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
-        nbtTagCompound.setInteger("yAxisDetect", this.yAxisDetect);
+        nbtTagCompound.setInteger("currentMaxRange", this.currentMaxRange);
+        nbtTagCompound.setInteger("upperBoundMaxRange", this.upperBoundMaxRange);
+        nbtTagCompound.setBoolean("rangeOverridden", this.rangeOverridden);
         nbtTagCompound.setBoolean("attacksMobs", attacksMobs);
         nbtTagCompound.setBoolean("attacksNeutrals", attacksNeutrals);
         nbtTagCompound.setBoolean("attacksPlayers", attacksPlayers);
@@ -114,7 +120,9 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
         super.readFromNBT(nbtTagCompound);
-        this.yAxisDetect = nbtTagCompound.getInteger("yAxisDetect");
+        this.currentMaxRange = nbtTagCompound.getInteger("currentMaxRange");
+        this.upperBoundMaxRange = nbtTagCompound.getInteger("upperBoundMaxRange");
+        this.rangeOverridden = nbtTagCompound.getBoolean("rangeOverridden");
         this.attacksMobs = nbtTagCompound.getBoolean("attacksMobs");
         this.attacksNeutrals = nbtTagCompound.getBoolean("attacksNeutrals");
         this.attacksPlayers = nbtTagCompound.getBoolean("attacksPlayers");
@@ -127,6 +135,20 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
             this.camoBlockState = getBlockStateFromNBT(nbtTagCompound);
         } else {
             this.camoBlockState = getDefaultCamoState();
+        }
+    }
+
+    public void setCurrentMaxRange(int newCurrentMaxRange) {
+
+        this.currentMaxRange = newCurrentMaxRange;
+        this.rangeOverridden = true;
+
+        if (currentMaxRange > this.upperBoundMaxRange) {
+            this.currentMaxRange = this.upperBoundMaxRange;
+        }
+
+        if (currentMaxRange < 0) {
+            this.currentMaxRange = 0;
         }
     }
 
@@ -147,18 +169,15 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
             //Extenders
             this.storage.setCapacity(getMaxEnergyStorageWithExtenders());
 
-            //Thaumcraft
-            /*if (ModCompatibility.ThaumcraftLoaded && TurretHeadUtil.hasPotentiaUpgradeAddon(this)) {
-                if (amountOfPotentia > 0.05F && !(storage.getMaxEnergyStored() - storage.getEnergyStored() == 0)) {
-                    if (VisNetHandler.drainVis(this.getWorld(), xCoord, yCoord, zCoord, Aspect.ORDER, 5) == 5) {
-                        this.amountOfPotentia = this.amountOfPotentia - 0.05F;
-                        this.storage.modifyEnergyStored(Math.round(ConfigHandler.getPotentiaToRFRatio() * 5));
-                    } else {
-                        this.amountOfPotentia = this.amountOfPotentia - 0.05F;
-                        this.storage.modifyEnergyStored(Math.round(ConfigHandler.getPotentiaToRFRatio() / 2));
-                    }
-                }
-            }*/
+            //maxRange update
+            setUpperBoundMaxRange();
+            if (this.currentMaxRange > this.upperBoundMaxRange) {
+                this.currentMaxRange = upperBoundMaxRange;
+            }
+
+            if (!this.rangeOverridden) {
+                this.currentMaxRange = upperBoundMaxRange;
+            }
 
             if (ticks % 20 == 0) {
 
@@ -166,16 +185,22 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
                 ticks = 0;
                 updateRedstoneReactor(this);
 
-                //Thaumcraft
-                /*if (ModCompatibility.ThaumcraftLoaded && amountOfPotentia <= maxAmountOfPotentia) {
-                    amountOfPotentia = amountOfPotentia + drawEssentia();
-                } */
-
                 //Computers
                 this.computerAccessible = (ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputerCraftLoaded) && TurretHeadUtil.hasSerialPortAddon(
                         this);
             }
         }
+    }
+
+    private void setUpperBoundMaxRange() {
+        int maxRange = 0;
+        List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
+        for (TileEntity te : tileEntities) {
+            if (te != null && te instanceof TurretHead) {
+                maxRange = Math.max(((TurretHead) te).getTurretRange() + TurretHeadUtil.getRangeUpgrades(this), maxRange);
+            }
+        }
+        this.upperBoundMaxRange = maxRange;
     }
 
     @Override
@@ -228,22 +253,6 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
 
     public void setTier(int tier) {
         this.tier = tier;
-    }
-
-    public int getyAxisDetect() {
-        return yAxisDetect;
-    }
-
-    public void setyAxisDetect(int yAxisDetect) {
-        this.yAxisDetect = yAxisDetect;
-
-        if (this.yAxisDetect > 9) {
-            this.yAxisDetect = 9;
-        }
-
-        if (this.yAxisDetect < 0) {
-            this.yAxisDetect = 0;
-        }
     }
 
     public void setAllTurretsYawPitch(float yaw, float pitch) {
@@ -303,7 +312,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
     public NBTTagCompound writeMemoryCardNBT() {
         NBTTagCompound nbtTagCompound = new NBTTagCompound();
         nbtTagCompound.setBoolean("inverted", inverted);
-        nbtTagCompound.setInteger("yAxisDetect", this.yAxisDetect);
+        nbtTagCompound.setInteger("currentMaxRange", this.currentMaxRange);
         nbtTagCompound.setBoolean("attacksMobs", attacksMobs);
         nbtTagCompound.setBoolean("attacksNeutrals", attacksNeutrals);
         nbtTagCompound.setBoolean("attacksPlayers", attacksPlayers);
@@ -313,7 +322,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
     }
 
     public void readMemoryCardNBT(NBTTagCompound nbtTagCompound) {
-        this.yAxisDetect = nbtTagCompound.getInteger("yAxisDetect");
+        this.currentMaxRange = nbtTagCompound.getInteger("currentMaxRange");
         this.attacksMobs = nbtTagCompound.getBoolean("attacksMobs");
         this.attacksNeutrals = nbtTagCompound.getBoolean("attacksNeutrals");
         this.attacksPlayers = nbtTagCompound.getBoolean("attacksPlayers");
@@ -379,6 +388,14 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
                         this.getWorld(), this.pos);
         }
         return 0;
+    }
+
+    public int getCurrentMaxRange() {
+        return currentMaxRange;
+    }
+
+    public int getUpperBoundMaxRange() {
+        return upperBoundMaxRange;
     }
 
     @Nonnull
