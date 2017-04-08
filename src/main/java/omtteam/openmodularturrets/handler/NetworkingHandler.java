@@ -30,8 +30,8 @@ public class NetworkingHandler {
         INSTANCE.registerMessage(MessageSetTurretOwner.MessageHandlerSetTurretOwner.class, MessageSetTurretOwner.class,
                 5, Side.SERVER);
 
-        INSTANCE.registerMessage(MessageAdjustYAxisDetect.MessageHandlerAdjustYAxisDetect.class,
-                MessageAdjustYAxisDetect.class, 7, Side.SERVER);
+        INSTANCE.registerMessage(MessageAdjustMaxRange.MessageHandlerAdjustYAxisDetect.class,
+                MessageAdjustMaxRange.class, 7, Side.SERVER);
 
         INSTANCE.registerMessage(MessageDropTurrets.MessageHandlerDropTurrets.class, MessageDropTurrets.class, 8,
                 Side.SERVER);

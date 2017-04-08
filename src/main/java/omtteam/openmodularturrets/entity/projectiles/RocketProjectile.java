@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
@@ -44,9 +45,8 @@ public class RocketProjectile extends TurretProjectile {
 
     @Override
     public void onEntityUpdate() {
-        if (ticksExisted >= 100) {
-            this.setDead();
-        }
+        super.onEntityUpdate();
+
         if (!getEntityWorld().isRemote) {
             if (ConfigHandler.canRocketsHome && target != null) {
                 double d0 = target.posX - this.posX;
@@ -69,18 +69,16 @@ public class RocketProjectile extends TurretProjectile {
 
     @Override
     @ParametersAreNonnullByDefault
-    protected void onImpact(RayTraceResult movingobjectposition) {
-        if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
-            IBlockState hitBlock = getEntityWorld().getBlockState(movingobjectposition.getBlockPos());
+    public void onHitBlock(IBlockState hitBlock, BlockPos pos) {
 
-            if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
-                return;
-            }
 
-            if (!hitBlock.getMaterial().isSolid()) {
-                // Go through non solid block
-                return;
-            }
+        if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
+            return;
+        }
+
+        if (!hitBlock.getMaterial().isSolid()) {
+            // Go through non solid block
+            return;
         }
 
         if (!getEntityWorld().isRemote) {
@@ -121,7 +119,52 @@ public class RocketProjectile extends TurretProjectile {
     }
 
     @Override
+    public void onHitEntity(Entity entity) {
+
+        if (!getEntityWorld().isRemote) {
+            float strength = ConfigHandler.canRocketsDestroyBlocks ? 2.3F : 0.1F;
+            getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
+            AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
+                    this.posX + 5, this.posY + 5, this.posZ + 5);
+            List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
+
+            for (Entity mob : targets) {
+
+                int damage = ConfigHandler.getRocketTurretSettings().getDamage();
+
+                if (isAmped) {
+                    if (mob instanceof EntityLivingBase) {
+                        EntityLivingBase elb = (EntityLivingBase) mob;
+                        damage += ((int) elb.getHealth() * (0.08F * amp_level));
+                    }
+                }
+
+                if (mob instanceof EntityPlayer) {
+                    if (canDamagePlayer((EntityPlayer) mob)) {
+                        mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
+                        mob.hurtResistantTime = 0;
+                    }
+                }
+
+                if (ConfigHandler.isCanRocketsHurtEnderDragon() && mob instanceof EntityDragon) {
+                    ((EntityDragon) mob).setHealth(((EntityDragon) mob).getHealth() - damage);
+                    mob.hurtResistantTime = 0;
+                } else {
+                    mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
+                    mob.hurtResistantTime = 0;
+                }
+            }
+        }
+        this.setDead();
+
+    }
+
+    @Override
     protected float getGravityVelocity() {
         return this.gravity;
+    }
+
+    @Override
+    protected void onImpact(RayTraceResult result) {
     }
 }

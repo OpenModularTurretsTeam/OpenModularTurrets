@@ -30,36 +30,18 @@ public class BlazingClayProjectile extends TurretProjectile {
     }
 
     @Override
-    public void onEntityUpdate() {
-        if (ticksExisted >= 50) {
-            this.setDead();
-        }
-    }
-
-    @Override
     @ParametersAreNonnullByDefault
-    protected void onImpact(RayTraceResult movingobjectposition) {
-        if (this.ticksExisted <= 1) {
+    public void onHitBlock(IBlockState hitBlock, BlockPos pos) {
+
+        if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
             return;
         }
-        if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
-            IBlockState hitBlock = getEntityWorld().getBlockState(movingobjectposition.getBlockPos());
 
-            if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
-                return;
-            }
-
-            if (!hitBlock.getMaterial().isSolid()) {
-                // Go through non solid block
-                return;
-            }
+        if (!hitBlock.getMaterial().isSolid()) {
+            // Go through non solid block
+            return;
         }
 
-        if (movingobjectposition.typeOfHit.equals(RayTraceResult.Type.MISS)) {
-            if (getEntityWorld().isAirBlock(movingobjectposition.getBlockPos())) {
-                return;
-            }
-        }
 
         if (!getEntityWorld().isRemote) {
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
@@ -67,10 +49,39 @@ public class BlazingClayProjectile extends TurretProjectile {
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             int damage = ConfigHandler.getIncendiary_turret().getDamage();
+            for (Entity mob : targets) {
+
+                if (mob instanceof EntityPlayer) {
+                    if (canDamagePlayer((EntityPlayer) mob)) {
+                        mob.attackEntityFrom(new NormalDamageSource("bullet"), damage);
+                        mob.hurtResistantTime = 0;
+                        mob.setFire(5);
+                    }
+                } else {
+                    mob.attackEntityFrom(new NormalDamageSource("bullet"), damage);
+                    mob.hurtResistantTime = 0;
+                    mob.setFire(5);
+                }
+            }
+        }
+        this.setDead();
+    }
+
+    @Override
+    public void onHitEntity(Entity entity) {
+
+
+        if (!getEntityWorld().isRemote) {
+
+            AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
+                    this.posX + 5, this.posY + 5, this.posZ + 5);
+            List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
+
+            int damage = ConfigHandler.getIncendiary_turret().getDamage();
 
             if (isAmped) {
-                if (movingobjectposition.entityHit instanceof EntityLivingBase) {
-                    EntityLivingBase elb = (EntityLivingBase) movingobjectposition.entityHit;
+                if (entity instanceof EntityLivingBase) {
+                    EntityLivingBase elb = (EntityLivingBase) entity;
                     damage += ((int) elb.getHealth() * (0.05F * amp_level));
                 }
             }
@@ -102,5 +113,9 @@ public class BlazingClayProjectile extends TurretProjectile {
     @Override
     protected float getGravityVelocity() {
         return this.gravity;
+    }
+
+    @Override
+    protected void onImpact(RayTraceResult result) {
     }
 }

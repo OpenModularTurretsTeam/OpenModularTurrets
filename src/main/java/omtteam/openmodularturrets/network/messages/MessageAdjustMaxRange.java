@@ -10,33 +10,33 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 @SuppressWarnings("unused")
-public class MessageAdjustYAxisDetect implements IMessage {
+public class MessageAdjustMaxRange implements IMessage {
     private int x, y, z;
-    private int y_axis_detect;
+    private int range;
 
-    public MessageAdjustYAxisDetect() {
+    public MessageAdjustMaxRange() {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static class MessageHandlerAdjustYAxisDetect implements IMessageHandler<MessageAdjustYAxisDetect, IMessage> {
+    public static class MessageHandlerAdjustYAxisDetect implements IMessageHandler<MessageAdjustMaxRange, IMessage> {
         @Override
-        public IMessage onMessage(MessageAdjustYAxisDetect messageIn, MessageContext ctxIn) {
-            final MessageAdjustYAxisDetect message = messageIn;
+        public IMessage onMessage(MessageAdjustMaxRange messageIn, MessageContext ctxIn) {
+            final MessageAdjustMaxRange message = messageIn;
             final MessageContext ctx = ctxIn;
             ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(() -> {
                 World world = ctx.getServerHandler().playerEntity.getEntityWorld();
                 TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-                turret.setyAxisDetect(message.getYAxisDetect());
+                turret.setCurrentMaxRange(message.getRange());
             });
             return null;
         }
     }
 
-    public MessageAdjustYAxisDetect(int x, int y, int z, int y_axis_detect) {
+    public MessageAdjustMaxRange(int x, int y, int z, int range) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.y_axis_detect = y_axis_detect;
+        this.range = range;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class MessageAdjustYAxisDetect implements IMessage {
         this.x = buf.readInt();
         this.y = buf.readInt();
         this.z = buf.readInt();
-        this.y_axis_detect = buf.readInt();
+        this.range = buf.readInt();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class MessageAdjustYAxisDetect implements IMessage {
         buf.writeInt(this.x);
         buf.writeInt(this.y);
         buf.writeInt(this.z);
-        buf.writeInt(this.y_axis_detect);
+        buf.writeInt(this.range);
     }
 
     private int getX() {
@@ -67,7 +67,7 @@ public class MessageAdjustYAxisDetect implements IMessage {
         return z;
     }
 
-    private int getYAxisDetect() {
-        return y_axis_detect;
+    public int getRange() {
+        return range;
     }
 }

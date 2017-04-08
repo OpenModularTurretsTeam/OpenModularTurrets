@@ -139,22 +139,22 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     }
 
     Entity getTargetWithMinRange() {
-        return TurretHeadUtil.getTargetWithMinimumRange(base, this.getWorld(), base.getyAxisDetect(), this.pos,
-                getTurretRange() + TurretHeadUtil.getRangeUpgrades(base), this);
+        return TurretHeadUtil.getTargetWithMinimumRange(base, this.getWorld(), this.pos,
+                Math.min(getTurretRange() + TurretHeadUtil.getRangeUpgrades(base), base.getCurrentMaxRange()), this);
     }
 
     Entity getTargetWithoutEffect() {
-        return TurretHeadUtil.getTargetWithoutSlowEffect(base, this.getWorld(), base.getyAxisDetect(), this.pos,
-                getTurretRange() + TurretHeadUtil.getRangeUpgrades(base),
+        return TurretHeadUtil.getTargetWithoutSlowEffect(base, this.getWorld(), this.pos,
+                Math.min(getTurretRange() + TurretHeadUtil.getRangeUpgrades(base), base.getCurrentMaxRange()),
                 this);
     }
 
     private Entity getTarget() {
-        return TurretHeadUtil.getTarget(base, this.getWorld(), base.getyAxisDetect(), this.pos,
-                getTurretRange() + TurretHeadUtil.getRangeUpgrades(base), this);
+        return TurretHeadUtil.getTarget(base, this.getWorld(), this.pos,
+                Math.min(getTurretRange() + TurretHeadUtil.getRangeUpgrades(base), base.getCurrentMaxRange()), this);
     }
 
-    protected abstract int getTurretRange();
+    public abstract int getTurretRange();
 
     TurretBase getBase() {
         return TurretHeadUtil.getTurretBase(this.getWorld(), this.pos);
@@ -280,7 +280,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
             this.getWorld().destroyBlock(this.pos, true);
         } else {
             if (base.isAttacksPlayers() && base.isActive() && ConfigHandler.globalCanTargetPlayers) {
-                TurretHeadUtil.warnPlayers(base, base.getWorld(), base.getyAxisDetect(), this.pos, getTurretRange());
+                TurretHeadUtil.warnPlayers(base, base.getWorld(), this.pos, getTurretRange());
             }
 
             //Real time tick updates
@@ -429,13 +429,9 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
                 double dist2 = MathTools.sqrt_double(adjustedX * adjustedX + adjustedY * adjustedY + adjustedZ * adjustedZ);
                 float speedFactor = (float) (dist2 / dist);
 
-                if (projectile.gravity == 0.00F) {
-                    projectile.setThrowableHeading(adjustedX, adjustedY,
-                            adjustedZ, 3.0F * speedFactor, (float) accuracy);
-                } else {
-                    projectile.setThrowableHeading(adjustedX, adjustedY,
-                            adjustedZ, 1.6F * speedFactor, (float) accuracy);
-                }
+                projectile.setThrowableHeading(adjustedX, adjustedY - 0.1F,
+                        adjustedZ, 3.0F * speedFactor, (float) accuracy);
+
                 this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
                         ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
                 spawnEntity(this.getWorld(), projectile);

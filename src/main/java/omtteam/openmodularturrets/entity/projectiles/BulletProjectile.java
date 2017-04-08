@@ -1,6 +1,7 @@
 package omtteam.openmodularturrets.entity.projectiles;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -30,63 +31,52 @@ public class BulletProjectile extends TurretProjectile {
     }
 
     @Override
-    public void onEntityUpdate() {
-        if (ticksExisted >= 50) {
-            this.setDead();
+    @ParametersAreNonnullByDefault
+    public void onHitBlock(IBlockState hitBlock, BlockPos pos) {
+
+        if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
+            return;
         }
+
+        if (!hitBlock.getMaterial().isSolid()) {
+            // Go through non solid block
+            return;
+        }
+
+        this.setDead();
     }
 
     @Override
-    @ParametersAreNonnullByDefault
-    protected void onImpact(RayTraceResult movingobjectposition) {
-        if (this.ticksExisted <= 1) {
-            return;
-        }
-        if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
-            IBlockState hitBlock = getEntityWorld().getBlockState(movingobjectposition.getBlockPos());
+    public void onHitEntity(Entity entity) {
 
-            if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
-                return;
-            }
-
-            if (!hitBlock.getMaterial().isSolid()) {
-                // Go through non solid block
-                return;
-            }
-        }
-
-        if (movingobjectposition.entityHit != null && !getEntityWorld().isRemote) {
-            if (movingobjectposition.typeOfHit.equals(RayTraceResult.Type.MISS)) {
-                if (getEntityWorld().isAirBlock(movingobjectposition.getBlockPos())) {
-                    return;
-                }
-            }
+        if (entity != null && !getEntityWorld().isRemote) {
 
             int damage = ConfigHandler.getGunTurretSettings().getDamage();
 
             if (isAmped) {
-                if (movingobjectposition.entityHit instanceof EntityLivingBase) {
-                    EntityLivingBase elb = (EntityLivingBase) movingobjectposition.entityHit;
+                if (entity instanceof EntityLivingBase) {
+                    EntityLivingBase elb = (EntityLivingBase) entity;
                     damage += ((int) elb.getHealth() * (0.06F * amp_level));
                 }
             }
 
-            if (movingobjectposition.entityHit instanceof EntityPlayer) {
-                if (canDamagePlayer((EntityPlayer) movingobjectposition.entityHit)) {
-                    movingobjectposition.entityHit.attackEntityFrom(new NormalDamageSource("bullet"), damage);
-                    movingobjectposition.entityHit.hurtResistantTime = 0;
+            if (entity instanceof EntityPlayer) {
+                if (canDamagePlayer((EntityPlayer) entity)) {
+                    entity.attackEntityFrom(new NormalDamageSource("bullet"), damage);
+                    entity.hurtResistantTime = 0;
                 }
             } else {
-                movingobjectposition.entityHit.attackEntityFrom(new NormalDamageSource("bullet"), damage);
-                movingobjectposition.entityHit.hurtResistantTime = 0;
+                entity.attackEntityFrom(new NormalDamageSource("bullet"), damage);
+                entity.hurtResistantTime = 0;
             }
         }
 
-        if (movingobjectposition.entityHit == null && !getEntityWorld().isRemote) {
+        if (entity == null && !getEntityWorld().isRemote) {
             Random random = new Random();
             getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.bulletHitSound, SoundCategory.AMBIENT,
                     ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
         }
+
         this.setDead();
     }
 
@@ -99,5 +89,9 @@ public class BulletProjectile extends TurretProjectile {
     @Override
     protected float getGravityVelocity() {
         return this.gravity;
+    }
+
+    @Override
+    protected void onImpact(RayTraceResult result) {
     }
 }
