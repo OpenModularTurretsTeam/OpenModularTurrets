@@ -144,10 +144,6 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
     @SuppressWarnings("EmptyCatchBlock")
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == 1 || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(keyCode)) {
-            this.mc.thePlayer.closeScreen();
-            return;
-        }
         if (!textFieldAddTrustedPlayer.isFocused()) {
             try {
                 super.keyTyped(typedChar, keyCode);
