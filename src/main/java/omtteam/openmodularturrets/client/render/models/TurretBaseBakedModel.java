@@ -1,6 +1,7 @@
 package omtteam.openmodularturrets.client.render.models;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -11,6 +12,7 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.IRetexturableModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,6 +21,7 @@ import omtteam.omlib.render.CamoBakedModel;
 import omtteam.openmodularturrets.reference.Reference;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,8 +39,12 @@ import static omtteam.openmodularturrets.blocks.BlockTurretBase.TIER;
 public class TurretBaseBakedModel extends CamoBakedModel {
     private static final ResourceLocation FAKE_LOCATION = new ResourceLocation("openmodularturrets", "models/block/custom/turret_base");
 
-    private TurretBaseBakedModel(List<IBakedModel> list) {
+    private final TextureAtlasSprite particle;
+
+
+    private TurretBaseBakedModel(List<IBakedModel> list, TextureAtlasSprite part) {
         super(list);
+        particle = part;
     }
 
     @Override
@@ -45,7 +52,25 @@ public class TurretBaseBakedModel extends CamoBakedModel {
         return list.get(state.getValue(TIER) - 1);
     }
 
-    public static class Model implements IModel {
+    @Override
+    public TextureAtlasSprite getParticleTexture() {
+        return particle;
+    }
+
+    public static class Model implements IModel, IRetexturableModel {
+        @Nullable
+        private final ResourceLocation particle;
+
+        public Model()
+        {
+            this.particle = null;
+        }
+
+        public Model(String particle)
+        {
+            this.particle = particle == null ? null : new ResourceLocation(particle);
+        }
+
         @Override
         public Collection<ResourceLocation> getDependencies() {
             List<ResourceLocation> list = new ArrayList<>();
@@ -57,6 +82,8 @@ public class TurretBaseBakedModel extends CamoBakedModel {
 
         @Override
         public Collection<ResourceLocation> getTextures() {
+            if (particle != null)
+                return Collections.singletonList(particle);
             return Collections.emptyList();
         }
 
@@ -70,12 +97,21 @@ public class TurretBaseBakedModel extends CamoBakedModel {
                     e.printStackTrace();
                 }
             }
-            return new TurretBaseBakedModel(list);
+            TextureAtlasSprite part = null;
+            if (particle != null) part = bakedTextureGetter.apply(particle);
+            return new TurretBaseBakedModel(list, part);
         }
 
         @Override
         public IModelState getDefaultState() {
             return null;
+        }
+
+
+        @Override
+        public IModel retexture(ImmutableMap<String, String> textures)
+        {
+            return new Model(textures.get("particle"));
         }
     }
 
