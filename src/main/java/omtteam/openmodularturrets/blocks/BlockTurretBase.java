@@ -61,7 +61,6 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
         }
         setDefaultState(this.blockState.getBaseState().withProperty(TIER, 1));
         this.setSoundType(SoundType.STONE);
-        this.setHardness(20F);
         this.setUnlocalizedName(OMTNames.Blocks.turretBase);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.turretBase);
     }
