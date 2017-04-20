@@ -61,6 +61,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
         }
         setDefaultState(this.blockState.getBaseState().withProperty(TIER, 1));
         this.setSoundType(SoundType.STONE);
+        this.setHardness(20F);
         this.setUnlocalizedName(OMTNames.Blocks.turretBase);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.turretBase);
     }
@@ -223,18 +224,23 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             switch (state.getValue(TIER)) {
                 case 1:
                     this.setResistance(ConfigHandler.getBaseTierOneBlastResistance());
+                    this.setHardness(ConfigHandler.getBaseTierOneHardness());
                     break;
                 case 2:
                     this.setResistance(ConfigHandler.getBaseTierTwoBlastResistance());
+                    this.setHardness(ConfigHandler.getBaseTierTwoHardness());
                     break;
                 case 3:
                     this.setResistance(ConfigHandler.getBaseTierThreeBlastResistance());
+                    this.setHardness(ConfigHandler.getBaseTierThreeHardness());
                     break;
                 case 4:
                     this.setResistance(ConfigHandler.getBaseTierFourBlastResistance());
+                    this.setHardness(ConfigHandler.getBaseTierFourHardness());
                     break;
                 case 5:
                     this.setResistance(ConfigHandler.getBaseTierFiveBlastResistance());
+                    this.setHardness(ConfigHandler.getBaseTierFiveHardness());
             }
         }
     }
