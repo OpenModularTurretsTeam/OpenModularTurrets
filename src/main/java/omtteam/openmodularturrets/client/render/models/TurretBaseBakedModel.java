@@ -97,7 +97,7 @@ public class TurretBaseBakedModel extends CamoBakedModel {
                     e.printStackTrace();
                 }
             }
-            TextureAtlasSprite part = bakedTextureGetter.apply(new ModelResourceLocation("openmodularturrets:turret_base_normal", "tier=2"));
+            TextureAtlasSprite part = bakedTextureGetter.apply(new ResourceLocation("openmodularturrets", "blocks/turret_base_tier_two"));
             return new TurretBaseBakedModel(list, part);
         }
 
