@@ -41,18 +41,23 @@ public class ConfigHandler {
     private static int baseTierOneMaxCharge;
     private static int baseTierOneMaxIo;
     private static int baseTierOneBlastResistance;
+    private static int baseTierOneHardness;
     private static int baseTierTwoMaxCharge;
     private static int baseTierTwoMaxIo;
     private static int baseTierTwoBlastResistance;
+    private static int baseTierTwoHardness;
     private static int baseTierThreeMaxCharge;
     private static int baseTierThreeMaxIo;
     private static int baseTierThreeBlastResistance;
+    private static int baseTierThreeHardness;
     private static int baseTierFourMaxCharge;
     private static int baseTierFourMaxIo;
     private static int baseTierFourBlastResistance;
+    private static int baseTierFourHardness;
     private static int baseTierFiveMaxCharge;
     private static int baseTierFiveMaxIo;
     private static int baseTierFiveBlastResistance;
+    private static int baseTierFiveHardness;
     private static int potentiaToRFRatio;
     private static int potentiaAddonCapacity;
     private static TurretSetting disposable_turret;
@@ -85,23 +90,28 @@ public class ConfigHandler {
 
         baseTierOneMaxCharge = config.get("TurretBaseTierOne", "MaxCharge", 500).getInt();
         baseTierOneMaxIo = config.get("TurretBaseTierOne", "MaxIo", 50).getInt();
-        baseTierOneBlastResistance = config.get("TurretBaseTierOne", "BlastResistance", 10).getInt();
+        baseTierOneBlastResistance = config.get("TurretBaseTierOne", "BlastResistance", 5).getInt();
+        baseTierOneHardness = config.get("TurretBaseTierOne", "Hardness", 20).getInt();
 
         baseTierTwoMaxCharge = config.get("TurretBaseTierTwo", "MaxCharge", 50000).getInt();
         baseTierTwoMaxIo = config.get("TurretBaseTierTwo", "MaxIo", 100).getInt();
         baseTierTwoBlastResistance = config.get("TurretBaseTierTwo", "BlastResistance", 10).getInt();
+        baseTierTwoHardness = config.get("TurretBaseTierTwo", "Hardness", 30).getInt();
 
         baseTierThreeMaxCharge = config.get("TurretBaseTierThree", "MaxCharge", 150000).getInt();
         baseTierThreeMaxIo = config.get("TurretBaseTierThree", "MaxIo", 500).getInt();
-        baseTierThreeBlastResistance = config.get("TurretBaseTierThree", "BlastResistance", 10).getInt();
+        baseTierThreeBlastResistance = config.get("TurretBaseTierThree", "BlastResistance", 15).getInt();
+        baseTierThreeHardness = config.get("TurretBaseTierThree", "Hardness", 40).getInt();
 
         baseTierFourMaxCharge = config.get("TurretBaseTierFour", "MaxCharge", 500000).getInt();
         baseTierFourMaxIo = config.get("TurretBaseTierFour", "MaxIo", 1500).getInt();
-        baseTierFourBlastResistance = config.get("TurretBaseTierFour", "BlastResistance", 10).getInt();
+        baseTierFourBlastResistance = config.get("TurretBaseTierFour", "BlastResistance", 20).getInt();
+        baseTierFourHardness = config.get("TurretBaseTierFour", "Hardness", 50).getInt();
 
         baseTierFiveMaxCharge = config.get("TurretBaseTierFive", "MaxCharge", 10000000).getInt();
         baseTierFiveMaxIo = config.get("TurretBaseTierFive", "MaxIo", 5000).getInt();
-        baseTierFiveBlastResistance = config.get("TurretBaseTierFive", "BlastResistance", 10).getInt();
+        baseTierFiveBlastResistance = config.get("TurretBaseTierFive", "BlastResistance", 25).getInt();
+        baseTierFiveHardness = config.get("TurretBaseTierFive", "Hardness", 60).getInt();
 
         disposable_turret = new TurretSetting(
                 config.get("TurretDisposable", "Range", 10, "Turret range, in blocks").getInt(),
@@ -309,6 +319,26 @@ public class ConfigHandler {
     public static void parseLists() {
         parseDisposableAmmoList();
         parseMobBlacklist();
+    }
+
+    public static int getBaseTierOneHardness() {
+        return baseTierOneHardness;
+    }
+
+    public static int getBaseTierTwoHardness() {
+        return baseTierTwoHardness;
+    }
+
+    public static int getBaseTierThreeHardness() {
+        return baseTierThreeHardness;
+    }
+
+    public static int getBaseTierFourHardness() {
+        return baseTierFourHardness;
+    }
+
+    public static int getBaseTierFiveHardness() {
+        return baseTierFiveHardness;
     }
 
     public static int getBaseTierOneMaxIo() {

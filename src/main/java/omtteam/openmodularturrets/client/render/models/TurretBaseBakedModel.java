@@ -1,7 +1,6 @@
 package omtteam.openmodularturrets.client.render.models;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -12,7 +11,6 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IRetexturableModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,7 +19,6 @@ import omtteam.omlib.render.CamoBakedModel;
 import omtteam.openmodularturrets.reference.Reference;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,19 +54,11 @@ public class TurretBaseBakedModel extends CamoBakedModel {
         return particle;
     }
 
-    public static class Model implements IModel, IRetexturableModel {
-        @Nullable
-        private final ResourceLocation particle;
+    public static class Model implements IModel {
+        public Model() {
 
-        public Model()
-        {
-            this.particle = null;
         }
 
-        public Model(String particle)
-        {
-            this.particle = particle == null ? null : new ResourceLocation(particle);
-        }
 
         @Override
         public Collection<ResourceLocation> getDependencies() {
@@ -82,8 +71,6 @@ public class TurretBaseBakedModel extends CamoBakedModel {
 
         @Override
         public Collection<ResourceLocation> getTextures() {
-            if (particle != null)
-                return Collections.singletonList(particle);
             return Collections.emptyList();
         }
 
@@ -104,13 +91,6 @@ public class TurretBaseBakedModel extends CamoBakedModel {
         @Override
         public IModelState getDefaultState() {
             return null;
-        }
-
-
-        @Override
-        public IModel retexture(ImmutableMap<String, String> textures)
-        {
-            return new Model(textures.get("particle"));
         }
     }
 
