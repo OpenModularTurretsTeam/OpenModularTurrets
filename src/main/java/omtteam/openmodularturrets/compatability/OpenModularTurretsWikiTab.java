@@ -30,7 +30,7 @@ class OpenModularTurretsWikiTab extends BaseWikiTab {
             pageEntries.add("block/machine_gun_turret");
         }
 
-        if (ConfigHandler.getIncendiary_turret().isEnabled()) {
+        if (ConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
             pageEntries.add("block/incendiary_turret");
         }
 
@@ -38,14 +38,14 @@ class OpenModularTurretsWikiTab extends BaseWikiTab {
             pageEntries.add("block/grenade_turret");
         }
 
-        if (ConfigHandler.getRelativistic_turret().isEnabled()) {
+        if (ConfigHandler.getRelativisticTurretSettings().isEnabled()) {
             pageEntries.add("block/relativistic_turret");
         }
         if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
             pageEntries.add("block/rocket_turret");
         }
 
-        if (ConfigHandler.getTeleporter_turret().isEnabled()) {
+        if (ConfigHandler.getTeleporterTurretSettings().isEnabled()) {
             pageEntries.add("block/teleporter_turret");
         }
 
@@ -53,7 +53,7 @@ class OpenModularTurretsWikiTab extends BaseWikiTab {
             pageEntries.add("block/laser_turret");
         }
 
-        if (ConfigHandler.getRailgun_turret().isEnabled()) {
+        if (ConfigHandler.getRailgunTurretSettings().isEnabled()) {
             pageEntries.add("block/rail_gun_turret");
         }
     }
