@@ -114,22 +114,22 @@ public class RelativisticTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return ConfigHandler.getRelativistic_turret().getRange();
+        return ConfigHandler.getRelativisticTurretSettings().getRange();
     }
 
     @Override
     protected int getTurretPowerUsage() {
-        return ConfigHandler.getRelativistic_turret().getPowerUsage();
+        return ConfigHandler.getRelativisticTurretSettings().getPowerUsage();
     }
 
     @Override
     protected int getTurretFireRate() {
-        return ConfigHandler.getRelativistic_turret().getFireRate();
+        return ConfigHandler.getRelativisticTurretSettings().getFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getRelativistic_turret().getAccuracy();
+        return ConfigHandler.getRelativisticTurretSettings().getAccuracy();
     }
 
     @Override

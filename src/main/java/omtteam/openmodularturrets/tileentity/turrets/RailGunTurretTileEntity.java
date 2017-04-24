@@ -18,22 +18,22 @@ public class RailGunTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return ConfigHandler.getRailgun_turret().getRange();
+        return ConfigHandler.getRailgunTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return ConfigHandler.getRailgun_turret().getPowerUsage();
+        return ConfigHandler.getRailgunTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return ConfigHandler.getRailgun_turret().getFireRate();
+        return ConfigHandler.getRailgunTurretSettings().getFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getRailgun_turret().getAccuracy() / 10;
+        return ConfigHandler.getRailgunTurretSettings().getAccuracy() / 10;
     }
 
     @Override

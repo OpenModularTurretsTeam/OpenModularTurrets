@@ -62,7 +62,7 @@ public class FerroSlugProjectile extends TurretProjectile {
                 }
             }
 
-            int damage = ConfigHandler.getRailgun_turret().getDamage();
+            int damage = ConfigHandler.getRailgunTurretSettings().getDamage();
 
             if (isAmped) {
                 if (movingobjectposition.entityHit instanceof EntityLivingBase) {

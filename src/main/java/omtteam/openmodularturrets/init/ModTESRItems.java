@@ -31,11 +31,11 @@ public class ModTESRItems {
             ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.machineGunTurret), 0, GunTurretTileEntity.class);
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.machineGunTurret), 0, new ModelResourceLocation(ModBlocks.machineGunTurret.getRegistryName(), "inventory"));
         }
-        if (ConfigHandler.getIncendiary_turret().isEnabled()) {
+        if (ConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
             ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.incendiaryTurret), 0, IncendiaryTurretTileEntity.class);
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.incendiaryTurret), 0, new ModelResourceLocation(ModBlocks.incendiaryTurret.getRegistryName(), "inventory"));
         }
-        if (ConfigHandler.getRelativistic_turret().isEnabled()) {
+        if (ConfigHandler.getRelativisticTurretSettings().isEnabled()) {
             ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.relativisticTurret), 0, RelativisticTurretTileEntity.class);
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.relativisticTurret), 0, new ModelResourceLocation(ModBlocks.relativisticTurret.getRegistryName(), "inventory"));
         }
@@ -47,7 +47,7 @@ public class ModTESRItems {
             ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.rocketTurret), 0, RocketTurretTileEntity.class);
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.rocketTurret), 0, new ModelResourceLocation(ModBlocks.rocketTurret.getRegistryName(), "inventory"));
         }
-        if (ConfigHandler.getTeleporter_turret().isEnabled()) {
+        if (ConfigHandler.getTeleporterTurretSettings().isEnabled()) {
             ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.teleporterTurret), 0, TeleporterTurretTileEntity.class);
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.teleporterTurret), 0, new ModelResourceLocation(ModBlocks.teleporterTurret.getRegistryName(), "inventory"));
         }
@@ -55,7 +55,7 @@ public class ModTESRItems {
             ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.laserTurret), 0, LaserTurretTileEntity.class);
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.laserTurret), 0, new ModelResourceLocation(ModBlocks.laserTurret.getRegistryName(), "inventory"));
         }
-        if (ConfigHandler.getRailgun_turret().isEnabled()) {
+        if (ConfigHandler.getRailgunTurretSettings().isEnabled()) {
             ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.railGunTurret), 0, RailGunTurretTileEntity.class);
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.railGunTurret), 0, new ModelResourceLocation(ModBlocks.railGunTurret.getRegistryName(), "inventory"));
         }
