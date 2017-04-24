@@ -384,7 +384,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
     @Nonnull
     @Override
     public IBlockState getCamoState() {
-        return camoBlockState;
+        return camoBlockState != null ? camoBlockState : this.getDefaultCamoState();
     }
 
     @Override
