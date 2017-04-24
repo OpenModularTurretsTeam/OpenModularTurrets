@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.tileentity;
 
-import cofh.api.energy.EnergyStorage;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
@@ -16,6 +15,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityMachine;
 import omtteam.omlib.util.TrustedPlayer;
@@ -79,7 +79,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
         super();
         this.yAxisDetect = 2;
-        this.storage = new EnergyStorage(MaxEnergyStorage, MaxIO);
+        this.storage = new OMEnergyStorage(MaxEnergyStorage, MaxIO);
         this.attacksMobs = true;
         this.attacksNeutrals = true;
         this.attacksPlayers = false;

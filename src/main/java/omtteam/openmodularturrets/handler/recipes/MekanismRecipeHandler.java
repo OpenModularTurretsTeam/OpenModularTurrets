@@ -152,7 +152,7 @@ class MekanismRecipeHandler {
                             RecipeHandler.ioBus));
         }
 
-        if (ConfigHandler.getIncendiary_turret().isEnabled()) {
+        if (ConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.incendiaryTurret, 1), "A A", "BCB", "DCD", 'A',
                             new ItemStack(ModItems.intermediateProductTiered, 1, 11), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 6), 'C', "ingotTin", 'D',
@@ -180,7 +180,7 @@ class MekanismRecipeHandler {
                     Items.DIAMOND));
         }
 
-        if (ConfigHandler.getTeleporter_turret().isEnabled()) {
+        if (ConfigHandler.getTeleporterTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.teleporterTurret, 1), "CEC", "ABA", "CDC", 'A',
                             Items.DIAMOND, 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 3), 'C',

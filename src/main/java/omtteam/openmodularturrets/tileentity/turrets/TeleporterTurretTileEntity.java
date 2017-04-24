@@ -132,22 +132,22 @@ public class TeleporterTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return ConfigHandler.getTeleporter_turret().getRange();
+        return ConfigHandler.getTeleporterTurretSettings().getRange();
     }
 
     @Override
     protected int getTurretPowerUsage() {
-        return ConfigHandler.getTeleporter_turret().getPowerUsage();
+        return ConfigHandler.getTeleporterTurretSettings().getPowerUsage();
     }
 
     @Override
     protected int getTurretFireRate() {
-        return ConfigHandler.getTeleporter_turret().getFireRate();
+        return ConfigHandler.getTeleporterTurretSettings().getFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getTeleporter_turret().getAccuracy();
+        return ConfigHandler.getTeleporterTurretSettings().getAccuracy();
     }
 
     @Override

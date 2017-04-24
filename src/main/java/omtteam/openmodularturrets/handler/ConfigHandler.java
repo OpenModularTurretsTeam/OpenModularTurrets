@@ -19,8 +19,6 @@ public class ConfigHandler {
     public static boolean turretDamageTrustedPlayers;
     public static String recipes;
     public static boolean shouldDoThaumcraftIntegration;
-    @SuppressWarnings("unused")
-    public static boolean shouldDoComputerIntegration;
     public static boolean globalCanTargetPlayers;
     public static boolean globalCanTargetNeutrals;
     public static boolean globalCanTargetMobs;
@@ -62,7 +60,7 @@ public class ConfigHandler {
     private static int potentiaAddonCapacity;
     private static TurretSetting disposable_turret;
     private static TurretSetting potato_cannon_turret;
-    private static TurretSetting gun_turret;
+    private static TurretSetting machine_gun_turret;
     private static TurretSetting incendiary_turret;
     private static TurretSetting grenade_turret;
     private static TurretSetting relativistic_turret;
@@ -131,7 +129,7 @@ public class ConfigHandler {
                 config.get("TurretPotatoCannon", "PowerUsage", 10, "RF used per shot").getInt(),
                 config.get("TurretPotatoCannon", "Enabled", true, "Enabled?").getBoolean());
 
-        gun_turret = new TurretSetting(config.get("TurretMachineGun", "Range", 18, "Turret range, in blocks").getInt(),
+        machine_gun_turret = new TurretSetting(config.get("TurretMachineGun", "Range", 18, "Turret range, in blocks").getInt(),
                 config.get("TurretMachineGun", "FireRateCooldown", 8,
                         "Number of ticks between firings").getInt(),
                 config.get("TurretMachineGun", "Damage", 2, "Measured in half-hearts").getInt(),
@@ -279,10 +277,6 @@ public class ConfigHandler {
                 "Should we enable items that integrate with Thaumcraft?",
                 true).getBoolean();
 
-        shouldDoComputerIntegration = config.get("ModCompatibility",
-                "Should we enable items that integrate with ComputerCraft/OpenComputers?",
-                true).getBoolean();
-
         potentiaToRFRatio = config.get("ModCompatibility", "Potentia Addons' RF conversion ratio per 1 essentia",
                 500).getInt();
 
@@ -414,7 +408,7 @@ public class ConfigHandler {
     }
 
     public static TurretSetting getGunTurretSettings() {
-        return gun_turret;
+        return machine_gun_turret;
     }
 
     public static TurretSetting getRocketTurretSettings() {
@@ -429,8 +423,20 @@ public class ConfigHandler {
         return laser_turret;
     }
 
-    public static TurretSetting getRailgun_turret() {
+    public static TurretSetting getRailgunTurretSettings() {
         return railgun_turret;
+    }
+
+    public static TurretSetting getIncendiaryTurretSettings() {
+        return incendiary_turret;
+    }
+
+    public static TurretSetting getRelativisticTurretSettings() {
+        return relativistic_turret;
+    }
+
+    public static TurretSetting getTeleporterTurretSettings() {
+        return teleporter_turret;
     }
 
     public static int getRangeUpgradeBoost() {
@@ -463,23 +469,6 @@ public class ConfigHandler {
 
     public static int getPotentiaAddonCapacity() {
         return potentiaAddonCapacity;
-    }
-
-    @SuppressWarnings("unused")
-    public static TurretSetting getPotato_cannon_turret() {
-        return potato_cannon_turret;
-    }
-
-    public static TurretSetting getIncendiary_turret() {
-        return incendiary_turret;
-    }
-
-    public static TurretSetting getRelativistic_turret() {
-        return relativistic_turret;
-    }
-
-    public static TurretSetting getTeleporter_turret() {
-        return teleporter_turret;
     }
 
     public static float getTurretSoundVolume() {
@@ -518,7 +507,6 @@ public class ConfigHandler {
         return turretTargetSearchTicks;
     }
 
-    @SuppressWarnings("unused")
     public static boolean isAllowBaseCamo() {
         return allowBaseCamo;
     }
@@ -535,7 +523,7 @@ public class ConfigHandler {
         private final int power_usage;
         private final boolean enabled;
 
-        public TurretSetting(int range, int rof, int damage, double accuracy, int power_usage, boolean enabled) {
+        private TurretSetting(int range, int rof, int damage, double accuracy, int power_usage, boolean enabled) {
             this.range = range;
             this.rof = rof;
             this.damage = damage;

@@ -66,7 +66,7 @@ public class BlazingClayProjectile extends TurretProjectile {
                     this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-            int damage = ConfigHandler.getIncendiary_turret().getDamage();
+            int damage = ConfigHandler.getIncendiaryTurretSettings().getDamage();
 
             if (isAmped) {
                 if (movingobjectposition.entityHit instanceof EntityLivingBase) {
