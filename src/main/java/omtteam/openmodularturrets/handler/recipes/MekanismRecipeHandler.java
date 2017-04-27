@@ -1,13 +1,34 @@
 package omtteam.openmodularturrets.handler.recipes;
 
 
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.init.ModBlocks;
+import omtteam.openmodularturrets.init.ModItems;
 
-@SuppressWarnings("deprecation")
+
 class MekanismRecipeHandler {
+    private static void postErrorMessage() {
+        OpenModularTurrets.getLogger().info("Error while initializing Mekanism recipes, please report to OMT devs!");
+    }
+
     public static void init() {
         String Mek = "Mekanism";
 
+        Item ironEnrichedItem = Item.REGISTRY.getObject(new ResourceLocation(Mek, "EnrichedIron"));
+        Item alloyEnrichedItem = Item.REGISTRY.getObject(new ResourceLocation(Mek, "EnrichedAlloy"));
+        Item alloyReinforcedItem = Item.REGISTRY.getObject(new ResourceLocation(Mek, "ReinforcedAlloy"));
+        Item alloyAtomicItem = Item.REGISTRY.getObject(new ResourceLocation(Mek, "AtomicAlloy"));
+        Item energyTabletItem = Item.REGISTRY.getObject(new ResourceLocation(Mek, "EnergyTablet"));
+        Item controlCircuitItem = Item.REGISTRY.getObject(new ResourceLocation(Mek, "ControlCircuit"));
         ItemStack ironEnriched;
         ItemStack alloyEnriched;
         ItemStack alloyReinforced;
@@ -17,14 +38,44 @@ class MekanismRecipeHandler {
 
 
 		/* ModItems */
-        /*
-        ironEnriched = new ItemStack(GameRegistry.findItem(Mek, "EnrichedIron"), 1);
-        alloyEnriched = new ItemStack(GameRegistry.findItem(Mek, "EnrichedAlloy"), 1);
-        alloyReinforced = new ItemStack(GameRegistry.findItem(Mek, "ReinforcedAlloy"), 1);
-        alloyAtomic = new ItemStack(GameRegistry.findItem(Mek, "AtomicAlloy"), 1);
-        energyTablet = new ItemStack(GameRegistry.findItem(Mek, "EnergyTablet"), 1);
-        energyTablet.setItemDamage(OreDictionary.WILDCARD_VALUE);
-        controlCircuit = new ItemStack(GameRegistry.findItem(Mek, "ControlCircuit"), 1);
+        if (ironEnrichedItem != null) {
+            ironEnriched = new ItemStack(ironEnrichedItem, 1);
+        } else {
+            postErrorMessage();
+            return;
+        }
+        if (alloyEnrichedItem != null) {
+            alloyEnriched = new ItemStack(alloyEnrichedItem, 1);
+        } else {
+            postErrorMessage();
+            return;
+        }
+        if (alloyReinforcedItem != null) {
+            alloyReinforced = new ItemStack(alloyReinforcedItem, 1);
+        } else {
+            postErrorMessage();
+            return;
+        }
+        if (alloyAtomicItem != null) {
+            alloyAtomic = new ItemStack(alloyAtomicItem, 1);
+        } else {
+            postErrorMessage();
+            return;
+        }
+        if (energyTabletItem != null) {
+            energyTablet = new ItemStack(energyTabletItem, 1);
+            energyTablet.setItemDamage(OreDictionary.WILDCARD_VALUE);
+        } else {
+            postErrorMessage();
+            return;
+        }
+        if (controlCircuitItem != null) {
+            controlCircuit = new ItemStack(controlCircuitItem, 1);
+        } else {
+            postErrorMessage();
+            return;
+        }
+
 
         // ModItems
         // Barrels
@@ -166,7 +217,7 @@ class MekanismRecipeHandler {
                             'D', RecipeHandler.ioBus));
         }
 
-        if (ConfigHandler.getRelativistic_turret().isEnabled()) {
+        if (ConfigHandler.getRelativisticTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.relativisticTurret, 1), "CAC", "ABA", "CDC", 'A',
                             Items.ENDER_PEARL, 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 2), 'C',
@@ -195,7 +246,7 @@ class MekanismRecipeHandler {
                     "ingotRefinedObsidian"));
         }
 
-        if (ConfigHandler.getRailgun_turret().isEnabled()) {
+        if (ConfigHandler.getRailgunTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.railGunTurret, 1), "EAE", "CAC", "DBD", 'A',
                     new ItemStack(ModItems.intermediateProductTiered, 1, 14), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 9), 'C',
                     Blocks.OBSIDIAN, 'D', RecipeHandler.ioBus, 'E',
@@ -204,19 +255,19 @@ class MekanismRecipeHandler {
 
         // Ammo
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(ammoRocket, " A ", "ABA", "ACA", 'A', "ingotTin", 'B',
+                new ShapedOreRecipe(RecipeHandler.ammoRocket, " A ", "ABA", "ACA", 'A', "ingotTin", 'B',
                         Items.GUNPOWDER, 'C', Items.REDSTONE));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(ammoBullet, " A ", " B ", " C ", 'A', "ingotOsmium",
+                new ShapedOreRecipe(RecipeHandler.ammoBullet, " A ", " B ", " C ", 'A', "ingotOsmium",
                         'B', Items.GUNPOWDER, 'C', "ingotIron"));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(ammoGrenade, " C ", "ABA", " A ", 'A', "ingotIron",
+                new ShapedOreRecipe(RecipeHandler.ammoGrenade, " C ", "ABA", " A ", 'A', "ingotIron",
                         'B', Items.GUNPOWDER, 'C', Items.REDSTONE));
 
         GameRegistry.addRecipe(
-                new ShapedOreRecipe(ammoFerroSlug, " C ", "CBC", " A ", 'A', alloyEnriched, 'B',
-                        Items.FLINT, 'C', Items.REDSTONE));   */
+                new ShapedOreRecipe(RecipeHandler.ammoFerroSlug, " C ", "CBC", " A ", 'A', alloyEnriched, 'B',
+                        Items.FLINT, 'C', Items.REDSTONE));
     }
 }

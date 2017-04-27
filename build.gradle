@@ -138,7 +138,7 @@ dependencies {
     //compile "Azanor:Thaumcraft:${config.tc_version}:deobf@jar"
     compile "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
     compile "net.darkhax.tesla:Tesla:${config.minecraft_version}-${config.tesla_version}"
-	compileOnly "ValkyrienWarfareRevamped:valkyrienwarfare:${config.valkyrienwarfare_version}:dev"
+    compileOnly "ValkyrienWarfareRevamped:valkyrienwarfare:${config.valkyrienwarfare_version}:dev"
     if (!omlib_local) {
         compile "omtteam:omlib:${config.minecraft_version}-${config.omlib_version}:dev"
     } else {
