@@ -53,7 +53,7 @@ public class RocketProjectile extends TurretProjectile {
                 double d1 = target.posY + (double) target.getEyeHeight() - 1.1F - this.posY;
                 double d2 = target.posZ - this.posZ;
 
-                float speed = 0.06F;
+                float speed = 0.24F;
                 this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
             } else if (ConfigHandler.canRocketsHome && target == null) {
                 this.setDead();
