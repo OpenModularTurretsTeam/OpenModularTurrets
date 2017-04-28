@@ -19,6 +19,7 @@ import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.omlib.util.compat.MathTools;
+import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
 import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
@@ -266,6 +267,10 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
         if (this.getWorld().isRemote) {
             updateRotationAnimation();
+            return;
+        }
+
+        if (!(this.getWorld().getBlockState(this.getPos()).getBlock() instanceof BlockAbstractTurretHead)) {
             return;
         }
 
