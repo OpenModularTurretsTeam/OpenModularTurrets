@@ -58,7 +58,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
                     base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
 
             // power check
-            if ((base.getEnergyStored(EnumFacing.DOWN) < power_required) || (!base.isActive())) {
+            if ((base.getEnergyLevel(EnumFacing.DOWN) < power_required) || (!base.isActive())) {
                 return;
             }
 
@@ -104,7 +104,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
             }
 
             // Consume energy
-            base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - power_required);
+            base.setEnergyStored(base.getEnergyLevel(EnumFacing.DOWN) - power_required);
 
             EntityLivingBase base = (EntityLivingBase) target;
 

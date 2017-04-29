@@ -18,18 +18,22 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
+import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.IHasItemBlock;
 import omtteam.omlib.util.compat.MathTools;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.items.blocks.ItemBlockLever;
-import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import static omtteam.openmodularturrets.reference.OMTNames.Blocks.lever;
 
 @SuppressWarnings("deprecation")
 public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock {
@@ -37,13 +41,13 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
 
     public LeverBlock() {
         super(Material.GLASS);
-        this.setUnlocalizedName(OMTNames.Blocks.lever);
+        this.setUnlocalizedName(lever);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setHardness(2F);
         this.setResistance(15F);
         this.setSoundType(SoundType.STONE);
         setDefaultState(this.blockState.getBaseState().withProperty(ROTATION, 0));
-        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.lever);
+        this.setRegistryName(Reference.MOD_ID, lever);
     }
 
     @Override
@@ -110,17 +114,25 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
 
     @Override
     protected boolean clOnBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        TurretBase base;
+        if (TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.DOWN || TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.UP) {
+            return true;
+        }
+        TurretBase base = TurretHeadUtil.getTurretBase(worldIn, pos);
         LeverTileEntity lever = (LeverTileEntity) worldIn.getTileEntity(pos);
+        OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
+        if (storage == null) {
+            return true;
+        }
         if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 0 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
                 pos.getZ() + 1)))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
                     pos.getZ() + 1));
             if (base != null) {
                 lever.isTurning = true;
+
                 if (lever.rotation == 0F) {
                     //worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
-                    base.receiveEnergy(EnumFacing.DOWN, 50, false);
+                    storage.receiveEnergy(50, false);
                 }
             }
         }
@@ -132,7 +144,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
                     //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
-                    base.receiveEnergy(EnumFacing.DOWN, 50, false);
+                    storage.receiveEnergy(50, false);
                 }
             }
         }
@@ -145,7 +157,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
                     //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
-                    base.receiveEnergy(EnumFacing.DOWN, 50, false);
+                    storage.receiveEnergy(50, false);
                 }
             }
         }
@@ -157,7 +169,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
                     //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
-                    base.receiveEnergy(EnumFacing.DOWN, 50, false);
+                    storage.receiveEnergy(50, false);
                 }
             }
         }

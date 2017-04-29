@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import omtteam.omlib.power.OMEnergyStorage;
@@ -149,7 +150,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
 
             //Thaumcraft
             /*if (ModCompatibility.ThaumcraftLoaded && TurretHeadUtil.hasPotentiaUpgradeAddon(this)) {
-                if (amountOfPotentia > 0.05F && !(storage.getMaxEnergyStored() - storage.getEnergyStored() == 0)) {
+                if (amountOfPotentia > 0.05F && !(storage.getMaxEnergyLevel() - storage.getEnergyLevel() == 0)) {
                     if (VisNetHandler.drainVis(this.getWorld(), xCoord, yCoord, zCoord, Aspect.ORDER, 5) == 5) {
                         this.amountOfPotentia = this.amountOfPotentia - 0.05F;
                         this.storage.modifyEnergyStored(Math.round(ConfigHandler.getPotentiaToRFRatio() * 5));
@@ -323,12 +324,12 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
     }
 
     private static void updateRedstoneReactor(TurretBase base) {
-        if (!TurretHeadUtil.hasRedstoneReactor(base)) {
+        OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
+        if (!TurretHeadUtil.hasRedstoneReactor(base) || storage == null) {
             return;
         }
 
-        if (ConfigHandler.getRedstoneReactorAddonGen() < (base.getMaxEnergyStored(
-                EnumFacing.DOWN) - base.getEnergyStored(EnumFacing.DOWN))) {
+        if (ConfigHandler.getRedstoneReactorAddonGen() < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
 
             //Prioritise redstone blocks
             ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackBlockFromBase(base, new ItemStack(
@@ -340,8 +341,8 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
                         base);
             }
 
-            if (redstoneBlock != ItemStackTools.getEmptyStack() && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base.getMaxEnergyStored(
-                    EnumFacing.DOWN) - base.getEnergyStored(EnumFacing.DOWN))) {
+            if (redstoneBlock != ItemStackTools.getEmptyStack() && ConfigHandler.getRedstoneReactorAddonGen() * 9
+                    < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
                 base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen() * 9);
                 return;
             }
@@ -354,7 +355,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
             }
 
             if (redstone != ItemStackTools.getEmptyStack()) {
-                base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen());
+                storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen());
             }
         }
     }
@@ -534,7 +535,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
-        return new Object[]{this.getEnergyStored(EnumFacing.DOWN)};
+        return new Object[]{this.getEnergyLevel(EnumFacing.DOWN)};
     }
 
     @Optional.Method(modid = "OpenComputers")

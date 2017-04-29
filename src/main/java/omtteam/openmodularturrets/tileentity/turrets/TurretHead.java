@@ -297,7 +297,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
             }
 
             // power check
-            if ((base.getEnergyStored(EnumFacing.DOWN) < getPowerRequiredForNextShot())) {
+            if ((base.getEnergyLevel(EnumFacing.DOWN) < getPowerRequiredForNextShot())) {
                 return;
             }
 
@@ -390,7 +390,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
 
             // Consume energy
-            base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot());
+            base.setEnergyStored(base.getEnergyLevel(EnumFacing.DOWN) - getPowerRequiredForNextShot());
 
             for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
                 TurretProjectile projectile = this.createProjectile(this.getWorld(), target, ammo);
@@ -492,7 +492,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
             return false;
         }
 
-        base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot());
+        base.setEnergyStored(base.getEnergyLevel(EnumFacing.DOWN) - getPowerRequiredForNextShot());
 
         for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
             double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(
