@@ -55,7 +55,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
                     base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
 
             // power check
-            if ((base.getEnergyStored(EnumFacing.DOWN) < power_required) || (!base.isActive())) {
+            if ((base.getEnergyLevel(EnumFacing.DOWN) < power_required) || (!base.isActive())) {
                 return;
             }
 
@@ -101,7 +101,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
             }
 
             // Consume energy
-            base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - power_required);
+            base.setEnergyStored(base.getEnergyLevel(EnumFacing.DOWN) - power_required);
             ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 5, false, false));
             ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.getPotionById(18), 200, 5, false, false));
 
