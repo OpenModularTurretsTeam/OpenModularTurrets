@@ -1,7 +1,6 @@
 package omtteam.openmodularturrets.entity.projectiles;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -75,7 +74,8 @@ public class BlazingClayProjectile extends TurretProjectile {
                 }
             }
 
-            for (Entity mob : targets) {
+            for (EntityLivingBase mob : targets) {
+                setMobDropLoot(mob);
 
                 if (mob instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) mob)) {
@@ -88,6 +88,7 @@ public class BlazingClayProjectile extends TurretProjectile {
                     mob.hurtResistantTime = 0;
                     mob.setFire(5);
                 }
+                setMobDropLoot(movingobjectposition.entityHit);
             }
         }
         this.setDead();
