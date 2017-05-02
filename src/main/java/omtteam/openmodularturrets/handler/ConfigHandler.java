@@ -23,6 +23,7 @@ public class ConfigHandler {
     public static boolean globalCanTargetNeutrals;
     public static boolean globalCanTargetMobs;
     public static boolean canRocketsHome;
+    public static boolean doTurretsKillsDropMobLoot;
     public static boolean useWhitelistForAmmo;
     private static List<String> stringAmmoAllowList;
     private static List<String> stringMobBlackList;
@@ -237,6 +238,10 @@ public class ConfigHandler {
                 "Can rockets fired by the rocket launcher turret home on targets ?",
                 false).getBoolean();
 
+        doTurretsKillsDropMobLoot = config.get("miscellaneous",
+                "Do Mobs killed by turrets drop loot?",
+                true).getBoolean();
+
         useWhitelistForAmmo = config.get("miscellaneous",
                 "whitelistForAmmo",
                 true, "Use Whitelist for ammo slots?").getBoolean();
@@ -244,7 +249,6 @@ public class ConfigHandler {
         stringMobBlackList = Arrays.asList(config.getStringList("mobBlackList", "miscellaneous",
                 new String[]{"ArmorStand"},
                 "Which Entities should not be targetable by turrets? String is the name used by the /summon command."));
-
 
         stringAmmoAllowList = Arrays.asList(config.getStringList("disposableAmmoList", "miscellaneous",
                 new String[]{"minecraft:cobblestone", "minecraft:planks"},

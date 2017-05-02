@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.entity.projectiles;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -38,16 +37,17 @@ public class GrenadeProjectile extends TurretProjectile {
                         this.posX + 3, this.posY + 3, this.posZ + 3);
                 List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-                for (Entity mob : targets) {
+                for (EntityLivingBase mob : targets) {
 
                     int damage = ConfigHandler.getGrenadeTurretSettings().getDamage();
 
                     if (isAmped) {
-                        if (mob instanceof EntityLivingBase) {
-                            EntityLivingBase elb = (EntityLivingBase) mob;
-                            damage += ((int) elb.getHealth() * (0.08F * amp_level));
-                        }
+
+                        EntityLivingBase elb = (EntityLivingBase) mob;
+                        damage += ((int) elb.getHealth() * (0.08F * amp_level));
+
                     }
+                    setMobDropLoot(mob);
 
                     if (mob instanceof EntityPlayer) {
                         if (canDamagePlayer((EntityPlayer) mob)) {

@@ -19,7 +19,7 @@ public class ModularTurretsTab extends CompatCreativeTabs {
 
     public static ModularTurretsTab getInstance() {
         if (instance == null) {
-            instance = new ModularTurretsTab(Reference.MOD_ID);
+            instance = new ModularTurretsTab(Reference.NAME);
         }
         return instance;
     }
