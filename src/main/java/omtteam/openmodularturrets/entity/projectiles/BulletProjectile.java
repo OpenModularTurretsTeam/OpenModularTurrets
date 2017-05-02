@@ -80,6 +80,7 @@ public class BulletProjectile extends TurretProjectile {
                 movingobjectposition.entityHit.attackEntityFrom(new NormalDamageSource("bullet"), damage);
                 movingobjectposition.entityHit.hurtResistantTime = 0;
             }
+            setMobDropLoot(movingobjectposition.entityHit);
         }
 
         if (movingobjectposition.entityHit == null && !getEntityWorld().isRemote) {

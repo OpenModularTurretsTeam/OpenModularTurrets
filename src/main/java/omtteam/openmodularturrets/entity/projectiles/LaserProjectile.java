@@ -78,6 +78,7 @@ public class LaserProjectile extends TurretProjectile {
                     }
                 }
 
+
                 if (movingobjectposition.entityHit instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) movingobjectposition.entityHit)) {
                         movingobjectposition.entityHit.setFire(2);
@@ -89,6 +90,7 @@ public class LaserProjectile extends TurretProjectile {
                     movingobjectposition.entityHit.attackEntityFrom(new NormalDamageSource("laser"), damage);
                     movingobjectposition.entityHit.hurtResistantTime = 0;
                 }
+                setMobDropLoot(movingobjectposition.entityHit);
             }
         }
         this.setDead();

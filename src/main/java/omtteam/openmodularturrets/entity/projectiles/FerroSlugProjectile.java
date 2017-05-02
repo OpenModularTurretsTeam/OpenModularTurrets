@@ -84,6 +84,7 @@ public class FerroSlugProjectile extends TurretProjectile {
                 movingobjectposition.entityHit.attackEntityFrom(new ArmorBypassDamageSource("ferroslug"), damage);
                 movingobjectposition.entityHit.hurtResistantTime = 0;
             }
+            setMobDropLoot(movingobjectposition.entityHit);
         }
 
         this.setDead();
