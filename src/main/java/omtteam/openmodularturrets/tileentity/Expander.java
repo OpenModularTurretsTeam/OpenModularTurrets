@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import omtteam.omlib.tileentity.TileEntityContainerElectric;
+import omtteam.omlib.tileentity.TileEntityContainer;
 import omtteam.omlib.util.compat.ItemStackList;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
@@ -14,7 +14,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.util.MathUtil.truncateDoubleToInt;
 
-public class Expander extends TileEntityContainerElectric implements ITickable {
+public class Expander extends TileEntityContainer implements ITickable {
     @SuppressWarnings("unused")
     protected TurretBase base;
     private boolean powerExpander;
