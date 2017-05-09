@@ -27,7 +27,7 @@ public class OpenModularTurrets {
     @SidedProxy(clientSide = "omtteam.openmodularturrets.proxy.ClientProxy", serverSide = "omtteam.openmodularturrets.proxy.ServerProxy")
     private static CommonProxy proxy;
 
-    public static CreativeTabs modularTurretsTab;
+    public static CreativeTabs modularTurretsTab = ModularTurretsTab.getInstance();
     private static final Logger logger = Logger.getLogger(Reference.NAME);
 
     public static Logger getLogger() {
@@ -38,7 +38,6 @@ public class OpenModularTurrets {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.init(event.getSuggestedConfigurationFile());
-        modularTurretsTab = ModularTurretsTab.getInstance();
         proxy.preInit();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, GuiHandler.getInstance());
     }

@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import omtteam.omlib.compatability.minecraft.CompatItemBlock;
 import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -40,8 +41,8 @@ public class ItemBlockExpander extends CompatItemBlock {
     @Override
     @ParametersAreNonnullByDefault
     public void clGetSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-        for (int i = 0; i < 15; i++) {
-            subItems.add(new ItemStack(ModItems.intermediateProductTiered, 1, i));
+        for (int i = 0; i < 10; i++) {
+            subItems.add(new ItemStack(ModBlocks.expander, 1, i));
         }
     }
 

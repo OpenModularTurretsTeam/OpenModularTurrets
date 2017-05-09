@@ -65,7 +65,7 @@ tile.expander_inv_tier_five.name=Base Inventory Expander (Tier 5)
 #for IGWMod
 tile.turret_base.name=Turret Base
 
-item_group.omtteam.openmodularturrets=Open Modular Turrets
+itemGroup.openmodularturrets=Open Modular Turrets
 
 tooltip.tier=Tier
 tooltip.range=Range (in blocks)
