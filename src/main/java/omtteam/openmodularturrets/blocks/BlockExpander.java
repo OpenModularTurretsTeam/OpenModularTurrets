@@ -64,6 +64,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
         this.setHardness(3.0F);
         this.setSoundType(SoundType.STONE);
         this.setDefaultState(this.blockState.getBaseState().withProperty(META, 0));
+        this.setUnlocalizedName(OMTNames.Blocks.expander);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.expander);
     }
 

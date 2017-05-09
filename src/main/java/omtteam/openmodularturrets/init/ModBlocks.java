@@ -83,7 +83,6 @@ public class ModBlocks {
         }
 
         leverBlock = registerBlock(new LeverBlock());
-
     }
 
     public static void initTileEntities() {
