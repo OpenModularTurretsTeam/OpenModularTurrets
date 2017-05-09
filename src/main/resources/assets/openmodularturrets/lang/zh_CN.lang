@@ -75,7 +75,7 @@ tile.hard_wall_tier_five.name=坚固墙壁(五级)
 #for IGWMod
 tile.turret_base.name=炮塔基座
 
-item_group.omtteam.openmodularturrets=模块化炮塔
+itemGroup.openmodularturrets=模块化炮塔
 
 tooltip.tier=等级
 tooltip.range=范围
