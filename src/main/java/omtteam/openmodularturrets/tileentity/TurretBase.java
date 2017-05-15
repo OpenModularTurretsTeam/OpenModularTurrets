@@ -148,6 +148,10 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
             //Extenders
             this.storage.setCapacity(getMaxEnergyStorageWithExtenders());
 
+            if (IC2Loaded) {
+                moveEnergyFromIC2ToStorage();
+            }
+
             //Thaumcraft
             /*if (ModCompatibility.ThaumcraftLoaded && TurretHeadUtil.hasPotentiaUpgradeAddon(this)) {
                 if (amountOfPotentia > 0.05F && !(storage.getMaxEnergyLevel() - storage.getEnergyLevel() == 0)) {
