@@ -56,7 +56,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;*/
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft"),
         @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")}
 )
-public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ ITickable, SimpleComponent, ICamoSupport {
+public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ SimpleComponent, ICamoSupport {
     public int trustedPlayerIndex = 0;
     protected IBlockState camoBlockState;
 
@@ -133,13 +133,12 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
 
     @Override
     public void update() {
+        super.update();
         if (!this.getWorld().isRemote && dropBlock) {
             this.getWorld().destroyBlock(this.pos, true);
             return;
-        } else if (IC2Loaded && EUSupport && !wasAddedToEnergyNet && !this.getWorld().isRemote) {
-            addToIc2EnergyNetwork();
-            wasAddedToEnergyNet = true;
         }
+        ticks++;
         if (!this.getWorld().isRemote && ticks % 5 == 0) {
 
             //Concealment
@@ -148,9 +147,6 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
             //Extenders
             this.storage.setCapacity(getMaxEnergyStorageWithExtenders());
 
-            if (IC2Loaded) {
-                moveEnergyFromIC2ToStorage();
-            }
 
             //Thaumcraft
             /*if (ModCompatibility.ThaumcraftLoaded && TurretHeadUtil.hasPotentiaUpgradeAddon(this)) {
