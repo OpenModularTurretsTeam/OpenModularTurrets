@@ -6,7 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import omtteam.omlib.blocks.BlockAbstract;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
+import omtteam.openmodularturrets.util.ITurretBaseAddon;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -17,13 +17,9 @@ import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
  * This Class
  */
 @SuppressWarnings("unused")
-public abstract class BlockTurretBaseAddon extends BlockAbstract {
+public abstract class BlockTurretBaseAddon extends BlockAbstract implements ITurretBaseAddon {
     public BlockTurretBaseAddon() {
         super(Material.ROCK);
-    }
-
-    public static TurretBase getBase(World world, BlockPos pos) {
-        return TurretHeadUtil.getTurretBase(world, pos);
     }
 
     @Override

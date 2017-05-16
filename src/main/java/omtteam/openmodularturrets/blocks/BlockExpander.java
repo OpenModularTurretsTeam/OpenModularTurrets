@@ -36,6 +36,7 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.util.ITurretBaseAddon;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -50,7 +51,7 @@ import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
  * This Class
  */
 @SuppressWarnings("deprecation")
-public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBlock {
+public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddon {
     private static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
     private static final PropertyDirection FACING = PropertyDirection.create("facing");
 
