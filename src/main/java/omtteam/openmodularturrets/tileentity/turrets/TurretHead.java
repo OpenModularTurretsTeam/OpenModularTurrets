@@ -56,10 +56,10 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     private double targetLastY = 0;
     private double targetLastZ = 0;
 
-    private float maxPitch = 180;
-    private float maxYaw = 180;
-    private float minPitch = -180;
-    private float minYaw = -180;
+    private float maxPitch = 360;
+    private float maxYaw = 360;
+    private float minPitch = 0;
+    private float minYaw = 0;
 
 
     @Nullable
@@ -100,10 +100,10 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         this.rotationXZ = par1.getFloat("rotationXZ");
         this.shouldConceal = par1.getBoolean("shouldConceal");
         this.autoFire = par1.getBoolean("autoFire");
-        this.maxPitch = par1.getFloat("maxPitch");
-        this.minPitch = par1.getFloat("minPitch");
-        this.maxYaw = par1.getFloat("maxYaw");
-        this.minYaw = par1.getFloat("minYaw");
+        //this.maxPitch = par1.getFloat("maxPitch");
+        //this.minPitch = par1.getFloat("minPitch");
+        //this.maxYaw = par1.getFloat("maxYaw");
+        //this.minYaw = par1.getFloat("minYaw");
     }
 
     void setSide() {
@@ -309,6 +309,14 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     private boolean isTargetInYawPitch(Entity entity) {
         float yaw = getYawFromXYXZ(TurretHeadUtil.getAimPitch(entity, this.pos), TurretHeadUtil.getAimYaw(entity, this.pos) + 3.2F);
         float pitch = getPitchFromXYXZ(TurretHeadUtil.getAimPitch(entity, this.pos), TurretHeadUtil.getAimYaw(entity, this.pos) + 3.2F);
+        while (yaw > 360 || pitch > 360) {
+            if (yaw > 360) {
+                yaw -= 360;
+            }
+            if (pitch > 360) {
+                pitch -= 360;
+            }
+        }
         return minYaw <= yaw && yaw <= maxYaw && minPitch <= pitch && pitch <= maxPitch;
     }
 
