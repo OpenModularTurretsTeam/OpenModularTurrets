@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import omtteam.omlib.compatability.minecraft.CompatItemBlock;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -16,7 +15,7 @@ import java.util.List;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 @SuppressWarnings("deprecation")
-public class ItemBlockPotatoCannonTurret extends CompatItemBlock {
+public class ItemBlockPotatoCannonTurret extends ItemBlockBaseAddon {
     private static final DecimalFormat df = new DecimalFormat("0.0");
 
     public ItemBlockPotatoCannonTurret(Block block) {

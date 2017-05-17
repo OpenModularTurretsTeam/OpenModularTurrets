@@ -56,20 +56,35 @@ public class EventHandler {
                 GlStateManager.glLineWidth(2.0F);
                 GlStateManager.disableTexture2D();
                 GlStateManager.depthMask(false);
+                AxisAlignedBB alignedBB;
                 EnumFacing facing = getTurretBaseFacing(event.getPlayer().getEntityWorld(), blockpos);
-                AxisAlignedBB alignedBB = addon.getRenderOutline(addon.getBlock().getDefaultState().withProperty(FACING, facing), event.getPlayer().getEntityWorld(), blockpos);
+                if (addon.getBlock().getDefaultState().getProperties().containsKey(FACING)) {
+                    alignedBB = addon.getRenderOutline(addon.getBlock().getDefaultState().withProperty(FACING, facing), event.getPlayer().getEntityWorld(), blockpos);
+                } else {
+                    alignedBB = addon.getRenderOutline(addon.getBlock().getDefaultState(), event.getPlayer().getEntityWorld(), blockpos);
+                }
                 EntityPlayer player = event.getPlayer();
                 double partialTicks = event.getPartialTicks();
                 double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
                 double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
                 double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
+                float[] color = new float[3];
+                if (event.getPlayer().getEntityWorld().isAirBlock(blockpos)) {
+                    color[0] = 0F;
+                    color[1] = 1F;
+                    color[2] = 1F;
+                } else {
+                    color[0] = 1F;
+                    color[1] = 0F;
+                    color[2] = 0F;
+                }
 
                 alignedBB = alignedBB.offset(-d0, -d1, -d2);
 
                 Tessellator tessellator = Tessellator.getInstance();
                 VertexBuffer vertexbuffer = tessellator.getBuffer();
                 vertexbuffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
-                drawHighlightBox(vertexbuffer, alignedBB.minX, alignedBB.minY, alignedBB.minZ, alignedBB.maxX, alignedBB.maxY, alignedBB.maxZ, 0F, 1F, 1F, 0.5F);
+                drawHighlightBox(vertexbuffer, alignedBB.minX, alignedBB.minY, alignedBB.minZ, alignedBB.maxX, alignedBB.maxY, alignedBB.maxZ, color[0], color[1], color[2], 0.5F);
                 tessellator.draw();
                 GlStateManager.depthMask(true);
                 GlStateManager.enableTexture2D();

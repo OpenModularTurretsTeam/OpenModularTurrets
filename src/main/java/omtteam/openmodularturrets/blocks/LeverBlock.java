@@ -22,21 +22,25 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.IHasItemBlock;
+import omtteam.omlib.util.MathUtil;
 import omtteam.omlib.util.compat.MathTools;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.items.blocks.ItemBlockLever;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.util.ITurretBaseAddon;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.openmodularturrets.reference.OMTNames.Blocks.lever;
+import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBase;
+import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing;
 
 @SuppressWarnings("deprecation")
-public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock {
+public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddon {
     public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 4);
 
     public LeverBlock() {
@@ -59,7 +63,6 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     @Nonnull
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(ROTATION, meta);
-
     }
 
     @Override
@@ -117,7 +120,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
         if (TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.DOWN || TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.UP) {
             return true;
         }
-        TurretBase base = TurretHeadUtil.getTurretBase(worldIn, pos);
+        TurretBase base = getTurretBase(worldIn, pos);
         LeverTileEntity lever = (LeverTileEntity) worldIn.getTileEntity(pos);
         OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
         if (storage == null) {
@@ -191,6 +194,23 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     @Nonnull
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return new AxisAlignedBB(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBoxFromState(IBlockState blockState, World world, BlockPos pos) {
+        EnumFacing facing = getTurretBaseFacing(world, pos);
+        if (getTurretBase(world, pos) != null && getTurretBase(world, pos).getTier() == 1) {
+            if (facing != null) {
+                AxisAlignedBB axisAlignedBB = new AxisAlignedBB(-0.3F, -0.3F, -0.4F, 0.3F, 0.3F, 0.4F);
+                axisAlignedBB = MathUtil.rotateAABB(axisAlignedBB, facing.getOpposite());
+                double[] offset = new double[3];
+                offset[0] = 0.5D + facing.getFrontOffsetX() * 0.1D;
+                offset[1] = 0.5D + facing.getFrontOffsetY() * 0.1D;
+                offset[2] = 0.5D + facing.getFrontOffsetZ() * 0.1D;
+                return axisAlignedBB.offset(pos).offset(offset[0], offset[1], offset[2]);
+            }
+        }
+        return new AxisAlignedBB(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F).offset(pos);
     }
 
     @Override
