@@ -17,7 +17,7 @@ import omtteam.omlib.util.IHasItemBlock;
 import omtteam.omlib.util.MathUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.util.ITurretBaseAddon;
+import omtteam.openmodularturrets.util.ITurretBaseAddonBlock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -25,7 +25,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing;
 
 @SuppressWarnings("deprecation")
-public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddon {
+public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock {
     public static final PropertyBool CONCEALED = PropertyBool.create("concealed");
 
 

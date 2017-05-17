@@ -29,7 +29,7 @@ import omtteam.openmodularturrets.items.blocks.ItemBlockLever;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.util.ITurretBaseAddon;
+import omtteam.openmodularturrets.util.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
@@ -40,7 +40,7 @@ import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBase;
 import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing;
 
 @SuppressWarnings("deprecation")
-public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddon {
+public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock {
     public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 4);
 
     public LeverBlock() {
