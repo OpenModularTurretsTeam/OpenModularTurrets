@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.compatability.minecraft.CompatItemBlock;
-import omtteam.openmodularturrets.util.ITurretBaseAddon;
+import omtteam.openmodularturrets.util.ITurretBaseAddonBlock;
 
 /**
  * Created by Keridos on 17/05/17.
@@ -21,6 +21,6 @@ public abstract class ItemBlockBaseAddon extends CompatItemBlock {
 
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderOutline(IBlockState state, World world, BlockPos pos) {
-        return ((ITurretBaseAddon) this.getBlock()).getBoundingBoxFromState(state, world, pos);
+        return ((ITurretBaseAddonBlock) this.getBlock()).getBoundingBoxFromState(state, world, pos);
     }
 }
