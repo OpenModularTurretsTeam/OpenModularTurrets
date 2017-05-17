@@ -53,7 +53,7 @@ import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 @SuppressWarnings("deprecation")
 public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddon {
     private static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
-    private static final PropertyDirection FACING = PropertyDirection.create("facing");
+    public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
     public BlockExpander() {
         super(Material.GLASS);
@@ -118,6 +118,11 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         IBlockState blockState = this.getActualState(state, source, pos);
         return MathUtil.rotateAABB(new AxisAlignedBB(1 / 8F, 1 / 8F, 0F, 7 / 8F, 7 / 8F, 3 / 8F), blockState.getValue(FACING).getOpposite());
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBoxFromState(IBlockState blockState, World world, BlockPos pos) {
+        return MathUtil.rotateAABB(new AxisAlignedBB(1 / 8F, 1 / 8F, 0F, 7 / 8F, 7 / 8F, 3 / 8F), blockState.getValue(FACING).getOpposite()).offset(pos);
     }
 
     @Override

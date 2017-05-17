@@ -1,7 +1,24 @@
 package omtteam.openmodularturrets.handler;
 
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.openmodularturrets.items.blocks.ItemBlockBaseAddon;
+
+import static omtteam.omlib.util.RenderUtil.drawHighlightBox;
+import static omtteam.openmodularturrets.blocks.BlockExpander.FACING;
+import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBase;
+import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing;
 
 /**
  * Created by Keridos on 02/05/17.
@@ -24,6 +41,40 @@ public class EventHandler {
     public void lootEvent(LivingDropsEvent event) {
         if (event.getEntityLiving().getTags().contains("openmodularturrets:turretHit") && !ConfigHandler.doTurretsKillsDropMobLoot) {
             event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void drawBlockOutline(DrawBlockHighlightEvent event) {
+        if (event.getPlayer().getHeldItemMainhand() != null && event.getPlayer().getHeldItemMainhand().getItem() instanceof ItemBlockBaseAddon) {
+            BlockPos blockpos = event.getTarget().getBlockPos().offset(event.getTarget().sideHit);
+            if (getTurretBase(event.getPlayer().getEntityWorld(), blockpos) != null) {
+                ItemBlockBaseAddon addon = (ItemBlockBaseAddon) event.getPlayer().getHeldItemMainhand().getItem();
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+                GlStateManager.glLineWidth(2.0F);
+                GlStateManager.disableTexture2D();
+                GlStateManager.depthMask(false);
+                EnumFacing facing = getTurretBaseFacing(event.getPlayer().getEntityWorld(), blockpos);
+                AxisAlignedBB alignedBB = addon.getRenderOutline(addon.getBlock().getDefaultState().withProperty(FACING, facing), event.getPlayer().getEntityWorld(), blockpos);
+                EntityPlayer player = event.getPlayer();
+                double partialTicks = event.getPartialTicks();
+                double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
+                double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
+                double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
+
+                alignedBB = alignedBB.offset(-d0, -d1, -d2);
+
+                Tessellator tessellator = Tessellator.getInstance();
+                VertexBuffer vertexbuffer = tessellator.getBuffer();
+                vertexbuffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
+                drawHighlightBox(vertexbuffer, alignedBB.minX, alignedBB.minY, alignedBB.minZ, alignedBB.maxX, alignedBB.maxY, alignedBB.maxZ, 0F, 1F, 1F, 0.5F);
+                tessellator.draw();
+                GlStateManager.depthMask(true);
+                GlStateManager.enableTexture2D();
+                GlStateManager.disableBlend();
+            }
         }
     }
 }

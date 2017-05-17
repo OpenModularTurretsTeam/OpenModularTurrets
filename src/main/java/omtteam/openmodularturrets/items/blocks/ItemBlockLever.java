@@ -3,7 +3,6 @@ package omtteam.openmodularturrets.items.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import omtteam.omlib.compatability.minecraft.CompatItemBlock;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
@@ -12,7 +11,7 @@ import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
-public class ItemBlockLever extends CompatItemBlock {
+public class ItemBlockLever extends ItemBlockBaseAddon {
     public ItemBlockLever(Block block) {
         super(block);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.lever);
