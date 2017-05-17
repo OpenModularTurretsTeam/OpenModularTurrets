@@ -117,12 +117,24 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     @Nonnull
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         IBlockState blockState = this.getActualState(state, source, pos);
-        return MathUtil.rotateAABB(new AxisAlignedBB(1 / 8F, 1 / 8F, 0F, 7 / 8F, 7 / 8F, 3 / 8F), blockState.getValue(FACING).getOpposite());
+        EnumFacing facing = blockState.getValue(FACING);
+        return getBoundingBoxFromFacing(facing);
     }
 
     @Override
     public AxisAlignedBB getBoundingBoxFromState(IBlockState blockState, World world, BlockPos pos) {
-        return MathUtil.rotateAABB(new AxisAlignedBB(1 / 8F, 1 / 8F, 0F, 7 / 8F, 7 / 8F, 3 / 8F), blockState.getValue(FACING).getOpposite()).offset(pos);
+        EnumFacing facing = blockState.getValue(FACING);
+        return getBoundingBoxFromFacing(facing).offset(pos);
+
+    }
+
+    public static AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing) {
+        AxisAlignedBB alignedBB = MathUtil.rotateAABB(new AxisAlignedBB(-3 / 8F, -3 / 8F, -3 / 16F, 3 / 8F, 3 / 8F, 3 / 16F), facing.getOpposite());
+        double[] offset = new double[3];
+        offset[0] = 0.5D + facing.getFrontOffsetX() * 0.325D;
+        offset[1] = 0.5D + facing.getFrontOffsetY() * 0.325D;
+        offset[2] = 0.5D + facing.getFrontOffsetZ() * 0.325D;
+        return alignedBB.offset(offset[0], offset[1], offset[2]);
     }
 
     @Override
