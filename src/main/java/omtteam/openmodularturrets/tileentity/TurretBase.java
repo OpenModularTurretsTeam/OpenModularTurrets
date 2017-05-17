@@ -54,7 +54,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;*/
 @SuppressWarnings("unused")
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft"),
-        @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")}
+        @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = omtteam.omlib.compatability.ModCompatibility.OCModID)}
 )
 public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ SimpleComponent, ICamoSupport {
     public int trustedPlayerIndex = 0;
@@ -412,13 +412,13 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return true;
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Override
     public String getComponentName() {
         return "turretBase";
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():string; returns owner of turret base.")
     public Object[] getOwner(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -427,7 +427,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{this.getOwner()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack hostile mobs.")
     public Object[] isAttacksMobs(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -436,7 +436,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{this.isAttacksMobs()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):boolean;  sets to attack hostile mobs or not.")
     public Object[] setAttacksMobs(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -446,7 +446,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return null;
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack neutral mobs.")
     public Object[] isAttacksNeutrals(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -455,7 +455,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{this.isAttacksNeutrals()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):boolean; sets to attack neutral mobs or not.")
     public Object[] setAttacksNeutrals(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -465,7 +465,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return null;
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack players.")
     public Object[] isAttacksPlayers(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -474,7 +474,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{this.isAttacksPlayers()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):boolean; sets to attack players or not.")
     public Object[] setAttacksPlayers(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -484,7 +484,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return null;
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():table; returns a table of trusted players on this base.")
     public Object[] getTrustedPlayers(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -493,7 +493,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{this.getTrustedPlayers()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , " + "admin:boolean]):string; adds Trusted player to Trustlist.")
     public Object[] addTrustedPlayer(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -510,7 +510,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return null;
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(name:String):string; removes trusted player from trust list.")
     public Object[] removeTrustedPlayer(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -520,7 +520,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return null;
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():int; returns maximum energy storage.")
     public Object[] getMaxEnergyStorage(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -529,7 +529,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{this.storage.getMaxEnergyStored()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():int; returns current energy stored.")
     public Object[] getCurrentEnergyStorage(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -538,7 +538,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{this.getEnergyLevel(EnumFacing.DOWN)};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; returns if the turret is currently active.")
     public Object[] getActive(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -547,7 +547,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{this.isActive()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):boolean; toggles turret redstone inversion state.")
     public Object[] setInverted(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -557,7 +557,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return null;
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; shows redstone inversion state.")
     public Object[] getInverted(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -566,7 +566,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{this.getInverted()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; shows redstone state.")
     public Object[] getRedstone(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -575,7 +575,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{this.getRedstone()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(side:int, yaw:double, pitch:double):void; Set yaw and pitch for all turrets (deact. auto targ. before).")
     public Object[] setAllYawPitch(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -586,7 +586,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(yaw:double, pitch:double):boolean; Set yaw and pitch for a turret (deact. auto targ. before).")
     public Object[] setTurretYawPitch(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -598,7 +598,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{setTurretYawPitch(EnumFacing.getFront(args.checkInteger(0)), (float) args.checkDouble(0), (float) args.checkDouble(1))};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):void; Enable auto firing for all Turrets (deact. auto targ. before).")
     public Object[] setAllAutoForceFire(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -609,7 +609,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):boolean; Enable auto firing for specified Turret (deact. auto targ. before).")
     public Object[] setTurretAutoForceFire(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -620,7 +620,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{setTurretForceFire(EnumFacing.getFront(args.checkInteger(0)), args.checkBoolean(1))};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():int; Try to shoot all turrets, returns successful shots")
     public Object[] forceShootAll(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -630,7 +630,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return new Object[]{this.forceShootAllTurrets()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(side:int):boolean; Try to shoot specified turret, returns true if successfully shot")
     public Object[] forceShootTurret(Context context, Arguments args) {
         if (!computerAccessible) {

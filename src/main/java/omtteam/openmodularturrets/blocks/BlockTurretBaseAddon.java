@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import omtteam.omlib.blocks.BlockAbstract;
+import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.util.ITurretBaseAddonBlock;
 
@@ -20,7 +21,7 @@ import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
  * This Class
  */
 @SuppressWarnings("unused")
-public abstract class BlockTurretBaseAddon extends BlockAbstract implements ITurretBaseAddonBlock {
+public abstract class BlockTurretBaseAddon extends BlockAbstractTileEntity implements ITurretBaseAddonBlock {
     public BlockTurretBaseAddon() {
         super(Material.ROCK);
     }
