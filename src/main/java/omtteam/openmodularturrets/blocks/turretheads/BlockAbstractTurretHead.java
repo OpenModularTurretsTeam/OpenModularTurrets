@@ -23,6 +23,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity implements IHasItemBlock {
     public static final PropertyBool CONCEALED = PropertyBool.create("concealed");
 
+
     BlockAbstractTurretHead() {
         super(Material.GLASS);
 
