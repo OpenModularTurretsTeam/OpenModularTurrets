@@ -6,5 +6,4 @@ package omtteam.openmodularturrets.util;
  */
 public interface ITurretBaseAddonTileEntity {
 
-    String getOwnerDelegate();
 }
