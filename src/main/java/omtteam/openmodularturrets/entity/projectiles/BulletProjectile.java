@@ -9,6 +9,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -64,21 +65,25 @@ public class BulletProjectile extends TurretProjectile {
                 if (canDamagePlayer((EntityPlayer) entity)) {
                     entity.attackEntityFrom(new NormalDamageSource("bullet"), damage);
                     entity.hurtResistantTime = 0;
+                    playSound();
+                } else {
+                    return;
                 }
             } else {
                 entity.attackEntityFrom(new NormalDamageSource("bullet"), damage);
                 entity.hurtResistantTime = 0;
+                playSound();
             }
             setMobDropLoot(entity);
+            this.setDead();
         }
+    }
 
-        if (entity == null && !getEntityWorld().isRemote) {
-            Random random = new Random();
-            getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.bulletHitSound, SoundCategory.AMBIENT,
-                    ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
-        }
-
-        this.setDead();
+    @Override
+    public void playSound() {
+        Random random = RandomUtil.random;
+        getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.bulletHitSound, SoundCategory.AMBIENT,
+                ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
     }
 
     @Override

@@ -83,18 +83,19 @@ public class DisposableTurretProjectile extends TurretProjectile {
                 if (canDamagePlayer((EntityPlayer) entity)) {
                     entity.attackEntityFrom(new NormalDamageSource("disposable"), damage);
                     entity.hurtResistantTime = 0;
+                } else {
+                    return;
                 }
             } else {
                 entity.attackEntityFrom(new NormalDamageSource("disposable"), damage);
                 entity.hurtResistantTime = 0;
             }
             setMobDropLoot(entity);
+            if (itemBound != null) {
+                itemBound.setDead();
+            }
+            this.setDead();
         }
-
-        if (itemBound != null) {
-            itemBound.setDead();
-        }
-        this.setDead();
     }
 
     public EntityItem getItemBound() {
@@ -108,5 +109,10 @@ public class DisposableTurretProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(RayTraceResult result) {
+    }
+
+    @Override
+    public void playSound() {
+
     }
 }
