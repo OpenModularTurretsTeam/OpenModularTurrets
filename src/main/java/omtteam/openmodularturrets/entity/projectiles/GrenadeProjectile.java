@@ -33,10 +33,10 @@ public class GrenadeProjectile extends TurretProjectile {
     }
 
     @Override
-    public void onEntityUpdate() {
+    public void onUpdate() {
 
-        super.onEntityUpdate();
-        if (ticksExisted >= 50) {
+        super.onUpdate();
+        if (ticksExisted >= 40) {
             if (!getEntityWorld().isRemote) {
                 float strength = ConfigHandler.canGrenadesDestroyBlocks ? 1.4F : 0.1F;
                 getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
