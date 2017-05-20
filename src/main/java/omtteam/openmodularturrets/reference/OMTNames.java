@@ -138,6 +138,7 @@ public class OMTNames {
             public static final String AMMO_SLOT = "tooltip.omtteam.openmodularturrets:ammo_slot";
             public static final String ADDON_SLOT = "tooltip.omtteam.openmodularturrets:addon_slot";
             public static final String UPGRADE_SLOT = "tooltip.omtteam.openmodularturrets:upgrade_slot";
+            public static final String BASE_MAX_RANGE = "tooltip.omtteam.openmodularturrets:base_max_range";
         }
     }
 

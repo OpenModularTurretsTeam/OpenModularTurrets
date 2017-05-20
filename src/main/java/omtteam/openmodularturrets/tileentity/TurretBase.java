@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityMachine;
 import omtteam.omlib.util.TrustedPlayer;
+import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackList;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
@@ -170,7 +171,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
             this.storage.setCapacity(getMaxEnergyStorageWithExtenders());
 
             //maxRange update
-            setUpperBoundMaxRange();
+            setBaseUpperBoundRange();
             if (this.currentMaxRange > this.upperBoundMaxRange) {
                 this.currentMaxRange = upperBoundMaxRange;
             }
@@ -192,9 +193,9 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         }
     }
 
-    private void setUpperBoundMaxRange() {
+    private void setBaseUpperBoundRange() {
         int maxRange = 0;
-        List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
+        List<TileEntity> tileEntities = WorldUtil.getTouchingTileEntities(getWorld(), getPos());
         for (TileEntity te : tileEntities) {
             if (te != null && te instanceof TurretHead) {
                 maxRange = Math.max(((TurretHead) te).getTurretRange() + TurretHeadUtil.getRangeUpgrades(this), maxRange);
