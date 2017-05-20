@@ -5,12 +5,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -48,6 +47,7 @@ public abstract class TurretProjectile extends EntityThrowable {
             isAmped = true;
             amp_level = TurretHeadUtil.getAmpLevel(turretBase);
         }
+
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -66,46 +66,79 @@ public abstract class TurretProjectile extends EntityThrowable {
     public abstract void onHitEntity(Entity entity);
 
     @Override
-    public void onEntityUpdate() {
-        if (ticksExisted >= 80) {
+    public void onUpdate() {
+
+        if (this.ticksExisted > 80) {
             this.setDead();
         }
 
-        Vec3d vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
-        Vec3d vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-        RayTraceResult raytraceResultBlock = this.worldObj.rayTraceBlocks(vec3d1, vec3d, false, true, false);
+        this.lastTickPosX = this.posX;
+        this.lastTickPosY = this.posY;
+        this.lastTickPosZ = this.posZ;
 
-        if (raytraceResultBlock != null) {
-            onHitBlock(this.worldObj.getBlockState(raytraceResultBlock.getBlockPos()), raytraceResultBlock.getBlockPos());
-            return;
-        }
+        Vec3d vec3d = new Vec3d(this.posX, this.posY, this.posZ);
+        Vec3d vec3d1 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+        RayTraceResult raytraceresult = this.worldObj.rayTraceBlocks(vec3d, vec3d1);
 
-        Entity entity = null;
-
-        List<Entity> list = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D));
-        double d0 = 0.0D;
+        List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(0.2D));
 
         for (int i = 0; i < list.size(); ++i) {
             Entity entity1 = list.get(i);
 
-            AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().expandXyz(0.30000001192092896D);
-            RayTraceResult raytraceResultEntity = axisalignedbb.calculateIntercept(vec3d1, vec3d);
-
-            if (raytraceResultEntity != null) {
-                double d1 = vec3d1.squareDistanceTo(raytraceResultEntity.hitVec);
-
-                if (d1 < d0 || d0 == 0.0D) {
-                    entity = entity1;
-                    d0 = d1;
-                }
+            if (entity1.canBeCollidedWith()) {
+                this.onHitEntity(entity1);
             }
         }
 
-        if (entity != null) {
-            onHitEntity(entity);
+        if (raytraceresult != null) {
+            if (raytraceresult.typeOfHit == RayTraceResult.Type.BLOCK) {
+                this.onHitBlock(this.worldObj.getBlockState(raytraceresult.getBlockPos()), raytraceresult.getBlockPos());
+            }
         }
-    }
 
+        this.posX += this.motionX;
+        this.posY += this.motionY;
+        this.posZ += this.motionZ;
+        float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+        this.rotationYaw = (float) (MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
+
+        for (this.rotationPitch = (float) (MathHelper.atan2(this.motionY, (double) f) * (180D / Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
+        }
+
+        while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
+            this.prevRotationPitch += 360.0F;
+        }
+
+        while (this.rotationYaw - this.prevRotationYaw < -180.0F) {
+            this.prevRotationYaw -= 360.0F;
+        }
+
+        while (this.rotationYaw - this.prevRotationYaw >= 180.0F) {
+            this.prevRotationYaw += 360.0F;
+        }
+
+        this.rotationPitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * 0.2F;
+        this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
+        float f1 = 0.99F;
+        float f2 = this.getGravityVelocity();
+
+        if (this.isInWater()) {
+            for (int j = 0; j < 4; ++j) {
+                this.worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ, new int[0]);
+            }
+            f1 = 0.8F;
+        }
+
+        this.motionX *= (double) f1;
+        this.motionY *= (double) f1;
+        this.motionZ *= (double) f1;
+
+        if (!this.func_189652_ae()) {
+            this.motionY -= (double) f2;
+        }
+
+        this.setPosition(this.posX, this.posY, this.posZ);
+    }
 
     @Override
     @ParametersAreNonnullByDefault

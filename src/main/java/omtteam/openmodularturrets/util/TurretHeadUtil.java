@@ -88,8 +88,8 @@ public class TurretHeadUtil {
         Entity target = null;
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
-            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange + 1, pos.getY() - turretRange + 1,
-                    pos.getZ() - turretRange + 1, pos.getX() + turretRange + 1,
+            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
+                    pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
                     pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
@@ -148,8 +148,8 @@ public class TurretHeadUtil {
         Entity target = null;
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
-            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange + 1, pos.getY() - turretRange + 1,
-                    pos.getZ() - turretRange + 1, pos.getX() + turretRange + 1,
+            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
+                    pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
                     pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
@@ -210,8 +210,8 @@ public class TurretHeadUtil {
         Entity target = null;
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
-            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange + 1, pos.getY() - turretRange + 1,
-                    pos.getZ() - turretRange + 1, pos.getX() + turretRange + 1,
+            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
+                    pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
                     pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
@@ -503,16 +503,19 @@ public class TurretHeadUtil {
 
         if (ModCompatibility.ValkyrienWarfareLoaded) {
             Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(target.getEntityWorld(), pos);
+
             //We're in Ship space, convert target coords to local coords
             if (shipEntity != null) {
                 targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
             }
         }
 
+        BlockPos targetBlockPos = new BlockPos(targetPos.xCoord, targetPos.yCoord, targetPos.zCoord);
 
-        double dX = (targetPos.xCoord - 0.2F) - (pos.getX() + 0.6F);
-        double dY = (targetPos.yCoord + 0.6F) - (pos.getY() - 0.6F);
-        double dZ = (targetPos.zCoord - 0.2F) - (pos.getZ() + 0.6F);
+        double dX = (targetBlockPos.getX() - 0.5F) - (pos.getX() + 0.5F);
+        double dY = (targetBlockPos.getY() + 0.5F) - (pos.getY() - 0.5F);
+        double dZ = (targetBlockPos.getZ() - 0.5F) - (pos.getZ() + 0.5F);
+
         float pitch = (float) (Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY) + Math.PI);
         pitch = pitch + 1.65F;
         return pitch;
