@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -14,6 +15,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
@@ -50,17 +52,21 @@ public class MessageTurretBase implements IMessage {
                 TileEntity tileEntity = getWorld(FMLClientHandler.instance().getClient()).getTileEntity(new BlockPos(message.x, message.y,
                         message.z));
                 if (tileEntity instanceof TurretBase) {
-                    ((TurretBase) tileEntity).setOwner(message.owner);
-                    ((TurretBase) tileEntity).setOwnerName(message.ownerName);
-                    ((TurretBase) tileEntity).setEnergyStored(message.rfStorageCurrent);
-                    ((TurretBase) tileEntity).setMaxEnergyStored(message.rfStorageMax);
-                    ((TurretBase) tileEntity).setAttacksMobs(message.attacksMobs);
-                    ((TurretBase) tileEntity).setAttacksNeutrals(message.attacksNeutrals);
-                    ((TurretBase) tileEntity).setAttacksPlayers(message.attacksPlayers);
-                    ((TurretBase) tileEntity).setMultiTargeting(message.multiTargeting);
-                    ((TurretBase) tileEntity).setTrustedPlayers(message.trustedPlayers);
-                    ((TurretBase) tileEntity).setTier(message.tier);
-                    ((TurretBase) tileEntity).setCamoState(ForgeRegistries.BLOCKS.getValue(
+                    TurretBase base = (TurretBase) tileEntity;
+                    OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
+                    base.setOwner(message.owner);
+                    base.setOwnerName(message.ownerName);
+                    if (storage != null) {
+                        storage.setEnergyStored(message.rfStorageCurrent);
+                        storage.setCapacity(message.rfStorageMax);
+                    }
+                    base.setAttacksMobs(message.attacksMobs);
+                    base.setAttacksNeutrals(message.attacksNeutrals);
+                    base.setAttacksPlayers(message.attacksPlayers);
+                    base.setMultiTargeting(message.multiTargeting);
+                    base.setTrustedPlayers(message.trustedPlayers);
+                    base.setTier(message.tier);
+                    base.setCamoState(ForgeRegistries.BLOCKS.getValue(
                             new ResourceLocation(message.camoBlockRegName)).getStateFromMeta(message.camoBlockMeta));
 
                 }
@@ -72,22 +78,22 @@ public class MessageTurretBase implements IMessage {
 
     public MessageTurretBase(TileEntity tileEntity) {
         if (tileEntity instanceof TurretBase) {
-            TurretBase TurretBase = (TurretBase) tileEntity;
-            this.x = TurretBase.getPos().getX();
-            this.y = TurretBase.getPos().getY();
-            this.z = TurretBase.getPos().getZ();
-            this.tier = TurretBase.getTier();
-            this.owner = TurretBase.getOwner();
-            this.ownerName = TurretBase.getOwnerName();
-            this.rfStorageCurrent = TurretBase.getEnergyStored(EnumFacing.DOWN);
-            this.rfStorageMax = TurretBase.getMaxEnergyStored(EnumFacing.DOWN);
-            this.attacksMobs = TurretBase.isAttacksMobs();
-            this.attacksNeutrals = TurretBase.isAttacksNeutrals();
-            this.attacksPlayers = TurretBase.isAttacksPlayers();
-            this.multiTargeting = TurretBase.isMultiTargeting();
-            this.trustedPlayers = TurretBase.getTrustedPlayers();
-            this.camoBlockRegName = TurretBase.getCamoState().getBlock().getRegistryName().toString();
-            this.camoBlockMeta = TurretBase.getCamoState().getBlock().getMetaFromState(TurretBase.getCamoState());
+            TurretBase base = (TurretBase) tileEntity;
+            this.x = base.getPos().getX();
+            this.y = base.getPos().getY();
+            this.z = base.getPos().getZ();
+            this.tier = base.getTier();
+            this.owner = base.getOwner();
+            this.ownerName = base.getOwnerName();
+            this.rfStorageCurrent = base.getEnergyLevel(EnumFacing.DOWN);
+            this.rfStorageMax = base.getMaxEnergyLevel(EnumFacing.DOWN);
+            this.attacksMobs = base.isAttacksMobs();
+            this.attacksNeutrals = base.isAttacksNeutrals();
+            this.attacksPlayers = base.isAttacksPlayers();
+            this.multiTargeting = base.isMultiTargeting();
+            this.trustedPlayers = base.getTrustedPlayers();
+            this.camoBlockRegName = base.getCamoState().getBlock().getRegistryName().toString();
+            this.camoBlockMeta = base.getCamoState().getBlock().getMetaFromState(base.getCamoState());
         }
     }
 

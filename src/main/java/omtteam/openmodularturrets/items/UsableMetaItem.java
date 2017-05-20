@@ -24,6 +24,7 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.Set;
 
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
@@ -52,8 +53,12 @@ public class UsableMetaItem extends CompatItem {
     @Nonnull
     public EnumActionResult clOnItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
-        if (stack.getItemDamage() == 2 && player.isSneaking()) {
-            stack.getTagCompound().getKeySet().clear();
+        if (stack.getItemDamage() == 2 && player.isSneaking() && stack.hasTagCompound()) {
+            Set<String> keySet = stack.getTagCompound().getKeySet();
+
+            if (keySet != null) {
+                keySet.clear();
+            }
         }
         return super.clOnItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
     }
@@ -61,8 +66,12 @@ public class UsableMetaItem extends CompatItem {
     @Override
     protected ActionResult<ItemStack> clOnItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
         ItemStack itemStackIn = playerIn.getHeldItemMainhand();
-        if (itemStackIn.getItemDamage() == 2 && playerIn.isSneaking()) {
-            itemStackIn.getTagCompound().getKeySet().clear();
+        if (itemStackIn.getItemDamage() == 2 && playerIn.isSneaking() && itemStackIn.hasTagCompound()) {
+            Set<String> keySet = itemStackIn.getTagCompound().getKeySet();
+
+            if (keySet != null) {
+                keySet.clear();
+            }
         }
         return super.clOnItemRightClick(worldIn, playerIn, hand);
     }

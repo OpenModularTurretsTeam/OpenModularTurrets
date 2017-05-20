@@ -20,7 +20,6 @@ import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 import java.util.Random;
 
 public class LaserProjectile extends TurretProjectile {
@@ -86,6 +85,7 @@ public class LaserProjectile extends TurretProjectile {
                 entity.setFire(2);
                 entity.attackEntityFrom(new NormalDamageSource("laser"), damage);
                 entity.hurtResistantTime = 0;
+                setMobDropLoot(entity);
             }
         }
         this.setDead();

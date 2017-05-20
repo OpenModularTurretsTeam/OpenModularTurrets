@@ -19,12 +19,11 @@ public class ConfigHandler {
     public static boolean turretDamageTrustedPlayers;
     public static String recipes;
     public static boolean shouldDoThaumcraftIntegration;
-    @SuppressWarnings("unused")
-    public static boolean shouldDoComputerIntegration;
     public static boolean globalCanTargetPlayers;
     public static boolean globalCanTargetNeutrals;
     public static boolean globalCanTargetMobs;
     public static boolean canRocketsHome;
+    public static boolean doTurretsKillsDropMobLoot;
     public static boolean useWhitelistForAmmo;
     private static List<String> stringAmmoAllowList;
     private static List<String> stringMobBlackList;
@@ -41,23 +40,28 @@ public class ConfigHandler {
     private static int baseTierOneMaxCharge;
     private static int baseTierOneMaxIo;
     private static int baseTierOneBlastResistance;
+    private static int baseTierOneHardness;
     private static int baseTierTwoMaxCharge;
     private static int baseTierTwoMaxIo;
     private static int baseTierTwoBlastResistance;
+    private static int baseTierTwoHardness;
     private static int baseTierThreeMaxCharge;
     private static int baseTierThreeMaxIo;
     private static int baseTierThreeBlastResistance;
+    private static int baseTierThreeHardness;
     private static int baseTierFourMaxCharge;
     private static int baseTierFourMaxIo;
     private static int baseTierFourBlastResistance;
+    private static int baseTierFourHardness;
     private static int baseTierFiveMaxCharge;
     private static int baseTierFiveMaxIo;
     private static int baseTierFiveBlastResistance;
+    private static int baseTierFiveHardness;
     private static int potentiaToRFRatio;
     private static int potentiaAddonCapacity;
     private static TurretSetting disposable_turret;
     private static TurretSetting potato_cannon_turret;
-    private static TurretSetting gun_turret;
+    private static TurretSetting machine_gun_turret;
     private static TurretSetting incendiary_turret;
     private static TurretSetting grenade_turret;
     private static TurretSetting relativistic_turret;
@@ -85,23 +89,28 @@ public class ConfigHandler {
 
         baseTierOneMaxCharge = config.get("TurretBaseTierOne", "MaxCharge", 500).getInt();
         baseTierOneMaxIo = config.get("TurretBaseTierOne", "MaxIo", 50).getInt();
-        baseTierOneBlastResistance = config.get("TurretBaseTierOne", "BlastResistance", 10).getInt();
+        baseTierOneBlastResistance = config.get("TurretBaseTierOne", "BlastResistance", 5).getInt();
+        baseTierOneHardness = config.get("TurretBaseTierOne", "Hardness", 20).getInt();
 
         baseTierTwoMaxCharge = config.get("TurretBaseTierTwo", "MaxCharge", 50000).getInt();
         baseTierTwoMaxIo = config.get("TurretBaseTierTwo", "MaxIo", 100).getInt();
         baseTierTwoBlastResistance = config.get("TurretBaseTierTwo", "BlastResistance", 10).getInt();
+        baseTierTwoHardness = config.get("TurretBaseTierTwo", "Hardness", 30).getInt();
 
         baseTierThreeMaxCharge = config.get("TurretBaseTierThree", "MaxCharge", 150000).getInt();
         baseTierThreeMaxIo = config.get("TurretBaseTierThree", "MaxIo", 500).getInt();
-        baseTierThreeBlastResistance = config.get("TurretBaseTierThree", "BlastResistance", 10).getInt();
+        baseTierThreeBlastResistance = config.get("TurretBaseTierThree", "BlastResistance", 15).getInt();
+        baseTierThreeHardness = config.get("TurretBaseTierThree", "Hardness", 40).getInt();
 
         baseTierFourMaxCharge = config.get("TurretBaseTierFour", "MaxCharge", 500000).getInt();
         baseTierFourMaxIo = config.get("TurretBaseTierFour", "MaxIo", 1500).getInt();
-        baseTierFourBlastResistance = config.get("TurretBaseTierFour", "BlastResistance", 10).getInt();
+        baseTierFourBlastResistance = config.get("TurretBaseTierFour", "BlastResistance", 20).getInt();
+        baseTierFourHardness = config.get("TurretBaseTierFour", "Hardness", 50).getInt();
 
         baseTierFiveMaxCharge = config.get("TurretBaseTierFive", "MaxCharge", 10000000).getInt();
         baseTierFiveMaxIo = config.get("TurretBaseTierFive", "MaxIo", 5000).getInt();
-        baseTierFiveBlastResistance = config.get("TurretBaseTierFive", "BlastResistance", 10).getInt();
+        baseTierFiveBlastResistance = config.get("TurretBaseTierFive", "BlastResistance", 25).getInt();
+        baseTierFiveHardness = config.get("TurretBaseTierFive", "Hardness", 60).getInt();
 
         disposable_turret = new TurretSetting(
                 config.get("TurretDisposable", "Range", 10, "Turret range, in blocks").getInt(),
@@ -121,7 +130,7 @@ public class ConfigHandler {
                 config.get("TurretPotatoCannon", "PowerUsage", 10, "RF used per shot").getInt(),
                 config.get("TurretPotatoCannon", "Enabled", true, "Enabled?").getBoolean());
 
-        gun_turret = new TurretSetting(config.get("TurretMachineGun", "Range", 18, "Turret range, in blocks").getInt(),
+        machine_gun_turret = new TurretSetting(config.get("TurretMachineGun", "Range", 18, "Turret range, in blocks").getInt(),
                 config.get("TurretMachineGun", "FireRateCooldown", 8,
                         "Number of ticks between firings").getInt(),
                 config.get("TurretMachineGun", "Damage", 2, "Measured in half-hearts").getInt(),
@@ -229,6 +238,10 @@ public class ConfigHandler {
                 "Can rockets fired by the rocket launcher turret home on targets ?",
                 false).getBoolean();
 
+        doTurretsKillsDropMobLoot = config.get("miscellaneous",
+                "Do Mobs killed by turrets drop loot?",
+                true).getBoolean();
+
         useWhitelistForAmmo = config.get("miscellaneous",
                 "whitelistForAmmo",
                 true, "Use Whitelist for ammo slots?").getBoolean();
@@ -236,7 +249,6 @@ public class ConfigHandler {
         stringMobBlackList = Arrays.asList(config.getStringList("mobBlackList", "miscellaneous",
                 new String[]{"ArmorStand"},
                 "Which Entities should not be targetable by turrets? String is the name used by the /summon command."));
-
 
         stringAmmoAllowList = Arrays.asList(config.getStringList("disposableAmmoList", "miscellaneous",
                 new String[]{"minecraft:cobblestone", "minecraft:planks"},
@@ -267,10 +279,6 @@ public class ConfigHandler {
 
         shouldDoThaumcraftIntegration = config.get("ModCompatibility",
                 "Should we enable items that integrate with Thaumcraft?",
-                true).getBoolean();
-
-        shouldDoComputerIntegration = config.get("ModCompatibility",
-                "Should we enable items that integrate with ComputerCraft/OpenComputers?",
                 true).getBoolean();
 
         potentiaToRFRatio = config.get("ModCompatibility", "Potentia Addons' RF conversion ratio per 1 essentia",
@@ -309,6 +317,26 @@ public class ConfigHandler {
     public static void parseLists() {
         parseDisposableAmmoList();
         parseMobBlacklist();
+    }
+
+    public static int getBaseTierOneHardness() {
+        return baseTierOneHardness;
+    }
+
+    public static int getBaseTierTwoHardness() {
+        return baseTierTwoHardness;
+    }
+
+    public static int getBaseTierThreeHardness() {
+        return baseTierThreeHardness;
+    }
+
+    public static int getBaseTierFourHardness() {
+        return baseTierFourHardness;
+    }
+
+    public static int getBaseTierFiveHardness() {
+        return baseTierFiveHardness;
     }
 
     public static int getBaseTierOneMaxIo() {
@@ -384,7 +412,7 @@ public class ConfigHandler {
     }
 
     public static TurretSetting getGunTurretSettings() {
-        return gun_turret;
+        return machine_gun_turret;
     }
 
     public static TurretSetting getRocketTurretSettings() {
@@ -399,8 +427,20 @@ public class ConfigHandler {
         return laser_turret;
     }
 
-    public static TurretSetting getRailgun_turret() {
+    public static TurretSetting getRailgunTurretSettings() {
         return railgun_turret;
+    }
+
+    public static TurretSetting getIncendiaryTurretSettings() {
+        return incendiary_turret;
+    }
+
+    public static TurretSetting getRelativisticTurretSettings() {
+        return relativistic_turret;
+    }
+
+    public static TurretSetting getTeleporterTurretSettings() {
+        return teleporter_turret;
     }
 
     public static int getRangeUpgradeBoost() {
@@ -433,23 +473,6 @@ public class ConfigHandler {
 
     public static int getPotentiaAddonCapacity() {
         return potentiaAddonCapacity;
-    }
-
-    @SuppressWarnings("unused")
-    public static TurretSetting getPotato_cannon_turret() {
-        return potato_cannon_turret;
-    }
-
-    public static TurretSetting getIncendiary_turret() {
-        return incendiary_turret;
-    }
-
-    public static TurretSetting getRelativistic_turret() {
-        return relativistic_turret;
-    }
-
-    public static TurretSetting getTeleporter_turret() {
-        return teleporter_turret;
     }
 
     public static float getTurretSoundVolume() {
@@ -488,7 +511,6 @@ public class ConfigHandler {
         return turretTargetSearchTicks;
     }
 
-    @SuppressWarnings("unused")
     public static boolean isAllowBaseCamo() {
         return allowBaseCamo;
     }
@@ -505,7 +527,7 @@ public class ConfigHandler {
         private final int power_usage;
         private final boolean enabled;
 
-        public TurretSetting(int range, int rof, int damage, double accuracy, int power_usage, boolean enabled) {
+        private TurretSetting(int range, int rof, int damage, double accuracy, int power_usage, boolean enabled) {
             this.range = range;
             this.rof = rof;
             this.damage = damage;

@@ -36,8 +36,12 @@ import static omtteam.openmodularturrets.blocks.BlockTurretBase.TIER;
 public class TurretBaseBakedModel extends CamoBakedModel {
     private static final ResourceLocation FAKE_LOCATION = new ResourceLocation("openmodularturrets", "models/block/custom/turret_base");
 
-    private TurretBaseBakedModel(List<IBakedModel> list) {
+    private final TextureAtlasSprite particle;
+
+
+    private TurretBaseBakedModel(List<IBakedModel> list, TextureAtlasSprite part) {
         super(list);
+        particle = part;
     }
 
     @Override
@@ -45,7 +49,17 @@ public class TurretBaseBakedModel extends CamoBakedModel {
         return list.get(state.getValue(TIER) - 1);
     }
 
+    @Override
+    public TextureAtlasSprite getParticleTexture() {
+        return particle;
+    }
+
     public static class Model implements IModel {
+        public Model() {
+
+        }
+
+
         @Override
         public Collection<ResourceLocation> getDependencies() {
             List<ResourceLocation> list = new ArrayList<>();
@@ -70,7 +84,8 @@ public class TurretBaseBakedModel extends CamoBakedModel {
                     e.printStackTrace();
                 }
             }
-            return new TurretBaseBakedModel(list);
+            TextureAtlasSprite part = bakedTextureGetter.apply(new ResourceLocation("openmodularturrets", "blocks/turret_base_tier_two"));
+            return new TurretBaseBakedModel(list, part);
         }
 
         @Override

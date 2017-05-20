@@ -19,6 +19,7 @@ import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.omlib.util.compat.MathTools;
+import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.compatability.ModCompatibility;
 import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
@@ -55,6 +56,12 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     private double targetLastY = 0;
     private double targetLastZ = 0;
 
+    private float maxPitch = 360;
+    private float maxYaw = 360;
+    private float minPitch = 0;
+    private float minYaw = 0;
+
+
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
@@ -79,6 +86,10 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         nbtTagCompound.setInteger("ticksBeforeFire", ticks);
         nbtTagCompound.setBoolean("shouldConceal", shouldConceal);
         nbtTagCompound.setBoolean("autoFire", autoFire);
+        nbtTagCompound.setFloat("maxPitch", maxPitch);
+        nbtTagCompound.setFloat("minPitch", minPitch);
+        nbtTagCompound.setFloat("maxYaw", maxYaw);
+        nbtTagCompound.setFloat("minYaw", minYaw);
         return nbtTagCompound;
     }
 
@@ -89,6 +100,10 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         this.rotationXZ = par1.getFloat("rotationXZ");
         this.shouldConceal = par1.getBoolean("shouldConceal");
         this.autoFire = par1.getBoolean("autoFire");
+        //this.maxPitch = par1.getFloat("maxPitch");
+        //this.minPitch = par1.getFloat("minPitch");
+        //this.maxYaw = par1.getFloat("maxYaw");
+        //this.minYaw = par1.getFloat("minYaw");
     }
 
     void setSide() {
@@ -184,6 +199,38 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         return getPitchFromXYXZ(this.rotationXY, this.rotationXZ);
     }
 
+    public float getMaxPitch() {
+        return maxPitch;
+    }
+
+    public void setMaxPitch(float maxPitch) {
+        this.maxPitch = maxPitch;
+    }
+
+    public float getMinPitch() {
+        return minPitch;
+    }
+
+    public void setMinPitch(float minPitch) {
+        this.minPitch = minPitch;
+    }
+
+    public float getMaxYaw() {
+        return maxYaw;
+    }
+
+    public void setMaxYaw(float maxYaw) {
+        this.maxYaw = maxYaw;
+    }
+
+    public float getMinYaw() {
+        return minYaw;
+    }
+
+    public void setMinYaw(float minYaw) {
+        this.minYaw = minYaw;
+    }
+
     public boolean getAutoFire() {
         return autoFire;
     }
@@ -259,6 +306,20 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         return ammo;
     }
 
+    private boolean isTargetInYawPitch(Entity entity) {
+        float yaw = getYawFromXYXZ(TurretHeadUtil.getAimPitch(entity, this.pos), TurretHeadUtil.getAimYaw(entity, this.pos) + 3.2F);
+        float pitch = getPitchFromXYXZ(TurretHeadUtil.getAimPitch(entity, this.pos), TurretHeadUtil.getAimYaw(entity, this.pos) + 3.2F);
+        while (yaw > 360 || pitch > 360) {
+            if (yaw > 360) {
+                yaw -= 360;
+            }
+            if (pitch > 360) {
+                pitch -= 360;
+            }
+        }
+        return minYaw <= yaw && yaw <= maxYaw && minPitch <= pitch && pitch <= maxPitch;
+    }
+
     @Override
     public void update() {
         setSide();
@@ -266,6 +327,10 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
         if (this.getWorld().isRemote) {
             updateRotationAnimation();
+            return;
+        }
+
+        if (!(this.getWorld().getBlockState(this.getPos()).getBlock() instanceof BlockAbstractTurretHead)) {
             return;
         }
 
@@ -296,11 +361,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
                 return;
             }
 
-            if (this.autoFire) {
-                forceShot();
-                return;
-            }
-
             //turret tick rate;
             if (target == null && targetingTicks < ConfigHandler.getTurretTargetSearchTicks()) {
                 targetingTicks++;
@@ -327,9 +387,17 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
             }
 
             //set where the turret is aiming at.
+            if (!isTargetInYawPitch(target)) {
+                return;
+            }
             this.rotationXZ = TurretHeadUtil.getAimYaw(target, this.pos) + 3.2F;
             this.rotationXY = TurretHeadUtil.getAimPitch(target, this.pos);
 
+
+            if (this.autoFire) {
+                forceShot();
+                return;
+            }
             // Update target tracking (Player entity not setting motion data when moving via movement keys)
             double targetSpeedX = 0;
             double targetSpeedY = 0;
