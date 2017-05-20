@@ -137,9 +137,9 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.AMMO), 8, 6, 0);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.INVENTORY), 8, ySize - 97 + 4, 0);
 
-        int rangeStringLength = ("" + base.getCurrentMaxRange() + "/" + getBaseUpperBoundRange()).length();
-        fontRenderer.drawStringWithShadow("" + base.getCurrentMaxRange() + "/" + getBaseUpperBoundRange(), 116, 39, 40000);
-        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.RANGE), 117 + ((rangeStringLength - 3) * 3), 6, 0);
+        fontRenderer.drawStringWithShadow("" + base.getCurrentMaxRange(), String.valueOf(base.getCurrentMaxRange()).length() == 1 ?
+                127 : 124, 39, base.getCurrentMaxRange() == getBaseUpperBoundRange() ? 16724530 : 40000);
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.RANGE), 117, 6, 0);
 
         ArrayList targetInfo = new ArrayList();
 
@@ -161,7 +161,7 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
         targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
 
-        this.drawHoveringText(targetInfo, -128, 17, fontRenderer);
+        //this.drawHoveringText(targetInfo, -128, 17, fontRenderer);
 
         drawTooltips();
     }
@@ -197,8 +197,11 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         if (mouseX > k + 71 && mouseX < k + 71 + 40 && mouseY > l + 39 && mouseY < l + 39 + 14) {
             tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.UPGRADE_SLOT));
         }
-        if (mouseX > k + 8 && mouseX < k + 8 + 40 && mouseY > l + 6 && mouseY < l + 6 + 14) {
+        if (mouseX > k + 10 && mouseX < k + 8 + 40 && mouseY > l + 6 && mouseY < l + 6 + 14) {
             tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.AMMO_SLOT));
+        }
+        if (mouseX > k + 123 && mouseX < k + 134 && mouseY > l + 35 && mouseY < l + 48) {
+            tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.BASE_MAX_RANGE));
         }
         if (!tooltip.isEmpty())
             this.drawHoveringText(tooltip, mouseX - k, mouseY - l, Minecraft.getMinecraft().fontRendererObj);
