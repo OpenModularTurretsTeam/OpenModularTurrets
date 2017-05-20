@@ -309,7 +309,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
             targetingTicks = 0;
 
 
-            // is there a target, and Has it died in the previous tick?
+            // is there a target, and has it died in the previous tick?
             if (target == null || target.isDead || this.getWorld().getEntityByID(
                     target.getEntityId()) == null || ((EntityLivingBase) target).getHealth() <= 0.0F) {
                 target = getTarget();

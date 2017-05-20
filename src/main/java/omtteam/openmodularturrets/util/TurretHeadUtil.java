@@ -86,9 +86,9 @@ public class TurretHeadUtil {
         Entity target = null;
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
-            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange, pos.getY() - turretRange,
-                    pos.getZ() - turretRange, pos.getX() + turretRange,
-                    pos.getY() + turretRange, pos.getZ() + turretRange);
+            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange + 1, pos.getY() - turretRange + 1,
+                    pos.getZ() - turretRange + 1, pos.getX() + turretRange + 1,
+                    pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
@@ -146,9 +146,9 @@ public class TurretHeadUtil {
         Entity target = null;
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
-            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange, pos.getY() - turretRange,
-                    pos.getZ() - turretRange, pos.getX() + turretRange,
-                    pos.getY() + turretRange, pos.getZ() + turretRange);
+            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange + 1, pos.getY() - turretRange + 1,
+                    pos.getZ() - turretRange + 1, pos.getX() + turretRange + 1,
+                    pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
@@ -208,9 +208,9 @@ public class TurretHeadUtil {
         Entity target = null;
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
-            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange, pos.getY() - turretRange,
-                    pos.getZ() - turretRange, pos.getX() + turretRange,
-                    pos.getY() + turretRange, pos.getZ() + turretRange);
+            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange + 1, pos.getY() - turretRange + 1,
+                    pos.getZ() - turretRange + 1, pos.getX() + turretRange + 1,
+                    pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
