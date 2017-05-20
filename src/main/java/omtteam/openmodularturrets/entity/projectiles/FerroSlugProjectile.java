@@ -63,23 +63,33 @@ public class FerroSlugProjectile extends TurretProjectile {
                 }
             }
 
-            Random random = new Random();
-            getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.railGunHitSound, SoundCategory.AMBIENT,
-                    ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
+
 
             if (entity instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) entity)) {
                     entity.attackEntityFrom(new ArmorBypassDamageSource("ferroslug"), damage);
                     entity.hurtResistantTime = 0;
+                    playSound();
+                } else {
+                    return;
                 }
+
             } else {
                 entity.attackEntityFrom(new ArmorBypassDamageSource("ferroslug"), damage);
                 entity.hurtResistantTime = 0;
+                playSound();
             }
 
             setMobDropLoot(entity);
+            this.setDead();
         }
-        this.setDead();
+    }
+
+    @Override
+    public void playSound() {
+        Random random = new Random();
+        getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.railGunHitSound, SoundCategory.AMBIENT,
+                ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
     }
 
     @Override

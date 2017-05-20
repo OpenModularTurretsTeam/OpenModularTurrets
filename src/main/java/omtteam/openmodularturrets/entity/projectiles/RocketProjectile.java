@@ -121,7 +121,7 @@ public class RocketProjectile extends TurretProjectile {
     @Override
     public void onHitEntity(Entity entity) {
 
-        if (!getEntityWorld().isRemote) {
+        if (!getEntityWorld().isRemote && !(entity instanceof EntityPlayer && !canDamagePlayer((EntityPlayer) entity))) {
             float strength = ConfigHandler.canRocketsDestroyBlocks ? 2.3F : 0.1F;
             getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
@@ -154,9 +154,8 @@ public class RocketProjectile extends TurretProjectile {
                 }
                 setMobDropLoot(mob);
             }
+            this.setDead();
         }
-        this.setDead();
-
     }
 
     @Override
@@ -166,5 +165,10 @@ public class RocketProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(RayTraceResult result) {
+    }
+
+    @Override
+    public void playSound() {
+
     }
 }

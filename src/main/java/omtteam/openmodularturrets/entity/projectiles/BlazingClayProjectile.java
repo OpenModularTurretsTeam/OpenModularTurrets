@@ -56,20 +56,22 @@ public class BlazingClayProjectile extends TurretProjectile {
                         mob.attackEntityFrom(new NormalDamageSource("bullet"), damage);
                         mob.hurtResistantTime = 0;
                         mob.setFire(5);
+                        playSound();
                     }
                 } else {
                     mob.attackEntityFrom(new NormalDamageSource("bullet"), damage);
                     mob.hurtResistantTime = 0;
                     mob.setFire(5);
+                    playSound();
                 }
             }
+            this.setDead();
         }
-        this.setDead();
     }
 
     @Override
     public void onHitEntity(Entity entity) {
-        if (!getEntityWorld().isRemote) {
+        if (!getEntityWorld().isRemote && !(entity instanceof EntityPlayer && !canDamagePlayer((EntityPlayer) entity))) {
 
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
                     this.posX + 5, this.posY + 5, this.posZ + 5);
@@ -100,8 +102,8 @@ public class BlazingClayProjectile extends TurretProjectile {
                 }
                 setMobDropLoot(entity);
             }
+            this.setDead();
         }
-        this.setDead();
     }
 
     @Override
@@ -117,5 +119,10 @@ public class BlazingClayProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(RayTraceResult result) {
+    }
+
+    @Override
+    public void playSound() {
+
     }
 }

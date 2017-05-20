@@ -24,7 +24,7 @@ public abstract class TurretProjectile extends EntityThrowable {
     public boolean isAmped;
     public int amp_level;
     ItemStack ammo;
-    private TurretBase turretBase;
+    protected TurretBase turretBase;
 
     TurretProjectile(World world) {
         super(world);
@@ -53,10 +53,11 @@ public abstract class TurretProjectile extends EntityThrowable {
     @SuppressWarnings("ConstantConditions")
     boolean canDamagePlayer(EntityPlayer entityPlayer) {
         if (!ConfigHandler.turretDamageTrustedPlayers) {
-            if (this.turretBase.getTrustedPlayer(entityPlayer.getUniqueID()) != null || PlayerUtil.getPlayerUIDUnstable(
-                    this.turretBase.getOwner()).equals(entityPlayer.getUniqueID())) {
+            if (this.turretBase.getTrustedPlayer(entityPlayer.getUniqueID()) != null) {
                 return false;
             }
+        } else if (PlayerUtil.getPlayerUIDUnstable(this.turretBase.getOwner()).equals(entityPlayer.getUniqueID())) {
+            return false;
         }
         return true;
     }
@@ -64,6 +65,8 @@ public abstract class TurretProjectile extends EntityThrowable {
     public abstract void onHitBlock(IBlockState block, BlockPos pos);
 
     public abstract void onHitEntity(Entity entity);
+
+    public abstract void playSound();
 
     @Override
     public void onUpdate() {
