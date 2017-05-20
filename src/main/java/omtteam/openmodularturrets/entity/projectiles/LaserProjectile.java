@@ -13,6 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import omtteam.omlib.util.PlayerUtil;
+import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -39,9 +41,14 @@ public class LaserProjectile extends TurretProjectile {
     }
 
     @Override
-    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) {
-        this.setDead();
-        this.gravity = 0.00F;
+    public void onCollideWithPlayer(EntityPlayer entityPlayer) {
+        if (!ConfigHandler.turretDamageTrustedPlayers) {
+            if (!(this.turretBase.getTrustedPlayer(entityPlayer.getUniqueID()) != null || PlayerUtil.getPlayerUIDUnstable(
+                    this.turretBase.getOwner()).equals(entityPlayer.getUniqueID()))) {
+                this.setDead();
+                this.gravity = 0.00F;
+            }
+        }
     }
 
     @ParametersAreNonnullByDefault
@@ -62,9 +69,6 @@ public class LaserProjectile extends TurretProjectile {
     @Override
     public void onHitEntity(Entity entity) {
         if (entity != null && !getEntityWorld().isRemote) {
-            Random random = new Random();
-            getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.laserHitSound, SoundCategory.AMBIENT,
-                    ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
 
             int damage = ConfigHandler.getLaserTurretSettings().getDamage();
 
@@ -80,6 +84,8 @@ public class LaserProjectile extends TurretProjectile {
                     entity.setFire(2);
                     entity.attackEntityFrom(new NormalDamageSource("laser"), damage);
                     entity.hurtResistantTime = 0;
+                } else {
+                    return;
                 }
             } else {
                 entity.setFire(2);
@@ -87,8 +93,8 @@ public class LaserProjectile extends TurretProjectile {
                 entity.hurtResistantTime = 0;
                 setMobDropLoot(entity);
             }
+            this.setDead();
         }
-        this.setDead();
     }
 
 
@@ -99,5 +105,13 @@ public class LaserProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(RayTraceResult result) {
+    }
+
+    @Override
+    public void playSound() {
+        Random random = RandomUtil.random;
+        getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.laserHitSound, SoundCategory.AMBIENT,
+                ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
+
     }
 }

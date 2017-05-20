@@ -97,9 +97,11 @@ public class GrenadeProjectile extends TurretProjectile {
 
     @Override
     public void onHitEntity(Entity entity) {
-        this.motionX = 0.0F;
-        this.motionY = 0.0F;
-        this.motionZ = 0.0F;
+        if (!(entity instanceof EntityPlayer && !canDamagePlayer((EntityPlayer) entity))) {
+            this.motionX = 0.0F;
+            this.motionY = 0.0F;
+            this.motionZ = 0.0F;
+        }
     }
 
     @Override
@@ -109,5 +111,10 @@ public class GrenadeProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(RayTraceResult result) {
+    }
+
+    @Override
+    public void playSound() {
+
     }
 }
