@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import omtteam.omlib.compatability.minecraft.CompatItemBlock;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -16,7 +15,7 @@ import java.util.List;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 @SuppressWarnings("deprecation")
-public class ItemBlockRailGunTurret extends CompatItemBlock {
+public class ItemBlockRailGunTurret extends ItemBlockBaseAddon {
     private static final DecimalFormat df = new DecimalFormat("0.0");
 
     public ItemBlockRailGunTurret(Block block) {
@@ -33,7 +32,7 @@ public class ItemBlockRailGunTurret extends CompatItemBlock {
         tooltip.add(TextFormatting.GOLD + "--" + safeLocalize("tooltip.info") + "--");
         tooltip.add(safeLocalize("tooltip.tier") + ": " + TextFormatting.WHITE + "5");
         tooltip.add(safeLocalize("tooltip.range") + ": " + TextFormatting.WHITE +
-                ConfigHandler.getRailgun_turret().getRange());
+                ConfigHandler.getRailgunTurretSettings().getRange());
         tooltip.add(safeLocalize("tooltip.accuracy") + ": " + TextFormatting.WHITE +
                 safeLocalize("turret.accuracy.exact"));
         tooltip.add(safeLocalize("tooltip.ammo") + ": " + TextFormatting.WHITE +
@@ -44,13 +43,13 @@ public class ItemBlockRailGunTurret extends CompatItemBlock {
         tooltip.add(
                 TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");
         tooltip.add(safeLocalize("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
-                (ConfigHandler.getRailgun_turret().getDamage() / 2F) + " " + safeLocalize(
+                (ConfigHandler.getRailgunTurretSettings().getDamage() / 2F) + " " + safeLocalize(
                 "tooltip" + ".health"));
         tooltip.add(safeLocalize("tooltip.aoe") + ": " + TextFormatting.WHITE + "0");
         tooltip.add(safeLocalize("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
-                20.0F / ConfigHandler.getRailgun_turret().getFireRate()));
+                20.0F / ConfigHandler.getRailgunTurretSettings().getFireRate()));
         tooltip.add(safeLocalize("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
-                ConfigHandler.getRailgun_turret().getPowerUsage() + " RF");
+                ConfigHandler.getRailgunTurretSettings().getPowerUsage() + " RF");
         tooltip.add("");
         tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.turret.5"));
     }

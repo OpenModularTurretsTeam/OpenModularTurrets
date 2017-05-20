@@ -88,6 +88,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
                 entity.attackEntityFrom(new NormalDamageSource("disposable"), damage);
                 entity.hurtResistantTime = 0;
             }
+            setMobDropLoot(entity);
         }
 
         if (itemBound != null) {

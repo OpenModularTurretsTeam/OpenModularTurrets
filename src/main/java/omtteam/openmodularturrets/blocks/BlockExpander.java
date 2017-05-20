@@ -36,6 +36,7 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.util.ITurretBaseAddonBlock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -50,9 +51,9 @@ import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
  * This Class
  */
 @SuppressWarnings("deprecation")
-public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBlock {
+public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock {
     private static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
-    private static final PropertyDirection FACING = PropertyDirection.create("facing");
+    public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
     public BlockExpander() {
         super(Material.GLASS);
@@ -64,6 +65,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
         this.setHardness(3.0F);
         this.setSoundType(SoundType.STONE);
         this.setDefaultState(this.blockState.getBaseState().withProperty(META, 0));
+        this.setUnlocalizedName(OMTNames.Blocks.expander);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.expander);
     }
 
@@ -115,7 +117,24 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     @Nonnull
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         IBlockState blockState = this.getActualState(state, source, pos);
-        return MathUtil.rotateAABB(new AxisAlignedBB(1 / 8F, 1 / 8F, 0F, 7 / 8F, 7 / 8F, 3 / 8F), blockState.getValue(FACING).getOpposite());
+        EnumFacing facing = blockState.getValue(FACING);
+        return getBoundingBoxFromFacing(facing);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBoxFromState(IBlockState blockState, World world, BlockPos pos) {
+        EnumFacing facing = blockState.getValue(FACING);
+        return getBoundingBoxFromFacing(facing).offset(pos);
+
+    }
+
+    public static AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing) {
+        AxisAlignedBB alignedBB = MathUtil.rotateAABB(new AxisAlignedBB(-3 / 8F, -3 / 8F, -3 / 16F, 3 / 8F, 3 / 8F, 3 / 16F), facing.getOpposite());
+        double[] offset = new double[3];
+        offset[0] = 0.5D + facing.getFrontOffsetX() * 0.325D;
+        offset[1] = 0.5D + facing.getFrontOffsetY() * 0.325D;
+        offset[2] = 0.5D + facing.getFrontOffsetZ() * 0.325D;
+        return alignedBB.offset(offset[0], offset[1], offset[2]);
     }
 
     @Override

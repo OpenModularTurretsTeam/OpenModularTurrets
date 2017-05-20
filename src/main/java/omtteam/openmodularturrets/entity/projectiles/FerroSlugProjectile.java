@@ -54,7 +54,7 @@ public class FerroSlugProjectile extends TurretProjectile {
 
         if (entity != null && !getEntityWorld().isRemote) {
 
-            int damage = ConfigHandler.getRailgun_turret().getDamage();
+            int damage = ConfigHandler.getRailgunTurretSettings().getDamage();
 
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
@@ -77,6 +77,7 @@ public class FerroSlugProjectile extends TurretProjectile {
                 entity.hurtResistantTime = 0;
             }
 
+            setMobDropLoot(entity);
         }
         this.setDead();
     }

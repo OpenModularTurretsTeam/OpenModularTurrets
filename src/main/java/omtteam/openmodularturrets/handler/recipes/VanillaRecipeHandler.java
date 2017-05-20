@@ -140,7 +140,7 @@ class VanillaRecipeHandler {
                             RecipeHandler.ioBus));
         }
 
-        if (ConfigHandler.getIncendiary_turret().isEnabled()) {
+        if (ConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.incendiaryTurret, 1), "A A", "BCB", "DCD", 'A',
                             new ItemStack(ModItems.intermediateProductTiered, 1, 11), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 6), 'C', "ingotIron", 'D',
@@ -154,7 +154,7 @@ class VanillaRecipeHandler {
                             'D', RecipeHandler.ioBus));
         }
 
-        if (ConfigHandler.getRelativistic_turret().isEnabled()) {
+        if (ConfigHandler.getRelativisticTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.relativisticTurret, 1), "CAC", "ABA", "CDC", 'A',
                             Items.ENDER_PEARL, 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 2), 'C',
@@ -168,7 +168,7 @@ class VanillaRecipeHandler {
                     Items.DIAMOND));
         }
 
-        if (ConfigHandler.getTeleporter_turret().isEnabled()) {
+        if (ConfigHandler.getTeleporterTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.teleporterTurret, 1), "CEC", "ABA", "CDC", 'A',
                             Items.DIAMOND, 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 3), 'C',
@@ -182,7 +182,7 @@ class VanillaRecipeHandler {
                     Blocks.OBSIDIAN, 'D', RecipeHandler.ioBus));
         }
 
-        if (ConfigHandler.getRailgun_turret().isEnabled()) {
+        if (ConfigHandler.getRailgunTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.railGunTurret, 1), "CAC", "CAC", "DBD", 'A',
                     new ItemStack(ModItems.intermediateProductTiered, 1, 14), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 9), 'C',
                     Blocks.OBSIDIAN, 'D', RecipeHandler.ioBus));

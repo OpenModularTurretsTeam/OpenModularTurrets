@@ -54,7 +54,7 @@ public class ModBlocks {
             machineGunTurret = registerBlock(new BlockGunTurret());
         }
 
-        if (ConfigHandler.getIncendiary_turret().isEnabled()) {
+        if (ConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
             incendiaryTurret = registerBlock(new BlockIncendiaryTurret());
         }
 
@@ -62,7 +62,7 @@ public class ModBlocks {
             grenadeLauncherTurret = registerBlock(new BlockGrenadeTurret());
         }
 
-        if (ConfigHandler.getRelativistic_turret().isEnabled()) {
+        if (ConfigHandler.getRelativisticTurretSettings().isEnabled()) {
             relativisticTurret = registerBlock(new BlockRelativisticTurret());
         }
 
@@ -70,7 +70,7 @@ public class ModBlocks {
             rocketTurret = registerBlock(new BlockRocketTurret());
         }
 
-        if (ConfigHandler.getTeleporter_turret().isEnabled()) {
+        if (ConfigHandler.getTeleporterTurretSettings().isEnabled()) {
             teleporterTurret = registerBlock(new BlockTeleporterTurret());
         }
 
@@ -78,12 +78,11 @@ public class ModBlocks {
             laserTurret = registerBlock(new BlockLaserTurret());
         }
 
-        if (ConfigHandler.getRailgun_turret().isEnabled()) {
+        if (ConfigHandler.getRailgunTurretSettings().isEnabled()) {
             railGunTurret = registerBlock(new BlockRailGunTurret());
         }
 
         leverBlock = registerBlock(new LeverBlock());
-
     }
 
     public static void initTileEntities() {
