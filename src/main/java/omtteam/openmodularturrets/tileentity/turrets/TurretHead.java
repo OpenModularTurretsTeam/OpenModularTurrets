@@ -268,8 +268,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         }
 
         return MathTools.abs_max(MathTools.abs_max(targetPos.xCoord - this.getPos().getX(), targetPos.yCoord - this.getPos().getY()),
-                targetPos.zCoord - this.getPos().getZ()) > (getTurretRange() + TurretHeadUtil.getRangeUpgrades(
-                base));
+                targetPos.zCoord - this.getPos().getZ()) > (this.getBase().getCurrentMaxRange());
     }
 
     private int getPowerRequiredForNextShot() {
@@ -390,6 +389,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
             if (!isTargetInYawPitch(target)) {
                 return;
             }
+
             this.rotationXZ = TurretHeadUtil.getAimYaw(target, this.pos) + 3.2F;
             this.rotationXY = TurretHeadUtil.getAimPitch(target, this.pos);
 
