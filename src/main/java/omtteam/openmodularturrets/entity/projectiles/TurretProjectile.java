@@ -1,12 +1,9 @@
 package omtteam.openmodularturrets.entity.projectiles;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -115,5 +112,15 @@ public abstract class TurretProjectile extends EntityThrowable {
     public boolean writeToNBTOptional(NBTTagCompound nbtTagCompound) {
         this.setDead();
         return false;
+    }
+
+    protected void setMobDropLoot(Entity entity) {
+        EntityLivingBase entityLivingBase;
+        if (entity instanceof EntityLivingBase) {
+            entityLivingBase = (EntityLivingBase) entity;
+            if (!(entityLivingBase instanceof EntityPlayer) && !entityLivingBase.getTags().contains("openmodularturrets:turretHit")) {
+                entityLivingBase.addTag("openmodularturrets:turretHit");
+            }
+        }
     }
 }

@@ -53,7 +53,7 @@ public class RocketProjectile extends TurretProjectile {
                 double d1 = target.posY + (double) target.getEyeHeight() - 1.1F - this.posY;
                 double d2 = target.posZ - this.posZ;
 
-                float speed = 0.06F;
+                float speed = 0.24F;
                 this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
             } else if (ConfigHandler.canRocketsHome && target == null) {
                 this.setDead();
@@ -128,16 +128,15 @@ public class RocketProjectile extends TurretProjectile {
                     this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-            for (Entity mob : targets) {
+            for (EntityLivingBase mob : targets) {
 
                 int damage = ConfigHandler.getRocketTurretSettings().getDamage();
 
                 if (isAmped) {
-                    if (mob instanceof EntityLivingBase) {
-                        EntityLivingBase elb = (EntityLivingBase) mob;
-                        damage += ((int) elb.getHealth() * (0.08F * amp_level));
-                    }
+                    EntityLivingBase elb = (EntityLivingBase) mob;
+                    damage += ((int) elb.getHealth() * (0.08F * amp_level));
                 }
+
 
                 if (mob instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) mob)) {
@@ -153,6 +152,7 @@ public class RocketProjectile extends TurretProjectile {
                     mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
                     mob.hurtResistantTime = 0;
                 }
+                setMobDropLoot(mob);
             }
         }
         this.setDead();

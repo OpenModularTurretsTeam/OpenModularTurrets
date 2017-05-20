@@ -20,6 +20,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackTools;
@@ -800,12 +802,13 @@ public class TurretHeadUtil {
     }
 
     public static void updateSolarPanelAddon(TurretBase base) {
-        if (!hasSolarPanelAddon(base)) {
+        OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
+        if (!hasSolarPanelAddon(base) || storage == null) {
             return;
         }
 
         if (base.getWorld().isDaytime() && !base.getWorld().isRaining() && base.getWorld().canBlockSeeSky(base.getPos().up(2))) {
-            base.receiveEnergy(EnumFacing.DOWN, ConfigHandler.getSolarPanelAddonGen(), false);
+            storage.receiveEnergy(ConfigHandler.getSolarPanelAddonGen(), false);
         }
     }
 

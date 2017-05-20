@@ -1,6 +1,8 @@
 package omtteam.openmodularturrets.proxy;
 
+import net.minecraftforge.common.MinecraftForge;
 import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.openmodularturrets.handler.EventHandler;
 import omtteam.openmodularturrets.handler.NetworkingHandler;
 import omtteam.openmodularturrets.handler.ProjectileEntityHandler;
 import omtteam.openmodularturrets.handler.recipes.RecipeHandler;
@@ -34,5 +36,6 @@ public class CommonProxy {
     public void init() {
         RecipeHandler.initRecipes();
         initEntityRenderers();
+        MinecraftForge.EVENT_BUS.register(EventHandler.getInstance());
     }
 }

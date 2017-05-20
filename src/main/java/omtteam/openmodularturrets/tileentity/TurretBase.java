@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.tileentity;
 
-import cofh.api.energy.EnergyStorage;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
@@ -14,8 +13,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityMachine;
 import omtteam.omlib.util.TrustedPlayer;
@@ -54,9 +55,9 @@ import dan200.computercraft.api.peripheral.IPeripheral;*/
 @SuppressWarnings("unused")
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft"),
-        @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")}
+        @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = omtteam.omlib.compatability.ModCompatibility.OCModID)}
 )
-public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ ITickable, SimpleComponent, ICamoSupport {
+public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ SimpleComponent, ICamoSupport {
     public int trustedPlayerIndex = 0;
     protected IBlockState camoBlockState;
 
@@ -84,7 +85,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         this.currentMaxRange = 0;
         this.upperBoundMaxRange = 0;
         this.rangeOverridden = false;
-        this.storage = new EnergyStorage(MaxEnergyStorage, MaxIO);
+        this.storage = new OMEnergyStorage(MaxEnergyStorage, MaxIO);
         this.attacksMobs = true;
         this.attacksNeutrals = true;
         this.attacksPlayers = false;
@@ -155,13 +156,23 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
 
     @Override
     public void update() {
+        super.update();
         if (!this.getWorld().isRemote && dropBlock) {
             this.getWorld().destroyBlock(this.pos, true);
             return;
-        } else if (IC2Loaded && EUSupport && !wasAddedToEnergyNet && !this.getWorld().isRemote) {
-            addToIc2EnergyNetwork();
-            wasAddedToEnergyNet = true;
         }
+
+        //maxRange update, needs to happen on both client and server else GUI information may become disjoint.
+        setBaseUpperBoundRange();
+        if (this.currentMaxRange > this.upperBoundMaxRange) {
+            this.currentMaxRange = upperBoundMaxRange;
+        }
+
+        if (!this.rangeOverridden) {
+            this.currentMaxRange = upperBoundMaxRange;
+        }
+
+        ticks++;
         if (!this.getWorld().isRemote && ticks % 5 == 0) {
 
             //Concealment
@@ -170,15 +181,18 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
             //Extenders
             this.storage.setCapacity(getMaxEnergyStorageWithExtenders());
 
-            //maxRange update
-            setBaseUpperBoundRange();
-            if (this.currentMaxRange > this.upperBoundMaxRange) {
-                this.currentMaxRange = upperBoundMaxRange;
-            }
-
-            if (!this.rangeOverridden) {
-                this.currentMaxRange = upperBoundMaxRange;
-            }
+            //Thaumcraft
+            /*if (ModCompatibility.ThaumcraftLoaded && TurretHeadUtil.hasPotentiaUpgradeAddon(this)) {
+                if (amountOfPotentia > 0.05F && !(storage.getMaxEnergyLevel() - storage.getEnergyLevel() == 0)) {
+                    if (VisNetHandler.drainVis(this.getWorld(), xCoord, yCoord, zCoord, Aspect.ORDER, 5) == 5) {
+                        this.amountOfPotentia = this.amountOfPotentia - 0.05F;
+                        this.storage.modifyEnergyStored(Math.round(ConfigHandler.getPotentiaToRFRatio() * 5));
+                    } else {
+                        this.amountOfPotentia = this.amountOfPotentia - 0.05F;
+                        this.storage.modifyEnergyStored(Math.round(ConfigHandler.getPotentiaToRFRatio() / 2));
+                    }
+                }
+            }*/
 
             if (ticks % 20 == 0) {
 
@@ -333,12 +347,12 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
     }
 
     private static void updateRedstoneReactor(TurretBase base) {
-        if (!TurretHeadUtil.hasRedstoneReactor(base)) {
+        OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
+        if (!TurretHeadUtil.hasRedstoneReactor(base) || storage == null) {
             return;
         }
 
-        if (ConfigHandler.getRedstoneReactorAddonGen() < (base.getMaxEnergyStored(
-                EnumFacing.DOWN) - base.getEnergyStored(EnumFacing.DOWN))) {
+        if (ConfigHandler.getRedstoneReactorAddonGen() < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
 
             //Prioritise redstone blocks
             ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackBlockFromBase(base, new ItemStack(
@@ -350,8 +364,8 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
                         base);
             }
 
-            if (redstoneBlock != ItemStackTools.getEmptyStack() && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base.getMaxEnergyStored(
-                    EnumFacing.DOWN) - base.getEnergyStored(EnumFacing.DOWN))) {
+            if (redstoneBlock != ItemStackTools.getEmptyStack() && ConfigHandler.getRedstoneReactorAddonGen() * 9
+                    < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
                 base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen() * 9);
                 return;
             }
@@ -364,7 +378,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
             }
 
             if (redstone != ItemStackTools.getEmptyStack()) {
-                base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen());
+                storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen());
             }
         }
     }
@@ -402,7 +416,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
     @Nonnull
     @Override
     public IBlockState getCamoState() {
-        return camoBlockState;
+        return camoBlockState != null ? camoBlockState : this.getDefaultCamoState();
     }
 
     @Override
@@ -429,13 +443,13 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return true;
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Override
     public String getComponentName() {
         return "turretBase";
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():string; returns owner of turret base.")
     public Object[] getOwner(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -444,7 +458,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return new Object[]{this.getOwner()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack hostile mobs.")
     public Object[] isAttacksMobs(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -453,7 +467,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return new Object[]{this.isAttacksMobs()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):boolean;  sets to attack hostile mobs or not.")
     public Object[] setAttacksMobs(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -463,7 +477,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return null;
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack neutral mobs.")
     public Object[] isAttacksNeutrals(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -472,7 +486,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return new Object[]{this.isAttacksNeutrals()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):boolean; sets to attack neutral mobs or not.")
     public Object[] setAttacksNeutrals(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -482,7 +496,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return null;
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack players.")
     public Object[] isAttacksPlayers(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -491,7 +505,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return new Object[]{this.isAttacksPlayers()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):boolean; sets to attack players or not.")
     public Object[] setAttacksPlayers(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -501,7 +515,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return null;
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():table; returns a table of trusted players on this base.")
     public Object[] getTrustedPlayers(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -510,7 +524,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return new Object[]{this.getTrustedPlayers()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , " + "admin:boolean]):string; adds Trusted player to Trustlist.")
     public Object[] addTrustedPlayer(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -527,7 +541,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return null;
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(name:String):string; removes trusted player from trust list.")
     public Object[] removeTrustedPlayer(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -537,7 +551,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return null;
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():int; returns maximum energy storage.")
     public Object[] getMaxEnergyStorage(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -546,16 +560,16 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return new Object[]{this.storage.getMaxEnergyStored()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():int; returns current energy stored.")
     public Object[] getCurrentEnergyStorage(Context context, Arguments args) {
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
-        return new Object[]{this.getEnergyStored(EnumFacing.DOWN)};
+        return new Object[]{this.getEnergyLevel(EnumFacing.DOWN)};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; returns if the turret is currently active.")
     public Object[] getActive(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -564,7 +578,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return new Object[]{this.isActive()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):boolean; toggles turret redstone inversion state.")
     public Object[] setInverted(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -574,7 +588,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return null;
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; shows redstone inversion state.")
     public Object[] getInverted(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -583,7 +597,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return new Object[]{this.getInverted()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; shows redstone state.")
     public Object[] getRedstone(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -592,7 +606,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return new Object[]{this.getRedstone()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(side:int, yaw:double, pitch:double):void; Set yaw and pitch for all turrets (deact. auto targ. before).")
     public Object[] setAllYawPitch(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -603,7 +617,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return new Object[]{};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(yaw:double, pitch:double):boolean; Set yaw and pitch for a turret (deact. auto targ. before).")
     public Object[] setTurretYawPitch(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -615,7 +629,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return new Object[]{setTurretYawPitch(EnumFacing.getFront(args.checkInteger(0)), (float) args.checkDouble(0), (float) args.checkDouble(1))};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):void; Enable auto firing for all Turrets (deact. auto targ. before).")
     public Object[] setAllAutoForceFire(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -626,7 +640,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return new Object[]{};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):boolean; Enable auto firing for specified Turret (deact. auto targ. before).")
     public Object[] setTurretAutoForceFire(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -637,7 +651,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return new Object[]{setTurretForceFire(EnumFacing.getFront(args.checkInteger(0)), args.checkBoolean(1))};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():int; Try to shoot all turrets, returns successful shots")
     public Object[] forceShootAll(Context context, Arguments args) {
         if (!computerAccessible) {
@@ -647,7 +661,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IT
         return new Object[]{this.forceShootAllTurrets()};
     }
 
-    @Optional.Method(modid = "OpenComputers")
+    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(side:int):boolean; Try to shoot specified turret, returns true if successfully shot")
     public Object[] forceShootTurret(Context context, Arguments args) {
         if (!computerAccessible) {

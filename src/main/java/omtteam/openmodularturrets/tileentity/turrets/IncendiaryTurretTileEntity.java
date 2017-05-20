@@ -18,22 +18,22 @@ public class IncendiaryTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return ConfigHandler.getIncendiary_turret().getRange();
+        return ConfigHandler.getIncendiaryTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return ConfigHandler.getIncendiary_turret().getPowerUsage();
+        return ConfigHandler.getIncendiaryTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return ConfigHandler.getIncendiary_turret().getFireRate();
+        return ConfigHandler.getIncendiaryTurretSettings().getFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getIncendiary_turret().getAccuracy() / 10;
+        return ConfigHandler.getIncendiaryTurretSettings().getAccuracy() / 10;
     }
 
     @Override

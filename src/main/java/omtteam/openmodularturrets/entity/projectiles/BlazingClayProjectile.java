@@ -48,7 +48,7 @@ public class BlazingClayProjectile extends TurretProjectile {
                     this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-            int damage = ConfigHandler.getIncendiary_turret().getDamage();
+            int damage = ConfigHandler.getIncendiaryTurretSettings().getDamage();
             for (Entity mob : targets) {
 
                 if (mob instanceof EntityPlayer) {
@@ -69,15 +69,13 @@ public class BlazingClayProjectile extends TurretProjectile {
 
     @Override
     public void onHitEntity(Entity entity) {
-
-
         if (!getEntityWorld().isRemote) {
 
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
                     this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-            int damage = ConfigHandler.getIncendiary_turret().getDamage();
+            int damage = ConfigHandler.getIncendiaryTurretSettings().getDamage();
 
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
@@ -86,7 +84,8 @@ public class BlazingClayProjectile extends TurretProjectile {
                 }
             }
 
-            for (Entity mob : targets) {
+            for (EntityLivingBase mob : targets) {
+                setMobDropLoot(mob);
 
                 if (mob instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) mob)) {
@@ -99,6 +98,7 @@ public class BlazingClayProjectile extends TurretProjectile {
                     mob.hurtResistantTime = 0;
                     mob.setFire(5);
                 }
+                setMobDropLoot(entity);
             }
         }
         this.setDead();

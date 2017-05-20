@@ -188,7 +188,7 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         }
 
         if (mouseX > k + 153 && mouseX < k + 153 + 14 && mouseY > l + 17 && mouseY < l + 17 + 51) {
-            tooltip.add(base.getEnergyStored(EnumFacing.DOWN) + "/" + base.getMaxEnergyStored(
+            tooltip.add(base.getEnergyLevel(EnumFacing.DOWN) + "/" + base.getMaxEnergyLevel(
                     EnumFacing.DOWN) + " RF");
         }
         if (mouseX > k + 71 && mouseX < k + 71 + 40 && mouseY > l + 6 && mouseY < l + 6 + 14) {

@@ -18,32 +18,40 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
+import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.IHasItemBlock;
+import omtteam.omlib.util.MathUtil;
 import omtteam.omlib.util.compat.MathTools;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.items.blocks.ItemBlockLever;
-import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.util.ITurretBaseAddonBlock;
+import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static omtteam.openmodularturrets.reference.OMTNames.Blocks.lever;
+import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBase;
+import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing;
+
 @SuppressWarnings("deprecation")
-public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock {
+public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock {
     public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 4);
 
     public LeverBlock() {
         super(Material.GLASS);
-        this.setUnlocalizedName(OMTNames.Blocks.lever);
+        this.setUnlocalizedName(lever);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setHardness(2F);
         this.setResistance(15F);
         this.setSoundType(SoundType.STONE);
         setDefaultState(this.blockState.getBaseState().withProperty(ROTATION, 0));
-        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.lever);
+        this.setRegistryName(Reference.MOD_ID, lever);
     }
 
     @Override
@@ -55,7 +63,6 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     @Nonnull
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(ROTATION, meta);
-
     }
 
     @Override
@@ -110,17 +117,25 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
 
     @Override
     protected boolean clOnBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        TurretBase base;
+        if (TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.DOWN || TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.UP) {
+            return true;
+        }
+        TurretBase base = getTurretBase(worldIn, pos);
         LeverTileEntity lever = (LeverTileEntity) worldIn.getTileEntity(pos);
+        OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
+        if (storage == null) {
+            return true;
+        }
         if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 0 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
                 pos.getZ() + 1)))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
                     pos.getZ() + 1));
             if (base != null) {
                 lever.isTurning = true;
+
                 if (lever.rotation == 0F) {
                     //worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
-                    base.receiveEnergy(EnumFacing.DOWN, 50, false);
+                    storage.receiveEnergy(50, false);
                 }
             }
         }
@@ -132,7 +147,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
                     //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
-                    base.receiveEnergy(EnumFacing.DOWN, 50, false);
+                    storage.receiveEnergy(50, false);
                 }
             }
         }
@@ -145,7 +160,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
                     //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
-                    base.receiveEnergy(EnumFacing.DOWN, 50, false);
+                    storage.receiveEnergy(50, false);
                 }
             }
         }
@@ -157,7 +172,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
                     //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
-                    base.receiveEnergy(EnumFacing.DOWN, 50, false);
+                    storage.receiveEnergy(50, false);
                 }
             }
         }
@@ -179,6 +194,23 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     @Nonnull
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return new AxisAlignedBB(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBoxFromState(IBlockState blockState, World world, BlockPos pos) {
+        EnumFacing facing = getTurretBaseFacing(world, pos);
+        if (getTurretBase(world, pos) != null && getTurretBase(world, pos).getTier() == 1) {
+            if (facing != null) {
+                AxisAlignedBB axisAlignedBB = new AxisAlignedBB(-0.3F, -0.3F, -0.4F, 0.3F, 0.3F, 0.4F);
+                axisAlignedBB = MathUtil.rotateAABB(axisAlignedBB, facing.getOpposite());
+                double[] offset = new double[3];
+                offset[0] = 0.5D + facing.getFrontOffsetX() * 0.1D;
+                offset[1] = 0.5D + facing.getFrontOffsetY() * 0.1D;
+                offset[2] = 0.5D + facing.getFrontOffsetZ() * 0.1D;
+                return axisAlignedBB.offset(pos).offset(offset[0], offset[1], offset[2]);
+            }
+        }
+        return new AxisAlignedBB(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F).offset(pos);
     }
 
     @Override

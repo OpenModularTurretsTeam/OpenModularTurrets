@@ -13,6 +13,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.util.MathUtil.truncateDoubleToInt;
+import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing;
 
 public class Expander extends TileEntityContainer implements ITickable {
     @SuppressWarnings("unused")
@@ -58,34 +59,7 @@ public class Expander extends TileEntityContainer implements ITickable {
     }
 
     public void setSide() {
-        if (this.getWorld().getTileEntity(this.pos.east()) instanceof TurretBase) {
-            this.setOrientation(EnumFacing.EAST);
-            return;
-        }
-
-        if (this.getWorld().getTileEntity(this.pos.west()) instanceof TurretBase) {
-            this.setOrientation(EnumFacing.WEST);
-            return;
-        }
-
-        if (this.getWorld().getTileEntity(this.pos.down()) instanceof TurretBase) {
-            this.setOrientation(EnumFacing.DOWN);
-            return;
-        }
-
-        if (this.getWorld().getTileEntity(this.pos.up()) instanceof TurretBase) {
-            this.setOrientation(EnumFacing.UP);
-            return;
-        }
-
-        if (this.getWorld().getTileEntity(this.pos.north()) instanceof TurretBase) {
-            this.setOrientation(EnumFacing.NORTH);
-            return;
-        }
-
-        if (this.getWorld().getTileEntity(this.pos.south()) instanceof TurretBase) {
-            this.setOrientation(EnumFacing.SOUTH);
-        }
+        this.setOrientation(getTurretBaseFacing(this.getWorld(), this.pos));
     }
 
     @Override
