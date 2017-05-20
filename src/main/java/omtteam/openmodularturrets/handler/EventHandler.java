@@ -47,7 +47,7 @@ public class EventHandler {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void drawBlockOutline(DrawBlockHighlightEvent event) {
-        if (event.getPlayer().getHeldItemMainhand() != null && event.getPlayer().getHeldItemMainhand().getItem() instanceof ItemBlockBaseAddon) {
+        if (event.getTarget() != null && event.getPlayer().getHeldItemMainhand() != null && event.getPlayer().getHeldItemMainhand().getItem() instanceof ItemBlockBaseAddon) {
             BlockPos blockpos = event.getTarget().getBlockPos().offset(event.getTarget().sideHit);
             if (getTurretBase(event.getPlayer().getEntityWorld(), blockpos) != null) {
                 ItemBlockBaseAddon addon = (ItemBlockBaseAddon) event.getPlayer().getHeldItemMainhand().getItem();
