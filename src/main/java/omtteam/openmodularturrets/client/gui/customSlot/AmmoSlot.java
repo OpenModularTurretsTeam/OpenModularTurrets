@@ -19,6 +19,6 @@ public class AmmoSlot extends Slot {
 
     @Override
     public int getItemStackLimit(ItemStack stack) {
-        return 64;
+        return Math.min(64, this.getSlotStackLimit());
     }
 }
