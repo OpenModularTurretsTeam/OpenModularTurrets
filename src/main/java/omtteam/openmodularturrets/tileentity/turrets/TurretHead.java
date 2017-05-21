@@ -510,7 +510,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
     void concealmentChecks() {
         if (base != null && base.shouldConcealTurrets) {
-            if (!shouldConceal && target == null && ticksWithoutTarget >= 40) {
+            if (!shouldConceal && (target == null || !TurretHeadUtil.canTurretSeeTarget(this, (EntityLivingBase) target)) && ticksWithoutTarget >= 40) {
                 ticksWithoutTarget = 0;
                 shouldConceal = true;
                 playedDeploy = false;

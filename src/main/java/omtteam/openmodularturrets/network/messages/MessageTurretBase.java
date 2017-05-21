@@ -32,7 +32,7 @@ import static omtteam.omlib.proxy.ClientProxy.getWorld;
  */
 @SuppressWarnings("unused")
 public class MessageTurretBase implements IMessage {
-    private int x, y, z, rfStorageCurrent, rfStorageMax, tier, camoBlockMeta;
+    private int x, y, z, rfStorageCurrent, rfStorageMax, tier, camoBlockMeta, maxRange;
     private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting;
     private String owner, ownerName, camoBlockRegName;
     private List<TrustedPlayer> trustedPlayers = new ArrayList<>();
@@ -68,7 +68,7 @@ public class MessageTurretBase implements IMessage {
                     base.setTier(message.tier);
                     base.setCamoState(ForgeRegistries.BLOCKS.getValue(
                             new ResourceLocation(message.camoBlockRegName)).getStateFromMeta(message.camoBlockMeta));
-
+                    base.setCurrentMaxRange(message.maxRange);
                 }
             });
             return null;
@@ -94,6 +94,7 @@ public class MessageTurretBase implements IMessage {
             this.trustedPlayers = base.getTrustedPlayers();
             this.camoBlockRegName = base.getCamoState().getBlock().getRegistryName().toString();
             this.camoBlockMeta = base.getCamoState().getBlock().getMetaFromState(base.getCamoState());
+            this.maxRange = base.getCurrentMaxRange();
         }
     }
 
@@ -109,6 +110,7 @@ public class MessageTurretBase implements IMessage {
         this.ownerName = new String(buf.readBytes(ownerNameLength).array());
         this.rfStorageCurrent = buf.readInt();
         this.rfStorageMax = buf.readInt();
+        this.maxRange = buf.readInt();
         this.attacksMobs = buf.readBoolean();
         this.attacksNeutrals = buf.readBoolean();
         this.attacksPlayers = buf.readBoolean();
@@ -144,6 +146,7 @@ public class MessageTurretBase implements IMessage {
         buf.writeBytes(ownerName.getBytes());
         buf.writeInt(rfStorageCurrent);
         buf.writeInt(rfStorageMax);
+        buf.writeInt(maxRange);
         buf.writeBoolean(attacksMobs);
         buf.writeBoolean(attacksNeutrals);
         buf.writeBoolean(attacksPlayers);
