@@ -206,7 +206,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
     }
 
     private void setBaseUpperBoundRange() {
-        int maxRange = 0;
+        int maxRange = upperBoundMaxRange;
         List<TileEntity> tileEntities = WorldUtil.getTouchingTileEntities(getWorld(), getPos());
         for (TileEntity te : tileEntities) {
             if (te != null && te instanceof TurretHead) {

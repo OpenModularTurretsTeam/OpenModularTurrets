@@ -34,14 +34,14 @@ public class DisposableTurretProjectile extends TurretProjectile {
     }
 
     @Override
-    public void onEntityUpdate() {
-        super.onEntityUpdate();
+    public void onUpdate() {
+        super.onUpdate();
         if (!spawned && !this.getEntityWorld().isRemote) {
             itemBound = new EntityItem(this.getEntityWorld(), posX, posY - 0.2F, posZ, ammo);
             itemBound.motionX = this.motionX;
             itemBound.motionY = this.motionY + this.gravity;
             itemBound.motionZ = this.motionZ;
-            itemBound.setPickupDelay(100);
+            itemBound.setPickupDelay(10000);
             spawnEntity(this.getEntityWorld(), itemBound);
             spawned = true;
         }
