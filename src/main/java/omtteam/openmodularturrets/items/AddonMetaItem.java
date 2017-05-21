@@ -72,6 +72,7 @@ public class AddonMetaItem extends CompatItem {
                 tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
                 tooltip.add("");
                 tooltip.add(safeLocalize("turret.addon.amp.a.label"));
+                tooltip.add(safeLocalize("turret.addon.amp.b.label"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.amp.flavour"));
                 return;
