@@ -29,6 +29,11 @@ class RocketRenderer extends Render {
 
     @SuppressWarnings("unused")
     private void renderRocket(RocketProjectile par1EntityRocket, double x, double y, double z, float entityYaw, float partialTicks) {
+
+        if (par1EntityRocket.ticksExisted < 2) {
+            return;
+        }
+
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.pushMatrix();
