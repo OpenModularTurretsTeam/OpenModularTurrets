@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
@@ -36,8 +35,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-import static omtteam.omlib.compatability.ModCompatibility.IC2Loaded;
-import static omtteam.omlib.handler.ConfigHandler.EUSupport;
 import static omtteam.omlib.util.BlockUtil.getBlockStateFromNBT;
 import static omtteam.omlib.util.BlockUtil.writeBlockFromStateToNBT;
 import static omtteam.omlib.util.MathUtil.getRotationXYFromYawPitch;
@@ -162,18 +159,19 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
             return;
         }
 
-        //maxRange update, needs to happen on both client and server else GUI information may become disjoint.
-        setBaseUpperBoundRange();
-        if (this.currentMaxRange > this.upperBoundMaxRange) {
-            this.currentMaxRange = upperBoundMaxRange;
-        }
-
-        if (!this.rangeOverridden) {
-            this.currentMaxRange = upperBoundMaxRange;
-        }
-
         ticks++;
         if (!this.getWorld().isRemote && ticks % 5 == 0) {
+
+            //maxRange update, needs to happen on both client and server else GUI information may become disjoint.
+            //moved by Keridos, added the sync to MessageTurretBase, should sync properly now too.
+            setBaseUpperBoundRange();
+            if (this.currentMaxRange > this.upperBoundMaxRange) {
+                this.currentMaxRange = upperBoundMaxRange;
+            }
+
+            if (!this.rangeOverridden) {
+                this.currentMaxRange = upperBoundMaxRange;
+            }
 
             //Concealment
             this.shouldConcealTurrets = TurretHeadUtil.hasConcealmentAddon(this);
