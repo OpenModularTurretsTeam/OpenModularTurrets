@@ -143,6 +143,7 @@ public abstract class TurretProjectile extends EntityThrowable {
         this.setPosition(this.posX, this.posY, this.posZ);
     }
 
+
     @Override
     @ParametersAreNonnullByDefault
     public boolean writeToNBTOptional(NBTTagCompound nbtTagCompound) {
