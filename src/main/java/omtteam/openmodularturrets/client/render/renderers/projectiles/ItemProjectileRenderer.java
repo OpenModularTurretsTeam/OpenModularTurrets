@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 class ItemProjectileRenderer extends Render {
+
     private final RenderItem itemRenderer;
 
     public ItemProjectileRenderer(RenderManager renderManagerIn, RenderItem itemRendererIn) {
@@ -28,7 +29,8 @@ class ItemProjectileRenderer extends Render {
     @SuppressWarnings({"unchecked", "unused"})
     public void doRender(DisposableTurretProjectile entity, double x, double y, double z, float entityYaw, float partialTicks) {
 
-        if (entity.ticksExisted < 2) {
+        if (entity.getFramesRendered() <= 1) {
+            entity.setFramesRendered(entity.getFramesRendered() + 1);
             return;
         }
 

@@ -21,6 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @SideOnly(Side.CLIENT)
 class LaserRenderer extends Render {
+
     LaserRenderer() {
         super(Minecraft.getMinecraft().getRenderManager());
     }
@@ -30,7 +31,8 @@ class LaserRenderer extends Render {
     @SuppressWarnings("unused")
     private void renderLaser(LaserProjectile par1EntityLaser, double x, double y, double z, float entityYaw, float partialTicks) {
 
-        if (par1EntityLaser.ticksExisted < 2) {
+        if (par1EntityLaser.getFramesRendered() <= 1) {
+            par1EntityLaser.setFramesRendered(par1EntityLaser.getFramesRendered() + 1);
             return;
         }
 
@@ -59,21 +61,6 @@ class LaserRenderer extends Render {
         GlStateManager.rotate(45.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.scale(0.05625F, 0.05625F, 0.05625F);
         GlStateManager.translate(-4.0F, 0.0F, 0.0F);
-
-//        GlStateManager.glNormal3f(0.05625F, 0.0F, 0.0F);
-//        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-//        vertexbuffer.pos(-7.0D, -2.0D, -2.0D).tex(0.0D, 0.15625D).endVertex();
-//        vertexbuffer.pos(-7.0D, -2.0D, 2.0D).tex(0.15625D, 0.15625D).endVertex();
-//        vertexbuffer.pos(-7.0D, 2.0D, 2.0D).tex(0.15625D, 0.3125D).endVertex();
-//        vertexbuffer.pos(-7.0D, 2.0D, -2.0D).tex(0.0D, 0.3125D).endVertex();
-//        tessellator.draw();
-        GlStateManager.glNormal3f(-0.05625F, 0.0F, 0.0F);
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos(-7.0D, 2.0D, -2.0D).tex(0.0D, 0.15625D).endVertex();
-        vertexbuffer.pos(-7.0D, 2.0D, 2.0D).tex(0.15625D, 0.15625D).endVertex();
-        vertexbuffer.pos(-7.0D, -2.0D, 2.0D).tex(0.15625D, 0.3125D).endVertex();
-        vertexbuffer.pos(-7.0D, -2.0D, -2.0D).tex(0.0D, 0.3125D).endVertex();
-        tessellator.draw();
 
         for (int j = 0; j < 4; ++j) {
             GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);

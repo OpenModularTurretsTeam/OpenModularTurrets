@@ -44,6 +44,7 @@ public class BulletProjectile extends TurretProjectile {
             return;
         }
 
+        playSound();
         this.setDead();
     }
 
@@ -72,7 +73,7 @@ public class BulletProjectile extends TurretProjectile {
             } else {
                 entity.attackEntityFrom(new NormalDamageSource("bullet"), damage);
                 entity.hurtResistantTime = 0;
-                playSound();
+
             }
             setMobDropLoot(entity);
             this.setDead();

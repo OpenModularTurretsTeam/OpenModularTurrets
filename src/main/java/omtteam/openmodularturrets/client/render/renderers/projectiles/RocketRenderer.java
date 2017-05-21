@@ -22,7 +22,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 class RocketRenderer extends Render {
 
     private final ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/rocket.png"));
-
     public RocketRenderer() {
         super(Minecraft.getMinecraft().getRenderManager());
     }
@@ -30,7 +29,8 @@ class RocketRenderer extends Render {
     @SuppressWarnings("unused")
     private void renderRocket(RocketProjectile par1EntityRocket, double x, double y, double z, float entityYaw, float partialTicks) {
 
-        if (par1EntityRocket.ticksExisted < 2) {
+        if (par1EntityRocket.getFramesRendered() <= 1) {
+            par1EntityRocket.setFramesRendered(par1EntityRocket.getFramesRendered() + 1);
             return;
         }
 
