@@ -143,7 +143,6 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                         world.notifyBlockUpdate(pos, state, state, 3);
                     } else {
                         addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
-                        addChatMessage(player, new TextComponentString(base.getOwnerName()+ "::" + base.getOwner() +"::"+player.getUniqueID()));
                     }
                 }
             }
@@ -164,7 +163,6 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                         world.notifyBlockUpdate(pos, state, state, 3);
                     } else {
                         addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
-                        addChatMessage(player, new TextComponentString(base.getOwnerName()+ "::" + base.getOwner() +"::"+player.getUniqueID()));
                     }
                 }
 
@@ -186,7 +184,6 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                     player.openGui(OpenModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
                 } else {
                     addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
-                    addChatMessage(player, new TextComponentString(base.getOwnerName()+ "::" + base.getOwner() +"::"+player.getUniqueID()));
                 }
             }
         }
