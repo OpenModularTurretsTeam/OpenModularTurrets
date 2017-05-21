@@ -25,6 +25,7 @@ public abstract class TurretProjectile extends EntityThrowable {
     public int amp_level;
     ItemStack ammo;
     protected TurretBase turretBase;
+    public int framesRendered = 0;
 
     TurretProjectile(World world) {
         super(world);
@@ -159,5 +160,13 @@ public abstract class TurretProjectile extends EntityThrowable {
                 entityLivingBase.addTag("openmodularturrets:turretHit");
             }
         }
+    }
+
+    public int getFramesRendered() {
+        return framesRendered;
+    }
+
+    public void setFramesRendered(int framesRendered) {
+        this.framesRendered = framesRendered;
     }
 }
