@@ -27,6 +27,11 @@ class ItemProjectileRenderer extends Render {
 
     @SuppressWarnings({"unchecked", "unused"})
     public void doRender(DisposableTurretProjectile entity, double x, double y, double z, float entityYaw, float partialTicks) {
+
+        if (entity.ticksExisted < 2) {
+            return;
+        }
+
         GlStateManager.pushMatrix();
         GlStateManager.translate((float) x, (float) y, (float) z);
         GlStateManager.enableRescaleNormal();
