@@ -132,14 +132,14 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
     protected void drawGuiContainerForegroundLayer(int param1, int param2) {
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 
-        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.ADDONS), 71, 6, 0);
-        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.UPGRADES), 71, 39, 0);
+        fontRenderer.drawString(base.getTier() > 1 ? safeLocalize(OMTNames.Localizations.GUI.ADDONS) : "", 71, 6, 0);
+        fontRenderer.drawString(base.getTier() > 1 ? safeLocalize(OMTNames.Localizations.GUI.UPGRADES) : "", 71, 39, 0);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.AMMO), 8, 6, 0);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.INVENTORY), 8, ySize - 97 + 4, 0);
 
         fontRenderer.drawStringWithShadow("" + base.getCurrentMaxRange(), String.valueOf(base.getCurrentMaxRange()).length() == 1 ?
                 127 : 124, 39, base.getCurrentMaxRange() == getBaseUpperBoundRange() ? 16724530 : 40000);
-        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.RANGE), 117, 6, 0);
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.RANGE), 116, 6, 0);
 
         ArrayList targetInfo = new ArrayList();
 
@@ -191,10 +191,10 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
             tooltip.add(base.getEnergyLevel(EnumFacing.DOWN) + "/" + base.getMaxEnergyLevel(
                     EnumFacing.DOWN) + " RF");
         }
-        if (mouseX > k + 71 && mouseX < k + 71 + 40 && mouseY > l + 6 && mouseY < l + 6 + 14) {
+        if (base.getTier() > 1 && mouseX > k + 71 && mouseX < k + 71 + 40 && mouseY > l + 6 && mouseY < l + 6 + 14) {
             tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.ADDON_SLOT));
         }
-        if (mouseX > k + 71 && mouseX < k + 71 + 40 && mouseY > l + 39 && mouseY < l + 39 + 14) {
+        if (base.getTier() > 1 && mouseX > k + 71 && mouseX < k + 71 + 40 && mouseY > l + 39 && mouseY < l + 39 + 14) {
             tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.UPGRADE_SLOT));
         }
         if (mouseX > k + 10 && mouseX < k + 8 + 40 && mouseY > l + 6 && mouseY < l + 6 + 14) {
