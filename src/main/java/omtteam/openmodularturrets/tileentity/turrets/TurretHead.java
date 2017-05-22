@@ -324,220 +324,156 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         setSide();
         this.base = getBase();
 
+        //Is this the client?
         if (this.getWorld().isRemote) {
             updateRotationAnimation();
             return;
         }
 
+        //Is the turret head block still there?
         if (!(this.getWorld().getBlockState(this.getPos()).getBlock() instanceof BlockAbstractTurretHead)) {
             return;
         }
 
-        if (ticks % 5 == 0) {
+        //Send a block update after every 5 ticks of inactivity?
+        if (this.ticks % 5 == 0) {
             this.getWorld().notifyBlockUpdate(this.pos, this.getWorld().getBlockState(pos), this.getWorld().getBlockState(pos), 3);
         }
+        this.ticks++;
 
-        ticks++;
-
-        //Base checks
-        if (base == null || base.getTier() < this.turretTier) {
+        //Is turret base present and valid?
+        if (this.base == null || this.base.getTier() < this.turretTier) {
             this.getWorld().destroyBlock(this.pos, true);
+            return;
+        }
+
+        //Is turret base active?
+        if (!base.isActive()) {
+            return;
+        }
+
+        //Real time tick updates
+        TurretHeadUtil.updateSolarPanelAddon(base);
+        concealmentChecks();
+
+        //Is there enough power to shoot?
+        if ((base.getEnergyLevel(EnumFacing.DOWN) < getPowerRequiredForNextShot())) {
+            return;
+        }
+
+        //Warn players
+        if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetPlayers) {
+            TurretHeadUtil.warnPlayers(base, base.getWorld(), this.pos, getTurretRange());
+        }
+
+        //turret tick rate;
+        if (target == null && targetingTicks < ConfigHandler.getTurretTargetSearchTicks()) {
+            targetingTicks++;
         } else {
-            if (base.isAttacksPlayers() && base.isActive() && ConfigHandler.globalCanTargetPlayers) {
-                TurretHeadUtil.warnPlayers(base, base.getWorld(), this.pos, getTurretRange());
+            //Validate current target, get a new one if necessary
+            targetingChecks();
+
+            //Aim at target
+            if (target != null && isTargetInYawPitch(target)) {
+                this.rotationXZ = TurretHeadUtil.getAimYaw(this.target, this.pos) + 3.2F;
+                this.rotationXY = TurretHeadUtil.getAimPitch(this.target, this.pos);
             }
 
-            //Real time tick updates
-            TurretHeadUtil.updateSolarPanelAddon(base);
-            concealmentChecks();
-
-            if (!base.isActive()) {
-                return;
-            }
-
-            // power check
-            if ((base.getEnergyLevel(EnumFacing.DOWN) < getPowerRequiredForNextShot())) {
-                return;
-            }
-
-            //turret tick rate;
-            if (target == null && targetingTicks < ConfigHandler.getTurretTargetSearchTicks()) {
-                targetingTicks++;
-                return;
-            }
             targetingTicks = 0;
+        }
 
-
-            // is there a target, and has it died in the previous tick?
-            if (target == null || target.isDead || this.getWorld().getEntityByID(
-                    target.getEntityId()) == null || ((EntityLivingBase) target).getHealth() <= 0.0F) {
-                target = getTarget();
-
-                // did we even get a target previously?
-                if (target == null) {
-                    return;
-                }
-
-                // Start tracking if target is acquired
-                targetLastX = target.prevPosX;
-                targetLastY = target.prevPosY;
-                targetLastZ = target.prevPosZ;
-
-            }
-
-            //set where the turret is aiming at.
-            if (!isTargetInYawPitch(target)) {
-                return;
-            }
-
-            this.rotationXZ = TurretHeadUtil.getAimYaw(target, this.pos) + 3.2F;
-            this.rotationXY = TurretHeadUtil.getAimPitch(target, this.pos);
-
-
-            if (this.autoFire) {
-                forceShot();
-                return;
-            }
-            // Update target tracking (Player entity not setting motion data when moving via movement keys)
-            double targetSpeedX = 0;
-            double targetSpeedY = 0;
-            double targetSpeedZ = 0;
-            if (target != null && target instanceof EntityPlayerMP) {
-                targetSpeedX = target.posX - targetLastX;
-                targetSpeedY = target.posY - targetLastY;
-                targetSpeedZ = target.posZ - targetLastZ;
-                targetLastX = target.posX;
-                targetLastY = target.posY;
-                targetLastZ = target.posZ;
-            }
-
+        if (target != null || this.autoFire) {
             // has cooldown passed?
-            if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
+            if (this.ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
                 return;
             }
 
-            //Player checks: is target in creative mode?
-            if (target != null && target instanceof EntityPlayerMP) {
-                EntityPlayerMP entity = (EntityPlayerMP) target;
-
-                if (TurretHeadUtil.isTrustedPlayer(entity.getUniqueID(),
-                        base) || entity.capabilities.isCreativeMode || !base.isAttacksPlayers()) {
-                    target = null;
-                    return;
-                }
-            }
-
-            // Can the turret still see the target? (It's moving)
-            if (target != null) {
-                if (!TurretHeadUtil.canTurretSeeTarget(this, (EntityLivingBase) target)) {
-                    target = null;
-                    return;
-                }
-            }
-
-            //Is the target out of range now?
-            if (target != null) {
-                if (chebyshevDistance(target, base)) {
-                    target = null;
-                    return;
-                }
+            // Is there ammo?
+            ItemStack ammo = getAmmoStack();
+            if (ammo == ItemStackTools.getEmptyStack() && this.requiresAmmo()) {
+                //TODO: Play some kind of clicking sound?
+                return;
             }
 
             //Finally, try to shoot if criteria is met.
-            ItemStack ammo = getAmmoStack();
-
-            // Is there ammo?
-            if (ammo == ItemStackTools.getEmptyStack() && this.requiresAmmo()) {
-                return;
+            if (target != null) {
+                doTargetedShot(this.target, ammo);
+            } else if (this.autoFire) {
+                doBlindShot(ammo);
             }
 
-
-            // Consume energy
-            base.setEnergyStored(base.getEnergyLevel(EnumFacing.DOWN) - getPowerRequiredForNextShot());
-
-            for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-                TurretProjectile projectile = this.createProjectile(this.getWorld(), target, ammo);
-
-                projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
-
-                //If the turret is on a Ship, it needs to change to World coordinates from Ship coordinates
-                if (ModCompatibility.ValkyrienWarfareLoaded) {
-                    Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
-                    if (shipEntity != null) {
-                        Vec3d inShipPos = new Vec3d(this.getPos().getX() + 0.5, this.getPos().getY() + 0.5, this.getPos().getZ() + 0.5);
-                        Vec3d inWorldPos = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, inShipPos);
-                        projectile.setPosition(inWorldPos.xCoord, inWorldPos.yCoord, inWorldPos.zCoord);
-                    }
-                }
-
-                if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
-                    this.getWorld().playSound(null, this.pos, ModSounds.amped, SoundCategory.BLOCKS,
-                            ConfigHandler.getTurretSoundVolume(), RandomUtil.random.nextFloat() + 0.5F);
-                    projectile.isAmped = true;
-                }
-
-                // Calculate speed from displacement from last tick (Or use tracking data if target is player)
-                double speedX = target instanceof EntityPlayerMP ? targetSpeedX : target.posX - target.prevPosX;
-                double speedY = target instanceof EntityPlayerMP ? targetSpeedY : target.posY - target.prevPosY;
-                double speedZ = target instanceof EntityPlayerMP ? targetSpeedZ : target.posZ - target.prevPosZ;
-                double d0 = target.posX - projectile.posX;
-                double d1 = target.posY + (double) target.getEyeHeight() - projectile.posY;
-                double d2 = target.posZ - projectile.posZ;
-                double dist = MathTools.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
-                double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(
-                        base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
-
-                // Adjust new firing coordinate according to target speed
-                double time = dist / (projectile.gravity == 0.00F ? 3.0 : 1.6);
-                double adjustedX = d0 + speedX * time;
-                double adjustedY = d1 + speedY * time;
-                double adjustedZ = d2 + speedZ * time;
-
-                // Calculate projectile speed scaling factor to travel to adjusted destination on time
-                double dist2 = MathTools.sqrt_double(adjustedX * adjustedX + adjustedY * adjustedY + adjustedZ * adjustedZ);
-                float speedFactor = (float) (dist2 / dist);
-
-                projectile.setThrowableHeading(adjustedX, adjustedY - 0.1F,
-                        adjustedZ, 3.0F * speedFactor, (float) accuracy);
-
-                this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
-                        ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
-                spawnEntity(this.getWorld(), projectile);
-            }
-            ticks = 0;
+            //If we made it this far, reset ticks to zero?
+            this.ticks = 0;
         }
     }
 
-    void concealmentChecks() {
-        if (base != null && base.shouldConcealTurrets) {
-            if (!shouldConceal && (target == null || !TurretHeadUtil.canTurretSeeTarget(this, (EntityLivingBase) target)) && ticksWithoutTarget >= 40) {
-                ticksWithoutTarget = 0;
-                shouldConceal = true;
-                playedDeploy = false;
-                this.getWorld().playSound(null, this.pos, ModSounds.turretRetractSound, SoundCategory.BLOCKS,
-                        ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
-                this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(pos).withProperty(CONCEALED, true), 3);
-            } else {
-                ticksWithoutTarget++;
-            }
 
-            if (base != null && target != null) {
-                ticksWithoutTarget = 0;
-                shouldConceal = false;
 
-                if (!playedDeploy) {
-                    this.getWorld().playSound(null, this.pos, ModSounds.turretDeploySound, SoundCategory.BLOCKS,
-                            ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
-                    playedDeploy = true;
-                    this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(pos).withProperty(CONCEALED, false), 3);
-                }
-            }
+    /**
+     * Tracks target and shoots at it
+     */
+    private void doTargetedShot(Entity target, ItemStack ammo) {
+        // Update target tracking (Player entity not setting motion data when moving via movement keys)
+        double speedX, speedY, speedZ;
+        if (target instanceof EntityPlayerMP) {
+            speedX = target.posX - this.targetLastX;
+            speedY = target.posY - this.targetLastY;
+            speedZ = target.posZ - this.targetLastZ;
+            this.targetLastX = target.posX;
+            this.targetLastY = target.posY;
+            this.targetLastZ = target.posZ;
+
         } else {
-            this.shouldConceal = false;
-            this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(pos).withProperty(CONCEALED, false), 3);
+            speedX = target.posX - target.prevPosX;
+            speedY = target.posY - target.prevPosY;
+            speedZ = target.posZ - target.prevPosZ;
         }
+
+        // Calculate speed from displacement from last tick (Or use tracking data if target is player)
+        double d0 = target.posX - (this.pos.getX() + 0.5);
+        double d1 = target.posY + (double) target.getEyeHeight() - (this.pos.getY() + 0.5);
+        double d2 = target.posZ - (this.pos.getZ() + 0.5);
+        double dist = MathTools.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
+        double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
+
+        // Adjust new firing coordinate according to target speed
+        double time = dist / 3.0; //(getProjectileGravity() == 0.00F ? 3.0 : 1.6);
+        double adjustedX = d0 + speedX * time;
+        double adjustedY = d1 + speedY * time;
+        double adjustedZ = d2 + speedZ * time;
+
+        // Calculate projectile speed scaling factor to travel to adjusted destination on time
+        double dist2 = MathTools.sqrt_double(adjustedX * adjustedX + adjustedY * adjustedY + adjustedZ * adjustedZ);
+        float speedFactor = (float) (dist2 / dist);
+
+        // Now that we have a trajectory, throw something at it
+        shootProjectile(adjustedX, adjustedY - 0.1F, adjustedZ, 3.0F * speedFactor, (float) accuracy, ammo);
     }
 
+    /**
+     * Just shoots, no aiming required
+     */
+    private void doBlindShot(ItemStack ammo) {
+        if (this instanceof RocketTurretTileEntity && ConfigHandler.canRocketsHome) {
+            return;
+        }
+
+        // Work out a trajectory based on current yaw/pitch
+        Vec3d velocity = getVelocityVectorFromYawPitch(getYawFromXYXZ(this.rotationXY, this.rotationXZ), getPitchFromXYXZ(this.rotationXY, this.rotationXZ), 3.0F);
+        double adjustedX = velocity.xCoord;
+        double adjustedY = velocity.yCoord;
+        double adjustedZ = velocity.zCoord;
+        float speedFactor = (float) velocity.lengthVector();
+        double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
+
+        // Now that we have a trajectory, throw something at it
+        shootProjectile(adjustedX, adjustedY, adjustedZ, speedFactor, (float) accuracy, ammo);
+    }
+
+    /**
+     * Set this.autoFire to true instead.
+     */
+    @Deprecated
     public boolean forceShot() {
         if (this instanceof RocketTurretTileEntity && ConfigHandler.canRocketsHome) return false;
         if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
@@ -579,4 +515,111 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
         return true;
     }
+
+    /**
+     * Attempts to create and throw a projectile
+     */
+    private void shootProjectile(double adjustedX, double adjustedY, double adjustedZ, float speedFactor, float accuracy, ItemStack ammo) {
+        // Consume energy
+        base.setEnergyStored(base.getEnergyLevel(EnumFacing.DOWN) - getPowerRequiredForNextShot());
+
+        // Create one projectile per scatter-shot upgrade
+        for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
+            // Create a projectile, consuming ammo if applicable
+            TurretProjectile projectile = this.createProjectile(this.getWorld(), this.target, ammo);
+
+            // Set projectile starting position
+            projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
+
+            //If the turret is on a Ship, it needs to change to World coordinates from Ship coordinates
+            if (ModCompatibility.ValkyrienWarfareLoaded) {
+                Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
+                if (shipEntity != null) {
+                    Vec3d inShipPos = new Vec3d(this.getPos().getX() + 0.5, this.getPos().getY() + 0.5, this.getPos().getZ() + 0.5);
+                    Vec3d inWorldPos = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, inShipPos);
+                    projectile.setPosition(inWorldPos.xCoord, inWorldPos.yCoord, inWorldPos.zCoord);
+                }
+            }
+
+            // Set projectile heading
+            projectile.setThrowableHeading(adjustedX, adjustedY, adjustedZ, speedFactor, accuracy);
+
+            // Play sounds
+            if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
+                this.getWorld().playSound(null, this.pos, ModSounds.amped, SoundCategory.BLOCKS,
+                        ConfigHandler.getTurretSoundVolume(), RandomUtil.random.nextFloat() + 0.5F);
+                projectile.isAmped = true;
+            }
+            this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
+                    ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+
+            // Spawn entity
+            spawnEntity(this.getWorld(), projectile);
+        }
+    }
+
+    private void targetingChecks() {
+        // is there a target, and has it died in the previous tick?
+        if (this.target == null || this.target.isDead || this.getWorld().getEntityByID(this.target.getEntityId()) == null || ((EntityLivingBase) this.target).getHealth() <= 0.0F ) {
+            this.target = getTarget();
+        }
+
+        // did we get a target, and is it valid?
+        if (this.target != null) {
+            //Player checks: is target in creative mode?
+            if (this.target instanceof EntityPlayerMP) {
+                EntityPlayerMP entity = (EntityPlayerMP) target;
+
+                if (TurretHeadUtil.isTrustedPlayer(entity.getUniqueID(),
+                        base) || entity.capabilities.isCreativeMode || !base.isAttacksPlayers()) {
+                    this.target = null;
+                    return;
+                }
+            }
+
+            // Can the turret still see the target? (It's moving)
+            if (!TurretHeadUtil.canTurretSeeTarget(this, (EntityLivingBase) this.target)) {
+                this.target = null;
+                return;
+            }
+
+            //Is the target out of range now?
+            if (chebyshevDistance(target, base)) {
+                this.target = null;
+                return;
+            }
+        }
+    }
+
+    void concealmentChecks() {
+        if (base != null && base.shouldConcealTurrets) {
+            if (!shouldConceal && (target == null || !TurretHeadUtil.canTurretSeeTarget(this, (EntityLivingBase) target)) && ticksWithoutTarget >= 40) {
+                ticksWithoutTarget = 0;
+                shouldConceal = true;
+                playedDeploy = false;
+                this.getWorld().playSound(null, this.pos, ModSounds.turretRetractSound, SoundCategory.BLOCKS,
+                        ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+                this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(pos).withProperty(CONCEALED, true), 3);
+            } else {
+                ticksWithoutTarget++;
+            }
+
+            if (base != null && target != null) {
+                ticksWithoutTarget = 0;
+                shouldConceal = false;
+
+                if (!playedDeploy) {
+                    this.getWorld().playSound(null, this.pos, ModSounds.turretDeploySound, SoundCategory.BLOCKS,
+                            ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+                    playedDeploy = true;
+                    this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(pos).withProperty(CONCEALED, false), 3);
+                }
+            }
+        } else {
+            this.shouldConceal = false;
+            this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(pos).withProperty(CONCEALED, false), 3);
+        }
+    }
+
+
 }
