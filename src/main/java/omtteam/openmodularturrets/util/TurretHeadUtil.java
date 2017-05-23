@@ -38,6 +38,7 @@ import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import java.util.*;
 
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
+import static omtteam.omlib.util.PlayerUtil.isPlayerOwner;
 import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
 import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
@@ -121,7 +122,7 @@ public class TurretHeadUtil {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
-                        if (!entity.getUniqueID().toString().equals(base.getOwner()) && !isTrustedPlayer(
+                        if (!isPlayerOwner(entity, base) && !isTrustedPlayer(
                                 entity.getUniqueID(), base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
                         }
@@ -182,7 +183,7 @@ public class TurretHeadUtil {
                             pos.getZ()) >= 3) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
-                        if (!entity.getUniqueID().toString().equals(base.getOwner()) && !isTrustedPlayer(
+                        if (!isPlayerOwner(entity, base) && !isTrustedPlayer(
                                 entity.getUniqueID(), base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
                         }
