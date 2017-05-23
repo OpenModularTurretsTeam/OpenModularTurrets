@@ -8,6 +8,7 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,6 +22,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -251,6 +253,42 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             dropItems(worldIn, pos);
             worldIn.removeTileEntity(pos);
         }
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
+        switch (blockState.getValue(TIER)) {
+            case 1:
+                return ConfigHandler.getBaseTierOneHardness();
+            case 2:
+                return ConfigHandler.getBaseTierTwoHardness();
+            case 3:
+                return ConfigHandler.getBaseTierThreeHardness();
+            case 4:
+                return ConfigHandler.getBaseTierFourHardness();
+            case 5:
+                return ConfigHandler.getBaseTierFiveHardness();
+        }
+        return 10.0F;
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
+        switch (world.getBlockState(pos).getValue(TIER)) {
+            case 1:
+                return ConfigHandler.getBaseTierOneBlastResistance();
+            case 2:
+                return ConfigHandler.getBaseTierTwoBlastResistance();
+            case 3:
+                return ConfigHandler.getBaseTierThreeBlastResistance();
+            case 4:
+                return ConfigHandler.getBaseTierFourBlastResistance();
+            case 5:
+                return ConfigHandler.getBaseTierFiveBlastResistance();
+        }
+        return 10.0F;
     }
 
     @Override
