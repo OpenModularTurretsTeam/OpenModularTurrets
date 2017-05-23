@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import omtteam.omlib.api.IDebugTile;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityMachine;
@@ -33,6 +34,7 @@ import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.List;
 
 import static omtteam.omlib.util.BlockUtil.getBlockStateFromNBT;
@@ -54,7 +56,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;*/
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft"),
         @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = omtteam.omlib.compatability.ModCompatibility.OCModID)}
 )
-public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ SimpleComponent, ICamoSupport {
+public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ SimpleComponent, ICamoSupport, IDebugTile {
     public int trustedPlayerIndex = 0;
     protected IBlockState camoBlockState;
 
@@ -668,6 +670,14 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         if (!args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0)
             return new Object[]{"Wrong parameters!"};
         return new Object[]{this.forceShootTurret(EnumFacing.getFront(args.checkInteger(0)))};
+    }
+
+    @Override
+    public List<String> getDebugInfo() {
+        List<String> debugInfo = new ArrayList<>();
+        debugInfo.add("Camo: " + this.camoBlockState.getBlock().getRegistryName() + ", computerAccess: " + this.computerAccessible);
+        debugInfo.add("Force Fire: " + this.forceFire + ", UpperMaxRange: " + this.upperBoundMaxRange);
+        return debugInfo;
     }
 
     /*@Optional.Method(modid = "ComputerCraft")

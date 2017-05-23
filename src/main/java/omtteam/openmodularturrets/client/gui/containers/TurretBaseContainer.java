@@ -6,6 +6,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import omtteam.omlib.util.DebugHandler;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.openmodularturrets.client.gui.customSlot.AddonSlot;
 import omtteam.openmodularturrets.client.gui.customSlot.UpgradeSlot;
@@ -104,6 +105,7 @@ public abstract class TurretBaseContainer extends Container {
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
+        DebugHandler.getInstance().setListeners(this.listeners);
         for (IContainerListener listener : this.listeners) {
             if (listener instanceof EntityPlayerMP) {
                 NetworkingHandler.INSTANCE.sendTo(new MessageTurretBase(this.tileEntity), (EntityPlayerMP) listener);

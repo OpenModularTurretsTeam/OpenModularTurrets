@@ -573,7 +573,7 @@ public class ConfigHandler {
                 }
             }
         } catch (Exception e) {
-            OpenModularTurrets.getLogger().severe("error while parsing disp. ammo list config!");
+            OpenModularTurrets.getLogger().error("error while parsing disp. ammo list config!");
             e.printStackTrace();
         }
     }
@@ -587,7 +587,7 @@ public class ConfigHandler {
                 }
             }
         } catch (Exception e) {
-            OpenModularTurrets.getLogger().severe("error while parsing mob blacklist config!");
+            OpenModularTurrets.getLogger().error("error while parsing mob blacklist config!");
             e.printStackTrace();
         }
     }
