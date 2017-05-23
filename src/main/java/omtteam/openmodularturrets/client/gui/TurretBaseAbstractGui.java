@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import omtteam.omlib.client.gui.BlockingAbstractGuiContainer;
 import omtteam.omlib.client.gui.IHasTooltips;
+import omtteam.omlib.util.DebugHandler;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
@@ -46,6 +47,7 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         super(container);
         this.base = tileEntity;
         player = inventoryPlayer.player;
+        DebugHandler.getInstance().setPlayer(player);
     }
 
     @Override

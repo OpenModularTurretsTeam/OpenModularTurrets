@@ -14,8 +14,7 @@ import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.handler.GuiHandler;
 import omtteam.openmodularturrets.proxy.CommonProxy;
 import omtteam.openmodularturrets.reference.Reference;
-
-import java.util.logging.Logger;
+import org.apache.logging.log4j.Logger;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION, acceptedMinecraftVersions = Reference.ACCEPTED_MINECRAFT_VERSION, dependencies = Reference.DEPENDENCIES)
 public class OpenModularTurrets {
@@ -28,7 +27,7 @@ public class OpenModularTurrets {
     private static CommonProxy proxy;
 
     public static CreativeTabs modularTurretsTab = ModularTurretsTab.getInstance();
-    private static final Logger logger = Logger.getLogger(Reference.NAME);
+    private static Logger logger;
 
     public static Logger getLogger() {
         return logger;
@@ -37,6 +36,7 @@ public class OpenModularTurrets {
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        logger = event.getModLog();
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         proxy.preInit();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, GuiHandler.getInstance());

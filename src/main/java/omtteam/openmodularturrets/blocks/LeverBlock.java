@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.omlib.power.OMEnergyStorage;
-import omtteam.omlib.util.IHasItemBlock;
+import omtteam.omlib.api.IHasItemBlock;
 import omtteam.omlib.util.MathUtil;
 import omtteam.omlib.util.compat.MathTools;
 import omtteam.openmodularturrets.OpenModularTurrets;

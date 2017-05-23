@@ -27,8 +27,9 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.omlib.api.IDebugTile;
 import omtteam.omlib.blocks.BlockAbstractCamoTileEntity;
-import omtteam.omlib.util.IHasItemBlock;
+import omtteam.omlib.api.IHasItemBlock;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.compat.ItemStackTools;
@@ -106,7 +107,6 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     public boolean isOpaqueCube(IBlockState blockState) {
         return true;
     }
-
 
     @Override
     @SideOnly(Side.CLIENT)
