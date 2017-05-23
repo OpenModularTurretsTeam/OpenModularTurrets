@@ -36,7 +36,7 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
     private int waitForServerTrustedPlayers = -1;
 
     public ConfigureGui(InventoryPlayer inventoryPlayer, TurretBase tileEntity) {
-        super(new ConfigContainer(tileEntity));
+        super(new ConfigContainer(tileEntity, inventoryPlayer.player));
         this.base = tileEntity;
         player = inventoryPlayer.player;
     }
