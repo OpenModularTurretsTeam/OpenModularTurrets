@@ -26,3 +26,4 @@ out/
 Thumbs.db
 *.hprof
 settings.gradle
+*.log
