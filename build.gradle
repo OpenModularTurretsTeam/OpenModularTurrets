@@ -27,6 +27,7 @@ configFile.withReader {
     prop.load(it)
     project.ext.config = new ConfigSlurper().parse prop
 }
+config = project.ext.config
 
 version = "${config.minecraft_version}-${config.mod_version}"
 if (hasProperty('appendBuildNumber')) {
@@ -43,6 +44,7 @@ minecraft {
     runDir = "run"
 
     replace "@VERSION@", project.version
+    replace "omlib@[0.0.0,)", "omlib@[" + project.omlib_version + ",)"
 	    // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
