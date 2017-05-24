@@ -56,7 +56,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;*/
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft"),
         @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = omtteam.omlib.compatability.ModCompatibility.OCModID)}
 )
-public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ SimpleComponent, ICamoSupport, IDebugTile {
+public class TurretBase extends TileEntityMachine implements /*IPeripheral, SimpleComponent,*/ ICamoSupport, IDebugTile {
     public int trustedPlayerIndex = 0;
     protected IBlockState camoBlockState;
 
@@ -443,12 +443,13 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ Si
         return true;
     }
 
+    /*
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Override
     public String getComponentName() {
         return "turretBase";
     }
-
+    */
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():string; returns owner of turret base.")
     public Object[] getOwner(Context context, Arguments args) {
