@@ -536,6 +536,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
             wasAddedToEnergyNet = true;
         }
 
+        ticks++;
         if (!worldObj.isRemote && ticks % 5 == 0) {
 
             //Concealment
