@@ -44,7 +44,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     public float baseFitRotationX;
     public float baseFitRotationZ;
     int turretTier;
-    public TurretBase base;
+    protected TurretBase base;
     private boolean hasSetSide = false;
     public Entity target = null;
     public float rotationAnimation = 0.00F;
@@ -171,8 +171,12 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
     public abstract int getTurretRange();
 
-    TurretBase getBase() {
+    TurretBase getBaseFromWorld() {
         return TurretHeadUtil.getTurretBase(this.getWorld(), this.pos);
+    }
+
+    public TurretBase getBase() {
+        return base;
     }
 
     public float getRotationXY() {
@@ -245,11 +249,13 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
     protected abstract double getTurretAccuracy();
 
+    public abstract double getTurretDamageAmpBonus();
+
     protected abstract boolean requiresAmmo();
 
     protected abstract boolean requiresSpecificAmmo();
 
-    protected abstract ItemStack getAmmo();
+    public abstract ItemStack getAmmo();
 
     protected abstract TurretProjectile createProjectile(World world, Entity target, ItemStack ammo);
 
@@ -268,7 +274,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         }
 
         return MathTools.abs_max(MathTools.abs_max(targetPos.xCoord - this.getPos().getX(), targetPos.yCoord - this.getPos().getY()),
-                targetPos.zCoord - this.getPos().getZ()) > (this.getBase().getCurrentMaxRange());
+                targetPos.zCoord - this.getPos().getZ()) > (this.getBaseFromWorld().getCurrentMaxRange());
     }
 
     private int getPowerRequiredForNextShot() {
@@ -322,7 +328,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     @Override
     public void update() {
         setSide();
-        this.base = getBase();
+        this.base = getBaseFromWorld();
 
         if (this.getWorld().isRemote) {
             updateRotationAnimation();

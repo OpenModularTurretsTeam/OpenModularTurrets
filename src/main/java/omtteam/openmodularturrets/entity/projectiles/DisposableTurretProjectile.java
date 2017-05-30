@@ -75,7 +75,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
                     EntityLivingBase elb = (EntityLivingBase) entity;
-                    damage += ((int) elb.getHealth() * (0.05F * amp_level));
+                    damage += ((int) elb.getHealth() * (getDamageAmpBonus() * amp_level));
                 }
             }
 
@@ -114,5 +114,10 @@ public class DisposableTurretProjectile extends TurretProjectile {
     @Override
     public void playSound() {
 
+    }
+
+    @Override
+    public double getDamageAmpBonus() {
+        return ConfigHandler.getDisposableTurretSettings().getDamageAmp();
     }
 }

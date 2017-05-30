@@ -37,6 +37,11 @@ public class GrenadeLauncherTurretTileEntity extends TurretHead {
     }
 
     @Override
+    public double getTurretDamageAmpBonus() {
+        return ConfigHandler.getGrenadeTurretSettings().getDamageAmp();
+    }
+
+    @Override
     public boolean requiresAmmo() {
         return true;
     }
@@ -53,7 +58,7 @@ public class GrenadeLauncherTurretTileEntity extends TurretHead {
 
     @Override
     public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
-        return new GrenadeProjectile(world, ammo, this.getBase());
+        return new GrenadeProjectile(world, ammo, this.getBaseFromWorld());
     }
 
     @Override

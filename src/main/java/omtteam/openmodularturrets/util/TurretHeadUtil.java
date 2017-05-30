@@ -409,6 +409,32 @@ public class TurretHeadUtil {
         return ItemStackTools.getEmptyStack();
     }
 
+    public static int getAmmoLevel(TurretBase base, ItemStack ammoStackRequired) {
+        int result = 0;
+        for (int i = 0; i <= 8; i++) {
+            ItemStack ammoStack = base.getStackInSlot(i);
+
+            if (ammoStack != ItemStackTools.getEmptyStack() && getStackSize(ammoStack) > 0 && ammoStack.getItem() == ammoStackRequired.getItem()
+                    && ammoStack.getMetadata() == ammoStackRequired.getMetadata()) {
+                result += ammoStack.stackSize;
+            }
+        }
+
+        for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(base.getWorld(), base.getPos())) {
+            if (tileEntity instanceof Expander && !((Expander) tileEntity).isPowerExpander()) {
+                Expander exp = (Expander) tileEntity;
+                for (int i = 0; i < exp.getSizeInventory(); i++) {
+                    ItemStack ammoStack = exp.getStackInSlot(i);
+                    if (ammoStack != ItemStackTools.getEmptyStack() && ammoStack.getItem() == ammoStackRequired.getItem()) {
+                        result += ammoStack.stackSize;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
     private static int getPowerExtenderCapacityValue(Expander expander) {
         if (expander != null) {
             if (!expander.isPowerExpander()) return 0;

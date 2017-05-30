@@ -119,7 +119,9 @@ public class ConfigHandler {
                 config.get("TurretDisposable", "Accuracy", 50,
                         "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretDisposable", "PowerUsage", 2, "RF used per shot").getInt(),
-                config.get("TurretDisposable", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretDisposable", "Enabled", true, "Enabled?").getBoolean(),
+                config.get("TurretDisposable", "DamageAmpBonus", 0.05F,
+                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
 
         potato_cannon_turret = new TurretSetting(
                 config.get("TurretPotatoCannon", "Range", 15, "Turret range, in blocks").getInt(),
@@ -128,7 +130,9 @@ public class ConfigHandler {
                 config.get("TurretPotatoCannon", "Accuracy", 30,
                         "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretPotatoCannon", "PowerUsage", 10, "RF used per shot").getInt(),
-                config.get("TurretPotatoCannon", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretPotatoCannon", "Enabled", true, "Enabled?").getBoolean(),
+                config.get("TurretPotatoCannon", "DamageAmpBonus", 0.05F,
+                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
 
         machine_gun_turret = new TurretSetting(config.get("TurretMachineGun", "Range", 18, "Turret range, in blocks").getInt(),
                 config.get("TurretMachineGun", "FireRateCooldown", 8,
@@ -137,7 +141,9 @@ public class ConfigHandler {
                 config.get("TurretMachineGun", "Accuracy", 30,
                         "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretMachineGun", "PowerUsage", 100, "RF used per shot").getInt(),
-                config.get("TurretMachineGun", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretMachineGun", "Enabled", true, "Enabled?").getBoolean(),
+                config.get("TurretMachineGun", "DamageAmpBonus", 0.06F,
+                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
 
         incendiary_turret = new TurretSetting(
                 config.get("TurretIncendiary", "Range", 12, "Turret range, in blocks").getInt(),
@@ -146,7 +152,9 @@ public class ConfigHandler {
                 config.get("TurretIncendiary", "Accuracy", 30,
                         "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretIncendiary", "PowerUsage", 250, "RF used per shot").getInt(),
-                config.get("TurretIncendiary", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretIncendiary", "Enabled", true, "Enabled?").getBoolean(),
+                config.get("TurretIncendiary", "DamageAmpBonus", 0.05F,
+                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
 
         grenade_turret = new TurretSetting(config.get("TurretGrenade", "Range", 20, "Turret range, in blocks").getInt(),
                 config.get("TurretGrenade", "FireRateCooldown", 40,
@@ -155,7 +163,9 @@ public class ConfigHandler {
                 config.get("TurretGrenade", "Accuracy", 30,
                         "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretGrenade", "PowerUsage", 3000, "RF used per shot").getInt(),
-                config.get("TurretGrenade", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretGrenade", "Enabled", true, "Enabled?").getBoolean(),
+                config.get("TurretGrenade", "DamageAmpBonus", 0.08F,
+                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
 
         relativistic_turret = new TurretSetting(
                 config.get("TurretRelativistic", "Range", 20, "Turret range, in blocks").getInt(),
@@ -164,7 +174,7 @@ public class ConfigHandler {
                 config.get("TurretRelativistic", "Accuracy", 0,
                         "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretRelativistic", "PowerUsage", 5000, "RF used per shot").getInt(),
-                config.get("TurretRelativistic", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretRelativistic", "Enabled", true, "Enabled?").getBoolean(), 0);
 
         rocket_turret = new TurretSetting(config.get("TurretRocket", "Range", 30, "Turret range, in blocks").getInt(),
                 config.get("TurretRocket", "FireRateCooldown", 30,
@@ -173,7 +183,9 @@ public class ConfigHandler {
                 config.get("TurretRocket", "Accuracy", 10,
                         "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretRocket", "PowerUsage", 5000, "RF used per shot").getInt(),
-                config.get("TurretRocket", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretRocket", "Enabled", true, "Enabled?").getBoolean(),
+                config.get("TurretRocket", "DamageAmpBonus", 0.08F,
+                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
 
         teleporter_turret = new TurretSetting(
                 config.get("TurretTeleporter", "Range", 20, "Turret range, in blocks").getInt(),
@@ -182,7 +194,7 @@ public class ConfigHandler {
                 config.get("TurretTeleporter", "Accuracy", 0,
                         "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretTeleporter", "PowerUsage", 15000, "RF used per shot").getInt(),
-                config.get("TurretTeleporter", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretTeleporter", "Enabled", true, "Enabled?").getBoolean(), 0);
 
         laser_turret = new TurretSetting(config.get("TurretLaser", "Range", 25, "Turret range, in blocks").getInt(),
                 config.get("TurretLaser", "FireRateCooldown", 10,
@@ -191,7 +203,9 @@ public class ConfigHandler {
                 config.get("TurretLaser", "Accuracy", 10,
                         "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretLaser", "PowerUsage", 10000, "RF used per shot").getInt(),
-                config.get("TurretLaser", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretLaser", "Enabled", true, "Enabled?").getBoolean(),
+                config.get("TurretLaser", "DamageAmpBonus", 0.06F,
+                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
 
         railgun_turret = new TurretSetting(config.get("TurretRailgun", "Range", 30, "Turret range, in blocks").getInt(),
                 config.get("TurretRailgun", "FireRateCooldown", 100,
@@ -202,7 +216,9 @@ public class ConfigHandler {
                         "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretRailgun", "PowerUsage", 25000,
                         "RF used per shot").getInt(),
-                config.get("TurretRailgun", "Enabled", true, "Enabled?").getBoolean());
+                config.get("TurretRailgun", "Enabled", true, "Enabled?").getBoolean(),
+                config.get("TurretRailgun", "DamageAmpBonus", 0.10F,
+                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
 
         rangeUpgradeBoost = config.get("upgrades", "range", 2, "Increases range in blocks linearly").getInt();
         fireRateUpgradeBoostPercentage = config.get("upgrades", "rateOfFire", 0.1D,
@@ -524,16 +540,18 @@ public class ConfigHandler {
         private final int rof;
         private final int damage;
         private final double accuracy;
+        private final double damageAmp;
         private final int power_usage;
         private final boolean enabled;
 
-        private TurretSetting(int range, int rof, int damage, double accuracy, int power_usage, boolean enabled) {
+        private TurretSetting(int range, int rof, int damage, double accuracy, int power_usage, boolean enabled, double damage_amp) {
             this.range = range;
             this.rof = rof;
             this.damage = damage;
             this.accuracy = accuracy;
             this.power_usage = power_usage;
             this.enabled = enabled;
+            this.damageAmp = damage_amp;
         }
 
         public int getRange() {
@@ -560,6 +578,9 @@ public class ConfigHandler {
             return enabled;
         }
 
+        public double getDamageAmp() {
+            return damageAmp;
+        }
     }
 
     private static void parseDisposableAmmoList() {

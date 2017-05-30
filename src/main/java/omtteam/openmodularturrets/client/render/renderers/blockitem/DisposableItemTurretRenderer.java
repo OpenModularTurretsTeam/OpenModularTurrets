@@ -70,22 +70,22 @@ class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
 
         model.renderAll();
 
-        if (turretHead.base != null) {
-            if (TurretHeadUtil.hasSolarPanelAddon(turretHead.base)) {
+        if (turretHead.getBase() != null) {
+            if (TurretHeadUtil.hasSolarPanelAddon(turretHead.getBase())) {
                 ResourceLocation texturesSolar = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_solar_panel.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
                 solar.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 solar.renderAll();
             }
 
-            if (TurretHeadUtil.hasDamageAmpAddon(turretHead.base)) {
+            if (TurretHeadUtil.hasDamageAmpAddon(turretHead.getBase())) {
                 ResourceLocation texturesAmp = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_damage_amp.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
                 amp.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 amp.renderAll();
             }
 
-            if (TurretHeadUtil.hasRedstoneReactor(turretHead.base)) {
+            if (TurretHeadUtil.hasRedstoneReactor(turretHead.getBase())) {
                 ResourceLocation texturesReac = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_redstone_reactor.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesReac);
                 reac.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);

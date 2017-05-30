@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.compatability;
+package omtteam.openmodularturrets.compatability.hwyla;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -26,7 +26,7 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 @SuppressWarnings("unused")
 @Optional.Interface(iface = "mcp.mobius.waila.api.IWailaDataProvider", modid = "Waila")
-public class WailaTileHandler implements IWailaDataProvider {
+public class WailaTurretBaseHandler implements IWailaDataProvider {
     /**
      * Although this is likely not necessary, you can also use the Optional.Method interface to mark a
      * method to be stripped if a mod is not detected. In this case we're doing this for all methods
@@ -40,7 +40,7 @@ public class WailaTileHandler implements IWailaDataProvider {
      */
     @Optional.Method(modid = "Waila")
     public static void callbackRegister(IWailaRegistrar register) {
-        WailaTileHandler instance = new WailaTileHandler();
+        WailaTurretBaseHandler instance = new WailaTurretBaseHandler();
 
         register.registerNBTProvider(instance, TurretBase.class);
         register.registerBodyProvider(instance, TurretBase.class);

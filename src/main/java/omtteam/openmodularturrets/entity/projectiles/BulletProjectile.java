@@ -58,7 +58,7 @@ public class BulletProjectile extends TurretProjectile {
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
                     EntityLivingBase elb = (EntityLivingBase) entity;
-                    damage += ((int) elb.getHealth() * (0.06F * amp_level));
+                    damage += ((int) elb.getHealth() * (getDamageAmpBonus() * amp_level));
                 }
             }
 
@@ -100,5 +100,10 @@ public class BulletProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(RayTraceResult result) {
+    }
+
+    @Override
+    public double getDamageAmpBonus() {
+        return ConfigHandler.getGunTurretSettings().getDamageAmp();
     }
 }

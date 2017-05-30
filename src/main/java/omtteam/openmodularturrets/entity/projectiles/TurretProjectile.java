@@ -5,11 +5,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -68,6 +70,8 @@ public abstract class TurretProjectile extends EntityThrowable {
     public abstract void onHitEntity(Entity entity);
 
     public abstract void playSound();
+
+    public abstract double getDamageAmpBonus();
 
     @Override
     public void onUpdate() {

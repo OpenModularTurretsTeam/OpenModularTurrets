@@ -37,6 +37,11 @@ public class RocketTurretTileEntity extends TurretHead {
     }
 
     @Override
+    public double getTurretDamageAmpBonus() {
+        return ConfigHandler.getRocketTurretSettings().getDamageAmp();
+    }
+
+    @Override
     public boolean requiresAmmo() {
         return true;
     }
@@ -53,7 +58,7 @@ public class RocketTurretTileEntity extends TurretHead {
 
     @Override
     public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
-        return new RocketProjectile(world, target, ammo, this.getBase());
+        return new RocketProjectile(world, target, ammo, this.getBaseFromWorld());
     }
 
     @Override
