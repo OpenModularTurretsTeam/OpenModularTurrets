@@ -99,6 +99,7 @@ public class OMTNames {
             public static final String ADDONS = "gui.omtteam.openmodularturrets:addons";
             public static final String UPGRADES = "gui.omtteam.openmodularturrets:upgrades";
             public static final String AMMO = "gui.omtteam.openmodularturrets:ammo";
+            public static final String DAMAGE_AMP = "gui.omtteam.openmodularturrets:damage_amp";
             public static final String INVENTORY = "gui.omtteam.openmodularturrets:inventory";
             public static final String TARGET = "gui.omtteam.openmodularturrets:target";
             public static final String ADD_TRUSTED_PLAYER = "gui.omtteam.openmodularturrets:add_trusted_player";

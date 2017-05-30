@@ -203,6 +203,7 @@ gui.omtteam.openmodularturrets:multi_targeting=Multiple Ziele
 gui.omtteam.openmodularturrets:addons=Addons
 gui.omtteam.openmodularturrets:upgrades=Upgr.
 gui.omtteam.openmodularturrets:ammo=Mun./Treibst.
+gui.omtteam.openmodularturrets:damage_amp=Schadensbonus (% von HP)
 gui.omtteam.openmodularturrets:inventory=Inventar
 gui.omtteam.openmodularturrets:target=Ziel
 gui.omtteam.openmodularturrets:add_trusted_player=Füge vertr. Spieler hinzu

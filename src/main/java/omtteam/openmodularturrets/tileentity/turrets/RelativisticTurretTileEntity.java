@@ -25,7 +25,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
     @Override
     public void update() {
         setSide();
-        this.base = getBase();
+        this.base = getBaseFromWorld();
 
         if (this.getWorld().isRemote) {
             if (rotationAnimation >= 360F) {
@@ -130,6 +130,12 @@ public class RelativisticTurretTileEntity extends TurretHead {
     @Override
     public double getTurretAccuracy() {
         return ConfigHandler.getRelativisticTurretSettings().getAccuracy();
+    }
+
+
+    @Override
+    public double getTurretDamageAmpBonus() {
+        return ConfigHandler.getRelativisticTurretSettings().getDamageAmp();
     }
 
     @Override

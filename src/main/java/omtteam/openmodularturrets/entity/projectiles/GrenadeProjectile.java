@@ -1,7 +1,5 @@
 package omtteam.openmodularturrets.entity.projectiles;
 
-import omtteam.openmodularturrets.handler.ConfigHandler;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,6 +13,7 @@ import net.minecraft.world.World;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
+import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -51,7 +50,7 @@ public class GrenadeProjectile extends TurretProjectile {
                     if (isAmped) {
 
                         EntityLivingBase elb = (EntityLivingBase) mob;
-                        damage += ((int) elb.getHealth() * (0.08F * amp_level));
+                        damage += ((int) elb.getHealth() * (getDamageAmpBonus() * amp_level));
 
                     }
                     setMobDropLoot(mob);
@@ -116,5 +115,10 @@ public class GrenadeProjectile extends TurretProjectile {
     @Override
     public void playSound() {
 
+    }
+
+    @Override
+    public double getDamageAmpBonus() {
+        return ConfigHandler.getGrenadeTurretSettings().getDamageAmp();
     }
 }

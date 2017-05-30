@@ -1,17 +1,12 @@
 package omtteam.openmodularturrets.entity.projectiles;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.RandomUtil;
@@ -75,7 +70,7 @@ public class LaserProjectile extends TurretProjectile {
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
                     EntityLivingBase elb = (EntityLivingBase) entity;
-                    damage += ((int) elb.getHealth() * (0.06F * amp_level));
+                    damage += ((int) elb.getHealth() * (getDamageAmpBonus() * amp_level));
                 }
             }
 
@@ -113,5 +108,10 @@ public class LaserProjectile extends TurretProjectile {
         getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.laserHitSound, SoundCategory.AMBIENT,
                 ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
 
+    }
+
+    @Override
+    public double getDamageAmpBonus() {
+        return ConfigHandler.getLaserTurretSettings().getDamageAmp();
     }
 }

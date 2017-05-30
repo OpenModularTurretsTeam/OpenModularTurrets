@@ -134,7 +134,7 @@ public class RocketProjectile extends TurretProjectile {
 
                 if (isAmped) {
                     EntityLivingBase elb = (EntityLivingBase) mob;
-                    damage += ((int) elb.getHealth() * (0.08F * amp_level));
+                    damage += ((int) elb.getHealth() * (getDamageAmpBonus() * amp_level));
                 }
 
 
@@ -170,5 +170,10 @@ public class RocketProjectile extends TurretProjectile {
     @Override
     public void playSound() {
 
+    }
+
+    @Override
+    public double getDamageAmpBonus() {
+        return ConfigHandler.getRocketTurretSettings().getDamageAmp();
     }
 }

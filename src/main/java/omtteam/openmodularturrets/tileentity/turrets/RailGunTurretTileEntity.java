@@ -37,6 +37,11 @@ public class RailGunTurretTileEntity extends TurretHead {
     }
 
     @Override
+    public double getTurretDamageAmpBonus() {
+        return ConfigHandler.getRailgunTurretSettings().getDamageAmp();
+    }
+
+    @Override
     public boolean requiresAmmo() {
         return true;
     }
@@ -53,7 +58,7 @@ public class RailGunTurretTileEntity extends TurretHead {
 
     @Override
     public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
-        return new FerroSlugProjectile(world, ammo, this.getBase());
+        return new FerroSlugProjectile(world, ammo, this.getBaseFromWorld());
     }
 
     @Override
