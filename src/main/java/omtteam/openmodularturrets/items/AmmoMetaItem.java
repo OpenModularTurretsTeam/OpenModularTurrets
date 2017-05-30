@@ -1,8 +1,10 @@
 package omtteam.openmodularturrets.items;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import omtteam.omlib.compatability.minecraft.CompatItem;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.init.ModItems;
@@ -12,6 +14,8 @@ import omtteam.openmodularturrets.reference.Reference;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+
+import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 public class AmmoMetaItem extends CompatItem {
     public AmmoMetaItem() {
@@ -45,5 +49,41 @@ public class AmmoMetaItem extends CompatItem {
     @Override
     public int getMetadata(int damage) {
         return damage;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
+        switch (stack.getMetadata()) {
+            case 0:
+                tooltip.add("");
+                tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                tooltip.add("");
+                tooltip.add(safeLocalize("turret.ammo.blazing_clay"));
+                return;
+            case 1:
+                tooltip.add("");
+                tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                tooltip.add("");
+                tooltip.add(safeLocalize("turret.ammo.bullet"));
+                return;
+            case 2:
+                tooltip.add("");
+                tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                tooltip.add("");
+                tooltip.add(safeLocalize("turret.ammo.ferro_slug"));
+                return;
+            case 3:
+                tooltip.add("");
+                tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                tooltip.add("");
+                tooltip.add(safeLocalize("turret.ammo.grenade"));
+                return;
+            case 4:
+                tooltip.add("");
+                tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                tooltip.add("");
+                tooltip.add(safeLocalize("turret.ammo.rocket"));
+        }
     }
 }

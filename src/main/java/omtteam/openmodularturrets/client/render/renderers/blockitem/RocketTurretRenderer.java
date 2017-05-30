@@ -87,6 +87,7 @@ class RocketTurretRenderer extends TileEntitySpecialRenderer {
                 reac.renderAll();
             }
         }
+
         GL11.glPopMatrix();
     }
 }

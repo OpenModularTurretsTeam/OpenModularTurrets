@@ -5,7 +5,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import omtteam.omlib.compatability.minecraft.CompatItem;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -62,7 +61,7 @@ public class UpgradeMetaItem extends CompatItem {
                 tooltip.add("");
                 tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
                 tooltip.add("");
-                tooltip.add("+ " + ConfigHandler.getAccuracyUpgradeBoost() * 100 + "% " + I18n.translateToLocal(
+                tooltip.add("+ " + ConfigHandler.getAccuracyUpgradeBoost() * 100 + "% " + safeLocalize(
                         "turret.upgrade.acc"));
                 tooltip.add(safeLocalize("turret.upgrade.stacks"));
                 tooltip.add("");
@@ -73,8 +72,7 @@ public class UpgradeMetaItem extends CompatItem {
                 tooltip.add("");
                 tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
                 tooltip.add("");
-                tooltip.add(
-                        "- " + ConfigHandler.getEfficiencyUpgradeBoostPercentage() * 100 + "% " + I18n.translateToLocal(
+                tooltip.add("- " + ConfigHandler.getEfficiencyUpgradeBoostPercentage() * 100 + "% " + safeLocalize(
                                 "turret.upgrade.eff"));
                 tooltip.add(safeLocalize("turret.upgrade.stacks"));
                 tooltip.add("");
@@ -84,8 +82,7 @@ public class UpgradeMetaItem extends CompatItem {
                 tooltip.add("");
                 tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
                 tooltip.add("");
-                tooltip.add(
-                        "+ " + ConfigHandler.getFireRateUpgradeBoostPercentage() * 100 + "% " + I18n.translateToLocal(
+                tooltip.add("+ " + ConfigHandler.getFireRateUpgradeBoostPercentage() * 100 + "% " + safeLocalize(
                                 "turret.upgrade.rof"));
                 tooltip.add(safeLocalize("turret.upgrade.stacks"));
                 tooltip.add("");
@@ -95,7 +92,7 @@ public class UpgradeMetaItem extends CompatItem {
                 tooltip.add("");
                 tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
                 tooltip.add("");
-                tooltip.add("+ " + ConfigHandler.getRangeUpgradeBoost() + " " + I18n.translateToLocal(
+                tooltip.add("+ " + ConfigHandler.getRangeUpgradeBoost() + " " + safeLocalize(
                         "turret" + ".upgrade.range"));
                 tooltip.add(safeLocalize("turret.upgrade.stacks"));
                 tooltip.add("");
