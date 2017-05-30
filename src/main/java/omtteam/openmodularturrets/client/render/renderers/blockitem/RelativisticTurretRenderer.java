@@ -65,7 +65,6 @@ class RelativisticTurretRenderer extends TileEntitySpecialRenderer {
             model.renderAll();
         }
 
-
         GL11.glPopMatrix();
     }
 }

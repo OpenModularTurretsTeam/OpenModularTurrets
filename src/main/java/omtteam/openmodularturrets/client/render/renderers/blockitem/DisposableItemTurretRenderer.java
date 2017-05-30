@@ -93,7 +93,5 @@ class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
             }
         }
         GL11.glPopMatrix();
-
-
     }
 }

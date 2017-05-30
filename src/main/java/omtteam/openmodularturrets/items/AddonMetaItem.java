@@ -5,7 +5,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import omtteam.omlib.compatability.minecraft.CompatItem;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -80,11 +79,11 @@ public class AddonMetaItem extends CompatItem {
                 tooltip.add("");
                 tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
                 tooltip.add("");
-                tooltip.add(I18n.translateToLocal(
-                        "turret.addon.potentia.a") + ConfigHandler.getPotentiaToRFRatio() + " " + I18n.translateToLocal(
+                tooltip.add(safeLocalize(
+                        "turret.addon.potentia.a") + ConfigHandler.getPotentiaToRFRatio() + " " + safeLocalize(
                         "turret.addon.potentia.b"));
                 tooltip.add("");
-                tooltip.add(I18n.translateToLocal(
+                tooltip.add(safeLocalize(
                         "turret.addon.potentia.c") + ConfigHandler.getPotentiaAddonCapacity() + ".");
                 tooltip.add("");
                 tooltip.add(safeLocalize("turret.addon.potentia.d"));
@@ -99,9 +98,9 @@ public class AddonMetaItem extends CompatItem {
                 tooltip.add(safeLocalize("turret.addon.recycler.1"));
                 tooltip.add(safeLocalize("turret.addon.recycler.2"));
                 tooltip.add("");
-                tooltip.add(I18n.translateToLocal(
+                tooltip.add(safeLocalize(
                         "turret.addon.recycler.3") + " " + ConfigHandler.getRecyclerNegateChance() + "%");
-                tooltip.add(I18n.translateToLocal(
+                tooltip.add(safeLocalize(
                         "turret.addon.recycler.4") + " " + ConfigHandler.getRecyclerAddChance() + "%");
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.recycler.flavour"));
@@ -110,8 +109,8 @@ public class AddonMetaItem extends CompatItem {
                 tooltip.add("");
                 tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
                 tooltip.add("");
-                tooltip.add(I18n.translateToLocal(
-                        "turret.addon.redstone.a") + " " + ConfigHandler.getRedstoneReactorAddonGen() + " " + I18n.translateToLocal(
+                tooltip.add(safeLocalize(
+                        "turret.addon.redstone.a") + " " + ConfigHandler.getRedstoneReactorAddonGen() + " " + safeLocalize(
                         "turret.addon.redstone.b"));
                 tooltip.add(safeLocalize("turret.addon.redstone.c"));
                 tooltip.add("");
@@ -121,7 +120,7 @@ public class AddonMetaItem extends CompatItem {
                 tooltip.add("");
                 tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
                 tooltip.add("");
-                tooltip.add(safeLocalize("turret.addon.serial.a") + " " + I18n.translateToLocal(
+                tooltip.add(safeLocalize("turret.addon.serial.a") + " " + safeLocalize(
                         "turret.addon.serial.b"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.serial.flavour"));
@@ -130,8 +129,8 @@ public class AddonMetaItem extends CompatItem {
                 tooltip.add("");
                 tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
                 tooltip.add("");
-                tooltip.add(I18n.translateToLocal(
-                        "turret.addon.solar.a") + " " + ConfigHandler.getSolarPanelAddonGen() + " " + I18n.translateToLocal(
+                tooltip.add(safeLocalize(
+                        "turret.addon.solar.a") + " " + ConfigHandler.getSolarPanelAddonGen() + " " + safeLocalize(
                         "turret.addon.solar.b"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.solar.flavour"));

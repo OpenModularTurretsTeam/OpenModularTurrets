@@ -4,9 +4,9 @@ import net.minecraftforge.common.MinecraftForge;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.EventHandler;
 import omtteam.openmodularturrets.handler.NetworkingHandler;
-import omtteam.openmodularturrets.handler.ProjectileEntityHandler;
 import omtteam.openmodularturrets.handler.recipes.RecipeHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
+import omtteam.openmodularturrets.init.ModEntities;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
 
@@ -16,7 +16,7 @@ public class CommonProxy {
         ModBlocks.initBlocks();
         ModBlocks.initTileEntities();
         ModSounds.init();
-        ProjectileEntityHandler.registerProjectiles(OpenModularTurrets.instance);
+        ModEntities.registerProjectiles(OpenModularTurrets.instance);
         initTileRenderers();
         initHandlers();
     }
