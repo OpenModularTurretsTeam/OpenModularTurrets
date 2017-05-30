@@ -89,7 +89,6 @@ class LaserTurretRenderer extends TileEntitySpecialRenderer {
             }
         }
 
-
         GL11.glPopMatrix();
     }
 }

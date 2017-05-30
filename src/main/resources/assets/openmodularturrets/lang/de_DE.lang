@@ -175,6 +175,13 @@ turret.upgrade.scatter.a=Fügt 2 Projektile zu jedem Schuss hinzu für
 turret.upgrade.scatter.b=+2 Munitionsverbrauch, weniger Genauigkeit, und mehr RF Verbrauch.
 turret.upgrade.scatter.flavour=Einfach mit mehr Kugeln schiessen.
 
+turret.ammo.label=Munition für Türme
+turret.ammo.blazing_clay=Glühender Ton für den Feuer Turm.
+turret.ammo.bullet=Eine einfache Kugel für den Maschinengewehr Turm.
+turret.ammo.ferro_slug=Diese fortschrittlich aussehende Kugel ist für die Railgun.
+turret.ammo.grenade=Eine schöne Granate für den Granatwerfer Turm..
+turret.ammo.rocket=Die Rakete kommt natürlich im Raketenwerfen zum Einsatz!
+
 status.ownership=Du besitzt diesen Turm nicht, oder hast dazu keine Berechtigung.
 status.missing_base=Dort ist keine Turm Basis.
 status.warning=Du betrittst einen turmgesicherten Bereich. Weitergehen auf eigene Gefahr.
@@ -238,6 +245,6 @@ death.attack.disposable=Very %s, much dead, such wow...
 death.attack.bullet=%s aß zu viel leckeres Blei.
 death.attack.blazingclay=%s wurde medium-rare gebraten.
 death.attack.grenade=%s muss wieder zusammengesetzt werden.
-death.attack.rocket=%s fand die Rakete am ende des Regenbogens.
+death.attack.rocket=%s fand die Rakete am Ende des Regenbogens.
 death.attack.laser=%s wurde verdampft.
 death.attack.ferroslug=%s wurde von einer Railgun gelochert..
