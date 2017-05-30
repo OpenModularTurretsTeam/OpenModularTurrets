@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.compatability;
+package omtteam.openmodularturrets.compatability.hwyla;
 
 import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.IWailaRegistrar;

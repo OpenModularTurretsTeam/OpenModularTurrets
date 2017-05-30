@@ -59,7 +59,7 @@ public class FerroSlugProjectile extends TurretProjectile {
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
                     EntityLivingBase elb = (EntityLivingBase) entity;
-                    damage += ((int) elb.getHealth() * (0.10F * amp_level));
+                    damage += ((int) elb.getHealth() * (getDamageAmpBonus() * amp_level));
                 }
             }
 
@@ -105,5 +105,10 @@ public class FerroSlugProjectile extends TurretProjectile {
 
     @Override
     protected void onImpact(RayTraceResult result) {
+    }
+
+    @Override
+    public double getDamageAmpBonus() {
+        return ConfigHandler.getRailgunTurretSettings().getDamageAmp();
     }
 }

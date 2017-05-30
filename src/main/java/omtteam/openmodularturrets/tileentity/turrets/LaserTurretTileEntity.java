@@ -36,6 +36,11 @@ public class LaserTurretTileEntity extends TurretHead {
     }
 
     @Override
+    public double getTurretDamageAmpBonus() {
+        return ConfigHandler.getLaserTurretSettings().getDamageAmp();
+    }
+
+    @Override
     public boolean requiresAmmo() {
         return false;
     }
@@ -52,7 +57,7 @@ public class LaserTurretTileEntity extends TurretHead {
 
     @Override
     public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
-        return new LaserProjectile(world, this.getBase());
+        return new LaserProjectile(world, this.getBaseFromWorld());
     }
 
     @Override

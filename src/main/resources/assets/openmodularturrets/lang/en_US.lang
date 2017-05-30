@@ -231,6 +231,7 @@ gui.omtteam.openmodularturrets:multi_targeting=Multi Targeting
 gui.omtteam.openmodularturrets:addons=Addons
 gui.omtteam.openmodularturrets:upgrades=Upgr.
 gui.omtteam.openmodularturrets:ammo=Ammo/Fuel
+gui.omtteam.openmodularturrets:damage_amp=Damage Boost (rel. to HP)
 gui.omtteam.openmodularturrets:inventory=Inventory
 gui.omtteam.openmodularturrets:target=Target
 gui.omtteam.openmodularturrets:add_trusted_player=Add trusted player
