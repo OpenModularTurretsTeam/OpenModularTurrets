@@ -87,9 +87,6 @@ public class OMTNames {
     public static class Localizations {
         public static class GUI {
             public static final String BASE = "gui.omtteam.openmodularturrets:base";
-            public static final String OWNER = "gui.omtteam.openmodularturrets:owner";
-            public static final String INVERT = "gui.omtteam.openmodularturrets:invert";
-            public static final String ACTIVE = "gui.omtteam.openmodularturrets:active";
             public static final String RANGE = "gui.omtteam.openmodularturrets:range";
             public static final String TRUSTED_PLAYERS = "gui.omtteam.openmodularturrets:trusted_players";
             public static final String ATTACK_PLAYERS = "gui.omtteam.openmodularturrets:attack_players";

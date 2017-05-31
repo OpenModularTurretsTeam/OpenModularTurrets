@@ -15,6 +15,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.compatability.minecraft.CompatItem;
+import omtteam.omlib.reference.OMLibNames;
+import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
@@ -124,7 +126,7 @@ public class UsableMetaItem extends CompatItem {
                 tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc2"));
                 tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc3"));
                 tooltip.add("\u00A76: \u00A7b" + nbtTagCompound.getInteger("currentMaxRange"));
-                tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.INVERT) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("inverted")));
+                tooltip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": " + TurretBase.getModeAsLocString(EnumMachineMode.values()[nbtTagCompound.getInteger("mode")]));
                 tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.MULTI_TARGETING) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("multiTargeting")));
                 tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksMobs")));
                 tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksNeutrals")));

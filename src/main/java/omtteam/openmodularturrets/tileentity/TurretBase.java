@@ -3,7 +3,6 @@ package omtteam.openmodularturrets.tileentity;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -17,6 +16,7 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import omtteam.omlib.api.IDebugTile;
 import omtteam.omlib.power.OMEnergyStorage;
+import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityMachine;
 import omtteam.omlib.util.TrustedPlayer;
@@ -74,6 +74,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     protected int tier;
     private boolean forceFire = false;
 
+
     public TurretBase() {
         super();
         this.inventory = ItemStackList.create(13);
@@ -91,10 +92,12 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
         this.inventory = ItemStackList.create(tier == 5 ? 13 : tier == 4 ? 12 : tier == 3 ? 12 : tier == 2 ? 12 : 9);
         this.tier = tier;
         this.camoBlockState = camoState;
+        this.mode = EnumMachineMode.INVERTED;
     }
 
     @SuppressWarnings("deprecation")
     @Override
+    @Nonnull
     public IBlockState getDefaultCamoState() {
         return ForgeRegistries.BLOCKS.getValue(
                 new ResourceLocation(Reference.MOD_ID + ":" + OMTNames.Blocks.turretBase)).getStateFromMeta(this.tier - 1);
@@ -114,6 +117,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
         nbtTagCompound.setBoolean("multiTargeting", multiTargeting);
         nbtTagCompound.setBoolean("forceFire", forceFire);
         nbtTagCompound.setInteger("tier", tier);
+        nbtTagCompound.setInteger("mode", mode.ordinal());
         writeBlockFromStateToNBT(nbtTagCompound, this.camoBlockState);
         return nbtTagCompound;
     }
@@ -131,6 +135,11 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
         this.multiTargeting = nbtTagCompound.getBoolean("multiTargeting");
         this.forceFire = nbtTagCompound.getBoolean("forceFire");
         this.tier = nbtTagCompound.getInteger("tier");
+        if (nbtTagCompound.hasKey("mode")) {
+            this.mode = EnumMachineMode.values()[nbtTagCompound.getInteger("mode")];
+        } else {
+            this.mode = EnumMachineMode.INVERTED;
+        }
         this.computerAccessible = nbtTagCompound.hasKey("computerAccessible") && nbtTagCompound.getBoolean("computerAccessible");
         if (getBlockStateFromNBT(nbtTagCompound) != null) {
             this.camoBlockState = getBlockStateFromNBT(nbtTagCompound);
@@ -270,6 +279,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
         this.tier = tier;
     }
 
+
     public void setAllTurretsYawPitch(float yaw, float pitch) {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         for (TileEntity te : tileEntities) {
@@ -326,12 +336,15 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
 
     public NBTTagCompound writeMemoryCardNBT() {
         NBTTagCompound nbtTagCompound = new NBTTagCompound();
-        nbtTagCompound.setBoolean("inverted", inverted);
         nbtTagCompound.setInteger("currentMaxRange", this.currentMaxRange);
         nbtTagCompound.setBoolean("attacksMobs", attacksMobs);
         nbtTagCompound.setBoolean("attacksNeutrals", attacksNeutrals);
         nbtTagCompound.setBoolean("attacksPlayers", attacksPlayers);
         nbtTagCompound.setBoolean("multiTargeting", multiTargeting);
+        nbtTagCompound.setInteger("mode", mode.ordinal());
+        if (this.rangeOverridden) {
+            nbtTagCompound.setInteger("range", this.currentMaxRange);
+        }
         nbtTagCompound.setTag("trustedPlayers", getTrustedPlayersAsNBT());
         return nbtTagCompound;
     }
@@ -342,7 +355,18 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
         this.attacksNeutrals = nbtTagCompound.getBoolean("attacksNeutrals");
         this.attacksPlayers = nbtTagCompound.getBoolean("attacksPlayers");
         this.multiTargeting = nbtTagCompound.getBoolean("multiTargeting");
-        this.setInverted(nbtTagCompound.getBoolean("inverted"));
+        if (nbtTagCompound.hasKey("mode")) {
+            this.mode = EnumMachineMode.values()[nbtTagCompound.getInteger("mode")];
+        } else {
+            this.mode = EnumMachineMode.INVERTED;
+        }
+        if (nbtTagCompound.hasKey("range")) {
+            this.rangeOverridden = true;
+            this.currentMaxRange = nbtTagCompound.getInteger("range");
+        } else {
+            this.rangeOverridden = false;
+            this.currentMaxRange = getUpperBoundMaxRange();
+        }
         buildTrustedPlayersFromNBT(nbtTagCompound.getTagList("trustedPlayers", 10));
     }
 
@@ -454,7 +478,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function():string; returns owner of turret base.")
     public Object[] getOwner(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         return new Object[]{this.getOwner()};
     }
@@ -463,7 +487,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack hostile mobs.")
     public Object[] isAttacksMobs(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         return new Object[]{this.isAttacksMobs()};
     }
@@ -472,7 +496,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function(state:boolean):boolean;  sets to attack hostile mobs or not.")
     public Object[] setAttacksMobs(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         this.setAttacksMobs(args.checkBoolean(0));
         return null;
@@ -482,7 +506,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack neutral mobs.")
     public Object[] isAttacksNeutrals(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         return new Object[]{this.isAttacksNeutrals()};
     }
@@ -491,7 +515,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function(state:boolean):boolean; sets to attack neutral mobs or not.")
     public Object[] setAttacksNeutrals(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         this.setAttacksNeutrals(args.checkBoolean(0));
         return null;
@@ -501,7 +525,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack players.")
     public Object[] isAttacksPlayers(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         return new Object[]{this.isAttacksPlayers()};
     }
@@ -510,7 +534,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function(state:boolean):boolean; sets to attack players or not.")
     public Object[] setAttacksPlayers(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         this.setAttacksPlayers(args.checkBoolean(0));
         return null;
@@ -520,7 +544,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function():table; returns a table of trusted players on this base.")
     public Object[] getTrustedPlayers(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         return new Object[]{this.getTrustedPlayers()};
     }
@@ -529,10 +553,10 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , " + "admin:boolean]):string; adds Trusted player to Trustlist.")
     public Object[] addTrustedPlayer(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         if (!this.addTrustedPlayer(args.checkString(0))) {
-            return new Object[]{"Name not valid!"};
+            return new Object[]{"Name not valid!" };
         }
         TrustedPlayer trustedPlayer = this.getTrustedPlayer(args.checkString(0));
         trustedPlayer.canOpenGUI = args.optBoolean(1, false);
@@ -546,7 +570,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function(name:String):string; removes trusted player from trust list.")
     public Object[] removeTrustedPlayer(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         this.removeTrustedPlayer(args.checkString(0));
         return null;
@@ -556,7 +580,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function():int; returns maximum energy storage.")
     public Object[] getMaxEnergyStorage(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         return new Object[]{this.storage.getMaxEnergyStored()};
     }
@@ -565,7 +589,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function():int; returns current energy stored.")
     public Object[] getCurrentEnergyStorage(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         return new Object[]{this.getEnergyLevel(EnumFacing.DOWN)};
     }
@@ -574,35 +598,48 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function():boolean; returns if the turret is currently active.")
     public Object[] getActive(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         return new Object[]{this.isActive()};
     }
 
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function(state:boolean):boolean; toggles turret redstone inversion state.")
-    public Object[] setInverted(Context context, Arguments args) {
+    @Callback(doc = "function(state:int):void; toggles turret redstone inversion state.")
+    public Object[] setMode(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
+        } else if (!args.isInteger(0) || args.checkInteger(0) <= EnumMachineMode.values().length) {
+            return new Object[]{"Set first parameter to any number between 0 and " + EnumMachineMode.values().length,
+                    "0 - Always on, 1 - always off, 2 - inverted, 3 - not inverted" };
         }
-        this.setInverted(args.checkBoolean(0));
+        this.mode = EnumMachineMode.values()[args.checkInteger(0)];
         return null;
     }
 
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function():boolean; shows redstone inversion state.")
+    @Callback(doc = "function():int; shows redstone inversion state.")
     public Object[] getInverted(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
-        return new Object[]{this.getInverted()};
+        switch (this.getMode().ordinal()) {
+            case 0:
+                return new Object[]{"0 - Always on" };
+            case 1:
+                return new Object[]{"1 - always off" };
+            case 2:
+                return new Object[]{"2 - inverted" };
+            case 3:
+                return new Object[]{"3 - not inverted" };
+        }
+        return new Object[]{};
     }
 
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; shows redstone state.")
     public Object[] getRedstone(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         return new Object[]{this.getRedstone()};
     }
@@ -611,9 +648,9 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function(side:int, yaw:double, pitch:double):void; Set yaw and pitch for all turrets (deact. auto targ. before).")
     public Object[] setAllYawPitch(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
-        if (!args.isDouble(0) || !args.isDouble(1)) return new Object[]{"Wrong parameters!"};
+        if (!args.isDouble(0) || !args.isDouble(1)) return new Object[]{"Wrong parameters!" };
         setAllTurretsYawPitch((float) args.checkDouble(0), (float) args.checkDouble(1));
         return new Object[]{};
     }
@@ -622,10 +659,10 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function(yaw:double, pitch:double):boolean; Set yaw and pitch for a turret (deact. auto targ. before).")
     public Object[] setTurretYawPitch(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         if (!args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0 && !args.isDouble(1) || !args.isDouble(2))
-            return new Object[]{"Wrong parameters!"};
+            return new Object[]{"Wrong parameters!" };
 
         return new Object[]{setTurretYawPitch(EnumFacing.getFront(args.checkInteger(0)), (float) args.checkDouble(0), (float) args.checkDouble(1))};
     }
@@ -634,9 +671,9 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function(state:boolean):void; Enable auto firing for all Turrets (deact. auto targ. before).")
     public Object[] setAllAutoForceFire(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
-        if (!args.isBoolean(0)) return new Object[]{"Wrong parameters!"};
+        if (!args.isBoolean(0)) return new Object[]{"Wrong parameters!" };
         setAllTurretsForceFire(args.checkBoolean(0));
         return new Object[]{};
     }
@@ -645,10 +682,10 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function(state:boolean):boolean; Enable auto firing for specified Turret (deact. auto targ. before).")
     public Object[] setTurretAutoForceFire(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         if (!args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0 && !args.isBoolean(1))
-            return new Object[]{"Wrong parameters!"};
+            return new Object[]{"Wrong parameters!" };
         return new Object[]{setTurretForceFire(EnumFacing.getFront(args.checkInteger(0)), args.checkBoolean(1))};
     }
 
@@ -656,7 +693,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function():int; Try to shoot all turrets, returns successful shots")
     public Object[] forceShootAll(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
 
         return new Object[]{this.forceShootAllTurrets()};
@@ -666,10 +703,10 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     @Callback(doc = "function(side:int):boolean; Try to shoot specified turret, returns true if successfully shot")
     public Object[] forceShootTurret(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[]{"Computer access deactivated!" };
         }
         if (!args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0)
-            return new Object[]{"Wrong parameters!"};
+            return new Object[]{"Wrong parameters!" };
         return new Object[]{this.forceShootTurret(EnumFacing.getFront(args.checkInteger(0)))};
     }
 
