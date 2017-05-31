@@ -118,6 +118,8 @@ public class OMTNames {
             public static final String TURRET_LEVER_DESCRIPTION = "gui.omtteam.openmodularturrets:turret_lever_description";
             public static final String NO_TURRET = "gui.omtteam.openmodularturrets:no_turret";
             public static final String TYPE = "gui.omtteam.openmodularturrets:type";
+            public static final String ACCURACY = "gui.omtteam.openmodularturrets:accuracy";
+            public static final String RATE_OF_FIRE = "gui.omtteam.openmodularturrets:rof";
         }
 
         public static class Tooltip {
