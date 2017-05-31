@@ -15,8 +15,8 @@ item.addon_damage_amp.name=Addon - Schadens Boost
 item.addon_solar_panel.name=Addon - Solar Panel
 item.addon_potentia.name=Addon - Potentia Konverter
 item.addon_serial_port.name=Addon - Serieller Port
-item.addon_concealer.name=Addon - Turm Verberger
 item.addon_recycler.name=Addon - Recycler
+item.addon_concealer.name=Addon - Turm Verberger
 item.sensor_tier_one.name=Sensor (Stufe 1)
 item.sensor_tier_two.name=Sensor (Stufe 2)
 item.sensor_tier_three.name=Sensor (Stufe 3)
@@ -33,6 +33,7 @@ item.barrel_tier_three.name=Lauf (Stufe 3)
 item.barrel_tier_four.name=Lauf (Stufe 4)
 item.barrel_tier_five.name=Lauf (Stufe 5)
 item.io_bus.name=IO Bus
+item.memory_card.name=Turmbasis Speicherkarte
 tile.turret_base_tier_one.name=Turm Basis (Stufe 1)
 tile.turret_base_tier_two.name=Turm Basis (Stufe 2)
 tile.turret_base_tier_three.name=Turm Basis (Stufe 3)
@@ -90,9 +91,29 @@ tooltip.extras.upgrade.0=Nichts
 tooltip.extras.upgrade.1=1x Upgrade Slots
 tooltip.extras.upgrade.2=2x Upgrade Slots
 
+tooltip.expander.power1=Turmbasis Energie Expansion
+tooltip.expander.power2=Fügt
+tooltip.expander.power3=RF Kapazität zur Basis hinzu.
+
+tooltip.expander.inv1=Turmbasis Inventarvergrößerung
+tooltip.expander.inv2=Fügt 9 Slots Inventar hinzu, die die Basis nutzen kann.
+tooltip.expander.inv3=Jeder Slot kann nur stacken bis
+
 tooltip.openmodularturrets.memory_card.desc1=Shift-RechtsClick um auf Karte zu kopieren.
 tooltip.openmodularturrets.memory_card.desc2=Shift-RechtsClick irgendwo anders um Karte zu leeren.
 tooltip.openmodularturrets.memory_card.desc2=RechtsClick um Daten von Karte zu kopieren.
+
+flavour.expander.power.1=Jetzt verschiedene Geschmacksrichtungen!
+flavour.expander.power.2=Kinetische Expansion.
+flavour.expander.power.3=Veni, vidi, vici.
+flavour.expander.power.4=Taugt als Briefbeschwerer.
+flavour.expander.power.5=Asymmetrische Kriegsführung.
+
+flavour.expander.inv.1=Ein bisschen geht weit weg.
+flavour.expander.inv.2=Nachschub!
+flavour.expander.inv.3=Mehrwehrt.
+flavour.expander.inv.4=Taugt als Ballon.
+flavour.expander.inv.5=Very space, much inventory.
 
 flavour.base.0=Bäume überall.
 flavour.base.1=Ich werd mit deinem Blut malen!
@@ -154,6 +175,13 @@ turret.addon.potentia.flavour=Weil RWE es nicht gebacken kriegt.
 turret.addon.serial.a=Erlaubt Open_computers und Computer_craft
 turret.addon.serial.b=Kompatabilität.
 turret.addon.serial.flavour=Wer braucht OOP?
+turret.addon.recycler.1=Fügt eine Chance, keine Muntion zu verbrauchen und
+turret.addon.recycler.2=auch eine Chance Munition zu generieren, pro Schuss.
+turret.addon.recycler.3=Verbrauch Neg. Chance:
+turret.addon.recycler.4=Generationschance:
+turret.addon.recycler.flavour=Reduzieren, wiederverwenden, einschalten.
+turret.addon.concealer.1=Versteckt die Türme der Basis, wenn sie nicht schießen.
+turret.addon.concealer.flavour=DiggyDiggy Hole!
 
 turret.upgrade.label=Turm Upgrade
 turret.upgrade.stacks=Stackt bis zu 4 mal.
@@ -222,6 +250,9 @@ gui.omtteam.openmodularturrets:turret_head_description=Ein Turm Kopf, auf einer 
 gui.omtteam.openmodularturrets:turret_lever_description=Ein Hebel, auf Tier 1 Basis platzieren, erzeugt Energie.
 gui.omtteam.openmodularturrets:no_turret=Kein Turm auf Basis.
 gui.omtteam.openmodularturrets:type=Typ
+gui.omtteam.openmodularturrets:range=Reichweite
+gui.omtteam.openmodularturrets:rof=Feuerrate
+gui.omtteam.openmodularturrets:accuracy=Treffsicherheit
 
 tooltip.omtteam.openmodularturrets:add_trusted_player=Fügt den angegebenen Spieler der vertrauten Spieler Liste hinzu.
 tooltip.omtteam.openmodularturrets:remove_trusted_player=Entfernt den angezeigten Spieler aus der Liste.
@@ -241,6 +272,7 @@ tooltip.omtteam.openmodularturrets:multi_targeting=Ender ob Türme ihr Feuer fok
 tooltip.omtteam.openmodularturrets:ammo_slot=Munition und Treibstoff für den modularen Turm.
 tooltip.omtteam.openmodularturrets:addon_slot=Addons (für mehr Funktionen) für den modularen Turm.
 tooltip.omtteam.openmodularturrets:upgrade_slot=Upgrades für den modularen Turm.
+tooltip.omtteam.openmodularturrets:base_max_range=Maximala Reichweite in Blöcken, in der Türme nach Zielen suchen.
 
 death.attack.disposable=Very %s, much dead, such wow...
 death.attack.bullet=%s aß zu viel leckeres Blei.

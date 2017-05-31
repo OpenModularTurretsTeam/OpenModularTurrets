@@ -243,11 +243,11 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         this.autoFire = autoFire;
     }
 
-    protected abstract int getTurretPowerUsage();
+    public abstract int getTurretPowerUsage();
 
-    protected abstract int getTurretFireRate();
+    public abstract int getTurretFireRate();
 
-    protected abstract double getTurretAccuracy();
+    public abstract double getTurretAccuracy();
 
     public abstract double getTurretDamageAmpBonus();
 
@@ -412,8 +412,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
             this.ticks = 0;
         }
     }
-
-
 
     /**
      * Tracks target and shoots at it
@@ -626,6 +624,4 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
             this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(pos).withProperty(CONCEALED, false), 3);
         }
     }
-
-
 }

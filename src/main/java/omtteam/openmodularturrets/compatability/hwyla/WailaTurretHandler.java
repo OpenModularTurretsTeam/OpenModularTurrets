@@ -19,7 +19,7 @@ import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
-import static omtteam.openmodularturrets.util.TurretHeadUtil.getAmmoLevel;
+import static omtteam.openmodularturrets.util.TurretHeadUtil.*;
 
 /**
  * Created by nico on 5/23/15.
@@ -90,8 +90,10 @@ public class WailaTurretHandler implements IWailaDataProvider {
             currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
             String ownerName = turret.getBase().getOwnerName();
             currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
-            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.AMMO) + ": " + getAmmoLevel(turret.getBase(), turret.getAmmo()));
-            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": " + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100) + "%");
+            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.AMMO) + ": " + getAmmoLevel(turret, turret.getBase()));
+            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": " + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * getAmpLevel(turret.getBase())) + "%");
+            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ACCURACY) + ": " + String.format("%.2f", Math.min(100F, (100 - turret.getTurretAccuracy() * 10) * (1.0 + getAccuraccyUpgrades(turret.getBase())))) + "%");
+            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": " + String.format("%.2f", 20F / turret.getTurretFireRate()) + "s/sec");
         }
         return currenttip;
     }
