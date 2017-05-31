@@ -136,12 +136,12 @@ public class TeleporterTurretTileEntity extends TurretHead {
     }
 
     @Override
-    protected int getTurretPowerUsage() {
+    public int getTurretPowerUsage() {
         return ConfigHandler.getTeleporterTurretSettings().getPowerUsage();
     }
 
     @Override
-    protected int getTurretFireRate() {
+    public int getTurretFireRate() {
         return ConfigHandler.getTeleporterTurretSettings().getFireRate();
     }
 

@@ -231,7 +231,7 @@ gui.omtteam.openmodularturrets:multi_targeting=Multi Targeting
 gui.omtteam.openmodularturrets:addons=Addons
 gui.omtteam.openmodularturrets:upgrades=Upgr.
 gui.omtteam.openmodularturrets:ammo=Ammo/Fuel
-gui.omtteam.openmodularturrets:damage_amp=Damage Boost (in % of HP)
+gui.omtteam.openmodularturrets:damage_amp=Damage Boost (rel. to HP)
 gui.omtteam.openmodularturrets:inventory=Inventory
 gui.omtteam.openmodularturrets:target=Target
 gui.omtteam.openmodularturrets:add_trusted_player=Add trusted player
@@ -251,6 +251,8 @@ gui.omtteam.openmodularturrets:turret_lever_description=A lever to generate ener
 gui.omtteam.openmodularturrets:no_turret=No turret on base.
 gui.omtteam.openmodularturrets:type=Type
 gui.omtteam.openmodularturrets:range=Range
+gui.omtteam.openmodularturrets:rof=Rate of fire
+gui.omtteam.openmodularturrets:accuracy=Accuracy
 
 tooltip.omtteam.openmodularturrets:add_trusted_player=Adds the given player to the turret's trusted list.
 tooltip.omtteam.openmodularturrets:remove_trusted_player=Removes viewed trusted player from the turret's trusted player list.
