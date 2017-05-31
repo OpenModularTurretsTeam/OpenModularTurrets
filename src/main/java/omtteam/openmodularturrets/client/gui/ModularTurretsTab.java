@@ -13,6 +13,7 @@ import omtteam.openmodularturrets.reference.Reference;
 public class ModularTurretsTab extends CompatCreativeTabs {
     private static ModularTurretsTab instance;
 
+    @SuppressWarnings("SameParameterValue")
     private ModularTurretsTab(String label) {
         super(label);
     }

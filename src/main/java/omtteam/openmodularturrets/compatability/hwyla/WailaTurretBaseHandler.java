@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
-import omtteam.openmodularturrets.reference.OMTNames;
+import omtteam.omlib.reference.OMLibNames;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import java.util.List;
@@ -81,10 +81,10 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         boolean invert = accessor.getNBTData().getBoolean("inverted");
         boolean active = accessor.getNBTData().getBoolean("inverted") ^ accessor.getNBTData().getBoolean("redstone");
-        currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.INVERT) + ": " + getColoredBooleanLocalizationYesNo(invert));
-        currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
+        currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": " + getColoredBooleanLocalizationYesNo(invert));
+        currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
         String ownerName = accessor.getNBTData().getString("ownerName");
-        currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
+        currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
         return currenttip;
     }
 

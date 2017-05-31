@@ -215,14 +215,6 @@ status.missing_base=Dort ist keine Turm Basis.
 status.warning=Du betrittst einen turmgesicherten Bereich. Weitergehen auf eigene Gefahr.
 
 gui.omtteam.openmodularturrets:base=Basis
-gui.omtteam.openmodularturrets:owner=Besitzer
-gui.omtteam.openmodularturrets:invert=Invertiert
-gui.omtteam.openmodularturrets:active=Aktiv
-gui.omtteam.openmodularturrets:mode=Modus
-gui.omtteam.openmodularturrets:true=wahr
-gui.omtteam.openmodularturrets:false=falsch
-gui.omtteam.openmodularturrets:yes=ja
-gui.omtteam.openmodularturrets:no=nein
 gui.omtteam.openmodularturrets:trusted_players=Vertr. Spieler
 gui.omtteam.openmodularturrets:attack_mobs=Attack. Mobs
 gui.omtteam.openmodularturrets:attack_neutrals=Attack. Neutrale
