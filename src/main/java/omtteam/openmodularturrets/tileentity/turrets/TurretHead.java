@@ -590,7 +590,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
             //Is the target out of range now?
             if (chebyshevDistance(target, base)) {
                 this.target = null;
-                return;
             }
         }
     }

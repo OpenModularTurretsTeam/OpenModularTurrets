@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.power.OMEnergyStorage;
+import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
@@ -36,6 +37,7 @@ public class MessageTurretBase implements IMessage {
     private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting;
     private String owner, ownerName, camoBlockRegName;
     private List<TrustedPlayer> trustedPlayers = new ArrayList<>();
+    private EnumMachineMode mode;
 
     public MessageTurretBase() {
     }
@@ -66,6 +68,7 @@ public class MessageTurretBase implements IMessage {
                     base.setMultiTargeting(message.multiTargeting);
                     base.setTrustedPlayers(message.trustedPlayers);
                     base.setTier(message.tier);
+                    base.setMode(message.mode);
                     base.setCamoState(ForgeRegistries.BLOCKS.getValue(
                             new ResourceLocation(message.camoBlockRegName)).getStateFromMeta(message.camoBlockMeta));
                     base.setCurrentMaxRange(message.maxRange);
@@ -95,6 +98,7 @@ public class MessageTurretBase implements IMessage {
             this.camoBlockRegName = base.getCamoState().getBlock().getRegistryName().toString();
             this.camoBlockMeta = base.getCamoState().getBlock().getMetaFromState(base.getCamoState());
             this.maxRange = base.getCurrentMaxRange();
+            this.mode = base.getMode();
         }
     }
 
@@ -111,6 +115,7 @@ public class MessageTurretBase implements IMessage {
         this.rfStorageCurrent = buf.readInt();
         this.rfStorageMax = buf.readInt();
         this.maxRange = buf.readInt();
+        this.mode = EnumMachineMode.values()[buf.readInt()];
         this.attacksMobs = buf.readBoolean();
         this.attacksNeutrals = buf.readBoolean();
         this.attacksPlayers = buf.readBoolean();
@@ -147,6 +152,7 @@ public class MessageTurretBase implements IMessage {
         buf.writeInt(rfStorageCurrent);
         buf.writeInt(rfStorageMax);
         buf.writeInt(maxRange);
+        buf.writeInt(mode.ordinal());
         buf.writeBoolean(attacksMobs);
         buf.writeBoolean(attacksNeutrals);
         buf.writeBoolean(attacksPlayers);
