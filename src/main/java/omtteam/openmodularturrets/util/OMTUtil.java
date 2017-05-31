@@ -21,7 +21,7 @@ public class OMTUtil {
                 || itemStack.getItem() == Items.REDSTONE || itemStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK))
             return true;
         for (ItemStack itemStackAllowed : ConfigHandler.disposableAmmoList) {
-            if (itemStackAllowed.getItem() == itemStack.getItem() && (getStackSize(itemStack) == 2 ||
+            if (itemStackAllowed.getItem() == itemStack.getItem() && (getStackSize(itemStackAllowed) == 2 ||
                     itemStackAllowed.getItemDamage() == itemStack.getItemDamage())) {
                 return true;
             }
