@@ -22,7 +22,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import omtteam.omlib.power.OMEnergyStorage;
-import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.omlib.util.compat.MathTools;
@@ -39,6 +38,7 @@ import java.util.*;
 
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.PlayerUtil.isPlayerOwner;
+import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
 import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
 import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
@@ -63,7 +63,7 @@ public class TurretHeadUtil {
             List<EntityPlayerMP> targets = worldObj.getEntitiesWithinAABB(EntityPlayerMP.class, axis);
 
             for (EntityPlayerMP target : targets) {
-                if (!target.getUniqueID().toString().equals(base.getOwner()) && !isTrustedPlayer(target.getUniqueID(),
+                if (!target.getUniqueID().toString().equals(base.getOwner()) && !isPlayerTrusted(target,
                         base) && !warnedPlayers.contains(
                         target) && !target.capabilities.isCreativeMode) {
                     dispatchWarnMessage(target, worldObj);
@@ -122,8 +122,8 @@ public class TurretHeadUtil {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
-                        if (!isPlayerOwner(entity, base) && !isTrustedPlayer(
-                                entity.getUniqueID(), base) && !entity.capabilities.isCreativeMode) {
+                        if (!isPlayerOwner(entity, base) && !isPlayerTrusted(entity,
+                                base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
                         }
                     }
@@ -183,8 +183,8 @@ public class TurretHeadUtil {
                             pos.getZ()) >= 3) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
-                        if (!isPlayerOwner(entity, base) && !isTrustedPlayer(
-                                entity.getUniqueID(), base) && !entity.capabilities.isCreativeMode) {
+                        if (!isPlayerOwner(entity, base) && !isPlayerTrusted(entity,
+                                base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
                         }
                     }
@@ -243,8 +243,8 @@ public class TurretHeadUtil {
                             Potion.getPotionById(2))) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
-                        if (!entity.getUniqueID().toString().equals(base.getOwner()) && !isTrustedPlayer(
-                                entity.getUniqueID(), base) && !entity.capabilities.isCreativeMode) {
+                        if (!entity.getUniqueID().toString().equals(base.getOwner()) && !isPlayerTrusted(entity,
+                                base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
                         }
                     }
@@ -277,15 +277,6 @@ public class TurretHeadUtil {
         return false;
     }
 
-    public static boolean isTrustedPlayer(UUID uuid, TurretBase base) {
-        for (TrustedPlayer trusted_player : base.getTrustedPlayers()) {
-            if (trusted_player.uuid.equals(uuid)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     public static int getPowerExpanderTotalExtraCapacity(World world, BlockPos pos) {
         int totalExtraCap = 0;
