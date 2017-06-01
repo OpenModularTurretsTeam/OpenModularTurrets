@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 import static omtteam.omlib.util.MathUtil.*;
+import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
 import static omtteam.omlib.util.compat.WorldTools.spawnEntity;
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
@@ -564,7 +565,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
     private void targetingChecks() {
         // is there a target, and has it died in the previous tick?
-        if (this.target == null || this.target.isDead || this.getWorld().getEntityByID(this.target.getEntityId()) == null || ((EntityLivingBase) this.target).getHealth() <= 0.0F ) {
+        if (this.target == null || this.target.isDead || this.getWorld().getEntityByID(this.target.getEntityId()) == null || ((EntityLivingBase) this.target).getHealth() <= 0.0F) {
             this.target = getTarget();
         }
 
@@ -574,8 +575,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
             if (this.target instanceof EntityPlayerMP) {
                 EntityPlayerMP entity = (EntityPlayerMP) target;
 
-                if (TurretHeadUtil.isTrustedPlayer(entity.getUniqueID(),
-                        base) || entity.capabilities.isCreativeMode || !base.isAttacksPlayers()) {
+                if (isPlayerTrusted(entity, base) || entity.capabilities.isCreativeMode || !base.isAttacksPlayers()) {
                     this.target = null;
                     return;
                 }
