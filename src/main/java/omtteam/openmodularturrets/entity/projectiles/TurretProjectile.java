@@ -27,7 +27,7 @@ public abstract class TurretProjectile extends EntityThrowable {
     public int amp_level;
     ItemStack ammo;
     protected TurretBase turretBase;
-    public int framesRendered = 0;
+    protected int framesRendered = 0;
 
     TurretProjectile(World world) {
         super(world);
@@ -53,13 +53,12 @@ public abstract class TurretProjectile extends EntityThrowable {
 
     }
 
-    @SuppressWarnings("ConstantConditions")
     boolean canDamagePlayer(EntityPlayer entityPlayer) {
         if (!ConfigHandler.turretDamageTrustedPlayers) {
-            if (this.turretBase.getTrustedPlayer(entityPlayer.getUniqueID()) != null) {
+            if (PlayerUtil.isPlayerTrusted(entityPlayer, this.turretBase)) {
                 return false;
             }
-        } else if (PlayerUtil.getPlayerUIDUnstable(this.turretBase.getOwner()).equals(entityPlayer.getUniqueID())) {
+        } else if (PlayerUtil.isPlayerOwner(entityPlayer, this.turretBase)) {
             return false;
         }
         return true;
@@ -90,11 +89,9 @@ public abstract class TurretProjectile extends EntityThrowable {
 
         List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(0.2D));
 
-        for (int i = 0; i < list.size(); ++i) {
-            Entity entity1 = list.get(i);
-
-            if (entity1.canBeCollidedWith()) {
-                this.onHitEntity(entity1);
+        for (Entity entity : list) {
+            if (entity.canBeCollidedWith()) {
+                this.onHitEntity(entity);
             }
         }
 
@@ -111,6 +108,7 @@ public abstract class TurretProjectile extends EntityThrowable {
         this.rotationYaw = (float) (MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
 
         for (this.rotationPitch = (float) (MathHelper.atan2(this.motionY, (double) f) * (180D / Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
+            //TODO: what is this?
         }
 
         while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {

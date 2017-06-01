@@ -15,6 +15,8 @@ import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
+import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
+
 public class RelativisticTurretTileEntity extends TurretHead {
     public RelativisticTurretTileEntity() {
         super();
@@ -88,7 +90,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
             if (target != null && target instanceof EntityPlayerMP) {
                 EntityPlayerMP entity = (EntityPlayerMP) target;
 
-                if (TurretHeadUtil.isTrustedPlayer(entity.getUniqueID(), base)) {
+                if (isPlayerTrusted(entity, base)) {
                     target = null;
                     return;
                 }

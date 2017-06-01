@@ -73,7 +73,7 @@ public class UpgradeMetaItem extends CompatItem {
                 tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
                 tooltip.add("");
                 tooltip.add("- " + ConfigHandler.getEfficiencyUpgradeBoostPercentage() * 100 + "% " + safeLocalize(
-                                "turret.upgrade.eff"));
+                        "turret.upgrade.eff"));
                 tooltip.add(safeLocalize("turret.upgrade.stacks"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.upgrade.eff.flavour"));
@@ -83,7 +83,7 @@ public class UpgradeMetaItem extends CompatItem {
                 tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
                 tooltip.add("");
                 tooltip.add("+ " + ConfigHandler.getFireRateUpgradeBoostPercentage() * 100 + "% " + safeLocalize(
-                                "turret.upgrade.rof"));
+                        "turret.upgrade.rof"));
                 tooltip.add(safeLocalize("turret.upgrade.stacks"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.upgrade.rof.flavour"));

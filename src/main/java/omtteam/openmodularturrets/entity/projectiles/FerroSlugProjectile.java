@@ -64,7 +64,6 @@ public class FerroSlugProjectile extends TurretProjectile {
             }
 
 
-
             if (entity instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) entity)) {
                     entity.attackEntityFrom(new ArmorBypassDamageSource("ferroslug"), damage);
