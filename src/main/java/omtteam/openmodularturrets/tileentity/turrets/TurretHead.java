@@ -476,7 +476,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     }
 
     /**
-     * Set this.autoFire to true instead.
+     * Set this.autoFire to true instead. TODO: This is for a single shot only.
      */
     @Deprecated
     public boolean forceShot() {

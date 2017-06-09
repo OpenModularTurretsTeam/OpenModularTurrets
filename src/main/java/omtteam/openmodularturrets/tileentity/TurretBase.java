@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.tileentity;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -56,7 +57,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;*/
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft"),
         @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = omtteam.omlib.compatability.ModCompatibility.OCModID)}
 )
-public class TurretBase extends TileEntityMachine implements /*IPeripheral, SimpleComponent,*/ ICamoSupport, IDebugTile {
+public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ ICamoSupport, IDebugTile {
     public int trustedPlayerIndex = 0;
     protected IBlockState camoBlockState;
 
@@ -73,7 +74,6 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
     //private ArrayList<IComputerAccess> comp;
     protected int tier;
     private boolean forceFire = false;
-
 
     public TurretBase() {
         super();
@@ -279,6 +279,9 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
         this.tier = tier;
     }
 
+    public boolean isComputerAccessible() {
+        return computerAccessible;
+    }
 
     public void setAllTurretsYawPitch(float yaw, float pitch) {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
@@ -474,241 +477,6 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral, Simp
         return "turretBase";
     }
     */
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function():string; returns owner of turret base.")
-    public Object[] getOwner(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        return new Object[]{this.getOwner()};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function():boolean; returns if the turret is currently set to attack hostile mobs.")
-    public Object[] isAttacksMobs(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        return new Object[]{this.isAttacksMobs()};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function(state:boolean):boolean;  sets to attack hostile mobs or not.")
-    public Object[] setAttacksMobs(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        this.setAttacksMobs(args.checkBoolean(0));
-        return null;
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function():boolean; returns if the turret is currently set to attack neutral mobs.")
-    public Object[] isAttacksNeutrals(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        return new Object[]{this.isAttacksNeutrals()};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function(state:boolean):boolean; sets to attack neutral mobs or not.")
-    public Object[] setAttacksNeutrals(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        this.setAttacksNeutrals(args.checkBoolean(0));
-        return null;
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function():boolean; returns if the turret is currently set to attack players.")
-    public Object[] isAttacksPlayers(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        return new Object[]{this.isAttacksPlayers()};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function(state:boolean):boolean; sets to attack players or not.")
-    public Object[] setAttacksPlayers(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        this.setAttacksPlayers(args.checkBoolean(0));
-        return null;
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function():table; returns a table of trusted players on this base.")
-    public Object[] getTrustedPlayers(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        return new Object[]{this.getTrustedPlayers()};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , " + "admin:boolean]):string; adds Trusted player to Trustlist.")
-    public Object[] addTrustedPlayer(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        if (!this.addTrustedPlayer(args.checkString(0))) {
-            return new Object[]{"Name not valid!"};
-        }
-        TrustedPlayer trustedPlayer = this.getTrustedPlayer(args.checkString(0));
-        trustedPlayer.canOpenGUI = args.optBoolean(1, false);
-        trustedPlayer.canChangeTargeting = args.optBoolean(1, false);
-        trustedPlayer.admin = args.optBoolean(1, false);
-        trustedPlayer.uuid = getPlayerUUID(args.checkString(0));
-        return null;
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function(name:String):string; removes trusted player from trust list.")
-    public Object[] removeTrustedPlayer(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        this.removeTrustedPlayer(args.checkString(0));
-        return null;
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function():int; returns maximum energy storage.")
-    public Object[] getMaxEnergyStorage(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        return new Object[]{this.storage.getMaxEnergyStored()};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function():int; returns current energy stored.")
-    public Object[] getCurrentEnergyStorage(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        return new Object[]{this.getEnergyLevel(EnumFacing.DOWN)};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function():boolean; returns if the turret is currently active.")
-    public Object[] getActive(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        return new Object[]{this.isActive()};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function(state:int):void; toggles turret redstone inversion state.")
-    public Object[] setMode(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        } else if (!args.isInteger(0) || args.checkInteger(0) <= EnumMachineMode.values().length) {
-            return new Object[]{"Set first parameter to any number between 0 and " + EnumMachineMode.values().length,
-                    "0 - Always on, 1 - always off, 2 - inverted, 3 - not inverted"};
-        }
-        this.mode = EnumMachineMode.values()[args.checkInteger(0)];
-        return null;
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function():int; shows redstone inversion state.")
-    public Object[] getInverted(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        switch (this.getMode().ordinal()) {
-            case 0:
-                return new Object[]{"0 - Always on"};
-            case 1:
-                return new Object[]{"1 - always off"};
-            case 2:
-                return new Object[]{"2 - inverted"};
-            case 3:
-                return new Object[]{"3 - not inverted"};
-        }
-        return new Object[]{};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function():boolean; shows redstone state.")
-    public Object[] getRedstone(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        return new Object[]{this.getRedstone()};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function(side:int, yaw:double, pitch:double):void; Set yaw and pitch for all turrets (deact. auto targ. before).")
-    public Object[] setAllYawPitch(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        if (!args.isDouble(0) || !args.isDouble(1)) return new Object[]{"Wrong parameters!"};
-        setAllTurretsYawPitch((float) args.checkDouble(0), (float) args.checkDouble(1));
-        return new Object[]{};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function(yaw:double, pitch:double):boolean; Set yaw and pitch for a turret (deact. auto targ. before).")
-    public Object[] setTurretYawPitch(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        if (!args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0 && !args.isDouble(1) || !args.isDouble(2))
-            return new Object[]{"Wrong parameters!"};
-
-        return new Object[]{setTurretYawPitch(EnumFacing.getFront(args.checkInteger(0)), (float) args.checkDouble(0), (float) args.checkDouble(1))};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function(state:boolean):void; Enable auto firing for all Turrets (deact. auto targ. before).")
-    public Object[] setAllAutoForceFire(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        if (!args.isBoolean(0)) return new Object[]{"Wrong parameters!"};
-        setAllTurretsForceFire(args.checkBoolean(0));
-        return new Object[]{};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function(state:boolean):boolean; Enable auto firing for specified Turret (deact. auto targ. before).")
-    public Object[] setTurretAutoForceFire(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        if (!args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0 && !args.isBoolean(1))
-            return new Object[]{"Wrong parameters!"};
-        return new Object[]{setTurretForceFire(EnumFacing.getFront(args.checkInteger(0)), args.checkBoolean(1))};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function():int; Try to shoot all turrets, returns successful shots")
-    public Object[] forceShootAll(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-
-        return new Object[]{this.forceShootAllTurrets()};
-    }
-
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Callback(doc = "function(side:int):boolean; Try to shoot specified turret, returns true if successfully shot")
-    public Object[] forceShootTurret(Context context, Arguments args) {
-        if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        if (!args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0)
-            return new Object[]{"Wrong parameters!"};
-        return new Object[]{this.forceShootTurret(EnumFacing.getFront(args.checkInteger(0)))};
-    }
 
     @Override
     public List<String> getDebugInfo() {
