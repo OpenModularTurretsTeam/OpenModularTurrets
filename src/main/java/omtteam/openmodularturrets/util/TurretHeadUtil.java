@@ -826,6 +826,35 @@ public class TurretHeadUtil {
         return amp_level;
     }
 
+    @SuppressWarnings("ConstantConditions")
+    public static int getFakeDropsLevel(TurretBase base) {
+        int fakeDropsLevel = -1;
+
+        if (base == null) {
+            return fakeDropsLevel;
+        }
+
+        int tier = base.getTier();
+
+        if (tier == 1) {
+            return fakeDropsLevel;
+        }
+
+        if (base.getStackInSlot(9) != ItemStackTools.getEmptyStack()) {
+            if (base.getStackInSlot(9).getItemDamage() == 7) {
+                fakeDropsLevel += getStackSize(base.getStackInSlot(9));
+            }
+        }
+
+        if (base.getStackInSlot(10) != ItemStackTools.getEmptyStack()) {
+            if (base.getStackInSlot(10).getItemDamage() == 7) {
+                fakeDropsLevel += getStackSize(base.getStackInSlot(10));
+            }
+        }
+
+        return Math.min(fakeDropsLevel, 3);
+    }
+
     public static void updateSolarPanelAddon(TurretBase base) {
         OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
         if (!hasSolarPanelAddon(base) || storage == null) {

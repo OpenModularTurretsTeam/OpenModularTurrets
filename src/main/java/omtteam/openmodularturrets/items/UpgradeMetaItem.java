@@ -44,6 +44,7 @@ public class UpgradeMetaItem extends CompatItem {
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public String getUnlocalizedName(ItemStack itemStack) {
         return "item." + subNames[itemStack.getItemDamage()];
     }
@@ -55,6 +56,7 @@ public class UpgradeMetaItem extends CompatItem {
 
     @Override
     @SuppressWarnings("unchecked")
+    @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
         switch (stack.getMetadata()) {
             case 0:
