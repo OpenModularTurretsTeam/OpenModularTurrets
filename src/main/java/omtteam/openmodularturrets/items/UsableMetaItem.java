@@ -68,7 +68,7 @@ public class UsableMetaItem extends CompatItem {
 
     @Override
     protected ActionResult<ItemStack> clOnItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
-        ItemStack itemStackIn = playerIn.getHeldItemMainhand();
+        ItemStack itemStackIn = playerIn.getHeldItem(hand);
         if (itemStackIn.getItemDamage() == 2 && playerIn.isSneaking() && itemStackIn.hasTagCompound()) {
             Set<String> keySet = itemStackIn.getTagCompound().getKeySet();
 
