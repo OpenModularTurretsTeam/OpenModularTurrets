@@ -62,6 +62,7 @@ public class OMTNames {
         public static final String serialPortAddon = "addon_serial_port";
         public static final String recyclerAddon = "addon_recycler";
         public static final String concealerAddon = "addon_concealer";
+        public static final String fakeDropsAddon = "addon_fake_drops";
 
         public static final String sensorTierOne = "sensor_tier_one";
         public static final String sensorTierTwo = "sensor_tier_two";

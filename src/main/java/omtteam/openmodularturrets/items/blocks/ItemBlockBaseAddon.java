@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.compatability.minecraft.CompatItemBlock;
-import omtteam.openmodularturrets.util.ITurretBaseAddonBlock;
+import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 
 /**
  * Created by Keridos on 17/05/17.

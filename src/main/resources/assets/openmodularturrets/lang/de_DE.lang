@@ -182,6 +182,10 @@ turret.addon.recycler.4=Generationschance:
 turret.addon.recycler.flavour=Reduzieren, wiederverwenden, einschalten.
 turret.addon.concealer.1=Versteckt die Türme der Basis, wenn sie nicht schießen.
 turret.addon.concealer.flavour=DiggyDiggy Hole!
+turret.addon.fakedrops.a=Sorgt dafür, dass Mobs Loot fallen
+turret.addon.fakedrops.b=lassen, als ob ein Spieler sie tötete..
+turret.addon.fakedrops.flavour=Dreh den Swag auf!
+
 
 turret.upgrade.label=Turm Upgrade
 turret.upgrade.stacks=Stackt bis zu 4 mal.

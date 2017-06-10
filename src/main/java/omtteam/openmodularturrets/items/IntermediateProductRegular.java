@@ -37,6 +37,7 @@ public class IntermediateProductRegular extends CompatItem {
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public String getUnlocalizedName(ItemStack itemStack) {
         return "item." + subNames[itemStack.getItemDamage()];
     }

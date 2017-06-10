@@ -25,11 +25,11 @@ import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.MathUtil;
 import omtteam.omlib.util.compat.MathTools;
 import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.items.blocks.ItemBlockLever;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.util.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;

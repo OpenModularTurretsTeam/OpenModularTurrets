@@ -4,16 +4,23 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.openmodularturrets.items.blocks.ItemBlockBaseAddon;
+import omtteam.openmodularturrets.util.OMTFakePlayer;
+import omtteam.openmodularturrets.util.OMTUtil;
 
 import static omtteam.omlib.util.RenderUtil.drawHighlightBox;
 import static omtteam.openmodularturrets.blocks.BlockExpander.FACING;
@@ -39,8 +46,19 @@ public class EventHandler {
 
     @SubscribeEvent
     public void lootEvent(LivingDropsEvent event) {
-        if (event.getEntityLiving().getTags().contains("openmodularturrets:turretHit") && !ConfigHandler.doTurretsKillsDropMobLoot) {
+        if (event.getEntityLiving().getTags().contains("openmodularturrets:turret_hit") && !ConfigHandler.doTurretsKillsDropMobLoot) {
             event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public void entityHurtEvent(LivingHurtEvent event) {
+        EntityLivingBase entity = event.getEntityLiving();
+        int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
+        if (fakeDrops > -1) {
+            FakePlayer player = OMTFakePlayer.getFakePlayer((WorldServer) event.getEntityLiving().getEntityWorld());
+            player.getEntityAttribute(SharedMonsterAttributes.LUCK).setBaseValue(fakeDrops);
+            entity.setLastAttacker(player);
         }
     }
 

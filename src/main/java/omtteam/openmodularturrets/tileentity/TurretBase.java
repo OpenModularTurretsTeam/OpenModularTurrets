@@ -1,9 +1,5 @@
 package omtteam.openmodularturrets.tileentity;
 
-import li.cil.oc.api.machine.Arguments;
-import li.cil.oc.api.machine.Callback;
-import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -20,7 +16,6 @@ import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityMachine;
-import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackList;
 import omtteam.omlib.util.compat.ItemStackTools;
@@ -42,7 +37,6 @@ import static omtteam.omlib.util.BlockUtil.getBlockStateFromNBT;
 import static omtteam.omlib.util.BlockUtil.writeBlockFromStateToNBT;
 import static omtteam.omlib.util.MathUtil.getRotationXYFromYawPitch;
 import static omtteam.omlib.util.MathUtil.getRotationXZFromYawPitch;
-import static omtteam.omlib.util.PlayerUtil.getPlayerUUID;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 
@@ -54,8 +48,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;*/
 
 @SuppressWarnings("unused")
 @Optional.InterfaceList({
-        @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft"),
-        @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = omtteam.omlib.compatability.ModCompatibility.OCModID)}
+        @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft")}
 )
 public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ ICamoSupport, IDebugTile {
     public int trustedPlayerIndex = 0;

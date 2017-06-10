@@ -41,6 +41,7 @@ public class IntermediateProductTiered extends CompatItem {
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public String getUnlocalizedName(ItemStack itemStack) {
         return "item." + subNames[itemStack.getItemDamage()];
     }

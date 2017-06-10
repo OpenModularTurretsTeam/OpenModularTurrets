@@ -27,7 +27,8 @@ public abstract class TurretProjectile extends EntityThrowable {
     public int amp_level;
     ItemStack ammo;
     protected TurretBase turretBase;
-    protected int framesRendered = 0;
+    public int framesRendered = 0;
+    public int fakeDrops;
 
     TurretProjectile(World world) {
         super(world);
@@ -40,6 +41,7 @@ public abstract class TurretProjectile extends EntityThrowable {
             isAmped = true;
             amp_level = TurretHeadUtil.getAmpLevel(turretBase);
         }
+        fakeDrops = TurretHeadUtil.getFakeDropsLevel(turretBase);
     }
 
     TurretProjectile(World world, ItemStack ammo, TurretBase turretBase) {
@@ -160,8 +162,11 @@ public abstract class TurretProjectile extends EntityThrowable {
         EntityLivingBase entityLivingBase;
         if (entity instanceof EntityLivingBase) {
             entityLivingBase = (EntityLivingBase) entity;
-            if (!(entityLivingBase instanceof EntityPlayer) && !entityLivingBase.getTags().contains("openmodularturrets:turretHit")) {
-                entityLivingBase.addTag("openmodularturrets:turretHit");
+            if (!(entityLivingBase instanceof EntityPlayer) && !entityLivingBase.getTags().contains("openmodularturrets:turret_hit")) {
+                entityLivingBase.addTag("openmodularturrets:turret_hit");
+            }
+            if (!(entityLivingBase instanceof EntityPlayer) && this.fakeDrops > -1) {
+                entityLivingBase.addTag("openmodularturrets:fake_drop_" + this.fakeDrops);
             }
         }
     }

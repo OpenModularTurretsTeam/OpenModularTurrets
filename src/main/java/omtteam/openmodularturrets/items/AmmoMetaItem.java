@@ -53,6 +53,7 @@ public class AmmoMetaItem extends CompatItem {
 
     @Override
     @SuppressWarnings("unchecked")
+    @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
         switch (stack.getMetadata()) {
             case 0:

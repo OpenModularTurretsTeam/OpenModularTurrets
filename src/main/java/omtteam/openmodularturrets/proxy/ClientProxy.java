@@ -81,7 +81,7 @@ public class ClientProxy extends CommonProxy {
         for (int i = 0; i < 15; i++) {
             registerItemModel(ModItems.intermediateProductTiered, i, IntermediateProductTiered.subNames[i], true);
         }
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
             registerItemModel(ModItems.addonMetaItem, i, AddonMetaItem.subNames[i], true);
         }
         for (int i = 0; i < 5; i++) {

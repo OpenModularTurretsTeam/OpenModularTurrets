@@ -1,0 +1,6 @@
+{
+  "parent": "omlib:item/default_item",
+  "textures": {
+	"layer0": "openmodularturrets:items/addon_fake_drops"
+  }
+}

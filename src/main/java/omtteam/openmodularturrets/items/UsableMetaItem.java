@@ -47,6 +47,7 @@ public class UsableMetaItem extends CompatItem {
     };
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
         return stack.getItemDamage() == 2 && world.getTileEntity(pos) instanceof TurretBase || super.doesSneakBypassUse(stack, world, pos, player);
     }
@@ -88,6 +89,7 @@ public class UsableMetaItem extends CompatItem {
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public String getUnlocalizedName(ItemStack itemStack) {
         return "item." + subNames[itemStack.getItemDamage()];
     }
@@ -118,6 +120,7 @@ public class UsableMetaItem extends CompatItem {
 
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
+    @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean isAdvanced) {
         if (stack.getItemDamage() == 2) {
             if (hasDataStored(stack)) {
