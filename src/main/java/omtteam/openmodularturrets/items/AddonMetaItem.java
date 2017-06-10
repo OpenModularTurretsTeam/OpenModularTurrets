@@ -32,19 +32,20 @@ public class AddonMetaItem extends CompatItem {
     public final static String[] subNames = {
             OMTNames.Items.concealerAddon, OMTNames.Items.damageAmpAddon, OMTNames.Items.potentiaAddon,
             OMTNames.Items.recyclerAddon, OMTNames.Items.redReactorAddon, OMTNames.Items.serialPortAddon,
-            OMTNames.Items.solarPanelAddon
+            OMTNames.Items.solarPanelAddon, OMTNames.Items.fakeDropsAddon
     };
 
     @Override
     @ParametersAreNonnullByDefault
     public void clGetSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
             subItems.add(new ItemStack(ModItems.addonMetaItem, 1, i));
         }
     }
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public String getUnlocalizedName(ItemStack itemStack) {
         return "item." + subNames[itemStack.getItemDamage()];
     }
@@ -56,6 +57,7 @@ public class AddonMetaItem extends CompatItem {
 
     @Override
     @SuppressWarnings("unchecked")
+    @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
         switch (stack.getMetadata()) {
             case 0:
@@ -134,6 +136,14 @@ public class AddonMetaItem extends CompatItem {
                         "turret.addon.solar.b"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.solar.flavour"));
+            case 7:
+                tooltip.add("");
+                tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
+                tooltip.add("");
+                tooltip.add(safeLocalize("turret.addon.fakedrops.a"));
+                tooltip.add(safeLocalize("turret.addon.fakedrops.b"));
+                tooltip.add("");
+                tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.fakedrops.flavour"));
         }
     }
 }

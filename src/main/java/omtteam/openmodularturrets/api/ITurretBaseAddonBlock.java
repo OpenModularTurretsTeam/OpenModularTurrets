@@ -1,10 +1,11 @@
-package omtteam.openmodularturrets.util;
+package omtteam.openmodularturrets.api;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 /**
  * Created by Keridos on 17/05/17.

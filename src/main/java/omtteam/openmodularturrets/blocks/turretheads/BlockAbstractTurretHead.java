@@ -16,8 +16,8 @@ import omtteam.omlib.api.IHasItemBlock;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.omlib.util.MathUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.util.ITurretBaseAddonBlock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;

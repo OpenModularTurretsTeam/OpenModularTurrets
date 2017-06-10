@@ -7,8 +7,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
+import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.util.ITurretBaseAddonBlock;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

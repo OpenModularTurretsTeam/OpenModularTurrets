@@ -17,6 +17,7 @@ item.addon_potentia.name=Addon - Potentia Converter
 item.addon_serial_port.name=Addon - Serial Port
 item.addon_recycler.name=Addon - Recycler
 item.addon_concealer.name=Addon - Turret Concealer
+item.addon_fake_drops.name=Addon - Fake Drops
 item.sensor_tier_one.name=Sensor (Tier 1)
 item.sensor_tier_two.name=Sensor (Tier 2)
 item.sensor_tier_three.name=Sensor (Tier 3)
@@ -182,6 +183,9 @@ turret.addon.recycler.4=Ammo generation chance:
 turret.addon.recycler.flavour=Reduce, reuse, reassert.
 turret.addon.concealer.1=Conceals the bases turrets when they aren't shooting.
 turret.addon.concealer.flavour=DiggyDiggy Hole!
+turret.addon.fakedrops.a=Makes mobs killed by turrets
+turret.addon.fakedrops.b=drop loot as if a player killed them.
+turret.addon.fakedrops.flavour=Turn on the swag!
 
 turret.upgrade.label=Turret Upgrade
 turret.upgrade.stacks=Stacks up to 4 times.
