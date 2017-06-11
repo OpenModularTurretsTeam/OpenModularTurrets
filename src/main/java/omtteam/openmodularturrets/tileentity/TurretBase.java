@@ -33,6 +33,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+import static omtteam.omlib.compatability.ModCompatibility.ComputerCraftLoaded;
+import static omtteam.omlib.compatability.ModCompatibility.OpenComputersLoaded;
 import static omtteam.omlib.util.BlockUtil.getBlockStateFromNBT;
 import static omtteam.omlib.util.BlockUtil.writeBlockFromStateToNBT;
 import static omtteam.omlib.util.MathUtil.getRotationXYFromYawPitch;
@@ -203,7 +205,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IC
                 updateRedstoneReactor(this);
 
                 //Computers
-                this.computerAccessible = (ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputerCraftLoaded) && TurretHeadUtil.hasSerialPortAddon(
+                this.computerAccessible = (OpenComputersLoaded || ComputerCraftLoaded) && TurretHeadUtil.hasSerialPortAddon(
                         this);
             }
         }
