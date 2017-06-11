@@ -15,9 +15,10 @@ import static omtteam.omlib.util.PlayerUtil.getPlayerUUID;
 
 /**
  * Created by nico on 09/06/17.
+ * The instance of the component wrapper for a specific turret base.
  */
 public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment implements NamedBlock {
-    private TurretBase base;
+    private final TurretBase base;
 
     public ManagedEnvironmentTurretBase(TurretBase base) {
         super();
@@ -34,6 +35,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return 10;
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():string; returns owner of turret base.")
     public Object[] getOwner(Context context, Arguments args) {
@@ -43,6 +45,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{base.getOwner()};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack hostile mobs.")
     public Object[] isAttacksMobs(Context context, Arguments args) {
@@ -52,6 +55,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{base.isAttacksMobs()};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):boolean;  sets to attack hostile mobs or not.")
     public Object[] setAttacksMobs(Context context, Arguments args) {
@@ -62,6 +66,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return null;
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack neutral mobs.")
     public Object[] isAttacksNeutrals(Context context, Arguments args) {
@@ -71,6 +76,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{base.isAttacksNeutrals()};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):boolean; sets to attack neutral mobs or not.")
     public Object[] setAttacksNeutrals(Context context, Arguments args) {
@@ -81,6 +87,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return null;
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack players.")
     public Object[] isAttacksPlayers(Context context, Arguments args) {
@@ -90,6 +97,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{base.isAttacksPlayers()};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):boolean; sets to attack players or not.")
     public Object[] setAttacksPlayers(Context context, Arguments args) {
@@ -100,6 +108,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return null;
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():table; returns a table of trusted players on this base.")
     public Object[] getTrustedPlayers(Context context, Arguments args) {
@@ -109,6 +118,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{base.getTrustedPlayers()};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , " + "admin:boolean]):string; adds Trusted player to Trustlist.")
     public Object[] addTrustedPlayer(Context context, Arguments args) {
@@ -126,6 +136,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return null;
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(name:String):string; removes trusted player from trust list.")
     public Object[] removeTrustedPlayer(Context context, Arguments args) {
@@ -136,6 +147,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return null;
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():int; returns maximum energy storage.")
     public Object[] getMaxEnergyStorage(Context context, Arguments args) {
@@ -145,6 +157,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{base.getMaxEnergyLevel(EnumFacing.DOWN)};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():int; returns current energy stored.")
     public Object[] getCurrentEnergyStorage(Context context, Arguments args) {
@@ -154,6 +167,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{base.getEnergyLevel(EnumFacing.DOWN)};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; returns if the turret is currently active.")
     public Object[] getActive(Context context, Arguments args) {
@@ -163,6 +177,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{base.isActive()};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:int):void; toggles turret redstone inversion state.")
     public Object[] setMode(Context context, Arguments args) {
@@ -176,6 +191,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return null;
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():int; shows redstone inversion state.")
     public Object[] getInverted(Context context, Arguments args) {
@@ -195,6 +211,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():boolean; shows redstone state.")
     public Object[] getRedstone(Context context, Arguments args) {
@@ -204,6 +221,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{base.getRedstone()};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(side:int, yaw:double, pitch:double):void; Set yaw and pitch for all turrets (deact. auto targ. before).")
     public Object[] setAllYawPitch(Context context, Arguments args) {
@@ -215,6 +233,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(yaw:double, pitch:double):boolean; Set yaw and pitch for a turret (deact. auto targ. before).")
     public Object[] setTurretYawPitch(Context context, Arguments args) {
@@ -227,6 +246,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{base.setTurretYawPitch(EnumFacing.getFront(args.checkInteger(0)), (float) args.checkDouble(0), (float) args.checkDouble(1))};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):void; Enable auto firing for all Turrets (deact. auto targ. before).")
     public Object[] setAllAutoForceFire(Context context, Arguments args) {
@@ -238,6 +258,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(state:boolean):boolean; Enable auto firing for specified Turret (deact. auto targ. before).")
     public Object[] setTurretAutoForceFire(Context context, Arguments args) {
@@ -249,6 +270,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{base.setTurretForceFire(EnumFacing.getFront(args.checkInteger(0)), args.checkBoolean(1))};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function():int; Try to shoot all turrets, returns successful shots")
     public Object[] forceShootAll(Context context, Arguments args) {
@@ -259,6 +281,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         return new Object[]{base.forceShootAllTurrets()};
     }
 
+    @SuppressWarnings("unused")
     @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
     @Callback(doc = "function(side:int):boolean; Try to shoot specified turret, returns true if successfully shot")
     public Object[] forceShootTurret(Context context, Arguments args) {
