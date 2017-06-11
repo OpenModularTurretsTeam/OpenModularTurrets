@@ -13,7 +13,7 @@ import omtteam.openmodularturrets.util.TurretHeadUtil;
  */
 public interface ITurretBaseAddonBlock {
     /**
-     * This should give the correct bounding bos for the block based on its BlockState.
+     * This should give the correct bounding box for the block based on its BlockState.
      * It is used for example for the block building preview.
      *
      * @param blockState the blockstate of the block
@@ -23,6 +23,13 @@ public interface ITurretBaseAddonBlock {
      */
     AxisAlignedBB getBoundingBoxFromState(IBlockState blockState, World world, BlockPos pos);
 
+    /**
+     * This should give back the base that this addon block belongs to.
+     *
+     * @param world the World of the block
+     * @param pos   the BlockPos of the block in the world
+     * @return the corresponding base.
+     */
     default TurretBase getBase(World world, BlockPos pos) {
         return TurretHeadUtil.getTurretBase(world, pos);
     }
