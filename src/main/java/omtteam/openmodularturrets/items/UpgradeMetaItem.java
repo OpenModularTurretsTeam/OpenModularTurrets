@@ -5,6 +5,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.compatability.minecraft.CompatItem;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -54,10 +56,10 @@ public class UpgradeMetaItem extends CompatItem {
         return damage;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
-    @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean isAdvanced) {
         switch (stack.getMetadata()) {
             case 0:
                 tooltip.add("");
