@@ -31,7 +31,7 @@ import java.util.Set;
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
-@SuppressWarnings("ConstantConditions")
+
 public class UsableMetaItem extends CompatItem {
     public UsableMetaItem() {
         super();
@@ -56,12 +56,10 @@ public class UsableMetaItem extends CompatItem {
     @Nonnull
     public EnumActionResult clOnItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
-        if (stack.getItemDamage() == 2 && player.isSneaking() && stack.hasTagCompound()) {
+        if (stack != null && stack.getItemDamage() == 2 && player.isSneaking() && stack.hasTagCompound()) {
+            //noinspection ConstantConditions
             Set<String> keySet = stack.getTagCompound().getKeySet();
-
-            if (keySet != null) {
-                keySet.clear();
-            }
+            keySet.clear();
         }
         return super.clOnItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
     }
@@ -69,12 +67,10 @@ public class UsableMetaItem extends CompatItem {
     @Override
     protected ActionResult<ItemStack> clOnItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
-        if (itemStackIn.getItemDamage() == 2 && playerIn.isSneaking() && itemStackIn.hasTagCompound()) {
+        if (itemStackIn != null && itemStackIn.getItemDamage() == 2 && playerIn.isSneaking() && itemStackIn.hasTagCompound()) {
+            //noinspection ConstantConditions
             Set<String> keySet = itemStackIn.getTagCompound().getKeySet();
-
-            if (keySet != null) {
-                keySet.clear();
-            }
+            keySet.clear();
         }
         return super.clOnItemRightClick(worldIn, playerIn, hand);
     }
@@ -99,10 +95,12 @@ public class UsableMetaItem extends CompatItem {
         return damage;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public boolean hasDataStored(ItemStack stack) {
         return stack.hasTagCompound() && stack.getTagCompound().hasKey("data");
     }
 
+    @SuppressWarnings("ConstantConditions")
     public NBTTagCompound getDataStored(ItemStack stack) {
         return stack.hasTagCompound() ? stack.getTagCompound().getCompoundTag("data") : null;
     }
@@ -119,9 +117,9 @@ public class UsableMetaItem extends CompatItem {
     }
 
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings("unchecked")
+    @Override
     @ParametersAreNonnullByDefault
-    public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean isAdvanced) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean isAdvanced) {
         if (stack.getItemDamage() == 2) {
             if (hasDataStored(stack)) {
                 NBTTagCompound nbtTagCompound = getDataStored(stack);
