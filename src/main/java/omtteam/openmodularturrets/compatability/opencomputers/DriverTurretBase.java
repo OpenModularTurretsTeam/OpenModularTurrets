@@ -10,9 +10,9 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 
 /**
  * Created by nico on 08/06/17.
+ * The OpenComputers (Singleton) driver for a turret base.
  */
 public class DriverTurretBase extends AbstractOMDriver {
-
     @Override
     public Class<?> getTileEntityClass() {
         return TurretBase.class;
