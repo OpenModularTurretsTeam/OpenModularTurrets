@@ -11,6 +11,13 @@ import omtteam.openmodularturrets.util.TurretHeadUtil;
  * This Class
  */
 public interface ITurretBaseAddonTileEntity extends IOwnedBlockAddon {
+    /**
+     * This should give back the base that this addon block belongs to.
+     *
+     * @param world the World of the block
+     * @param pos   the BlockPos of the block in the world
+     * @return the corresponding base.
+     */
     default TurretBase getBase(World world, BlockPos pos) {
         return TurretHeadUtil.getTurretBase(world, pos);
     }
