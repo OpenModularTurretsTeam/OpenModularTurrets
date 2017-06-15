@@ -56,7 +56,7 @@ public abstract class TurretProjectile extends EntityThrowable {
     }
 
     boolean canDamagePlayer(EntityPlayer entityPlayer) {
-        if (!entityPlayer.getEntityWorld().isRemote) {
+        if (entityPlayer != null && !entityPlayer.getEntityWorld().isRemote) {
             if (!ConfigHandler.turretDamageTrustedPlayers) {
                 if (PlayerUtil.isPlayerTrusted(entityPlayer, this.turretBase)) {
                     return false;
