@@ -3,6 +3,8 @@ package omtteam.openmodularturrets.client.render.models;
 import com.google.common.base.Function;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -50,12 +52,25 @@ public class TurretBaseBakedModel extends CamoBakedModel {
     }
 
     @Override
+    @Nonnull
     public TextureAtlasSprite getParticleTexture() {
         return particle;
     }
 
+    @Override
+    @Nonnull
+    public ItemCameraTransforms getItemCameraTransforms() {
+        return ItemCameraTransforms.DEFAULT;
+    }
+
+    @Override
+    @Nonnull
+    public ItemOverrideList getOverrides() {
+        return ItemOverrideList.NONE;
+    }
+
     public static class Model implements IModel {
-        public Model() {
+        Model() {
 
         }
 
@@ -114,7 +129,7 @@ public class TurretBaseBakedModel extends CamoBakedModel {
     }
 
     public static class Statemapper extends StateMapperBase {
-        public static final ModelResourceLocation LOCATION = new ModelResourceLocation("openmodularturrets:turret_base", "normal");
+        static final ModelResourceLocation LOCATION = new ModelResourceLocation("openmodularturrets:turret_base", "normal");
 
         @Override
         @Nonnull

@@ -8,7 +8,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
@@ -16,8 +15,12 @@ import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
+
+import static omtteam.omlib.util.PlayerUtil.isPlayerOwner;
+import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
 
 public class LaserProjectile extends TurretProjectile {
     @SuppressWarnings("unused")
@@ -37,12 +40,10 @@ public class LaserProjectile extends TurretProjectile {
 
     @Override
     public void onCollideWithPlayer(EntityPlayer entityPlayer) {
-        if (!ConfigHandler.turretDamageTrustedPlayers) {
-            if (!(this.turretBase.getTrustedPlayer(entityPlayer.getUniqueID()) != null || PlayerUtil.getPlayerUIDUnstable(
-                    this.turretBase.getOwner()).equals(entityPlayer.getUniqueID()))) {
-                this.setDead();
-                this.gravity = 0.00F;
-            }
+        if ((!ConfigHandler.turretDamageTrustedPlayers && isPlayerTrusted(entityPlayer, this.turretBase))
+                || !isPlayerOwner(entityPlayer, this.turretBase)) {
+            this.setDead();
+            this.gravity = 0.00F;
         }
     }
 
@@ -99,7 +100,7 @@ public class LaserProjectile extends TurretProjectile {
     }
 
     @Override
-    protected void onImpact(RayTraceResult result) {
+    protected void onImpact(@Nonnull RayTraceResult result) {
     }
 
     @Override
