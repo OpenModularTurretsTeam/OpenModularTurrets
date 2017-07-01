@@ -26,11 +26,13 @@ public class DisposableTurretProjectile extends TurretProjectile {
     public DisposableTurretProjectile(World p_i1776_1_) {
         super(p_i1776_1_);
         this.gravity = 0.03F;
+        this.itemBound.lifespan = 6000;
     }
 
     public DisposableTurretProjectile(World par1World, ItemStack ammo, TurretBase turretBase) {
         super(par1World, ammo, turretBase);
         this.gravity = 0.03F;
+        this.itemBound.lifespan = 6000;
     }
 
     @Override
@@ -50,7 +52,6 @@ public class DisposableTurretProjectile extends TurretProjectile {
     @Override
     @ParametersAreNonnullByDefault
     public void onHitBlock(IBlockState hitBlock, BlockPos pos) {
-
         if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
             return;
         }
@@ -108,6 +109,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult result) {
     }
 

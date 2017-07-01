@@ -118,6 +118,7 @@ public class BlazingClayProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult result) {
     }
 
