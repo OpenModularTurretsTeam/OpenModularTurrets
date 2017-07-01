@@ -67,11 +67,33 @@ public class RocketProjectile extends TurretProjectile {
         }
     }
 
+    private void damageEntityLivingBase(EntityLivingBase mob) {
+        int damage = ConfigHandler.getRocketTurretSettings().getDamage();
+
+        if (isAmped) {
+            damage += ((int) mob.getHealth() * (getDamageAmpBonus() * amp_level));
+        }
+
+
+        if (mob instanceof EntityPlayer) {
+            if (canDamagePlayer((EntityPlayer) mob)) {
+                mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
+                mob.hurtResistantTime = 0;
+            }
+        }
+
+        if (ConfigHandler.isCanRocketsHurtEnderDragon() && mob instanceof EntityDragon) {
+            (mob).setHealth((mob).getHealth() - damage);
+            mob.hurtResistantTime = 0;
+        } else {
+            mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
+            mob.hurtResistantTime = 0;
+        }
+    }
+
     @Override
     @ParametersAreNonnullByDefault
     public void onHitBlock(IBlockState hitBlock, BlockPos pos) {
-
-
         if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
             return;
         }
@@ -88,31 +110,9 @@ public class RocketProjectile extends TurretProjectile {
                     this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-            for (Entity mob : targets) {
-
-                int damage = ConfigHandler.getRocketTurretSettings().getDamage();
-
-                if (isAmped) {
-                    if (mob instanceof EntityLivingBase) {
-                        EntityLivingBase elb = (EntityLivingBase) mob;
-                        damage += ((int) elb.getHealth() * (0.08F * amp_level));
-                    }
-                }
-
-                if (mob instanceof EntityPlayer) {
-                    if (canDamagePlayer((EntityPlayer) mob)) {
-                        mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
-                        mob.hurtResistantTime = 0;
-                    }
-                }
-
-                if (ConfigHandler.isCanRocketsHurtEnderDragon() && mob instanceof EntityDragon) {
-                    ((EntityDragon) mob).setHealth(((EntityDragon) mob).getHealth() - damage);
-                    mob.hurtResistantTime = 0;
-                } else {
-                    mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
-                    mob.hurtResistantTime = 0;
-                }
+            for (EntityLivingBase mob : targets) {
+                damageEntityLivingBase(mob);
+                setMobDropLoot(mob);
             }
         }
         this.setDead();
@@ -120,7 +120,6 @@ public class RocketProjectile extends TurretProjectile {
 
     @Override
     public void onHitEntity(Entity entity) {
-
         if (!getEntityWorld().isRemote && !(entity instanceof EntityPlayer && !canDamagePlayer((EntityPlayer) entity))) {
             float strength = ConfigHandler.canRocketsDestroyBlocks ? 2.3F : 0.1F;
             getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
@@ -129,29 +128,7 @@ public class RocketProjectile extends TurretProjectile {
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase mob : targets) {
-
-                int damage = ConfigHandler.getRocketTurretSettings().getDamage();
-
-                if (isAmped) {
-                    EntityLivingBase elb = (EntityLivingBase) mob;
-                    damage += ((int) elb.getHealth() * (getDamageAmpBonus() * amp_level));
-                }
-
-
-                if (mob instanceof EntityPlayer) {
-                    if (canDamagePlayer((EntityPlayer) mob)) {
-                        mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
-                        mob.hurtResistantTime = 0;
-                    }
-                }
-
-                if (ConfigHandler.isCanRocketsHurtEnderDragon() && mob instanceof EntityDragon) {
-                    ((EntityDragon) mob).setHealth(((EntityDragon) mob).getHealth() - damage);
-                    mob.hurtResistantTime = 0;
-                } else {
-                    mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
-                    mob.hurtResistantTime = 0;
-                }
+                damageEntityLivingBase(mob);
                 setMobDropLoot(mob);
             }
             this.setDead();
@@ -164,6 +141,7 @@ public class RocketProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult result) {
     }
 

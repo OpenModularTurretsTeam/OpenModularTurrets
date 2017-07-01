@@ -8,7 +8,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
@@ -33,17 +32,6 @@ public class LaserProjectile extends TurretProjectile {
     public LaserProjectile(World par1World, TurretBase turretBase) {
         super(par1World, turretBase);
         this.gravity = 0.00F;
-    }
-
-    @Override
-    public void onCollideWithPlayer(EntityPlayer entityPlayer) {
-        if (!ConfigHandler.turretDamageTrustedPlayers) {
-            if (!(this.turretBase.getTrustedPlayer(entityPlayer.getUniqueID()) != null || PlayerUtil.getPlayerUIDUnstable(
-                    this.turretBase.getOwner()).equals(entityPlayer.getUniqueID()))) {
-                this.setDead();
-                this.gravity = 0.00F;
-            }
-        }
     }
 
     @ParametersAreNonnullByDefault
@@ -99,6 +87,7 @@ public class LaserProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult result) {
     }
 

@@ -48,9 +48,7 @@ public class GrenadeProjectile extends TurretProjectile {
                     int damage = ConfigHandler.getGrenadeTurretSettings().getDamage();
 
                     if (isAmped) {
-
-                        EntityLivingBase elb = (EntityLivingBase) mob;
-                        damage += ((int) elb.getHealth() * (getDamageAmpBonus() * amp_level));
+                        damage += ((int) mob.getHealth() * (getDamageAmpBonus() * amp_level));
 
                     }
                     setMobDropLoot(mob);
@@ -109,6 +107,7 @@ public class GrenadeProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult result) {
     }
 
