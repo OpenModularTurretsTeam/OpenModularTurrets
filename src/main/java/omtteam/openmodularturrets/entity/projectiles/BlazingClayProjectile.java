@@ -71,7 +71,8 @@ public class BlazingClayProjectile extends TurretProjectile {
 
     @Override
     public void onHitEntity(Entity entity) {
-        if (!getEntityWorld().isRemote && !(entity instanceof EntityPlayer && !canDamagePlayer((EntityPlayer) entity))) {
+        if (!getEntityWorld().isRemote && !(entity instanceof EntityPlayer && !canDamagePlayer((EntityPlayer) entity))
+                && !(entity instanceof TurretProjectile)) {
 
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
                     this.posX + 5, this.posY + 5, this.posZ + 5);
@@ -87,7 +88,7 @@ public class BlazingClayProjectile extends TurretProjectile {
             }
 
             for (EntityLivingBase mob : targets) {
-                setMobDropLoot(mob);
+                setTagsForTurretHit(mob);
 
                 if (mob instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) mob)) {
@@ -100,7 +101,7 @@ public class BlazingClayProjectile extends TurretProjectile {
                     mob.hurtResistantTime = 0;
                     mob.setFire(5);
                 }
-                setMobDropLoot(entity);
+                setTagsForTurretHit(entity);
             }
             this.setDead();
         }

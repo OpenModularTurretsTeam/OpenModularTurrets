@@ -50,7 +50,7 @@ public class BulletProjectile extends TurretProjectile {
 
     @Override
     public void onHitEntity(Entity entity) {
-        if (entity != null && !getEntityWorld().isRemote) {
+        if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
 
             int damage = ConfigHandler.getGunTurretSettings().getDamage();
 
@@ -74,7 +74,7 @@ public class BulletProjectile extends TurretProjectile {
                 entity.hurtResistantTime = 0;
 
             }
-            setMobDropLoot(entity);
+            setTagsForTurretHit(entity);
             this.setDead();
         }
     }
