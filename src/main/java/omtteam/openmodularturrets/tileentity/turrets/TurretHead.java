@@ -56,6 +56,9 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     private double targetLastX = 0;
     private double targetLastY = 0;
     private double targetLastZ = 0;
+    private double targetSpeedX = 0;
+    private double targetSpeedY = 0;
+    private double targetSpeedZ = 0;
 
     private float maxPitch = 360;
     private float maxYaw = 360;
@@ -374,6 +377,16 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetPlayers) {
             TurretHeadUtil.warnPlayers(base, base.getWorld(), this.pos, getTurretRange());
         }
+        // Update target tracking (Player entity not setting motion data when moving via movement keys)
+
+        if (target != null && target instanceof EntityPlayerMP) {
+            targetSpeedX = target.posX - targetLastX;
+            targetSpeedY = target.posY - targetLastY;
+            targetSpeedZ = target.posZ - targetLastZ;
+            targetLastX = target.posX;
+            targetLastY = target.posY;
+            targetLastZ = target.posZ;
+        }
 
         //turret tick rate;
         if (target == null && targetingTicks < ConfigHandler.getTurretTargetSearchTicks()) {
@@ -421,20 +434,9 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
      */
     private void doTargetedShot(Entity target, ItemStack ammo) {
         // Update target tracking (Player entity not setting motion data when moving via movement keys)
-        double speedX, speedY, speedZ;
-        if (target instanceof EntityPlayerMP) {
-            speedX = target.posX - target.prevPosX;
-            speedY = target.posY - target.prevPosY;
-            speedZ = target.posZ - target.prevPosZ;
-            this.targetLastX = target.posX;
-            this.targetLastY = target.posY;
-            this.targetLastZ = target.posZ;
-
-        } else {
-            speedX = target.posX - this.targetLastX;
-            speedY = target.posY - this.targetLastY;
-            speedZ = target.posZ - this.targetLastZ;
-        }
+        double speedX = target instanceof EntityPlayerMP ? targetSpeedX : target.posX - target.prevPosX;
+        double speedY = target instanceof EntityPlayerMP ? targetSpeedY : target.posY - target.prevPosY;
+        double speedZ = target instanceof EntityPlayerMP ? targetSpeedZ : target.posZ - target.prevPosZ;
 
         // Calculate speed from displacement from last tick (Or use tracking data if target is player)
         double d0 = target.posX - (this.pos.getX() + 0.5);
