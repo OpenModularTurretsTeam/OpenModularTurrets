@@ -36,6 +36,8 @@ import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 
 import java.util.*;
 
+import static omtteam.omlib.compatability.ModCompatibility.ComputerCraftLoaded;
+import static omtteam.omlib.compatability.ModCompatibility.OpenComputersLoaded;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.PlayerUtil.isPlayerOwner;
 import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
@@ -767,7 +769,7 @@ public class TurretHeadUtil {
         if (base.getTier() == 1) {
             return false;
         }
-        if (!ModCompatibility.OpenComputersLoaded && !ModCompatibility.ComputerCraftLoaded) {
+        if (!OpenComputersLoaded && !ComputerCraftLoaded) {
             return false;
         }
 

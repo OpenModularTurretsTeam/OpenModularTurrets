@@ -9,17 +9,17 @@ import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.compatability.opencomputers.DriverTurretBase;
 import omtteam.openmodularturrets.reference.Reference;
 
+import static omtteam.omlib.compatability.ModCompatibility.*;
+
 /**
  * Created by Keridos on 23/01/2015. This Class
  */
 public class ModCompatibility {
     public static boolean IGWModLoaded = false;
-    private static boolean ThermalExpansionLoaded = false;
+    public static boolean ThermalExpansionLoaded = false;
     public static boolean EnderIOLoaded = false;
     public static boolean MekanismLoaded = false;
     public static boolean ThaumcraftLoaded = false;
-    public static boolean OpenComputersLoaded = false;
-    public static boolean ComputerCraftLoaded = false;
     public static boolean ValkyrienWarfareLoaded = false;
     @SuppressWarnings("unused")
     public static IGWHandler igwHandler = null;
@@ -45,8 +45,6 @@ public class ModCompatibility {
             OpenModularTurrets.getLogger().info("Afrikaners is plesierig. (Found Thaumcraft)");
         }
 
-        OpenComputersLoaded = Loader.isModLoaded("OpenComputers");
-        ComputerCraftLoaded = Loader.isModLoaded("ComputerCraft");
         if (OpenComputersLoaded || ComputerCraftLoaded) {
             OpenModularTurrets.getLogger().info("Enabling LUA integration. (Found OpenComputers/ComputerCraft)");
         }
@@ -80,11 +78,19 @@ public class ModCompatibility {
     }
 
     public static void preinit() {
+        if (OpenComputersLoaded) {
+            registerOCCompat();
+        }
+    }
+
+    @SuppressWarnings("EmptyMethod")
+    @Optional.Method(modid = OCModID)
+    private static void registerOCCompat() {
         Driver.add(new DriverTurretBase());
     }
 
     @SuppressWarnings("EmptyMethod")
-    @Optional.Method(modid = "ComputerCraft")
+    @Optional.Method(modid = CCModID)
     private static void registerCCCompat() {
         //ComputerCraftAPI.registerPeripheralProvider(CCPeripheralProvider.getInstance());
     }

@@ -11,6 +11,9 @@ import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 
+import static omtteam.omlib.compatability.ModCompatibility.ComputerCraftLoaded;
+import static omtteam.omlib.compatability.ModCompatibility.OpenComputersLoaded;
+
 public class RecipeHandler {
     private static ItemStack ammoBlazingClay;
     public static ItemStack ammoBullet;
@@ -183,7 +186,7 @@ public class RecipeHandler {
             //ThaumcraftRecipeHandler.init();
         }
 
-        if ((ModCompatibility.ComputerCraftLoaded || ModCompatibility.OpenComputersLoaded) && ConfigHandler.shouldDoThaumcraftIntegration) {
+        if ((ComputerCraftLoaded || OpenComputersLoaded) && ConfigHandler.shouldDoThaumcraftIntegration) {
             ComputerRecipeHandler.init();
         }
 
