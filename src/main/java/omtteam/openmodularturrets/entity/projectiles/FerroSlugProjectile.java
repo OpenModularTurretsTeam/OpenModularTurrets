@@ -33,8 +33,6 @@ public class FerroSlugProjectile extends TurretProjectile {
     @Override
     @ParametersAreNonnullByDefault
     public void onHitBlock(IBlockState hitBlock, BlockPos pos) {
-
-
         if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
             return;
         }
@@ -51,7 +49,6 @@ public class FerroSlugProjectile extends TurretProjectile {
 
     @Override
     public void onHitEntity(Entity entity) {
-
         if (entity != null && !getEntityWorld().isRemote) {
 
             int damage = ConfigHandler.getRailgunTurretSettings().getDamage();
@@ -103,6 +100,7 @@ public class FerroSlugProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult result) {
     }
 

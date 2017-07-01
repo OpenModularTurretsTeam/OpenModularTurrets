@@ -50,7 +50,6 @@ public class BulletProjectile extends TurretProjectile {
 
     @Override
     public void onHitEntity(Entity entity) {
-
         if (entity != null && !getEntityWorld().isRemote) {
 
             int damage = ConfigHandler.getGunTurretSettings().getDamage();
@@ -99,6 +98,7 @@ public class BulletProjectile extends TurretProjectile {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult result) {
     }
 
