@@ -69,7 +69,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
 
     @Override
     public void onHitEntity(Entity entity) {
-        if (entity != null && !getEntityWorld().isRemote) {
+        if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
 
             int damage = ConfigHandler.getDisposableTurretSettings().getDamage();
 
@@ -91,7 +91,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
                 entity.attackEntityFrom(new NormalDamageSource("disposable"), damage);
                 entity.hurtResistantTime = 0;
             }
-            setMobDropLoot(entity);
+            setTagsForTurretHit(entity);
             if (itemBound != null) {
                 itemBound.setDead();
             }

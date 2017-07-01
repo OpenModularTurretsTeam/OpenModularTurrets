@@ -51,7 +51,7 @@ public class GrenadeProjectile extends TurretProjectile {
                         damage += ((int) mob.getHealth() * (getDamageAmpBonus() * amp_level));
 
                     }
-                    setMobDropLoot(mob);
+                    setTagsForTurretHit(mob);
 
                     if (mob instanceof EntityPlayer) {
                         if (canDamagePlayer((EntityPlayer) mob)) {
