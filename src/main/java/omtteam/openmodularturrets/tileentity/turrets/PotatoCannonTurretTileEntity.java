@@ -17,6 +17,11 @@ public class PotatoCannonTurretTileEntity extends TurretHead {
     }
 
     @Override
+    protected float getProjectileGravity() {
+        return 0.03F;
+    }
+
+    @Override
     public int getTurretRange() {
         return ConfigHandler.getPotatoCannonTurretSettings().getRange();
     }

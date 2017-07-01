@@ -137,6 +137,7 @@ dependencies {
     compileOnly "mezz.jei:jei_${config.minecraft_version}:${config.jei_version}:api"
     compileOnly "igwmod:IGW-Mod-${config.igwmod_version}:userdev"
     deobfCompile "mcp.mobius.waila:Hwyla:${config.hwyla_version}_${config.minecraft_version}"
+    deobfCompile "mcjty.theoneprobe:TheOneProbe:${config.minecraft_version_short}-${config.top_version}"
     compileOnly "li.cil.oc:OpenComputers:MC${config.minecraft_version}-${config.oc_version}:api"
     //compile "Azanor:Thaumcraft:${config.tc_version}:deobf@jar"
     compileOnly "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
