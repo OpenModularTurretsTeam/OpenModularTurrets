@@ -158,7 +158,7 @@ public abstract class TurretProjectile extends EntityThrowable {
         return false;
     }
 
-    protected void setMobDropLoot(Entity entity) {
+    protected void setTagsForTurretHit(Entity entity) {
         EntityLivingBase entityLivingBase;
         if (entity instanceof EntityLivingBase) {
             entityLivingBase = (EntityLivingBase) entity;

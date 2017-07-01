@@ -51,7 +51,7 @@ public class LaserProjectile extends TurretProjectile {
 
     @Override
     public void onHitEntity(Entity entity) {
-        if (entity != null && !getEntityWorld().isRemote) {
+        if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
 
             int damage = ConfigHandler.getLaserTurretSettings().getDamage();
 
@@ -74,7 +74,7 @@ public class LaserProjectile extends TurretProjectile {
                 entity.setFire(2);
                 entity.attackEntityFrom(new NormalDamageSource("laser"), damage);
                 entity.hurtResistantTime = 0;
-                setMobDropLoot(entity);
+                setTagsForTurretHit(entity);
             }
             this.setDead();
         }
