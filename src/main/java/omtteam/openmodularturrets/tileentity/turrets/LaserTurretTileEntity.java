@@ -16,6 +16,11 @@ public class LaserTurretTileEntity extends TurretHead {
     }
 
     @Override
+    protected float getProjectileGravity() {
+        return 0.00F;
+    }
+
+    @Override
     public int getTurretRange() {
         return ConfigHandler.getLaserTurretSettings().getRange();
     }

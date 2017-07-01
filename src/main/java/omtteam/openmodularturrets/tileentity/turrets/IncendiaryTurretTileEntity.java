@@ -17,6 +17,11 @@ public class IncendiaryTurretTileEntity extends TurretHead {
     }
 
     @Override
+    protected float getProjectileGravity() {
+        return 0.00F;
+    }
+
+    @Override
     public int getTurretRange() {
         return ConfigHandler.getIncendiaryTurretSettings().getRange();
     }

@@ -23,6 +23,11 @@ public class RelativisticTurretTileEntity extends TurretHead {
         this.turretTier = 3;
     }
 
+    @Override
+    protected float getProjectileGravity() {
+        return 0.00F;
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
     public void update() {

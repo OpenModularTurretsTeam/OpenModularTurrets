@@ -28,6 +28,11 @@ public class TeleporterTurretTileEntity extends TurretHead {
     }
 
     @Override
+    protected float getProjectileGravity() {
+        return 0.00F;
+    }
+
+    @Override
     public void update() {
         setSide();
         this.base = getBaseFromWorld();
