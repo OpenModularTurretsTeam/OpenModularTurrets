@@ -256,6 +256,8 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
     protected abstract boolean requiresSpecificAmmo();
 
+    protected abstract float getProjectileGravity();
+
     public abstract ItemStack getAmmo();
 
     protected abstract TurretProjectile createProjectile(World world, Entity target, ItemStack ammo);
@@ -442,7 +444,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
 
         // Adjust new firing coordinate according to target speed
-        double time = dist / 3.0; //(getProjectileGravity() == 0.00F ? 3.0 : 1.6);
+        double time = dist / (this.getProjectileGravity() == 0.00F ? 3.0 : 1.6);
         double adjustedX = d0 + speedX * time;
         double adjustedY = d1 + speedY * time;
         double adjustedZ = d2 + speedZ * time;

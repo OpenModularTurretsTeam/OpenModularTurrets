@@ -17,6 +17,11 @@ public class RailGunTurretTileEntity extends TurretHead {
     }
 
     @Override
+    protected float getProjectileGravity() {
+        return 0.00F;
+    }
+
+    @Override
     public int getTurretRange() {
         return ConfigHandler.getRailgunTurretSettings().getRange();
     }

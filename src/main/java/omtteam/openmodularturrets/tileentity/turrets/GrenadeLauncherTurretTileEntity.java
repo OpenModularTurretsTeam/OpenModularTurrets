@@ -17,6 +17,11 @@ public class GrenadeLauncherTurretTileEntity extends TurretHead {
     }
 
     @Override
+    protected float getProjectileGravity() {
+        return 0.03F;
+    }
+
+    @Override
     public int getTurretRange() {
         return ConfigHandler.getGrenadeTurretSettings().getRange();
     }
