@@ -132,6 +132,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
         return new ExtendedBlockState(this, new IProperty[]{TIER}, new IUnlistedProperty[]{RENDERBLOCKSTATE});
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected boolean clOnBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote && hand == EnumHand.MAIN_HAND) {

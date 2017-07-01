@@ -77,6 +77,7 @@ public class ExpanderInvContainer extends Container {
         return itemStack;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public boolean mergeItemStack(ItemStack stack, int begin, int end, boolean backwards) {
         int i = backwards ? end - 1 : begin, increment = backwards ? -1 : 1;
