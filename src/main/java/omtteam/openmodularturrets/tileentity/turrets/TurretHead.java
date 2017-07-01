@@ -423,17 +423,17 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         // Update target tracking (Player entity not setting motion data when moving via movement keys)
         double speedX, speedY, speedZ;
         if (target instanceof EntityPlayerMP) {
-            speedX = target.posX - this.targetLastX;
-            speedY = target.posY - this.targetLastY;
-            speedZ = target.posZ - this.targetLastZ;
+            speedX = target.posX - target.prevPosX;
+            speedY = target.posY - target.prevPosY;
+            speedZ = target.posZ - target.prevPosZ;
             this.targetLastX = target.posX;
             this.targetLastY = target.posY;
             this.targetLastZ = target.posZ;
 
         } else {
-            speedX = target.posX - target.prevPosX;
-            speedY = target.posY - target.prevPosY;
-            speedZ = target.posZ - target.prevPosZ;
+            speedX = target.posX - this.targetLastX;
+            speedY = target.posY - this.targetLastY;
+            speedZ = target.posZ - this.targetLastZ;
         }
 
         // Calculate speed from displacement from last tick (Or use tracking data if target is player)
