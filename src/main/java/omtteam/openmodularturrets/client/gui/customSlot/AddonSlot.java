@@ -18,6 +18,6 @@ public class AddonSlot extends Slot {
 
     @Override
     public int getItemStackLimit(ItemStack stack) {
-        return (stack.getItemDamage() == 1 ? 4 : 1);
+        return (stack.getItemDamage() == 1 || stack.getItemDamage() == 7 ? 4 : 1);
     }
 }

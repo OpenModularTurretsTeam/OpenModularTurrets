@@ -191,8 +191,8 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         }
 
         if (mouseX > k + 153 && mouseX < k + 153 + 14 && mouseY > l + 17 && mouseY < l + 17 + 51) {
-            tooltip.add(base.getEnergyLevel(EnumFacing.DOWN) + "/" + base.getMaxEnergyLevel(
-                    EnumFacing.DOWN) + " RF");
+            tooltip.add(base.getEnergyLevel(EnumFacing.DOWN) + "/" + base.getMaxEnergyLevel(EnumFacing.DOWN) + " RF");
+            tooltip.add("EU Buffer: " + Math.round(base.getStorageEU()) + "/" + Math.round(base.getMaxStorageEU()));
         }
         if (base.getTier() > 1 && mouseX > k + 71 && mouseX < k + 71 + 40 && mouseY > l + 6 && mouseY < l + 6 + 14) {
             tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.ADDON_SLOT));

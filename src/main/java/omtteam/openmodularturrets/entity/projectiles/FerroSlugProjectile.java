@@ -9,6 +9,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -63,7 +64,7 @@ public class FerroSlugProjectile extends TurretProjectile {
 
             if (entity instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) entity)) {
-                    entity.attackEntityFrom(new ArmorBypassDamageSource("ferroslug"), damage);
+                    entity.attackEntityFrom(new ArmorBypassDamageSource("ferroslug", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
                     entity.hurtResistantTime = 0;
                     playSound();
                 } else {
@@ -71,7 +72,7 @@ public class FerroSlugProjectile extends TurretProjectile {
                 }
 
             } else {
-                entity.attackEntityFrom(new ArmorBypassDamageSource("ferroslug"), damage);
+                entity.attackEntityFrom(new ArmorBypassDamageSource("ferroslug", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
                 entity.hurtResistantTime = 0;
                 playSound();
             }

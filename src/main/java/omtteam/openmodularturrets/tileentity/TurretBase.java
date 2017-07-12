@@ -19,7 +19,6 @@ import omtteam.omlib.tileentity.TileEntityMachine;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackList;
 import omtteam.omlib.util.compat.ItemStackTools;
-import omtteam.openmodularturrets.compatability.ModCompatibility;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.items.AddonMetaItem;
 import omtteam.openmodularturrets.items.UpgradeMetaItem;
@@ -88,6 +87,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IC
         this.tier = tier;
         this.camoBlockState = camoState;
         this.mode = EnumMachineMode.INVERTED;
+        this.maxStorageEU = tier * 7500D;
     }
 
     @SuppressWarnings("deprecation")
@@ -141,6 +141,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IC
         } else {
             this.camoBlockState = getDefaultCamoState();
         }
+        this.maxStorageEU = tier * 7500D;
     }
 
     public void setCurrentMaxRange(int newCurrentMaxRange) {

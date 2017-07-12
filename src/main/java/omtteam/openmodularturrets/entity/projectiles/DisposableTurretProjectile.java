@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -26,13 +27,11 @@ public class DisposableTurretProjectile extends TurretProjectile {
     public DisposableTurretProjectile(World p_i1776_1_) {
         super(p_i1776_1_);
         this.gravity = 0.03F;
-        this.itemBound.lifespan = 6000;
     }
 
     public DisposableTurretProjectile(World par1World, ItemStack ammo, TurretBase turretBase) {
         super(par1World, ammo, turretBase);
         this.gravity = 0.03F;
-        this.itemBound.lifespan = 6000;
     }
 
     @Override
@@ -44,6 +43,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
             itemBound.motionY = this.motionY + this.gravity;
             itemBound.motionZ = this.motionZ;
             itemBound.setPickupDelay(10000);
+            itemBound.lifespan = 6000;
             spawnEntity(this.getEntityWorld(), itemBound);
             spawned = true;
         }
@@ -82,13 +82,13 @@ public class DisposableTurretProjectile extends TurretProjectile {
 
             if (entity instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) entity)) {
-                    entity.attackEntityFrom(new NormalDamageSource("disposable"), damage);
+                    entity.attackEntityFrom(new NormalDamageSource("disposable", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
                     entity.hurtResistantTime = 0;
                 } else {
                     return;
                 }
             } else {
-                entity.attackEntityFrom(new NormalDamageSource("disposable"), damage);
+                entity.attackEntityFrom(new NormalDamageSource("disposable", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
                 entity.hurtResistantTime = 0;
             }
             setTagsForTurretHit(entity);
