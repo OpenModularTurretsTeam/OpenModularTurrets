@@ -83,8 +83,6 @@ public class ModCompatibility {
         }
     }
 
-    @SuppressWarnings("EmptyMethod")
-    @Optional.Method(modid = OCModID)
     private static void registerOCCompat() {
         Driver.add(new DriverTurretBase());
     }
