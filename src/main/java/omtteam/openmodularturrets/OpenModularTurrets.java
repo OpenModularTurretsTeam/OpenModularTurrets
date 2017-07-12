@@ -39,6 +39,7 @@ public class OpenModularTurrets {
         logger = event.getModLog();
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         proxy.preInit();
+        ModCompatibility.checkForMods();
         ModCompatibility.preinit();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, GuiHandler.getInstance());
     }
@@ -46,7 +47,6 @@ public class OpenModularTurrets {
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        ModCompatibility.checkForMods();
         ModCompatibility.init();
         proxy.init();
     }
