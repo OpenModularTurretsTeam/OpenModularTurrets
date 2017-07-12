@@ -40,6 +40,7 @@ public class RecipeHandler {
     private static ItemStack addonRedstoneReactor;
     public static ItemStack addonSerialPort;
     private static ItemStack addonSolarPanel;
+    private static ItemStack addonFakeDrops;
 
     private static ItemStack upgradeAccuracy;
     private static ItemStack upgradeEfficiency;
@@ -76,6 +77,7 @@ public class RecipeHandler {
         addonRedstoneReactor = new ItemStack(ModItems.addonMetaItem, 1, 4);
         addonSerialPort = new ItemStack(ModItems.addonMetaItem, 1, 5);
         addonSolarPanel = new ItemStack(ModItems.addonMetaItem, 1, 6);
+        addonFakeDrops = new ItemStack(ModItems.addonMetaItem, 1, 7);
         upgradeAccuracy = new ItemStack(ModItems.upgradeMetaItem, 1, 0);
         upgradeEfficiency = new ItemStack(ModItems.upgradeMetaItem, 1, 1);
         upgradeFireRate = new ItemStack(ModItems.upgradeMetaItem, 1, 2);
@@ -164,6 +166,11 @@ public class RecipeHandler {
 
         GameRegistry.addRecipe(
                 new ShapedOreRecipe(addonRedstoneReactor, "CAC", "ABD", "CAC", 'A', Items.IRON_INGOT,
+                        'B', Items.ENDER_EYE, 'C', Items.QUARTZ, 'D',
+                        ioBus));
+
+        GameRegistry.addRecipe(
+                new ShapedOreRecipe(addonFakeDrops, "CAC", "ABD", "CAC", 'A', Blocks.LAPIS_BLOCK,
                         'B', Items.ENDER_EYE, 'C', Items.QUARTZ, 'D',
                         ioBus));
 

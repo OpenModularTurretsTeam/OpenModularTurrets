@@ -11,6 +11,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -77,7 +78,7 @@ public class RocketProjectile extends TurretProjectile {
 
         if (mob instanceof EntityPlayer) {
             if (canDamagePlayer((EntityPlayer) mob)) {
-                mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
+                mob.attackEntityFrom(new NormalDamageSource("rocket", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
                 mob.hurtResistantTime = 0;
             }
         }
@@ -86,7 +87,7 @@ public class RocketProjectile extends TurretProjectile {
             (mob).setHealth((mob).getHealth() - damage);
             mob.hurtResistantTime = 0;
         } else {
-            mob.attackEntityFrom(new NormalDamageSource("rocket"), damage);
+            mob.attackEntityFrom(new NormalDamageSource("rocket", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
             mob.hurtResistantTime = 0;
         }
     }

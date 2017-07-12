@@ -8,6 +8,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
@@ -64,17 +65,15 @@ public class LaserProjectile extends TurretProjectile {
 
             if (entity instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) entity)) {
-                    entity.setFire(2);
-                    entity.attackEntityFrom(new NormalDamageSource("laser"), damage);
+                    entity.attackEntityFrom(new NormalDamageSource("laser", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
                     entity.hurtResistantTime = 0;
                 } else {
                     return;
                 }
             } else {
-                entity.setFire(2);
-                entity.attackEntityFrom(new NormalDamageSource("laser"), damage);
-                entity.hurtResistantTime = 0;
                 setTagsForTurretHit(entity);
+                entity.attackEntityFrom(new NormalDamageSource("laser", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
+                entity.hurtResistantTime = 0;
             }
             this.setDead();
         }

@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -53,6 +54,17 @@ public class EventHandler {
 
     @SubscribeEvent
     public void entityHurtEvent(LivingHurtEvent event) {
+        EntityLivingBase entity = event.getEntityLiving();
+        int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
+        if (fakeDrops > -1) {
+            FakePlayer player = OMTFakePlayer.getFakePlayer((WorldServer) event.getEntityLiving().getEntityWorld());
+            player.getEntityAttribute(SharedMonsterAttributes.LUCK).setBaseValue(fakeDrops);
+            entity.setLastAttacker(player);
+        }
+    }
+
+    @SubscribeEvent
+    public void entityAttackedEvent(LivingAttackEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
         int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
         if (fakeDrops > -1) {

@@ -10,6 +10,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
@@ -55,13 +56,13 @@ public class GrenadeProjectile extends TurretProjectile {
 
                     if (mob instanceof EntityPlayer) {
                         if (canDamagePlayer((EntityPlayer) mob)) {
-                            mob.attackEntityFrom(new NormalDamageSource("grenade"), damage * 0.9F);
-                            mob.attackEntityFrom(new ArmorBypassDamageSource("grenade"), damage * 0.1F);
+                            mob.attackEntityFrom(new NormalDamageSource("grenade", fakeDrops, (WorldServer) this.getEntityWorld()), damage * 0.9F);
+                            mob.attackEntityFrom(new ArmorBypassDamageSource("grenade", fakeDrops, (WorldServer) this.getEntityWorld()), damage * 0.1F);
                             mob.hurtResistantTime = 0;
                         }
                     } else {
-                        mob.attackEntityFrom(new NormalDamageSource("grenade"), damage * 0.9F);
-                        mob.attackEntityFrom(new ArmorBypassDamageSource("grenade"), damage * 0.1F);
+                        mob.attackEntityFrom(new NormalDamageSource("grenade", fakeDrops, (WorldServer) this.getEntityWorld()), damage * 0.9F);
+                        mob.attackEntityFrom(new ArmorBypassDamageSource("grenade", fakeDrops, (WorldServer) this.getEntityWorld()), damage * 0.1F);
                         mob.hurtResistantTime = 0;
                     }
                 }

@@ -9,6 +9,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
@@ -63,14 +64,14 @@ public class BulletProjectile extends TurretProjectile {
 
             if (entity instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) entity)) {
-                    entity.attackEntityFrom(new NormalDamageSource("bullet"), damage);
+                    entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
                     entity.hurtResistantTime = 0;
                     playSound();
                 } else {
                     return;
                 }
             } else {
-                entity.attackEntityFrom(new NormalDamageSource("bullet"), damage);
+                entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
                 entity.hurtResistantTime = 0;
 
             }
