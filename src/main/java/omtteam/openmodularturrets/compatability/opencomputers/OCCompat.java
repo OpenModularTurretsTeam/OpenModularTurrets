@@ -21,6 +21,6 @@ public class OCCompat {
     }
 
     private void registerDrivers() {
-        Driver.add(new DriverTurretBase());
+        Driver.add(new DriverTurretBase().getWrapper());
     }
 }
