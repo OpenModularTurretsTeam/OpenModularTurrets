@@ -72,7 +72,7 @@ public class ModCompatibility {
                 "omtteam.openmodularturrets.compatability.hwyla.WailaTurretHandler.callbackRegister");
         addVersionCheckerInfo();
         if (ComputerCraftLoaded) {
-            registerCCCompat();
+            //registerCCCompat();
         }
     }
 
