@@ -1,12 +1,11 @@
 package omtteam.openmodularturrets.compatability;
 
-import li.cil.oc.api.Driver;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.compatability.opencomputers.DriverTurretBase;
+import omtteam.openmodularturrets.compatability.opencomputers.OCCompat;
 import omtteam.openmodularturrets.reference.Reference;
 
 import static omtteam.omlib.compatability.ModCompatibility.*;
@@ -83,8 +82,9 @@ public class ModCompatibility {
         }
     }
 
+
     private static void registerOCCompat() {
-        Driver.add(new DriverTurretBase());
+        OCCompat.getInstance();
     }
 
     @SuppressWarnings("EmptyMethod")
