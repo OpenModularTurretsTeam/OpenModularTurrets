@@ -143,7 +143,7 @@ public abstract class TurretProjectile extends EntityThrowable {
         this.motionY *= (double) f1;
         this.motionZ *= (double) f1;
 
-        if (!this.func_189652_ae()) {
+        if (!this.hasNoGravity()) {
             this.motionY -= (double) f2;
         }
 

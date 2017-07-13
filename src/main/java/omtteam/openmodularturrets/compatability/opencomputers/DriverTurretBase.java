@@ -14,12 +14,12 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
  */
 public class DriverTurretBase extends AbstractOMDriver {
     @Override
-    public Class<?> getTileEntityClass() {
+    public Class<?> clGetTileEntityClass() {
         return TurretBase.class;
     }
 
     @Override
-    public ManagedEnvironment createEnvironment(World world, BlockPos pos, EnumFacing side) {
+    public ManagedEnvironment clCreateEnvironment(World world, BlockPos pos, EnumFacing side) {
         TileEntity base = world.getTileEntity(pos);
         return (base != null && base instanceof TurretBase ? new ManagedEnvironmentTurretBase((TurretBase) base) : null);
     }
