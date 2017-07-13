@@ -1,7 +1,5 @@
 package omtteam.openmodularturrets.compatability.opencomputers;
 
-import li.cil.oc.api.Driver;
-
 /**
  * Created by Keridos on 13/07/17.
  * This Class
@@ -21,6 +19,6 @@ public class OCCompat {
     }
 
     private void registerDrivers() {
-        Driver.add(new DriverTurretBase().getWrapper());
+        new DriverTurretBase().registerWrapper();
     }
 }
