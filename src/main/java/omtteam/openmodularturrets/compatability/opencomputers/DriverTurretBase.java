@@ -6,6 +6,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import omtteam.omlib.compatability.opencomputers.AbstractOMDriver;
+import omtteam.openmodularturrets.reference.OMTNames;
+import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 /**
@@ -22,5 +24,10 @@ public class DriverTurretBase extends AbstractOMDriver {
     public ManagedEnvironment clCreateEnvironment(World world, BlockPos pos, EnumFacing side) {
         TileEntity base = world.getTileEntity(pos);
         return (base != null && base instanceof TurretBase ? new ManagedEnvironmentTurretBase((TurretBase) base) : null);
+    }
+
+    @Override
+    protected String getName() {
+        return Reference.MOD_ID + ":" + OMTNames.Blocks.turretBase;
     }
 }

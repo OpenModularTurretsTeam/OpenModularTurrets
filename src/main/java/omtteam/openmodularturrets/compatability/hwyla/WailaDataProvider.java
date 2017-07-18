@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.compatability.hwyla;
 
-import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.IWailaRegistrar;
 
 /**
@@ -8,9 +7,9 @@ import mcp.mobius.waila.api.IWailaRegistrar;
  * This Class
  */
 @SuppressWarnings("unused")
-public class HwylaPlugin implements IWailaPlugin {
-    @Override
+public class WailaDataProvider {
     public void register(IWailaRegistrar registrar) {
-
+        WailaTurretBaseHandler.callbackRegister(registrar);
+        WailaTurretBaseHandler.callbackRegister(registrar);
     }
 }
