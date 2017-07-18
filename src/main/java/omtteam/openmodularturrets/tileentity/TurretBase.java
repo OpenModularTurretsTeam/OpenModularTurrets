@@ -1,5 +1,9 @@
 package omtteam.openmodularturrets.tileentity;
 
+import dan200.computercraft.api.lua.ILuaContext;
+import dan200.computercraft.api.lua.LuaException;
+import dan200.computercraft.api.peripheral.IComputerAccess;
+import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -16,6 +20,7 @@ import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityMachine;
+import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackList;
 import omtteam.omlib.util.compat.ItemStackTools;
@@ -30,28 +35,25 @@ import omtteam.openmodularturrets.util.TurretHeadUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static omtteam.omlib.compatibility.ModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
 import static omtteam.omlib.util.BlockUtil.getBlockStateFromNBT;
 import static omtteam.omlib.util.BlockUtil.writeBlockFromStateToNBT;
+import static omtteam.omlib.util.GeneralUtil.getMachineModeLocalization;
 import static omtteam.omlib.util.MathUtil.getRotationXYFromYawPitch;
 import static omtteam.omlib.util.MathUtil.getRotationXZFromYawPitch;
+import static omtteam.omlib.util.PlayerUtil.getPlayerUUID;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
-
-
-/*import dan200.computercraft.api.lua.ILuaContext;
-import dan200.computercraft.api.lua.LuaException;
-import dan200.computercraft.api.peripheral.IComputerAccess;
-import dan200.computercraft.api.peripheral.IPeripheral;*/
 
 @SuppressWarnings("unused")
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft")}
 )
-public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ ICamoSupport, IDebugTile {
+public class TurretBase extends TileEntityMachine implements IPeripheral, ICamoSupport, IDebugTile {
     public int trustedPlayerIndex = 0;
     protected IBlockState camoBlockState;
 
@@ -65,7 +67,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IC
     private boolean attacksPlayers;
     private int ticks;
     private boolean computerAccessible = false;
-    //private ArrayList<IComputerAccess> comp;
+    private ArrayList<IComputerAccess> comp;
     protected int tier;
     private boolean forceFire = false;
 
@@ -466,14 +468,6 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IC
         return true;
     }
 
-    /*
-    @Optional.Method(modid = omtteam.omlib.compatability.ModCompatibility.OCModID)
-    @Override
-    public String getComponentName() {
-        return "turretBase";
-    }
-    */
-
     @Override
     public List<String> getDebugInfo() {
         List<String> debugInfo = new ArrayList<>();
@@ -482,15 +476,17 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IC
         return debugInfo;
     }
 
-    /*@Optional.Method(modid = "ComputerCraft")
+    @Optional.Method(modid = "ComputerCraft")
     @Override
+    @Nonnull
     public String getType() {
         // peripheral.getType returns whaaaaat?
-        return "OMTBase";
+        return "turret_base";
     }
 
     @Optional.Method(modid = "ComputerCraft")
     @Override
+    @Nonnull
     public String[] getMethodNames() {
         // list commands you want..
         return new String[]{commands.getOwner.toString(), commands.attacksPlayers.toString(),
@@ -498,13 +494,14 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IC
                 commands.setAttacksMobs.toString(), commands.attacksNeutrals.toString(),
                 commands.setAttacksNeutrals.toString(), commands.getTrustedPlayers.toString(),
                 commands.addTrustedPlayer.toString(), commands.removeTrustedPlayer.toString(),
-                commands.getActive.toString(), commands.getInverted.toString(),
-                commands.getRedstone.toString(), commands.setInverted.toString(),
+                commands.getActive.toString(), commands.getMode.toString(),
+                commands.getRedstone.toString(), commands.setMode.toString(),
                 commands.getType.toString()};
     }
 
     @Optional.Method(modid = "ComputerCraft")
     @Override
+    @ParametersAreNonnullByDefault
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
         // method is command
         boolean b;
@@ -572,28 +569,27 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IC
                 trustedPlayer.canChangeTargeting = arguments[2].toString().equals("true");
                 trustedPlayer.admin = arguments[3].toString().equals("true");
                 trustedPlayer.uuid = getPlayerUUID(arguments[0].toString());
-                this.getWorld().markBlockForUpdate(this.pos);
+
                 return new Object[]{"successfully added player to trust list with parameters"};
             case removeTrustedPlayer:
                 if (arguments[0].toString().equals("")) {
                     return new Object[]{"wrong arguments"};
                 }
                 this.removeTrustedPlayer(arguments[0].toString());
-                this.getWorld().markBlockForUpdate(this.pos);
                 return new Object[]{"removed player from trusted list"};
             case getActive:
                 return new Object[]{this.active};
-            case getInverted:
-                return new Object[]{this.inverted};
+            case getMode:
+                return new Object[]{getMachineModeLocalization(this.mode)};
             case getRedstone:
                 return new Object[]{this.redstone};
-            case setInverted:
-                if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
-                    return new Object[]{"wrong arguments"};
+            case setMode:
+                String arg = arguments[0].toString();
+                if (!(arg.equals("0") || arg.equals("1") || arg.equals("2") || arg.equals("3"))) {
+                    return new Object[]{"wrong arguments, expect number between 0 and 3"};
                 }
-                b = (arguments[0].toString().equals("true"));
-                this.setInverted(b);
-                this.getWorld().markBlockForUpdate(this.pos);
+                int mode = (Integer.valueOf(arguments[0].toString()));
+                this.setMode(EnumMachineMode.values()[mode]);
                 return new Object[]{true};
             case getType:
                 return new Object[]{this.getType()};
@@ -605,18 +601,20 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IC
 
     @Optional.Method(modid = "ComputerCraft")
     @Override
+    @ParametersAreNonnullByDefault
     public void attach(IComputerAccess computer) {
         if (comp == null) {
-            comp = new ArrayList<IComputerAccess>();
+            comp = new ArrayList<>();
         }
         comp.add(computer);
     }
 
     @Optional.Method(modid = "ComputerCraft")
     @Override
+    @ParametersAreNonnullByDefault
     public void detach(IComputerAccess computer) {
         if (comp == null) {
-            comp = new ArrayList<IComputerAccess>();
+            comp = new ArrayList<>();
         }
         comp.remove(computer);
     }
@@ -629,7 +627,7 @@ public class TurretBase extends TileEntityMachine implements /*IPeripheral,*/ IC
 
     public enum commands {
         getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals,
-        getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getInverted, getRedstone, setInverted,
+        getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getMode, getRedstone, setMode,
         getType
-    }*/
+    }
 }
