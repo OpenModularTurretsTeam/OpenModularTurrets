@@ -83,7 +83,7 @@ public class ModCompatibility {
     }
 
     private static void registerOCCompat() {
-        new DriverTurretBase().registerWrapper();
+        DriverTurretBase.getInstance().registerWrapper();
     }
 
     private static void registerCCCompat() {
