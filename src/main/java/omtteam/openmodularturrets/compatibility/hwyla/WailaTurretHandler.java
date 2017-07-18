@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.compatability.hwyla;
+package omtteam.openmodularturrets.compatibility.hwyla;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -12,12 +12,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import omtteam.omlib.reference.OMLibNames;
-import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.reference.OMTNames;
+import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
+import static omtteam.openmodularturrets.util.TurretHeadUtil.*;
 
 /**
  * Created by nico on 5/23/15.
@@ -26,7 +29,7 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 @SuppressWarnings("unused")
 @Optional.Interface(iface = "mcp.mobius.waila.api.IWailaDataProvider", modid = "Waila")
-public class WailaTurretBaseHandler implements IWailaDataProvider {
+public class WailaTurretHandler implements IWailaDataProvider {
     /**
      * Although this is likely not necessary, you can also use the Optional.Method interface to mark a
      * method to be stripped if a mod is not detected. In this case we're doing this for all methods
@@ -38,12 +41,11 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
      * constructor of this class, which can be used to help initialize other things. Alternatively you
      * can initialize things within this method as well.
      */
-    @Optional.Method(modid = "Waila")
     public static void callbackRegister(IWailaRegistrar register) {
-        WailaTurretBaseHandler instance = new WailaTurretBaseHandler();
+        WailaTurretHandler instance = new WailaTurretHandler();
 
-        register.registerNBTProvider(instance, TurretBase.class);
-        register.registerBodyProvider(instance, TurretBase.class);
+        register.registerNBTProvider(instance, TurretHead.class);
+        register.registerBodyProvider(instance, TurretHead.class);
     }
 
     /**
@@ -54,7 +56,6 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
      * method will ignore any changes made here.
      */
     @Override
-    @Optional.Method(modid = "Waila")
     public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return accessor.getStack();
     }
@@ -66,7 +67,6 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
      * the config parameter allows you to take advantage of the ingame config gui.
      */
     @Override
-    @Optional.Method(modid = "Waila")
     public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return currenttip;
     }
@@ -77,14 +77,20 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
      * the config parameter allows you to take advantage of the ingame config gui.
      */
     @Override
-    @Optional.Method(modid = "Waila")
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        boolean invert = accessor.getNBTData().getBoolean("inverted");
-        boolean active = accessor.getNBTData().getBoolean("inverted") ^ accessor.getNBTData().getBoolean("redstone");
-        currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": " + getColoredBooleanLocalizationYesNo(invert));
-        currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
-        String ownerName = accessor.getNBTData().getString("ownerName");
-        currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
+        TileEntity te = accessor.getTileEntity();
+        if (te != null && te instanceof TurretHead) {
+            TurretHead turret = (TurretHead) te;
+            boolean active = turret.getBase().isActive();
+
+            currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
+            String ownerName = turret.getBase().getOwnerName();
+            currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
+            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.AMMO) + ": \u00A7F" + getAmmoLevel(turret, turret.getBase()));
+            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": \u00A7F" + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * getAmpLevel(turret.getBase())) + "%");
+            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ACCURACY) + ": \u00A7F" + String.format("%.2f", Math.min(100F, (100 - turret.getTurretAccuracy() * 10) * (1.0 + getAccuraccyUpgrades(turret.getBase())))) + "%");
+            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": \u00A7F" + String.format("%.2f", 20F / (turret.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(turret.getBase())))) + "s/sec");
+        }
         return currenttip;
     }
 

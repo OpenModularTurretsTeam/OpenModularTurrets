@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import omtteam.openmodularturrets.client.gui.ModularTurretsTab;
-import omtteam.openmodularturrets.compatability.ModCompatibility;
+import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.handler.GuiHandler;
 import omtteam.openmodularturrets.proxy.CommonProxy;

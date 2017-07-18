@@ -1,20 +1,30 @@
 package omtteam.openmodularturrets.blocks.turretheads;
 
+import mcjty.theoneprobe.api.IProbeHitData;
+import mcjty.theoneprobe.api.IProbeInfo;
+import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import omtteam.omlib.reference.OMLibNames;
 import omtteam.openmodularturrets.items.blocks.ItemBlockTeleporterTurret;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.TeleporterTurretTileEntity;
+import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
+
+import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
+import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 public class BlockTeleporterTurret extends BlockAbstractTurretHead {
     public boolean shouldAnimate = false;
@@ -52,6 +62,20 @@ public class BlockTeleporterTurret extends BlockAbstractTurretHead {
                         (double) var22, (double) var23);
             }
             shouldAnimate = false;
+        }
+    }
+
+    @Override
+    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
+        TileEntity te = world.getTileEntity(data.getPos());
+        if (te != null && te instanceof TurretHead) {
+            TurretHead turret = (TurretHead) te;
+            boolean active = turret.getBase().isActive();
+
+            probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
+            String ownerName = turret.getBase().getOwnerName();
+            probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
+            probeInfo.text("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": " + String.format("%.2f", 20F / (turret.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(turret.getBase())))) + "s/sec");
         }
     }
 }

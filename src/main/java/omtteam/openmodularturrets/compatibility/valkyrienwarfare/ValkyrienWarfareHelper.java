@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.compatability.valkyrienwarfare;
+package omtteam.openmodularturrets.compatibility.valkyrienwarfare;
 
 import ValkyrienWarfareBase.API.RotationMatrices;
 import ValkyrienWarfareBase.PhysicsManagement.PhysicsWrapperEntity;
