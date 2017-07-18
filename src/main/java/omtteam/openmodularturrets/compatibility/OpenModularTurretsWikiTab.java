@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.compatability;
+package omtteam.openmodularturrets.compatibility;
 
 import igwmod.gui.GuiWiki;
 import igwmod.gui.tabs.BaseWikiTab;

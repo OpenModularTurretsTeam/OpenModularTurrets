@@ -25,8 +25,8 @@ import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.omlib.util.compat.MathTools;
-import omtteam.openmodularturrets.compatability.ModCompatibility;
-import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
+import omtteam.openmodularturrets.compatibility.ModCompatibility;
+import omtteam.openmodularturrets.compatibility.valkyrienwarfare.ValkyrienWarfareHelper;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.items.AmmoMetaItem;
@@ -36,8 +36,8 @@ import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 
 import java.util.*;
 
-import static omtteam.omlib.compatability.ModCompatibility.ComputerCraftLoaded;
-import static omtteam.omlib.compatability.ModCompatibility.OpenComputersLoaded;
+import static omtteam.omlib.compatibility.ModCompatibility.ComputerCraftLoaded;
+import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.PlayerUtil.isPlayerOwner;
 import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;

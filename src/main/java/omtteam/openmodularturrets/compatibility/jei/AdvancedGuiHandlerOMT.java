@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.compatability.jei;
+package omtteam.openmodularturrets.compatibility.jei;
 
 import mcp.MethodsReturnNonnullByDefault;
 import mezz.jei.api.gui.IAdvancedGuiHandler;

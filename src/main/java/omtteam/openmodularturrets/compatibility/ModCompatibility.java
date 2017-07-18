@@ -1,14 +1,14 @@
-package omtteam.openmodularturrets.compatability;
+package omtteam.openmodularturrets.compatibility;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.compatability.opencomputers.DriverTurretBase;
+import omtteam.openmodularturrets.compatibility.opencomputers.DriverTurretBase;
 import omtteam.openmodularturrets.reference.Reference;
 
-import static omtteam.omlib.compatability.ModCompatibility.ComputerCraftLoaded;
-import static omtteam.omlib.compatability.ModCompatibility.OpenComputersLoaded;
+import static omtteam.omlib.compatibility.ModCompatibility.ComputerCraftLoaded;
+import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
 
 /**
  * Created by Keridos on 23/01/2015. This Class
@@ -67,7 +67,7 @@ public class ModCompatibility {
 
     public static void init() {
         FMLInterModComms.sendMessage("Waila", "register",
-                "omtteam.openmodularturrets.compatability.hwyla.WailaDataProvider.register");
+                "omtteam.openmodularturrets.compatibility.hwyla.WailaDataProvider.register");
 
         addVersionCheckerInfo();
         if (ComputerCraftLoaded) {

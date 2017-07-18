@@ -1,5 +1,8 @@
 package omtteam.openmodularturrets.blocks;
 
+import mcjty.theoneprobe.api.IProbeHitData;
+import mcjty.theoneprobe.api.IProbeInfo;
+import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -31,6 +34,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.IHasItemBlock;
 import omtteam.omlib.blocks.BlockAbstractCamoTileEntity;
+import omtteam.omlib.compatibility.theoneprobe.TOPInfoProvider;
+import omtteam.omlib.reference.OMLibNames;
+import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.compat.ItemStackTools;
@@ -48,11 +54,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
-import static omtteam.omlib.util.GeneralUtil.safeLocalize;
+import static omtteam.omlib.util.GeneralUtil.*;
 import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 
 @SuppressWarnings("deprecation")
-public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHasItemBlock {
+public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHasItemBlock, TOPInfoProvider {
     public static final PropertyInteger TIER = PropertyInteger.create("tier", 1, 5);
 
     public BlockTurretBase() {
@@ -320,6 +326,20 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     public void clGetSubBlocks(Item item, CreativeTabs tab, List subItems) {
         for (int i = 0; i < 5; i++) {
             subItems.add(new ItemStack(ModBlocks.turretBase, 1, i));
+        }
+    }
+
+    @Override
+    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
+        TileEntity te = world.getTileEntity(data.getPos());
+        if (te != null && te instanceof TurretBase) {
+            TurretBase base = (TurretBase) te;
+            EnumMachineMode machineMode = base.getMode();
+            boolean active = base.isActive();
+            probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7A" + getMachineModeLocalization(machineMode));
+            probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
+            String ownerName = base.getOwnerName();
+            probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
         }
     }
 }

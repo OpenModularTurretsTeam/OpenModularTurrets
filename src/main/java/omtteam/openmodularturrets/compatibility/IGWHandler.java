@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.compatability;
+package omtteam.openmodularturrets.compatibility;
 
 import igwmod.api.WikiRegistry;
 import omtteam.openmodularturrets.init.ModBlocks;
