@@ -1,11 +1,11 @@
-package omtteam.openmodularturrets.compatability.opencomputers;
+package omtteam.openmodularturrets.compatibility.opencomputers;
 
 import li.cil.oc.api.network.ManagedEnvironment;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import omtteam.omlib.compatability.opencomputers.AbstractOMDriver;
+import omtteam.omlib.compatibility.opencomputers.AbstractOMDriver;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.TurretBase;

@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.compatability.jei;
+package omtteam.openmodularturrets.compatibility.jei;
 
 import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IModRegistry;

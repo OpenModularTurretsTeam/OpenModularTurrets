@@ -14,7 +14,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.omlib.compatability.minecraft.CompatItem;
+import omtteam.omlib.compatibility.minecraft.CompatItem;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.openmodularturrets.OpenModularTurrets;

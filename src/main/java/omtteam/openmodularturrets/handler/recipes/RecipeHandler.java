@@ -6,13 +6,13 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import omtteam.openmodularturrets.compatability.ModCompatibility;
+import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 
-import static omtteam.omlib.compatability.ModCompatibility.ComputerCraftLoaded;
-import static omtteam.omlib.compatability.ModCompatibility.OpenComputersLoaded;
+import static omtteam.omlib.compatibility.ModCompatibility.ComputerCraftLoaded;
+import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
 
 public class RecipeHandler {
     private static ItemStack ammoBlazingClay;
