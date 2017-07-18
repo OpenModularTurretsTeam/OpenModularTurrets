@@ -2,13 +2,13 @@ package omtteam.openmodularturrets.compatability;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.compatability.opencomputers.OCCompat;
+import omtteam.openmodularturrets.compatability.opencomputers.DriverTurretBase;
 import omtteam.openmodularturrets.reference.Reference;
 
-import static omtteam.omlib.compatability.ModCompatibility.*;
+import static omtteam.omlib.compatability.ModCompatibility.ComputerCraftLoaded;
+import static omtteam.omlib.compatability.ModCompatibility.OpenComputersLoaded;
 
 /**
  * Created by Keridos on 23/01/2015. This Class
@@ -67,28 +67,25 @@ public class ModCompatibility {
 
     public static void init() {
         FMLInterModComms.sendMessage("Waila", "register",
-                "omtteam.openmodularturrets.compatability.hwyla.WailaTurretBaseHandler.callbackRegister");
-        FMLInterModComms.sendMessage("Waila", "register",
-                "omtteam.openmodularturrets.compatability.hwyla.WailaTurretHandler.callbackRegister");
+                "omtteam.openmodularturrets.compatability.hwyla.WailaDataProvider.register");
+
         addVersionCheckerInfo();
         if (ComputerCraftLoaded) {
             //registerCCCompat();
         }
-    }
-
-    public static void preinit() {
         if (OpenComputersLoaded) {
             registerOCCompat();
         }
     }
 
+    public static void preinit() {
 
-    private static void registerOCCompat() {
-        OCCompat.getInstance();
     }
 
-    @SuppressWarnings("EmptyMethod")
-    @Optional.Method(modid = CCModID)
+    private static void registerOCCompat() {
+        new DriverTurretBase().registerWrapper();
+    }
+
     private static void registerCCCompat() {
         //ComputerCraftAPI.registerPeripheralProvider(CCPeripheralProvider.getInstance());
     }
