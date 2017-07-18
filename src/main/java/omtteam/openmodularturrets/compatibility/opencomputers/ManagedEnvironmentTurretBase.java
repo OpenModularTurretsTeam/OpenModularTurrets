@@ -4,8 +4,8 @@ import li.cil.oc.api.driver.NamedBlock;
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
-import li.cil.oc.integration.ManagedTileEntityEnvironment;
 import net.minecraft.util.EnumFacing;
+import omtteam.omlib.compatibility.opencomputers.AbstractOMTileEntityEnvironment;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.tileentity.TurretBase;
@@ -16,7 +16,7 @@ import static omtteam.omlib.util.PlayerUtil.getPlayerUUID;
  * Created by nico on 09/06/17.
  * The instance of the component wrapper for a specific turret base.
  */
-public class ManagedEnvironmentTurretBase extends ManagedTileEntityEnvironment<TurretBase> implements NamedBlock {
+public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironment<TurretBase> implements NamedBlock {
     private final TurretBase base;
 
     ManagedEnvironmentTurretBase(TurretBase base) {
