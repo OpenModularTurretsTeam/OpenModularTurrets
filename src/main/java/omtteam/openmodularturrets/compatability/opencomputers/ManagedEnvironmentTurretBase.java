@@ -19,7 +19,7 @@ import static omtteam.omlib.util.PlayerUtil.getPlayerUUID;
 public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment implements NamedBlock {
     private final TurretBase base;
 
-    public ManagedEnvironmentTurretBase(TurretBase base) {
+    ManagedEnvironmentTurretBase(TurretBase base) {
         super();
         this.base = base;
     }
@@ -40,7 +40,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
         }
-        return new Object[]{base.getOwner()};
+        return new Object[]{base.getOwnerName()};
     }
 
     @SuppressWarnings("unused")
@@ -53,7 +53,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function(state:boolean):boolean;  sets to attack hostile mobs or not.")
+    @Callback(doc = "function(state:boolean):boolean; set attack hostile mobs or not.")
     public Object[] setAttacksMobs(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
@@ -72,7 +72,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function(state:boolean):boolean; sets to attack neutral mobs or not.")
+    @Callback(doc = "function(state:boolean):boolean; set attack neutral mobs or not.")
     public Object[] setAttacksNeutrals(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
@@ -91,7 +91,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function(state:boolean):boolean; sets to attack players or not.")
+    @Callback(doc = "function(state:boolean):boolean; sets attack players or not.")
     public Object[] setAttacksPlayers(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
@@ -110,7 +110,8 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , " + "admin:boolean]):string; adds Trusted player to Trustlist.")
+    @Callback(doc = "function(name:String, [canOpenGUI:boolean, canChangeTargeting:boolean, admin:boolean]):string;" +
+            " adds Trusted player to Trustlist.")
     public Object[] addTrustedPlayer(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
@@ -221,7 +222,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
         }
-        if (!args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0 && !args.isDouble(1) || !args.isDouble(2))
+        if (!(args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0 && !args.isDouble(1)) || !args.isDouble(2))
             return new Object[]{"Wrong parameters!"};
 
         return new Object[]{base.setTurretYawPitch(EnumFacing.getFront(args.checkInteger(0)), (float) args.checkDouble(0), (float) args.checkDouble(1))};
@@ -239,18 +240,18 @@ public class ManagedEnvironmentTurretBase extends AbstractOMManagedEnvironment i
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function(state:boolean):boolean; Enable auto firing for specified Turret (deact. auto targ. before).")
+    @Callback(doc = "function(side:int, state:boolean):boolean; Enable auto firing for specified Turret (deact. auto targ. before).")
     public Object[] setTurretAutoForceFire(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
         }
-        if (!args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0 && !args.isBoolean(1))
+        if (!(args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0) || (!args.isBoolean(1)))
             return new Object[]{"Wrong parameters!"};
         return new Object[]{base.setTurretForceFire(EnumFacing.getFront(args.checkInteger(0)), args.checkBoolean(1))};
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function():int; Try to shoot all turrets, returns successful shots")
+    @Callback(doc = "function():int; Try to shoot all turrets, returns number of successful shots")
     public Object[] forceShootAll(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
