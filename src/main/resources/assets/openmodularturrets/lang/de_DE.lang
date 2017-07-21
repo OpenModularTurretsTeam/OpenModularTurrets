@@ -252,6 +252,8 @@ gui.omtteam.openmodularturrets:accuracy=Treffsicherheit
 gui.omtteam.openmodularturrets:drop_turrets=Droppe Türme
 gui.omtteam.openmodularturrets:drop_base=Droppe Basis
 gui.omtteam.openmodularturrets:configure=Konfigurieren
+gui.omtteam.openmodularturrets:kills=Kills (Insg.)
+gui.omtteam.openmodularturrets:player_kills=Kills (Spieler)
 
 tooltip.omtteam.openmodularturrets:add_trusted_player=Fügt den angegebenen Spieler der vertrauten Spieler Liste hinzu.
 tooltip.omtteam.openmodularturrets:remove_trusted_player=Entfernt den angezeigten Spieler aus der Liste.

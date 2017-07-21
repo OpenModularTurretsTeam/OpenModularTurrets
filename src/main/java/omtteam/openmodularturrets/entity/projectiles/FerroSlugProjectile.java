@@ -64,7 +64,7 @@ public class FerroSlugProjectile extends TurretProjectile {
 
             if (entity instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) entity)) {
-                    entity.attackEntityFrom(new ArmorBypassDamageSource("ferroslug", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
+                    entity.attackEntityFrom(new ArmorBypassDamageSource("ferroslug", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
                     entity.hurtResistantTime = 0;
                     playSound();
                 } else {
@@ -72,7 +72,7 @@ public class FerroSlugProjectile extends TurretProjectile {
                 }
 
             } else {
-                entity.attackEntityFrom(new ArmorBypassDamageSource("ferroslug", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
+                entity.attackEntityFrom(new ArmorBypassDamageSource("ferroslug", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
                 entity.hurtResistantTime = 0;
                 playSound();
             }

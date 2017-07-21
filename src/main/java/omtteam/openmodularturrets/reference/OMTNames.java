@@ -121,6 +121,8 @@ public class OMTNames {
             public static final String DROP_TURRETS = "gui.omtteam.openmodularturrets:drop_turrets";
             public static final String DROP_BASE = "gui.omtteam.openmodularturrets:drop_base";
             public static final String CONFIGURE = "gui.omtteam.openmodularturrets:configure";
+            public static final String KILLS = "gui.omtteam.openmodularturrets:kills";
+            public static final String PLAYER_KILLS = "gui.omtteam.openmodularturrets:player_kills";
         }
 
         public static class Tooltip {

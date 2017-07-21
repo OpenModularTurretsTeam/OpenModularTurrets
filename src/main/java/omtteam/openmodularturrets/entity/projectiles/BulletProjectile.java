@@ -64,14 +64,14 @@ public class BulletProjectile extends TurretProjectile {
 
             if (entity instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) entity)) {
-                    entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
+                    entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
                     entity.hurtResistantTime = 0;
                     playSound();
                 } else {
                     return;
                 }
             } else {
-                entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
+                entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
                 entity.hurtResistantTime = 0;
 
             }
