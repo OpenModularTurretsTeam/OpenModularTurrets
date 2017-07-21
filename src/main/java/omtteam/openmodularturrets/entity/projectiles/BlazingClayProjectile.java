@@ -54,13 +54,13 @@ public class BlazingClayProjectile extends TurretProjectile {
 
                 if (mob instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) mob)) {
-                        mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
+                        mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
                         mob.hurtResistantTime = 0;
                         mob.setFire(5);
                         playSound();
                     }
                 } else {
-                    mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
+                    mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
                     mob.hurtResistantTime = 0;
                     mob.setFire(5);
                     playSound();
@@ -93,12 +93,12 @@ public class BlazingClayProjectile extends TurretProjectile {
 
                 if (mob instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) mob)) {
-                        mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
+                        mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
                         mob.hurtResistantTime = 0;
                         mob.setFire(5);
                     }
                 } else {
-                    mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
+                    mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
                     mob.hurtResistantTime = 0;
                     mob.setFire(5);
                 }

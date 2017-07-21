@@ -148,7 +148,10 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7f" + base.getOwnerName());
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7f" + getMachineModeLocalization(base.getMode()));
         boolean isCurrentlyOn = base.isActive();
-        targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + (getColoredBooleanLocalizationYesNo(isCurrentlyOn)));
+        targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(isCurrentlyOn));
+        targetInfo.add("");
+        targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.KILLS) + ": " + base.getKills());
+        targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.PLAYER_KILLS) + ": " + base.getPlayerKills());
         targetInfo.add("");
         if (base.getTrustedPlayers().size() != 0) {
             targetInfo.add("\u00A75" + safeLocalize(OMTNames.Localizations.GUI.TRUSTED_PLAYERS) + ":");

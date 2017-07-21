@@ -70,6 +70,8 @@ public class TurretBase extends TileEntityMachine implements IPeripheral, ICamoS
     private ArrayList<IComputerAccess> comp;
     protected int tier;
     private boolean forceFire = false;
+    protected int kills;
+    protected int playerKills;
 
     public TurretBase() {
         super();
@@ -106,15 +108,16 @@ public class TurretBase extends TileEntityMachine implements IPeripheral, ICamoS
         nbtTagCompound.setInteger("currentMaxRange", this.currentMaxRange);
         nbtTagCompound.setInteger("upperBoundMaxRange", this.upperBoundMaxRange);
         nbtTagCompound.setBoolean("rangeOverridden", this.rangeOverridden);
-        nbtTagCompound.setBoolean("attacksMobs", attacksMobs);
-        nbtTagCompound.setBoolean("attacksNeutrals", attacksNeutrals);
-        nbtTagCompound.setBoolean("attacksPlayers", attacksPlayers);
-        nbtTagCompound.setBoolean("computerAccessible", computerAccessible);
-        nbtTagCompound.setBoolean("shouldConcealTurrets", shouldConcealTurrets);
-        nbtTagCompound.setBoolean("multiTargeting", multiTargeting);
-        nbtTagCompound.setBoolean("forceFire", forceFire);
-        nbtTagCompound.setInteger("tier", tier);
-        nbtTagCompound.setInteger("mode", mode.ordinal());
+        nbtTagCompound.setBoolean("attacksMobs", this.attacksMobs);
+        nbtTagCompound.setBoolean("attacksNeutrals", this.attacksNeutrals);
+        nbtTagCompound.setBoolean("attacksPlayers", this.attacksPlayers);
+        nbtTagCompound.setBoolean("computerAccessible", this.computerAccessible);
+        nbtTagCompound.setBoolean("shouldConcealTurrets", this.shouldConcealTurrets);
+        nbtTagCompound.setBoolean("multiTargeting", this.multiTargeting);
+        nbtTagCompound.setBoolean("forceFire", this.forceFire);
+        nbtTagCompound.setInteger("tier", this.tier);
+        nbtTagCompound.setInteger("mode", this.mode.ordinal());
+        nbtTagCompound.setInteger("kills", this.kills);
         writeBlockFromStateToNBT(nbtTagCompound, this.camoBlockState);
         return nbtTagCompound;
     }
@@ -142,6 +145,16 @@ public class TurretBase extends TileEntityMachine implements IPeripheral, ICamoS
             this.camoBlockState = getBlockStateFromNBT(nbtTagCompound);
         } else {
             this.camoBlockState = getDefaultCamoState();
+        }
+        if (nbtTagCompound.hasKey("kills")) {
+            this.kills = nbtTagCompound.getInteger("kills");
+        } else {
+            this.kills = 0;
+        }
+        if (nbtTagCompound.hasKey("playerKills")) {
+            this.kills = nbtTagCompound.getInteger("playerKills");
+        } else {
+            this.playerKills = 0;
         }
         this.maxStorageEU = tier * 7500D;
     }
@@ -279,6 +292,30 @@ public class TurretBase extends TileEntityMachine implements IPeripheral, ICamoS
 
     public boolean isComputerAccessible() {
         return computerAccessible;
+    }
+
+    public void increaseKillCounter() {
+        kills++;
+    }
+
+    public void increasePlayerKillCounter() {
+        playerKills++;
+    }
+
+    public int getKills() {
+        return kills;
+    }
+
+    public int getPlayerKills() {
+        return playerKills;
+    }
+
+    public void setKills(int kills) {
+        this.kills = kills;
+    }
+
+    public void setPlayerKills(int playerKills) {
+        this.playerKills = playerKills;
     }
 
     public void setAllTurretsYawPitch(float yaw, float pitch) {

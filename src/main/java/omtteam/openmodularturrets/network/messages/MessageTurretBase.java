@@ -33,7 +33,7 @@ import static omtteam.omlib.proxy.ClientProxy.getWorld;
  */
 @SuppressWarnings("unused")
 public class MessageTurretBase implements IMessage {
-    private int x, y, z, rfStorageCurrent, rfStorageMax, tier, camoBlockMeta, maxRange;
+    private int x, y, z, rfStorageCurrent, rfStorageMax, tier, camoBlockMeta, maxRange, kills, playerKills;
     private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting;
     private String owner, ownerName, camoBlockRegName;
     private List<TrustedPlayer> trustedPlayers = new ArrayList<>();
@@ -72,6 +72,8 @@ public class MessageTurretBase implements IMessage {
                     base.setCamoState(ForgeRegistries.BLOCKS.getValue(
                             new ResourceLocation(message.camoBlockRegName)).getStateFromMeta(message.camoBlockMeta));
                     base.setCurrentMaxRange(message.maxRange);
+                    base.setKills(message.kills);
+                    base.setPlayerKills(message.playerKills);
                 }
             });
             return null;
@@ -99,6 +101,8 @@ public class MessageTurretBase implements IMessage {
             this.camoBlockMeta = base.getCamoState().getBlock().getMetaFromState(base.getCamoState());
             this.maxRange = base.getCurrentMaxRange();
             this.mode = base.getMode();
+            this.kills = base.getKills();
+            this.playerKills = base.getPlayerKills();
         }
     }
 
@@ -115,6 +119,8 @@ public class MessageTurretBase implements IMessage {
         this.rfStorageCurrent = buf.readInt();
         this.rfStorageMax = buf.readInt();
         this.maxRange = buf.readInt();
+        this.kills = buf.readInt();
+        this.playerKills = buf.readInt();
         this.mode = EnumMachineMode.values()[buf.readInt()];
         this.attacksMobs = buf.readBoolean();
         this.attacksNeutrals = buf.readBoolean();
@@ -152,6 +158,8 @@ public class MessageTurretBase implements IMessage {
         buf.writeInt(rfStorageCurrent);
         buf.writeInt(rfStorageMax);
         buf.writeInt(maxRange);
+        buf.writeInt(kills);
+        buf.writeInt(playerKills);
         buf.writeInt(mode.ordinal());
         buf.writeBoolean(attacksMobs);
         buf.writeBoolean(attacksNeutrals);
