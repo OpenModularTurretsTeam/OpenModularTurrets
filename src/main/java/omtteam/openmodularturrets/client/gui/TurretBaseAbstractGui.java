@@ -30,8 +30,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
-import static omtteam.omlib.util.GeneralUtil.safeLocalize;
+import static omtteam.omlib.util.GeneralUtil.*;
 
 /**
  * Created by nico on 6/4/15.
@@ -62,20 +61,20 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "+"));
         this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "-"));
         if (PlayerUtil.isPlayerOwner(player, base)) {
-            this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
-            this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
-            this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
+            this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_TURRETS)));
+            this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_BASE)));
+            this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, safeLocalize(OMTNames.Localizations.GUI.CONFIGURE)));
             this.buttonList.add(new GuiButton(6, x + 180, y + 75, 80, 20,
                     base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": "
                             + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET)
                             + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE)));
         } else if (trustedPlayer != null) {
             if (trustedPlayer.admin) {
-                this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
-                this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
+                this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_TURRETS)));
+                this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_BASE)));
             }
             if (trustedPlayer.canChangeTargeting || trustedPlayer.admin) {
-                this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
+                this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, safeLocalize(OMTNames.Localizations.GUI.CONFIGURE)));
                 this.buttonList.add(new GuiButton(6, x + 180, y + 75, 80, 20,
                         base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": "
                                 + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET)
@@ -147,6 +146,7 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         ArrayList targetInfo = new ArrayList();
 
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7f" + base.getOwnerName());
+        targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7f" + getMachineModeLocalization(base.getMode()));
         boolean isCurrentlyOn = base.isActive();
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + (getColoredBooleanLocalizationYesNo(isCurrentlyOn)));
         targetInfo.add("");

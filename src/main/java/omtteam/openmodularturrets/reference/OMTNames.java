@@ -118,6 +118,9 @@ public class OMTNames {
             public static final String TYPE = "gui.omtteam.openmodularturrets:type";
             public static final String ACCURACY = "gui.omtteam.openmodularturrets:accuracy";
             public static final String RATE_OF_FIRE = "gui.omtteam.openmodularturrets:rof";
+            public static final String DROP_TURRETS = "gui.omtteam.openmodularturrets:drop_turrets";
+            public static final String DROP_BASE = "gui.omtteam.openmodularturrets:drop_base";
+            public static final String CONFIGURE = "gui.omtteam.openmodularturrets:configure";
         }
 
         public static class Tooltip {
