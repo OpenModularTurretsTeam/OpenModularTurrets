@@ -217,6 +217,11 @@ gui.omtteam.openmodularturrets:type=类型
 gui.omtteam.openmodularturrets:range=范围
 gui.omtteam.openmodularturrets:rof=射击速率
 gui.omtteam.openmodularturrets:accuracy=精确度
+gui.omtteam.openmodularturrets:drop_turrets=拆卸炮塔
+gui.omtteam.openmodularturrets:drop_base=拆卸基座
+gui.omtteam.openmodularturrets:configure=配置
+gui.omtteam.openmodularturrets:kills=杀敌数（总）
+gui.omtteam.openmodularturrets:player_kills=杀敌数（玩家）
 
 tooltip.omtteam.openmodularturrets:add_trusted_player=将给定的玩家添加到炮塔的信任列表中。
 tooltip.omtteam.openmodularturrets:remove_trusted_player=将当前玩家移除炮塔的信任列表中。
