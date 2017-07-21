@@ -252,6 +252,8 @@ gui.omtteam.openmodularturrets:accuracy=Accuracy
 gui.omtteam.openmodularturrets:drop_turrets=Drop turrets
 gui.omtteam.openmodularturrets:drop_base=Drop base
 gui.omtteam.openmodularturrets:configure=Configure
+gui.omtteam.openmodularturrets:kills=Kills (Total)
+gui.omtteam.openmodularturrets:player_kills=Kills (Player)
 
 tooltip.omtteam.openmodularturrets:add_trusted_player=Adds the given player to the turret's trusted list.
 tooltip.omtteam.openmodularturrets:remove_trusted_player=Removes viewed trusted player from the turret's trusted player list.

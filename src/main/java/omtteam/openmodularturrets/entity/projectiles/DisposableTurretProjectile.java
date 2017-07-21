@@ -82,13 +82,13 @@ public class DisposableTurretProjectile extends TurretProjectile {
 
             if (entity instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) entity)) {
-                    entity.attackEntityFrom(new NormalDamageSource("disposable", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
+                    entity.attackEntityFrom(new NormalDamageSource("disposable", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
                     entity.hurtResistantTime = 0;
                 } else {
                     return;
                 }
             } else {
-                entity.attackEntityFrom(new NormalDamageSource("disposable", fakeDrops, (WorldServer) this.getEntityWorld()), damage);
+                entity.attackEntityFrom(new NormalDamageSource("disposable", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
                 entity.hurtResistantTime = 0;
             }
             setTagsForTurretHit(entity);

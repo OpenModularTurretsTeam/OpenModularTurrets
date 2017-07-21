@@ -14,11 +14,13 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.openmodularturrets.entity.projectiles.damagesources.AbstractOMTDamageSource;
 import omtteam.openmodularturrets.items.blocks.ItemBlockBaseAddon;
 import omtteam.openmodularturrets.util.OMTFakePlayer;
 import omtteam.openmodularturrets.util.OMTUtil;
@@ -71,6 +73,16 @@ public class EventHandler {
             FakePlayer player = OMTFakePlayer.getFakePlayer((WorldServer) event.getEntityLiving().getEntityWorld());
             player.getEntityAttribute(SharedMonsterAttributes.LUCK).setBaseValue(fakeDrops);
             entity.setLastAttacker(player);
+        }
+    }
+
+    @SubscribeEvent
+    public void entityDeathEvent(LivingDeathEvent event) {
+        if (event.getSource() instanceof AbstractOMTDamageSource) {
+            ((AbstractOMTDamageSource) event.getSource()).getBase().increaseKillCounter();
+            if (event.getEntity() instanceof EntityPlayer) {
+                ((AbstractOMTDamageSource) event.getSource()).getBase().increasePlayerKillCounter();
+            }
         }
     }
 
