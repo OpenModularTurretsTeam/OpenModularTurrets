@@ -70,12 +70,14 @@ public class BulletProjectile extends TurretProjectile {
                 } else {
                     return;
                 }
-            } else {
+            } else if (canDamageEntity(entity)) {
+                setTagsForTurretHit(entity);
                 entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
                 entity.hurtResistantTime = 0;
-
+            } else {
+                return;
             }
-            setTagsForTurretHit(entity);
+
             this.setDead();
         }
     }
