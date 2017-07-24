@@ -17,10 +17,7 @@ import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.NetworkingHandler;
-import omtteam.openmodularturrets.network.messages.MessageAdjustMaxRange;
-import omtteam.openmodularturrets.network.messages.MessageDropBase;
-import omtteam.openmodularturrets.network.messages.MessageDropTurrets;
-import omtteam.openmodularturrets.network.messages.MessageSetBaseTargetingType;
+import omtteam.openmodularturrets.network.messages.*;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
@@ -60,6 +57,8 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
 
         this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "+"));
         this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "-"));
+
+
         if (PlayerUtil.isPlayerOwner(player, base)) {
             this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_TURRETS)));
             this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_BASE)));
@@ -68,10 +67,12 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
                     base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": "
                             + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET)
                             + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE)));
+            this.buttonList.add(new GuiButton(7,x+155,y+3,11,10,"M"));
         } else if (trustedPlayer != null) {
             if (trustedPlayer.admin) {
                 this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_TURRETS)));
                 this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_BASE)));
+                this.buttonList.add(new GuiButton(7,x+155,y+3,11,10,"M"));
             }
             if (trustedPlayer.canChangeTargeting || trustedPlayer.admin) {
                 this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, safeLocalize(OMTNames.Localizations.GUI.CONFIGURE)));
@@ -122,6 +123,9 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
                     ((GuiButton) button).displayString = base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": " + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE);
                 }
             }
+        }
+        if (guibutton.id == 7) {
+            sendToggleModeToServer();
         }
     }
 
@@ -191,6 +195,9 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
             case 6:
                 tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.MULTI_TARGETING));
                 break;
+            case 7:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TOGGLE_MODE));
+                break;
         }
 
         if (mouseX > k + 153 && mouseX < k + 153 + 14 && mouseY > l + 17 && mouseY < l + 17 + 51) {
@@ -233,6 +240,11 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
 
     private void sendSetBaseTargetingToServer() {
         MessageSetBaseTargetingType message = new MessageSetBaseTargetingType(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
+        NetworkingHandler.INSTANCE.sendToServer(message);
+    }
+
+    private void sendToggleModeToServer() {
+        MessageToggleMode message = new MessageToggleMode(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
         NetworkingHandler.INSTANCE.sendToServer(message);
     }
 
