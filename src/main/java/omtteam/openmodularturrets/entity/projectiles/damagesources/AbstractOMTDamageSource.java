@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
  */
 public abstract class AbstractOMTDamageSource extends DamageSource {
     private FakePlayer player;
-    private TurretBase base;
+    private final TurretBase base;
 
     public AbstractOMTDamageSource(String damageTypeIn, int fakeDrops, TurretBase base, WorldServer worldServer) {
         super(damageTypeIn);

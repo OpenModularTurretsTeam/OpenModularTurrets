@@ -116,6 +116,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     }
 
     @Override
+    @Nonnull
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;

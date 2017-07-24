@@ -39,7 +39,7 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
      * can initialize things within this method as well.
      */
 
-    public static void callbackRegister(IWailaRegistrar register) {
+    static void callbackRegister(IWailaRegistrar register) {
         WailaTurretBaseHandler instance = new WailaTurretBaseHandler();
 
         register.registerNBTProvider(instance, TurretBase.class);

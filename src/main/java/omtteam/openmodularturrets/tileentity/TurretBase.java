@@ -290,6 +290,7 @@ public class TurretBase extends TileEntityMachine implements IPeripheral, ICamoS
         this.tier = tier;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isComputerAccessible() {
         return computerAccessible;
     }

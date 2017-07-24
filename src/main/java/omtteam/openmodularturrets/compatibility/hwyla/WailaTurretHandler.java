@@ -41,7 +41,7 @@ public class WailaTurretHandler implements IWailaDataProvider {
      * constructor of this class, which can be used to help initialize other things. Alternatively you
      * can initialize things within this method as well.
      */
-    public static void callbackRegister(IWailaRegistrar register) {
+    static void callbackRegister(IWailaRegistrar register) {
         WailaTurretHandler instance = new WailaTurretHandler();
 
         register.registerNBTProvider(instance, TurretHead.class);
