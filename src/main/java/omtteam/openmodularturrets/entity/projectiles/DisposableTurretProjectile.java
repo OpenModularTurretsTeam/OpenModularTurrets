@@ -87,11 +87,14 @@ public class DisposableTurretProjectile extends TurretProjectile {
                 } else {
                     return;
                 }
-            } else {
+            } else if (canDamageEntity(entity)) {
+                setTagsForTurretHit(entity);
                 entity.attackEntityFrom(new NormalDamageSource("disposable", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
                 entity.hurtResistantTime = 0;
+            } else {
+                return;
             }
-            setTagsForTurretHit(entity);
+
             if (itemBound != null) {
                 itemBound.setDead();
             }

@@ -86,7 +86,7 @@ public class RocketProjectile extends TurretProjectile {
         if (ConfigHandler.isCanRocketsHurtEnderDragon() && mob instanceof EntityDragon) {
             (mob).setHealth((mob).getHealth() - damage);
             mob.hurtResistantTime = 0;
-        } else {
+        } else if (canDamageEntity(mob)) {
             mob.attackEntityFrom(new NormalDamageSource("rocket", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
             mob.hurtResistantTime = 0;
         }
@@ -122,7 +122,7 @@ public class RocketProjectile extends TurretProjectile {
     @Override
     public void onHitEntity(Entity entity) {
         if (!getEntityWorld().isRemote && !(entity instanceof EntityPlayer && !canDamagePlayer((EntityPlayer) entity))
-                && !(entity instanceof TurretProjectile)) {
+                && canDamageEntity(entity) && !(entity instanceof TurretProjectile)) {
             float strength = ConfigHandler.canRocketsDestroyBlocks ? 2.3F : 0.1F;
             getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
