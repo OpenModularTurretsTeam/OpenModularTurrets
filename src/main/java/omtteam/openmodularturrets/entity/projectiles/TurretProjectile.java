@@ -166,7 +166,7 @@ public abstract class TurretProjectile extends EntityThrowable {
                 entityLivingBase.addTag("openmodularturrets:turret_hit");
             }
             if (!(entityLivingBase instanceof EntityPlayer) && this.fakeDrops > -1) {
-                entityLivingBase.addTag("openmodularturrets:fake_drop_" + this.fakeDrops);
+                entityLivingBase.addTag("openmodularturrets:fake_drops_" + this.fakeDrops);
             }
         }
     }
@@ -178,4 +178,6 @@ public abstract class TurretProjectile extends EntityThrowable {
     public void setFramesRendered(int framesRendered) {
         this.framesRendered = framesRendered;
     }
+
+
 }

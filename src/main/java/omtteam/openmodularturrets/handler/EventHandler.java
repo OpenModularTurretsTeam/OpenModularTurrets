@@ -5,9 +5,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
@@ -32,7 +32,7 @@ import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing
 
 /**
  * Created by Keridos on 02/05/17.
- * This Class
+ * This class is the listener for all the Events we need to watch & modify.
  */
 public class EventHandler {
     private static EventHandler instance;
@@ -52,15 +52,16 @@ public class EventHandler {
         if (event.getEntityLiving().getTags().contains("openmodularturrets:turret_hit") && !ConfigHandler.doTurretsKillsDropMobLoot) {
             event.setCanceled(true);
         }
+        event.getLootingLevel();
     }
 
     @SubscribeEvent
     public void entityHurtEvent(LivingHurtEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
         int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
-        if (fakeDrops > -1) {
+        if (fakeDrops >= 0) {
             FakePlayer player = OMTFakePlayer.getFakePlayer((WorldServer) event.getEntityLiving().getEntityWorld());
-            player.getEntityAttribute(SharedMonsterAttributes.LUCK).setBaseValue(fakeDrops);
+            player.setHeldItem(EnumHand.MAIN_HAND, OMTFakePlayer.getSword(fakeDrops));
             entity.setLastAttacker(player);
         }
     }
@@ -69,9 +70,9 @@ public class EventHandler {
     public void entityAttackedEvent(LivingAttackEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
         int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
-        if (fakeDrops > -1) {
+        if (fakeDrops >= 0) {
             FakePlayer player = OMTFakePlayer.getFakePlayer((WorldServer) event.getEntityLiving().getEntityWorld());
-            player.getEntityAttribute(SharedMonsterAttributes.LUCK).setBaseValue(fakeDrops);
+            player.setHeldItem(EnumHand.MAIN_HAND, OMTFakePlayer.getSword(fakeDrops));
             entity.setLastAttacker(player);
         }
     }
