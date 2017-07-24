@@ -1,9 +1,11 @@
 package omtteam.openmodularturrets.compatibility;
 
+import dan200.computercraft.api.ComputerCraftAPI;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.openmodularturrets.compatibility.computercraft.CCPeripheralProvider;
 import omtteam.openmodularturrets.compatibility.opencomputers.DriverTurretBase;
 import omtteam.openmodularturrets.reference.Reference;
 
@@ -71,7 +73,7 @@ public class ModCompatibility {
 
         addVersionCheckerInfo();
         if (ComputerCraftLoaded) {
-            //registerCCCompat();
+            registerCCCompat();
         }
         if (OpenComputersLoaded) {
             registerOCCompat();
@@ -87,6 +89,6 @@ public class ModCompatibility {
     }
 
     private static void registerCCCompat() {
-        //ComputerCraftAPI.registerPeripheralProvider(CCPeripheralProvider.getInstance());
+        ComputerCraftAPI.registerPeripheralProvider(CCPeripheralProvider.getInstance());
     }
 }

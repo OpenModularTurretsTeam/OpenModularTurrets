@@ -8,6 +8,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * This Class
  */
 
+@SuppressWarnings("EmptyMethod")
 @SideOnly(Side.SERVER)
 public class ServerProxy extends CommonProxy {
     @Override
