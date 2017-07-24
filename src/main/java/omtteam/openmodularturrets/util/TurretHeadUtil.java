@@ -8,6 +8,8 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -100,6 +102,16 @@ public class TurretHeadUtil {
             for (EntityLivingBase target1 : targets) {
                 if (target1 != null && EntityList.getEntityString(target1) != null) {
                     if (ConfigHandler.validMobBlacklist.contains(EntityList.getEntityString(target1))) continue;
+                }
+
+                if (target1 instanceof EntityTameable) {
+                    EntityLivingBase entity = ((EntityTameable) target1).getOwner();
+                    if (entity != null && entity instanceof EntityPlayer) {
+                        EntityPlayer owner = (EntityPlayer) entity;
+                        if (isPlayerOwner(owner, base) || isPlayerTrusted(owner, base)) {
+                            continue;
+                        }
+                    }
                 }
 
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
