@@ -125,7 +125,6 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     public AxisAlignedBB getBoundingBoxFromState(IBlockState blockState, World world, BlockPos pos) {
         EnumFacing facing = blockState.getValue(FACING);
         return getBoundingBoxFromFacing(facing).offset(pos);
-
     }
 
     public static AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing) {
