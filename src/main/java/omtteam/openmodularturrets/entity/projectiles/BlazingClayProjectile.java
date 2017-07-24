@@ -59,7 +59,7 @@ public class BlazingClayProjectile extends TurretProjectile {
                         mob.setFire(5);
                         playSound();
                     }
-                } else {
+                } else if (canDamageEntity(mob)) {
                     mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
                     mob.hurtResistantTime = 0;
                     mob.setFire(5);
@@ -73,7 +73,7 @@ public class BlazingClayProjectile extends TurretProjectile {
     @Override
     public void onHitEntity(Entity entity) {
         if (!getEntityWorld().isRemote && !(entity instanceof EntityPlayer && !canDamagePlayer((EntityPlayer) entity))
-                && !(entity instanceof TurretProjectile)) {
+                && canDamageEntity(entity) && !(entity instanceof TurretProjectile)) {
 
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
                     this.posX + 5, this.posY + 5, this.posZ + 5);
@@ -97,12 +97,12 @@ public class BlazingClayProjectile extends TurretProjectile {
                         mob.hurtResistantTime = 0;
                         mob.setFire(5);
                     }
-                } else {
+                } else if (canDamageEntity(mob)) {
+                    setTagsForTurretHit(entity);
                     mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
                     mob.hurtResistantTime = 0;
                     mob.setFire(5);
                 }
-                setTagsForTurretHit(entity);
             }
             this.setDead();
         }

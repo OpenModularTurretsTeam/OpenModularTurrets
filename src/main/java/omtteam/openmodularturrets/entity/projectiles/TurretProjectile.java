@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.entity.projectiles;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,9 @@ import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+
+import static omtteam.omlib.util.PlayerUtil.isPlayerOwner;
+import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
 
 public abstract class TurretProjectile extends EntityThrowable {
     public float gravity;
@@ -63,6 +67,21 @@ public abstract class TurretProjectile extends EntityThrowable {
                 }
             } else if (PlayerUtil.isPlayerOwner(entityPlayer, this.turretBase)) {
                 return false;
+            }
+        }
+        return true;
+    }
+
+    boolean canDamageEntity(Entity entity) {
+        if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
+            if (entity instanceof EntityTameable) {
+                EntityLivingBase entityOwner = ((EntityTameable) entity).getOwner();
+                if (entityOwner != null && entityOwner instanceof EntityPlayer) {
+                    EntityPlayer owner = (EntityPlayer) entityOwner;
+                    if (isPlayerOwner(owner, turretBase) || isPlayerTrusted(owner, turretBase)) {
+                        return false;
+                    }
+                }
             }
         }
         return true;
