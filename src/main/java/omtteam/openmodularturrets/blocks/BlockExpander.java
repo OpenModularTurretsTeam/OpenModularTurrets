@@ -121,12 +121,6 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
         return getBoundingBoxFromFacing(facing);
     }
 
-    @Override
-    public AxisAlignedBB getBoundingBoxFromState(IBlockState blockState, World world, BlockPos pos) {
-        EnumFacing facing = blockState.getValue(FACING);
-        return getBoundingBoxFromFacing(facing).offset(pos);
-    }
-
     public static AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing) {
         AxisAlignedBB alignedBB = MathUtil.rotateAABB(new AxisAlignedBB(-3 / 8F, -3 / 8F, -3 / 16F, 3 / 8F, 3 / 8F, 3 / 16F), facing.getOpposite());
         double[] offset = new double[3];
@@ -135,6 +129,12 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
         offset[2] = 0.5D + facing.getFrontOffsetZ() * 0.325D;
         return alignedBB.offset(offset[0], offset[1], offset[2]);
     }
+
+    @Override
+    public AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing, World world, BlockPos pos) {
+        return getBoundingBoxFromFacing(facing).offset(pos);
+    }
+
 
     @Override
     public boolean isFullBlock(IBlockState state) {

@@ -197,8 +197,8 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
-    public AxisAlignedBB getBoundingBoxFromState(IBlockState blockState, World world, BlockPos pos) {
-        EnumFacing facing = getTurretBaseFacing(world, pos);
+    public AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing, World world, BlockPos pos) {
+        facing = getTurretBaseFacing(world, pos);
         if (getTurretBase(world, pos) != null && getTurretBase(world, pos).getTier() == 1) {
             if (facing != null) {
                 AxisAlignedBB axisAlignedBB = new AxisAlignedBB(-0.3F, -0.3F, -0.4F, 0.3F, 0.3F, 0.4F);
