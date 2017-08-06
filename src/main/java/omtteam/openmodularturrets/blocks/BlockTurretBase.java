@@ -55,6 +55,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.*;
+import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 
 @SuppressWarnings("deprecation")
@@ -251,6 +252,17 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                     this.setHardness(ConfigHandler.getBaseTierFiveHardness());
             }
         }
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            for (TileEntity tileEntity : getTouchingTileEntities(worldIn, pos.offset(facing))) {
+                if (tileEntity instanceof TurretBase) return false;
+            }
+        }
+        return true;
     }
 
     @Override

@@ -67,8 +67,8 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     }
 
     @Override
-    public AxisAlignedBB getBoundingBoxFromState(IBlockState blockState, World world, BlockPos pos) {
-        EnumFacing facing = getTurretBaseFacing(world, pos);
+    public AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing, World world, BlockPos pos) {
+        facing = getTurretBaseFacing(world, pos);
         if (facing != null) {
             AxisAlignedBB axisAlignedBB = new AxisAlignedBB(-0.3F, -0.3F, -0.5F, 0.3F, 0.3F, 0.5F);
             axisAlignedBB = MathUtil.rotateAABB(axisAlignedBB, facing.getOpposite());

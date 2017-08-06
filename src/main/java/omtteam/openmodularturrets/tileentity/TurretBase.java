@@ -19,7 +19,7 @@ import omtteam.omlib.api.IDebugTile;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.tileentity.ICamoSupport;
-import omtteam.omlib.tileentity.TileEntityMachine;
+import omtteam.omlib.tileentity.TileEntityTrustedMachine;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackList;
@@ -53,7 +53,7 @@ import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft")}
 )
-public class TurretBase extends TileEntityMachine implements IPeripheral, ICamoSupport, IDebugTile {
+public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile {
     public int trustedPlayerIndex = 0;
     protected IBlockState camoBlockState;
 
