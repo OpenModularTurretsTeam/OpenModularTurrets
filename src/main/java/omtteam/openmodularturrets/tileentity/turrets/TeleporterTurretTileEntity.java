@@ -80,8 +80,8 @@ public class TeleporterTurretTileEntity extends TurretHead {
                 return;
             }
 
-            this.rotationXZ = TurretHeadUtil.getAimYaw(target, this.pos) + 3.2F;
-            this.rotationXY = TurretHeadUtil.getAimPitch(target, this.pos);
+            this.yaw = TurretHeadUtil.getAimYaw(target, this.pos) + 3.2F;
+            this.pitch = TurretHeadUtil.getAimPitch(target, this.pos);
 
             // has cooldown passed?
             if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
