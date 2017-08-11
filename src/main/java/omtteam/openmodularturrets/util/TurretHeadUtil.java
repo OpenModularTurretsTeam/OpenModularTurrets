@@ -27,6 +27,7 @@ import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.omlib.util.compat.MathTools;
+import omtteam.openmodularturrets.api.ITurretBaseController;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.compatibility.valkyrienwarfare.ValkyrienWarfareHelper;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -99,13 +100,23 @@ public class TurretHeadUtil {
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-            for (EntityLivingBase target1 : targets) {
-                if (target1 != null && EntityList.getEntityString(target1) != null) {
-                    if (ConfigHandler.validMobBlacklist.contains(EntityList.getEntityString(target1))) continue;
+            for (EntityLivingBase possibleTarget : targets) {
+                if (possibleTarget != null && EntityList.getEntityString(possibleTarget) != null) {
+                    if (ConfigHandler.validMobBlacklist.contains(EntityList.getEntityString(possibleTarget))) continue;
                 }
 
-                if (target1 instanceof EntityTameable) {
-                    EntityLivingBase entity = ((EntityTameable) target1).getOwner();
+                boolean validTarget = true;
+                for (ITurretBaseController controller : base.getControllers()) {
+                    if (!controller.isEntityValidTarget(possibleTarget, getAimYaw(possibleTarget, pos), getAimPitch(possibleTarget, pos))) {
+                        validTarget = false;
+                    }
+                }
+                if (!validTarget) {
+                    continue;
+                }
+
+                if (possibleTarget instanceof EntityTameable) {
+                    EntityLivingBase entity = ((EntityTameable) possibleTarget).getOwner();
                     if (entity != null && entity instanceof EntityPlayer) {
                         EntityPlayer owner = (EntityPlayer) entity;
                         if (isPlayerOwner(owner, base) || isPlayerTrusted(owner, base)) {
@@ -115,30 +126,30 @@ public class TurretHeadUtil {
                 }
 
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
-                    if (target1 instanceof EntityAnimal && !target1.isDead) {
-                        target = target1;
+                    if (possibleTarget instanceof EntityAnimal && !possibleTarget.isDead) {
+                        target = possibleTarget;
                     }
                 }
 
                 if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
-                    if (target1 instanceof EntityAmbientCreature && !target1.isDead) {
-                        target = target1;
+                    if (possibleTarget instanceof EntityAmbientCreature && !possibleTarget.isDead) {
+                        target = possibleTarget;
                     }
                 }
 
                 if (base.isAttacksMobs() && ConfigHandler.globalCanTargetMobs) {
-                    if (target1.isCreatureType(EnumCreatureType.MONSTER, false) && !target1.isDead) {
-                        target = target1;
+                    if (possibleTarget.isCreatureType(EnumCreatureType.MONSTER, false) && !possibleTarget.isDead) {
+                        target = possibleTarget;
                     }
                 }
 
                 if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetPlayers) {
-                    if (target1 instanceof EntityPlayerMP && !target1.isDead) {
-                        EntityPlayerMP entity = (EntityPlayerMP) target1;
+                    if (possibleTarget instanceof EntityPlayerMP && !possibleTarget.isDead) {
+                        EntityPlayerMP entity = (EntityPlayerMP) possibleTarget;
 
                         if (!isPlayerOwner(entity, base) && !isPlayerTrusted(entity,
                                 base) && !entity.capabilities.isCreativeMode) {
-                            target = target1;
+                            target = possibleTarget;
                         }
                     }
                 }
@@ -529,9 +540,7 @@ public class TurretHeadUtil {
 
         double dX = (targetPos.xCoord) - (pos.getX());
         double dZ = (targetPos.zCoord) - (pos.getZ());
-        float yaw = (float) Math.atan2(dZ, dX);
-        yaw = yaw - 1.570796F + 3.1F;
-        return yaw;
+        return (float) Math.atan2(dZ, dX);
     }
 
     public static float getAimPitch(Entity target, BlockPos pos) {
@@ -552,9 +561,8 @@ public class TurretHeadUtil {
         double dY = (targetBlockPos.getY() + 0.5F) - (pos.getY() - 0.5F);
         double dZ = (targetBlockPos.getZ() - 0.5F) - (pos.getZ() + 0.5F);
 
-        float pitch = (float) (Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY) + Math.PI);
-        pitch = pitch + 1.65F;
-        return pitch;
+
+        return (float) (Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY));
     }
 
     @SuppressWarnings("ConstantConditions")

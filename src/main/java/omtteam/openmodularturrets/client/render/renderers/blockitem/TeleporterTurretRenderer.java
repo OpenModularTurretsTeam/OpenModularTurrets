@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import omtteam.omlib.util.MathUtil;
 import omtteam.openmodularturrets.client.render.models.ModelTeleporterTurret;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
@@ -46,7 +47,7 @@ class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
             rotation = te.getBlockMetadata();
             GL11.glRotatef(rotation * 90, 0.0F, 1.0F, 0.0F);
             GL11.glScalef(1.0F, -1F, -1F);
-            model.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
+            model.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(turretHead.pitch, turretHead.yaw), MathUtil.getRotationXZFromYawPitch(turretHead.pitch, turretHead.yaw));
             model.Base.rotateAngleX = turretHead.baseFitRotationX;
             model.Base.rotateAngleY = turretHead.baseFitRotationZ;
             model.Spinner1.rotateAngleY = turretHead.rotationAnimation;
