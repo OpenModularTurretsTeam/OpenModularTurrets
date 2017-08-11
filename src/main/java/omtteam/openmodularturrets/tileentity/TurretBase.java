@@ -5,6 +5,7 @@ import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -12,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -24,6 +26,7 @@ import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackList;
 import omtteam.omlib.util.compat.ItemStackTools;
+import omtteam.openmodularturrets.api.ITurretBaseController;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.items.AddonMetaItem;
 import omtteam.openmodularturrets.items.UpgradeMetaItem;
@@ -70,8 +73,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private ArrayList<IComputerAccess> comp;
     protected int tier;
     private boolean forceFire = false;
-    protected int kills;
-    protected int playerKills;
+    private int kills;
+    private int playerKills;
+    private ArrayList<ITurretBaseController> controllers = new ArrayList<>();
 
     public TurretBase() {
         super();
@@ -323,8 +327,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         for (TileEntity te : tileEntities) {
             if (te != null && te instanceof TurretHead) {
-                ((TurretHead) te).setRotationXY(getRotationXYFromYawPitch(yaw, pitch));
-                ((TurretHead) te).setRotationXZ(getRotationXZFromYawPitch(yaw, pitch));
+                ((TurretHead) te).setPitch(getRotationXYFromYawPitch(yaw, pitch));
+                ((TurretHead) te).setYaw(getRotationXZFromYawPitch(yaw, pitch));
             }
         }
     }
@@ -332,8 +336,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     public boolean setTurretYawPitch(EnumFacing facing, float yaw, float pitch) {
         TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
         if (turretHead != null && turretHead instanceof TurretHead) {
-            ((TurretHead) turretHead).setRotationXY(getRotationXYFromYawPitch(yaw, pitch));
-            ((TurretHead) turretHead).setRotationXZ(getRotationXZFromYawPitch(yaw, pitch));
+            ((TurretHead) turretHead).setPitch(getRotationXYFromYawPitch(yaw, pitch));
+            ((TurretHead) turretHead).setYaw(getRotationXZFromYawPitch(yaw, pitch));
             return true;
         }
         return false;
@@ -474,6 +478,22 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     public int getUpperBoundMaxRange() {
         return upperBoundMaxRange;
+    }
+
+    public void registerController(ITurretBaseController controller) {
+        this.controllers.add(controller);
+    }
+
+    public ArrayList<ITurretBaseController> getControllers() {
+        return controllers;
+    }
+
+    public List<EntityLivingBase> getEntitiesWithinRange() {
+        AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - currentMaxRange - 1, pos.getY() - currentMaxRange - 1,
+                pos.getZ() - currentMaxRange - 1, pos.getX() + currentMaxRange + 1,
+                pos.getY() + currentMaxRange + 1, pos.getZ() + currentMaxRange + 1);
+
+        return worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
     }
 
     @Nonnull

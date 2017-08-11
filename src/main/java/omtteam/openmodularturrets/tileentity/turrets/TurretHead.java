@@ -31,7 +31,7 @@ import omtteam.openmodularturrets.util.TurretHeadUtil;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import static omtteam.omlib.util.MathUtil.*;
+import static omtteam.omlib.util.MathUtil.getVelocityVectorFromYawPitch;
 import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
 import static omtteam.omlib.util.compat.WorldTools.spawnEntity;
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
@@ -40,8 +40,8 @@ import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretH
 public abstract class TurretHead extends TileEntityBase implements ITickable {
     int ticks;
     int targetingTicks;
-    public float rotationXY;
-    public float rotationXZ;
+    public float pitch;
+    public float yaw;
     public float baseFitRotationX;
     public float baseFitRotationZ;
     int turretTier;
@@ -85,8 +85,8 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
-        nbtTagCompound.setFloat("rotationXY", rotationXY);
-        nbtTagCompound.setFloat("rotationXZ", rotationXZ);
+        nbtTagCompound.setFloat("pitch", pitch);
+        nbtTagCompound.setFloat("yaw", yaw);
         nbtTagCompound.setInteger("ticksBeforeFire", ticks);
         nbtTagCompound.setBoolean("shouldConceal", shouldConceal);
         nbtTagCompound.setBoolean("autoFire", autoFire);
@@ -100,8 +100,8 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     @Override
     public void readFromNBT(NBTTagCompound par1) {
         super.readFromNBT(par1);
-        this.rotationXY = par1.getFloat("rotationXY");
-        this.rotationXZ = par1.getFloat("rotationXZ");
+        this.pitch = par1.getFloat("pitch");
+        this.yaw = par1.getFloat("yaw");
         this.shouldConceal = par1.getBoolean("shouldConceal");
         this.autoFire = par1.getBoolean("autoFire");
         //this.maxPitch = par1.getFloat("maxPitch");
@@ -183,28 +183,20 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         return base;
     }
 
-    public float getRotationXY() {
-        return rotationXY;
+    public float getPitch() {
+        return pitch;
     }
 
-    public void setRotationXY(float rotationXY) {
-        this.rotationXY = rotationXY;
-    }
-
-    public float getRotationXZ() {
-        return rotationXZ;
-    }
-
-    public void setRotationXZ(float rotationXZ) {
-        this.rotationXZ = rotationXZ;
+    public void setPitch(float pitch) {
+        this.pitch = pitch;
     }
 
     public float getYaw() {
-        return getYawFromXYXZ(this.rotationXY, this.rotationXZ);
+        return yaw;
     }
 
-    public float getPitch() {
-        return getPitchFromXYXZ(this.rotationXY, this.rotationXZ);
+    public void setYaw(float yaw) {
+        this.yaw = yaw;
     }
 
     public float getMaxPitch() {
@@ -318,8 +310,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     }
 
     private boolean isTargetInYawPitch(Entity entity) {
-        float yaw = getYawFromXYXZ(TurretHeadUtil.getAimPitch(entity, this.pos), TurretHeadUtil.getAimYaw(entity, this.pos) + 3.2F);
-        float pitch = getPitchFromXYXZ(TurretHeadUtil.getAimPitch(entity, this.pos), TurretHeadUtil.getAimYaw(entity, this.pos) + 3.2F);
         while (yaw > 360 || pitch > 360) {
             if (yaw > 360) {
                 yaw -= 360;
@@ -397,8 +387,8 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
             //Aim at target
             if (target != null && isTargetInYawPitch(target)) {
-                this.rotationXZ = TurretHeadUtil.getAimYaw(this.target, this.pos) + 3.2F;
-                this.rotationXY = TurretHeadUtil.getAimPitch(this.target, this.pos);
+                this.yaw = TurretHeadUtil.getAimYaw(this.target, this.pos) + 3.2F;
+                this.pitch = TurretHeadUtil.getAimPitch(this.target, this.pos);
             }
 
             targetingTicks = 0;
@@ -468,7 +458,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         }
 
         // Work out a trajectory based on current yaw/pitch
-        Vec3d velocity = getVelocityVectorFromYawPitch(getYawFromXYXZ(this.rotationXY, this.rotationXZ), getPitchFromXYXZ(this.rotationXY, this.rotationXZ), 3.0F);
+        Vec3d velocity = getVelocityVectorFromYawPitch(this.pitch, this.yaw, 3.0F);
         double adjustedX = velocity.xCoord;
         double adjustedY = velocity.yCoord;
         double adjustedZ = velocity.zCoord;
@@ -504,11 +494,11 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
             TurretProjectile projectile = this.createProjectile(this.getWorld(), target, ammo);
             projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
             if (projectile.gravity == 0.00F) {
-                Vec3d velocity = getVelocityVectorFromYawPitch(getYawFromXYXZ(this.rotationXY, this.rotationXZ), getPitchFromXYXZ(this.rotationXY, this.rotationXZ), 3.0F);
+                Vec3d velocity = getVelocityVectorFromYawPitch(this.pitch, this.yaw, 3.0F);
                 projectile.setThrowableHeading(velocity.xCoord, velocity.yCoord, velocity.zCoord, (float) velocity.lengthVector(), (float) accuracy);
             } else {
-                projectile.rotationYaw = getYawFromXYXZ(this.getRotationXY(), this.getRotationXZ());
-                projectile.rotationPitch = getPitchFromXYXZ(this.getRotationXY(), this.getRotationXZ());
+                projectile.rotationYaw = this.yaw;
+                projectile.rotationPitch = this.pitch;
                 Vec3d velocity = getVelocityVectorFromYawPitch(projectile.rotationYaw, projectile.rotationPitch, 1.6F);
                 projectile.motionX = velocity.xCoord + RandomUtil.random.nextGaussian() * 0.007499999832361937D * accuracy;
                 projectile.motionY = velocity.yCoord + RandomUtil.random.nextGaussian() * 0.007499999832361937D * accuracy;
