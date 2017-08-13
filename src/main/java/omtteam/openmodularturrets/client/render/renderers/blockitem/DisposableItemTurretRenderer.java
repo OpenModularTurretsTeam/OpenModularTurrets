@@ -62,7 +62,7 @@ class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
             rotation = te.getBlockMetadata();
             GL11.glRotatef(rotation * 90, 0.0F, 1.0F, 0.0F);
             GL11.glScalef(1.0F, -1F, -1F);
-            model.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(turretHead.pitch, turretHead.yaw), MathUtil.getRotationXZFromYawPitch(turretHead.pitch, turretHead.yaw));
+            model.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(turretHead.yaw, turretHead.pitch), MathUtil.getRotationXZFromYawPitch(turretHead.yaw, turretHead.pitch));
             model.Base.rotateAngleX = turretHead.baseFitRotationX;
             model.Base.rotateAngleY = turretHead.baseFitRotationZ;
             model.Pole.rotateAngleX = turretHead.baseFitRotationX;
@@ -76,21 +76,21 @@ class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
             if (TurretHeadUtil.hasSolarPanelAddon(turretHead.getBase())) {
                 ResourceLocation texturesSolar = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_solar_panel.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
-                solar.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(turretHead.pitch, turretHead.yaw), MathUtil.getRotationXZFromYawPitch(turretHead.pitch, turretHead.yaw));
+                solar.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(turretHead.yaw, turretHead.pitch), MathUtil.getRotationXZFromYawPitch(turretHead.yaw, turretHead.pitch));
                 solar.renderAll();
             }
 
             if (TurretHeadUtil.hasDamageAmpAddon(turretHead.getBase())) {
                 ResourceLocation texturesAmp = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_damage_amp.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
-                amp.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(turretHead.pitch, turretHead.yaw), MathUtil.getRotationXZFromYawPitch(turretHead.pitch, turretHead.yaw));
+                amp.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(turretHead.yaw, turretHead.pitch), MathUtil.getRotationXZFromYawPitch(turretHead.yaw, turretHead.pitch));
                 amp.renderAll();
             }
 
             if (TurretHeadUtil.hasRedstoneReactor(turretHead.getBase())) {
                 ResourceLocation texturesReac = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_redstone_reactor.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesReac);
-                reac.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(turretHead.pitch, turretHead.yaw), MathUtil.getRotationXZFromYawPitch(turretHead.pitch, turretHead.yaw));
+                reac.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(turretHead.yaw, turretHead.pitch), MathUtil.getRotationXZFromYawPitch(turretHead.yaw, turretHead.pitch));
                 reac.renderAll();
             }
         }

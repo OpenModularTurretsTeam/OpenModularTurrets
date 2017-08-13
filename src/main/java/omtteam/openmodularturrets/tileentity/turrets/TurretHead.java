@@ -310,12 +310,18 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
     }
 
     private boolean isTargetInYawPitch(Entity entity) {
-        while (yaw > 360 || pitch > 360) {
+        while (yaw > 360 || pitch > 360 || yaw < 0 || pitch < 0) {
             if (yaw > 360) {
                 yaw -= 360;
             }
             if (pitch > 360) {
                 pitch -= 360;
+            }
+            if (yaw < 0) {
+                yaw += 360;
+            }
+            if (pitch < 0) {
+                pitch += 360;
             }
         }
         return minYaw <= yaw && yaw <= maxYaw && minPitch <= pitch && pitch <= maxPitch;
@@ -387,7 +393,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
 
             //Aim at target
             if (target != null && isTargetInYawPitch(target)) {
-                this.yaw = TurretHeadUtil.getAimYaw(this.target, this.pos) + 3.2F;
+                this.yaw = TurretHeadUtil.getAimYaw(this.target, this.pos);
                 this.pitch = TurretHeadUtil.getAimPitch(this.target, this.pos);
             }
 

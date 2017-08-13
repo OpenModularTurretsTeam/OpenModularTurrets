@@ -48,7 +48,7 @@ class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
             rotation = te.getBlockMetadata();
             GL11.glRotatef(rotation * 90, 0.0F, 1.0F, 0.0F);
             GL11.glScalef(1.0F, -1F, -1F);
-            model.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(turretHead.pitch, turretHead.yaw), MathUtil.getRotationXZFromYawPitch(turretHead.pitch, turretHead.yaw));
+            model.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(turretHead.yaw, turretHead.pitch), MathUtil.getRotationXZFromYawPitch(turretHead.yaw, turretHead.pitch));
             model.Base.rotateAngleX = turretHead.baseFitRotationX;
             model.Base.rotateAngleY = turretHead.baseFitRotationZ;
             model.Spinner1.rotateAngleY = turretHead.rotationAnimation;
