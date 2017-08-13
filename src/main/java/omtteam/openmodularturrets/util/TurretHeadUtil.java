@@ -540,7 +540,13 @@ public class TurretHeadUtil {
 
         double dX = (targetPos.xCoord) - (pos.getX());
         double dZ = (targetPos.zCoord) - (pos.getZ());
-        return (float) Math.atan2(dZ, dX);
+
+        float yaw = (float) ((Math.atan2(dZ, dX)));
+        if (yaw < 0) {
+            yaw += 2 * Math.PI;
+        }
+
+        return yaw / (float) Math.PI * 180F;
     }
 
     public static float getAimPitch(Entity target, BlockPos pos) {
@@ -561,8 +567,12 @@ public class TurretHeadUtil {
         double dY = (targetBlockPos.getY() + 0.5F) - (pos.getY() - 0.5F);
         double dZ = (targetBlockPos.getZ() - 0.5F) - (pos.getZ() + 0.5F);
 
+        float pitch = (float) ((Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY)));
+        if (pitch < 0) {
+            pitch += 2 * Math.PI;
+        }
 
-        return (float) (Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY));
+        return pitch / (float) Math.PI * 180F;
     }
 
     @SuppressWarnings("ConstantConditions")
