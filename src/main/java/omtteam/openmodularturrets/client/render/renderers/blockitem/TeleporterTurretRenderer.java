@@ -33,6 +33,7 @@ class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
             GL11.glScalef(0.7F, -0.7F, -0.7F);
             GL11.glTranslatef((float) x + 0.0F, (float) y + 0.4F, (float) z + 0.5F);
             GL11.glRotatef(45.0F, 2.5F, -4.5F, -1.0F);
+            model.setRotationForTarget(0, 0);
             model.renderAll();
             GL11.glPopMatrix();
             return;
