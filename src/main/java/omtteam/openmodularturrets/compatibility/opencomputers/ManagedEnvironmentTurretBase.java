@@ -53,7 +53,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function(state:boolean):boolean; set attack hostile mobs or not.")
+    @Callback(doc = "function(state:boolean):void; set attack hostile mobs or not.")
     public Object[] setAttacksMobs(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
@@ -72,7 +72,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function(state:boolean):boolean; set attack neutral mobs or not.")
+    @Callback(doc = "function(state:boolean):void; set attack neutral mobs or not.")
     public Object[] setAttacksNeutrals(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
@@ -91,7 +91,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function(state:boolean):boolean; sets attack players or not.")
+    @Callback(doc = "function(state:boolean):void; sets attack players or not.")
     public Object[] setAttacksPlayers(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
@@ -101,7 +101,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function():table; returns a table of trusted players on this base.")
+    @Callback(doc = "function():table; returns a table of all trusted players on this base.")
     public Object[] getTrustedPlayers(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
@@ -111,7 +111,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
 
     @SuppressWarnings("unused")
     @Callback(doc = "function(name:String, [canOpenGUI:boolean, canChangeTargeting:boolean, admin:boolean]):string;" +
-            " adds Trusted player to Trustlist.")
+            " adds Trusted player to Trustlist. Can return error.")
     public Object[] addTrustedPlayer(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
@@ -178,8 +178,8 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function():int; shows redstone inversion state.")
-    public Object[] getInverted(Context context, Arguments args) {
+    @Callback(doc = "function():int; shows base mode.")
+    public Object[] getMode(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
         }
@@ -206,7 +206,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function(side:int, yaw:double, pitch:double):void; Set yaw and pitch for all turrets (deact. auto targ. before).")
+    @Callback(doc = "function(yaw:double, pitch:double):void; Set yaw and pitch for all turrets (deact. auto targ. before).")
     public Object[] setAllYawPitch(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
@@ -217,7 +217,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function(yaw:double, pitch:double):boolean; Set yaw and pitch for a turret (deact. auto targ. before).")
+    @Callback(doc = "function(side:int, yaw:double, pitch:double):boolean; Set yaw and pitch for a turret (deact. auto targ. before).")
     public Object[] setTurretYawPitch(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
@@ -261,7 +261,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function(side:int):boolean; Try to shoot specified turret, returns true if successfully shot")
+    @Callback(doc = "function(side:int):boolean; Try to shoot specified turret, returns true if successful")
     public Object[] forceShootTurret(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
