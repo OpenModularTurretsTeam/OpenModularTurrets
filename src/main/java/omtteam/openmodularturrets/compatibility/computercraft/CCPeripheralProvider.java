@@ -1,6 +1,7 @@
 package omtteam.openmodularturrets.compatibility.computercraft;
 
 
+import dan200.computercraft.api.ComputerCraftAPI;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;
 import net.minecraft.util.EnumFacing;
@@ -15,7 +16,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * This Class
  */
 
-public class CCPeripheralProvider implements IPeripheralProvider {
+public class CCPeripheralProvider {
     private static CCPeripheralProvider instance;
 
     private CCPeripheralProvider() {
@@ -28,12 +29,18 @@ public class CCPeripheralProvider implements IPeripheralProvider {
         return instance;
     }
 
-    @Override
-    @ParametersAreNonnullByDefault
-    public IPeripheral getPeripheral(World world, BlockPos pos, EnumFacing side) {
-        if (world.getTileEntity(pos) instanceof TurretBase) {
-            return (IPeripheral) world.getTileEntity(pos);
+    private class CCDriverTurrretBase implements IPeripheralProvider {
+        @Override
+        @ParametersAreNonnullByDefault
+        public IPeripheral getPeripheral(World world, BlockPos pos, EnumFacing side) {
+            if (world.getTileEntity(pos) instanceof TurretBase) {
+                return (IPeripheral) world.getTileEntity(pos);
+            }
+            return null;
         }
-        return null;
+    }
+
+    public void registerWrapper() {
+        ComputerCraftAPI.registerPeripheralProvider(new CCDriverTurrretBase());
     }
 }
