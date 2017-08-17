@@ -26,13 +26,15 @@ import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackList;
 import omtteam.omlib.util.compat.ItemStackTools;
-import omtteam.openmodularturrets.api.ITurretBaseController;
+import omtteam.openmodularturrets.api.IBaseFullController;
+import omtteam.openmodularturrets.api.IBaseTargetCheckController;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.items.AddonMetaItem;
 import omtteam.openmodularturrets.items.UpgradeMetaItem;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import omtteam.openmodularturrets.util.TargetingSettings;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
@@ -73,7 +75,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private boolean forceFire = false;
     private int kills;
     private int playerKills;
-    private ArrayList<ITurretBaseController> controllers = new ArrayList<>();
+    private ArrayList<IBaseTargetCheckController> controllers = new ArrayList<>();
 
     public TurretBase() {
         super();
@@ -175,6 +177,20 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         }
     }
 
+    private void updateControllerSettings() {
+        for (IBaseTargetCheckController controller : controllers) {
+            if (controller instanceof IBaseFullController) {
+                TargetingSettings settings = ((IBaseFullController) controller).getTargetingSettings();
+                this.attacksMobs = settings.isTargetMobs();
+                this.attacksNeutrals = settings.isTargetPassive();
+                this.attacksPlayers = settings.isTargetPlayers();
+                this.currentMaxRange = settings.getMaxRange();
+
+                this.trustedPlayers = ((IBaseFullController) controller).getTrustedPlayerList();
+            }
+        }
+    }
+
     @Override
     public void update() {
         super.update();
@@ -189,6 +205,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             //maxRange update, needs to happen on both client and server else GUI information may become disjoint.
             //moved by Keridos, added the sync to MessageTurretBase, should sync properly now too.
             setBaseUpperBoundRange();
+            updateControllerSettings();
+
             if (this.currentMaxRange > this.upperBoundMaxRange) {
                 this.currentMaxRange = upperBoundMaxRange;
             }
@@ -229,6 +247,14 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         }
     }
 
+    @Override
+    public List<String> getDebugInfo() {
+        List<String> debugInfo = new ArrayList<>();
+        debugInfo.add("Camo: " + this.camoBlockState.getBlock().getRegistryName() + ", computerAccess: " + this.computerAccessible);
+        debugInfo.add("Force Fire: " + this.forceFire + ", UpperMaxRange: " + this.upperBoundMaxRange);
+        return debugInfo;
+    }
+
     private void setBaseUpperBoundRange() {
         int maxRange = upperBoundMaxRange;
         List<TileEntity> tileEntities = WorldUtil.getTouchingTileEntities(getWorld(), getPos());
@@ -240,16 +266,80 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         this.upperBoundMaxRange = maxRange;
     }
 
-    @Override
-    public boolean isItemValidForSlot(int i, ItemStack stack) {
-        if (i < 9) {
-            return isItemStackValidAmmo(stack);
-        } else if (i >= 9 && i <= 10) {
-            return stack.getItem() instanceof AddonMetaItem;
-        } else if (i >= 11 && i <= 12) {
-            return stack.getItem() instanceof UpgradeMetaItem;
+    public NBTTagCompound writeMemoryCardNBT() {
+        NBTTagCompound nbtTagCompound = new NBTTagCompound();
+        nbtTagCompound.setInteger("currentMaxRange", this.currentMaxRange);
+        nbtTagCompound.setBoolean("attacksMobs", attacksMobs);
+        nbtTagCompound.setBoolean("attacksNeutrals", attacksNeutrals);
+        nbtTagCompound.setBoolean("attacksPlayers", attacksPlayers);
+        nbtTagCompound.setBoolean("multiTargeting", multiTargeting);
+        nbtTagCompound.setInteger("mode", mode.ordinal());
+        if (this.rangeOverridden) {
+            nbtTagCompound.setInteger("range", this.currentMaxRange);
         }
-        return false;
+        nbtTagCompound.setTag("trustedPlayers", getTrustedPlayersAsNBT());
+        return nbtTagCompound;
+    }
+
+    public void readMemoryCardNBT(NBTTagCompound nbtTagCompound) {
+        this.currentMaxRange = nbtTagCompound.getInteger("currentMaxRange");
+        this.attacksMobs = nbtTagCompound.getBoolean("attacksMobs");
+        this.attacksNeutrals = nbtTagCompound.getBoolean("attacksNeutrals");
+        this.attacksPlayers = nbtTagCompound.getBoolean("attacksPlayers");
+        this.multiTargeting = nbtTagCompound.getBoolean("multiTargeting");
+        if (nbtTagCompound.hasKey("mode")) {
+            this.mode = EnumMachineMode.values()[nbtTagCompound.getInteger("mode")];
+        } else {
+            this.mode = EnumMachineMode.INVERTED;
+        }
+        if (nbtTagCompound.hasKey("range")) {
+            this.rangeOverridden = true;
+            this.currentMaxRange = nbtTagCompound.getInteger("range");
+        } else {
+            this.rangeOverridden = false;
+            this.currentMaxRange = getUpperBoundMaxRange();
+        }
+        buildTrustedPlayersFromNBT(nbtTagCompound.getTagList("trustedPlayers", 10));
+    }
+
+    private int getMaxEnergyStorageWithExtenders() {
+        int tier = getTier();
+        switch (tier) {
+            case 1:
+                return ConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.getWorld(), this.pos);
+            case 2:
+                return ConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.getWorld(), this.pos);
+            case 3:
+                return ConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.getWorld(), this.pos);
+            case 4:
+                return ConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.getWorld(), this.pos);
+            case 5:
+                return ConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.getWorld(), this.pos);
+        }
+        return 0;
+    }
+
+    // Getters and Setters
+
+    @Override
+    public boolean isActive() {
+        boolean changedActive = false;
+        for (IBaseTargetCheckController controller : controllers) {
+            if (controller.overridesMode() && controller.getOverriddenMode() != this.mode) {
+                refreshActive(controller.getOverriddenMode());
+                changedActive = true;
+            }
+        }
+        if (!changedActive) {
+            refreshActive(this.mode);
+        }
+
+        return active;
     }
 
     public boolean isAttacksMobs() {
@@ -321,6 +411,133 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         this.playerKills = playerKills;
     }
 
+    public int getCurrentMaxRange() {
+        return currentMaxRange;
+    }
+
+    public int getUpperBoundMaxRange() {
+        return upperBoundMaxRange;
+    }
+
+    public ArrayList<IBaseTargetCheckController> getControllers() {
+        return controllers;
+    }
+
+    @Nonnull
+    @Override
+    public IBlockState getCamoState() {
+        return camoBlockState != null ? camoBlockState : this.getDefaultCamoState();
+    }
+
+    @Override
+    public void setCamoState(IBlockState state) {
+        this.camoBlockState = state;
+    }
+
+    // Inventory Functions
+
+    @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
+    public int[] getSlotsForFace(EnumFacing side) {
+        return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn);
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public boolean canExtractItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return true;
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int i, ItemStack stack) {
+        if (i < 9) {
+            return isItemStackValidAmmo(stack);
+        } else if (i <= 10) {
+            return stack.getItem() instanceof AddonMetaItem;
+        } else if (i <= 12) {
+            return stack.getItem() instanceof UpgradeMetaItem;
+        }
+        return false;
+    }
+
+    private static void updateRedstoneReactor(TurretBase base) {
+        OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
+        if (!TurretHeadUtil.hasRedstoneReactor(base) || storage == null) {
+            return;
+        }
+
+        if (ConfigHandler.getRedstoneReactorAddonGen() < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
+
+            //Prioritise redstone blocks
+            ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackBlockFromBase(base, new ItemStack(
+                    Blocks.REDSTONE_BLOCK));
+
+            if (redstoneBlock == ItemStackTools.getEmptyStack()) {
+                redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
+                        new ItemStack(Blocks.REDSTONE_BLOCK),
+                        base);
+            }
+
+            if (redstoneBlock != ItemStackTools.getEmptyStack() && ConfigHandler.getRedstoneReactorAddonGen() * 9
+                    < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
+                base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen() * 9);
+                return;
+            }
+
+            ItemStack redstone = TurretHeadUtil.getSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE));
+
+            if (redstone == ItemStackTools.getEmptyStack()) {
+                redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
+                        new ItemStack(Items.REDSTONE), base);
+            }
+
+            if (redstone != ItemStackTools.getEmptyStack()) {
+                storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen());
+            }
+        }
+    }
+
+    // API Functions. TODO: Add more?
+
+    /**
+     * Try to register the contoller given at the turret base.
+     *
+     * @param controller instance of the controller to add.
+     * @return true if added successfully
+     */
+
+    public boolean registerController(IBaseTargetCheckController controller) {
+        for (IBaseTargetCheckController controllerEntry : controllers) {
+            if ((controller instanceof IBaseFullController && controllerEntry instanceof IBaseFullController)
+                    || (controller.overridesMode() && controllerEntry.overridesMode())) {
+                return false;
+            }
+        }
+        this.controllers.add(controller);
+        return true;
+    }
+
+    /**
+     * List of all entities around the turret base in its range.
+     *
+     * @return List of EntityLivingBase
+     */
+
+    public List<EntityLivingBase> getEntitiesWithinRange() {
+        AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - currentMaxRange - 1, pos.getY() - currentMaxRange - 1,
+                pos.getZ() - currentMaxRange - 1, pos.getX() + currentMaxRange + 1,
+                pos.getY() + currentMaxRange + 1, pos.getZ() + currentMaxRange + 1);
+
+        return worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
+    }
+
     public void setAllTurretsYawPitch(float yaw, float pitch) {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         for (TileEntity te : tileEntities) {
@@ -375,162 +592,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return successes;
     }
 
-    public NBTTagCompound writeMemoryCardNBT() {
-        NBTTagCompound nbtTagCompound = new NBTTagCompound();
-        nbtTagCompound.setInteger("currentMaxRange", this.currentMaxRange);
-        nbtTagCompound.setBoolean("attacksMobs", attacksMobs);
-        nbtTagCompound.setBoolean("attacksNeutrals", attacksNeutrals);
-        nbtTagCompound.setBoolean("attacksPlayers", attacksPlayers);
-        nbtTagCompound.setBoolean("multiTargeting", multiTargeting);
-        nbtTagCompound.setInteger("mode", mode.ordinal());
-        if (this.rangeOverridden) {
-            nbtTagCompound.setInteger("range", this.currentMaxRange);
-        }
-        nbtTagCompound.setTag("trustedPlayers", getTrustedPlayersAsNBT());
-        return nbtTagCompound;
-    }
-
-    public void readMemoryCardNBT(NBTTagCompound nbtTagCompound) {
-        this.currentMaxRange = nbtTagCompound.getInteger("currentMaxRange");
-        this.attacksMobs = nbtTagCompound.getBoolean("attacksMobs");
-        this.attacksNeutrals = nbtTagCompound.getBoolean("attacksNeutrals");
-        this.attacksPlayers = nbtTagCompound.getBoolean("attacksPlayers");
-        this.multiTargeting = nbtTagCompound.getBoolean("multiTargeting");
-        if (nbtTagCompound.hasKey("mode")) {
-            this.mode = EnumMachineMode.values()[nbtTagCompound.getInteger("mode")];
-        } else {
-            this.mode = EnumMachineMode.INVERTED;
-        }
-        if (nbtTagCompound.hasKey("range")) {
-            this.rangeOverridden = true;
-            this.currentMaxRange = nbtTagCompound.getInteger("range");
-        } else {
-            this.rangeOverridden = false;
-            this.currentMaxRange = getUpperBoundMaxRange();
-        }
-        buildTrustedPlayersFromNBT(nbtTagCompound.getTagList("trustedPlayers", 10));
-    }
-
-    private static void updateRedstoneReactor(TurretBase base) {
-        OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
-        if (!TurretHeadUtil.hasRedstoneReactor(base) || storage == null) {
-            return;
-        }
-
-        if (ConfigHandler.getRedstoneReactorAddonGen() < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
-
-            //Prioritise redstone blocks
-            ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackBlockFromBase(base, new ItemStack(
-                    Blocks.REDSTONE_BLOCK));
-
-            if (redstoneBlock == ItemStackTools.getEmptyStack()) {
-                redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
-                        new ItemStack(Blocks.REDSTONE_BLOCK),
-                        base);
-            }
-
-            if (redstoneBlock != ItemStackTools.getEmptyStack() && ConfigHandler.getRedstoneReactorAddonGen() * 9
-                    < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
-                base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen() * 9);
-                return;
-            }
-
-            ItemStack redstone = TurretHeadUtil.getSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE));
-
-            if (redstone == ItemStackTools.getEmptyStack()) {
-                redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
-                        new ItemStack(Items.REDSTONE), base);
-            }
-
-            if (redstone != ItemStackTools.getEmptyStack()) {
-                storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen());
-            }
-        }
-    }
-
-    private int getMaxEnergyStorageWithExtenders() {
-        int tier = getTier();
-        switch (tier) {
-            case 1:
-                return ConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
-            case 2:
-                return ConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
-            case 3:
-                return ConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
-            case 4:
-                return ConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
-            case 5:
-                return ConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
-        }
-        return 0;
-    }
-
-    public int getCurrentMaxRange() {
-        return currentMaxRange;
-    }
-
-    public int getUpperBoundMaxRange() {
-        return upperBoundMaxRange;
-    }
-
-    public void registerController(ITurretBaseController controller) {
-        this.controllers.add(controller);
-    }
-
-    public ArrayList<ITurretBaseController> getControllers() {
-        return controllers;
-    }
-
-    public List<EntityLivingBase> getEntitiesWithinRange() {
-        AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - currentMaxRange - 1, pos.getY() - currentMaxRange - 1,
-                pos.getZ() - currentMaxRange - 1, pos.getX() + currentMaxRange + 1,
-                pos.getY() + currentMaxRange + 1, pos.getZ() + currentMaxRange + 1);
-
-        return worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
-    }
-
-    @Nonnull
-    @Override
-    public IBlockState getCamoState() {
-        return camoBlockState != null ? camoBlockState : this.getDefaultCamoState();
-    }
-
-    @Override
-    public void setCamoState(IBlockState state) {
-        this.camoBlockState = state;
-    }
-
-    @Override
-    @Nonnull
-    @ParametersAreNonnullByDefault
-    public int[] getSlotsForFace(EnumFacing side) {
-        return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
-    }
-
-    @Override
-    @ParametersAreNonnullByDefault
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return isItemValidForSlot(index, itemStackIn);
-    }
-
-    @Override
-    @ParametersAreNonnullByDefault
-    public boolean canExtractItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return true;
-    }
-
-    @Override
-    public List<String> getDebugInfo() {
-        List<String> debugInfo = new ArrayList<>();
-        debugInfo.add("Camo: " + this.camoBlockState.getBlock().getRegistryName() + ", computerAccess: " + this.computerAccessible);
-        debugInfo.add("Force Fire: " + this.forceFire + ", UpperMaxRange: " + this.upperBoundMaxRange);
-        return debugInfo;
-    }
+    // Mod Compatibility  functions:
 
     @Optional.Method(modid = "ComputerCraft")
     @Override
