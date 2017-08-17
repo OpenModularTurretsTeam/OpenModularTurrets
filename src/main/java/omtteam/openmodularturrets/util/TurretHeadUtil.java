@@ -27,7 +27,7 @@ import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.omlib.util.compat.MathTools;
-import omtteam.openmodularturrets.api.ITurretBaseController;
+import omtteam.openmodularturrets.api.IBaseTargetCheckController;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.compatibility.valkyrienwarfare.ValkyrienWarfareHelper;
 import omtteam.openmodularturrets.handler.ConfigHandler;
@@ -106,7 +106,7 @@ public class TurretHeadUtil {
                 }
 
                 boolean validTarget = true;
-                for (ITurretBaseController controller : base.getControllers()) {
+                for (IBaseTargetCheckController controller : base.getControllers()) {
                     if (!controller.isEntityValidTarget(possibleTarget, getAimYaw(possibleTarget, pos), getAimPitch(possibleTarget, pos))) {
                         validTarget = false;
                     }
