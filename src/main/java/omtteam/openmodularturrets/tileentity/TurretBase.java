@@ -46,8 +46,6 @@ import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
 import static omtteam.omlib.util.BlockUtil.getBlockStateFromNBT;
 import static omtteam.omlib.util.BlockUtil.writeBlockFromStateToNBT;
 import static omtteam.omlib.util.GeneralUtil.getMachineModeLocalization;
-import static omtteam.omlib.util.MathUtil.getRotationXYFromYawPitch;
-import static omtteam.omlib.util.MathUtil.getRotationXZFromYawPitch;
 import static omtteam.omlib.util.PlayerUtil.getPlayerUUID;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
@@ -327,8 +325,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         for (TileEntity te : tileEntities) {
             if (te != null && te instanceof TurretHead) {
-                ((TurretHead) te).setPitch(getRotationXYFromYawPitch(yaw, pitch));
-                ((TurretHead) te).setYaw(getRotationXZFromYawPitch(yaw, pitch));
+                ((TurretHead) te).setPitch(pitch);
+                ((TurretHead) te).setYaw(yaw);
             }
         }
     }
@@ -336,8 +334,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     public boolean setTurretYawPitch(EnumFacing facing, float yaw, float pitch) {
         TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
         if (turretHead != null && turretHead instanceof TurretHead) {
-            ((TurretHead) turretHead).setPitch(getRotationXYFromYawPitch(yaw, pitch));
-            ((TurretHead) turretHead).setYaw(getRotationXZFromYawPitch(yaw, pitch));
+            ((TurretHead) turretHead).setPitch(pitch);
+            ((TurretHead) turretHead).setYaw(yaw);
             return true;
         }
         return false;
