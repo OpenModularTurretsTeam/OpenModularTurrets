@@ -2,8 +2,12 @@ package omtteam.openmodularturrets.tileentity;
 
 import net.minecraft.util.ITickable;
 import omtteam.omlib.tileentity.TileEntityBase;
+import omtteam.omlib.tileentity.TileEntityOwnedBlock;
+import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
 
-public class LeverTileEntity extends TileEntityBase implements ITickable {
+import javax.annotation.Nonnull;
+
+public class LeverTileEntity extends TileEntityBase implements ITickable, ITurretBaseAddonTileEntity {
     public float rotation = 0;
     public boolean isTurning = false;
     private TurretBase base;
@@ -36,5 +40,11 @@ public class LeverTileEntity extends TileEntityBase implements ITickable {
                 this.rotation = 0F;
             }
         }
+    }
+
+    @Nonnull
+    @Override
+    public TileEntityOwnedBlock getLinkedBlock() {
+        return base;
     }
 }

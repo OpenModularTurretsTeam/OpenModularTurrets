@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.api;
+package omtteam.openmodularturrets.api.network;
 
 import net.minecraft.util.EnumFacing;
 
@@ -19,9 +19,16 @@ public interface INetworkCable {
     boolean shouldConnect(EnumFacing side);
 
     /**
-     * Return a list of all networking capable tiles near the cable.
+     * Return a list of all networking capable tiles touching the cable.
      *
      * @return the list.
      */
     List<INetworkTile> getConnectedDevices();
+
+    /**
+     * Return a list of all networking capable tiles near the cable.
+     *
+     * @return the list.
+     */
+    OMTNetwork getConnectedNetwork();
 }

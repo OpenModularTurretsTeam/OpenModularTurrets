@@ -8,7 +8,7 @@ import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 /**
  * Created by Keridos on 17/05/17.
- * This Class
+ * This interface if for all tile entities of addons attached to turret bases.
  */
 public interface ITurretBaseAddonTileEntity extends IOwnedBlockAddon {
     /**

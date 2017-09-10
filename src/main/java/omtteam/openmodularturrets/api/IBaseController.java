@@ -3,14 +3,19 @@ package omtteam.openmodularturrets.api;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import omtteam.omlib.tileentity.EnumMachineMode;
+import omtteam.omlib.util.TrustedPlayer;
+import omtteam.openmodularturrets.util.TargetingSettings;
+
+import java.util.List;
 
 /**
  * Created by Keridos on 08/08/17.
  * This interface should be implemented by tile entities that want to control turret bases.
- * Register them with base.registerController(IBaseTargetCheckController instance) for them to be used.
- * Turret Bases get additional API functions like getAllTargetsInRange. Only one of these can be registered per base.
+ * Register them with base.registerController(IBaseController instance) for them to be used.
+ * Only one instance of this interface can be registered per base.
+ * Turret Bases get additional API functions like getAllTargetsInRange.
  */
-public interface IBaseTargetCheckController extends ITurretBaseAddonTileEntity {
+public interface IBaseController extends ITurretBaseAddonTileEntity {
     /**
      * Return true if the Entity given per parameter is a valid target.
      *
@@ -22,14 +27,14 @@ public interface IBaseTargetCheckController extends ITurretBaseAddonTileEntity {
     boolean isEntityValidTarget(Entity target, float yaw, float pitch);
 
     /**
-     * Return true if the controller overrides Base modes. Should not be changed based on anything.
+     * Return true if the controller overrides base modes.
      *
      * @return boolean
      */
     boolean overridesMode();
 
     /**
-     * Return the overriden mode if the controller overrides Base modes.
+     * Return the overriden mode if the controller overrides base modes.
      *
      * @return overriding mode
      */
@@ -41,4 +46,19 @@ public interface IBaseTargetCheckController extends ITurretBaseAddonTileEntity {
      * @return BlockPos
      */
     BlockPos getPositionOfBlock();
+
+    /**
+     * Return the overridden targeting settings for the base.
+     *
+     * @return TargetingSettings
+     */
+    TargetingSettings getTargetingSettings();
+
+
+    /**
+     * Return the overridden trusted player list for the base.
+     *
+     * @return List of TrustedPlayer
+     */
+    List<TrustedPlayer> getTrustedPlayerList();
 }

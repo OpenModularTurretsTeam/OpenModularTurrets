@@ -16,9 +16,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.tileentity.TileEntityBase;
+import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.omlib.util.compat.MathTools;
+import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.compatibility.valkyrienwarfare.ValkyrienWarfareHelper;
@@ -28,6 +30,7 @@ import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
@@ -37,7 +40,7 @@ import static omtteam.omlib.util.compat.WorldTools.spawnEntity;
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
 
-public abstract class TurretHead extends TileEntityBase implements ITickable {
+public abstract class TurretHead extends TileEntityBase implements ITickable, ITurretBaseAddonTileEntity {
     int ticks;
     int targetingTicks;
     public float pitch;
@@ -108,6 +111,12 @@ public abstract class TurretHead extends TileEntityBase implements ITickable {
         //this.minPitch = par1.getFloat("minPitch");
         //this.maxYaw = par1.getFloat("maxYaw");
         //this.minYaw = par1.getFloat("minYaw");
+    }
+
+    @Nonnull
+    @Override
+    public TileEntityOwnedBlock getLinkedBlock() {
+        return base;
     }
 
     void setSide() {
