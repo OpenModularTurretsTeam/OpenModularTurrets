@@ -26,8 +26,7 @@ import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackList;
 import omtteam.omlib.util.compat.ItemStackTools;
-import omtteam.openmodularturrets.api.IBaseFullController;
-import omtteam.openmodularturrets.api.IBaseTargetCheckController;
+import omtteam.openmodularturrets.api.IBaseController;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.items.AddonMetaItem;
 import omtteam.openmodularturrets.items.UpgradeMetaItem;
@@ -75,7 +74,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private boolean forceFire = false;
     private int kills;
     private int playerKills;
-    private ArrayList<IBaseTargetCheckController> controllers = new ArrayList<>();
+    private IBaseController controller;
 
     public TurretBase() {
         super();
@@ -178,17 +177,14 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     private void updateControllerSettings() {
-        for (IBaseTargetCheckController controller : controllers) {
-            if (controller instanceof IBaseFullController) {
-                TargetingSettings settings = ((IBaseFullController) controller).getTargetingSettings();
-                this.attacksMobs = settings.isTargetMobs();
-                this.attacksNeutrals = settings.isTargetPassive();
-                this.attacksPlayers = settings.isTargetPlayers();
-                this.currentMaxRange = settings.getMaxRange();
 
-                this.trustedPlayers = ((IBaseFullController) controller).getTrustedPlayerList();
-            }
-        }
+        TargetingSettings settings = controller.getTargetingSettings();
+        this.attacksMobs = settings.isTargetMobs();
+        this.attacksNeutrals = settings.isTargetPassive();
+        this.attacksPlayers = settings.isTargetPlayers();
+        this.currentMaxRange = settings.getMaxRange();
+
+        this.trustedPlayers = controller.getTrustedPlayerList();
     }
 
     @Override
@@ -329,11 +325,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Override
     public boolean isActive() {
         boolean changedActive = false;
-        for (IBaseTargetCheckController controller : controllers) {
-            if (controller.overridesMode() && controller.getOverriddenMode() != this.mode) {
-                refreshActive(controller.getOverriddenMode());
-                changedActive = true;
-            }
+        if (controller.overridesMode() && controller.getOverriddenMode() != this.mode) {
+            refreshActive(controller.getOverriddenMode());
+            changedActive = true;
         }
         if (!changedActive) {
             refreshActive(this.mode);
@@ -419,8 +413,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return upperBoundMaxRange;
     }
 
-    public ArrayList<IBaseTargetCheckController> getControllers() {
-        return controllers;
+    public IBaseController getController() {
+        return controller;
     }
 
     @Nonnull
@@ -513,14 +507,11 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
      * @return true if added successfully
      */
 
-    public boolean registerController(IBaseTargetCheckController controller) {
-        for (IBaseTargetCheckController controllerEntry : controllers) {
-            if ((controller instanceof IBaseFullController && controllerEntry instanceof IBaseFullController)
-                    || (controller.overridesMode() && controllerEntry.overridesMode())) {
-                return false;
-            }
+    public boolean registerController(IBaseController controller) {
+        if (this.controller != null) {
+            return false;
         }
-        this.controllers.add(controller);
+        this.controller = controller;
         return true;
     }
 

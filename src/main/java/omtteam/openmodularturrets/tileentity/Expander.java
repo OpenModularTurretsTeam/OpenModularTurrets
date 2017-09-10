@@ -6,7 +6,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import omtteam.omlib.tileentity.TileEntityContainer;
+import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.util.compat.ItemStackList;
+import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
@@ -15,7 +17,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static omtteam.omlib.util.MathUtil.truncateDoubleToInt;
 import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing;
 
-public class Expander extends TileEntityContainer implements ITickable {
+public class Expander extends TileEntityContainer implements ITickable, ITurretBaseAddonTileEntity {
     @SuppressWarnings("unused")
     protected TurretBase base;
     private boolean powerExpander;
@@ -111,5 +113,11 @@ public class Expander extends TileEntityContainer implements ITickable {
 
     private void setOrientation(EnumFacing orientation) {
         this.orientation = orientation;
+    }
+
+    @Nonnull
+    @Override
+    public TileEntityOwnedBlock getLinkedBlock() {
+        return base;
     }
 }
