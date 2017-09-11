@@ -224,12 +224,12 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
 
         if (ConfigHandler.offlineModeSupport) {
-            if (trustedPlayer.getName().equals(getOwner())) {
+            if (trustedPlayer.getName().equals(getOwnerName())) {
                 return false;
             }
 
         } else {
-            if (trustedPlayer.uuid == null || trustedPlayer.uuid.toString().equals(getOwner())) {
+            if (trustedPlayer.uuid == null || trustedPlayer.uuid.toString().equals(getOwnerName())) {
                 return false;
             }
         }
@@ -237,7 +237,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         if (trustedPlayer.uuid != null || ConfigHandler.offlineModeSupport) {
             for (TrustedPlayer player : trustedPlayers) {
                 if (ConfigHandler.offlineModeSupport) {
-                    if (player.getName().toLowerCase().equals(name.toLowerCase()) || player.getName().equals(getOwner())) {
+                    if (player.getName().toLowerCase().equals(name.toLowerCase()) || player.getName().equals(getOwnerName())) {
                         return false;
                     }
                 } else {
@@ -870,7 +870,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         if (!computerAccessible) {
             return new Object[]{"Computer access deactivated!"};
         }
-        return new Object[]{this.getOwner()};
+        return new Object[]{this.getOwnerName()};
     }
 
     @Optional.Method(modid = "OpenComputers")
@@ -1059,7 +1059,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         }
         switch (commands.values()[method]) {
             case getOwner:
-                return new Object[]{this.getOwner()};
+                return new Object[]{this.getOwnerName()};
             case attacksPlayers:
                 return new Object[]{this.attacksPlayers};
             case setAttacksPlayers:
