@@ -73,7 +73,6 @@ public class OMTNetwork {
 
     //TODO: add merging and splitting function
 
-
     public World getWorld() {
         return world;
     }

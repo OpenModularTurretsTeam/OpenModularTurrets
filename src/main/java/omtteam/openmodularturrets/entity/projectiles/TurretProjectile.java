@@ -65,7 +65,8 @@ public abstract class TurretProjectile extends EntityThrowable {
                 if (PlayerUtil.isPlayerTrusted(entityPlayer, this.turretBase)) {
                     return false;
                 }
-            } else if (PlayerUtil.isPlayerOwner(entityPlayer, this.turretBase)) {
+            }
+            if (PlayerUtil.isPlayerOwner(entityPlayer, this.turretBase)) {
                 return false;
             }
         }

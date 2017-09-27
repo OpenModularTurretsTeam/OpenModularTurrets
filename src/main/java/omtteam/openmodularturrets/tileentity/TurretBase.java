@@ -27,6 +27,9 @@ import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackList;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.openmodularturrets.api.IBaseController;
+import omtteam.openmodularturrets.api.network.INetworkTile;
+import omtteam.openmodularturrets.api.network.IPowerExchangeTile;
+import omtteam.openmodularturrets.api.network.OMTNetwork;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.items.AddonMetaItem;
 import omtteam.openmodularturrets.items.UpgradeMetaItem;
@@ -37,6 +40,7 @@ import omtteam.openmodularturrets.util.TargetingSettings;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +59,7 @@ import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft")}
 )
-public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile {
+public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile {
     public int trustedPlayerIndex = 0;
     protected IBlockState camoBlockState;
 
@@ -75,6 +79,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private int kills;
     private int playerKills;
     private IBaseController controller;
+    private OMTNetwork network;
 
     public TurretBase() {
         super();
@@ -177,14 +182,15 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     private void updateControllerSettings() {
+        if (controller != null) {
+            TargetingSettings settings = controller.getTargetingSettings();
+            this.attacksMobs = settings.isTargetMobs();
+            this.attacksNeutrals = settings.isTargetPassive();
+            this.attacksPlayers = settings.isTargetPlayers();
+            this.currentMaxRange = settings.getMaxRange();
 
-        TargetingSettings settings = controller.getTargetingSettings();
-        this.attacksMobs = settings.isTargetMobs();
-        this.attacksNeutrals = settings.isTargetPassive();
-        this.attacksPlayers = settings.isTargetPlayers();
-        this.currentMaxRange = settings.getMaxRange();
-
-        this.trustedPlayers = controller.getTrustedPlayerList();
+            this.trustedPlayers = controller.getTrustedPlayerList();
+        }
     }
 
     @Override
@@ -325,7 +331,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Override
     public boolean isActive() {
         boolean changedActive = false;
-        if (controller.overridesMode() && controller.getOverriddenMode() != this.mode) {
+        if (controller != null && controller.overridesMode() && controller.getOverriddenMode() != this.mode) {
             refreshActive(controller.getOverriddenMode());
             changedActive = true;
         }
@@ -413,6 +419,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return upperBoundMaxRange;
     }
 
+    @Nullable
     public IBaseController getController() {
         return controller;
     }
@@ -506,7 +513,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
      * @param controller instance of the controller to add.
      * @return true if added successfully
      */
-
     public boolean registerController(IBaseController controller) {
         if (this.controller != null) {
             return false;
@@ -520,7 +526,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
      *
      * @return List of EntityLivingBase
      */
-
     public List<EntityLivingBase> getEntitiesWithinRange() {
         AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - currentMaxRange - 1, pos.getY() - currentMaxRange - 1,
                 pos.getZ() - currentMaxRange - 1, pos.getX() + currentMaxRange + 1,
@@ -584,6 +589,38 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     // Mod Compatibility  functions:
+
+
+    @Override
+    public boolean requiresEnergy() {
+        return true;
+    }
+
+    @Override
+    public boolean deliversEnergy() {
+        return false;
+    }
+
+    @Override
+    public OMEnergyStorage getEnergyStorage() {
+        return storage;
+    }
+
+    @Nullable
+    @Override
+    public OMTNetwork getNetwork() {
+        return network;
+    }
+
+    @Override
+    public String getDeviceName() {
+        return "TurretBase";
+    }
+
+    @Override
+    public void setNetwork(OMTNetwork network) {
+        this.network = network;
+    }
 
     @Optional.Method(modid = "ComputerCraft")
     @Override
