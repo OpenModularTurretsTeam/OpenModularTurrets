@@ -106,7 +106,7 @@ public class TurretHeadUtil {
 
                 boolean validTarget = true;
 
-                if (!base.getController().isEntityValidTarget(possibleTarget, getAimYaw(possibleTarget, pos), getAimPitch(possibleTarget, pos))) {
+                if (base.getController() != null && !base.getController().isEntityValidTarget(possibleTarget, getAimYaw(possibleTarget, pos), getAimPitch(possibleTarget, pos))) {
                     validTarget = false;
                 }
 

@@ -9,7 +9,6 @@ import java.util.List;
  * This Class
  */
 public interface INetworkCable {
-
     /**
      * Return true if the cable should connect to the given side.
      *
@@ -31,4 +30,9 @@ public interface INetworkCable {
      * @return the list.
      */
     OMTNetwork getConnectedNetwork();
+
+    /**
+     * Connect the device given to the network of the cable, and If necessary join networks.
+     */
+    void connectDevice(INetworkTile tile);
 }
