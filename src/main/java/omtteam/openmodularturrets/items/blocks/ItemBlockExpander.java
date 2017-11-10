@@ -1,17 +1,19 @@
 package omtteam.openmodularturrets.items.blocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
@@ -36,9 +38,11 @@ public class ItemBlockExpander extends ItemBlockBaseAddon {
             OMTNames.Blocks.expanderPowerTierFive,
     };
 
+
+
     @Override
     @ParametersAreNonnullByDefault
-    public void clGetSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         for (int i = 0; i < 10; i++) {
             subItems.add(new ItemStack(ModBlocks.expander, 1, i));
         }
@@ -58,7 +62,7 @@ public class ItemBlockExpander extends ItemBlockBaseAddon {
     @Override
     @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         switch (stack.getMetadata()) {
             case 0:
                 tooltip.add("");

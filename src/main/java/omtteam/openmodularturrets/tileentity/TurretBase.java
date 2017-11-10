@@ -22,10 +22,9 @@ import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityTrustedMachine;
+import omtteam.omlib.util.ItemStackList;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
-import omtteam.omlib.util.compat.ItemStackList;
-import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.openmodularturrets.api.IBaseController;
 import omtteam.openmodularturrets.api.network.INetworkTile;
 import omtteam.openmodularturrets.api.network.IPowerExchangeTile;
@@ -480,13 +479,13 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackBlockFromBase(base, new ItemStack(
                     Blocks.REDSTONE_BLOCK));
 
-            if (redstoneBlock == ItemStackTools.getEmptyStack()) {
+            if (redstoneBlock == ItemStack.EMPTY) {
                 redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
                         new ItemStack(Blocks.REDSTONE_BLOCK),
                         base);
             }
 
-            if (redstoneBlock != ItemStackTools.getEmptyStack() && ConfigHandler.getRedstoneReactorAddonGen() * 9
+            if (redstoneBlock != ItemStack.EMPTY && ConfigHandler.getRedstoneReactorAddonGen() * 9
                     < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
                 base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen() * 9);
                 return;
@@ -494,12 +493,12 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
             ItemStack redstone = TurretHeadUtil.getSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE));
 
-            if (redstone == ItemStackTools.getEmptyStack()) {
+            if (redstone == ItemStack.EMPTY) {
                 redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
                         new ItemStack(Items.REDSTONE), base);
             }
 
-            if (redstone != ItemStackTools.getEmptyStack()) {
+            if (redstone != ItemStack.EMPTY) {
                 storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen());
             }
         }
@@ -531,7 +530,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 pos.getZ() - currentMaxRange - 1, pos.getX() + currentMaxRange + 1,
                 pos.getY() + currentMaxRange + 1, pos.getZ() + currentMaxRange + 1);
 
-        return worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
+        return this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
     }
 
     public void setAllTurretsYawPitch(float yaw, float pitch) {

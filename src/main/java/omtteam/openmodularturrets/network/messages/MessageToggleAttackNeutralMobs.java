@@ -24,8 +24,8 @@ public class MessageToggleAttackNeutralMobs implements IMessage {
         public IMessage onMessage(MessageToggleAttackNeutralMobs messageIn, MessageContext ctxIn) {
             final MessageToggleAttackNeutralMobs message = messageIn;
             final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().playerEntity.getEntityWorld();
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
                 TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
 
                 turret.setAttacksNeutrals(message.doAttackNeutrals());

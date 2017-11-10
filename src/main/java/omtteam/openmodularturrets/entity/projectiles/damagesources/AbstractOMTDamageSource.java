@@ -29,7 +29,7 @@ public abstract class AbstractOMTDamageSource extends DamageSource {
 
     @Nullable
     @Override
-    public Entity getEntity() {
+    public Entity getTrueSource() {
         return player;
     }
 

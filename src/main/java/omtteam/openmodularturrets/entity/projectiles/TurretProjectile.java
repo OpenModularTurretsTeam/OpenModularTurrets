@@ -109,9 +109,9 @@ public abstract class TurretProjectile extends EntityThrowable {
 
         Vec3d vec3d = new Vec3d(this.posX, this.posY, this.posZ);
         Vec3d vec3d1 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-        RayTraceResult raytraceresult = this.worldObj.rayTraceBlocks(vec3d, vec3d1);
+        RayTraceResult raytraceresult = this.getEntityWorld().rayTraceBlocks(vec3d, vec3d1);
 
-        List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(0.2D));
+        List<Entity> list = this.getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.motionX, this.motionY, this.motionZ).expand(0.2D, 0.2D, 0.2D));
 
         for (Entity entity : list) {
             if (entity.canBeCollidedWith()) {
@@ -121,14 +121,14 @@ public abstract class TurretProjectile extends EntityThrowable {
 
         if (raytraceresult != null) {
             if (raytraceresult.typeOfHit == RayTraceResult.Type.BLOCK) {
-                this.onHitBlock(this.worldObj.getBlockState(raytraceresult.getBlockPos()), raytraceresult.getBlockPos());
+                this.onHitBlock(this.getEntityWorld().getBlockState(raytraceresult.getBlockPos()), raytraceresult.getBlockPos());
             }
         }
 
         this.posX += this.motionX;
         this.posY += this.motionY;
         this.posZ += this.motionZ;
-        float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+        float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
         this.rotationYaw = (float) (MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
 
         for (this.rotationPitch = (float) (MathHelper.atan2(this.motionY, (double) f) * (180D / Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
@@ -154,7 +154,7 @@ public abstract class TurretProjectile extends EntityThrowable {
 
         if (this.isInWater()) {
             for (int j = 0; j < 4; ++j) {
-                this.worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ, new int[0]);
+                this.getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ, new int[0]);
             }
             f1 = 0.8F;
         }

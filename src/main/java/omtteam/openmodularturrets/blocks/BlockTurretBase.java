@@ -15,13 +15,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
@@ -39,7 +39,6 @@ import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
-import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
@@ -55,8 +54,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.*;
+import static omtteam.omlib.util.PlayerUtil.addChatMessage;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
-import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
+
 
 @SuppressWarnings("deprecation")
 public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHasItemBlock, TOPInfoProvider {
@@ -142,11 +142,11 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    protected boolean clOnBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote && hand == EnumHand.MAIN_HAND) {
             ItemStack heldItem = player.getHeldItemMainhand();
             TurretBase base = (TurretBase) world.getTileEntity(pos);
-            if (player.isSneaking() && ConfigHandler.isAllowBaseCamo() && heldItem == ItemStackTools.getEmptyStack()) {
+            if (player.isSneaking() && ConfigHandler.isAllowBaseCamo() && heldItem == ItemStack.EMPTY) {
                 if (base != null) {
                     if (player.getUniqueID().toString().equals(base.getOwner())) {
                         base.setCamoState(state);
@@ -159,11 +159,11 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
 
             Block heldItemBlock = null;
 
-            if (heldItem != ItemStackTools.getEmptyStack()) {
+            if (heldItem != ItemStack.EMPTY) {
                 heldItemBlock = Block.getBlockFromItem(heldItem.getItem());
             }
 
-            if (!player.isSneaking() && ConfigHandler.isAllowBaseCamo() && heldItem != ItemStackTools.getEmptyStack() && heldItem.getItem() instanceof ItemBlock &&
+            if (!player.isSneaking() && ConfigHandler.isAllowBaseCamo() && heldItem != ItemStack.EMPTY && heldItem.getItem() instanceof ItemBlock &&
                     heldItemBlock.isNormalCube(heldItemBlock.getStateFromMeta(heldItem.getMetadata())) && Block.getBlockFromItem(
                     heldItem.getItem()).isOpaqueCube(heldItemBlock.getStateFromMeta(heldItem.getMetadata())) && !(Block.getBlockFromItem(
                     heldItem.getItem()) instanceof BlockTurretBase)) {
@@ -176,10 +176,10 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                     }
                 }
 
-            } else if (player.isSneaking() && base != null && player.getHeldItemMainhand() != ItemStackTools.getEmptyStack() &&
+            } else if (player.isSneaking() && base != null && player.getHeldItemMainhand() != ItemStack.EMPTY &&
                     player.getHeldItemMainhand().getItem() instanceof UsableMetaItem && player.getHeldItemMainhand().getItemDamage() == 2) {
                 ((UsableMetaItem) player.getHeldItemMainhand().getItem()).setDataStored(player.getHeldItemMainhand(), base.writeMemoryCardNBT());
-            } else if (!player.isSneaking() && base != null && player.getHeldItemMainhand() != ItemStackTools.getEmptyStack() &&
+            } else if (!player.isSneaking() && base != null && player.getHeldItemMainhand() != ItemStack.EMPTY &&
                     player.getHeldItemMainhand().getItem() instanceof UsableMetaItem && player.getHeldItemMainhand().getItemDamage() == 2 &&
                     ((UsableMetaItem) player.getHeldItemMainhand().getItem()).hasDataStored(player.getHeldItemMainhand())) {
                 base.readMemoryCardNBT(((UsableMetaItem) player.getHeldItemMainhand().getItem()).getDataStored(player.getHeldItemMainhand()));
@@ -201,10 +201,10 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     }
 
     @Override
-    protected void clOnNeighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos neighbor) {
         if (!worldIn.isRemote) {
             TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
-            if (base != null && worldIn.isBlockIndirectlyGettingPowered(pos) > 0) {
+            if (base != null && worldIn.isBlockIndirectlyGettingPowered(pos) > 0){
                 base.setRedstone(true);
             } else if (base != null && worldIn.isBlockIndirectlyGettingPowered(pos) == 0) {
                 base.setRedstone(false);
@@ -336,7 +336,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
-    public void clGetSubBlocks(Item item, CreativeTabs tab, List subItems) {
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         for (int i = 0; i < 5; i++) {
             subItems.add(new ItemStack(ModBlocks.turretBase, 1, i));
         }

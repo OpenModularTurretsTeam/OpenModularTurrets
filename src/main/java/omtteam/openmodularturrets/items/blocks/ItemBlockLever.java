@@ -1,11 +1,13 @@
 package omtteam.openmodularturrets.items.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class ItemBlockLever extends ItemBlockBaseAddon {
     @Override
     @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
-    public void addInformation(ItemStack itemStack, EntityPlayer player, List tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(safeLocalize(OMTNames.Localizations.GUI.TURRET_LEVER_DESCRIPTION));
     }
 }

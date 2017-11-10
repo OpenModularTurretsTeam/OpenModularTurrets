@@ -31,7 +31,7 @@ public class ModBlocks {
     public static Block teleporterTurret;
 
     public static Block rocketTurret;
-    public static Block laserTurret;
+    public static Block laserTurret = new BlockLaserTurret();
     public static Block railGunTurret;
     public static Block leverBlock;
 
@@ -75,7 +75,7 @@ public class ModBlocks {
         }
 
         if (ConfigHandler.getLaserTurretSettings().isEnabled()) {
-            laserTurret = registerBlock(new BlockLaserTurret());
+            registerBlock(laserTurret);
         }
 
         if (ConfigHandler.getRailgunTurretSettings().isEnabled()) {

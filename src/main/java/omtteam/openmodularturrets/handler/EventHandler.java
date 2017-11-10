@@ -54,7 +54,7 @@ public class EventHandler {
         if (fakeDrops >= 0) {
             FakePlayer player = OMTFakePlayer.getFakePlayer((WorldServer) event.getEntityLiving().getEntityWorld());
             player.setHeldItem(EnumHand.MAIN_HAND, OMTFakePlayer.getSword(fakeDrops));
-            entity.setLastAttacker(player);
+            entity.setLastAttackedEntity(player);
         }
     }
 
@@ -65,7 +65,7 @@ public class EventHandler {
         if (fakeDrops >= 0) {
             FakePlayer player = OMTFakePlayer.getFakePlayer((WorldServer) event.getEntityLiving().getEntityWorld());
             player.setHeldItem(EnumHand.MAIN_HAND, OMTFakePlayer.getSword(fakeDrops));
-            entity.setLastAttacker(player);
+            entity.setLastAttackedEntity(player);
         }
     }
 

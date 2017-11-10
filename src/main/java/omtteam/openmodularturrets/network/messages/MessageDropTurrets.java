@@ -21,8 +21,8 @@ public class MessageDropTurrets implements IMessage {
         public IMessage onMessage(MessageDropTurrets messageIn, MessageContext ctxIn) {
             final MessageDropTurrets message = messageIn;
             final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().playerEntity.getEntityWorld();
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
 
                 if (world.getTileEntity(new BlockPos(message.getX() + 1, message.getY(), message.getZ())) instanceof TurretHead) {
                     world.destroyBlock(new BlockPos(message.getX() + 1, message.getY(), message.getZ()), true);
