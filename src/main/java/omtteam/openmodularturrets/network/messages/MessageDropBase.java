@@ -21,8 +21,8 @@ public class MessageDropBase implements IMessage {
         public IMessage onMessage(MessageDropBase messageIn, MessageContext ctxIn) {
             final MessageDropBase message = messageIn;
             final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().playerEntity.getEntityWorld();
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
                 world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ()), true);
             });
             return null;

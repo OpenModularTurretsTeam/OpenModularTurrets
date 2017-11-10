@@ -23,8 +23,8 @@ public class MessageToggleMode implements IMessage {
         public IMessage onMessage(MessageToggleMode messageIn, MessageContext ctxIn) {
             final MessageToggleMode message = messageIn;
             final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().playerEntity.getEntityWorld();
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
                 TileEntity te = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
                 if (te != null && te instanceof TurretBase) {
                     ((TurretBase) te).toggleMode();

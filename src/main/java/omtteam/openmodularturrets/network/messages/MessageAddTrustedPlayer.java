@@ -25,8 +25,8 @@ public class MessageAddTrustedPlayer implements IMessage {
         public IMessage onMessage(MessageAddTrustedPlayer messageIn, MessageContext ctxIn) {
             final MessageAddTrustedPlayer message = messageIn;
             final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().playerEntity.getEntityWorld();
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
                 TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
                 turret.addTrustedPlayer(message.getPlayer());
             });

@@ -2,9 +2,9 @@ package omtteam.openmodularturrets.client.render.renderers.projectiles;
 
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -43,7 +43,7 @@ class RocketRenderer extends Render {
         GlStateManager.rotate(par1EntityRocket.prevRotationYaw + (par1EntityRocket.rotationYaw - par1EntityRocket.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(par1EntityRocket.prevRotationPitch + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexbuffer = tessellator.getBuffer();
+        BufferBuilder vertexbuffer = tessellator.getBuffer();
 
         GlStateManager.enableRescaleNormal();
         float f9 = (float) par1EntityRocket.arrowShake - partialTicks;

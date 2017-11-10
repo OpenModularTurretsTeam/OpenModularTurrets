@@ -1,13 +1,14 @@
 package omtteam.openmodularturrets.items;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.omlib.compatibility.minecraft.CompatItem;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModItems;
@@ -15,13 +16,14 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 @SuppressWarnings("deprecation")
-public class AddonMetaItem extends CompatItem {
+public class AddonMetaItem extends Item {
     public AddonMetaItem() {
         super();
 
@@ -39,7 +41,7 @@ public class AddonMetaItem extends CompatItem {
 
     @Override
     @ParametersAreNonnullByDefault
-    public void clGetSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         for (int i = 0; i < 8; i++) {
             subItems.add(new ItemStack(ModItems.addonMetaItem, 1, i));
         }
@@ -60,7 +62,7 @@ public class AddonMetaItem extends CompatItem {
     @SideOnly(Side.CLIENT)
     @Override
     @ParametersAreNonnullByDefault
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean isAdvanced) {
+    public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
         switch (stack.getMetadata()) {
             case 0:
                 tooltip.add("");

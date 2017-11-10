@@ -5,13 +5,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.items.AmmoMetaItem;
 
 import java.util.Set;
 
-import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
+import static omtteam.omlib.util.InvUtil.getStackSize;
 
 /**
  * Created by Keridos on 06/02/17.
@@ -19,7 +18,7 @@ import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
  */
 public class OMTUtil {
     public static boolean isItemStackValidAmmo(ItemStack itemStack) {
-        if (itemStack == ItemStackTools.getEmptyStack()) return false;
+        if (itemStack == ItemStack.EMPTY) return false;
         if (!ConfigHandler.useWhitelistForAmmo || itemStack.getItem() == Items.POTATO
                 || itemStack.getItem() == Items.REDSTONE || itemStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK))
             return true;

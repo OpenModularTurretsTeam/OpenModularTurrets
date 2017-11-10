@@ -5,14 +5,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.openmodularturrets.client.gui.customSlot.AmmoSlot;
 import omtteam.openmodularturrets.tileentity.Expander;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static omtteam.omlib.util.InvUtil.mergeItemStackWithStackLimit;
-import static omtteam.omlib.util.compat.ItemStackTools.*;
+import static omtteam.omlib.util.InvUtil.*;
 
 public class ExpanderInvContainer extends Container {
     private final Expander tileEntity;
@@ -40,13 +38,13 @@ public class ExpanderInvContainer extends Container {
     @Override
     @ParametersAreNonnullByDefault
     public boolean canInteractWith(EntityPlayer player) {
-        return tileEntity.isUsable(player);
+        return tileEntity.isUsableByPlayer(player);
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int slot) {
-        ItemStack itemStack = ItemStackTools.getEmptyStack();
+        ItemStack itemStack = ItemStack.EMPTY;
         Slot invSlot = this.inventorySlots.get(slot);
 
         if (invSlot != null && invSlot.getHasStack()) {
@@ -55,20 +53,20 @@ public class ExpanderInvContainer extends Container {
 
             if (slot < 9) {
                 if (!mergeItemStackWithStackLimit(itemStack1, 9, 45, true, this)) {
-                    return ItemStackTools.getEmptyStack();
+                    return ItemStack.EMPTY;
                 }
             } else if (!mergeItemStackWithStackLimit(itemStack1, 0, 9, false, this)) {
-                return ItemStackTools.getEmptyStack();
+                return ItemStack.EMPTY;
             }
 
             if (getStackSize(itemStack1) == 0) {
-                invSlot.putStack(ItemStackTools.getEmptyStack());
+                invSlot.putStack(ItemStack.EMPTY);
             } else {
                 invSlot.onSlotChanged();
             }
 
             if (getStackSize(itemStack1) == getStackSize(itemStack)) {
-                return ItemStackTools.getEmptyStack();
+                return ItemStack.EMPTY;
             }
 
             invSlot.onSlotChanged();
@@ -88,7 +86,7 @@ public class ExpanderInvContainer extends Container {
             int slotStackLimit = i < tileEntity.getSizeInventory() ? tileEntity.getInventoryStackLimit() : 64;
             int totalLimit = slotStackLimit < stack.getMaxStackSize() ? slotStackLimit : stack.getMaxStackSize();
 
-            if (slotStack == ItemStackTools.getEmptyStack()) {
+            if (slotStack == ItemStack.EMPTY) {
                 int transfer = totalLimit < getStackSize(stack) ? totalLimit : getStackSize(stack);
                 ItemStack stackToPut = stack.copy();
                 setStackSize(stackToPut, transfer);
@@ -100,7 +98,7 @@ public class ExpanderInvContainer extends Container {
                     stack, slotStack)) {
                 int maxTransfer = totalLimit - getStackSize(slotStack);
                 int transfer = maxTransfer > getStackSize(stack) ? getStackSize(stack) : maxTransfer;
-                incStackSize(slotStack, transfer);
+                slotStack.setCount(slotStack.getCount()+ transfer);
                 slot.onSlotChanged();
                 setStackSize(stack, getStackSize(stack) - transfer);
                 flag = true;

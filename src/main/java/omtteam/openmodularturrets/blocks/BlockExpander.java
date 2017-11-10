@@ -10,12 +10,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -40,11 +40,10 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
+import static omtteam.omlib.util.PlayerUtil.addChatMessage;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
-import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 
 /**
  * Created by Keridos on 19/07/16.
@@ -147,8 +146,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     }
 
     @Override
-    @ParametersAreNonnullByDefault
-    public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }
 
@@ -158,7 +156,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     }
 
     @Override
-    protected boolean clOnBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (hand.equals(EnumHand.OFF_HAND)) return true;
         Expander expander = (Expander) worldIn.getTileEntity(pos);
         if (expander == null) {
@@ -227,7 +225,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
-    public void clGetSubBlocks(Item item, CreativeTabs tab, List subItems) {
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         for (int i = 0; i < 10; i++) {
             subItems.add(new ItemStack(ModBlocks.expander, 1, i));
         }

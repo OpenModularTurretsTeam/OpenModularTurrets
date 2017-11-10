@@ -22,8 +22,8 @@ public class MessageSetBaseTargetingType implements IMessage {
         public IMessage onMessage(MessageSetBaseTargetingType messageIn, MessageContext ctxIn) {
             final MessageSetBaseTargetingType message = messageIn;
             final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().playerEntity.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().playerEntity.getEntityWorld();
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
                 TurretBase turretbase = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
                 turretbase.setMultiTargeting(!turretbase.isMultiTargeting());
             });

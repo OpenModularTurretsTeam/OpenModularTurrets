@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.items;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import omtteam.omlib.compatibility.minecraft.CompatItem;
+import net.minecraft.util.NonNullList;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
@@ -11,9 +11,8 @@ import omtteam.openmodularturrets.reference.Reference;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 
-public class IntermediateProductRegular extends CompatItem {
+public class IntermediateProductRegular extends Item {
     public IntermediateProductRegular() {
         super();
 
@@ -29,7 +28,7 @@ public class IntermediateProductRegular extends CompatItem {
 
     @Override
     @ParametersAreNonnullByDefault
-    public void clGetSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         for (int i = 0; i < 1; i++) {
             subItems.add(new ItemStack(ModItems.intermediateProductRegular, 1, i));
         }

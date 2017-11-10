@@ -1,25 +1,27 @@
 package omtteam.openmodularturrets.items.blocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
-import omtteam.omlib.compatibility.minecraft.CompatItemBlock;
+import net.minecraft.world.World;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 @SuppressWarnings("deprecation")
-public class ItemBlockTurretBase extends CompatItemBlock {
+public class ItemBlockTurretBase extends ItemBlock {
     public ItemBlockTurretBase(Block block) {
         super(block);
         setHasSubtypes(true);
@@ -32,7 +34,7 @@ public class ItemBlockTurretBase extends CompatItemBlock {
 
     @Override
     @ParametersAreNonnullByDefault
-    public void clGetSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         for (int i = 0; i < 5; i++) {
             subItems.add(new ItemStack(ModBlocks.turretBase, 1, i));
         }
@@ -52,7 +54,7 @@ public class ItemBlockTurretBase extends CompatItemBlock {
     @Override
     @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
         tooltip.add(safeLocalize(OMTNames.Localizations.GUI.TURRET_BASE_DESCRIPTION));
 
         switch (stack.getMetadata()) {

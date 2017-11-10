@@ -1,20 +1,17 @@
 package omtteam.openmodularturrets.items;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.omlib.compatibility.minecraft.CompatItem;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.openmodularturrets.OpenModularTurrets;
@@ -24,6 +21,7 @@ import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +29,7 @@ import java.util.Set;
 import static omtteam.omlib.util.GeneralUtil.*;
 
 
-public class UsableMetaItem extends CompatItem {
+public class UsableMetaItem extends Item {
     public UsableMetaItem() {
         super();
 
@@ -53,30 +51,30 @@ public class UsableMetaItem extends CompatItem {
 
     @Override
     @Nonnull
-    public EnumActionResult clOnItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
         if (stack != null && stack.getItemDamage() == 2 && player.isSneaking() && stack.hasTagCompound()) {
             //noinspection ConstantConditions
             Set<String> keySet = stack.getTagCompound().getKeySet();
             keySet.clear();
         }
-        return super.clOnItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+        return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
     }
 
     @Override
-    protected ActionResult<ItemStack> clOnItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
         if (itemStackIn != null && itemStackIn.getItemDamage() == 2 && playerIn.isSneaking() && itemStackIn.hasTagCompound()) {
             //noinspection ConstantConditions
             Set<String> keySet = itemStackIn.getTagCompound().getKeySet();
             keySet.clear();
         }
-        return super.clOnItemRightClick(worldIn, playerIn, hand);
+        return super.onItemRightClick(worldIn, playerIn, hand);
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public void clGetSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         for (int i = 0; i < 3; i++) {
             subItems.add(new ItemStack(ModItems.usableMetaItem, 1, i));
         }
@@ -115,10 +113,12 @@ public class UsableMetaItem extends CompatItem {
         }
     }
 
+
+
     @SideOnly(Side.CLIENT)
     @Override
     @ParametersAreNonnullByDefault
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean isAdvanced) {
+    public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
         if (stack.getItemDamage() == 2) {
             if (hasDataStored(stack)) {
                 NBTTagCompound nbtTagCompound = getDataStored(stack);

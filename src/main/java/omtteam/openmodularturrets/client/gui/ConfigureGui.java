@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
-import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
+import static omtteam.omlib.util.PlayerUtil.addChatMessage;
 
 public class ConfigureGui extends GuiContainer implements IHasTooltips {
     private final TurretBase base;
@@ -47,7 +47,7 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
         super.initGui();
         this.buttonList.clear();
 
-        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
+        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 
         String mobsButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
         String neutralsButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
@@ -127,7 +127,7 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
                 break;
         }
         if (!tooltip.isEmpty())
-            this.drawHoveringText(tooltip, mouseX - k, mouseY - l, Minecraft.getMinecraft().fontRendererObj);
+            this.drawHoveringText(tooltip, mouseX - k, mouseY - l, Minecraft.getMinecraft().fontRenderer);
     }
 
     @SuppressWarnings("EmptyCatchBlock")
@@ -336,7 +336,7 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
     @SuppressWarnings("unchecked")
     @Override
     protected void drawGuiContainerForegroundLayer(int param1, int param2) {
-        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
+        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.TARGETING_OPTIONS) + ": ", 10, 8, 0);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.ADD_TRUSTED_PLAYER) + ": ", 10, 87, 0);
 

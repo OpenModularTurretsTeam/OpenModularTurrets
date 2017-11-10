@@ -136,7 +136,7 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
     @SuppressWarnings("unchecked")
     @Override
     protected void drawGuiContainerForegroundLayer(int param1, int param2) {
-        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
+        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 
         fontRenderer.drawString(base.getTier() > 1 ? safeLocalize(OMTNames.Localizations.GUI.ADDONS) : "", 71, 6, 0);
         fontRenderer.drawString(base.getTier() > 1 ? safeLocalize(OMTNames.Localizations.GUI.UPGRADES) : "", 71, 39, 0);
@@ -217,7 +217,7 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
             tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.BASE_MAX_RANGE));
         }
         if (!tooltip.isEmpty())
-            this.drawHoveringText(tooltip, mouseX - k, mouseY - l, Minecraft.getMinecraft().fontRendererObj);
+            this.drawHoveringText(tooltip, mouseX - k, mouseY - l, Minecraft.getMinecraft().fontRenderer);
     }
 
 

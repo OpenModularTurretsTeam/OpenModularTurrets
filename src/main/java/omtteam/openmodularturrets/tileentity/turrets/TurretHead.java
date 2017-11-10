@@ -11,6 +11,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -18,12 +19,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.util.RandomUtil;
-import omtteam.omlib.util.compat.ItemStackTools;
-import omtteam.omlib.util.compat.MathTools;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
-import omtteam.openmodularturrets.compatibility.ModCompatibility;
-import omtteam.openmodularturrets.compatibility.valkyrienwarfare.ValkyrienWarfareHelper;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
@@ -36,7 +33,6 @@ import java.util.Random;
 
 import static omtteam.omlib.util.MathUtil.getVelocityVectorFromYawPitch;
 import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
-import static omtteam.omlib.util.compat.WorldTools.spawnEntity;
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
 
@@ -271,17 +267,17 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     boolean chebyshevDistance(Entity target, TurretBase base) {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
 
-        if (ModCompatibility.ValkyrienWarfareLoaded) {
+        /*if (ModCompatibility.ValkyrienWarfareLoaded) {
             Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
 
             if (shipEntity != null) {
                 //The turret is on a Ship, time to convert the coordinates; converting the target positions to local ship space
                 targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
             }
-        }
+        } */
 
-        return MathTools.abs_max(MathTools.abs_max(targetPos.xCoord - this.getPos().getX(), targetPos.yCoord - this.getPos().getY()),
-                targetPos.zCoord - this.getPos().getZ()) > (this.getBaseFromWorld().getCurrentMaxRange());
+        return MathHelper.absMax(MathHelper.absMax(targetPos.x - this.getPos().getX(), targetPos.y - this.getPos().getY()),
+                targetPos.z - this.getPos().getZ()) > (this.getBaseFromWorld().getCurrentMaxRange());
     }
 
     private int getPowerRequiredForNextShot() {
@@ -297,19 +293,19 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     }
 
     private ItemStack getAmmoStack() {
-        ItemStack ammo = ItemStackTools.getEmptyStack();
+        ItemStack ammo = ItemStack.EMPTY;
         if (this.requiresAmmo()) {
             if (this.requiresSpecificAmmo()) {
                 for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
                     ammo = TurretHeadUtil.getSpecificItemStackItemFromBase(base, this.getAmmo());
-                    if (ammo == ItemStackTools.getEmptyStack()) {
+                    if (ammo == ItemStack.EMPTY) {
                         ammo = TurretHeadUtil.getSpecificItemFromInvExpanders(this.getWorld(), this.getAmmo(), base);
                     }
                 }
             } else {
                 for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
                     ammo = TurretHeadUtil.getDisposableAmmoFromBase(base);
-                    if (ammo == ItemStackTools.getEmptyStack()) {
+                    if (ammo == ItemStack.EMPTY) {
                         ammo = TurretHeadUtil.getDisposableAmmoFromInvExpander(this.getWorld(), base);
                     }
                 }
@@ -417,7 +413,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
             // Is there ammo?
             ItemStack ammo = getAmmoStack();
-            if (ammo == ItemStackTools.getEmptyStack() && this.requiresAmmo()) {
+            if (ammo == ItemStack.EMPTY && this.requiresAmmo()) {
                 //TODO: Play some kind of clicking sound?
                 return;
             }
@@ -447,7 +443,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         double d0 = target.posX - (this.pos.getX() + 0.5);
         double d1 = target.posY + (double) target.getEyeHeight() - (this.pos.getY() + 0.5);
         double d2 = target.posZ - (this.pos.getZ() + 0.5);
-        double dist = MathTools.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
+        double dist = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
         double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
 
         // Adjust new firing coordinate according to target speed
@@ -457,7 +453,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         double adjustedZ = d2 + speedZ * time;
 
         // Calculate projectile speed scaling factor to travel to adjusted destination on time
-        double dist2 = MathTools.sqrt_double(adjustedX * adjustedX + adjustedY * adjustedY + adjustedZ * adjustedZ);
+        double dist2 = MathHelper.sqrt(adjustedX * adjustedX + adjustedY * adjustedY + adjustedZ * adjustedZ);
         float speedFactor = (float) (dist2 / dist);
 
         // Now that we have a trajectory, throw something at it
@@ -474,9 +470,9 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
         // Work out a trajectory based on current yaw/pitch
         Vec3d velocity = getVelocityVectorFromYawPitch(this.pitch, this.yaw, 3.0F);
-        double adjustedX = velocity.xCoord;
-        double adjustedY = velocity.yCoord;
-        double adjustedZ = velocity.zCoord;
+        double adjustedX = velocity.x;
+        double adjustedY = velocity.y;
+        double adjustedZ = velocity.z;
         float speedFactor = (float) velocity.lengthVector();
         double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
 
@@ -497,7 +493,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         ItemStack ammo = getAmmoStack();
 
         // Is there ammo?
-        if (ammo == ItemStackTools.getEmptyStack() && this.requiresAmmo()) {
+        if (ammo == ItemStack.EMPTY && this.requiresAmmo()) {
             return false;
         }
 
@@ -510,18 +506,18 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
             if (projectile.gravity == 0.00F) {
                 Vec3d velocity = getVelocityVectorFromYawPitch(this.pitch, this.yaw, 3.0F);
-                projectile.setThrowableHeading(velocity.xCoord, velocity.yCoord, velocity.zCoord, (float) velocity.lengthVector(), (float) accuracy);
+                projectile.setThrowableHeading(velocity.x, velocity.y, velocity.z, (float) velocity.lengthVector(), (float) accuracy);
             } else {
                 projectile.rotationYaw = this.yaw;
                 projectile.rotationPitch = this.pitch;
                 Vec3d velocity = getVelocityVectorFromYawPitch(projectile.rotationYaw, projectile.rotationPitch, 1.6F);
-                projectile.motionX = velocity.xCoord + RandomUtil.random.nextGaussian() * 0.007499999832361937D * accuracy;
-                projectile.motionY = velocity.yCoord + RandomUtil.random.nextGaussian() * 0.007499999832361937D * accuracy;
-                projectile.motionZ = velocity.zCoord + RandomUtil.random.nextGaussian() * 0.007499999832361937D * accuracy;
+                projectile.motionX = velocity.x + RandomUtil.random.nextGaussian() * 0.007499999832361937D * accuracy;
+                projectile.motionY = velocity.y + RandomUtil.random.nextGaussian() * 0.007499999832361937D * accuracy;
+                projectile.motionZ = velocity.z + RandomUtil.random.nextGaussian() * 0.007499999832361937D * accuracy;
                 projectile.prevRotationYaw = projectile.rotationYaw;
                 projectile.prevRotationPitch = projectile.rotationPitch;
             }
-            spawnEntity(this.getWorld(), projectile);
+            this.getWorld().spawnEntity(projectile);
         }
         this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
                 ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
@@ -546,14 +542,14 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
 
             //If the turret is on a Ship, it needs to change to World coordinates from Ship coordinates
-            if (ModCompatibility.ValkyrienWarfareLoaded) {
+            /*if (ModCompatibility.ValkyrienWarfareLoaded) {
                 Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
                 if (shipEntity != null) {
                     Vec3d inShipPos = new Vec3d(this.getPos().getX() + 0.5, this.getPos().getY() + 0.5, this.getPos().getZ() + 0.5);
                     Vec3d inWorldPos = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, inShipPos);
-                    projectile.setPosition(inWorldPos.xCoord, inWorldPos.yCoord, inWorldPos.zCoord);
+                    projectile.setPosition(inWorldPos.x, inWorldPos.y, inWorldPos.z);
                 }
-            }
+            } */
 
             // Set projectile heading
             projectile.setThrowableHeading(adjustedX, adjustedY, adjustedZ, speedFactor, accuracy);
@@ -568,7 +564,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
                     ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
 
             // Spawn entity
-            spawnEntity(this.getWorld(), projectile);
+            this.getWorld().spawnEntity(projectile);
         }
     }
 

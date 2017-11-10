@@ -7,7 +7,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import omtteam.omlib.tileentity.TileEntityContainer;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
-import omtteam.omlib.util.compat.ItemStackList;
+import omtteam.omlib.util.ItemStackList;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
