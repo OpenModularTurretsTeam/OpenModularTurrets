@@ -17,8 +17,6 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static omtteam.omlib.util.compat.WorldTools.spawnEntity;
-
 public class DisposableTurretProjectile extends TurretProjectile {
     private EntityItem itemBound;
     private boolean spawned = false;
@@ -44,7 +42,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
             itemBound.motionZ = this.motionZ;
             itemBound.setPickupDelay(10000);
             itemBound.lifespan = 6000;
-            spawnEntity(this.getEntityWorld(), itemBound);
+            world.spawnEntity(itemBound);
             spawned = true;
         }
     }

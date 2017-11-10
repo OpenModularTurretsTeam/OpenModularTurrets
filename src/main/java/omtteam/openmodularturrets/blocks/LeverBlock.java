@@ -16,6 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -23,7 +24,6 @@ import omtteam.omlib.api.IHasItemBlock;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.MathUtil;
-import omtteam.omlib.util.compat.MathTools;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.items.blocks.ItemBlockLever;
@@ -111,12 +111,12 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
         if (isBaseValid(worldIn.getTileEntity(pos.north()))) {
             l = 180F;
         }
-        int shu = MathTools.floor_double((double) (l * 4.0F / 360.0F) + 0.5D) & 3;
+        int shu = MathHelper.floor((double) (l * 4.0F / 360.0F) + 0.5D) & 3;
         worldIn.setBlockState(pos, worldIn.getBlockState(pos).withProperty(ROTATION, shu), 3);
     }
 
     @Override
-    protected boolean clOnBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.DOWN || TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.UP) {
             return true;
         }
@@ -214,7 +214,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
-    protected void clOnNeighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos neighbor) {
         if (!(isBaseValid(worldIn.getTileEntity(pos.north())) ||
                 isBaseValid(worldIn.getTileEntity(pos.east())) ||
                 isBaseValid(worldIn.getTileEntity(pos.south())) ||

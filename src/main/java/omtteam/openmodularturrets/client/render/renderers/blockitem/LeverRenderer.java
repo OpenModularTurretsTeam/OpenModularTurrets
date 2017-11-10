@@ -18,7 +18,7 @@ class LeverRenderer extends TileEntitySpecialRenderer {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage) {
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         LeverTileEntity lever = (LeverTileEntity) te;
         int rotation;
         ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/lever_block.png"));

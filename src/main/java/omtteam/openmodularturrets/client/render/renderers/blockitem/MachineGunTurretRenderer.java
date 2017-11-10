@@ -29,8 +29,7 @@ class MachineGunTurretRenderer extends TileEntitySpecialRenderer {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage) {
-        TurretHead turretHead = (TurretHead) te;
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {        TurretHead turretHead = (TurretHead) te;
         int rotation;
 
         ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/machine_gun_turret.png"));

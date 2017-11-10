@@ -33,7 +33,7 @@ class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
     @SuppressWarnings("ConstantConditions")
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int destroyStage) {
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         DisposableItemTurretTileEntity turretHead = (DisposableItemTurretTileEntity) te;
         int rotation;
 

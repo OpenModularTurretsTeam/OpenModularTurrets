@@ -10,8 +10,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.blocks.turretheads.BlockTeleporterTurret;
-import omtteam.openmodularturrets.compatibility.ModCompatibility;
-import omtteam.openmodularturrets.compatibility.valkyrienwarfare.ValkyrienWarfareHelper;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
@@ -117,16 +115,16 @@ public class TeleporterTurretTileEntity extends TurretHead {
 
             Vec3d basePositionToSet = new Vec3d(this.getPos().getX() + 0.5F, this.getPos().getY() + 1.0F, this.getPos().getZ() + 0.5F);
 
-            if (ModCompatibility.ValkyrienWarfareLoaded) {
+            /*if (ModCompatibility.ValkyrienWarfareLoaded) {
                 Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(getWorld(), getPos());
                 //If not null, then the turret is in ship space, so the coordinates it'll apply to entities must be converter
                 // to world coordinates
                 if (shipEntity != null) {
                     basePositionToSet = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, basePositionToSet);
                 }
-            }
+            } */
 
-            base.setPositionAndUpdate(basePositionToSet.xCoord, basePositionToSet.yCoord, basePositionToSet.zCoord);
+            base.setPositionAndUpdate(basePositionToSet.x, basePositionToSet.y, basePositionToSet.z);
 
             ((BlockTeleporterTurret) this.getWorld().getBlockState(this.pos).getBlock()).shouldAnimate = true;
             target = null;

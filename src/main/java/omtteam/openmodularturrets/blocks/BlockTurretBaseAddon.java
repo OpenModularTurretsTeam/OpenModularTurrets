@@ -35,7 +35,7 @@ public abstract class BlockTurretBaseAddon extends BlockAbstractTileEntity imple
     }
 
     @Override
-    protected void clOnNeighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         boolean found = false;
         for (IBlockState blockState : getTouchingBlockStates(worldIn, pos)) {
             if (blockState.getBlock() instanceof BlockTurretBase) {
