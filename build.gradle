@@ -148,10 +148,10 @@ if (rootProject.name == "OMTControl"){
 dependencies {
     compileOnly "mezz.jei:jei_${config.minecraft_version}:${config.jei_version}:api"
     //compileOnly "igwmod:IGW-Mod-${config.igwmod_version}:userdev"
-    deobfCompile "mcp.mobius.waila:Hwyla:${config.hwyla_version}_${config.minecraft_version_short}"
+    compileOnly "mcp.mobius.waila:Hwyla:${config.hwyla_version}_${config.minecraft_version_short}"
     compileOnly "cofh:RedstoneFlux:${config.minecraft_version_short}-${config.redstoneflux_version}:deobf"
-    deobfCompile "mcjty.theoneprobe:TheOneProbe-${config.minecraft_version_short}:${config.minecraft_version_short}-${config.top_version}"
-    deobfCompile "li.cil.oc:OpenComputers:MC${config.minecraft_version_short}.1-${config.oc_version}"
+    compileOnly "mcjty.theoneprobe:TheOneProbe-${config.minecraft_version_short}:${config.minecraft_version_short}-${config.top_version}"
+    compileOnly "li.cil.oc:OpenComputers:MC${config.minecraft_version_short}.1-${config.oc_version}"
     //compile "Azanor:Thaumcraft:${config.tc_version}:deobf@jar"
     //compileOnly "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
     compileOnly "net.darkhax.tesla:Tesla-${config.minecraft_version_short}:${config.tesla_version}"
