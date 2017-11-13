@@ -1,0 +1,24 @@
+{
+  "result": {
+	"item": "openmodularturrets:upgrade_meta",
+	"data": 4
+  },
+  "pattern": [
+	" A ",
+	"ABA",
+	" C "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"A": {
+	  "item": "minecraft:quartz"
+	},
+	"B": {
+	  "item": "minecraft:flint"
+	},
+	"C": {
+	  "item": "openmodularturrets:intermediate_regular",
+	  "data": 0
+	}
+  }
+}

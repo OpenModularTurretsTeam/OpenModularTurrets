@@ -1,0 +1,37 @@
+{
+  "result": {
+	"item": "openmodularturrets:rocket_turret"
+  },
+  "pattern": [
+	"CAC",
+	"CAC",
+	"EDE"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+	"A": {
+	  "item": "openmodularturrets:intermediate_tiered",
+	  "data": 13
+	},
+	"B": {
+	  "item": "openmodularturrets:intermediate_tiered",
+	  "data": 8
+	},
+	"C": {
+	  "item": "#INGOTREFINEDGLOWSTONE"
+	},
+	"D": {
+	  "item": "openmodularturrets:intermediate_regular",
+	  "data": 0
+	},
+	"E": {
+	  "item": "minecraft:diamond"
+	}
+  },
+  "conditions": [
+	{
+	  "type": "openmodularturrets:recipetype",
+	  "mod": "mekanism"
+	}
+  ]
+}

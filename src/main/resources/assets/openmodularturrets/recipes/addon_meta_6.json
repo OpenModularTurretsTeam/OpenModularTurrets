@@ -1,0 +1,35 @@
+{
+  "result": {
+	"item": "openmodularturrets:addon_meta",
+	"data": 6
+  },
+  "pattern": [
+	"AAA",
+	"CBC",
+	"DED"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"A": {
+	  "item": "minecraft:glass_pane"
+	},
+	"B": {
+	  "item": "minecraft:lapis_block"
+	},
+	"C": {
+	  "item": "minecraft:redstone"
+	},
+	"D": {
+	  "item": "minecraft:iron_ingot"
+	},
+	"E": {
+	  "item": "openmodularturrets:intermediate_regular",
+	  "data": 0
+	}
+  },
+  "conditions": [
+	{
+	  "mod": "computer"
+	}
+  ]
+}

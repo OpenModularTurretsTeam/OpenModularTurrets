@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.client.render.models;
 
-import com.google.common.base.Function;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -74,7 +73,6 @@ public class TurretBaseBakedModel extends CamoBakedModel {
 
         }
 
-
         @Override
         public Collection<ResourceLocation> getDependencies() {
             List<ResourceLocation> list = new ArrayList<>();
@@ -90,7 +88,7 @@ public class TurretBaseBakedModel extends CamoBakedModel {
         }
 
         @Override
-        public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+        public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
             List<IBakedModel> list = new ArrayList<>();
             for (int i = 1; i < 6; i++) {
                 try {

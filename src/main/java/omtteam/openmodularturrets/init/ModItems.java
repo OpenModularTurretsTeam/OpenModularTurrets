@@ -2,7 +2,11 @@ package omtteam.openmodularturrets.init;
 
 
 import net.minecraft.item.Item;
+import net.minecraftforge.registries.IForgeRegistry;
 import omtteam.openmodularturrets.items.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static omtteam.omlib.util.InitHelper.registerItem;
 
@@ -14,13 +18,18 @@ public class ModItems {
     public static Item intermediateProductRegular;
     public static Item ammoMetaItem;
     public static Item usableMetaItem;
+    public static List<Item> subblocks = new ArrayList<>();
 
-    public static void init() {
-        intermediateProductTiered = registerItem(new IntermediateProductTiered());
-        intermediateProductRegular = registerItem(new IntermediateProductRegular());
-        addonMetaItem = registerItem(new AddonMetaItem());
-        upgradeMetaItem = registerItem(new UpgradeMetaItem());
-        ammoMetaItem = registerItem(new AmmoMetaItem());
-        usableMetaItem = registerItem(new UsableMetaItem());
+    public static void init(IForgeRegistry<Item> registry) {
+        intermediateProductTiered = registerItem(new IntermediateProductTiered(), registry);
+        intermediateProductRegular = registerItem(new IntermediateProductRegular(), registry);
+        addonMetaItem = registerItem(new AddonMetaItem(), registry);
+        upgradeMetaItem = registerItem(new UpgradeMetaItem(), registry);
+        ammoMetaItem = registerItem(new AmmoMetaItem(), registry);
+        usableMetaItem = registerItem(new UsableMetaItem(), registry);
+
+        for (Item item: subblocks) {
+            registry.register(item);
+        }
     }
 }

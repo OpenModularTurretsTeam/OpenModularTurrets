@@ -1,0 +1,37 @@
+{
+  "result": {
+	"item": "openmodularturrets:intermediate_tiered",
+	"data": 3
+  },
+  "pattern": [
+	"EDE",
+	"CBC",
+	"EDE"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+	"A": {
+	  "item": "#INGOTGOLD"
+	},
+	"B": {
+	  "item": "openmodularturrets:intermediate_tiered",
+	  "data": 2
+	},
+	"C": {
+	  "item": "openmodularturrets:intermediate_regular",
+	  "data": 0
+	},
+	"D": {
+	  "item": "minecraft:diamond"
+	},
+	"E": {
+	  "item": "minecraft:quartz"
+	}
+  },
+  "conditions": [
+	{
+	  "type": "openmodularturrets:recipetype",
+	  "mod": "vanilla"
+	}
+  ]
+}

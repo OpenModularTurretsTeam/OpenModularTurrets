@@ -54,7 +54,16 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit() {
         super.preInit();
+    }
 
+    @Override
+    public void init() {
+        super.init();
+        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new CamoBlockColor(), ModBlocks.turretBase);
+    }
+
+    @Override
+    public void initModelLoaders() {
         StateMap ignoreRotation = new StateMap.Builder().ignore(LeverBlock.ROTATION).build();
         StateMap ignoreConcealed = new StateMap.Builder().ignore(BlockAbstractTurretHead.CONCEALED).build();
         ModelLoader.setCustomStateMapper(ModBlocks.leverBlock, ignoreRotation);
@@ -115,12 +124,7 @@ public class ClientProxy extends CommonProxy {
         for (int i = 0; i < 3; i++) {
             registerItemModel(ModItems.usableMetaItem, i, UsableMetaItem.subNames[i], true);
         }
-    }
-
-    @Override
-    public void init() {
-        super.init();
-        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new CamoBlockColor(), ModBlocks.turretBase);
+        initTileRenderers();
     }
 
     @Override

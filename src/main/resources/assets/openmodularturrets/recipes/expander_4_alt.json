@@ -1,0 +1,34 @@
+{
+  "result": {
+	"item": "openmodularturrets:expander",
+	"data": 4
+  },
+  "pattern": [
+	"ABA",
+	"DCD",
+	"ADA"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"A": {
+	  "item": "minecraft:obsidian"
+	},
+	"B": {
+	  "item": "openmodularturrets:expander",
+	  "data": 3
+	},
+	"C": {
+	  "item": "minecraft:chest"
+	},
+	"D": {
+	  "item": "openmodularturrets:intermediate_regular",
+	  "data": 0
+	}
+  },
+  "conditions": [
+	{
+	  "type": "openmodularturrets:recipetype",
+	  "mod": "vanilla"
+	}
+  ]
+}
