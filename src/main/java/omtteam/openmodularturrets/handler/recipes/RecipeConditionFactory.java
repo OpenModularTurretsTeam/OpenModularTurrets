@@ -31,10 +31,11 @@ public class RecipeConditionFactory implements IConditionFactory {
                 return () -> true;
             } else if (ModCompatibility.MekanismLoaded && mod.equals("mekanism")) {
                 return () -> true;
-            } else if (mod.equals("vanilla")) {
+            } else if (mod.equals("vanilla") && !ModCompatibility.MekanismLoaded && !ModCompatibility.EnderIOLoaded) {
                 return () -> true;
             }
-        } else if (mod.equals("computer") && (ComputerCraftLoaded || OpenComputersLoaded)) {
+        }
+        if (mod.equals("computer") && (ComputerCraftLoaded || OpenComputersLoaded)) {
             return () -> true;
         }
         return () -> false;
