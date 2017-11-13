@@ -29,6 +29,7 @@
   },
   "conditions": [
 	{
+	  "type": "openmodularturrets:recipetype",
 	  "mod": "computer"
 	}
   ]
