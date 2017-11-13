@@ -138,11 +138,15 @@ sourceSets {
 }
 
 def omlib_local = false
-configure(!projects.getProjects().findAll( {it.name == 'OMLib'}).isEmpty()) {
-    omlib_local = true
-}
-if (rootProject.name == "OMTControl"){
-    omlib_local = true
+try {
+    configure(!projects.getProjects().findAll({ it.name == 'OMLib' }).isEmpty()) {
+        omlib_local = true
+    }
+    if (rootProject.name == "OMTControl") {
+        omlib_local = true
+    }
+} catch (Exception e){
+    e.printStackTrace()
 }
 
 dependencies {
