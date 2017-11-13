@@ -1,4 +1,3 @@
-
 // For those who want the bleeding edge
 buildscript {
     repositories {
@@ -46,7 +45,7 @@ minecraft {
 
     replace "@VERSION@", project.version
     //replace "omlib@[0.0.0,)", "omlib@[" + config.omlib_version + ",)"
-	    // the mappings can be changed at any time, and must be in the following format.
+    // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
@@ -89,16 +88,16 @@ repositories {
         url "http://chickenbones.net/maven/"
     }
     maven {
-        name  "OC repo"
-        url  "http://maven.cil.li/"
+        name "OC repo"
+        url "http://maven.cil.li/"
     }
     maven { // the repo from which to get EnderIO and tterrags mods
         name 'tterrag'
         url "http://maven.tterrag.com/"
     }
     maven {
-        name  "ic2"
-        url  "http://maven.ic2.player.to/"
+        name "ic2"
+        url "http://maven.ic2.player.to/"
     }
     maven { // Tesla
         url 'http://maven.epoxide.xyz'
@@ -138,15 +137,12 @@ sourceSets {
 }
 
 def omlib_local = false
-try {
-    configure(!projects.getProjects().findAll({ it.name == 'OMLib' }).isEmpty()) {
-        omlib_local = true
-    }
-    if (rootProject.name == "OMTControl") {
-        omlib_local = true
-    }
-} catch (Exception e){
-    e.printStackTrace()
+
+if (!projects.getProjects().findAll({ it.name == 'OMLib' }).isEmpty()) {
+    omlib_local = true
+}
+if (rootProject.name == "OMTControl") {
+    omlib_local = true
 }
 
 dependencies {
@@ -157,7 +153,7 @@ dependencies {
     compileOnly "mcjty.theoneprobe:TheOneProbe-${config.minecraft_version_short}:${config.minecraft_version_short}-${config.top_version}"
     compileOnly "li.cil.oc:OpenComputers:MC${config.minecraft_version_short}.1-${config.oc_version}"
     //compile "Azanor:Thaumcraft:${config.tc_version}:deobf@jar"
-    //compileOnly "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
+    compileOnly "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
     compileOnly "net.darkhax.tesla:Tesla-${config.minecraft_version_short}:${config.tesla_version}"
     //compileOnly "ValkyrienWarfareRevamped:valkyrienwarfare:${config.valkyrienwarfare_version}:dev"
     if (!omlib_local) {
