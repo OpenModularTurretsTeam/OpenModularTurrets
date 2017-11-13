@@ -193,7 +193,7 @@ public class RecipeHandler {
             //ThaumcraftRecipeHandler.init();
         }
 
-        if ((ComputerCraftLoaded || OpenComputersLoaded) && ConfigHandler.shouldDoThaumcraftIntegration) {
+        if ((ComputerCraftLoaded || OpenComputersLoaded)) {
             ComputerRecipeHandler.init();
         }
 

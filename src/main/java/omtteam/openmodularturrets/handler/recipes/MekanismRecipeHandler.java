@@ -225,7 +225,7 @@ class MekanismRecipeHandler {
         }
 
         if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.rocketTurret, 1), "CAC", "CAC", "EDE", 'A',
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.rocketTurret, 1), "CAC", "CBC", "EDE", 'A',
                     new ItemStack(ModItems.intermediateProductTiered, 1, 13), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 8), 'C',
                     "ingotRefinedGlowstone", 'D', RecipeHandler.ioBus, 'E',
                     Items.DIAMOND));

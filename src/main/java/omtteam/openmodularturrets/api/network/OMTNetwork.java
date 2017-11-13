@@ -55,7 +55,7 @@ public class OMTNetwork {
             if (device instanceof IBaseController) {
                 return (IBaseController) device;
             }
-        }
+        } 
         return null;
     }
 
