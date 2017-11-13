@@ -138,7 +138,7 @@ sourceSets {
 
 def omlib_local = false
 
-if (!projects.getProjects().findAll({ it.name == 'OMLib' }).isEmpty()) {
+if (project.allprojects.findAll({it.name == "OMLib"}).size() > 0) {
     omlib_local = true
 }
 if (rootProject.name == "OMTControl") {

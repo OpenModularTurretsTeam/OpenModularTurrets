@@ -24,22 +24,22 @@ public class ModCompatibility {
     @SuppressWarnings("unused")
 
     public static void checkForMods() {
-        ThermalExpansionLoaded = Loader.isModLoaded("ThermalExpansion");
+        ThermalExpansionLoaded = Loader.isModLoaded(omtteam.omlib.compatibility.ModCompatibility.TEModID);
         if (ThermalExpansionLoaded) {
             OpenModularTurrets.getLogger().info("Hi there, dV=V0B(t1-t0)! (Found ThermalExpansion)");
         }
 
-        EnderIOLoaded = Loader.isModLoaded("EnderIO");
+        EnderIOLoaded = Loader.isModLoaded(omtteam.omlib.compatibility.ModCompatibility.EIOModID);
         if (EnderIOLoaded) {
             OpenModularTurrets.getLogger().info("Not sure if iron ingot, or electrical steel ingot... (Found EnderIO)");
         }
 
-        MekanismLoaded = Loader.isModLoaded("Mekanism");
+        MekanismLoaded = Loader.isModLoaded(omtteam.omlib.compatibility.ModCompatibility.MekModID);
         if (MekanismLoaded) {
             OpenModularTurrets.getLogger().info("Mur omsimu, plz. (Found Mekanism)");
         }
 
-        ThaumcraftLoaded = Loader.isModLoaded("Thaumcraft");
+        ThaumcraftLoaded = Loader.isModLoaded(omtteam.omlib.compatibility.ModCompatibility.TCModID);
         if (ThaumcraftLoaded) {
             OpenModularTurrets.getLogger().info("Afrikaners is plesierig. (Found Thaumcraft)");
         }
@@ -53,13 +53,13 @@ public class ModCompatibility {
             OpenModularTurrets.getLogger().info("Valkyrien Warfare Found! You have a good taste in mods");
         }
 
-        IGWModLoaded = Loader.isModLoaded("IGWMod");
+        IGWModLoaded = Loader.isModLoaded("igwmod");
     }
 
     private static void addVersionCheckerInfo() {
         NBTTagCompound versionchecker = new NBTTagCompound();
-        versionchecker.setString("curseProjectName", "224663-omtteam.openmodularturrets");
-        versionchecker.setString("curseFilenameParser", "OpenModularTurrets-1.10.2-[].jar");
+        versionchecker.setString("curseProjectName", "openmodularturrets");
+        versionchecker.setString("curseFilenameParser", "OpenModularTurrets-1.12.2-[].jar");
         versionchecker.setString("modDisplayName", "OpenModularTurrets");
         versionchecker.setString("oldVersion", Reference.VERSION);
         FMLInterModComms.sendRuntimeMessage("omtteam/openmodularturrets", "VersionChecker", "addCurseCheck", versionchecker);
