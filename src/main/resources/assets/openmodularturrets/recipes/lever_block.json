@@ -1,0 +1,16 @@
+{
+  "result": {
+	"item": "openmodularturrets:lever_block"
+  },
+  "pattern": [
+	"AAA",
+	"A  ",
+	"A  "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"A": {
+	  "item": "minecraft:cobblestone"
+	}
+  }
+}

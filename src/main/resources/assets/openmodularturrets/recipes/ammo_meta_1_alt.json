@@ -1,0 +1,30 @@
+{
+  "result": {
+	"item": "openmodularturrets:ammo_meta",
+	"data": 1,
+	"count": 64
+  },
+  "pattern": [
+	" A ",
+	"BC ",
+	" A "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"A": {
+	  "item": "minecraft:iron_ingot"
+	},
+	"B": {
+	  "item": "minecraft:gunpowder"
+	},
+	"C": {
+	  "item": "minecraft:redstone"
+	}
+  },
+  "conditions": [
+	{
+	  "type": "openmodularturrets:recipetype",
+	  "mod": "vanilla"
+	}
+  ]
+}

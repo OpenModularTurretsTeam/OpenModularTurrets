@@ -1,0 +1,37 @@
+{
+  "result": {
+	"item": "openmodularturrets:expander",
+	"data": 3
+  },
+  "pattern": [
+	"ABA",
+	"ECE",
+	"ADA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+	"A": {
+	  "item": "mekanism:reinforcedalloy"
+	},
+	"B": {
+	  "item": "mekanism:energytablet",
+	  "data": 32767
+	},
+	"C": {
+	  "item": "minecraft:chest"
+	},
+	"D": {
+	  "item": "#INGOTREFINEDGLOWSTONE"
+	},
+	"E": {
+	  "item": "openmodularturrets:intermediate_regular",
+	  "data": 0
+	}
+  },
+  "conditions": [
+	{
+	  "type": "openmodularturrets:recipetype",
+	  "mod": "mekanism"
+	}
+  ]
+}

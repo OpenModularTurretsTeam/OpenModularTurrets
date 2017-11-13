@@ -9,6 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -112,10 +113,8 @@ public class MessageTurretBase implements IMessage {
         this.y = buf.readInt();
         this.z = buf.readInt();
         this.tier = buf.readInt();
-        int ownerLength = buf.readInt();
-        this.owner = new String(buf.readBytes(ownerLength).array());
-        int ownerNameLength = buf.readInt();
-        this.ownerName = new String(buf.readBytes(ownerNameLength).array());
+        this.owner = ByteBufUtils.readUTF8String(buf);
+        this.ownerName = ByteBufUtils.readUTF8String(buf);
         this.rfStorageCurrent = buf.readInt();
         this.rfStorageMax = buf.readInt();
         this.maxRange = buf.readInt();
@@ -126,17 +125,14 @@ public class MessageTurretBase implements IMessage {
         this.attacksNeutrals = buf.readBoolean();
         this.attacksPlayers = buf.readBoolean();
         this.multiTargeting = buf.readBoolean();
-        int camoBlockRegNameLength = buf.readInt();
-        this.camoBlockRegName = new String(buf.readBytes(camoBlockRegNameLength).array());
+        this.camoBlockRegName = ByteBufUtils.readUTF8String(buf);
         this.camoBlockMeta = buf.readInt();
         int lengthOfTPList = buf.readInt();
         if (lengthOfTPList > 0) {
             for (int i = 0; i < lengthOfTPList; i++) {
-                int length = buf.readInt();
-                String name = new String(buf.readBytes(length).array());
+                String name = ByteBufUtils.readUTF8String(buf);
                 TrustedPlayer trustedPlayer = new TrustedPlayer(name);
-                length = buf.readInt();
-                trustedPlayer.uuid = UUID.fromString(new String(buf.readBytes(length).array()));
+                trustedPlayer.uuid = UUID.fromString(ByteBufUtils.readUTF8String(buf));
                 trustedPlayer.canOpenGUI = buf.readBoolean();
                 trustedPlayer.canChangeTargeting = buf.readBoolean();
                 trustedPlayer.admin = buf.readBoolean();
@@ -151,10 +147,8 @@ public class MessageTurretBase implements IMessage {
         buf.writeInt(y);
         buf.writeInt(z);
         buf.writeInt(tier);
-        buf.writeInt(owner.length());
-        buf.writeBytes(owner.getBytes());
-        buf.writeInt(ownerName.length());
-        buf.writeBytes(ownerName.getBytes());
+        ByteBufUtils.writeUTF8String(buf, owner);
+        ByteBufUtils.writeUTF8String(buf, ownerName);
         buf.writeInt(rfStorageCurrent);
         buf.writeInt(rfStorageMax);
         buf.writeInt(maxRange);
@@ -165,16 +159,13 @@ public class MessageTurretBase implements IMessage {
         buf.writeBoolean(attacksNeutrals);
         buf.writeBoolean(attacksPlayers);
         buf.writeBoolean(multiTargeting);
-        buf.writeInt(camoBlockRegName.length());
-        buf.writeBytes(camoBlockRegName.getBytes());
+        ByteBufUtils.writeUTF8String(buf, camoBlockRegName);
         buf.writeInt(camoBlockMeta);
         buf.writeInt(trustedPlayers.size());
         if (trustedPlayers.size() > 0) {
             for (TrustedPlayer trustedPlayer : trustedPlayers) {
-                buf.writeInt(trustedPlayer.getName().length());
-                buf.writeBytes(trustedPlayer.getName().getBytes());
-                buf.writeInt(trustedPlayer.uuid.toString().length());
-                buf.writeBytes(trustedPlayer.uuid.toString().getBytes());
+                ByteBufUtils.writeUTF8String(buf, trustedPlayer.getName());
+                ByteBufUtils.writeUTF8String(buf, trustedPlayer.uuid.toString());
                 buf.writeBoolean(trustedPlayer.canOpenGUI);
                 buf.writeBoolean(trustedPlayer.canChangeTargeting);
                 buf.writeBoolean(trustedPlayer.admin);

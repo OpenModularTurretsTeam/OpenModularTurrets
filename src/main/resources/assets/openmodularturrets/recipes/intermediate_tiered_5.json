@@ -1,0 +1,23 @@
+{
+  "result": {
+	"item": "openmodularturrets:intermediate_tiered",
+	"data": 5
+  },
+  "pattern": [
+	"AAA",
+	" BC",
+	"AAA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+	"A": {
+	  "item": "minecraft:cobblestone"
+	},
+	"B": {
+	  "item": "#PLANKWOOD"
+	},
+	"C": {
+	  "item": "minecraft:redstone"
+	}
+  }
+}

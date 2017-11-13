@@ -4,25 +4,23 @@ import net.minecraftforge.common.MinecraftForge;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.EventHandler;
 import omtteam.openmodularturrets.handler.NetworkingHandler;
-import omtteam.openmodularturrets.handler.recipes.RecipeHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModEntities;
-import omtteam.openmodularturrets.init.ModItems;
-import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.OMTFakePlayer;
 
 public class CommonProxy {
     public void preInit() {
-        ModItems.init();
-        ModBlocks.initBlocks();
+        MinecraftForge.EVENT_BUS.register(EventHandler.getInstance());
         ModBlocks.initTileEntities();
-        ModSounds.init();
         ModEntities.registerProjectiles(OpenModularTurrets.instance);
-        initTileRenderers();
         initHandlers();
     }
 
     protected void initTileRenderers() {
+
+    }
+
+    public void initModelLoaders() {
 
     }
 
@@ -35,9 +33,8 @@ public class CommonProxy {
     }
 
     public void init() {
-        RecipeHandler.initRecipes();
+        //RecipeHandler.initRecipes();
         initEntityRenderers();
-        MinecraftForge.EVENT_BUS.register(EventHandler.getInstance());
         OMTFakePlayer.init();
     }
 }

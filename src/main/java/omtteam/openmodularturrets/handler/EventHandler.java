@@ -1,19 +1,28 @@
 package omtteam.openmodularturrets.handler;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.api.network.OMTNetwork;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.AbstractOMTDamageSource;
+import omtteam.openmodularturrets.init.ModBlocks;
+import omtteam.openmodularturrets.init.ModItems;
+import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.OMTFakePlayer;
 import omtteam.openmodularturrets.util.OMTUtil;
 
@@ -90,6 +99,27 @@ public class EventHandler {
             network.tick();
         }
     }
+  
+    @SubscribeEvent
+    public void blockRegisterEvent(RegistryEvent.Register<Block> event) {
+        ModBlocks.initBlocks(event.getRegistry());
+    }
+
+    @SubscribeEvent
+    public void itemRegisterEvent(RegistryEvent.Register<Item> event) {
+        ModItems.init(event.getRegistry());
+    }
+
+    @SubscribeEvent
+    public void soundRegistryEvent(RegistryEvent.Register<SoundEvent> event) {
+        ModSounds.init(event.getRegistry());
+    }
+
+    @SubscribeEvent
+    public void renderRegisterEvent(ModelRegistryEvent event) {
+        OpenModularTurrets.proxy.initModelLoaders();
+    }
+
 
     public void registerNetwork(OMTNetwork network) {
         getNetworkListForWorld(network.getWorld()).add(network);

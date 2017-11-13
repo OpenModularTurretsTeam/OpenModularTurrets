@@ -1,0 +1,27 @@
+{
+  "result": {
+	"item": "openmodularturrets:addon_meta",
+	"data": 7
+  },
+  "pattern": [
+	"CAC",
+	"ABD",
+	"CAC"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"A": {
+	  "item": "minecraft:lapis_block"
+	},
+	"B": {
+	  "item": "minecraft:ender_eye"
+	},
+	"C": {
+	  "item": "minecraft:quartz"
+	},
+	"D": {
+	  "item": "openmodularturrets:intermediate_regular",
+	  "data": 0
+	}
+  }
+}

@@ -24,7 +24,7 @@ public class OpenModularTurrets {
 
     @SuppressWarnings({"CanBeFinal", "unused"})
     @SidedProxy(clientSide = "omtteam.openmodularturrets.proxy.ClientProxy", serverSide = "omtteam.openmodularturrets.proxy.ServerProxy")
-    private static CommonProxy proxy;
+    public static CommonProxy proxy;
 
     public static final CreativeTabs modularTurretsTab = ModularTurretsTab.getInstance();
     private static Logger logger;

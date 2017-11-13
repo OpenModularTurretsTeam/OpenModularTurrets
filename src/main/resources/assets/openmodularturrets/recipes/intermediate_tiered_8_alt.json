@@ -1,0 +1,34 @@
+{
+  "result": {
+	"item": "openmodularturrets:intermediate_tiered",
+	"data": 8
+  },
+  "pattern": [
+	"DAD",
+	" BC",
+	"DAD"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"A": {
+	  "item": "minecraft:diamond"
+	},
+	"B": {
+	  "item": "openmodularturrets:intermediate_tiered",
+	  "data": 7
+	},
+	"C": {
+	  "item": "openmodularturrets:intermediate_regular",
+	  "data": 0
+	},
+	"D": {
+	  "item": "minecraft:quartz"
+	}
+  },
+  "conditions": [
+	{
+	  "type": "openmodularturrets:recipetype",
+	  "mod": "vanilla"
+	}
+  ]
+}
