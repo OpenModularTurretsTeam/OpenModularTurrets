@@ -4,7 +4,7 @@
   },
   "pattern": [
 	"CAC",
-	"CAC",
+	"CBC",
 	"EDE"
   ],
   "type": "forge:ore_shaped",

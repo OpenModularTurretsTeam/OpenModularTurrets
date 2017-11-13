@@ -120,7 +120,6 @@ public class EventHandler {
         OpenModularTurrets.proxy.initModelLoaders();
     }
 
-
     public void registerNetwork(OMTNetwork network) {
         getNetworkListForWorld(network.getWorld()).add(network);
     }
