@@ -137,12 +137,15 @@ sourceSets {
 }
 
 def omlib_local = false
-
 if (project.allprojects.findAll({it.name == "OMLib"}).size() > 0) {
     omlib_local = true
 }
 if (rootProject.name == "OMTControl") {
     omlib_local = true
+}
+def ompd_local = false
+if (project.allprojects.findAll({it.name == "OpenModularPassiveDefense"}).size() > 0) {
+    ompd_local = true
 }
 
 dependencies {
@@ -157,9 +160,12 @@ dependencies {
     compileOnly "net.darkhax.tesla:Tesla-${config.minecraft_version_short}:${config.tesla_version}"
     //compileOnly "ValkyrienWarfareRevamped:valkyrienwarfare:${config.valkyrienwarfare_version}:dev"
     if (!omlib_local) {
-        compile "omtteam:omlib:${config.minecraft_version}-${config.omlib_version}:dev"
+        compileOnly "omtteam:omlib:${config.minecraft_version}-${config.omlib_version}:dev"
     } else {
         compile project(':OMLib')
+    }
+    if (ompd_local) {
+        runtime project(':OpenModularPassiveDefense')
     }
     //runtime "com.enderio:EnderIO:${config.minecraft_version}-${config.enderio_version}"
     //runtime "com.enderio.core:EnderCore:${config.minecraft_version}-${config.endercore_version}"
