@@ -13,6 +13,8 @@ import java.util.List;
 import static omtteam.omlib.util.GeneralUtil.getItem;
 
 public class ConfigHandler {
+
+    public static Configuration config;
     public static boolean turretAlarmSound;
     public static boolean turretBreakable;
     public static boolean turretWarnMessage;
@@ -84,7 +86,7 @@ public class ConfigHandler {
     public static boolean canRailgunDestroyBlocks;
 
     public static void init(File configFile) {
-        Configuration config = new Configuration(configFile);
+        config = new Configuration(configFile);
         config.load();
 
         baseTierOneMaxCharge = config.get("TurretBaseTierOne", "MaxCharge", 500).getInt();

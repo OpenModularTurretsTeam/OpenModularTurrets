@@ -1,0 +1,36 @@
+{
+  "result": {
+	"item": "openmodularturrets:teleporter_turret"
+  },
+  "pattern": [
+	"CEC",
+	"ABA",
+	"CDC"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"A": {
+	  "item": "minecraft:diamond"
+	},
+	"B": {
+	  "item": "openmodularturrets:intermediate_tiered",
+	  "data": 3
+	},
+	"C": {
+	  "item": "minecraft:ender_eye"
+	},
+	"D": {
+	  "item": "openmodularturrets:intermediate_regular",
+	  "data": 0
+	},
+	"E": {
+	  "item": "minecraft:quartz"
+	}
+  },
+  "conditions": [
+	{
+	  "type": "openmodularturrets:recipetype",
+	  "mod": "vanilla"
+	}
+  ]
+}

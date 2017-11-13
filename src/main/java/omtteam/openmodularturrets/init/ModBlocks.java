@@ -2,6 +2,7 @@ package omtteam.openmodularturrets.init;
 
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
 import omtteam.openmodularturrets.blocks.BlockExpander;
 import omtteam.openmodularturrets.blocks.BlockTurretBase;
 import omtteam.openmodularturrets.blocks.LeverBlock;
@@ -38,51 +39,51 @@ public class ModBlocks {
     public static Block expander;
 
 
-    public static void initBlocks() {
-        turretBase = registerBlock(new BlockTurretBase());
-        expander = registerBlock(new BlockExpander());
+    public static void initBlocks(IForgeRegistry<Block> registry) {
+        turretBase = registerBlock(new BlockTurretBase(), registry, ModItems.subblocks);
+        expander = registerBlock(new BlockExpander(), registry, ModItems.subblocks);
 
         if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
-            disposableItemTurret = registerBlock(new BlockDisposableTurret());
+            disposableItemTurret = registerBlock(new BlockDisposableTurret(), registry, ModItems.subblocks);
         }
 
         if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
-            potatoCannonTurret = registerBlock(new BlockPotatoCannonTurret());
+            potatoCannonTurret = registerBlock(new BlockPotatoCannonTurret(), registry, ModItems.subblocks);
         }
 
         if (ConfigHandler.getGunTurretSettings().isEnabled()) {
-            machineGunTurret = registerBlock(new BlockGunTurret());
+            machineGunTurret = registerBlock(new BlockGunTurret(), registry, ModItems.subblocks);
         }
 
         if (ConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
-            incendiaryTurret = registerBlock(new BlockIncendiaryTurret());
+            incendiaryTurret = registerBlock(new BlockIncendiaryTurret(), registry, ModItems.subblocks);
         }
 
         if (ConfigHandler.getGrenadeTurretSettings().isEnabled()) {
-            grenadeLauncherTurret = registerBlock(new BlockGrenadeTurret());
+            grenadeLauncherTurret = registerBlock(new BlockGrenadeTurret(), registry, ModItems.subblocks);
         }
 
         if (ConfigHandler.getRelativisticTurretSettings().isEnabled()) {
-            relativisticTurret = registerBlock(new BlockRelativisticTurret());
+            relativisticTurret = registerBlock(new BlockRelativisticTurret(), registry, ModItems.subblocks);
         }
 
         if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
-            rocketTurret = registerBlock(new BlockRocketTurret());
+            rocketTurret = registerBlock(new BlockRocketTurret(), registry, ModItems.subblocks);
         }
 
         if (ConfigHandler.getTeleporterTurretSettings().isEnabled()) {
-            teleporterTurret = registerBlock(new BlockTeleporterTurret());
+            teleporterTurret = registerBlock(new BlockTeleporterTurret(), registry, ModItems.subblocks);
         }
 
         if (ConfigHandler.getLaserTurretSettings().isEnabled()) {
-            registerBlock(laserTurret);
+            registerBlock(laserTurret, registry, ModItems.subblocks);
         }
 
         if (ConfigHandler.getRailgunTurretSettings().isEnabled()) {
-            railGunTurret = registerBlock(new BlockRailGunTurret());
+            railGunTurret = registerBlock(new BlockRailGunTurret(), registry, ModItems.subblocks);
         }
 
-        leverBlock = registerBlock(new LeverBlock());
+        leverBlock = registerBlock(new LeverBlock(), registry, ModItems.subblocks);
     }
 
     public static void initTileEntities() {

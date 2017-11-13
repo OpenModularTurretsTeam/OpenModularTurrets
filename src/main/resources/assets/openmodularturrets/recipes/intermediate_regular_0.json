@@ -1,0 +1,23 @@
+{
+  "result": {
+	"item": "openmodularturrets:intermediate_regular",
+	"data": 0
+  },
+  "pattern": [
+	" A ",
+	"BBB",
+	" C "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+	"A": {
+	  "item": "#INGOTGOLD"
+	},
+	"B": {
+	  "item": "minecraft:redstone"
+	},
+	"C": {
+	  "item": "minecraft:iron_ingot"
+	}
+  }
+}
