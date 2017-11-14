@@ -43,8 +43,10 @@ public class ItemBlockExpander extends ItemBlockBaseAddon {
     @Override
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
-        for (int i = 0; i < 10; i++) {
-            subItems.add(new ItemStack(ModBlocks.expander, 1, i));
+        if (isInCreativeTab(itemIn)) {
+            for (int i = 0; i < 10; i++) {
+                subItems.add(new ItemStack(ModBlocks.expander, 1, i));
+            }
         }
     }
 
