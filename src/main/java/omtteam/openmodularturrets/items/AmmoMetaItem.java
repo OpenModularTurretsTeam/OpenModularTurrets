@@ -39,8 +39,10 @@ public class AmmoMetaItem extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
-        for (int i = 0; i < 5; i++) {
-            subItems.add(new ItemStack(ModItems.ammoMetaItem, 1, i));
+        if(isInCreativeTab(itemIn)) {
+            for (int i = 0; i < 5; i++) {
+                subItems.add(new ItemStack(ModItems.ammoMetaItem.setCreativeTab(itemIn), 1, i));
+            }
         }
     }
 

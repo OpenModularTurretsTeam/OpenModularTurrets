@@ -33,8 +33,10 @@ public class IntermediateProductTiered extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
-        for (int i = 0; i < 15; i++) {
-            subItems.add(new ItemStack(ModItems.intermediateProductTiered, 1, i));
+        if(isInCreativeTab(itemIn)) {
+            for (int i = 0; i < 15; i++) {
+                subItems.add(new ItemStack(ModItems.intermediateProductTiered, 1, i));
+            }
         }
     }
 

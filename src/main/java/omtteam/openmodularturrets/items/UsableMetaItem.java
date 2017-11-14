@@ -75,8 +75,10 @@ public class UsableMetaItem extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
-        for (int i = 0; i < 3; i++) {
-            subItems.add(new ItemStack(ModItems.usableMetaItem, 1, i));
+        if(isInCreativeTab(itemIn)) {
+            for (int i = 0; i < 3; i++) {
+                subItems.add(new ItemStack(ModItems.usableMetaItem, 1, i));
+            }
         }
     }
 
