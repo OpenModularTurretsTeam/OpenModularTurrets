@@ -4,13 +4,12 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import omtteam.openmodularturrets.init.ModBlocks;
-import omtteam.openmodularturrets.items.blocks.ItemBlockLaserTurret;
+import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.Reference;
 
 
 @MethodsReturnNonnullByDefault
-public class ModularTurretsTab extends CreativeTabs {
+public final class ModularTurretsTab extends CreativeTabs {
     private static ModularTurretsTab instance;
 
     @SuppressWarnings("SameParameterValue")
@@ -27,10 +26,10 @@ public class ModularTurretsTab extends CreativeTabs {
 
     @Override
     public ItemStack getTabIconItem() {
-        return new ItemStack(getItem());
+        return new ItemStack(getItem(),1,4);
     }
 
     public Item getItem() {
-        return new ItemBlockLaserTurret(ModBlocks.laserTurret);
+        return ModItems.ammoMetaItem;
     }
 }

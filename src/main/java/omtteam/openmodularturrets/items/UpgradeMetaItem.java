@@ -41,8 +41,10 @@ public class UpgradeMetaItem extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
-        for (int i = 0; i < 5; i++) {
-            subItems.add(new ItemStack(ModItems.upgradeMetaItem, 1, i));
+        if(isInCreativeTab(itemIn)) {
+            for (int i = 0; i < 5; i++) {
+                subItems.add(new ItemStack(ModItems.upgradeMetaItem, 1, i));
+            }
         }
     }
 
