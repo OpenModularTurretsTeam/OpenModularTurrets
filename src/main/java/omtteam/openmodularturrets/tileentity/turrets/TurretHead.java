@@ -441,10 +441,10 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
         // Calculate speed from displacement from last tick (Or use tracking data if target is player)
         double d0 = target.posX - (this.pos.getX() + 0.5);
-        double d1 = target.posY + (double) target.getEyeHeight() - (this.pos.getY() + 0.5);
+        double d1 = target.posY + (double) target.getEyeHeight() * 0.8F - (this.pos.getY() + 0.5);
         double d2 = target.posZ - (this.pos.getZ() + 0.5);
         double dist = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-        double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
+        double inaccuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
 
         // Adjust new firing coordinate according to target speed
         double time = dist / (this.getProjectileGravity() == 0.00F ? 3.0 : 1.6);
@@ -457,7 +457,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         float speedFactor = (float) (dist2 / dist);
 
         // Now that we have a trajectory, throw something at it
-        shootProjectile(adjustedX, adjustedY - 0.1F, adjustedZ, 3.0F * speedFactor, (float) accuracy, ammo);
+        shootProjectile(adjustedX, adjustedY - 0.1F, adjustedZ, 3.0F * speedFactor, (float) inaccuracy, ammo);
     }
 
     /**
