@@ -56,7 +56,7 @@ import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 
 @SuppressWarnings("unused")
 @Optional.InterfaceList({
-        @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft")}
+        @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "computercraft")}
 )
 public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile {
     public int trustedPlayerIndex = 0;
@@ -621,7 +621,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         this.network = network;
     }
 
-    @Optional.Method(modid = "ComputerCraft")
+    @Optional.Method(modid = "computercraft")
     @Override
     @Nonnull
     public String getType() {
@@ -629,7 +629,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return "turret_base";
     }
 
-    @Optional.Method(modid = "ComputerCraft")
+    @Optional.Method(modid = "computercraft")
     @Override
     @Nonnull
     public String[] getMethodNames() {
@@ -644,7 +644,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 commands.getType.toString()};
     }
 
-    @Optional.Method(modid = "ComputerCraft")
+    @Optional.Method(modid = "computercraft")
     @Override
     @ParametersAreNonnullByDefault
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
@@ -744,7 +744,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return new Object[]{false};
     }
 
-    @Optional.Method(modid = "ComputerCraft")
+    @Optional.Method(modid = "computercraft")
     @Override
     @ParametersAreNonnullByDefault
     public void attach(IComputerAccess computer) {
@@ -754,7 +754,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         comp.add(computer);
     }
 
-    @Optional.Method(modid = "ComputerCraft")
+    @Optional.Method(modid = "computercraft")
     @Override
     @ParametersAreNonnullByDefault
     public void detach(IComputerAccess computer) {
@@ -764,7 +764,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         comp.remove(computer);
     }
 
-    @Optional.Method(modid = "ComputerCraft")
+    @Optional.Method(modid = "computercraft")
     @Override
     public boolean equals(IPeripheral other) {
         return other.getType().equals(getType());

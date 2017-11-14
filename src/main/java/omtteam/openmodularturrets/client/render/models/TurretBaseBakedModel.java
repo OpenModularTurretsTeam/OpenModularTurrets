@@ -20,6 +20,7 @@ import omtteam.omlib.render.CamoBakedModel;
 import omtteam.openmodularturrets.reference.Reference;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,8 +47,8 @@ public class TurretBaseBakedModel extends CamoBakedModel {
     }
 
     @Override
-    protected IBakedModel getModel(List<IBakedModel> list, IBlockState state) {
-        return list.get(state.getValue(TIER) - 1);
+    protected IBakedModel getModel(List<IBakedModel> list, @Nullable IBlockState state) {
+        return state != null ? list.get(state.getValue(TIER) - 1): list.get(0);
     }
 
     @Override
