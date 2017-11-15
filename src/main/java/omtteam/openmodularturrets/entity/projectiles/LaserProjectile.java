@@ -66,14 +66,14 @@ public class LaserProjectile extends TurretProjectile {
             if (entity instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) entity)) {
                     entity.attackEntityFrom(new NormalDamageSource("laser", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
-                    entity.hurtResistantTime = 0;
+                    entity.hurtResistantTime = -1;
                 } else {
                     return;
                 }
             } else if (canDamageEntity(entity)) {
                 setTagsForTurretHit(entity);
                 entity.attackEntityFrom(new NormalDamageSource("laser", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
-                entity.hurtResistantTime = 0;
+                entity.hurtResistantTime = -1;
             } else {
                 return;
             }

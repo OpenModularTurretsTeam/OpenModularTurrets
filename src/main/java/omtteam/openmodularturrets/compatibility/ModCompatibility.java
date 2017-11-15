@@ -62,11 +62,11 @@ public class ModCompatibility {
         versionchecker.setString("curseFilenameParser", "OpenModularTurrets-1.12.2-[].jar");
         versionchecker.setString("modDisplayName", "OpenModularTurrets");
         versionchecker.setString("oldVersion", Reference.VERSION);
-        FMLInterModComms.sendRuntimeMessage("omtteam/openmodularturrets", "VersionChecker", "addCurseCheck", versionchecker);
+        FMLInterModComms.sendRuntimeMessage("openmodularturrets", "versionChecker", "addCurseCheck", versionchecker);
     }
 
     public static void init() {
-        FMLInterModComms.sendMessage("Waila", "register",
+        FMLInterModComms.sendMessage("waila", "register",
                 "omtteam.openmodularturrets.compatibility.hwyla.WailaDataProvider.register");
 
         addVersionCheckerInfo();

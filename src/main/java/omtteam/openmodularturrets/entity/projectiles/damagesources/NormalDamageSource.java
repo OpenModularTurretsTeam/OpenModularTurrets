@@ -12,6 +12,4 @@ public class NormalDamageSource extends AbstractOMTDamageSource {
         super(damageSource, fakeDrops, base, worldServer);
         this.setProjectile();
     }
-
-
 }

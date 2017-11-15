@@ -83,6 +83,7 @@ public abstract class TurretBaseContainer extends Container {
             } else // Transfer from turret base inventory
             {
                 if (!mergeItemStackWithStackLimit(stackInSlot, 0, slotStart, false, this)) {
+                    slotObject.onSlotChanged();
                     return ItemStack.EMPTY;
                 }
             }
@@ -94,6 +95,7 @@ public abstract class TurretBaseContainer extends Container {
             }
 
             if (getStackSize(stackInSlot) == getStackSize(stack)) {
+                slotObject.onSlotChanged();
                 return ItemStack.EMPTY;
             }
             slotObject.onSlotChanged();

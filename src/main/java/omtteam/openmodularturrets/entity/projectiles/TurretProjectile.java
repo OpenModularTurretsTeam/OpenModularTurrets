@@ -31,7 +31,7 @@ public abstract class TurretProjectile extends EntityThrowable {
     public int amp_level;
     ItemStack ammo;
     protected TurretBase turretBase;
-    public int framesRendered = 0;
+    private int framesRendered = 0;
     public int fakeDrops;
 
     TurretProjectile(World world) {
@@ -56,7 +56,7 @@ public abstract class TurretProjectile extends EntityThrowable {
             isAmped = true;
             amp_level = TurretHeadUtil.getAmpLevel(turretBase);
         }
-
+        fakeDrops = TurretHeadUtil.getFakeDropsLevel(turretBase);
     }
 
     boolean canDamagePlayer(EntityPlayer entityPlayer) {
@@ -110,12 +110,12 @@ public abstract class TurretProjectile extends EntityThrowable {
         Vec3d vec3d = new Vec3d(this.posX, this.posY, this.posZ);
         Vec3d vec3d1 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
         RayTraceResult raytraceresult = this.getEntityWorld().rayTraceBlocks(vec3d, vec3d1);
-
-        List<Entity> list = this.getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.motionX, this.motionY, this.motionZ).expand(0.2D, 0.2D, 0.2D));
-
+        List<Entity> list = this.getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(motionX, motionY, motionZ).expand(motionX * 1.2D, motionY * 1.2D, motionZ * 1.2D));
+        
         for (Entity entity : list) {
             if (entity.canBeCollidedWith()) {
                 this.onHitEntity(entity);
+                return;
             }
         }
 
@@ -132,7 +132,7 @@ public abstract class TurretProjectile extends EntityThrowable {
         this.rotationYaw = (float) (MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
 
         for (this.rotationPitch = (float) (MathHelper.atan2(this.motionY, (double) f) * (180D / Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
-            //TODO: what is this?
+            //TODO: what is this?  Keridos: No idea!
         }
 
         while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
@@ -198,6 +198,4 @@ public abstract class TurretProjectile extends EntityThrowable {
     public void setFramesRendered(int framesRendered) {
         this.framesRendered = framesRendered;
     }
-
-
 }
