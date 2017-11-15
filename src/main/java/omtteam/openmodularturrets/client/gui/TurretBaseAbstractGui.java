@@ -6,6 +6,8 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import omtteam.omlib.client.gui.BlockingAbstractGuiContainer;
@@ -67,12 +69,12 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
                     base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": "
                             + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET)
                             + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE)));
-            this.buttonList.add(new GuiButton(7,x+155,y+3,11,10,"M"));
+            this.buttonList.add(new GuiButton(7, x + 155, y + 3, 11, 10, "M"));
         } else if (trustedPlayer != null) {
             if (trustedPlayer.admin) {
                 this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_TURRETS)));
                 this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_BASE)));
-                this.buttonList.add(new GuiButton(7,x+155,y+3,11,10,"M"));
+                this.buttonList.add(new GuiButton(7, x + 155, y + 3, 11, 10, "M"));
             }
             if (trustedPlayer.canChangeTargeting || trustedPlayer.admin) {
                 this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, safeLocalize(OMTNames.Localizations.GUI.CONFIGURE)));
@@ -174,6 +176,7 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         this.drawHoveringText(targetInfo, -128, 17, fontRenderer);
 
         drawTooltips();
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
     }
 
     @Override
@@ -215,6 +218,11 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         }
         if (mouseX > k + 123 && mouseX < k + 134 && mouseY > l + 35 && mouseY < l + 48) {
             tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.BASE_MAX_RANGE));
+        }
+        Slot slot = getSlotUnderMouse();
+        if (slot != null && !slot.getStack().isEmpty()) {
+            ItemStack stack = slot.getStack();
+            this.renderToolTip(stack, mouseX - guiLeft, mouseY - guiTop);
         }
         if (!tooltip.isEmpty())
             this.drawHoveringText(tooltip, mouseX - k, mouseY - l, Minecraft.getMinecraft().fontRenderer);

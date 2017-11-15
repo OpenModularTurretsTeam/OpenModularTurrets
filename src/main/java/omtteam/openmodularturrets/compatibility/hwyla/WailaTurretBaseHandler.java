@@ -25,7 +25,7 @@ import static omtteam.omlib.util.GeneralUtil.*;
  */
 
 @SuppressWarnings("unused")
-@Optional.Interface(iface = "mcp.mobius.waila.api.IWailaDataProvider", modid = "Waila")
+@Optional.Interface(iface = "mcp.mobius.waila.api.IWailaDataProvider", modid = "waila")
 public class WailaTurretBaseHandler implements IWailaDataProvider {
     /**
      * Although this is likely not necessary, you can also use the Optional.Method interface to mark a
@@ -76,12 +76,14 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
      */
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        EnumMachineMode machineMode = EnumMachineMode.values()[accessor.getNBTData().getInteger("mode")];
-        boolean active = accessor.getNBTData().getBoolean("inverted") ^ accessor.getNBTData().getBoolean("redstone");
-        currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7A" + getMachineModeLocalization(machineMode));
-        currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
-        String ownerName = accessor.getNBTData().getString("ownerName");
-        currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
+        if (currenttip.size() == 0) {
+            EnumMachineMode machineMode = EnumMachineMode.values()[accessor.getNBTData().getInteger("mode")];
+            boolean active = accessor.getNBTData().getBoolean("inverted") ^ accessor.getNBTData().getBoolean("redstone");
+            currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7A" + getMachineModeLocalization(machineMode));
+            currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
+            String ownerName = accessor.getNBTData().getString("ownerName");
+            currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
+        }
         return currenttip;
     }
 

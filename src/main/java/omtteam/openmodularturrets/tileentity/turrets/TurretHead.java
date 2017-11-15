@@ -441,7 +441,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
         // Calculate speed from displacement from last tick (Or use tracking data if target is player)
         double d0 = target.posX - (this.pos.getX() + 0.5);
-        double d1 = target.posY + (double) target.getEyeHeight() * 0.8F - (this.pos.getY() + 0.5);
+        double d1 = target.posY + (double) target.height* 0.5F - (this.pos.getY() + 0.5);
         double d2 = target.posZ - (this.pos.getZ() + 0.5);
         double dist = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
         double inaccuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
