@@ -56,7 +56,7 @@ public abstract class TurretProjectile extends EntityThrowable {
             isAmped = true;
             amp_level = TurretHeadUtil.getAmpLevel(turretBase);
         }
-
+        fakeDrops = TurretHeadUtil.getFakeDropsLevel(turretBase);
     }
 
     boolean canDamagePlayer(EntityPlayer entityPlayer) {
