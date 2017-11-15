@@ -58,12 +58,12 @@ public class GrenadeProjectile extends TurretProjectile {
                         if (canDamagePlayer((EntityPlayer) mob)) {
                             mob.attackEntityFrom(new NormalDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage * 0.9F);
                             mob.attackEntityFrom(new ArmorBypassDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage * 0.1F);
-                            mob.hurtResistantTime = 0;
+                            mob.hurtResistantTime = -1;
                         }
                     } else if (canDamageEntity(mob)) {
                         mob.attackEntityFrom(new NormalDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage * 0.9F);
                         mob.attackEntityFrom(new ArmorBypassDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage * 0.1F);
-                        mob.hurtResistantTime = 0;
+                        mob.hurtResistantTime = -1;
                     }
                 }
                 this.setDead();

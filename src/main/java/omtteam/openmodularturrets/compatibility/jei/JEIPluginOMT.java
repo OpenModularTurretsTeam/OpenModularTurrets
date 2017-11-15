@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.compatibility.jei;
 
-import mezz.jei.api.BlankModPlugin;
+import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 
@@ -11,7 +11,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * This Class
  */
 @JEIPlugin
-public class JEIPluginOMT extends BlankModPlugin {
+public class JEIPluginOMT implements IModPlugin {
     @Override
     @ParametersAreNonnullByDefault
     public void register(IModRegistry registry) {

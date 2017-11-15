@@ -28,7 +28,7 @@ import static omtteam.openmodularturrets.util.TurretHeadUtil.*;
  */
 
 @SuppressWarnings("unused")
-@Optional.Interface(iface = "mcp.mobius.waila.api.IWailaDataProvider", modid = "Waila")
+@Optional.Interface(iface = "mcp.mobius.waila.api.IWailaDataProvider", modid = "waila")
 public class WailaTurretHandler implements IWailaDataProvider {
     /**
      * Although this is likely not necessary, you can also use the Optional.Method interface to mark a
@@ -78,18 +78,20 @@ public class WailaTurretHandler implements IWailaDataProvider {
      */
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        TileEntity te = accessor.getTileEntity();
-        if (te != null && te instanceof TurretHead) {
-            TurretHead turret = (TurretHead) te;
-            boolean active = turret.getBase().isActive();
+        if (accessor.getWorld().isRemote) {
+            TileEntity te = accessor.getTileEntity();
+            if (te != null && te instanceof TurretHead && currenttip.size() == 0) {
+                TurretHead turret = (TurretHead) te;
+                boolean active = turret.getBase().isActive();
 
-            currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
-            String ownerName = turret.getBase().getOwnerName();
-            currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
-            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.AMMO) + ": \u00A7F" + getAmmoLevel(turret, turret.getBase()));
-            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": \u00A7F" + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * getAmpLevel(turret.getBase())) + "%");
-            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ACCURACY) + ": \u00A7F" + String.format("%.2f", Math.min(100F, (100 - turret.getTurretAccuracy() * 10) * (1.0 + getAccuraccyUpgrades(turret.getBase())))) + "%");
-            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": \u00A7F" + String.format("%.2f", 20F / (turret.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(turret.getBase())))) + "s/sec");
+                currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
+                String ownerName = turret.getBase().getOwnerName();
+                currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
+                currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.AMMO) + ": \u00A7F" + getAmmoLevel(turret, turret.getBase()));
+                currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": \u00A7F" + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * getAmpLevel(turret.getBase())) + "%");
+                currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ACCURACY) + ": \u00A7F" + String.format("%.2f", Math.min(100F, (100 - turret.getTurretAccuracy() * 10) * (1.0 + getAccuraccyUpgrades(turret.getBase())))) + "%");
+                currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": \u00A7F" + String.format("%.2f", 20F / (turret.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(turret.getBase())))) + "s/sec");
+            }
         }
         return currenttip;
     }
@@ -100,7 +102,7 @@ public class WailaTurretHandler implements IWailaDataProvider {
      * relevant data while the config parameter allows you to take advantage of the ingame config gui.
      */
     @Override
-    @Optional.Method(modid = "Waila")
+    @Optional.Method(modid = "waila")
     public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return currenttip;
     }
