@@ -6,14 +6,14 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import omtteam.omlib.util.JSONRecipeBuilder;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 
 import static omtteam.omlib.compatibility.ModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
 
-public class RecipeHandler {
+public class OMTRecipeHandler {
     private static ItemStack ammoBlazingClay;
     public static ItemStack ammoBullet;
     public static ItemStack ammoFerroSlug;
@@ -87,7 +87,7 @@ public class RecipeHandler {
 
 
         // Recipes
-        JSONRecipeBuilder.setupDir(ConfigHandler.config);
+        JSONRecipeBuilder.setupDir(OMTConfigHandler.config);
 
         //EnderIORecipeHandler.init();
 
@@ -123,13 +123,13 @@ public class RecipeHandler {
                 Blocks.COBBLESTONE, 'B', "plankWood", 'C',
                 Blocks.CHEST, 'D', ioBus);
 
-        if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getDisposableTurretSettings().isEnabled()) {
             JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModBlocks.disposableItemTurret, 1), " A ", "CBC", "CDC", 'A',
                     new ItemStack(ModItems.intermediateProductTiered, 1, 10), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 5), 'C',
                     Blocks.COBBLESTONE, 'D', Items.REDSTONE);
         }
 
-        if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
             JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModBlocks.potatoCannonTurret, 1), "CAC", "CAC", "DBD", 'A',
                     new ItemStack(ModItems.intermediateProductTiered, 1, 10), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 5), 'C',
                     Blocks.COBBLESTONE, 'D', Items.REDSTONE);
@@ -165,11 +165,11 @@ public class RecipeHandler {
                 'D', ioBus);
 
         // Integration
-        if (ModCompatibility.ThaumcraftLoaded && ConfigHandler.shouldDoThaumcraftIntegration) {
+        if (ModCompatibility.ThaumcraftLoaded && OMTConfigHandler.shouldDoThaumcraftIntegration) {
             //ThaumcraftRecipeHandler.init();
         }
 
-        if ((ComputerCraftLoaded || OpenComputersLoaded) && ConfigHandler.shouldDoThaumcraftIntegration) {
+        if ((ComputerCraftLoaded || OpenComputersLoaded) && OMTConfigHandler.shouldDoThaumcraftIntegration) {
             ComputerRecipeHandler.init();
         }
 
@@ -203,7 +203,7 @@ public class RecipeHandler {
                 Items.REDSTONE, 'C', Items.IRON_INGOT);
 
         JSONRecipeBuilder.addShapedRecipe(memoryCard, "BAB", "CEC", "FDF", 'A', "ingotGold", 'B',
-                Items.REDSTONE, 'C', Items.IRON_INGOT, 'D', RecipeHandler.ioBus, 'E', Items.PAPER,
+                Items.REDSTONE, 'C', Items.IRON_INGOT, 'D', OMTRecipeHandler.ioBus, 'E', Items.PAPER,
                 'F', new ItemStack(Items.DYE, 1, 4));
 
 

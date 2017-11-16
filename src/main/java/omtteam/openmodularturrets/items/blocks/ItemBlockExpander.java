@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -116,7 +116,7 @@ public class ItemBlockExpander extends ItemBlockBaseAddon {
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.WHITE + safeLocalize(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierOneCapacity() + " " + safeLocalize(
+                        "tooltip.expander.power2") + " " + OMTConfigHandler.getExpanderPowerTierOneCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.1"));
@@ -126,7 +126,7 @@ public class ItemBlockExpander extends ItemBlockBaseAddon {
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.WHITE + safeLocalize(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierTwoCapacity() + " " + safeLocalize(
+                        "tooltip.expander.power2") + " " + OMTConfigHandler.getExpanderPowerTierTwoCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.2"));
@@ -136,7 +136,7 @@ public class ItemBlockExpander extends ItemBlockBaseAddon {
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.WHITE + safeLocalize(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierThreeCapacity() + " " + safeLocalize(
+                        "tooltip.expander.power2") + " " + OMTConfigHandler.getExpanderPowerTierThreeCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.3"));
@@ -146,7 +146,7 @@ public class ItemBlockExpander extends ItemBlockBaseAddon {
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.WHITE + safeLocalize(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierFourCapacity() + " " + safeLocalize(
+                        "tooltip.expander.power2") + " " + OMTConfigHandler.getExpanderPowerTierFourCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.4"));
@@ -156,7 +156,7 @@ public class ItemBlockExpander extends ItemBlockBaseAddon {
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.WHITE + safeLocalize(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierFiveCapacity() + " " + safeLocalize(
+                        "tooltip.expander.power2") + " " + OMTConfigHandler.getExpanderPowerTierFiveCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.5"));

@@ -7,7 +7,7 @@ import omtteam.openmodularturrets.blocks.BlockExpander;
 import omtteam.openmodularturrets.blocks.BlockTurretBase;
 import omtteam.openmodularturrets.blocks.LeverBlock;
 import omtteam.openmodularturrets.blocks.turretheads.*;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
@@ -43,43 +43,43 @@ public class ModBlocks {
         turretBase = registerBlock(new BlockTurretBase(), registry, ModItems.subblocks);
         expander = registerBlock(new BlockExpander(), registry, ModItems.subblocks);
 
-        if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getDisposableTurretSettings().isEnabled()) {
             disposableItemTurret = registerBlock(new BlockDisposableTurret(), registry, ModItems.subblocks);
         }
 
-        if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
             potatoCannonTurret = registerBlock(new BlockPotatoCannonTurret(), registry, ModItems.subblocks);
         }
 
-        if (ConfigHandler.getGunTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getGunTurretSettings().isEnabled()) {
             machineGunTurret = registerBlock(new BlockGunTurret(), registry, ModItems.subblocks);
         }
 
-        if (ConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
             incendiaryTurret = registerBlock(new BlockIncendiaryTurret(), registry, ModItems.subblocks);
         }
 
-        if (ConfigHandler.getGrenadeTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getGrenadeTurretSettings().isEnabled()) {
             grenadeLauncherTurret = registerBlock(new BlockGrenadeTurret(), registry, ModItems.subblocks);
         }
 
-        if (ConfigHandler.getRelativisticTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRelativisticTurretSettings().isEnabled()) {
             relativisticTurret = registerBlock(new BlockRelativisticTurret(), registry, ModItems.subblocks);
         }
 
-        if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRocketTurretSettings().isEnabled()) {
             rocketTurret = registerBlock(new BlockRocketTurret(), registry, ModItems.subblocks);
         }
 
-        if (ConfigHandler.getTeleporterTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getTeleporterTurretSettings().isEnabled()) {
             teleporterTurret = registerBlock(new BlockTeleporterTurret(), registry, ModItems.subblocks);
         }
 
-        if (ConfigHandler.getLaserTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getLaserTurretSettings().isEnabled()) {
             registerBlock(laserTurret, registry, ModItems.subblocks);
         }
 
-        if (ConfigHandler.getRailgunTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRailgunTurretSettings().isEnabled()) {
             railGunTurret = registerBlock(new BlockRailGunTurret(), registry, ModItems.subblocks);
         }
 

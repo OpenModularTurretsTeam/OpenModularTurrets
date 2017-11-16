@@ -18,7 +18,7 @@ import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.handler.NetworkingHandler;
+import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.network.messages.*;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.TurretBase;
@@ -233,27 +233,27 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         MessageAdjustMaxRange message = new MessageAdjustMaxRange(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
                 base.getCurrentMaxRange());
 
-        NetworkingHandler.INSTANCE.sendToServer(message);
+        OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendDropTurretsToServer() {
         MessageDropTurrets message = new MessageDropTurrets(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
-        NetworkingHandler.INSTANCE.sendToServer(message);
+        OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendDropBaseToServer() {
         MessageDropBase message = new MessageDropBase(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
-        NetworkingHandler.INSTANCE.sendToServer(message);
+        OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendSetBaseTargetingToServer() {
         MessageSetBaseTargetingType message = new MessageSetBaseTargetingType(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
-        NetworkingHandler.INSTANCE.sendToServer(message);
+        OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendToggleModeToServer() {
         MessageToggleMode message = new MessageToggleMode(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
-        NetworkingHandler.INSTANCE.sendToServer(message);
+        OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     @Override

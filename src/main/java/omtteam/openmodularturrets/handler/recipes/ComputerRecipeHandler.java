@@ -6,7 +6,7 @@ import omtteam.omlib.util.JSONRecipeBuilder;
 
 class ComputerRecipeHandler {
     public static void init() {
-        JSONRecipeBuilder.addShapedRecipe(RecipeHandler.addonSerialPort, " A ", "BAB", " A ", 'A',
-                Items.QUARTZ, 'B', RecipeHandler.ioBus);
+        JSONRecipeBuilder.addShapedRecipe(OMTRecipeHandler.addonSerialPort, " A ", "BAB", " A ", 'A',
+                Items.QUARTZ, 'B', OMTRecipeHandler.ioBus);
     }
 }

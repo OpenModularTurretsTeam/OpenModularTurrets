@@ -6,7 +6,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.entity.projectiles.BulletProjectile;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
 
@@ -23,27 +23,27 @@ public class GunTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return ConfigHandler.getGunTurretSettings().getRange();
+        return OMTConfigHandler.getGunTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return ConfigHandler.getGunTurretSettings().getPowerUsage();
+        return OMTConfigHandler.getGunTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return ConfigHandler.getGunTurretSettings().getFireRate();
+        return OMTConfigHandler.getGunTurretSettings().getFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getGunTurretSettings().getAccuracy() / 10;
+        return OMTConfigHandler.getGunTurretSettings().getAccuracy() / 10;
     }
 
     @Override
     public double getTurretDamageAmpBonus() {
-        return ConfigHandler.getGunTurretSettings().getDamageAmp();
+        return OMTConfigHandler.getGunTurretSettings().getDamageAmp();
     }
 
     @Override

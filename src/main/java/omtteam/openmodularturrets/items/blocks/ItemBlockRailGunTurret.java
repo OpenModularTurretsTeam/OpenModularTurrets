@@ -5,7 +5,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
@@ -34,7 +34,7 @@ public class ItemBlockRailGunTurret extends ItemBlockBaseAddon {
         tooltip.add(TextFormatting.GOLD + "--" + safeLocalize("tooltip.info") + "--");
         tooltip.add(safeLocalize("tooltip.tier") + ": " + TextFormatting.WHITE + "5");
         tooltip.add(safeLocalize("tooltip.range") + ": " + TextFormatting.WHITE +
-                ConfigHandler.getRailgunTurretSettings().getRange());
+                OMTConfigHandler.getRailgunTurretSettings().getRange());
         tooltip.add(safeLocalize("tooltip.accuracy") + ": " + TextFormatting.WHITE +
                 safeLocalize("turret.accuracy.exact"));
         tooltip.add(safeLocalize("tooltip.ammo") + ": " + TextFormatting.WHITE +
@@ -45,13 +45,13 @@ public class ItemBlockRailGunTurret extends ItemBlockBaseAddon {
         tooltip.add(
                 TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");
         tooltip.add(safeLocalize("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
-                (ConfigHandler.getRailgunTurretSettings().getDamage() / 2F) + " " + safeLocalize(
+                (OMTConfigHandler.getRailgunTurretSettings().getDamage() / 2F) + " " + safeLocalize(
                 "tooltip" + ".health"));
         tooltip.add(safeLocalize("tooltip.aoe") + ": " + TextFormatting.WHITE + "0");
         tooltip.add(safeLocalize("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
-                20.0F / ConfigHandler.getRailgunTurretSettings().getFireRate()));
+                20.0F / OMTConfigHandler.getRailgunTurretSettings().getFireRate()));
         tooltip.add(safeLocalize("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
-                ConfigHandler.getRailgunTurretSettings().getPowerUsage() + " RF");
+                OMTConfigHandler.getRailgunTurretSettings().getPowerUsage() + " RF");
         tooltip.add("");
         tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.turret.5"));
     }
