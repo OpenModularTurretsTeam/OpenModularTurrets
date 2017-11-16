@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
@@ -22,6 +21,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.WorldUtil;
+import omtteam.openmodularturrets.api.lists.MobList;
+import omtteam.openmodularturrets.api.lists.MobBlacklist;
+import omtteam.openmodularturrets.api.lists.NeutralList;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
@@ -80,6 +82,26 @@ public class TurretHeadUtil {
         }
     }
 
+    public static boolean isEntityValidNeutral(TurretBase base, EntityLivingBase possibleTarget) {
+        if (base.isAttacksNeutrals() && OMTConfigHandler.globalCanTargetNeutrals) {
+            if (!possibleTarget.isDead && (possibleTarget instanceof EntityAnimal ||
+                    possibleTarget instanceof EntityAmbientCreature || NeutralList.contains(possibleTarget))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isEntityValidMob(TurretBase base, EntityLivingBase possibleTarget) {
+        if (base.isAttacksMobs() && OMTConfigHandler.globalCanTargetMobs) {
+            if (!possibleTarget.isDead && (possibleTarget.isCreatureType(EnumCreatureType.MONSTER, false) ||
+                    MobList.contains(possibleTarget))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @SuppressWarnings("ConstantConditions")
     public static Entity getTarget(TurretBase base, World worldObj, BlockPos pos, int turretRange, TurretHead turret) {
         Entity target = null;
@@ -93,7 +115,7 @@ public class TurretHeadUtil {
 
             for (EntityLivingBase possibleTarget : targets) {
                 if (possibleTarget != null && EntityList.getEntityString(possibleTarget) != null) {
-                    if (OMTConfigHandler.validMobBlacklist.contains(EntityList.getEntityString(possibleTarget))) continue;
+                    if (MobBlacklist.contains(EntityList.getEntityString(possibleTarget))) continue;
                 }
 
                 boolean validTarget = true;
@@ -116,23 +138,14 @@ public class TurretHeadUtil {
                     }
                 }
 
-                if (base.isAttacksNeutrals() && OMTConfigHandler.globalCanTargetNeutrals) {
-                    if (possibleTarget instanceof EntityAnimal && !possibleTarget.isDead) {
-                        target = possibleTarget;
-                    }
+                if (isEntityValidNeutral(base, possibleTarget)) {
+                    target = possibleTarget;
                 }
 
-                if (base.isAttacksNeutrals() && OMTConfigHandler.globalCanTargetNeutrals) {
-                    if (possibleTarget instanceof EntityAmbientCreature && !possibleTarget.isDead) {
-                        target = possibleTarget;
-                    }
+                if (isEntityValidMob(base, possibleTarget)) {
+                    target = possibleTarget;
                 }
 
-                if (base.isAttacksMobs() && OMTConfigHandler.globalCanTargetMobs) {
-                    if (possibleTarget.isCreatureType(EnumCreatureType.MONSTER, false) && !possibleTarget.isDead) {
-                        target = possibleTarget;
-                    }
-                }
 
                 if (base.isAttacksPlayers() && OMTConfigHandler.globalCanTargetPlayers) {
                     if (possibleTarget instanceof EntityPlayerMP && !possibleTarget.isDead) {
@@ -172,26 +185,14 @@ public class TurretHeadUtil {
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase target1 : targets) {
-                if (base.isAttacksNeutrals() && OMTConfigHandler.globalCanTargetNeutrals) {
-                    if (target1 instanceof EntityAnimal && !target1.isDead && target1.getDistance(pos.getX(), pos.getY(),
-                            pos.getZ()) >= 3) {
-                        target = target1;
-                    }
+
+                if (isEntityValidNeutral(base, target1) && target1.getDistance(pos.getX(), pos.getY(), pos.getZ()) >= 3) {
+                    target = target1;
+
                 }
 
-                if (base.isAttacksNeutrals() && OMTConfigHandler.globalCanTargetNeutrals) {
-                    if (target1 instanceof EntityAmbientCreature && !target1.isDead && target1.getDistance(pos.getX(),
-                            pos.getY(),
-                            pos.getZ()) >= 3) {
-                        target = target1;
-                    }
-                }
-
-                if (base.isAttacksMobs() && OMTConfigHandler.globalCanTargetMobs) {
-                    if (target1 instanceof IMob && !target1.isDead && target1.getDistance(pos.getX(), pos.getY(),
-                            pos.getZ()) >= 3) {
-                        target = target1;
-                    }
+                if (isEntityValidMob(base, target1) && target1.getDistance(pos.getX(), pos.getY(), pos.getZ()) >= 3) {
+                    target = target1;
                 }
 
                 if (base.isAttacksPlayers() && OMTConfigHandler.globalCanTargetPlayers) {
@@ -234,24 +235,13 @@ public class TurretHeadUtil {
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase target1 : targets) {
-                if (base.isAttacksNeutrals() && OMTConfigHandler.globalCanTargetNeutrals) {
-                    if (target1 instanceof EntityAnimal && !target1.isDead && !target1.isPotionActive(
-                            Potion.getPotionById(2))) {
-                        target = target1;
-                    }
+                if (isEntityValidNeutral(base, target1) && !target1.isPotionActive(Potion.getPotionById(2))) {
+                    target = target1;
+
                 }
 
-                if (base.isAttacksNeutrals() && OMTConfigHandler.globalCanTargetNeutrals) {
-                    if (target1 instanceof EntityAmbientCreature && !target1.isDead && !target1.isPotionActive(
-                            Potion.getPotionById(2))) {
-                        target = target1;
-                    }
-                }
-
-                if (base.isAttacksMobs() && OMTConfigHandler.globalCanTargetMobs) {
-                    if (target1 instanceof IMob && !target1.isDead && !target1.isPotionActive(Potion.getPotionById(2))) {
-                        target = target1;
-                    }
+                if (isEntityValidMob(base, target1) && !target1.isPotionActive(Potion.getPotionById(2))) {
+                    target = target1;
                 }
 
                 if (base.isAttacksPlayers() && OMTConfigHandler.globalCanTargetPlayers) {
