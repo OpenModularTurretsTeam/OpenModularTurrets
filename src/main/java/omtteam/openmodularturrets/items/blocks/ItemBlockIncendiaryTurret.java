@@ -5,7 +5,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
@@ -34,7 +34,7 @@ public class ItemBlockIncendiaryTurret extends ItemBlockBaseAddon {
         tooltip.add(TextFormatting.GOLD + "--" + safeLocalize("tooltip.info") + "--");
         tooltip.add(safeLocalize("tooltip.tier") + ": " + TextFormatting.WHITE + "2");
         tooltip.add(safeLocalize("tooltip.range") + ": " + TextFormatting.WHITE +
-                ConfigHandler.getIncendiaryTurretSettings().getRange());
+                OMTConfigHandler.getIncendiaryTurretSettings().getRange());
         tooltip.add(safeLocalize("tooltip.accuracy") + ": " + TextFormatting.WHITE +
                 safeLocalize("turret.accuracy.medium"));
         tooltip.add(safeLocalize("tooltip.ammo") + ": " + TextFormatting.WHITE +
@@ -45,13 +45,13 @@ public class ItemBlockIncendiaryTurret extends ItemBlockBaseAddon {
         tooltip.add(
                 TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");
         tooltip.add(safeLocalize("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
-                (ConfigHandler.getIncendiaryTurretSettings().getDamage() / 2F) + " " + safeLocalize(
+                (OMTConfigHandler.getIncendiaryTurretSettings().getDamage() / 2F) + " " + safeLocalize(
                 "tooltip.health"));
         tooltip.add(safeLocalize("tooltip.aoe") + ": " + TextFormatting.WHITE + "5");
         tooltip.add(safeLocalize("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
-                20.0F / ConfigHandler.getIncendiaryTurretSettings().getFireRate()));
+                20.0F / OMTConfigHandler.getIncendiaryTurretSettings().getFireRate()));
         tooltip.add(safeLocalize("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
-                ConfigHandler.getIncendiaryTurretSettings().getPowerUsage() + " RF");
+                OMTConfigHandler.getIncendiaryTurretSettings().getPowerUsage() + " RF");
         tooltip.add("");
         tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.turret.7"));
     }

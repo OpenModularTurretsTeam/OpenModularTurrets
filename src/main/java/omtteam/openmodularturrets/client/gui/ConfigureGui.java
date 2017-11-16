@@ -14,7 +14,7 @@ import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.client.gui.containers.ConfigContainer;
-import omtteam.openmodularturrets.handler.NetworkingHandler;
+import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.network.messages.*;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.TurretBase;
@@ -370,27 +370,27 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
 
     private void sendChangeToServerMobs(boolean setTo) {
         MessageToggleAttackMobs message = new MessageToggleAttackMobs(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(), setTo);
-        NetworkingHandler.INSTANCE.sendToServer(message);
+        OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendChangeToServerNeutrals(boolean setTo) {
         MessageToggleAttackNeutralMobs message = new MessageToggleAttackNeutralMobs(base.getPos().getX(), base.getPos().getY(),
                 base.getPos().getZ(), setTo);
-        NetworkingHandler.INSTANCE.sendToServer(message);
+        OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendChangeToServerPlayers(boolean setTo) {
         MessageToggleAttackPlayers message = new MessageToggleAttackPlayers(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
                 setTo);
 
-        NetworkingHandler.INSTANCE.sendToServer(message);
+        OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendChangeToServerAddTrusted() {
         MessageAddTrustedPlayer message = new MessageAddTrustedPlayer(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
                 textFieldAddTrustedPlayer.getText());
 
-        NetworkingHandler.INSTANCE.sendToServer(message);
+        OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendChangeToServerRemoveTrusted() {
@@ -398,14 +398,14 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
                 base.getTrustedPlayers().get(
                         base.trustedPlayerIndex).getName());
 
-        NetworkingHandler.INSTANCE.sendToServer(message);
+        OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendChangeToServerModifyPermissions(String player, String perm, boolean canDo) {
         MessageModifyPermissions message = new MessageModifyPermissions(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(), player,
                 perm, canDo);
 
-        NetworkingHandler.INSTANCE.sendToServer(message);
+        OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     @Override

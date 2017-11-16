@@ -6,7 +6,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.entity.projectiles.BlazingClayProjectile;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
 
@@ -23,27 +23,27 @@ public class IncendiaryTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return ConfigHandler.getIncendiaryTurretSettings().getRange();
+        return OMTConfigHandler.getIncendiaryTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return ConfigHandler.getIncendiaryTurretSettings().getPowerUsage();
+        return OMTConfigHandler.getIncendiaryTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return ConfigHandler.getIncendiaryTurretSettings().getFireRate();
+        return OMTConfigHandler.getIncendiaryTurretSettings().getFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getIncendiaryTurretSettings().getAccuracy() / 10;
+        return OMTConfigHandler.getIncendiaryTurretSettings().getAccuracy() / 10;
     }
 
     @Override
     public double getTurretDamageAmpBonus() {
-        return ConfigHandler.getIncendiaryTurretSettings().getDamageAmp();
+        return OMTConfigHandler.getIncendiaryTurretSettings().getDamageAmp();
     }
 
     @Override

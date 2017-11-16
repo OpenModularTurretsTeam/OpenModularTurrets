@@ -5,7 +5,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.items.AmmoMetaItem;
 
 import java.util.Set;
@@ -19,10 +19,10 @@ import static omtteam.omlib.util.InvUtil.getStackSize;
 public class OMTUtil {
     public static boolean isItemStackValidAmmo(ItemStack itemStack) {
         if (itemStack == ItemStack.EMPTY) return false;
-        if (!ConfigHandler.useWhitelistForAmmo || itemStack.getItem() == Items.POTATO
+        if (!OMTConfigHandler.useWhitelistForAmmo || itemStack.getItem() == Items.POTATO
                 || itemStack.getItem() == Items.REDSTONE || itemStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK))
             return true;
-        for (ItemStack itemStackAllowed : ConfigHandler.disposableAmmoList) {
+        for (ItemStack itemStackAllowed : OMTConfigHandler.disposableAmmoList) {
             if (itemStackAllowed.getItem() == itemStack.getItem() && (getStackSize(itemStackAllowed) == 2 ||
                     itemStackAllowed.getItemDamage() == itemStack.getItemDamage())) {
                 return true;

@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import omtteam.omlib.util.DebugHandler;
 import omtteam.openmodularturrets.client.gui.customSlot.AddonSlot;
 import omtteam.openmodularturrets.client.gui.customSlot.UpgradeSlot;
-import omtteam.openmodularturrets.handler.NetworkingHandler;
+import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.items.AddonMetaItem;
 import omtteam.openmodularturrets.items.UpgradeMetaItem;
 import omtteam.openmodularturrets.network.messages.MessageTurretBase;
@@ -109,7 +109,7 @@ public abstract class TurretBaseContainer extends Container {
         DebugHandler.getInstance().setListeners(this.listeners);
         for (IContainerListener listener : this.listeners) {
             if (listener instanceof EntityPlayerMP) {
-                NetworkingHandler.INSTANCE.sendTo(new MessageTurretBase(this.tileEntity), (EntityPlayerMP) listener);
+                OMTNetworkingHandler.INSTANCE.sendTo(new MessageTurretBase(this.tileEntity), (EntityPlayerMP) listener);
             }
         }
     }

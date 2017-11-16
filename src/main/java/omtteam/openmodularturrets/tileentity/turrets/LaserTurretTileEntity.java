@@ -6,7 +6,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.entity.projectiles.LaserProjectile;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 
 public class LaserTurretTileEntity extends TurretHead {
@@ -22,27 +22,27 @@ public class LaserTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return ConfigHandler.getLaserTurretSettings().getRange();
+        return OMTConfigHandler.getLaserTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return ConfigHandler.getLaserTurretSettings().getPowerUsage();
+        return OMTConfigHandler.getLaserTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return ConfigHandler.getLaserTurretSettings().getFireRate();
+        return OMTConfigHandler.getLaserTurretSettings().getFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getLaserTurretSettings().getAccuracy() / 10;
+        return OMTConfigHandler.getLaserTurretSettings().getAccuracy() / 10;
     }
 
     @Override
     public double getTurretDamageAmpBonus() {
-        return ConfigHandler.getLaserTurretSettings().getDamageAmp();
+        return OMTConfigHandler.getLaserTurretSettings().getDamageAmp();
     }
 
     @Override

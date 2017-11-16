@@ -11,7 +11,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
@@ -52,7 +52,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
             TurretHeadUtil.updateSolarPanelAddon(base);
 
             //turret tick rate;
-            if (target == null && targetingTicks < ConfigHandler.getTurretTargetSearchTicks()) {
+            if (target == null && targetingTicks < OMTConfigHandler.getTurretTargetSearchTicks()) {
                 targetingTicks++;
                 return;
             }
@@ -121,28 +121,28 @@ public class RelativisticTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return ConfigHandler.getRelativisticTurretSettings().getRange();
+        return OMTConfigHandler.getRelativisticTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return ConfigHandler.getRelativisticTurretSettings().getPowerUsage();
+        return OMTConfigHandler.getRelativisticTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return ConfigHandler.getRelativisticTurretSettings().getFireRate();
+        return OMTConfigHandler.getRelativisticTurretSettings().getFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getRelativisticTurretSettings().getAccuracy();
+        return OMTConfigHandler.getRelativisticTurretSettings().getAccuracy();
     }
 
 
     @Override
     public double getTurretDamageAmpBonus() {
-        return ConfigHandler.getRelativisticTurretSettings().getDamageAmp();
+        return OMTConfigHandler.getRelativisticTurretSettings().getDamageAmp();
     }
 
     @Override

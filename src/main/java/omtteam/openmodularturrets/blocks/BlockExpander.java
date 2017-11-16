@@ -30,7 +30,7 @@ import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.items.blocks.ItemBlockExpander;
 import omtteam.openmodularturrets.reference.OMTNames;
@@ -57,7 +57,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     public BlockExpander() {
         super(Material.GLASS);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
-        if (!ConfigHandler.turretBreakable) {
+        if (!OMTConfigHandler.turretBreakable) {
             this.setBlockUnbreakable();
         }
         this.setResistance(3.0F);
