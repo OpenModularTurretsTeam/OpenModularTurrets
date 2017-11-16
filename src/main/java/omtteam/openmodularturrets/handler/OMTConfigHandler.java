@@ -2,11 +2,11 @@ package omtteam.openmodularturrets.handler;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import omtteam.omlib.util.EntityUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.openmodularturrets.api.lists.AmmoList;
+import omtteam.openmodularturrets.api.lists.MobBlacklist;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,8 +29,6 @@ public class OMTConfigHandler {
     public static boolean useWhitelistForAmmo;
     private static List<String> stringAmmoAllowList;
     private static List<String> stringMobBlackList;
-    public static final List<ItemStack> disposableAmmoList = new ArrayList<>();
-    public static final List<String> validMobBlacklist = new ArrayList<>();
     private static int expanderPowerTierOneCapacity;
     private static int expanderPowerTierTwoCapacity;
     private static int expanderPowerTierThreeCapacity;
@@ -268,7 +266,7 @@ public class OMTConfigHandler {
                 new String[]{"ArmorStand"},
                 "Which Entities should not be targetable by turrets? String is the name used by the /summon command."));
 
-        stringAmmoAllowList = Arrays.asList(config.getStringList("disposableAmmoList", "miscellaneous",
+        stringAmmoAllowList = Arrays.asList(config.getStringList("list", "miscellaneous",
                 new String[]{"minecraft:cobblestone", "minecraft:planks"},
                 "Which Items should be usable as disp. ammo (modid:itemname[:meta], if meta is omitted it enables all subitems/blocks)"));
 
@@ -596,9 +594,9 @@ public class OMTConfigHandler {
             for (String itemListEntry : stringAmmoAllowList) {
                 String[] item = itemListEntry.split(":");
                 if (item.length == 3) {
-                    disposableAmmoList.add(new ItemStack(getItem(item[0], item[1]), 1, Integer.parseInt(item[2])));
+                    AmmoList.add(new ItemStack(getItem(item[0], item[1]), 1, Integer.parseInt(item[2])));
                 } else {
-                    disposableAmmoList.add(new ItemStack(getItem(item[0], item[1]), 2));
+                    AmmoList.add(new ItemStack(getItem(item[0], item[1]), 2));
                 }
             }
         } catch (Exception e) {
@@ -611,9 +609,7 @@ public class OMTConfigHandler {
         try {
             if (stringMobBlackList.isEmpty()) return;
             for (String itemListEntry : stringMobBlackList) {
-                if (EntityUtil.findClassById(itemListEntry) != null) {
-                    validMobBlacklist.add(itemListEntry);
-                }
+                    MobBlacklist.add(itemListEntry);
             }
         } catch (Exception e) {
             OpenModularTurrets.getLogger().error("error while parsing mob blacklist config!");
