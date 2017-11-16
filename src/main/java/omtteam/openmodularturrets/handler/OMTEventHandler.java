@@ -34,23 +34,23 @@ import java.util.List;
  * Created by Keridos on 02/05/17.
  * This class is the listener for all the Events we need to watch & modify.
  */
-public class EventHandler {
-    private static EventHandler instance;
+public class OMTEventHandler {
+    private static OMTEventHandler instance;
     private HashMap<World, List<OMTNetwork>> networks = new HashMap<>();
 
-    private EventHandler() {
+    private OMTEventHandler() {
     }
 
-    public static EventHandler getInstance() {
+    public static OMTEventHandler getInstance() {
         if (instance == null) {
-            instance = new EventHandler();
+            instance = new OMTEventHandler();
         }
         return instance;
     }
 
     @SubscribeEvent
     public void lootEvent(LivingDropsEvent event) {
-        if (event.getEntityLiving().getTags().contains("openmodularturrets:turret_hit") && !ConfigHandler.doTurretsKillsDropMobLoot) {
+        if (event.getEntityLiving().getTags().contains("openmodularturrets:turret_hit") && !OMTConfigHandler.doTurretsKillsDropMobLoot) {
             event.setCanceled(true);
         }
         event.getLootingLevel();

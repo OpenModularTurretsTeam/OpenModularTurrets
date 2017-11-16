@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
@@ -41,7 +41,7 @@ public class FerroSlugProjectile extends TurretProjectile {
         if (!hitBlock.getMaterial().isSolid()) {
             // Go through non solid block
             return;
-        } else if (ConfigHandler.canRailgunDestroyBlocks) {
+        } else if (OMTConfigHandler.canRailgunDestroyBlocks) {
             getEntityWorld().destroyBlock(pos, false);
         }
 
@@ -52,7 +52,7 @@ public class FerroSlugProjectile extends TurretProjectile {
     public void onHitEntity(Entity entity) {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
 
-            int damage = ConfigHandler.getRailgunTurretSettings().getDamage();
+            int damage = OMTConfigHandler.getRailgunTurretSettings().getDamage();
 
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
@@ -88,7 +88,7 @@ public class FerroSlugProjectile extends TurretProjectile {
     public void playSound() {
         Random random = new Random();
         getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.railGunHitSound, SoundCategory.AMBIENT,
-                ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
+                OMTConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
     }
 
     @Override
@@ -109,6 +109,6 @@ public class FerroSlugProjectile extends TurretProjectile {
 
     @Override
     public double getDamageAmpBonus() {
-        return ConfigHandler.getRailgunTurretSettings().getDamageAmp();
+        return OMTConfigHandler.getRailgunTurretSettings().getDamageAmp();
     }
 }

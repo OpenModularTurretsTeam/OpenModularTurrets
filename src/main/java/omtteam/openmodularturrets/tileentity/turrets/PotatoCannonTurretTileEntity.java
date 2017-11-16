@@ -7,7 +7,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.entity.projectiles.DisposableTurretProjectile;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 
 public class PotatoCannonTurretTileEntity extends TurretHead {
@@ -23,27 +23,27 @@ public class PotatoCannonTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return ConfigHandler.getPotatoCannonTurretSettings().getRange();
+        return OMTConfigHandler.getPotatoCannonTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return ConfigHandler.getPotatoCannonTurretSettings().getPowerUsage();
+        return OMTConfigHandler.getPotatoCannonTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return ConfigHandler.getPotatoCannonTurretSettings().getFireRate();
+        return OMTConfigHandler.getPotatoCannonTurretSettings().getFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getPotatoCannonTurretSettings().getAccuracy() / 10;
+        return OMTConfigHandler.getPotatoCannonTurretSettings().getAccuracy() / 10;
     }
 
     @Override
     public double getTurretDamageAmpBonus() {
-        return ConfigHandler.getPotatoCannonTurretSettings().getDamageAmp();
+        return OMTConfigHandler.getPotatoCannonTurretSettings().getDamageAmp();
     }
 
     @Override

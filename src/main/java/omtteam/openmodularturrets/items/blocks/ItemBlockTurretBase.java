@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -64,9 +64,9 @@ public class ItemBlockTurretBase extends ItemBlock {
                 tooltip.add("");
                 tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
                 tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                        ConfigHandler.getBaseTierOneMaxCharge());
+                        OMTConfigHandler.getBaseTierOneMaxCharge());
                 tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                        ConfigHandler.getBaseTierOneMaxIo());
+                        OMTConfigHandler.getBaseTierOneMaxIo());
                 tooltip.add("");
                 tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
                 tooltip.add(safeLocalize("tooltip.extras.addons.0"));
@@ -77,9 +77,9 @@ public class ItemBlockTurretBase extends ItemBlock {
                 tooltip.add("");
                 tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
                 tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                        ConfigHandler.getBaseTierTwoMaxCharge());
+                        OMTConfigHandler.getBaseTierTwoMaxCharge());
                 tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                        ConfigHandler.getBaseTierTwoMaxIo());
+                        OMTConfigHandler.getBaseTierTwoMaxIo());
                 tooltip.add("");
                 tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
                 tooltip.add(safeLocalize("tooltip.extras.addons.2"));
@@ -91,9 +91,9 @@ public class ItemBlockTurretBase extends ItemBlock {
                 tooltip.add("");
                 tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
                 tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                        ConfigHandler.getBaseTierThreeMaxCharge());
+                        OMTConfigHandler.getBaseTierThreeMaxCharge());
                 tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                        ConfigHandler.getBaseTierThreeMaxIo());
+                        OMTConfigHandler.getBaseTierThreeMaxIo());
                 tooltip.add("");
                 tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
                 tooltip.add(safeLocalize("tooltip.extras.addons.2"));
@@ -105,9 +105,9 @@ public class ItemBlockTurretBase extends ItemBlock {
                 tooltip.add("");
                 tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
                 tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                        ConfigHandler.getBaseTierFourMaxCharge());
+                        OMTConfigHandler.getBaseTierFourMaxCharge());
                 tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                        ConfigHandler.getBaseTierFourMaxIo());
+                        OMTConfigHandler.getBaseTierFourMaxIo());
                 tooltip.add("");
                 tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
                 tooltip.add(safeLocalize("tooltip.extras.addons.2"));
@@ -119,9 +119,9 @@ public class ItemBlockTurretBase extends ItemBlock {
                 tooltip.add("");
                 tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
                 tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                        ConfigHandler.getBaseTierFiveMaxCharge());
+                        OMTConfigHandler.getBaseTierFiveMaxCharge());
                 tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                        ConfigHandler.getBaseTierFiveMaxIo());
+                        OMTConfigHandler.getBaseTierFiveMaxIo());
                 tooltip.add("");
                 tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
                 tooltip.add(safeLocalize("tooltip.extras.addons.2"));

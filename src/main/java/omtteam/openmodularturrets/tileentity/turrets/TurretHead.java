@@ -22,7 +22,7 @@ import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
@@ -375,7 +375,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         }
 
         //Warn players
-        if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetPlayers) {
+        if (base.isAttacksPlayers() && OMTConfigHandler.globalCanTargetPlayers) {
             TurretHeadUtil.warnPlayers(base, base.getWorld(), this.pos, getTurretRange());
         }
         // Update target tracking (Player entity not setting motion data when moving via movement keys)
@@ -390,7 +390,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         }
 
         //turret tick rate;
-        if (target == null && targetingTicks < ConfigHandler.getTurretTargetSearchTicks()) {
+        if (target == null && targetingTicks < OMTConfigHandler.getTurretTargetSearchTicks()) {
             targetingTicks++;
         } else {
             //Validate current target, get a new one if necessary
@@ -464,7 +464,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
      * Just shoots, no aiming required
      */
     private void doBlindShot(ItemStack ammo) {
-        if (this instanceof RocketTurretTileEntity && ConfigHandler.canRocketsHome) {
+        if (this instanceof RocketTurretTileEntity && OMTConfigHandler.canRocketsHome) {
             return;
         }
 
@@ -485,7 +485,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
      */
     @Deprecated
     public boolean forceShot() {
-        if (this instanceof RocketTurretTileEntity && ConfigHandler.canRocketsHome) return false;
+        if (this instanceof RocketTurretTileEntity && OMTConfigHandler.canRocketsHome) return false;
         if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
             return false;
         }
@@ -520,7 +520,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             this.getWorld().spawnEntity(projectile);
         }
         this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
-                ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+                OMTConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
         ticks = 0;
 
         return true;
@@ -557,11 +557,11 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             // Play sounds
             if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
                 this.getWorld().playSound(null, this.pos, ModSounds.amped, SoundCategory.BLOCKS,
-                        ConfigHandler.getTurretSoundVolume(), RandomUtil.random.nextFloat() + 0.5F);
+                        OMTConfigHandler.getTurretSoundVolume(), RandomUtil.random.nextFloat() + 0.5F);
                 projectile.isAmped = true;
             }
             this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
-                    ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+                    OMTConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
 
             // Spawn entity
             this.getWorld().spawnEntity(projectile);
@@ -606,7 +606,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
                 shouldConceal = true;
                 playedDeploy = false;
                 this.getWorld().playSound(null, this.pos, ModSounds.turretRetractSound, SoundCategory.BLOCKS,
-                        ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+                        OMTConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
                 this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(pos).withProperty(CONCEALED, true), 3);
             } else {
                 ticksWithoutTarget++;
@@ -618,7 +618,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
                 if (!playedDeploy) {
                     this.getWorld().playSound(null, this.pos, ModSounds.turretDeploySound, SoundCategory.BLOCKS,
-                            ConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+                            OMTConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
                     playedDeploy = true;
                     this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(pos).withProperty(CONCEALED, false), 3);
                 }

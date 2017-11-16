@@ -12,7 +12,7 @@ import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.getItem;
 
-public class ConfigHandler {
+public class OMTConfigHandler {
 
     public static Configuration config;
     public static boolean turretAlarmSound;
@@ -279,6 +279,12 @@ public class ConfigHandler {
         recipes = config.get("miscellaneous",
                 "Which recipes should we do? (auto, enderio, mekanism, vanilla)",
                 "auto").getString();
+
+        if (recipes.equalsIgnoreCase("enderio") || !(recipes.equalsIgnoreCase("mekanism") ||
+                recipes.equalsIgnoreCase("vanilla") || recipes.equalsIgnoreCase("auto"))) {
+            recipes = "auto";   //Fix Recipe settings.
+            OpenModularTurrets.getLogger().warn("Setup auto recipes because of wrong setting.");
+        }
 
         turretSoundVolume = config.get("miscellaneous", "Turret sound volume percentage (Between 0 - 100)",
                 40).getInt() / 10;

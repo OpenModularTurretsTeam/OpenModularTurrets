@@ -6,7 +6,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.entity.projectiles.GrenadeProjectile;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
 
@@ -23,27 +23,27 @@ public class GrenadeLauncherTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return ConfigHandler.getGrenadeTurretSettings().getRange();
+        return OMTConfigHandler.getGrenadeTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return ConfigHandler.getGrenadeTurretSettings().getPowerUsage();
+        return OMTConfigHandler.getGrenadeTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return ConfigHandler.getGrenadeTurretSettings().getFireRate();
+        return OMTConfigHandler.getGrenadeTurretSettings().getFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getGrenadeTurretSettings().getAccuracy() / 10;
+        return OMTConfigHandler.getGrenadeTurretSettings().getAccuracy() / 10;
     }
 
     @Override
     public double getTurretDamageAmpBonus() {
-        return ConfigHandler.getGrenadeTurretSettings().getDamageAmp();
+        return OMTConfigHandler.getGrenadeTurretSettings().getDamageAmp();
     }
 
     @Override

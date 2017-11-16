@@ -5,11 +5,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import omtteam.omlib.util.JSONRecipeBuilder;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 
-import static omtteam.openmodularturrets.handler.recipes.RecipeHandler.*;
+import static omtteam.openmodularturrets.handler.recipes.OMTRecipeHandler.*;
 
 
 class VanillaRecipeHandler {
@@ -35,129 +35,129 @@ class VanillaRecipeHandler {
                         'B', new ItemStack(ModItems.intermediateProductTiered, 1, 5), 'C', Items.REDSTONE);
 
         JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModItems.intermediateProductTiered, 1, 7), "AAA", " BC", "AAA", 'A', "ingotGold",
-                        'B', new ItemStack(ModItems.intermediateProductTiered, 1, 6), 'C', RecipeHandler.ioBus);
+                        'B', new ItemStack(ModItems.intermediateProductTiered, 1, 6), 'C', OMTRecipeHandler.ioBus);
 
         JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModItems.intermediateProductTiered, 1, 8), "DAD", " BC", "DAD", 'A',
-                        Items.DIAMOND, 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 7), 'C', RecipeHandler.ioBus,
+                        Items.DIAMOND, 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 7), 'C', OMTRecipeHandler.ioBus,
                         'D', Items.QUARTZ);
 
         JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModItems.intermediateProductTiered, 1, 9), "ADA", " BC", "ADA", 'A',
                         Blocks.OBSIDIAN, 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 8), 'C',
-                        RecipeHandler.ioBus, 'D', Items.QUARTZ);
+                        OMTRecipeHandler.ioBus, 'D', Items.QUARTZ);
 
         // Sensors
         JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModItems.intermediateProductTiered, 1, 1), " A ", "ABA", " C ", 'A', "ingotIron",
-                        'B', new ItemStack(ModItems.intermediateProductTiered, 1, 0), 'C', RecipeHandler.ioBus);
+                        'B', new ItemStack(ModItems.intermediateProductTiered, 1, 0), 'C', OMTRecipeHandler.ioBus);
 
         JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModItems.intermediateProductTiered, 1, 2), " C ", "ABA", " C ", 'A', "ingotGold",
-                        'B', new ItemStack(ModItems.intermediateProductTiered, 1, 1), 'C', RecipeHandler.ioBus);
+                        'B', new ItemStack(ModItems.intermediateProductTiered, 1, 1), 'C', OMTRecipeHandler.ioBus);
 
         JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModItems.intermediateProductTiered, 1, 3), "EDE", "CBC", "EDE", 'A', "ingotGold",
-                        'B', new ItemStack(ModItems.intermediateProductTiered, 1, 2), 'C', RecipeHandler.ioBus, 'D',
+                        'B', new ItemStack(ModItems.intermediateProductTiered, 1, 2), 'C', OMTRecipeHandler.ioBus, 'D',
                         Items.DIAMOND, 'E', Items.QUARTZ);
 
         JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModItems.intermediateProductTiered, 1, 4), "EDE", "CBC", "EDE", 'A', "ingotGold",
-                        'B', new ItemStack(ModItems.intermediateProductTiered, 1, 3), 'C', RecipeHandler.ioBus, 'D',
+                        'B', new ItemStack(ModItems.intermediateProductTiered, 1, 3), 'C', OMTRecipeHandler.ioBus, 'D',
                         Items.GLOWSTONE_DUST, 'E', Blocks.OBSIDIAN);
 
         // Bases
         JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModBlocks.turretBase, 1, 1), "ABA", "DCD", "ADA", 'A', "ingotIron",
-                        'B', new ItemStack(ModBlocks.turretBase, 1, 0), 'C', new ItemStack(ModItems.intermediateProductTiered, 1, 1), 'D', RecipeHandler.ioBus);
+                        'B', new ItemStack(ModBlocks.turretBase, 1, 0), 'C', new ItemStack(ModItems.intermediateProductTiered, 1, 1), 'D', OMTRecipeHandler.ioBus);
 
         JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModBlocks.turretBase, 1, 2), "ABA", "DCD", "ADA", 'A', "ingotGold",
-                        'B', new ItemStack(ModBlocks.turretBase, 1, 1), 'C', new ItemStack(ModItems.intermediateProductTiered, 1, 2), 'D', RecipeHandler.ioBus);
+                        'B', new ItemStack(ModBlocks.turretBase, 1, 1), 'C', new ItemStack(ModItems.intermediateProductTiered, 1, 2), 'D', OMTRecipeHandler.ioBus);
 
         JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModBlocks.turretBase, 1, 3), "ABA", "DCD", "ADA", 'A',
                         Items.DIAMOND, 'B', new ItemStack(ModBlocks.turretBase, 1, 2), 'C',
-                        new ItemStack(ModItems.intermediateProductTiered, 1, 3), 'D', RecipeHandler.ioBus);
+                        new ItemStack(ModItems.intermediateProductTiered, 1, 3), 'D', OMTRecipeHandler.ioBus);
 
         JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModBlocks.turretBase, 1, 4), "ABA", "DCD", "ADA", 'A',
                         Blocks.OBSIDIAN, 'B', new ItemStack(ModBlocks.turretBase, 1, 3), 'C',
-                        new ItemStack(ModItems.intermediateProductTiered, 1, 4), 'D', RecipeHandler.ioBus);
+                        new ItemStack(ModItems.intermediateProductTiered, 1, 4), 'D', OMTRecipeHandler.ioBus);
 
         // Power Expanders
-        JSONRecipeBuilder.addShapedRecipe(RecipeHandler.expanderPowerTierTwo, "ABA", "DCD", "ADA", 'A',
-                        "ingotIron", 'B', RecipeHandler.expanderPowerTierOne, 'C',
-                        Blocks.REDSTONE_BLOCK, 'D', RecipeHandler.ioBus);
+        JSONRecipeBuilder.addShapedRecipe(OMTRecipeHandler.expanderPowerTierTwo, "ABA", "DCD", "ADA", 'A',
+                        "ingotIron", 'B', OMTRecipeHandler.expanderPowerTierOne, 'C',
+                        Blocks.REDSTONE_BLOCK, 'D', OMTRecipeHandler.ioBus);
 
-        JSONRecipeBuilder.addShapedRecipe(RecipeHandler.expanderPowerTierThree, "ABA", "DCD", "ADA", 'A',
-                        "ingotGold", 'B', RecipeHandler.expanderPowerTierTwo, 'C',
-                        Blocks.REDSTONE_BLOCK, 'D', RecipeHandler.ioBus);
+        JSONRecipeBuilder.addShapedRecipe(OMTRecipeHandler.expanderPowerTierThree, "ABA", "DCD", "ADA", 'A',
+                        "ingotGold", 'B', OMTRecipeHandler.expanderPowerTierTwo, 'C',
+                        Blocks.REDSTONE_BLOCK, 'D', OMTRecipeHandler.ioBus);
 
-        JSONRecipeBuilder.addShapedRecipe(RecipeHandler.expanderPowerTierFour, "ABA", "DCD", "ADA", 'A',
-                        Items.DIAMOND, 'B', RecipeHandler.expanderPowerTierThree, 'C',
-                        Blocks.REDSTONE_BLOCK, 'D', RecipeHandler.ioBus);
+        JSONRecipeBuilder.addShapedRecipe(OMTRecipeHandler.expanderPowerTierFour, "ABA", "DCD", "ADA", 'A',
+                        Items.DIAMOND, 'B', OMTRecipeHandler.expanderPowerTierThree, 'C',
+                        Blocks.REDSTONE_BLOCK, 'D', OMTRecipeHandler.ioBus);
 
-        JSONRecipeBuilder.addShapedRecipe(RecipeHandler.expanderPowerTierFive, "ABA", "DCD", "ADA", 'A',
-                        Blocks.OBSIDIAN, 'B', RecipeHandler.expanderPowerTierFour, 'C',
-                        Blocks.REDSTONE_BLOCK, 'D', RecipeHandler.ioBus);
+        JSONRecipeBuilder.addShapedRecipe(OMTRecipeHandler.expanderPowerTierFive, "ABA", "DCD", "ADA", 'A',
+                        Blocks.OBSIDIAN, 'B', OMTRecipeHandler.expanderPowerTierFour, 'C',
+                        Blocks.REDSTONE_BLOCK, 'D', OMTRecipeHandler.ioBus);
 
         // Inventory Expanders
-        JSONRecipeBuilder.addShapedRecipe(RecipeHandler.expanderInvTierTwo, "ABA", "DCD", "ADA", 'A', "ingotIron",
-                        'B', RecipeHandler.expanderInvTierOne, 'C', Blocks.CHEST, 'D',
-                        RecipeHandler.ioBus);
+        JSONRecipeBuilder.addShapedRecipe(OMTRecipeHandler.expanderInvTierTwo, "ABA", "DCD", "ADA", 'A', "ingotIron",
+                        'B', OMTRecipeHandler.expanderInvTierOne, 'C', Blocks.CHEST, 'D',
+                        OMTRecipeHandler.ioBus);
 
-        JSONRecipeBuilder.addShapedRecipe(RecipeHandler.expanderInvTierThree, "ABA", "DCD", "ADA", 'A',
-                        "ingotGold", 'B', RecipeHandler.expanderInvTierTwo, 'C', Blocks.CHEST,
-                        'D', RecipeHandler.ioBus);
+        JSONRecipeBuilder.addShapedRecipe(OMTRecipeHandler.expanderInvTierThree, "ABA", "DCD", "ADA", 'A',
+                        "ingotGold", 'B', OMTRecipeHandler.expanderInvTierTwo, 'C', Blocks.CHEST,
+                        'D', OMTRecipeHandler.ioBus);
 
-        JSONRecipeBuilder.addShapedRecipe(RecipeHandler.expanderInvTierFour, "ABA", "DCD", "ADA", 'A',
-                        Items.DIAMOND, 'B', RecipeHandler.expanderInvTierThree, 'C',
-                        Blocks.CHEST, 'D', RecipeHandler.ioBus);
+        JSONRecipeBuilder.addShapedRecipe(OMTRecipeHandler.expanderInvTierFour, "ABA", "DCD", "ADA", 'A',
+                        Items.DIAMOND, 'B', OMTRecipeHandler.expanderInvTierThree, 'C',
+                        Blocks.CHEST, 'D', OMTRecipeHandler.ioBus);
 
-        JSONRecipeBuilder.addShapedRecipe(RecipeHandler.expanderInvTierFive, "ABA", "DCD", "ADA", 'A',
-                        Blocks.OBSIDIAN, 'B', RecipeHandler.expanderInvTierFour, 'C',
-                        Blocks.CHEST, 'D', RecipeHandler.ioBus);
+        JSONRecipeBuilder.addShapedRecipe(OMTRecipeHandler.expanderInvTierFive, "ABA", "DCD", "ADA", 'A',
+                        Blocks.OBSIDIAN, 'B', OMTRecipeHandler.expanderInvTierFour, 'C',
+                        Blocks.CHEST, 'D', OMTRecipeHandler.ioBus);
 
         // Turrets
-        if (ConfigHandler.getGunTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getGunTurretSettings().isEnabled()) {
             JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModBlocks.machineGunTurret, 1), " A ", "CAC", "DBD", 'A',
                             new ItemStack(ModItems.intermediateProductTiered, 1, 11), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 6), 'C', "ingotIron", 'D',
-                            RecipeHandler.ioBus);
+                            OMTRecipeHandler.ioBus);
         }
 
-        if (ConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
             JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModBlocks.incendiaryTurret, 1), "A A", "BCB", "DCD", 'A',
                             new ItemStack(ModItems.intermediateProductTiered, 1, 11), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 6), 'C', "ingotIron", 'D',
-                            RecipeHandler.ioBus);
+                            OMTRecipeHandler.ioBus);
         }
 
-        if (ConfigHandler.getGrenadeTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getGrenadeTurretSettings().isEnabled()) {
             JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModBlocks.grenadeLauncherTurret, 1), " A ", "CBC", "CDC", 'A',
                             new ItemStack(ModItems.intermediateProductTiered, 1, 12), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 7), 'C', "ingotGold",
-                            'D', RecipeHandler.ioBus);
+                            'D', OMTRecipeHandler.ioBus);
         }
 
-        if (ConfigHandler.getRelativisticTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRelativisticTurretSettings().isEnabled()) {
             JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModBlocks.relativisticTurret, 1), "CAC", "ABA", "CDC", 'A',
                             Items.ENDER_PEARL, 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 2), 'C',
-                            "ingotGold", 'D', RecipeHandler.ioBus);
+                            "ingotGold", 'D', OMTRecipeHandler.ioBus);
         }
 
-        if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRocketTurretSettings().isEnabled()) {
             JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModBlocks.rocketTurret, 1), "CAC", "ABA", "EDE", 'A',
                     new ItemStack(ModItems.intermediateProductTiered, 1, 13), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 8), 'C',
-                    Items.QUARTZ, 'D', RecipeHandler.ioBus, 'E',
+                    Items.QUARTZ, 'D', OMTRecipeHandler.ioBus, 'E',
                     Items.DIAMOND);
         }
 
-        if (ConfigHandler.getTeleporterTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getTeleporterTurretSettings().isEnabled()) {
             JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModBlocks.teleporterTurret, 1), "CEC", "ABA", "CDC", 'A',
                             Items.DIAMOND, 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 3), 'C',
-                            Items.ENDER_EYE, 'D', RecipeHandler.ioBus, 'E',
+                            Items.ENDER_EYE, 'D', OMTRecipeHandler.ioBus, 'E',
                             Items.QUARTZ);
         }
 
-        if (ConfigHandler.getLaserTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getLaserTurretSettings().isEnabled()) {
             JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModBlocks.laserTurret, 1), " A ", "CBC", "DCD", 'A',
                     new ItemStack(ModItems.intermediateProductTiered, 1, 14), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 9), 'C',
-                    Blocks.OBSIDIAN, 'D', RecipeHandler.ioBus);
+                    Blocks.OBSIDIAN, 'D', OMTRecipeHandler.ioBus);
         }
 
-        if (ConfigHandler.getRailgunTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRailgunTurretSettings().isEnabled()) {
             JSONRecipeBuilder.addShapedRecipe(new ItemStack(ModBlocks.railGunTurret, 1), "CAC", "CAC", "DBD", 'A',
                     new ItemStack(ModItems.intermediateProductTiered, 1, 14), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 9), 'C',
-                    Blocks.OBSIDIAN, 'D', RecipeHandler.ioBus);
+                    Blocks.OBSIDIAN, 'D', OMTRecipeHandler.ioBus);
         }
 
         // Ammo

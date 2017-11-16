@@ -6,7 +6,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import omtteam.openmodularturrets.network.messages.*;
 import omtteam.openmodularturrets.reference.Reference;
 
-public class NetworkingHandler {
+public class OMTNetworkingHandler {
     public final static SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
 
     public static void initNetworking() {
