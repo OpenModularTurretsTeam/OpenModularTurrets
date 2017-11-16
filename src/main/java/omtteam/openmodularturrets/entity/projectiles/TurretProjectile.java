@@ -198,6 +198,4 @@ public abstract class TurretProjectile extends EntityThrowable {
     public void setFramesRendered(int framesRendered) {
         this.framesRendered = framesRendered;
     }
-
-
 }

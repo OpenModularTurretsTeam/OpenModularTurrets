@@ -6,12 +6,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import omtteam.omlib.util.compat.ItemStackTools;
+import omtteam.openmodularturrets.api.lists.AmmoList;
 import omtteam.openmodularturrets.handler.ConfigHandler;
 import omtteam.openmodularturrets.items.AmmoMetaItem;
 
 import java.util.Set;
-
-import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
 
 /**
  * Created by Keridos on 06/02/17.
@@ -23,13 +22,7 @@ public class OMTUtil {
         if (!ConfigHandler.useWhitelistForAmmo || itemStack.getItem() == Items.POTATO
                 || itemStack.getItem() == Items.REDSTONE || itemStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK))
             return true;
-        for (ItemStack itemStackAllowed : ConfigHandler.disposableAmmoList) {
-            if (itemStackAllowed.getItem() == itemStack.getItem() && (getStackSize(itemStackAllowed) == 2 ||
-                    itemStackAllowed.getItemDamage() == itemStack.getItemDamage())) {
-                return true;
-            }
-        }
-        return itemStack.getItem() instanceof AmmoMetaItem;
+        return AmmoList.contains(itemStack) || itemStack.getItem() instanceof AmmoMetaItem;
     }
 
     public static int getFakeDropsLevel(EntityLivingBase entity) {

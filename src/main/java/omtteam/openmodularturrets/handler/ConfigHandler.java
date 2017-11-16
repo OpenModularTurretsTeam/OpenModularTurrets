@@ -3,14 +3,14 @@ package omtteam.openmodularturrets.handler;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.openmodularturrets.api.lists.AmmoList;
+import omtteam.openmodularturrets.api.lists.MobBlacklist;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.getItem;
-import static omtteam.omlib.util.compat.EntityTools.findClassById;
 
 public class ConfigHandler {
     public static boolean turretAlarmSound;
@@ -27,8 +27,6 @@ public class ConfigHandler {
     public static boolean useWhitelistForAmmo;
     private static List<String> stringAmmoAllowList;
     private static List<String> stringMobBlackList;
-    public static final List<ItemStack> disposableAmmoList = new ArrayList<>();
-    public static final List<String> validMobBlacklist = new ArrayList<>();
     private static int expanderPowerTierOneCapacity;
     private static int expanderPowerTierTwoCapacity;
     private static int expanderPowerTierThreeCapacity;
@@ -277,6 +275,12 @@ public class ConfigHandler {
         recipes = config.get("miscellaneous",
                 "Which recipes should we do? (auto, enderio, mekanism, vanilla)",
                 "auto").getString();
+
+        if (!(recipes.equalsIgnoreCase("enderio") || recipes.equalsIgnoreCase("mekanism") ||
+                recipes.equalsIgnoreCase("vanilla") || recipes.equalsIgnoreCase("auto"))) {
+            recipes = "auto";   //Fix Recipe settings.
+            OpenModularTurrets.getLogger().warn("Setup auto recipes because of wrong setting.");
+        }
 
         turretSoundVolume = config.get("miscellaneous", "Turret sound volume percentage (Between 0 - 100)",
                 40).getInt() / 10;
@@ -588,9 +592,9 @@ public class ConfigHandler {
             for (String itemListEntry : stringAmmoAllowList) {
                 String[] item = itemListEntry.split(":");
                 if (item.length == 3) {
-                    disposableAmmoList.add(new ItemStack(getItem(item[0], item[1]), 1, Integer.parseInt(item[2])));
+                    AmmoList.add(new ItemStack(getItem(item[0], item[1]), 1, Integer.parseInt(item[2])));
                 } else {
-                    disposableAmmoList.add(new ItemStack(getItem(item[0], item[1]), 2));
+                    AmmoList.add(new ItemStack(getItem(item[0], item[1]), 2));
                 }
             }
         } catch (Exception e) {
@@ -603,9 +607,7 @@ public class ConfigHandler {
         try {
             if (stringMobBlackList.isEmpty()) return;
             for (String itemListEntry : stringMobBlackList) {
-                if (findClassById(itemListEntry) != null) {
-                    validMobBlacklist.add(itemListEntry);
-                }
+                MobBlacklist.add(itemListEntry);
             }
         } catch (Exception e) {
             OpenModularTurrets.getLogger().error("error while parsing mob blacklist config!");
