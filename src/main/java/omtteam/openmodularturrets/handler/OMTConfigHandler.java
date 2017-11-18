@@ -266,7 +266,7 @@ public class OMTConfigHandler {
                 new String[]{"ArmorStand"},
                 "Which Entities should not be targetable by turrets? String is the name used by the /summon command."));
 
-        stringAmmoAllowList = Arrays.asList(config.getStringList("list", "miscellaneous",
+        stringAmmoAllowList = Arrays.asList(config.getStringList("disposableAmmoList", "miscellaneous",
                 new String[]{"minecraft:cobblestone", "minecraft:planks"},
                 "Which Items should be usable as disp. ammo (modid:itemname[:meta], if meta is omitted it enables all subitems/blocks)"));
 

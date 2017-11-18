@@ -27,9 +27,11 @@ class RocketTurretRenderer extends TileEntitySpecialRenderer {
         reac = new ModelRedstoneReactor();
     }
 
+
+
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {        TurretHead turretHead = (TurretHead) te;
+    public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {        TurretHead turretHead = (TurretHead) te;
 
         int rotation;
         ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/rocket_turret.png"));

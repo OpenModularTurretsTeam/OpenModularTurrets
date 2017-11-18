@@ -32,7 +32,7 @@ class RailGunTurretRenderer extends TileEntitySpecialRenderer {
     @SuppressWarnings("ConstantConditions")
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {        RailGunTurretTileEntity turretHead = (RailGunTurretTileEntity) te;
+    public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {        RailGunTurretTileEntity turretHead = (RailGunTurretTileEntity) te;
 
         ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/rail_gun_turret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);

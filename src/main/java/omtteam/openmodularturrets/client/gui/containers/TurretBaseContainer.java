@@ -8,6 +8,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import omtteam.omlib.util.DebugHandler;
 import omtteam.openmodularturrets.client.gui.customSlot.AddonSlot;
+import omtteam.openmodularturrets.client.gui.customSlot.AmmoSlot;
 import omtteam.openmodularturrets.client.gui.customSlot.UpgradeSlot;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.items.AddonMetaItem;
@@ -15,6 +16,7 @@ import omtteam.openmodularturrets.items.UpgradeMetaItem;
 import omtteam.openmodularturrets.network.messages.MessageTurretBase;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.util.InvUtil.getStackSize;
@@ -36,6 +38,7 @@ public abstract class TurretBaseContainer extends Container {
     @SuppressWarnings("ConstantConditions")
     @ParametersAreNonnullByDefault
     @Override
+    @Nonnull
     public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
         ItemStack stack = ItemStack.EMPTY;
         Slot slotObject = inventorySlots.get(slot);
@@ -52,7 +55,7 @@ public abstract class TurretBaseContainer extends Container {
             // Determine the slot range for each type( According to the class constructor )
             for (int i = slotStart; i < this.inventorySlots.size(); i++) {
                 Class slotClass = this.getSlot(i).getClass();
-                if (slotClass == Slot.class) {
+                if (slotClass == AmmoSlot.class) {
                     ammoSlotStart = Math.min(i, ammoSlotStart);
                     ammoSlotEnd = Math.max(i + 1, ammoSlotEnd);
                 } else if (slotClass == AddonSlot.class) {
