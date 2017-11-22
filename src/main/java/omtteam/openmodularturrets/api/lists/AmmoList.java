@@ -30,7 +30,6 @@ public class AmmoList {
         }
     }
 
-
     public static boolean remove(ItemStack itemStack) {
         for (ItemStack stack : list) {
             if (stack.isItemEqual(itemStack)) {

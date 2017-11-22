@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -143,6 +144,10 @@ public class TurretHeadUtil {
                         if (isPlayerOwner(owner, base) || isPlayerTrusted(owner, base)) {
                             continue;
                         }
+                    }
+                } else if (possibleTarget instanceof EntityHorse) {
+                    if (((EntityHorse) possibleTarget).isTame()) {
+                        continue;
                     }
                 }
 
