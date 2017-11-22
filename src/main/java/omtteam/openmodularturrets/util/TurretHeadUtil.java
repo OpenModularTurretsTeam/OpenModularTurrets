@@ -1,13 +1,10 @@
 package omtteam.openmodularturrets.util;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.*;
 import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -21,8 +18,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.WorldUtil;
-import omtteam.openmodularturrets.api.lists.MobList;
 import omtteam.openmodularturrets.api.lists.MobBlacklist;
+import omtteam.openmodularturrets.api.lists.MobList;
 import omtteam.openmodularturrets.api.lists.NeutralList;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
@@ -128,13 +125,17 @@ public class TurretHeadUtil {
                     continue;
                 }
 
-                if (possibleTarget instanceof EntityTameable) {
-                    EntityLivingBase entity = ((EntityTameable) possibleTarget).getOwner();
+                if (possibleTarget instanceof IEntityOwnable) {
+                    Entity entity = ((IEntityOwnable) possibleTarget).getOwner();
                     if (entity != null && entity instanceof EntityPlayer) {
                         EntityPlayer owner = (EntityPlayer) entity;
                         if (isPlayerOwner(owner, base) || isPlayerTrusted(owner, base)) {
                             continue;
                         }
+                    }
+                } else if (possibleTarget instanceof EntityHorse){
+                    if (((EntityHorse)possibleTarget).isTame()){
+                        continue;
                     }
                 }
 
