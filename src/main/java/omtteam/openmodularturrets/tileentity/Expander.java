@@ -18,8 +18,6 @@ import static omtteam.omlib.util.MathUtil.truncateDoubleToInt;
 import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing;
 
 public class Expander extends TileEntityContainer implements ITickable, ITurretBaseAddonTileEntity {
-    @SuppressWarnings("unused")
-    protected TurretBase base;
     private boolean powerExpander;
     private EnumFacing orientation;
     private int tier;
@@ -118,6 +116,6 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
     @Nonnull
     @Override
     public TileEntityOwnedBlock getLinkedBlock() {
-        return base;
+        return getBase();
     }
 }

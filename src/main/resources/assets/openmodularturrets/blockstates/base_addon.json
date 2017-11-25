@@ -1,0 +1,67 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+	"model": "openmodularturrets:expander",
+	"transform": "forge:default-block"
+  },
+  "variants": {
+	"normal": [{}],
+	"inventory": [{}],
+	"facing": {
+	  "down": {
+		"transform": {
+		  "rotation": [
+			{
+			  "x": 270
+			}
+		  ]
+		}
+	  },
+	  "up": {
+		"transform": {
+		  "rotation": [
+			{
+			  "x": 90
+			}
+		  ]
+		}
+	  },
+	  "north": {},
+	  "south": {
+		"transform": {
+		  "rotation": [
+			{
+			  "y": 180
+			}
+		  ]
+		}
+	  },
+	  "west": {
+		"transform": {
+		  "rotation": [
+			{
+			  "y": 90
+			}
+		  ]
+		}
+	  },
+	  "east": {
+		"transform": {
+		  "rotation": [
+			{
+			  "y": 270
+			}
+		  ]
+		}
+	  }
+	},
+	"model": {
+	  "0": {
+		"textures": {
+		  "top": "openmodularturrets:blocks/base_addon_loot_deleter_top",
+		  "side": "openmodularturrets:blocks/base_addon_loot_deleter_side"
+		}
+	  }
+	}
+  }
+}

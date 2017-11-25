@@ -33,6 +33,9 @@ public class OMTNames {
         public static final String expanderInvTierThree = "expander_inv_tier_three";
         public static final String expanderInvTierFour = "expander_inv_tier_four";
         public static final String expanderInvTierFive = "expander_inv_tier_five";
+
+        public static final String baseAddon = "base_addon";
+        public static final String baseAddonLootDeleter = "base_addon_loot_deleter";
     }
 
     public static class Items {

@@ -3,12 +3,14 @@ package omtteam.openmodularturrets.init;
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
+import omtteam.openmodularturrets.blocks.BlockBaseAddon;
 import omtteam.openmodularturrets.blocks.BlockExpander;
 import omtteam.openmodularturrets.blocks.BlockTurretBase;
 import omtteam.openmodularturrets.blocks.LeverBlock;
 import omtteam.openmodularturrets.blocks.turretheads.*;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
+import omtteam.openmodularturrets.tileentity.BaseAddon;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
@@ -37,11 +39,13 @@ public class ModBlocks {
     public static Block leverBlock;
 
     public static Block expander;
+    public static Block baseAddon;
 
 
     public static void initBlocks(IForgeRegistry<Block> registry) {
         turretBase = registerBlock(new BlockTurretBase(), registry, ModItems.subblocks);
         expander = registerBlock(new BlockExpander(), registry, ModItems.subblocks);
+        baseAddon = registerBlock(new BlockBaseAddon(), registry, ModItems.subblocks);
 
         if (OMTConfigHandler.getDisposableTurretSettings().isEnabled()) {
             disposableItemTurret = registerBlock(new BlockDisposableTurret(), registry, ModItems.subblocks);
@@ -100,5 +104,6 @@ public class ModBlocks {
         GameRegistry.registerTileEntity(RelativisticTurretTileEntity.class, OMTNames.Blocks.relativisticTurret);
         GameRegistry.registerTileEntity(TeleporterTurretTileEntity.class, OMTNames.Blocks.teleporterTurret);
         GameRegistry.registerTileEntity(Expander.class, OMTNames.Blocks.expander);
+        GameRegistry.registerTileEntity(BaseAddon.class, OMTNames.Blocks.baseAddon);
     }
 }

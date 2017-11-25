@@ -13,7 +13,7 @@ import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
-public class ItemBlockLever extends ItemBlockBaseAddon {
+public class ItemBlockLever extends AbtractItemBlockBaseAddon {
     public ItemBlockLever(Block block) {
         super(block);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.lever);
