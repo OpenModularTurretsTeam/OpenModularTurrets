@@ -5,6 +5,8 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static omtteam.omlib.util.compat.ItemStackTools.getStackSize;
+
 /**
  * Created by Keridos on 16/11/17.
  * This Class
@@ -14,7 +16,7 @@ public class AmmoList {
 
     public static boolean contains(ItemStack itemStack) {
         for (ItemStack stack : list) {
-            if (stack.isItemEqual(itemStack) || (stack.stackSize == 2 && itemStack.getItem() == stack.getItem())) {
+            if (stack.isItemEqual(itemStack) || (getStackSize(itemStack) == 2 && itemStack.getItem() == stack.getItem())) {
                 return true;
             }
         }
