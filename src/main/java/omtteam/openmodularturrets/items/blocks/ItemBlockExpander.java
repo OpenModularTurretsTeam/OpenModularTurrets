@@ -24,7 +24,7 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
  * This Class
  */
 @SuppressWarnings("deprecation")
-public class ItemBlockExpander extends ItemBlockBaseAddon {
+public class ItemBlockExpander extends AbtractItemBlockBaseAddon {
     public ItemBlockExpander(Block block) {
         super(block);
         setHasSubtypes(true);
@@ -37,8 +37,6 @@ public class ItemBlockExpander extends ItemBlockBaseAddon {
             OMTNames.Blocks.expanderPowerTierTwo, OMTNames.Blocks.expanderPowerTierThree, OMTNames.Blocks.expanderPowerTierFour,
             OMTNames.Blocks.expanderPowerTierFive,
     };
-
-
 
     @Override
     @ParametersAreNonnullByDefault

@@ -21,6 +21,7 @@ import omtteam.omlib.util.WorldUtil;
 import omtteam.openmodularturrets.api.lists.MobBlacklist;
 import omtteam.openmodularturrets.api.lists.MobList;
 import omtteam.openmodularturrets.api.lists.NeutralList;
+import omtteam.openmodularturrets.blocks.BlockBaseAddon;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
@@ -36,6 +37,7 @@ import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.InvUtil.getStackSize;
 import static omtteam.omlib.util.PlayerUtil.*;
+import static omtteam.openmodularturrets.blocks.BlockBaseAddon.MODEL;
 import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 
 public class TurretHeadUtil {
@@ -867,6 +869,18 @@ public class TurretHeadUtil {
         }
 
         return Math.min(fakeDropsLevel, 3);
+    }
+
+    public static boolean baseHasLootDeleter(TurretBase base) {
+        List<IBlockState> states = WorldUtil.getTouchingBlockStates(base.getWorld(), base.getPos());
+        for (IBlockState state: states){
+            if (state.getBlock() instanceof BlockBaseAddon) {
+                if (state.getValue(MODEL) == 0){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static void updateSolarPanelAddon(TurretBase base) {

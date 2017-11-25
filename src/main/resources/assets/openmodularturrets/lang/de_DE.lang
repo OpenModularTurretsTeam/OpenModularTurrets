@@ -34,6 +34,7 @@ item.barrel_tier_four.name=Lauf (Stufe 4)
 item.barrel_tier_five.name=Lauf (Stufe 5)
 item.io_bus.name=IO Bus
 item.memory_card.name=Turmbasis Speicherkarte
+
 tile.turret_base_tier_one.name=Turm Basis (Stufe 1)
 tile.turret_base_tier_two.name=Turm Basis (Stufe 2)
 tile.turret_base_tier_three.name=Turm Basis (Stufe 3)
@@ -99,6 +100,10 @@ tooltip.expander.inv1=Turmbasis Inventarvergrößerung
 tooltip.expander.inv2=Fügt 9 Slots Inventar hinzu, die die Basis nutzen kann.
 tooltip.expander.inv3=Jeder Slot kann nur stacken bis
 
+tooltip.base_addon_loot_deleter.inv1=Turret Base Addon - Loot Deleter
+tooltip.base_addon_loot_deleter.inv2=Entfernt alles Loot, welches von Gegnern
+tooltip.base_addon_loot_deleter.inv3=der angeschlossen Base, gedroppt wurde.
+
 tooltip.openmodularturrets.memory_card.desc1=Shift-RechtsClick um auf Karte zu kopieren.
 tooltip.openmodularturrets.memory_card.desc2=Shift-RechtsClick irgendwo anders um Karte zu leeren.
 tooltip.openmodularturrets.memory_card.desc2=RechtsClick um Daten von Karte zu kopieren.
@@ -114,6 +119,8 @@ flavour.expander.inv.2=Nachschub!
 flavour.expander.inv.3=Mehrwehrt.
 flavour.expander.inv.4=Taugt als Ballon.
 flavour.expander.inv.5=Very space, much inventory.
+
+flavour.base_addon_loot_deleter.inv.1=Nur ein bisschen Rauch.
 
 flavour.base.0=Bäume überall.
 flavour.base.1=Ich werd mit deinem Blut malen!

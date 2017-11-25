@@ -50,10 +50,10 @@ public class OMTEventHandler {
 
     @SubscribeEvent
     public void lootEvent(LivingDropsEvent event) {
-        if (event.getEntityLiving().getTags().contains("openmodularturrets:turret_hit") && !OMTConfigHandler.doTurretsKillsDropMobLoot) {
+        if ((event.getEntityLiving().getTags().contains("openmodularturrets:turret_hit") && !OMTConfigHandler.doTurretsKillsDropMobLoot) ||
+                event.getEntityLiving().getTags().contains("openmodularturrets:dont_drop_loot")) {
             event.setCanceled(true);
         }
-        event.getLootingLevel();
     }
 
     @SubscribeEvent
