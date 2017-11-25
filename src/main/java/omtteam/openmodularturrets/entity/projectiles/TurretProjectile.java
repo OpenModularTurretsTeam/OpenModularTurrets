@@ -33,6 +33,7 @@ public abstract class TurretProjectile extends EntityThrowable {
     protected TurretBase turretBase;
     private int framesRendered = 0;
     public int fakeDrops;
+    public boolean dropLoot = true;
 
     TurretProjectile(World world) {
         super(world);
@@ -46,6 +47,7 @@ public abstract class TurretProjectile extends EntityThrowable {
             amp_level = TurretHeadUtil.getAmpLevel(turretBase);
         }
         fakeDrops = TurretHeadUtil.getFakeDropsLevel(turretBase);
+        dropLoot = !TurretHeadUtil.baseHasLootDeleter(turretBase);
     }
 
     TurretProjectile(World world, ItemStack ammo, TurretBase turretBase) {
@@ -57,6 +59,7 @@ public abstract class TurretProjectile extends EntityThrowable {
             amp_level = TurretHeadUtil.getAmpLevel(turretBase);
         }
         fakeDrops = TurretHeadUtil.getFakeDropsLevel(turretBase);
+        dropLoot = !TurretHeadUtil.baseHasLootDeleter(turretBase);
     }
 
     boolean canDamagePlayer(EntityPlayer entityPlayer) {
@@ -187,6 +190,9 @@ public abstract class TurretProjectile extends EntityThrowable {
             }
             if (!(entityLivingBase instanceof EntityPlayer) && this.fakeDrops > -1) {
                 entityLivingBase.addTag("openmodularturrets:fake_drops_" + this.fakeDrops);
+            }
+            if (!(entityLivingBase instanceof EntityPlayer) && !this.dropLoot && !entityLivingBase.getTags().contains("openmodularturrets:dont_drop_loot")) {
+                entityLivingBase.addTag("openmodularturrets:dont_drop_loot");
             }
         }
     }

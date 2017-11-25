@@ -1,38 +1,75 @@
 package omtteam.openmodularturrets.items.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.omlib.items.IDrawOutlineBase;
-import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
+import omtteam.openmodularturrets.init.ModBlocks;
+import omtteam.openmodularturrets.reference.OMTNames;
+import omtteam.openmodularturrets.reference.Reference;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
+
+import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 /**
- * Created by Keridos on 17/05/17.
+ * Created by Keridos on 22/07/16.
  * This Class
  */
-public abstract class ItemBlockBaseAddon extends ItemBlock implements IDrawOutlineBase {
+@SuppressWarnings("deprecation")
+public class ItemBlockBaseAddon extends AbtractItemBlockBaseAddon {
     public ItemBlockBaseAddon(Block block) {
         super(block);
+        setHasSubtypes(true);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.baseAddon);
     }
 
-    @SideOnly(Side.CLIENT)
+    private final static String[] subNames = {
+            OMTNames.Blocks.baseAddonLootDeleter
+    };
+
+
+
     @Override
-    public AxisAlignedBB getRenderOutline(EnumFacing facing, World world, BlockPos pos) {
-        return ((ITurretBaseAddonBlock) this.getBlock()).getBoundingBoxFromFacing(facing, world, pos);
+    @ParametersAreNonnullByDefault
+    public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
+        if (isInCreativeTab(itemIn)) {
+            for (int i = 0; i < 1; i++) {
+                subItems.add(new ItemStack(ModBlocks.baseAddon, 1, i));
+            }
+        }
     }
 
-
-    @Nullable
     @Override
-    public EnumFacing getBaseFacing(World world, BlockPos pos) {
-        return TurretHeadUtil.getTurretBaseFacing(world, pos);
+    @Nonnull
+    public String getUnlocalizedName(ItemStack itemStack) {
+        return "tile." + subNames[itemStack.getItemDamage()];
+    }
+
+    @Override
+    public int getMetadata(int damage) {
+        return damage;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    @ParametersAreNonnullByDefault
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        switch (stack.getMetadata()) {
+            case 0:
+                tooltip.add("");
+                tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.base_addon_loot_deleter.inv1"));
+                tooltip.add("");
+                tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.base_addon_loot_deleter.inv2"));
+                tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.base_addon_loot_deleter.inv3"));
+                tooltip.add("");
+                tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base_addon_loot_deleter.inv.1"));
+        }
     }
 }

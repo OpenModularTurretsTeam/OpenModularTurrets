@@ -36,7 +36,6 @@ public class MobBlacklist {
         }
     }
 
-
     public static boolean remove(String mobIn) {
         for (String mob : list) {
             if (mob.equalsIgnoreCase(mobIn)) {
