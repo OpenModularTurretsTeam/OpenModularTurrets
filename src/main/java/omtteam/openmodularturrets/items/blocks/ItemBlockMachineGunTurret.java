@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
@@ -15,7 +15,7 @@ import java.util.List;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 @SuppressWarnings("deprecation")
-public class ItemBlockMachineGunTurret extends ItemBlockBaseAddon {
+public class ItemBlockMachineGunTurret extends AbstractItemBlockBaseAddon {
     private static final DecimalFormat df = new DecimalFormat("0.0");
 
     public ItemBlockMachineGunTurret(Block block) {
@@ -32,7 +32,7 @@ public class ItemBlockMachineGunTurret extends ItemBlockBaseAddon {
         tooltip.add(TextFormatting.GOLD + "--" + safeLocalize("tooltip.info") + "--");
         tooltip.add(safeLocalize("tooltip.tier") + ": " + TextFormatting.WHITE + "2");
         tooltip.add(safeLocalize("tooltip.range") + ": " + TextFormatting.WHITE +
-                ConfigHandler.getGunTurretSettings().getRange());
+                OMTConfigHandler.getGunTurretSettings().getRange());
         tooltip.add(safeLocalize("tooltip.accuracy") + ": " + TextFormatting.WHITE +
                 safeLocalize("turret.accuracy.medium"));
         tooltip.add(safeLocalize("tooltip.ammo") + ": " + TextFormatting.WHITE +
@@ -43,13 +43,13 @@ public class ItemBlockMachineGunTurret extends ItemBlockBaseAddon {
         tooltip.add(
                 TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");
         tooltip.add(safeLocalize("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
-                (ConfigHandler.getGunTurretSettings().getDamage() / 2F) + " " + safeLocalize(
+                (OMTConfigHandler.getGunTurretSettings().getDamage() / 2F) + " " + safeLocalize(
                 "tooltip.health"));
         tooltip.add(safeLocalize("tooltip.aoe") + ": " + TextFormatting.WHITE + "0");
         tooltip.add(safeLocalize("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
-                20.0F / ConfigHandler.getGunTurretSettings().getFireRate()));
+                20.0F / OMTConfigHandler.getGunTurretSettings().getFireRate()));
         tooltip.add(safeLocalize("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
-                ConfigHandler.getGunTurretSettings().getPowerUsage() + " RF");
+                OMTConfigHandler.getGunTurretSettings().getPowerUsage() + " RF");
         tooltip.add("");
         tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.turret.1"));
     }

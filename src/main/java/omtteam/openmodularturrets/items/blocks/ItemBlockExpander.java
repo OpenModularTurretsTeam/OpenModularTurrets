@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -21,8 +21,7 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
  * Created by Keridos on 22/07/16.
  * This Class
  */
-@SuppressWarnings("deprecation")
-public class ItemBlockExpander extends ItemBlockBaseAddon {
+public class ItemBlockExpander extends AbstractItemBlockBaseAddon {
     public ItemBlockExpander(Block block) {
         super(block);
         setHasSubtypes(true);
@@ -110,7 +109,7 @@ public class ItemBlockExpander extends ItemBlockBaseAddon {
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.WHITE + safeLocalize(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierOneCapacity() + " " + safeLocalize(
+                        "tooltip.expander.power2") + " " + OMTConfigHandler.getExpanderPowerTierOneCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.1"));
@@ -120,7 +119,7 @@ public class ItemBlockExpander extends ItemBlockBaseAddon {
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.WHITE + safeLocalize(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierTwoCapacity() + " " + safeLocalize(
+                        "tooltip.expander.power2") + " " + OMTConfigHandler.getExpanderPowerTierTwoCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.2"));
@@ -130,7 +129,7 @@ public class ItemBlockExpander extends ItemBlockBaseAddon {
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.WHITE + safeLocalize(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierThreeCapacity() + " " + safeLocalize(
+                        "tooltip.expander.power2") + " " + OMTConfigHandler.getExpanderPowerTierThreeCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.3"));
@@ -140,7 +139,7 @@ public class ItemBlockExpander extends ItemBlockBaseAddon {
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.WHITE + safeLocalize(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierFourCapacity() + " " + safeLocalize(
+                        "tooltip.expander.power2") + " " + OMTConfigHandler.getExpanderPowerTierFourCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.4"));
@@ -150,7 +149,7 @@ public class ItemBlockExpander extends ItemBlockBaseAddon {
                 tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.WHITE + safeLocalize(
-                        "tooltip.expander.power2") + " " + ConfigHandler.getExpanderPowerTierFiveCapacity() + " " + safeLocalize(
+                        "tooltip.expander.power2") + " " + OMTConfigHandler.getExpanderPowerTierFiveCapacity() + " " + safeLocalize(
                         "tooltip.expander.power3"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.5"));

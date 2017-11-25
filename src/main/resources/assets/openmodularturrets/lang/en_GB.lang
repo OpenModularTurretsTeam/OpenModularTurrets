@@ -35,6 +35,7 @@ item.barrel_tier_four.name=Barrel (Tier 4)
 item.barrel_tier_five.name=Barrel (Tier 5)
 item.io_bus.name=IO Bus
 item.memory_card.name=Turret Memory Card
+
 tile.turret_base_tier_one.name=Turret Base (Tier 1)
 tile.turret_base_tier_two.name=Turret Base (Tier 2)
 tile.turret_base_tier_three.name=Turret Base (Tier 3)
@@ -62,6 +63,7 @@ tile.expander_inv_tier_two.name=Base Inventory Expander (Tier 2)
 tile.expander_inv_tier_three.name=Base Inventory Expander (Tier 3)
 tile.expander_inv_tier_four.name=Base Inventory Expander (Tier 4)
 tile.expander_inv_tier_five.name=Base Inventory Expander (Tier 5)
+tile.base_addon_loot_deleter.name=Base Addon - Loot Deleter
 
 #for IGWMod
 tile.turret_base.name=Turret Base
@@ -100,6 +102,10 @@ tooltip.expander.inv1=Turret Base Inventory Expander
 tooltip.expander.inv2=Adds 9 slots of inventory space that the turret base can use.
 tooltip.expander.inv3=Each slot can only accept a max stack size of
 
+tooltip.base_addon_loot_deleter.inv1=Turret Base Addon - Loot Deleter
+tooltip.base_addon_loot_deleter.inv2=Removes all dropped loot from
+tooltip.base_addon_loot_deleter.inv3=enemies killed by attached base.
+
 tooltip.openmodularturrets.memory_card.desc1=Shift-RightClick base stores data
 tooltip.openmodularturrets.memory_card.desc2=Shift-RightClick anywhere else to clear
 tooltip.openmodularturrets.memory_card.desc3=RightClick base copies data from card
@@ -115,6 +121,8 @@ flavour.expander.inv.2=Supplies!
 flavour.expander.inv.3=Hair, heir and hare.
 flavour.expander.inv.4=Can be used as a floatation device.
 flavour.expander.inv.5=Very space, much inventory.
+
+flavour.base_addon_loot_deleter.inv.1=Just a bit of smoke.
 
 flavour.base.1=There are trees, everywhere...
 flavour.base.2=I'll draw your blood.

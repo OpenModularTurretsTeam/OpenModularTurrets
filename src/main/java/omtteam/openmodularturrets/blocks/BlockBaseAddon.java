@@ -7,10 +7,8 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -18,43 +16,31 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.IHasItemBlock;
-import omtteam.omlib.blocks.BlockAbstractTileEntity;
-import omtteam.omlib.util.PlayerUtil;
-import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
-import omtteam.openmodularturrets.init.ModBlocks;
-import omtteam.openmodularturrets.items.blocks.ItemBlockExpander;
+import omtteam.openmodularturrets.items.blocks.ItemBlockBaseAddon;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.tileentity.Expander;
+import omtteam.openmodularturrets.tileentity.BaseAddon;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 
-import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
-import static omtteam.omlib.util.compat.ChatTools.addChatMessage;
 
 /**
- * Created by Keridos on 19/07/16.
+ * Created by Keridos on 25/11/17.
  * This Class
  */
-@SuppressWarnings("deprecation")
-public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock {
-    private static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
+public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBlock {
+    public static final PropertyInteger MODEL = PropertyInteger.create("model", 0, 15);
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
-    public BlockExpander() {
+    public BlockBaseAddon() {
         super(Material.GLASS);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         if (!OMTConfigHandler.turretBreakable) {
@@ -63,39 +49,43 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
         this.setResistance(3.0F);
         this.setHardness(3.0F);
         this.setSoundType(SoundType.STONE);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(META, 0));
-        this.setUnlocalizedName(OMTNames.Blocks.expander);
-        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.expander);
+        this.setDefaultState(this.blockState.getBaseState());
+        this.setUnlocalizedName(OMTNames.Blocks.baseAddon);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.baseAddon);
     }
 
     @Override
     public ItemBlock getItemBlock(Block block) {
-        return new ItemBlockExpander(block);
+        return new ItemBlockBaseAddon(block);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     @Nonnull
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(META, meta);
+        return this.getDefaultState().withProperty(MODEL, meta);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(META);
+        return state.getValue(MODEL);
     }
 
     @Override
     @Nonnull
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, META, FACING);
+        return new BlockStateContainer(this, MODEL, FACING);
+    }
+
+    public static AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing) {
+        return BlockTurretBaseAddon.getBoundingBoxFromFacing(facing);
     }
 
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        Expander te = ((Expander) worldIn.getTileEntity(pos));
+        BaseAddon te = ((BaseAddon) worldIn.getTileEntity(pos));
         if (te != null) {
             return state.withProperty(FACING, te.getOrientation());
         } else return state.withProperty(FACING, EnumFacing.NORTH);
@@ -105,11 +95,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     @Nonnull
     @ParametersAreNonnullByDefault
     public TileEntity createTileEntity(World world, IBlockState state) {
-        if (state.getValue(META) < 5) {
-            return new Expander(state.getValue(META), false);
-        } else {
-            return new Expander(state.getValue(META), true);
-        }
+        return new BaseAddon();
     }
 
     @Override
@@ -117,12 +103,12 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         IBlockState blockState = this.getActualState(state, source, pos);
         EnumFacing facing = blockState.getValue(FACING);
-        return BlockTurretBaseAddon.getBoundingBoxFromFacing(facing);
+        return getBoundingBoxFromFacing(facing);
     }
 
     @Override
     public AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing, World world, BlockPos pos) {
-        return BlockTurretBaseAddon.getBoundingBoxFromFacing(facing).offset(pos);
+        return getBoundingBoxFromFacing(facing).offset(pos);
     }
 
 
@@ -137,8 +123,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     }
 
     @Override
-    @ParametersAreNonnullByDefault
-    public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }
 
@@ -150,34 +135,24 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     @Override
     protected boolean clOnBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (hand.equals(EnumHand.OFF_HAND)) return true;
-        Expander expander = (Expander) worldIn.getTileEntity(pos);
-        if (expander == null) {
+        BaseAddon baseAddon = (BaseAddon) worldIn.getTileEntity(pos);
+        if (baseAddon == null) {
             return true;
         }
-        TurretBase base = expander.getBase();
+        TurretBase base = baseAddon.getBase();
         if (base == null) {
             worldIn.destroyBlock(pos, true);
             return true;
         }
-        TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(playerIn, base);
-        if (trustedPlayer != null) {
-            if (base.getTrustedPlayer(playerIn.getUniqueID()).canOpenGUI && state.getValue(META) < 5) {
-                playerIn.openGui(OpenModularTurrets.instance, 7, worldIn, pos.getX(), pos.getY(), pos.getZ());
-                return true;
-            }
-        }
-        if (PlayerUtil.isPlayerOwner(playerIn, base)) {
-            if (playerIn.isSneaking() && playerIn.getHeldItemMainhand() == null) {
-                worldIn.destroyBlock(pos, true);
-            } else if (state.getValue(META) < 5) {
-                playerIn.openGui(OpenModularTurrets.instance, 7, worldIn, pos.getX(), pos.getY(), pos.getZ());
-            } else {
-                return true;
-            }
-        } else {
-            addChatMessage(playerIn, new TextComponentString(safeLocalize("status.ownership")));
-        }
         return true;
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        BaseAddon baseAddon = (BaseAddon) worldIn.getTileEntity(pos);
+        if (baseAddon != null) {
+            baseAddon.setSide();
+        }
     }
 
     @Override
@@ -195,31 +170,6 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
         if (!worldIn.isRemote) {
             dropItems(worldIn, pos);
             super.breakBlock(worldIn, pos, state);
-        }
-    }
-
-    @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        Expander expander = (Expander) worldIn.getTileEntity(pos);
-        if (expander != null) {
-            expander.setOwnerName(expander.getBase().getOwnerName());
-            expander.setOwner(expander.getBase().getOwner());
-            expander.setSide();
-        }
-    }
-
-    @Override
-    public int damageDropped(IBlockState state) {
-        return state.getValue(META);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    @SuppressWarnings("unchecked")
-    @ParametersAreNonnullByDefault
-    public void clGetSubBlocks(Item item, CreativeTabs tab, List subItems) {
-        for (int i = 0; i < 10; i++) {
-            subItems.add(new ItemStack(ModBlocks.expander, 1, i));
         }
     }
 }

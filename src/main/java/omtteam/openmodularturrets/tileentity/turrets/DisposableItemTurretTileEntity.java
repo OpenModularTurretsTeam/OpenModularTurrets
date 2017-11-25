@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.openmodularturrets.entity.projectiles.DisposableTurretProjectile;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 
 public class DisposableItemTurretTileEntity extends TurretHead {
@@ -23,27 +23,27 @@ public class DisposableItemTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return ConfigHandler.getDisposableTurretSettings().getRange();
+        return OMTConfigHandler.getDisposableTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return ConfigHandler.getDisposableTurretSettings().getPowerUsage();
+        return OMTConfigHandler.getDisposableTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return ConfigHandler.getDisposableTurretSettings().getFireRate();
+        return OMTConfigHandler.getDisposableTurretSettings().getFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getDisposableTurretSettings().getAccuracy() / 10;
+        return OMTConfigHandler.getDisposableTurretSettings().getAccuracy() / 10;
     }
 
     @Override
     public double getTurretDamageAmpBonus() {
-        return ConfigHandler.getDisposableTurretSettings().getDamageAmp();
+        return OMTConfigHandler.getDisposableTurretSettings().getDamageAmp();
     }
 
     @Override

@@ -10,8 +10,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import omtteam.openmodularturrets.client.gui.ModularTurretsTab;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
-import omtteam.openmodularturrets.handler.ConfigHandler;
-import omtteam.openmodularturrets.handler.GuiHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.OMTGuiHandler;
 import omtteam.openmodularturrets.proxy.CommonProxy;
 import omtteam.openmodularturrets.reference.Reference;
 import org.apache.logging.log4j.Logger;
@@ -37,11 +37,11 @@ public class OpenModularTurrets {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
-        ConfigHandler.init(event.getSuggestedConfigurationFile());
+        OMTConfigHandler.init(event.getSuggestedConfigurationFile());
         proxy.preInit();
         ModCompatibility.checkForMods();
         ModCompatibility.preinit();
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, GuiHandler.getInstance());
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, OMTGuiHandler.getInstance());
     }
 
     @SuppressWarnings("unused")
@@ -54,6 +54,6 @@ public class OpenModularTurrets {
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        ConfigHandler.parseLists();
+        OMTConfigHandler.parseLists();
     }
 }

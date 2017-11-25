@@ -6,7 +6,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 
 /**
@@ -18,42 +18,42 @@ class OpenModularTurretsWikiTab extends BaseWikiTab {
         pageEntries.add("block/turret_base");
         pageEntries.add("block/lever_block");
 
-        if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getDisposableTurretSettings().isEnabled()) {
             pageEntries.add("block/disposable_item_turret");
         }
 
-        if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
             pageEntries.add("block/potato_cannon_turret");
         }
 
-        if (ConfigHandler.getGunTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getGunTurretSettings().isEnabled()) {
             pageEntries.add("block/machine_gun_turret");
         }
 
-        if (ConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
             pageEntries.add("block/incendiary_turret");
         }
 
-        if (ConfigHandler.getGrenadeTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getGrenadeTurretSettings().isEnabled()) {
             pageEntries.add("block/grenade_turret");
         }
 
-        if (ConfigHandler.getRelativisticTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRelativisticTurretSettings().isEnabled()) {
             pageEntries.add("block/relativistic_turret");
         }
-        if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRocketTurretSettings().isEnabled()) {
             pageEntries.add("block/rocket_turret");
         }
 
-        if (ConfigHandler.getTeleporterTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getTeleporterTurretSettings().isEnabled()) {
             pageEntries.add("block/teleporter_turret");
         }
 
-        if (ConfigHandler.getLaserTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getLaserTurretSettings().isEnabled()) {
             pageEntries.add("block/laser_turret");
         }
 
-        if (ConfigHandler.getRailgunTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRailgunTurretSettings().isEnabled()) {
             pageEntries.add("block/rail_gun_turret");
         }
     }

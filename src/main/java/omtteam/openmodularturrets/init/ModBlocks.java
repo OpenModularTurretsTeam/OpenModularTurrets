@@ -2,12 +2,14 @@ package omtteam.openmodularturrets.init;
 
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import omtteam.openmodularturrets.blocks.BlockBaseAddon;
 import omtteam.openmodularturrets.blocks.BlockExpander;
 import omtteam.openmodularturrets.blocks.BlockTurretBase;
 import omtteam.openmodularturrets.blocks.LeverBlock;
 import omtteam.openmodularturrets.blocks.turretheads.*;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
+import omtteam.openmodularturrets.tileentity.BaseAddon;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
@@ -36,49 +38,50 @@ public class ModBlocks {
     public static Block leverBlock;
 
     public static Block expander;
-
+    public static Block baseAddon;
 
     public static void initBlocks() {
         turretBase = registerBlock(new BlockTurretBase());
         expander = registerBlock(new BlockExpander());
+        baseAddon = registerBlock(new BlockBaseAddon());
 
-        if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getDisposableTurretSettings().isEnabled()) {
             disposableItemTurret = registerBlock(new BlockDisposableTurret());
         }
 
-        if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
             potatoCannonTurret = registerBlock(new BlockPotatoCannonTurret());
         }
 
-        if (ConfigHandler.getGunTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getGunTurretSettings().isEnabled()) {
             machineGunTurret = registerBlock(new BlockGunTurret());
         }
 
-        if (ConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
             incendiaryTurret = registerBlock(new BlockIncendiaryTurret());
         }
 
-        if (ConfigHandler.getGrenadeTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getGrenadeTurretSettings().isEnabled()) {
             grenadeLauncherTurret = registerBlock(new BlockGrenadeTurret());
         }
 
-        if (ConfigHandler.getRelativisticTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRelativisticTurretSettings().isEnabled()) {
             relativisticTurret = registerBlock(new BlockRelativisticTurret());
         }
 
-        if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRocketTurretSettings().isEnabled()) {
             rocketTurret = registerBlock(new BlockRocketTurret());
         }
 
-        if (ConfigHandler.getTeleporterTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getTeleporterTurretSettings().isEnabled()) {
             teleporterTurret = registerBlock(new BlockTeleporterTurret());
         }
 
-        if (ConfigHandler.getLaserTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getLaserTurretSettings().isEnabled()) {
             laserTurret = registerBlock(new BlockLaserTurret());
         }
 
-        if (ConfigHandler.getRailgunTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRailgunTurretSettings().isEnabled()) {
             railGunTurret = registerBlock(new BlockRailGunTurret());
         }
 
@@ -99,5 +102,6 @@ public class ModBlocks {
         GameRegistry.registerTileEntity(RelativisticTurretTileEntity.class, OMTNames.Blocks.relativisticTurret);
         GameRegistry.registerTileEntity(TeleporterTurretTileEntity.class, OMTNames.Blocks.teleporterTurret);
         GameRegistry.registerTileEntity(Expander.class, OMTNames.Blocks.expander);
+        GameRegistry.registerTileEntity(BaseAddon.class, OMTNames.Blocks.baseAddon);
     }
 }

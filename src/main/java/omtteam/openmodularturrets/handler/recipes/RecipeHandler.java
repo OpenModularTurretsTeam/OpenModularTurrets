@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 
@@ -89,16 +89,16 @@ public class RecipeHandler {
         boolean recipesDone = false;
         // Recipes
 
-        if (ModCompatibility.EnderIOLoaded && ConfigHandler.recipes.equals("enderio")) {
+        if (ModCompatibility.EnderIOLoaded && OMTConfigHandler.recipes.equals("enderio")) {
             EnderIORecipeHandler.init();
             recipesDone = true;
-        } else if (ModCompatibility.MekanismLoaded && ConfigHandler.recipes.equals("mekanism")) {
+        } else if (ModCompatibility.MekanismLoaded && OMTConfigHandler.recipes.equals("mekanism")) {
             MekanismRecipeHandler.init();
             recipesDone = true;
-        } else if (ConfigHandler.recipes.equals("vanilla")) {
+        } else if (OMTConfigHandler.recipes.equals("vanilla")) {
             VanillaRecipeHandler.init();
             recipesDone = true;
-        } else if (ConfigHandler.recipes.equals("auto")) {
+        } else if (OMTConfigHandler.recipes.equals("auto")) {
             if (ModCompatibility.EnderIOLoaded) {
                 EnderIORecipeHandler.init();
             } else if (ModCompatibility.MekanismLoaded) {
@@ -140,14 +140,14 @@ public class RecipeHandler {
                         Blocks.COBBLESTONE, 'B', "plankWood", 'C',
                         Blocks.CHEST, 'D', ioBus));
 
-        if (ConfigHandler.getDisposableTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getDisposableTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.disposableItemTurret, 1), " A ", "CBC", "CDC", 'A',
                             new ItemStack(ModItems.intermediateProductTiered, 1, 10), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 5), 'C',
                             Blocks.COBBLESTONE, 'D', Items.REDSTONE));
         }
 
-        if (ConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getPotatoCannonTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.potatoCannonTurret, 1), "CAC", "CAC", "DBD", 'A',
                             new ItemStack(ModItems.intermediateProductTiered, 1, 10), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 5), 'C',
@@ -189,7 +189,7 @@ public class RecipeHandler {
                         'D', ioBus));
 
         // Integration
-        if (ModCompatibility.ThaumcraftLoaded && ConfigHandler.shouldDoThaumcraftIntegration) {
+        if (ModCompatibility.ThaumcraftLoaded && OMTConfigHandler.shouldDoThaumcraftIntegration) {
             //ThaumcraftRecipeHandler.init();
         }
 

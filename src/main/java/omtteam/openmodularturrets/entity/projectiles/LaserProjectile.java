@@ -12,7 +12,7 @@ import net.minecraft.world.WorldServer;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
@@ -54,7 +54,7 @@ public class LaserProjectile extends TurretProjectile {
     public void onHitEntity(Entity entity) {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
 
-            int damage = ConfigHandler.getLaserTurretSettings().getDamage();
+            int damage = OMTConfigHandler.getLaserTurretSettings().getDamage();
 
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
@@ -97,12 +97,12 @@ public class LaserProjectile extends TurretProjectile {
     public void playSound() {
         Random random = RandomUtil.random;
         getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.laserHitSound, SoundCategory.AMBIENT,
-                ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
+                OMTConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
 
     }
 
     @Override
     public double getDamageAmpBonus() {
-        return ConfigHandler.getLaserTurretSettings().getDamageAmp();
+        return OMTConfigHandler.getLaserTurretSettings().getDamageAmp();
     }
 }

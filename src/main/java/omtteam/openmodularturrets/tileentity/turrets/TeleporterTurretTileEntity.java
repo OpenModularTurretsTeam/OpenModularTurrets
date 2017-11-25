@@ -13,7 +13,7 @@ import omtteam.openmodularturrets.blocks.turretheads.BlockTeleporterTurret;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.compatibility.valkyrienwarfare.ValkyrienWarfareHelper;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
@@ -55,7 +55,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
             TurretHeadUtil.updateSolarPanelAddon(base);
 
             //turret tick rate;
-            if (target == null && targetingTicks < ConfigHandler.getTurretTargetSearchTicks()) {
+            if (target == null && targetingTicks < OMTConfigHandler.getTurretTargetSearchTicks()) {
                 targetingTicks++;
                 return;
             }
@@ -139,27 +139,27 @@ public class TeleporterTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return ConfigHandler.getTeleporterTurretSettings().getRange();
+        return OMTConfigHandler.getTeleporterTurretSettings().getRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return ConfigHandler.getTeleporterTurretSettings().getPowerUsage();
+        return OMTConfigHandler.getTeleporterTurretSettings().getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return ConfigHandler.getTeleporterTurretSettings().getFireRate();
+        return OMTConfigHandler.getTeleporterTurretSettings().getFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return ConfigHandler.getTeleporterTurretSettings().getAccuracy();
+        return OMTConfigHandler.getTeleporterTurretSettings().getAccuracy();
     }
 
     @Override
     public double getTurretDamageAmpBonus() {
-        return ConfigHandler.getTeleporterTurretSettings().getDamageAmp();
+        return OMTConfigHandler.getTeleporterTurretSettings().getDamageAmp();
     }
 
     @Override

@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
@@ -15,7 +15,7 @@ import java.util.List;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 @SuppressWarnings("deprecation")
-public class ItemBlockPotatoCannonTurret extends ItemBlockBaseAddon {
+public class ItemBlockPotatoCannonTurret extends AbstractItemBlockBaseAddon {
     private static final DecimalFormat df = new DecimalFormat("0.0");
 
     public ItemBlockPotatoCannonTurret(Block block) {
@@ -32,7 +32,7 @@ public class ItemBlockPotatoCannonTurret extends ItemBlockBaseAddon {
         tooltip.add(TextFormatting.GOLD + "--" + safeLocalize("tooltip.info") + "--");
         tooltip.add(safeLocalize("tooltip.tier") + ": " + TextFormatting.WHITE + "1");
         tooltip.add(safeLocalize("tooltip.range") + ": " + TextFormatting.WHITE +
-                ConfigHandler.getPotatoCannonTurretSettings().getRange());
+                OMTConfigHandler.getPotatoCannonTurretSettings().getRange());
         tooltip.add(safeLocalize("tooltip.accuracy") + ": " + TextFormatting.WHITE +
                 safeLocalize("turret.accuracy.medium"));
         tooltip.add(safeLocalize("tooltip.ammo") + ": " + TextFormatting.WHITE +
@@ -43,13 +43,13 @@ public class ItemBlockPotatoCannonTurret extends ItemBlockBaseAddon {
         tooltip.add(
                 TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");
         tooltip.add(safeLocalize("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
-                (ConfigHandler.getPotatoCannonTurretSettings().getDamage() / 2F) + " " + safeLocalize(
+                (OMTConfigHandler.getPotatoCannonTurretSettings().getDamage() / 2F) + " " + safeLocalize(
                 "tooltip.health"));
         tooltip.add(safeLocalize("tooltip.aoe") + ": " + TextFormatting.WHITE + "0");
         tooltip.add(safeLocalize("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
-                20.0F / ConfigHandler.getPotatoCannonTurretSettings().getFireRate()));
+                20.0F / OMTConfigHandler.getPotatoCannonTurretSettings().getFireRate()));
         tooltip.add(safeLocalize("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
-                ConfigHandler.getPotatoCannonTurretSettings().getPowerUsage() + " RF");
+                OMTConfigHandler.getPotatoCannonTurretSettings().getPowerUsage() + " RF");
         tooltip.add("");
         tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.turret.6"));
     }

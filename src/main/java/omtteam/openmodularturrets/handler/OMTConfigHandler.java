@@ -12,7 +12,7 @@ import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.getItem;
 
-public class ConfigHandler {
+public class OMTConfigHandler {
     public static boolean turretAlarmSound;
     public static boolean turretBreakable;
     public static boolean turretWarnMessage;

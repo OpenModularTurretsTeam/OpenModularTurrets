@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -49,7 +49,7 @@ public class BlazingClayProjectile extends TurretProjectile {
                     this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-            int damage = ConfigHandler.getIncendiaryTurretSettings().getDamage();
+            int damage = OMTConfigHandler.getIncendiaryTurretSettings().getDamage();
             for (Entity mob : targets) {
 
                 if (mob instanceof EntityPlayer) {
@@ -79,7 +79,7 @@ public class BlazingClayProjectile extends TurretProjectile {
                     this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-            int damage = ConfigHandler.getIncendiaryTurretSettings().getDamage();
+            int damage = OMTConfigHandler.getIncendiaryTurretSettings().getDamage();
 
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
@@ -131,6 +131,6 @@ public class BlazingClayProjectile extends TurretProjectile {
 
     @Override
     public double getDamageAmpBonus() {
-        return ConfigHandler.getIncendiaryTurretSettings().getDamageAmp();
+        return OMTConfigHandler.getIncendiaryTurretSettings().getDamageAmp();
     }
 }

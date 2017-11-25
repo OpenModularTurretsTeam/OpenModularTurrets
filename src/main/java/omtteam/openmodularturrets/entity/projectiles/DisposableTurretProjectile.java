@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -71,7 +71,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
     public void onHitEntity(Entity entity) {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
 
-            int damage = ConfigHandler.getDisposableTurretSettings().getDamage();
+            int damage = OMTConfigHandler.getDisposableTurretSettings().getDamage();
 
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
@@ -123,6 +123,6 @@ public class DisposableTurretProjectile extends TurretProjectile {
 
     @Override
     public double getDamageAmpBonus() {
-        return ConfigHandler.getDisposableTurretSettings().getDamageAmp();
+        return OMTConfigHandler.getDisposableTurretSettings().getDamageAmp();
     }
 }

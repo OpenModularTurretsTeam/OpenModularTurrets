@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.compatibility.minecraft.CompatItem;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -84,11 +84,11 @@ public class AddonMetaItem extends CompatItem {
                 tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
                 tooltip.add("");
                 tooltip.add(safeLocalize(
-                        "turret.addon.potentia.a") + ConfigHandler.getPotentiaToRFRatio() + " " + safeLocalize(
+                        "turret.addon.potentia.a") + OMTConfigHandler.getPotentiaToRFRatio() + " " + safeLocalize(
                         "turret.addon.potentia.b"));
                 tooltip.add("");
                 tooltip.add(safeLocalize(
-                        "turret.addon.potentia.c") + ConfigHandler.getPotentiaAddonCapacity() + ".");
+                        "turret.addon.potentia.c") + OMTConfigHandler.getPotentiaAddonCapacity() + ".");
                 tooltip.add("");
                 tooltip.add(safeLocalize("turret.addon.potentia.d"));
                 tooltip.add(safeLocalize("turret.addon.potentia.e"));
@@ -103,9 +103,9 @@ public class AddonMetaItem extends CompatItem {
                 tooltip.add(safeLocalize("turret.addon.recycler.2"));
                 tooltip.add("");
                 tooltip.add(safeLocalize(
-                        "turret.addon.recycler.3") + " " + ConfigHandler.getRecyclerNegateChance() + "%");
+                        "turret.addon.recycler.3") + " " + OMTConfigHandler.getRecyclerNegateChance() + "%");
                 tooltip.add(safeLocalize(
-                        "turret.addon.recycler.4") + " " + ConfigHandler.getRecyclerAddChance() + "%");
+                        "turret.addon.recycler.4") + " " + OMTConfigHandler.getRecyclerAddChance() + "%");
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.recycler.flavour"));
                 return;
@@ -114,7 +114,7 @@ public class AddonMetaItem extends CompatItem {
                 tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
                 tooltip.add("");
                 tooltip.add(safeLocalize(
-                        "turret.addon.redstone.a") + " " + ConfigHandler.getRedstoneReactorAddonGen() + " " + safeLocalize(
+                        "turret.addon.redstone.a") + " " + OMTConfigHandler.getRedstoneReactorAddonGen() + " " + safeLocalize(
                         "turret.addon.redstone.b"));
                 tooltip.add(safeLocalize("turret.addon.redstone.c"));
                 tooltip.add("");
@@ -134,7 +134,7 @@ public class AddonMetaItem extends CompatItem {
                 tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
                 tooltip.add("");
                 tooltip.add(safeLocalize(
-                        "turret.addon.solar.a") + " " + ConfigHandler.getSolarPanelAddonGen() + " " + safeLocalize(
+                        "turret.addon.solar.a") + " " + OMTConfigHandler.getSolarPanelAddonGen() + " " + safeLocalize(
                         "turret.addon.solar.b"));
                 tooltip.add("");
                 tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.solar.flavour"));

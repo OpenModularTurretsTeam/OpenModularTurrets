@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 
@@ -164,42 +164,42 @@ class EnderIORecipeHandler {
                         Blocks.CHEST, 'D', octadicCapacitor, 'E', RecipeHandler.ioBus));
 
         // Turrets
-        if (ConfigHandler.getGunTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getGunTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.machineGunTurret, 1), " A ", "CAC", "DBD", 'A',
                             new ItemStack(ModItems.intermediateProductTiered, 1, 11), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 6), 'C',
                             electricalSteel, 'D', RecipeHandler.ioBus));
         }
 
-        if (ConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getIncendiaryTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.incendiaryTurret, 1), "A A", "BCB", "DCD", 'A',
                             new ItemStack(ModItems.intermediateProductTiered, 1, 11), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 6), 'C',
                             electricalSteel, 'D', RecipeHandler.ioBus));
         }
 
-        if (ConfigHandler.getGrenadeTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getGrenadeTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.grenadeLauncherTurret, 1), " A ", "CBC", "CDC", 'A',
                             new ItemStack(ModItems.intermediateProductTiered, 1, 12), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 7), 'C',
                             darkSteel, 'D', RecipeHandler.ioBus));
         }
 
-        if (ConfigHandler.getRelativisticTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRelativisticTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.relativisticTurret, 1), "CAC", "ABA", "CDC", 'A',
                             Items.ENDER_PEARL, 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 2), 'C',
                             darkSteel, 'D', RecipeHandler.ioBus));
         }
 
-        if (ConfigHandler.getRocketTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRocketTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.rocketTurret, 1), "CAC", "CbC", "EDE", 'A',
                     new ItemStack(ModItems.intermediateProductTiered, 1, 13), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 8), 'C',
                     soularium, 'D', RecipeHandler.ioBus, 'E',
                     Items.DIAMOND));
         }
 
-        if (ConfigHandler.getTeleporterTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getTeleporterTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(
                     new ShapedOreRecipe(new ItemStack(ModBlocks.teleporterTurret, 1), "CEC", "ABA", "CDC", 'A',
                             Items.DIAMOND, 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 3), 'C',
@@ -207,14 +207,14 @@ class EnderIORecipeHandler {
                             Items.DIAMOND));
         }
 
-        if (ConfigHandler.getLaserTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getLaserTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.laserTurret, 1), "EAE", "CBC", "DCD", 'A',
                     new ItemStack(ModItems.intermediateProductTiered, 1, 14), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 9), 'C',
                     Blocks.OBSIDIAN, 'D', RecipeHandler.ioBus, 'E',
                     vibrantCrystal));
         }
 
-        if (ConfigHandler.getRailgunTurretSettings().isEnabled()) {
+        if (OMTConfigHandler.getRailgunTurretSettings().isEnabled()) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.railGunTurret, 1), "EAE", "CAC", "DBD", 'A',
                     new ItemStack(ModItems.intermediateProductTiered, 1, 14), 'B', new ItemStack(ModItems.intermediateProductTiered, 1, 9), 'C',
                     Blocks.OBSIDIAN, 'D', RecipeHandler.ioBus, 'E',

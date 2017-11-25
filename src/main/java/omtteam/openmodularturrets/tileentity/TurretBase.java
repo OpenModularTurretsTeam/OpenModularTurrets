@@ -30,7 +30,7 @@ import omtteam.openmodularturrets.api.IBaseController;
 import omtteam.openmodularturrets.api.network.INetworkTile;
 import omtteam.openmodularturrets.api.network.IPowerExchangeTile;
 import omtteam.openmodularturrets.api.network.OMTNetwork;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.items.AddonMetaItem;
 import omtteam.openmodularturrets.items.UpgradeMetaItem;
 import omtteam.openmodularturrets.reference.OMTNames;
@@ -228,10 +228,10 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 if (amountOfPotentia > 0.05F && !(storage.getMaxEnergyLevel() - storage.getEnergyLevel() == 0)) {
                     if (VisNetHandler.drainVis(this.getWorld(), xCoord, yCoord, zCoord, Aspect.ORDER, 5) == 5) {
                         this.amountOfPotentia = this.amountOfPotentia - 0.05F;
-                        this.storage.modifyEnergyStored(Math.round(ConfigHandler.getPotentiaToRFRatio() * 5));
+                        this.storage.modifyEnergyStored(Math.round(OMTConfigHandler.getPotentiaToRFRatio() * 5));
                     } else {
                         this.amountOfPotentia = this.amountOfPotentia - 0.05F;
-                        this.storage.modifyEnergyStored(Math.round(ConfigHandler.getPotentiaToRFRatio() / 2));
+                        this.storage.modifyEnergyStored(Math.round(OMTConfigHandler.getPotentiaToRFRatio() / 2));
                     }
                 }
             }*/
@@ -308,19 +308,19 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         int tier = getTier();
         switch (tier) {
             case 1:
-                return ConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
             case 2:
-                return ConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
             case 3:
-                return ConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
             case 4:
-                return ConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
             case 5:
-                return ConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
         }
         return 0;
@@ -474,7 +474,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             return;
         }
 
-        if (ConfigHandler.getRedstoneReactorAddonGen() < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
+        if (OMTConfigHandler.getRedstoneReactorAddonGen() < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
 
             //Prioritise redstone blocks
             ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackBlockFromBase(base, new ItemStack(
@@ -486,9 +486,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                         base);
             }
 
-            if (redstoneBlock != ItemStackTools.getEmptyStack() && ConfigHandler.getRedstoneReactorAddonGen() * 9
+            if (redstoneBlock != ItemStackTools.getEmptyStack() && OMTConfigHandler.getRedstoneReactorAddonGen() * 9
                     < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
-                base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen() * 9);
+                base.storage.modifyEnergyStored(OMTConfigHandler.getRedstoneReactorAddonGen() * 9);
                 return;
             }
 
@@ -500,7 +500,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             }
 
             if (redstone != ItemStackTools.getEmptyStack()) {
-                storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen());
+                storage.modifyEnergyStored(OMTConfigHandler.getRedstoneReactorAddonGen());
             }
         }
     }

@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -49,14 +49,14 @@ public class RocketProjectile extends TurretProjectile {
         super.onEntityUpdate();
 
         if (!getEntityWorld().isRemote) {
-            if (ConfigHandler.canRocketsHome && target != null) {
+            if (OMTConfigHandler.canRocketsHome && target != null) {
                 double d0 = target.posX - this.posX;
                 double d1 = target.posY + (double) target.getEyeHeight() - 1.1F - this.posY;
                 double d2 = target.posZ - this.posZ;
 
                 float speed = 0.24F;
                 this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
-            } else if (ConfigHandler.canRocketsHome && target == null) {
+            } else if (OMTConfigHandler.canRocketsHome && target == null) {
                 this.setDead();
             }
         }
@@ -69,7 +69,7 @@ public class RocketProjectile extends TurretProjectile {
     }
 
     private void damageEntityLivingBase(EntityLivingBase mob) {
-        int damage = ConfigHandler.getRocketTurretSettings().getDamage();
+        int damage = OMTConfigHandler.getRocketTurretSettings().getDamage();
 
         if (isAmped) {
             damage += ((int) mob.getHealth() * (getDamageAmpBonus() * amp_level));
@@ -83,7 +83,7 @@ public class RocketProjectile extends TurretProjectile {
             }
         }
 
-        if (ConfigHandler.isCanRocketsHurtEnderDragon() && mob instanceof EntityDragon) {
+        if (OMTConfigHandler.isCanRocketsHurtEnderDragon() && mob instanceof EntityDragon) {
             (mob).setHealth((mob).getHealth() - damage);
             mob.hurtResistantTime = 0;
         } else if (canDamageEntity(mob)) {
@@ -105,7 +105,7 @@ public class RocketProjectile extends TurretProjectile {
         }
 
         if (!getEntityWorld().isRemote) {
-            float strength = ConfigHandler.canRocketsDestroyBlocks ? 2.3F : 0.1F;
+            float strength = OMTConfigHandler.canRocketsDestroyBlocks ? 2.3F : 0.1F;
             getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
                     this.posX + 5, this.posY + 5, this.posZ + 5);
@@ -123,7 +123,7 @@ public class RocketProjectile extends TurretProjectile {
     public void onHitEntity(Entity entity) {
         if (!getEntityWorld().isRemote && !(entity instanceof EntityPlayer && !canDamagePlayer((EntityPlayer) entity))
                 && canDamageEntity(entity) && !(entity instanceof TurretProjectile)) {
-            float strength = ConfigHandler.canRocketsDestroyBlocks ? 2.3F : 0.1F;
+            float strength = OMTConfigHandler.canRocketsDestroyBlocks ? 2.3F : 0.1F;
             getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
                     this.posX + 5, this.posY + 5, this.posZ + 5);
@@ -154,6 +154,6 @@ public class RocketProjectile extends TurretProjectile {
 
     @Override
     public double getDamageAmpBonus() {
-        return ConfigHandler.getRocketTurretSettings().getDamageAmp();
+        return OMTConfigHandler.getRocketTurretSettings().getDamageAmp();
     }
 }

@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.openmodularturrets.api.lists.AmmoList;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.items.AmmoMetaItem;
 
 import java.util.Set;
@@ -19,7 +19,7 @@ import java.util.Set;
 public class OMTUtil {
     public static boolean isItemStackValidAmmo(ItemStack itemStack) {
         if (itemStack == ItemStackTools.getEmptyStack()) return false;
-        if (!ConfigHandler.useWhitelistForAmmo || itemStack.getItem() == Items.POTATO
+        if (!OMTConfigHandler.useWhitelistForAmmo || itemStack.getItem() == Items.POTATO
                 || itemStack.getItem() == Items.REDSTONE || itemStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK))
             return true;
         return AmmoList.contains(itemStack) || itemStack.getItem() instanceof AmmoMetaItem;

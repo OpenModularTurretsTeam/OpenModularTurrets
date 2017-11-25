@@ -32,7 +32,7 @@ import omtteam.openmodularturrets.api.lists.MobList;
 import omtteam.openmodularturrets.api.lists.NeutralList;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.compatibility.valkyrienwarfare.ValkyrienWarfareHelper;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.items.AmmoMetaItem;
 import omtteam.openmodularturrets.tileentity.Expander;
@@ -55,7 +55,7 @@ public class TurretHeadUtil {
 
     public static void warnPlayers(TurretBase base, World worldObj, BlockPos pos, int turretRange) {
         if (base.isAttacksPlayers()) {
-            int warnDistance = ConfigHandler.getTurretWarningDistance();
+            int warnDistance = OMTConfigHandler.getTurretWarningDistance();
             AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - warnDistance,
                     pos.getY() - turretRange - warnDistance,
                     pos.getZ() - turretRange - warnDistance,
@@ -82,17 +82,17 @@ public class TurretHeadUtil {
 
     @SuppressWarnings({"deprecation", "unused"})
     private static void dispatchWarnMessage(EntityPlayerMP player, World worldObj) {
-        if (ConfigHandler.turretAlarmSound) {
+        if (OMTConfigHandler.turretAlarmSound) {
             player.playSound(ModSounds.turretWarnSound, 1.0F, 1.0F);
         }
-        if (ConfigHandler.turretWarnMessage) {
+        if (OMTConfigHandler.turretWarnMessage) {
             addChatMessage(player, new TextComponentString(
                     TextFormatting.DARK_RED + safeLocalize("status.warning")));
         }
     }
 
     public static boolean isEntityValidNeutral(TurretBase base, EntityLivingBase possibleTarget) {
-        if (base.isAttacksNeutrals() && ConfigHandler.globalCanTargetNeutrals) {
+        if (base.isAttacksNeutrals() && OMTConfigHandler.globalCanTargetNeutrals) {
             if (!possibleTarget.isDead && (possibleTarget instanceof EntityAnimal ||
                     possibleTarget instanceof EntityAmbientCreature || NeutralList.contains(possibleTarget))) {
                 return true;
@@ -102,7 +102,7 @@ public class TurretHeadUtil {
     }
 
     public static boolean isEntityValidMob(TurretBase base, EntityLivingBase possibleTarget) {
-        if (base.isAttacksMobs() && ConfigHandler.globalCanTargetMobs) {
+        if (base.isAttacksMobs() && OMTConfigHandler.globalCanTargetMobs) {
             if (!possibleTarget.isDead && (possibleTarget.isCreatureType(EnumCreatureType.MONSTER, false) ||
                     MobList.contains(possibleTarget))) {
                 return true;
@@ -160,7 +160,7 @@ public class TurretHeadUtil {
                 }
 
 
-                if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetPlayers) {
+                if (base.isAttacksPlayers() && OMTConfigHandler.globalCanTargetPlayers) {
                     if (possibleTarget instanceof EntityPlayerMP && !possibleTarget.isDead) {
                         EntityPlayerMP entity = (EntityPlayerMP) possibleTarget;
 
@@ -208,7 +208,7 @@ public class TurretHeadUtil {
                     target = target1;
                 }
 
-                if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetPlayers) {
+                if (base.isAttacksPlayers() && OMTConfigHandler.globalCanTargetPlayers) {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead && target1.getDistance(pos.getX(), pos.getY(),
                             pos.getZ()) >= 3) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
@@ -257,7 +257,7 @@ public class TurretHeadUtil {
                     target = target1;
                 }
 
-                if (base.isAttacksPlayers() && ConfigHandler.globalCanTargetPlayers) {
+                if (base.isAttacksPlayers() && OMTConfigHandler.globalCanTargetPlayers) {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead && !target1.isPotionActive(
                             Potion.getPotionById(2))) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
@@ -317,10 +317,10 @@ public class TurretHeadUtil {
                     int chance = new Random().nextInt(99);
 
                     //For negating
-                    if (chance >= 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
+                    if (chance >= 0 && chance < OMTConfigHandler.getRecyclerNegateChance()) {
                         return new ItemStack(ammoCheck.getItem());
                         //For adding
-                    } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
+                    } else if (chance > OMTConfigHandler.getRecyclerNegateChance() && chance < (OMTConfigHandler.getRecyclerNegateChance() + OMTConfigHandler.getRecyclerAddChance())) {
                         exp.decrStackSize(i, -1);
                         return new ItemStack(ammoCheck.getItem());
                     } else {
@@ -399,10 +399,10 @@ public class TurretHeadUtil {
                     int chance = new Random().nextInt(99);
 
                     //For negating
-                    if (chance > 0 && chance < ConfigHandler.getRecyclerNegateChance()) {
+                    if (chance > 0 && chance < OMTConfigHandler.getRecyclerNegateChance()) {
                         return new ItemStack(ammo_stack.getItem());
                         //For adding
-                    } else if (chance > ConfigHandler.getRecyclerNegateChance() && chance < (ConfigHandler.getRecyclerNegateChance() + ConfigHandler.getRecyclerAddChance())) {
+                    } else if (chance > OMTConfigHandler.getRecyclerNegateChance() && chance < (OMTConfigHandler.getRecyclerNegateChance() + OMTConfigHandler.getRecyclerAddChance())) {
                         base.decrStackSize(i, -1);
                         return new ItemStack(ammo_stack.getItem());
                     } else {
@@ -456,15 +456,15 @@ public class TurretHeadUtil {
 
             switch (tier) {
                 case 1:
-                    return ConfigHandler.getExpanderPowerTierOneCapacity();
+                    return OMTConfigHandler.getExpanderPowerTierOneCapacity();
                 case 2:
-                    return ConfigHandler.getExpanderPowerTierTwoCapacity();
+                    return OMTConfigHandler.getExpanderPowerTierTwoCapacity();
                 case 3:
-                    return ConfigHandler.getExpanderPowerTierThreeCapacity();
+                    return OMTConfigHandler.getExpanderPowerTierThreeCapacity();
                 case 4:
-                    return ConfigHandler.getExpanderPowerTierFourCapacity();
+                    return OMTConfigHandler.getExpanderPowerTierFourCapacity();
                 case 5:
-                    return ConfigHandler.getExpanderPowerTierFiveCapacity();
+                    return OMTConfigHandler.getExpanderPowerTierFiveCapacity();
                 default:
                     return 0;
             }
@@ -581,14 +581,14 @@ public class TurretHeadUtil {
         if (tier == 5) {
             if (base.getStackInSlot(12) != ItemStackTools.getEmptyStack()) {
                 if (base.getStackInSlot(12).getItemDamage() == 3) {
-                    value += (ConfigHandler.getRangeUpgradeBoost() * getStackSize(base.getStackInSlot(12)));
+                    value += (OMTConfigHandler.getRangeUpgradeBoost() * getStackSize(base.getStackInSlot(12)));
                 }
             }
         }
 
         if (base.getStackInSlot(11) != ItemStackTools.getEmptyStack()) {
             if (base.getStackInSlot(11).getItemDamage() == 3) {
-                value += (ConfigHandler.getRangeUpgradeBoost() * getStackSize(base.getStackInSlot(11)));
+                value += (OMTConfigHandler.getRangeUpgradeBoost() * getStackSize(base.getStackInSlot(11)));
             }
         }
 
@@ -633,14 +633,14 @@ public class TurretHeadUtil {
         if (tier == 5) {
             if (base.getStackInSlot(12) != ItemStackTools.getEmptyStack()) {
                 if (base.getStackInSlot(12).getItemDamage() == 0) {
-                    accuracy += (ConfigHandler.getAccuracyUpgradeBoost() * getStackSize(base.getStackInSlot(12)));
+                    accuracy += (OMTConfigHandler.getAccuracyUpgradeBoost() * getStackSize(base.getStackInSlot(12)));
                 }
             }
         }
 
         if (base.getStackInSlot(11) != ItemStackTools.getEmptyStack()) {
             if (base.getStackInSlot(11).getItemDamage() == 0) {
-                accuracy += (ConfigHandler.getAccuracyUpgradeBoost() * getStackSize(base.getStackInSlot(11)));
+                accuracy += (OMTConfigHandler.getAccuracyUpgradeBoost() * getStackSize(base.getStackInSlot(11)));
             }
         }
 
@@ -659,14 +659,14 @@ public class TurretHeadUtil {
         if (tier == 5) {
             if (base.getStackInSlot(12) != ItemStackTools.getEmptyStack()) {
                 if (base.getStackInSlot(12).getItemDamage() == 1) {
-                    efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(12)));
+                    efficiency += (OMTConfigHandler.getEfficiencyUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(12)));
                 }
             }
         }
 
         if (base.getStackInSlot(11) != ItemStackTools.getEmptyStack()) {
             if (base.getStackInSlot(11).getItemDamage() == 1) {
-                efficiency += (ConfigHandler.getEfficiencyUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(11)));
+                efficiency += (OMTConfigHandler.getEfficiencyUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(11)));
             }
         }
 
@@ -685,14 +685,14 @@ public class TurretHeadUtil {
         if (tier == 5) {
             if (base.getStackInSlot(12) != ItemStackTools.getEmptyStack()) {
                 if (base.getStackInSlot(12).getItemDamage() == 2) {
-                    rof += (ConfigHandler.getFireRateUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(12)));
+                    rof += (OMTConfigHandler.getFireRateUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(12)));
                 }
             }
         }
 
         if (base.getStackInSlot(11) != ItemStackTools.getEmptyStack()) {
             if (base.getStackInSlot(11).getItemDamage() == 2) {
-                rof += (ConfigHandler.getFireRateUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(11)));
+                rof += (OMTConfigHandler.getFireRateUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(11)));
             }
         }
 
@@ -888,7 +888,7 @@ public class TurretHeadUtil {
         }
 
         if (base.getWorld().isDaytime() && !base.getWorld().isRaining() && base.getWorld().canBlockSeeSky(base.getPos().up(2))) {
-            storage.receiveEnergy(ConfigHandler.getSolarPanelAddonGen(), false);
+            storage.receiveEnergy(OMTConfigHandler.getSolarPanelAddonGen(), false);
         }
     }
 

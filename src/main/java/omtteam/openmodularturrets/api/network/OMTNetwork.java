@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.api.network;
 import jline.internal.Nullable;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.api.IBaseController;
-import omtteam.openmodularturrets.handler.EventHandler;
+import omtteam.openmodularturrets.handler.OMTEventHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class OMTNetwork {
 
     public OMTNetwork(World world) {
         this.world = world;
-        EventHandler.getInstance().registerNetwork(this);
+        OMTEventHandler.getInstance().registerNetwork(this);
     }
 
     public void tick() {

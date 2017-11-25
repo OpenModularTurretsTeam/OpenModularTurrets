@@ -14,7 +14,7 @@ import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
-import omtteam.openmodularturrets.handler.ConfigHandler;
+import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -38,7 +38,7 @@ public class GrenadeProjectile extends TurretProjectile {
         super.onUpdate();
         if (ticksExisted >= 40) {
             if (!getEntityWorld().isRemote) {
-                float strength = ConfigHandler.canGrenadesDestroyBlocks ? 1.4F : 0.1F;
+                float strength = OMTConfigHandler.canGrenadesDestroyBlocks ? 1.4F : 0.1F;
                 getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
                 AxisAlignedBB axis = new AxisAlignedBB(this.posX - 3, this.posY - 3, this.posZ - 3,
                         this.posX + 3, this.posY + 3, this.posZ + 3);
@@ -46,7 +46,7 @@ public class GrenadeProjectile extends TurretProjectile {
 
                 for (EntityLivingBase mob : targets) {
 
-                    int damage = ConfigHandler.getGrenadeTurretSettings().getDamage();
+                    int damage = OMTConfigHandler.getGrenadeTurretSettings().getDamage();
 
                     if (isAmped) {
                         damage += ((int) mob.getHealth() * (getDamageAmpBonus() * amp_level));
@@ -119,6 +119,6 @@ public class GrenadeProjectile extends TurretProjectile {
 
     @Override
     public double getDamageAmpBonus() {
-        return ConfigHandler.getGrenadeTurretSettings().getDamageAmp();
+        return OMTConfigHandler.getGrenadeTurretSettings().getDamageAmp();
     }
 }

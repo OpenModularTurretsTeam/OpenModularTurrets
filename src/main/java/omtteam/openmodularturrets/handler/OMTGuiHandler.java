@@ -13,15 +13,15 @@ import omtteam.openmodularturrets.client.gui.containers.*;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
-public class GuiHandler implements IGuiHandler {
-    private static GuiHandler instance;
+public class OMTGuiHandler implements IGuiHandler {
+    private static OMTGuiHandler instance;
 
-    private GuiHandler() {
+    private OMTGuiHandler() {
     }
 
-    public static GuiHandler getInstance() {
+    public static OMTGuiHandler getInstance() {
         if (instance == null) {
-            instance = new GuiHandler();
+            instance = new OMTGuiHandler();
         }
         return instance;
     }
