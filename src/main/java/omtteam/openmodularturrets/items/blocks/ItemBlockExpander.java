@@ -24,7 +24,7 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
  * This Class
  */
 @SuppressWarnings("deprecation")
-public class ItemBlockExpander extends AbtractItemBlockBaseAddon {
+public class ItemBlockExpander extends AbstractItemBlockBaseAddon {
     public ItemBlockExpander(Block block) {
         super(block);
         setHasSubtypes(true);

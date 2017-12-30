@@ -17,7 +17,7 @@ import java.util.List;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 @SuppressWarnings("deprecation")
-public class ItemBlockIncendiaryTurret extends AbtractItemBlockBaseAddon {
+public class ItemBlockIncendiaryTurret extends AbstractItemBlockBaseAddon {
     private static final DecimalFormat df = new DecimalFormat("0.0");
 
     public ItemBlockIncendiaryTurret(Block block) {
