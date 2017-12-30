@@ -506,7 +506,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
             if (projectile.gravity == 0.00F) {
                 Vec3d velocity = getVelocityVectorFromYawPitch(this.pitch, this.yaw, 3.0F);
-                projectile.setThrowableHeading(velocity.x, velocity.y, velocity.z, (float) velocity.lengthVector(), (float) accuracy);
+                projectile.shoot(velocity.x, velocity.y, velocity.z, (float) velocity.lengthVector(), (float) accuracy);
             } else {
                 projectile.rotationYaw = this.yaw;
                 projectile.rotationPitch = this.pitch;
@@ -552,7 +552,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             } */
 
             // Set projectile heading
-            projectile.setThrowableHeading(adjustedX, adjustedY, adjustedZ, speedFactor, accuracy);
+            projectile.shoot(adjustedX, adjustedY, adjustedZ, speedFactor, accuracy);
 
             // Play sounds
             if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {

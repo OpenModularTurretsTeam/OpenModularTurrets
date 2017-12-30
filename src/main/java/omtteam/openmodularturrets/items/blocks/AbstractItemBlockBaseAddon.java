@@ -18,8 +18,8 @@ import javax.annotation.Nullable;
  * Created by Keridos on 17/05/17.
  * This Class
  */
-public abstract class AbtractItemBlockBaseAddon extends ItemBlock implements IDrawOutlineBase {
-    public AbtractItemBlockBaseAddon(Block block) {
+public abstract class AbstractItemBlockBaseAddon extends ItemBlock implements IDrawOutlineBase {
+    public AbstractItemBlockBaseAddon(Block block) {
         super(block);
     }
 
