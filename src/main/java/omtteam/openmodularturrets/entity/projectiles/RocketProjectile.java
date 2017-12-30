@@ -55,7 +55,7 @@ public class RocketProjectile extends TurretProjectile {
                 double d2 = target.posZ - this.posZ;
 
                 float speed = 0.24F;
-                this.setThrowableHeading(d0, d1, d2, speed, 0.0F);
+                this.shoot(d0, d1, d2, speed, 0.0F);
             } else if (OMTConfigHandler.canRocketsHome && target == null) {
                 this.setDead();
             }

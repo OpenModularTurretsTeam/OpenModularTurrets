@@ -22,10 +22,7 @@ import omtteam.openmodularturrets.reference.Reference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static omtteam.openmodularturrets.blocks.BlockTurretBase.TIER;
 
@@ -100,11 +97,6 @@ public class TurretBaseBakedModel extends CamoBakedModel {
             }
             TextureAtlasSprite part = bakedTextureGetter.apply(new ResourceLocation("openmodularturrets", "blocks/turret_base_tier_two"));
             return new TurretBaseBakedModel(list, part);
-        }
-
-        @Override
-        public IModelState getDefaultState() {
-            return null;
         }
     }
 
