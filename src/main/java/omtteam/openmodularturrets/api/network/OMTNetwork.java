@@ -1,19 +1,19 @@
 package omtteam.openmodularturrets.api.network;
 
 import jline.internal.Nullable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.api.IBaseController;
 import omtteam.openmodularturrets.handler.OMTEventHandler;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Keridos on 30/08/17.
  * This Class
  */
 public class OMTNetwork {
-    private List<INetworkTile> devices = new ArrayList<>();
+    private Map<BlockPos,INetworkTile> devices = new HashMap<>();
     private World world;
 
     public OMTNetwork(World world) {
@@ -26,7 +26,7 @@ public class OMTNetwork {
         List<IPowerExchangeTile> requiring = new ArrayList<>();
         int powerRequired = 0, powerToDeliver = 0;
 
-        for (INetworkTile device : devices) {
+        for (INetworkTile device : devices.values()) {
             if (device instanceof IPowerExchangeTile) {
                 if (((IPowerExchangeTile) device).deliversEnergy()) {
                     delivering.add((IPowerExchangeTile) device);
@@ -51,7 +51,7 @@ public class OMTNetwork {
 
     @Nullable
     public IBaseController getController() {
-        for (INetworkTile device : devices) {
+        for (INetworkTile device : devices.values()) {
             if (device instanceof IBaseController) {
                 return (IBaseController) device;
             }
@@ -62,16 +62,24 @@ public class OMTNetwork {
     public boolean addDevice(INetworkTile tile) {
         boolean controllerExists = getController() != null;
         if (tile instanceof IBaseController && !controllerExists) {
-            this.devices.add(tile);
+            this.devices.putIfAbsent(tile.getPosition(), tile);
             return true;
         } else if (!(tile instanceof IBaseController)) {
-            this.devices.add(tile);
+            this.devices.putIfAbsent(tile.getPosition(), tile);
             return true;
         }
         return false;
     }
 
-    //TODO: add merging and splitting function
+
+    @Nullable
+    public INetworkTile getConnectedDevice(BlockPos pos){
+        return devices.get(pos);
+    }
+
+    public Collection<INetworkTile> getAllDevices(){
+        return devices.values();
+    }
 
     public World getWorld() {
         return world;
@@ -79,5 +87,20 @@ public class OMTNetwork {
 
     public void setWorld(World world) {
         this.world = world;
+    }
+
+    public void splitNetwork() {
+        // set all networktile to refresh their network.
+        for (INetworkTile tile: devices.values()){
+            tile.setNetwork(null);
+        }
+    }
+
+    public void mergeNetwork(OMTNetwork network) {
+        // add all the devices from other network to this.
+        for (INetworkTile tile: network.getAllDevices()){
+            devices.putIfAbsent(tile.getPosition(), tile);
+            tile.setNetwork(this);
+        }
     }
 }
