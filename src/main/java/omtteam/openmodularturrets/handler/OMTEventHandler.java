@@ -94,4 +94,8 @@ public class OMTEventHandler {
     public void registerNetwork(OMTNetwork network) {
         getNetworkListForWorld(network.getWorld()).add(network);
     }
+
+    public void removeNetwork(OMTNetwork network) {
+        getNetworkListForWorld(network.getWorld()).remove(network);
+    }
 }

@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.api.network;
 import jline.internal.Nullable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import omtteam.omlib.handler.EventHandler;
 import omtteam.openmodularturrets.api.IBaseController;
 import omtteam.openmodularturrets.handler.OMTEventHandler;
 
@@ -13,7 +14,7 @@ import java.util.*;
  * This Class
  */
 public class OMTNetwork {
-    private Map<BlockPos,INetworkTile> devices = new HashMap<>();
+    private Map<BlockPos, INetworkTile> devices = new HashMap<>();
     private World world;
 
     public OMTNetwork(World world) {
@@ -55,7 +56,7 @@ public class OMTNetwork {
             if (device instanceof IBaseController) {
                 return (IBaseController) device;
             }
-        } 
+        }
         return null;
     }
 
@@ -71,13 +72,16 @@ public class OMTNetwork {
         return false;
     }
 
+    public boolean removeDevice(INetworkTile tile) {
+        return this.devices.remove(tile.getPosition()) != null;
+    }
 
     @Nullable
-    public INetworkTile getConnectedDevice(BlockPos pos){
+    public INetworkTile getConnectedDevice(BlockPos pos) {
         return devices.get(pos);
     }
 
-    public Collection<INetworkTile> getAllDevices(){
+    public Collection<INetworkTile> getAllDevices() {
         return devices.values();
     }
 
@@ -91,16 +95,23 @@ public class OMTNetwork {
 
     public void splitNetwork() {
         // set all networktile to refresh their network.
-        for (INetworkTile tile: devices.values()){
+        for (INetworkTile tile : devices.values()) {
             tile.setNetwork(null);
         }
     }
 
     public void mergeNetwork(OMTNetwork network) {
         // add all the devices from other network to this.
-        for (INetworkTile tile: network.getAllDevices()){
+        for (INetworkTile tile : network.getAllDevices()) {
             devices.putIfAbsent(tile.getPosition(), tile);
             tile.setNetwork(this);
         }
+        network.destroy();
+    }
+
+    private void destroy() {
+        OMTEventHandler.getInstance().removeNetwork(this);
+        this.devices = null;
+        this.world = null;
     }
 }
