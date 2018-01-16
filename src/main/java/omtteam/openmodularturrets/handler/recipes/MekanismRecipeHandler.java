@@ -37,7 +37,7 @@ class MekanismRecipeHandler {
         ItemStack controlCircuit;
 
 
-		/* ModItems */
+        /* ModItems */
         if (ironEnrichedItem != null) {
             ironEnriched = new ItemStack(ironEnrichedItem, 1);
         } else {

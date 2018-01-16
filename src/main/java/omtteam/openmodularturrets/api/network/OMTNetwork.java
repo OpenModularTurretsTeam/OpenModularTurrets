@@ -3,7 +3,6 @@ package omtteam.openmodularturrets.api.network;
 import jline.internal.Nullable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import omtteam.omlib.handler.EventHandler;
 import omtteam.openmodularturrets.api.IBaseController;
 import omtteam.openmodularturrets.handler.OMTEventHandler;
 
