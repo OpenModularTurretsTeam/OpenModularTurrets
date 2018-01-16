@@ -69,6 +69,7 @@ public class TurretBaseBakedModel extends CamoBakedModel {
         return ItemOverrideList.NONE;
     }
 
+
     public static class Model implements IModel {
         Model() {
 

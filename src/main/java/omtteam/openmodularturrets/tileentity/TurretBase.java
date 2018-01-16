@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -27,7 +28,6 @@ import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.compat.ItemStackList;
 import omtteam.omlib.util.compat.ItemStackTools;
 import omtteam.openmodularturrets.api.IBaseController;
-import omtteam.openmodularturrets.api.network.INetworkTile;
 import omtteam.openmodularturrets.api.network.IPowerExchangeTile;
 import omtteam.openmodularturrets.api.network.OMTNetwork;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
@@ -59,7 +59,7 @@ import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft")}
 )
-public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile {
+public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile {
     public int trustedPlayerIndex = 0;
     protected IBlockState camoBlockState;
 
@@ -255,6 +255,12 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         debugInfo.add("Camo: " + this.camoBlockState.getBlock().getRegistryName() + ", computerAccess: " + this.computerAccessible);
         debugInfo.add("Force Fire: " + this.forceFire + ", UpperMaxRange: " + this.upperBoundMaxRange);
         return debugInfo;
+    }
+
+    @Nonnull
+    @Override
+    public BlockPos getPosition() {
+        return this.getPos();
     }
 
     private void setBaseUpperBoundRange() {
@@ -589,7 +595,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     // Mod Compatibility  functions:
-
 
     @Override
     public boolean requiresEnergy() {
