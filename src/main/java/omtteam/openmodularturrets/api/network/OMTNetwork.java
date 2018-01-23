@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.api.network;
 
-import jdk.nashorn.internal.ir.Block;
 import jline.internal.Nullable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -17,9 +16,9 @@ import static java.util.UUID.randomUUID;
  * Created by Keridos on 30/08/17.
  * This Class
  */
-public class OMTNetwork implements Serializable {
+public class OMTNetwork {
     private Map<BlockPos, INetworkTile> devices = new HashMap<>();
-    private transient World world;
+    private World world;
     private UUID uuid;
     private String name;
 
@@ -52,11 +51,11 @@ public class OMTNetwork implements Serializable {
         }
         for (IPowerExchangeTile tile : requiring) {
             powerRequired += Math.min(tile.getEnergyStorage().getMaxReceive(),
-                    tile.getEnergyStorage().getMaxEnergyStored() - tile.getEnergyStorage().getEnergyStored());
+                                      tile.getEnergyStorage().getMaxEnergyStored() - tile.getEnergyStorage().getEnergyStored());
         }
         for (IPowerExchangeTile tile : delivering) {
             powerToDeliver += Math.min(powerRequired - powerToDeliver, Math.min(tile.getEnergyStorage().getMaxExtract(),
-                    tile.getEnergyStorage().getMaxEnergyStored() - tile.getEnergyStorage().getEnergyStored()));
+                                                                                tile.getEnergyStorage().getMaxEnergyStored() - tile.getEnergyStorage().getEnergyStored()));
         }
         for (IPowerExchangeTile tile : requiring) {
             tile.getEnergyStorage().receiveEnergy(powerToDeliver / requiring.size(), false);
@@ -103,8 +102,12 @@ public class OMTNetwork implements Serializable {
         return world;
     }
 
-    public void setWorld(World world) {
-        this.world = world;
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void splitNetwork() {

@@ -44,12 +44,18 @@ public interface INetworkTile {
     @Nonnull
     BlockPos getPosition();
 
-    default void recursAddDevice(World world, BlockPos pos, @Nullable EnumFacing from) {
+    default void recursAddDevice(World world, OMTNetwork network, BlockPos pos, @Nullable EnumFacing from) {
         if (world.isBlockLoaded(pos)) {
             for (EnumFacing facing : EnumFacing.VALUES) {
                 TileEntity te = world.getTileEntity(pos.offset(facing));
                 if (!facing.equals(from) && te instanceof INetworkTile & te != null) {
-                    ((INetworkTile) te).recursAddDevice(world, pos.offset(facing), facing);
+                    OMTNetwork remoteNetwork = ((INetworkTile) te).getNetwork();
+                    if (remoteNetwork == null) {
+                        ((INetworkTile) te).setNetwork(network);
+                        ((INetworkTile) te).recursAddDevice(world, network, pos.offset(facing), facing);
+                    } else if (!remoteNetwork.getUuid().equals(network.getUuid())) {
+                        remoteNetwork.mergeNetwork(network);
+                    }
                 }
             }
         }
@@ -58,7 +64,7 @@ public interface INetworkTile {
     default OMTNetwork createNetwork(World world) {
         OMTNetwork network = new OMTNetwork(world);
         network.addDevice(this);
-        recursAddDevice(world, this.getPosition(), null);
+        recursAddDevice(world, network, this.getPosition(), null);
         return network;
     }
 }
