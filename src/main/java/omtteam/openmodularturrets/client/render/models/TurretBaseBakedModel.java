@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.client.render.models;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -22,7 +23,10 @@ import omtteam.openmodularturrets.reference.Reference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import static omtteam.openmodularturrets.blocks.BlockTurretBase.TIER;
 
@@ -32,6 +36,7 @@ import static omtteam.openmodularturrets.blocks.BlockTurretBase.TIER;
  */
 
 @SideOnly(Side.CLIENT)
+@MethodsReturnNonnullByDefault
 public class TurretBaseBakedModel extends CamoBakedModel {
     private static final ResourceLocation FAKE_LOCATION = new ResourceLocation("openmodularturrets", "models/block/custom/turret_base");
 
@@ -45,7 +50,10 @@ public class TurretBaseBakedModel extends CamoBakedModel {
 
     @Override
     protected IBakedModel getModel(List<IBakedModel> list, @Nullable IBlockState state) {
-        return state != null ? list.get(state.getValue(TIER) - 1): list.get(0);
+        if (state != null) {
+            return list.get(state.getValue(TIER) - 1);
+        }
+        return list.get(0);
     }
 
     @Override
@@ -66,12 +74,14 @@ public class TurretBaseBakedModel extends CamoBakedModel {
         return ItemOverrideList.NONE;
     }
 
+    @MethodsReturnNonnullByDefault
     public static class Model implements IModel {
         Model() {
 
         }
 
         @Override
+
         public Collection<ResourceLocation> getDependencies() {
             List<ResourceLocation> list = new ArrayList<>();
             for (int i = 1; i < 6; i++) {
@@ -86,7 +96,8 @@ public class TurretBaseBakedModel extends CamoBakedModel {
         }
 
         @Override
-        public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+        @ParametersAreNonnullByDefault
+        public IBakedModel bake(@Nullable IModelState state, @Nullable VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
             List<IBakedModel> list = new ArrayList<>();
             for (int i = 1; i < 6; i++) {
                 try {
@@ -100,15 +111,18 @@ public class TurretBaseBakedModel extends CamoBakedModel {
         }
     }
 
+    @MethodsReturnNonnullByDefault
     public static class ModelLoader implements ICustomModelLoader {
 
         @Override
+        @ParametersAreNonnullByDefault
         public boolean accepts(ResourceLocation modelLocation) {
             return (modelLocation.getResourceDomain().equals(Reference.MOD_ID) && modelLocation.equals(FAKE_LOCATION));
         }
 
         @Override
-        public IModel loadModel(ResourceLocation modelLocation) throws Exception {
+        @ParametersAreNonnullByDefault
+        public IModel loadModel(ResourceLocation modelLocation) {
             return new Model();
         }
 
