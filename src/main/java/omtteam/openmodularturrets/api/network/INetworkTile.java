@@ -1,5 +1,8 @@
 package omtteam.openmodularturrets.api.network;
 
+import net.minecraft.util.math.BlockPos;
+
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -18,14 +21,23 @@ public interface INetworkTile {
     OMTNetwork getNetwork();
 
     /**
-     * Set the currently connected network for the tile.
+     * Set the currently connected network for the tile. If set to null, refresh on next tick.
      */
-    void setNetwork(OMTNetwork network);
+    void setNetwork(@Nullable OMTNetwork network);
 
     /**
-     * Return a list of all networking capable tiles near the cable.
+     * Return the devices name.
      *
-     * @return the list.
+     * @return name of device
      */
+    @Nonnull
     String getDeviceName();
+
+    /**
+     * Return the position of the tile.
+     *
+     * @return BlockPos position
+     */
+    @Nonnull
+    BlockPos getPosition();
 }
