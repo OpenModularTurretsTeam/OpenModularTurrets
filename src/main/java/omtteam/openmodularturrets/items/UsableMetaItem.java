@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.items;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,7 +29,7 @@ import java.util.Set;
 
 import static omtteam.omlib.util.GeneralUtil.*;
 
-
+@MethodsReturnNonnullByDefault
 public class UsableMetaItem extends Item {
     public UsableMetaItem() {
         super();
@@ -53,7 +54,7 @@ public class UsableMetaItem extends Item {
     @Nonnull
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
-        if (stack != null && stack.getItemDamage() == 2 && player.isSneaking() && stack.hasTagCompound()) {
+        if (!stack.isEmpty() && stack.getItemDamage() == 2 && player.isSneaking() && stack.hasTagCompound()) {
             //noinspection ConstantConditions
             Set<String> keySet = stack.getTagCompound().getKeySet();
             keySet.clear();
@@ -62,9 +63,10 @@ public class UsableMetaItem extends Item {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
-        if (itemStackIn != null && itemStackIn.getItemDamage() == 2 && playerIn.isSneaking() && itemStackIn.hasTagCompound()) {
+        if (!itemStackIn.isEmpty() && itemStackIn.getItemDamage() == 2 && playerIn.isSneaking() && itemStackIn.hasTagCompound()) {
             //noinspection ConstantConditions
             Set<String> keySet = itemStackIn.getTagCompound().getKeySet();
             keySet.clear();

@@ -18,7 +18,7 @@ public class ModItems {
     public static Item intermediateProductRegular;
     public static Item ammoMetaItem;
     public static Item usableMetaItem;
-    public static List<Item> subblocks = new ArrayList<>();
+    public static final List<Item> subblocks = new ArrayList<>();
 
     public static void init(IForgeRegistry<Item> registry) {
         intermediateProductTiered = registerItem(new IntermediateProductTiered(), registry);
