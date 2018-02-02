@@ -1,7 +1,6 @@
 package omtteam.openmodularturrets.tileentity;
 
 import dan200.computercraft.api.lua.ILuaContext;
-import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.block.state.IBlockState;
@@ -106,6 +105,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Override
     @Nonnull
     public IBlockState getDefaultCamoState() {
+        //noinspection ConstantConditions
         return ForgeRegistries.BLOCKS.getValue(
                 new ResourceLocation(Reference.MOD_ID + ":" + OMTNames.Blocks.turretBase)).getStateFromMeta(this.tier - 1);
     }
@@ -583,6 +583,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return (turretHead != null && turretHead instanceof TurretHead && ((TurretHead) turretHead).forceShot());
     }
 
+    @SuppressWarnings("deprecation")
     public int forceShootAllTurrets() {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         int successes = 0;
@@ -618,6 +619,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return network;
     }
 
+    @Nonnull
     @Override
     public String getDeviceName() {
         return "TurretBase";
@@ -654,7 +656,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Optional.Method(modid = "computercraft")
     @Override
     @ParametersAreNonnullByDefault
-    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
+    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) {
         // method is command
         boolean b;
         int i;

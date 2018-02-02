@@ -16,6 +16,7 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
@@ -55,6 +56,7 @@ public class WailaTurretHandler implements IWailaDataProvider {
      * a bug with this method in that it will only affect the head of the tool tip. The body and tail
      * method will ignore any changes made here.
      */
+    @Nonnull
     @Override
     public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return accessor.getStack();
@@ -66,6 +68,7 @@ public class WailaTurretHandler implements IWailaDataProvider {
      * the name of the block. The accessor is an object wrapper which contains all relevant data while
      * the config parameter allows you to take advantage of the ingame config gui.
      */
+    @Nonnull
     @Override
     public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return currenttip;
@@ -76,6 +79,7 @@ public class WailaTurretHandler implements IWailaDataProvider {
      * majority of your data. The accessor is an object wrapper which contains all relevant data while
      * the config parameter allows you to take advantage of the ingame config gui.
      */
+    @Nonnull
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         if (accessor.getWorld().isRemote) {
@@ -101,6 +105,7 @@ public class WailaTurretHandler implements IWailaDataProvider {
      * of the mod which adds this block to the game. The accessor is an object wrapper which contains all
      * relevant data while the config parameter allows you to take advantage of the ingame config gui.
      */
+    @Nonnull
     @Override
     @Optional.Method(modid = "waila")
     public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
@@ -114,6 +119,7 @@ public class WailaTurretHandler implements IWailaDataProvider {
      * entities.
      */
 
+    @Nonnull
     @Override
     public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, BlockPos pos) {
         if (te != null) {

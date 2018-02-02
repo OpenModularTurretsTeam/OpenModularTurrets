@@ -83,20 +83,16 @@ public class TurretHeadUtil {
 
     public static boolean isEntityValidNeutral(TurretBase base, EntityLivingBase possibleTarget) {
         if (base.isAttacksNeutrals() && OMTConfigHandler.globalCanTargetNeutrals) {
-            if (!possibleTarget.isDead && (possibleTarget instanceof EntityAnimal ||
-                    possibleTarget instanceof EntityAmbientCreature || NeutralList.contains(possibleTarget))) {
-                return true;
-            }
+            return !possibleTarget.isDead && (possibleTarget instanceof EntityAnimal ||
+                    possibleTarget instanceof EntityAmbientCreature || NeutralList.contains(possibleTarget));
         }
         return false;
     }
 
     public static boolean isEntityValidMob(TurretBase base, EntityLivingBase possibleTarget) {
         if (base.isAttacksMobs() && OMTConfigHandler.globalCanTargetMobs) {
-            if (!possibleTarget.isDead && (possibleTarget.isCreatureType(EnumCreatureType.MONSTER, false) ||
-                    MobList.contains(possibleTarget))) {
-                return true;
-            }
+            return !possibleTarget.isDead && (possibleTarget.isCreatureType(EnumCreatureType.MONSTER, false) ||
+                    MobList.contains(possibleTarget));
         }
         return false;
     }
@@ -871,16 +867,16 @@ public class TurretHeadUtil {
         return Math.min(fakeDropsLevel, 3);
     }
 
-    public static boolean baseHasLootDeleter(TurretBase base) {
+    public static boolean baseHasNoLootDeleter(TurretBase base) {
         List<IBlockState> states = WorldUtil.getTouchingBlockStates(base.getWorld(), base.getPos());
         for (IBlockState state: states){
             if (state.getBlock() instanceof BlockBaseAddon) {
                 if (state.getValue(MODEL) == 0){
-                    return true;
+                    return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 
     public static void updateSolarPanelAddon(TurretBase base) {

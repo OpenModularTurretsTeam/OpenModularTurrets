@@ -14,7 +14,6 @@ import static omtteam.omlib.compatibility.ModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
 
 public class OMTRecipeHandler {
-    private static ItemStack ammoBlazingClay;
     public static ItemStack ammoBullet;
     public static ItemStack ammoFerroSlug;
     public static ItemStack ammoGrenade;
@@ -31,30 +30,17 @@ public class OMTRecipeHandler {
     public static ItemStack expanderPowerTierFour;
     public static ItemStack expanderPowerTierFive;
 
-    private static ItemStack addonConcealer;
-    private static ItemStack addonDamageAmp;
     @SuppressWarnings("unused")
     public static ItemStack addonPotentia;
-    private static ItemStack addonRecycler;
-    private static ItemStack addonRedstoneReactor;
     public static ItemStack addonSerialPort;
-    private static ItemStack addonSolarPanel;
-    private static ItemStack addonFakeDrops;
-
-    private static ItemStack upgradeAccuracy;
-    private static ItemStack upgradeEfficiency;
-    private static ItemStack upgradeFireRate;
-    private static ItemStack upgradeRange;
-    private static ItemStack upgradeScatterShot;
 
     public static ItemStack ioBus;
-    private static ItemStack memoryCard;
 
 
     @SuppressWarnings("StatementWithEmptyBody")
     public static void initRecipes() {
 
-        ammoBlazingClay = new ItemStack(ModItems.ammoMetaItem, 32, 0);
+        ItemStack ammoBlazingClay = new ItemStack(ModItems.ammoMetaItem, 32, 0);
         ammoBullet = new ItemStack(ModItems.ammoMetaItem, 64, 1);
         ammoFerroSlug = new ItemStack(ModItems.ammoMetaItem, 16, 2);
         ammoGrenade = new ItemStack(ModItems.ammoMetaItem, 32, 3);
@@ -69,21 +55,21 @@ public class OMTRecipeHandler {
         expanderPowerTierThree = new ItemStack(ModBlocks.expander, 1, 7);
         expanderPowerTierFour = new ItemStack(ModBlocks.expander, 1, 8);
         expanderPowerTierFive = new ItemStack(ModBlocks.expander, 1, 9);
-        addonConcealer = new ItemStack(ModItems.addonMetaItem, 1, 0);
-        addonDamageAmp = new ItemStack(ModItems.addonMetaItem, 1, 1);
+        ItemStack addonConcealer = new ItemStack(ModItems.addonMetaItem, 1, 0);
+        ItemStack addonDamageAmp = new ItemStack(ModItems.addonMetaItem, 1, 1);
         addonPotentia = new ItemStack(ModItems.addonMetaItem, 1, 2);
-        addonRecycler = new ItemStack(ModItems.addonMetaItem, 1, 3);
-        addonRedstoneReactor = new ItemStack(ModItems.addonMetaItem, 1, 4);
+        ItemStack addonRecycler = new ItemStack(ModItems.addonMetaItem, 1, 3);
+        ItemStack addonRedstoneReactor = new ItemStack(ModItems.addonMetaItem, 1, 4);
         addonSerialPort = new ItemStack(ModItems.addonMetaItem, 1, 5);
-        addonSolarPanel = new ItemStack(ModItems.addonMetaItem, 1, 6);
-        addonFakeDrops = new ItemStack(ModItems.addonMetaItem, 1, 7);
-        upgradeAccuracy = new ItemStack(ModItems.upgradeMetaItem, 1, 0);
-        upgradeEfficiency = new ItemStack(ModItems.upgradeMetaItem, 1, 1);
-        upgradeFireRate = new ItemStack(ModItems.upgradeMetaItem, 1, 2);
-        upgradeRange = new ItemStack(ModItems.upgradeMetaItem, 1, 3);
-        upgradeScatterShot = new ItemStack(ModItems.upgradeMetaItem, 1, 4);
+        ItemStack addonSolarPanel = new ItemStack(ModItems.addonMetaItem, 1, 6);
+        ItemStack addonFakeDrops = new ItemStack(ModItems.addonMetaItem, 1, 7);
+        ItemStack upgradeAccuracy = new ItemStack(ModItems.upgradeMetaItem, 1, 0);
+        ItemStack upgradeEfficiency = new ItemStack(ModItems.upgradeMetaItem, 1, 1);
+        ItemStack upgradeFireRate = new ItemStack(ModItems.upgradeMetaItem, 1, 2);
+        ItemStack upgradeRange = new ItemStack(ModItems.upgradeMetaItem, 1, 3);
+        ItemStack upgradeScatterShot = new ItemStack(ModItems.upgradeMetaItem, 1, 4);
         ioBus = new ItemStack(ModItems.intermediateProductRegular, 1, 0);
-        memoryCard = new ItemStack(ModItems.usableMetaItem, 1, 2);
+        ItemStack memoryCard = new ItemStack(ModItems.usableMetaItem, 1, 2);
 
 
         // Recipes

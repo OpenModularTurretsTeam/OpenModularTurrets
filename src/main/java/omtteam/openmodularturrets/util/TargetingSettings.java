@@ -5,8 +5,10 @@ package omtteam.openmodularturrets.util;
  * This Class
  */
 public class TargetingSettings {
-    private boolean targetPlayers, targetMobs, targetPassive;
-    private int maxRange;
+    private final boolean targetPlayers;
+    private final boolean targetMobs;
+    private final boolean targetPassive;
+    private final int maxRange;
 
     public TargetingSettings(boolean targetPlayers, boolean targetMobs, boolean targetPassive, int maxRange) {
         this.targetPlayers = targetPlayers;

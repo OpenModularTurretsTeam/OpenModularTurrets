@@ -15,6 +15,7 @@ import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.*;
@@ -53,6 +54,7 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
      * a bug with this method in that it will only affect the head of the tool tip. The body and tail
      * method will ignore any changes made here.
      */
+    @Nonnull
     @Override
     public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return accessor.getStack();
@@ -64,6 +66,7 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
      * the name of the block. The accessor is an object wrapper which contains all relevant data while
      * the config parameter allows you to take advantage of the ingame config gui.
      */
+    @Nonnull
     @Override
     public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return currenttip;
@@ -74,6 +77,7 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
      * majority of your data. The accessor is an object wrapper which contains all relevant data while
      * the config parameter allows you to take advantage of the ingame config gui.
      */
+    @Nonnull
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         if (currenttip.size() == 0) {
@@ -92,6 +96,7 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
      * of the mod which adds this block to the game. The accessor is an object wrapper which contains all
      * relevant data while the config parameter allows you to take advantage of the ingame config gui.
      */
+    @Nonnull
     @Override
     public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         return currenttip;
@@ -104,6 +109,7 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
      * entities.
      */
 
+    @Nonnull
     @Override
     public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, BlockPos pos) {
         if (te != null) {

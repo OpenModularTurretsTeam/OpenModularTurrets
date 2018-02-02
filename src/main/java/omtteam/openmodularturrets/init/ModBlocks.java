@@ -34,7 +34,7 @@ public class ModBlocks {
     public static Block teleporterTurret;
 
     public static Block rocketTurret;
-    public static Block laserTurret = new BlockLaserTurret();
+    public static final Block laserTurret = new BlockLaserTurret();
     public static Block railGunTurret;
     public static Block leverBlock;
 
