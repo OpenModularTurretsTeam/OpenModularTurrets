@@ -49,6 +49,7 @@ import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
@@ -294,7 +295,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
 
     @Override
     @ParametersAreNonnullByDefault
-    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
+    public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
         switch (world.getBlockState(pos).getValue(TIER)) {
             case 1:
                 return OMTConfigHandler.getBaseTierOneBlastResistance();

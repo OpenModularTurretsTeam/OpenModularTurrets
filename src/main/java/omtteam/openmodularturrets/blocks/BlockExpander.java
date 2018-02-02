@@ -138,7 +138,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState base_state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EnumFacing side) {
         return false;
     }
 
@@ -167,7 +167,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
             }
         }
         if (PlayerUtil.isPlayerOwner(playerIn, base)) {
-            if (playerIn.isSneaking() && playerIn.getHeldItemMainhand() == null) {
+            if (playerIn.isSneaking() && playerIn.getHeldItemMainhand().isEmpty()) {
                 worldIn.destroyBlock(pos, true);
             } else if (state.getValue(META) < 5) {
                 playerIn.openGui(OpenModularTurrets.instance, 7, worldIn, pos.getX(), pos.getY(), pos.getZ());

@@ -21,12 +21,10 @@ public class AmmoList {
         return false;
     }
 
-    public static boolean add(ItemStack itemStack)  {
+    public static void add(ItemStack itemStack) {
         if (contains(itemStack)){
-            return false;
         }else {
             list.add(itemStack);
-            return true;
         }
     }
 

@@ -27,12 +27,10 @@ public class MobBlacklist {
         return contains(EntityList.getEntityString(mobIn));
     }
 
-    public static boolean add(String mobIn) {
+    public static void add(String mobIn) {
         if (contains(mobIn) || EntityUtil.findClassById(mobIn) == null) {
-            return false;
         } else {
             list.add(mobIn);
-            return true;
         }
     }
 

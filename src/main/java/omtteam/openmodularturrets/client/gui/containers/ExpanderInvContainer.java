@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import omtteam.openmodularturrets.client.gui.customSlot.AmmoSlot;
 import omtteam.openmodularturrets.tileentity.Expander;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.util.InvUtil.*;
@@ -41,6 +42,7 @@ public class ExpanderInvContainer extends Container {
         return tileEntity.isUsableByPlayer(player);
     }
 
+    @Nonnull
     @SuppressWarnings("ConstantConditions")
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int slot) {

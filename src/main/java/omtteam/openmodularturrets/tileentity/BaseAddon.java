@@ -49,6 +49,7 @@ public class BaseAddon extends TileEntityBase implements ITurretBaseAddonTileEnt
         this.setOrientation(getTurretBaseFacing(this.getWorld(), this.pos));
     }
 
+    @Nonnull
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);

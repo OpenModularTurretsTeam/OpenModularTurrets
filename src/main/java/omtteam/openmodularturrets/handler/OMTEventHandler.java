@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class OMTEventHandler {
     private static OMTEventHandler instance;
-    private HashMap<World, List<OMTNetwork>> networks = new HashMap<>();
+    private final HashMap<World, List<OMTNetwork>> networks = new HashMap<>();
 
     private OMTEventHandler() {
     }
