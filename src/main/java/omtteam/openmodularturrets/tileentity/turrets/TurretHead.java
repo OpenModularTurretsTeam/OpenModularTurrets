@@ -117,7 +117,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     }
 
     boolean setSide() {
-        if (!this.getWorld().isBlockLoaded(this.getPos().offset(turretBase))) {
+        if (hasSetSide && !this.getWorld().isBlockLoaded(this.getPos().offset(turretBase))) {
             return false;
         }
         if (hasSetSide) {
