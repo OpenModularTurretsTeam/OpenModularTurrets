@@ -1,13 +1,15 @@
 package omtteam.openmodularturrets.api.network;
 
 import jline.internal.Nullable;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import omtteam.openmodularturrets.api.IBaseController;
 import omtteam.openmodularturrets.handler.OMTEventHandler;
 
 import java.util.*;
+
+import static java.util.UUID.randomUUID;
 
 /**
  * Created by Keridos on 30/08/17.
@@ -16,9 +18,19 @@ import java.util.*;
 public class OMTNetwork {
     private Map<BlockPos, INetworkTile> devices = new HashMap<>();
     private World world;
+    private UUID uuid;
+    private String name;
 
     public OMTNetwork(World world) {
         this.world = world;
+        this.uuid = randomUUID();
+        OMTEventHandler.getInstance().registerNetwork(this);
+    }
+
+    public OMTNetwork(World world, String name) {
+        this.world = world;
+        this.uuid = randomUUID();
+        this.name = name;
         OMTEventHandler.getInstance().registerNetwork(this);
     }
 
@@ -27,12 +39,12 @@ public class OMTNetwork {
         List<IPowerExchangeTile> requiring = new ArrayList<>();
         int powerRequired = 0, powerToDeliver = 0;
 
-        for (INetworkTile device : devices.values()) {
-            if (device instanceof IPowerExchangeTile) {
-                if (((IPowerExchangeTile) device).deliversEnergy()) {
-                    delivering.add((IPowerExchangeTile) device);
-                } else if (((IPowerExchangeTile) device).requiresEnergy()) {
-                    requiring.add((IPowerExchangeTile) device);
+        for (Map.Entry<BlockPos, INetworkTile> device : devices.entrySet()) {
+            if (world.isBlockLoaded(device.getKey()) && device.getValue() instanceof IPowerExchangeTile) {
+                if (((IPowerExchangeTile) device.getValue()).deliversEnergy()) {
+                    delivering.add((IPowerExchangeTile) device.getValue());
+                } else if (((IPowerExchangeTile) device.getValue()).requiresEnergy()) {
+                    requiring.add((IPowerExchangeTile) device.getValue());
                 }
             }
         }
@@ -78,7 +90,7 @@ public class OMTNetwork {
 
     @Nullable
     public INetworkTile getConnectedDevice(BlockPos pos) {
-        return devices.get(pos);
+        return world.isBlockLoaded(pos) ? devices.get(pos) : null;
     }
 
     public Collection<INetworkTile> getAllDevices() {
@@ -89,8 +101,12 @@ public class OMTNetwork {
         return world;
     }
 
-    public void setWorld(World world) {
-        this.world = world;
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void splitNetwork() {
@@ -109,9 +125,22 @@ public class OMTNetwork {
         network.destroy();
     }
 
+    public NBTTagCompound getAsNBTTagCompound() {
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setUniqueId("uuid", this.uuid);
+        tag.setString("name", this.name);
+        return tag;
+    }
+
+    public UUID getUuidFromTagCompound(NBTTagCompound tag) {
+        return tag.getUniqueId("uuid");
+    }
+
     private void destroy() {
         OMTEventHandler.getInstance().removeNetwork(this);
         this.devices = null;
         this.world = null;
     }
+
+    //TODO: add saving and loading function
 }
