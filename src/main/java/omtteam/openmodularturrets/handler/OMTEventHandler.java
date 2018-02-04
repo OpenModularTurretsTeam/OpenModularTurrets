@@ -6,15 +6,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import omtteam.openmodularturrets.OpenModularTurrets;
@@ -26,9 +29,11 @@ import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.OMTFakePlayer;
 import omtteam.openmodularturrets.util.OMTUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 /**
  * Created by Keridos on 02/05/17.
@@ -36,7 +41,7 @@ import java.util.List;
  */
 public class OMTEventHandler {
     private static OMTEventHandler instance;
-    private final HashMap<World, List<OMTNetwork>> networks = new HashMap<>();
+    private HashMap<World, List<OMTNetwork>> networks = new HashMap<>();
 
     private OMTEventHandler() {
     }
@@ -99,7 +104,7 @@ public class OMTEventHandler {
             network.tick();
         }
     }
-  
+
     @SubscribeEvent
     public void blockRegisterEvent(RegistryEvent.Register<Block> event) {
         ModBlocks.initBlocks(event.getRegistry());
@@ -126,5 +131,66 @@ public class OMTEventHandler {
 
     public void removeNetwork(OMTNetwork network) {
         getNetworkListForWorld(network.getWorld()).remove(network);
+    }
+
+    @SubscribeEvent
+    public void worldLoadEvent(WorldEvent.Load event) {
+        try {
+            HashMap<Integer, List<Tuple<UUID, String>>> tempList = new HashMap<>();
+            Path fullpath = Paths.get(DimensionManager.getCurrentSaveRootDirectory().toString() + "/omt/networks.sav");
+            FileInputStream saveFile = new FileInputStream(fullpath.toFile());
+            ObjectInputStream save = new ObjectInputStream(saveFile);
+            Object object = save.readObject();
+            if (object instanceof Map) {
+                tempList = (HashMap<Integer, List<Tuple<UUID, String>>>) object;
+            }
+            save.close();
+            saveFile.close();
+            for (Map.Entry<Integer, List<Tuple<UUID, String>>> entry : tempList.entrySet()) {
+                World world = DimensionManager.getWorld(entry.getKey());
+                for (Tuple<UUID, String> tuple : entry.getValue()) {
+                    new OMTNetwork(world, tuple.getSecond(), tuple.getFirst());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @SubscribeEvent
+    public void worldUnloadEvent(WorldEvent.Unload event) {
+        HashMap<Integer, List<Tuple<UUID, String>>> list = new HashMap<>();
+        for (Map.Entry<World, List<OMTNetwork>> entry : networks.entrySet()) {
+            List<Tuple<UUID, String>> tempList = new ArrayList<>();
+            for (OMTNetwork network : entry.getValue()) {
+                tempList.add(new Tuple<>(network.getUuid(), network.getName()));
+                network.saveToDisk();
+            }
+            list.put(entry.getKey().provider.getDimension(), tempList);
+        }
+        File saveRoot = DimensionManager.getCurrentSaveRootDirectory();
+        if (saveRoot != null) {
+            Path path = Paths.get(saveRoot.toString() + "/omt/");
+            Path fullpath = Paths.get(saveRoot.toString() + "/omt/networks.sav");
+            try {
+                if (Files.notExists(path)) {
+                    if (!path.toFile().mkdir()) {
+                        throw new Exception("Failed to create dir");
+                    }
+                }
+                FileOutputStream saveFile = new FileOutputStream(fullpath.toFile());
+                ObjectOutputStream save = new ObjectOutputStream(saveFile);
+                save.writeObject(list);
+                save.close();
+                saveFile.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    Files.deleteIfExists(fullpath);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        }
     }
 }
