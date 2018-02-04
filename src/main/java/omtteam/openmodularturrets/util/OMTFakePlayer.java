@@ -2,11 +2,11 @@ package omtteam.openmodularturrets.util;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import omtteam.omlib.init.OMLibItems;
 
 import java.util.UUID;
 
@@ -22,10 +22,10 @@ public class OMTFakePlayer {
     private static ItemStack swordLooting3;
 
     public static void init() {
-        swordLooting0 = new ItemStack(Items.DIAMOND_SWORD, 1);
-        swordLooting1 = new ItemStack(Items.DIAMOND_SWORD, 1);
-        swordLooting2 = new ItemStack(Items.DIAMOND_SWORD, 1);
-        swordLooting3 = new ItemStack(Items.DIAMOND_SWORD, 1);
+        swordLooting0 = new ItemStack(OMLibItems.fakeSword, 1);
+        swordLooting1 = new ItemStack(OMLibItems.fakeSword, 1);
+        swordLooting2 = new ItemStack(OMLibItems.fakeSword, 1);
+        swordLooting3 = new ItemStack(OMLibItems.fakeSword, 1);
         swordLooting1.addEnchantment(Enchantments.LOOTING, 1);
         swordLooting2.addEnchantment(Enchantments.LOOTING, 2);
         swordLooting3.addEnchantment(Enchantments.LOOTING, 3);
