@@ -48,6 +48,4 @@ public class ModSounds {
         teleportLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "teleport")).setRegistryName("openmodularturrets", "teleport"));
         amped = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "amped")).setRegistryName("openmodularturrets", "amped"));
     }
-
-
 }
