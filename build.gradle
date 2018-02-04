@@ -148,8 +148,6 @@ dependencies {
     } else {
         compile project(':OMLib')
     }
-    runtime "com.enderio:EnderIO:${config.minecraft_version}-${config.enderio_version}"
-    runtime "com.enderio.core:EnderCore:${config.minecraft_version}-${config.endercore_version}"
     //runtime "com.github.azanor:baubles:${config.baubles_version}"
 }
 

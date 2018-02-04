@@ -83,7 +83,7 @@ public class TurretHeadUtil {
     @SuppressWarnings({"deprecation", "unused"})
     private static void dispatchWarnMessage(EntityPlayerMP player, World worldObj) {
         if (OMTConfigHandler.turretAlarmSound) {
-            player.playSound(ModSounds.turretWarnSound, 1.0F, 1.0F);
+            player.playSound(ModSounds.warningSound, 1.0F, 1.0F);
         }
         if (OMTConfigHandler.turretWarnMessage) {
             addChatMessage(player, new TextComponentString(

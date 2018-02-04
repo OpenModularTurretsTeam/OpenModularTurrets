@@ -26,13 +26,13 @@ public class ModSounds {
     public static SoundEvent relativisticLaunchSound;
     public static SoundEvent rocketLaunchSound;
     public static SoundEvent teleportLaunchSound;
-    @SuppressWarnings("unused")
-    public static SoundEvent turretWarnSound;
+    public static SoundEvent warningSound;
     public static SoundEvent amped;
 
     public static void init() {
         turretDeploySound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "turret_deploy")).setRegistryName("openmodularturrets", "turret_deploy"));
         turretRetractSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "turret_retract")).setRegistryName("openmodularturrets", "turret_retract"));
+        warningSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "warning")).setRegistryName("openmodularturrets", "warning"));
         bulletHitSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "bullet_hit")).setRegistryName("openmodularturrets", "bullet_hit"));
         railGunHitSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "rail_gun_hit")).setRegistryName("openmodularturrets", "rail_gun_hit"));
         laserHitSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "laser_hit")).setRegistryName("openmodularturrets", "laser_hit"));

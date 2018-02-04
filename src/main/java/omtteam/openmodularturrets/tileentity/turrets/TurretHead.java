@@ -50,6 +50,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     int turretTier;
     protected TurretBase base;
     private boolean hasSetSide = false;
+    private EnumFacing turretBase;
     public Entity target = null;
     public float rotationAnimation = 0.00F;
     public boolean shouldConceal = false;
@@ -119,51 +120,62 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         return base;
     }
 
-    void setSide() {
+    boolean setSide() {
+        if (hasSetSide && !this.getWorld().isBlockLoaded(this.getPos().offset(turretBase))) {
+            return false;
+        }
         if (hasSetSide) {
-            return;
+            return true;
         }
 
-        if (this.getWorld().getTileEntity(this.pos.east()) instanceof TurretBase) {
+        if (this.getWorld().isBlockLoaded(this.pos.east()) && this.getWorld().getTileEntity(this.pos.east()) instanceof TurretBase) {
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 1.565F;
+            this.turretBase = EnumFacing.EAST;
             this.hasSetSide = true;
-            return;
+            return true;
         }
 
-        if (this.getWorld().getTileEntity(this.pos.west()) instanceof TurretBase) {
+        if (this.getWorld().isBlockLoaded(this.pos.west()) && this.getWorld().getTileEntity(this.pos.west()) instanceof TurretBase) {
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 4.705F;
+            this.turretBase = EnumFacing.WEST;
             this.hasSetSide = true;
-            return;
+            return true;
         }
 
-        if (this.getWorld().getTileEntity(this.pos.south()) instanceof TurretBase) {
+        if (this.getWorld().isBlockLoaded(this.pos.south()) && this.getWorld().getTileEntity(this.pos.south()) instanceof TurretBase) {
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 3.145F;
+            this.turretBase = EnumFacing.SOUTH;
             this.hasSetSide = true;
-            return;
+            return true;
         }
 
-        if (this.getWorld().getTileEntity(this.pos.north()) instanceof TurretBase) {
+        if (this.getWorld().isBlockLoaded(this.pos.north()) && this.getWorld().getTileEntity(this.pos.north()) instanceof TurretBase) {
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 0F;
+            this.turretBase = EnumFacing.NORTH;
             this.hasSetSide = true;
-            return;
+            return true;
         }
 
-        if (this.getWorld().getTileEntity(this.pos.up()) instanceof TurretBase) {
+        if (this.getWorld().isBlockLoaded(this.pos.up()) && this.getWorld().getTileEntity(this.pos.up()) instanceof TurretBase) {
             this.baseFitRotationX = 3.145F;
             this.baseFitRotationZ = 0F;
+            this.turretBase = EnumFacing.UP;
             this.hasSetSide = true;
-            return;
+            return true;
         }
 
-        if (this.getWorld().getTileEntity(this.pos.down()) instanceof TurretBase) {
+        if (this.getWorld().isBlockLoaded(this.pos.down()) && this.getWorld().getTileEntity(this.pos.down()) instanceof TurretBase) {
             this.baseFitRotationX = 0F;
             this.baseFitRotationZ = 0F;
+            this.turretBase = EnumFacing.DOWN;
             this.hasSetSide = true;
+            return true;
         }
+        return false;
     }
 
     Entity getTargetWithMinRange() {
