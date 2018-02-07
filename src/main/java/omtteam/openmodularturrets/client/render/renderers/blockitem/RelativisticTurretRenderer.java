@@ -18,7 +18,8 @@ class RelativisticTurretRenderer extends TileEntitySpecialRenderer {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {        TurretHead turretHead = (TurretHead) te;
+    public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+        TurretHead turretHead = (TurretHead) te;
         ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/relativistic_turret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 

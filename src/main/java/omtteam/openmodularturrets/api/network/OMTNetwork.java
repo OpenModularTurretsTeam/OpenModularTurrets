@@ -2,6 +2,8 @@ package omtteam.openmodularturrets.api.network;
 
 import jline.internal.Nullable;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -175,12 +177,34 @@ public class OMTNetwork {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     //Utility Functions
+
+    private boolean isSplitted() {
+        HashMap<BlockPos, INetworkTile> tempmap = new HashMap<>();
+        recursiveSearch((BlockPos) devices.keySet().toArray()[0], null, tempmap);
+        return tempmap.keySet().equals(devices.keySet());
+    }
+
+    private void recursiveSearch(BlockPos pos, @Nullable EnumFacing from, HashMap<BlockPos, INetworkTile> tempmap) {
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            TileEntity te = world.getTileEntity(pos.offset(facing));
+            if (!facing.equals(from) && te instanceof INetworkTile & te != null) {
+                tempmap.put(pos.offset(facing), (INetworkTile) te);
+                recursiveSearch(pos.offset(facing), facing.getOpposite(), tempmap);
+            }
+        }
+    }
 
     public void splitNetwork() {
         // set all networktile to refresh their network.
-        for (INetworkTile tile : devices.values()) {
-            tile.setNetwork(null);
+        if (isSplitted()) {
+            for (INetworkTile tile : devices.values()) {
+                tile.setNetwork(null);
+            }
         }
     }
 

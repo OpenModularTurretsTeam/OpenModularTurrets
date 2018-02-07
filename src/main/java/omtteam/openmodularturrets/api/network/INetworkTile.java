@@ -24,7 +24,10 @@ public interface INetworkTile {
     OMTNetwork getNetwork();
 
     /**
-     * Set the currently connected network for the tile. If set to null, refresh on next tick.
+     * Set the currently connected network for the tile.
+     * If set to null, refresh on next tick (aka scan for networking tiles near own position).
+     *
+     * @param network the network the device should be connected to.
      */
     void setNetwork(@Nullable OMTNetwork network);
 

@@ -41,7 +41,7 @@ public class UpgradeMetaItem extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
-        if(isInCreativeTab(itemIn)) {
+        if (isInCreativeTab(itemIn)) {
             for (int i = 0; i < 5; i++) {
                 subItems.add(new ItemStack(ModItems.upgradeMetaItem, 1, i));
             }
@@ -60,7 +60,6 @@ public class UpgradeMetaItem extends Item {
     public int getMetadata(int damage) {
         return damage;
     }
-
 
 
     @SideOnly(Side.CLIENT)

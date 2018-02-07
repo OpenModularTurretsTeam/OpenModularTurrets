@@ -100,7 +100,7 @@ public class ExpanderInvContainer extends Container {
                     stack, slotStack)) {
                 int maxTransfer = totalLimit - getStackSize(slotStack);
                 int transfer = maxTransfer > getStackSize(stack) ? getStackSize(stack) : maxTransfer;
-                slotStack.setCount(slotStack.getCount()+ transfer);
+                slotStack.setCount(slotStack.getCount() + transfer);
                 slot.onSlotChanged();
                 setStackSize(stack, getStackSize(stack) - transfer);
                 flag = true;

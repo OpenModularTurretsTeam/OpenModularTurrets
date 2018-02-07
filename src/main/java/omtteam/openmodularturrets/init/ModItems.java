@@ -28,7 +28,7 @@ public class ModItems {
         ammoMetaItem = registerItem(new AmmoMetaItem(), registry);
         usableMetaItem = registerItem(new UsableMetaItem(), registry);
 
-        for (Item item: subblocks) {
+        for (Item item : subblocks) {
             registry.register(item);
         }
     }
