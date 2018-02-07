@@ -35,7 +35,6 @@ public class ItemBlockBaseAddon extends AbstractItemBlockBaseAddon {
     };
 
 
-
     @Override
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {

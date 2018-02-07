@@ -42,7 +42,7 @@ public class AddonMetaItem extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
-        if(isInCreativeTab(itemIn)) {
+        if (isInCreativeTab(itemIn)) {
             for (int i = 0; i < 8; i++) {
                 subItems.add(new ItemStack(ModItems.addonMetaItem, 1, i));
             }

@@ -28,7 +28,6 @@ public class IncendiaryTurretRenderer extends TileEntitySpecialRenderer {
     }
 
 
-
     @SuppressWarnings("ConstantConditions")
     @Override
     public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {

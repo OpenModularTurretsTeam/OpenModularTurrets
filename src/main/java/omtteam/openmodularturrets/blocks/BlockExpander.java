@@ -120,7 +120,6 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     }
 
 
-
     @Override
     public AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing, World world, BlockPos pos) {
         return BlockTurretBaseAddon.getBoundingBoxFromFacing(facing).offset(pos);

@@ -21,6 +21,7 @@ public class ModCompatibility {
     public static boolean MekanismLoaded = false;
     public static boolean ThaumcraftLoaded = false;
     public static boolean ValkyrienWarfareLoaded = false;
+
     @SuppressWarnings("unused")
 
     public static void checkForMods() {

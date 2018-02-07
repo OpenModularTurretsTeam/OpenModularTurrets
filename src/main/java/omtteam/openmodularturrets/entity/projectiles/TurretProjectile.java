@@ -110,7 +110,7 @@ public abstract class TurretProjectile extends EntityThrowable {
         Vec3d vec3d1 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
         RayTraceResult raytraceresult = this.getEntityWorld().rayTraceBlocks(vec3d, vec3d1);
         List<Entity> list = this.getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(motionX, motionY, motionZ).expand(motionX * 1.2D, motionY * 1.2D, motionZ * 1.2D));
-        
+
         for (Entity entity : list) {
             if (entity.canBeCollidedWith()) {
                 this.onHitEntity(entity);

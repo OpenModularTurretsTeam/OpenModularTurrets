@@ -205,7 +205,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos neighbor) {
         if (!worldIn.isRemote) {
             TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
-            if (base != null && worldIn.isBlockIndirectlyGettingPowered(pos) > 0){
+            if (base != null && worldIn.isBlockIndirectlyGettingPowered(pos) > 0) {
                 base.setRedstone(true);
             } else if (base != null && worldIn.isBlockIndirectlyGettingPowered(pos) == 0) {
                 base.setRedstone(false);
