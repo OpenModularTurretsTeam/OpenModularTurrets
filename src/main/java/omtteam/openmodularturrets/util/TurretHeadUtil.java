@@ -93,20 +93,16 @@ public class TurretHeadUtil {
 
     public static boolean isEntityValidNeutral(TurretBase base, EntityLivingBase possibleTarget) {
         if (base.isAttacksNeutrals() && OMTConfigHandler.globalCanTargetNeutrals) {
-            if (!possibleTarget.isDead && (possibleTarget instanceof EntityAnimal ||
-                    possibleTarget instanceof EntityAmbientCreature || NeutralList.contains(possibleTarget))) {
-                return true;
-            }
+            return !possibleTarget.isDead && (possibleTarget instanceof EntityAnimal ||
+                    possibleTarget instanceof EntityAmbientCreature || NeutralList.contains(possibleTarget));
         }
         return false;
     }
 
     public static boolean isEntityValidMob(TurretBase base, EntityLivingBase possibleTarget) {
         if (base.isAttacksMobs() && OMTConfigHandler.globalCanTargetMobs) {
-            if (!possibleTarget.isDead && (possibleTarget.isCreatureType(EnumCreatureType.MONSTER, false) ||
-                    MobList.contains(possibleTarget))) {
-                return true;
-            }
+            return !possibleTarget.isDead && (possibleTarget.isCreatureType(EnumCreatureType.MONSTER, false) ||
+                    MobList.contains(possibleTarget));
         }
         return false;
     }

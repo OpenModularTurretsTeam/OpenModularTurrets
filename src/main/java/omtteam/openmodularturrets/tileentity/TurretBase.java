@@ -242,6 +242,10 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 ticks = 0;
                 updateRedstoneReactor(this);
 
+                if (network != null && network.getController() != null) {
+                    registerController(network.getController());
+                }
+
                 //Computers
                 this.computerAccessible = (OpenComputersLoaded || ComputerCraftLoaded) && TurretHeadUtil.hasSerialPortAddon(
                         this);
@@ -618,6 +622,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     @Override
+    @Nonnull
     public String getDeviceName() {
         return "TurretBase";
     }

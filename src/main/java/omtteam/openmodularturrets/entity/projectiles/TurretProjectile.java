@@ -66,9 +66,7 @@ public abstract class TurretProjectile extends EntityThrowable {
                     return false;
                 }
             }
-            if (PlayerUtil.isPlayerOwner(entityPlayer, this.turretBase)) {
-                return false;
-            }
+            return !PlayerUtil.isPlayerOwner(entityPlayer, this.turretBase);
         }
         return true;
     }
@@ -79,9 +77,7 @@ public abstract class TurretProjectile extends EntityThrowable {
                 EntityLivingBase entityOwner = ((EntityTameable) entity).getOwner();
                 if (entityOwner != null && entityOwner instanceof EntityPlayer) {
                     EntityPlayer owner = (EntityPlayer) entityOwner;
-                    if (isPlayerOwner(owner, turretBase) || isPlayerTrusted(owner, turretBase)) {
-                        return false;
-                    }
+                    return !isPlayerOwner(owner, turretBase) && !isPlayerTrusted(owner, turretBase);
                 }
             }
         }
@@ -154,7 +150,7 @@ public abstract class TurretProjectile extends EntityThrowable {
 
         if (this.isInWater()) {
             for (int j = 0; j < 4; ++j) {
-                this.worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ, new int[0]);
+                this.worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
             }
             f1 = 0.8F;
         }

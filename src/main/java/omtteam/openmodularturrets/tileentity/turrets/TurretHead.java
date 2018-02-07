@@ -496,10 +496,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         shootProjectile(adjustedX, adjustedY, adjustedZ, speedFactor, (float) accuracy, ammo);
     }
 
-    /**
-     * Set this.autoFire to true instead. TODO: This is for a single shot only.
-     */
-    @Deprecated
+
     public boolean forceShot() {
         if (this instanceof RocketTurretTileEntity && OMTConfigHandler.canRocketsHome) return false;
         if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
