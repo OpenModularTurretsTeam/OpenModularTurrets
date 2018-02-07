@@ -12,8 +12,8 @@ import java.util.List;
 public class AmmoList {
     private static final List<ItemStack> list = new ArrayList<>();
 
-    public static boolean contains(ItemStack itemStack){
-        for (ItemStack stack: list){
+    public static boolean contains(ItemStack itemStack) {
+        for (ItemStack stack : list) {
             if (stack.isItemEqual(itemStack) || (stack.getCount() == 2 && itemStack.getItem() == stack.getItem())) {
                 return true;
             }
@@ -22,14 +22,14 @@ public class AmmoList {
     }
 
     public static void add(ItemStack itemStack) {
-        if (contains(itemStack)){
-        }else {
+        if (contains(itemStack)) {
+        } else {
             list.add(itemStack);
         }
     }
 
-    public static boolean remove(ItemStack itemStack)    {
-        for (ItemStack stack: list){
+    public static boolean remove(ItemStack itemStack) {
+        for (ItemStack stack : list) {
             if (stack.isItemEqual(itemStack)) {
                 list.remove(stack);
                 return true;

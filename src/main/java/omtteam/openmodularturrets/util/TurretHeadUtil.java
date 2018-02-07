@@ -131,8 +131,8 @@ public class TurretHeadUtil {
                             continue;
                         }
                     }
-                } else if (possibleTarget instanceof EntityHorse){
-                    if (((EntityHorse)possibleTarget).isTame()){
+                } else if (possibleTarget instanceof EntityHorse) {
+                    if (((EntityHorse) possibleTarget).isTame()) {
                         continue;
                     }
                 }
@@ -869,9 +869,9 @@ public class TurretHeadUtil {
 
     public static boolean baseHasNoLootDeleter(TurretBase base) {
         List<IBlockState> states = WorldUtil.getTouchingBlockStates(base.getWorld(), base.getPos());
-        for (IBlockState state: states){
+        for (IBlockState state : states) {
             if (state.getBlock() instanceof BlockBaseAddon) {
-                if (state.getValue(MODEL) == 0){
+                if (state.getValue(MODEL) == 0) {
                     return false;
                 }
             }

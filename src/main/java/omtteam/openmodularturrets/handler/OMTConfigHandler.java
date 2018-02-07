@@ -609,7 +609,7 @@ public class OMTConfigHandler {
         try {
             if (stringMobBlackList.isEmpty()) return;
             for (String itemListEntry : stringMobBlackList) {
-                    MobBlacklist.add(itemListEntry);
+                MobBlacklist.add(itemListEntry);
             }
         } catch (Exception e) {
             OpenModularTurrets.getLogger().error("error while parsing mob blacklist config!");

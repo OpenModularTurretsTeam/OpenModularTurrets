@@ -33,7 +33,8 @@ class PotatoCannonTurretRenderer extends TileEntitySpecialRenderer {
     @SuppressWarnings("ConstantConditions")
     @Override
     @SideOnly(Side.CLIENT)
-    public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {        PotatoCannonTurretTileEntity turretHead = (PotatoCannonTurretTileEntity) te;
+    public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+        PotatoCannonTurretTileEntity turretHead = (PotatoCannonTurretTileEntity) te;
 
         ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/potato_cannon_turret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);

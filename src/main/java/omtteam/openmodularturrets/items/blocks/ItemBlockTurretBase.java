@@ -35,7 +35,7 @@ public class ItemBlockTurretBase extends ItemBlock {
     @Override
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
-        if(isInCreativeTab(itemIn)) {
+        if (isInCreativeTab(itemIn)) {
             for (int i = 0; i < 5; i++) {
                 subItems.add(new ItemStack(ModBlocks.turretBase, 1, i));
             }

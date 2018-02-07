@@ -83,7 +83,7 @@ public class OMTRecipeHandler {
 
 
         // Only do vanilla if setting was invalid (recipes chosen but mod not available)
-        
+
 
         //RECIPES THAT DON'T CHANGE BASED ON MODS LOADED:
         //Tier 1 static recipes (Because they shouldn't use expensive mod items, only redstone, cobblestone and planks)
