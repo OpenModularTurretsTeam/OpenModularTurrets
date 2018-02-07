@@ -99,9 +99,6 @@ repositories {
         name "ic2"
         url "http://maven.ic2.player.to/"
     }
-    maven { // Tesla
-        url 'http://maven.epoxide.xyz'
-    }
     maven {
         url "http://tehnut.info/maven"
     }
@@ -116,6 +113,9 @@ repositories {
     maven { // CoFH
         name = "Covers Maven"
         url = "http://maven.covers1624.net"
+    }
+    maven {
+        url 'http://maven.mcmoddev.com'
     }
     /*ivy {
         url "http://ae-mod.info/builds"
