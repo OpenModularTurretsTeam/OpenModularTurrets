@@ -1,6 +1,8 @@
 package omtteam.openmodularturrets.network.messages;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -8,6 +10,7 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import omtteam.omlib.util.PlayerUtil;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 @SuppressWarnings("unused")
@@ -26,9 +29,15 @@ public class MessageRemoveTrustedPlayer implements IMessage {
             final MessageContext ctx = ctxIn;
             ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
                 World world = ctx.getServerHandler().player.getEntityWorld();
-                TurretBase turret = (TurretBase) world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-
-                turret.removeTrustedPlayer(message.getPlayer());
+                EntityPlayerMP player = ctx.getServerHandler().player;
+                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+                TurretBase machine = null;
+                if (entity instanceof TurretBase) {
+                    machine = (TurretBase) entity;
+                }
+                if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
+                    machine.removeTrustedPlayer(message.getPlayer());
+                }
             });
             return null;
         }

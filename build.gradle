@@ -75,9 +75,20 @@ processResources {
 }
 
 repositories {
-    maven {
-        name "IGW"
-        url "http://maven.k-4u.nl/"
+    mavenCentral()
+    maven { url = "http://tehnut.info/maven" }
+    maven { url = "http://maven.tterrag.com" }
+    maven { url = "http://dvs1.progwml6.com/files/maven" }
+    maven { url = "http://files.minecraftforge.net/maven" }
+    maven { url = "http://maven.cil.li/" }
+    maven { url = "http://maven.ic2.player.to" }
+    maven { url = "http://maven.mcmoddev.com" }
+    maven { url = "http://mod-buildcraft.com/maven/" }
+    ivy {
+        url "http://ae-mod.info/builds"
+        layout "pattern", {
+            artifact "[module]-[revision](-[classifier])(.[ext])"
+        }
     }
     maven { // The repo from which to get waila
         name "Mobius Repo"
@@ -87,35 +98,11 @@ repositories {
         name 'CB Repo'
         url "http://chickenbones.net/maven/"
     }
-    maven {
-        name "OC repo"
-        url "http://maven.cil.li/"
-    }
-    maven { // the repo from which to get EnderIO and tterrags mods
-        name 'tterrag'
-        url "http://maven.tterrag.com/"
-    }
-    maven {
-        name "ic2"
-        url "http://maven.ic2.player.to/"
-    }
-    maven {
-        url "http://tehnut.info/maven"
-    }
-    maven {
-        url "http://maven.ironhide.de/"
-    }
-    maven { // JEI
-        url "http://dvs1.progwml6.com/files/maven"
-    }
+    maven { url "http://maven.ironhide.de/" }
     maven { url = "http://dl.tsr.me/artifactory/libs-release-local" }
-
     maven { // CoFH
         name = "Covers Maven"
         url = "http://maven.covers1624.net"
-    }
-    maven {
-        url 'http://maven.mcmoddev.com'
     }
     /*ivy {
         url "http://ae-mod.info/builds"

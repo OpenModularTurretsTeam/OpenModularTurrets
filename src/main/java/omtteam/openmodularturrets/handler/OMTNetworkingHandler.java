@@ -25,9 +25,6 @@ public class OMTNetworkingHandler {
         INSTANCE.registerMessage(MessageToggleAttackPlayers.MessageHandlerToggleAttackPlayers.class,
                 MessageToggleAttackPlayers.class, 4, Side.SERVER);
 
-        INSTANCE.registerMessage(MessageSetTurretOwner.MessageHandlerSetTurretOwner.class, MessageSetTurretOwner.class,
-                5, Side.SERVER);
-
         INSTANCE.registerMessage(MessageAdjustMaxRange.MessageHandlerAdjustYAxisDetect.class,
                 MessageAdjustMaxRange.class, 7, Side.SERVER);
 
