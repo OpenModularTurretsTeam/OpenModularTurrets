@@ -21,6 +21,7 @@ import omtteam.omlib.api.IDebugTile;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.tileentity.ICamoSupport;
+import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.tileentity.TileEntityTrustedMachine;
 import omtteam.omlib.util.ItemStackList;
 import omtteam.omlib.util.TrustedPlayer;
@@ -255,6 +256,11 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         debugInfo.add("Camo: " + this.camoBlockState.getBlock().getRegistryName() + ", computerAccess: " + this.computerAccessible);
         debugInfo.add("Force Fire: " + this.forceFire + ", UpperMaxRange: " + this.upperBoundMaxRange);
         return debugInfo;
+    }
+
+    @Override
+    public TileEntityOwnedBlock getOwnedBlock() {
+        return this;
     }
 
     @Nonnull
