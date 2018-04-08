@@ -76,4 +76,9 @@ public class PlayerUtil {
         }
         return false;
     }
+
+    public static boolean isPlayerAdmin(EntityPlayer player, TurretBase machine) {
+        return isPlayerOwner(player, machine)
+                || (getTrustedPlayer(player, machine) != null && (getTrustedPlayer(player, machine).admin));
+    }
 }
