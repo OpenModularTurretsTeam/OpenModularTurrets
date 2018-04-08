@@ -4,7 +4,12 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import openmodularturrets.tileentity.turretbase.TrustedPlayer;
+import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.util.PlayerUtil;
 
 public class MessageDropBase implements IMessage {
     private int x, y, z;
@@ -17,9 +22,18 @@ public class MessageDropBase implements IMessage {
         @Override
         public IMessage onMessage(MessageDropBase message, MessageContext ctx) {
             World world = ctx.getServerHandler().playerEntity.worldObj;
-
-            world.func_147480_a(message.getX(), message.getY(), message.getZ(), true);
-
+            EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+            TileEntity te = world.getTileEntity(message.getX(), message.getY(), message.getZ());
+            TurretBase base = null;
+            if (te instanceof TurretBase){
+                base = (TurretBase) te;
+            }
+            if (base != null) {
+                TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
+                if (PlayerUtil.isPlayerOwner(player, base) || (trustedPlayer != null && trustedPlayer.admin)) {
+                    world.func_147480_a(message.getX(), message.getY(), message.getZ(), true);
+                }
+            }
             return null;
         }
     }
