@@ -4,8 +4,11 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.util.PlayerUtil;
 
 public class MessageSetBaseTargetingType implements IMessage {
     private int x, y, z;
@@ -16,9 +19,16 @@ public class MessageSetBaseTargetingType implements IMessage {
     public static class MessageHandlerSetBaseTargetingType implements IMessageHandler<MessageSetBaseTargetingType, IMessage> {
         @Override
         public IMessage onMessage(MessageSetBaseTargetingType message, MessageContext ctx) {
-            World world = ctx.getServerHandler().playerEntity.worldObj;
-            TurretBase turretbase = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
-            turretbase.setMultiTargeting(!turretbase.isMultiTargeting());
+            World world = ctx.getServerHandler().playerEntity.getEntityWorld();
+            EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+            TileEntity entity = world.getTileEntity(message.getX(), message.getY(), message.getZ());
+            TurretBase turret = null;
+            if (entity instanceof TurretBase) {
+                turret = (TurretBase) entity;
+            }
+            if (turret != null && PlayerUtil.isPlayerAdmin(player, turret)) {
+                turret.setMultiTargeting(!turret.isMultiTargeting());
+            }
             return null;
         }
     }

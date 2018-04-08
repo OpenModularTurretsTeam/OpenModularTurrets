@@ -4,8 +4,11 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.util.PlayerUtil;
 
 public class MessageAdjustYAxisDetect implements IMessage {
     private int x, y, z;
@@ -17,10 +20,16 @@ public class MessageAdjustYAxisDetect implements IMessage {
     public static class MessageHandlerAdjustYAxisDetect implements IMessageHandler<MessageAdjustYAxisDetect, IMessage> {
         @Override
         public IMessage onMessage(MessageAdjustYAxisDetect message, MessageContext ctx) {
-            World world = ctx.getServerHandler().playerEntity.worldObj;
-            TurretBase turret = (TurretBase) world.getTileEntity(message.getX(), message.getY(), message.getZ());
-
-            turret.setyAxisDetect(message.getYAxisDetect());
+            World world = ctx.getServerHandler().playerEntity.getEntityWorld();
+            EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+            TileEntity entity = world.getTileEntity(message.getX(), message.getY(), message.getZ());
+            TurretBase turret = null;
+            if (entity instanceof TurretBase) {
+                turret = (TurretBase) entity;
+            }
+            if (turret != null && PlayerUtil.isPlayerAdmin(player, turret)) {
+                turret.setyAxisDetect(message.getYAxisDetect());
+            }
             return null;
         }
     }
