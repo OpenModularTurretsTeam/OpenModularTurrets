@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "openmodularturrets:ammo_meta",
+    "data": 2,
+    "count": 16
+  },
+  "pattern": [
+    " C ",
+    "CBC",
+    " A "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "mekanism:enrichedalloy"
+    },
+    "B": {
+      "item": "minecraft:flint"
+    },
+    "C": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "mekanism"
+    }
+  ]
+}

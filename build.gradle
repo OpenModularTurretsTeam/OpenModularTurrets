@@ -28,6 +28,16 @@ configFile.withReader {
 }
 config = project.ext.config
 
+ext.local = file "local.properties"
+
+local.withReader {
+    // read config.  it shall from now on be referenced as simply config or as project.config
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.local = new ConfigSlurper().parse prop
+}
+local = project.ext.local
+
 
 version = "${config.mod_version}"
 if (hasProperty('appendBuildNumber')) {
@@ -116,12 +126,12 @@ configurations {
     runtime.exclude group: 'ValkyrienWarfareRevamped', module: 'valkyrienwarfare'
 }
 
-sourceSets {
-    main {
-        compileClasspath += configurations.forgeGradleResolvedDeobfCompile
-        runtimeClasspath -= runtimeClasspath
-    }
-}
+//sourceSets {
+//   main {
+//       compileClasspath += configurations.forgeGradleResolvedDeobfCompile
+//        runtimeClasspath -= runtimeClasspath
+//    }
+//}
 
 def omlib_local = false
 if (project.allprojects.findAll({it.name == "OMLib"}).size() > 0) {
@@ -181,4 +191,7 @@ publishing {
     repositories {
         mavenLocal()
     }
+
+    JavaExec exec = project.getTasks().getByName("runClient")
+    exec.args("--user ${local.username} --password ${local.password}")
 }

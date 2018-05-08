@@ -1,5 +1,5 @@
 {
   "conditions": {
-	"recipetype": "omtteam.openmodularturrets.handler.recipes.RecipeConditionFactory"
+    "recipetype": "omtteam.openmodularturrets.handler.recipes.RecipeConfigFactory"
   }
 }

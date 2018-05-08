@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "openmodularturrets:ammo_meta",
+    "data": 4,
+    "count": 32
+  },
+  "pattern": [
+    " A ",
+    "ABA",
+    "ACA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "#INGOTTIN"
+    },
+    "B": {
+      "item": "minecraft:tnt"
+    },
+    "C": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "mekanism"
+    }
+  ]
+}

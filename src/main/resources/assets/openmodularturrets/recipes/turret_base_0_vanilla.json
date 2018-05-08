@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "openmodularturrets:turret_base",
+    "data": 0
+  },
+  "pattern": [
+    "ABA",
+    "BCB",
+    "ABA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "cobblestone"
+    },
+    "B": {
+      "item": "#PLANKWOOD"
+    },
+    "C": {
+      "item": "openmodularturrets:intermediate_tiered",
+      "data": 0
+    }
+  }
+}

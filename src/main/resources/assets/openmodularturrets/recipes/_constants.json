@@ -1,58 +1,72 @@
 [
   {
-	"ingredient": {
-	  "type": "forge:ore_dict",
-	  "ore": "ingotGold"
-	},
-	"name": "INGOTGOLD"
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "name": "INGOTGOLD"
   },
   {
-	"ingredient": {
-	  "type": "forge:ore_dict",
-	  "ore": "ingotIron"
-	},
-	"name": "INGOTIRON"
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "name": "INGOTIRON"
   },
   {
-	"ingredient": {
-	  "type": "forge:ore_dict",
-	  "ore": "ingotOsmium"
-	},
-	"name": "INGOTOSMIUM"
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotOsmium"
+    },
+    "name": "INGOTOSMIUM"
   },
   {
-	"ingredient": {
-	  "type": "forge:ore_dict",
-	  "ore": "ingotRefinedGlowstone"
-	},
-	"name": "INGOTREFINEDGLOWSTONE"
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotRefinedGlowstone"
+    },
+    "name": "INGOTREFINEDGLOWSTONE"
   },
   {
-	"ingredient": {
-	  "type": "forge:ore_dict",
-	  "ore": "ingotRefinedObsidian"
-	},
-	"name": "INGOTREFINEDOBSIDIAN"
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotRefinedObsidian"
+    },
+    "name": "INGOTREFINEDOBSIDIAN"
   },
   {
-	"ingredient": {
-	  "type": "forge:ore_dict",
-	  "ore": "ingotSteel"
-	},
-	"name": "INGOTSTEEL"
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    },
+    "name": "INGOTSTEEL"
   },
   {
-	"ingredient": {
-	  "type": "forge:ore_dict",
-	  "ore": "ingotTin"
-	},
-	"name": "INGOTTIN"
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotTin"
+    },
+    "name": "INGOTTIN"
   },
   {
-	"ingredient": {
-	  "type": "forge:ore_dict",
-	  "ore": "plankWood"
-	},
-	"name": "PLANKWOOD"
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "name": "PLANKWOOD"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "chestWood"
+    },
+    "name": "CHESTWOOD"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "obsidian"
+    },
+    "name": "OBSIDIAN"
   }
 ]

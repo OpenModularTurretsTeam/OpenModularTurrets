@@ -1,0 +1,33 @@
+{
+  "result": {
+    "item": "openmodularturrets:relativistic_turret"
+  },
+  "pattern": [
+    "CAC",
+    "ABA",
+    "CDC"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "minecraft:ender_pearl"
+    },
+    "B": {
+      "item": "openmodularturrets:intermediate_tiered",
+      "data": 2
+    },
+    "C": {
+      "item": "#INGOTGOLD"
+    },
+    "D": {
+      "item": "openmodularturrets:intermediate_regular",
+      "data": 0
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "vanilla"
+    }
+  ]
+}

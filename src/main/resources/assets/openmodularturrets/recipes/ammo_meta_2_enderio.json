@@ -1,0 +1,31 @@
+{
+  "result": {
+    "item": "openmodularturrets:ammo_meta",
+    "data": 2,
+    "count": 16
+  },
+  "pattern": [
+    " C ",
+    "CBC",
+    " A "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "enderio:item_alloy_ingot",
+      "data": 6
+    },
+    "B": {
+      "item": "minecraft:flint"
+    },
+    "C": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "enderio"
+    }
+  ]
+}

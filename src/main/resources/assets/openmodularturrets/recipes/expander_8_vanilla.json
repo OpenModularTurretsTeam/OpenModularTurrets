@@ -1,0 +1,35 @@
+{
+  "result": {
+    "item": "openmodularturrets:expander",
+    "data": 8
+  },
+  "pattern": [
+    "ABA",
+    "DCD",
+    "ADA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "minecraft:diamond"
+    },
+    "B": {
+      "item": "openmodularturrets:expander",
+      "data": 7
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "blockRedstone"
+    },
+    "D": {
+      "item": "openmodularturrets:intermediate_regular",
+      "data": 0
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "vanilla"
+    }
+  ]
+}

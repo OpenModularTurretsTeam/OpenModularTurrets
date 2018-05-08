@@ -1,0 +1,35 @@
+{
+  "result": {
+    "item": "openmodularturrets:intermediate_tiered",
+    "data": 9
+  },
+  "pattern": [
+    "ADA",
+    " BC",
+    "ADA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "#OBSIDIAN"
+    },
+    "B": {
+      "item": "openmodularturrets:intermediate_tiered",
+      "data": 8
+    },
+    "C": {
+      "item": "enderio:item_basic_capacitor",
+      "data": 2
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "itemChassiParts"
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "enderio"
+    }
+  ]
+}
