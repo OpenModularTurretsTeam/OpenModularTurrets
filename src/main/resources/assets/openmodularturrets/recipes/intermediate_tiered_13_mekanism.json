@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "openmodularturrets:intermediate_tiered",
+    "data": 13
+  },
+  "pattern": [
+    "CAC",
+    " B ",
+    "CAC"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "mekanism:reinforcedalloy"
+    },
+    "B": {
+      "item": "openmodularturrets:intermediate_tiered",
+      "data": 12
+    },
+    "C": {
+      "item": "#INGOTREFINEDGLOWSTONE"
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "mekanism"
+    }
+  ]
+}

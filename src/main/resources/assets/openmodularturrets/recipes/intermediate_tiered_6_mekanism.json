@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "openmodularturrets:intermediate_tiered",
+    "data": 6
+  },
+  "pattern": [
+    "ACA",
+    " BC",
+    "ACA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "mekanism:enrichediron"
+    },
+    "B": {
+      "item": "openmodularturrets:intermediate_tiered",
+      "data": 5
+    },
+    "C": {
+      "item": "#INGOTTIN"
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "mekanism"
+    }
+  ]
+}

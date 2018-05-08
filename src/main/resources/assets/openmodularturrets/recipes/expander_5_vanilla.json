@@ -1,0 +1,28 @@
+{
+  "result": {
+    "item": "openmodularturrets:expander",
+    "data": 5
+  },
+  "pattern": [
+    "ABA",
+    "DCD",
+    "ADA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "cobblestone"
+    },
+    "B": {
+      "item": "#PLANKWOOD"
+    },
+    "C": {
+      "item": "minecraft:redstone"
+    },
+    "D": {
+      "item": "openmodularturrets:intermediate_regular",
+      "data": 0
+    }
+  }
+}

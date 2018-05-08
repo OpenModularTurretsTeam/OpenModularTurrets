@@ -1,0 +1,31 @@
+{
+  "result": {
+    "item": "openmodularturrets:ammo_meta",
+    "data": 3,
+    "count": 32
+  },
+  "pattern": [
+    " C ",
+    "ABA",
+    " A "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "enderio:item_alloy_ingot",
+      "data": 4
+    },
+    "B": {
+      "item": "minecraft:gunpowder"
+    },
+    "C": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "enderio"
+    }
+  ]
+}

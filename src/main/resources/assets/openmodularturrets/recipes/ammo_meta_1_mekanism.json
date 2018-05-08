@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "openmodularturrets:ammo_meta",
+    "data": 1,
+    "count": 64
+  },
+  "pattern": [
+    " A ",
+    " B ",
+    " C "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "#INGOTOSMIUM"
+    },
+    "B": {
+      "item": "minecraft:gunpowder"
+    },
+    "C": {
+      "item": "#INGOTIRON"
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "mekanism"
+    }
+  ]
+}

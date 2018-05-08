@@ -1,0 +1,28 @@
+{
+  "result": {
+    "item": "openmodularturrets:addon_meta",
+    "data": 0
+  },
+  "pattern": [
+    "ABA",
+    "BCD",
+    "ABA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "minecraft:iron_ingot"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "gemQuartz"
+    },
+    "C": {
+      "item": "minecraft:chest"
+    },
+    "D": {
+      "item": "openmodularturrets:intermediate_regular",
+      "data": 0
+    }
+  }
+}

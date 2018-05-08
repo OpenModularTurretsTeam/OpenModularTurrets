@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "openmodularturrets:addon_meta",
+    "data": 1
+  },
+  "pattern": [
+    "AAA",
+    "BCB",
+    "AAA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "minecraft:iron_ingot"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "pearlEnderEye"
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "blockRedstone"
+    }
+  }
+}

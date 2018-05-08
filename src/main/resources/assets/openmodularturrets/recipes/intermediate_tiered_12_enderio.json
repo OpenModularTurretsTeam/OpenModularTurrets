@@ -1,0 +1,28 @@
+{
+  "result": {
+    "item": "openmodularturrets:intermediate_tiered",
+    "data": 12
+  },
+  "pattern": [
+    "AAA",
+    " B ",
+    "AAA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "enderio:item_alloy_ingot",
+      "data": 6
+    },
+    "B": {
+      "item": "openmodularturrets:intermediate_tiered",
+      "data": 11
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "enderio"
+    }
+  ]
+}

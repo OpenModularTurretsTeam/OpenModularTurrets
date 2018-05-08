@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "openmodularturrets:addon_meta",
+    "data": 3
+  },
+  "pattern": [
+    "ABA",
+    "BCD",
+    "ABA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "#INGOTGOLD"
+    },
+    "B": {
+      "item": "minecraft:magma_cream"
+    },
+    "C": {
+      "item": "minecraft:ender_chest"
+    },
+    "D": {
+      "item": "openmodularturrets:intermediate_regular",
+      "data": 0
+    }
+  }
+}

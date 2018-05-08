@@ -1,0 +1,24 @@
+{
+  "result": {
+    "item": "openmodularturrets:ammo_meta",
+    "data": 0,
+    "count": 32
+  },
+  "pattern": [
+    "BCB",
+    "CAC",
+    "BCB"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "minecraft:blaze_powder"
+    },
+    "B": {
+      "item": "minecraft:clay_ball"
+    },
+    "C": {
+      "item": "minecraft:redstone"
+    }
+  }
+}
