@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "openmodularturrets:intermediate_tiered",
+    "data": 12
+  },
+  "pattern": [
+    "AAA",
+    " B ",
+    "AAA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "#INGOTGOLD"
+    },
+    "B": {
+      "item": "openmodularturrets:intermediate_tiered",
+      "data": 11
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "vanilla"
+    }
+  ]
+}

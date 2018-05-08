@@ -1,0 +1,17 @@
+{
+  "result": {
+    "item": "openmodularturrets:lever_block"
+  },
+  "pattern": [
+    "AAA",
+    "A  ",
+    "A  "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "cobblestone"
+    }
+  }
+}

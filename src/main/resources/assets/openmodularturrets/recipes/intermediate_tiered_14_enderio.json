@@ -1,0 +1,31 @@
+{
+  "result": {
+    "item": "openmodularturrets:intermediate_tiered",
+    "data": 14
+  },
+  "pattern": [
+    "AAA",
+    "CBC",
+    "AAA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "#OBSIDIAN"
+    },
+    "B": {
+      "item": "openmodularturrets:intermediate_tiered",
+      "data": 13
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "itemChassiParts"
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "enderio"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "result": {
+    "item": "openmodularturrets:rail_gun_turret"
+  },
+  "pattern": [
+    "EAE",
+    "CAC",
+    "DBD"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "openmodularturrets:intermediate_tiered",
+      "data": 14
+    },
+    "B": {
+      "item": "openmodularturrets:intermediate_tiered",
+      "data": 9
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "gearVibrant"
+    },
+    "D": {
+      "item": "openmodularturrets:intermediate_regular",
+      "data": 0
+    },
+    "E": {
+      "type": "forge:ore_dict",
+      "ore": "itemChassiParts"
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "enderio"
+    }
+  ]
+}

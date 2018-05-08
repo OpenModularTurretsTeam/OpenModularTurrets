@@ -1,0 +1,39 @@
+{
+  "result": {
+    "item": "openmodularturrets:expander",
+    "data": 1
+  },
+  "pattern": [
+    "ABA",
+    "ECE",
+    "ADA"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "item": "enderio:item_alloy_ingot",
+      "data": 0
+    },
+    "B": {
+      "item": "enderio:block_cap_bank",
+      "data": 2
+    },
+    "C": {
+      "item": "minecraft:chest"
+    },
+    "D": {
+      "item": "enderio:item_basic_capacitor",
+      "data": 0
+    },
+    "E": {
+      "item": "openmodularturrets:intermediate_regular",
+      "data": 0
+    }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "enderio"
+    }
+  ]
+}

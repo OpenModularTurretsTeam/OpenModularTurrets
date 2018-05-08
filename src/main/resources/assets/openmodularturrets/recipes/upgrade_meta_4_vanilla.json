@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "openmodularturrets:upgrade_meta",
+    "data": 4
+  },
+  "pattern": [
+    " A ",
+    "ABA",
+    " C "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "gemQuartz"
+    },
+    "B": {
+      "item": "minecraft:flint"
+    },
+    "C": {
+      "item": "openmodularturrets:intermediate_regular",
+      "data": 0
+    }
+  }
+}
