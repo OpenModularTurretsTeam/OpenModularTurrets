@@ -17,6 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 import omtteam.omlib.api.IDebugTile;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.EnumMachineMode;
@@ -36,6 +38,7 @@ import omtteam.openmodularturrets.items.UpgradeMetaItem;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import omtteam.openmodularturrets.util.OMTUtil;
 import omtteam.openmodularturrets.util.TargetingSettings;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
@@ -81,9 +84,40 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private IBaseController controller;
     private OMTNetwork network;
 
+    protected IItemHandlerModifiable inventory;
+
+    protected void setupInventory() {
+        inventory = new ItemStackHandler(13){
+
+            @Override
+            protected void onContentsChanged(int slot)
+            {
+                super.onContentsChanged(slot);
+                markDirty();
+            }
+
+            public boolean isItemValidForSlot(int index, ItemStack stack)
+            {
+                if (index < 9) {
+                    return OMTUtil.isItemStackValidAmmo(stack);
+                }
+                return false;
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate)
+            {
+                if (!isItemValidForSlot(slot, stack))
+                    return stack;
+                return super.insertItem(slot, stack, simulate);
+            }
+        };
+    }
+
     public TurretBase() {
         super();
-        this.inventory = ItemStackList.create(13);
+        setupInventory();
     }
 
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
@@ -95,11 +129,11 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         this.attacksMobs = true;
         this.attacksNeutrals = true;
         this.attacksPlayers = false;
-        this.inventory = ItemStackList.create(tier == 5 ? 13 : tier == 4 ? 12 : tier == 3 ? 12 : tier == 2 ? 12 : 9);
         this.tier = tier;
         this.camoBlockState = camoState;
         this.mode = EnumMachineMode.INVERTED;
         this.maxStorageEU = tier * 7500D;
+        setupInventory();
     }
 
     @SuppressWarnings("deprecation")
@@ -340,6 +374,12 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     // Getters and Setters
 
+
+    @Override
+    public IItemHandlerModifiable getInventory() {
+        return inventory;
+    }
+
     @Override
     public boolean isActive() {
         boolean changedActive = false;
@@ -445,39 +485,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Override
     public void setCamoState(IBlockState state) {
         this.camoBlockState = state;
-    }
-
-    // Inventory Functions
-
-    @Override
-    @Nonnull
-    @ParametersAreNonnullByDefault
-    public int[] getSlotsForFace(EnumFacing side) {
-        return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
-    }
-
-    @Override
-    @ParametersAreNonnullByDefault
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return isItemValidForSlot(index, itemStackIn);
-    }
-
-    @Override
-    @ParametersAreNonnullByDefault
-    public boolean canExtractItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return true;
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int i, ItemStack stack) {
-        if (i < 9) {
-            return isItemStackValidAmmo(stack);
-        } else if (i <= 10) {
-            return stack.getItem() instanceof AddonMetaItem;
-        } else if (i <= 12) {
-            return stack.getItem() instanceof UpgradeMetaItem;
-        }
-        return false;
     }
 
     private static void updateRedstoneReactor(TurretBase base) {
@@ -602,7 +609,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     // Mod Compatibility  functions:
-
 
     @Override
     public boolean requiresEnergy() {
