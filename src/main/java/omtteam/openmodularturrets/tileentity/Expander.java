@@ -25,40 +25,45 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
     private EnumFacing orientation;
     private int tier;
 
-    protected IItemHandlerModifiable inventory = new ItemStackHandler(9){
+    protected IItemHandlerModifiable inventory;
 
-        @Override
-        protected void onContentsChanged(int slot)
-        {
-            super.onContentsChanged(slot);
-            markDirty();
-        }
+    protected void setupInventory() {
+        new ItemStackHandler(9) {
 
-        public boolean isItemValidForSlot(int index, ItemStack stack)
-        {
-                return !isPowerExpander();
-        }
+            @Override
+            protected void onContentsChanged(int slot) {
+                super.onContentsChanged(slot);
+                markDirty();
+            }
 
-        @Nonnull
-        @Override
-        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate)
-        {
-            if (!isItemValidForSlot(slot, stack))
-                return stack;
-            return super.insertItem(slot, stack, simulate);
-        }
+            public boolean isItemValidForSlot(int index, ItemStack stack) {
+                return !isPowerExpander() && OMTUtil.isItemStackValidAmmo(stack);
+            }
 
-        @Override
-        public int getSlotLimit(int slot) {
-            return truncateDoubleToInt(Math.pow(2, tier + 1));
-        }
-    };
+            @Nonnull
+            @Override
+            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+                if (!isItemValidForSlot(slot, stack))
+                    return stack;
+                return super.insertItem(slot, stack, simulate);
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return truncateDoubleToInt(Math.pow(2, tier + 1));
+            }
+        };
+    }
 
     public Expander() {
+        super();
         this.orientation = EnumFacing.NORTH;
+        setupInventory();
     }
 
     public Expander(int tier, boolean powerExpander) {
+        super();
+        setupInventory();
         this.tier = tier;
         this.powerExpander = powerExpander;
         this.orientation = EnumFacing.NORTH;
@@ -118,5 +123,10 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
     @Override
     public TileEntityOwnedBlock getLinkedBlock() {
         return getBase();
+    }
+
+    @Override
+    public IItemHandlerModifiable getInventory() {
+        return inventory;
     }
 }
