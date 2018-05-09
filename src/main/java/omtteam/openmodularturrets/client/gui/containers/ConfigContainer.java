@@ -22,7 +22,9 @@ public class ConfigContainer extends Container {
     @Override
     @ParametersAreNonnullByDefault
     public boolean canInteractWith(EntityPlayer player) {
-        return tileEntity.isUsableByPlayer(player);
+        return player.getDistanceSq(this.tileEntity.getPos().getX() + 0.5,
+                this.tileEntity.getPos().getY() + 0.5,
+                this.tileEntity.getPos().getZ() + 0.5) < 64;
     }
 
     @Override

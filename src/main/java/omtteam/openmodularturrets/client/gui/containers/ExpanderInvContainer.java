@@ -21,7 +21,7 @@ public class ExpanderInvContainer extends Container {
 
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 3; y++) {
-                this.addSlotToContainer(new AmmoSlot(te, y + x * 3, 62 + y * 18, 17 + x * 18));
+                this.addSlotToContainer(new AmmoSlot(te.getInventory(), y + x * 3, 62 + y * 18, 17 + x * 18));
             }
         }
 
@@ -39,7 +39,9 @@ public class ExpanderInvContainer extends Container {
     @Override
     @ParametersAreNonnullByDefault
     public boolean canInteractWith(EntityPlayer player) {
-        return tileEntity.isUsableByPlayer(player);
+        return player.getDistanceSq(this.tileEntity.getPos().getX() + 0.5,
+                this.tileEntity.getPos().getY() + 0.5,
+                this.tileEntity.getPos().getZ() + 0.5) < 64;
     }
 
     @Nonnull
@@ -85,7 +87,7 @@ public class ExpanderInvContainer extends Container {
         while (getStackSize(stack) > 0 && i >= begin && i < end) {
             Slot slot = this.getSlot(i);
             ItemStack slotStack = slot.getStack();
-            int slotStackLimit = i < tileEntity.getSizeInventory() ? tileEntity.getInventoryStackLimit() : 64;
+            int slotStackLimit = i < tileEntity.getInventory().getSlots()? tileEntity.getInventory().getSlotLimit(1): 64;
             int totalLimit = slotStackLimit < stack.getMaxStackSize() ? slotStackLimit : stack.getMaxStackSize();
 
             if (slotStack == ItemStack.EMPTY) {

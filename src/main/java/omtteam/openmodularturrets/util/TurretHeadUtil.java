@@ -296,8 +296,8 @@ public class TurretHeadUtil {
 
     private static ItemStack deductFromInvExpander(ItemStack itemStack, Expander exp, TurretBase base) {
 
-        for (int i = 0; i < exp.getSizeInventory(); i++) {
-            ItemStack ammoCheck = exp.getStackInSlot(i);
+        for (int i = 0; i < exp.getInventory().getSlots(); i++) {
+            ItemStack ammoCheck = exp.getInventory().getStackInSlot(i);
             if (ammoCheck != ItemStack.EMPTY && ammoCheck.getItem() == itemStack.getItem()) {
                 if (hasRecyclerAddon(base)) {
                     int chance = new Random().nextInt(99);
@@ -307,14 +307,14 @@ public class TurretHeadUtil {
                         return new ItemStack(ammoCheck.getItem());
                         //For adding
                     } else if (chance > OMTConfigHandler.getRecyclerNegateChance() && chance < (OMTConfigHandler.getRecyclerNegateChance() + OMTConfigHandler.getRecyclerAddChance())) {
-                        exp.decrStackSize(i, -1);
+                        exp.getInventory().insertItem(i, new ItemStack(ammoCheck.getItem(), 1), false);
                         return new ItemStack(ammoCheck.getItem());
                     } else {
-                        exp.decrStackSize(i, 1);
+                        exp.getInventory().extractItem(i, 1, false);
                         return new ItemStack(ammoCheck.getItem());
                     }
                 } else {
-                    exp.decrStackSize(i, 1);
+                    exp.getInventory().extractItem(i, 1, false);
                     return new ItemStack(ammoCheck.getItem());
                 }
             }
@@ -339,10 +339,10 @@ public class TurretHeadUtil {
         for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, base.getPos())) {
             if (tileEntity instanceof Expander && !((Expander) tileEntity).isPowerExpander()) {
                 Expander exp = (Expander) tileEntity;
-                for (int i = 0; i < exp.getSizeInventory(); i++) {
-                    ItemStack itemCheck = exp.getStackInSlot(i);
+                for (int i = 0; i < exp.getInventory().getSlots(); i++) {
+                    ItemStack itemCheck = exp.getInventory().getStackInSlot(i);
                     if (itemCheck != ItemStack.EMPTY && isItemStackValidAmmo(itemCheck) && !(itemCheck.getItem() instanceof AmmoMetaItem)) {
-                        exp.decrStackSize(i, 1);
+                        exp.getInventory().extractItem(i, 1, false);
                         return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
                     }
                 }
@@ -353,9 +353,9 @@ public class TurretHeadUtil {
 
     public static ItemStack getDisposableAmmoFromBase(TurretBase base) {
         for (int i = 0; i <= 8; i++) {
-            ItemStack itemCheck = base.getStackInSlot(i);
+            ItemStack itemCheck = base.getInventory().getStackInSlot(i);
             if (itemCheck != ItemStack.EMPTY && isItemStackValidAmmo(itemCheck) && !(itemCheck.getItem() instanceof AmmoMetaItem)) {
-                base.decrStackSize(i, 1);
+                base.getInventory().extractItem(i, 1, false);
                 return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
             }
         }
@@ -364,10 +364,10 @@ public class TurretHeadUtil {
 
     public static ItemStack getSpecificItemStackBlockFromBase(TurretBase base, ItemStack stack) {
         for (int i = 0; i <= 8; i++) {
-            ItemStack ammo_stack = base.getStackInSlot(i);
+            ItemStack ammo_stack = base.getInventory().getStackInSlot(i);
 
             if (ammo_stack != ItemStack.EMPTY && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == stack.getItem()) {
-                base.decrStackSize(i, 1);
+                base.getInventory().extractItem(i, 1, false);
                 return new ItemStack(ammo_stack.getItem());
             }
         }
@@ -377,7 +377,7 @@ public class TurretHeadUtil {
 
     public static ItemStack getSpecificItemStackItemFromBase(TurretBase base, ItemStack ammoStackRequired) {
         for (int i = 0; i <= 8; i++) {
-            ItemStack ammo_stack = base.getStackInSlot(i);
+            ItemStack ammo_stack = base.getInventory().getStackInSlot(i);
 
             if (ammo_stack != ItemStack.EMPTY && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == ammoStackRequired.getItem()
                     && ammo_stack.getMetadata() == ammoStackRequired.getMetadata()) {
@@ -389,14 +389,15 @@ public class TurretHeadUtil {
                         return new ItemStack(ammo_stack.getItem());
                         //For adding
                     } else if (chance > OMTConfigHandler.getRecyclerNegateChance() && chance < (OMTConfigHandler.getRecyclerNegateChance() + OMTConfigHandler.getRecyclerAddChance())) {
-                        base.decrStackSize(i, -1);
+
+                        base.getInventory().insertItem(i,  new ItemStack(ammo_stack.getItem(), 1), false);
                         return new ItemStack(ammo_stack.getItem());
                     } else {
-                        base.decrStackSize(i, 1);
+                        base.getInventory().extractItem(i, 1, false);
                         return new ItemStack(ammo_stack.getItem());
                     }
                 } else {
-                    base.decrStackSize(i, 1);
+                    base.getInventory().extractItem(i, 1, false);
                     return new ItemStack(ammo_stack.getItem());
                 }
             }
@@ -412,7 +413,7 @@ public class TurretHeadUtil {
             return base.getEnergyLevel(EnumFacing.DOWN) / turret.getTurretPowerUsage();
         }
         for (int i = 0; i <= 8; i++) {
-            ItemStack ammoStack = base.getStackInSlot(i);
+            ItemStack ammoStack = base.getInventory().getStackInSlot(i);
 
             if (ammoStack != ItemStack.EMPTY && getStackSize(ammoStack) > 0 && ammoStack.getItem() == ammoStackRequired.getItem()
                     && ammoStack.getMetadata() == ammoStackRequired.getMetadata()) {
@@ -423,8 +424,8 @@ public class TurretHeadUtil {
         for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(base.getWorld(), base.getPos())) {
             if (tileEntity instanceof Expander && !((Expander) tileEntity).isPowerExpander()) {
                 Expander exp = (Expander) tileEntity;
-                for (int i = 0; i < exp.getSizeInventory(); i++) {
-                    ItemStack ammoStack = exp.getStackInSlot(i);
+                for (int i = 0; i < exp.getInventory().getSlots(); i++) {
+                    ItemStack ammoStack = exp.getInventory().getStackInSlot(i);
                     if (ammoStack != ItemStack.EMPTY && ammoStack.getItem() == ammoStackRequired.getItem()) {
                         result += ammoStack.getCount();
                     }
@@ -565,16 +566,16 @@ public class TurretHeadUtil {
         }
 
         if (tier == 5) {
-            if (base.getStackInSlot(12) != ItemStack.EMPTY) {
-                if (base.getStackInSlot(12).getItemDamage() == 3) {
-                    value += (OMTConfigHandler.getRangeUpgradeBoost() * getStackSize(base.getStackInSlot(12)));
+            if (base.getInventory().getStackInSlot(12) != ItemStack.EMPTY) {
+                if (base.getInventory().getStackInSlot(12).getItemDamage() == 3) {
+                    value += (OMTConfigHandler.getRangeUpgradeBoost() * getStackSize(base.getInventory().getStackInSlot(12)));
                 }
             }
         }
 
-        if (base.getStackInSlot(11) != ItemStack.EMPTY) {
-            if (base.getStackInSlot(11).getItemDamage() == 3) {
-                value += (OMTConfigHandler.getRangeUpgradeBoost() * getStackSize(base.getStackInSlot(11)));
+        if (base.getInventory().getStackInSlot(11) != ItemStack.EMPTY) {
+            if (base.getInventory().getStackInSlot(11).getItemDamage() == 3) {
+                value += (OMTConfigHandler.getRangeUpgradeBoost() * getStackSize(base.getInventory().getStackInSlot(11)));
             }
         }
 
@@ -591,16 +592,16 @@ public class TurretHeadUtil {
         }
 
         if (tier == 5) {
-            if (base.getStackInSlot(12) != ItemStack.EMPTY) {
-                if (base.getStackInSlot(12).getItemDamage() == 4) {
-                    value += getStackSize(base.getStackInSlot(12));
+            if (base.getInventory().getStackInSlot(12) != ItemStack.EMPTY) {
+                if (base.getInventory().getStackInSlot(12).getItemDamage() == 4) {
+                    value += getStackSize(base.getInventory().getStackInSlot(12));
                 }
             }
         }
 
-        if (base.getStackInSlot(11) != ItemStack.EMPTY) {
-            if (base.getStackInSlot(11).getItemDamage() == 4) {
-                value += getStackSize(base.getStackInSlot(11));
+        if (base.getInventory().getStackInSlot(11) != ItemStack.EMPTY) {
+            if (base.getInventory().getStackInSlot(11).getItemDamage() == 4) {
+                value += getStackSize(base.getInventory().getStackInSlot(11));
             }
         }
 
@@ -617,16 +618,16 @@ public class TurretHeadUtil {
         }
 
         if (tier == 5) {
-            if (base.getStackInSlot(12) != ItemStack.EMPTY) {
-                if (base.getStackInSlot(12).getItemDamage() == 0) {
-                    accuracy += (OMTConfigHandler.getAccuracyUpgradeBoost() * getStackSize(base.getStackInSlot(12)));
+            if (base.getInventory().getStackInSlot(12) != ItemStack.EMPTY) {
+                if (base.getInventory().getStackInSlot(12).getItemDamage() == 0) {
+                    accuracy += (OMTConfigHandler.getAccuracyUpgradeBoost() * getStackSize(base.getInventory().getStackInSlot(12)));
                 }
             }
         }
 
-        if (base.getStackInSlot(11) != ItemStack.EMPTY) {
-            if (base.getStackInSlot(11).getItemDamage() == 0) {
-                accuracy += (OMTConfigHandler.getAccuracyUpgradeBoost() * getStackSize(base.getStackInSlot(11)));
+        if (base.getInventory().getStackInSlot(11) != ItemStack.EMPTY) {
+            if (base.getInventory().getStackInSlot(11).getItemDamage() == 0) {
+                accuracy += (OMTConfigHandler.getAccuracyUpgradeBoost() * getStackSize(base.getInventory().getStackInSlot(11)));
             }
         }
 
@@ -643,16 +644,16 @@ public class TurretHeadUtil {
         }
 
         if (tier == 5) {
-            if (base.getStackInSlot(12) != ItemStack.EMPTY) {
-                if (base.getStackInSlot(12).getItemDamage() == 1) {
-                    efficiency += (OMTConfigHandler.getEfficiencyUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(12)));
+            if (base.getInventory().getStackInSlot(12) != ItemStack.EMPTY) {
+                if (base.getInventory().getStackInSlot(12).getItemDamage() == 1) {
+                    efficiency += (OMTConfigHandler.getEfficiencyUpgradeBoostPercentage() * getStackSize(base.getInventory().getStackInSlot(12)));
                 }
             }
         }
 
-        if (base.getStackInSlot(11) != ItemStack.EMPTY) {
-            if (base.getStackInSlot(11).getItemDamage() == 1) {
-                efficiency += (OMTConfigHandler.getEfficiencyUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(11)));
+        if (base.getInventory().getStackInSlot(11) != ItemStack.EMPTY) {
+            if (base.getInventory().getStackInSlot(11).getItemDamage() == 1) {
+                efficiency += (OMTConfigHandler.getEfficiencyUpgradeBoostPercentage() * getStackSize(base.getInventory().getStackInSlot(11)));
             }
         }
 
@@ -669,16 +670,16 @@ public class TurretHeadUtil {
         }
 
         if (tier == 5) {
-            if (base.getStackInSlot(12) != ItemStack.EMPTY) {
-                if (base.getStackInSlot(12).getItemDamage() == 2) {
-                    rof += (OMTConfigHandler.getFireRateUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(12)));
+            if (base.getInventory().getStackInSlot(12) != ItemStack.EMPTY) {
+                if (base.getInventory().getStackInSlot(12).getItemDamage() == 2) {
+                    rof += (OMTConfigHandler.getFireRateUpgradeBoostPercentage() * getStackSize(base.getInventory().getStackInSlot(12)));
                 }
             }
         }
 
-        if (base.getStackInSlot(11) != ItemStack.EMPTY) {
-            if (base.getStackInSlot(11).getItemDamage() == 2) {
-                rof += (OMTConfigHandler.getFireRateUpgradeBoostPercentage() * getStackSize(base.getStackInSlot(11)));
+        if (base.getInventory().getStackInSlot(11) != ItemStack.EMPTY) {
+            if (base.getInventory().getStackInSlot(11).getItemDamage() == 2) {
+                rof += (OMTConfigHandler.getFireRateUpgradeBoostPercentage() * getStackSize(base.getInventory().getStackInSlot(11)));
             }
         }
 
@@ -692,12 +693,12 @@ public class TurretHeadUtil {
             return false;
         }
 
-        if (base.getStackInSlot(9) != ItemStack.EMPTY) {
-            found = base.getStackInSlot(9).getItemDamage() == 4;
+        if (base.getInventory().getStackInSlot(9) != ItemStack.EMPTY) {
+            found = base.getInventory().getStackInSlot(9).getItemDamage() == 4;
         }
 
-        if (base.getStackInSlot(10) != ItemStack.EMPTY && !found) {
-            found = base.getStackInSlot(10).getItemDamage() == 4;
+        if (base.getInventory().getStackInSlot(10) != ItemStack.EMPTY && !found) {
+            found = base.getInventory().getStackInSlot(10).getItemDamage() == 4;
         }
         return found;
     }
@@ -709,12 +710,12 @@ public class TurretHeadUtil {
             return false;
         }
 
-        if (base.getStackInSlot(9) != ItemStack.EMPTY) {
-            found = base.getStackInSlot(9).getItemDamage() == 1;
+        if (base.getInventory().getStackInSlot(9) != ItemStack.EMPTY) {
+            found = base.getInventory().getStackInSlot(9).getItemDamage() == 1;
         }
 
-        if (base.getStackInSlot(10) != ItemStack.EMPTY && !found) {
-            found = base.getStackInSlot(10).getItemDamage() == 1;
+        if (base.getInventory().getStackInSlot(10) != ItemStack.EMPTY && !found) {
+            found = base.getInventory().getStackInSlot(10).getItemDamage() == 1;
         }
         return found;
     }
@@ -726,12 +727,12 @@ public class TurretHeadUtil {
             return false;
         }
 
-        if (base.getStackInSlot(9) != ItemStack.EMPTY) {
-            found = base.getStackInSlot(9).getItemDamage() == 0;
+        if (base.getInventory().getStackInSlot(9) != ItemStack.EMPTY) {
+            found = base.getInventory().getStackInSlot(9).getItemDamage() == 0;
         }
 
-        if (base.getStackInSlot(10) != ItemStack.EMPTY && !found) {
-            found = base.getStackInSlot(10).getItemDamage() == 0;
+        if (base.getInventory().getStackInSlot(10) != ItemStack.EMPTY && !found) {
+            found = base.getInventory().getStackInSlot(10).getItemDamage() == 0;
         }
         return found;
     }
@@ -743,12 +744,12 @@ public class TurretHeadUtil {
             return false;
         }
 
-        if (base.getStackInSlot(9) != ItemStack.EMPTY) {
-            found = base.getStackInSlot(9).getItemDamage() == 6;
+        if (base.getInventory().getStackInSlot(9) != ItemStack.EMPTY) {
+            found = base.getInventory().getStackInSlot(9).getItemDamage() == 6;
         }
 
-        if (base.getStackInSlot(10) != ItemStack.EMPTY && !found) {
-            found = base.getStackInSlot(10).getItemDamage() == 6;
+        if (base.getInventory().getStackInSlot(10) != ItemStack.EMPTY && !found) {
+            found = base.getInventory().getStackInSlot(10).getItemDamage() == 6;
         }
         return found;
     }
@@ -763,12 +764,12 @@ public class TurretHeadUtil {
             return false;
         }
 
-        if (base.getStackInSlot(9) != ItemStack.EMPTY) {
-            found = base.getStackInSlot(9).getItemDamage() == 2;
+        if (base.getInventory().getStackInSlot(9) != ItemStack.EMPTY) {
+            found = base.getInventory().getStackInSlot(9).getItemDamage() == 2;
         }
 
-        if (base.getStackInSlot(10) != ItemStack.EMPTY && !found) {
-            found = base.getStackInSlot(10).getItemDamage() == 2;
+        if (base.getInventory().getStackInSlot(10) != ItemStack.EMPTY && !found) {
+            found = base.getInventory().getStackInSlot(10).getItemDamage() == 2;
         }
         return found;
     }
@@ -783,12 +784,12 @@ public class TurretHeadUtil {
             return false;
         }
 
-        if (base.getStackInSlot(9) != ItemStack.EMPTY) {
-            found = base.getStackInSlot(9).getItemDamage() == 5;
+        if (base.getInventory().getStackInSlot(9) != ItemStack.EMPTY) {
+            found = base.getInventory().getStackInSlot(9).getItemDamage() == 5;
         }
 
-        if (base.getStackInSlot(10) != ItemStack.EMPTY && !found) {
-            found = base.getStackInSlot(10).getItemDamage() == 5;
+        if (base.getInventory().getStackInSlot(10) != ItemStack.EMPTY && !found) {
+            found = base.getInventory().getStackInSlot(10).getItemDamage() == 5;
         }
         return found;
     }
@@ -799,12 +800,12 @@ public class TurretHeadUtil {
         if (base.getTier() == 1) {
             return false;
         }
-        if (base.getStackInSlot(9) != ItemStack.EMPTY) {
-            found = base.getStackInSlot(9).getItemDamage() == 3;
+        if (base.getInventory().getStackInSlot(9) != ItemStack.EMPTY) {
+            found = base.getInventory().getStackInSlot(9).getItemDamage() == 3;
         }
 
-        if (base.getStackInSlot(10) != ItemStack.EMPTY && !found) {
-            found = base.getStackInSlot(10).getItemDamage() == 3;
+        if (base.getInventory().getStackInSlot(10) != ItemStack.EMPTY && !found) {
+            found = base.getInventory().getStackInSlot(10).getItemDamage() == 3;
         }
         return found;
     }
@@ -823,15 +824,15 @@ public class TurretHeadUtil {
             return amp_level;
         }
 
-        if (base.getStackInSlot(9) != ItemStack.EMPTY) {
-            if (base.getStackInSlot(9).getItemDamage() == 1) {
-                amp_level += getStackSize(base.getStackInSlot(9));
+        if (base.getInventory().getStackInSlot(9) != ItemStack.EMPTY) {
+            if (base.getInventory().getStackInSlot(9).getItemDamage() == 1) {
+                amp_level += getStackSize(base.getInventory().getStackInSlot(9));
             }
         }
 
-        if (base.getStackInSlot(10) != ItemStack.EMPTY) {
-            if (base.getStackInSlot(10).getItemDamage() == 1) {
-                amp_level += getStackSize(base.getStackInSlot(10));
+        if (base.getInventory().getStackInSlot(10) != ItemStack.EMPTY) {
+            if (base.getInventory().getStackInSlot(10).getItemDamage() == 1) {
+                amp_level += getStackSize(base.getInventory().getStackInSlot(10));
             }
         }
 
@@ -852,15 +853,15 @@ public class TurretHeadUtil {
             return fakeDropsLevel;
         }
 
-        if (base.getStackInSlot(9) != ItemStack.EMPTY) {
-            if (base.getStackInSlot(9).getItemDamage() == 7) {
-                fakeDropsLevel += getStackSize(base.getStackInSlot(9));
+        if (base.getInventory().getStackInSlot(9) != ItemStack.EMPTY) {
+            if (base.getInventory().getStackInSlot(9).getItemDamage() == 7) {
+                fakeDropsLevel += getStackSize(base.getInventory().getStackInSlot(9));
             }
         }
 
-        if (base.getStackInSlot(10) != ItemStack.EMPTY) {
-            if (base.getStackInSlot(10).getItemDamage() == 7) {
-                fakeDropsLevel += getStackSize(base.getStackInSlot(10));
+        if (base.getInventory().getStackInSlot(10) != ItemStack.EMPTY) {
+            if (base.getInventory().getStackInSlot(10).getItemDamage() == 7) {
+                fakeDropsLevel += getStackSize(base.getInventory().getStackInSlot(10));
             }
         }
 
