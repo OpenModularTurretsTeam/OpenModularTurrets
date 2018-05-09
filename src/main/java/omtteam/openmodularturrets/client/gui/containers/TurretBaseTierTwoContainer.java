@@ -23,12 +23,12 @@ public class TurretBaseTierTwoContainer extends TurretBaseContainer {
 
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
-                addSlotToContainer(new AmmoSlot(tileEntity, x + y * 3, 8 + x * 18, 17 + y * 18));
+                addSlotToContainer(new AmmoSlot(tileEntity.getInventory(), x + y * 3, 8 + x * 18, 17 + y * 18));
             }
         }
 
-        addSlotToContainer(new AddonSlot(tileEntity, 9, 72, 18));
-        addSlotToContainer(new AddonSlot(tileEntity, 10, 92, 18));
-        addSlotToContainer(new UpgradeSlot(tileEntity, 11, 72, 52));
+        addSlotToContainer(new AddonSlot(tileEntity.getInventory(), 9, 72, 18));
+        addSlotToContainer(new AddonSlot(tileEntity.getInventory(), 10, 92, 18));
+        addSlotToContainer(new UpgradeSlot(tileEntity.getInventory(), 11, 72, 52));
     }
 }

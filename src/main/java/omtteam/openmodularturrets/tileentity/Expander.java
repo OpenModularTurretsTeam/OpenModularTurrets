@@ -5,10 +5,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 import omtteam.omlib.tileentity.TileEntityContainer;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.util.ItemStackList;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
+import omtteam.openmodularturrets.util.OMTUtil;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
@@ -22,13 +25,40 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
     private EnumFacing orientation;
     private int tier;
 
+    protected IItemHandlerModifiable inventory = new ItemStackHandler(9){
+
+        @Override
+        protected void onContentsChanged(int slot)
+        {
+            super.onContentsChanged(slot);
+            markDirty();
+        }
+
+        public boolean isItemValidForSlot(int index, ItemStack stack)
+        {
+                return !isPowerExpander();
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate)
+        {
+            if (!isItemValidForSlot(slot, stack))
+                return stack;
+            return super.insertItem(slot, stack, simulate);
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
+            return truncateDoubleToInt(Math.pow(2, tier + 1));
+        }
+    };
+
     public Expander() {
-        this.inventory = ItemStackList.create(9);
         this.orientation = EnumFacing.NORTH;
     }
 
     public Expander(int tier, boolean powerExpander) {
-        this.inventory = ItemStackList.create(9);
         this.tier = tier;
         this.powerExpander = powerExpander;
         this.orientation = EnumFacing.NORTH;
@@ -53,11 +83,6 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
         }
     }
 
-    @Override
-    public int getInventoryStackLimit() {
-        return truncateDoubleToInt(Math.pow(2, tier + 1));
-    }
-
     public void setSide() {
         this.setOrientation(getTurretBaseFacing(this.getWorld(), this.pos));
     }
@@ -69,36 +94,12 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
         }
     }
 
-    @Override
-    public boolean isItemValidForSlot(int i, ItemStack stack) {
-        return !isPowerExpander();
-    }
-
     public int getTier() {
         return tier;
     }
 
     public TurretBase getBase() {
         return TurretHeadUtil.getTurretBase(this.getWorld(), this.pos);
-    }
-
-    @Override
-    @ParametersAreNonnullByDefault
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        return false;
-    }
-
-    @Override
-    @ParametersAreNonnullByDefault
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return false;
-    }
-
-    @Override
-    @ParametersAreNonnullByDefault
-    @Nonnull
-    public int[] getSlotsForFace(EnumFacing side) {
-        return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
     }
 
     public boolean isPowerExpander() {
