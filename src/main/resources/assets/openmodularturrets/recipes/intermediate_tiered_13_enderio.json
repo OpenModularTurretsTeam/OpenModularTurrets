@@ -18,8 +18,8 @@
       "data": 12
     },
     "C": {
-      "item": "enderio:item_alloy_ingot",
-      "data": 7
+      "type": "forge:ore_dict",
+      "ore": "ingotSoularium"
     }
   },
   "conditions": [
