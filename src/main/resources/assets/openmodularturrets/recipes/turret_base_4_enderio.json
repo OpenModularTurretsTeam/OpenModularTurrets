@@ -15,16 +15,16 @@
       "ore": "ingotEndSteel"
     },
     "B": {
-      "item": "enderio:block_cap_bank",
-      "data": 3
+      "type": "forge:ore_dict",
+      "ore": "itemEnhancedMachineChassi"
     },
     "C": {
       "item": "openmodularturrets:intermediate_tiered",
       "data": 4
     },
     "D": {
-      "item": "enderio:item_material",
-      "data": 41
+      "item": "enderio:item_basic_capacitor",
+      "data": 2
     },
     "E": {
       "item": "openmodularturrets:intermediate_regular",

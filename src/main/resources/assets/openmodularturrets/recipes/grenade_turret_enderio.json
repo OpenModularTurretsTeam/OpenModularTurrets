@@ -18,8 +18,8 @@
       "data": 7
     },
     "C": {
-      "item": "enderio:item_alloy_ingot",
-      "data": 6
+      "type": "forge:ore_dict",
+      "ore": "ingotDarkSteel"
     },
     "D": {
       "item": "openmodularturrets:intermediate_regular",

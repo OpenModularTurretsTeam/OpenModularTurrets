@@ -12,8 +12,8 @@
   "type": "forge:ore_shaped",
   "key": {
     "A": {
-      "item": "enderio:item_alloy_ingot",
-      "data": 4
+      "type": "forge:ore_dict",
+      "ore": "ingotConductiveIron"
     },
     "B": {
       "item": "minecraft:gunpowder"
