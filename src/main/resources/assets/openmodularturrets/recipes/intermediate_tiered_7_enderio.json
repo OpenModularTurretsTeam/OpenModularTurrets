@@ -11,8 +11,8 @@
   "type": "forge:ore_shaped",
   "key": {
     "A": {
-      "item": "enderio:item_alloy_ingot",
-      "data": 6
+      "type": "forge:ore_dict",
+      "ore": "ingotDarkSteel"
     },
     "B": {
       "item": "openmodularturrets:intermediate_tiered",
