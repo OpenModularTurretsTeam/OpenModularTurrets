@@ -25,7 +25,6 @@ import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.tileentity.TileEntityTrustedMachine;
-import omtteam.omlib.util.ItemStackList;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.openmodularturrets.api.IBaseController;
@@ -33,8 +32,6 @@ import omtteam.openmodularturrets.api.network.INetworkTile;
 import omtteam.openmodularturrets.api.network.IPowerExchangeTile;
 import omtteam.openmodularturrets.api.network.OMTNetwork;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
-import omtteam.openmodularturrets.items.AddonMetaItem;
-import omtteam.openmodularturrets.items.UpgradeMetaItem;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
@@ -56,7 +53,6 @@ import static omtteam.omlib.util.BlockUtil.writeBlockFromStateToNBT;
 import static omtteam.omlib.util.GeneralUtil.getMachineModeLocalization;
 import static omtteam.omlib.util.PlayerUtil.getPlayerUUID;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
-import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 
 @SuppressWarnings("unused")
 @Optional.InterfaceList({
@@ -87,6 +83,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     protected IItemHandlerModifiable inventory;
 
     protected void setupInventory() {
+        //noinspection BooleanMethodIsAlwaysInverted,BooleanMethodIsAlwaysInverted
         inventory = new ItemStackHandler(13){
 
             @Override
@@ -111,6 +108,16 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 if (!isItemValidForSlot(slot, stack))
                     return stack;
                 return super.insertItem(slot, stack, simulate);
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                if (slot < 9) {
+                    return super.extractItem(slot, amount, simulate);
+                } else {
+                    return ItemStack.EMPTY;
+                }
             }
         };
     }
@@ -146,6 +153,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     @Override
+    @Nonnull
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
         nbtTagCompound.setInteger("currentMaxRange", this.currentMaxRange);
@@ -307,7 +315,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         int maxRange = upperBoundMaxRange;
         List<TileEntity> tileEntities = WorldUtil.getTouchingTileEntities(getWorld(), getPos());
         for (TileEntity te : tileEntities) {
-            if (te != null && te instanceof TurretHead) {
+            if (te instanceof TurretHead) {
                 maxRange = Math.max(((TurretHead) te).getTurretRange() + TurretHeadUtil.getRangeUpgrades(this), maxRange);
             }
         }
@@ -556,7 +564,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     public void setAllTurretsYawPitch(float yaw, float pitch) {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         for (TileEntity te : tileEntities) {
-            if (te != null && te instanceof TurretHead) {
+            if (te instanceof TurretHead) {
                 ((TurretHead) te).setPitch(pitch);
                 ((TurretHead) te).setYaw(yaw);
             }
@@ -565,7 +573,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     public boolean setTurretYawPitch(EnumFacing facing, float yaw, float pitch) {
         TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
-        if (turretHead != null && turretHead instanceof TurretHead) {
+        if (turretHead instanceof TurretHead) {
             ((TurretHead) turretHead).setPitch(pitch);
             ((TurretHead) turretHead).setYaw(yaw);
             return true;
@@ -576,7 +584,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     public void setAllTurretsForceFire(boolean state) {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         for (TileEntity te : tileEntities) {
-            if (te != null && te instanceof TurretHead) {
+            if (te instanceof TurretHead) {
                 ((TurretHead) te).setAutoFire(state);
             }
         }
@@ -584,7 +592,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     public boolean setTurretForceFire(EnumFacing facing, boolean state) {
         TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
-        if (turretHead != null && turretHead instanceof TurretHead) {
+        if (turretHead instanceof TurretHead) {
             ((TurretHead) turretHead).setAutoFire(state);
             return true;
         }
@@ -593,7 +601,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     public boolean forceShootTurret(EnumFacing facing) {
         TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
-        return (turretHead != null && turretHead instanceof TurretHead && ((TurretHead) turretHead).forceShot());
+        return (turretHead instanceof TurretHead && ((TurretHead) turretHead).forceShot());
     }
 
     @SuppressWarnings("deprecation")
@@ -601,7 +609,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         int successes = 0;
         for (TileEntity te : tileEntities) {
-            if (te != null && te instanceof TurretHead) {
+            if (te instanceof TurretHead) {
                 successes += ((TurretHead) te).forceShot() ? 1 : 0;
             }
         }

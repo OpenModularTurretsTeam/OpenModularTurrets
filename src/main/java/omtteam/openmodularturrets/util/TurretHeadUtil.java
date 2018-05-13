@@ -125,7 +125,7 @@ public class TurretHeadUtil {
 
                 if (possibleTarget instanceof IEntityOwnable) {
                     Entity entity = ((IEntityOwnable) possibleTarget).getOwner();
-                    if (entity != null && entity instanceof EntityPlayer) {
+                    if (entity instanceof EntityPlayer) {
                         EntityPlayer owner = (EntityPlayer) entity;
                         if (isPlayerOwner(owner, base) || isPlayerTrusted(owner, base)) {
                             continue;
@@ -274,7 +274,7 @@ public class TurretHeadUtil {
     private static boolean isTargetAlreadyTargeted(TurretBase base, Entity entity) {
         for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(base.getWorld(), base.getPos())) {
             if (tileEntity instanceof TurretHead) {
-                if (((TurretHead) tileEntity).target != null && entity.equals(((TurretHead) tileEntity).target)) {
+                if (entity.equals(((TurretHead) tileEntity).target)) {
                     return true;
                 }
             }

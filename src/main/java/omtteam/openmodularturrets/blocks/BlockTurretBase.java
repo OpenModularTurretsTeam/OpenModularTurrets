@@ -346,7 +346,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         TileEntity te = world.getTileEntity(data.getPos());
-        if (te != null && te instanceof TurretBase) {
+        if (te instanceof TurretBase) {
             TurretBase base = (TurretBase) te;
             EnumMachineMode machineMode = base.getMode();
             boolean active = base.isActive();

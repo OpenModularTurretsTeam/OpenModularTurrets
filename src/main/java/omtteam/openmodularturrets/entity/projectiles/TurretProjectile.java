@@ -78,7 +78,7 @@ public abstract class TurretProjectile extends EntityThrowable {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
             if (entity instanceof EntityTameable) {
                 EntityLivingBase entityOwner = ((EntityTameable) entity).getOwner();
-                if (entityOwner != null && entityOwner instanceof EntityPlayer) {
+                if (entityOwner instanceof EntityPlayer) {
                     EntityPlayer owner = (EntityPlayer) entityOwner;
                     return !isPlayerOwner(owner, turretBase) && !isPlayerTrusted(owner, turretBase);
                 }
@@ -129,10 +129,6 @@ public abstract class TurretProjectile extends EntityThrowable {
         this.posZ += this.motionZ;
         float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
         this.rotationYaw = (float) (MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
-
-        for (this.rotationPitch = (float) (MathHelper.atan2(this.motionY, (double) f) * (180D / Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
-            //TODO: what is this?  Keridos: No idea!
-        }
 
         while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
             this.prevRotationPitch += 360.0F;

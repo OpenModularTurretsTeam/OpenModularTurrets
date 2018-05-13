@@ -7,9 +7,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import omtteam.omlib.util.GeneralUtil;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
+import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -60,15 +62,19 @@ public class ItemBlockBaseAddon extends AbstractItemBlockBaseAddon {
     @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        switch (stack.getMetadata()) {
-            case 0:
-                tooltip.add("");
-                tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.base_addon_loot_deleter.inv1"));
-                tooltip.add("");
-                tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.base_addon_loot_deleter.inv2"));
-                tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.base_addon_loot_deleter.inv3"));
-                tooltip.add("");
-                tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base_addon_loot_deleter.inv.1"));
+        if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
+            tooltip.add(GeneralUtil.shiftDetail);
+        } else {
+            switch (stack.getMetadata()) {
+                case 0:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.base_addon_loot_deleter.inv1"));
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.base_addon_loot_deleter.inv2"));
+                    tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.base_addon_loot_deleter.inv3"));
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base_addon_loot_deleter.inv.1"));
+            }
         }
     }
 }

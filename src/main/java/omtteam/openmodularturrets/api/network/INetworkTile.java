@@ -36,6 +36,7 @@ public interface INetworkTile {
      *
      * @return name of device
      */
+    @SuppressWarnings("SameReturnValue")
     @Nonnull
     String getDeviceName();
 
