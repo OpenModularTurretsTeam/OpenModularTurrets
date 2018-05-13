@@ -93,7 +93,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
                     return;
                 }
             }
-            if (target != null && target instanceof EntityPlayerMP) {
+            if (target instanceof EntityPlayerMP) {
                 EntityPlayerMP entity = (EntityPlayerMP) target;
 
                 if (isPlayerTrusted(entity, base)) {

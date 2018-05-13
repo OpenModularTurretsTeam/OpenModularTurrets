@@ -4,8 +4,10 @@ import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import omtteam.omlib.util.GeneralUtil;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
+import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -23,6 +25,10 @@ public class ItemBlockLever extends AbstractItemBlockBaseAddon {
     @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(safeLocalize(OMTNames.Localizations.GUI.TURRET_LEVER_DESCRIPTION));
+        if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
+            tooltip.add(GeneralUtil.shiftDetail);
+        } else {
+            tooltip.add(safeLocalize(OMTNames.Localizations.GUI.TURRET_LEVER_DESCRIPTION));
+        }
     }
 }

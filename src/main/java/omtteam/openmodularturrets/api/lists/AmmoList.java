@@ -1,6 +1,7 @@
 package omtteam.openmodularturrets.api.lists;
 
 import net.minecraft.item.ItemStack;
+import omtteam.openmodularturrets.OpenModularTurrets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class AmmoList {
 
     public static void add(ItemStack itemStack) {
         if (contains(itemStack)) {
+            OpenModularTurrets.getLogger().warn("Tried to add duplicate item to ammo list: " + itemStack.getDisplayName());
         } else {
             list.add(itemStack);
         }

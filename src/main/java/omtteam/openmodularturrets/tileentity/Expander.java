@@ -9,13 +9,11 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import omtteam.omlib.tileentity.TileEntityContainer;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
-import omtteam.omlib.util.ItemStackList;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.util.OMTUtil;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.util.MathUtil.truncateDoubleToInt;
 import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing;

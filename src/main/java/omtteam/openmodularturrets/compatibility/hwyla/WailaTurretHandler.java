@@ -84,7 +84,7 @@ public class WailaTurretHandler implements IWailaDataProvider {
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         if (accessor.getWorld().isRemote) {
             TileEntity te = accessor.getTileEntity();
-            if (te != null && te instanceof TurretHead && currenttip.size() == 0) {
+            if (te instanceof TurretHead && currenttip.size() == 0) {
                 TurretHead turret = (TurretHead) te;
                 boolean active = turret.getBase().isActive();
 

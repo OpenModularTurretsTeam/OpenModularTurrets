@@ -123,7 +123,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         TileEntity te = world.getTileEntity(data.getPos());
-        if (te != null && te instanceof TurretHead) {
+        if (te instanceof TurretHead) {
             TurretHead turret = (TurretHead) te;
             boolean active = turret.getBase().isActive();
 

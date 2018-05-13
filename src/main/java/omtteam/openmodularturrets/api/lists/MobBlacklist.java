@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.api.lists;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import omtteam.omlib.util.EntityUtil;
+import omtteam.openmodularturrets.OpenModularTurrets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class MobBlacklist {
 
     public static void add(String mobIn) {
         if (contains(mobIn) || EntityUtil.findClassById(mobIn) == null) {
+            OpenModularTurrets.getLogger().warn("Tried to add duplicate mob to mob list: " + mobIn);
         } else {
             list.add(mobIn);
         }
