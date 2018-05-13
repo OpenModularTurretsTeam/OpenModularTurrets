@@ -36,7 +36,7 @@ public class DriverTurretBase extends AbstractOMDriver {
     @Override
     public ManagedEnvironment clCreateEnvironment(World world, BlockPos pos, EnumFacing side) {
         TileEntity base = world.getTileEntity(pos);
-        return (base != null && base instanceof TurretBase ? new ManagedEnvironmentTurretBase((TurretBase) base) : null);
+        return (base instanceof TurretBase ? new ManagedEnvironmentTurretBase((TurretBase) base) : null);
     }
 
     @Override

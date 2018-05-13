@@ -392,7 +392,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         }
         // Update target tracking (Player entity not setting motion data when moving via movement keys)
 
-        if (target != null && target instanceof EntityPlayerMP) {
+        if (target instanceof EntityPlayerMP) {
             targetSpeedX = target.posX - targetLastX;
             targetSpeedY = target.posY - targetLastY;
             targetSpeedZ = target.posZ - targetLastZ;
@@ -493,9 +493,8 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     }
 
     /**
-     * Set this.autoFire to true instead. TODO: This is for a single shot only.
+     * Set this.autoFire to true instead.
      */
-    @Deprecated
     public boolean forceShot() {
         if (this instanceof RocketTurretTileEntity && OMTConfigHandler.canRocketsHome) return false;
         if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {

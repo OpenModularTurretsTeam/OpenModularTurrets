@@ -9,10 +9,12 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.omlib.util.GeneralUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
+import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -62,36 +64,40 @@ public class AmmoMetaItem extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
-        switch (stack.getMetadata()) {
-            case 0:
-                tooltip.add("");
-                tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
-                tooltip.add("");
-                tooltip.add(safeLocalize("turret.ammo.blazing_clay"));
-                return;
-            case 1:
-                tooltip.add("");
-                tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
-                tooltip.add("");
-                tooltip.add(safeLocalize("turret.ammo.bullet"));
-                return;
-            case 2:
-                tooltip.add("");
-                tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
-                tooltip.add("");
-                tooltip.add(safeLocalize("turret.ammo.ferro_slug"));
-                return;
-            case 3:
-                tooltip.add("");
-                tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
-                tooltip.add("");
-                tooltip.add(safeLocalize("turret.ammo.grenade"));
-                return;
-            case 4:
-                tooltip.add("");
-                tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
-                tooltip.add("");
-                tooltip.add(safeLocalize("turret.ammo.rocket"));
+        if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
+            tooltip.add(GeneralUtil.shiftDetail);
+        } else {
+            switch (stack.getMetadata()) {
+                case 0:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                    tooltip.add("");
+                    tooltip.add(safeLocalize("turret.ammo.blazing_clay"));
+                    return;
+                case 1:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                    tooltip.add("");
+                    tooltip.add(safeLocalize("turret.ammo.bullet"));
+                    return;
+                case 2:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                    tooltip.add("");
+                    tooltip.add(safeLocalize("turret.ammo.ferro_slug"));
+                    return;
+                case 3:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                    tooltip.add("");
+                    tooltip.add(safeLocalize("turret.ammo.grenade"));
+                    return;
+                case 4:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                    tooltip.add("");
+                    tooltip.add(safeLocalize("turret.ammo.rocket"));
+            }
         }
     }
 }

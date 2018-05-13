@@ -15,11 +15,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.tileentity.EnumMachineMode;
+import omtteam.omlib.util.GeneralUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.TurretBase;
+import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -122,23 +124,27 @@ public class UsableMetaItem extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
-        if (stack.getItemDamage() == 2) {
-            if (hasDataStored(stack)) {
-                NBTTagCompound nbtTagCompound = getDataStored(stack);
-                tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc1"));
-                tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc2"));
-                tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc3"));
-                tooltip.add("\u00A76: \u00A7b" + nbtTagCompound.getInteger("currentMaxRange"));
-                tooltip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": " + getMachineModeLocalization(EnumMachineMode.values()[nbtTagCompound.getInteger("mode")]));
-                tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.MULTI_TARGETING) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("multiTargeting")));
-                tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksMobs")));
-                tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksNeutrals")));
-                tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksPlayers")));
-            } else // If the stack does not have valid tag data, a default message
-            {
-                tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc1"));
-                tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc2"));
-                tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc3"));
+        if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
+            tooltip.add(GeneralUtil.shiftDetail);
+        } else {
+            if (stack.getItemDamage() == 2) {
+                if (hasDataStored(stack)) {
+                    NBTTagCompound nbtTagCompound = getDataStored(stack);
+                    tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc1"));
+                    tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc2"));
+                    tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc3"));
+                    tooltip.add("\u00A76: \u00A7b" + nbtTagCompound.getInteger("currentMaxRange"));
+                    tooltip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": " + getMachineModeLocalization(EnumMachineMode.values()[nbtTagCompound.getInteger("mode")]));
+                    tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.MULTI_TARGETING) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("multiTargeting")));
+                    tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksMobs")));
+                    tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksNeutrals")));
+                    tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksPlayers")));
+                } else // If the stack does not have valid tag data, a default message
+                {
+                    tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc1"));
+                    tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc2"));
+                    tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc3"));
+                }
             }
         }
     }

@@ -8,10 +8,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import omtteam.omlib.util.GeneralUtil;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
+import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -57,78 +59,82 @@ public class ItemBlockTurretBase extends ItemBlock {
     @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
-        tooltip.add(safeLocalize(OMTNames.Localizations.GUI.TURRET_BASE_DESCRIPTION));
+        if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
+            tooltip.add(GeneralUtil.shiftDetail);
+        } else {
+            tooltip.add(safeLocalize(OMTNames.Localizations.GUI.TURRET_BASE_DESCRIPTION));
 
-        switch (stack.getMetadata()) {
-            case 0:
-                tooltip.add("");
-                tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
-                tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                        OMTConfigHandler.getBaseTierOneMaxCharge());
-                tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                        OMTConfigHandler.getBaseTierOneMaxIo());
-                tooltip.add("");
-                tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
-                tooltip.add(safeLocalize("tooltip.extras.addons.0"));
-                tooltip.add("");
-                tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.1"));
-                return;
-            case 1:
-                tooltip.add("");
-                tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
-                tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                        OMTConfigHandler.getBaseTierTwoMaxCharge());
-                tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                        OMTConfigHandler.getBaseTierTwoMaxIo());
-                tooltip.add("");
-                tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
-                tooltip.add(safeLocalize("tooltip.extras.addons.2"));
-                tooltip.add(safeLocalize("tooltip.extras.upgrade.1"));
-                tooltip.add("");
-                tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.2"));
-                return;
-            case 2:
-                tooltip.add("");
-                tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
-                tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                        OMTConfigHandler.getBaseTierThreeMaxCharge());
-                tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                        OMTConfigHandler.getBaseTierThreeMaxIo());
-                tooltip.add("");
-                tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
-                tooltip.add(safeLocalize("tooltip.extras.addons.2"));
-                tooltip.add(safeLocalize("tooltip.extras.upgrade.1"));
-                tooltip.add("");
-                tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.3"));
-                return;
-            case 3:
-                tooltip.add("");
-                tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
-                tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                        OMTConfigHandler.getBaseTierFourMaxCharge());
-                tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                        OMTConfigHandler.getBaseTierFourMaxIo());
-                tooltip.add("");
-                tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
-                tooltip.add(safeLocalize("tooltip.extras.addons.2"));
-                tooltip.add(safeLocalize("tooltip.extras.upgrade.1"));
-                tooltip.add("");
-                tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.4"));
-                return;
-            case 4:
-                tooltip.add("");
-                tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
-                tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                        OMTConfigHandler.getBaseTierFiveMaxCharge());
-                tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                        OMTConfigHandler.getBaseTierFiveMaxIo());
-                tooltip.add("");
-                tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
-                tooltip.add(safeLocalize("tooltip.extras.addons.2"));
-                tooltip.add(safeLocalize("tooltip.extras.upgrade.2"));
-                tooltip.add("");
-                tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.5a"));
-                tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.5b"));
+            switch (stack.getMetadata()) {
+                case 0:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
+                    tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
+                            OMTConfigHandler.getBaseTierOneMaxCharge());
+                    tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
+                            OMTConfigHandler.getBaseTierOneMaxIo());
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
+                    tooltip.add(safeLocalize("tooltip.extras.addons.0"));
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.1"));
+                    return;
+                case 1:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
+                    tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
+                            OMTConfigHandler.getBaseTierTwoMaxCharge());
+                    tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
+                            OMTConfigHandler.getBaseTierTwoMaxIo());
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
+                    tooltip.add(safeLocalize("tooltip.extras.addons.2"));
+                    tooltip.add(safeLocalize("tooltip.extras.upgrade.1"));
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.2"));
+                    return;
+                case 2:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
+                    tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
+                            OMTConfigHandler.getBaseTierThreeMaxCharge());
+                    tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
+                            OMTConfigHandler.getBaseTierThreeMaxIo());
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
+                    tooltip.add(safeLocalize("tooltip.extras.addons.2"));
+                    tooltip.add(safeLocalize("tooltip.extras.upgrade.1"));
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.3"));
+                    return;
+                case 3:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
+                    tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
+                            OMTConfigHandler.getBaseTierFourMaxCharge());
+                    tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
+                            OMTConfigHandler.getBaseTierFourMaxIo());
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
+                    tooltip.add(safeLocalize("tooltip.extras.addons.2"));
+                    tooltip.add(safeLocalize("tooltip.extras.upgrade.1"));
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.4"));
+                    return;
+                case 4:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
+                    tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
+                            OMTConfigHandler.getBaseTierFiveMaxCharge());
+                    tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
+                            OMTConfigHandler.getBaseTierFiveMaxIo());
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
+                    tooltip.add(safeLocalize("tooltip.extras.addons.2"));
+                    tooltip.add(safeLocalize("tooltip.extras.upgrade.2"));
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.5a"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.5b"));
+            }
         }
     }
 }
