@@ -28,7 +28,7 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
     protected IItemHandlerModifiable inventory;
 
     protected void setupInventory() {
-        new ItemStackHandler(9) {
+        inventory = new ItemStackHandler(9) {
 
             @Override
             protected void onContentsChanged(int slot) {

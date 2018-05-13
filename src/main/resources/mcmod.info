@@ -16,11 +16,8 @@
         ],
         "parent":"",
         "screenshots": [],
-        "requiredMods": [
-            "MinecraftForge,ThermalExpansion"
-        ],
         "dependencies": [
-            "MinecraftForge,ThermalExpansion"
+            "omlib"
         ]
     }
 ]
