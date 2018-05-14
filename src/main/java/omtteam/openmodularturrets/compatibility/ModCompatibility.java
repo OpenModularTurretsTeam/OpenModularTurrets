@@ -67,9 +67,6 @@ public class ModCompatibility {
     }
 
     public static void init() {
-        FMLInterModComms.sendMessage("waila", "register",
-                "omtteam.openmodularturrets.compatibility.hwyla.WailaDataProvider.register");
-
         addVersionCheckerInfo();
         if (ComputerCraftLoaded) {
             registerCCCompat();
