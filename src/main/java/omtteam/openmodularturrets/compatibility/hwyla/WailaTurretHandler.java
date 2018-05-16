@@ -29,7 +29,6 @@ import static omtteam.openmodularturrets.util.TurretHeadUtil.*;
  */
 
 @SuppressWarnings("unused")
-@Optional.Interface(iface = "mcp.mobius.waila.api.IWailaDataProvider", modid = "waila")
 public class WailaTurretHandler implements IWailaDataProvider {
     /**
      * Although this is likely not necessary, you can also use the Optional.Method interface to mark a

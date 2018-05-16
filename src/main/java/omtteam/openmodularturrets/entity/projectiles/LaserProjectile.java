@@ -20,7 +20,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
 public class LaserProjectile extends TurretProjectile {
-    @SuppressWarnings("unused")
     public int arrowShake;
 
 
