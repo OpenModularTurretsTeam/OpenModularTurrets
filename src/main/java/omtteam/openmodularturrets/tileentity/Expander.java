@@ -7,6 +7,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.RangedWrapper;
 import omtteam.omlib.tileentity.TileEntityContainer;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
@@ -51,6 +52,11 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
                 return truncateDoubleToInt(Math.pow(2, tier + 1));
             }
         };
+    }
+
+    @Override
+    public RangedWrapper getCapabilityInventory(EnumFacing facing) {
+        return new RangedWrapper(inventory, 0, 9);
     }
 
     public Expander() {
