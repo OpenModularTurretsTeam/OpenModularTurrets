@@ -17,8 +17,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.RangedWrapper;
 import omtteam.omlib.api.IDebugTile;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.EnumMachineMode;
@@ -113,13 +115,14 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             @Nonnull
             @Override
             public ItemStack extractItem(int slot, int amount, boolean simulate) {
-                if (slot < 9) {
-                    return super.extractItem(slot, amount, simulate);
-                } else {
-                    return ItemStack.EMPTY;
-                }
+                return super.extractItem(slot, amount, simulate);
             }
         };
+    }
+
+    @Override
+    public IItemHandler getCapabilityInventory(EnumFacing facing) {
+        return new RangedWrapper(inventory, 0, 9);
     }
 
     public TurretBase() {
