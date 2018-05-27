@@ -55,8 +55,11 @@ public class OMTEventHandler {
 
     @SubscribeEvent
     public void lootEvent(LivingDropsEvent event) {
-        if ((event.getEntityLiving().getTags().contains("openmodularturrets:turret_hit") && !OMTConfigHandler.doTurretsKillsDropMobLoot) ||
-                event.getEntityLiving().getTags().contains("openmodularturrets:dont_drop_loot")) {
+        EntityLivingBase entity = event.getEntityLiving();
+        int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
+        if (((entity.getTags().contains("openmodularturrets:turret_hit") && !OMTConfigHandler.doTurretsKillsDropMobLoot)
+                && !(fakeDrops >= 0 && OMTConfigHandler.doLootAddonsOverrideMobLootSetting)) ||
+                entity.getTags().contains("openmodularturrets:dont_drop_loot")) {
             event.setCanceled(true);
         }
     }

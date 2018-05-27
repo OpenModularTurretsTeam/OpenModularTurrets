@@ -26,6 +26,7 @@ public class OMTConfigHandler {
     public static boolean globalCanTargetMobs;
     public static boolean canRocketsHome;
     public static boolean doTurretsKillsDropMobLoot;
+    public static boolean doLootAddonsOverrideMobLootSetting;
     public static boolean useWhitelistForAmmo;
     private static List<String> stringAmmoAllowList;
     private static List<String> stringMobBlackList;
@@ -121,7 +122,7 @@ public class OMTConfigHandler {
                 config.get("TurretDisposable", "PowerUsage", 2, "RF used per shot").getInt(),
                 config.get("TurretDisposable", "Enabled", true, "Enabled?").getBoolean(),
                 config.get("TurretDisposable", "DamageAmpBonus", 0.05F,
-                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
+                        "Value of the bonus damage (relative to HP of enemy target) per damage amp addon.").getDouble());
 
         potato_cannon_turret = new TurretSetting(
                 config.get("TurretPotatoCannon", "Range", 15, "Turret range, in blocks").getInt(),
@@ -132,7 +133,7 @@ public class OMTConfigHandler {
                 config.get("TurretPotatoCannon", "PowerUsage", 10, "RF used per shot").getInt(),
                 config.get("TurretPotatoCannon", "Enabled", true, "Enabled?").getBoolean(),
                 config.get("TurretPotatoCannon", "DamageAmpBonus", 0.05F,
-                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
+                        "Value of the bonus damage (relative to HP of enemy target) per damage amp addon.").getDouble());
 
         machine_gun_turret = new TurretSetting(config.get("TurretMachineGun", "Range", 18, "Turret range, in blocks").getInt(),
                 config.get("TurretMachineGun", "FireRateCooldown", 8,
@@ -143,7 +144,7 @@ public class OMTConfigHandler {
                 config.get("TurretMachineGun", "PowerUsage", 100, "RF used per shot").getInt(),
                 config.get("TurretMachineGun", "Enabled", true, "Enabled?").getBoolean(),
                 config.get("TurretMachineGun", "DamageAmpBonus", 0.06F,
-                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
+                        "Value of the bonus damage (relative to HP of enemy target) per damage amp addon.").getDouble());
 
         incendiary_turret = new TurretSetting(
                 config.get("TurretIncendiary", "Range", 12, "Turret range, in blocks").getInt(),
@@ -154,7 +155,7 @@ public class OMTConfigHandler {
                 config.get("TurretIncendiary", "PowerUsage", 250, "RF used per shot").getInt(),
                 config.get("TurretIncendiary", "Enabled", true, "Enabled?").getBoolean(),
                 config.get("TurretIncendiary", "DamageAmpBonus", 0.05F,
-                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
+                        "Value of the bonus damage (relative to HP of enemy target) per damage amp addon.").getDouble());
 
         grenade_turret = new TurretSetting(config.get("TurretGrenade", "Range", 20, "Turret range, in blocks").getInt(),
                 config.get("TurretGrenade", "FireRateCooldown", 40,
@@ -165,7 +166,7 @@ public class OMTConfigHandler {
                 config.get("TurretGrenade", "PowerUsage", 3000, "RF used per shot").getInt(),
                 config.get("TurretGrenade", "Enabled", true, "Enabled?").getBoolean(),
                 config.get("TurretGrenade", "DamageAmpBonus", 0.08F,
-                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
+                        "Value of the bonus damage (relative to HP of enemy target) per damage amp addon.").getDouble());
 
         relativistic_turret = new TurretSetting(
                 config.get("TurretRelativistic", "Range", 20, "Turret range, in blocks").getInt(),
@@ -185,7 +186,7 @@ public class OMTConfigHandler {
                 config.get("TurretRocket", "PowerUsage", 5000, "RF used per shot").getInt(),
                 config.get("TurretRocket", "Enabled", true, "Enabled?").getBoolean(),
                 config.get("TurretRocket", "DamageAmpBonus", 0.08F,
-                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
+                        "Value of the bonus damage (relative to HP of enemy target) per damage amp addon.").getDouble());
 
         teleporter_turret = new TurretSetting(
                 config.get("TurretTeleporter", "Range", 20, "Turret range, in blocks").getInt(),
@@ -205,7 +206,7 @@ public class OMTConfigHandler {
                 config.get("TurretLaser", "PowerUsage", 10000, "RF used per shot").getInt(),
                 config.get("TurretLaser", "Enabled", true, "Enabled?").getBoolean(),
                 config.get("TurretLaser", "DamageAmpBonus", 0.06F,
-                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
+                        "Value of the bonus damage (relative to HP of enemy target) per damage amp addon.").getDouble());
 
         railgun_turret = new TurretSetting(config.get("TurretRailgun", "Range", 30, "Turret range, in blocks").getInt(),
                 config.get("TurretRailgun", "FireRateCooldown", 100,
@@ -218,7 +219,7 @@ public class OMTConfigHandler {
                         "RF used per shot").getInt(),
                 config.get("TurretRailgun", "Enabled", true, "Enabled?").getBoolean(),
                 config.get("TurretRailgun", "DamageAmpBonus", 0.10F,
-                        "Value of the bonus damage (relative to HP of enemy target) for the turret per damage amp addon.").getDouble());
+                        "Value of the bonus damage (relative to HP of enemy target) per damage amp addon.").getDouble());
 
         rangeUpgradeBoost = config.get("upgrades", "range", 2, "Increases range in blocks linearly").getInt();
         fireRateUpgradeBoostPercentage = config.get("upgrades", "rateOfFire", 0.1D,
@@ -256,6 +257,10 @@ public class OMTConfigHandler {
 
         doTurretsKillsDropMobLoot = config.get("miscellaneous",
                 "Do Mobs killed by turrets drop loot?",
+                true).getBoolean();
+
+        doLootAddonsOverrideMobLootSetting = config.get("miscellaneous",
+                "Do loot addons override mob loot settings?",
                 true).getBoolean();
 
         useWhitelistForAmmo = config.get("miscellaneous",
