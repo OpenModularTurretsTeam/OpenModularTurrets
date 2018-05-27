@@ -40,8 +40,8 @@ public class DisposableTurretProjectile extends TurretProjectile {
             itemBound.motionX = this.motionX;
             itemBound.motionY = this.motionY + this.gravity;
             itemBound.motionZ = this.motionZ;
-            itemBound.setPickupDelay(10000);
-            itemBound.lifespan = 6000;
+            itemBound.setPickupDelay(100000);
+            itemBound.lifespan = 60;
             world.spawnEntity(itemBound);
             spawned = true;
         }
