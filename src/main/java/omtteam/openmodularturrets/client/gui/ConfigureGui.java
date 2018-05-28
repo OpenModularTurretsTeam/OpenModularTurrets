@@ -59,6 +59,7 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
         textFieldAddTrustedPlayer = new GuiTextField(0, fontRenderer, 11, 99, 100, 18);
         textFieldAddTrustedPlayer.setMaxStringLength(50);
         textFieldAddTrustedPlayer.setFocused(true);
+        fontRenderer.drawString("?", x + 93, y + 135, 0);
 
         this.buttonList.add(new GuiButton(1, x + 10, y + 20, 155, 20, mobsButton));
         this.buttonList.add(new GuiButton(2, x + 10, y + 40, 155, 20, neutralsButton));
@@ -69,16 +70,22 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
         this.buttonList.add(new GuiButton(7, x + 145, y + 135, 20, 20, ">>"));
 
         if (this.base.getTrustedPlayers().size() > 0) {
-            this.buttonList.add(new GuiButton(8, x + 70, y + 135, 23, 20, this.base.getTrustedPlayers().get(
-                    base.trustedPlayerIndex).canOpenGUI ? "\u00A72Y" : "\u00A7cN"));
-            this.buttonList.add(new GuiButton(9, x + 93, y + 135, 23, 20, this.base.getTrustedPlayers().get(
-                    base.trustedPlayerIndex).canChangeTargeting ? "\u00A72Y" : "\u00A7cN"));
-            this.buttonList.add(new GuiButton(10, x + 116, y + 135, 23, 20, this.base.getTrustedPlayers().get(
-                    base.trustedPlayerIndex).admin ? "\u00A72Y" : "\u00A7cN"));
+            this.buttonList.add(new GuiButton(8, x + 70, y + 135, 23, 20, "-"));
+            this.buttonList.add(new GuiButton(9, x + 116, y + 135, 23, 20, "+"));
         } else {
             this.buttonList.add(new GuiButton(8, x + 70, y + 135, 23, 20, "?"));
-            this.buttonList.add(new GuiButton(9, x + 93, y + 135, 23, 20, "?"));
-            this.buttonList.add(new GuiButton(10, x + 116, y + 135, 23, 20, "?"));
+            this.buttonList.add(new GuiButton(9, x + 116, y + 135, 23, 20, "?"));
+        }
+    }
+
+    private void drawMode() {
+        if (base.getTrustedPlayers().size() > base.trustedPlayerIndex) {
+            TrustedPlayer trustedPlayer = base.getTrustedPlayers().get(base.trustedPlayerIndex);
+            if (trustedPlayer != null) {
+                fontRenderer.drawString(trustedPlayer.getAccessMode().ordinal() + "", 102, 141, 0xFFFF00);
+            }
+        } else {
+            fontRenderer.drawString("?", 102, 140, 0);
         }
     }
 
@@ -89,6 +96,9 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
         int tooltipToDraw = buttonList.stream().filter(GuiButton::isMouseOver).mapToInt(s -> s.id).sum();
         if (tooltipToDraw == 0) {
             tooltipToDraw = isMouseOverTextField(textFieldAddTrustedPlayer, mouseX - this.guiLeft, mouseY - this.guiTop) ? 11 : 0;
+        }
+        if (tooltipToDraw == 0 && mouseX > 95 && mouseX < 110 && mouseY > 135 && mouseY < 146) {
+            tooltipToDraw = 10;
         }
         ArrayList<String> tooltip = new ArrayList<>();
         switch (tooltipToDraw) {
@@ -114,13 +124,32 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
                 tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.VIEW_PREVIOUS_TRUSTED_PLAYER));
                 break;
             case 8:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_OPEN_GUI));
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_DECREASE_ACCESS));
                 break;
             case 9:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_CHANGE_TARGETING));
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_INCREASE_ACCESS));
                 break;
             case 10:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_ADMINISTER));
+                if (base.getTrustedPlayers().size() > base.trustedPlayerIndex) {
+                    TrustedPlayer trustedPlayer = base.getTrustedPlayers().get(base.trustedPlayerIndex);
+                    if (trustedPlayer != null) {
+                        switch (trustedPlayer.getAccessMode()) {
+                            case ADMIN:
+                                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_ADMINISTER));
+                                break;
+                            case CHANGE_SETTINGS:
+                                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_CHANGE_SETTINGS));
+                                break;
+                            case OPEN_GUI:
+                                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_CAN_OPEN_GUI));
+                                break;
+                            case NONE:
+                                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_NONE));
+                                break;
+                        }
+                    }
+                }
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_DECREASE_ACCESS));
                 break;
             case 11:
                 tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TEXT_TRUSTED_PLAYER));
@@ -158,12 +187,8 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
     @SuppressWarnings("deprecation")
     @Override
     protected void actionPerformed(GuiButton guibutton) {
-        TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
         if (guibutton.id == 1) { //change Attack Mobs
-            if (PlayerUtil.isPlayerOwner(player, base)) {
-                sendChangeToServerMobs(!base.isAttacksMobs());
-                guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksMobs()));
-            } else if (trustedPlayer != null && trustedPlayer.canChangeTargeting) {
+            if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerMobs(!base.isAttacksMobs());
                 guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksMobs()));
             } else {
@@ -172,10 +197,7 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
         }
 
         if (guibutton.id == 2) { //change Attack Neutrals
-            if (PlayerUtil.isPlayerOwner(player, base)) {
-                sendChangeToServerNeutrals(!base.isAttacksNeutrals());
-                guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksNeutrals()));
-            } else if (trustedPlayer != null && trustedPlayer.canChangeTargeting) {
+            if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerNeutrals(!base.isAttacksNeutrals());
                 guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksNeutrals()));
             } else {
@@ -184,10 +206,7 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
         }
 
         if (guibutton.id == 3) { // change Attack Players
-            if (PlayerUtil.isPlayerOwner(player, base)) {
-                sendChangeToServerPlayers(!base.isAttacksPlayers());
-                guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksPlayers()));
-            } else if (trustedPlayer != null && trustedPlayer.canChangeTargeting) {
+            if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerPlayers(!base.isAttacksPlayers());
                 guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksPlayers()));
             } else {
@@ -196,13 +215,7 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
         }
 
         if (guibutton.id == 4) { //add trusted player
-            if (PlayerUtil.isPlayerOwner(player, base)) {
-                if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
-                    sendChangeToServerAddTrusted();
-                    textFieldAddTrustedPlayer.setText("");
-                    waitForServerTrustedPlayers = 20;
-                }
-            } else if (trustedPlayer != null && trustedPlayer.admin) {
+            if (PlayerUtil.isPlayerAdmin(player, base)) {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
                     sendChangeToServerAddTrusted();
                     textFieldAddTrustedPlayer.setText("");
@@ -221,27 +234,16 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
 
             if (base.getTrustedPlayers().size() > 0) {
                 if (this.base.getTrustedPlayers().get(
-                        base.trustedPlayerIndex) != null && player.getUniqueID().toString().equals(base.getOwner())) {
+                        base.trustedPlayerIndex) != null && PlayerUtil.isPlayerAdmin(player, base)) {
                     sendChangeToServerRemoveTrusted();
                     base.removeTrustedPlayer(base.getTrustedPlayers().get(base.trustedPlayerIndex).getName());
                     textFieldAddTrustedPlayer.setText("");
                     this.base.trustedPlayerIndex = 0;
-                    player.openGui(OpenModularTurrets.instance, 6, player.getEntityWorld(), base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
-                } else if (base.getTrustedPlayer(player.getUniqueID()).admin) {
-                    if (this.base.getTrustedPlayers().get(
-                            base.trustedPlayerIndex) != null && this.base.getTrustedPlayers().size() > 0) {
-                        sendChangeToServerRemoveTrusted();
-                        base.removeTrustedPlayer(base.getTrustedPlayers().get(base.trustedPlayerIndex).getName());
-                        textFieldAddTrustedPlayer.setText("");
-                        this.base.trustedPlayerIndex = 0;
-                        if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex).uuid.equals(
-                                player.getUniqueID()) && !player.getUniqueID().toString().equals(base.getOwner())) {
-                            mc.displayGuiScreen(null);
-                            return;
-                        }
-                        player.openGui(OpenModularTurrets.instance, 6, player.getEntityWorld(), base.getPos().getX(), base.getPos().getY(),
-                                base.getPos().getZ());
+                    if (!player.getUniqueID().toString().equals(base.getOwner()) && (base.getTrustedPlayers().size() == 0 || PlayerUtil.isPlayerAdmin(player, base))) {
+                        mc.displayGuiScreen(null);
+                        return;
                     }
+                    player.openGui(OpenModularTurrets.instance, 6, player.getEntityWorld(), base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
                 } else {
                     addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
                 }
@@ -261,72 +263,28 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
                 player.openGui(OpenModularTurrets.instance, 6, player.getEntityWorld(), base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
             }
         }
+
         if (this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex) {
             return;
         }
 
-        if (guibutton.id == 8) { //change trusted player permission for GUI opening
-            if (PlayerUtil.isPlayerOwner(player, base) && this.base.getTrustedPlayers().get(
+        if (guibutton.id == 8) { // decrease permission level by 1
+            if (PlayerUtil.isPlayerAdmin(player, base) && this.base.getTrustedPlayers().get(
                     base.trustedPlayerIndex) != null) {
                 sendChangeToServerModifyPermissions(
-                        this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "gui",
-                        !base.getTrustedPlayers().get(base.trustedPlayerIndex).canOpenGUI);
-                guibutton.displayString = !base.getTrustedPlayers().get(
-                        base.trustedPlayerIndex).canOpenGUI ? "\u00A72Y" : "\u00A7cN";
-            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && trustedPlayer != null && trustedPlayer.admin) {
-                sendChangeToServerModifyPermissions(
-                        this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "gui",
-                        !base.getTrustedPlayers().get(base.trustedPlayerIndex).canOpenGUI);
-                guibutton.displayString = !base.getTrustedPlayers().get(
-                        base.trustedPlayerIndex).canOpenGUI ? "\u00A72Y" : "\u00A7cN";
+                        this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), -1);
+
             } else {
                 addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
             }
         }
 
-        if (guibutton.id == 9) { //change trusted player permission for targeting
-
-            if (this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex) {
-                return;
-            }
-
-            if (PlayerUtil.isPlayerOwner(player, base) && this.base.getTrustedPlayers().get(
+        if (guibutton.id == 9) { //increase permission level by 1
+            if (PlayerUtil.isPlayerAdmin(player, base) && this.base.getTrustedPlayers().get(
                     base.trustedPlayerIndex) != null) {
                 sendChangeToServerModifyPermissions(
-                        this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "targeting",
-                        !base.getTrustedPlayers().get(base.trustedPlayerIndex).canChangeTargeting);
-                guibutton.displayString = !base.getTrustedPlayers().get(
-                        base.trustedPlayerIndex).canChangeTargeting ? "\u00A72Y" : "\u00A7cN";
-            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && trustedPlayer != null && trustedPlayer.admin) {
-                sendChangeToServerModifyPermissions(
-                        this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "targeting",
-                        !base.getTrustedPlayers().get(base.trustedPlayerIndex).canChangeTargeting);
-                guibutton.displayString = !base.getTrustedPlayers().get(
-                        base.trustedPlayerIndex).canChangeTargeting ? "\u00A72Y" : "\u00A7cN";
-            } else {
-                addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
-            }
-        }
+                        this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), 1);
 
-        if (guibutton.id == 10) { //change trusted player permission for administering
-
-            if (this.base.getTrustedPlayers().size() <= base.trustedPlayerIndex) {
-                return;
-            }
-
-            if (PlayerUtil.isPlayerOwner(player, base) && this.base.getTrustedPlayers().get(
-                    base.trustedPlayerIndex) != null) {
-                sendChangeToServerModifyPermissions(
-                        this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "isAdmin",
-                        !base.getTrustedPlayers().get(base.trustedPlayerIndex).admin);
-                guibutton.displayString = !base.getTrustedPlayers().get(
-                        base.trustedPlayerIndex).admin ? "\u00A72Y" : "\u00A7cN";
-            } else if (this.base.getTrustedPlayers().get(base.trustedPlayerIndex) != null && trustedPlayer != null && trustedPlayer.admin) {
-                sendChangeToServerModifyPermissions(
-                        this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), "isAdmin",
-                        !base.getTrustedPlayers().get(base.trustedPlayerIndex).admin);
-                guibutton.displayString = !base.getTrustedPlayers().get(
-                        base.trustedPlayerIndex).admin ? "\u00A72Y" : "\u00A7cN";
             } else {
                 addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
             }
@@ -346,7 +304,7 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
             fontRenderer.drawString(base.getTrustedPlayers().get(base.trustedPlayerIndex).getName() + "'s " + safeLocalize(OMTNames.Localizations.GUI.PERMISSIONS),
                     10, 124, 0);
         }
-
+        drawMode();
         textFieldAddTrustedPlayer.drawTextBox();
         drawTooltips();
     }
@@ -401,9 +359,9 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
         OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
-    private void sendChangeToServerModifyPermissions(String player, String perm, boolean canDo) {
+    private void sendChangeToServerModifyPermissions(String player, Integer change) {
         MessageModifyPermissions message = new MessageModifyPermissions(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(), player,
-                perm, canDo);
+                change);
 
         OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }

@@ -10,14 +10,15 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import omtteam.omlib.util.EnumAccessMode;
 import omtteam.omlib.util.PlayerUtil;
+import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 @SuppressWarnings("unused")
 public class MessageModifyPermissions implements IMessage {
-    private int x, y, z;
-    private String player, perm;
-    private boolean canDo;
+    private int x, y, z, change;
+    private String player;
 
     public MessageModifyPermissions() {
     }
@@ -37,16 +38,12 @@ public class MessageModifyPermissions implements IMessage {
                     machine = (TurretBase) entity;
                 }
                 if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
-                    if (message.getPerm().equals("gui")) {
-                        machine.getTrustedPlayer(message.getPlayer()).setCanOpenGUI(message.canDo);
-                    }
-
-                    if (message.getPerm().equals("targeting")) {
-                        machine.getTrustedPlayer(message.getPlayer()).setCanChangeTargeting(message.canDo);
-                    }
-
-                    if (message.getPerm().equals("isAdmin")) {
-                        machine.getTrustedPlayer(message.getPlayer()).setAdmin(message.canDo);
+                    TrustedPlayer trustedPlayer = machine.getTrustedPlayer(message.getPlayer());
+                    if (trustedPlayer != null) {
+                        int newMode = trustedPlayer.getAccessMode().ordinal() + message.getChange();
+                        if (!(newMode > 3 || newMode < 0)) {
+                            trustedPlayer.setAccessMode(EnumAccessMode.values()[newMode]);
+                        }
                     }
                 }
             });
@@ -54,13 +51,12 @@ public class MessageModifyPermissions implements IMessage {
         }
     }
 
-    public MessageModifyPermissions(int x, int y, int z, String player, String perm, boolean canDo) {
+    public MessageModifyPermissions(int x, int y, int z, String player, int change) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.player = player;
-        this.perm = perm;
-        this.canDo = canDo;
+        this.change = change;
     }
 
     @Override
@@ -69,8 +65,7 @@ public class MessageModifyPermissions implements IMessage {
         this.y = buf.readInt();
         this.z = buf.readInt();
         this.player = ByteBufUtils.readUTF8String(buf);
-        this.perm = ByteBufUtils.readUTF8String(buf);
-        this.canDo = buf.readBoolean();
+        this.change = buf.readInt();
     }
 
     @Override
@@ -79,8 +74,7 @@ public class MessageModifyPermissions implements IMessage {
         buf.writeInt(this.y);
         buf.writeInt(this.z);
         ByteBufUtils.writeUTF8String(buf, this.player);
-        ByteBufUtils.writeUTF8String(buf, this.perm);
-        buf.writeBoolean(canDo);
+        buf.writeInt(this.change);
     }
 
     private int getX() {
@@ -99,11 +93,7 @@ public class MessageModifyPermissions implements IMessage {
         return player;
     }
 
-    private String getPerm() {
-        return perm;
-    }
-
-    public boolean getCanDo() {
-        return canDo;
+    private int getChange() {
+        return change;
     }
 }

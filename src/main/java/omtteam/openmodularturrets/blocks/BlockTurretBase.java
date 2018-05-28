@@ -38,7 +38,6 @@ import omtteam.omlib.compatibility.theoneprobe.TOPInfoProvider;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.util.PlayerUtil;
-import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModBlocks;
@@ -169,7 +168,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                     heldItem.getItem()).isOpaqueCube(heldItemBlock.getStateFromMeta(heldItem.getMetadata())) && !(Block.getBlockFromItem(
                     heldItem.getItem()) instanceof BlockTurretBase)) {
                 if (base != null) {
-                    if (player.getUniqueID().toString().equals(base.getOwner())) {
+                    if (PlayerUtil.isPlayerAdmin(player, base)) {
                         base.setCamoState(heldItemBlock.getStateFromMeta(heldItem.getItemDamage()));
                         world.notifyBlockUpdate(pos, state, state, 3);
                     } else {
@@ -183,14 +182,10 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             } else if (!player.isSneaking() && base != null && player.getHeldItemMainhand() != ItemStack.EMPTY &&
                     player.getHeldItemMainhand().getItem() instanceof UsableMetaItem && player.getHeldItemMainhand().getItemDamage() == 2 &&
                     ((UsableMetaItem) player.getHeldItemMainhand().getItem()).hasDataStored(player.getHeldItemMainhand())) {
+                // Memory Card
                 base.readMemoryCardNBT(((UsableMetaItem) player.getHeldItemMainhand().getItem()).getDataStored(player.getHeldItemMainhand()));
             } else if (!player.isSneaking() && base != null) {
-                TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
-                if (trustedPlayer != null && trustedPlayer.canOpenGUI) {
-                    world.notifyBlockUpdate(pos, state, state, 6);
-                    player.openGui(OpenModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
-                    return true;
-                } else if (PlayerUtil.isPlayerOwner(player, base)) {
+                if (PlayerUtil.canPlayerOpenGUI(player, base)) {
                     world.notifyBlockUpdate(pos, state, state, 6);
                     player.openGui(OpenModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
                 } else {

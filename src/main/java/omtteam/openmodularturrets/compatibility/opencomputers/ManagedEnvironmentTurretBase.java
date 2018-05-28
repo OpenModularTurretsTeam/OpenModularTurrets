@@ -7,6 +7,7 @@ import li.cil.oc.api.machine.Context;
 import net.minecraft.util.EnumFacing;
 import omtteam.omlib.compatibility.opencomputers.AbstractOMTileEntityEnvironment;
 import omtteam.omlib.tileentity.EnumMachineMode;
+import omtteam.omlib.util.EnumAccessMode;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
@@ -110,7 +111,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function(name:String, [canOpenGUI:boolean, canChangeTargeting:boolean, admin:boolean]):string;" +
+    @Callback(doc = "function(name:String, [accessLevel:Integer]):string;" +
             " adds Trusted player to Trustlist. Can return error.")
     public Object[] addTrustedPlayer(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
@@ -120,10 +121,8 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
             return new Object[]{"Name not valid!"};
         }
         TrustedPlayer trustedPlayer = base.getTrustedPlayer(args.checkString(0));
-        trustedPlayer.canOpenGUI = args.optBoolean(1, false);
-        trustedPlayer.canChangeTargeting = args.optBoolean(1, false);
-        trustedPlayer.admin = args.optBoolean(1, false);
-        trustedPlayer.uuid = getPlayerUUID(args.checkString(0));
+        trustedPlayer.setAccessMode(EnumAccessMode.values()[args.checkInteger(1)]);
+        trustedPlayer.setUuid(getPlayerUUID(args.checkString(0)));
         return null;
     }
 

@@ -28,6 +28,7 @@ import omtteam.openmodularturrets.util.TurretHeadUtil;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static omtteam.omlib.util.GeneralUtil.*;
 
@@ -49,42 +50,65 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         DebugHandler.getInstance().setPlayer(player);
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public void initGui() {
-        super.initGui();
+    protected void drawEnergyBar() {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
-        TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(player, base);
 
-        this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "+"));
-        this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "-"));
+        this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 
+        int expression = (base.getEnergyLevel(EnumFacing.DOWN) * 51) / (base.getMaxEnergyLevel(
+                EnumFacing.DOWN) == 0 ? 1 : base.getMaxEnergyLevel(EnumFacing.DOWN));
 
-        if (PlayerUtil.isPlayerOwner(player, base)) {
-            this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_TURRETS)));
-            this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_BASE)));
+        drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
+
+        int next = new Random().nextInt(3);
+
+        if (next == 0) {
+            drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 196, 68 - expression, 14, expression);
+        }
+
+        if (next == 1) {
+            drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 215, 68 - expression, 14, expression);
+        }
+
+        if (next == 2) {
+            drawTexturedModalRect(x + 153, y + 17 + 51 - expression, 234, 68 - expression, 14, expression);
+        }
+    }
+
+    protected void buttonInit() {
+        int x = (width - xSize) / 2;
+        int y = (height - ySize) / 2;
+
+        if (PlayerUtil.isPlayerAdmin(player, base)) {
+            this.buttonList.add(new GuiButton(3, x + 180, y + 100, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_TURRETS)));
+            this.buttonList.add(new GuiButton(4, x + 180, y + 75, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_BASE)));
+            this.buttonList.add(new GuiButton(5, x + 180, y + 25, 80, 20, safeLocalize(OMTNames.Localizations.GUI.CONFIGURE)));
+            this.buttonList.add(new GuiButton(6, x + 180, y + 50, 80, 20,
+                    base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": "
+                            + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET)
+                            + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE)));
+            this.buttonList.add(new GuiButton(7, x + 180, y, 80, 20, safeLocalize(OMLibNames.Localizations.GUI.MODE)));
+            this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "+"));
+            this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "-"));
+        } else if (PlayerUtil.canPlayerChangeSetting(player, base)) {
             this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, safeLocalize(OMTNames.Localizations.GUI.CONFIGURE)));
             this.buttonList.add(new GuiButton(6, x + 180, y + 75, 80, 20,
                     base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": "
                             + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET)
                             + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE)));
-            this.buttonList.add(new GuiButton(7, x + 155, y + 3, 11, 10, "M"));
-        } else if (trustedPlayer != null) {
-            if (trustedPlayer.admin) {
-                this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_TURRETS)));
-                this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_BASE)));
-                this.buttonList.add(new GuiButton(7, x + 155, y + 3, 11, 10, "M"));
-            }
-            if (trustedPlayer.canChangeTargeting || trustedPlayer.admin) {
-                this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, safeLocalize(OMTNames.Localizations.GUI.CONFIGURE)));
-                this.buttonList.add(new GuiButton(6, x + 180, y + 75, 80, 20,
-                        base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": "
-                                + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET)
-                                + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE)));
-            }
+            this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "+"));
+            this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "-"));
         }
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void initGui() {
+        super.initGui();
+        buttonInit();
+    }
+
 
     @Override
     public void drawScreen(int par1, int par2, float par3) {
@@ -162,7 +186,7 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         if (base.getTrustedPlayers().size() != 0) {
             targetInfo.add("\u00A75" + safeLocalize(OMTNames.Localizations.GUI.TRUSTED_PLAYERS) + ":");
             for (TrustedPlayer trusted_player : base.getTrustedPlayers()) {
-                targetInfo.add("\u00A7b" + trusted_player.name);
+                targetInfo.add("\u00A7b" + trusted_player.getName());
             }
         } else {
             targetInfo.add("\u00A75" + safeLocalize(OMTNames.Localizations.GUI.TRUSTED_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(false));
@@ -260,16 +284,10 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
     public ArrayList<Rectangle> getBlockingAreas() {
         ArrayList<Rectangle> list = new ArrayList<>();
         Rectangle rectangleGUI = new Rectangle(0, 0, 0, 0);
-        if (player.getUniqueID().toString().equals(base.getOwner())) {
+        if (PlayerUtil.isPlayerAdmin(player, base)) {
             rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 95);
-        } else if (base.getTrustedPlayer(player.getUniqueID()) != null) {
-            if (base.getTrustedPlayer(player.getUniqueID()).admin) {
-                rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 45);
-            }
-            if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting || base.getTrustedPlayer(
-                    player.getUniqueID()).admin) {
-                rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2 + 50, 80, 20);
-            }
+        } else if (PlayerUtil.canPlayerChangeSetting(player, base)) {
+            rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2 + 50, 80, 20);
         }
         list.add(rectangleGUI);
         return list;

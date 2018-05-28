@@ -26,7 +26,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.IHasItemBlock;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.omlib.util.PlayerUtil;
-import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
@@ -42,6 +41,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.PlayerUtil.addChatMessage;
+import static omtteam.omlib.util.PlayerUtil.canPlayerOpenGUI;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 
 /**
@@ -158,13 +158,12 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
             worldIn.destroyBlock(pos, true);
             return true;
         }
-        TrustedPlayer trustedPlayer = PlayerUtil.getTrustedPlayer(playerIn, base);
-        if (trustedPlayer != null) {
-            if (base.getTrustedPlayer(playerIn.getUniqueID()).canOpenGUI && state.getValue(META) < 5) {
-                playerIn.openGui(OpenModularTurrets.instance, 7, worldIn, pos.getX(), pos.getY(), pos.getZ());
-                return true;
-            }
+
+        if (canPlayerOpenGUI(playerIn, base) && state.getValue(META) < 5) {
+            playerIn.openGui(OpenModularTurrets.instance, 7, worldIn, pos.getX(), pos.getY(), pos.getZ());
+            return true;
         }
+
         if (PlayerUtil.isPlayerOwner(playerIn, base)) {
             if (playerIn.isSneaking() && playerIn.getHeldItemMainhand().isEmpty()) {
                 worldIn.destroyBlock(pos, true);

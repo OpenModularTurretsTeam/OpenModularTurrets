@@ -27,6 +27,7 @@ import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.tileentity.TileEntityTrustedMachine;
+import omtteam.omlib.util.EnumAccessMode;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.openmodularturrets.api.IBaseController;
@@ -86,17 +87,15 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     protected void setupInventory() {
         //noinspection BooleanMethodIsAlwaysInverted,BooleanMethodIsAlwaysInverted
-        inventory = new ItemStackHandler(13){
+        inventory = new ItemStackHandler(13) {
 
             @Override
-            protected void onContentsChanged(int slot)
-            {
+            protected void onContentsChanged(int slot) {
                 super.onContentsChanged(slot);
                 markDirty();
             }
 
-            public boolean isItemValidForSlot(int index, ItemStack stack)
-            {
+            public boolean isItemValidForSlot(int index, ItemStack stack) {
                 if (index < 9) {
                     return OMTUtil.isItemStackValidAmmo(stack);
                 }
@@ -105,8 +104,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
             @Nonnull
             @Override
-            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate)
-            {
+            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
                 if (!isItemValidForSlot(slot, stack))
                     return stack;
                 return super.insertItem(slot, stack, simulate);
@@ -720,8 +718,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 HashMap<String, Integer> result = new HashMap<>();
                 if (this.getTrustedPlayers() != null && this.getTrustedPlayers().size() > 0) {
                     for (TrustedPlayer trustedPlayer : this.getTrustedPlayers()) {
-                        result.put(trustedPlayer.name,
-                                (trustedPlayer.canOpenGUI ? 1 : 0) + (trustedPlayer.canChangeTargeting ? 2 : 0) + (trustedPlayer.admin ? 4 : 0));
+                        result.put(trustedPlayer.getName(), trustedPlayer.getAccessMode().ordinal());
                     }
                 }
                 return new Object[]{result};
@@ -734,18 +731,12 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 }
                 if (arguments[1].toString().equals("")) {
                     return new Object[]{"successfully added"};
-                }
-                for (i = 1; i <= 4; i++) {
-                    if (arguments.length > i && !(arguments[i].toString().equals(
-                            "true") || arguments[i].toString().equals("false"))) {
-                        return new Object[]{"wrong arguments"};
-                    }
+                } else if (!(arguments[1] instanceof Integer)) {
+                    return new Object[]{"wrong arguments"};
                 }
                 TrustedPlayer trustedPlayer = this.getTrustedPlayer(arguments[0].toString());
-                trustedPlayer.canOpenGUI = arguments[1].toString().equals("true");
-                trustedPlayer.canChangeTargeting = arguments[2].toString().equals("true");
-                trustedPlayer.admin = arguments[3].toString().equals("true");
-                trustedPlayer.uuid = getPlayerUUID(arguments[0].toString());
+                trustedPlayer.setAccessMode(EnumAccessMode.values()[(Integer) arguments[1]]);
+                trustedPlayer.setUuid(getPlayerUUID(arguments[0].toString()));
 
                 return new Object[]{"successfully added player to trust list with parameters"};
             case removeTrustedPlayer:

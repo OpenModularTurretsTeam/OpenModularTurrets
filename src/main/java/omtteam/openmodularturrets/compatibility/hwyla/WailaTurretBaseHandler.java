@@ -46,31 +46,6 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
     }
 
     /**
-     * This method allows you to change what ItemStack is used for the Waila tooltip. This is used by
-     * Waila to make silverfish stone look like normal stone in the Waila hud. This is usually used as a
-     * way to prevent people from cheating. It can also be used to correct block data. Note that there is
-     * a bug with this method in that it will only affect the head of the tool tip. The body and tail
-     * method will ignore any changes made here.
-     */
-    @Nonnull
-    @Override
-    public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        return accessor.getStack();
-    }
-
-    /**
-     * The Waila hud is devided up into three sections, this is to allow for data to be aranged in a nice
-     * way. This method adds data to the header of the waila tool tip. This is where the game displays
-     * the name of the block. The accessor is an object wrapper which contains all relevant data while
-     * the config parameter allows you to take advantage of the ingame config gui.
-     */
-    @Nonnull
-    @Override
-    public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        return currenttip;
-    }
-
-    /**
      * This method adds data to the body of the waila tool tip. This is where you should place the
      * majority of your data. The accessor is an object wrapper which contains all relevant data while
      * the config parameter allows you to take advantage of the ingame config gui.
@@ -78,27 +53,15 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
     @Nonnull
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        if (currenttip.size() == 0) {
             EnumMachineMode machineMode = EnumMachineMode.values()[accessor.getNBTData().getInteger("mode")];
-            boolean active = accessor.getNBTData().getBoolean("inverted") ^ accessor.getNBTData().getBoolean("redstone");
+        boolean active = accessor.getNBTData().getBoolean("active");
             currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7A" + getMachineModeLocalization(machineMode));
             currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
             String ownerName = accessor.getNBTData().getString("ownerName");
             currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
-        }
         return currenttip;
     }
 
-    /**
-     * This method adds data to the tail of the waila tool tip. This is where the game displays the name
-     * of the mod which adds this block to the game. The accessor is an object wrapper which contains all
-     * relevant data while the config parameter allows you to take advantage of the ingame config gui.
-     */
-    @Nonnull
-    @Override
-    public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        return currenttip;
-    }
 
     /**
      * This method is used to sync data between server and client easily. The tag parameter is the nbt
@@ -110,8 +73,12 @@ public class WailaTurretBaseHandler implements IWailaDataProvider {
     @Nonnull
     @Override
     public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, BlockPos pos) {
-        if (te != null) {
-            te.writeToNBT(tag);
+        if (te instanceof TurretBase) {
+            TurretBase base = (TurretBase) te;
+            // te.writeToNBT(tag);
+            tag.setBoolean("active", base.isActive());
+            tag.setInteger("mode", base.getMode().ordinal());
+            tag.setString("ownerName", base.getOwnerName());
         }
 
         return tag;

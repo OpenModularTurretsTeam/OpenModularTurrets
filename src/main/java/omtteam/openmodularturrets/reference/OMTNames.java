@@ -133,9 +133,12 @@ public class OMTNames {
             public static final String REMOVE_TRUSTED_PLAYER = "tooltip.omtteam.openmodularturrets:remove_trusted_player";
             public static final String VIEW_PREVIOUS_TRUSTED_PLAYER = "tooltip.omtteam.openmodularturrets:view_previous_trusted_player";
             public static final String VIEW_NEXT_TRUSTED_PLAYER = "tooltip.omtteam.openmodularturrets:view_previous_trusted_player";
+            public static final String TP_NONE = "tooltip.omtteam.openmodularturrets:tp_none";
             public static final String TP_CAN_OPEN_GUI = "tooltip.omtteam.openmodularturrets:tp_can_open_gui";
-            public static final String TP_CAN_CHANGE_TARGETING = "tooltip.omtteam.openmodularturrets:tp_can_change_targeting";
+            public static final String TP_CAN_CHANGE_SETTINGS = "tooltip.omtteam.openmodularturrets:tp_can_change_targeting";
             public static final String TP_CAN_ADMINISTER = "tooltip.omtteam.openmodularturrets:tp_can_administer";
+            public static final String TP_INCREASE_ACCESS = "tooltip.omtteam.openmodularturrets:tp_increase_access";
+            public static final String TP_DECREASE_ACCESS = "tooltip.omtteam.openmodularturrets:tp_decrease_access";
             public static final String TEXT_TRUSTED_PLAYER = "tooltip.omtteam.openmodularturrets:tp_text_field";
             public static final String TARGET_NEUTRALS = "tooltip.omtteam.openmodularturrets:target_neutrals";
             public static final String TARGET_MOBS = "tooltip.omtteam.openmodularturrets:target_mobs";

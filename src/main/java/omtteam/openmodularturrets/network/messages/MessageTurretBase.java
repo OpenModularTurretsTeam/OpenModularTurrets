@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.EnumMachineMode;
+import omtteam.omlib.util.EnumAccessMode;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
@@ -132,10 +133,8 @@ public class MessageTurretBase implements IMessage {
             for (int i = 0; i < lengthOfTPList; i++) {
                 String name = ByteBufUtils.readUTF8String(buf);
                 TrustedPlayer trustedPlayer = new TrustedPlayer(name);
-                trustedPlayer.uuid = UUID.fromString(ByteBufUtils.readUTF8String(buf));
-                trustedPlayer.canOpenGUI = buf.readBoolean();
-                trustedPlayer.canChangeTargeting = buf.readBoolean();
-                trustedPlayer.admin = buf.readBoolean();
+                trustedPlayer.setUuid(UUID.fromString(ByteBufUtils.readUTF8String(buf)));
+                trustedPlayer.setAccessMode(EnumAccessMode.values()[buf.readInt()]);
                 trustedPlayers.add(trustedPlayer);
             }
         }
@@ -165,10 +164,8 @@ public class MessageTurretBase implements IMessage {
         if (trustedPlayers.size() > 0) {
             for (TrustedPlayer trustedPlayer : trustedPlayers) {
                 ByteBufUtils.writeUTF8String(buf, trustedPlayer.getName());
-                ByteBufUtils.writeUTF8String(buf, trustedPlayer.uuid.toString());
-                buf.writeBoolean(trustedPlayer.canOpenGUI);
-                buf.writeBoolean(trustedPlayer.canChangeTargeting);
-                buf.writeBoolean(trustedPlayer.admin);
+                ByteBufUtils.writeUTF8String(buf, trustedPlayer.getUuid().toString());
+                buf.writeInt(trustedPlayer.getAccessMode().ordinal());
             }
         }
     }
