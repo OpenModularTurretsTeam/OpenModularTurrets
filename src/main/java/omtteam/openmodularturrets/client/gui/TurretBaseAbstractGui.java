@@ -285,7 +285,7 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         ArrayList<Rectangle> list = new ArrayList<>();
         Rectangle rectangleGUI = new Rectangle(0, 0, 0, 0);
         if (PlayerUtil.isPlayerAdmin(player, base)) {
-            rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 95);
+            rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 120);
         } else if (PlayerUtil.canPlayerChangeSetting(player, base)) {
             rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2 + 50, 80, 20);
         }

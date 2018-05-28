@@ -4,8 +4,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.turrets.*;
@@ -17,7 +15,6 @@ import omtteam.openmodularturrets.tileentity.turrets.*;
 public class ModTESRItems {
 
     @SuppressWarnings("ConstantConditions")
-    @SideOnly(Side.CLIENT)
     public static void init() {
         if (OMTConfigHandler.getDisposableTurretSettings().isEnabled()) {
             ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.disposableItemTurret), 0, DisposableItemTurretTileEntity.class);

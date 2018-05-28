@@ -6,8 +6,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.openmodularturrets.client.gui.*;
 import omtteam.openmodularturrets.client.gui.containers.*;
 import omtteam.openmodularturrets.tileentity.Expander;
@@ -41,8 +39,6 @@ public class OMTGuiHandler implements IGuiHandler {
                 return new TurretBaseTierFourContainer(player.inventory, (TurretBase) tileEntity);
             case 5:
                 return new TurretBaseTierFiveContainer(player.inventory, (TurretBase) tileEntity);
-            case 6:
-                return new ConfigContainer((TurretBase) tileEntity, player);
             case 7:
                 return new ExpanderInvContainer(player.inventory, (Expander) tileEntity);
             default:
@@ -51,7 +47,6 @@ public class OMTGuiHandler implements IGuiHandler {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 

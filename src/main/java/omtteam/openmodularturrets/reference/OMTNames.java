@@ -140,6 +140,7 @@ public class OMTNames {
             public static final String TP_INCREASE_ACCESS = "tooltip.omtteam.openmodularturrets:tp_increase_access";
             public static final String TP_DECREASE_ACCESS = "tooltip.omtteam.openmodularturrets:tp_decrease_access";
             public static final String TEXT_TRUSTED_PLAYER = "tooltip.omtteam.openmodularturrets:tp_text_field";
+            public static final String INFO_ACCESS_LEVEL = "tooltip.omtteam.openmodularturrets:info_access_level";
             public static final String TARGET_NEUTRALS = "tooltip.omtteam.openmodularturrets:target_neutrals";
             public static final String TARGET_MOBS = "tooltip.omtteam.openmodularturrets:target_mobs";
             public static final String TARGET_PLAYERS = "tooltip.omtteam.openmodularturrets:target_players";

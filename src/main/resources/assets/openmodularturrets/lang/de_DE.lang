@@ -157,6 +157,7 @@ tooltip.omtteam.openmodularturrets:tp_can_change_settings=Spieler kann die Param
 tooltip.omtteam.openmodularturrets:tp_can_administer=Spieler kann die Basis administr. (vertraute Sp. + abbauen).
 tooltip.omtteam.openmodularturrets:tp_decrease_access=Zugriffslevel für ausgewählten Spieler reduzieren.
 tooltip.omtteam.openmodularturrets:tp_increase_access=Zugriffslevel für ausgewählten Spieler erhöhen.
+tooltip.omtteam.openmodularturrets:info_access_level=Zeigt Zugriffslevel des ausgewählten Spielers an, falls ausgewählt.
 tooltip.omtteam.openmodularturrets:target_mobs=Ob die Türme der Basis Mobs angreifen.
 tooltip.omtteam.openmodularturrets:target_neutrals=Ob die Türme der Basis passive Kreaturen angreifen.
 tooltip.omtteam.openmodularturrets:target_players=Ob die Türme der Basis nicht vertraute Spieler angreifen.

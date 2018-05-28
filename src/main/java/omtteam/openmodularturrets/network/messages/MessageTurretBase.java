@@ -14,8 +14,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.util.EnumAccessMode;
@@ -47,7 +45,6 @@ public class MessageTurretBase implements IMessage {
 
     public static class MessageHandlerTurretBase implements IMessageHandler<MessageTurretBase, IMessage> {
         @Override
-        @SideOnly(Side.CLIENT)
         @SuppressWarnings("deprecation")
         public IMessage onMessage(MessageTurretBase messageIn, MessageContext ctx) {
             final MessageTurretBase message = messageIn;

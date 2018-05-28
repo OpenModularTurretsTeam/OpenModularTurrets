@@ -3,17 +3,19 @@ package omtteam.openmodularturrets.client.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import omtteam.omlib.client.gui.IHasTooltips;
+import omtteam.omlib.handler.OMLibNetworkingHandler;
+import omtteam.omlib.network.messages.MessageCloseGUI;
+import omtteam.omlib.network.messages.MessageOpenGUI;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.client.gui.containers.ConfigContainer;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.network.messages.*;
 import omtteam.openmodularturrets.reference.OMTNames;
@@ -27,7 +29,11 @@ import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.PlayerUtil.addChatMessage;
 
-public class ConfigureGui extends GuiContainer implements IHasTooltips {
+public class ConfigureGui extends GuiScreen implements IHasTooltips {
+    protected int xSize = 176;
+    protected int ySize = 166;
+    protected int guiLeft;
+    protected int guiTop;
     private final TurretBase base;
     private GuiTextField textFieldAddTrustedPlayer;
     private final EntityPlayer player;
@@ -36,15 +42,23 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
     private int waitForServerTrustedPlayers = -1;
 
     public ConfigureGui(InventoryPlayer inventoryPlayer, TurretBase tileEntity) {
-        super(new ConfigContainer(tileEntity, inventoryPlayer.player));
+        super();
         this.base = tileEntity;
         player = inventoryPlayer.player;
+    }
+
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
-        super.initGui();
+        //super.initGui();
+        OMLibNetworkingHandler.INSTANCE.sendToServer(new MessageOpenGUI(base));
+        this.guiLeft = (this.width - this.xSize) / 2;
+        this.guiTop = (this.height - this.ySize) / 2;
         this.buttonList.clear();
 
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
@@ -53,28 +67,26 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
         String neutralsButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
         String playersButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
 
-        int x = (width - xSize) / 2;
-        int y = (height - ySize) / 2;
 
-        textFieldAddTrustedPlayer = new GuiTextField(0, fontRenderer, 11, 99, 100, 18);
+        textFieldAddTrustedPlayer = new GuiTextField(0, fontRenderer, guiLeft + 11, guiTop + 99, 100, 18);
         textFieldAddTrustedPlayer.setMaxStringLength(50);
         textFieldAddTrustedPlayer.setFocused(true);
-        fontRenderer.drawString("?", x + 93, y + 135, 0);
+        fontRenderer.drawString("?", guiLeft + 93, guiTop + 135, 0);
 
-        this.buttonList.add(new GuiButton(1, x + 10, y + 20, 155, 20, mobsButton));
-        this.buttonList.add(new GuiButton(2, x + 10, y + 40, 155, 20, neutralsButton));
-        this.buttonList.add(new GuiButton(3, x + 10, y + 60, 155, 20, playersButton));
-        this.buttonList.add(new GuiButton(4, x + 114, y + 98, 51, 20, "+"));
-        this.buttonList.add(new GuiButton(5, x + 35, y + 135, 30, 20, "-"));
-        this.buttonList.add(new GuiButton(6, x + 10, y + 135, 20, 20, "<<"));
-        this.buttonList.add(new GuiButton(7, x + 145, y + 135, 20, 20, ">>"));
+        this.buttonList.add(new GuiButton(1, guiLeft + 10, guiTop + 20, 155, 20, mobsButton));
+        this.buttonList.add(new GuiButton(2, guiLeft + 10, guiTop + 40, 155, 20, neutralsButton));
+        this.buttonList.add(new GuiButton(3, guiLeft + 10, guiTop + 60, 155, 20, playersButton));
+        this.buttonList.add(new GuiButton(4, guiLeft + 114, guiTop + 98, 51, 20, "+"));
+        this.buttonList.add(new GuiButton(5, guiLeft + 35, guiTop + 135, 30, 20, "-"));
+        this.buttonList.add(new GuiButton(6, guiLeft + 10, guiTop + 135, 20, 20, "<<"));
+        this.buttonList.add(new GuiButton(7, guiLeft + 145, guiTop + 135, 20, 20, ">>"));
 
         if (this.base.getTrustedPlayers().size() > 0) {
-            this.buttonList.add(new GuiButton(8, x + 70, y + 135, 23, 20, "-"));
-            this.buttonList.add(new GuiButton(9, x + 116, y + 135, 23, 20, "+"));
+            this.buttonList.add(new GuiButton(8, guiLeft + 70, guiTop + 135, 23, 20, "-"));
+            this.buttonList.add(new GuiButton(9, guiLeft + 116, guiTop + 135, 23, 20, "+"));
         } else {
-            this.buttonList.add(new GuiButton(8, x + 70, y + 135, 23, 20, "?"));
-            this.buttonList.add(new GuiButton(9, x + 116, y + 135, 23, 20, "?"));
+            this.buttonList.add(new GuiButton(8, guiLeft + 70, guiTop + 135, 23, 20, "-"));
+            this.buttonList.add(new GuiButton(9, guiLeft + 116, guiTop + 135, 23, 20, "+"));
         }
     }
 
@@ -82,10 +94,10 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
         if (base.getTrustedPlayers().size() > base.trustedPlayerIndex) {
             TrustedPlayer trustedPlayer = base.getTrustedPlayers().get(base.trustedPlayerIndex);
             if (trustedPlayer != null) {
-                fontRenderer.drawString(trustedPlayer.getAccessMode().ordinal() + "", 102, 141, 0xFFFF00);
+                fontRenderer.drawString(trustedPlayer.getAccessMode().ordinal() + "", guiLeft + 102, guiTop + 141, 0xFFFF00);
             }
         } else {
-            fontRenderer.drawString("?", 102, 140, 0);
+            fontRenderer.drawString("?", guiLeft + 102, guiTop + 140, 0);
         }
     }
 
@@ -97,7 +109,7 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
         if (tooltipToDraw == 0) {
             tooltipToDraw = isMouseOverTextField(textFieldAddTrustedPlayer, mouseX - this.guiLeft, mouseY - this.guiTop) ? 11 : 0;
         }
-        if (tooltipToDraw == 0 && mouseX > 95 && mouseX < 110 && mouseY > 135 && mouseY < 146) {
+        if (tooltipToDraw == 0 && mouseX > guiLeft + 95 && mouseX < guiLeft + 115 && mouseY > guiTop + 135 && mouseY < guiTop + 155) {
             tooltipToDraw = 10;
         }
         ArrayList<String> tooltip = new ArrayList<>();
@@ -149,14 +161,14 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
                         }
                     }
                 }
-                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_DECREASE_ACCESS));
+                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.INFO_ACCESS_LEVEL));
                 break;
             case 11:
                 tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TEXT_TRUSTED_PLAYER));
                 break;
         }
         if (!tooltip.isEmpty())
-            this.drawHoveringText(tooltip, mouseX - k, mouseY - l, Minecraft.getMinecraft().fontRenderer);
+            this.drawHoveringText(tooltip, guiLeft + mouseX - k, guiTop + mouseY - l, Minecraft.getMinecraft().fontRenderer);
     }
 
     @SuppressWarnings("EmptyCatchBlock")
@@ -291,39 +303,31 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    protected void drawGuiContainerForegroundLayer(int param1, int param2) {
-        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.TARGETING_OPTIONS) + ": ", 10, 8, 0);
-        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.ADD_TRUSTED_PLAYER) + ": ", 10, 87, 0);
+    public void drawScreen(int par1, int par2, float par3) {
+        this.mouseX = par1;
+        this.mouseY = par2;
 
-        if (this.base.getTrustedPlayers().size() == 0) {
-            fontRenderer.drawString("\u00A7f" + safeLocalize(OMTNames.Localizations.GUI.NO_TRUSTED_PLAYERS), 10, 124, 0);
-        } else {
-            fontRenderer.drawString(base.getTrustedPlayers().get(base.trustedPlayerIndex).getName() + "'s " + safeLocalize(OMTNames.Localizations.GUI.PERMISSIONS),
-                    10, 124, 0);
-        }
-        drawMode();
-        textFieldAddTrustedPlayer.drawTextBox();
-        drawTooltips();
-    }
-
-    @Override
-    protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
         ResourceLocation texture = (new ResourceLocation(OMTNames.Textures.configureGUI));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
         this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
-    }
+        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.TARGETING_OPTIONS) + ": ", guiLeft + 10, guiTop + 8, 0);
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.ADD_TRUSTED_PLAYER) + ": ", guiLeft + 10, guiTop + 87, 0);
 
-    @Override
-    public void drawScreen(int par1, int par2, float par3) {
-        this.mouseX = par1;
-        this.mouseY = par2;
+        if (this.base.getTrustedPlayers().size() == 0) {
+            fontRenderer.drawString("\u00A7f" + safeLocalize(OMTNames.Localizations.GUI.NO_TRUSTED_PLAYERS), guiLeft + 10, guiTop + 124, 0);
+        } else {
+            fontRenderer.drawString(base.getTrustedPlayers().get(base.trustedPlayerIndex).getName() + "'s " + safeLocalize(OMTNames.Localizations.GUI.PERMISSIONS),
+                    guiLeft + 10, 124, 0);
+        }
+        drawMode();
+        textFieldAddTrustedPlayer.drawTextBox();
         super.drawScreen(par1, par2, par3);
+        drawTooltips();
     }
 
     private void sendChangeToServerMobs(boolean setTo) {
@@ -378,5 +382,11 @@ public class ConfigureGui extends GuiContainer implements IHasTooltips {
         } else if (waitForServerTrustedPlayers >= 0) {
             waitForServerTrustedPlayers--;
         }
+    }
+
+    @Override
+    public void onGuiClosed() {
+        OMLibNetworkingHandler.INSTANCE.sendToServer(new MessageCloseGUI(base));
+        super.onGuiClosed();
     }
 }

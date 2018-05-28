@@ -5,6 +5,7 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 import omtteam.omlib.api.IDebugTile;
+import omtteam.omlib.network.ISyncable;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.tileentity.ICamoSupport;
@@ -35,6 +37,8 @@ import omtteam.openmodularturrets.api.network.INetworkTile;
 import omtteam.openmodularturrets.api.network.IPowerExchangeTile;
 import omtteam.openmodularturrets.api.network.OMTNetwork;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
+import omtteam.openmodularturrets.network.messages.MessageTurretBase;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
@@ -61,7 +65,7 @@ import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "computercraft")}
 )
-public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile {
+public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile, ISyncable {
     public int trustedPlayerIndex = 0;
     protected IBlockState camoBlockState;
 
@@ -82,6 +86,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private int playerKills;
     private IBaseController controller;
     private OMTNetwork network;
+    private List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
 
     protected IItemHandlerModifiable inventory;
 
@@ -135,7 +140,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         this.rangeOverridden = false;
         this.storage = new OMEnergyStorage(MaxEnergyStorage, MaxIO);
         this.attacksMobs = true;
-        this.attacksNeutrals = true;
+        this.attacksNeutrals = false;
         this.attacksPlayers = false;
         this.tier = tier;
         this.camoBlockState = camoState;
@@ -211,6 +216,16 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         this.maxStorageEU = tier * 7500D;
     }
 
+    @Override
+    public List<EntityPlayerMP> getSyncPlayerList() {
+        return openClients;
+    }
+
+    @Override
+    public TileEntity getTE() {
+        return this;
+    }
+
     public void setCurrentMaxRange(int newCurrentMaxRange) {
 
         this.currentMaxRange = newCurrentMaxRange;
@@ -245,6 +260,11 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             return;
         }
 
+        if (!this.getWorld().isRemote) {
+            for (EntityPlayerMP player : openClients) {
+                OMTNetworkingHandler.INSTANCE.sendTo(new MessageTurretBase(this), player);
+            }
+        }
         ticks++;
         if (!this.getWorld().isRemote && ticks % 5 == 0) {
 
@@ -267,24 +287,14 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             //Extenders
             this.storage.setCapacity(getMaxEnergyStorageWithExtenders());
 
-            //Thaumcraft
-            /*if (ModCompatibility.ThaumcraftLoaded && TurretHeadUtil.hasPotentiaUpgradeAddon(this)) {
-                if (amountOfPotentia > 0.05F && !(storage.getMaxEnergyLevel() - storage.getEnergyLevel() == 0)) {
-                    if (VisNetHandler.drainVis(this.getWorld(), xCoord, yCoord, zCoord, Aspect.ORDER, 5) == 5) {
-                        this.amountOfPotentia = this.amountOfPotentia - 0.05F;
-                        this.storage.modifyEnergyStored(Math.round(OMTConfigHandler.getPotentiaToRFRatio() * 5));
-                    } else {
-                        this.amountOfPotentia = this.amountOfPotentia - 0.05F;
-                        this.storage.modifyEnergyStored(Math.round(OMTConfigHandler.getPotentiaToRFRatio() / 2));
-                    }
-                }
-            }*/
 
             if (ticks % 20 == 0) {
 
                 //General
                 ticks = 0;
                 updateRedstoneReactor(this);
+
+                this.scrubSyncPlayerList();
 
                 //Computers
                 this.computerAccessible = (OpenComputersLoaded || ComputerCraftLoaded) && TurretHeadUtil.hasSerialPortAddon(

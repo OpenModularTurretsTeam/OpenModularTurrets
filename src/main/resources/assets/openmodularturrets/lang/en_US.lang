@@ -157,6 +157,7 @@ tooltip.omtteam.openmodularturrets:tp_can_change_settings=Player can change the 
 tooltip.omtteam.openmodularturrets:tp_can_administer=Player can administer turret (trust. players and dropping).
 tooltip.omtteam.openmodularturrets:tp_decrease_access=Decrease viewed trusted players access level.
 tooltip.omtteam.openmodularturrets:tp_increase_access=Increase viewed trusted players access level.
+tooltip.omtteam.openmodularturrets:info_access_level=When a player is selected, this shows their access level.
 tooltip.omtteam.openmodularturrets:target_mobs=If the base's turrets target mobs.
 tooltip.omtteam.openmodularturrets:target_neutrals=If the base's turrets target passive creatures.
 tooltip.omtteam.openmodularturrets:target_players=If the base's turrets target (non-trusted) players.
