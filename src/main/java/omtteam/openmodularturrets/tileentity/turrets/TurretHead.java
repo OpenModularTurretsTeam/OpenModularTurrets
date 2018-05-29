@@ -349,11 +349,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         if (!setSide()) return;
         this.base = getBaseFromWorld();
 
-        //Is this the client?
-        if (this.getWorld().isRemote) {
-            updateRotationAnimation();
-            return;
-        }
 
         //Is the turret head block still there?
         if (!(this.getWorld().getBlockState(this.getPos()).getBlock() instanceof BlockAbstractTurretHead)) {
@@ -374,7 +369,17 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
         //Is turret base active?
         if (!base.isActive()) {
+            this.target = null;
             return;
+        }
+        //Is this the client?
+        if (this.getWorld().isRemote) {
+            updateRotationAnimation();
+            return;
+        }
+        
+        if (this.ticks % 5 == 0) {
+            this.getWorld().notifyBlockUpdate(this.pos, this.getWorld().getBlockState(pos), this.getWorld().getBlockState(pos), 3);
         }
 
         //Real time tick updates
