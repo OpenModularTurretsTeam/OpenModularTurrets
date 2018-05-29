@@ -35,14 +35,15 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
                 markDirty();
             }
 
-            public boolean isItemValidForSlot(int index, ItemStack stack) {
+            @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+            public boolean isItemValidForSlot(ItemStack stack) {
                 return !isPowerExpander() && OMTUtil.isItemStackValidAmmo(stack);
             }
 
             @Nonnull
             @Override
             public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-                if (!isItemValidForSlot(slot, stack))
+                if (!isItemValidForSlot(stack))
                     return stack;
                 return super.insertItem(slot, stack, simulate);
             }
@@ -73,6 +74,7 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
         this.orientation = EnumFacing.NORTH;
     }
 
+    @Nonnull
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);

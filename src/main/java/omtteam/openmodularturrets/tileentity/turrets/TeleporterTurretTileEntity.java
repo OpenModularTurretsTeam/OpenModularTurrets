@@ -102,7 +102,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
                 }
             }
             if (target != null) {
-                if (chebyshevDistance(target, base)) {
+                if (chebyshevDistance(target)) {
                     target = null;
                     return;
                 }

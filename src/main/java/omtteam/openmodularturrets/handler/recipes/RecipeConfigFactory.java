@@ -16,6 +16,8 @@ import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
  * Created by Keridos on 13/11/17.
  * This Class
  */
+
+@SuppressWarnings("ALL")
 public class RecipeConfigFactory implements IConditionFactory {
     @Override
     public BooleanSupplier parse(JsonContext context, JsonObject json) {

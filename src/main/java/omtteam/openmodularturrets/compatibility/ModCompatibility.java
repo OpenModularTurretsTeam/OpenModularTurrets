@@ -15,7 +15,6 @@ import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
  * Created by Keridos on 23/01/2015. This Class
  */
 public class ModCompatibility {
-    public static boolean IGWModLoaded = false;
     public static boolean ThermalExpansionLoaded = false;
     public static boolean EnderIOLoaded = false;
     public static boolean MekanismLoaded = false;
@@ -54,7 +53,6 @@ public class ModCompatibility {
             OpenModularTurrets.getLogger().info("Valkyrien Warfare Found! You have a good taste in mods");
         }
 
-        IGWModLoaded = Loader.isModLoaded("igwmod");
     }
 
     private static void addVersionCheckerInfo() {
@@ -76,6 +74,7 @@ public class ModCompatibility {
         }
     }
 
+    @SuppressWarnings("EmptyMethod")
     public static void preinit() {
 
     }

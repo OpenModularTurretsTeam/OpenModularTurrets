@@ -22,6 +22,7 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static omtteam.omlib.proxy.ClientProxy.getWorld;
@@ -68,8 +69,8 @@ public class MessageTurretBase implements IMessage {
                     base.setTrustedPlayers(message.trustedPlayers);
                     base.setTier(message.tier);
                     base.setMode(message.mode);
-                    base.setCamoState(ForgeRegistries.BLOCKS.getValue(
-                            new ResourceLocation(message.camoBlockRegName)).getStateFromMeta(message.camoBlockMeta));
+                    base.setCamoState(Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(
+                            new ResourceLocation(message.camoBlockRegName))).getStateFromMeta(message.camoBlockMeta));
                     base.setCurrentMaxRange(message.maxRange);
                     base.setKills(message.kills);
                     base.setPlayerKills(message.playerKills);
@@ -96,7 +97,7 @@ public class MessageTurretBase implements IMessage {
             this.attacksPlayers = base.isAttacksPlayers();
             this.multiTargeting = base.isMultiTargeting();
             this.trustedPlayers = base.getTrustedPlayers();
-            this.camoBlockRegName = base.getCamoState().getBlock().getRegistryName().toString();
+            this.camoBlockRegName = Objects.requireNonNull(base.getCamoState().getBlock().getRegistryName()).toString();
             this.camoBlockMeta = base.getCamoState().getBlock().getMetaFromState(base.getCamoState());
             this.maxRange = base.getCurrentMaxRange();
             this.mode = base.getMode();

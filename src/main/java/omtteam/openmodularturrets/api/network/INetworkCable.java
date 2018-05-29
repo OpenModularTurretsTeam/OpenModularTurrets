@@ -6,6 +6,7 @@ import net.minecraft.util.EnumFacing;
  * Created by Keridos on 30/08/17.
  * This Class
  */
+@SuppressWarnings("ALL")
 public interface INetworkCable extends INetworkTile {
     /**
      * Return true if the cable should connect to the given side.

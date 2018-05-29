@@ -4,6 +4,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
+import javax.annotation.Nonnull;
+
 import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 
 public class AmmoSlot extends SlotItemHandler {
@@ -13,12 +15,12 @@ public class AmmoSlot extends SlotItemHandler {
     }
 
     @Override
-    public boolean isItemValid(ItemStack itemStack) {
+    public boolean isItemValid(@Nonnull ItemStack itemStack) {
         return isItemStackValidAmmo(itemStack);
     }
 
     @Override
-    public int getItemStackLimit(ItemStack stack) {
+    public int getItemStackLimit(@Nonnull ItemStack stack) {
         return Math.min(64, this.getSlotStackLimit());
     }
 }

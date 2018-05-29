@@ -77,6 +77,7 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
         return new BlockStateContainer(this, MODEL, FACING);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing) {
         return BlockTurretBaseAddon.getBoundingBoxFromFacing(facing);
     }

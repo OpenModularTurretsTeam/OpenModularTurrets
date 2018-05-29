@@ -10,6 +10,7 @@ import omtteam.openmodularturrets.util.TurretHeadUtil;
  * Created by Keridos on 17/05/17.
  * This interface if for all tile entities of addons attached to turret bases.
  */
+@SuppressWarnings("ALL")
 public interface ITurretBaseAddonTileEntity extends IOwnedBlockAddon {
     /**
      * This should give back the base that this addon block belongs to.

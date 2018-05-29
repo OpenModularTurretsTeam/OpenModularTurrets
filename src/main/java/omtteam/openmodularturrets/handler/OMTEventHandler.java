@@ -144,7 +144,7 @@ public class OMTEventHandler {
             FileInputStream saveFile = new FileInputStream(fullpath.toFile());
             ObjectInputStream save = new ObjectInputStream(saveFile);
             Object object = save.readObject();
-            if (object instanceof Map) {
+            if (object instanceof HashMap) {
                 tempList = (HashMap<Integer, List<Tuple<UUID, String>>>) object;
             }
             save.close();

@@ -5,7 +5,7 @@ package omtteam.openmodularturrets.proxy;
  * This Class
  */
 
-@SuppressWarnings("EmptyMethod")
+@SuppressWarnings({"EmptyMethod", "unused"})
 public class ServerProxy extends CommonProxy {
     @Override
     public void preInit() {

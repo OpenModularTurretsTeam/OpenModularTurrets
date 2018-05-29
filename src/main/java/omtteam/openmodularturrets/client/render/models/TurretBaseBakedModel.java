@@ -101,6 +101,7 @@ public class TurretBaseBakedModel extends CamoBakedModel {
             List<IBakedModel> list = new ArrayList<>();
             for (int i = 1; i < 6; i++) {
                 try {
+                    //noinspection ConstantConditions
                     list.add(ModelLoaderRegistry.getModel(new ModelResourceLocation("openmodularturrets:turret_base_normal", "tier=" + i)).bake(state, format, bakedTextureGetter));
                 } catch (Exception e) {
                     e.printStackTrace();

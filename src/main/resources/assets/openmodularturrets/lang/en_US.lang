@@ -136,7 +136,7 @@ tooltip.expander.power2=Adds
 tooltip.expander.power3=RF capacity to a turret base.
 
 tooltip.expander.inv1=Turret Base Inventory Expander
-tooltip.expander.inv2=Adds 9 slots of inventory space that the turret base can use.
+tooltip.expander.inv2=Adds 9 slots of inventory that the turret base can use.
 tooltip.expander.inv3=Each slot can only accept a max stack size of
 
 tooltip.base_addon_loot_deleter.inv1=Turret Base Addon - Loot Deleter
@@ -147,8 +147,8 @@ tooltip.openmodularturrets.memory_card.desc1=Shift-RightClick base stores data
 tooltip.openmodularturrets.memory_card.desc2=Shift-RightClick anywhere else to clear
 tooltip.openmodularturrets.memory_card.desc3=RightClick base copies data from card
 
-tooltip.omtteam.openmodularturrets:add_trusted_player=Adds the given player to the turret's trusted list.
-tooltip.omtteam.openmodularturrets:remove_trusted_player=Removes viewed trusted player from the turret's trusted player list.
+tooltip.omtteam.openmodularturrets:add_trusted_player=Adds the given player to the base's trusted list.
+tooltip.omtteam.openmodularturrets:remove_trusted_player=Removes player from the base's trusted player list.
 tooltip.omtteam.openmodularturrets:view_previous_trusted_player=View previous trusted player.
 tooltip.omtteam.openmodularturrets:view_next_trusted_player=View next trusted player.
 tooltip.omtteam.openmodularturrets:tp_none=Player cannot open GUI.
@@ -162,14 +162,14 @@ tooltip.omtteam.openmodularturrets:target_mobs=If the base's turrets target mobs
 tooltip.omtteam.openmodularturrets:target_neutrals=If the base's turrets target passive creatures.
 tooltip.omtteam.openmodularturrets:target_players=If the base's turrets target (non-trusted) players.
 tooltip.omtteam.openmodularturrets:tp_text_field=Name of the trusted player to add.
-tooltip.omtteam.openmodularturrets:minus_range=Decrease the maximum range for the turret(s) to seek targets at by
-tooltip.omtteam.openmodularturrets:plus_range=Increase the maximum range for the attached turret(s) to seek targets at by
+tooltip.omtteam.openmodularturrets:minus_range=Decrease the max range for the turret(s) to seek targets at by
+tooltip.omtteam.openmodularturrets:plus_range=Increase the max range for the turret(s) to seek targets at by
 tooltip.omtteam.openmodularturrets:configure_base=Enter the base's config screen.
 tooltip.omtteam.openmodularturrets:multi_targeting=Change if turrets should focus fire or spread it.
 tooltip.omtteam.openmodularturrets:ammo_slot=Ammo and Fuel for the modular turret.
 tooltip.omtteam.openmodularturrets:addon_slot=Addons (for more functions) for the modular turret.
 tooltip.omtteam.openmodularturrets:upgrade_slot=Upgrades for the modular turret.
-tooltip.omtteam.openmodularturrets:base_max_range=Max range at which all mounted turrets will search for targets, in blocks.
+tooltip.omtteam.openmodularturrets:base_max_range=Max range at which turrets will search for targets, in blocks.
 tooltip.omtteam.openmodularturrets:toggle_mode=Toggle on/off modes
 
 flavour.expander.power.1=Now with flavour!

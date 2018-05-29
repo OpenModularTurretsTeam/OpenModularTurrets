@@ -15,6 +15,7 @@ import java.util.List;
  * Only one instance of this interface can be registered per base.
  * Turret Bases get additional API functions like getAllTargetsInRange.
  */
+@SuppressWarnings("ALL")
 public interface IBaseController extends ITurretBaseAddonTileEntity {
     /**
      * Return true if the Entity given per parameter is a valid target.

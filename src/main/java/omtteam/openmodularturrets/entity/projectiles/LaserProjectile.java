@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
+import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
@@ -20,7 +21,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
 public class LaserProjectile extends TurretProjectile {
-    public int arrowShake;
 
 
     @SuppressWarnings("unused")
@@ -64,14 +64,16 @@ public class LaserProjectile extends TurretProjectile {
 
             if (entity instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) entity)) {
-                    entity.attackEntityFrom(new NormalDamageSource("laser", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
+                    entity.attackEntityFrom(new NormalDamageSource("laser", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage * 0.75F);
+                    entity.attackEntityFrom(new ArmorBypassDamageSource("laser", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage * 0.25F);
                     entity.hurtResistantTime = -1;
                 } else {
                     return;
                 }
             } else if (canDamageEntity(entity)) {
                 setTagsForTurretHit(entity);
-                entity.attackEntityFrom(new NormalDamageSource("laser", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
+                entity.attackEntityFrom(new NormalDamageSource("laser", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage * 0.75F);
+                entity.attackEntityFrom(new ArmorBypassDamageSource("laser", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage * 0.25F);
                 entity.hurtResistantTime = -1;
             } else {
                 return;

@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
  * Created by Keridos on 02/06/17.
  * This Class
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class AbstractOMTDamageSource extends DamageSource {
     private FakePlayer player;
     private final TurretBase base;

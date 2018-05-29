@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
  * Created by Keridos on 30/08/17.
  * This Class
  */
+@SuppressWarnings("ALL")
 public interface INetworkTile {
     // TODO: write this.
 

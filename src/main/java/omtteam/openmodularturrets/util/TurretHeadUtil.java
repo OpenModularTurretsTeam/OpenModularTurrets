@@ -390,7 +390,7 @@ public class TurretHeadUtil {
                         //For adding
                     } else if (chance > OMTConfigHandler.getRecyclerNegateChance() && chance < (OMTConfigHandler.getRecyclerNegateChance() + OMTConfigHandler.getRecyclerAddChance())) {
 
-                        base.getInventory().insertItem(i,  new ItemStack(ammo_stack.getItem(), 1), false);
+                        base.getInventory().insertItem(i, new ItemStack(ammo_stack.getItem(), 1), false);
                         return new ItemStack(ammo_stack.getItem());
                     } else {
                         base.getInventory().extractItem(i, 1, false);

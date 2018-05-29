@@ -98,8 +98,9 @@ public abstract class TurretProjectile extends EntityThrowable {
     @Override
     public void onUpdate() {
 
-        if (this.ticksExisted > 80) {
+        if (this.ticksExisted > 40) {
             this.setDead();
+            return;
         }
 
         this.lastTickPosX = this.posX;
@@ -114,6 +115,7 @@ public abstract class TurretProjectile extends EntityThrowable {
         for (Entity entity : list) {
             if (entity.canBeCollidedWith()) {
                 this.onHitEntity(entity);
+                this.setDead();
                 return;
             }
         }
@@ -127,7 +129,6 @@ public abstract class TurretProjectile extends EntityThrowable {
         this.posX += this.motionX;
         this.posY += this.motionY;
         this.posZ += this.motionZ;
-        float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
         this.rotationYaw = (float) (MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
 
         while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {

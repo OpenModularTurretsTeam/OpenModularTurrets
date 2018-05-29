@@ -6,6 +6,7 @@ import omtteam.omlib.power.OMEnergyStorage;
  * Created by Keridos on 30/08/17.
  * This Class
  */
+@SuppressWarnings("SameReturnValue")
 public interface IPowerExchangeTile extends INetworkTile {
 
     boolean requiresEnergy();

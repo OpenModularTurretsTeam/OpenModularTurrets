@@ -200,7 +200,7 @@ public class OMTConfigHandler {
         laser_turret = new TurretSetting(config.get("TurretLaser", "Range", 25, "Turret range, in blocks").getInt(),
                 config.get("TurretLaser", "FireRateCooldown", 10,
                         "Number of ticks between firings").getInt(),
-                config.get("TurretLaser", "Damage", 2, "Measured in half-hearts").getInt(),
+                config.get("TurretLaser", "Damage", 4, "Measured in half-hearts").getInt(),
                 config.get("TurretLaser", "Accuracy", 10,
                         "Value between 0 - 100, where 0 will miss 0% of the time over a distance of 10 blocks, subject to standard deviation.").getDouble(),
                 config.get("TurretLaser", "PowerUsage", 10000, "RF used per shot").getInt(),

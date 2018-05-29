@@ -198,9 +198,8 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
 
         this.drawHoveringText(targetInfo, -128, 17, fontRenderer);
-
-        drawTooltips();
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+        drawTooltips();
     }
 
     @Override

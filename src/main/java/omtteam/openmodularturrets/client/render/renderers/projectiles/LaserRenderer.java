@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.openmodularturrets.entity.projectiles.LaserProjectile;
@@ -51,12 +50,6 @@ class LaserRenderer extends Render {
         BufferBuilder vertexbuffer = tessellator.getBuffer();
 
         GlStateManager.enableRescaleNormal();
-        float f9 = (float) par1EntityLaser.arrowShake - partialTicks;
-
-        if (f9 > 0.0F) {
-            float f10 = -MathHelper.sin(f9 * 3.0F) * f9;
-            GlStateManager.rotate(f10, 0.0F, 0.0F, 1.0F);
-        }
 
         GlStateManager.rotate(45.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.scale(0.05625F, 0.05625F, 0.05625F);

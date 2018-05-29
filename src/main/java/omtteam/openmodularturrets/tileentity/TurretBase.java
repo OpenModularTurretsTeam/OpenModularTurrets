@@ -91,7 +91,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     protected IItemHandlerModifiable inventory;
 
     protected void setupInventory() {
-        //noinspection BooleanMethodIsAlwaysInverted,BooleanMethodIsAlwaysInverted
+        //noinspection BooleanMethodIsAlwaysInverted,BooleanMethodIsAlwaysInverted,BooleanMethodIsAlwaysInverted
         inventory = new ItemStackHandler(13) {
 
             @Override
@@ -115,11 +115,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 return super.insertItem(slot, stack, simulate);
             }
 
-            @Nonnull
-            @Override
-            public ItemStack extractItem(int slot, int amount, boolean simulate) {
-                return super.extractItem(slot, amount, simulate);
-            }
         };
     }
 

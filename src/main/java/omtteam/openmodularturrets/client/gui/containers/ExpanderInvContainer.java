@@ -87,7 +87,7 @@ public class ExpanderInvContainer extends Container {
         while (getStackSize(stack) > 0 && i >= begin && i < end) {
             Slot slot = this.getSlot(i);
             ItemStack slotStack = slot.getStack();
-            int slotStackLimit = i < tileEntity.getInventory().getSlots()? tileEntity.getInventory().getSlotLimit(1): 64;
+            int slotStackLimit = i < tileEntity.getInventory().getSlots() ? tileEntity.getInventory().getSlotLimit(1) : 64;
             int totalLimit = slotStackLimit < stack.getMaxStackSize() ? slotStackLimit : stack.getMaxStackSize();
 
             if (slotStack == ItemStack.EMPTY) {

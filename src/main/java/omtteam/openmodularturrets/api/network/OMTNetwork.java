@@ -22,6 +22,7 @@ import static java.util.UUID.randomUUID;
  * Created by Keridos on 30/08/17.
  * This Class
  */
+@SuppressWarnings("UnusedReturnValue")
 public class OMTNetwork {
     private Map<BlockPos, INetworkTile> devices = new HashMap<>();
     private World world;

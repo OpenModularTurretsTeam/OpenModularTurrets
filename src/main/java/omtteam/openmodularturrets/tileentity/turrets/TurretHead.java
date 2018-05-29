@@ -276,7 +276,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
     protected abstract SoundEvent getLaunchSoundEffect();
 
-    boolean chebyshevDistance(Entity target, TurretBase base) {
+    boolean chebyshevDistance(Entity target) {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
 
         /*if (ModCompatibility.ValkyrienWarfareLoaded) {
@@ -377,7 +377,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             updateRotationAnimation();
             return;
         }
-        
+
         if (this.ticks % 5 == 0) {
             this.getWorld().notifyBlockUpdate(this.pos, this.getWorld().getBlockState(pos), this.getWorld().getBlockState(pos), 3);
         }
@@ -609,7 +609,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             }
 
             //Is the target out of range now?
-            if (chebyshevDistance(target, base)) {
+            if (chebyshevDistance(target)) {
                 this.target = null;
             }
         }

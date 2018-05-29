@@ -5,6 +5,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import omtteam.openmodularturrets.items.UpgradeMetaItem;
 
+import javax.annotation.Nonnull;
+
 
 public class UpgradeSlot extends SlotItemHandler {
     @SuppressWarnings("SameParameterValue")
@@ -13,12 +15,12 @@ public class UpgradeSlot extends SlotItemHandler {
     }
 
     @Override
-    public boolean isItemValid(ItemStack par1ItemStack) {
+    public boolean isItemValid(@Nonnull ItemStack par1ItemStack) {
         return par1ItemStack.getItem() instanceof UpgradeMetaItem;
     }
 
     @Override
-    public int getItemStackLimit(ItemStack stack) {
+    public int getItemStackLimit(@Nonnull ItemStack stack) {
         return (4);
     }
 
