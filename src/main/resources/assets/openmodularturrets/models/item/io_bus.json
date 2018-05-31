@@ -1,6 +1,6 @@
 {
   "parent": "omlib:item/default_item",
   "textures": {
-	"layer0": "openmodularturrets:items/io_bus"
+    "layer0": "openmodularturrets:items/io_bus"
   }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "omlib:item/default_item",
   "textures": {
-	"layer0": "openmodularturrets:items/chamber_tier_three"
+    "layer0": "openmodularturrets:items/chamber_tier_three"
   }
 }

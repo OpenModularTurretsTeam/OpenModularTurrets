@@ -1,6 +1,6 @@
 {
   "parent": "omlib:item/default_item",
   "textures": {
-	"layer0": "openmodularturrets:items/memory_card"
+    "layer0": "openmodularturrets:items/memory_card"
   }
 }

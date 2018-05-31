@@ -1,164 +1,164 @@
 {
-    "amped": {
-        "category": "block",
-        "sounds": [
-            {
-                "name": "openmodularturrets:amped",
-                "stream": false
-            }
-        ]
-    },
-    "bullet_hit": {
-        "category": "ambient",
-        "sounds": [
-            {
-                "name": "openmodularturrets:bullet_hit",
-                "stream": false
-            }
-        ]
-    },
-    "windup": {
-        "category": "block",
-        "sounds": [
-            {
-                "name": "openmodularturrets:windup",
-                "stream": false
-            }
-        ]
-    },
-    "grenade": {
-        "category": "block",
-        "sounds": [
-            {
-                "name": "openmodularturrets:grenade",
-                "stream": false
-            }
-        ]
-    },
-    "machine_gun": {
-        "category": "block",
-        "sounds": [
-            {
-                "name": "openmodularturrets:machine_gun",
-                "stream": false
-            }
-        ]
-    },
-    "laser": {
-        "category": "block",
-        "sounds": [
-            {
-                "name": "openmodularturrets:laser",
-                "stream": false
-            }
-        ]
-    },
-    "warning": {
-        "category": "block",
-        "sounds": [
-            {
-                "name": "openmodularturrets:warning",
-                "stream": false
-            }
-        ]
-    },
-    "laser_hit": {
-        "category": "block",
-        "sounds": [
-            {
-               "name": "openmodularturrets:laser_hit",
-              "stream": false
-            }
-        ]
-    },
-    "rocket": {
-        "category": "block",
-        "sounds": [
-            {
-               "name": "openmodularturrets:rocket",
-              "stream": false
-            }
-        ]
-    },
-    "disposable": {
-        "category": "block",
-        "sounds": [
-            {
-               "name": "openmodularturrets:disposable",
-              "stream": false
-            }
-        ]
-    },
-    "potato": {
-        "category": "block",
-        "sounds": [
-            {
-               "name": "openmodularturrets:potato",
-              "stream": false
-            }
-        ]
-    },
-    "incendiary": {
-        "category": "block",
-        "sounds": [
-            {
-               "name": "openmodularturrets:incendiary",
-              "stream": false
-            }
-        ]
-    },
-    "relativistic": {
-        "category": "block",
-        "sounds": [
-            {
-               "name": "openmodularturrets:relativistic",
-              "stream": false
-            }
-        ]
-    },
-    "teleport": {
-        "category": "block",
-        "sounds": [
-            {
-               "name": "openmodularturrets:teleport",
-              "stream": false
-            }
-        ]
-    },
-     "rail_gun": {
-        "category": "block",
-        "sounds": [
-            {
-               "name": "openmodularturrets:rail_gun",
-              "stream": false
-            }
-        ]
-    },
-     "rail_gun_hit": {
-        "category": "ambient",
-        "sounds": [
-            {
-               "name": "openmodularturrets:rail_gun_hit",
-              "stream": false
-            }
-        ]
-    },
-    "turret_deploy": {
-        "category": "block",
-        "sounds": [
-            {
-                "name": "openmodularturrets:turret_deploy",
-                "stream": false
-            }
-        ]
-    },
-    "turret_retract": {
-        "category": "block",
-        "sounds": [
-            {
-                "name": "openmodularturrets:turret_retract",
-                "stream": false
-            }
-        ]
-    }
+  "amped": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:amped",
+        "stream": false
+      }
+    ]
+  },
+  "bullet_hit": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "openmodularturrets:bullet_hit",
+        "stream": false
+      }
+    ]
+  },
+  "windup": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:windup",
+        "stream": false
+      }
+    ]
+  },
+  "grenade": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:grenade",
+        "stream": false
+      }
+    ]
+  },
+  "machine_gun": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:machine_gun",
+        "stream": false
+      }
+    ]
+  },
+  "laser": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:laser",
+        "stream": false
+      }
+    ]
+  },
+  "warning": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:warning",
+        "stream": false
+      }
+    ]
+  },
+  "laser_hit": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:laser_hit",
+        "stream": false
+      }
+    ]
+  },
+  "rocket": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:rocket",
+        "stream": false
+      }
+    ]
+  },
+  "disposable": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:disposable",
+        "stream": false
+      }
+    ]
+  },
+  "potato": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:potato",
+        "stream": false
+      }
+    ]
+  },
+  "incendiary": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:incendiary",
+        "stream": false
+      }
+    ]
+  },
+  "relativistic": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:relativistic",
+        "stream": false
+      }
+    ]
+  },
+  "teleport": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:teleport",
+        "stream": false
+      }
+    ]
+  },
+  "rail_gun": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:rail_gun",
+        "stream": false
+      }
+    ]
+  },
+  "rail_gun_hit": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "openmodularturrets:rail_gun_hit",
+        "stream": false
+      }
+    ]
+  },
+  "turret_deploy": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:turret_deploy",
+        "stream": false
+      }
+    ]
+  },
+  "turret_retract": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:turret_retract",
+        "stream": false
+      }
+    ]
+  }
 }

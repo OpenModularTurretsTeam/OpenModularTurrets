@@ -1,14 +1,16 @@
 {
   "forge_marker": 1,
   "defaults": {
-	"textures": {
-	  "all": "openmodularturrets:blocks/turret_base_tier_one"
-	},
-	"transform": "forge:default-block"
+    "textures": {
+      "all": "openmodularturrets:blocks/turret_base_tier_one"
+    },
+    "transform": "forge:default-block"
   },
   "variants": {
-	"normal": [{
-	  "model": "openmodularturrets:custom/turret_base"
-	}]
+    "normal": [
+      {
+        "model": "openmodularturrets:custom/turret_base"
+      }
+    ]
   }
 }

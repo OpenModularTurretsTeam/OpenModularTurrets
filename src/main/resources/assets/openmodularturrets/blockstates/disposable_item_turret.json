@@ -1,10 +1,14 @@
 {
   "forge_marker": 1,
   "defaults": {
-	"model": "openmodularturrets:disposable_item_turret"
+    "model": "openmodularturrets:disposable_item_turret"
   },
   "variants": {
-	"normal": [{}],
-    "inventory": [{}]
+    "normal": [
+      {}
+    ],
+    "inventory": [
+      {}
+    ]
   }
 }

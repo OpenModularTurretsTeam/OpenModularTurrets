@@ -1,121 +1,125 @@
 {
   "forge_marker": 1,
   "defaults": {
-	"model": "openmodularturrets:expander",
-	"transform": "forge:default-block"
+    "model": "openmodularturrets:expander",
+    "transform": "forge:default-block"
   },
   "variants": {
-	"normal": [{}],
-	"inventory": [{}],
-	"facing": {
-	  "down": {
-		"transform": {
-		  "rotation": [
-			{
-			  "x": 270
-			}
-		  ]
-		}
-	  },
-	  "up": {
-		"transform": {
-		  "rotation": [
-			{
-			  "x": 90
-			}
-		  ]
-		}
-	  },
-	  "north": {},
-	  "south": {
-		"transform": {
-		  "rotation": [
-			{
-			  "y": 180
-			}
-		  ]
-		}
-	  },
-	  "west": {
-		"transform": {
-		  "rotation": [
-			{
-			  "y": 90
-			}
-		  ]
-		}
-	  },
-	  "east": {
-		"transform": {
-		  "rotation": [
-			{
-			  "y": 270
-			}
-		  ]
-		}
-	  }
-	},
-	"meta": {
-	  "0": {
-		"textures": {
-		  "top": "openmodularturrets:blocks/expander_inv_tier_one_top",
-		  "side": "openmodularturrets:blocks/expander_inv_tier_one_side"
-		}
-	  },
-	  "1": {
-		"textures": {
-		  "top": "openmodularturrets:blocks/expander_inv_tier_two_top",
-		  "side": "openmodularturrets:blocks/expander_inv_tier_two_side"
-		}
-	  },
-	  "2": {
-		"textures": {
-		  "top": "openmodularturrets:blocks/expander_inv_tier_three_top",
-		  "side": "openmodularturrets:blocks/expander_inv_tier_three_side"
-		}
-	  },
-	  "3": {
-		"textures": {
-		  "top": "openmodularturrets:blocks/expander_inv_tier_four_top",
-		  "side": "openmodularturrets:blocks/expander_inv_tier_four_side"
-		}
-	  },
-	  "4": {
-		"textures": {
-		  "top": "openmodularturrets:blocks/expander_inv_tier_five_top",
-		  "side": "openmodularturrets:blocks/expander_inv_tier_five_side"
-		}
-	  },
-	  "5": {
-		"textures": {
-		  "top": "openmodularturrets:blocks/expander_power_tier_one_top",
-		  "side": "openmodularturrets:blocks/expander_power_tier_one_side"
-		}
-	  },
-	  "6": {
-		"textures": {
-		  "top": "openmodularturrets:blocks/expander_power_tier_two_top",
-		  "side": "openmodularturrets:blocks/expander_power_tier_two_side"
-		}
-	  },
-	  "7": {
-		"textures": {
-		  "top": "openmodularturrets:blocks/expander_power_tier_three_top",
-		  "side": "openmodularturrets:blocks/expander_power_tier_three_side"
-		}
-	  },
-	  "8": {
-		"textures": {
-		  "top": "openmodularturrets:blocks/expander_power_tier_four_top",
-		  "side": "openmodularturrets:blocks/expander_power_tier_four_side"
-		}
-	  },
-	  "9": {
-		"textures": {
-		  "top": "openmodularturrets:blocks/expander_power_tier_five_top",
-		  "side": "openmodularturrets:blocks/expander_power_tier_five_side"
-		}
-	  }
-	}
+    "normal": [
+      {}
+    ],
+    "inventory": [
+      {}
+    ],
+    "facing": {
+      "down": {
+        "transform": {
+          "rotation": [
+            {
+              "x": 270
+            }
+          ]
+        }
+      },
+      "up": {
+        "transform": {
+          "rotation": [
+            {
+              "x": 90
+            }
+          ]
+        }
+      },
+      "north": {},
+      "south": {
+        "transform": {
+          "rotation": [
+            {
+              "y": 180
+            }
+          ]
+        }
+      },
+      "west": {
+        "transform": {
+          "rotation": [
+            {
+              "y": 90
+            }
+          ]
+        }
+      },
+      "east": {
+        "transform": {
+          "rotation": [
+            {
+              "y": 270
+            }
+          ]
+        }
+      }
+    },
+    "meta": {
+      "0": {
+        "textures": {
+          "top": "openmodularturrets:blocks/expander_inv_tier_one_top",
+          "side": "openmodularturrets:blocks/expander_inv_tier_one_side"
+        }
+      },
+      "1": {
+        "textures": {
+          "top": "openmodularturrets:blocks/expander_inv_tier_two_top",
+          "side": "openmodularturrets:blocks/expander_inv_tier_two_side"
+        }
+      },
+      "2": {
+        "textures": {
+          "top": "openmodularturrets:blocks/expander_inv_tier_three_top",
+          "side": "openmodularturrets:blocks/expander_inv_tier_three_side"
+        }
+      },
+      "3": {
+        "textures": {
+          "top": "openmodularturrets:blocks/expander_inv_tier_four_top",
+          "side": "openmodularturrets:blocks/expander_inv_tier_four_side"
+        }
+      },
+      "4": {
+        "textures": {
+          "top": "openmodularturrets:blocks/expander_inv_tier_five_top",
+          "side": "openmodularturrets:blocks/expander_inv_tier_five_side"
+        }
+      },
+      "5": {
+        "textures": {
+          "top": "openmodularturrets:blocks/expander_power_tier_one_top",
+          "side": "openmodularturrets:blocks/expander_power_tier_one_side"
+        }
+      },
+      "6": {
+        "textures": {
+          "top": "openmodularturrets:blocks/expander_power_tier_two_top",
+          "side": "openmodularturrets:blocks/expander_power_tier_two_side"
+        }
+      },
+      "7": {
+        "textures": {
+          "top": "openmodularturrets:blocks/expander_power_tier_three_top",
+          "side": "openmodularturrets:blocks/expander_power_tier_three_side"
+        }
+      },
+      "8": {
+        "textures": {
+          "top": "openmodularturrets:blocks/expander_power_tier_four_top",
+          "side": "openmodularturrets:blocks/expander_power_tier_four_side"
+        }
+      },
+      "9": {
+        "textures": {
+          "top": "openmodularturrets:blocks/expander_power_tier_five_top",
+          "side": "openmodularturrets:blocks/expander_power_tier_five_side"
+        }
+      }
+    }
   }
 }

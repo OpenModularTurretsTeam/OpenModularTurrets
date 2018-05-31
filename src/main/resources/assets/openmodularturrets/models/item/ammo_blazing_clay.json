@@ -1,6 +1,6 @@
 {
   "parent": "omlib:item/default_item",
   "textures": {
-	"layer0": "openmodularturrets:items/ammo_blazing_clay"
+    "layer0": "openmodularturrets:items/ammo_blazing_clay"
   }
 }
