@@ -124,14 +124,14 @@ configurations {
 //}
 
 def omlib_local = false
-if (project.allprojects.findAll({it.name == "OMLib"}).size() > 0) {
+if (project.allprojects.findAll({ it.name == "OMLib" }).size() > 0) {
     omlib_local = true
 }
 if (rootProject.name == "OMTControl") {
     omlib_local = true
 }
 def ompd_local = false
-if (project.allprojects.findAll({it.name == "OpenModularPassiveDefense"}).size() > 0) {
+if (project.allprojects.findAll({ it.name == "OpenModularPassiveDefense" }).size() > 0) {
     ompd_local = true
 }
 

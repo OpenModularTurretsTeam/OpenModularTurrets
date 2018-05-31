@@ -97,11 +97,10 @@ public class TurretHeadUtil {
         return false;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static Entity getTarget(TurretBase base, World worldObj, BlockPos pos, int turretRange, TurretHead turret) {
         Entity target = null;
 
-        if (!worldObj.isRemote && base != null && base.getOwner() != null) {
+        if (!worldObj.isRemote && base != null) {
             AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
                     pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
                     pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
@@ -172,11 +171,11 @@ public class TurretHeadUtil {
         return null;
     }
 
-    @SuppressWarnings("ConstantConditions")
+
     public static Entity getTargetWithMinimumRange(TurretBase base, World worldObj, BlockPos pos, int turretRange, TurretHead turret) {
         Entity target = null;
 
-        if (!worldObj.isRemote && base != null && base.getOwner() != null) {
+        if (!worldObj.isRemote && base != null) {
             AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
                     pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
                     pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
