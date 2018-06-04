@@ -5,7 +5,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import omtteam.openmodularturrets.entity.projectiles.DisposableTurretProjectile;
+import omtteam.openmodularturrets.entity.projectiles.PotatoProjectile;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
@@ -63,7 +63,7 @@ public class PotatoCannonTurretTileEntity extends TurretHead {
 
     @Override
     public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
-        return new DisposableTurretProjectile(world, ammo, this.getBaseFromWorld());
+        return new PotatoProjectile(world, ammo, this.getBaseFromWorld());
     }
 
     @Override
