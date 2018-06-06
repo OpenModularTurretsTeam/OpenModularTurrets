@@ -22,8 +22,7 @@
       "ore": "gearVibrant"
     },
     "D": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     },
     "E": {
       "type": "forge:ore_dict",

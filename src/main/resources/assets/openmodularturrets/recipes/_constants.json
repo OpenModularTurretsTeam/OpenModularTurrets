@@ -68,5 +68,12 @@
       "ore": "obsidian"
     },
     "name": "OBSIDIAN"
+  },
+  {
+    "ingredient": {
+      "item": "openmodularturrets:intermediate_regular",
+      "data": 0
+    },
+    "name": "IOBUS"
   }
 ]

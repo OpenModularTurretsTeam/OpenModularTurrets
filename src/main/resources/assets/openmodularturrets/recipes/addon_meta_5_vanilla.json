@@ -15,8 +15,13 @@
       "ore": "gemQuartz"
     },
     "B": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     }
-  }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "computer"
+    }
+  ]
 }

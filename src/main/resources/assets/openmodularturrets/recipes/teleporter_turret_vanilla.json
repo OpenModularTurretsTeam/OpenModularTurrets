@@ -10,7 +10,8 @@
   "type": "forge:ore_shaped",
   "key": {
     "A": {
-      "item": "minecraft:diamond"
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
     },
     "B": {
       "item": "openmodularturrets:intermediate_tiered",
@@ -20,8 +21,7 @@
       "item": "minecraft:ender_eye"
     },
     "D": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     },
     "E": {
       "type": "forge:ore_dict",

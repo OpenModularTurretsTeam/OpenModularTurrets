@@ -11,18 +11,18 @@
   "type": "forge:ore_shaped",
   "key": {
     "A": {
-      "item": "minecraft:diamond"
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
     },
     "B": {
       "item": "openmodularturrets:expander",
       "data": 2
     },
     "C": {
-      "item": "minecraft:chest"
+      "item": "#CHESTWOOD"
     },
     "D": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     }
   },
   "conditions": [

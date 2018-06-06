@@ -18,11 +18,11 @@
       "item": "#PLANKWOOD"
     },
     "C": {
-      "item": "minecraft:redstone"
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
     },
     "D": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     }
   }
 }

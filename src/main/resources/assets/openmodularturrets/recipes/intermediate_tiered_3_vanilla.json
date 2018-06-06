@@ -18,11 +18,11 @@
       "data": 2
     },
     "C": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     },
     "D": {
-      "item": "minecraft:diamond"
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
     },
     "E": {
       "type": "forge:ore_dict",

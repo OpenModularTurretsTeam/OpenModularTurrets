@@ -21,11 +21,11 @@
       "item": "#INGOTREFINEDGLOWSTONE"
     },
     "D": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     },
     "E": {
-      "item": "minecraft:diamond"
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
     }
   },
   "conditions": [

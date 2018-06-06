@@ -18,8 +18,7 @@
       "data": 3
     },
     "C": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     },
     "D": {
       "item": "mekanism:controlcircuit",
