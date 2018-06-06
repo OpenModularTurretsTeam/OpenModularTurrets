@@ -20,7 +20,8 @@
       "item": "minecraft:redstone"
     },
     "D": {
-      "item": "minecraft:iron_ingot"
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
     },
     "E": {
       "item": "openmodularturrets:intermediate_regular",

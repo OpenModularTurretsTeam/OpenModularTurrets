@@ -40,7 +40,6 @@ import static omtteam.openmodularturrets.util.TurretHeadUtil.*;
 public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock, TOPInfoProvider {
     public static final PropertyBool CONCEALED = PropertyBool.create("concealed");
 
-
     BlockAbstractTurretHead() {
         super(Material.GLASS);
 
