@@ -19,15 +19,14 @@
       "data": 3
     },
     "C": {
-      "item": "minecraft:chest"
+      "item": "#CHESTWOOD"
     },
     "D": {
       "item": "enderio:item_basic_capacitor",
       "data": 1
     },
     "E": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     }
   },
   "conditions": [

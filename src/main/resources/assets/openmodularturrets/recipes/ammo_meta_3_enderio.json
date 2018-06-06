@@ -19,7 +19,8 @@
       "item": "minecraft:gunpowder"
     },
     "C": {
-      "item": "minecraft:redstone"
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
     }
   },
   "conditions": [

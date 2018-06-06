@@ -18,7 +18,8 @@
       "item": "minecraft:clay_ball"
     },
     "C": {
-      "item": "minecraft:redstone"
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
     }
   }
 }

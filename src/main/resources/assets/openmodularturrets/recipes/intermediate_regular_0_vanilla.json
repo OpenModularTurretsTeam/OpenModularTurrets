@@ -14,7 +14,8 @@
       "item": "#INGOTGOLD"
     },
     "B": {
-      "item": "minecraft:redstone"
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
     },
     "C": {
       "type": "forge:ore_dict",

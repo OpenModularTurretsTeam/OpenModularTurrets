@@ -11,7 +11,8 @@
   "type": "forge:ore_shaped",
   "key": {
     "A": {
-      "item": "minecraft:redstone"
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
     },
     "B": {
       "item": "#PLANKWOOD"

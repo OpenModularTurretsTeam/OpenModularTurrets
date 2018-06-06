@@ -18,8 +18,7 @@
       "item": "minecraft:flint"
     },
     "C": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     }
   }
 }

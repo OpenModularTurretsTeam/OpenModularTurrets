@@ -11,27 +11,23 @@
   "type": "forge:ore_shaped",
   "key": {
     "A": {
-      "item": "minecraft:glass_pane"
+      "type": "forge:ore_dict",
+      "ore": "paneGlass"
     },
     "B": {
-      "item": "minecraft:lapis_block"
+      "type": "forge:ore_dict",
+      "ore": "blockLapis"
     },
     "C": {
-      "item": "minecraft:redstone"
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
     },
     "D": {
       "type": "forge:ore_dict",
       "ore": "ingotIron"
     },
     "E": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     }
-  },
-  "conditions": [
-    {
-      "type": "openmodularturrets:recipetype",
-      "mod": "computer"
-    }
-  ]
+  }
 }

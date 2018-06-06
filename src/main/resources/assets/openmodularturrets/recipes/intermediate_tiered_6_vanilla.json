@@ -18,7 +18,8 @@
       "data": 5
     },
     "C": {
-      "item": "minecraft:redstone"
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
     }
   },
   "conditions": [

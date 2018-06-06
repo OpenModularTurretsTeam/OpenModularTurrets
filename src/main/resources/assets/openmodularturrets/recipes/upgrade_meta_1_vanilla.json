@@ -18,8 +18,7 @@
       "item": "minecraft:ender_eye"
     },
     "C": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     }
   }
 }
