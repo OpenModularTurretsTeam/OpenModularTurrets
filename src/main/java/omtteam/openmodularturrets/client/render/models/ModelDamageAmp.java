@@ -14,67 +14,66 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelDamageAmp extends ModelBase {
-    //fields
-    private final ModelRenderer Shape2;
-    private final ModelRenderer Shape1;
-    private final ModelRenderer Shape3;
-    private final ModelRenderer Shape4;
-    private final ModelRenderer Shape5;
-    private final ModelRenderer Shape6;
-    private final ModelRenderer Shape7;
+    private final ModelRenderer bottomBar;
+    private final ModelRenderer rod1;
+    private final ModelRenderer rod2;
+    private final ModelRenderer rod3;
+    private final ModelRenderer rod4;
+    private final ModelRenderer rod5;
+    private final ModelRenderer rod6;
 
     public ModelDamageAmp() {
         textureWidth = 64;
         textureHeight = 64;
 
-        Shape2 = new ModelRenderer(this, 5, 15);
-        Shape2.addBox(-1F, 1F, -13F, 2, 1, 11);
-        Shape2.setRotationPoint(0F, 15F, 0F);
-        Shape2.setTextureSize(64, 64);
-        Shape2.mirror = true;
-        setRotation(Shape2, 0F, 0F, 0F);
+        bottomBar = new ModelRenderer(this, 5, 15);
+        bottomBar.addBox(-1F, 1F, -13F, 2, 1, 11);
+        bottomBar.setRotationPoint(0F, 16F, 0F);
+        bottomBar.setTextureSize(64, 64);
+        bottomBar.mirror = true;
+        setRotation(bottomBar, 0F, 0F, 0F);
 
-        Shape1 = new ModelRenderer(this, 0, 0);
-        Shape1.addBox(1F, -5F, -13F, 1, 6, 1);
-        Shape1.setRotationPoint(0F, 16F, 0F);
-        Shape1.setTextureSize(64, 64);
-        Shape1.mirror = true;
-        setRotation(Shape1, 0F, 0F, 0F);
+        rod1 = new ModelRenderer(this, 0, 0);
+        rod1.addBox(1F, -5F, -13F, 1, 6, 1);
+        rod1.setRotationPoint(0F, 16F, 0F);
+        rod1.setTextureSize(64, 64);
+        rod1.mirror = true;
+        setRotation(rod1, 0F, 0F, 0F);
 
-        Shape3 = new ModelRenderer(this, 0, 0);
-        Shape3.addBox(1F, -5F, -11F, 1, 6, 1);
-        Shape3.setRotationPoint(0F, 16F, 0F);
-        Shape3.setTextureSize(64, 64);
-        Shape3.mirror = true;
-        setRotation(Shape3, 0F, 0F, 0F);
+        rod2 = new ModelRenderer(this, 0, 0);
+        rod2.addBox(1F, -5F, -11F, 1, 6, 1);
+        rod2.setRotationPoint(0F, 16F, 0F);
+        rod2.setTextureSize(64, 64);
+        rod2.mirror = true;
+        setRotation(rod2, 0F, 0F, 0F);
 
-        Shape4 = new ModelRenderer(this, 0, 0);
-        Shape4.addBox(-2F, -4F, -9F, 1, 6, 1);
-        Shape4.setRotationPoint(0F, 15F, 0F);
-        Shape4.setTextureSize(64, 64);
-        Shape4.mirror = true;
-        setRotation(Shape4, 0F, 0F, 0F);
+        rod3 = new ModelRenderer(this, 0, 0);
+        rod3.addBox(-2F, -5F, -9F, 1, 6, 1);
+        rod3.setRotationPoint(0F, 16F, 0F);
+        rod3.setTextureSize(64, 64);
+        rod3.mirror = true;
+        setRotation(rod3, 0F, 0F, 0F);
 
-        Shape5 = new ModelRenderer(this, 0, 0);
-        Shape5.addBox(-2F, -5F, -13F, 1, 6, 1);
-        Shape5.setRotationPoint(0F, 16F, 0F);
-        Shape5.setTextureSize(64, 64);
-        Shape5.mirror = true;
-        setRotation(Shape5, 0F, 0F, 0F);
+        rod4 = new ModelRenderer(this, 0, 0);
+        rod4.addBox(-2F, -5F, -13F, 1, 6, 1);
+        rod4.setRotationPoint(0F, 16F, 0F);
+        rod4.setTextureSize(64, 64);
+        rod4.mirror = true;
+        setRotation(rod4, 0F, 0F, 0F);
 
-        Shape6 = new ModelRenderer(this, 0, 0);
-        Shape6.addBox(-2F, -5F, -11F, 1, 6, 1);
-        Shape6.setRotationPoint(0F, 16F, 0F);
-        Shape6.setTextureSize(64, 64);
-        Shape6.mirror = true;
-        setRotation(Shape6, 0F, 0F, 0F);
+        rod5 = new ModelRenderer(this, 0, 0);
+        rod5.addBox(-2F, -5F, -11F, 1, 6, 1);
+        rod5.setRotationPoint(0F, 16F, 0F);
+        rod5.setTextureSize(64, 64);
+        rod5.mirror = true;
+        setRotation(rod5, 0F, 0F, 0F);
 
-        Shape7 = new ModelRenderer(this, 0, 0);
-        Shape7.addBox(1F, -5F, -9F, 1, 6, 1);
-        Shape7.setRotationPoint(0F, 16F, 0F);
-        Shape7.setTextureSize(64, 64);
-        Shape7.mirror = true;
-        setRotation(Shape7, 0F, 0F, 0F);
+        rod6 = new ModelRenderer(this, 0, 0);
+        rod6.addBox(1F, -5F, -9F, 1, 6, 1);
+        rod6.setRotationPoint(0F, 16F, 0F);
+        rod6.setTextureSize(64, 64);
+        rod6.mirror = true;
+        setRotation(rod6, 0F, 0F, 0F);
     }
 
     @Override
@@ -82,13 +81,13 @@ public class ModelDamageAmp extends ModelBase {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 
-        Shape2.render(f5);
-        Shape1.render(f5);
-        Shape3.render(f5);
-        Shape4.render(f5);
-        Shape5.render(f5);
-        Shape6.render(f5);
-        Shape7.render(f5);
+        bottomBar.render(f5);
+        rod1.render(f5);
+        rod2.render(f5);
+        rod3.render(f5);
+        rod4.render(f5);
+        rod5.render(f5);
+        rod6.render(f5);
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -100,29 +99,29 @@ public class ModelDamageAmp extends ModelBase {
 
     @SuppressWarnings("SuspiciousNameCombination")
     public void setRotationForTarget(float y, float z) {
-        Shape1.rotateAngleX = y;
-        Shape1.rotateAngleY = z;
-        Shape2.rotateAngleX = y;
-        Shape2.rotateAngleY = z;
-        Shape3.rotateAngleX = y;
-        Shape3.rotateAngleY = z;
-        Shape4.rotateAngleX = y;
-        Shape4.rotateAngleY = z;
-        Shape5.rotateAngleX = y;
-        Shape5.rotateAngleY = z;
-        Shape6.rotateAngleX = y;
-        Shape6.rotateAngleY = z;
-        Shape7.rotateAngleX = y;
-        Shape7.rotateAngleY = z;
+        bottomBar.rotateAngleX = y;
+        bottomBar.rotateAngleY = z;
+        rod1.rotateAngleX = y;
+        rod1.rotateAngleY = z;
+        rod2.rotateAngleX = y;
+        rod2.rotateAngleY = z;
+        rod3.rotateAngleX = y;
+        rod3.rotateAngleY = z;
+        rod4.rotateAngleX = y;
+        rod4.rotateAngleY = z;
+        rod5.rotateAngleX = y;
+        rod5.rotateAngleY = z;
+        rod6.rotateAngleX = y;
+        rod6.rotateAngleY = z;
     }
 
     public void renderAll() {
-        Shape2.render(0.0625F);
-        Shape1.render(0.0625F);
-        Shape3.render(0.0625F);
-        Shape4.render(0.0625F);
-        Shape5.render(0.0625F);
-        Shape6.render(0.0625F);
-        Shape7.render(0.0625F);
+        bottomBar.render(0.0625F);
+        rod1.render(0.0625F);
+        rod2.render(0.0625F);
+        rod3.render(0.0625F);
+        rod4.render(0.0625F);
+        rod5.render(0.0625F);
+        rod6.render(0.0625F);
     }
 }
