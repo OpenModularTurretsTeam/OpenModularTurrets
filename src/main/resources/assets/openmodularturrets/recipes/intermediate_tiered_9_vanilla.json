@@ -18,8 +18,7 @@
       "data": 8
     },
     "C": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     },
     "D": {
       "type": "forge:ore_dict",

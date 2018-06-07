@@ -18,14 +18,13 @@
       "data": 32767
     },
     "C": {
-      "item": "minecraft:chest"
+      "item": "#CHESTWOOD"
     },
     "D": {
       "item": "#INGOTTIN"
     },
     "E": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     }
   },
   "conditions": [

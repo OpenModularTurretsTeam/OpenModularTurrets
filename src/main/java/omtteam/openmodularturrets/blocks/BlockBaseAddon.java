@@ -37,7 +37,7 @@ import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
  * This Class
  */
 public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBlock {
-    public static final PropertyInteger MODEL = PropertyInteger.create("model", 0, 15);
+    public static final PropertyInteger MODEL = PropertyInteger.create("model", 0, 1);
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
     public BlockBaseAddon() {

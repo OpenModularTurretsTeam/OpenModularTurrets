@@ -11,18 +11,18 @@
   "type": "forge:ore_shaped",
   "key": {
     "A": {
-      "item": "minecraft:iron_ingot"
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
     },
     "B": {
       "type": "forge:ore_dict",
       "ore": "gemQuartz"
     },
     "C": {
-      "item": "minecraft:chest"
+      "item": "#CHESTWOOD"
     },
     "D": {
-      "item": "openmodularturrets:intermediate_regular",
-      "data": 0
+      "item": "#IOBUS"
     }
   }
 }

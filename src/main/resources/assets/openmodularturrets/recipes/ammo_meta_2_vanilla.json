@@ -12,13 +12,15 @@
   "type": "forge:ore_shaped",
   "key": {
     "A": {
-      "item": "minecraft:iron_ingot"
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
     },
     "B": {
       "item": "minecraft:flint"
     },
     "C": {
-      "item": "minecraft:redstone"
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
     }
   },
   "conditions": [
