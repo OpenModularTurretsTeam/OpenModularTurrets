@@ -217,7 +217,7 @@ curseforge {
         id = config.curse_project_id
 
         relations {
-            requiredlLibrary 'omlib'
+            requiredLibrary 'omlib'
             optionalLibrary 'ompd'
             optionalLibrary 'ender-io'
             optionalLibrary 'redstone-flux'
