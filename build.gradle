@@ -231,12 +231,12 @@ curseforge {
         }
 
         addArtifact(sourceJar){
-            changelog = file("${projectDir}/change_log.html").tex
+            changelog = file("${projectDir}/change_log.html").text
             releaseType = 'alpha'
         }
 
         addArtifact(deobfJar){
-            changelog = file("${projectDir}/change_log.html").tex
+            changelog = file("${projectDir}/change_log.html").text
             releaseType = 'alpha'
         }
     }
