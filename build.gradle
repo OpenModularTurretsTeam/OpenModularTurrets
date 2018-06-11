@@ -14,6 +14,49 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven-publish'
 apply plugin: 'idea'
+
+plugins {
+    id "com.matthewprenger.cursegradle" version "1.0.10"
+}
+
+repositories {
+    mavenCentral()
+    maven { url = "http://tehnut.info/maven" }
+    maven { url = "http://maven.tterrag.com" }
+    maven { url = "http://dvs1.progwml6.com/files/maven" }
+    maven { url = "http://files.minecraftforge.net/maven" }
+    maven { url = "http://maven.cil.li/" }
+    maven { url = "http://maven.ic2.player.to" }
+    maven { url = "http://maven.mcmoddev.com" }
+    maven { url = "http://mod-buildcraft.com/maven/" }
+    ivy {
+        url "http://ae-mod.info/builds"
+        layout "pattern", {
+            artifact "[module]-[revision](-[classifier])(.[ext])"
+        }
+    }
+    maven { // The repo from which to get waila
+        name "Mobius Repo"
+        url "http://mobiusstrip.eu/maven"
+    }
+    maven { // the repo from which to get NEI and stuff
+        name 'CB Repo'
+        url "http://chickenbones.net/maven/"
+    }
+    maven { url "http://maven.ironhide.de/" }
+    maven { url = "http://dl.tsr.me/artifactory/libs-release-local" }
+    maven { // CoFH
+        name = "Covers Maven"
+        url = "http://maven.covers1624.net"
+    }
+    /*ivy {
+        url "http://ae-mod.info/builds"
+        layout "pattern", {
+            artifact "[module]-[revision](-[classifier])(.[ext])"
+        }
+    } */
+}
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -74,54 +117,9 @@ processResources {
     }
 }
 
-repositories {
-    mavenCentral()
-    maven { url = "http://tehnut.info/maven" }
-    maven { url = "http://maven.tterrag.com" }
-    maven { url = "http://dvs1.progwml6.com/files/maven" }
-    maven { url = "http://files.minecraftforge.net/maven" }
-    maven { url = "http://maven.cil.li/" }
-    maven { url = "http://maven.ic2.player.to" }
-    maven { url = "http://maven.mcmoddev.com" }
-    maven { url = "http://mod-buildcraft.com/maven/" }
-    ivy {
-        url "http://ae-mod.info/builds"
-        layout "pattern", {
-            artifact "[module]-[revision](-[classifier])(.[ext])"
-        }
-    }
-    maven { // The repo from which to get waila
-        name "Mobius Repo"
-        url "http://mobiusstrip.eu/maven"
-    }
-    maven { // the repo from which to get NEI and stuff
-        name 'CB Repo'
-        url "http://chickenbones.net/maven/"
-    }
-    maven { url "http://maven.ironhide.de/" }
-    maven { url = "http://dl.tsr.me/artifactory/libs-release-local" }
-    maven { // CoFH
-        name = "Covers Maven"
-        url = "http://maven.covers1624.net"
-    }
-    /*ivy {
-        url "http://ae-mod.info/builds"
-        layout "pattern", {
-            artifact "[module]-[revision](-[classifier])(.[ext])"
-        }
-    } */
-}
-
 configurations {
     runtime.exclude group: 'ValkyrienWarfareRevamped', module: 'valkyrienwarfare'
 }
-
-//sourceSets {
-//   main {
-//       compileClasspath += configurations.forgeGradleResolvedDeobfCompile
-//        runtimeClasspath -= runtimeClasspath
-//    }
-//}
 
 def omlib_local = false
 if (project.allprojects.findAll({ it.name == "OMLib" }).size() > 0) {
@@ -137,12 +135,10 @@ if (project.allprojects.findAll({ it.name == "OpenModularPassiveDefense" }).size
 
 dependencies {
     compileOnly "mezz.jei:jei_${config.minecraft_version}:${config.jei_version}:api"
-    //compileOnly "igwmod:IGW-Mod-${config.igwmod_version}:userdev"
     compileOnly "mcp.mobius.waila:Hwyla:${config.hwyla_version}_${config.minecraft_version_short}"
     compileOnly "cofh:RedstoneFlux:${config.minecraft_version_short}-${config.redstoneflux_version}:deobf"
     compileOnly "mcjty.theoneprobe:TheOneProbe-${config.minecraft_version_short}:${config.minecraft_version_short}-${config.top_version}"
     compileOnly "li.cil.oc:OpenComputers:MC${config.minecraft_version_short}.1-${config.oc_version}"
-    //compile "Azanor:Thaumcraft:${config.tc_version}:deobf@jar"
     compileOnly "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
     compileOnly "net.darkhax.tesla:Tesla-${config.minecraft_version_short}:${config.tesla_version}"
     //compileOnly "ValkyrienWarfareRevamped:valkyrienwarfare:${config.valkyrienwarfare_version}:dev"
@@ -180,5 +176,67 @@ publishing {
     }
     repositories {
         mavenLocal()
+    }
+}
+
+//// DETECTING COMMIT NAME AND ACTIVATING CURSE RELEASE \\\\
+
+def commit_release_type = getCommmitReleaseType()
+def getCommmitReleaseType(){
+    if(project.hasProperty("curseforge_key")){
+        def stdout = new ByteArrayOutputStream()
+        try {
+            exec {
+                commandLine 'git', 'log', '-1', '--pretty=tformat:%s'
+                standardOutput = stdout
+            }
+        }catch(Exception e){
+            System.print("SKIPPING CURSE RELEASE - FAILED TO RETRIEVE LAST COMMIT")
+            e.printStackTrace();
+            return 'none';
+        }
+        String commit = stdout.toString().trim()
+
+        if(commit.startsWith("Release") || commit.startsWith("release")){ System.out.println("FOUND NEW RELEASE - COMMIT: " + commit); return 'release' }
+        else if(commit.startsWith("Beta") || commit.startsWith("beta")){ System.out.println("FOUND NEW BETA - COMMIT: " + commit); return 'beta' }
+        else if(commit.startsWith("Alpha") || commit.startsWith("alpha")){ System.out.println("FOUND NEW ALPHA - COMMIT: " + commit); return 'alpha' }
+        else{System.out.println("SKIPPING CURSE RELEASE - COMMIT: " + commit)}
+    }
+    System.out.println("SKIPPING CURSE RELEASE - NO CURSE API KEY")
+    return 'none';
+}
+
+tasks.curseforge.enabled = project.hasProperty("curseforge_key") && !commit_release_type.equals('none')
+curseforge {
+    if(project.hasProperty("curseforge_key") && !commit_release_type.equals('none')) {
+        System.out.println("ATTEMPTING CURSE RELEASE")
+        apiKey = project.properties["curseforge_key"]
+    }
+    project {
+        id = curse_project_id
+
+        relations {
+            requiredlLibrary 'omlib'
+            optionalLibrary 'ompd'
+            optionalLibrary 'ender-io'
+            optionalLibrary 'redstone-flux'
+            optionalLibrary 'thermalexpansion'
+        }
+
+        mainArtifact(jar) {
+            releaseType = commit_release_type.equals('none') ? 'release' : commit_release_type //throws if not release, beta or alpha
+            changelog = file("${projectDir}/change_log.html").text
+            changelogType = 'html'
+        }
+
+        addArtifact(sourceJar){
+            changelog = file("${projectDir}/change_log.html").tex
+            releaseType = 'alpha'
+        }
+
+        addArtifact(deobfJar){
+            changelog = file("${projectDir}/change_log.html").tex
+            releaseType = 'alpha'
+        }
     }
 }
