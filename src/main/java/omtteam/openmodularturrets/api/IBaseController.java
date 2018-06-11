@@ -2,6 +2,7 @@ package omtteam.openmodularturrets.api;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import omtteam.omlib.api.network.IController;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.openmodularturrets.util.TargetingSettings;
@@ -16,7 +17,7 @@ import java.util.List;
  * Turret Bases get additional API functions like getAllTargetsInRange.
  */
 @SuppressWarnings("ALL")
-public interface IBaseController extends ITurretBaseAddonTileEntity {
+public interface IBaseController extends IController {
     /**
      * Return true if the Entity given per parameter is a valid target.
      *

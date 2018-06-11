@@ -33,9 +33,9 @@ import omtteam.omlib.util.EnumAccessMode;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.openmodularturrets.api.IBaseController;
-import omtteam.openmodularturrets.api.network.INetworkTile;
-import omtteam.openmodularturrets.api.network.IPowerExchangeTile;
-import omtteam.openmodularturrets.api.network.OMTNetwork;
+import omtteam.omlib.api.network.INetworkTile;
+import omtteam.omlib.api.network.IPowerExchangeTile;
+import omtteam.omlib.api.network.OMLibNetwork;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.network.messages.MessageTurretBase;
@@ -85,7 +85,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private int kills;
     private int playerKills;
     private IBaseController controller;
-    private OMTNetwork network;
+    private OMLibNetwork network;
     private List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
 
     protected IItemHandlerModifiable inventory;
@@ -641,7 +641,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     @Nullable
     @Override
-    public OMTNetwork getNetwork() {
+    public OMLibNetwork getNetwork() {
         return network;
     }
 
@@ -652,7 +652,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     @Override
-    public void setNetwork(OMTNetwork network) {
+    public void setNetwork(OMLibNetwork network) {
         this.network = network;
     }
 

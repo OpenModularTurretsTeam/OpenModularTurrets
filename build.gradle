@@ -11,13 +11,14 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'maven-publish'
-apply plugin: 'idea'
-
 plugins {
     id "com.matthewprenger.cursegradle" version "1.0.10"
 }
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven-publish'
+apply plugin: 'idea'
+apply plugin: 'java'
 
 repositories {
     mavenCentral()
