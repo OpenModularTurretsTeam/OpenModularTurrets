@@ -426,7 +426,7 @@ public class TurretHeadUtil {
 
             if (ammoStack != ItemStackTools.getEmptyStack() && getStackSize(ammoStack) > 0 && ammoStack.getItem() == ammoStackRequired.getItem()
                     && ammoStack.getMetadata() == ammoStackRequired.getMetadata()) {
-                result += ammoStack.getCount();
+                result += ItemStackTools.getStackSize(ammoStack);
             }
         }
 
@@ -436,7 +436,7 @@ public class TurretHeadUtil {
                 for (int i = 0; i < exp.getSizeInventory(); i++) {
                     ItemStack ammoStack = exp.getStackInSlot(i);
                     if (ammoStack != ItemStackTools.getEmptyStack() && ammoStack.getItem() == ammoStackRequired.getItem()) {
-                        result += ammoStack.getCount();
+                        result += ItemStackTools.getStackSize(ammoStack);
                     }
                 }
             }

@@ -15,6 +15,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import omtteam.omlib.util.PlayerUtil;
+import omtteam.omlib.util.compat.MathTools;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
@@ -124,7 +125,7 @@ public abstract class TurretProjectile extends EntityThrowable {
         this.posX += this.motionX;
         this.posY += this.motionY;
         this.posZ += this.motionZ;
-        float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
+        float f = MathTools.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
         this.rotationYaw = (float) (MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
 
         for (this.rotationPitch = (float) (MathHelper.atan2(this.motionY, (double) f) * (180D / Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
