@@ -1,6 +1,7 @@
 package omtteam.openmodularturrets.client.render.models;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -106,7 +107,7 @@ public class TurretBaseBakedModel extends CamoBakedModel {
 
         @Override
         public IModelState getDefaultState() {
-            return null;
+            return part -> Optional.absent();
         }
     }
 
