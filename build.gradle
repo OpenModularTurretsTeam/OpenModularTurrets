@@ -51,8 +51,9 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20161111"
+    mappings = "snapshot_20161227"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    useDepAts = true
 }
 
 
@@ -107,8 +108,9 @@ repositories {
         url "http://tehnut.info/maven"
     }
     maven {
-        url "http://maven.ironhide.de/"
+        url "https://maven.ironhide.de/"
     }
+    maven { url = "http://maven.mcmoddev.com" }
     maven { // JEI
         url "http://dvs1.progwml6.com/files/maven"
     }
@@ -134,17 +136,17 @@ if (rootProject.name == "OMTControl"){
 }
 
 dependencies {
-    compileOnly "mezz.jei:jei_${config.minecraft_version}:${config.jei_version}:api"
-    compileOnly "igwmod:IGW-Mod-${config.igwmod_version}:userdev"
-    deobfCompile "mcp.mobius.waila:Hwyla:${config.hwyla_version}_${config.minecraft_version}"
-    compileOnly "mcjty.theoneprobe:TheOneProbe:${config.minecraft_version_short}-${config.top_version}"
-    deobfCompile "li.cil.oc:OpenComputers:MC${config.minecraft_version}-${config.oc_version}:api"
+    deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.jei_version}"
+    compile "net.darkhax.tesla:Tesla:${config.minecraft_version_short}-${config.tesla_version}"
+    compile "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
+    compileOnly "mcjty.theoneprobe:TheOneProbe:1.1x-${config.top_version}"
+    deobfCompile "mcp.mobius.waila:Hwyla:${config.hwyla_version}_${config.minecraft_version_short}"
+    //runtime "omtteam:openmodularturrets:1.10.2-${config.omt_version}:dev"
+    deobfCompile "li.cil.oc:OpenComputers:MC${config.minecraft_version}-${config.oc_version}"
     //compile "Azanor:Thaumcraft:${config.tc_version}:deobf@jar"
-    compileOnly "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
-    compileOnly "net.darkhax.tesla:Tesla:${config.minecraft_version}-${config.tesla_version}"
     compileOnly "ValkyrienWarfareRevamped:valkyrienwarfare:${config.valkyrienwarfare_version}:dev"
     if (!omlib_local) {
-        compile "omtteam:omlib:${config.minecraft_version}-${config.omlib_version}:dev"
+        deobfCompile "omtteam:omlib:${config.minecraft_version}-${config.omlib_version}"
     } else {
         compile project(':OMLib')
     }
