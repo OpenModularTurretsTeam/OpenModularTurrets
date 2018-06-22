@@ -22,6 +22,7 @@ import omtteam.omlib.api.IDebugTile;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.tileentity.ICamoSupport;
+import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.tileentity.TileEntityTrustedMachine;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
@@ -336,6 +337,11 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return 0;
     }
 
+    @Override
+    public TileEntityOwnedBlock getOwnedBlock() {
+        return this;
+    }
+
     // Getters and Setters
 
     @Override
@@ -541,7 +547,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 pos.getZ() - currentMaxRange - 1, pos.getX() + currentMaxRange + 1,
                 pos.getY() + currentMaxRange + 1, pos.getZ() + currentMaxRange + 1);
 
-        return worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
+        return this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
     }
 
     public void setAllTurretsYawPitch(float yaw, float pitch) {

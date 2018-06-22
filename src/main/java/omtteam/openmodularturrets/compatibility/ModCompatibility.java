@@ -21,8 +21,6 @@ public class ModCompatibility {
     public static boolean MekanismLoaded = false;
     public static boolean ThaumcraftLoaded = false;
     public static boolean ValkyrienWarfareLoaded = false;
-    @SuppressWarnings("unused")
-    public static IGWHandler igwHandler = null;
 
     public static void checkForMods() {
         ThermalExpansionLoaded = Loader.isModLoaded("ThermalExpansion");
