@@ -127,7 +127,7 @@ configurations {
 }
 
 def omlib_local = false
-configure(projects.findAll( {it.name.contains('OMLib')})) {
+configure(allprojects.findAll( {it.name.contains('OMLib')})) {
    omlib_local = true
 }
 
@@ -141,7 +141,7 @@ dependencies {
     compileOnly "net.industrial-craft:industrialcraft-2:${config.ic2_version}:dev"
     compileOnly "net.darkhax.tesla:Tesla:${config.minecraft_version}-${config.tesla_version}"
     compileOnly "ValkyrienWarfareRevamped:valkyrienwarfare:${config.valkyrienwarfare_version}:dev"
-    if (!omlib_local && !gradle.ext.omlib_local) {
+    if (!omlib_local) {
         compile "omtteam:omlib:${config.minecraft_version}-${config.omlib_version}:dev"
     } else {
         compile project(':OMLib')
