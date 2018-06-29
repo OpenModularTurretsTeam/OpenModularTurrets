@@ -100,10 +100,6 @@ public class PotatoProjectile extends TurretProjectile {
         }
     }
 
-    public EntityItem getItemBound() {
-        return itemBound;
-    }
-
     @Override
     protected float getGravityVelocity() {
         return this.gravity;

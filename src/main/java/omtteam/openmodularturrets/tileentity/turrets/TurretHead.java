@@ -36,6 +36,7 @@ import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
 
+@SuppressWarnings("unused")
 public abstract class TurretHead extends TileEntityBase implements ITickable, ITurretBaseAddonTileEntity {
     int ticks;
     int targetingTicks;

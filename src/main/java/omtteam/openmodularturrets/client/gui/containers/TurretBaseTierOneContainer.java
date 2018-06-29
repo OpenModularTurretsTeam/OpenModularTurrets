@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.client.gui.containers;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
-import omtteam.openmodularturrets.client.gui.customSlot.AmmoSlot;
+import omtteam.openmodularturrets.client.gui.slot.AmmoSlot;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 public class TurretBaseTierOneContainer extends TurretBaseContainer {

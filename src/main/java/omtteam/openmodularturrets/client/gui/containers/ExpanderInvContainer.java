@@ -5,7 +5,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import omtteam.openmodularturrets.client.gui.customSlot.AmmoSlot;
+import omtteam.openmodularturrets.client.gui.slot.AmmoSlot;
 import omtteam.openmodularturrets.tileentity.Expander;
 
 import javax.annotation.Nonnull;

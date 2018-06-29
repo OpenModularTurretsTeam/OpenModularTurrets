@@ -58,8 +58,7 @@ repositories {
     } */
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = targetCompatibility = 1.8
 
 // define the properties file
 ext.configFile = file "project.properties"
@@ -198,9 +197,9 @@ def getCommmitReleaseType(){
         }
         String commit = stdout.toString().trim()
 
-        if(commit.startsWith("Release") || commit.startsWith("release")){ System.out.println("FOUND NEW RELEASE - COMMIT: " + commit); return 'release' }
-        else if(commit.startsWith("Beta") || commit.startsWith("beta")){ System.out.println("FOUND NEW BETA - COMMIT: " + commit); return 'beta' }
-        else if(commit.startsWith("Alpha") || commit.startsWith("alpha")){ System.out.println("FOUND NEW ALPHA - COMMIT: " + commit); return 'alpha' }
+        if(commit.startsWith("CRelease") || commit.startsWith("crelease")){ System.out.println("FOUND NEW RELEASE - COMMIT: " + commit); return 'release' }
+        else if(commit.startsWith("CBeta") || commit.startsWith("cbeta")){ System.out.println("FOUND NEW BETA - COMMIT: " + commit); return 'beta' }
+        else if(commit.startsWith("CAlpha") || commit.startsWith("calpha")){ System.out.println("FOUND NEW ALPHA - COMMIT: " + commit); return 'alpha' }
         else{System.out.println("SKIPPING CURSE RELEASE - COMMIT: " + commit)}
     }
     System.out.println("SKIPPING CURSE RELEASE - NO CURSE API KEY")
@@ -215,6 +214,7 @@ curseforge {
     }
     project {
         id = config.curse_project_id
+        addGameVersion '1.12.2'
 
         relations {
             requiredLibrary 'omlib'

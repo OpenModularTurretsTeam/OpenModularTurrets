@@ -29,6 +29,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -58,9 +59,10 @@ import static omtteam.omlib.util.PlayerUtil.addChatMessage;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 
 
-@SuppressWarnings("deprecation")
 public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHasItemBlock, TOPInfoProvider {
     public static final PropertyInteger TIER = PropertyInteger.create("tier", 1, 5);
+    public static final PropertyInteger LIGHT_VALUE = PropertyInteger.create("light_value", 0, 15);
+    public static final PropertyInteger LIGHT_OPACITY = PropertyInteger.create("light_opacity", 0, 15);
 
     public BlockTurretBase() {
         super(Material.ROCK);
@@ -68,7 +70,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
         if (!OMTConfigHandler.turretBreakable) {
             this.setBlockUnbreakable();
         }
-        setDefaultState(this.blockState.getBaseState().withProperty(TIER, 1));
+        setDefaultState(this.blockState.getBaseState().withProperty(TIER, 1).withProperty(LIGHT_VALUE, 0).withProperty(LIGHT_OPACITY, 0));
         this.setSoundType(SoundType.STONE);
         this.setUnlocalizedName(OMTNames.Blocks.turretBase);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.turretBase);
@@ -112,15 +114,17 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isOpaqueCube(IBlockState blockState) {
-        return true;
+        return false;
     }
 
     @Override
     @Nonnull
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
+    @ParametersAreNonnullByDefault
+    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+        return true;
     }
 
     @Override
@@ -130,6 +134,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public int getMetaFromState(IBlockState state) {
         return state.getValue(TIER) - 1;
     }
@@ -137,54 +142,108 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @Override
     @Nonnull
     protected BlockStateContainer createBlockState() {
-        return new ExtendedBlockState(this, new IProperty[]{TIER}, new IUnlistedProperty[]{RENDERBLOCKSTATE});
+        return new ExtendedBlockState(this, new IProperty[]{TIER, LIGHT_VALUE, LIGHT_OPACITY}, new IUnlistedProperty[]{RENDERBLOCKSTATE});
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public boolean isTranslucent(IBlockState state) {
+        if (state instanceof IExtendedBlockState) {
+            return ((IExtendedBlockState) state).getValue(RENDERBLOCKSTATE).getRenderState().isTranslucent();
+        }
+        return false;
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+        if (state.getBlock() instanceof BlockTurretBase) {
+            return state.getActualState(world, pos).getValue(LIGHT_VALUE);
+        }
+        return super.getLightValue(state, world, pos);
+    }
+
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
+        if (state.getBlock() instanceof BlockTurretBase) {
+            return state.getActualState(world, pos).getValue(LIGHT_OPACITY);
+        }
+        return super.getLightValue(state, world, pos);
+    }
+
+    @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        if (state.getBlock() instanceof BlockTurretBase) {
+            TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
+            if (base != null) {
+                int lightValue, lightOpacity;
+                lightValue = base.getCamoSettings().getLightValue();
+                lightOpacity = base.getCamoSettings().getLightOpacity();
+                return state.withProperty(LIGHT_VALUE, lightValue).withProperty(LIGHT_OPACITY, lightOpacity);
+            }
+        }
+        return super.getActualState(state, worldIn, pos);
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
+    @ParametersAreNonnullByDefault
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote && hand == EnumHand.MAIN_HAND) {
             ItemStack heldItem = player.getHeldItemMainhand();
             TurretBase base = (TurretBase) world.getTileEntity(pos);
+            // Camo clear
             if (player.isSneaking() && OMTConfigHandler.isAllowBaseCamo() && heldItem == ItemStack.EMPTY) {
                 if (base != null) {
                     if (player.getUniqueID().toString().equals(base.getOwner())) {
                         base.setCamoState(state);
-                        world.notifyBlockUpdate(pos, state, state, 3);
                     } else {
                         addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
                     }
                 }
             }
-
-            Block heldItemBlock = null;
-
+            // Camo preparation
+            Block heldBlock = null;
+            IBlockState camoState = null;
             if (heldItem != ItemStack.EMPTY) {
-                heldItemBlock = Block.getBlockFromItem(heldItem.getItem());
+                heldBlock = Block.getBlockFromItem(heldItem.getItem());
+                camoState = heldBlock.getStateForPlacement(world, pos, side.getOpposite(), hitX, hitY, hitZ, heldItem.getMetadata(), player, hand);
             }
-
+            // Camo set
             if (!player.isSneaking() && OMTConfigHandler.isAllowBaseCamo() && heldItem != ItemStack.EMPTY && heldItem.getItem() instanceof ItemBlock &&
-                    heldItemBlock.isNormalCube(heldItemBlock.getStateFromMeta(heldItem.getMetadata())) && Block.getBlockFromItem(
-                    heldItem.getItem()).isOpaqueCube(heldItemBlock.getStateFromMeta(heldItem.getMetadata())) && !(Block.getBlockFromItem(
-                    heldItem.getItem()) instanceof BlockTurretBase)) {
+                    heldBlock.isFullCube(camoState)
+                    && !heldBlock.hasTileEntity(camoState)
+                    && !(heldBlock instanceof BlockTurretBase)) {
                 if (base != null) {
                     if (PlayerUtil.isPlayerAdmin(player, base)) {
-                        base.setCamoState(heldItemBlock.getStateFromMeta(heldItem.getItemDamage()));
-                        world.notifyBlockUpdate(pos, state, state, 3);
+                        base.setCamoState(camoState);
+                        return true;
                     } else {
                         addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
                     }
                 }
+            }
+            // Write Memory Card
+            if (player.isSneaking() && base != null && player.getHeldItemMainhand() != ItemStack.EMPTY
+                    && player.getHeldItemMainhand().getItem() instanceof UsableMetaItem && player.getHeldItemMainhand().getItemDamage() == 2) {
 
-            } else if (player.isSneaking() && base != null && player.getHeldItemMainhand() != ItemStack.EMPTY &&
-                    player.getHeldItemMainhand().getItem() instanceof UsableMetaItem && player.getHeldItemMainhand().getItemDamage() == 2) {
                 ((UsableMetaItem) player.getHeldItemMainhand().getItem()).setDataStored(player.getHeldItemMainhand(), base.writeMemoryCardNBT());
-            } else if (!player.isSneaking() && base != null && player.getHeldItemMainhand() != ItemStack.EMPTY &&
-                    player.getHeldItemMainhand().getItem() instanceof UsableMetaItem && player.getHeldItemMainhand().getItemDamage() == 2 &&
-                    ((UsableMetaItem) player.getHeldItemMainhand().getItem()).hasDataStored(player.getHeldItemMainhand())) {
-                // Memory Card
+                return true;
+            }
+            // Read Memory Card
+            if (!player.isSneaking() && base != null && player.getHeldItemMainhand() != ItemStack.EMPTY
+                    && player.getHeldItemMainhand().getItem() instanceof UsableMetaItem && player.getHeldItemMainhand().getItemDamage() == 2
+                    && ((UsableMetaItem) player.getHeldItemMainhand().getItem()).hasDataStored(player.getHeldItemMainhand())) {
+
                 base.readMemoryCardNBT(((UsableMetaItem) player.getHeldItemMainhand().getItem()).getDataStored(player.getHeldItemMainhand()));
-            } else if (!player.isSneaking() && base != null) {
+                return true;
+            }
+            // Open GUI
+            if (!player.isSneaking() && base != null) {
                 if (PlayerUtil.canPlayerOpenGUI(player, base)) {
                     world.notifyBlockUpdate(pos, state, state, 6);
                     player.openGui(OpenModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
@@ -197,6 +256,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos neighbor) {
         if (!worldIn.isRemote) {
             TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
@@ -209,6 +269,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack
             stack) {
 

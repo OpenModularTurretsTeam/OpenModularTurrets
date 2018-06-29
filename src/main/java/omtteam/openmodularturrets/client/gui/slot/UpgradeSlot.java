@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.client.gui.customSlot;
+package omtteam.openmodularturrets.client.gui.slot;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;

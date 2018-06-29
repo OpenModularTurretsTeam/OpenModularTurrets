@@ -12,6 +12,7 @@ import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.getItem;
 
+@SuppressWarnings("unused")
 public class OMTConfigHandler {
 
     public static Configuration config;

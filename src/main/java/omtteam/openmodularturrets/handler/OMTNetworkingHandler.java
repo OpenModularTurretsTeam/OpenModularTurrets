@@ -45,5 +45,11 @@ public class OMTNetworkingHandler {
 
         INSTANCE.registerMessage(MessageToggleMode.MessageHandlerToggleMode.class, MessageToggleMode.class, 13,
                 Side.SERVER);
+
+        INSTANCE.registerMessage(MessageAdjustLightValue.MessageHandlerAdjustLightValue.class,
+                MessageAdjustLightValue.class, 14, Side.SERVER);
+
+        INSTANCE.registerMessage(MessageAdjustLightOpacity.MessageHandlerAdjustLightOpacity.class,
+                MessageAdjustLightOpacity.class, 15, Side.SERVER);
     }
 }

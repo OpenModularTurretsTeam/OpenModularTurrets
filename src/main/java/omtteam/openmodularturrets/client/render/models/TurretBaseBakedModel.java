@@ -32,7 +32,7 @@ import static omtteam.openmodularturrets.blocks.BlockTurretBase.TIER;
 
 /**
  * Created by Keridos on 29/01/17.
- * This Class
+ * This is the baked model for the turret base.
  */
 
 @SideOnly(Side.CLIENT)
@@ -50,7 +50,7 @@ public class TurretBaseBakedModel extends CamoBakedModel {
 
     @Override
     protected IBakedModel getModel(List<IBakedModel> list, @Nullable IBlockState state) {
-        if (state != null) {
+        if (state != null && state.getPropertyKeys().contains(TIER)) {
             return list.get(state.getValue(TIER) - 1);
         }
         return list.get(0);
@@ -81,7 +81,6 @@ public class TurretBaseBakedModel extends CamoBakedModel {
         }
 
         @Override
-
         public Collection<ResourceLocation> getDependencies() {
             List<ResourceLocation> list = new ArrayList<>();
             for (int i = 1; i < 6; i++) {
@@ -114,7 +113,6 @@ public class TurretBaseBakedModel extends CamoBakedModel {
 
     @MethodsReturnNonnullByDefault
     public static class ModelLoader implements ICustomModelLoader {
-
         @Override
         @ParametersAreNonnullByDefault
         public boolean accepts(ResourceLocation modelLocation) {

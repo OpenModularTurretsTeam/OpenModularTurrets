@@ -25,6 +25,7 @@ import java.util.List;
 import static omtteam.omlib.util.PlayerUtil.isPlayerOwner;
 import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
 
+@SuppressWarnings("unused")
 public abstract class TurretProjectile extends EntityThrowable {
     public float gravity;
     public boolean isAmped;

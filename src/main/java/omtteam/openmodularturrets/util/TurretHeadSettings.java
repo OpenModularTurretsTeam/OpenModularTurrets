@@ -7,6 +7,7 @@ import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
  * Created by Keridos on 09/02/17.
  * This Class
  */
+@SuppressWarnings("unused")
 public class TurretHeadSettings {
     public float yaw, pitch;
     public boolean forceFire;

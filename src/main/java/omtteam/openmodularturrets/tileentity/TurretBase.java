@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.tileentity;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -15,27 +16,32 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 import omtteam.omlib.api.IDebugTile;
+import omtteam.omlib.api.network.INetworkTile;
+import omtteam.omlib.api.network.IPowerExchangeTile;
+import omtteam.omlib.api.network.OMLibNetwork;
 import omtteam.omlib.network.ISyncable;
+import omtteam.omlib.network.OMLibNetworkingHandler;
+import omtteam.omlib.network.messages.MessageCamoSettings;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.tileentity.TileEntityTrustedMachine;
+import omtteam.omlib.util.CamoSettings;
 import omtteam.omlib.util.EnumAccessMode;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.openmodularturrets.api.IBaseController;
-import omtteam.omlib.api.network.INetworkTile;
-import omtteam.omlib.api.network.IPowerExchangeTile;
-import omtteam.omlib.api.network.OMLibNetwork;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.network.messages.MessageTurretBase;
@@ -55,8 +61,6 @@ import java.util.List;
 
 import static omtteam.omlib.compatibility.ModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
-import static omtteam.omlib.util.BlockUtil.getBlockStateFromNBT;
-import static omtteam.omlib.util.BlockUtil.writeBlockFromStateToNBT;
 import static omtteam.omlib.util.GeneralUtil.getMachineModeLocalization;
 import static omtteam.omlib.util.PlayerUtil.getPlayerUUID;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
@@ -67,7 +71,8 @@ import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 )
 public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile, ISyncable {
     public int trustedPlayerIndex = 0;
-    protected IBlockState camoBlockState;
+    protected CamoSettings camoSettings;
+    private IBlockState camoBlockStateTemp;
 
     public boolean shouldConcealTurrets;
     private boolean multiTargeting = false;
@@ -78,8 +83,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private boolean attacksNeutrals;
     private boolean attacksPlayers;
     private int ticks;
-    private boolean computerAccessible = false;
-    private ArrayList<IComputerAccess> comp;
     protected int tier;
     private boolean forceFire = false;
     private int kills;
@@ -89,6 +92,33 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
 
     protected IItemHandlerModifiable inventory;
+
+    public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
+        super();
+        this.currentMaxRange = 0;
+        this.upperBoundMaxRange = 0;
+        this.rangeOverridden = false;
+        this.storage = new OMEnergyStorage(MaxEnergyStorage, MaxIO);
+        this.attacksMobs = true;
+        this.attacksNeutrals = false;
+        this.attacksPlayers = false;
+        this.tier = tier;
+        this.camoBlockStateTemp = camoState;
+        this.mode = EnumMachineMode.INVERTED;
+        this.maxStorageEU = tier * 7500D;
+        this.camoSettings = new CamoSettings();
+        setupInventory();
+    }
+
+    public TurretBase() {
+        super();
+        setupInventory();
+    }
+
+    @Override
+    public IItemHandler getCapabilityInventory(EnumFacing facing) {
+        return new RangedWrapper(inventory, 0, 9);
+    }
 
     protected void setupInventory() {
         //noinspection BooleanMethodIsAlwaysInverted,BooleanMethodIsAlwaysInverted,BooleanMethodIsAlwaysInverted
@@ -100,6 +130,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 markDirty();
             }
 
+            @SuppressWarnings("BooleanMethodIsAlwaysInverted")
             public boolean isItemValidForSlot(int index, ItemStack stack) {
                 if (index < 9) {
                     return OMTUtil.isItemStackValidAmmo(stack);
@@ -114,34 +145,13 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                     return stack;
                 return super.insertItem(slot, stack, simulate);
             }
-
         };
     }
 
     @Override
-    public IItemHandler getCapabilityInventory(EnumFacing facing) {
-        return new RangedWrapper(inventory, 0, 9);
-    }
-
-    public TurretBase() {
-        super();
-        setupInventory();
-    }
-
-    public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
-        super();
-        this.currentMaxRange = 0;
-        this.upperBoundMaxRange = 0;
-        this.rangeOverridden = false;
-        this.storage = new OMEnergyStorage(MaxEnergyStorage, MaxIO);
-        this.attacksMobs = true;
-        this.attacksNeutrals = false;
-        this.attacksPlayers = false;
-        this.tier = tier;
-        this.camoBlockState = camoState;
-        this.mode = EnumMachineMode.INVERTED;
-        this.maxStorageEU = tier * 7500D;
-        setupInventory();
+    @Nonnull
+    public CamoSettings getCamoSettings() {
+        return camoSettings == null ? new CamoSettings() : camoSettings;
     }
 
     @SuppressWarnings("deprecation")
@@ -149,8 +159,36 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Nonnull
     public IBlockState getDefaultCamoState() {
         //noinspection ConstantConditions
-        return ForgeRegistries.BLOCKS.getValue(
-                new ResourceLocation(Reference.MOD_ID + ":" + OMTNames.Blocks.turretBase)).getStateFromMeta(this.tier - 1);
+        Block base = ForgeRegistries.BLOCKS.getValue(
+                new ResourceLocation(Reference.MOD_ID + ":" + OMTNames.Blocks.turretBase));
+        return base.getStateFromMeta(this.tier - 1);
+    }
+
+    @Nonnull
+    @Override
+    public IBlockState getCamoState() {
+        return this.getCamoSettings().getCamoBlockState() != null
+                && this.getCamoSettings().getCamoBlockState() instanceof IExtendedBlockState
+                ? (IExtendedBlockState) this.getCamoSettings().getCamoBlockState()
+                : this.getCamoSettings().getCamoBlockState() != null
+                ? this.getCamoSettings().getCamoBlockState().getBlock()
+                .getExtendedState(this.getCamoSettings().getCamoBlockState(), this.getWorld(), this.getPos())
+                : this.getDefaultCamoState();
+    }
+
+    @Override
+    public void setCamoState(IBlockState state) {
+        if (!(state instanceof IExtendedBlockState)) {
+            this.getCamoSettings().setCamoBlockState(state.getBlock().getExtendedState(state, this.getWorld(), this.getPos()));
+        } else {
+            this.getCamoSettings().setCamoBlockState(state);
+        }
+        this.camoBlockStateTemp = state;
+        if (!world.isRemote) {
+            OMLibNetworkingHandler.INSTANCE.sendToAllAround(new MessageCamoSettings(this),
+                    new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
+            this.markBlockForUpdate(3);
+        }
     }
 
     @Override
@@ -163,14 +201,13 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         nbtTagCompound.setBoolean("attacksMobs", this.attacksMobs);
         nbtTagCompound.setBoolean("attacksNeutrals", this.attacksNeutrals);
         nbtTagCompound.setBoolean("attacksPlayers", this.attacksPlayers);
-        nbtTagCompound.setBoolean("computerAccessible", this.computerAccessible);
         nbtTagCompound.setBoolean("shouldConcealTurrets", this.shouldConcealTurrets);
         nbtTagCompound.setBoolean("multiTargeting", this.multiTargeting);
         nbtTagCompound.setBoolean("forceFire", this.forceFire);
         nbtTagCompound.setInteger("tier", this.tier);
         nbtTagCompound.setInteger("mode", this.mode.ordinal());
         nbtTagCompound.setInteger("kills", this.kills);
-        writeBlockFromStateToNBT(nbtTagCompound, this.camoBlockState);
+        camoSettings.writeNBT(nbtTagCompound);
         return nbtTagCompound;
     }
 
@@ -192,11 +229,11 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         } else {
             this.mode = EnumMachineMode.INVERTED;
         }
-        this.computerAccessible = nbtTagCompound.hasKey("computerAccessible") && nbtTagCompound.getBoolean("computerAccessible");
-        if (getBlockStateFromNBT(nbtTagCompound) != null) {
-            this.camoBlockState = getBlockStateFromNBT(nbtTagCompound);
+        this.camoSettings = CamoSettings.getSettingsFromNBT(nbtTagCompound);
+        if (camoSettings.getCamoBlockState() != null) {
+            this.camoBlockStateTemp = camoSettings.getCamoBlockState();
         } else {
-            this.camoBlockState = getDefaultCamoState();
+            this.camoBlockStateTemp = getDefaultCamoState();
         }
         if (nbtTagCompound.hasKey("kills")) {
             this.kills = nbtTagCompound.getInteger("kills");
@@ -209,6 +246,17 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             this.playerKills = 0;
         }
         this.maxStorageEU = tier * 7500D;
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if (camoBlockStateTemp instanceof IExtendedBlockState) {
+            this.camoSettings.setCamoBlockState(camoBlockStateTemp);
+        } else {
+            this.setCamoState(camoBlockStateTemp.getBlock().getExtendedState(camoBlockStateTemp, this.getWorld(), this.getPos()));
+        }
+        this.updateNBT = true;
     }
 
     @Override
@@ -247,6 +295,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         }
     }
 
+
     @Override
     public void update() {
         super.update();
@@ -265,7 +314,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
             //maxRange update, needs to happen on both client and server else GUI information may become disjoint.
             //moved by Keridos, added the sync to MessageTurretBase, should sync properly now too.
-            setBaseUpperBoundRange();
+            //setBaseUpperBoundRange();
             updateControllerSettings();
 
             if (this.currentMaxRange > this.upperBoundMaxRange) {
@@ -290,10 +339,13 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 updateRedstoneReactor(this);
 
                 this.scrubSyncPlayerList();
+                if (this.updateNBT) {
+                    this.markBlockForUpdate(3);
+                    OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageTurretBase(this),
+                            new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
+                    this.updateNBT = false;
+                }
 
-                //Computers
-                this.computerAccessible = (OpenComputersLoaded || ComputerCraftLoaded) && TurretHeadUtil.hasSerialPortAddon(
-                        this);
             }
         }
     }
@@ -301,7 +353,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Override
     public List<String> getDebugInfo() {
         List<String> debugInfo = new ArrayList<>();
-        debugInfo.add("Camo: " + this.camoBlockState.getBlock().getRegistryName() + ", computerAccess: " + this.computerAccessible);
+        debugInfo.add("Camo: " + this.camoSettings.getCamoBlockState().getBlock().getRegistryName());
         debugInfo.add("Force Fire: " + this.forceFire + ", UpperMaxRange: " + this.upperBoundMaxRange);
         return debugInfo;
     }
@@ -450,7 +502,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isComputerAccessible() {
-        return computerAccessible;
+        return (OpenComputersLoaded || ComputerCraftLoaded) && TurretHeadUtil.hasSerialPortAddon(
+                this);
     }
 
     public void increaseKillCounter() {
@@ -488,17 +541,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Nullable
     public IBaseController getController() {
         return controller;
-    }
-
-    @Nonnull
-    @Override
-    public IBlockState getCamoState() {
-        return camoBlockState != null ? camoBlockState : this.getDefaultCamoState();
-    }
-
-    @Override
-    public void setCamoState(IBlockState state) {
-        this.camoBlockState = state;
     }
 
     private static void updateRedstoneReactor(TurretBase base) {
@@ -660,7 +702,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Override
     @Nonnull
     public String getType() {
-        // peripheral.getType returns whaaaaat?
         return "turret_base";
     }
 
@@ -686,7 +727,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         // method is command
         boolean b;
         int i;
-        if (!computerAccessible) {
+        if (!isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
         }
         switch (commands.values()[method]) {
@@ -774,26 +815,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     @Optional.Method(modid = "computercraft")
     @Override
-    @ParametersAreNonnullByDefault
-    public void attach(IComputerAccess computer) {
-        if (comp == null) {
-            comp = new ArrayList<>();
-        }
-        comp.add(computer);
-    }
-
-    @Optional.Method(modid = "computercraft")
-    @Override
-    @ParametersAreNonnullByDefault
-    public void detach(IComputerAccess computer) {
-        if (comp == null) {
-            comp = new ArrayList<>();
-        }
-        comp.remove(computer);
-    }
-
-    @Optional.Method(modid = "computercraft")
-    @Override
     public boolean equals(IPeripheral other) {
         return other.getType().equals(getType());
     }
@@ -802,5 +823,17 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals,
         getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getMode, getRedstone, setMode,
         getType
+    }
+
+    @Optional.Method(modid = "computercraft")
+    @Override
+    public void attach(@Nonnull IComputerAccess computer) {
+
+    }
+
+    @Optional.Method(modid = "computercraft")
+    @Override
+    public void detach(@Nonnull IComputerAccess computer) {
+
     }
 }

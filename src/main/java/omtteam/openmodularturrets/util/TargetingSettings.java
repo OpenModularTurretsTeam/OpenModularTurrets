@@ -4,6 +4,7 @@ package omtteam.openmodularturrets.util;
  * Created by Keridos on 17/08/17.
  * This Class
  */
+@SuppressWarnings("unused")
 public class TargetingSettings {
     private final boolean targetPlayers;
     private final boolean targetMobs;

@@ -126,6 +126,8 @@ public class OMTNames {
             public static final String CONFIGURE = "gui.omtteam.openmodularturrets:configure";
             public static final String KILLS = "gui.omtteam.openmodularturrets:kills";
             public static final String PLAYER_KILLS = "gui.omtteam.openmodularturrets:player_kills";
+            public static final String LIGHT_VALUE = "gui.omtteam.openmodularturrets:light_value";
+            public static final String LIGHT_OPACITY = "gui.omtteam.openmodularturrets:light_opacity";
         }
 
         public static class Tooltip {

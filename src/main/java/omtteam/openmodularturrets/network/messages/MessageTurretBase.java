@@ -34,7 +34,7 @@ import static omtteam.omlib.proxy.ClientProxy.getWorld;
  */
 @SuppressWarnings("unused")
 public class MessageTurretBase implements IMessage {
-    private int x, y, z, rfStorageCurrent, rfStorageMax, tier, camoBlockMeta, maxRange, kills, playerKills;
+    private int x, y, z, rfStorageCurrent, rfStorageMax, tier, camoBlockMeta, maxRange, kills, playerKills, lightValue, lightOpacity;
     private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting;
     private String owner, ownerName, camoBlockRegName;
     private List<TrustedPlayer> trustedPlayers = new ArrayList<>();
@@ -44,43 +44,6 @@ public class MessageTurretBase implements IMessage {
     }
 
 
-    public static class MessageHandlerTurretBase implements IMessageHandler<MessageTurretBase, IMessage> {
-        @Override
-        @SuppressWarnings("deprecation")
-        public IMessage onMessage(MessageTurretBase messageIn, MessageContext ctx) {
-            final MessageTurretBase message = messageIn;
-            Minecraft.getMinecraft().addScheduledTask(() -> {
-
-                TileEntity tileEntity = getWorld(FMLClientHandler.instance().getClient()).getTileEntity(new BlockPos(message.x, message.y,
-                        message.z));
-                if (tileEntity instanceof TurretBase) {
-                    TurretBase base = (TurretBase) tileEntity;
-                    OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
-                    base.setOwner(message.owner);
-                    base.setOwnerName(message.ownerName);
-                    if (storage != null) {
-                        storage.setEnergyStored(message.rfStorageCurrent);
-                        storage.setCapacity(message.rfStorageMax);
-                    }
-                    base.setAttacksMobs(message.attacksMobs);
-                    base.setAttacksNeutrals(message.attacksNeutrals);
-                    base.setAttacksPlayers(message.attacksPlayers);
-                    base.setMultiTargeting(message.multiTargeting);
-                    base.setTrustedPlayers(message.trustedPlayers);
-                    base.setTier(message.tier);
-                    base.setMode(message.mode);
-                    base.setCamoState(Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(
-                            new ResourceLocation(message.camoBlockRegName))).getStateFromMeta(message.camoBlockMeta));
-                    base.setCurrentMaxRange(message.maxRange);
-                    base.setKills(message.kills);
-                    base.setPlayerKills(message.playerKills);
-                }
-            });
-            return null;
-        }
-
-    }
-
     public MessageTurretBase(TileEntity tileEntity) {
         if (tileEntity instanceof TurretBase) {
             TurretBase base = (TurretBase) tileEntity;
@@ -88,6 +51,8 @@ public class MessageTurretBase implements IMessage {
             this.y = base.getPos().getY();
             this.z = base.getPos().getZ();
             this.tier = base.getTier();
+            this.lightValue = base.getCamoSettings().getLightValue();
+            this.lightOpacity = base.getCamoSettings().getLightOpacity();
             this.owner = base.getOwner();
             this.ownerName = base.getOwnerName();
             this.rfStorageCurrent = base.getEnergyLevel(EnumFacing.DOWN);
@@ -112,6 +77,8 @@ public class MessageTurretBase implements IMessage {
         this.y = buf.readInt();
         this.z = buf.readInt();
         this.tier = buf.readInt();
+        this.lightValue = buf.readInt();
+        this.lightOpacity = buf.readInt();
         this.owner = ByteBufUtils.readUTF8String(buf);
         this.ownerName = ByteBufUtils.readUTF8String(buf);
         this.rfStorageCurrent = buf.readInt();
@@ -144,6 +111,8 @@ public class MessageTurretBase implements IMessage {
         buf.writeInt(y);
         buf.writeInt(z);
         buf.writeInt(tier);
+        buf.writeInt(lightValue);
+        buf.writeInt(lightOpacity);
         ByteBufUtils.writeUTF8String(buf, owner);
         ByteBufUtils.writeUTF8String(buf, ownerName);
         buf.writeInt(rfStorageCurrent);
@@ -166,6 +135,45 @@ public class MessageTurretBase implements IMessage {
                 buf.writeInt(trustedPlayer.getAccessMode().ordinal());
             }
         }
+    }
+
+    public static class MessageHandlerTurretBase implements IMessageHandler<MessageTurretBase, IMessage> {
+        @Override
+        @SuppressWarnings("deprecation")
+        public IMessage onMessage(MessageTurretBase messageIn, MessageContext ctx) {
+            final MessageTurretBase message = messageIn;
+            Minecraft.getMinecraft().addScheduledTask(() -> {
+
+                TileEntity tileEntity = getWorld(FMLClientHandler.instance().getClient()).getTileEntity(new BlockPos(message.x, message.y,
+                        message.z));
+                if (tileEntity instanceof TurretBase) {
+                    TurretBase base = (TurretBase) tileEntity;
+                    OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
+                    base.setOwner(message.owner);
+                    base.setOwnerName(message.ownerName);
+                    if (storage != null) {
+                        storage.setEnergyStored(message.rfStorageCurrent);
+                        storage.setCapacity(message.rfStorageMax);
+                    }
+                    base.setAttacksMobs(message.attacksMobs);
+                    base.setAttacksNeutrals(message.attacksNeutrals);
+                    base.setAttacksPlayers(message.attacksPlayers);
+                    base.setMultiTargeting(message.multiTargeting);
+                    base.setTrustedPlayers(message.trustedPlayers);
+                    base.setTier(message.tier);
+                    base.getCamoSettings().setLightValue(message.lightValue);
+                    base.getCamoSettings().setLightOpacity(message.lightOpacity);
+                    base.setMode(message.mode);
+                    base.setCamoState(Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(
+                            new ResourceLocation(message.camoBlockRegName))).getStateFromMeta(message.camoBlockMeta));
+                    base.setCurrentMaxRange(message.maxRange);
+                    base.setKills(message.kills);
+                    base.setPlayerKills(message.playerKills);
+                }
+            });
+            return null;
+        }
+
     }
 
     @Override

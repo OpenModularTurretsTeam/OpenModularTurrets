@@ -12,6 +12,7 @@ import java.util.List;
  * Created by Keridos on 16/11/17.
  * This Class
  */
+@SuppressWarnings("unused")
 public class MobBlacklist {
     private static final List<String> list = new ArrayList<>();
 

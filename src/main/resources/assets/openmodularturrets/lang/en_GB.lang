@@ -106,6 +106,8 @@ gui.omtteam.openmodularturrets:drop_base=Drop base
 gui.omtteam.openmodularturrets:configure=Configure
 gui.omtteam.openmodularturrets:kills=Kills (Total)
 gui.omtteam.openmodularturrets:player_kills=Kills (Player)
+gui.omtteam.openmodularturrets:light_value=Light value
+gui.omtteam.openmodularturrets:light_opacity=Light opacity
 
 tooltip.tier=Tier
 tooltip.range=Range (in blocks)
