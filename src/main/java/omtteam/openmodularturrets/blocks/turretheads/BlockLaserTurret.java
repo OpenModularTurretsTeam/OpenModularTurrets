@@ -9,6 +9,8 @@ import omtteam.openmodularturrets.items.blocks.ItemBlockLaserTurret;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
+import omtteam.openmodularturrets.util.TurretList;
+import omtteam.openmodularturrets.util.TurretType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -31,5 +33,10 @@ public class BlockLaserTurret extends BlockAbstractTurretHead {
     @ParametersAreNonnullByDefault
     public TileEntity createTileEntity(World world, IBlockState state) {
         return new LaserTurretTileEntity();
+    }
+
+    @Override
+    public TurretType getTurretType() {
+        return TurretList.getTurretType(OMTNames.Blocks.laserTurret);
     }
 }

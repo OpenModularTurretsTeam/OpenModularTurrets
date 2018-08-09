@@ -78,7 +78,7 @@ public class MessageAdjustLightOpacity implements IMessage {
                 if (machine != null && PlayerUtil.isPlayerAdmin(player, machine) && machine instanceof ICamoSupport) {
                     ((ICamoSupport) machine).getCamoSettings().setLightOpacity(message.value);
                     machine.getOwnedBlock().getWorld().notifyLightSet(((TileEntity) machine).getPos());
-                    machine.getOwnedBlock().markBlockForUpdate(3);
+                    machine.getOwnedBlock().markDirty();
                     ((ICamoSupport) machine).updateCamoSettingsToPlayers();
                 }
             });

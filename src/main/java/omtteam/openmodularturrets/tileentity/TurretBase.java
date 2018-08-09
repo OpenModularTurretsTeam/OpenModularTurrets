@@ -18,6 +18,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -92,6 +94,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
 
     protected IItemHandlerModifiable inventory;
+    protected FluidTank tank;
 
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
         super();
@@ -148,6 +151,20 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         };
     }
 
+    protected void setupTank() {
+        tank = new FluidTank(4000) {
+            @Override
+            public boolean canFillFluidType(FluidStack fluid) {
+                return super.canFillFluidType(fluid); //TODO: add supported fluid tanks
+            }
+
+            @Override
+            public boolean canDrain() {
+                return false;
+            }
+        };
+    }
+
     @Override
     @Nonnull
     public CamoSettings getCamoSettings() {
@@ -187,61 +204,61 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         if (!world.isRemote) {
             OMLibNetworkingHandler.INSTANCE.sendToAllAround(new MessageCamoSettings(this),
                     new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
-            this.markBlockForUpdate(3);
+            this.markDirty();
         }
     }
 
     @Override
     @Nonnull
-    public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
-        super.writeToNBT(nbtTagCompound);
-        nbtTagCompound.setInteger("currentMaxRange", this.currentMaxRange);
-        nbtTagCompound.setInteger("upperBoundMaxRange", this.upperBoundMaxRange);
-        nbtTagCompound.setBoolean("rangeOverridden", this.rangeOverridden);
-        nbtTagCompound.setBoolean("attacksMobs", this.attacksMobs);
-        nbtTagCompound.setBoolean("attacksNeutrals", this.attacksNeutrals);
-        nbtTagCompound.setBoolean("attacksPlayers", this.attacksPlayers);
-        nbtTagCompound.setBoolean("shouldConcealTurrets", this.shouldConcealTurrets);
-        nbtTagCompound.setBoolean("multiTargeting", this.multiTargeting);
-        nbtTagCompound.setBoolean("forceFire", this.forceFire);
-        nbtTagCompound.setInteger("tier", this.tier);
-        nbtTagCompound.setInteger("mode", this.mode.ordinal());
-        nbtTagCompound.setInteger("kills", this.kills);
-        camoSettings.writeNBT(nbtTagCompound);
-        return nbtTagCompound;
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+        tag.setInteger("currentMaxRange", this.currentMaxRange);
+        tag.setInteger("upperBoundMaxRange", this.upperBoundMaxRange);
+        tag.setBoolean("rangeOverridden", this.rangeOverridden);
+        tag.setBoolean("attacksMobs", this.attacksMobs);
+        tag.setBoolean("attacksNeutrals", this.attacksNeutrals);
+        tag.setBoolean("attacksPlayers", this.attacksPlayers);
+        tag.setBoolean("shouldConcealTurrets", this.shouldConcealTurrets);
+        tag.setBoolean("multiTargeting", this.multiTargeting);
+        tag.setBoolean("forceFire", this.forceFire);
+        tag.setInteger("tier", this.tier);
+        tag.setInteger("mode", this.mode.ordinal());
+        tag.setInteger("kills", this.kills);
+        camoSettings.writeNBT(tag);
+        return tag;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
-        super.readFromNBT(nbtTagCompound);
-        this.currentMaxRange = nbtTagCompound.getInteger("currentMaxRange");
-        this.upperBoundMaxRange = nbtTagCompound.getInteger("upperBoundMaxRange");
-        this.rangeOverridden = nbtTagCompound.getBoolean("rangeOverridden");
-        this.attacksMobs = nbtTagCompound.getBoolean("attacksMobs");
-        this.attacksNeutrals = nbtTagCompound.getBoolean("attacksNeutrals");
-        this.attacksPlayers = nbtTagCompound.getBoolean("attacksPlayers");
-        this.shouldConcealTurrets = nbtTagCompound.getBoolean("shouldConcealTurrets");
-        this.multiTargeting = nbtTagCompound.getBoolean("multiTargeting");
-        this.forceFire = nbtTagCompound.getBoolean("forceFire");
-        this.tier = nbtTagCompound.getInteger("tier");
-        if (nbtTagCompound.hasKey("mode")) {
-            this.mode = EnumMachineMode.values()[nbtTagCompound.getInteger("mode")];
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        this.currentMaxRange = tag.getInteger("currentMaxRange");
+        this.upperBoundMaxRange = tag.getInteger("upperBoundMaxRange");
+        this.rangeOverridden = tag.getBoolean("rangeOverridden");
+        this.attacksMobs = tag.getBoolean("attacksMobs");
+        this.attacksNeutrals = tag.getBoolean("attacksNeutrals");
+        this.attacksPlayers = tag.getBoolean("attacksPlayers");
+        this.shouldConcealTurrets = tag.getBoolean("shouldConcealTurrets");
+        this.multiTargeting = tag.getBoolean("multiTargeting");
+        this.forceFire = tag.getBoolean("forceFire");
+        this.tier = tag.getInteger("tier");
+        if (tag.hasKey("mode")) {
+            this.mode = EnumMachineMode.values()[tag.getInteger("mode")];
         } else {
             this.mode = EnumMachineMode.INVERTED;
         }
-        this.camoSettings = CamoSettings.getSettingsFromNBT(nbtTagCompound);
+        this.camoSettings = CamoSettings.getSettingsFromNBT(tag);
         if (camoSettings.getCamoBlockState() != null) {
             this.camoBlockStateTemp = camoSettings.getCamoBlockState();
         } else {
             this.camoBlockStateTemp = getDefaultCamoState();
         }
-        if (nbtTagCompound.hasKey("kills")) {
-            this.kills = nbtTagCompound.getInteger("kills");
+        if (tag.hasKey("kills")) {
+            this.kills = tag.getInteger("kills");
         } else {
             this.kills = 0;
         }
-        if (nbtTagCompound.hasKey("playerKills")) {
-            this.kills = nbtTagCompound.getInteger("playerKills");
+        if (tag.hasKey("playerKills")) {
+            this.kills = tag.getInteger("playerKills");
         } else {
             this.playerKills = 0;
         }
@@ -340,7 +357,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
                 this.scrubSyncPlayerList();
                 if (this.updateNBT) {
-                    this.markBlockForUpdate(3);
+                    this.markDirty();
                     OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageTurretBase(this),
                             new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
                     this.updateNBT = false;
@@ -440,6 +457,18 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     // Getters and Setters
 
+
+    @Nullable
+    @Override
+    public FluidTank getTank() {
+        return tank;
+    }
+
+    @Nullable
+    @Override
+    public FluidTank getCapabilityTank(EnumFacing facing) {
+        return tank;
+    }
 
     @Override
     public IItemHandlerModifiable getInventory() {

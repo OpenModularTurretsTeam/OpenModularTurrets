@@ -17,6 +17,8 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.RelativisticTurretTileEntity;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import omtteam.openmodularturrets.util.TurretList;
+import omtteam.openmodularturrets.util.TurretType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -64,5 +66,10 @@ public class BlockRelativisticTurret extends BlockAbstractTurretHead {
             String ownerName = turret.getBase().getOwnerName();
             probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
         }
+    }
+
+    @Override
+    public TurretType getTurretType() {
+        return TurretList.getTurretType(OMTNames.Blocks.relativisticTurret);
     }
 }

@@ -18,6 +18,8 @@ import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.TeleporterTurretTileEntity;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
+import omtteam.openmodularturrets.util.TurretList;
+import omtteam.openmodularturrets.util.TurretType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -77,5 +79,10 @@ public class BlockTeleporterTurret extends BlockAbstractTurretHead {
             probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
             probeInfo.text("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": " + String.format("%.2f", 20F / (turret.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(turret.getBase())))) + "s/sec");
         }
+    }
+
+    @Override
+    public TurretType getTurretType() {
+        return TurretList.getTurretType(OMTNames.Blocks.teleporterTurret);
     }
 }

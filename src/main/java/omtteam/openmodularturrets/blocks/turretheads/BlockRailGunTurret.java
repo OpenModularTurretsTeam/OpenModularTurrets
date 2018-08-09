@@ -11,6 +11,8 @@ import omtteam.openmodularturrets.items.blocks.ItemBlockRailGunTurret;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
+import omtteam.openmodularturrets.util.TurretList;
+import omtteam.openmodularturrets.util.TurretType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -45,5 +47,10 @@ public class BlockRailGunTurret extends BlockAbstractTurretHead {
                         pos.getZ() + (random.nextGaussian() / 10) + 0.5F, (0), (50), (200));
             }
         }
+    }
+
+    @Override
+    public TurretType getTurretType() {
+        return TurretList.getTurretType(OMTNames.Blocks.railGunTurret);
     }
 }

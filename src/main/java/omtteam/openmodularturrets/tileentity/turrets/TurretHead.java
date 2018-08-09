@@ -26,6 +26,7 @@ import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
+import omtteam.openmodularturrets.util.TurretType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -271,6 +272,11 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
     protected abstract float getProjectileGravity();
 
+    public TurretType getTurretType() {
+        BlockAbstractTurretHead block = (BlockAbstractTurretHead) this.getWorld().getBlockState(this.getPos()).getBlock();
+        return block.getTurretType();
+    }
+
     public abstract ItemStack getAmmo();
 
     protected abstract TurretProjectile createProjectile(World world, Entity target, ItemStack ammo);
@@ -293,7 +299,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
                 targetPos.z - this.getPos().getZ()) > (this.getBaseFromWorld().getCurrentMaxRange());
     }
 
-    private int getPowerRequiredForNextShot() {
+    protected int getPowerRequiredForNextShot() {
         return Math.round(this.getTurretPowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(
                 base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
     }
@@ -451,7 +457,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     /**
      * Tracks target and shoots at it
      */
-    private void doTargetedShot(Entity target, ItemStack ammo) {
+    protected void doTargetedShot(Entity target, ItemStack ammo) {
         // Update target tracking (Player entity not setting motion data when moving via movement keys)
         double speedX = target instanceof EntityPlayerMP ? targetSpeedX : target.posX - target.prevPosX;
         double speedY = target instanceof EntityPlayerMP ? targetSpeedY : target.posY - target.prevPosY;
@@ -546,7 +552,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     /**
      * Attempts to create and throw a projectile
      */
-    private void shootProjectile(double adjustedX, double adjustedY, double adjustedZ, float speedFactor, float accuracy, ItemStack ammo) {
+    protected void shootProjectile(double adjustedX, double adjustedY, double adjustedZ, float speedFactor, float accuracy, ItemStack ammo) {
         // Consume energy
         base.setEnergyStored(base.getEnergyLevel(EnumFacing.DOWN) - getPowerRequiredForNextShot());
 

@@ -9,6 +9,8 @@ import omtteam.openmodularturrets.items.blocks.ItemBlockMachineGunTurret;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.GunTurretTileEntity;
+import omtteam.openmodularturrets.util.TurretList;
+import omtteam.openmodularturrets.util.TurretType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -31,5 +33,10 @@ public class BlockGunTurret extends BlockAbstractTurretHead {
     @ParametersAreNonnullByDefault
     public TileEntity createTileEntity(World world, IBlockState state) {
         return new GunTurretTileEntity();
+    }
+
+    @Override
+    public TurretType getTurretType() {
+        return TurretList.getTurretType(OMTNames.Blocks.gunTurret);
     }
 }
