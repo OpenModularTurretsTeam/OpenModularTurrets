@@ -1,4 +1,6 @@
-package omtteam.openmodularturrets.util;
+package omtteam.openmodularturrets.api.lists;
+
+import omtteam.openmodularturrets.util.TurretType;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;

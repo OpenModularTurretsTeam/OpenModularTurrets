@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.init;
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
+import omtteam.openmodularturrets.api.lists.TurretList;
 import omtteam.openmodularturrets.blocks.BlockBaseAddon;
 import omtteam.openmodularturrets.blocks.BlockExpander;
 import omtteam.openmodularturrets.blocks.BlockTurretBase;
@@ -15,7 +16,6 @@ import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.*;
-import omtteam.openmodularturrets.util.TurretList;
 import omtteam.openmodularturrets.util.TurretType;
 
 import static omtteam.omlib.util.InitHelper.registerBlock;

@@ -7,11 +7,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import omtteam.openmodularturrets.api.lists.TurretList;
 import omtteam.openmodularturrets.items.blocks.ItemBlockRailGunTurret;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
-import omtteam.openmodularturrets.util.TurretList;
 import omtteam.openmodularturrets.util.TurretType;
 
 import javax.annotation.Nonnull;

@@ -12,13 +12,13 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import omtteam.omlib.reference.OMLibNames;
+import omtteam.openmodularturrets.api.lists.TurretList;
 import omtteam.openmodularturrets.items.blocks.ItemBlockTeleporterTurret;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.TeleporterTurretTileEntity;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
-import omtteam.openmodularturrets.util.TurretList;
 import omtteam.openmodularturrets.util.TurretType;
 
 import javax.annotation.Nonnull;

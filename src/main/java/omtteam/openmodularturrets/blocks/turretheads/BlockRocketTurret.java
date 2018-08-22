@@ -5,11 +5,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import omtteam.openmodularturrets.api.lists.TurretList;
 import omtteam.openmodularturrets.items.blocks.ItemBlockRocketTurret;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.RocketTurretTileEntity;
-import omtteam.openmodularturrets.util.TurretList;
 import omtteam.openmodularturrets.util.TurretType;
 
 import javax.annotation.Nonnull;
