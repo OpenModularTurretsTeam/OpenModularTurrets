@@ -10,10 +10,8 @@ Creating issue tickets:
 If a you create a new issue that: 
 
 1. Duplicates a previous ticket's issue(s) OR 
-2. Is unreadable (grammatically or otherwise) OR
 3. Does not make sense (Logically or otherwise) OR
 4. Is a crash issue without a proper stack trace OR
-5. Is new functionality request (New content, CR or otherwise)
 
 the ticket may not be considered and be closed immediately. Make absolutely sure that the ticket you post adheres to the above.
 
