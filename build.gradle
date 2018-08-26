@@ -137,7 +137,7 @@ if (project.allprojects.findAll({ it.name == "OpenModularPassiveDefense" }).size
 dependencies {
     deobfProvided "mezz.jei:jei_${config.minecraft_version}:${config.jei_version}:api"
     deobfProvided "mcp.mobius.waila:Hwyla:${config.hwyla_version}_${config.minecraft_version_short}"
-    deobfProvided "cofh:RedstoneFlux:${config.minecraft_version_short}-${config.redstoneflux_version}"
+    deobfProvided "cofh:RedstoneFlux:${config.minecraft_version_short}-${config.redstoneflux_version}:universal"
     deobfProvided "mcjty.theoneprobe:TheOneProbe-${config.minecraft_version_short}:${config.minecraft_version_short}-${config.top_version}"
     deobfProvided "li.cil.oc:OpenComputers:MC${config.minecraft_version_short}.1-${config.oc_version}"
     deobfProvided "net.industrial-craft:industrialcraft-2:${config.ic2_version}"
