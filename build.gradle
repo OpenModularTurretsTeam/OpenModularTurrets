@@ -11,11 +11,54 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
+plugins {
+    id "com.matthewprenger.cursegradle" version "1.1.0"
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven-publish'
 apply plugin: 'idea'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+    maven { url = "http://tehnut.info/maven" }
+    maven { url = "http://maven.tterrag.com" }
+    maven { url = "http://dvs1.progwml6.com/files/maven" }
+    maven { url = "http://files.minecraftforge.net/maven" }
+    maven { url = "http://maven.cil.li/" }
+    maven { url = "http://maven.ic2.player.to" }
+    maven { url = "http://maven.mcmoddev.com" }
+    maven { url = "http://mod-buildcraft.com/maven/" }
+    ivy {
+        url "http://ae-mod.info/builds"
+        layout "pattern", {
+            artifact "[module]-[revision](-[classifier])(.[ext])"
+        }
+    }
+    maven { // The repo from which to get waila
+        name "Mobius Repo"
+        url "http://mobiusstrip.eu/maven"
+    }
+    maven { // the repo from which to get NEI and stuff
+        name 'CB Repo'
+        url "http://chickenbones.net/maven/"
+    }
+    maven { url "http://maven.ironhide.de/" }
+    maven { url = "http://dl.tsr.me/artifactory/libs-release-local" }
+    maven { // CoFH
+        name = "Covers Maven"
+        url = "http://maven.covers1624.net"
+    }
+    /*ivy {
+        url "http://ae-mod.info/builds"
+        layout "pattern", {
+            artifact "[module]-[revision](-[classifier])(.[ext])"
+        }
+    } */
+}
+
+sourceCompatibility = targetCompatibility = 1.8
 
 // define the properties file
 ext.configFile = file "project.properties"
@@ -74,54 +117,9 @@ processResources {
     }
 }
 
-repositories {
-    mavenCentral()
-    maven { url = "http://tehnut.info/maven" }
-    maven { url = "http://maven.tterrag.com" }
-    maven { url = "http://dvs1.progwml6.com/files/maven" }
-    maven { url = "http://files.minecraftforge.net/maven" }
-    maven { url = "http://maven.cil.li/" }
-    maven { url = "http://maven.ic2.player.to" }
-    maven { url = "http://maven.mcmoddev.com" }
-    maven { url = "http://mod-buildcraft.com/maven/" }
-    ivy {
-        url "http://ae-mod.info/builds"
-        layout "pattern", {
-            artifact "[module]-[revision](-[classifier])(.[ext])"
-        }
-    }
-    maven { // The repo from which to get waila
-        name "Mobius Repo"
-        url "http://mobiusstrip.eu/maven"
-    }
-    maven { // the repo from which to get NEI and stuff
-        name 'CB Repo'
-        url "http://chickenbones.net/maven/"
-    }
-    maven { url "http://maven.ironhide.de/" }
-    maven { url = "http://dl.tsr.me/artifactory/libs-release-local" }
-    maven { // CoFH
-        name = "Covers Maven"
-        url = "http://maven.covers1624.net"
-    }
-    /*ivy {
-        url "http://ae-mod.info/builds"
-        layout "pattern", {
-            artifact "[module]-[revision](-[classifier])(.[ext])"
-        }
-    } */
-}
-
 configurations {
     runtime.exclude group: 'ValkyrienWarfareRevamped', module: 'valkyrienwarfare'
 }
-
-//sourceSets {
-//   main {
-//       compileClasspath += configurations.forgeGradleResolvedDeobfCompile
-//        runtimeClasspath -= runtimeClasspath
-//    }
-//}
 
 def omlib_local = false
 if (project.allprojects.findAll({it.name == "OMLib"}).size() > 0) {
@@ -180,5 +178,73 @@ publishing {
     }
     repositories {
         mavenLocal()
+    }
+}
+
+//// DETECTING COMMIT NAME AND ACTIVATING CURSE RELEASE \\\\
+
+def commit_release_type = getCommmitReleaseType()
+def getCommmitReleaseType(){
+    if(project.hasProperty("curseforge_key")){
+        def stdout = new ByteArrayOutputStream()
+        try {
+            exec {
+                commandLine 'git', 'log', '-1', '--pretty=tformat:%s'
+                standardOutput = stdout
+            }
+        }catch(Exception e){
+            System.print("SKIPPING CURSE RELEASE - FAILED TO RETRIEVE LAST COMMIT")
+            e.printStackTrace();
+            return 'none';
+        }
+        String commit = stdout.toString().trim()
+
+        if (commit.startsWith("CRelease") || commit.startsWith("crelease")) {
+            System.out.println("FOUND NEW RELEASE - COMMIT: " + commit); return 'release'
+        } else if (commit.startsWith("CBeta") || commit.startsWith("cbeta")) {
+            System.out.println("FOUND NEW BETA - COMMIT: " + commit); return 'beta'
+        } else if (commit.startsWith("CAlpha") || commit.startsWith("calpha")) {
+            System.out.println("FOUND NEW ALPHA - COMMIT: " + commit); return 'alpha'
+        } else {
+            System.out.println("SKIPPING CURSE RELEASE - COMMIT: " + commit)
+        }
+    }
+    System.out.println("SKIPPING CURSE RELEASE - NO CURSE API KEY")
+    return 'none';
+}
+
+tasks.curseforge.enabled = project.hasProperty("curseforge_key") && !commit_release_type.equals('none')
+curseforge {
+    if(project.hasProperty("curseforge_key") && !commit_release_type.equals('none')) {
+        System.out.println("ATTEMPTING CURSE RELEASE")
+        apiKey = project.properties["curseforge_key"]
+    }
+    project {
+        id = config.curse_project_id
+        addGameVersion '1.12.2'
+
+        relations {
+            requiredDependency 'omlib'
+            optionalDependency 'ompd'
+            optionalDependency 'ender-io'
+            optionalDependency 'redstone-flux'
+            optionalDependency 'thermalexpansion'
+        }
+
+        mainArtifact(jar) {
+            releaseType = commit_release_type.equals('none') ? 'release' : commit_release_type //throws if not release, beta or alpha
+            changelog = file("${projectDir}/change_log.html").text
+            changelogType = 'html'
+        }
+
+        addArtifact(sourceJar){
+            changelog = file("${projectDir}/change_log.html").text
+            releaseType = 'alpha'
+        }
+
+        addArtifact(deobfJar){
+            changelog = file("${projectDir}/change_log.html").text
+            releaseType = 'alpha'
+        }
     }
 }
