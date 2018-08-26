@@ -12,7 +12,7 @@ buildscript {
     }
 }
 plugins {
-    id "com.matthewprenger.cursegradle" version "1.0.10"
+    id "com.matthewprenger.cursegradle" version "1.1.0"
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -197,10 +197,15 @@ def getCommmitReleaseType(){
         }
         String commit = stdout.toString().trim()
 
-        if(commit.startsWith("CRelease") || commit.startsWith("crelease")){ System.out.println("FOUND NEW RELEASE - COMMIT: " + commit); return 'release' }
-        else if(commit.startsWith("CBeta") || commit.startsWith("cbeta")){ System.out.println("FOUND NEW BETA - COMMIT: " + commit); return 'beta' }
-        else if(commit.startsWith("CAlpha") || commit.startsWith("calpha")){ System.out.println("FOUND NEW ALPHA - COMMIT: " + commit); return 'alpha' }
-        else{System.out.println("SKIPPING CURSE RELEASE - COMMIT: " + commit)}
+        if (commit.startsWith("CRelease") || commit.startsWith("crelease")) {
+            System.out.println("FOUND NEW RELEASE - COMMIT: " + commit); return 'release'
+        } else if (commit.startsWith("CBeta") || commit.startsWith("cbeta")) {
+            System.out.println("FOUND NEW BETA - COMMIT: " + commit); return 'beta'
+        } else if (commit.startsWith("CAlpha") || commit.startsWith("calpha")) {
+            System.out.println("FOUND NEW ALPHA - COMMIT: " + commit); return 'alpha'
+        } else {
+            System.out.println("SKIPPING CURSE RELEASE - COMMIT: " + commit)
+        }
     }
     System.out.println("SKIPPING CURSE RELEASE - NO CURSE API KEY")
     return 'none';
