@@ -531,8 +531,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isComputerAccessible() {
-        return (OpenComputersLoaded || ComputerCraftLoaded) && TurretHeadUtil.hasSerialPortAddon(
-                this);
+        return (OpenComputersLoaded || ComputerCraftLoaded) && (this.tier == 5 || TurretHeadUtil.hasSerialPortAddon(
+                this));
     }
 
     public void increaseKillCounter() {
