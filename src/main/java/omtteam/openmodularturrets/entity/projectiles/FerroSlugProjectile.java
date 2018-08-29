@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import omtteam.omlib.util.EntityUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.handler.OMTConfigHandler;
@@ -61,6 +62,7 @@ public class FerroSlugProjectile extends TurretProjectile {
                 }
             }
 
+            damage *= EntityUtil.getEntityArmor(entity) / 20F - 0.5F;
 
             if (entity instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) entity)) {
