@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/OpenModularTurretsTeam/OpenModularTurrets.svg?branch=master)](https://travis-ci.org/OpenModularTurretsTeam/OpenModularTurrets)
+[![Build Status](https://travis-ci.org/OpenModularTurretsTeam/OpenModularTurrets.svg?branch=1.12)](https://travis-ci.org/OpenModularTurretsTeam/OpenModularTurrets)
 OpenModularTurrets
 ==================
 
