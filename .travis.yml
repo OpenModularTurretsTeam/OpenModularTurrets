@@ -7,6 +7,6 @@ notifications:
   email: false
 jdk:
   - oraclejdk8
-before_install:
-  - chmod a+x gradlew
-script: ./gradlew clean check
+script: gradle clean check
+after_script:
+- rm -rf libs/
