@@ -11,7 +11,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
@@ -52,14 +52,14 @@ public class RelativisticTurretTileEntity extends TurretHead {
             TurretHeadUtil.updateSolarPanelAddon(base);
 
             //turret tick rate;
-            if (target == null && targetingTicks < OMTConfigHandler.getTurretTargetSearchTicks()) {
+            if (target == null && targetingTicks < OMTConfig.TURRETS.turretTargetSearchTicks) {
                 targetingTicks++;
                 return;
             }
             targetingTicks = 0;
 
             int power_required = Math.round(this.getTurretPowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(
-                    base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
+                    base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
 
             // power check
             if ((base.getEnergyLevel(EnumFacing.DOWN) < power_required) || (!base.isActive())) {
@@ -81,7 +81,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
             this.pitch = TurretHeadUtil.getAimPitch(target, this.pos);
 
             // has cooldown passed?
-            if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
+            if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
                 return;
             }
 
@@ -121,28 +121,28 @@ public class RelativisticTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return OMTConfigHandler.getRelativisticTurretSettings().getRange();
+        return OMTConfig.TURRETS.relativistic_turret.getBaseRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return OMTConfigHandler.getRelativisticTurretSettings().getPowerUsage();
+        return OMTConfig.TURRETS.relativistic_turret.getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return OMTConfigHandler.getRelativisticTurretSettings().getFireRate();
+        return OMTConfig.TURRETS.relativistic_turret.getBaseFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return OMTConfigHandler.getRelativisticTurretSettings().getAccuracy();
+        return OMTConfig.TURRETS.relativistic_turret.getBaseAccuracyDeviation();
     }
 
 
     @Override
     public double getTurretDamageAmpBonus() {
-        return OMTConfigHandler.getRelativisticTurretSettings().getDamageAmp();
+        return OMTConfig.TURRETS.relativistic_turret.getDamageAmp();
     }
 
     @Override

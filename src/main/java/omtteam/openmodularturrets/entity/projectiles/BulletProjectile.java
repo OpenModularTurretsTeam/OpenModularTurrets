@@ -13,7 +13,7 @@ import net.minecraft.world.WorldServer;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
@@ -53,7 +53,7 @@ public class BulletProjectile extends TurretProjectile {
     public void onHitEntity(Entity entity) {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
 
-            int damage = OMTConfigHandler.getGunTurretSettings().getDamage();
+            int damage = OMTConfig.TURRETS.machine_gun_turret.getBaseDamage();
 
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
@@ -86,7 +86,7 @@ public class BulletProjectile extends TurretProjectile {
     public void playSound() {
         Random random = RandomUtil.random;
         getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.bulletHitSound, SoundCategory.AMBIENT,
-                OMTConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
+                                   OMTConfig.TURRETS.turretSoundVolume, random.nextFloat() + 0.5F);
     }
 
     @Override
@@ -107,6 +107,6 @@ public class BulletProjectile extends TurretProjectile {
 
     @Override
     public double getDamageAmpBonus() {
-        return OMTConfigHandler.getGunTurretSettings().getDamageAmp();
+        return OMTConfig.TURRETS.machine_gun_turret.getDamageAmp();
     }
 }

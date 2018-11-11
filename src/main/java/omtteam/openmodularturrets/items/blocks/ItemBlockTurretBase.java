@@ -9,7 +9,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import omtteam.omlib.util.GeneralUtil;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -69,9 +69,9 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add("");
                     tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
                     tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                            OMTConfigHandler.getBaseTierOneMaxCharge());
+                                        OMTConfig.BASES.baseTierOne.baseMaxCharge);
                     tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                            OMTConfigHandler.getBaseTierOneMaxIo());
+                                        OMTConfig.BASES.baseTierOne.baseMaxIo);
                     tooltip.add("");
                     tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
                     tooltip.add(safeLocalize("tooltip.extras.addons.0"));
@@ -82,9 +82,9 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add("");
                     tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
                     tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                            OMTConfigHandler.getBaseTierTwoMaxCharge());
+                                        OMTConfig.BASES.baseTierTwo.baseMaxCharge);
                     tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                            OMTConfigHandler.getBaseTierTwoMaxIo());
+                                        OMTConfig.BASES.baseTierTwo.baseMaxIo);
                     tooltip.add("");
                     tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
                     tooltip.add(safeLocalize("tooltip.extras.addons.2"));
@@ -96,9 +96,9 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add("");
                     tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
                     tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                            OMTConfigHandler.getBaseTierThreeMaxCharge());
+                                        OMTConfig.BASES.baseTierThree.baseMaxCharge);
                     tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                            OMTConfigHandler.getBaseTierThreeMaxIo());
+                                        OMTConfig.BASES.baseTierThree.baseMaxIo);
                     tooltip.add("");
                     tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
                     tooltip.add(safeLocalize("tooltip.extras.addons.2"));
@@ -110,9 +110,9 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add("");
                     tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
                     tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                            OMTConfigHandler.getBaseTierFourMaxCharge());
+                                        OMTConfig.BASES.baseTierFour.baseMaxCharge);
                     tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                            OMTConfigHandler.getBaseTierFourMaxIo());
+                                        OMTConfig.BASES.baseTierFour.baseMaxIo);
                     tooltip.add("");
                     tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
                     tooltip.add(safeLocalize("tooltip.extras.addons.2"));
@@ -124,9 +124,9 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add("");
                     tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
                     tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
-                            OMTConfigHandler.getBaseTierFiveMaxCharge());
+                                        OMTConfig.BASES.baseTierFive.baseMaxCharge);
                     tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
-                            OMTConfigHandler.getBaseTierFiveMaxIo());
+                                        OMTConfig.BASES.baseTierFive.baseMaxIo);
                     tooltip.add("");
                     tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
                     tooltip.add(safeLocalize("tooltip.extras.addons.2"));

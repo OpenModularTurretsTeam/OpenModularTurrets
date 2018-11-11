@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.util.GeneralUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -91,7 +91,7 @@ public class AddonMetaItem extends Item {
                 case 2:
                     tooltip.add("");
                     tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
-                    tooltip.add("");
+                    /*tooltip.add("");
                     tooltip.add(safeLocalize(
                             "turret.addon.potentia.a") + OMTConfigHandler.getPotentiaToRFRatio() + " " + safeLocalize(
                             "turret.addon.potentia.b"));
@@ -103,6 +103,7 @@ public class AddonMetaItem extends Item {
                     tooltip.add(safeLocalize("turret.addon.potentia.e"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.potentia.flavour"));
+                    */
                     return;
                 case 3:
                     tooltip.add("");
@@ -111,10 +112,6 @@ public class AddonMetaItem extends Item {
                     tooltip.add(safeLocalize("turret.addon.recycler.1"));
                     tooltip.add(safeLocalize("turret.addon.recycler.2"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize(
-                            "turret.addon.recycler.3") + " " + OMTConfigHandler.getRecyclerNegateChance() + "%");
-                    tooltip.add(safeLocalize(
-                            "turret.addon.recycler.4") + " " + OMTConfigHandler.getRecyclerAddChance() + "%");
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.recycler.flavour"));
                     return;
@@ -123,7 +120,7 @@ public class AddonMetaItem extends Item {
                     tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
                     tooltip.add("");
                     tooltip.add(safeLocalize(
-                            "turret.addon.redstone.a") + " " + OMTConfigHandler.getRedstoneReactorAddonGen() + " " + safeLocalize(
+                            "turret.addon.redstone.a") + " " + OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen + " " + safeLocalize(
                             "turret.addon.redstone.b"));
                     tooltip.add(safeLocalize("turret.addon.redstone.c"));
                     tooltip.add("");
@@ -143,7 +140,7 @@ public class AddonMetaItem extends Item {
                     tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
                     tooltip.add("");
                     tooltip.add(safeLocalize(
-                            "turret.addon.solar.a") + " " + OMTConfigHandler.getSolarPanelAddonGen() + " " + safeLocalize(
+                            "turret.addon.solar.a") + " " + OMTConfig.MISCELLANEOUS.solarPanelAddonGen + " " + safeLocalize(
                             "turret.addon.solar.b"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.solar.flavour"));

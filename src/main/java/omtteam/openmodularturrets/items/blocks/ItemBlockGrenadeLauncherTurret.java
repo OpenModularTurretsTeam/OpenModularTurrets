@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import omtteam.omlib.util.GeneralUtil;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import org.lwjgl.input.Keyboard;
@@ -39,7 +39,7 @@ public class ItemBlockGrenadeLauncherTurret extends AbstractItemBlockBaseAddon {
             tooltip.add(TextFormatting.GOLD + "--" + safeLocalize("tooltip.info") + "--");
             tooltip.add(safeLocalize("tooltip.tier") + ": " + TextFormatting.WHITE + "3");
             tooltip.add(safeLocalize("tooltip.range") + ": " + TextFormatting.WHITE +
-                    OMTConfigHandler.getGrenadeTurretSettings().getRange());
+                                OMTConfig.TURRETS.laser_turret.getBaseRange());
             tooltip.add(safeLocalize("tooltip.accuracy") + ": " + TextFormatting.WHITE +
                     safeLocalize("turret.accuracy.medium"));
             tooltip.add(safeLocalize("tooltip.ammo") + ": " + TextFormatting.WHITE +
@@ -50,13 +50,13 @@ public class ItemBlockGrenadeLauncherTurret extends AbstractItemBlockBaseAddon {
             tooltip.add(
                     TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");
             tooltip.add(safeLocalize("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
-                    (OMTConfigHandler.getGrenadeTurretSettings().getDamage() / 2F) + " " + safeLocalize(
+                                (OMTConfig.TURRETS.laser_turret.getBaseDamage() / 2F) + " " + safeLocalize(
                     "tooltip.health"));
             tooltip.add(safeLocalize("tooltip.aoe") + ": 3");
             tooltip.add(safeLocalize("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
-                    20.0F / OMTConfigHandler.getGrenadeTurretSettings().getFireRate()));
+                    20.0F / OMTConfig.TURRETS.laser_turret.getBaseFireRate()));
             tooltip.add(safeLocalize("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
-                    OMTConfigHandler.getGrenadeTurretSettings().getPowerUsage() + " RF");
+                                OMTConfig.TURRETS.laser_turret.getPowerUsage() + " RF");
             tooltip.add("");
             tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.turret.2a"));
             tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.turret.2b"));

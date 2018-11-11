@@ -20,7 +20,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import omtteam.omlib.api.IHasItemBlock;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.items.blocks.ItemBlockBaseAddon;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -43,7 +43,7 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
     public BlockBaseAddon() {
         super(Material.GLASS);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
-        if (!OMTConfigHandler.turretBreakable) {
+        if (!OMTConfig.TURRETS.turretBreakable) {
             this.setBlockUnbreakable();
         }
         this.setResistance(3.0F);

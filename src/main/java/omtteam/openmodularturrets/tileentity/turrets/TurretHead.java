@@ -22,7 +22,7 @@ import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
@@ -178,18 +178,18 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
     Entity getTargetWithMinRange() {
         return TurretHeadUtil.getTargetWithMinimumRange(base, this.getWorld(), this.pos,
-                Math.min(getTurretRange() + TurretHeadUtil.getRangeUpgrades(base), base.getCurrentMaxRange()), this);
+                                                        Math.min(getTurretRange() + TurretHeadUtil.getRangeUpgrades(base, this), base.getCurrentMaxRange()), this);
     }
 
     Entity getTargetWithoutEffect() {
         return TurretHeadUtil.getTargetWithoutSlowEffect(base, this.getWorld(), this.pos,
-                Math.min(getTurretRange() + TurretHeadUtil.getRangeUpgrades(base), base.getCurrentMaxRange()),
-                this);
+                                                         Math.min(getTurretRange() + TurretHeadUtil.getRangeUpgrades(base, this), base.getCurrentMaxRange()),
+                                                         this);
     }
 
     private Entity getTarget() {
         return TurretHeadUtil.getTarget(base, this.getWorld(), this.pos,
-                Math.min(getTurretRange() + TurretHeadUtil.getRangeUpgrades(base), base.getCurrentMaxRange()), this);
+                                        Math.min(getTurretRange() + TurretHeadUtil.getRangeUpgrades(base, this), base.getCurrentMaxRange()), this);
     }
 
     public abstract int getTurretRange();
@@ -301,7 +301,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
     protected int getPowerRequiredForNextShot() {
         return Math.round(this.getTurretPowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(
-                base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
+                base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
     }
 
     private void updateRotationAnimation() {
@@ -316,9 +316,9 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         if (this.requiresAmmo()) {
             if (this.requiresSpecificAmmo()) {
                 for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-                    ammo = TurretHeadUtil.getSpecificItemStackItemFromBase(base, this.getAmmo());
+                    ammo = TurretHeadUtil.getSpecificItemStackItemFromBase(base, this.getAmmo(), this);
                     if (ammo == ItemStack.EMPTY) {
-                        ammo = TurretHeadUtil.getSpecificItemFromInvExpanders(this.getWorld(), this.getAmmo(), base);
+                        ammo = TurretHeadUtil.getSpecificItemFromInvExpanders(this.getWorld(), this.getAmmo(), base, this);
                     }
                 }
             } else {
@@ -399,7 +399,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         }
 
         //Warn players
-        if (base.isAttacksPlayers() && OMTConfigHandler.globalCanTargetPlayers) {
+        if (base.isAttacksPlayers() && OMTConfig.TURRETS.globalCanTargetPlayers) {
             TurretHeadUtil.warnPlayers(base, base.getWorld(), this.pos, getTurretRange());
         }
         // Update target tracking (Player entity not setting motion data when moving via movement keys)
@@ -414,7 +414,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         }
 
         //turret tick rate;
-        if (target == null && targetingTicks < OMTConfigHandler.getTurretTargetSearchTicks()) {
+        if (target == null && targetingTicks < OMTConfig.TURRETS.turretTargetSearchTicks) {
             targetingTicks++;
         } else {
             //Validate current target, get a new one if necessary
@@ -431,7 +431,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
         if (target != null || this.autoFire) {
             // has cooldown passed?
-            if (this.ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
+            if (this.ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
                 return;
             }
 
@@ -468,7 +468,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         double d1 = target.posY + (double) target.height * 0.5F - (this.pos.getY() + 0.5);
         double d2 = target.posZ - (this.pos.getZ() + 0.5);
         double dist = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-        double inaccuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
+        double inaccuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
 
         // Adjust new firing coordinate according to target speed
         double time = dist / (this.getProjectileGravity() == 0.00F ? 3.0 : 1.6);
@@ -488,7 +488,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
      * Just shoots, no aiming required
      */
     private void doBlindShot(ItemStack ammo) {
-        if (this instanceof RocketTurretTileEntity && OMTConfigHandler.canRocketsHome) {
+        if (this instanceof RocketTurretTileEntity && OMTConfig.TURRETS.canRocketsHome) {
             return;
         }
 
@@ -498,7 +498,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         double adjustedY = velocity.y;
         double adjustedZ = velocity.z;
         float speedFactor = (float) velocity.lengthVector();
-        double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
+        double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
 
         // Now that we have a trajectory, throw something at it
         shootProjectile(adjustedX, adjustedY, adjustedZ, speedFactor, (float) accuracy, ammo);
@@ -508,8 +508,8 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
      * Set this.autoFire to true instead.
      */
     public boolean forceShot() {
-        if (this instanceof RocketTurretTileEntity && OMTConfigHandler.canRocketsHome) return false;
-        if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base)))) {
+        if (this instanceof RocketTurretTileEntity && OMTConfig.TURRETS.canRocketsHome) return false;
+        if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
             return false;
         }
         //Finally, try to shoot if criteria is met.
@@ -524,7 +524,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
         for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
             double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(
-                    base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
+                    base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
             TurretProjectile projectile = this.createProjectile(this.getWorld(), target, ammo);
             projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
             if (projectile.gravity == 0.00F) {
@@ -543,7 +543,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             this.getWorld().spawnEntity(projectile);
         }
         this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
-                OMTConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+                                  OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
         ticks = 0;
 
         return true;
@@ -580,11 +580,11 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             // Play sounds
             if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
                 this.getWorld().playSound(null, this.pos, ModSounds.amped, SoundCategory.BLOCKS,
-                        OMTConfigHandler.getTurretSoundVolume(), RandomUtil.random.nextFloat() + 0.5F);
+                                          OMTConfig.TURRETS.turretSoundVolume, RandomUtil.random.nextFloat() + 0.5F);
                 projectile.isAmped = true;
             }
             this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
-                    OMTConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+                                      OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
 
             // Spawn entity
             this.getWorld().spawnEntity(projectile);
@@ -629,7 +629,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
                 shouldConceal = true;
                 playedDeploy = false;
                 this.getWorld().playSound(null, this.pos, ModSounds.turretRetractSound, SoundCategory.BLOCKS,
-                        OMTConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+                                          OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
                 this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(pos).withProperty(CONCEALED, true), 3);
             } else {
                 ticksWithoutTarget++;
@@ -641,7 +641,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
                 if (!playedDeploy) {
                     this.getWorld().playSound(null, this.pos, ModSounds.turretDeploySound, SoundCategory.BLOCKS,
-                            OMTConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+                                              OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
                     playedDeploy = true;
                     this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(pos).withProperty(CONCEALED, false), 3);
                 }

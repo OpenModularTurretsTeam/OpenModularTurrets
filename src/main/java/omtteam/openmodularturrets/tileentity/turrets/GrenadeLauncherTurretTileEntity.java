@@ -6,7 +6,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.entity.projectiles.GrenadeProjectile;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
 
@@ -23,27 +23,27 @@ public class GrenadeLauncherTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return OMTConfigHandler.getGrenadeTurretSettings().getRange();
+        return OMTConfig.TURRETS.laser_turret.getBaseRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return OMTConfigHandler.getGrenadeTurretSettings().getPowerUsage();
+        return OMTConfig.TURRETS.laser_turret.getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return OMTConfigHandler.getGrenadeTurretSettings().getFireRate();
+        return OMTConfig.TURRETS.laser_turret.getBaseFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return OMTConfigHandler.getGrenadeTurretSettings().getAccuracy() / 10;
+        return OMTConfig.TURRETS.laser_turret.getBaseAccuracyDeviation() / 10;
     }
 
     @Override
     public double getTurretDamageAmpBonus() {
-        return OMTConfigHandler.getGrenadeTurretSettings().getDamageAmp();
+        return OMTConfig.TURRETS.laser_turret.getDamageAmp();
     }
 
     @Override

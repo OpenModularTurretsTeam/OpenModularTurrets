@@ -15,7 +15,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import omtteam.omlib.util.PlayerUtil;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
@@ -65,7 +65,7 @@ public abstract class TurretProjectile extends EntityThrowable {
 
     boolean canDamagePlayer(EntityPlayer entityPlayer) {
         if (entityPlayer != null && !entityPlayer.getEntityWorld().isRemote) {
-            if (!OMTConfigHandler.turretDamageTrustedPlayers) {
+            if (!OMTConfig.TURRETS.turretDamageTrustedPlayers) {
                 if (PlayerUtil.isPlayerTrusted(entityPlayer, this.turretBase)) {
                     return false;
                 }

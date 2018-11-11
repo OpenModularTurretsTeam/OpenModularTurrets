@@ -8,18 +8,23 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.AbstractOMTDamageSource;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
+import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.util.OMTFakePlayer;
 import omtteam.openmodularturrets.util.OMTUtil;
 
@@ -41,13 +46,9 @@ public class OMTEventHandler {
     }
 
     @SubscribeEvent
-    public void lootEvent(LivingDropsEvent event) {
-        EntityLivingBase entity = event.getEntityLiving();
-        int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
-        if (((entity.getTags().contains("openmodularturrets:turret_hit") && !OMTConfigHandler.doTurretsKillsDropMobLoot)
-                && !(fakeDrops >= 0 && OMTConfigHandler.doLootAddonsOverrideMobLootSetting)) ||
-                entity.getTags().contains("openmodularturrets:dont_drop_loot")) {
-            event.setCanceled(true);
+    public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (event.getModID().equals(Reference.MOD_ID)) {
+            ConfigManager.sync(Reference.MOD_ID, Config.Type.INSTANCE);
         }
     }
 
@@ -103,5 +104,14 @@ public class OMTEventHandler {
         OpenModularTurrets.proxy.initModelLoaders();
     }
 
-
+    @SubscribeEvent
+    public void lootEvent(LivingDropsEvent event) {
+        EntityLivingBase entity = event.getEntityLiving();
+        int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
+        if (((entity.getTags().contains("openmodularturrets:turret_hit") && !OMTConfig.GENERAL.doTurretsKillsDropMobLoot)
+                && !(fakeDrops >= 0 && OMTConfig.GENERAL.doLootAddonsOverrideMobLootSetting)) ||
+                entity.getTags().contains("openmodularturrets:dont_drop_loot")) {
+            event.setCanceled(true);
+        }
+    }
 }

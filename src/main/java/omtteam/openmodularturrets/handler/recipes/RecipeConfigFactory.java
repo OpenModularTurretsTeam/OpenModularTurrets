@@ -5,7 +5,7 @@ import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 
 import java.util.function.BooleanSupplier;
 
@@ -22,13 +22,13 @@ public class RecipeConfigFactory implements IConditionFactory {
     @Override
     public BooleanSupplier parse(JsonContext context, JsonObject json) {
         String mod = JsonUtils.getString(json, "mod");
-        if (ModCompatibility.EnderIOLoaded && OMTConfigHandler.recipes.equals("enderio") && mod.equals("enderio")) {
+        if (ModCompatibility.EnderIOLoaded && OMTConfig.GENERAL.recipes.equals("enderio") && mod.equals("enderio")) {
             return () -> true;
-        } else if (ModCompatibility.MekanismLoaded && OMTConfigHandler.recipes.equals("mekanism") && mod.equals("mekanism")) {
+        } else if (ModCompatibility.MekanismLoaded && OMTConfig.GENERAL.recipes.equals("mekanism") && mod.equals("mekanism")) {
             return () -> true;
-        } else if (OMTConfigHandler.recipes.equals("vanilla") && mod.equals("vanilla")) {
+        } else if (OMTConfig.GENERAL.recipes.equals("vanilla") && mod.equals("vanilla")) {
             return () -> true;
-        } else if (OMTConfigHandler.recipes.equals("auto")) {
+        } else if (OMTConfig.GENERAL.recipes.equals("auto")) {
             if (ModCompatibility.EnderIOLoaded && mod.equals("enderio")) {
                 return () -> true;
             } else if (ModCompatibility.MekanismLoaded && !ModCompatibility.EnderIOLoaded && mod.equals("mekanism")) {

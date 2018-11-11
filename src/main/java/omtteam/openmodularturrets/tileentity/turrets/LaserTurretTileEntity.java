@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.OMTUtil;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
@@ -39,27 +39,27 @@ public class LaserTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return OMTConfigHandler.getLaserTurretSettings().getRange();
+        return OMTConfig.TURRETS.laser_turret.getBaseRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return OMTConfigHandler.getLaserTurretSettings().getPowerUsage();
+        return OMTConfig.TURRETS.laser_turret.getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return OMTConfigHandler.getLaserTurretSettings().getFireRate();
+        return OMTConfig.TURRETS.laser_turret.getBaseFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return OMTConfigHandler.getLaserTurretSettings().getAccuracy() / 10;
+        return OMTConfig.TURRETS.laser_turret.getBaseAccuracyDeviation() / 10;
     }
 
     @Override
     public double getTurretDamageAmpBonus() {
-        return OMTConfigHandler.getLaserTurretSettings().getDamageAmp();
+        return OMTConfig.TURRETS.laser_turret.getDamageAmp();
     }
 
     @Override
@@ -94,7 +94,7 @@ public class LaserTurretTileEntity extends TurretHead {
         double d1 = target.posY + (double) target.height * 0.5F - (this.pos.getY() + 0.5);
         double d2 = target.posZ - (this.pos.getZ() + 0.5);
         double dist = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-        double inaccuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
+        double inaccuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
     }
 
     @Override
@@ -113,11 +113,11 @@ public class LaserTurretTileEntity extends TurretHead {
 
             // Play Sound
             this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
-                                      OMTConfigHandler.getTurretSoundVolume(), new Random().nextFloat() + 0.5F);
+                                      OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
 
             RayTraceResult result = world.rayTraceBlocks(new Vec3d(this.getBase().getPos().getX(),
                                                                    this.getBase().getPos().getY(),
-                                                                   this.getBase().getPos().getZ()), vector);
+                                                                   this.getBase().getPos().getZ()), vector, false, true, true);
 
         }
     }
@@ -136,11 +136,11 @@ public class LaserTurretTileEntity extends TurretHead {
     public void onHitEntity(Entity entity) {
         if (entity != null && !entity.getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
 
-            int damage = OMTConfigHandler.getLaserTurretSettings().getDamage();
+            int damage = OMTConfig.TURRETS.laser_turret.getBaseDamage();
 
             Random random = RandomUtil.random;
             this.getWorld().playSound(null, entity.getPosition(), ModSounds.laserHitSound, SoundCategory.AMBIENT,
-                                      OMTConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
+                                      OMTConfig.TURRETS.turretSoundVolume, random.nextFloat() + 0.5F);
             if (getTurretDamageAmpBonus() > 0) {
                 if (entity instanceof EntityLivingBase) {
                     EntityLivingBase elb = (EntityLivingBase) entity;

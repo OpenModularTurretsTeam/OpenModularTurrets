@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import omtteam.omlib.util.PlayerUtil;
 import omtteam.openmodularturrets.api.lists.AmmoList;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.items.AmmoMetaItem;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
@@ -30,7 +30,7 @@ import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
 public class OMTUtil {
     public static boolean isItemStackValidAmmo(ItemStack itemStack) {
         if (itemStack == ItemStack.EMPTY) return false;
-        return !OMTConfigHandler.useWhitelistForAmmo || itemStack.getItem() == Items.POTATO ||
+        return !OMTConfig.GENERAL.useWhitelistForAmmo || itemStack.getItem() == Items.POTATO ||
                 itemStack.getItem() == Items.REDSTONE || itemStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK)
                 || AmmoList.contains(itemStack) || itemStack.getItem() instanceof AmmoMetaItem;
     }
@@ -43,7 +43,7 @@ public class OMTUtil {
 
     public static boolean canDamagePlayer(EntityPlayer entityPlayer, TurretBase turretBase) {
         if (entityPlayer != null && !entityPlayer.getEntityWorld().isRemote) {
-            if (!OMTConfigHandler.turretDamageTrustedPlayers) {
+            if (!OMTConfig.TURRETS.turretDamageTrustedPlayers) {
                 if (PlayerUtil.isPlayerTrusted(entityPlayer, turretBase)) {
                     return false;
                 }
@@ -95,20 +95,20 @@ public class OMTUtil {
 
         switch (base.getTier()) {
             case 1:
-                return numberOfTurretsRemaining == 1000 ? Math.max(0, OMTConfigHandler.getBaseTierOneMaxTurrets() - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size()) :
-                        Math.max(0, Math.min(OMTConfigHandler.getBaseTierOneMaxTurrets() - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size(), numberOfTurretsRemaining));
+                return numberOfTurretsRemaining == 1000 ? Math.max(0, OMTConfig.BASES.baseTierOne.baseMaxTurrets - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size()) :
+                        Math.max(0, Math.min(OMTConfig.BASES.baseTierOne.baseMaxTurrets - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size(), numberOfTurretsRemaining));
             case 2:
-                return numberOfTurretsRemaining == 1000 ? Math.max(0, OMTConfigHandler.getBaseTierTwoMaxTurrets() - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size()) :
-                        Math.max(0, Math.min(OMTConfigHandler.getBaseTierTwoMaxTurrets() - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size(), numberOfTurretsRemaining));
+                return numberOfTurretsRemaining == 1000 ? Math.max(0, OMTConfig.BASES.baseTierTwo.baseMaxTurrets - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size()) :
+                        Math.max(0, Math.min(OMTConfig.BASES.baseTierTwo.baseMaxTurrets - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size(), numberOfTurretsRemaining));
             case 3:
-                return numberOfTurretsRemaining == 1000 ? Math.max(0, OMTConfigHandler.getBaseTierThreeMaxTurrets() - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size()) :
-                        Math.max(0, Math.min(OMTConfigHandler.getBaseTierThreeMaxTurrets() - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size(), numberOfTurretsRemaining));
+                return numberOfTurretsRemaining == 1000 ? Math.max(0, OMTConfig.BASES.baseTierThree.baseMaxTurrets - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size()) :
+                        Math.max(0, Math.min(OMTConfig.BASES.baseTierThree.baseMaxTurrets - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size(), numberOfTurretsRemaining));
             case 4:
-                return numberOfTurretsRemaining == 1000 ? Math.max(0, OMTConfigHandler.getBaseTierFourMaxTurrets() - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size()) :
-                        Math.max(0, Math.min(OMTConfigHandler.getBaseTierFourMaxTurrets() - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size(), numberOfTurretsRemaining));
+                return numberOfTurretsRemaining == 1000 ? Math.max(0, OMTConfig.BASES.baseTierFour.baseMaxTurrets - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size()) :
+                        Math.max(0, Math.min(OMTConfig.BASES.baseTierFour.baseMaxTurrets - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size(), numberOfTurretsRemaining));
             case 5:
-                return numberOfTurretsRemaining == 1000 ? Math.max(0, OMTConfigHandler.getBaseTierFiveMaxTurrets() - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size()) :
-                        Math.max(0, Math.min(OMTConfigHandler.getBaseTierFiveMaxTurrets() - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size(), numberOfTurretsRemaining));
+                return numberOfTurretsRemaining == 1000 ? Math.max(0, OMTConfig.BASES.baseTierFive.baseMaxTurrets - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size()) :
+                        Math.max(0, Math.min(OMTConfig.BASES.baseTierFive.baseMaxTurrets - TurretHeadUtil.getBaseTurrets(base.getWorld(), base.getPos()).size(), numberOfTurretsRemaining));
         }
         return 0;
     }

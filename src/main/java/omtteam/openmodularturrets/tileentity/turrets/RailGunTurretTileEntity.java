@@ -6,7 +6,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.entity.projectiles.FerroSlugProjectile;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
 
@@ -23,27 +23,27 @@ public class RailGunTurretTileEntity extends TurretHead {
 
     @Override
     public int getTurretRange() {
-        return OMTConfigHandler.getRailgunTurretSettings().getRange();
+        return OMTConfig.TURRETS.railgun_turret.getBaseRange();
     }
 
     @Override
     public int getTurretPowerUsage() {
-        return OMTConfigHandler.getRailgunTurretSettings().getPowerUsage();
+        return OMTConfig.TURRETS.railgun_turret.getPowerUsage();
     }
 
     @Override
     public int getTurretFireRate() {
-        return OMTConfigHandler.getRailgunTurretSettings().getFireRate();
+        return OMTConfig.TURRETS.railgun_turret.getBaseFireRate();
     }
 
     @Override
     public double getTurretAccuracy() {
-        return OMTConfigHandler.getRailgunTurretSettings().getAccuracy() / 10;
+        return OMTConfig.TURRETS.railgun_turret.getBaseAccuracyDeviation() / 10;
     }
 
     @Override
     public double getTurretDamageAmpBonus() {
-        return OMTConfigHandler.getRailgunTurretSettings().getDamageAmp();
+        return OMTConfig.TURRETS.railgun_turret.getDamageAmp();
     }
 
     @Override

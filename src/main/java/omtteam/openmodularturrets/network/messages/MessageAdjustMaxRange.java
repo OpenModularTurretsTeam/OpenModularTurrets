@@ -20,26 +20,8 @@ public class MessageAdjustMaxRange implements IMessage {
     public MessageAdjustMaxRange() {
     }
 
-    @SuppressWarnings("ConstantConditions")
-    public static class MessageHandlerAdjustYAxisDetect implements IMessageHandler<MessageAdjustMaxRange, IMessage> {
-        @Override
-        public IMessage onMessage(MessageAdjustMaxRange messageIn, MessageContext ctxIn) {
-            final MessageAdjustMaxRange message = messageIn;
-            final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().player.getEntityWorld();
-                EntityPlayerMP player = ctx.getServerHandler().player;
-                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-                TurretBase machine = null;
-                if (entity instanceof TurretBase) {
-                    machine = (TurretBase) entity;
-                }
-                if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
-                    machine.setCurrentMaxRange(message.getRange());
-                }
-            });
-            return null;
-        }
+    public int getBaseRange() {
+        return range;
     }
 
     public MessageAdjustMaxRange(int x, int y, int z, int range) {
@@ -77,7 +59,25 @@ public class MessageAdjustMaxRange implements IMessage {
         return z;
     }
 
-    public int getRange() {
-        return range;
+    @SuppressWarnings("ConstantConditions")
+    public static class MessageHandlerAdjustYAxisDetect implements IMessageHandler<MessageAdjustMaxRange, IMessage> {
+        @Override
+        public IMessage onMessage(MessageAdjustMaxRange messageIn, MessageContext ctxIn) {
+            final MessageAdjustMaxRange message = messageIn;
+            final MessageContext ctx = ctxIn;
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
+                EntityPlayerMP player = ctx.getServerHandler().player;
+                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+                TurretBase machine = null;
+                if (entity instanceof TurretBase) {
+                    machine = (TurretBase) entity;
+                }
+                if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
+                    machine.setCurrentMaxRange(message.getBaseRange());
+                }
+            });
+            return null;
+        }
     }
 }

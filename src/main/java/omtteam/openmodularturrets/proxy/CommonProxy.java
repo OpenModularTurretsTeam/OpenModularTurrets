@@ -4,6 +4,7 @@ import net.minecraftforge.common.MinecraftForge;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.OMTEventHandler;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModEntities;
 import omtteam.openmodularturrets.util.OMTFakePlayer;
@@ -36,5 +37,9 @@ public class CommonProxy {
         //OMTRecipeHandler.initRecipes();
         initEntityRenderers();
         OMTFakePlayer.init();
+    }
+
+    public void postInit() {
+        OMTConfig.parseLists();
     }
 }

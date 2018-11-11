@@ -44,8 +44,8 @@ import omtteam.omlib.util.EnumAccessMode;
 import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.openmodularturrets.api.IBaseController;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.network.messages.MessageTurretBase;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -313,6 +313,62 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
 
+    private static void updateRedstoneReactor(TurretBase base) {
+        OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
+        if (!TurretHeadUtil.hasRedstoneReactor(base) || storage == null) {
+            return;
+        }
+
+        if (OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
+
+            //Prioritise redstone blocks
+            ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackBlockFromBase(base, new ItemStack(
+                    Blocks.REDSTONE_BLOCK));
+
+            if (redstoneBlock == ItemStack.EMPTY) {
+                redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
+                                                                               new ItemStack(Blocks.REDSTONE_BLOCK),
+                                                                               base, null);
+            }
+
+            if (redstoneBlock != ItemStack.EMPTY && OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9
+                    < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
+                base.storage.modifyEnergyStored(OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9);
+                return;
+            }
+
+            ItemStack redstone = TurretHeadUtil.getSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE), null);
+
+            if (redstone == ItemStack.EMPTY) {
+                redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
+                                                                          new ItemStack(Items.REDSTONE), base, null);
+            }
+
+            if (redstone != ItemStack.EMPTY) {
+                storage.modifyEnergyStored(OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen);
+            }
+        }
+    }
+
+    @Override
+    public List<String> getDebugInfo() {
+        List<String> debugInfo = new ArrayList<>();
+        debugInfo.add("Camo: " + this.camoSettings.getCamoBlockState().getBlock().getRegistryName());
+        debugInfo.add("Force Fire: " + this.forceFire + ", UpperMaxRange: " + this.upperBoundMaxRange);
+        return debugInfo;
+    }
+
+    @Override
+    public TileEntityOwnedBlock getOwnedBlock() {
+        return this;
+    }
+
+    @Nonnull
+    @Override
+    public BlockPos getPosition() {
+        return this.getPos();
+    }
+
     @Override
     public void update() {
         super.update();
@@ -351,7 +407,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
             if (ticks % 20 == 0) {
 
-                //General
+                //ConfigGeneral
                 ticks = 0;
                 updateRedstoneReactor(this);
 
@@ -365,36 +421,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
             }
         }
-    }
-
-    @Override
-    public List<String> getDebugInfo() {
-        List<String> debugInfo = new ArrayList<>();
-        debugInfo.add("Camo: " + this.camoSettings.getCamoBlockState().getBlock().getRegistryName());
-        debugInfo.add("Force Fire: " + this.forceFire + ", UpperMaxRange: " + this.upperBoundMaxRange);
-        return debugInfo;
-    }
-
-    @Override
-    public TileEntityOwnedBlock getOwnedBlock() {
-        return this;
-    }
-
-    @Nonnull
-    @Override
-    public BlockPos getPosition() {
-        return this.getPos();
-    }
-
-    private void setBaseUpperBoundRange() {
-        int maxRange = upperBoundMaxRange;
-        List<TileEntity> tileEntities = WorldUtil.getTouchingTileEntities(getWorld(), getPos());
-        for (TileEntity te : tileEntities) {
-            if (te instanceof TurretHead) {
-                maxRange = Math.max(((TurretHead) te).getTurretRange() + TurretHeadUtil.getRangeUpgrades(this), maxRange);
-            }
-        }
-        this.upperBoundMaxRange = maxRange;
     }
 
     public NBTTagCompound writeMemoryCardNBT() {
@@ -433,31 +459,18 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         buildTrustedPlayersFromNBT(nbtTagCompound.getTagList("trustedPlayers", 10));
     }
 
-    private int getMaxEnergyStorageWithExtenders() {
-        int tier = getTier();
-        switch (tier) {
-            case 1:
-                return OMTConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
-            case 2:
-                return OMTConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
-            case 3:
-                return OMTConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
-            case 4:
-                return OMTConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
-            case 5:
-                return OMTConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
+    private void setBaseUpperBoundRange() {
+        int maxRange = upperBoundMaxRange;
+        List<TileEntity> tileEntities = WorldUtil.getTouchingTileEntities(getWorld(), getPos());
+        for (TileEntity te : tileEntities) {
+            if (te instanceof TurretHead) {
+                maxRange = Math.max(((TurretHead) te).getTurretRange() + TurretHeadUtil.getRangeUpgrades(this, (TurretHead) te), maxRange);
+            }
         }
-        return 0;
+        this.upperBoundMaxRange = maxRange;
     }
 
     // Getters and Setters
-
-
     @Nullable
     @Override
     public FluidTank getTank() {
@@ -572,41 +585,26 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return controller;
     }
 
-    private static void updateRedstoneReactor(TurretBase base) {
-        OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
-        if (!TurretHeadUtil.hasRedstoneReactor(base) || storage == null) {
-            return;
+    private int getMaxEnergyStorageWithExtenders() {
+        int tier = getTier();
+        switch (tier) {
+            case 1:
+                return OMTConfig.BASES.baseTierOne.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.getWorld(), this.pos);
+            case 2:
+                return OMTConfig.BASES.baseTierTwo.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.getWorld(), this.pos);
+            case 3:
+                return OMTConfig.BASES.baseTierThree.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.getWorld(), this.pos);
+            case 4:
+                return OMTConfig.BASES.baseTierFour.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.getWorld(), this.pos);
+            case 5:
+                return OMTConfig.BASES.baseTierFive.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                        this.getWorld(), this.pos);
         }
-
-        if (OMTConfigHandler.getRedstoneReactorAddonGen() < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
-
-            //Prioritise redstone blocks
-            ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackBlockFromBase(base, new ItemStack(
-                    Blocks.REDSTONE_BLOCK));
-
-            if (redstoneBlock == ItemStack.EMPTY) {
-                redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
-                        new ItemStack(Blocks.REDSTONE_BLOCK),
-                        base);
-            }
-
-            if (redstoneBlock != ItemStack.EMPTY && OMTConfigHandler.getRedstoneReactorAddonGen() * 9
-                    < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
-                base.storage.modifyEnergyStored(OMTConfigHandler.getRedstoneReactorAddonGen() * 9);
-                return;
-            }
-
-            ItemStack redstone = TurretHeadUtil.getSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE));
-
-            if (redstone == ItemStack.EMPTY) {
-                redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
-                        new ItemStack(Items.REDSTONE), base);
-            }
-
-            if (redstone != ItemStack.EMPTY) {
-                storage.modifyEnergyStored(OMTConfigHandler.getRedstoneReactorAddonGen());
-            }
-        }
+        return 0;
     }
 
     // API Functions. TODO: Add more?

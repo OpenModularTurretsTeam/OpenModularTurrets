@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -69,7 +69,7 @@ public class PotatoProjectile extends TurretProjectile {
     public void onHitEntity(Entity entity) {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
 
-            int damage = OMTConfigHandler.getPotatoCannonTurretSettings().getDamage();
+            int damage = OMTConfig.TURRETS.potato_cannon_turret.getBaseDamage();
 
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
@@ -117,6 +117,6 @@ public class PotatoProjectile extends TurretProjectile {
 
     @Override
     public double getDamageAmpBonus() {
-        return OMTConfigHandler.getDisposableTurretSettings().getDamageAmp();
+        return OMTConfig.TURRETS.disposable_turret.getDamageAmp();
     }
 }

@@ -10,7 +10,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import omtteam.openmodularturrets.client.gui.ModularTurretsTab;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
 import omtteam.openmodularturrets.handler.OMTGuiHandler;
 import omtteam.openmodularturrets.proxy.CommonProxy;
 import omtteam.openmodularturrets.reference.Reference;
@@ -37,7 +36,6 @@ public class OpenModularTurrets {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
-        OMTConfigHandler.init(event.getSuggestedConfigurationFile());
         proxy.preInit();
         ModCompatibility.checkForMods();
         ModCompatibility.preinit();
@@ -54,6 +52,6 @@ public class OpenModularTurrets {
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        OMTConfigHandler.parseLists();
+        proxy.postInit();
     }
 }

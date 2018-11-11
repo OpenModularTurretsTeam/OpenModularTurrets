@@ -1,12 +1,12 @@
 package omtteam.openmodularturrets.util;
 
-import omtteam.openmodularturrets.handler.OMTConfigHandler;
+import omtteam.openmodularturrets.handler.config.TurretSetting;
 
 public class TurretType {
     private String internalName;
-    private OMTConfigHandler.TurretSetting settings;
+    private TurretSetting settings;
 
-    public TurretType(String internalName, OMTConfigHandler.TurretSetting settings) {
+    public TurretType(String internalName, TurretSetting settings) {
         this.internalName = internalName;
         this.settings = settings;
     }
@@ -15,7 +15,7 @@ public class TurretType {
         return internalName;
     }
 
-    public OMTConfigHandler.TurretSetting getSettings() {
+    public TurretSetting getSettings() {
         return settings;
     }
 }
