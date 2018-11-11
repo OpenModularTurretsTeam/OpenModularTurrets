@@ -21,7 +21,6 @@ public class TurretList {
         types.put(turretType.getInternalName(), turretType);
     }
 
-
     /**
      * Returns the corresponding TurretType instance to the internal name.
      *
@@ -32,7 +31,6 @@ public class TurretList {
     public static TurretType getTurretType(String turretIn) {
         return types.get(turretIn);
     }
-
 
     public static Collection<TurretType> getAllTurrets() {
         return types.values();

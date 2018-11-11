@@ -26,6 +26,12 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 @SuppressWarnings("deprecation")
 public class AddonMetaItem extends Item {
+    public final static String[] subNames = {
+            OMTNames.Items.concealerAddon, OMTNames.Items.damageAmpAddon, OMTNames.Items.potentiaAddon,
+            OMTNames.Items.recyclerAddon, OMTNames.Items.redReactorAddon, OMTNames.Items.serialPortAddon,
+            OMTNames.Items.solarPanelAddon, OMTNames.Items.fakeDropsAddon
+    };
+
     public AddonMetaItem() {
         super();
 
@@ -34,12 +40,6 @@ public class AddonMetaItem extends Item {
         this.setRegistryName(Reference.MOD_ID, OMTNames.Items.addonMetaItem);
         this.setUnlocalizedName(OMTNames.Items.addonMetaItem);
     }
-
-    public final static String[] subNames = {
-            OMTNames.Items.concealerAddon, OMTNames.Items.damageAmpAddon, OMTNames.Items.potentiaAddon,
-            OMTNames.Items.recyclerAddon, OMTNames.Items.redReactorAddon, OMTNames.Items.serialPortAddon,
-            OMTNames.Items.solarPanelAddon, OMTNames.Items.fakeDropsAddon
-    };
 
     @Override
     @ParametersAreNonnullByDefault

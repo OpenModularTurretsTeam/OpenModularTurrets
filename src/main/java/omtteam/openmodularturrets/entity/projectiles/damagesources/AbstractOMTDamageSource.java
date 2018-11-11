@@ -16,8 +16,8 @@ import javax.annotation.Nullable;
  */
 @SuppressWarnings("WeakerAccess")
 public abstract class AbstractOMTDamageSource extends DamageSource {
-    private FakePlayer player;
     private final TurretBase base;
+    private FakePlayer player;
 
     public AbstractOMTDamageSource(String damageTypeIn, int fakeDrops, TurretBase base, WorldServer worldServer) {
         super(damageTypeIn);
@@ -33,7 +33,6 @@ public abstract class AbstractOMTDamageSource extends DamageSource {
     public Entity getTrueSource() {
         return player;
     }
-
 
     public TurretBase getBase() {
         return base;

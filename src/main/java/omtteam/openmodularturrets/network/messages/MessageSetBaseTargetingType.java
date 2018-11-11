@@ -19,28 +19,6 @@ public class MessageSetBaseTargetingType implements IMessage {
     public MessageSetBaseTargetingType() {
     }
 
-    @SuppressWarnings("ConstantConditions")
-    public static class MessageHandlerSetBaseTargetingType implements IMessageHandler<MessageSetBaseTargetingType, IMessage> {
-        @Override
-        public IMessage onMessage(MessageSetBaseTargetingType messageIn, MessageContext ctxIn) {
-            final MessageSetBaseTargetingType message = messageIn;
-            final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().player.getEntityWorld();
-                EntityPlayerMP player = ctx.getServerHandler().player;
-                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-                TurretBase machine = null;
-                if (entity instanceof TurretBase) {
-                    machine = (TurretBase) entity;
-                }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
-                    machine.setMultiTargeting(!machine.isMultiTargeting());
-                }
-            });
-            return null;
-        }
-    }
-
     public MessageSetBaseTargetingType(int x, int y, int z) {
         this.x = x;
         this.y = y;
@@ -71,5 +49,27 @@ public class MessageSetBaseTargetingType implements IMessage {
 
     private int getZ() {
         return z;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static class MessageHandlerSetBaseTargetingType implements IMessageHandler<MessageSetBaseTargetingType, IMessage> {
+        @Override
+        public IMessage onMessage(MessageSetBaseTargetingType messageIn, MessageContext ctxIn) {
+            final MessageSetBaseTargetingType message = messageIn;
+            final MessageContext ctx = ctxIn;
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
+                EntityPlayerMP player = ctx.getServerHandler().player;
+                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+                TurretBase machine = null;
+                if (entity instanceof TurretBase) {
+                    machine = (TurretBase) entity;
+                }
+                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
+                    machine.setMultiTargeting(!machine.isMultiTargeting());
+                }
+            });
+            return null;
+        }
     }
 }

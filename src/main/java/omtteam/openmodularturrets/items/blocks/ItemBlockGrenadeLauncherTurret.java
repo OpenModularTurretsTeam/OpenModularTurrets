@@ -41,11 +41,11 @@ public class ItemBlockGrenadeLauncherTurret extends AbstractItemBlockBaseAddon {
             tooltip.add(safeLocalize("tooltip.range") + ": " + TextFormatting.WHITE +
                                 OMTConfig.TURRETS.laser_turret.getBaseRange());
             tooltip.add(safeLocalize("tooltip.accuracy") + ": " + TextFormatting.WHITE +
-                    safeLocalize("turret.accuracy.medium"));
+                                safeLocalize("turret.accuracy.medium"));
             tooltip.add(safeLocalize("tooltip.ammo") + ": " + TextFormatting.WHITE +
-                    safeLocalize("turret.ammo.2"));
+                                safeLocalize("turret.ammo.2"));
             tooltip.add(safeLocalize("tooltip.tier_required") + ": " + TextFormatting.WHITE +
-                    safeLocalize("base.tier.3"));
+                                safeLocalize("base.tier.3"));
             tooltip.add("");
             tooltip.add(
                     TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");

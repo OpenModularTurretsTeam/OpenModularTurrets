@@ -20,15 +20,15 @@ public class MessageAdjustMaxRange implements IMessage {
     public MessageAdjustMaxRange() {
     }
 
-    public int getBaseRange() {
-        return range;
-    }
-
     public MessageAdjustMaxRange(int x, int y, int z, int range) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.range = range;
+    }
+
+    public int getBaseRange() {
+        return range;
     }
 
     @Override

@@ -25,6 +25,11 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 @SuppressWarnings("deprecation")
 public class UpgradeMetaItem extends Item {
+    public final static String[] subNames = {
+            OMTNames.Items.accuraccyUpgrade, OMTNames.Items.efficiencyUpgrade, OMTNames.Items.fireRateUpgrade,
+            OMTNames.Items.rangeUpgrade, OMTNames.Items.scattershotUpgrade
+    };
+
     public UpgradeMetaItem() {
         super();
 
@@ -33,11 +38,6 @@ public class UpgradeMetaItem extends Item {
         this.setRegistryName(Reference.MOD_ID, OMTNames.Items.upgradeMetaItem);
         this.setUnlocalizedName(OMTNames.Items.upgradeMetaItem);
     }
-
-    public final static String[] subNames = {
-            OMTNames.Items.accuraccyUpgrade, OMTNames.Items.efficiencyUpgrade, OMTNames.Items.fireRateUpgrade,
-            OMTNames.Items.rangeUpgrade, OMTNames.Items.scattershotUpgrade
-    };
 
     @Override
     @ParametersAreNonnullByDefault
@@ -48,7 +48,6 @@ public class UpgradeMetaItem extends Item {
             }
         }
     }
-
 
     @Override
     @Nonnull
@@ -61,7 +60,6 @@ public class UpgradeMetaItem extends Item {
     public int getMetadata(int damage) {
         return damage;
     }
-
 
     @SideOnly(Side.CLIENT)
     @Override

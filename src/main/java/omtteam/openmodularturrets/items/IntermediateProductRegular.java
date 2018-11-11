@@ -13,6 +13,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class IntermediateProductRegular extends Item {
+    public final static String[] subNames = {
+            OMTNames.Items.ioBus
+    };
+
     public IntermediateProductRegular() {
         super();
 
@@ -21,10 +25,6 @@ public class IntermediateProductRegular extends Item {
         this.setRegistryName(Reference.MOD_ID, OMTNames.Items.intermediateRegularItem);
         this.setUnlocalizedName(OMTNames.Items.intermediateRegularItem);
     }
-
-    public final static String[] subNames = {
-            OMTNames.Items.ioBus
-    };
 
     @Override
     @ParametersAreNonnullByDefault

@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.network.messages;
 
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
@@ -27,7 +26,6 @@ import java.util.UUID;
 
 import static omtteam.omlib.proxy.ClientProxy.getWorld;
 
-
 /**
  * Created by Keridos on 05.10.14.
  * This Class is the Message that the electric floodlights TileEntity uses.
@@ -42,7 +40,6 @@ public class MessageTurretBase implements IMessage {
 
     public MessageTurretBase() {
     }
-
 
     public MessageTurretBase(TileEntity tileEntity) {
         if (tileEntity instanceof TurretBase) {
@@ -137,6 +134,12 @@ public class MessageTurretBase implements IMessage {
         }
     }
 
+    @Override
+    public String toString() {
+        return String.format(
+                "MessageTurretBase - x:%s, y:%s, z:%s, owner:%s, rfstorage:%s", x, y, z, owner, rfStorageCurrent);
+    }
+
     public static class MessageHandlerTurretBase implements IMessageHandler<MessageTurretBase, IMessage> {
         @Override
         @SuppressWarnings("deprecation")
@@ -145,7 +148,7 @@ public class MessageTurretBase implements IMessage {
             Minecraft.getMinecraft().addScheduledTask(() -> {
 
                 TileEntity tileEntity = getWorld(FMLClientHandler.instance().getClient()).getTileEntity(new BlockPos(message.x, message.y,
-                        message.z));
+                                                                                                                     message.z));
                 if (tileEntity instanceof TurretBase) {
                     TurretBase base = (TurretBase) tileEntity;
                     OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
@@ -173,13 +176,6 @@ public class MessageTurretBase implements IMessage {
             });
             return null;
         }
-
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "MessageTurretBase - x:%s, y:%s, z:%s, owner:%s, rfstorage:%s", x, y, z, owner, rfStorageCurrent);
     }
 }
 

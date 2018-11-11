@@ -50,7 +50,6 @@ public class BlockTeleporterTurret extends BlockAbstractTurretHead {
         return new TeleporterTurretTileEntity();
     }
 
-
     @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (shouldAnimate) {
@@ -59,9 +58,9 @@ public class BlockTeleporterTurret extends BlockAbstractTurretHead {
                 float var22 = (rand.nextFloat() - 0.5F) * 0.2F;
                 float var23 = (rand.nextFloat() - 0.5F) * 0.2F;
                 worldIn.spawnParticle(EnumParticleTypes.PORTAL, pos.getX() + 0.5f + rand.nextGaussian(),
-                        pos.getY() + 0.5f + rand.nextGaussian(),
-                        pos.getZ() + 0.5f + rand.nextGaussian(), (double) var21,
-                        (double) var22, (double) var23);
+                                      pos.getY() + 0.5f + rand.nextGaussian(),
+                                      pos.getZ() + 0.5f + rand.nextGaussian(), (double) var21,
+                                      (double) var22, (double) var23);
             }
             shouldAnimate = false;
         }

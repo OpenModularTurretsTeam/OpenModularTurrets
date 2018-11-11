@@ -70,15 +70,14 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         this.guiTop = (this.height - this.ySize) / 2;
         this.buttonList.clear();
         this.sliderLightValue = new GuiSlider(this, 10, guiLeft + 10, guiTop + 157,
-                safeLocalize(OMTNames.Localizations.GUI.LIGHT_VALUE), 0, 15, lightValue, this);
+                                              safeLocalize(OMTNames.Localizations.GUI.LIGHT_VALUE), 0, 15, lightValue, this);
         this.sliderLightOpacity = new GuiSlider(this, 11, guiLeft + 10, guiTop + 179,
-                safeLocalize(OMTNames.Localizations.GUI.LIGHT_OPACITY), 0, 15, lightOpacity, this);
+                                                safeLocalize(OMTNames.Localizations.GUI.LIGHT_OPACITY), 0, 15, lightOpacity, this);
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 
         String mobsButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
         String neutralsButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
         String playersButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
-
 
         textFieldAddTrustedPlayer = new GuiTextField(0, fontRenderer, guiLeft + 11, guiTop + 99, 100, 18);
         textFieldAddTrustedPlayer.setMaxStringLength(50);
@@ -125,7 +124,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             fontRenderer.drawString("\u00A7f" + safeLocalize(OMTNames.Localizations.GUI.NO_TRUSTED_PLAYERS), guiLeft + 10, guiTop + 124, 0);
         } else {
             fontRenderer.drawString(base.getTrustedPlayers().get(base.trustedPlayerIndex).getName() + "'s " + safeLocalize(OMTNames.Localizations.GUI.PERMISSIONS),
-                    guiLeft + 10, 124, 0);
+                                    guiLeft + 10, 124, 0);
         }
         drawMode();
         textFieldAddTrustedPlayer.drawTextBox();
@@ -258,7 +257,6 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
                     base.trustedPlayerIndex) != null) {
                 sendChangeToServerModifyPermissions(
                         this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), -1);
-
             } else {
                 addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
             }
@@ -269,7 +267,6 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
                     base.trustedPlayerIndex) != null) {
                 sendChangeToServerModifyPermissions(
                         this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), 1);
-
             } else {
                 addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
             }
@@ -395,35 +392,35 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
 
     private void sendChangeToServerNeutrals(boolean setTo) {
         MessageToggleAttackNeutralMobs message = new MessageToggleAttackNeutralMobs(base.getPos().getX(), base.getPos().getY(),
-                base.getPos().getZ(), setTo);
+                                                                                    base.getPos().getZ(), setTo);
         OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendChangeToServerPlayers(boolean setTo) {
         MessageToggleAttackPlayers message = new MessageToggleAttackPlayers(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
-                setTo);
+                                                                            setTo);
 
         OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendChangeToServerAddTrusted() {
         MessageAddTrustedPlayer message = new MessageAddTrustedPlayer(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
-                textFieldAddTrustedPlayer.getText());
+                                                                      textFieldAddTrustedPlayer.getText());
 
         OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendChangeToServerRemoveTrusted() {
         MessageRemoveTrustedPlayer message = new MessageRemoveTrustedPlayer(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
-                base.getTrustedPlayers().get(
-                        base.trustedPlayerIndex).getName());
+                                                                            base.getTrustedPlayers().get(
+                                                                                    base.trustedPlayerIndex).getName());
 
         OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 
     private void sendChangeToServerModifyPermissions(String player, Integer change) {
         MessageModifyPermissions message = new MessageModifyPermissions(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(), player,
-                change);
+                                                                        change);
 
         OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }

@@ -12,35 +12,12 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
-
 @SuppressWarnings("unused")
 public class MessageToggleAttackMobs implements IMessage {
     private int x, y, z;
     private boolean attack_mobs;
 
     public MessageToggleAttackMobs() {
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    public static class MessageHandlerToggleAttackMobs implements IMessageHandler<MessageToggleAttackMobs, IMessage> {
-        @Override
-        public IMessage onMessage(MessageToggleAttackMobs messageIn, MessageContext ctxIn) {
-            final MessageToggleAttackMobs message = messageIn;
-            final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().player.getEntityWorld();
-                EntityPlayerMP player = ctx.getServerHandler().player;
-                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-                TurretBase machine = null;
-                if (entity instanceof TurretBase) {
-                    machine = (TurretBase) entity;
-                }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
-                    machine.setAttacksMobs(message.doAttackMobs());
-                }
-            });
-            return null;
-        }
     }
 
     public MessageToggleAttackMobs(int x, int y, int z, boolean attack_mobs) {
@@ -83,5 +60,27 @@ public class MessageToggleAttackMobs implements IMessage {
 
     private boolean doAttackMobs() {
         return attack_mobs;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static class MessageHandlerToggleAttackMobs implements IMessageHandler<MessageToggleAttackMobs, IMessage> {
+        @Override
+        public IMessage onMessage(MessageToggleAttackMobs messageIn, MessageContext ctxIn) {
+            final MessageToggleAttackMobs message = messageIn;
+            final MessageContext ctx = ctxIn;
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
+                EntityPlayerMP player = ctx.getServerHandler().player;
+                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+                TurretBase machine = null;
+                if (entity instanceof TurretBase) {
+                    machine = (TurretBase) entity;
+                }
+                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
+                    machine.setAttacksMobs(message.doAttackMobs());
+                }
+            });
+            return null;
+        }
     }
 }

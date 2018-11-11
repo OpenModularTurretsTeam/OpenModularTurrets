@@ -20,29 +20,22 @@ import omtteam.openmodularturrets.util.TurretType;
 
 import static omtteam.omlib.util.InitHelper.registerBlock;
 
-
 public class ModBlocks {
+    public static final Block laserTurret = new BlockLaserTurret();
     public static Block turretBase;
     public static Block disposableItemTurret;
     public static Block potatoCannonTurret;
-
     public static Block incendiaryTurret;
-
     public static Block machineGunTurret;
     public static Block grenadeLauncherTurret;
-
     public static Block relativisticTurret;
-
     public static Block teleporterTurret;
-
     public static Block rocketTurret;
-    public static final Block laserTurret = new BlockLaserTurret();
     public static Block railGunTurret;
     public static Block leverBlock;
 
     public static Block expander;
     public static Block baseAddon;
-
 
     public static void initBlocks(IForgeRegistry<Block> registry) {
         turretBase = registerBlock(new BlockTurretBase(), registry, ModItems.subblocks);

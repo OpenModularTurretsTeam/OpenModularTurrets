@@ -42,7 +42,6 @@ public class TurretBaseBakedModel extends CamoBakedModel {
 
     private final TextureAtlasSprite particle;
 
-
     private TurretBaseBakedModel(List<IBakedModel> list, TextureAtlasSprite part) {
         super(list);
         particle = part;

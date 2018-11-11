@@ -73,10 +73,12 @@ import static omtteam.omlib.util.player.PlayerUtil.getPlayerUUID;
 )
 public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile, ISyncable {
     public int trustedPlayerIndex = 0;
-    protected CamoSettings camoSettings;
-    private IBlockState camoBlockStateTemp;
-
     public boolean shouldConcealTurrets;
+    protected CamoSettings camoSettings;
+    protected int tier;
+    protected IItemHandlerModifiable inventory;
+    protected FluidTank tank;
+    private IBlockState camoBlockStateTemp;
     private boolean multiTargeting = false;
     private int currentMaxRange;
     private int upperBoundMaxRange;
@@ -85,16 +87,12 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private boolean attacksNeutrals;
     private boolean attacksPlayers;
     private int ticks;
-    protected int tier;
     private boolean forceFire = false;
     private int kills;
     private int playerKills;
     private IBaseController controller;
     private OMLibNetwork network;
     private List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
-
-    protected IItemHandlerModifiable inventory;
-    protected FluidTank tank;
 
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
         super();
@@ -116,6 +114,43 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     public TurretBase() {
         super();
         setupInventory();
+    }
+
+    private static void updateRedstoneReactor(TurretBase base) {
+        OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
+        if (!TurretHeadUtil.hasRedstoneReactor(base) || storage == null) {
+            return;
+        }
+
+        if (OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
+
+            //Prioritise redstone blocks
+            ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackBlockFromBase(base, new ItemStack(
+                    Blocks.REDSTONE_BLOCK));
+
+            if (redstoneBlock == ItemStack.EMPTY) {
+                redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
+                                                                               new ItemStack(Blocks.REDSTONE_BLOCK),
+                                                                               base, null);
+            }
+
+            if (redstoneBlock != ItemStack.EMPTY && OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9
+                    < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
+                base.storage.modifyEnergyStored(OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9);
+                return;
+            }
+
+            ItemStack redstone = TurretHeadUtil.getSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE), null);
+
+            if (redstone == ItemStack.EMPTY) {
+                redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
+                                                                          new ItemStack(Items.REDSTONE), base, null);
+            }
+
+            if (redstone != ItemStack.EMPTY) {
+                storage.modifyEnergyStored(OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen);
+            }
+        }
     }
 
     @Override
@@ -203,7 +238,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         this.camoBlockStateTemp = state;
         if (!world.isRemote) {
             OMLibNetworkingHandler.INSTANCE.sendToAllAround(new MessageCamoSettings(this),
-                    new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
+                                                            new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
             this.markDirty();
         }
     }
@@ -286,20 +321,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return this;
     }
 
-    public void setCurrentMaxRange(int newCurrentMaxRange) {
-
-        this.currentMaxRange = newCurrentMaxRange;
-        this.rangeOverridden = true;
-
-        if (currentMaxRange > this.upperBoundMaxRange) {
-            this.currentMaxRange = this.upperBoundMaxRange;
-        }
-
-        if (currentMaxRange < 0) {
-            this.currentMaxRange = 0;
-        }
-    }
-
     private void updateControllerSettings() {
         if (controller != null) {
             TargetingSettings settings = controller.getTargetingSettings();
@@ -309,44 +330,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             this.currentMaxRange = settings.getMaxRange();
 
             this.trustedPlayers = controller.getTrustedPlayerList();
-        }
-    }
-
-
-    private static void updateRedstoneReactor(TurretBase base) {
-        OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
-        if (!TurretHeadUtil.hasRedstoneReactor(base) || storage == null) {
-            return;
-        }
-
-        if (OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
-
-            //Prioritise redstone blocks
-            ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackBlockFromBase(base, new ItemStack(
-                    Blocks.REDSTONE_BLOCK));
-
-            if (redstoneBlock == ItemStack.EMPTY) {
-                redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
-                                                                               new ItemStack(Blocks.REDSTONE_BLOCK),
-                                                                               base, null);
-            }
-
-            if (redstoneBlock != ItemStack.EMPTY && OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9
-                    < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
-                base.storage.modifyEnergyStored(OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9);
-                return;
-            }
-
-            ItemStack redstone = TurretHeadUtil.getSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE), null);
-
-            if (redstone == ItemStack.EMPTY) {
-                redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
-                                                                          new ItemStack(Items.REDSTONE), base, null);
-            }
-
-            if (redstone != ItemStack.EMPTY) {
-                storage.modifyEnergyStored(OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen);
-            }
         }
     }
 
@@ -404,7 +387,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             //Extenders
             this.storage.setCapacity(getMaxEnergyStorageWithExtenders());
 
-
             if (ticks % 20 == 0) {
 
                 //ConfigGeneral
@@ -415,10 +397,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 if (this.updateNBT) {
                     this.markDirty();
                     OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageTurretBase(this),
-                            new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
+                                                                  new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
                     this.updateNBT = false;
                 }
-
             }
         }
     }
@@ -560,12 +541,12 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return kills;
     }
 
-    public int getPlayerKills() {
-        return playerKills;
-    }
-
     public void setKills(int kills) {
         this.kills = kills;
+    }
+
+    public int getPlayerKills() {
+        return playerKills;
     }
 
     public void setPlayerKills(int playerKills) {
@@ -574,6 +555,20 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     public int getCurrentMaxRange() {
         return currentMaxRange;
+    }
+
+    public void setCurrentMaxRange(int newCurrentMaxRange) {
+
+        this.currentMaxRange = newCurrentMaxRange;
+        this.rangeOverridden = true;
+
+        if (currentMaxRange > this.upperBoundMaxRange) {
+            this.currentMaxRange = this.upperBoundMaxRange;
+        }
+
+        if (currentMaxRange < 0) {
+            this.currentMaxRange = 0;
+        }
     }
 
     public int getUpperBoundMaxRange() {
@@ -630,8 +625,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
      */
     public List<EntityLivingBase> getEntitiesWithinRange() {
         AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - currentMaxRange - 1, pos.getY() - currentMaxRange - 1,
-                pos.getZ() - currentMaxRange - 1, pos.getX() + currentMaxRange + 1,
-                pos.getY() + currentMaxRange + 1, pos.getZ() + currentMaxRange + 1);
+                                               pos.getZ() - currentMaxRange - 1, pos.getX() + currentMaxRange + 1,
+                                               pos.getY() + currentMaxRange + 1, pos.getZ() + currentMaxRange + 1);
 
         return this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
     }
@@ -714,15 +709,15 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return network;
     }
 
+    @Override
+    public void setNetwork(OMLibNetwork network) {
+        this.network = network;
+    }
+
     @Nonnull
     @Override
     public String getDeviceName() {
         return "TurretBase";
-    }
-
-    @Override
-    public void setNetwork(OMLibNetwork network) {
-        this.network = network;
     }
 
     @Optional.Method(modid = "computercraft")
@@ -846,12 +841,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return other.getType().equals(getType());
     }
 
-    public enum commands {
-        getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals,
-        getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getMode, getRedstone, setMode,
-        getType
-    }
-
     @Optional.Method(modid = "computercraft")
     @Override
     public void attach(@Nonnull IComputerAccess computer) {
@@ -862,5 +851,11 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Override
     public void detach(@Nonnull IComputerAccess computer) {
 
+    }
+
+    public enum commands {
+        getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals,
+        getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getMode, getRedstone, setMode,
+        getType
     }
 }

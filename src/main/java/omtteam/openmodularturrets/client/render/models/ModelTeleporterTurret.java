@@ -10,12 +10,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ModelTeleporterTurret extends ModelBase {
     //fields
     public final ModelRenderer Base;
-    private final ModelRenderer BaseStand;
     public final ModelRenderer PillarLarge;
     public final ModelRenderer Spinner1;
     public final ModelRenderer Spinner2;
     public final ModelRenderer Spinner3;
     public final ModelRenderer Spinner4;
+    private final ModelRenderer BaseStand;
 
     public ModelTeleporterTurret() {
         textureWidth = 64;

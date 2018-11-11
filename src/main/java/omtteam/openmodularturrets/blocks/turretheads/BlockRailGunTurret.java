@@ -44,7 +44,7 @@ public class BlockRailGunTurret extends BlockAbstractTurretHead {
             for (int i = 0; i <= 5; i++) {
                 Random random = new Random();
                 worldIn.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX() + (random.nextGaussian() / 10) + 0.5F, pos.getY(),
-                        pos.getZ() + (random.nextGaussian() / 10) + 0.5F, (0), (50), (200));
+                                      pos.getZ() + (random.nextGaussian() / 10) + 0.5F, (0), (50), (200));
             }
         }
     }

@@ -20,27 +20,6 @@ public class MessageToggleMode implements IMessage {
     public MessageToggleMode() {
     }
 
-    public static class MessageHandlerToggleMode implements IMessageHandler<MessageToggleMode, IMessage> {
-        @Override
-        public IMessage onMessage(MessageToggleMode messageIn, MessageContext ctxIn) {
-            final MessageToggleMode message = messageIn;
-            final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().player.getEntityWorld();
-                EntityPlayerMP player = ctx.getServerHandler().player;
-                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-                TurretBase machine = null;
-                if (entity instanceof TurretBase) {
-                    machine = (TurretBase) entity;
-                }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
-                    machine.toggleMode();
-                }
-            });
-            return null;
-        }
-    }
-
     public MessageToggleMode(int x, int y, int z) {
         this.x = x;
         this.y = y;
@@ -75,5 +54,26 @@ public class MessageToggleMode implements IMessage {
 
     public String getOwner() {
         return player;
+    }
+
+    public static class MessageHandlerToggleMode implements IMessageHandler<MessageToggleMode, IMessage> {
+        @Override
+        public IMessage onMessage(MessageToggleMode messageIn, MessageContext ctxIn) {
+            final MessageToggleMode message = messageIn;
+            final MessageContext ctx = ctxIn;
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
+                EntityPlayerMP player = ctx.getServerHandler().player;
+                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+                TurretBase machine = null;
+                if (entity instanceof TurretBase) {
+                    machine = (TurretBase) entity;
+                }
+                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
+                    machine.toggleMode();
+                }
+            });
+            return null;
+        }
     }
 }

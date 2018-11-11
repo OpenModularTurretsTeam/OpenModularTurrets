@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.client.render.renderers.projectiles;
 
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;

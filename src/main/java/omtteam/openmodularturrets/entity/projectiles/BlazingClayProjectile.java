@@ -43,10 +43,9 @@ public class BlazingClayProjectile extends TurretProjectile {
             return;
         }
 
-
         if (!getEntityWorld().isRemote) {
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
-                    this.posX + 5, this.posY + 5, this.posZ + 5);
+                                                   this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             int damage = OMTConfig.TURRETS.incendiary_turret.getBaseDamage();
@@ -76,7 +75,7 @@ public class BlazingClayProjectile extends TurretProjectile {
                 && canDamageEntity(entity) && !(entity instanceof TurretProjectile)) {
 
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
-                    this.posX + 5, this.posY + 5, this.posZ + 5);
+                                                   this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             int damage = OMTConfig.TURRETS.incendiary_turret.getBaseDamage();

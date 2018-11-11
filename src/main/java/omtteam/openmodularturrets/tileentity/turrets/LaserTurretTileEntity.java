@@ -118,7 +118,6 @@ public class LaserTurretTileEntity extends TurretHead {
             RayTraceResult result = world.rayTraceBlocks(new Vec3d(this.getBase().getPos().getX(),
                                                                    this.getBase().getPos().getY(),
                                                                    this.getBase().getPos().getZ()), vector, false, true, true);
-
         }
     }
 

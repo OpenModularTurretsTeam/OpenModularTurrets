@@ -56,7 +56,6 @@ public interface IBaseController extends IController {
      */
     TargetingSettings getTargetingSettings();
 
-
     /**
      * Return the overridden trusted player list for the base.
      *

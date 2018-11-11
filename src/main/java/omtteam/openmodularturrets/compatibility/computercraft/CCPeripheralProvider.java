@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.compatibility.computercraft;
 
-
 import dan200.computercraft.api.ComputerCraftAPI;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;
@@ -29,6 +28,10 @@ public class CCPeripheralProvider {
         return instance;
     }
 
+    public void registerWrapper() {
+        ComputerCraftAPI.registerPeripheralProvider(new CCDriverTurrretBase());
+    }
+
     private class CCDriverTurrretBase implements IPeripheralProvider {
         @Override
         @ParametersAreNonnullByDefault
@@ -38,9 +41,5 @@ public class CCPeripheralProvider {
             }
             return null;
         }
-    }
-
-    public void registerWrapper() {
-        ComputerCraftAPI.registerPeripheralProvider(new CCDriverTurrretBase());
     }
 }

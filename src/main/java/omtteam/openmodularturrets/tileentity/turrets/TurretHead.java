@@ -36,22 +36,21 @@ import static omtteam.omlib.util.MathUtil.getVelocityVectorFromYawPitch;
 import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
-
 @SuppressWarnings("unused")
 public abstract class TurretHead extends TileEntityBase implements ITickable, ITurretBaseAddonTileEntity {
-    int ticks;
-    int targetingTicks;
     public float pitch;
     public float yaw;
     public float baseFitRotationX;
     public float baseFitRotationZ;
-    int turretTier;
-    protected TurretBase base;
-    private boolean hasSetSide = false;
-    private EnumFacing turretBase;
     public Entity target = null;
     public float rotationAnimation = 0.00F;
     public boolean shouldConceal = false;
+    protected TurretBase base;
+    int ticks;
+    int targetingTicks;
+    int turretTier;
+    private boolean hasSetSide = false;
+    private EnumFacing turretBase;
     private boolean playedDeploy = false;
     private boolean autoFire = false;
     private int ticksWithoutTarget;
@@ -66,7 +65,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     private float maxYaw = 360;
     private float minPitch = 0;
     private float minYaw = 0;
-
 
     @Nullable
     @Override
@@ -296,7 +294,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         } */
 
         return MathHelper.absMax(MathHelper.absMax(targetPos.x - this.getPos().getX(), targetPos.y - this.getPos().getY()),
-                targetPos.z - this.getPos().getZ()) > (this.getBaseFromWorld().getCurrentMaxRange());
+                                 targetPos.z - this.getPos().getZ()) > (this.getBaseFromWorld().getCurrentMaxRange());
     }
 
     protected int getPowerRequiredForNextShot() {
@@ -355,7 +353,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     public void update() {
         if (!setSide()) return;
         this.base = getBaseFromWorld();
-
 
         //Is the turret head block still there?
         if (!(this.getWorld().getBlockState(this.getPos()).getBlock() instanceof BlockAbstractTurretHead)) {

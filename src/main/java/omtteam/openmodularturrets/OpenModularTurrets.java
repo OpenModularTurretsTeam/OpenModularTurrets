@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets;
 
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -17,15 +16,13 @@ import org.apache.logging.log4j.Logger;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION, acceptedMinecraftVersions = Reference.ACCEPTED_MINECRAFT_VERSION, dependencies = Reference.DEPENDENCIES)
 public class OpenModularTurrets {
+    public static final CreativeTabs modularTurretsTab = ModularTurretsTab.getInstance();
     @SuppressWarnings("unused")
     @Mod.Instance(Reference.MOD_ID)
     public static OpenModularTurrets instance;
-
     @SuppressWarnings({"CanBeFinal", "unused"})
     @SidedProxy(clientSide = "omtteam.openmodularturrets.proxy.ClientProxy", serverSide = "omtteam.openmodularturrets.proxy.ServerProxy")
     public static CommonProxy proxy;
-
-    public static final CreativeTabs modularTurretsTab = ModularTurretsTab.getInstance();
     private static Logger logger;
 
     public static Logger getLogger() {

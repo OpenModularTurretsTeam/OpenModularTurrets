@@ -24,15 +24,15 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 @SuppressWarnings("deprecation")
 public class ItemBlockTurretBase extends ItemBlock {
+    private final static String[] subNames = {
+            "_tier_one", "_tier_two", "_tier_three", "_tier_four", "_tier_five"
+    };
+
     public ItemBlockTurretBase(Block block) {
         super(block);
         setHasSubtypes(true);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.turretBase);
     }
-
-    private final static String[] subNames = {
-            "_tier_one", "_tier_two", "_tier_three", "_tier_four", "_tier_five"
-    };
 
     @Override
     @ParametersAreNonnullByDefault

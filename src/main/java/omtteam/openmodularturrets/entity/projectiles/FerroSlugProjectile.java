@@ -72,7 +72,6 @@ public class FerroSlugProjectile extends TurretProjectile {
                 } else {
                     return;
                 }
-
             } else if (canDamageEntity(entity)) {
                 setTagsForTurretHit(entity);
                 entity.attackEntityFrom(new ArmorBypassDamageSource("ferroslug", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);

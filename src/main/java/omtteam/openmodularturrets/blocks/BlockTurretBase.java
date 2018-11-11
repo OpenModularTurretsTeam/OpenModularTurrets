@@ -58,7 +58,6 @@ import static omtteam.omlib.util.GeneralUtil.*;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
 
-
 public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHasItemBlock, TOPInfoProvider {
     public static final PropertyInteger TIER = PropertyInteger.create("tier", 1, 5);
     public static final PropertyInteger LIGHT_VALUE = PropertyInteger.create("light_value", 0, 15);
@@ -162,7 +161,6 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
         }
         return super.getLightValue(state, world, pos);
     }
-
 
     @Override
     @ParametersAreNonnullByDefault

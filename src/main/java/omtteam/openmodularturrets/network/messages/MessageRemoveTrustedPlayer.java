@@ -21,28 +21,6 @@ public class MessageRemoveTrustedPlayer implements IMessage {
     public MessageRemoveTrustedPlayer() {
     }
 
-    @SuppressWarnings("ConstantConditions")
-    public static class MessageHandlerRemoveTrustedPlayer implements IMessageHandler<MessageRemoveTrustedPlayer, IMessage> {
-        @Override
-        public IMessage onMessage(MessageRemoveTrustedPlayer messageIn, MessageContext ctxIn) {
-            final MessageRemoveTrustedPlayer message = messageIn;
-            final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().player.getEntityWorld();
-                EntityPlayerMP player = ctx.getServerHandler().player;
-                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-                TurretBase machine = null;
-                if (entity instanceof TurretBase) {
-                    machine = (TurretBase) entity;
-                }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
-                    machine.removeTrustedPlayer(message.getPlayer());
-                }
-            });
-            return null;
-        }
-    }
-
     public MessageRemoveTrustedPlayer(int x, int y, int z, String player) {
         this.x = x;
         this.y = y;
@@ -82,5 +60,27 @@ public class MessageRemoveTrustedPlayer implements IMessage {
 
     private String getPlayer() {
         return player;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static class MessageHandlerRemoveTrustedPlayer implements IMessageHandler<MessageRemoveTrustedPlayer, IMessage> {
+        @Override
+        public IMessage onMessage(MessageRemoveTrustedPlayer messageIn, MessageContext ctxIn) {
+            final MessageRemoveTrustedPlayer message = messageIn;
+            final MessageContext ctx = ctxIn;
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
+                EntityPlayerMP player = ctx.getServerHandler().player;
+                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+                TurretBase machine = null;
+                if (entity instanceof TurretBase) {
+                    machine = (TurretBase) entity;
+                }
+                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
+                    machine.removeTrustedPlayer(message.getPlayer());
+                }
+            });
+            return null;
+        }
     }
 }

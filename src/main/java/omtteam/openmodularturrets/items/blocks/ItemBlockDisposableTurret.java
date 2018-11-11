@@ -41,11 +41,11 @@ public class ItemBlockDisposableTurret extends AbstractItemBlockBaseAddon {
             tooltip.add(safeLocalize("tooltip.range") + ": " + TextFormatting.WHITE +
                                 OMTConfig.TURRETS.disposable_turret.getBaseRange());
             tooltip.add(safeLocalize("tooltip.accuracy") + ": " + TextFormatting.WHITE +
-                    safeLocalize("turret.accuracy.low"));
+                                safeLocalize("turret.accuracy.low"));
             tooltip.add(safeLocalize("tooltip.ammo") + ": " + TextFormatting.WHITE +
-                    safeLocalize("turret.ammo.0"));
+                                safeLocalize("turret.ammo.0"));
             tooltip.add(safeLocalize("tooltip.tier_required") + ": " + TextFormatting.WHITE +
-                    safeLocalize("base.tier.1"));
+                                safeLocalize("base.tier.1"));
             tooltip.add("");
             tooltip.add(
                     TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");

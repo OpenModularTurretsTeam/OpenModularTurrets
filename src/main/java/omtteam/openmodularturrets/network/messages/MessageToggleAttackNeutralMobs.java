@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.network.messages;
 
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
@@ -19,28 +18,6 @@ public class MessageToggleAttackNeutralMobs implements IMessage {
     private boolean attack_neutrals;
 
     public MessageToggleAttackNeutralMobs() {
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    public static class MessageHandlerToggleAttackNeutralMobs implements IMessageHandler<MessageToggleAttackNeutralMobs, IMessage> {
-        @Override
-        public IMessage onMessage(MessageToggleAttackNeutralMobs messageIn, MessageContext ctxIn) {
-            final MessageToggleAttackNeutralMobs message = messageIn;
-            final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().player.getEntityWorld();
-                EntityPlayerMP player = ctx.getServerHandler().player;
-                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-                TurretBase machine = null;
-                if (entity instanceof TurretBase) {
-                    machine = (TurretBase) entity;
-                }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
-                    machine.setAttacksNeutrals(message.doAttackNeutrals());
-                }
-            });
-            return null;
-        }
     }
 
     public MessageToggleAttackNeutralMobs(int x, int y, int z, boolean attack_neutrals) {
@@ -82,5 +59,27 @@ public class MessageToggleAttackNeutralMobs implements IMessage {
 
     private boolean doAttackNeutrals() {
         return attack_neutrals;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static class MessageHandlerToggleAttackNeutralMobs implements IMessageHandler<MessageToggleAttackNeutralMobs, IMessage> {
+        @Override
+        public IMessage onMessage(MessageToggleAttackNeutralMobs messageIn, MessageContext ctxIn) {
+            final MessageToggleAttackNeutralMobs message = messageIn;
+            final MessageContext ctx = ctxIn;
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
+                EntityPlayerMP player = ctx.getServerHandler().player;
+                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+                TurretBase machine = null;
+                if (entity instanceof TurretBase) {
+                    machine = (TurretBase) entity;
+                }
+                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
+                    machine.setAttacksNeutrals(message.doAttackNeutrals());
+                }
+            });
+            return null;
+        }
     }
 }

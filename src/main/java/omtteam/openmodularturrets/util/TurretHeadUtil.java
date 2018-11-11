@@ -47,11 +47,11 @@ public class TurretHeadUtil {
         if (base.isAttacksPlayers()) {
             int warnDistance = OMTConfig.TURRETS.turretWarningDistance;
             AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - warnDistance,
-                    pos.getY() - turretRange - warnDistance,
-                    pos.getZ() - turretRange - warnDistance,
-                    pos.getX() + turretRange + warnDistance,
-                    pos.getY() + turretRange + warnDistance,
-                    pos.getZ() + turretRange + warnDistance);
+                                                   pos.getY() - turretRange - warnDistance,
+                                                   pos.getZ() - turretRange - warnDistance,
+                                                   pos.getX() + turretRange + warnDistance,
+                                                   pos.getY() + turretRange + warnDistance,
+                                                   pos.getZ() + turretRange + warnDistance);
 
             if (worldObj.getWorldTime() % 2000 == 0) {
                 warnedPlayers.clear();
@@ -61,7 +61,7 @@ public class TurretHeadUtil {
 
             for (EntityPlayerMP target : targets) {
                 if (!target.getUniqueID().toString().equals(base.getOwner()) && !isPlayerTrusted(target,
-                        base) && !warnedPlayers.contains(
+                                                                                                 base) && !warnedPlayers.contains(
                         target) && !target.capabilities.isCreativeMode) {
                     dispatchWarnMessage(target, worldObj);
                     warnedPlayers.add(target);
@@ -102,8 +102,8 @@ public class TurretHeadUtil {
 
         if (!worldObj.isRemote && base != null) {
             AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
-                    pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
-                    pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
+                                                   pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
+                                                   pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
@@ -144,13 +144,12 @@ public class TurretHeadUtil {
                     target = possibleTarget;
                 }
 
-
                 if (base.isAttacksPlayers() && OMTConfig.TURRETS.globalCanTargetPlayers) {
                     if (possibleTarget instanceof EntityPlayerMP && !possibleTarget.isDead) {
                         EntityPlayerMP entity = (EntityPlayerMP) possibleTarget;
 
                         if (!isPlayerOwner(entity, base) && !isPlayerTrusted(entity,
-                                base) && !entity.capabilities.isCreativeMode) {
+                                                                             base) && !entity.capabilities.isCreativeMode) {
                             target = possibleTarget;
                         }
                     }
@@ -171,14 +170,13 @@ public class TurretHeadUtil {
         return null;
     }
 
-
     public static Entity getTargetWithMinimumRange(TurretBase base, World worldObj, BlockPos pos, int turretRange, TurretHead turret) {
         Entity target = null;
 
         if (!worldObj.isRemote && base != null) {
             AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
-                    pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
-                    pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
+                                                   pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
+                                                   pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
@@ -186,7 +184,6 @@ public class TurretHeadUtil {
 
                 if (isEntityValidNeutral(base, target1) && target1.getDistance(pos.getX(), pos.getY(), pos.getZ()) >= 3) {
                     target = target1;
-
                 }
 
                 if (isEntityValidMob(base, target1) && target1.getDistance(pos.getX(), pos.getY(), pos.getZ()) >= 3) {
@@ -195,11 +192,11 @@ public class TurretHeadUtil {
 
                 if (base.isAttacksPlayers() && OMTConfig.TURRETS.globalCanTargetPlayers) {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead && target1.getDistance(pos.getX(), pos.getY(),
-                            pos.getZ()) >= 3) {
+                                                                                                    pos.getZ()) >= 3) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
                         if (!isPlayerOwner(entity, base) && !isPlayerTrusted(entity,
-                                base) && !entity.capabilities.isCreativeMode) {
+                                                                             base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
                         }
                     }
@@ -227,15 +224,14 @@ public class TurretHeadUtil {
 
         if (!worldObj.isRemote && base != null && base.getOwner() != null) {
             AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
-                    pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
-                    pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
+                                                   pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
+                                                   pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase target1 : targets) {
                 if (isEntityValidNeutral(base, target1) && !target1.isPotionActive(Potion.getPotionById(2))) {
                     target = target1;
-
                 }
 
                 if (isEntityValidMob(base, target1) && !target1.isPotionActive(Potion.getPotionById(2))) {
@@ -248,7 +244,7 @@ public class TurretHeadUtil {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
                         if (!entity.getUniqueID().toString().equals(base.getOwner()) && !isPlayerTrusted(entity,
-                                base) && !entity.capabilities.isCreativeMode) {
+                                                                                                         base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
                         }
                     }
@@ -280,7 +276,6 @@ public class TurretHeadUtil {
         }
         return false;
     }
-
 
     public static int getPowerExpanderTotalExtraCapacity(World world, BlockPos pos) {
         int totalExtraCap = 0;
@@ -902,11 +897,10 @@ public class TurretHeadUtil {
             }
         } */
 
-
         Vec3d traceEnd = new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ);
         Vec3d vecDelta = new Vec3d(traceEnd.x - traceStart.x,
-                traceEnd.y - traceStart.y,
-                traceEnd.z - traceStart.z);
+                                   traceEnd.y - traceStart.y,
+                                   traceEnd.z - traceStart.z);
 
         // Normalize vector to the largest delta axis
         vecDelta = vecDelta.normalize();

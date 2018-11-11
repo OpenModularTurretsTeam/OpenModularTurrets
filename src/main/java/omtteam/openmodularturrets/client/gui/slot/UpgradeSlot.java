@@ -7,7 +7,6 @@ import omtteam.openmodularturrets.items.UpgradeMetaItem;
 
 import javax.annotation.Nonnull;
 
-
 public class UpgradeSlot extends SlotItemHandler {
     @SuppressWarnings("SameParameterValue")
     public UpgradeSlot(IItemHandler inventory, int par2, int par3, int par4) {

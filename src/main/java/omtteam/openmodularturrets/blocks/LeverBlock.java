@@ -126,10 +126,9 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
         if (storage == null) {
             return true;
         }
-        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 0 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
-                pos.getZ() + 1)))) {
-            base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
-                    pos.getZ() + 1));
+        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 0 &&
+                isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)))) {
+            base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1));
             if (base != null) {
                 lever.isTurning = true;
 
@@ -140,8 +139,8 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
             }
         }
 
-        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 90 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(),
-                pos.getZ())))) {
+        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 90 &&
+                isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()));
             if (base != null) {
                 lever.isTurning = true;
@@ -152,10 +151,9 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
             }
         }
 
-        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 180 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
-                pos.getZ() - 1)))) {
-            base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(),
-                    pos.getZ() - 1));
+        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 180 &&
+                isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1)))) {
+            base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1));
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
@@ -165,8 +163,8 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
             }
         }
 
-        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 270 && isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(),
-                pos.getZ())))) {
+        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 270 &&
+                isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()));
             if (base != null) {
                 lever.isTurning = true;

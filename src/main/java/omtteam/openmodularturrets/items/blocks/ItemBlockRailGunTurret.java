@@ -41,11 +41,11 @@ public class ItemBlockRailGunTurret extends AbstractItemBlockBaseAddon {
             tooltip.add(safeLocalize("tooltip.range") + ": " + TextFormatting.WHITE +
                                 OMTConfig.TURRETS.railgun_turret.getBaseRange());
             tooltip.add(safeLocalize("tooltip.accuracy") + ": " + TextFormatting.WHITE +
-                    safeLocalize("turret.accuracy.exact"));
+                                safeLocalize("turret.accuracy.exact"));
             tooltip.add(safeLocalize("tooltip.ammo") + ": " + TextFormatting.WHITE +
-                    safeLocalize("turret.ammo.5"));
+                                safeLocalize("turret.ammo.5"));
             tooltip.add(safeLocalize("tooltip.tier_required") + ": " + TextFormatting.WHITE +
-                    safeLocalize("base.tier.5"));
+                                safeLocalize("base.tier.5"));
             tooltip.add("");
             tooltip.add(
                     TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");

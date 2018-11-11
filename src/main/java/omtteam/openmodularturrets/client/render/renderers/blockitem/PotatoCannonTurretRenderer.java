@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.client.render.renderers.blockitem;
 
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -70,7 +69,6 @@ class PotatoCannonTurretRenderer extends TileEntitySpecialRenderer {
             model.BoxUnder.rotateAngleX = turretHead.baseFitRotationX;
             model.renderAll();
         }
-
 
         if (turretHead.getBase() != null) {
             if (TurretHeadUtil.hasSolarPanelAddon(turretHead.getBase())) {

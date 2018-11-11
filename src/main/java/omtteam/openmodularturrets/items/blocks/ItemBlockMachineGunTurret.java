@@ -41,11 +41,11 @@ public class ItemBlockMachineGunTurret extends AbstractItemBlockBaseAddon {
             tooltip.add(safeLocalize("tooltip.range") + ": " + TextFormatting.WHITE +
                                 OMTConfig.TURRETS.machine_gun_turret.getBaseRange());
             tooltip.add(safeLocalize("tooltip.accuracy") + ": " + TextFormatting.WHITE +
-                    safeLocalize("turret.accuracy.medium"));
+                                safeLocalize("turret.accuracy.medium"));
             tooltip.add(safeLocalize("tooltip.ammo") + ": " + TextFormatting.WHITE +
-                    safeLocalize("turret.ammo.1"));
+                                safeLocalize("turret.ammo.1"));
             tooltip.add(safeLocalize("tooltip.tier_required") + ": " + TextFormatting.WHITE +
-                    safeLocalize("base.tier.2"));
+                                safeLocalize("base.tier.2"));
             tooltip.add("");
             tooltip.add(
                     TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");

@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.handler.config;
 
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Config;
 import omtteam.openmodularturrets.OpenModularTurrets;

@@ -33,6 +33,10 @@ import static omtteam.omlib.util.GeneralUtil.*;
 
 @MethodsReturnNonnullByDefault
 public class UsableMetaItem extends Item {
+    public final static String[] subNames = {
+            OMTNames.Items.bulletThrowableItem, OMTNames.Items.grenadeThrowableItem, OMTNames.Items.memoryCard
+    };
+
     public UsableMetaItem() {
         super();
 
@@ -41,10 +45,6 @@ public class UsableMetaItem extends Item {
         this.setRegistryName(Reference.MOD_ID, OMTNames.Items.usableMetaItem);
         this.setUnlocalizedName(OMTNames.Items.usableMetaItem);
     }
-
-    public final static String[] subNames = {
-            OMTNames.Items.bulletThrowableItem, OMTNames.Items.grenadeThrowableItem, OMTNames.Items.memoryCard
-    };
 
     @Override
     @ParametersAreNonnullByDefault
@@ -118,7 +118,6 @@ public class UsableMetaItem extends Item {
             stack.setTagCompound(tagCompound);
         }
     }
-
 
     @SideOnly(Side.CLIENT)
     @Override

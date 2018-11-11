@@ -27,18 +27,18 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
  */
 @SuppressWarnings("deprecation")
 public class ItemBlockExpander extends AbstractItemBlockBaseAddon {
-    public ItemBlockExpander(Block block) {
-        super(block);
-        setHasSubtypes(true);
-        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.expander);
-    }
-
     private final static String[] subNames = {
             OMTNames.Blocks.expanderInvTierOne, OMTNames.Blocks.expanderInvTierTwo, OMTNames.Blocks.expanderInvTierThree,
             OMTNames.Blocks.expanderInvTierFour, OMTNames.Blocks.expanderInvTierFive, OMTNames.Blocks.expanderPowerTierOne,
             OMTNames.Blocks.expanderPowerTierTwo, OMTNames.Blocks.expanderPowerTierThree, OMTNames.Blocks.expanderPowerTierFour,
             OMTNames.Blocks.expanderPowerTierFive,
     };
+
+    public ItemBlockExpander(Block block) {
+        super(block);
+        setHasSubtypes(true);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.expander);
+    }
 
     @Override
     @ParametersAreNonnullByDefault

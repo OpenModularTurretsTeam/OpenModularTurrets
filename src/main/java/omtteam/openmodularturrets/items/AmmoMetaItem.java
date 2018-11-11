@@ -24,6 +24,11 @@ import java.util.List;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 public class AmmoMetaItem extends Item {
+    public final static String[] subNames = {
+            OMTNames.Items.blazingClayItem, OMTNames.Items.bulletCraftableItem, OMTNames.Items.ferroSlug,
+            OMTNames.Items.grenadeCraftableItem, OMTNames.Items.rocketCraftableItem
+    };
+
     public AmmoMetaItem() {
         super();
 
@@ -32,11 +37,6 @@ public class AmmoMetaItem extends Item {
         this.setRegistryName(Reference.MOD_ID, OMTNames.Items.ammoMetaItem);
         this.setUnlocalizedName(OMTNames.Items.ammoMetaItem);
     }
-
-    public final static String[] subNames = {
-            OMTNames.Items.blazingClayItem, OMTNames.Items.bulletCraftableItem, OMTNames.Items.ferroSlug,
-            OMTNames.Items.grenadeCraftableItem, OMTNames.Items.rocketCraftableItem
-    };
 
     @Override
     @ParametersAreNonnullByDefault

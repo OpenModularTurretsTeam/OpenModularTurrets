@@ -23,34 +23,6 @@ public class MessageModifyPermissions implements IMessage {
     public MessageModifyPermissions() {
     }
 
-    @SuppressWarnings("ConstantConditions")
-    public static class MessageHandlerModifyPermissions implements IMessageHandler<MessageModifyPermissions, IMessage> {
-        @Override
-        public IMessage onMessage(MessageModifyPermissions messageIn, MessageContext ctxIn) {
-            final MessageModifyPermissions message = messageIn;
-            final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().player.getEntityWorld();
-                EntityPlayerMP player = ctx.getServerHandler().player;
-                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-                TurretBase machine = null;
-                if (entity instanceof TurretBase) {
-                    machine = (TurretBase) entity;
-                }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
-                    TrustedPlayer trustedPlayer = machine.getTrustedPlayer(message.getPlayer());
-                    if (trustedPlayer != null) {
-                        int newMode = trustedPlayer.getAccessMode().ordinal() + message.getChange();
-                        if (!(newMode > 3 || newMode < 0)) {
-                            trustedPlayer.setAccessMode(EnumAccessMode.values()[newMode]);
-                        }
-                    }
-                }
-            });
-            return null;
-        }
-    }
-
     public MessageModifyPermissions(int x, int y, int z, String player, int change) {
         this.x = x;
         this.y = y;
@@ -95,5 +67,33 @@ public class MessageModifyPermissions implements IMessage {
 
     private int getChange() {
         return change;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static class MessageHandlerModifyPermissions implements IMessageHandler<MessageModifyPermissions, IMessage> {
+        @Override
+        public IMessage onMessage(MessageModifyPermissions messageIn, MessageContext ctxIn) {
+            final MessageModifyPermissions message = messageIn;
+            final MessageContext ctx = ctxIn;
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
+                EntityPlayerMP player = ctx.getServerHandler().player;
+                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+                TurretBase machine = null;
+                if (entity instanceof TurretBase) {
+                    machine = (TurretBase) entity;
+                }
+                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
+                    TrustedPlayer trustedPlayer = machine.getTrustedPlayer(message.getPlayer());
+                    if (trustedPlayer != null) {
+                        int newMode = trustedPlayer.getAccessMode().ordinal() + message.getChange();
+                        if (!(newMode > 3 || newMode < 0)) {
+                            trustedPlayer.setAccessMode(EnumAccessMode.values()[newMode]);
+                        }
+                    }
+                }
+            });
+            return null;
+        }
     }
 }

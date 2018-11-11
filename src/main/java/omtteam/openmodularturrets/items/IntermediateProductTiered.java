@@ -13,6 +13,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class IntermediateProductTiered extends Item {
+    public final static String[] subNames = {
+            OMTNames.Items.sensorTierOne, OMTNames.Items.sensorTierTwo, OMTNames.Items.sensorTierThree,
+            OMTNames.Items.sensorTierFour, OMTNames.Items.sensorTierFive, OMTNames.Items.chamberTierOne,
+            OMTNames.Items.chamberTierTwo, OMTNames.Items.chamberTierThree, OMTNames.Items.chamberTierFour,
+            OMTNames.Items.chamberTierFive, OMTNames.Items.barrelTierOne, OMTNames.Items.barrelTierTwo,
+            OMTNames.Items.barrelTierThree, OMTNames.Items.barrelTierFour, OMTNames.Items.barrelTierFive,
+    };
+
     public IntermediateProductTiered() {
         super();
 
@@ -21,14 +29,6 @@ public class IntermediateProductTiered extends Item {
         this.setRegistryName(Reference.MOD_ID, OMTNames.Items.intermediateTieredItem);
         this.setUnlocalizedName(OMTNames.Items.intermediateTieredItem);
     }
-
-    public final static String[] subNames = {
-            OMTNames.Items.sensorTierOne, OMTNames.Items.sensorTierTwo, OMTNames.Items.sensorTierThree,
-            OMTNames.Items.sensorTierFour, OMTNames.Items.sensorTierFive, OMTNames.Items.chamberTierOne,
-            OMTNames.Items.chamberTierTwo, OMTNames.Items.chamberTierThree, OMTNames.Items.chamberTierFour,
-            OMTNames.Items.chamberTierFive, OMTNames.Items.barrelTierOne, OMTNames.Items.barrelTierTwo,
-            OMTNames.Items.barrelTierThree, OMTNames.Items.barrelTierFour, OMTNames.Items.barrelTierFive,
-    };
 
     @Override
     @ParametersAreNonnullByDefault

@@ -93,5 +93,4 @@ public class ModelRelativisticTurret extends ModelBase {
         Base2.render(0.0625F);
         Crystal.render(0.0625F);
     }
-
 }

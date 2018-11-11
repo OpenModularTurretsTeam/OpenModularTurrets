@@ -64,7 +64,7 @@ public class RocketProjectile extends TurretProjectile {
         for (int i = 0; i <= 20; i++) {
             Random random = new Random();
             getEntityWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX + (random.nextGaussian() / 10), posY + (random.nextGaussian() / 10),
-                    posZ + (random.nextGaussian() / 10), (0), (0), (0));
+                                           posZ + (random.nextGaussian() / 10), (0), (0), (0));
         }
     }
 
@@ -74,7 +74,6 @@ public class RocketProjectile extends TurretProjectile {
         if (isAmped) {
             damage += ((int) mob.getHealth() * (getDamageAmpBonus() * amp_level));
         }
-
 
         if (mob instanceof EntityPlayer) {
             if (canDamagePlayer((EntityPlayer) mob)) {
@@ -108,7 +107,7 @@ public class RocketProjectile extends TurretProjectile {
             float strength = OMTConfig.TURRETS.canRocketsDestroyBlocks ? 2.3F : 0.1F;
             getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
-                    this.posX + 5, this.posY + 5, this.posZ + 5);
+                                                   this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase mob : targets) {
@@ -126,7 +125,7 @@ public class RocketProjectile extends TurretProjectile {
             float strength = OMTConfig.TURRETS.canRocketsDestroyBlocks ? 2.3F : 0.1F;
             getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
-                    this.posX + 5, this.posY + 5, this.posZ + 5);
+                                                   this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase mob : targets) {

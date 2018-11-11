@@ -49,8 +49,8 @@ import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
  */
 @SuppressWarnings("deprecation")
 public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock {
-    private static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
+    private static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
 
     public BlockExpander() {
         super(Material.GLASS);
@@ -119,12 +119,10 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
         return BlockTurretBaseAddon.getBoundingBoxFromFacing(facing);
     }
 
-
     @Override
     public AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing, World world, BlockPos pos) {
         return BlockTurretBaseAddon.getBoundingBoxFromFacing(facing).offset(pos);
     }
-
 
     @Override
     @ParametersAreNonnullByDefault

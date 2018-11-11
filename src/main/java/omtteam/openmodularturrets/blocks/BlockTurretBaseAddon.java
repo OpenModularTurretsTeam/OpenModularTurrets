@@ -28,6 +28,15 @@ public abstract class BlockTurretBaseAddon extends BlockAbstractTileEntity imple
         super(material);
     }
 
+    public static AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing) {
+        AxisAlignedBB alignedBB = MathUtil.rotateAABB(new AxisAlignedBB(-3 / 8F, -3 / 8F, -3 / 16F, 3 / 8F, 3 / 8F, 3 / 16F), facing.getOpposite());
+        double[] offset = new double[3];
+        offset[0] = 0.5D + facing.getFrontOffsetX() * 0.325D;
+        offset[1] = 0.5D + facing.getFrontOffsetY() * 0.325D;
+        offset[2] = 0.5D + facing.getFrontOffsetZ() * 0.325D;
+        return alignedBB.offset(offset[0], offset[1], offset[2]);
+    }
+
     @Override
     @ParametersAreNonnullByDefault
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
@@ -48,14 +57,5 @@ public abstract class BlockTurretBaseAddon extends BlockAbstractTileEntity imple
         if (!found) {
             this.dropBlockAsItem(worldIn, pos, state, 0);
         }
-    }
-
-    public static AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing) {
-        AxisAlignedBB alignedBB = MathUtil.rotateAABB(new AxisAlignedBB(-3 / 8F, -3 / 8F, -3 / 16F, 3 / 8F, 3 / 8F, 3 / 16F), facing.getOpposite());
-        double[] offset = new double[3];
-        offset[0] = 0.5D + facing.getFrontOffsetX() * 0.325D;
-        offset[1] = 0.5D + facing.getFrontOffsetY() * 0.325D;
-        offset[2] = 0.5D + facing.getFrontOffsetZ() * 0.325D;
-        return alignedBB.offset(offset[0], offset[1], offset[2]);
     }
 }

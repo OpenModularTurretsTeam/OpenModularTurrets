@@ -58,12 +58,10 @@ class ItemProjectileRenderer extends Render {
         GlStateManager.popMatrix();
     }
 
-
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
     protected ResourceLocation getEntityTexture(Entity entity) {
         return new ResourceLocation("");
     }
-
 }

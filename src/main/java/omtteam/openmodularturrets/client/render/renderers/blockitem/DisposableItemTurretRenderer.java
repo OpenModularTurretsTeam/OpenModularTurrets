@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.client.render.renderers.blockitem;
 
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;

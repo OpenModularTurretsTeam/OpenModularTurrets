@@ -52,7 +52,6 @@ public class ModCompatibility {
         if (ValkyrienWarfareLoaded) {
             OpenModularTurrets.getLogger().info("Valkyrien Warfare Found! You have a good taste in mods");
         }
-
     }
 
     private static void addVersionCheckerInfo() {

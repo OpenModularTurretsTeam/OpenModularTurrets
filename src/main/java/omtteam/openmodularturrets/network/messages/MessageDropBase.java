@@ -20,27 +20,6 @@ public class MessageDropBase implements IMessage {
     public MessageDropBase() {
     }
 
-    public static class MessageHandlerDropBase implements IMessageHandler<MessageDropBase, IMessage> {
-        @Override
-        public IMessage onMessage(MessageDropBase messageIn, MessageContext ctxIn) {
-            final MessageDropBase message = messageIn;
-            final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().player.getEntityWorld();
-                EntityPlayerMP player = ctx.getServerHandler().player;
-                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-                ITrustedPlayersManager machine = null;
-                if (entity instanceof ITrustedPlayersManager) {
-                    machine = (ITrustedPlayersManager) entity;
-                }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
-                    world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ()), true);
-                }
-            });
-            return null;
-        }
-    }
-
     public MessageDropBase(int x, int y, int z) {
         this.x = x;
         this.y = y;
@@ -75,5 +54,26 @@ public class MessageDropBase implements IMessage {
 
     public String getOwner() {
         return player;
+    }
+
+    public static class MessageHandlerDropBase implements IMessageHandler<MessageDropBase, IMessage> {
+        @Override
+        public IMessage onMessage(MessageDropBase messageIn, MessageContext ctxIn) {
+            final MessageDropBase message = messageIn;
+            final MessageContext ctx = ctxIn;
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
+                EntityPlayerMP player = ctx.getServerHandler().player;
+                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+                ITrustedPlayersManager machine = null;
+                if (entity instanceof ITrustedPlayersManager) {
+                    machine = (ITrustedPlayersManager) entity;
+                }
+                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
+                    world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ()), true);
+                }
+            });
+            return null;
+        }
     }
 }

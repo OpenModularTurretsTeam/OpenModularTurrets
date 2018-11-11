@@ -33,8 +33,8 @@ public abstract class TurretBaseContainer extends Container {
     @ParametersAreNonnullByDefault
     public boolean canInteractWith(EntityPlayer player) {
         return player.getDistanceSq(this.tileEntity.getPos().getX() + 0.5,
-                this.tileEntity.getPos().getY() + 0.5,
-                this.tileEntity.getPos().getZ() + 0.5) < 64;
+                                    this.tileEntity.getPos().getY() + 0.5,
+                                    this.tileEntity.getPos().getZ() + 0.5) < 64;
     }
 
     @SuppressWarnings("ConstantConditions")

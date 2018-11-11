@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.network.messages;
 
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
@@ -20,28 +19,6 @@ public class MessageAddTrustedPlayer implements IMessage {
     private String player;
 
     public MessageAddTrustedPlayer() {
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    public static class MessageHandlerAddTrustedPlayer implements IMessageHandler<MessageAddTrustedPlayer, IMessage> {
-        @Override
-        public IMessage onMessage(MessageAddTrustedPlayer messageIn, MessageContext ctxIn) {
-            final MessageAddTrustedPlayer message = messageIn;
-            final MessageContext ctx = ctxIn;
-            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
-                World world = ctx.getServerHandler().player.getEntityWorld();
-                EntityPlayerMP player = ctx.getServerHandler().player;
-                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-                TurretBase machine = null;
-                if (entity instanceof TurretBase) {
-                    machine = (TurretBase) entity;
-                }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
-                    machine.addTrustedPlayer(message.getPlayer());
-                }
-            });
-            return null;
-        }
     }
 
     public MessageAddTrustedPlayer(int x, int y, int z, String player) {
@@ -82,5 +59,27 @@ public class MessageAddTrustedPlayer implements IMessage {
 
     private String getPlayer() {
         return player;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static class MessageHandlerAddTrustedPlayer implements IMessageHandler<MessageAddTrustedPlayer, IMessage> {
+        @Override
+        public IMessage onMessage(MessageAddTrustedPlayer messageIn, MessageContext ctxIn) {
+            final MessageAddTrustedPlayer message = messageIn;
+            final MessageContext ctx = ctxIn;
+            ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
+                World world = ctx.getServerHandler().player.getEntityWorld();
+                EntityPlayerMP player = ctx.getServerHandler().player;
+                TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
+                TurretBase machine = null;
+                if (entity instanceof TurretBase) {
+                    machine = (TurretBase) entity;
+                }
+                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
+                    machine.addTrustedPlayer(message.getPlayer());
+                }
+            });
+            return null;
+        }
     }
 }

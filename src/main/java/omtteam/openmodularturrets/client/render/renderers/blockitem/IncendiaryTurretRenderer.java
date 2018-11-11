@@ -27,7 +27,6 @@ public class IncendiaryTurretRenderer extends TileEntitySpecialRenderer {
         reac = new ModelRedstoneReactor();
     }
 
-
     @SuppressWarnings("ConstantConditions")
     @Override
     public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -60,7 +59,7 @@ public class IncendiaryTurretRenderer extends TileEntitySpecialRenderer {
             GL11.glRotatef(rotation * 90, 0.0F, 1.0F, 0.0F);
             GL11.glScalef(1.0F, -1F, -1F);
             model.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(turretHead.yaw, turretHead.pitch),
-                    MathUtil.getRotationXZFromYawPitch(turretHead.yaw, turretHead.pitch));
+                                       MathUtil.getRotationXZFromYawPitch(turretHead.yaw, turretHead.pitch));
             model.Base.rotateAngleX = turretHead.baseFitRotationX;
             model.Base.rotateAngleY = turretHead.baseFitRotationZ;
             model.Pole.rotateAngleX = turretHead.baseFitRotationX;

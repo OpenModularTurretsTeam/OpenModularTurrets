@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.reference.Reference;
 
-
 @MethodsReturnNonnullByDefault
 public final class ModularTurretsTab extends CreativeTabs {
     private static ModularTurretsTab instance;

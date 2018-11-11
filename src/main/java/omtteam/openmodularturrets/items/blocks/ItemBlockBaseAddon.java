@@ -26,16 +26,15 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
  */
 @SuppressWarnings("deprecation")
 public class ItemBlockBaseAddon extends AbstractItemBlockBaseAddon {
+    private final static String[] subNames = {
+            OMTNames.Blocks.baseAddonLootDeleter
+    };
+
     public ItemBlockBaseAddon(Block block) {
         super(block);
         setHasSubtypes(true);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.baseAddon);
     }
-
-    private final static String[] subNames = {
-            OMTNames.Blocks.baseAddonLootDeleter
-    };
-
 
     @Override
     @ParametersAreNonnullByDefault

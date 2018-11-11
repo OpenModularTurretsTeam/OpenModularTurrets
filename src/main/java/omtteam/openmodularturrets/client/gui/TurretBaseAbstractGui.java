@@ -38,10 +38,10 @@ import static omtteam.omlib.util.GeneralUtil.*;
  */
 
 class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHasTooltips {
+    final TurretBase base;
+    private final EntityPlayer player;
     private int mouseX;
     private int mouseY;
-    private final EntityPlayer player;
-    final TurretBase base;
 
     TurretBaseAbstractGui(InventoryPlayer inventoryPlayer, TurretBase tileEntity, Container container) {
         super(container);
@@ -85,18 +85,18 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
             this.buttonList.add(new GuiButton(4, x + 180, y + 75, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_BASE)));
             this.buttonList.add(new GuiButton(5, x + 180, y + 25, 80, 20, safeLocalize(OMTNames.Localizations.GUI.CONFIGURE)));
             this.buttonList.add(new GuiButton(6, x + 180, y + 50, 80, 20,
-                    base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": "
-                            + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET)
-                            + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE)));
+                                              base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": "
+                                                      + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET)
+                                                      + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE)));
             this.buttonList.add(new GuiButton(7, x + 180, y, 80, 20, safeLocalize(OMLibNames.Localizations.GUI.MODE)));
             this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "+"));
             this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "-"));
         } else if (PlayerUtil.canPlayerChangeSetting(player, base)) {
             this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, safeLocalize(OMTNames.Localizations.GUI.CONFIGURE)));
             this.buttonList.add(new GuiButton(6, x + 180, y + 75, 80, 20,
-                    base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": "
-                            + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET)
-                            + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE)));
+                                              base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": "
+                                                      + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET)
+                                                      + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE)));
             this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "+"));
             this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "-"));
         }
@@ -108,7 +108,6 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         super.initGui();
         buttonInit();
     }
-
 
     @Override
     public void drawScreen(int par1, int par2, float par3) {
@@ -251,10 +250,9 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
             this.drawHoveringText(tooltip, mouseX - k, mouseY - l, Minecraft.getMinecraft().fontRenderer);
     }
 
-
     private void sendChangeToServer() {
         MessageAdjustMaxRange message = new MessageAdjustMaxRange(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
-                base.getCurrentMaxRange());
+                                                                  base.getCurrentMaxRange());
 
         OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }

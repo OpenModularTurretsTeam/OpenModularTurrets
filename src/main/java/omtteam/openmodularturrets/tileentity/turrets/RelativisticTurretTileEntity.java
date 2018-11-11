@@ -139,7 +139,6 @@ public class RelativisticTurretTileEntity extends TurretHead {
         return OMTConfig.TURRETS.relativistic_turret.getBaseAccuracyDeviation();
     }
 
-
     @Override
     public double getTurretDamageAmpBonus() {
         return OMTConfig.TURRETS.relativistic_turret.getDamageAmp();

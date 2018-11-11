@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.tileentity;
 
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -20,11 +19,24 @@ import static omtteam.omlib.util.MathUtil.truncateDoubleToInt;
 import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing;
 
 public class Expander extends TileEntityContainer implements ITickable, ITurretBaseAddonTileEntity {
+    protected IItemHandlerModifiable inventory;
     private boolean powerExpander;
     private EnumFacing orientation;
     private int tier;
 
-    protected IItemHandlerModifiable inventory;
+    public Expander() {
+        super();
+        this.orientation = EnumFacing.NORTH;
+        setupInventory();
+    }
+
+    public Expander(int tier, boolean powerExpander) {
+        super();
+        setupInventory();
+        this.tier = tier;
+        this.powerExpander = powerExpander;
+        this.orientation = EnumFacing.NORTH;
+    }
 
     protected void setupInventory() {
         inventory = new ItemStackHandler(9) {
@@ -58,20 +70,6 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
     @Override
     public RangedWrapper getCapabilityInventory(EnumFacing facing) {
         return new RangedWrapper(inventory, 0, 9);
-    }
-
-    public Expander() {
-        super();
-        this.orientation = EnumFacing.NORTH;
-        setupInventory();
-    }
-
-    public Expander(int tier, boolean powerExpander) {
-        super();
-        setupInventory();
-        this.tier = tier;
-        this.powerExpander = powerExpander;
-        this.orientation = EnumFacing.NORTH;
     }
 
     @Nonnull

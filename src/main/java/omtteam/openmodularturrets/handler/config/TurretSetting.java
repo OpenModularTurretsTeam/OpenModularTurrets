@@ -32,7 +32,6 @@ public class TurretSetting {
     @Config.RangeDouble(min = 0D)
     public double recyclerAddChance;
 
-
     public TurretSetting(boolean enabled, int baseRange, int baseFireRate, int baseDamage, int powerUsage, double baseAccuracyDeviation, int maxSimultaneous, double damageAmp, double fireRateUpgrade, int rangeUpgrade, double accuracyUpgrade, double efficiencyUpgrade, double recyclerNegateChance, double recyclerAddChance) {
         this.enabled = enabled;
         this.baseRange = baseRange;

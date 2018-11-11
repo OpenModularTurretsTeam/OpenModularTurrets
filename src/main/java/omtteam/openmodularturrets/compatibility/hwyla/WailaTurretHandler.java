@@ -70,7 +70,6 @@ public class WailaTurretHandler implements IWailaDataProvider {
         return currenttip;
     }
 
-
     /**
      * This method is used to sync data between server and client easily. The tag parameter is the nbt
      * tag which is provided when accessor.getNBTData() is called. Luckily for us, most of the time you

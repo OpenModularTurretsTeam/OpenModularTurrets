@@ -30,11 +30,11 @@ public abstract class TurretProjectile extends EntityThrowable {
     public float gravity;
     public boolean isAmped;
     public int amp_level;
-    ItemStack ammo;
-    protected TurretBase turretBase;
-    private int framesRendered = 0;
     public int fakeDrops;
     public boolean dropLoot = true;
+    protected TurretBase turretBase;
+    ItemStack ammo;
+    private int framesRendered = 0;
 
     TurretProjectile(World world) {
         super(world);
@@ -166,7 +166,6 @@ public abstract class TurretProjectile extends EntityThrowable {
 
         this.setPosition(this.posX, this.posY, this.posZ);
     }
-
 
     @Override
     @ParametersAreNonnullByDefault

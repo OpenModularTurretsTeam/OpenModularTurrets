@@ -54,6 +54,11 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.baseAddon);
     }
 
+    @SuppressWarnings("WeakerAccess")
+    public static AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing) {
+        return BlockTurretBaseAddon.getBoundingBoxFromFacing(facing);
+    }
+
     @Override
     public ItemBlock getItemBlock(Block block) {
         return new ItemBlockBaseAddon(block);
@@ -75,11 +80,6 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
     @Nonnull
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, MODEL, FACING);
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public static AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing) {
-        return BlockTurretBaseAddon.getBoundingBoxFromFacing(facing);
     }
 
     @Override
@@ -111,7 +111,6 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
     public AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing, World world, BlockPos pos) {
         return getBoundingBoxFromFacing(facing).offset(pos);
     }
-
 
     @Override
     public boolean isFullBlock(IBlockState state) {
