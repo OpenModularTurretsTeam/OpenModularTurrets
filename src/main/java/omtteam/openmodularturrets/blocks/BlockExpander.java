@@ -25,7 +25,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.IHasItemBlock;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
-import omtteam.omlib.util.PlayerUtil;
+import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
@@ -40,13 +40,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
-import static omtteam.omlib.util.PlayerUtil.addChatMessage;
-import static omtteam.omlib.util.PlayerUtil.canPlayerOpenGUI;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
+import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
 
 /**
  * Created by Keridos on 19/07/16.
- * This Class
+ * This Class implements the block for expanders.
  */
 @SuppressWarnings("deprecation")
 public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock {
@@ -73,13 +72,13 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     @Nonnull
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(META, meta);
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public int getMetaFromState(IBlockState state) {
         return state.getValue(META);
     }
@@ -113,6 +112,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         IBlockState blockState = this.getActualState(state, source, pos);
         EnumFacing facing = blockState.getValue(FACING);
@@ -127,26 +127,31 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
 
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isFullBlock(IBlockState state) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EnumFacing side) {
+    @ParametersAreNonnullByDefault
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (hand.equals(EnumHand.OFF_HAND)) return true;
         Expander expander = (Expander) worldIn.getTileEntity(pos);
@@ -159,7 +164,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
             return true;
         }
 
-        if (canPlayerOpenGUI(playerIn, base) && state.getValue(META) < 5) {
+        if (PlayerUtil.canPlayerAccessBlock(playerIn, base) && state.getValue(META) < 5) {
             playerIn.openGui(OpenModularTurrets.instance, 7, worldIn, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
@@ -197,6 +202,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         Expander expander = (Expander) worldIn.getTileEntity(pos);
         if (expander != null) {
@@ -207,6 +213,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public int damageDropped(IBlockState state) {
         return state.getValue(META);
     }

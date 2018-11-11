@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 import static omtteam.omlib.util.MathUtil.getVelocityVectorFromYawPitch;
-import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
+import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
 

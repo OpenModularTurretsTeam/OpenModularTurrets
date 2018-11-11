@@ -14,7 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import omtteam.omlib.util.PlayerUtil;
+import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
@@ -22,8 +22,8 @@ import omtteam.openmodularturrets.util.TurretHeadUtil;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-import static omtteam.omlib.util.PlayerUtil.isPlayerOwner;
-import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
+import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
+import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
 
 @SuppressWarnings("unused")
 public abstract class TurretProjectile extends EntityThrowable {

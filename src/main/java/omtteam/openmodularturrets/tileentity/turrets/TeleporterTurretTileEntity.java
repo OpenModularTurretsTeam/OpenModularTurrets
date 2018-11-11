@@ -15,7 +15,7 @@ import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
-import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
+import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
 
 //import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
 

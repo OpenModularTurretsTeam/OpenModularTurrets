@@ -41,8 +41,8 @@ import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.tileentity.TileEntityTrustedMachine;
 import omtteam.omlib.util.CamoSettings;
 import omtteam.omlib.util.EnumAccessMode;
-import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
+import omtteam.omlib.util.player.TrustedPlayer;
 import omtteam.openmodularturrets.api.IBaseController;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
@@ -64,8 +64,8 @@ import java.util.List;
 import static omtteam.omlib.compatibility.ModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
 import static omtteam.omlib.util.GeneralUtil.getMachineModeLocalization;
-import static omtteam.omlib.util.PlayerUtil.getPlayerUUID;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
+import static omtteam.omlib.util.player.PlayerUtil.getPlayerUUID;
 
 @SuppressWarnings("unused")
 @Optional.InterfaceList({

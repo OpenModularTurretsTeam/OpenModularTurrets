@@ -38,7 +38,7 @@ import omtteam.omlib.blocks.BlockAbstractCamoTileEntity;
 import omtteam.omlib.compatibility.theoneprobe.TOPInfoProvider;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.tileentity.EnumMachineMode;
-import omtteam.omlib.util.PlayerUtil;
+import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModBlocks;
@@ -55,8 +55,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.*;
-import static omtteam.omlib.util.PlayerUtil.addChatMessage;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
+import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
 
 
 public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHasItemBlock, TOPInfoProvider {
@@ -219,7 +219,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                     && !heldBlock.hasTileEntity(camoState)
                     && !(heldBlock instanceof BlockTurretBase)) {
                 if (base != null) {
-                    if (PlayerUtil.isPlayerAdmin(player, base)) {
+                    if (PlayerUtil.isTrustedPlayerAdmin(player, base)) {
                         base.setCamoState(camoState);
                         return true;
                     } else {
@@ -244,7 +244,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             }
             // Open GUI
             if (!player.isSneaking() && base != null) {
-                if (PlayerUtil.canPlayerOpenGUI(player, base)) {
+                if (PlayerUtil.canPlayerAccessBlock(player, base)) {
                     world.notifyBlockUpdate(pos, state, state, 6);
                     player.openGui(OpenModularTurrets.instance, base.getTier(), world, pos.getX(), pos.getY(), pos.getZ());
                 } else {

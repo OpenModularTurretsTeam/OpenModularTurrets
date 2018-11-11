@@ -10,8 +10,8 @@ import omtteam.omlib.client.gui.IHasTooltips;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.MessageCloseGUI;
 import omtteam.omlib.network.messages.MessageOpenGUI;
-import omtteam.omlib.util.PlayerUtil;
-import omtteam.omlib.util.TrustedPlayer;
+import omtteam.omlib.util.player.PlayerUtil;
+import omtteam.omlib.util.player.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.network.messages.*;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
-import static omtteam.omlib.util.PlayerUtil.addChatMessage;
+import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
 
 public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButtonList.GuiResponder, GuiSlider.FormatHelper {
     protected final int xSize = 176;
@@ -200,7 +200,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         }
 
         if (guibutton.id == 4) { //add trusted player
-            if (PlayerUtil.isPlayerAdmin(player, base)) {
+            if (PlayerUtil.isTrustedPlayerAdmin(player, base)) {
                 if (!textFieldAddTrustedPlayer.getText().equals("") || !textFieldAddTrustedPlayer.getText().isEmpty()) {
                     sendChangeToServerAddTrusted();
                     textFieldAddTrustedPlayer.setText("");
@@ -219,12 +219,12 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
 
             if (base.getTrustedPlayers().size() > 0) {
                 if (this.base.getTrustedPlayers().get(
-                        base.trustedPlayerIndex) != null && PlayerUtil.isPlayerAdmin(player, base)) {
+                        base.trustedPlayerIndex) != null && PlayerUtil.isTrustedPlayerAdmin(player, base)) {
                     sendChangeToServerRemoveTrusted();
                     base.removeTrustedPlayer(base.getTrustedPlayers().get(base.trustedPlayerIndex).getName());
                     textFieldAddTrustedPlayer.setText("");
                     this.base.trustedPlayerIndex = 0;
-                    if (!player.getUniqueID().toString().equals(base.getOwner()) && (base.getTrustedPlayers().size() == 0 || PlayerUtil.isPlayerAdmin(player, base))) {
+                    if (!player.getUniqueID().toString().equals(base.getOwner()) && (base.getTrustedPlayers().size() == 0 || PlayerUtil.isTrustedPlayerAdmin(player, base))) {
                         mc.displayGuiScreen(null);
                         return;
                     }
@@ -254,7 +254,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         }
 
         if (guibutton.id == 8) { // decrease permission level by 1
-            if (PlayerUtil.isPlayerAdmin(player, base) && this.base.getTrustedPlayers().get(
+            if (PlayerUtil.isTrustedPlayerAdmin(player, base) && this.base.getTrustedPlayers().get(
                     base.trustedPlayerIndex) != null) {
                 sendChangeToServerModifyPermissions(
                         this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), -1);
@@ -265,7 +265,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         }
 
         if (guibutton.id == 9) { //increase permission level by 1
-            if (PlayerUtil.isPlayerAdmin(player, base) && this.base.getTrustedPlayers().get(
+            if (PlayerUtil.isTrustedPlayerAdmin(player, base) && this.base.getTrustedPlayers().get(
                     base.trustedPlayerIndex) != null) {
                 sendChangeToServerModifyPermissions(
                         this.base.getTrustedPlayers().get(base.trustedPlayerIndex).getName(), 1);

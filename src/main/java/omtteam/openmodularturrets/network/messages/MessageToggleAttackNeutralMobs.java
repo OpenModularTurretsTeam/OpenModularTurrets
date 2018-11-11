@@ -10,7 +10,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import omtteam.omlib.util.PlayerUtil;
+import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 @SuppressWarnings("unused")
@@ -35,7 +35,7 @@ public class MessageToggleAttackNeutralMobs implements IMessage {
                 if (entity instanceof TurretBase) {
                     machine = (TurretBase) entity;
                 }
-                if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
+                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
                     machine.setAttacksNeutrals(message.doAttackNeutrals());
                 }
             });

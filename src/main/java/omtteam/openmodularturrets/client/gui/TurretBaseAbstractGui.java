@@ -14,9 +14,9 @@ import omtteam.omlib.client.gui.BlockingAbstractGuiContainer;
 import omtteam.omlib.client.gui.IHasTooltips;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.DebugHandler;
-import omtteam.omlib.util.PlayerUtil;
-import omtteam.omlib.util.TrustedPlayer;
 import omtteam.omlib.util.WorldUtil;
+import omtteam.omlib.util.player.PlayerUtil;
+import omtteam.omlib.util.player.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.network.messages.*;
@@ -80,7 +80,7 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
-        if (PlayerUtil.isPlayerAdmin(player, base)) {
+        if (PlayerUtil.isTrustedPlayerAdmin(player, base)) {
             this.buttonList.add(new GuiButton(3, x + 180, y + 100, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_TURRETS)));
             this.buttonList.add(new GuiButton(4, x + 180, y + 75, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_BASE)));
             this.buttonList.add(new GuiButton(5, x + 180, y + 25, 80, 20, safeLocalize(OMTNames.Localizations.GUI.CONFIGURE)));
@@ -283,7 +283,7 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
     public ArrayList<Rectangle> getBlockingAreas() {
         ArrayList<Rectangle> list = new ArrayList<>();
         Rectangle rectangleGUI = new Rectangle(0, 0, 0, 0);
-        if (PlayerUtil.isPlayerAdmin(player, base)) {
+        if (PlayerUtil.isTrustedPlayerAdmin(player, base)) {
             rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 120);
         } else if (PlayerUtil.canPlayerChangeSetting(player, base)) {
             rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2 + 50, 80, 20);

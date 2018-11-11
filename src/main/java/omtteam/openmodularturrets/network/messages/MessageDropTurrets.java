@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.omlib.tileentity.ITrustedPlayersManager;
-import omtteam.omlib.util.PlayerUtil;
+import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 
 @SuppressWarnings("unused")
@@ -33,7 +33,7 @@ public class MessageDropTurrets implements IMessage {
                 if (entity instanceof ITrustedPlayersManager) {
                     machine = (ITrustedPlayersManager) entity;
                 }
-                if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
+                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
                     world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ()), true);
 
 

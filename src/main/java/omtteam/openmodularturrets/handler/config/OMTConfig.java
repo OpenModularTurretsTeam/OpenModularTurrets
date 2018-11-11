@@ -108,9 +108,6 @@ public class OMTConfig {
         @Config.Comment("If turrets can target hostile mobs")
         public boolean globalCanTargetMobs = true;
 
-        @Config.Comment("If turrets can target opped players")
-        public boolean globalCanTargetOPs = true;
-
         public boolean turretAlarmSound = true;
 
         @Config.RequiresMcRestart

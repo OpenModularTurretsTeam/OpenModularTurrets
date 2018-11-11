@@ -11,8 +11,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.omlib.util.EnumAccessMode;
-import omtteam.omlib.util.PlayerUtil;
-import omtteam.omlib.util.TrustedPlayer;
+import omtteam.omlib.util.player.PlayerUtil;
+import omtteam.omlib.util.player.TrustedPlayer;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 @SuppressWarnings("unused")
@@ -37,7 +37,7 @@ public class MessageModifyPermissions implements IMessage {
                 if (entity instanceof TurretBase) {
                     machine = (TurretBase) entity;
                 }
-                if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
+                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
                     TrustedPlayer trustedPlayer = machine.getTrustedPlayer(message.getPlayer());
                     if (trustedPlayer != null) {
                         int newMode = trustedPlayer.getAccessMode().ordinal() + message.getChange();

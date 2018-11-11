@@ -8,7 +8,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import omtteam.omlib.util.PlayerUtil;
+import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.api.lists.AmmoList;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
@@ -20,8 +20,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Set;
 
-import static omtteam.omlib.util.PlayerUtil.isPlayerOwner;
-import static omtteam.omlib.util.PlayerUtil.isPlayerTrusted;
+import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
+import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
 
 /**
  * Created by Keridos on 06/02/17.

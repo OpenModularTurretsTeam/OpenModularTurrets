@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.util.EnumAccessMode;
-import omtteam.omlib.util.TrustedPlayer;
+import omtteam.omlib.util.player.TrustedPlayer;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import java.util.ArrayList;

@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.ITrustedPlayersManager;
-import omtteam.omlib.util.PlayerUtil;
+import omtteam.omlib.util.player.PlayerUtil;
 
 @SuppressWarnings("unused")
 public class MessageAdjustLightValue implements IMessage {
@@ -75,7 +75,7 @@ public class MessageAdjustLightValue implements IMessage {
                 if (entity instanceof ITrustedPlayersManager) {
                     machine = (ITrustedPlayersManager) entity;
                 }
-                if (machine != null && PlayerUtil.isPlayerAdmin(player, machine) && machine instanceof ICamoSupport) {
+                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine) && machine instanceof ICamoSupport) {
                     ((ICamoSupport) machine).getCamoSettings().setLightValue(message.value);
                     machine.getOwnedBlock().markDirty();
                     ((ICamoSupport) machine).updateCamoSettingsToPlayers();

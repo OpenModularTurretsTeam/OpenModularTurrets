@@ -36,7 +36,7 @@ import static omtteam.omlib.compatibility.ModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.InvUtil.getStackSize;
-import static omtteam.omlib.util.PlayerUtil.*;
+import static omtteam.omlib.util.player.PlayerUtil.*;
 import static omtteam.openmodularturrets.blocks.BlockBaseAddon.MODEL;
 import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 

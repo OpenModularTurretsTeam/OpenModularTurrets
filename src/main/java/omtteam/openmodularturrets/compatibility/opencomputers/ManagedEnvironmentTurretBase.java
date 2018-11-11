@@ -8,10 +8,10 @@ import net.minecraft.util.EnumFacing;
 import omtteam.omlib.compatibility.opencomputers.AbstractOMTileEntityEnvironment;
 import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.omlib.util.EnumAccessMode;
-import omtteam.omlib.util.TrustedPlayer;
+import omtteam.omlib.util.player.TrustedPlayer;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
-import static omtteam.omlib.util.PlayerUtil.getPlayerUUID;
+import static omtteam.omlib.util.player.PlayerUtil.getPlayerUUID;
 
 /**
  * Created by nico on 09/06/17.
