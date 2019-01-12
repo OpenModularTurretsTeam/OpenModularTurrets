@@ -16,7 +16,7 @@ the ticket may not be considered and be closed immediately. Make absolutely sure
 
 Additionally, for mod compatability request we have 2 requirements:
 
-1. The mod we should do compatability for should not be inactive
+1. The mod we should add compatibility for should not be inactive
 2. It should be possible to contact one of the authors directly (from dev to dev)
   
 Dev-Builds are available here (be careful, those are experimental and can break your save): [Click here](https://jenkins.ironhide.de/job/minecraft-mods/)
