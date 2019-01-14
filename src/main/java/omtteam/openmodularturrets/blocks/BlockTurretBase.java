@@ -332,37 +332,45 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @Override
     @ParametersAreNonnullByDefault
     public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
-        switch (blockState.getValue(TIER)) {
-            case 1:
-                return OMTConfig.BASES.baseTierOne.baseHardness;
-            case 2:
-                return OMTConfig.BASES.baseTierTwo.baseHardness;
-            case 3:
-                return OMTConfig.BASES.baseTierThree.baseHardness;
-            case 4:
-                return OMTConfig.BASES.baseTierFour.baseHardness;
-            case 5:
-                return OMTConfig.BASES.baseTierFive.baseHardness;
+        if (OMTConfig.BASES.baseBreakable) {
+            switch (blockState.getValue(TIER)) {
+                case 1:
+                    return OMTConfig.BASES.baseTierOne.baseHardness;
+                case 2:
+                    return OMTConfig.BASES.baseTierTwo.baseHardness;
+                case 3:
+                    return OMTConfig.BASES.baseTierThree.baseHardness;
+                case 4:
+                    return OMTConfig.BASES.baseTierFour.baseHardness;
+                case 5:
+                    return OMTConfig.BASES.baseTierFive.baseHardness;
+            }
+            return 10.0F;
+        } else {
+            return -1.0F;
         }
-        return 10.0F;
     }
 
     @Override
     @ParametersAreNonnullByDefault
     public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
-        switch (world.getBlockState(pos).getValue(TIER)) {
-            case 1:
-                return OMTConfig.BASES.baseTierOne.baseBlastResistance;
-            case 2:
-                return OMTConfig.BASES.baseTierTwo.baseBlastResistance;
-            case 3:
-                return OMTConfig.BASES.baseTierThree.baseBlastResistance;
-            case 4:
-                return OMTConfig.BASES.baseTierFour.baseBlastResistance;
-            case 5:
-                return OMTConfig.BASES.baseTierFive.baseBlastResistance;
+        if (OMTConfig.BASES.baseBreakable) {
+            switch (world.getBlockState(pos).getValue(TIER)) {
+                case 1:
+                    return OMTConfig.BASES.baseTierOne.baseBlastResistance;
+                case 2:
+                    return OMTConfig.BASES.baseTierTwo.baseBlastResistance;
+                case 3:
+                    return OMTConfig.BASES.baseTierThree.baseBlastResistance;
+                case 4:
+                    return OMTConfig.BASES.baseTierFour.baseBlastResistance;
+                case 5:
+                    return OMTConfig.BASES.baseTierFive.baseBlastResistance;
+            }
+            return 10.0F;
+        } else {
+            return -1.0F;
         }
-        return 10.0F;
     }
 
     @Override

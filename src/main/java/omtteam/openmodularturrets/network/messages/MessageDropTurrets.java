@@ -66,8 +66,6 @@ public class MessageDropTurrets implements IMessage {
                     machine = (ITrustedPlayersManager) entity;
                 }
                 if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
-                    world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ()), true);
-
                     if (world.getTileEntity(new BlockPos(message.getX() + 1, message.getY(), message.getZ())) instanceof TurretHead) {
                         world.destroyBlock(new BlockPos(message.getX() + 1, message.getY(), message.getZ()), true);
                     }
