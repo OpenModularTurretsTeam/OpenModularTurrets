@@ -77,7 +77,7 @@ public class MessageAdjustLightValue implements IMessage {
                 }
                 if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine) && machine instanceof ICamoSupport) {
                     ((ICamoSupport) machine).getCamoSettings().setLightValue(message.value);
-                    machine.getOwnedBlock().markDirty();
+                    machine.getOwnedBlock().markBlockForUpdate();
                     ((ICamoSupport) machine).updateCamoSettingsToPlayers();
                 }
             });

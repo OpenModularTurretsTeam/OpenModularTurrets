@@ -370,7 +370,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
             //maxRange update, needs to happen on both client and server else GUI information may become disjoint.
             //moved by Keridos, added the sync to MessageTurretBase, should sync properly now too.
-            //setBaseUpperBoundRange();
+            setBaseUpperBoundRange();
             updateControllerSettings();
 
             if (this.currentMaxRange > this.upperBoundMaxRange) {
