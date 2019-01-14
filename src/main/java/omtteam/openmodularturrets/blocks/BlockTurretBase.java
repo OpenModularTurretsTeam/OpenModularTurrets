@@ -175,7 +175,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @Nonnull
     @ParametersAreNonnullByDefault
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        if (state.getBlock() instanceof BlockTurretBase) {
+        if (state.getBlock() instanceof BlockTurretBase && worldIn.getTileEntity(pos) instanceof TurretBase) {
             TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
             if (base != null) {
                 int lightValue, lightOpacity;

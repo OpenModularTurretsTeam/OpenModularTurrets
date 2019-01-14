@@ -32,7 +32,7 @@ import static omtteam.omlib.proxy.ClientProxy.getWorld;
  */
 @SuppressWarnings("unused")
 public class MessageTurretBase implements IMessage {
-    private int x, y, z, rfStorageCurrent, rfStorageMax, tier, camoBlockMeta, maxRange, kills, playerKills, lightValue, lightOpacity;
+    private int x, y, z, rfStorageCurrent, rfStorageMax, tier, camoBlockMeta, maxRange, upperRange, kills, playerKills, lightValue, lightOpacity;
     private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting;
     private String owner, ownerName, camoBlockRegName;
     private List<TrustedPlayer> trustedPlayers = new ArrayList<>();
@@ -62,6 +62,7 @@ public class MessageTurretBase implements IMessage {
             this.camoBlockRegName = Objects.requireNonNull(base.getCamoState().getBlock().getRegistryName()).toString();
             this.camoBlockMeta = base.getCamoState().getBlock().getMetaFromState(base.getCamoState());
             this.maxRange = base.getCurrentMaxRange();
+            this.upperRange = base.getUpperBoundMaxRange();
             this.mode = base.getMode();
             this.kills = base.getKills();
             this.playerKills = base.getPlayerKills();
@@ -81,6 +82,7 @@ public class MessageTurretBase implements IMessage {
         this.rfStorageCurrent = buf.readInt();
         this.rfStorageMax = buf.readInt();
         this.maxRange = buf.readInt();
+        this.upperRange = buf.readInt();
         this.kills = buf.readInt();
         this.playerKills = buf.readInt();
         this.mode = EnumMachineMode.values()[buf.readInt()];
@@ -115,6 +117,7 @@ public class MessageTurretBase implements IMessage {
         buf.writeInt(rfStorageCurrent);
         buf.writeInt(rfStorageMax);
         buf.writeInt(maxRange);
+        buf.writeInt(upperRange);
         buf.writeInt(kills);
         buf.writeInt(playerKills);
         buf.writeInt(mode.ordinal());
@@ -170,6 +173,7 @@ public class MessageTurretBase implements IMessage {
                     base.setCamoState(Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(
                             new ResourceLocation(message.camoBlockRegName))).getStateFromMeta(message.camoBlockMeta));
                     base.setCurrentMaxRange(message.maxRange);
+                    base.setUpperBoundMaxRange(message.upperRange);
                     base.setKills(message.kills);
                     base.setPlayerKills(message.playerKills);
                 }

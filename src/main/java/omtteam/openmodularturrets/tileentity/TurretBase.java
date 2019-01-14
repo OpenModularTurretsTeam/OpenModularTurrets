@@ -231,15 +231,21 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Override
     public void setCamoState(IBlockState state) {
         if (!(state instanceof IExtendedBlockState)) {
+            if (this.getCamoState() == state.getBlock().getExtendedState(state, this.getWorld(), this.getPos())) {
+                return;
+            }
             this.getCamoSettings().setCamoBlockState(state.getBlock().getExtendedState(state, this.getWorld(), this.getPos()));
         } else {
+            if (this.getCamoState() == state) {
+                return;
+            }
             this.getCamoSettings().setCamoBlockState(state);
         }
         this.camoBlockStateTemp = state;
         if (!world.isRemote) {
             OMLibNetworkingHandler.INSTANCE.sendToAllAround(new MessageCamoSettings(this),
                                                             new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
-            this.markDirty();
+            this.markBlockForUpdate();
         }
     }
 
@@ -441,7 +447,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     private void setBaseUpperBoundRange() {
-        int maxRange = upperBoundMaxRange;
+        int maxRange = 0;
         List<TileEntity> tileEntities = WorldUtil.getTouchingTileEntities(getWorld(), getPos());
         for (TileEntity te : tileEntities) {
             if (te instanceof TurretHead) {
@@ -558,7 +564,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     public void setCurrentMaxRange(int newCurrentMaxRange) {
-
         this.currentMaxRange = newCurrentMaxRange;
         this.rangeOverridden = true;
 
@@ -573,6 +578,10 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     public int getUpperBoundMaxRange() {
         return upperBoundMaxRange;
+    }
+
+    public void setUpperBoundMaxRange(int upperBoundMaxRange) {
+        this.upperBoundMaxRange = upperBoundMaxRange;
     }
 
     @Nullable
