@@ -137,7 +137,7 @@ public class OMTConfig {
         @Config.Name("Laser Turret")
         public TurretSetting laser_turret = new TurretSetting(true, 25, 10, 4, 8000, 10, 4, 0.06D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
         @Config.Name("Railgun Turret")
-        public TurretSetting railgun_turret = new TurretSetting(true, 30, 100, 25, 25000, 0, 2, 0.10D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting railgun_turret = new TurretSetting(true, 30, 100, 25, 25000, 3, 2, 0.10D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
     }
 
     public static class ConfigBases {
