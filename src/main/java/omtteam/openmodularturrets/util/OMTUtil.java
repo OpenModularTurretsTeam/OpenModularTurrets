@@ -8,6 +8,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.scoreboard.Team;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.api.lists.AmmoList;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
@@ -25,7 +26,7 @@ import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
 
 /**
  * Created by Keridos on 06/02/17.
- * This Class
+ * This Class provides some utility functions for OMT related stuff.
  */
 public class OMTUtil {
     public static boolean isItemStackValidAmmo(ItemStack itemStack) {
@@ -48,7 +49,9 @@ public class OMTUtil {
                     return false;
                 }
             }
-            return !PlayerUtil.isPlayerOwner(entityPlayer, base);
+            Team team = entityPlayer.getTeam();
+            return (!PlayerUtil.isPlayerOwner(entityPlayer, base))
+                    || (team != null && team.getName().equals(base.getOwnerAsPlayer().getTeamName()));
         }
         return true;
     }

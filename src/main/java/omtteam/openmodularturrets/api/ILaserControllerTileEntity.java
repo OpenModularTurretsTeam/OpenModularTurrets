@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Created by Keridos on 17/05/17.
- * This interface is for an attachable laser (disco ?) controller.
+ * This interface is for a(n attachable) laser (disco ?) controller.
  */
 @SuppressWarnings("ALL")
 public interface ILaserControllerTileEntity extends ITurretBaseAddonTileEntity {
