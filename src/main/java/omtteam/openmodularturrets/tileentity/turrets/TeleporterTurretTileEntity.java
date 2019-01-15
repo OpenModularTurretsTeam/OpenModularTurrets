@@ -8,9 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import omtteam.openmodularturrets.blocks.turretheads.BlockTeleporterTurret;
-import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
@@ -21,14 +19,9 @@ import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
 
 public class TeleporterTurretTileEntity extends TurretHead {
     public TeleporterTurretTileEntity() {
-        super();
-        this.turretTier = 4;
+        super(4);
     }
 
-    @Override
-    protected float getProjectileGravity() {
-        return 0.00F;
-    }
 
     @Override
     public void update() {
@@ -176,12 +169,22 @@ public class TeleporterTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
-        return null;
+    protected SoundEvent getLaunchSoundEffect() {
+        return ModSounds.teleportLaunchSound;
     }
 
     @Override
-    protected SoundEvent getLaunchSoundEffect() {
-        return ModSounds.teleportLaunchSound;
+    protected void doTargetedShot(Entity target, ItemStack ammo) {
+
+    }
+
+    @Override
+    protected void doBlindShot(ItemStack ammo) {
+
+    }
+
+    @Override
+    public boolean forceShot() {
+        return false;
     }
 }

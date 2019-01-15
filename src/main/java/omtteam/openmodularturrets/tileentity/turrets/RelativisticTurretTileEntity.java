@@ -9,8 +9,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
-import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
@@ -19,14 +17,9 @@ import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
 
 public class RelativisticTurretTileEntity extends TurretHead {
     public RelativisticTurretTileEntity() {
-        super();
-        this.turretTier = 3;
+        super(3);
     }
 
-    @Override
-    protected float getProjectileGravity() {
-        return 0.00F;
-    }
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -160,12 +153,22 @@ public class RelativisticTurretTileEntity extends TurretHead {
     }
 
     @Override
-    public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
-        return null;
+    protected SoundEvent getLaunchSoundEffect() {
+        return ModSounds.relativisticLaunchSound;
     }
 
     @Override
-    protected SoundEvent getLaunchSoundEffect() {
-        return ModSounds.relativisticLaunchSound;
+    protected void doTargetedShot(Entity target, ItemStack ammo) {
+
+    }
+
+    @Override
+    protected void doBlindShot(ItemStack ammo) {
+
+    }
+
+    @Override
+    public boolean forceShot() {
+        return false;
     }
 }

@@ -6,13 +6,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import omtteam.omlib.api.render.ColorOM;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.render.MessageRenderRay;
 import omtteam.omlib.util.EntityUtil;
-import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 
@@ -21,11 +19,6 @@ public class LaserTurretTileEntity extends RayTracingTurret {
 
     public LaserTurretTileEntity() {
         super(5);
-    }
-
-    @Override
-    protected float getProjectileGravity() {
-        return 0.00F;
     }
 
     @Override
@@ -69,18 +62,13 @@ public class LaserTurretTileEntity extends RayTracingTurret {
     }
 
     @Override
-    public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
-        return null;
-    }
-
-    @Override
     public SoundEvent getLaunchSoundEffect() {
         return ModSounds.laserLaunchSound;
     }
 
     @Override
     protected void doTargetedShot(Entity target, ItemStack ammo) {
-        shootRay(target.posX, target.posY + target.getEyeHeight(), target.posZ, getTurretAccuracy(), target);
+        shootRay(target.posX, target.posY + target.getEyeHeight(), target.posZ, getTurretAccuracy());
     }
 
     @Override
