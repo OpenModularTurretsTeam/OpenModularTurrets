@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Random;
 
 public class LaserTurretTileEntity extends TurretHead {
-    private ColorOM color = new ColorOM(1F, 0.1F, 0, 0.5F);
+    private ColorOM color = new ColorOM(1F, 0.1F, 0, 0.38F);
 
     public LaserTurretTileEntity() {
         super();
@@ -106,25 +106,21 @@ public class LaserTurretTileEntity extends TurretHead {
 
             Vec3d vector = new Vec3d(adjustedX, adjustedY, adjustedZ);
             Vec3d baseVector = new Vec3d(this.getPos().getX() + 0.5D,
-                                         this.getPos().getY() + 0.5D,
+                                         this.getPos().getY() + 0.6D,
                                          this.getPos().getZ() + 0.5D);
             double deviationModifier = 1D * (target.height < 0.5 ? 1.5D : 1D)
-                    * ((vector.distanceTo(baseVector) * 0.5D / (this.getTurretRange() + TurretHeadUtil.getRangeUpgrades(base, this))) + 0.5D);
+                    * ((vector.distanceTo(baseVector) * 0.5D / (this.getTurretRange() + TurretHeadUtil.getRangeUpgrades(base, this))) + 0.3D);
 
             xDev = RandomUtil.random.nextGaussian() * 0.035D * accuracy * deviationModifier;
             yDev = RandomUtil.random.nextGaussian() * 0.035D * accuracy * deviationModifier;
             zDev = RandomUtil.random.nextGaussian() * 0.035D * accuracy * deviationModifier;
 
             vector = vector.addVector(xDev, yDev, zDev);
-            baseVector = baseVector.add(vector.subtract(baseVector).normalize().scale(0.55D));
+            baseVector = baseVector.add(vector.subtract(baseVector).normalize().scale(0.75D));
 
             // Play Sound
             this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
                                       OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
-            OMLibNetworkingHandler.INSTANCE.sendToAllAround(
-                    new MessageRenderRay(baseVector, vector, color, 5, true),
-                    new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(),
-                                                    baseVector.x, baseVector.y, baseVector.z, 120));
 
             RayTraceResult blockTraceResult = world.rayTraceBlocks(baseVector, vector, false, true, false);
             List<RayTraceResult> entityHits = WorldUtil.traceEntities(null, baseVector, vector, world);
@@ -133,10 +129,18 @@ public class LaserTurretTileEntity extends TurretHead {
                 Entity entity = result.entityHit;
                 if (baseVector.distanceTo(result.hitVec) <= blockRange) {
                     if (onHitEntity(entity)) {
+                        OMLibNetworkingHandler.INSTANCE.sendToAllAround(
+                                new MessageRenderRay(baseVector, vector, color, 5, true),
+                                new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(),
+                                                                baseVector.x, baseVector.y, baseVector.z, 120));
                         return;
                     }
                 }
             }
+            OMLibNetworkingHandler.INSTANCE.sendToAllAround(
+                    new MessageRenderRay(baseVector, vector.add(vector.subtract(baseVector).scale(2D)), color, 5, true),
+                    new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(),
+                                                    baseVector.x, baseVector.y, baseVector.z, 120));
 
         }
     }

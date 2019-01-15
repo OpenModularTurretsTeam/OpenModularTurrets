@@ -272,7 +272,7 @@ turret.upgrade.eff=RF Verbrauch pro Schuss, pro Upgrade.
 turret.upgrade.eff.flavour=Eureka!
 
 turret.upgrade.acc=Genauigkeit pro Upgrade.
-turret.upgrade.acc.flavour.a=Scharfes Auge, Sniper,
+turret.upgrade.acc.flavour.a=Scharfer Blick, Sniper,
 turret.upgrade.acc.flavour.b=Ich schiesse, du rennst.
 
 turret.upgrade.scatter.a=Fügt 2 Projektile zu jedem Schuss hinzu für
@@ -296,6 +296,6 @@ death.attack.blazingclay=%s wurde medium-rare gebraten.
 death.attack.grenade=%s muss wieder zusammengesetzt werden.
 death.attack.rocket=%s fand die Rakete am Ende des Regenbogens.
 death.attack.laser=%s wurde verdampft.
-death.attack.ferroslug=%s wurde von einer Railgun gelochert..
+death.attack.ferroslug=%s wurde von einer Railgun gelöchert..
 gui.omtteam.openmodularturrets:light_opacity=Lichtdurchlässigkeit
 gui.omtteam.openmodularturrets:light_value=Lichtlevel
