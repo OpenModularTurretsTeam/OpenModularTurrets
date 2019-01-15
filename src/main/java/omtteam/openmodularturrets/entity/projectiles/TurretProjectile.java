@@ -3,7 +3,6 @@ package omtteam.openmodularturrets.entity.projectiles;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
@@ -14,16 +13,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import omtteam.omlib.util.player.PlayerUtil;
-import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.util.OMTUtil;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-
-import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
-import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
 
 @SuppressWarnings("unused")
 public abstract class TurretProjectile extends EntityThrowable {
@@ -63,29 +58,12 @@ public abstract class TurretProjectile extends EntityThrowable {
         dropLoot = TurretHeadUtil.baseHasNoLootDeleter(turretBase);
     }
 
-    boolean canDamagePlayer(EntityPlayer entityPlayer) {
-        if (entityPlayer != null && !entityPlayer.getEntityWorld().isRemote) {
-            if (!OMTConfig.TURRETS.turretDamageTrustedPlayers) {
-                if (PlayerUtil.isPlayerTrusted(entityPlayer, this.turretBase)) {
-                    return false;
-                }
-            }
-            return !PlayerUtil.isPlayerOwner(entityPlayer, this.turretBase);
-        }
-        return true;
+    protected boolean canDamagePlayer(EntityPlayer entityPlayer) {
+        return OMTUtil.canDamagePlayer(entityPlayer, turretBase);
     }
 
-    boolean canDamageEntity(Entity entity) {
-        if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
-            if (entity instanceof EntityTameable) {
-                EntityLivingBase entityOwner = ((EntityTameable) entity).getOwner();
-                if (entityOwner instanceof EntityPlayer) {
-                    EntityPlayer owner = (EntityPlayer) entityOwner;
-                    return !isPlayerOwner(owner, turretBase) && !isPlayerTrusted(owner, turretBase);
-                }
-            }
-        }
-        return true;
+    protected boolean canDamageEntity(Entity entity) {
+        return OMTUtil.canDamageEntity(entity, turretBase);
     }
 
     public abstract void onHitBlock(IBlockState block, BlockPos pos);
@@ -111,13 +89,11 @@ public abstract class TurretProjectile extends EntityThrowable {
         Vec3d vec3d = new Vec3d(this.posX, this.posY, this.posZ);
         Vec3d vec3d1 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
         RayTraceResult raytraceresult = this.getEntityWorld().rayTraceBlocks(vec3d, vec3d1);
-        List<Entity> list = this.getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(motionX, motionY, motionZ).expand(motionX * 1.2D, motionY * 1.2D, motionZ * 1.2D));
+        List<Entity> list = this.getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(motionX * 1.2D, motionY * 1.2D, motionZ * 1.2D));
 
         for (Entity entity : list) {
             if (entity.canBeCollidedWith()) {
                 this.onHitEntity(entity);
-                this.setDead();
-                return;
             }
         }
 

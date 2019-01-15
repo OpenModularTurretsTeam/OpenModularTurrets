@@ -53,13 +53,13 @@ public class BlazingClayProjectile extends TurretProjectile {
 
                 if (mob instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) mob)) {
-                        mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
+                        mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
                         mob.hurtResistantTime = -1;
                         mob.setFire(5);
                         playSound();
                     }
                 } else if (canDamageEntity(mob)) {
-                    mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
+                    mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
                     mob.hurtResistantTime = -1;
                     mob.setFire(5);
                     playSound();
@@ -92,13 +92,13 @@ public class BlazingClayProjectile extends TurretProjectile {
 
                 if (mob instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) mob)) {
-                        mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
+                        mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
                         mob.hurtResistantTime = 0;
                         mob.setFire(5);
                     }
                 } else if (canDamageEntity(mob)) {
                     setTagsForTurretHit(entity);
-                    mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
+                    mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
                     mob.hurtResistantTime = 0;
                     mob.setFire(5);
                 }

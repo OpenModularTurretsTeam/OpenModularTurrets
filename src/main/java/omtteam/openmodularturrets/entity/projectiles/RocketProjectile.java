@@ -77,7 +77,7 @@ public class RocketProjectile extends TurretProjectile {
 
         if (mob instanceof EntityPlayer) {
             if (canDamagePlayer((EntityPlayer) mob)) {
-                mob.attackEntityFrom(new NormalDamageSource("rocket", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
+                mob.attackEntityFrom(new NormalDamageSource("rocket", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
                 mob.hurtResistantTime = -1;
             }
         }
@@ -86,7 +86,7 @@ public class RocketProjectile extends TurretProjectile {
             (mob).setHealth((mob).getHealth() - damage);
             mob.hurtResistantTime = -1;
         } else if (canDamageEntity(mob)) {
-            mob.attackEntityFrom(new NormalDamageSource("rocket", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
+            mob.attackEntityFrom(new NormalDamageSource("rocket", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
             mob.hurtResistantTime = -1;
         }
     }

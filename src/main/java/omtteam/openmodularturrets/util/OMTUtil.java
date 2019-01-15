@@ -41,25 +41,25 @@ public class OMTUtil {
                 tags.contains("openmodularturrets:fake_drops_2") ? 2 : tags.contains("openmodularturrets:fake_drops_3") ? 3 : -1);
     }
 
-    public static boolean canDamagePlayer(EntityPlayer entityPlayer, TurretBase turretBase) {
+    public static boolean canDamagePlayer(EntityPlayer entityPlayer, TurretBase base) {
         if (entityPlayer != null && !entityPlayer.getEntityWorld().isRemote) {
             if (!OMTConfig.TURRETS.turretDamageTrustedPlayers) {
-                if (PlayerUtil.isPlayerTrusted(entityPlayer, turretBase)) {
+                if (PlayerUtil.isPlayerTrusted(entityPlayer, base)) {
                     return false;
                 }
             }
-            return !PlayerUtil.isPlayerOwner(entityPlayer, turretBase);
+            return !PlayerUtil.isPlayerOwner(entityPlayer, base);
         }
         return true;
     }
 
-    public static boolean canDamageEntity(Entity entity, TurretBase turretBase) {
+    public static boolean canDamageEntity(Entity entity, TurretBase base) {
         if (entity != null && !entity.getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
             if (entity instanceof EntityTameable) {
                 EntityLivingBase entityOwner = ((EntityTameable) entity).getOwner();
                 if (entityOwner instanceof EntityPlayer) {
                     EntityPlayer owner = (EntityPlayer) entityOwner;
-                    return !isPlayerOwner(owner, turretBase) && !isPlayerTrusted(owner, turretBase);
+                    return !isPlayerOwner(owner, base) && !isPlayerTrusted(owner, base);
                 }
             }
         }

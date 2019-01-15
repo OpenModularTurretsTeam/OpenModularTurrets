@@ -135,7 +135,7 @@ public class OMTConfig {
         public TurretSetting teleporter_turret = new TurretSetting(true, 20, 100, 0, 15000, 0, 1, 0D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
         @Config.Name("Laser Turret")
         public TurretSetting laser_turret = new TurretSetting(true, 25, 10, 4, 8000, 10, 4, 0.06D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
-        @Config.Name("Disposable Turret")
+        @Config.Name("Railgun Turret")
         public TurretSetting railgun_turret = new TurretSetting(true, 30, 100, 25, 25000, 0, 2, 0.10D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
     }
 

@@ -64,7 +64,7 @@ public class BulletProjectile extends TurretProjectile {
 
             if (entity instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) entity)) {
-                    entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
+                    entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
                     entity.hurtResistantTime = -1;
                     playSound();
                 } else {
@@ -72,7 +72,7 @@ public class BulletProjectile extends TurretProjectile {
                 }
             } else if (canDamageEntity(entity)) {
                 setTagsForTurretHit(entity);
-                entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld()), damage);
+                entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
                 entity.hurtResistantTime = -1;
             } else {
                 return;

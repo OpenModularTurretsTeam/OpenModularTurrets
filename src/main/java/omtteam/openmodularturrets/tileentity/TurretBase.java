@@ -86,6 +86,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private boolean attacksMobs;
     private boolean attacksNeutrals;
     private boolean attacksPlayers;
+    private boolean updateRange;
     private int ticks;
     private boolean forceFire = false;
     private int kills;
@@ -398,6 +399,10 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 //ConfigGeneral
                 ticks = 0;
                 updateRedstoneReactor(this);
+                if (updateRange) {
+                    this.setCurrentMaxRange(upperBoundMaxRange);
+                    updateRange = false;
+                }
 
                 this.scrubSyncPlayerList();
                 if (this.updateNBT) {
@@ -487,6 +492,10 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         }
 
         return active;
+    }
+
+    public void setUpdateRange(boolean updateRange) {
+        this.updateRange = updateRange;
     }
 
     public boolean isAttacksMobs() {

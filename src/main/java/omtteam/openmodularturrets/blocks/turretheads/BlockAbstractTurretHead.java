@@ -9,7 +9,9 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -110,6 +112,15 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         TurretBase base = getBase(worldIn, pos);
         return base != null && OMTUtil.getRemainingTurretSlots(base, this.getTurretType()) > 0;
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+        TurretBase base = getBase(worldIn, pos);
+        if (this.getTurretType().getSettings().getBaseRange() > base.getCurrentMaxRange()) {
+            base.setUpdateRange(true);
+        }
     }
 
     @Override

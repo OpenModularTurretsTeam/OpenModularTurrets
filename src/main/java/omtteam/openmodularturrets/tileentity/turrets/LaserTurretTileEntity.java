@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.tileentity.turrets;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,20 +7,25 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import omtteam.omlib.network.OMLibNetworkingHandler;
+import omtteam.omlib.network.messages.render.MessageRenderRay;
+import omtteam.omlib.util.EntityUtil;
 import omtteam.omlib.util.RandomUtil;
-import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
+import omtteam.omlib.util.WorldUtil;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
+import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.OMTUtil;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 import org.lwjgl.util.Color;
 
+import java.util.List;
 import java.util.Random;
 
 public class LaserTurretTileEntity extends TurretHead {
@@ -54,7 +58,7 @@ public class LaserTurretTileEntity extends TurretHead {
 
     @Override
     public double getTurretAccuracy() {
-        return OMTConfig.TURRETS.laser_turret.getBaseAccuracyDeviation() / 10;
+        return OMTConfig.TURRETS.laser_turret.getBaseAccuracyDeviation();
     }
 
     @Override
@@ -89,78 +93,98 @@ public class LaserTurretTileEntity extends TurretHead {
 
     @Override
     protected void doTargetedShot(Entity target, ItemStack ammo) {
-
-        double d0 = target.posX - (this.pos.getX() + 0.5);
-        double d1 = target.posY + (double) target.height * 0.5F - (this.pos.getY() + 0.5);
-        double d2 = target.posZ - (this.pos.getZ() + 0.5);
-        double dist = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-        double inaccuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
+        shootLaser(target.posX, target.posY + target.getEyeHeight(), target.posZ, getTurretAccuracy(), target);
     }
 
-    @Override
-    protected void shootProjectile(double adjustedX, double adjustedY, double adjustedZ, float speedFactor, float accuracy, ItemStack ammo) {
+    protected void shootLaser(double adjustedX, double adjustedY, double adjustedZ, double accuracy, Entity target) {
         // Consume energy
         base.setEnergyStored(base.getEnergyLevel(EnumFacing.DOWN) - getPowerRequiredForNextShot());
 
         // Create one projectile per scatter-shot upgrade
         for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-            double x, y, z;
+            double xDev, yDev, zDev;
 
-            x = adjustedX + RandomUtil.random.nextGaussian() * 0.007499999832361937D * (double) accuracy;
-            y = adjustedY + RandomUtil.random.nextGaussian() * 0.007499999832361937D * (double) accuracy;
-            z = adjustedZ + RandomUtil.random.nextGaussian() * 0.007499999832361937D * (double) accuracy;
-            Vec3d vector = new Vec3d(x, y, z);
+            Vec3d vector = new Vec3d(adjustedX, adjustedY, adjustedZ);
+            Vec3d baseVector = new Vec3d(this.getPos().getX() + 0.5D,
+                                         this.getPos().getY() + 0.5D,
+                                         this.getPos().getZ() + 0.5D);
+            double deviationModifier = 1D * (target.height < 0.5 ? 1.5D : 1D)
+                    * ((vector.distanceTo(baseVector) * 0.5D / (this.getTurretRange() + TurretHeadUtil.getRangeUpgrades(base, this))) + 0.5D);
+
+            xDev = RandomUtil.random.nextGaussian() * 0.035D * accuracy * deviationModifier;
+            yDev = RandomUtil.random.nextGaussian() * 0.035D * accuracy * deviationModifier;
+            zDev = RandomUtil.random.nextGaussian() * 0.035D * accuracy * deviationModifier;
+
+            vector = vector.addVector(xDev, yDev, zDev);
+            Vec3d baseToTarget = vector.subtract(baseVector);
+            baseVector = baseVector.add(baseToTarget.normalize().scale(0.6D));
 
             // Play Sound
             this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
                                       OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
+            OMLibNetworkingHandler.INSTANCE.sendToAllAround(
+                    new MessageRenderRay(baseVector, vector, 1, 0, 0, 5, true),
+                    new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(),
+                                                    baseVector.x, baseVector.y, baseVector.z, 120));
 
-            RayTraceResult result = world.rayTraceBlocks(new Vec3d(this.getBase().getPos().getX(),
-                                                                   this.getBase().getPos().getY(),
-                                                                   this.getBase().getPos().getZ()), vector, false, true, true);
-        }
-    }
-
-    public void onHitBlock(IBlockState hitBlock, BlockPos pos) {
-        if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
-            return;
-        }
-
-        if (!hitBlock.getMaterial().isSolid()) {
-            // Go through non solid block
-            return;
-        }
-    }
-
-    public void onHitEntity(Entity entity) {
-        if (entity != null && !entity.getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
-
-            int damage = OMTConfig.TURRETS.laser_turret.getBaseDamage();
-
-            Random random = RandomUtil.random;
-            this.getWorld().playSound(null, entity.getPosition(), ModSounds.laserHitSound, SoundCategory.AMBIENT,
-                                      OMTConfig.TURRETS.turretSoundVolume, random.nextFloat() + 0.5F);
-            if (getTurretDamageAmpBonus() > 0) {
-                if (entity instanceof EntityLivingBase) {
-                    EntityLivingBase elb = (EntityLivingBase) entity;
-                    damage += ((int) elb.getHealth() * (getTurretDamageAmpBonus()));
+            RayTraceResult blockTraceResult = world.rayTraceBlocks(baseVector, vector, false, true, false);
+            List<RayTraceResult> entityHits = WorldUtil.traceEntities(null, baseVector, vector, world);
+            double blockRange = blockTraceResult != null ? blockTraceResult.hitVec.distanceTo(baseVector) : 500;
+            for (RayTraceResult result : entityHits) {
+                Entity entity = result.entityHit;
+                if (baseVector.distanceTo(result.hitVec) <= blockRange) {
+                    if (onHitEntity(entity)) {
+                        return;
+                    }
                 }
             }
 
+        }
+    }
+
+    boolean onHitEntity(Entity entity) {
+        if (entity != null && !entity.getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
             if (entity instanceof EntityPlayer) {
                 if (OMTUtil.canDamagePlayer((EntityPlayer) entity, base)) {
-                    //damageEntity(entity);
+                    damageEntity(entity);
                     entity.hurtResistantTime = -1;
+                    Random random = RandomUtil.random;
+                    this.getWorld().playSound(null, entity.getPosition(), ModSounds.laserHitSound, SoundCategory.AMBIENT,
+                                              OMTConfig.TURRETS.turretSoundVolume, random.nextFloat() + 0.5F);
+                    return true;
                 } else {
-                    return;
+                    return false;
                 }
             } else if (OMTUtil.canDamageEntity(entity, base)) {
                 OMTUtil.setTagsForTurretHit(entity, base);
-                //damageEntity(entity);
+                damageEntity(entity);
                 entity.hurtResistantTime = -1;
+                Random random = RandomUtil.random;
+                this.getWorld().playSound(null, entity.getPosition(), ModSounds.laserHitSound, SoundCategory.AMBIENT,
+                                          OMTConfig.TURRETS.turretSoundVolume, random.nextFloat() + 0.5F);
+                return true;
             } else {
-                return;
+                return false;
             }
+        }
+        return false;
+    }
+
+    public void damageEntity(Entity entity) {
+        float damageModifier = (30 - EntityUtil.getEntityArmor(entity)) / 20F + 0.3F; //0.8x to 1.8x damage multiplicator
+        float damage = OMTConfig.TURRETS.laser_turret.getBaseDamage() * damageModifier;
+
+        if (this.getTurretDamageAmpBonus() * TurretHeadUtil.getAmpLevel(base) > 0) {
+            if (entity instanceof EntityLivingBase) {
+                EntityLivingBase elb = (EntityLivingBase) entity;
+                damage += ((int) elb.getHealth() * getTurretDamageAmpBonus() * TurretHeadUtil.getAmpLevel(base));
+            }
+        }
+
+        if (entity instanceof EntityLivingBase) {
+            EntityLivingBase elb = (EntityLivingBase) entity;
+            elb.attackEntityFrom(new NormalDamageSource("laser", TurretHeadUtil.getFakeDropsLevel(base),
+                                                        base, (WorldServer) this.getWorld(), false), damage);
         }
     }
 }
