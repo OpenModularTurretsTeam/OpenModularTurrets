@@ -67,7 +67,7 @@ public class PotatoProjectile extends TurretProjectile {
 
     @Override
     public void onHitEntity(Entity entity) {
-        if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
+        if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile) && !this.isDead) {
 
             int damage = OMTConfig.TURRETS.potato_cannon_turret.getBaseDamage();
 
