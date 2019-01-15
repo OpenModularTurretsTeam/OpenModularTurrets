@@ -97,6 +97,7 @@ public class OMTConfig {
         public boolean canRocketsDestroyBlocks = false;
         public boolean canGrenadesDestroyBlocks = false;
         public boolean canRailgunDestroyBlocks = false;
+        public boolean canTurretsConcealWithoutAddon = false;
 
         @Config.Comment("If turrets can target players")
         public boolean globalCanTargetPlayers = true;

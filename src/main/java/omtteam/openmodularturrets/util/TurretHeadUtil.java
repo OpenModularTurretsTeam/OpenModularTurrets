@@ -729,7 +729,7 @@ public class TurretHeadUtil {
         if (base.getInventory().getStackInSlot(10) != ItemStack.EMPTY && !found) {
             found = base.getInventory().getStackInSlot(10).getItemDamage() == 0;
         }
-        return found;
+        return found || OMTConfig.TURRETS.canTurretsConcealWithoutAddon;
     }
 
     @SuppressWarnings("ConstantConditions")
