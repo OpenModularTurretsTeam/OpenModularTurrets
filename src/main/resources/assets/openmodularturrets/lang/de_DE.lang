@@ -106,8 +106,6 @@ gui.omtteam.openmodularturrets:drop_base=Droppe Basis
 gui.omtteam.openmodularturrets:configure=Konfigurieren
 gui.omtteam.openmodularturrets:kills=Kills (Insg.)
 gui.omtteam.openmodularturrets:player_kills=Kills (Spieler)
-gui.omtteam.openmodularturrets:light_value=Lichtlevel
-gui.omtteam.openmodularturrets:light_opacity=Lichtdurchlässigkeit
 
 tooltip.tier=Stufe
 tooltip.range=Reichweite (in Blocks)
@@ -149,7 +147,7 @@ tooltip.openmodularturrets.memory_card.desc1=Shift-RechtsClick um auf Karte zu k
 tooltip.openmodularturrets.memory_card.desc2=Shift-RechtsClick irgendwo anders um Karte zu leeren.
 tooltip.openmodularturrets.memory_card.desc3=RechtsClick um Daten von Karte zu kopieren.
 
-tooltip.omtteam.openmodularturrets:add_trusted_player=Fügt den angegebenen Spieler der vertrauten Spieler Liste hinzu.
+tooltip.omtteam.openmodularturrets:add_trusted_player=Fügt den Spieler der vertrauten Spieler Liste hinzu.
 tooltip.omtteam.openmodularturrets:remove_trusted_player=Entfernt den angezeigten Spieler aus der Liste.
 tooltip.omtteam.openmodularturrets:view_previous_trusted_player=Schaue vorherigen vertrauten Spieler an.
 tooltip.omtteam.openmodularturrets:view_next_trusted_player=Schaue nächsten vertrauten Spieler an..
@@ -159,6 +157,7 @@ tooltip.omtteam.openmodularturrets:tp_can_change_settings=Spieler kann die Param
 tooltip.omtteam.openmodularturrets:tp_can_administer=Spieler kann die Basis administr. (vertraute Sp. + abbauen).
 tooltip.omtteam.openmodularturrets:tp_decrease_access=Zugriffslevel für ausgewählten Spieler reduzieren.
 tooltip.omtteam.openmodularturrets:tp_increase_access=Zugriffslevel für ausgewählten Spieler erhöhen.
+tooltip.omtteam.openmodularturrets:tp_can_change_targeting=Ob gew. Spieler Zieleinstell. ändern kann.
 tooltip.omtteam.openmodularturrets:info_access_level=Zeigt Zugriffslevel des ausgewählten Spielers an, falls ausgewählt.
 tooltip.omtteam.openmodularturrets:target_mobs=Ob die Türme der Basis Mobs angreifen.
 tooltip.omtteam.openmodularturrets:target_neutrals=Ob die Türme der Basis passive Kreaturen angreifen.
@@ -260,6 +259,7 @@ turret.addon.fakedrops.b=lassen, als ob ein Spieler sie tötete..
 turret.addon.fakedrops.flavour=Dreh den Swag auf!
 
 turret.upgrade.label=Turm Upgrade
+turret.upgrade.turretinfo=Für Effekt siehe Turm-Tooltips.
 turret.upgrade.stacks=Stackt bis zu 4 mal.
 
 turret.upgrade.range=block Reichweite pro Upgrade.
@@ -297,3 +297,5 @@ death.attack.grenade=%s muss wieder zusammengesetzt werden.
 death.attack.rocket=%s fand die Rakete am Ende des Regenbogens.
 death.attack.laser=%s wurde verdampft.
 death.attack.ferroslug=%s wurde von einer Railgun gelochert..
+gui.omtteam.openmodularturrets:light_opacity=Lichtdurchlässigkeit
+gui.omtteam.openmodularturrets:light_value=Lichtlevel

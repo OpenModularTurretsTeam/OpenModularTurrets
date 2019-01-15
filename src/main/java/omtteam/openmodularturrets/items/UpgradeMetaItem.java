@@ -73,6 +73,7 @@ public class UpgradeMetaItem extends Item {
                     tooltip.add("");
                     tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
                     tooltip.add("");
+                    tooltip.add(safeLocalize("turret.upgrade.turretinfo"));
                     tooltip.add(safeLocalize("turret.upgrade.stacks"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.upgrade.acc.flavour.a"));
@@ -82,6 +83,7 @@ public class UpgradeMetaItem extends Item {
                     tooltip.add("");
                     tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
                     tooltip.add("");
+                    tooltip.add(safeLocalize("turret.upgrade.turretinfo"));
                     tooltip.add(safeLocalize("turret.upgrade.stacks"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.upgrade.eff.flavour"));
@@ -90,6 +92,7 @@ public class UpgradeMetaItem extends Item {
                     tooltip.add("");
                     tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
                     tooltip.add("");
+                    tooltip.add(safeLocalize("turret.upgrade.turretinfo"));
                     tooltip.add(safeLocalize("turret.upgrade.stacks"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.upgrade.rof.flavour"));
@@ -98,6 +101,7 @@ public class UpgradeMetaItem extends Item {
                     tooltip.add("");
                     tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
                     tooltip.add("");
+                    tooltip.add(safeLocalize("turret.upgrade.turretinfo"));
                     tooltip.add(safeLocalize("turret.upgrade.stacks"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.upgrade.range.flavour"));

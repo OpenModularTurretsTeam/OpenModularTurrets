@@ -83,6 +83,7 @@ public class AddonMetaItem extends Item {
                     tooltip.add("");
                     tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
                     tooltip.add("");
+                    tooltip.add(safeLocalize("turret.upgrade.turretinfo"));
                     tooltip.add(safeLocalize("turret.addon.amp.a.label"));
                     tooltip.add(safeLocalize("turret.addon.amp.b.label"));
                     tooltip.add("");

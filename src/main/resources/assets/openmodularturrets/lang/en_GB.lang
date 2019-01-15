@@ -260,6 +260,7 @@ turret.addon.fakedrops.b=drop loot as if a player killed them.
 turret.addon.fakedrops.flavour=Turn on the swag!
 
 turret.upgrade.label=Turret Upgrade
+turret.upgrade.turretinfo=For effects see tooltips of turrets.
 turret.upgrade.stacks=Stacks up to 4 times.
 
 turret.upgrade.range=block range per upgrade.
@@ -297,3 +298,6 @@ death.attack.grenade=%s may need some assembly.
 death.attack.rocket=%s found that rainbow connection in the form of a rocket.
 death.attack.laser=%s got disintegrated.
 death.attack.ferroslug=%s found atomized minerva.
+
+tooltip.omtteam.openmodularturrets:tp_can_change_targeting=If viewed trusted player can change the base's targeting parameters.
+
