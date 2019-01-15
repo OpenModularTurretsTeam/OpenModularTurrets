@@ -148,8 +148,7 @@ public class TurretHeadUtil {
                     if (possibleTarget instanceof EntityPlayerMP && !possibleTarget.isDead) {
                         EntityPlayerMP entity = (EntityPlayerMP) possibleTarget;
 
-                        if (!isPlayerOwner(entity, base) && !isPlayerTrusted(entity,
-                                                                             base) && !entity.capabilities.isCreativeMode) {
+                        if (OMTUtil.canDamagePlayer(entity, base) && !entity.capabilities.isCreativeMode) {
                             target = possibleTarget;
                         }
                     }
@@ -195,8 +194,7 @@ public class TurretHeadUtil {
                                                                                                     pos.getZ()) >= 3) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
-                        if (!isPlayerOwner(entity, base) && !isPlayerTrusted(entity,
-                                                                             base) && !entity.capabilities.isCreativeMode) {
+                        if (OMTUtil.canDamagePlayer(entity, base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
                         }
                     }
@@ -243,8 +241,7 @@ public class TurretHeadUtil {
                             Potion.getPotionById(2))) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
-                        if (!entity.getUniqueID().toString().equals(base.getOwner()) && !isPlayerTrusted(entity,
-                                                                                                         base) && !entity.capabilities.isCreativeMode) {
+                        if (OMTUtil.canDamagePlayer(entity, base) && !entity.capabilities.isCreativeMode) {
                             target = target1;
                         }
                     }
