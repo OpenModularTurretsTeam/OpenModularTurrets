@@ -12,6 +12,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import omtteam.omlib.api.render.ColorOM;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.render.MessageRenderRay;
 import omtteam.omlib.util.EntityUtil;
@@ -23,13 +24,12 @@ import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.OMTUtil;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
-import org.lwjgl.util.Color;
 
 import java.util.List;
 import java.util.Random;
 
 public class LaserTurretTileEntity extends TurretHead {
-    private Color color = new Color(255, 32, 0, 128);
+    private ColorOM color = new ColorOM(1F, 0.1F, 0, 0.5F);
 
     public LaserTurretTileEntity() {
         super();
@@ -116,14 +116,13 @@ public class LaserTurretTileEntity extends TurretHead {
             zDev = RandomUtil.random.nextGaussian() * 0.035D * accuracy * deviationModifier;
 
             vector = vector.addVector(xDev, yDev, zDev);
-            Vec3d baseToTarget = vector.subtract(baseVector);
-            baseVector = baseVector.add(baseToTarget.normalize().scale(0.6D));
+            baseVector = baseVector.add(vector.subtract(baseVector).normalize().scale(0.55D));
 
             // Play Sound
             this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
                                       OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
             OMLibNetworkingHandler.INSTANCE.sendToAllAround(
-                    new MessageRenderRay(baseVector, vector, 1, 0, 0, 5, true),
+                    new MessageRenderRay(baseVector, vector, color, 5, true),
                     new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(),
                                                     baseVector.x, baseVector.y, baseVector.z, 120));
 
