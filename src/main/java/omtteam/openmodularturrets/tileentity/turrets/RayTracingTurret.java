@@ -11,8 +11,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import omtteam.omlib.util.MathUtil;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
@@ -28,23 +28,7 @@ import java.util.Random;
 public abstract class RayTracingTurret extends TurretHead {
 
     public RayTracingTurret(int tier) {
-        super();
-        this.turretTier = tier;
-    }
-
-    @Override
-    protected float getProjectileGravity() {
-        return 0.00F;
-    }
-
-    @Override
-    public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
-        return null;
-    }
-
-    @Override
-    protected void doTargetedShot(Entity target, ItemStack ammo) {
-        shootRay(target.posX, target.posY + target.getEyeHeight(), target.posZ, this.getTurretAccuracy(), target);
+        super(tier);
     }
 
     protected abstract void renderRay(Vec3d start, Vec3d end);
@@ -63,7 +47,28 @@ public abstract class RayTracingTurret extends TurretHead {
 
     protected abstract void handleBlockHit(IBlockState hitBlock, BlockPos pos);
 
-    protected void shootRay(double adjustedX, double adjustedY, double adjustedZ, double accuracy, Entity target) {
+    @Override
+    protected void doTargetedShot(Entity target, ItemStack ammo) {
+        shootRay(target.posX, target.posY + target.getEyeHeight(), target.posZ, this.getTurretAccuracy());
+    }
+
+    @Override
+    protected void doBlindShot(ItemStack ammo) {
+        forceShot();
+    }
+
+    @Override
+    public boolean forceShot() {
+        Vec3d direction = MathUtil.getVectorFromYawPitch(this.yaw, this.pitch).scale(5D);
+        Vec3d baseVector = new Vec3d(this.getPos().getX() + 0.5D,
+                                     this.getPos().getY() + 0.6D,
+                                     this.getPos().getZ() + 0.5D);
+        Vec3d result = baseVector.add(direction);
+        shootRay(result.x, result.y, result.z, this.getTurretAccuracy());
+        return true;
+    }
+
+    protected void shootRay(double adjustedX, double adjustedY, double adjustedZ, double accuracy) {
         // Consume energy
         base.setEnergyStored(base.getEnergyLevel(EnumFacing.DOWN) - getPowerRequiredForNextShot());
         this.applyLaunchEffects();

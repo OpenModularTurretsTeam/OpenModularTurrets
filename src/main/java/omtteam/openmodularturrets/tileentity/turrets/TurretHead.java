@@ -13,15 +13,12 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
-import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
-import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
@@ -32,7 +29,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import static omtteam.omlib.util.MathUtil.getVelocityVectorFromYawPitch;
 import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
@@ -46,25 +42,29 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     public float rotationAnimation = 0.00F;
     public boolean shouldConceal = false;
     protected TurretBase base;
-    int ticks;
-    int targetingTicks;
-    int turretTier;
+    protected int ticks;
+    protected int targetingTicks;
+    protected int turretTier;
     private boolean hasSetSide = false;
     private EnumFacing turretBase;
-    private boolean playedDeploy = false;
-    private boolean autoFire = false;
-    private int ticksWithoutTarget;
-    private double targetLastX = 0;
-    private double targetLastY = 0;
-    private double targetLastZ = 0;
-    private double targetSpeedX = 0;
-    private double targetSpeedY = 0;
-    private double targetSpeedZ = 0;
+    protected boolean playedDeploy = false;
+    protected boolean autoFire = false;
+    protected int ticksWithoutTarget;
+    protected double targetLastX = 0;
+    protected double targetLastY = 0;
+    protected double targetLastZ = 0;
+    protected double targetSpeedX = 0;
+    protected double targetSpeedY = 0;
+    protected double targetSpeedZ = 0;
 
-    private float maxPitch = 360;
-    private float maxYaw = 360;
-    private float minPitch = 0;
-    private float minYaw = 0;
+    protected float maxPitch = 360;
+    protected float maxYaw = 360;
+    protected float minPitch = 0;
+    protected float minYaw = 0;
+
+    public TurretHead(int turretTier) {
+        this.turretTier = turretTier;
+    }
 
     @Nullable
     @Override
@@ -268,16 +268,12 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
     protected abstract boolean requiresSpecificAmmo();
 
-    protected abstract float getProjectileGravity();
-
     public TurretType getTurretType() {
         BlockAbstractTurretHead block = (BlockAbstractTurretHead) this.getWorld().getBlockState(this.getPos()).getBlock();
         return block.getTurretType();
     }
 
     public abstract ItemStack getAmmo();
-
-    protected abstract TurretProjectile createProjectile(World world, Entity target, ItemStack ammo);
 
     protected abstract SoundEvent getLaunchSoundEffect();
 
@@ -302,14 +298,14 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
                 base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
     }
 
-    private void updateRotationAnimation() {
+    protected void updateRotationAnimation() {
         if (rotationAnimation >= 360F) {
             rotationAnimation = 0F;
         }
         rotationAnimation = rotationAnimation + 0.03F;
     }
 
-    private ItemStack getAmmoStack() {
+    protected ItemStack getAmmoStack() {
         ItemStack ammo = ItemStack.EMPTY;
         if (this.requiresAmmo()) {
             if (this.requiresSpecificAmmo()) {
@@ -331,7 +327,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         return ammo;
     }
 
-    private boolean isTargetInYawPitch(Entity entity) {
+    protected boolean isTargetInYawPitch(Entity entity) {
         while (yaw > 360 || pitch > 360 || yaw < 0 || pitch < 0) {
             if (yaw > 360) {
                 yaw -= 360;
@@ -451,142 +447,11 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         }
     }
 
-    /**
-     * Tracks target and shoots at it
-     */
-    protected void doTargetedShot(Entity target, ItemStack ammo) {
-        // Update target tracking (Player entity not setting motion data when moving via movement keys)
-        double speedX = target instanceof EntityPlayerMP ? targetSpeedX : target.posX - target.prevPosX;
-        double speedY = target instanceof EntityPlayerMP ? targetSpeedY : target.posY - target.prevPosY;
-        double speedZ = target instanceof EntityPlayerMP ? targetSpeedZ : target.posZ - target.prevPosZ;
+    protected abstract void doTargetedShot(Entity target, ItemStack ammo);
 
-        // Calculate speed from displacement from last tick (Or use tracking data if target is player)
-        double d0 = target.posX - (this.pos.getX() + 0.5);
-        double d1 = target.posY + (double) target.height * 0.5F - (this.pos.getY() + 0.5);
-        double d2 = target.posZ - (this.pos.getZ() + 0.5);
-        double dist = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-        double inaccuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
+    protected abstract void doBlindShot(ItemStack ammo);
 
-        // Adjust new firing coordinate according to target speed
-        double time = dist / (this.getProjectileGravity() == 0.00F ? 3.0 : 1.6);
-        double adjustedX = d0 + speedX * time;
-        double adjustedY = d1 + speedY * time;
-        double adjustedZ = d2 + speedZ * time;
-
-        // Calculate projectile speed scaling factor to travel to adjusted destination on time
-        double dist2 = MathHelper.sqrt(adjustedX * adjustedX + adjustedY * adjustedY + adjustedZ * adjustedZ);
-        float speedFactor = (float) (dist2 / dist);
-
-        // Now that we have a trajectory, throw something at it
-        shootProjectile(adjustedX, adjustedY - 0.1F, adjustedZ, 3.0F * speedFactor, (float) inaccuracy, ammo);
-    }
-
-    /**
-     * Just shoots, no aiming required
-     */
-    private void doBlindShot(ItemStack ammo) {
-        if (this instanceof RocketTurretTileEntity && OMTConfig.TURRETS.canRocketsHome) {
-            return;
-        }
-
-        // Work out a trajectory based on current yaw/pitch
-        Vec3d velocity = getVelocityVectorFromYawPitch(this.pitch, this.yaw, 3.0F);
-        double adjustedX = velocity.x;
-        double adjustedY = velocity.y;
-        double adjustedZ = velocity.z;
-        float speedFactor = (float) velocity.lengthVector();
-        double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
-
-        // Now that we have a trajectory, throw something at it
-        shootProjectile(adjustedX, adjustedY, adjustedZ, speedFactor, (float) accuracy, ammo);
-    }
-
-    /**
-     * Set this.autoFire to true instead.
-     */
-    public boolean forceShot() {
-        if (this instanceof RocketTurretTileEntity && OMTConfig.TURRETS.canRocketsHome) return false;
-        if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
-            return false;
-        }
-        //Finally, try to shoot if criteria is met.
-        ItemStack ammo = getAmmoStack();
-
-        // Is there ammo?
-        if (ammo == ItemStack.EMPTY && this.requiresAmmo()) {
-            return false;
-        }
-
-        base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot());
-
-        for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-            double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(
-                    base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
-            TurretProjectile projectile = this.createProjectile(this.getWorld(), target, ammo);
-            projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
-            if (projectile.gravity == 0.00F) {
-                Vec3d velocity = getVelocityVectorFromYawPitch(this.pitch, this.yaw, 3.0F);
-                projectile.shoot(velocity.x, velocity.y, velocity.z, (float) velocity.lengthVector(), (float) accuracy);
-            } else {
-                projectile.rotationYaw = this.yaw;
-                projectile.rotationPitch = this.pitch;
-                Vec3d velocity = getVelocityVectorFromYawPitch(projectile.rotationYaw, projectile.rotationPitch, 1.6F);
-                projectile.motionX = velocity.x + RandomUtil.random.nextGaussian() * 0.007499999832361937D * accuracy;
-                projectile.motionY = velocity.y + RandomUtil.random.nextGaussian() * 0.007499999832361937D * accuracy;
-                projectile.motionZ = velocity.z + RandomUtil.random.nextGaussian() * 0.007499999832361937D * accuracy;
-                projectile.prevRotationYaw = projectile.rotationYaw;
-                projectile.prevRotationPitch = projectile.rotationPitch;
-            }
-            this.getWorld().spawnEntity(projectile);
-        }
-        this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
-                                  OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
-        ticks = 0;
-
-        return true;
-    }
-
-    /**
-     * Attempts to create and throw a projectile
-     */
-    protected void shootProjectile(double adjustedX, double adjustedY, double adjustedZ, float speedFactor, float accuracy, ItemStack ammo) {
-        // Consume energy
-        base.setEnergyStored(base.getEnergyLevel(EnumFacing.DOWN) - getPowerRequiredForNextShot());
-
-        // Create one projectile per scatter-shot upgrade
-        for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-            // Create a projectile, consuming ammo if applicable
-            TurretProjectile projectile = this.createProjectile(this.getWorld(), this.target, ammo);
-
-            // Set projectile starting position
-            projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
-
-            //If the turret is on a Ship, it needs to change to World coordinates from Ship coordinates
-            /*if (ModCompatibility.ValkyrienWarfareLoaded) {
-                Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
-                if (shipEntity != null) {
-                    Vec3d inShipPos = new Vec3d(this.getPos().getX() + 0.5, this.getPos().getY() + 0.5, this.getPos().getZ() + 0.5);
-                    Vec3d inWorldPos = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, inShipPos);
-                    projectile.setPosition(inWorldPos.x, inWorldPos.y, inWorldPos.z);
-                }
-            } */
-
-            // Set projectile heading
-            projectile.shoot(adjustedX, adjustedY, adjustedZ, speedFactor, accuracy);
-
-            // Play sounds
-            if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
-                this.getWorld().playSound(null, this.pos, ModSounds.amped, SoundCategory.BLOCKS,
-                                          OMTConfig.TURRETS.turretSoundVolume, RandomUtil.random.nextFloat() + 0.5F);
-                projectile.isAmped = true;
-            }
-            this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
-                                      OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
-
-            // Spawn entity
-            this.getWorld().spawnEntity(projectile);
-        }
-    }
+    public abstract boolean forceShot();
 
     private void targetingChecks() {
         // is there a target, and has it died in the previous tick?

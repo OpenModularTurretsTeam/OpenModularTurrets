@@ -6,14 +6,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import omtteam.omlib.api.render.ColorOM;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.render.MessageRenderRay;
 import omtteam.omlib.util.EntityUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
-import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
@@ -23,11 +21,6 @@ public class RailGunTurretTileEntity extends RayTracingTurret {
 
     public RailGunTurretTileEntity() {
         super(5);
-    }
-
-    @Override
-    protected float getProjectileGravity() {
-        return 0.00F;
     }
 
     @Override
@@ -68,11 +61,6 @@ public class RailGunTurretTileEntity extends RayTracingTurret {
     @Override
     public ItemStack getAmmo() {
         return new ItemStack(ModItems.ammoMetaItem, 1, 2);
-    }
-
-    @Override
-    public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
-        return null;
     }
 
     @Override

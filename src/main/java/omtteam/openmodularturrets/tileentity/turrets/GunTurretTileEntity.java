@@ -10,10 +10,9 @@ import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
 
-public class GunTurretTileEntity extends TurretHead {
+public class GunTurretTileEntity extends ProjectileTurret {
     public GunTurretTileEntity() {
-        super();
-        this.turretTier = 2;
+        super(2);
     }
 
     @Override
