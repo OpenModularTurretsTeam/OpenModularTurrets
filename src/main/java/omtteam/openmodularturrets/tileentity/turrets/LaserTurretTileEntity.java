@@ -103,7 +103,7 @@ public class LaserTurretTileEntity extends TurretHead {
         // Create one projectile per scatter-shot upgrade
         for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
             double xDev, yDev, zDev;
-
+            boolean hit = false;
             Vec3d vector = new Vec3d(adjustedX, adjustedY, adjustedZ);
             Vec3d baseVector = new Vec3d(this.getPos().getX() + 0.5D,
                                          this.getPos().getY() + 0.6D,
@@ -133,14 +133,17 @@ public class LaserTurretTileEntity extends TurretHead {
                                 new MessageRenderRay(baseVector, vector, color, 5, true),
                                 new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(),
                                                                 baseVector.x, baseVector.y, baseVector.z, 120));
-                        return;
+                        hit = true;
+                        break;
                     }
                 }
             }
-            OMLibNetworkingHandler.INSTANCE.sendToAllAround(
-                    new MessageRenderRay(baseVector, vector.add(vector.subtract(baseVector).scale(2D)), color, 5, true),
-                    new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(),
-                                                    baseVector.x, baseVector.y, baseVector.z, 120));
+            if (!hit) {
+                OMLibNetworkingHandler.INSTANCE.sendToAllAround(
+                        new MessageRenderRay(baseVector, vector.add(vector.subtract(baseVector).scale(2D)), color, 5, true),
+                        new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(),
+                                                        baseVector.x, baseVector.y, baseVector.z, 120));
+            }
 
         }
     }
