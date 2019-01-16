@@ -11,6 +11,7 @@ import omtteam.openmodularturrets.blocks.LeverBlock;
 import omtteam.openmodularturrets.blocks.turretheads.*;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.reference.OMTNames;
+import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.BaseAddon;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
@@ -21,7 +22,7 @@ import omtteam.openmodularturrets.util.TurretType;
 import static omtteam.omlib.util.InitHelper.registerBlock;
 
 public class ModBlocks {
-    public static final Block laserTurret = new BlockLaserTurret();
+    public static Block laserTurret;
     public static Block turretBase;
     public static Block disposableItemTurret;
     public static Block potatoCannonTurret;
@@ -83,7 +84,7 @@ public class ModBlocks {
         }
 
         if (OMTConfig.TURRETS.laser_turret.isEnabled()) {
-            registerBlock(laserTurret, registry, ModItems.subblocks);
+            laserTurret = registerBlock(new BlockLaserTurret(), registry, ModItems.subblocks);
             TurretList.addTurret(new TurretType(OMTNames.Blocks.laserTurret, OMTConfig.TURRETS.laser_turret));
         }
 
@@ -96,19 +97,19 @@ public class ModBlocks {
     }
 
     public static void initTileEntities() {
-        GameRegistry.registerTileEntity(TurretBase.class, OMTNames.Blocks.turretBase);
-        GameRegistry.registerTileEntity(DisposableItemTurretTileEntity.class, OMTNames.Blocks.disposableItemTurret);
-        GameRegistry.registerTileEntity(PotatoCannonTurretTileEntity.class, OMTNames.Blocks.potatoCannonTurret);
-        GameRegistry.registerTileEntity(RocketTurretTileEntity.class, OMTNames.Blocks.rocketTurret);
-        GameRegistry.registerTileEntity(GunTurretTileEntity.class, OMTNames.Blocks.gunTurret);
-        GameRegistry.registerTileEntity(GrenadeLauncherTurretTileEntity.class, OMTNames.Blocks.grenadeTurret);
-        GameRegistry.registerTileEntity(LaserTurretTileEntity.class, OMTNames.Blocks.laserTurret);
-        GameRegistry.registerTileEntity(LeverTileEntity.class, OMTNames.Blocks.lever);
-        GameRegistry.registerTileEntity(RailGunTurretTileEntity.class, OMTNames.Blocks.railGunTurret);
-        GameRegistry.registerTileEntity(IncendiaryTurretTileEntity.class, OMTNames.Blocks.incendiaryTurret);
-        GameRegistry.registerTileEntity(RelativisticTurretTileEntity.class, OMTNames.Blocks.relativisticTurret);
-        GameRegistry.registerTileEntity(TeleporterTurretTileEntity.class, OMTNames.Blocks.teleporterTurret);
-        GameRegistry.registerTileEntity(Expander.class, OMTNames.Blocks.expander);
-        GameRegistry.registerTileEntity(BaseAddon.class, OMTNames.Blocks.baseAddon);
+        GameRegistry.registerTileEntity(TurretBase.class, Reference.MOD_ID + ":" + OMTNames.Blocks.turretBase);
+        GameRegistry.registerTileEntity(DisposableItemTurretTileEntity.class, Reference.MOD_ID + ":" + OMTNames.Blocks.disposableItemTurret);
+        GameRegistry.registerTileEntity(PotatoCannonTurretTileEntity.class, Reference.MOD_ID + ":" + OMTNames.Blocks.potatoCannonTurret);
+        GameRegistry.registerTileEntity(RocketTurretTileEntity.class, Reference.MOD_ID + ":" + OMTNames.Blocks.rocketTurret);
+        GameRegistry.registerTileEntity(GunTurretTileEntity.class, Reference.MOD_ID + ":" + OMTNames.Blocks.gunTurret);
+        GameRegistry.registerTileEntity(GrenadeLauncherTurretTileEntity.class, Reference.MOD_ID + ":" + OMTNames.Blocks.grenadeTurret);
+        GameRegistry.registerTileEntity(LaserTurretTileEntity.class, Reference.MOD_ID + ":" + OMTNames.Blocks.laserTurret);
+        GameRegistry.registerTileEntity(LeverTileEntity.class, Reference.MOD_ID + ":" + OMTNames.Blocks.lever);
+        GameRegistry.registerTileEntity(RailGunTurretTileEntity.class, Reference.MOD_ID + ":" + OMTNames.Blocks.railGunTurret);
+        GameRegistry.registerTileEntity(IncendiaryTurretTileEntity.class, Reference.MOD_ID + ":" + OMTNames.Blocks.incendiaryTurret);
+        GameRegistry.registerTileEntity(RelativisticTurretTileEntity.class, Reference.MOD_ID + ":" + OMTNames.Blocks.relativisticTurret);
+        GameRegistry.registerTileEntity(TeleporterTurretTileEntity.class, Reference.MOD_ID + ":" + OMTNames.Blocks.teleporterTurret);
+        GameRegistry.registerTileEntity(Expander.class, Reference.MOD_ID + ":" + OMTNames.Blocks.expander);
+        GameRegistry.registerTileEntity(BaseAddon.class, Reference.MOD_ID + ":" + OMTNames.Blocks.baseAddon);
     }
 }
