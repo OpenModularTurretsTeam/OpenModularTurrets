@@ -301,7 +301,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
     @Nonnull
     @ParametersAreNonnullByDefault
     public String getText(int id, String name, float value) {
-        return name + ": " + Integer.toString(Math.round(value));
+        return name + ": " + Math.round(value);
     }
 
     private void drawMode() {

@@ -5,7 +5,7 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 
 /**
  * Created by Keridos on 11.04.2015.
- * This Class
+ * This is the normal DamageSource used by turrets.
  */
 public class NormalDamageSource extends AbstractOMTDamageSource {
     public NormalDamageSource(String damageSource, int fakeDrops, TurretBase base, WorldServer worldServer, boolean projectile) {

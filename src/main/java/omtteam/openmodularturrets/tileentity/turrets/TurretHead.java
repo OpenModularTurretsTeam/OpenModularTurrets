@@ -116,6 +116,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         return base;
     }
 
+    // Set the rotation to fit the turret against the base and store its direction
     boolean setSide() {
         if (hasSetSide && !this.getWorld().isBlockLoaded(this.getPos().offset(turretBase))) {
             return false;
@@ -395,8 +396,8 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         if (base.isAttacksPlayers() && OMTConfig.TURRETS.globalCanTargetPlayers) {
             TurretHeadUtil.warnPlayers(base, base.getWorld(), this.pos, getTurretRange());
         }
-        // Update target tracking (Player entity not setting motion data when moving via movement keys)
 
+        // Update target tracking (Player entity not setting motion data when moving via movement keys)
         if (target instanceof EntityPlayerMP) {
             targetSpeedX = target.posX - targetLastX;
             targetSpeedY = target.posY - targetLastY;

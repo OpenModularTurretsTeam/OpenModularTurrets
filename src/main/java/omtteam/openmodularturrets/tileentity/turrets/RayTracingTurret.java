@@ -73,14 +73,16 @@ public abstract class RayTracingTurret extends TurretHead {
         base.setEnergyStored(base.getEnergyLevel(EnumFacing.DOWN) - getPowerRequiredForNextShot());
         this.applyLaunchEffects();
 
-        // Create one projectile per scatter-shot upgrade
+        // Create one ray per scatter-shot upgrade
         for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
             double xDev, yDev, zDev;
             boolean hit = false;
+            // vector points at the target, baseVector is the origin of the raytrace
             Vec3d vector = new Vec3d(adjustedX, adjustedY, adjustedZ);
             Vec3d baseVector = new Vec3d(this.getPos().getX() + 0.5D,
                                          this.getPos().getY() + 0.6D,
                                          this.getPos().getZ() + 0.5D);
+            // Calculate deviation based on targets height and its distance to the turret
             double deviationModifier = 1D * (target.height < 0.5 ? 1.5D : 1D)
                     * ((vector.distanceTo(baseVector) * 0.5D / (this.getTurretRange() + TurretHeadUtil.getRangeUpgrades(base, this))) + 0.3D);
 
@@ -94,13 +96,16 @@ public abstract class RayTracingTurret extends TurretHead {
             // Play Sound
             this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
                                       OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
-
+            // Raytrace to see if/where it hits a block
             RayTraceResult blockTraceResult = world.rayTraceBlocks(baseVector, vector, false, true, false);
+
+            // Raytrace entities hit
             List<RayTraceResult> entityHits = WorldUtil.traceEntities(null, baseVector, vector, world);
             double blockRange = blockTraceResult != null ? blockTraceResult.hitVec.distanceTo(baseVector) : 500;
-            for (RayTraceResult result : entityHits) {
+
+            for (RayTraceResult result : entityHits) { // Loop through all entities
                 Entity entity = result.entityHit;
-                if (baseVector.distanceTo(result.hitVec) <= blockRange) {
+                if (baseVector.distanceTo(result.hitVec) <= blockRange) { // if entity is nearer than block hit
                     if (onHitEntity(entity)) {
                         this.renderRay(baseVector, vector);
                         hit = true;
@@ -120,25 +125,23 @@ public abstract class RayTracingTurret extends TurretHead {
     protected boolean onHitEntity(Entity entity) {
         if (entity != null && !entity.getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
             if (entity instanceof EntityPlayer) {
-                if (OMTUtil.canDamagePlayer((EntityPlayer) entity, base)) {
+                if (OMTUtil.canDamagePlayer((EntityPlayer) entity, base)) { // Player hit handling
                     damageEntity(entity);
                     applyHitEffects(entity);
                     entity.hurtResistantTime = -1;
-                    Random random = RandomUtil.random;
                     this.getWorld().playSound(null, entity.getPosition(), this.getHitSound(), SoundCategory.AMBIENT,
-                                              OMTConfig.TURRETS.turretSoundVolume, random.nextFloat() + 0.5F);
+                                              OMTConfig.TURRETS.turretSoundVolume, RandomUtil.random.nextFloat() + 0.5F);
                     return true;
                 } else {
                     return false;
                 }
-            } else if (OMTUtil.canDamageEntity(entity, base)) {
+            } else if (OMTUtil.canDamageEntity(entity, base)) {  // Entity hit Handling
                 OMTUtil.setTagsForTurretHit(entity, base);
                 damageEntity(entity);
                 applyHitEffects(entity);
                 entity.hurtResistantTime = -1;
-                Random random = RandomUtil.random;
                 this.getWorld().playSound(null, entity.getPosition(), this.getHitSound(), SoundCategory.AMBIENT,
-                                          OMTConfig.TURRETS.turretSoundVolume, random.nextFloat() + 0.5F);
+                                          OMTConfig.TURRETS.turretSoundVolume, RandomUtil.random.nextFloat() + 0.5F);
                 return true;
             } else {
                 return false;
@@ -148,7 +151,7 @@ public abstract class RayTracingTurret extends TurretHead {
     }
 
     protected void damageEntity(Entity entity) {
-        float damageModifier = this.getDamageModifier(entity); //0.8x to 1.8x damage multiplicator
+        float damageModifier = this.getDamageModifier(entity); // The damage modifier of the turret based on entity
         float damage = this.getTurretType().getSettings().getBaseDamage() * damageModifier;
         int fakeDrops = TurretHeadUtil.getFakeDropsLevel(base);
 
@@ -161,6 +164,7 @@ public abstract class RayTracingTurret extends TurretHead {
 
         if (entity instanceof EntityLivingBase) {
             EntityLivingBase elb = (EntityLivingBase) entity;
+            // Attack 2 times, once with normal, once with Bypassing Damage
             elb.attackEntityFrom(new NormalDamageSource(this.getTurretType().getInternalName(), fakeDrops, base,
                                                         (WorldServer) this.getWorld(), false), damage * this.getNormalDamageFactor());
             elb.attackEntityFrom(new ArmorBypassDamageSource(this.getTurretType().getInternalName(), fakeDrops, base,

@@ -14,7 +14,7 @@ import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
 
 /**
  * Created by Keridos on 13/11/17.
- * This Class
+ * This determines wether the given recipe should be loaded
  */
 
 @SuppressWarnings("ALL")

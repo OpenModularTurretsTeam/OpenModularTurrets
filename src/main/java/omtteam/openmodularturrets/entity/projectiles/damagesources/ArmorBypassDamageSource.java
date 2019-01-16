@@ -5,7 +5,7 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 
 /**
  * Created by Keridos on 11.04.2015.
- * This Class
+ * This is the armor bypassing damage source
  */
 public class ArmorBypassDamageSource extends AbstractOMTDamageSource {
     public ArmorBypassDamageSource(String damageSource, int fakeDrops, TurretBase base, WorldServer worldServer, boolean projectile) {
@@ -13,6 +13,6 @@ public class ArmorBypassDamageSource extends AbstractOMTDamageSource {
         if (projectile) {
             this.setProjectile();
         }
-
+        this.setDamageBypassesArmor();
     }
 }

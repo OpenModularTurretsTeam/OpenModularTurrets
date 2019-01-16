@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 
 /**
  * Created by Keridos on 02/06/17.
- * This Class
+ * This is the abstract DamageSource for OMT
  */
 @SuppressWarnings("WeakerAccess")
 public abstract class AbstractOMTDamageSource extends DamageSource {
