@@ -7,8 +7,6 @@ package omtteam.openmodularturrets.reference;
 public class OMTNames {
     public static class Blocks {
         public static final String turretBase = "turret_base";
-        @SuppressWarnings("unused")
-        public static final String turret = "turret";
         public static final String disposableItemTurret = "disposable_item_turret";
         public static final String rocketTurret = "rocket_turret";
         public static final String gunTurret = "machine_gun_turret";

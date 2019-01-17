@@ -60,6 +60,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import static omtteam.omlib.compatibility.ModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
@@ -160,7 +161,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     protected void setupInventory() {
-        //noinspection BooleanMethodIsAlwaysInverted,BooleanMethodIsAlwaysInverted,BooleanMethodIsAlwaysInverted
         inventory = new ItemStackHandler(13) {
 
             @Override
@@ -316,6 +316,11 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             this.setCamoState(camoBlockStateTemp.getBlock().getExtendedState(camoBlockStateTemp, this.getWorld(), this.getPos()));
         }
         this.updateNBT = true;
+        if (this.network == null) {
+            this.scan(this.getWorld(), this.getPos(), "");
+            this.network.setOwner(UUID.fromString(this.getOwner()));
+            this.network.setOwnerName(this.getOwnerName());
+        }
     }
 
     @Override
@@ -349,6 +354,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     @Override
+    @Nonnull
     public TileEntityOwnedBlock getOwnedBlock() {
         return this;
     }
@@ -602,19 +608,19 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         int tier = getTier();
         switch (tier) {
             case 1:
-                return OMTConfig.BASES.baseTierOne.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfig.BASES.baseTierOne.getBaseMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
             case 2:
-                return OMTConfig.BASES.baseTierTwo.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfig.BASES.baseTierTwo.getBaseMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
             case 3:
-                return OMTConfig.BASES.baseTierThree.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfig.BASES.baseTierThree.getBaseMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
             case 4:
-                return OMTConfig.BASES.baseTierFour.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfig.BASES.baseTierFour.getBaseMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
             case 5:
-                return OMTConfig.BASES.baseTierFive.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfig.BASES.baseTierFive.getBaseMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
         }
         return 0;

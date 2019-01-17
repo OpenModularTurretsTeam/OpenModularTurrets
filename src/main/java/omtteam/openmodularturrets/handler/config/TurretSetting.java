@@ -6,31 +6,31 @@ public class TurretSetting {
     @Config.RequiresMcRestart
     public boolean enabled;
     @Config.RangeInt(min = 1)
-    public int baseRange;
+    private int baseRange;
     @Config.RangeInt(min = 1)
-    public int baseFireRate;
+    private int baseFireRate;
     @Config.RangeInt(min = 0)
-    public int baseDamage;
+    private int baseDamage;
     @Config.RangeInt(min = 1)
-    public int powerUsage;
+    private int powerUsage;
     @Config.RangeDouble(min = 0D)
-    public double baseAccuracyDeviation;
+    private double baseAccuracyDeviation;
     @Config.RangeInt(min = 1)
-    public int maxSimultaneous;
+    private int maxSimultaneous;
     @Config.RangeDouble(min = 0D)
-    public double damageAmp;
+    private double damageAmp;
     @Config.RangeDouble(min = 0D)
-    public double fireRateUpgrade;
+    private double fireRateUpgrade;
     @Config.RangeInt(min = 0)
-    public int rangeUpgrade;
+    private int rangeUpgrade;
     @Config.RangeDouble(min = 0D)
-    public double accuracyUpgrade;
+    private double accuracyUpgrade;
     @Config.RangeDouble(min = 0D)
-    public double efficiencyUpgrade;
+    private double efficiencyUpgrade;
     @Config.RangeDouble(min = 0D)
-    public double recyclerNegateChance;
+    private double recyclerNegateChance;
     @Config.RangeDouble(min = 0D)
-    public double recyclerAddChance;
+    private double recyclerAddChance;
 
     public TurretSetting(boolean enabled, int baseRange, int baseFireRate, int baseDamage, int powerUsage, double baseAccuracyDeviation, int maxSimultaneous, double damageAmp, double fireRateUpgrade, int rangeUpgrade, double accuracyUpgrade, double efficiencyUpgrade, double recyclerNegateChance, double recyclerAddChance) {
         this.enabled = enabled;
@@ -79,5 +79,29 @@ public class TurretSetting {
 
     public double getDamageAmp() {
         return damageAmp;
+    }
+
+    public double getFireRateUpgrade() {
+        return fireRateUpgrade;
+    }
+
+    public int getRangeUpgrade() {
+        return rangeUpgrade;
+    }
+
+    public double getAccuracyUpgrade() {
+        return accuracyUpgrade;
+    }
+
+    public double getEfficiencyUpgrade() {
+        return efficiencyUpgrade;
+    }
+
+    public double getRecyclerNegateChance() {
+        return recyclerNegateChance;
+    }
+
+    public double getRecyclerAddChance() {
+        return recyclerAddChance;
     }
 }

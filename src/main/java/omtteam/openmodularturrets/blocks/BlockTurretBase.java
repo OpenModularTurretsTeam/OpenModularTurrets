@@ -88,24 +88,24 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
         int MaxIO;
         switch (state.getValue(TIER) - 1) {
             case 0:
-                MaxCharge = OMTConfig.BASES.baseTierOne.baseMaxCharge;
-                MaxIO = OMTConfig.BASES.baseTierOne.baseMaxIo;
+                MaxCharge = OMTConfig.BASES.baseTierOne.getBaseMaxCharge();
+                MaxIO = OMTConfig.BASES.baseTierOne.getBaseMaxIo();
                 return new TurretBase(MaxCharge, MaxIO, 1, state);
             case 1:
-                MaxCharge = OMTConfig.BASES.baseTierTwo.baseMaxCharge;
-                MaxIO = OMTConfig.BASES.baseTierTwo.baseMaxIo;
+                MaxCharge = OMTConfig.BASES.baseTierTwo.getBaseMaxCharge();
+                MaxIO = OMTConfig.BASES.baseTierTwo.getBaseMaxIo();
                 return new TurretBase(MaxCharge, MaxIO, 2, state);
             case 2:
-                MaxCharge = OMTConfig.BASES.baseTierThree.baseMaxCharge;
-                MaxIO = OMTConfig.BASES.baseTierThree.baseMaxIo;
+                MaxCharge = OMTConfig.BASES.baseTierThree.getBaseMaxCharge();
+                MaxIO = OMTConfig.BASES.baseTierThree.getBaseMaxIo();
                 return new TurretBase(MaxCharge, MaxIO, 3, state);
             case 3:
-                MaxCharge = OMTConfig.BASES.baseTierFour.baseMaxCharge;
-                MaxIO = OMTConfig.BASES.baseTierFour.baseMaxIo;
+                MaxCharge = OMTConfig.BASES.baseTierFour.getBaseMaxCharge();
+                MaxIO = OMTConfig.BASES.baseTierFour.getBaseMaxIo();
                 return new TurretBase(MaxCharge, MaxIO, 4, state);
             case 4:
-                MaxCharge = OMTConfig.BASES.baseTierFive.baseMaxCharge;
-                MaxIO = OMTConfig.BASES.baseTierFive.baseMaxIo;
+                MaxCharge = OMTConfig.BASES.baseTierFive.getBaseMaxCharge();
+                MaxIO = OMTConfig.BASES.baseTierFive.getBaseMaxIo();
                 return new TurretBase(MaxCharge, MaxIO, 5, state);
             default:
                 return new TurretBase(1, 1, 1, state);
@@ -287,24 +287,24 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             base.markDirty();
             switch (state.getValue(TIER)) {
                 case 1:
-                    this.setResistance(OMTConfig.BASES.baseTierOne.baseBlastResistance);
-                    this.setHardness(OMTConfig.BASES.baseTierOne.baseHardness);
+                    this.setResistance(OMTConfig.BASES.baseTierOne.getBaseBlastResistance());
+                    this.setHardness(OMTConfig.BASES.baseTierOne.getBaseHardness());
                     break;
                 case 2:
-                    this.setResistance(OMTConfig.BASES.baseTierTwo.baseBlastResistance);
-                    this.setHardness(OMTConfig.BASES.baseTierTwo.baseHardness);
+                    this.setResistance(OMTConfig.BASES.baseTierTwo.getBaseBlastResistance());
+                    this.setHardness(OMTConfig.BASES.baseTierTwo.getBaseHardness());
                     break;
                 case 3:
-                    this.setResistance(OMTConfig.BASES.baseTierThree.baseBlastResistance);
-                    this.setHardness(OMTConfig.BASES.baseTierThree.baseHardness);
+                    this.setResistance(OMTConfig.BASES.baseTierThree.getBaseBlastResistance());
+                    this.setHardness(OMTConfig.BASES.baseTierThree.getBaseHardness());
                     break;
                 case 4:
-                    this.setResistance(OMTConfig.BASES.baseTierFour.baseBlastResistance);
-                    this.setHardness(OMTConfig.BASES.baseTierFour.baseHardness);
+                    this.setResistance(OMTConfig.BASES.baseTierFour.getBaseBlastResistance());
+                    this.setHardness(OMTConfig.BASES.baseTierFour.getBaseHardness());
                     break;
                 case 5:
-                    this.setResistance(OMTConfig.BASES.baseTierFive.baseBlastResistance);
-                    this.setHardness(OMTConfig.BASES.baseTierFive.baseHardness);
+                    this.setResistance(OMTConfig.BASES.baseTierFive.getBaseBlastResistance());
+                    this.setHardness(OMTConfig.BASES.baseTierFive.getBaseHardness());
             }
         }
     }
@@ -335,15 +335,15 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
         if (OMTConfig.BASES.baseBreakable) {
             switch (blockState.getValue(TIER)) {
                 case 1:
-                    return OMTConfig.BASES.baseTierOne.baseHardness;
+                    return OMTConfig.BASES.baseTierOne.getBaseHardness();
                 case 2:
-                    return OMTConfig.BASES.baseTierTwo.baseHardness;
+                    return OMTConfig.BASES.baseTierTwo.getBaseHardness();
                 case 3:
-                    return OMTConfig.BASES.baseTierThree.baseHardness;
+                    return OMTConfig.BASES.baseTierThree.getBaseHardness();
                 case 4:
-                    return OMTConfig.BASES.baseTierFour.baseHardness;
+                    return OMTConfig.BASES.baseTierFour.getBaseHardness();
                 case 5:
-                    return OMTConfig.BASES.baseTierFive.baseHardness;
+                    return OMTConfig.BASES.baseTierFive.getBaseHardness();
             }
             return 10.0F;
         } else {
@@ -357,15 +357,15 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
         if (OMTConfig.BASES.baseBreakable) {
             switch (world.getBlockState(pos).getValue(TIER)) {
                 case 1:
-                    return OMTConfig.BASES.baseTierOne.baseBlastResistance;
+                    return OMTConfig.BASES.baseTierOne.getBaseBlastResistance();
                 case 2:
-                    return OMTConfig.BASES.baseTierTwo.baseBlastResistance;
+                    return OMTConfig.BASES.baseTierTwo.getBaseBlastResistance();
                 case 3:
-                    return OMTConfig.BASES.baseTierThree.baseBlastResistance;
+                    return OMTConfig.BASES.baseTierThree.getBaseBlastResistance();
                 case 4:
-                    return OMTConfig.BASES.baseTierFour.baseBlastResistance;
+                    return OMTConfig.BASES.baseTierFour.getBaseBlastResistance();
                 case 5:
-                    return OMTConfig.BASES.baseTierFive.baseBlastResistance;
+                    return OMTConfig.BASES.baseTierFive.getBaseBlastResistance();
             }
             return 10.0F;
         } else {

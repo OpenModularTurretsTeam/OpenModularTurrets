@@ -5,19 +5,19 @@ import net.minecraftforge.common.config.Config;
 public class BaseSetting {
     @Config.RangeInt(min = 1)
     @Config.RequiresMcRestart
-    public int baseMaxCharge;
+    private int baseMaxCharge;
     @Config.RangeInt(min = 1)
     @Config.RequiresMcRestart
-    public int baseMaxIo;
+    private int baseMaxIo;
     @Config.RangeInt(min = 1)
     @Config.RequiresMcRestart
-    public int baseMaxTurrets;
+    private int baseMaxTurrets;
     @Config.RangeInt(min = 1)
     @Config.RequiresMcRestart
-    public int baseBlastResistance;
+    private int baseBlastResistance;
     @Config.RangeInt(min = 1)
     @Config.RequiresMcRestart
-    public int baseHardness;
+    private int baseHardness;
 
     public BaseSetting(int baseMaxCharge, int baseMaxIo, int baseMaxTurrets, int baseBlastResistance, int baseHardness) {
         this.baseMaxCharge = baseMaxCharge;
@@ -25,5 +25,25 @@ public class BaseSetting {
         this.baseMaxTurrets = baseMaxTurrets;
         this.baseBlastResistance = baseBlastResistance;
         this.baseHardness = baseHardness;
+    }
+
+    public int getBaseMaxCharge() {
+        return baseMaxCharge;
+    }
+
+    public int getBaseMaxIo() {
+        return baseMaxIo;
+    }
+
+    public int getBaseMaxTurrets() {
+        return baseMaxTurrets;
+    }
+
+    public int getBaseBlastResistance() {
+        return baseBlastResistance;
+    }
+
+    public int getBaseHardness() {
+        return baseHardness;
     }
 }
