@@ -59,8 +59,14 @@
         }
       }
     },
-    "model": {
+    "meta": {
       "0": {
+        "textures": {
+          "top": "openmodularturrets:blocks/base_addon_loot_deleter_top",
+          "side": "openmodularturrets:blocks/base_addon_loot_deleter_side"
+        }
+      },
+      "1": {
         "textures": {
           "top": "openmodularturrets:blocks/base_addon_loot_deleter_top",
           "side": "openmodularturrets:blocks/base_addon_loot_deleter_side"

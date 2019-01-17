@@ -60,7 +60,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import static omtteam.omlib.compatibility.ModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
@@ -316,11 +315,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             this.setCamoState(camoBlockStateTemp.getBlock().getExtendedState(camoBlockStateTemp, this.getWorld(), this.getPos()));
         }
         this.updateNBT = true;
-        if (this.network == null) {
-            this.scan(this.getWorld(), this.getPos(), "");
-            this.network.setOwner(UUID.fromString(this.getOwner()));
-            this.network.setOwnerName(this.getOwnerName());
-        }
     }
 
     @Override

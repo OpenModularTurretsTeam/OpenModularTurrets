@@ -37,7 +37,7 @@ import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
  * This Class
  */
 public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBlock {
-    public static final PropertyInteger MODEL = PropertyInteger.create("model", 0, 1);
+    public static final PropertyInteger META = PropertyInteger.create("meta", 0, 1);
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
     public BlockBaseAddon() {
@@ -68,18 +68,18 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
     @SuppressWarnings("unchecked")
     @Nonnull
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(MODEL, meta);
+        return this.getDefaultState().withProperty(META, meta);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(MODEL);
+        return state.getValue(META);
     }
 
     @Override
     @Nonnull
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, MODEL, FACING);
+        return new BlockStateContainer(this, META, FACING);
     }
 
     @Override
