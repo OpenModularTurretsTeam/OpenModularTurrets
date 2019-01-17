@@ -1,34 +1,31 @@
 {
   "result": {
     "item": "openmodularturrets:addon_meta",
-    "data": 4
+    "data": 1
   },
   "pattern": [
-    "CAC",
-    "ABD",
-    "CAC"
+    "AAA",
+    "BCB",
+    "AAA"
   ],
   "type": "forge:ore_shaped",
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "blockRedstone"
+      "ore": "ingotSteel"
     },
     "B": {
-      "item": "minecraft:ender_eye"
+      "item": "#MEKELITECIRCUIT"
     },
     "C": {
       "type": "forge:ore_dict",
-      "ore": "gemQuartz"
-    },
-    "D": {
-      "item": "#IOBUS"
+      "ore": "alloyElite"
     }
   },
   "conditions": [
     {
       "type": "openmodularturrets:recipetype",
-      "mod": "vanilla"
+      "mod": "mekanism"
     }
   ]
 }

@@ -1,34 +1,39 @@
 {
   "result": {
     "item": "openmodularturrets:addon_meta",
-    "data": 4
+    "data": 6
   },
   "pattern": [
-    "CAC",
-    "ABD",
-    "CAC"
+    "AAA",
+    "CBC",
+    "DED"
   ],
   "type": "forge:ore_shaped",
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "blockRedstone"
+      "ore": "paneGlassColorless"
     },
     "B": {
-      "item": "minecraft:ender_eye"
+      "type": "forge:ore_dict",
+      "ore": "dustRefinedObsidian"
     },
     "C": {
       "type": "forge:ore_dict",
-      "ore": "gemQuartz"
+      "ore": "itemEnrichedAlloy"
     },
     "D": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    },
+    "E": {
       "item": "#IOBUS"
     }
   },
   "conditions": [
     {
       "type": "openmodularturrets:recipetype",
-      "mod": "vanilla"
+      "mod": "mekanism"
     }
   ]
 }

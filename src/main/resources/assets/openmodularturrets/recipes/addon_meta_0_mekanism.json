@@ -1,25 +1,23 @@
 {
   "result": {
     "item": "openmodularturrets:addon_meta",
-    "data": 4
+    "data": 0
   },
   "pattern": [
-    "CAC",
-    "ABD",
-    "CAC"
+    "ABA",
+    "BCD",
+    "ABA"
   ],
   "type": "forge:ore_shaped",
   "key": {
     "A": {
-      "type": "forge:ore_dict",
-      "ore": "blockRedstone"
+      "item": "#INGOTSTEEL"
     },
     "B": {
-      "item": "minecraft:ender_eye"
+      "item": "#MEKBASICCIRCUIT"
     },
     "C": {
-      "type": "forge:ore_dict",
-      "ore": "gemQuartz"
+      "item": "#CHESTWOOD"
     },
     "D": {
       "item": "#IOBUS"
@@ -28,7 +26,7 @@
   "conditions": [
     {
       "type": "openmodularturrets:recipetype",
-      "mod": "vanilla"
+      "mod": "mekanism"
     }
   ]
 }

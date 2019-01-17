@@ -1,25 +1,25 @@
 {
   "result": {
-    "item": "openmodularturrets:addon_meta",
-    "data": 4
+    "item": "openmodularturrets:base_addon",
+    "data": 0
   },
   "pattern": [
-    "CAC",
-    "ABD",
-    "CAC"
+    "ABA",
+    "DCD",
+    "ADA"
   ],
   "type": "forge:ore_shaped",
   "key": {
     "A": {
-      "type": "forge:ore_dict",
-      "ore": "blockRedstone"
+      "item": "#OBSIDIAN"
     },
     "B": {
-      "item": "minecraft:ender_eye"
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
     },
     "C": {
       "type": "forge:ore_dict",
-      "ore": "gemQuartz"
+      "ore": "dustRedstone"
     },
     "D": {
       "item": "#IOBUS"

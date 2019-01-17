@@ -154,6 +154,10 @@ public class OMTNames {
             public static final String BASE_MAX_RANGE = "tooltip.omtteam.openmodularturrets:base_max_range";
             public static final String TOGGLE_MODE = "tooltip.omtteam.openmodularturrets:toggle_mode";
         }
+
+        public static class Descriptions {
+            public static final String BASE_CONTROLLER_CAPABILITY = "tooltip.omtteam.openmodularturrets:base_controller_capability";
+        }
     }
 
     public static class Textures {

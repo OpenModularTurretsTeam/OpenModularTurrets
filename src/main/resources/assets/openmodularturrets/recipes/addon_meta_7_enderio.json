@@ -1,7 +1,7 @@
 {
   "result": {
     "item": "openmodularturrets:addon_meta",
-    "data": 4
+    "data": 7
   },
   "pattern": [
     "CAC",
@@ -12,14 +12,15 @@
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "blockRedstone"
+      "ore": "itemEnhancedChassiParts"
     },
     "B": {
-      "item": "minecraft:ender_eye"
+      "type": "forge:ore_dict",
+      "ore": "skullEnderResonator"
     },
     "C": {
       "type": "forge:ore_dict",
-      "ore": "gemQuartz"
+      "ore": "itemPrecientCrystal"
     },
     "D": {
       "item": "#IOBUS"
@@ -28,7 +29,7 @@
   "conditions": [
     {
       "type": "openmodularturrets:recipetype",
-      "mod": "vanilla"
+      "mod": "enderio"
     }
   ]
 }

@@ -7,6 +7,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -14,13 +15,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.IHasItemBlock;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
+import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.items.blocks.ItemBlockBaseAddon;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -37,7 +42,7 @@ import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
  * This Class
  */
 public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBlock {
-    public static final PropertyInteger MODEL = PropertyInteger.create("model", 0, 1);
+    public static final PropertyInteger META = PropertyInteger.create("meta", 0, 1);
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
     public BlockBaseAddon() {
@@ -49,7 +54,7 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
         this.setResistance(3.0F);
         this.setHardness(3.0F);
         this.setSoundType(SoundType.STONE);
-        this.setDefaultState(this.blockState.getBaseState());
+        this.setDefaultState(this.blockState.getBaseState().withProperty(META, 0));
         this.setUnlocalizedName(OMTNames.Blocks.baseAddon);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.baseAddon);
     }
@@ -68,18 +73,19 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
     @SuppressWarnings("unchecked")
     @Nonnull
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(MODEL, meta);
+        return this.getDefaultState().withProperty(META, meta);
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(MODEL);
+        return state.getValue(META);
     }
 
     @Override
     @Nonnull
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, MODEL, FACING);
+        return new BlockStateContainer(this, META, FACING);
     }
 
     @Override
@@ -113,26 +119,31 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isFullBlock(IBlockState state) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EnumFacing side) {
+    @ParametersAreNonnullByDefault
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (hand.equals(EnumHand.OFF_HAND)) return true;
         BaseAddon baseAddon = (BaseAddon) worldIn.getTileEntity(pos);
@@ -166,10 +177,26 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
 
     @Override
     @ParametersAreNonnullByDefault
+    public int damageDropped(IBlockState state) {
+        return state.getValue(META);
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         if (!worldIn.isRemote) {
             dropItems(worldIn, pos);
             super.breakBlock(worldIn, pos, state);
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
+    @ParametersAreNonnullByDefault
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
+        for (int i = 0; i < 1; i++) {
+            subItems.add(new ItemStack(ModBlocks.baseAddon, 1, i));
         }
     }
 }
