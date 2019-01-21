@@ -61,7 +61,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
     @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
-        //super.initGui();
+        super.initGui();
         if (!addedToSyncList) {
             OMLibNetworkingHandler.INSTANCE.sendToServer(new MessageOpenGUI(base));
             addedToSyncList = true;
@@ -81,6 +81,8 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
 
         textFieldAddTrustedPlayer = new GuiTextField(0, fontRenderer, guiLeft + 11, guiTop + 99, 100, 18);
         textFieldAddTrustedPlayer.setMaxStringLength(50);
+        textFieldAddTrustedPlayer.setCanLoseFocus(false);
+
         fontRenderer.drawString("?", guiLeft + 93, guiTop + 135, 0);
 
         this.buttonList.add(new GuiButton(1, guiLeft + 10, guiTop + 20, 155, 20, mobsButton));
@@ -90,14 +92,8 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         this.buttonList.add(new GuiButton(5, guiLeft + 35, guiTop + 135, 30, 20, "-"));
         this.buttonList.add(new GuiButton(6, guiLeft + 10, guiTop + 135, 20, 20, "<<"));
         this.buttonList.add(new GuiButton(7, guiLeft + 145, guiTop + 135, 20, 20, ">>"));
-
-        if (this.base.getTrustedPlayers().size() > 0) {
-            this.buttonList.add(new GuiButton(8, guiLeft + 70, guiTop + 135, 23, 20, "-"));
-            this.buttonList.add(new GuiButton(9, guiLeft + 116, guiTop + 135, 23, 20, "+"));
-        } else {
-            this.buttonList.add(new GuiButton(8, guiLeft + 70, guiTop + 135, 23, 20, "-"));
-            this.buttonList.add(new GuiButton(9, guiLeft + 116, guiTop + 135, 23, 20, "+"));
-        }
+        this.buttonList.add(new GuiButton(8, guiLeft + 70, guiTop + 135, 23, 20, "-"));
+        this.buttonList.add(new GuiButton(9, guiLeft + 116, guiTop + 135, 23, 20, "+"));
 
         if (this.base.getTier() > 3) {
             this.buttonList.add(sliderLightValue);
@@ -126,25 +122,29 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             fontRenderer.drawString(base.getTrustedPlayers().get(base.trustedPlayerIndex).getName() + "'s " + safeLocalize(OMTNames.Localizations.GUI.PERMISSIONS),
                                     guiLeft + 10, 124, 0);
         }
-        drawMode();
-        textFieldAddTrustedPlayer.drawTextBox();
+
         super.drawScreen(par1, par2, par3);
+        drawAccessMode();
+        textFieldAddTrustedPlayer.drawTextBox();
         drawTooltips();
     }
+
 
     @SuppressWarnings("EmptyCatchBlock")
     @Override
     public void mouseClicked(int i, int j, int k) {
-        try {
-            super.mouseClicked(i, j, k);
-        } catch (IOException e) {
 
-        }
         if (isMouseOverTextField(textFieldAddTrustedPlayer, i, j)) {
             if (textFieldAddTrustedPlayer.isFocused()) {
                 textFieldAddTrustedPlayer.mouseClicked(i, j, k);
             } else {
                 textFieldAddTrustedPlayer.setFocused(true);
+            }
+        } else {
+            try {
+                super.mouseClicked(i, j, k);
+            } catch (IOException e) {
+
             }
         }
     }
@@ -304,7 +304,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         return name + ": " + Math.round(value);
     }
 
-    private void drawMode() {
+    private void drawAccessMode() {
         if (base.getTrustedPlayers().size() > base.trustedPlayerIndex) {
             TrustedPlayer trustedPlayer = base.getTrustedPlayers().get(base.trustedPlayerIndex);
             if (trustedPlayer != null) {
@@ -324,7 +324,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             tooltipToDraw = isMouseOverTextField(textFieldAddTrustedPlayer, mouseX, mouseY) ? 25 : 0;
         }
         if (tooltipToDraw == 0 && mouseX > guiLeft + 95 && mouseX < guiLeft + 115 && mouseY > guiTop + 135 && mouseY < guiTop + 155) {
-            tooltipToDraw = 10;
+            tooltipToDraw = 20;
         }
         ArrayList<String> tooltip = new ArrayList<>();
         switch (tooltipToDraw) {
@@ -355,7 +355,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             case 9:
                 tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TP_INCREASE_ACCESS));
                 break;
-            case 10:
+            case 20:
                 if (base.getTrustedPlayers().size() > base.trustedPlayerIndex) {
                     TrustedPlayer trustedPlayer = base.getTrustedPlayers().get(base.trustedPlayerIndex);
                     if (trustedPlayer != null) {

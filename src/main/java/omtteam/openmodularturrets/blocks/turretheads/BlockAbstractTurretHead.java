@@ -87,6 +87,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public int getMetaFromState(IBlockState state) {
         return state.getValue(CONCEALED) ? 1 : 0;
     }
@@ -98,11 +99,13 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isFullBlock(IBlockState state) {
         return false;
     }
@@ -115,6 +118,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         TurretBase base = getBase(worldIn, pos);
@@ -125,6 +129,12 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
 
     @Override
     public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
+        return false;
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public boolean causesSuffocation(IBlockState state) {
         return false;
     }
 

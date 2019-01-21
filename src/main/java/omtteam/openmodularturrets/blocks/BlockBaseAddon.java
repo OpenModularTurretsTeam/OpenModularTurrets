@@ -91,7 +91,10 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
     @Nonnull
     @ParametersAreNonnullByDefault
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        BaseAddon te = ((BaseAddon) worldIn.getTileEntity(pos));
+        BaseAddon te = null;
+        if (worldIn.getTileEntity(pos) instanceof BaseAddon) {
+            te = ((BaseAddon) worldIn.getTileEntity(pos));
+        }
         if (te != null) {
             return state.withProperty(FACING, te.getOrientation());
         } else return state.withProperty(FACING, EnumFacing.NORTH);
