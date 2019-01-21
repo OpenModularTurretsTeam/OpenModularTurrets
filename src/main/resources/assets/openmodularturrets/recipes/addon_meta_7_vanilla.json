@@ -24,5 +24,11 @@
     "D": {
       "item": "#IOBUS"
     }
-  }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "vanilla"
+    }
+  ]
 }

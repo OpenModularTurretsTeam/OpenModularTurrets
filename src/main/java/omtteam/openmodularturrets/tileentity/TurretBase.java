@@ -43,7 +43,7 @@ import omtteam.omlib.util.CamoSettings;
 import omtteam.omlib.util.EnumAccessMode;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.player.TrustedPlayer;
-import omtteam.openmodularturrets.api.IBaseController;
+import omtteam.openmodularturrets.api.network.IBaseController;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.network.messages.MessageTurretBase;

@@ -103,7 +103,6 @@ public class ClientProxy extends CommonProxy {
         for (int i = 0; i < 10; i++) {
             registerBlockModelAsItem(ModBlocks.expander, i, OMTNames.Blocks.expander, "facing=north,meta=" + i);
         }
-
         for (int i = 0; i < 1; i++) {
             registerBlockModelAsItem(ModBlocks.baseAddon, i, OMTNames.Blocks.baseAddon, "facing=north,meta=" + i);
         }

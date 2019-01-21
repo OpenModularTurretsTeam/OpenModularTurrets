@@ -21,5 +21,11 @@
       "type": "forge:ore_dict",
       "ore": "blockRedstone"
     }
-  }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:recipetype",
+      "mod": "vanilla"
+    }
+  ]
 }

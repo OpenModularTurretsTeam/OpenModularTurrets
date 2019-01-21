@@ -1,30 +1,28 @@
 {
   "result": {
-    "item": "openmodularturrets:addon_meta",
-    "data": 6
+    "item": "openmodularturrets:base_addon",
+    "data": 0
   },
   "pattern": [
-    "AAA",
-    "CBC",
-    "DED"
+    "ABA",
+    "ECE",
+    "ADA"
   ],
   "type": "forge:ore_shaped",
   "key": {
     "A": {
-      "type": "forge:ore_dict",
-      "ore": "paneGlass"
+      "item": "#INGOTOSMIUM"
     },
     "B": {
       "type": "forge:ore_dict",
-      "ore": "blockLapis"
+      "ore": "itemAlloyEnriched"
     },
     "C": {
       "type": "forge:ore_dict",
-      "ore": "dustRedstone"
+      "ore": "circuitBasic"
     },
     "D": {
-      "type": "forge:ore_dict",
-      "ore": "ingotIron"
+      "item": "#INGOTREFINEDOBSIDIAN"
     },
     "E": {
       "item": "#IOBUS"
@@ -33,7 +31,7 @@
   "conditions": [
     {
       "type": "openmodularturrets:recipetype",
-      "mod": "vanilla"
+      "mod": "mekanism"
     }
   ]
 }

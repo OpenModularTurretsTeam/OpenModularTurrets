@@ -1,18 +1,23 @@
-package omtteam.openmodularturrets.api;
+package omtteam.openmodularturrets.api.network;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import omtteam.omlib.api.network.IController;
-import org.lwjgl.util.Color;
+import omtteam.omlib.tileentity.EnumMachineMode;
+import omtteam.omlib.util.player.TrustedPlayer;
+import omtteam.openmodularturrets.util.TargetingSettings;
+
+import java.util.List;
 
 /**
  * Created by Keridos on 08/08/17.
  * This interface should be implemented by tile entities that want to control turret bases.
  * Register them with base.registerController(IBaseController instance) for them to be used.
  * Only one instance of this interface can be registered per base.
+ * Turret Bases get additional API functions like getAllTargetsInRange.
  */
 @SuppressWarnings("ALL")
-public interface ILaserController extends IController {
+public interface IBaseController extends IController {
     /**
      * Return true if the Entity given per parameter is a valid target.
      *
@@ -24,23 +29,37 @@ public interface ILaserController extends IController {
     boolean isEntityValidTarget(Entity target, float yaw, float pitch);
 
     /**
-     * Return true if the controller overrides base modes.
+     * Return true if the controller overrides base modes. As in on/off and redstone behaviour.
      *
      * @return boolean
      */
     boolean overridesMode();
 
     /**
+     * Return the overriden mode if the controller overrides base modes.
+     *
+     * @return overriding mode
+     */
+    EnumMachineMode getOverriddenMode();
+
+    /**
      * Return the BlockPos of the tile entity implementing this.
      *
      * @return BlockPos
      */
-    BlockPos getPositionOfBlock();
+    BlockPos getPosition();
 
     /**
-     * Return the Color of the laser beam
+     * Return the overridden targeting settings for the base.
      *
-     * @return Color
+     * @return TargetingSettings
      */
-    Color getColorForLaser();
+    TargetingSettings getTargetingSettings();
+
+    /**
+     * Return the overridden trusted player list for the base.
+     *
+     * @return List of TrustedPlayer
+     */
+    List<TrustedPlayer> getTrustedPlayerList();
 }

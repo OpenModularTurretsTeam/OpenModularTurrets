@@ -12,14 +12,14 @@
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "blockRedstone"
+      "ore": "itemCompressedRedstone"
     },
     "B": {
-      "item": "minecraft:ender_eye"
+      "item": "#MEKADVCIRCUIT"
     },
     "C": {
       "type": "forge:ore_dict",
-      "ore": "gemQuartz"
+      "ore": "ingotSteel"
     },
     "D": {
       "item": "#IOBUS"
@@ -28,7 +28,7 @@
   "conditions": [
     {
       "type": "openmodularturrets:recipetype",
-      "mod": "vanilla"
+      "mod": "mekanism"
     }
   ]
 }

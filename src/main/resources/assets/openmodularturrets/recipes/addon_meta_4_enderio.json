@@ -15,11 +15,12 @@
       "ore": "blockRedstone"
     },
     "B": {
-      "item": "minecraft:ender_eye"
+      "type": "forge:ore_dict",
+      "ore": "itemDarkSteel"
     },
     "C": {
       "type": "forge:ore_dict",
-      "ore": "gemQuartz"
+      "ore": "ingotEnergeticAlloy"
     },
     "D": {
       "item": "#IOBUS"
@@ -28,7 +29,7 @@
   "conditions": [
     {
       "type": "openmodularturrets:recipetype",
-      "mod": "vanilla"
+      "mod": "enderio"
     }
   ]
 }

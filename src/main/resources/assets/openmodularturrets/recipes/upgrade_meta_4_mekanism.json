@@ -1,34 +1,31 @@
 {
   "result": {
-    "item": "openmodularturrets:addon_meta",
+    "item": "openmodularturrets:upgrade_meta",
     "data": 4
   },
   "pattern": [
-    "CAC",
-    "ABD",
-    "CAC"
+    " A ",
+    "ABA",
+    " C "
   ],
   "type": "forge:ore_shaped",
   "key": {
     "A": {
       "type": "forge:ore_dict",
-      "ore": "blockRedstone"
+      "ore": "alloyUltimate"
     },
     "B": {
-      "item": "minecraft:ender_eye"
+      "type": "forge:ore_dict",
+      "ore": "circuitUltimate"
     },
     "C": {
-      "type": "forge:ore_dict",
-      "ore": "gemQuartz"
-    },
-    "D": {
       "item": "#IOBUS"
     }
   },
   "conditions": [
     {
       "type": "openmodularturrets:recipetype",
-      "mod": "vanilla"
+      "mod": "mekanism"
     }
   ]
 }
