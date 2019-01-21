@@ -96,7 +96,6 @@ public class ClientProxy extends CommonProxy {
         }
         ModelLoaderRegistry.registerLoader(new TurretBaseBakedModel.ModelLoader());
         ModelLoader.setCustomStateMapper(ModBlocks.turretBase, new TurretBaseBakedModel.Statemapper());
-        ModelLoader.setCustomStateMapper(ModBlocks.baseAddon, ignoreFacing);
 
         for (int i = 0; i < 5; i++) {
             registerBlockModelAsItem(ModBlocks.turretBase, i, OMTNames.Blocks.turretBase + "_normal", "tier=" + (i + 1));

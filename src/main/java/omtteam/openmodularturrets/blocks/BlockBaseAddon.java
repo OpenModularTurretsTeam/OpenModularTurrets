@@ -49,7 +49,7 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
         this.setResistance(3.0F);
         this.setHardness(3.0F);
         this.setSoundType(SoundType.STONE);
-        this.setDefaultState(this.blockState.getBaseState());
+        this.setDefaultState(this.blockState.getBaseState().withProperty(META, 0));
         this.setUnlocalizedName(OMTNames.Blocks.baseAddon);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.baseAddon);
     }
@@ -65,13 +65,13 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     @Nonnull
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(META, meta);
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public int getMetaFromState(IBlockState state) {
         return state.getValue(META);
     }
@@ -101,6 +101,7 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         IBlockState blockState = this.getActualState(state, source, pos);
         EnumFacing facing = blockState.getValue(FACING);
@@ -113,26 +114,31 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isFullBlock(IBlockState state) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EnumFacing side) {
+    @ParametersAreNonnullByDefault
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (hand.equals(EnumHand.OFF_HAND)) return true;
         BaseAddon baseAddon = (BaseAddon) worldIn.getTileEntity(pos);
@@ -148,6 +154,7 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         BaseAddon baseAddon = (BaseAddon) worldIn.getTileEntity(pos);
         if (baseAddon != null) {
