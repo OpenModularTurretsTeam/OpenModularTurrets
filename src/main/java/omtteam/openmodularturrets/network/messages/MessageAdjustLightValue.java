@@ -9,9 +9,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import omtteam.omlib.tileentity.ICamoSupport;
-import omtteam.omlib.tileentity.ITrustedPlayersManager;
 import omtteam.omlib.util.player.PlayerUtil;
+import omtteam.openmodularturrets.tileentity.TurretBase;
 
 @SuppressWarnings("unused")
 public class MessageAdjustLightValue implements IMessage {
@@ -71,14 +70,14 @@ public class MessageAdjustLightValue implements IMessage {
                 EntityPlayerMP player = ctx.getServerHandler().player;
                 BlockPos pos = new BlockPos(message.getX(), message.getY(), message.getZ());
                 TileEntity entity = world.getTileEntity(pos);
-                ITrustedPlayersManager machine = null;
-                if (entity instanceof ITrustedPlayersManager) {
-                    machine = (ITrustedPlayersManager) entity;
+                TurretBase machine = null;
+                if (entity instanceof TurretBase) {
+                    machine = (TurretBase) entity;
                 }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine) && machine instanceof ICamoSupport) {
-                    ((ICamoSupport) machine).getCamoSettings().setLightValue(message.value);
-                    machine.getOwnedBlock().markBlockForUpdate();
-                    ((ICamoSupport) machine).updateCamoSettingsToPlayers();
+                if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
+                    machine.getCamoSettings().setLightValue(message.value);
+                    machine.sendMessageToAllAround();
+                    machine.updateCamoSettingsToPlayers();
                 }
             });
             return null;

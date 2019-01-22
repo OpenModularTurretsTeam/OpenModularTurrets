@@ -3,7 +3,6 @@ package omtteam.openmodularturrets.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -16,7 +15,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
@@ -24,10 +22,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.IHasItemBlock;
-import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.items.blocks.ItemBlockExpander;
@@ -40,7 +36,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
-import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
 
 /**
@@ -48,8 +43,7 @@ import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
  * This Class implements the block for expanders.
  */
 @SuppressWarnings("deprecation")
-public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock {
-    public static final PropertyDirection FACING = PropertyDirection.create("facing");
+public class BlockExpander extends BlockTurretBaseAddon implements IHasItemBlock {
     private static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
 
     public BlockExpander() {
@@ -110,19 +104,6 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
         }
     }
 
-    @Override
-    @Nonnull
-    @ParametersAreNonnullByDefault
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        IBlockState blockState = this.getActualState(state, source, pos);
-        EnumFacing facing = blockState.getValue(FACING);
-        return BlockTurretBaseAddon.getBoundingBoxFromFacing(facing);
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing, World world, BlockPos pos) {
-        return BlockTurretBaseAddon.getBoundingBoxFromFacing(facing).offset(pos);
-    }
 
     @Override
     @ParametersAreNonnullByDefault
@@ -163,7 +144,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
         }
 
         if (PlayerUtil.canPlayerAccessBlock(playerIn, base) && state.getValue(META) < 5) {
-            playerIn.openGui(OpenModularTurrets.instance, 7, worldIn, pos.getX(), pos.getY(), pos.getZ());
+            playerIn.openGui(OpenModularTurrets.instance, 2, worldIn, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
 
@@ -171,7 +152,7 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
             if (playerIn.isSneaking() && playerIn.getHeldItemMainhand().isEmpty()) {
                 worldIn.destroyBlock(pos, true);
             } else if (state.getValue(META) < 5) {
-                playerIn.openGui(OpenModularTurrets.instance, 7, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                playerIn.openGui(OpenModularTurrets.instance, 2, worldIn, pos.getX(), pos.getY(), pos.getZ());
             } else {
                 return true;
             }
@@ -179,15 +160,6 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
             addChatMessage(playerIn, new TextComponentString(safeLocalize("status.ownership")));
         }
         return true;
-    }
-
-    @Override
-    @ParametersAreNonnullByDefault
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        for (TileEntity tileEntity : getTouchingTileEntities(worldIn, pos)) {
-            if (tileEntity instanceof TurretBase) return true;
-        }
-        return false;
     }
 
     @Override
@@ -218,7 +190,6 @@ public class BlockExpander extends BlockAbstractTileEntity implements IHasItemBl
 
     @Override
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         for (int i = 0; i < 10; i++) {

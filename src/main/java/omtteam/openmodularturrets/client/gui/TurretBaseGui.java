@@ -5,25 +5,30 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import omtteam.omlib.client.gui.BlockingAbstractGuiContainer;
 import omtteam.omlib.client.gui.IHasTooltips;
+import omtteam.omlib.network.OMLibNetworkingHandler;
+import omtteam.omlib.network.messages.MessageCloseGUI;
+import omtteam.omlib.network.messages.MessageOpenGUI;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.DebugHandler;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.omlib.util.player.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.openmodularturrets.client.gui.containers.TurretBaseContainer;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.network.messages.*;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -31,21 +36,24 @@ import java.util.List;
 import java.util.Random;
 
 import static omtteam.omlib.util.GeneralUtil.*;
+import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
 
 /**
  * Created by nico on 6/4/15.
  * Abstract class for all turret base GUIs.
  */
 
-class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHasTooltips {
-    final TurretBase base;
+public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasTooltips {
+    private final TurretBase base;
     private final EntityPlayer player;
     private int mouseX;
     private int mouseY;
+    private int accessLevel = 0;
+    private boolean addedToSyncList;
 
-    TurretBaseAbstractGui(InventoryPlayer inventoryPlayer, TurretBase tileEntity, Container container) {
-        super(container);
-        this.base = tileEntity;
+    public TurretBaseGui(InventoryPlayer inventoryPlayer, TurretBase turretBase) {
+        super(new TurretBaseContainer(inventoryPlayer, turretBase));
+        this.base = turretBase;
         player = inventoryPlayer.player;
         DebugHandler.getInstance().setPlayer(player);
     }
@@ -79,8 +87,8 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
     protected void buttonInit() {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
-
-        if (PlayerUtil.isTrustedPlayerAdmin(player, base)) {
+        this.buttonList.clear();
+        if (PlayerUtil.isPlayerAdmin(player, base)) {
             this.buttonList.add(new GuiButton(3, x + 180, y + 100, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_TURRETS)));
             this.buttonList.add(new GuiButton(4, x + 180, y + 75, 80, 20, safeLocalize(OMTNames.Localizations.GUI.DROP_BASE)));
             this.buttonList.add(new GuiButton(5, x + 180, y + 25, 80, 20, safeLocalize(OMTNames.Localizations.GUI.CONFIGURE)));
@@ -92,8 +100,8 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
             this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "+"));
             this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "-"));
         } else if (PlayerUtil.canPlayerChangeSetting(player, base)) {
-            this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, safeLocalize(OMTNames.Localizations.GUI.CONFIGURE)));
-            this.buttonList.add(new GuiButton(6, x + 180, y + 75, 80, 20,
+            this.buttonList.add(new GuiButton(5, x + 180, y + 25, 80, 20, safeLocalize(OMTNames.Localizations.GUI.CONFIGURE)));
+            this.buttonList.add(new GuiButton(6, x + 180, y + 50, 80, 20,
                                               base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": "
                                                       + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET)
                                                       + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE)));
@@ -103,16 +111,32 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void initGui() {
-        super.initGui();
         buttonInit();
+        if (!addedToSyncList) {
+            OMLibNetworkingHandler.INSTANCE.sendToServer(new MessageOpenGUI(base));
+            addedToSyncList = true;
+        }
+        accessLevel = PlayerUtil.getPlayerAccess(player, base).ordinal();
+        if (accessLevel == 0) {
+            player.closeScreen();
+        }
+        super.initGui();
     }
 
     @Override
     public void drawScreen(int par1, int par2, float par3) {
         this.mouseX = par1;
         this.mouseY = par2;
+
+        if (accessLevel != PlayerUtil.getPlayerAccess(player, base).ordinal()) {
+            accessLevel = PlayerUtil.getPlayerAccess(player, base).ordinal();
+            if (accessLevel != 0) {
+                initGui();
+            }
+        } else if (!isPlayerOwner(player, base) && accessLevel == 0) {
+            player.closeScreen();
+        }
         super.drawScreen(par1, par2, par3);
     }
 
@@ -137,7 +161,7 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
         }
 
         if (guibutton.id == 5) {
-            player.openGui(OpenModularTurrets.instance, 6, player.getEntityWorld(), base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
+            player.openGui(OpenModularTurrets.instance, 20, player.getEntityWorld(), base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
         }
 
         if (guibutton.id == 6) {
@@ -155,12 +179,29 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
+    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        switch (base.getTier()) {
+            case 1:
+                this.mc.renderEngine.bindTexture(new ResourceLocation(OMTNames.Textures.turretBaseTierOneGUI));
+                break;
+            case 2:
+                this.mc.renderEngine.bindTexture(new ResourceLocation(OMTNames.Textures.turretBaseTierTwoGUI));
+                break;
+            case 3:
+                this.mc.renderEngine.bindTexture(new ResourceLocation(OMTNames.Textures.turretBaseTierThreeGUI));
+                break;
+            case 4:
+                this.mc.renderEngine.bindTexture(new ResourceLocation(OMTNames.Textures.turretBaseTierFourGUI));
+                break;
+            case 5:
+                this.mc.renderEngine.bindTexture(new ResourceLocation(OMTNames.Textures.turretBaseTierFiveGUI));
+        }
+        this.drawEnergyBar();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    protected void drawGuiContainerForegroundLayer(int param1, int param2) {
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 
         fontRenderer.drawString(base.getTier() > 1 ? safeLocalize(OMTNames.Localizations.GUI.ADDONS) : "", 71, 6, 0);
@@ -172,7 +213,7 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
                 127 : 124, 39, base.getCurrentMaxRange() == getBaseUpperBoundRange() ? 16724530 : 40000);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.RANGE), 116, 6, 0);
 
-        ArrayList targetInfo = new ArrayList();
+        ArrayList<String> targetInfo = new ArrayList<>();
 
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7f" + base.getOwnerName());
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7f" + getMachineModeLocalization(base.getMode()));
@@ -281,10 +322,10 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
     public ArrayList<Rectangle> getBlockingAreas() {
         ArrayList<Rectangle> list = new ArrayList<>();
         Rectangle rectangleGUI = new Rectangle(0, 0, 0, 0);
-        if (PlayerUtil.isTrustedPlayerAdmin(player, base)) {
+        if (PlayerUtil.isPlayerAdmin(player, base)) {
             rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 120);
         } else if (PlayerUtil.canPlayerChangeSetting(player, base)) {
-            rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2 + 50, 80, 20);
+            rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2 + 30, 80, 40);
         }
         list.add(rectangleGUI);
         return list;
@@ -299,5 +340,11 @@ class TurretBaseAbstractGui extends BlockingAbstractGuiContainer implements IHas
             }
         }
         return maxRange;
+    }
+
+    @Override
+    public void onGuiClosed() {
+        OMLibNetworkingHandler.INSTANCE.sendToServer(new MessageCloseGUI(base));
+        super.onGuiClosed();
     }
 }

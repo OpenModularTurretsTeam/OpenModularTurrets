@@ -65,8 +65,9 @@ public class MessageSetBaseTargetingType implements IMessage {
                 if (entity instanceof TurretBase) {
                     machine = (TurretBase) entity;
                 }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
+                if (machine != null && PlayerUtil.canPlayerChangeSetting(player, machine)) {
                     machine.setMultiTargeting(!machine.isMultiTargeting());
+                    machine.sendMessageToAllAround();
                 }
             });
             return null;

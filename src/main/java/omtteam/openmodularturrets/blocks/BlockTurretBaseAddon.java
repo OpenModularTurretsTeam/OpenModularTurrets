@@ -2,17 +2,20 @@ package omtteam.openmodularturrets.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.omlib.util.MathUtil;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.util.WorldUtil.getTouchingBlockStates;
@@ -24,6 +27,8 @@ import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
  */
 @SuppressWarnings("unused")
 public abstract class BlockTurretBaseAddon extends BlockAbstractTileEntity implements ITurretBaseAddonBlock {
+    public static final PropertyDirection FACING = PropertyDirection.create("facing");
+
     public BlockTurretBaseAddon(Material material) {
         super(material);
     }
@@ -38,6 +43,20 @@ public abstract class BlockTurretBaseAddon extends BlockAbstractTileEntity imple
     }
 
     @Override
+    public AxisAlignedBB getBoundingBoxFromFacing(EnumFacing facing, World world, BlockPos pos) {
+        return getBoundingBoxFromFacing(facing).offset(pos);
+    }
+
+    @Override
+    @Nonnull
+    @ParametersAreNonnullByDefault
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        IBlockState blockState = this.getActualState(state, source, pos);
+        EnumFacing facing = blockState.getValue(FACING);
+        return getBoundingBoxFromFacing(facing);
+    }
+
+    @Override
     @ParametersAreNonnullByDefault
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         for (TileEntity tileEntity : getTouchingTileEntities(worldIn, pos)) {
@@ -47,6 +66,7 @@ public abstract class BlockTurretBaseAddon extends BlockAbstractTileEntity imple
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         boolean found = false;
         for (IBlockState blockState : getTouchingBlockStates(worldIn, pos)) {

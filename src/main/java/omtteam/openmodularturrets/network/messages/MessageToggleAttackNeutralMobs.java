@@ -75,8 +75,9 @@ public class MessageToggleAttackNeutralMobs implements IMessage {
                 if (entity instanceof TurretBase) {
                     machine = (TurretBase) entity;
                 }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
+                if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
                     machine.setAttacksNeutrals(message.doAttackNeutrals());
+                    machine.sendMessageToAllAround();
                 }
             });
             return null;

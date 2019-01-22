@@ -69,8 +69,9 @@ public class MessageToggleMode implements IMessage {
                 if (entity instanceof TurretBase) {
                     machine = (TurretBase) entity;
                 }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
+                if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
                     machine.toggleMode();
+                    machine.sendMessageToAllAround();
                 }
             });
             return null;

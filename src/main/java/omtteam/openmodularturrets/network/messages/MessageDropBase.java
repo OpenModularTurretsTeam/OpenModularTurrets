@@ -69,7 +69,7 @@ public class MessageDropBase implements IMessage {
                 if (entity instanceof ITrustedPlayersManager) {
                     machine = (ITrustedPlayersManager) entity;
                 }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
+                if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
                     world.destroyBlock(new BlockPos(message.getX(), message.getY(), message.getZ()), true);
                 }
             });

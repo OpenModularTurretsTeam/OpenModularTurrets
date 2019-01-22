@@ -83,7 +83,7 @@ public class MessageModifyPermissions implements IMessage {
                 if (entity instanceof TurretBase) {
                     machine = (TurretBase) entity;
                 }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
+                if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
                     TrustedPlayer trustedPlayer = machine.getTrustedPlayer(message.getPlayer());
                     if (trustedPlayer != null) {
                         int newMode = trustedPlayer.getAccessMode().ordinal() + message.getChange();
@@ -91,6 +91,7 @@ public class MessageModifyPermissions implements IMessage {
                             trustedPlayer.setAccessMode(EnumAccessMode.values()[newMode]);
                         }
                     }
+                    machine.sendMessageToAllAround();
                 }
             });
             return null;

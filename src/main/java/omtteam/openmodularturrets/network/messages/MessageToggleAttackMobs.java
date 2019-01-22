@@ -76,8 +76,9 @@ public class MessageToggleAttackMobs implements IMessage {
                 if (entity instanceof TurretBase) {
                     machine = (TurretBase) entity;
                 }
-                if (machine != null && PlayerUtil.isTrustedPlayerAdmin(player, machine)) {
+                if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
                     machine.setAttacksMobs(message.doAttackMobs());
+                    machine.sendMessageToAllAround();
                 }
             });
             return null;

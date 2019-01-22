@@ -2,6 +2,7 @@ package omtteam.openmodularturrets.client.gui.containers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
@@ -26,15 +27,43 @@ import static omtteam.omlib.util.InvUtil.mergeItemStackWithStackLimit;
  * Created by Keridos on 09/12/2015.
  * This Class
  */
-public abstract class TurretBaseContainer extends Container {
-    TurretBase tileEntity;
+public class TurretBaseContainer extends Container {
+    TurretBase base;
+
+    public TurretBaseContainer(InventoryPlayer inventoryPlayer, TurretBase turretBase) {
+        this.base = turretBase;
+
+        for (int x = 0; x < 9; x++) {
+            this.addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 142));
+        }
+
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 9; x++) {
+                this.addSlotToContainer(new Slot(inventoryPlayer, 9 + x + y * 9, 8 + x * 18, 84 + y * 18));
+            }
+        }
+
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                addSlotToContainer(new AmmoSlot(base.getInventory(), x + y * 3, 8 + x * 18, 17 + y * 18));
+            }
+        }
+        if (base.getTier() > 1) {
+            addSlotToContainer(new AddonSlot(base.getInventory(), 9, 72, 18));
+            addSlotToContainer(new AddonSlot(base.getInventory(), 10, 92, 18));
+            addSlotToContainer(new UpgradeSlot(base.getInventory(), 11, 72, 52));
+        }
+        if (base.getTier() > 4) {
+            addSlotToContainer(new UpgradeSlot(base.getInventory(), 12, 92, 52));
+        }
+    }
 
     @Override
     @ParametersAreNonnullByDefault
     public boolean canInteractWith(EntityPlayer player) {
-        return player.getDistanceSq(this.tileEntity.getPos().getX() + 0.5,
-                                    this.tileEntity.getPos().getY() + 0.5,
-                                    this.tileEntity.getPos().getZ() + 0.5) < 64;
+        return player.getDistanceSq(this.base.getPos().getX() + 0.5,
+                                    this.base.getPos().getY() + 0.5,
+                                    this.base.getPos().getZ() + 0.5) < 64;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -114,7 +143,7 @@ public abstract class TurretBaseContainer extends Container {
         DebugHandler.getInstance().setListeners(this.listeners);
         for (IContainerListener listener : this.listeners) {
             if (listener instanceof EntityPlayerMP) {
-                OMTNetworkingHandler.INSTANCE.sendTo(new MessageTurretBase(this.tileEntity), (EntityPlayerMP) listener);
+                OMTNetworkingHandler.INSTANCE.sendTo(new MessageTurretBase(this.base), (EntityPlayerMP) listener);
             }
         }
     }

@@ -41,6 +41,7 @@ import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.tileentity.TileEntityTrustedMachine;
 import omtteam.omlib.util.CamoSettings;
 import omtteam.omlib.util.EnumAccessMode;
+import omtteam.omlib.util.NetworkUtil;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.player.TrustedPlayer;
 import omtteam.openmodularturrets.api.network.IBaseController;
@@ -325,6 +326,11 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Override
     public TileEntity getTE() {
         return this;
+    }
+
+    @Override
+    public void sendMessageToAllAround() {
+        OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageTurretBase(this), NetworkUtil.getTargetPointFromTE(this, 120));
     }
 
     private void updateControllerSettings() {
