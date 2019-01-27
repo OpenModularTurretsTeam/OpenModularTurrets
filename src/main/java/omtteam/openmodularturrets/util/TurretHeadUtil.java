@@ -402,7 +402,7 @@ public class TurretHeadUtil {
         int result = 0;
         ItemStack ammoStackRequired = turret.getAmmo();
         if (ammoStackRequired == null) {
-            return base.getEnergyLevel(EnumFacing.DOWN) / turret.getTurretPowerUsage();
+            return base.getEnergyLevel(EnumFacing.DOWN) / turret.getTurretBasePowerUsage();
         }
         for (int i = 0; i <= 8; i++) {
             ItemStack ammoStack = base.getInventory().getStackInSlot(i);

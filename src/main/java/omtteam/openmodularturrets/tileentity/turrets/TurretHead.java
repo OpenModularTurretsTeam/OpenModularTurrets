@@ -32,7 +32,6 @@ import java.util.Random;
 import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
-@SuppressWarnings("unused")
 public abstract class TurretHead extends TileEntityBase implements ITickable, ITurretBaseAddonTileEntity {
     public float pitch;
     public float yaw;
@@ -177,21 +176,19 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
     Entity getTargetWithMinRange() {
         return TurretHeadUtil.getTargetWithMinimumRange(base, this.getWorld(), this.pos,
-                                                        Math.min(getTurretRange() + TurretHeadUtil.getRangeUpgrades(base, this), base.getCurrentMaxRange()), this);
+                                                        Math.min(getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(base, this), base.getCurrentMaxRange()), this);
     }
 
     Entity getTargetWithoutEffect() {
         return TurretHeadUtil.getTargetWithoutSlowEffect(base, this.getWorld(), this.pos,
-                                                         Math.min(getTurretRange() + TurretHeadUtil.getRangeUpgrades(base, this), base.getCurrentMaxRange()),
+                                                         Math.min(getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(base, this), base.getCurrentMaxRange()),
                                                          this);
     }
 
     private Entity getTarget() {
         return TurretHeadUtil.getTarget(base, this.getWorld(), this.pos,
-                                        Math.min(getTurretRange() + TurretHeadUtil.getRangeUpgrades(base, this), base.getCurrentMaxRange()), this);
+                                        Math.min(getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(base, this), base.getCurrentMaxRange()), this);
     }
-
-    public abstract int getTurretRange();
 
     TurretBase getBaseFromWorld() {
         return TurretHeadUtil.getTurretBase(this.getWorld(), this.pos);
@@ -257,13 +254,31 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         this.autoFire = autoFire;
     }
 
-    public abstract int getTurretPowerUsage();
+    public int getTurretBasePowerUsage() {
+        return this.getTurretType().getSettings().getPowerUsage();
+    }
 
-    public abstract int getTurretFireRate();
+    public int getTurretBaseFireRate() {
+        return this.getTurretType().getSettings().getBaseFireRate();
+    }
 
-    public abstract double getTurretAccuracy();
+    public double getBaseTurretAccuracy() {
+        return this.getTurretType().getSettings().getBaseAccuracyDeviation();
+    }
 
-    public abstract double getTurretDamageAmpBonus();
+    public int getTurretBaseRange() {
+        return this.getTurretType().getSettings().getBaseRange();
+    }
+
+    public double getTurretDamageAmpBonus() {
+        return this.getTurretType().getSettings().getDamageAmp();
+    }
+
+    public double getActualTurretAccuracy() {
+        return 100F - (100F - this.getBaseTurretAccuracy())
+                * (1.0F + TurretHeadUtil.getAccuraccyUpgrades(this.getBase(), this))
+                * (1.0F - (TurretHeadUtil.getScattershotUpgrades(this.getBase())) / 25F);
+    }
 
     protected abstract boolean requiresAmmo();
 
@@ -274,8 +289,10 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         return block.getTurretType();
     }
 
+    @Nullable
     public abstract ItemStack getAmmo();
 
+    @Nonnull
     protected abstract SoundEvent getLaunchSoundEffect();
 
     boolean chebyshevDistance(Entity target) {
@@ -295,7 +312,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     }
 
     protected int getPowerRequiredForNextShot() {
-        return Math.round(this.getTurretPowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(
+        return Math.round(this.getTurretBasePowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(
                 base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
     }
 
@@ -394,7 +411,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
         //Warn players
         if (base.isAttacksPlayers() && OMTConfig.TURRETS.globalCanTargetPlayers) {
-            TurretHeadUtil.warnPlayers(base, base.getWorld(), this.pos, getTurretRange());
+            TurretHeadUtil.warnPlayers(base, base.getWorld(), this.pos, getTurretBaseRange());
         }
 
         // Update target tracking (Player entity not setting motion data when moving via movement keys)
@@ -425,7 +442,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
         if (target != null || this.autoFire) {
             // has cooldown passed?
-            if (this.ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
+            if (this.ticks < (this.getTurretBaseFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
                 return;
             }
 

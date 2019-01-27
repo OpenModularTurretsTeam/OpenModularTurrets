@@ -11,7 +11,6 @@ import omtteam.omlib.api.render.ColorOM;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.render.MessageRenderRay;
 import omtteam.omlib.util.EntityUtil;
-import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 
 public class LaserTurretTileEntity extends RayTracingTurret {
@@ -19,31 +18,6 @@ public class LaserTurretTileEntity extends RayTracingTurret {
 
     public LaserTurretTileEntity() {
         super(5);
-    }
-
-    @Override
-    public int getTurretRange() {
-        return OMTConfig.TURRETS.laser_turret.getBaseRange();
-    }
-
-    @Override
-    public int getTurretPowerUsage() {
-        return OMTConfig.TURRETS.laser_turret.getPowerUsage();
-    }
-
-    @Override
-    public int getTurretFireRate() {
-        return OMTConfig.TURRETS.laser_turret.getBaseFireRate();
-    }
-
-    @Override
-    public double getTurretAccuracy() {
-        return OMTConfig.TURRETS.laser_turret.getBaseAccuracyDeviation();
-    }
-
-    @Override
-    public double getTurretDamageAmpBonus() {
-        return OMTConfig.TURRETS.laser_turret.getDamageAmp();
     }
 
     @Override
@@ -68,7 +42,7 @@ public class LaserTurretTileEntity extends RayTracingTurret {
 
     @Override
     protected void doTargetedShot(Entity target, ItemStack ammo) {
-        shootRay(target.posX, target.posY + target.getEyeHeight(), target.posZ, getTurretAccuracy());
+        shootRay(target.posX, target.posY + target.getEyeHeight(), target.posZ, getBaseTurretAccuracy());
     }
 
     @Override

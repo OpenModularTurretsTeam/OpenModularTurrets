@@ -6,7 +6,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.entity.projectiles.DisposableTurretProjectile;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 
 public class DisposableItemTurretTileEntity extends ProjectileTurret {
@@ -17,31 +16,6 @@ public class DisposableItemTurretTileEntity extends ProjectileTurret {
     @Override
     protected float getProjectileGravity() {
         return 0.03F;
-    }
-
-    @Override
-    public int getTurretRange() {
-        return OMTConfig.TURRETS.disposable_turret.getBaseRange();
-    }
-
-    @Override
-    public int getTurretPowerUsage() {
-        return OMTConfig.TURRETS.disposable_turret.getPowerUsage();
-    }
-
-    @Override
-    public int getTurretFireRate() {
-        return OMTConfig.TURRETS.disposable_turret.getBaseFireRate();
-    }
-
-    @Override
-    public double getTurretAccuracy() {
-        return OMTConfig.TURRETS.disposable_turret.getBaseAccuracyDeviation();
-    }
-
-    @Override
-    public double getTurretDamageAmpBonus() {
-        return OMTConfig.TURRETS.disposable_turret.getDamageAmp();
     }
 
     @Override

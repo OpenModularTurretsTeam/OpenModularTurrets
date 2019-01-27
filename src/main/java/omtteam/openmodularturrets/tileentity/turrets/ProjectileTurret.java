@@ -42,7 +42,8 @@ public abstract class ProjectileTurret extends TurretHead {
         double d1 = target.posY + (double) target.height * 0.5F - (this.pos.getY() + 0.5);
         double d2 = target.posZ - (this.pos.getZ() + 0.5);
         double dist = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-        double inaccuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
+        double inaccuracy = (this.getBaseTurretAccuracy() / 10) * (1 - TurretHeadUtil.getAccuraccyUpgrades(base, this))
+                * (1 + TurretHeadUtil.getScattershotUpgrades(base));
 
         // Adjust new firing coordinate according to target speed
         double time = dist / (this.getProjectileGravity() == 0.00F ? 3.0 : 1.6);
@@ -73,7 +74,7 @@ public abstract class ProjectileTurret extends TurretHead {
         double adjustedY = velocity.y;
         double adjustedZ = velocity.z;
         float speedFactor = (float) velocity.lengthVector();
-        double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
+        double accuracy = this.getBaseTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
 
         // Now that we have a trajectory, throw something at it
         shootProjectile(adjustedX, adjustedY, adjustedZ, speedFactor, (float) accuracy, ammo);
@@ -85,7 +86,7 @@ public abstract class ProjectileTurret extends TurretHead {
     @Override
     public boolean forceShot() {
         if (this instanceof RocketTurretTileEntity && OMTConfig.TURRETS.canRocketsHome) return false;
-        if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
+        if (ticks < (this.getTurretBaseFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
             return false;
         }
         //Finally, try to shoot if criteria is met.
@@ -99,8 +100,7 @@ public abstract class ProjectileTurret extends TurretHead {
         base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot());
 
         for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-            double accuracy = this.getTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(
-                    base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
+            double accuracy = this.getActualTurretAccuracy() / 20D;
             TurretProjectile projectile = this.createProjectile(this.getWorld(), target, ammo);
             projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
             if (projectile.gravity == 0.00F) {

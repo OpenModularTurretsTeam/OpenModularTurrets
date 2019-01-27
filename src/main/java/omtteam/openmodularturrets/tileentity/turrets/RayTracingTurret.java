@@ -49,7 +49,7 @@ public abstract class RayTracingTurret extends TurretHead {
 
     @Override
     protected void doTargetedShot(Entity target, ItemStack ammo) {
-        shootRay(target.posX, target.posY + target.getEyeHeight(), target.posZ, this.getTurretAccuracy());
+        shootRay(target.posX, target.posY + target.getEyeHeight(), target.posZ, this.getActualTurretAccuracy());
     }
 
     @Override
@@ -64,7 +64,7 @@ public abstract class RayTracingTurret extends TurretHead {
                                      this.getPos().getY() + 0.6D,
                                      this.getPos().getZ() + 0.5D);
         Vec3d result = baseVector.add(direction);
-        shootRay(result.x, result.y, result.z, this.getTurretAccuracy());
+        shootRay(result.x, result.y, result.z, this.getActualTurretAccuracy());
         return true;
     }
 
@@ -84,7 +84,7 @@ public abstract class RayTracingTurret extends TurretHead {
                                          this.getPos().getZ() + 0.5D);
             // Calculate deviation based on targets height and its distance to the turret
             double deviationModifier = 1D * (target.height < 0.5 ? 1.5D : 1D)
-                    * ((vector.distanceTo(baseVector) * 0.5D / (this.getTurretRange() + TurretHeadUtil.getRangeUpgrades(base, this))) + 0.3D);
+                    * ((vector.distanceTo(baseVector) * 0.5D / (this.getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(base, this))) + 0.3D);
 
             xDev = RandomUtil.random.nextGaussian() * 0.035D * accuracy * deviationModifier;
             yDev = RandomUtil.random.nextGaussian() * 0.035D * accuracy * deviationModifier;

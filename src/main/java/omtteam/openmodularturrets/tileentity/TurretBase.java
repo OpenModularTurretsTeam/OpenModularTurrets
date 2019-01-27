@@ -211,9 +211,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Override
     @Nonnull
     public IBlockState getDefaultCamoState() {
-        //noinspection ConstantConditions
         Block base = ForgeRegistries.BLOCKS.getValue(
                 new ResourceLocation(Reference.MOD_ID + ":" + OMTNames.Blocks.turretBase));
+        //noinspection ConstantConditions
         return base.getStateFromMeta(this.tier - 1);
     }
 
@@ -462,7 +462,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         List<TileEntity> tileEntities = WorldUtil.getTouchingTileEntities(getWorld(), getPos());
         for (TileEntity te : tileEntities) {
             if (te instanceof TurretHead) {
-                maxRange = Math.max(((TurretHead) te).getTurretRange() + TurretHeadUtil.getRangeUpgrades(this, (TurretHead) te), maxRange);
+                maxRange = Math.max(((TurretHead) te).getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(this, (TurretHead) te), maxRange);
             }
         }
         this.upperBoundMaxRange = maxRange;

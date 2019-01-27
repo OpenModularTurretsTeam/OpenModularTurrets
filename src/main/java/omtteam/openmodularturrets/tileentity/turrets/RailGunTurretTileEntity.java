@@ -24,31 +24,6 @@ public class RailGunTurretTileEntity extends RayTracingTurret {
     }
 
     @Override
-    public int getTurretRange() {
-        return OMTConfig.TURRETS.railgun_turret.getBaseRange();
-    }
-
-    @Override
-    public int getTurretPowerUsage() {
-        return OMTConfig.TURRETS.railgun_turret.getPowerUsage();
-    }
-
-    @Override
-    public int getTurretFireRate() {
-        return OMTConfig.TURRETS.railgun_turret.getBaseFireRate();
-    }
-
-    @Override
-    public double getTurretAccuracy() {
-        return OMTConfig.TURRETS.railgun_turret.getBaseAccuracyDeviation();
-    }
-
-    @Override
-    public double getTurretDamageAmpBonus() {
-        return OMTConfig.TURRETS.railgun_turret.getDamageAmp();
-    }
-
-    @Override
     public boolean requiresAmmo() {
         return true;
     }

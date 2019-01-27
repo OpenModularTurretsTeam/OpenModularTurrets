@@ -51,7 +51,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
             }
             targetingTicks = 0;
 
-            int power_required = Math.round(this.getTurretPowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(
+            int power_required = Math.round(this.getTurretBasePowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(
                     base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
 
             // power check
@@ -74,7 +74,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
             this.pitch = TurretHeadUtil.getAimPitch(target, this.pos);
 
             // has cooldown passed?
-            if (ticks < (this.getTurretFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
+            if (ticks < (this.getTurretBaseFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
                 return;
             }
 
@@ -110,31 +110,6 @@ public class RelativisticTurretTileEntity extends TurretHead {
 
         this.getWorld().playSound(null, this.getPos(), this.getLaunchSoundEffect(), SoundCategory.BLOCKS, 0.6F, 1.0F);
         ticks = 0;
-    }
-
-    @Override
-    public int getTurretRange() {
-        return OMTConfig.TURRETS.relativistic_turret.getBaseRange();
-    }
-
-    @Override
-    public int getTurretPowerUsage() {
-        return OMTConfig.TURRETS.relativistic_turret.getPowerUsage();
-    }
-
-    @Override
-    public int getTurretFireRate() {
-        return OMTConfig.TURRETS.relativistic_turret.getBaseFireRate();
-    }
-
-    @Override
-    public double getTurretAccuracy() {
-        return OMTConfig.TURRETS.relativistic_turret.getBaseAccuracyDeviation();
-    }
-
-    @Override
-    public double getTurretDamageAmpBonus() {
-        return OMTConfig.TURRETS.relativistic_turret.getDamageAmp();
     }
 
     @Override
