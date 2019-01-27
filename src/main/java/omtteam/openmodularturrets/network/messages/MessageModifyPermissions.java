@@ -91,7 +91,7 @@ public class MessageModifyPermissions implements IMessage {
                             trustedPlayer.setAccessMode(EnumAccessMode.values()[newMode]);
                         }
                     }
-                    machine.sendMessageToAllAround();
+                    machine.sendMessageToAllTracking();
                 }
             });
             return null;

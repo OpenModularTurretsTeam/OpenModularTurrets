@@ -77,7 +77,7 @@ public class MessageToggleAttackPlayers implements IMessage {
                 }
                 if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
                     machine.setAttacksPlayers(message.doAttackPlayers());
-                    machine.sendMessageToAllAround();
+                    machine.sendMessageToAllTracking();
                 }
             });
             return null;

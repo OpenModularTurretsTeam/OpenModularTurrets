@@ -33,14 +33,12 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
-
 /**
  * Created by Keridos on 25/11/17.
  * This Class
  */
 public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBlock {
-    public static final PropertyInteger META = PropertyInteger.create("meta", 0, 1);
+    public static final PropertyInteger BASE_ADDON_META = PropertyInteger.create("meta", 0, 1);
 
     public BlockBaseAddon() {
         super(Material.GLASS);
@@ -51,7 +49,7 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
         this.setResistance(3.0F);
         this.setHardness(3.0F);
         this.setSoundType(SoundType.STONE);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(META, 0));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(BASE_ADDON_META, 0));
         this.setUnlocalizedName(OMTNames.Blocks.baseAddon);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.baseAddon);
     }
@@ -64,19 +62,19 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
     @Override
     @Nonnull
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(META, meta);
+        return this.getDefaultState().withProperty(BASE_ADDON_META, meta);
     }
 
     @Override
     @ParametersAreNonnullByDefault
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(META);
+        return state.getValue(BASE_ADDON_META);
     }
 
     @Override
     @Nonnull
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, META, FACING);
+        return new BlockStateContainer(this, BASE_ADDON_META, FACING);
     }
 
     @Override
@@ -151,17 +149,8 @@ public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBloc
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        for (TileEntity tileEntity : getTouchingTileEntities(worldIn, pos)) {
-            if (tileEntity instanceof TurretBase) return true;
-        }
-        return false;
-    }
-
-    @Override
-    @ParametersAreNonnullByDefault
     public int damageDropped(IBlockState state) {
-        return state.getValue(META);
+        return state.getValue(BASE_ADDON_META);
     }
 
     @Override

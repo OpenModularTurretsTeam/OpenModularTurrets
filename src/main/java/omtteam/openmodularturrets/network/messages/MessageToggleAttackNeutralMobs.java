@@ -77,7 +77,7 @@ public class MessageToggleAttackNeutralMobs implements IMessage {
                 }
                 if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
                     machine.setAttacksNeutrals(message.doAttackNeutrals());
-                    machine.sendMessageToAllAround();
+                    machine.sendMessageToAllTracking();
                 }
             });
             return null;

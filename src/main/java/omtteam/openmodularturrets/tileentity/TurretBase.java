@@ -244,8 +244,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         }
         this.camoBlockStateTemp = state;
         if (!world.isRemote) {
-            OMLibNetworkingHandler.INSTANCE.sendToAllAround(new MessageCamoSettings(this),
-                                                            new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
+            OMLibNetworkingHandler.INSTANCE.sendToAllTracking(new MessageCamoSettings(this),
+                                                              new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 80));
             this.markBlockForUpdate();
         }
     }
@@ -329,8 +329,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     @Override
-    public void sendMessageToAllAround() {
-        OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageTurretBase(this), NetworkUtil.getTargetPointFromTE(this, 120));
+    public void sendMessageToAllTracking() {
+        OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageTurretBase(this), NetworkUtil.getTargetPointFromTE(this, 20));
     }
 
     private void updateControllerSettings() {

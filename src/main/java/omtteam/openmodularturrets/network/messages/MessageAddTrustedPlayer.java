@@ -77,7 +77,7 @@ public class MessageAddTrustedPlayer implements IMessage {
                 }
                 if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
                     machine.addTrustedPlayer(message.getPlayer());
-                    machine.sendMessageToAllAround();
+                    machine.sendMessageToAllTracking();
                 }
             });
             return null;

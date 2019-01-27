@@ -212,8 +212,8 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                 camoState = heldBlock.getStateForPlacement(world, pos, side.getOpposite(), hitX, hitY, hitZ, heldItem.getMetadata(), player, hand);
             }
             // Camo set
-            if (!player.isSneaking() && OMTConfig.BASES.allowBaseCamo && heldItem != ItemStack.EMPTY && heldItem.getItem() instanceof ItemBlock &&
-                    heldBlock.isFullCube(camoState)
+            if (!player.isSneaking() && OMTConfig.BASES.allowBaseCamo && heldItem != ItemStack.EMPTY && heldItem.getItem() instanceof ItemBlock
+                    && heldBlock.isNormalCube(camoState, world, pos)
                     && !heldBlock.hasTileEntity(camoState)
                     && !(heldBlock instanceof BlockTurretBase)) {
                 if (base != null) {

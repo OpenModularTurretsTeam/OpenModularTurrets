@@ -44,7 +44,7 @@ import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
  */
 @SuppressWarnings("deprecation")
 public class BlockExpander extends BlockTurretBaseAddon implements IHasItemBlock {
-    private static final PropertyInteger META = PropertyInteger.create("meta", 0, 9);
+    private static final PropertyInteger EXPANDER_META = PropertyInteger.create("meta", 0, 9);
 
     public BlockExpander() {
         super(Material.GLASS);
@@ -55,7 +55,7 @@ public class BlockExpander extends BlockTurretBaseAddon implements IHasItemBlock
         this.setResistance(3.0F);
         this.setHardness(3.0F);
         this.setSoundType(SoundType.STONE);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(META, 0));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(EXPANDER_META, 0));
         this.setUnlocalizedName(OMTNames.Blocks.expander);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.expander);
     }
@@ -68,19 +68,19 @@ public class BlockExpander extends BlockTurretBaseAddon implements IHasItemBlock
     @Override
     @Nonnull
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(META, meta);
+        return this.getDefaultState().withProperty(EXPANDER_META, meta);
     }
 
     @Override
     @ParametersAreNonnullByDefault
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(META);
+        return state.getValue(EXPANDER_META);
     }
 
     @Override
     @Nonnull
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, META, FACING);
+        return new BlockStateContainer(this, EXPANDER_META, FACING);
     }
 
     @Override
@@ -97,10 +97,10 @@ public class BlockExpander extends BlockTurretBaseAddon implements IHasItemBlock
     @Nonnull
     @ParametersAreNonnullByDefault
     public TileEntity createTileEntity(World world, IBlockState state) {
-        if (state.getValue(META) < 5) {
-            return new Expander(state.getValue(META), false);
+        if (state.getValue(EXPANDER_META) < 5) {
+            return new Expander(state.getValue(EXPANDER_META), false);
         } else {
-            return new Expander(state.getValue(META), true);
+            return new Expander(state.getValue(EXPANDER_META), true);
         }
     }
 
@@ -143,7 +143,7 @@ public class BlockExpander extends BlockTurretBaseAddon implements IHasItemBlock
             return true;
         }
 
-        if (PlayerUtil.canPlayerAccessBlock(playerIn, base) && state.getValue(META) < 5) {
+        if (PlayerUtil.canPlayerAccessBlock(playerIn, base) && state.getValue(EXPANDER_META) < 5) {
             playerIn.openGui(OpenModularTurrets.instance, 2, worldIn, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
@@ -151,7 +151,7 @@ public class BlockExpander extends BlockTurretBaseAddon implements IHasItemBlock
         if (PlayerUtil.isPlayerOwner(playerIn, base)) {
             if (playerIn.isSneaking() && playerIn.getHeldItemMainhand().isEmpty()) {
                 worldIn.destroyBlock(pos, true);
-            } else if (state.getValue(META) < 5) {
+            } else if (state.getValue(EXPANDER_META) < 5) {
                 playerIn.openGui(OpenModularTurrets.instance, 2, worldIn, pos.getX(), pos.getY(), pos.getZ());
             } else {
                 return true;
@@ -185,7 +185,7 @@ public class BlockExpander extends BlockTurretBaseAddon implements IHasItemBlock
     @Override
     @ParametersAreNonnullByDefault
     public int damageDropped(IBlockState state) {
-        return state.getValue(META);
+        return state.getValue(EXPANDER_META);
     }
 
     @Override

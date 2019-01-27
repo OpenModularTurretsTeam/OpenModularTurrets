@@ -78,7 +78,7 @@ public class MessageRemoveTrustedPlayer implements IMessage {
                 }
                 if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
                     machine.removeTrustedPlayer(message.getPlayer());
-                    machine.sendMessageToAllAround();
+                    machine.sendMessageToAllTracking();
                 }
             });
             return null;

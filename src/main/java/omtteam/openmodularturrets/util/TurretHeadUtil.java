@@ -37,7 +37,7 @@ import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.InvUtil.getStackSize;
 import static omtteam.omlib.util.player.PlayerUtil.*;
-import static omtteam.openmodularturrets.blocks.BlockBaseAddon.META;
+import static omtteam.openmodularturrets.blocks.BlockBaseAddon.BASE_ADDON_META;
 import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 
 public class TurretHeadUtil {
@@ -864,7 +864,7 @@ public class TurretHeadUtil {
         List<IBlockState> states = WorldUtil.getTouchingBlockStates(base.getWorld(), base.getPos());
         for (IBlockState state : states) {
             if (state.getBlock() instanceof BlockBaseAddon) {
-                if (state.getValue(META) == 0) {
+                if (state.getValue(BASE_ADDON_META) == 0) {
                     return false;
                 }
             }

@@ -67,7 +67,7 @@ public class MessageSetBaseTargetingType implements IMessage {
                 }
                 if (machine != null && PlayerUtil.canPlayerChangeSetting(player, machine)) {
                     machine.setMultiTargeting(!machine.isMultiTargeting());
-                    machine.sendMessageToAllAround();
+                    machine.sendMessageToAllTracking();
                 }
             });
             return null;
