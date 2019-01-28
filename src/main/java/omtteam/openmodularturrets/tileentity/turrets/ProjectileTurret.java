@@ -63,27 +63,6 @@ public abstract class ProjectileTurret extends TurretHead {
      * Just shoots, no aiming required
      */
     @Override
-    protected void doBlindShot(ItemStack ammo) {
-        if (this instanceof RocketTurretTileEntity && OMTConfig.TURRETS.canRocketsHome) {
-            return;
-        }
-
-        // Work out a trajectory based on current yaw/pitch
-        Vec3d velocity = getVelocityVectorFromYawPitch(this.pitch, this.yaw, 3.0F);
-        double adjustedX = velocity.x;
-        double adjustedY = velocity.y;
-        double adjustedZ = velocity.z;
-        float speedFactor = (float) velocity.lengthVector();
-        double accuracy = this.getBaseTurretAccuracy() * (1 - TurretHeadUtil.getAccuraccyUpgrades(base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base));
-
-        // Now that we have a trajectory, throw something at it
-        shootProjectile(adjustedX, adjustedY, adjustedZ, speedFactor, (float) accuracy, ammo);
-    }
-
-    /**
-     * Set this.autoFire to true instead.
-     */
-    @Override
     public boolean forceShot() {
         if (this instanceof RocketTurretTileEntity && OMTConfig.TURRETS.canRocketsHome) return false;
         if (ticks < (this.getTurretBaseFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {

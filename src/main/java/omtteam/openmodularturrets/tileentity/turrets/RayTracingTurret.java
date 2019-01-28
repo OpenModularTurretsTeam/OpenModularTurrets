@@ -53,11 +53,6 @@ public abstract class RayTracingTurret extends TurretHead {
     }
 
     @Override
-    protected void doBlindShot(ItemStack ammo) {
-        forceShot();
-    }
-
-    @Override
     public boolean forceShot() {
         Vec3d direction = MathUtil.getVectorFromYawPitch(this.yaw, this.pitch).scale(5D);
         Vec3d baseVector = new Vec3d(this.getPos().getX() + 0.5D,

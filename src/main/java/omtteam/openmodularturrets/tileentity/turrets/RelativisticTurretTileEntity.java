@@ -138,11 +138,6 @@ public class RelativisticTurretTileEntity extends TurretHead {
     }
 
     @Override
-    protected void doBlindShot(ItemStack ammo) {
-
-    }
-
-    @Override
     public boolean forceShot() {
         return false;
     }

@@ -103,10 +103,10 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         this.yaw = par1.getFloat("yaw");
         this.shouldConceal = par1.getBoolean("shouldConceal");
         this.autoFire = par1.getBoolean("autoFire");
-        //this.maxPitch = par1.getFloat("maxPitch");
-        //this.minPitch = par1.getFloat("minPitch");
-        //this.maxYaw = par1.getFloat("maxYaw");
-        //this.minYaw = par1.getFloat("minYaw");
+        this.maxPitch = par1.getFloat("maxPitch");
+        this.minPitch = par1.getFloat("minPitch");
+        this.maxYaw = par1.getFloat("maxYaw");
+        this.minYaw = par1.getFloat("minYaw");
     }
 
     @Nonnull
@@ -457,7 +457,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             if (target != null) {
                 doTargetedShot(this.target, ammo);
             } else if (this.autoFire) {
-                doBlindShot(ammo);
+                forceShot();
             }
 
             //If we made it this far, reset ticks to zero?
@@ -466,8 +466,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     }
 
     protected abstract void doTargetedShot(Entity target, ItemStack ammo);
-
-    protected abstract void doBlindShot(ItemStack ammo);
 
     public abstract boolean forceShot();
 
