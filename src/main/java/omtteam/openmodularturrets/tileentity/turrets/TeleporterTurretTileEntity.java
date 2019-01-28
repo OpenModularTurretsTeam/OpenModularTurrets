@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.tileentity.turrets;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -13,6 +12,8 @@ import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
+import javax.annotation.Nonnull;
+
 import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
 
 //import omtteam.openmodularturrets.compatability.valkyrienwarfare.ValkyrienWarfareHelper;
@@ -22,18 +23,11 @@ public class TeleporterTurretTileEntity extends TurretHead {
         super(4);
     }
 
-
     @Override
     public void update() {
-        setSide();
-        this.base = getBaseFromWorld();
-
-        if (this.getWorld().isRemote) {
-            if (rotationAnimation >= 360F) {
-                rotationAnimation = 0F;
-            }
-            rotationAnimation = rotationAnimation + 0.03F;
-            return;
+        if (!setSide()) return;
+        if (this.base == null) {
+            this.base = getBaseFromWorld();
         }
 
         ticks++;
@@ -70,9 +64,6 @@ public class TeleporterTurretTileEntity extends TurretHead {
             if (target == null) {
                 return;
             }
-
-            this.yaw = TurretHeadUtil.getAimYaw(target, this.pos) + 3.2F;
-            this.pitch = TurretHeadUtil.getAimPitch(target, this.pos);
 
             // has cooldown passed?
             if (ticks < (this.getTurretBaseFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
@@ -144,17 +135,8 @@ public class TeleporterTurretTileEntity extends TurretHead {
     }
 
     @Override
+    @Nonnull
     protected SoundEvent getLaunchSoundEffect() {
         return ModSounds.teleportLaunchSound;
-    }
-
-    @Override
-    protected void doTargetedShot(Entity target, ItemStack ammo) {
-
-    }
-
-    @Override
-    public boolean forceShot() {
-        return false;
     }
 }

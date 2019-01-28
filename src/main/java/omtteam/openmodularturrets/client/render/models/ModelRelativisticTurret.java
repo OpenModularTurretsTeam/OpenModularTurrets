@@ -1,15 +1,14 @@
 package omtteam.openmodularturrets.client.render.models;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 
 @SideOnly(Side.CLIENT)
-public class ModelRelativisticTurret extends ModelBase {
+public class ModelRelativisticTurret extends ModelAbstractTurret {
     // fields
-    public final ModelRenderer Base;
     public final ModelRenderer Spike1;
     public final ModelRenderer Spike2;
     public final ModelRenderer Spike3;
@@ -18,10 +17,8 @@ public class ModelRelativisticTurret extends ModelBase {
     public final ModelRenderer Crystal;
 
     public ModelRelativisticTurret() {
-        textureWidth = 64;
-        textureHeight = 64;
-
-        Base = new ModelRenderer(this, 0, 37);
+        super(37, 28, 15);
+        
         Base.addBox(-6F, 7F, -6F, 12, 1, 12);
         Base.setRotationPoint(0F, 16F, 0F);
         Base.setTextureSize(64, 64);
@@ -78,10 +75,36 @@ public class ModelRelativisticTurret extends ModelBase {
         Crystal.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z) {
+    @Override
+    public void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
+    }
+
+    @Override
+    public void setRotationForTarget(float y, float z) {
+
+    }
+
+    @Override
+    public void setBaseRotation(TurretHead turretHead) {
+        super.setBaseRotation(turretHead);
+        Spike1.rotateAngleX = turretHead.baseFitRotationX;
+        Spike1.rotateAngleY = turretHead.baseFitRotationZ;
+        Spike2.rotateAngleX = turretHead.baseFitRotationX;
+        Spike2.rotateAngleY = turretHead.baseFitRotationZ;
+        Spike3.rotateAngleX = turretHead.baseFitRotationX;
+        Spike3.rotateAngleY = turretHead.baseFitRotationZ;
+        Spike4.rotateAngleX = turretHead.baseFitRotationX;
+        Spike4.rotateAngleY = turretHead.baseFitRotationZ;
+        Base2.rotateAngleX = turretHead.baseFitRotationX;
+        Base2.rotateAngleY = turretHead.baseFitRotationZ;
+        Crystal.rotateAngleX = turretHead.baseFitRotationX;
+        Crystal.rotateAngleY = turretHead.baseFitRotationZ;
+        Crystal.rotateAngleX = turretHead.rotationAnimation;
+        Crystal.rotateAngleY = turretHead.rotationAnimation;
+        Crystal.rotateAngleZ = turretHead.rotationAnimation;
     }
 
     public void renderAll() {
@@ -92,5 +115,15 @@ public class ModelRelativisticTurret extends ModelBase {
         Spike4.render(0.0625F);
         Base2.render(0.0625F);
         Crystal.render(0.0625F);
+    }
+
+    @Override
+    public boolean hasPole() {
+        return false;
+    }
+
+    @Override
+    public boolean hasBoxUnder() {
+        return false;
     }
 }

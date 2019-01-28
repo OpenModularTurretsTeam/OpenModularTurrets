@@ -1,6 +1,7 @@
 package omtteam.openmodularturrets.util;
 
 import io.netty.buffer.ByteBuf;
+import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 
 /**
@@ -9,8 +10,9 @@ import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
  */
 @SuppressWarnings("unused")
 public class TurretHeadSettings {
-    public float yaw, pitch;
+    public float yaw = 0, pitch = 0;
     public boolean forceFire;
+    private boolean isDirected = false;
 
     public TurretHeadSettings() {
 
@@ -23,8 +25,11 @@ public class TurretHeadSettings {
     }
 
     public TurretHeadSettings(TurretHead turretHead) {
-        this.yaw = turretHead.getYaw();
-        this.pitch = turretHead.getPitch();
+        if (turretHead instanceof AbstractDirectedTurret) {
+            this.yaw = ((AbstractDirectedTurret) turretHead).getYaw();
+            this.pitch = ((AbstractDirectedTurret) turretHead).getPitch();
+            this.isDirected = true;
+        }
         this.forceFire = turretHead.getAutoFire();
     }
 
@@ -39,5 +44,13 @@ public class TurretHeadSettings {
         this.pitch = buf.readFloat();
         this.forceFire = buf.readBoolean();
         return this;
+    }
+
+    public boolean isDirected() {
+        return isDirected;
+    }
+
+    public void setDirected(boolean directed) {
+        isDirected = directed;
     }
 }

@@ -1,15 +1,14 @@
 package omtteam.openmodularturrets.client.render.models;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 
 @SideOnly(Side.CLIENT)
-public class ModelTeleporterTurret extends ModelBase {
+public class ModelTeleporterTurret extends ModelAbstractTurret {
     //fields
-    public final ModelRenderer Base;
     public final ModelRenderer PillarLarge;
     public final ModelRenderer Spinner1;
     public final ModelRenderer Spinner2;
@@ -18,10 +17,8 @@ public class ModelTeleporterTurret extends ModelBase {
     private final ModelRenderer BaseStand;
 
     public ModelTeleporterTurret() {
-        textureWidth = 64;
-        textureHeight = 64;
+        super(37, 28, 15);
 
-        Base = new ModelRenderer(this, 0, 37);
         Base.addBox(-6F, 7F, -6F, 12, 1, 12);
         Base.setRotationPoint(0F, 16F, 0F);
         Base.setTextureSize(64, 64);
@@ -79,10 +76,27 @@ public class ModelTeleporterTurret extends ModelBase {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void setRotation(ModelRenderer model, float x, float y, float z) {
+    @Override
+    public void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
+    }
+
+    @SuppressWarnings({"EmptyMethod", "unused"})
+    @Override
+    public void setRotationForTarget(float y, float z) {
+
+    }
+
+    @Override
+    public void setBaseRotation(TurretHead turretHead) {
+        super.setBaseRotation(turretHead);
+        Spinner1.rotateAngleY = turretHead.rotationAnimation;
+        Spinner2.rotateAngleY = turretHead.rotationAnimation;
+        Spinner3.rotateAngleY = turretHead.rotationAnimation;
+        Spinner4.rotateAngleY = turretHead.rotationAnimation;
+        PillarLarge.rotateAngleY = (turretHead.rotationAnimation) * -1;
     }
 
     public void renderAll() {
@@ -95,7 +109,13 @@ public class ModelTeleporterTurret extends ModelBase {
         Spinner4.render(0.0625F);
     }
 
-    @SuppressWarnings({"EmptyMethod", "unused"})
-    public void setRotationForTarget(float y, float z) {
+    @Override
+    public boolean hasPole() {
+        return false;
+    }
+
+    @Override
+    public boolean hasBoxUnder() {
+        return false;
     }
 }

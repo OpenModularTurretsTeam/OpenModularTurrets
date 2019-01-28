@@ -25,7 +25,7 @@ import omtteam.openmodularturrets.util.TurretHeadUtil;
 import java.util.List;
 import java.util.Random;
 
-public abstract class RayTracingTurret extends TurretHead {
+public abstract class RayTracingTurret extends AbstractDirectedTurret {
 
     public RayTracingTurret(int tier) {
         super(tier);

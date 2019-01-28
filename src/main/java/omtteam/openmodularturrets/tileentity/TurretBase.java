@@ -50,6 +50,7 @@ import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.network.messages.MessageTurretBase;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
+import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.OMTUtil;
 import omtteam.openmodularturrets.util.TargetingSettings;
@@ -658,18 +659,18 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     public void setAllTurretsYawPitch(float yaw, float pitch) {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         for (TileEntity te : tileEntities) {
-            if (te instanceof TurretHead) {
-                ((TurretHead) te).setPitch(pitch);
-                ((TurretHead) te).setYaw(yaw);
+            if (te instanceof AbstractDirectedTurret) {
+                ((AbstractDirectedTurret) te).setPitch(pitch);
+                ((AbstractDirectedTurret) te).setYaw(yaw);
             }
         }
     }
 
     public boolean setTurretYawPitch(EnumFacing facing, float yaw, float pitch) {
         TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
-        if (turretHead instanceof TurretHead) {
-            ((TurretHead) turretHead).setPitch(pitch);
-            ((TurretHead) turretHead).setYaw(yaw);
+        if (turretHead instanceof AbstractDirectedTurret) {
+            ((AbstractDirectedTurret) turretHead).setPitch(pitch);
+            ((AbstractDirectedTurret) turretHead).setYaw(yaw);
             return true;
         }
         return false;
@@ -695,7 +696,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     public boolean forceShootTurret(EnumFacing facing) {
         TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
-        return (turretHead instanceof TurretHead && ((TurretHead) turretHead).forceShot());
+        return (turretHead instanceof AbstractDirectedTurret && ((AbstractDirectedTurret) turretHead).forceShot());
     }
 
     @SuppressWarnings("deprecation")
@@ -703,8 +704,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         int successes = 0;
         for (TileEntity te : tileEntities) {
-            if (te instanceof TurretHead) {
-                successes += ((TurretHead) te).forceShot() ? 1 : 0;
+            if (te instanceof AbstractDirectedTurret) {
+                successes += ((AbstractDirectedTurret) te).forceShot() ? 1 : 0;
             }
         }
         return successes;

@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.tileentity.turrets;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -13,6 +12,8 @@ import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
+import javax.annotation.Nonnull;
+
 import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
 
 public class RelativisticTurretTileEntity extends TurretHead {
@@ -20,19 +21,12 @@ public class RelativisticTurretTileEntity extends TurretHead {
         super(3);
     }
 
-
     @SuppressWarnings("ConstantConditions")
     @Override
     public void update() {
-        setSide();
-        this.base = getBaseFromWorld();
-
-        if (this.getWorld().isRemote) {
-            if (rotationAnimation >= 360F) {
-                rotationAnimation = 0F;
-            }
-            rotationAnimation = rotationAnimation + 0.03F;
-            return;
+        if (!setSide()) return;
+        if (this.base == null) {
+            this.base = getBaseFromWorld();
         }
 
         ticks++;
@@ -70,9 +64,6 @@ public class RelativisticTurretTileEntity extends TurretHead {
                 return;
             }
 
-            this.yaw = TurretHeadUtil.getAimYaw(target, this.pos) + 3.2F;
-            this.pitch = TurretHeadUtil.getAimPitch(target, this.pos);
-
             // has cooldown passed?
             if (ticks < (this.getTurretBaseFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
                 return;
@@ -102,8 +93,8 @@ public class RelativisticTurretTileEntity extends TurretHead {
 
             // Consume energy
             base.setEnergyStored(base.getEnergyLevel(EnumFacing.DOWN) - power_required);
-            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 5, false, false));
-            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.getPotionById(18), 200, 5, false, false));
+            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 3, false, true));
+            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.getPotionById(18), 200, 3, false, true));
 
             target = null;
         }
@@ -128,17 +119,8 @@ public class RelativisticTurretTileEntity extends TurretHead {
     }
 
     @Override
+    @Nonnull
     protected SoundEvent getLaunchSoundEffect() {
         return ModSounds.relativisticLaunchSound;
-    }
-
-    @Override
-    protected void doTargetedShot(Entity target, ItemStack ammo) {
-
-    }
-
-    @Override
-    public boolean forceShot() {
-        return false;
     }
 }

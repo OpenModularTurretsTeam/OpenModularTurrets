@@ -18,7 +18,7 @@ import java.util.Random;
 
 import static omtteam.omlib.util.MathUtil.getVelocityVectorFromYawPitch;
 
-public abstract class ProjectileTurret extends TurretHead {
+public abstract class ProjectileTurret extends AbstractDirectedTurret {
     public ProjectileTurret(int tier) {
         super(tier);
     }

@@ -67,6 +67,12 @@ public abstract class BlockTurretBaseAddon extends BlockAbstractTileEntity imple
 
     @Override
     @ParametersAreNonnullByDefault
+    public boolean causesSuffocation(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         boolean found = false;
         for (IBlockState blockState : getTouchingBlockStates(worldIn, pos)) {

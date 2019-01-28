@@ -8,7 +8,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ModelRailgun extends ModelAbstractTurret {
     // fields
-    public final ModelRenderer Base;
     private final ModelRenderer BarrelTop;
     private final ModelRenderer BarrelBot;
     private final ModelRenderer BarrelRight;
@@ -21,10 +20,7 @@ public class ModelRailgun extends ModelAbstractTurret {
     private final ModelRenderer GuardBinder;
 
     public ModelRailgun() {
-        textureWidth = 64;
-        textureHeight = 64;
-
-        Base = new ModelRenderer(this, 0, 0);
+        super(0, 0, 0);
         Base.addBox(-6F, 7F, -6F, 12, 1, 12);
         Base.setRotationPoint(0F, 16F, 0F);
         Base.setTextureSize(64, 64);
@@ -107,7 +103,7 @@ public class ModelRailgun extends ModelAbstractTurret {
         GuardBinder.render(f5);
     }
 
-    protected void setRotation(ModelRenderer model, float x, float y, float z) {
+    public void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
@@ -147,5 +143,15 @@ public class ModelRailgun extends ModelAbstractTurret {
         RightGuard.render(0.0625F);
         LeftGuard.render(0.0625F);
         GuardBinder.render(0.0625F);
+    }
+
+    @Override
+    public boolean hasPole() {
+        return false;
+    }
+
+    @Override
+    public boolean hasBoxUnder() {
+        return false;
     }
 }
