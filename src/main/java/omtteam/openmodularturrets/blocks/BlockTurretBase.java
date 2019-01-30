@@ -18,7 +18,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
@@ -120,14 +119,6 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
 
     @Override
     @Nonnull
-    @SideOnly(Side.CLIENT)
-    @ParametersAreNonnullByDefault
-    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-        return true;
-    }
-
-    @Override
-    @Nonnull
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(TIER, meta + 1);
     }
@@ -194,36 +185,8 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
         if (!world.isRemote && hand == EnumHand.MAIN_HAND) {
             ItemStack heldItem = player.getHeldItemMainhand();
             TurretBase base = (TurretBase) world.getTileEntity(pos);
-            // Camo clear
-            if (player.isSneaking() && OMTConfig.BASES.allowBaseCamo && heldItem == ItemStack.EMPTY) {
-                if (base != null) {
-                    if (player.getUniqueID().toString().equals(base.getOwner())) {
-                        base.setCamoState(state);
-                    } else {
-                        addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
-                    }
-                }
-            }
-            // Camo preparation
-            Block heldBlock = null;
-            IBlockState camoState = null;
-            if (heldItem != ItemStack.EMPTY) {
-                heldBlock = Block.getBlockFromItem(heldItem.getItem());
-                camoState = heldBlock.getStateForPlacement(world, pos, side.getOpposite(), hitX, hitY, hitZ, heldItem.getMetadata(), player, hand);
-            }
-            // Camo set
-            if (!player.isSneaking() && OMTConfig.BASES.allowBaseCamo && heldItem != ItemStack.EMPTY && heldItem.getItem() instanceof ItemBlock
-                    && heldBlock.isNormalCube(camoState, world, pos)
-                    && !heldBlock.hasTileEntity(camoState)
-                    && !(heldBlock instanceof BlockTurretBase)) {
-                if (base != null) {
-                    if (PlayerUtil.isPlayerAdmin(player, base)) {
-                        base.setCamoState(camoState);
-                        return true;
-                    } else {
-                        addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
-                    }
-                }
+            if (OMTConfig.BASES.allowBaseCamo && handleCamoActivation(world, pos, state, player, hand, side, hitX, hitY, hitZ).isSuccess()) {
+                return true;
             }
             // Write Memory Card
             if (player.isSneaking() && base != null && player.getHeldItemMainhand() != ItemStack.EMPTY
@@ -315,6 +278,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
         for (EnumFacing facing : EnumFacing.VALUES) {
             for (TileEntity tileEntity : getTouchingTileEntities(worldIn, pos.offset(facing))) {
                 if (tileEntity instanceof TurretBase) return false;
+                if (worldIn.getTileEntity(pos.offset(facing)) instanceof TurretBase) return false;
             }
         }
         return true;

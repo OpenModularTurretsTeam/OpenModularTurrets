@@ -9,8 +9,8 @@ import omtteam.openmodularturrets.handler.config.OMTConfig;
 
 import java.util.function.BooleanSupplier;
 
-import static omtteam.omlib.compatibility.ModCompatibility.ComputerCraftLoaded;
-import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
+import static omtteam.omlib.compatibility.OMLibModCompatibility.ComputerCraftLoaded;
+import static omtteam.omlib.compatibility.OMLibModCompatibility.OpenComputersLoaded;
 
 /**
  * Created by Keridos on 13/11/17.

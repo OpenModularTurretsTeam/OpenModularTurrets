@@ -138,6 +138,14 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
         return false;
     }
 
+    @Override
+    @ParametersAreNonnullByDefault
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+        if (!(world.getTileEntity(neighbor) instanceof TurretBase) && world.getTileEntity(pos) != null) {
+            world.getTileEntity(pos).getWorld().destroyBlock(pos, true);
+        }
+    }
+
     public abstract TurretType getTurretType();
 
     @Override

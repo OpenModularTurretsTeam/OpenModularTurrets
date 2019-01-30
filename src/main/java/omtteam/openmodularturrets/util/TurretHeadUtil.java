@@ -32,8 +32,8 @@ import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 
 import java.util.*;
 
-import static omtteam.omlib.compatibility.ModCompatibility.ComputerCraftLoaded;
-import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
+import static omtteam.omlib.compatibility.OMLibModCompatibility.ComputerCraftLoaded;
+import static omtteam.omlib.compatibility.OMLibModCompatibility.OpenComputersLoaded;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.InvUtil.getStackSize;
 import static omtteam.omlib.util.player.PlayerUtil.*;

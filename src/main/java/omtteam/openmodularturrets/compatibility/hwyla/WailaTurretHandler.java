@@ -2,7 +2,6 @@ package omtteam.openmodularturrets.compatibility.hwyla;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
-import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -10,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import omtteam.omlib.compatibility.hwyla.IOMLibWailaDataProvider;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
@@ -28,19 +28,15 @@ import static omtteam.openmodularturrets.util.TurretHeadUtil.*;
  */
 
 @SuppressWarnings("unused")
-public class WailaTurretHandler implements IWailaDataProvider {
+public class WailaTurretHandler implements IOMLibWailaDataProvider {
     /**
-     * Although this is likely not necessary, you can also use the Optional.Method interface to mark a
-     * method to be stripped if a mod is not detected. In this case we're doing this for all methods
-     * which relate to Waila, so the modid is Waila.
-     * <p/>
      * The callbackRegister method is used by Waila to register this data provider. Note that inside this
      * method we initialize a new instance of this class, this instance is used for a lot of the
      * IWailaRegistrar methods require an instance of the data provider to work. This will also call the
      * constructor of this class, which can be used to help initialize other things. Alternatively you
      * can initialize things within this method as well.
      */
-    static void callbackRegister(IWailaRegistrar register) {
+    public void callbackRegister(IWailaRegistrar register) {
         WailaTurretHandler instance = new WailaTurretHandler();
 
         register.registerNBTProvider(instance, TurretHead.class);

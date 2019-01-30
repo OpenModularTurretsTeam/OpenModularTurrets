@@ -3,13 +3,17 @@ package omtteam.openmodularturrets.compatibility;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
+import omtteam.omlib.compatibility.OMLibModCompatibility;
+import omtteam.omlib.compatibility.hwyla.OMLibWailaPlugin;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.compatibility.computercraft.CCPeripheralProvider;
+import omtteam.openmodularturrets.compatibility.hwyla.WailaTurretBaseHandler;
+import omtteam.openmodularturrets.compatibility.hwyla.WailaTurretHandler;
 import omtteam.openmodularturrets.compatibility.opencomputers.DriverTurretBase;
 import omtteam.openmodularturrets.reference.Reference;
 
-import static omtteam.omlib.compatibility.ModCompatibility.ComputerCraftLoaded;
-import static omtteam.omlib.compatibility.ModCompatibility.OpenComputersLoaded;
+import static omtteam.omlib.compatibility.OMLibModCompatibility.ComputerCraftLoaded;
+import static omtteam.omlib.compatibility.OMLibModCompatibility.OpenComputersLoaded;
 
 /**
  * Created by Keridos on 23/01/2015. This Class
@@ -24,22 +28,22 @@ public class ModCompatibility {
     @SuppressWarnings("unused")
 
     public static void checkForMods() {
-        ThermalExpansionLoaded = Loader.isModLoaded(omtteam.omlib.compatibility.ModCompatibility.TEModID);
+        ThermalExpansionLoaded = Loader.isModLoaded(OMLibModCompatibility.TEModID);
         if (ThermalExpansionLoaded) {
             OpenModularTurrets.getLogger().info("Hi there, dV=V0B(t1-t0)! (Found ThermalExpansion)");
         }
 
-        EnderIOLoaded = Loader.isModLoaded(omtteam.omlib.compatibility.ModCompatibility.EIOModID);
+        EnderIOLoaded = Loader.isModLoaded(OMLibModCompatibility.EIOModID);
         if (EnderIOLoaded) {
             OpenModularTurrets.getLogger().info("Not sure if iron ingot, or electrical steel ingot... (Found EnderIO)");
         }
 
-        MekanismLoaded = Loader.isModLoaded(omtteam.omlib.compatibility.ModCompatibility.MekModID);
+        MekanismLoaded = Loader.isModLoaded(OMLibModCompatibility.MekModID);
         if (MekanismLoaded) {
             OpenModularTurrets.getLogger().info("Mur omsimu, plz. (Found Mekanism)");
         }
 
-        ThaumcraftLoaded = Loader.isModLoaded(omtteam.omlib.compatibility.ModCompatibility.TCModID);
+        ThaumcraftLoaded = Loader.isModLoaded(OMLibModCompatibility.TCModID);
         if (ThaumcraftLoaded) {
             OpenModularTurrets.getLogger().info("Afrikaners is plesierig. (Found Thaumcraft)");
         }
@@ -71,11 +75,19 @@ public class ModCompatibility {
         if (OpenComputersLoaded) {
             registerOCCompat();
         }
+        if (OMLibModCompatibility.WailaLoaded) {
+            addWailaPlugins();
+        }
     }
 
     @SuppressWarnings("EmptyMethod")
     public static void preinit() {
 
+    }
+
+    private static void addWailaPlugins() {
+        OMLibWailaPlugin.addDataProvider(new WailaTurretBaseHandler());
+        OMLibWailaPlugin.addDataProvider(new WailaTurretHandler());
     }
 
     private static void registerOCCompat() {
