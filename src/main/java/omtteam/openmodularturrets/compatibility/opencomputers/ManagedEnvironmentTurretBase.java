@@ -5,9 +5,9 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import net.minecraft.util.EnumFacing;
+import omtteam.omlib.api.permission.EnumMachineMode;
 import omtteam.omlib.compatibility.opencomputers.AbstractOMTileEntityEnvironment;
-import omtteam.omlib.tileentity.EnumMachineMode;
-import omtteam.omlib.util.EnumAccessMode;
+import omtteam.omlib.util.player.EnumAccessMode;
 import omtteam.omlib.util.player.TrustedPlayer;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
@@ -142,7 +142,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
         }
-        return new Object[]{base.getMaxEnergyLevel(EnumFacing.DOWN)};
+        return new Object[]{base.getMaxEnergyStored(EnumFacing.DOWN)};
     }
 
     @SuppressWarnings("unused")
@@ -151,7 +151,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
         }
-        return new Object[]{base.getEnergyLevel(EnumFacing.DOWN)};
+        return new Object[]{base.getEnergyStored(EnumFacing.DOWN)};
     }
 
     @SuppressWarnings("unused")

@@ -35,7 +35,7 @@ import java.util.*;
 import static omtteam.omlib.compatibility.OMLibModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.OMLibModCompatibility.OpenComputersLoaded;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
-import static omtteam.omlib.util.InvUtil.getStackSize;
+import static omtteam.omlib.util.inventory.InvUtil.getStackSize;
 import static omtteam.omlib.util.player.PlayerUtil.*;
 import static omtteam.openmodularturrets.blocks.BlockBaseAddon.BASE_ADDON_META;
 import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
@@ -402,7 +402,7 @@ public class TurretHeadUtil {
         int result = 0;
         ItemStack ammoStackRequired = turret.getAmmo();
         if (ammoStackRequired == null) {
-            return base.getEnergyLevel(EnumFacing.DOWN) / turret.getTurretBasePowerUsage();
+            return base.getEnergyStored(EnumFacing.DOWN) / turret.getTurretBasePowerUsage();
         }
         for (int i = 0; i <= 8; i++) {
             ItemStack ammoStack = base.getInventory().getStackInSlot(i);

@@ -19,7 +19,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import omtteam.omlib.api.IHasItemBlock;
+import omtteam.omlib.api.block.IHasItemBlock;
 import omtteam.omlib.blocks.BlockAbstractTileEntity;
 import omtteam.omlib.compatibility.theoneprobe.TOPInfoProvider;
 import omtteam.omlib.reference.OMLibNames;

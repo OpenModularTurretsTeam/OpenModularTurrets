@@ -20,8 +20,8 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static omtteam.omlib.util.InvUtil.getStackSize;
-import static omtteam.omlib.util.InvUtil.mergeItemStackWithStackLimit;
+import static omtteam.omlib.util.inventory.InvUtil.getStackSize;
+import static omtteam.omlib.util.inventory.InvUtil.mergeItemStackWithStackLimit;
 
 /**
  * Created by Keridos on 09/12/2015.

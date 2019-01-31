@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -31,18 +32,18 @@ import omtteam.omlib.api.IDebugTile;
 import omtteam.omlib.api.network.INetworkTile;
 import omtteam.omlib.api.network.IPowerExchangeTile;
 import omtteam.omlib.api.network.OMLibNetwork;
+import omtteam.omlib.api.permission.EnumMachineMode;
+import omtteam.omlib.api.render.camo.ICamoSupport;
 import omtteam.omlib.network.ISyncable;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.MessageCamoSettings;
 import omtteam.omlib.power.OMEnergyStorage;
-import omtteam.omlib.tileentity.EnumMachineMode;
-import omtteam.omlib.tileentity.ICamoSupport;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.tileentity.TileEntityTrustedMachine;
-import omtteam.omlib.util.EnumAccessMode;
 import omtteam.omlib.util.NetworkUtil;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.camo.CamoSettings;
+import omtteam.omlib.util.player.EnumAccessMode;
 import omtteam.omlib.util.player.TrustedPlayer;
 import omtteam.openmodularturrets.api.network.IBaseController;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
@@ -73,7 +74,7 @@ import static omtteam.omlib.util.player.PlayerUtil.getPlayerUUID;
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "computercraft")}
 )
-public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile, ISyncable {
+public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile, ISyncable, ITickable {
     public int trustedPlayerIndex = 0;
     public boolean shouldConcealTurrets;
     protected CamoSettings camoSettings;
@@ -109,7 +110,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         this.tier = tier;
         this.camoBlockStateTemp = camoState;
         this.mode = EnumMachineMode.INVERTED;
-        this.maxStorageEU = tier * 7500D;
         this.camoSettings = new CamoSettings();
         setupInventory();
     }
@@ -305,7 +305,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         } else {
             this.playerKills = 0;
         }
-        this.maxStorageEU = tier * 7500D;
     }
 
     @Override
@@ -368,7 +367,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     @Override
     public void update() {
-        super.update();
         if (!this.getWorld().isRemote && dropBlock) {
             this.getWorld().destroyBlock(this.pos, true);
             return;

@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
-import omtteam.omlib.client.gui.IHasTooltips;
+import omtteam.omlib.api.gui.IHasTooltips;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.MessageCloseGUI;
 import omtteam.omlib.network.messages.MessageOpenGUI;

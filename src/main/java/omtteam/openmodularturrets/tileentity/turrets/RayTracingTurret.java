@@ -65,7 +65,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
 
     protected void shootRay(double adjustedX, double adjustedY, double adjustedZ, double accuracy) {
         // Consume energy
-        base.setEnergyStored(base.getEnergyLevel(EnumFacing.DOWN) - getPowerRequiredForNextShot());
+        base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot(), null);
         this.applyLaunchEffects();
 
         // Create one ray per scatter-shot upgrade

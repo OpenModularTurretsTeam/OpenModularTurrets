@@ -186,7 +186,7 @@ public abstract class AbstractDirectedTurret extends TurretHead {
         concealmentChecks();
 
         //Is there enough power to shoot?
-        if ((base.getEnergyLevel(EnumFacing.DOWN) < getPowerRequiredForNextShot())) {
+        if ((base.getEnergyStored(EnumFacing.DOWN) < getPowerRequiredForNextShot())) {
             return;
         }
 

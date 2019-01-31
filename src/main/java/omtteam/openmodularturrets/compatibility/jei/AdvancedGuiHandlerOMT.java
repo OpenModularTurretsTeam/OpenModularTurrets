@@ -4,7 +4,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import mezz.jei.api.gui.IAdvancedGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.omlib.client.gui.BlockingAbstractGuiContainer;
+import omtteam.omlib.api.gui.BlockingAbstractGuiContainer;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;

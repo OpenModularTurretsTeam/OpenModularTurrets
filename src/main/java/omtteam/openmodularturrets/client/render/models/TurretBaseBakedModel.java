@@ -17,7 +17,7 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.omlib.render.CamoBakedModel;
+import omtteam.omlib.api.render.camo.CamoBakedModel;
 import omtteam.openmodularturrets.reference.Reference;
 
 import javax.annotation.Nonnull;

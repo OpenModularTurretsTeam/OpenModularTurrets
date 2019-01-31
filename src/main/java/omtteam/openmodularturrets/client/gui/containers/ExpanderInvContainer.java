@@ -11,7 +11,7 @@ import omtteam.openmodularturrets.tileentity.Expander;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static omtteam.omlib.util.InvUtil.*;
+import static omtteam.omlib.util.inventory.InvUtil.*;
 
 public class ExpanderInvContainer extends Container {
     private final Expander tileEntity;

@@ -13,9 +13,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import omtteam.omlib.api.permission.EnumMachineMode;
 import omtteam.omlib.power.OMEnergyStorage;
-import omtteam.omlib.tileentity.EnumMachineMode;
-import omtteam.omlib.util.EnumAccessMode;
+import omtteam.omlib.util.player.EnumAccessMode;
 import omtteam.omlib.util.player.TrustedPlayer;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
@@ -52,8 +52,8 @@ public class MessageTurretBase implements IMessage {
             this.lightOpacity = base.getCamoSettings().getLightOpacity();
             this.owner = base.getOwner();
             this.ownerName = base.getOwnerName();
-            this.rfStorageCurrent = base.getEnergyLevel(EnumFacing.DOWN);
-            this.rfStorageMax = base.getMaxEnergyLevel(EnumFacing.DOWN);
+            this.rfStorageCurrent = base.getEnergyStored(EnumFacing.DOWN);
+            this.rfStorageMax = base.getMaxEnergyStored(EnumFacing.DOWN);
             this.attacksMobs = base.isAttacksMobs();
             this.attacksNeutrals = base.isAttacksNeutrals();
             this.attacksPlayers = base.isAttacksPlayers();

@@ -76,7 +76,7 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
             return false;
         }
 
-        base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot());
+        base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot(), null);
 
         for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
             double accuracy = this.getActualTurretAccuracy() / 20D;
@@ -109,7 +109,7 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
      */
     protected void shootProjectile(double adjustedX, double adjustedY, double adjustedZ, float speedFactor, float accuracy, ItemStack ammo) {
         // Consume energy
-        base.setEnergyStored(base.getEnergyLevel(EnumFacing.DOWN) - getPowerRequiredForNextShot());
+        base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot(), null);
 
         // Create one projectile per scatter-shot upgrade
         for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {

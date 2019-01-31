@@ -9,9 +9,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import omtteam.omlib.api.permission.EnumMachineMode;
 import omtteam.omlib.compatibility.hwyla.IOMLibWailaDataProvider;
 import omtteam.omlib.reference.OMLibNames;
-import omtteam.omlib.tileentity.EnumMachineMode;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import javax.annotation.Nonnull;

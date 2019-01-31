@@ -9,7 +9,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import omtteam.omlib.tileentity.ICamoSupport;
+import omtteam.omlib.api.render.camo.ICamoSupport;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 

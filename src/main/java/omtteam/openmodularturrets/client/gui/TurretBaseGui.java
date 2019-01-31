@@ -10,8 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import omtteam.omlib.client.gui.BlockingAbstractGuiContainer;
-import omtteam.omlib.client.gui.IHasTooltips;
+import omtteam.omlib.api.gui.BlockingAbstractGuiContainer;
+import omtteam.omlib.api.gui.IHasTooltips;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.MessageCloseGUI;
 import omtteam.omlib.network.messages.MessageOpenGUI;
@@ -64,8 +64,8 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
 
         this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 
-        int expression = (base.getEnergyLevel(EnumFacing.DOWN) * 51) / (base.getMaxEnergyLevel(
-                EnumFacing.DOWN) == 0 ? 1 : base.getMaxEnergyLevel(EnumFacing.DOWN));
+        int expression = (base.getEnergyStored(EnumFacing.DOWN) * 51) / (base.getMaxEnergyStored(
+                EnumFacing.DOWN) == 0 ? 1 : base.getMaxEnergyStored(EnumFacing.DOWN));
 
         drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
 
@@ -267,8 +267,7 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         }
 
         if (mouseX > k + 153 && mouseX < k + 153 + 14 && mouseY > l + 17 && mouseY < l + 17 + 51) {
-            tooltip.add(base.getEnergyLevel(EnumFacing.DOWN) + "/" + base.getMaxEnergyLevel(EnumFacing.DOWN) + " RF");
-            tooltip.add("EU Buffer: " + Math.round(base.getStorageEU()) + "/" + Math.round(base.getMaxStorageEU()));
+            tooltip.add(base.getEnergyStored(EnumFacing.DOWN) + "/" + base.getMaxEnergyStored(EnumFacing.DOWN) + " RF");
         }
         if (base.getTier() > 1 && mouseX > k + 71 && mouseX < k + 71 + 40 && mouseY > l + 6 && mouseY < l + 6 + 14) {
             tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.ADDON_SLOT));
