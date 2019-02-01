@@ -76,7 +76,7 @@ public class MessageAddTrustedPlayer implements IMessage {
                     machine = (TurretBase) entity;
                 }
                 if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
-                    machine.addTrustedPlayer(message.getPlayer());
+                    machine.getTrustManager().addTrustedPlayer(message.getPlayer());
                     machine.sendMessageToAllTracking();
                 }
             });

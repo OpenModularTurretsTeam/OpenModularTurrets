@@ -28,23 +28,23 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
-import omtteam.omlib.api.IDebugTile;
 import omtteam.omlib.api.network.INetworkTile;
 import omtteam.omlib.api.network.IPowerExchangeTile;
 import omtteam.omlib.api.network.OMLibNetwork;
-import omtteam.omlib.api.permission.EnumMachineMode;
+import omtteam.omlib.api.permission.EnumAccessLevel;
+import omtteam.omlib.api.permission.TrustedPlayer;
 import omtteam.omlib.api.render.camo.ICamoSupport;
+import omtteam.omlib.api.tile.IDebugTile;
 import omtteam.omlib.network.ISyncable;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.MessageCamoSettings;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.tileentity.TileEntityTrustedMachine;
+import omtteam.omlib.util.EnumMachineMode;
 import omtteam.omlib.util.NetworkUtil;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.camo.CamoSettings;
-import omtteam.omlib.util.player.EnumAccessMode;
-import omtteam.omlib.util.player.TrustedPlayer;
 import omtteam.openmodularturrets.api.network.IBaseController;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
@@ -340,8 +340,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             this.attacksNeutrals = settings.isTargetPassive();
             this.attacksPlayers = settings.isTargetPlayers();
             this.currentMaxRange = settings.getMaxRange();
-
-            this.trustedPlayers = controller.getTrustedPlayerList();
         }
     }
 
@@ -431,7 +429,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         if (this.rangeOverridden) {
             nbtTagCompound.setInteger("range", this.currentMaxRange);
         }
-        nbtTagCompound.setTag("trustedPlayers", getTrustedPlayersAsNBT());
         return nbtTagCompound;
     }
 
@@ -453,7 +450,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             this.rangeOverridden = false;
             this.currentMaxRange = getUpperBoundMaxRange();
         }
-        buildTrustedPlayersFromNBT(nbtTagCompound.getTagList("trustedPlayers", 10));
     }
 
     private void setBaseUpperBoundRange() {
@@ -807,9 +803,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 return new Object[]{true};
             case getTrustedPlayers:
                 HashMap<String, Integer> result = new HashMap<>();
-                if (this.getTrustedPlayers() != null && this.getTrustedPlayers().size() > 0) {
-                    for (TrustedPlayer trustedPlayer : this.getTrustedPlayers()) {
-                        result.put(trustedPlayer.getName(), trustedPlayer.getAccessMode().ordinal());
+                if (this.getTrustManager().getTrustedPlayers() != null && this.getTrustManager().getTrustedPlayers().size() > 0) {
+                    for (TrustedPlayer trustedPlayer : this.getTrustManager().getTrustedPlayers()) {
+                        result.put(trustedPlayer.getName(), trustedPlayer.getAccessLevel().ordinal());
                     }
                 }
                 return new Object[]{result};
@@ -817,7 +813,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 if (arguments[0].toString().equals("")) {
                     return new Object[]{"wrong arguments"};
                 }
-                if (!this.addTrustedPlayer(arguments[0].toString())) {
+                if (!this.getTrustManager().addTrustedPlayer(arguments[0].toString())) {
                     return new Object[]{"Name not valid!"};
                 }
                 if (arguments[1].toString().equals("")) {
@@ -825,8 +821,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 } else if (!(arguments[1] instanceof Integer)) {
                     return new Object[]{"wrong arguments"};
                 }
-                TrustedPlayer trustedPlayer = this.getTrustedPlayer(arguments[0].toString());
-                trustedPlayer.setAccessMode(EnumAccessMode.values()[(Integer) arguments[1]]);
+                TrustedPlayer trustedPlayer = this.getTrustManager().getTrustedPlayer(arguments[0].toString());
+                trustedPlayer.setAccessLevel(EnumAccessLevel.values()[(Integer) arguments[1]]);
                 trustedPlayer.setUuid(getPlayerUUID(arguments[0].toString()));
 
                 return new Object[]{"successfully added player to trust list with parameters"};
@@ -834,7 +830,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 if (arguments[0].toString().equals("")) {
                     return new Object[]{"wrong arguments"};
                 }
-                this.removeTrustedPlayer(arguments[0].toString());
+                this.getTrustManager().removeTrustedPlayer(arguments[0].toString());
                 return new Object[]{"removed player from trusted list"};
             case getActive:
                 return new Object[]{this.active};

@@ -77,7 +77,7 @@ public class MessageRemoveTrustedPlayer implements IMessage {
                     machine = (TurretBase) entity;
                 }
                 if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
-                    machine.removeTrustedPlayer(message.getPlayer());
+                    machine.getTrustManager().removeTrustedPlayer(message.getPlayer());
                     machine.sendMessageToAllTracking();
                 }
             });

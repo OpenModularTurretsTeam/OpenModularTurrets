@@ -10,9 +10,9 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import omtteam.omlib.util.player.EnumAccessMode;
+import omtteam.omlib.api.permission.EnumAccessLevel;
+import omtteam.omlib.api.permission.TrustedPlayer;
 import omtteam.omlib.util.player.PlayerUtil;
-import omtteam.omlib.util.player.TrustedPlayer;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 @SuppressWarnings("unused")
@@ -84,11 +84,11 @@ public class MessageModifyPermissions implements IMessage {
                     machine = (TurretBase) entity;
                 }
                 if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
-                    TrustedPlayer trustedPlayer = machine.getTrustedPlayer(message.getPlayer());
+                    TrustedPlayer trustedPlayer = machine.getTrustManager().getTrustedPlayer(message.getPlayer());
                     if (trustedPlayer != null) {
-                        int newMode = trustedPlayer.getAccessMode().ordinal() + message.getChange();
+                        int newMode = trustedPlayer.getAccessLevel().ordinal() + message.getChange();
                         if (!(newMode > 3 || newMode < 0)) {
-                            trustedPlayer.setAccessMode(EnumAccessMode.values()[newMode]);
+                            trustedPlayer.setAccessLevel(EnumAccessLevel.values()[newMode]);
                         }
                     }
                     machine.sendMessageToAllTracking();

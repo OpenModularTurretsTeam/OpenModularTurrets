@@ -9,7 +9,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import omtteam.omlib.api.permission.ITrustedPlayersManager;
+import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 
@@ -61,9 +61,9 @@ public class MessageDropTurrets implements IMessage {
                 World world = ctx.getServerHandler().player.getEntityWorld();
                 EntityPlayerMP player = ctx.getServerHandler().player;
                 TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-                ITrustedPlayersManager machine = null;
-                if (entity instanceof ITrustedPlayersManager) {
-                    machine = (ITrustedPlayersManager) entity;
+                TileEntityOwnedBlock machine = null;
+                if (entity instanceof TileEntityOwnedBlock) {
+                    machine = (TileEntityOwnedBlock) entity;
                 }
                 if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
                     if (world.getTileEntity(new BlockPos(message.getX() + 1, message.getY(), message.getZ())) instanceof TurretHead) {

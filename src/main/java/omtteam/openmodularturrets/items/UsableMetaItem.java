@@ -13,8 +13,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.omlib.api.permission.EnumMachineMode;
 import omtteam.omlib.reference.OMLibNames;
+import omtteam.omlib.util.EnumMachineMode;
 import omtteam.omlib.util.GeneralUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.init.ModItems;
@@ -124,7 +124,7 @@ public class UsableMetaItem extends Item {
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
         if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
-            tooltip.add(GeneralUtil.shiftDetail);
+            tooltip.add(GeneralUtil.getShiftDetail());
         } else {
             if (stack.getItemDamage() == 2) {
                 if (hasDataStored(stack)) {

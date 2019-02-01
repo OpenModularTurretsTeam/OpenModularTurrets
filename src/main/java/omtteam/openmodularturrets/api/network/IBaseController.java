@@ -3,8 +3,8 @@ package omtteam.openmodularturrets.api.network;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import omtteam.omlib.api.network.IController;
-import omtteam.omlib.api.permission.EnumMachineMode;
-import omtteam.omlib.util.player.TrustedPlayer;
+import omtteam.omlib.api.permission.TrustedPlayer;
+import omtteam.omlib.util.EnumMachineMode;
 import omtteam.openmodularturrets.util.TargetingSettings;
 
 import java.util.List;

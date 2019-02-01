@@ -5,10 +5,10 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import net.minecraft.util.EnumFacing;
-import omtteam.omlib.api.permission.EnumMachineMode;
+import omtteam.omlib.api.permission.EnumAccessLevel;
+import omtteam.omlib.api.permission.TrustedPlayer;
 import omtteam.omlib.compatibility.opencomputers.AbstractOMTileEntityEnvironment;
-import omtteam.omlib.util.player.EnumAccessMode;
-import omtteam.omlib.util.player.TrustedPlayer;
+import omtteam.omlib.util.EnumMachineMode;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import static omtteam.omlib.util.player.PlayerUtil.getPlayerUUID;
@@ -107,7 +107,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
         }
-        return new Object[]{base.getTrustedPlayers()};
+        return new Object[]{base.getTrustManager().getTrustedPlayers()};
     }
 
     @SuppressWarnings("unused")
@@ -117,11 +117,11 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
         }
-        if (!base.addTrustedPlayer(args.checkString(0))) {
+        if (!base.getTrustManager().addTrustedPlayer(args.checkString(0))) {
             return new Object[]{"Name not valid!"};
         }
-        TrustedPlayer trustedPlayer = base.getTrustedPlayer(args.checkString(0));
-        trustedPlayer.setAccessMode(EnumAccessMode.values()[args.checkInteger(1)]);
+        TrustedPlayer trustedPlayer = base.getTrustManager().getTrustedPlayer(args.checkString(0));
+        trustedPlayer.setAccessLevel(EnumAccessLevel.values()[args.checkInteger(1)]);
         trustedPlayer.setUuid(getPlayerUUID(args.checkString(0)));
         return null;
     }
@@ -132,7 +132,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
         }
-        base.removeTrustedPlayer(args.checkString(0));
+        base.getTrustManager().removeTrustedPlayer(args.checkString(0));
         return null;
     }
 

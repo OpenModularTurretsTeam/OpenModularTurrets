@@ -66,7 +66,7 @@ public class UpgradeMetaItem extends Item {
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
         if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
-            tooltip.add(GeneralUtil.shiftDetail);
+            tooltip.add(GeneralUtil.getShiftDetail());
         } else {
             switch (stack.getMetadata()) {
                 case 0:

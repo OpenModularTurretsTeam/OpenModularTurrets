@@ -12,6 +12,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import omtteam.omlib.api.gui.BlockingAbstractGuiContainer;
 import omtteam.omlib.api.gui.IHasTooltips;
+import omtteam.omlib.api.permission.TrustedPlayer;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.MessageCloseGUI;
 import omtteam.omlib.network.messages.MessageOpenGUI;
@@ -19,7 +20,6 @@ import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.DebugHandler;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.player.PlayerUtil;
-import omtteam.omlib.util.player.TrustedPlayer;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.client.gui.containers.TurretBaseContainer;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
@@ -117,7 +117,7 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
             OMLibNetworkingHandler.INSTANCE.sendToServer(new MessageOpenGUI(base));
             addedToSyncList = true;
         }
-        accessLevel = PlayerUtil.getPlayerAccess(player, base).ordinal();
+        accessLevel = PlayerUtil.getPlayerAccessLevel(player, base).ordinal();
         if (accessLevel == 0) {
             player.closeScreen();
         }
@@ -129,8 +129,8 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         this.mouseX = par1;
         this.mouseY = par2;
 
-        if (accessLevel != PlayerUtil.getPlayerAccess(player, base).ordinal()) {
-            accessLevel = PlayerUtil.getPlayerAccess(player, base).ordinal();
+        if (accessLevel != PlayerUtil.getPlayerAccessLevel(player, base).ordinal()) {
+            accessLevel = PlayerUtil.getPlayerAccessLevel(player, base).ordinal();
             if (accessLevel != 0) {
                 initGui();
             }
@@ -223,9 +223,9 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.KILLS) + ": " + base.getKills());
         targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.PLAYER_KILLS) + ": " + base.getPlayerKills());
         targetInfo.add("");
-        if (base.getTrustedPlayers().size() != 0) {
+        if (base.getTrustManager().getTrustedPlayers().size() != 0) {
             targetInfo.add("\u00A75" + safeLocalize(OMTNames.Localizations.GUI.TRUSTED_PLAYERS) + ":");
-            for (TrustedPlayer trusted_player : base.getTrustedPlayers()) {
+            for (TrustedPlayer trusted_player : base.getTrustManager().getTrustedPlayers()) {
                 targetInfo.add("\u00A7b" + trusted_player.getName());
             }
         } else {

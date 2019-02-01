@@ -13,10 +13,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import omtteam.omlib.api.permission.EnumMachineMode;
+import omtteam.omlib.api.permission.EnumAccessLevel;
+import omtteam.omlib.api.permission.TrustedPlayer;
 import omtteam.omlib.power.OMEnergyStorage;
-import omtteam.omlib.util.player.EnumAccessMode;
-import omtteam.omlib.util.player.TrustedPlayer;
+import omtteam.omlib.util.EnumMachineMode;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class MessageTurretBase implements IMessage {
             this.attacksNeutrals = base.isAttacksNeutrals();
             this.attacksPlayers = base.isAttacksPlayers();
             this.multiTargeting = base.isMultiTargeting();
-            this.trustedPlayers = base.getTrustedPlayers();
+            this.trustedPlayers = base.getTrustManager().getTrustedPlayers();
             this.camoBlockRegName = Objects.requireNonNull(base.getCamoState().getBlock().getRegistryName()).toString();
             this.camoBlockMeta = base.getCamoState().getBlock().getMetaFromState(base.getCamoState());
             this.maxRange = base.getCurrentMaxRange();
@@ -98,7 +98,7 @@ public class MessageTurretBase implements IMessage {
                 String name = ByteBufUtils.readUTF8String(buf);
                 TrustedPlayer trustedPlayer = new TrustedPlayer(name);
                 trustedPlayer.setUuid(UUID.fromString(ByteBufUtils.readUTF8String(buf)));
-                trustedPlayer.setAccessMode(EnumAccessMode.values()[buf.readInt()]);
+                trustedPlayer.setAccessLevel(EnumAccessLevel.values()[buf.readInt()]);
                 trustedPlayers.add(trustedPlayer);
             }
         }
@@ -132,7 +132,7 @@ public class MessageTurretBase implements IMessage {
             for (TrustedPlayer trustedPlayer : trustedPlayers) {
                 ByteBufUtils.writeUTF8String(buf, trustedPlayer.getName());
                 ByteBufUtils.writeUTF8String(buf, trustedPlayer.getUuid().toString());
-                buf.writeInt(trustedPlayer.getAccessMode().ordinal());
+                buf.writeInt(trustedPlayer.getAccessLevel().ordinal());
             }
         }
     }
@@ -165,7 +165,7 @@ public class MessageTurretBase implements IMessage {
                     base.setAttacksNeutrals(message.attacksNeutrals);
                     base.setAttacksPlayers(message.attacksPlayers);
                     base.setMultiTargeting(message.multiTargeting);
-                    base.setTrustedPlayers(message.trustedPlayers);
+                    base.getTrustManager().setTrustedPlayers(message.trustedPlayers);
                     base.setTier(message.tier);
                     base.getCamoSettings().setLightValue(message.lightValue);
                     base.getCamoSettings().setLightOpacity(message.lightOpacity);
