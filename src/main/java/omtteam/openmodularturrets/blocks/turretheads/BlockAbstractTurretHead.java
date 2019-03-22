@@ -158,7 +158,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
             probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": "
                                    + getColoredBooleanLocalizationYesNo(active));
             probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F"
-                                   + turret.getBase().getOwnerName());
+                                   + turret.getBase().getOwner().getName());
             probeInfo.text("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.AMMO) + ": \u00A7F"
                                    + getAmmoLevel(turret, turret.getBase()));
             probeInfo.text("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": \u00A7F"

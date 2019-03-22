@@ -22,7 +22,6 @@ import omtteam.openmodularturrets.api.lists.MobBlacklist;
 import omtteam.openmodularturrets.api.lists.MobList;
 import omtteam.openmodularturrets.api.lists.NeutralList;
 import omtteam.openmodularturrets.blocks.BlockBaseAddon;
-import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.items.AmmoMetaItem;
@@ -60,9 +59,9 @@ public class TurretHeadUtil {
             List<EntityPlayerMP> targets = worldObj.getEntitiesWithinAABB(EntityPlayerMP.class, axis);
 
             for (EntityPlayerMP target : targets) {
-                if (!target.getUniqueID().toString().equals(base.getOwner()) && !isPlayerTrusted(target,
-                                                                                                 base) && !warnedPlayers.contains(
-                        target) && !target.capabilities.isCreativeMode) {
+                if (!target.getUniqueID().toString().equals(base.getOwner())
+                        && !isPlayerTrusted(target, base) &&
+                        !warnedPlayers.contains(target) && !target.capabilities.isCreativeMode) {
                     dispatchWarnMessage(target, worldObj);
                     warnedPlayers.add(target);
                 }
@@ -70,7 +69,6 @@ public class TurretHeadUtil {
         }
     }
 
-    @SuppressWarnings({"deprecation", "unused"})
     private static void dispatchWarnMessage(EntityPlayerMP player, World worldObj) {
         if (OMTConfig.TURRETS.turretAlarmSound) {
             player.playSound(ModSounds.warningSound, 1.0F, 1.0F);
@@ -216,11 +214,10 @@ public class TurretHeadUtil {
         return null;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static Entity getTargetWithoutSlowEffect(TurretBase base, World worldObj, BlockPos pos, int turretRange, TurretHead turret) {
-        Entity target = null;
+        EntityLivingBase target = null;
 
-        if (!worldObj.isRemote && base != null && base.getOwner() != null) {
+        if (!worldObj.isRemote && base != null) {
             AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
                                                    pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
                                                    pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
@@ -248,13 +245,13 @@ public class TurretHeadUtil {
                 }
 
                 if (target != null && turret != null) {
-                    EntityLivingBase targetELB = (EntityLivingBase) target;
+
 
                     if (base.isMultiTargeting() && isTargetAlreadyTargeted(base, target)) {
                         continue;
                     }
 
-                    if (canTurretSeeTarget(turret, targetELB) && targetELB.getHealth() > 0.0F) {
+                    if (canTurretSeeTarget(turret, target) && target.getHealth() > 0.0F) {
                         return target;
                     }
                 }
@@ -548,7 +545,6 @@ public class TurretHeadUtil {
         return pitch / (float) Math.PI * 180F;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static int getRangeUpgrades(TurretBase base, TurretHead turretHead) {
         int value = 0;
         int tier = base.getTier();
@@ -574,7 +570,6 @@ public class TurretHeadUtil {
         return value;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static int getScattershotUpgrades(TurretBase base) {
         int value = 0;
         int tier = base.getTier();
@@ -600,7 +595,6 @@ public class TurretHeadUtil {
         return value;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static float getAccuraccyUpgrades(TurretBase base, TurretHead turretHead) {
         float accuracy = 0.0F;
         int tier = base.getTier();
@@ -626,7 +620,6 @@ public class TurretHeadUtil {
         return accuracy;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static float getEfficiencyUpgrades(TurretBase base, TurretHead turretHead) {
         float efficiency = 0.0F;
         int tier = base.getTier();
@@ -652,7 +645,6 @@ public class TurretHeadUtil {
         return efficiency;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static float getFireRateUpgrades(TurretBase base, TurretHead turretHead) {
         float rof = 0.0F;
         int tier = base.getTier();
@@ -678,7 +670,6 @@ public class TurretHeadUtil {
         return rof;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static boolean hasRedstoneReactor(TurretBase base) {
         boolean found = false;
         if (base.getTier() == 1) {
@@ -695,7 +686,6 @@ public class TurretHeadUtil {
         return found;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static boolean hasDamageAmpAddon(TurretBase base) {
         boolean found = false;
         if (base.getTier() == 1) {
@@ -712,7 +702,6 @@ public class TurretHeadUtil {
         return found;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static boolean hasConcealmentAddon(TurretBase base) {
         boolean found = false;
         if (base.getTier() == 1) {
@@ -729,7 +718,6 @@ public class TurretHeadUtil {
         return found || OMTConfig.TURRETS.canTurretsConcealWithoutAddon;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static boolean hasSolarPanelAddon(TurretBase base) {
         boolean found = false;
         if (base.getTier() == 1) {
@@ -746,27 +734,6 @@ public class TurretHeadUtil {
         return found;
     }
 
-    @SuppressWarnings({"unused", "ConstantConditions"})
-    public static boolean hasPotentiaUpgradeAddon(TurretBase base) {
-        boolean found = false;
-        if (base.getTier() == 1) {
-            return false;
-        }
-        if (!ModCompatibility.ThaumcraftLoaded) {
-            return false;
-        }
-
-        if (base.getInventory().getStackInSlot(9) != ItemStack.EMPTY) {
-            found = base.getInventory().getStackInSlot(9).getItemDamage() == 2;
-        }
-
-        if (base.getInventory().getStackInSlot(10) != ItemStack.EMPTY && !found) {
-            found = base.getInventory().getStackInSlot(10).getItemDamage() == 2;
-        }
-        return found;
-    }
-
-    @SuppressWarnings("ConstantConditions")
     public static boolean hasSerialPortAddon(TurretBase base) {
         boolean found = false;
         if (base.getTier() == 1) {
@@ -786,7 +753,6 @@ public class TurretHeadUtil {
         return found;
     }
 
-    @SuppressWarnings("ConstantConditions")
     private static boolean hasRecyclerAddon(TurretBase base) {
         boolean found = false;
         if (base.getTier() == 1) {
@@ -802,7 +768,6 @@ public class TurretHeadUtil {
         return found;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static int getAmpLevel(TurretBase base) {
         int amp_level = 0;
 
@@ -831,7 +796,6 @@ public class TurretHeadUtil {
         return amp_level;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static int getFakeDropsLevel(TurretBase base) {
         int fakeDropsLevel = -1;
 

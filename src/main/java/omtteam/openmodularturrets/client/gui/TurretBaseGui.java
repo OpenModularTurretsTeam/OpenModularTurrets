@@ -14,8 +14,8 @@ import omtteam.omlib.api.gui.BlockingAbstractGuiContainer;
 import omtteam.omlib.api.gui.IHasTooltips;
 import omtteam.omlib.api.permission.TrustedPlayer;
 import omtteam.omlib.network.OMLibNetworkingHandler;
-import omtteam.omlib.network.messages.MessageCloseGUI;
-import omtteam.omlib.network.messages.MessageOpenGUI;
+import omtteam.omlib.network.messages.MessageCloseGUITile;
+import omtteam.omlib.network.messages.MessageOpenGUITile;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.DebugHandler;
 import omtteam.omlib.util.WorldUtil;
@@ -114,7 +114,7 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
     public void initGui() {
         buttonInit();
         if (!addedToSyncList) {
-            OMLibNetworkingHandler.INSTANCE.sendToServer(new MessageOpenGUI(base));
+            OMLibNetworkingHandler.INSTANCE.sendToServer(new MessageOpenGUITile(base));
             addedToSyncList = true;
         }
         accessLevel = PlayerUtil.getPlayerAccessLevel(player, base).ordinal();
@@ -215,7 +215,7 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
 
         ArrayList<String> targetInfo = new ArrayList<>();
 
-        targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7f" + base.getOwnerName());
+        targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7f" + base.getOwner().getName());
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7f" + getMachineModeLocalization(base.getMode()));
         boolean isCurrentlyOn = base.isActive();
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(isCurrentlyOn));
@@ -224,12 +224,12 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.PLAYER_KILLS) + ": " + base.getPlayerKills());
         targetInfo.add("");
         if (base.getTrustManager().getTrustedPlayers().size() != 0) {
-            targetInfo.add("\u00A75" + safeLocalize(OMTNames.Localizations.GUI.TRUSTED_PLAYERS) + ":");
+            targetInfo.add("\u00A75" + safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS) + ":");
             for (TrustedPlayer trusted_player : base.getTrustManager().getTrustedPlayers()) {
                 targetInfo.add("\u00A7b" + trusted_player.getName());
             }
         } else {
-            targetInfo.add("\u00A75" + safeLocalize(OMTNames.Localizations.GUI.TRUSTED_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(false));
+            targetInfo.add("\u00A75" + safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(false));
         }
 
         targetInfo.add("");
@@ -343,7 +343,7 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
 
     @Override
     public void onGuiClosed() {
-        OMLibNetworkingHandler.INSTANCE.sendToServer(new MessageCloseGUI(base));
+        OMLibNetworkingHandler.INSTANCE.sendToServer(new MessageCloseGUITile(base));
         super.onGuiClosed();
     }
 }

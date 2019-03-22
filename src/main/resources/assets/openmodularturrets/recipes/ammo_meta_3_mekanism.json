@@ -12,7 +12,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "A": {
-      "item": "#INGOTIRON"
+      "item": "#INGOTSTEEL"
     },
     "B": {
       "item": "minecraft:gunpowder"

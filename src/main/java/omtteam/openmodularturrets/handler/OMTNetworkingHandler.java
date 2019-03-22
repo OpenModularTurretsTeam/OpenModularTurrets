@@ -10,46 +10,37 @@ public class OMTNetworkingHandler {
     public final static SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
 
     public static void initNetworking() {
-        INSTANCE.registerMessage(MessageAddTrustedPlayer.MessageHandlerAddTrustedPlayer.class,
-                                 MessageAddTrustedPlayer.class, 0, Side.SERVER);
-
-        INSTANCE.registerMessage(MessageRemoveTrustedPlayer.MessageHandlerRemoveTrustedPlayer.class,
-                                 MessageRemoveTrustedPlayer.class, 1, Side.SERVER);
-
         INSTANCE.registerMessage(MessageToggleAttackMobs.MessageHandlerToggleAttackMobs.class,
-                                 MessageToggleAttackMobs.class, 2, Side.SERVER);
+                                 MessageToggleAttackMobs.class, 0, Side.SERVER);
 
         INSTANCE.registerMessage(MessageToggleAttackNeutralMobs.MessageHandlerToggleAttackNeutralMobs.class,
-                                 MessageToggleAttackNeutralMobs.class, 3, Side.SERVER);
+                                 MessageToggleAttackNeutralMobs.class, 1, Side.SERVER);
 
         INSTANCE.registerMessage(MessageToggleAttackPlayers.MessageHandlerToggleAttackPlayers.class,
-                                 MessageToggleAttackPlayers.class, 4, Side.SERVER);
+                                 MessageToggleAttackPlayers.class, 2, Side.SERVER);
 
         INSTANCE.registerMessage(MessageAdjustMaxRange.MessageHandlerAdjustYAxisDetect.class,
-                                 MessageAdjustMaxRange.class, 7, Side.SERVER);
+                                 MessageAdjustMaxRange.class, 3, Side.SERVER);
 
-        INSTANCE.registerMessage(MessageDropTurrets.MessageHandlerDropTurrets.class, MessageDropTurrets.class, 8,
+        INSTANCE.registerMessage(MessageDropTurrets.MessageHandlerDropTurrets.class, MessageDropTurrets.class, 4,
                                  Side.SERVER);
 
         INSTANCE.registerMessage(MessageDropBase.MessageHandlerDropBase.class, MessageDropBase.class,
-                                 9, Side.SERVER);
-
-        INSTANCE.registerMessage(MessageModifyPermissions.MessageHandlerModifyPermissions.class,
-                                 MessageModifyPermissions.class, 10, Side.SERVER);
+                                 5, Side.SERVER);
 
         INSTANCE.registerMessage(MessageSetBaseTargetingType.MessageHandlerSetBaseTargetingType.class,
-                                 MessageSetBaseTargetingType.class, 11, Side.SERVER);
+                                 MessageSetBaseTargetingType.class, 6, Side.SERVER);
 
-        INSTANCE.registerMessage(MessageTurretBase.MessageHandlerTurretBase.class, MessageTurretBase.class, 12,
+        INSTANCE.registerMessage(MessageTurretBase.MessageHandlerTurretBase.class, MessageTurretBase.class, 7,
                                  Side.CLIENT);
 
-        INSTANCE.registerMessage(MessageToggleMode.MessageHandlerToggleMode.class, MessageToggleMode.class, 13,
+        INSTANCE.registerMessage(MessageToggleMode.MessageHandlerToggleMode.class, MessageToggleMode.class, 8,
                                  Side.SERVER);
 
         INSTANCE.registerMessage(MessageAdjustLightValue.MessageHandlerAdjustLightValue.class,
-                                 MessageAdjustLightValue.class, 14, Side.SERVER);
+                                 MessageAdjustLightValue.class, 9, Side.SERVER);
 
         INSTANCE.registerMessage(MessageAdjustLightOpacity.MessageHandlerAdjustLightOpacity.class,
-                                 MessageAdjustLightOpacity.class, 15, Side.SERVER);
+                                 MessageAdjustLightOpacity.class, 10, Side.SERVER);
     }
 }

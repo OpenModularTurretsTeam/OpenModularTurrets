@@ -17,6 +17,7 @@ import omtteam.omlib.api.permission.EnumAccessLevel;
 import omtteam.omlib.api.permission.TrustedPlayer;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.EnumMachineMode;
+import omtteam.omlib.util.player.Player;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 import java.util.ArrayList;
@@ -34,9 +35,10 @@ import static omtteam.omlib.proxy.ClientProxy.getWorld;
 public class MessageTurretBase implements IMessage {
     private int x, y, z, rfStorageCurrent, rfStorageMax, tier, camoBlockMeta, maxRange, upperRange, kills, playerKills, lightValue, lightOpacity;
     private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting;
-    private String owner, ownerName, camoBlockRegName;
+    private String camoBlockRegName;
     private List<TrustedPlayer> trustedPlayers = new ArrayList<>();
     private EnumMachineMode mode;
+    private Player owner;
 
     public MessageTurretBase() {
     }
@@ -51,7 +53,6 @@ public class MessageTurretBase implements IMessage {
             this.lightValue = base.getCamoSettings().getLightValue();
             this.lightOpacity = base.getCamoSettings().getLightOpacity();
             this.owner = base.getOwner();
-            this.ownerName = base.getOwnerName();
             this.rfStorageCurrent = base.getEnergyStored(EnumFacing.DOWN);
             this.rfStorageMax = base.getMaxEnergyStored(EnumFacing.DOWN);
             this.attacksMobs = base.isAttacksMobs();
@@ -77,8 +78,7 @@ public class MessageTurretBase implements IMessage {
         this.tier = buf.readInt();
         this.lightValue = buf.readInt();
         this.lightOpacity = buf.readInt();
-        this.owner = ByteBufUtils.readUTF8String(buf);
-        this.ownerName = ByteBufUtils.readUTF8String(buf);
+        this.owner = Player.readFromByteBuf(buf);
         this.rfStorageCurrent = buf.readInt();
         this.rfStorageMax = buf.readInt();
         this.maxRange = buf.readInt();
@@ -112,8 +112,7 @@ public class MessageTurretBase implements IMessage {
         buf.writeInt(tier);
         buf.writeInt(lightValue);
         buf.writeInt(lightOpacity);
-        ByteBufUtils.writeUTF8String(buf, owner);
-        ByteBufUtils.writeUTF8String(buf, ownerName);
+        Player.writeToByteBuf(owner, buf);
         buf.writeInt(rfStorageCurrent);
         buf.writeInt(rfStorageMax);
         buf.writeInt(maxRange);
@@ -156,7 +155,6 @@ public class MessageTurretBase implements IMessage {
                     TurretBase base = (TurretBase) tileEntity;
                     OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
                     base.setOwner(message.owner);
-                    base.setOwnerName(message.ownerName);
                     if (storage != null) {
                         storage.setEnergyStored(message.rfStorageCurrent);
                         storage.setCapacity(message.rfStorageMax);

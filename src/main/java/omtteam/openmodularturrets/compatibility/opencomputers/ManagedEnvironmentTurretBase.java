@@ -41,7 +41,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
         }
-        return new Object[]{base.getOwnerName()};
+        return new Object[]{base.getOwner().getName()};
     }
 
     @SuppressWarnings("unused")

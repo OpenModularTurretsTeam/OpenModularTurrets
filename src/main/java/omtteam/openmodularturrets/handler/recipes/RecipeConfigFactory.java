@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.common.crafting.JsonContext;
-import omtteam.openmodularturrets.compatibility.ModCompatibility;
+import omtteam.omlib.compatibility.OMLibModCompatibility;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 
 import java.util.function.BooleanSupplier;
@@ -22,18 +22,18 @@ public class RecipeConfigFactory implements IConditionFactory {
     @Override
     public BooleanSupplier parse(JsonContext context, JsonObject json) {
         String mod = JsonUtils.getString(json, "mod");
-        if (ModCompatibility.EnderIOLoaded && OMTConfig.GENERAL.recipes.equals("enderio") && mod.equals("enderio")) {
+        if (OMLibModCompatibility.EnderIOLoaded && OMTConfig.GENERAL.recipes.equals("enderio") && mod.equals("enderio")) {
             return () -> true;
-        } else if (ModCompatibility.MekanismLoaded && OMTConfig.GENERAL.recipes.equals("mekanism") && mod.equals("mekanism")) {
+        } else if (OMLibModCompatibility.MekanismLoaded && OMTConfig.GENERAL.recipes.equals("mekanism") && mod.equals("mekanism")) {
             return () -> true;
         } else if (OMTConfig.GENERAL.recipes.equals("vanilla") && mod.equals("vanilla")) {
             return () -> true;
         } else if (OMTConfig.GENERAL.recipes.equals("auto")) {
-            if (ModCompatibility.EnderIOLoaded && mod.equals("enderio")) {
+            if (OMLibModCompatibility.EnderIOLoaded && mod.equals("enderio")) {
                 return () -> true;
-            } else if (ModCompatibility.MekanismLoaded && !ModCompatibility.EnderIOLoaded && mod.equals("mekanism")) {
+            } else if (OMLibModCompatibility.MekanismLoaded && !OMLibModCompatibility.EnderIOLoaded && mod.equals("mekanism")) {
                 return () -> true;
-            } else if (mod.equals("vanilla") && !ModCompatibility.MekanismLoaded && !ModCompatibility.EnderIOLoaded) {
+            } else if (mod.equals("vanilla") && !OMLibModCompatibility.MekanismLoaded && !OMLibModCompatibility.EnderIOLoaded) {
                 return () -> true;
             }
         }

@@ -73,7 +73,7 @@ public class WailaTurretBaseHandler implements IOMLibWailaDataProvider {
             // te.writeToNBT(tag);
             tag.setBoolean("active", base.isActive());
             tag.setInteger("mode", base.getMode().ordinal());
-            tag.setString("ownerName", base.getOwnerName());
+            tag.setString("ownerName", base.getOwner().getName());
         }
 
         return tag;

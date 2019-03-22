@@ -90,7 +90,6 @@ public class OMTNames {
         public static class GUI {
             public static final String BASE = "gui.omtteam.openmodularturrets:base";
             public static final String RANGE = "gui.omtteam.openmodularturrets:range";
-            public static final String TRUSTED_PLAYERS = "gui.omtteam.openmodularturrets:trusted_players";
             public static final String ATTACK_PLAYERS = "gui.omtteam.openmodularturrets:attack_players";
             public static final String ATTACK_MOBS = "gui.omtteam.openmodularturrets:attack_mobs";
             public static final String ATTACK_NEUTRALS = "gui.omtteam.openmodularturrets:attack_neutrals";
@@ -101,10 +100,7 @@ public class OMTNames {
             public static final String DAMAGE_AMP = "gui.omtteam.openmodularturrets:damage_amp";
             public static final String INVENTORY = "gui.omtteam.openmodularturrets:inventory";
             public static final String TARGET = "gui.omtteam.openmodularturrets:target";
-            public static final String ADD_TRUSTED_PLAYER = "gui.omtteam.openmodularturrets:add_trusted_player";
-            public static final String NO_TRUSTED_PLAYERS = "gui.omtteam.openmodularturrets:no_trusted_players";
             public static final String TARGETING_OPTIONS = "gui.omtteam.openmodularturrets:targeting_options";
-            public static final String PERMISSIONS = "gui.omtteam.openmodularturrets:permissions";
             public static final String MULTI = "gui.omtteam.openmodularturrets:multi";
             public static final String SINGLE = "gui.omtteam.openmodularturrets:single";
             public static final String YAW = "gui.omtteam.openmodularturrets:yaw";
@@ -129,18 +125,6 @@ public class OMTNames {
         }
 
         public static class Tooltip {
-            public static final String ADD_TRUSTED_PLAYER = "tooltip.omtteam.openmodularturrets:add_trusted_player";
-            public static final String REMOVE_TRUSTED_PLAYER = "tooltip.omtteam.openmodularturrets:remove_trusted_player";
-            public static final String VIEW_PREVIOUS_TRUSTED_PLAYER = "tooltip.omtteam.openmodularturrets:view_previous_trusted_player";
-            public static final String VIEW_NEXT_TRUSTED_PLAYER = "tooltip.omtteam.openmodularturrets:view_previous_trusted_player";
-            public static final String TP_NONE = "tooltip.omtteam.openmodularturrets:tp_none";
-            public static final String TP_CAN_OPEN_GUI = "tooltip.omtteam.openmodularturrets:tp_can_open_gui";
-            public static final String TP_CAN_CHANGE_SETTINGS = "tooltip.omtteam.openmodularturrets:tp_can_change_settings";
-            public static final String TP_CAN_ADMINISTER = "tooltip.omtteam.openmodularturrets:tp_can_administer";
-            public static final String TP_INCREASE_ACCESS = "tooltip.omtteam.openmodularturrets:tp_increase_access";
-            public static final String TP_DECREASE_ACCESS = "tooltip.omtteam.openmodularturrets:tp_decrease_access";
-            public static final String TEXT_TRUSTED_PLAYER = "tooltip.omtteam.openmodularturrets:tp_text_field";
-            public static final String INFO_ACCESS_LEVEL = "tooltip.omtteam.openmodularturrets:info_access_level";
             public static final String TARGET_NEUTRALS = "tooltip.omtteam.openmodularturrets:target_neutrals";
             public static final String TARGET_MOBS = "tooltip.omtteam.openmodularturrets:target_mobs";
             public static final String TARGET_PLAYERS = "tooltip.omtteam.openmodularturrets:target_players";

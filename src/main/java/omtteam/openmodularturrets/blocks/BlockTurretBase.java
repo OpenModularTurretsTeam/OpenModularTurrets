@@ -37,6 +37,7 @@ import omtteam.omlib.blocks.BlockAbstractCamoTileEntity;
 import omtteam.omlib.compatibility.theoneprobe.TOPInfoProvider;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.EnumMachineMode;
+import omtteam.omlib.util.player.Player;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
@@ -138,7 +139,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @Override
     @ParametersAreNonnullByDefault
     public boolean isTranslucent(IBlockState state) {
-        if (state instanceof IExtendedBlockState) {
+        if (state instanceof IExtendedBlockState && state.getBlock() instanceof BlockTurretBase) {
             return ((IExtendedBlockState) state).getValue(RENDERBLOCKSTATE).getRenderState().isTranslucent();
         }
         return false;
@@ -178,12 +179,10 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
         return super.getActualState(state, worldIn, pos);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     @ParametersAreNonnullByDefault
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote && hand == EnumHand.MAIN_HAND) {
-            ItemStack heldItem = player.getHeldItemMainhand();
             TurretBase base = (TurretBase) world.getTileEntity(pos);
             if (OMTConfig.BASES.allowBaseCamo && handleCamoActivation(world, pos, state, player, hand, side, hitX, hitY, hitZ).isSuccess()) {
                 return true;
@@ -241,7 +240,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                 return;
             }
             base.setCamoState(state);
-            base.setOwner(player.getUniqueID().toString());
+            base.setOwner(new Player(player));
             if (worldIn.isBlockIndirectlyGettingPowered(pos) > 0) {
                 base.setRedstone(true);
             } else if (worldIn.isBlockIndirectlyGettingPowered(pos) == 0) {
@@ -347,6 +346,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public int damageDropped(IBlockState state) {
         return state.getValue(TIER) - 1;
     }
@@ -361,7 +361,6 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
 
     @Override
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings("unchecked")
     @ParametersAreNonnullByDefault
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         for (int i = 0; i < 5; i++) {
@@ -378,7 +377,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             boolean active = base.isActive();
             probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7A" + getMachineModeLocalization(machineMode));
             probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
-            String ownerName = base.getOwnerName();
+            String ownerName = base.getOwner().getName();
             probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
         }
     }

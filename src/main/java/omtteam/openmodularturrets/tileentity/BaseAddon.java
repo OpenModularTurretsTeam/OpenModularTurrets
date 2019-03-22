@@ -5,6 +5,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
+import omtteam.omlib.util.player.Player;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
@@ -32,13 +33,8 @@ public class BaseAddon extends TileEntityBase implements ITurretBaseAddonTileEnt
     }
 
     @Override
-    public String getOwner() {
+    public Player getOwner() {
         return getBase().getOwner();
-    }
-
-    @Override
-    public String getOwnerName() {
-        return getBase().getOwnerName();
     }
 
     public TurretBase getBase() {

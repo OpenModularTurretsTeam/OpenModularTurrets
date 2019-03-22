@@ -35,7 +35,7 @@ import omtteam.omlib.api.permission.EnumAccessLevel;
 import omtteam.omlib.api.permission.TrustedPlayer;
 import omtteam.omlib.api.render.camo.ICamoSupport;
 import omtteam.omlib.api.tile.IDebugTile;
-import omtteam.omlib.network.ISyncable;
+import omtteam.omlib.network.ISyncableTE;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.MessageCamoSettings;
 import omtteam.omlib.power.OMEnergyStorage;
@@ -74,7 +74,7 @@ import static omtteam.omlib.util.player.PlayerUtil.getPlayerUUID;
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "computercraft")}
 )
-public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile, ISyncable, ITickable {
+public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile, ISyncableTE, ITickable {
     public int trustedPlayerIndex = 0;
     public boolean shouldConcealTurrets;
     protected CamoSettings camoSettings;
@@ -429,6 +429,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         if (this.rangeOverridden) {
             nbtTagCompound.setInteger("range", this.currentMaxRange);
         }
+        NBTTagCompound trustedPlayers = new NBTTagCompound();
+        nbtTagCompound.setTag("trustedPlayers", this.getTrustManager().writeToNBT(trustedPlayers));
         return nbtTagCompound;
     }
 
@@ -449,6 +451,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         } else {
             this.rangeOverridden = false;
             this.currentMaxRange = getUpperBoundMaxRange();
+        }
+        if (nbtTagCompound.hasKey("trustedPlayers")) {
+            this.getTrustManager().readFromNBT((NBTTagCompound) nbtTagCompound.getTag("trustedPlayers"));
         }
     }
 

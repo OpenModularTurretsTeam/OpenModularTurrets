@@ -63,7 +63,7 @@ public class BlockRelativisticTurret extends BlockAbstractTurretHead {
             boolean active = turret.getBase().isActive();
 
             probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
-            String ownerName = turret.getBase().getOwnerName();
+            String ownerName = turret.getBase().getOwner().getName();
             probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
         }
     }

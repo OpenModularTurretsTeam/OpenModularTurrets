@@ -74,7 +74,7 @@ public class BlockTeleporterTurret extends BlockAbstractTurretHead {
             boolean active = turret.getBase().isActive();
 
             probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
-            String ownerName = turret.getBase().getOwnerName();
+            String ownerName = turret.getBase().getOwner().getName();
             probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
             probeInfo.text("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": " + String.format("%.2f", 20F / (turret.getTurretBaseFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(turret.getBase(), turret)))) + "s/sec");
         }

@@ -176,7 +176,6 @@ public class BlockExpander extends BlockTurretBaseAddon implements IHasItemBlock
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         Expander expander = (Expander) worldIn.getTileEntity(pos);
         if (expander != null) {
-            expander.setOwnerName(expander.getBase().getOwnerName());
             expander.setOwner(expander.getBase().getOwner());
             expander.setSide();
         }

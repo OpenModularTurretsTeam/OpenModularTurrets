@@ -80,7 +80,7 @@ public class WailaTurretHandler implements IOMLibWailaDataProvider {
             TurretHead turret = (TurretHead) te;
             // te.writeToNBT(tag);
             tag.setBoolean("active", turret.getBase().isActive());
-            tag.setString("ownerName", turret.getOwnerName());
+            tag.setString("ownerName", turret.getOwner().getName());
             tag.setInteger("ammoLevel", getAmmoLevel(turret, turret.getBase()));
             tag.setString("ampLevel", String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * getAmpLevel(turret.getBase())));
             tag.setString("accuracy", String.format("%.2f", Math.min(100F, (100 - turret.getBaseTurretAccuracy() * 10)
