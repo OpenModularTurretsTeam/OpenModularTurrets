@@ -139,7 +139,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @Override
     @ParametersAreNonnullByDefault
     public boolean isTranslucent(IBlockState state) {
-        if (state instanceof IExtendedBlockState && state.getBlock() instanceof BlockTurretBase) {
+        if (state instanceof IExtendedBlockState && state.getBlock() instanceof BlockTurretBase && ((IExtendedBlockState) state).getValue(RENDERBLOCKSTATE) != null) {
             return ((IExtendedBlockState) state).getValue(RENDERBLOCKSTATE).getRenderState().isTranslucent();
         }
         return false;
