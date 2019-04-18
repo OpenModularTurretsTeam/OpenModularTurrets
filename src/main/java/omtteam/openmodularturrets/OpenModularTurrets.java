@@ -1,6 +1,10 @@
 package omtteam.openmodularturrets;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.util.datafix.FixTypes;
+import net.minecraftforge.common.util.CompoundDataFixer;
+import net.minecraftforge.common.util.ModFixs;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -9,6 +13,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import omtteam.openmodularturrets.client.gui.ModularTurretsTab;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
+import omtteam.openmodularturrets.fixes.TENameFix;
 import omtteam.openmodularturrets.handler.OMTGuiHandler;
 import omtteam.openmodularturrets.proxy.CommonProxy;
 import omtteam.openmodularturrets.reference.Reference;
@@ -24,6 +29,7 @@ public class OpenModularTurrets {
     @SidedProxy(clientSide = "omtteam.openmodularturrets.proxy.ClientProxy", serverSide = "omtteam.openmodularturrets.proxy.ServerProxy")
     public static CommonProxy proxy;
     private static Logger logger;
+    public final static int DATA_VERSION = 1;
 
     public static Logger getLogger() {
         return logger;
@@ -39,11 +45,15 @@ public class OpenModularTurrets {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, OMTGuiHandler.getInstance());
     }
 
-    @SuppressWarnings("unused")
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         ModCompatibility.init();
         proxy.init();
+
+        // Fixers
+        CompoundDataFixer fixer = FMLCommonHandler.instance().getDataFixer();
+        ModFixs modFixer = fixer.init(Reference.MOD_ID, DATA_VERSION);
+        modFixer.registerFix(FixTypes.BLOCK_ENTITY, new TENameFix());
     }
 
     @SuppressWarnings("unused")

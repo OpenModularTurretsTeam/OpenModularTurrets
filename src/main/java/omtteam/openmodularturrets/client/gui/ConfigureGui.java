@@ -149,11 +149,11 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
 
     @Override
     public void setEntryValue(int id, float value) {
-        if (id == 10) {
+        if (id == 4) {
             this.lightValue = Math.round(value);
             this.sliderLightValue.setSliderValue(Math.round(value), false);
             sendChangeToServerLightValue(lightValue);
-        } else if (id == 11) {
+        } else if (id == 5) {
             this.lightOpacity = Math.round(value);
             this.sliderLightOpacity.setSliderValue(Math.round(value), false);
             sendChangeToServerLightOpacity(lightOpacity);
@@ -207,9 +207,9 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         if (PlayerUtil.isPlayerAdmin(player, base)) {
 
             this.buttonList.add(new GuiButton(3, guiLeft + 10, guiTop + 90, 155, 20, safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS)));
-            this.sliderLightValue = new GuiSlider(this, 3, guiLeft + 10, guiTop + 157,
+            this.sliderLightValue = new GuiSlider(this, 4, guiLeft + 10, guiTop + 157,
                                                   safeLocalize(OMTNames.Localizations.GUI.LIGHT_VALUE), 0, 15, lightValue, this);
-            this.sliderLightOpacity = new GuiSlider(this, 4, guiLeft + 10, guiTop + 179,
+            this.sliderLightOpacity = new GuiSlider(this, 5, guiLeft + 10, guiTop + 179,
                                                     safeLocalize(OMTNames.Localizations.GUI.LIGHT_OPACITY), 0, 15, lightOpacity, this);
 
 
