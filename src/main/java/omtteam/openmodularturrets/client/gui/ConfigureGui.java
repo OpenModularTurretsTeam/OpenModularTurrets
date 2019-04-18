@@ -6,10 +6,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
+import omtteam.omlib.OMLib;
 import omtteam.omlib.api.gui.IHasTooltips;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.MessageCloseGUITile;
 import omtteam.omlib.network.messages.MessageOpenGUITile;
+import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
@@ -105,7 +107,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
     @Override
     @ParametersAreNonnullByDefault
     protected void actionPerformed(GuiButton guibutton) {
-        if (guibutton.id == 1) { //change Attack Mobs
+        if (guibutton.id == 0) { //change Attack Mobs
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerMobs(!base.isAttacksMobs());
                 guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksMobs()));
@@ -114,7 +116,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             }
         }
 
-        if (guibutton.id == 2) { //change Attack Neutrals
+        if (guibutton.id == 1) { //change Attack Neutrals
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerNeutrals(!base.isAttacksNeutrals());
                 guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksNeutrals()));
@@ -123,10 +125,17 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             }
         }
 
-        if (guibutton.id == 3) { // change Attack Players
+        if (guibutton.id == 2) { // change Attack Players
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerPlayers(!base.isAttacksPlayers());
                 guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksPlayers()));
+            } else {
+                addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
+            }
+        }
+        if (guibutton.id == 3) { // Open TP GUI for this block
+            if (PlayerUtil.isPlayerAdmin(player, base)) {
+                player.openGui(OMLib.instance, 0, player.getEntityWorld(), base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
             } else {
                 addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
             }
@@ -197,6 +206,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         }
         if (PlayerUtil.isPlayerAdmin(player, base)) {
 
+            this.buttonList.add(new GuiButton(3, guiLeft + 10, guiTop + 90, 155, 20, safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS)));
             this.sliderLightValue = new GuiSlider(this, 3, guiLeft + 10, guiTop + 157,
                                                   safeLocalize(OMTNames.Localizations.GUI.LIGHT_VALUE), 0, 15, lightValue, this);
             this.sliderLightOpacity = new GuiSlider(this, 4, guiLeft + 10, guiTop + 179,

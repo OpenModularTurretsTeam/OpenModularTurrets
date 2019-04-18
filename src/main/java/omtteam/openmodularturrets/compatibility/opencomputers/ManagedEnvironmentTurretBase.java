@@ -118,7 +118,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
             return new Object[]{"Computer access deactivated!"};
         }
         if (!base.getTrustManager().addTrustedPlayer(args.checkString(0))) {
-            return new Object[]{"Name not valid!"};
+            return new Object[]{"Not successful!"};
         }
         TrustedPlayer trustedPlayer = base.getTrustManager().getTrustedPlayer(args.checkString(0));
         trustedPlayer.setAccessLevel(EnumAccessLevel.values()[args.checkInteger(1)]);
