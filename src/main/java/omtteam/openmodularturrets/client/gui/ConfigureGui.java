@@ -90,27 +90,33 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         } else if (!isPlayerOwner(player, base) && accessLevel < 2) {
             player.closeScreen();
             player.openGui(OpenModularTurrets.instance, 1, player.getEntityWorld(), base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
+            return;
         }
         ResourceLocation texture = (new ResourceLocation(OMTNames.Textures.configureGUI));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
         this.drawTexturedModalRect((width - xSize) / 2, (height - ySize) / 2, 0, 0, xSize, ySize);
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.TARGETING_OPTIONS) + ": ", guiLeft + 10, guiTop + 8, 0);
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.TARGETING_OPTIONS) + ": ", guiLeft + 10, guiTop + 9, 0);
+        if (accessLevel > 2) {
+            fontRenderer.drawString(safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS) + ": ", guiLeft + 10, guiTop + 84, 0);
+            fontRenderer.drawString(safeLocalize(OMLibNames.Localizations.GUI.LIGHT_VALUES) + ": ", guiLeft + 10, guiTop + 145, 0);
+        }
+        buttonList.get(0).displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
+        buttonList.get(1).displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
+        buttonList.get(2).displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
 
         super.drawScreen(par1, par2, par3);
         drawTooltips();
     }
 
 
-    @SuppressWarnings("deprecation")
     @Override
     @ParametersAreNonnullByDefault
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 0) { //change Attack Mobs
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerMobs(!base.isAttacksMobs());
-                guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksMobs()));
             } else {
                 addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
             }
@@ -119,7 +125,6 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         if (guibutton.id == 1) { //change Attack Neutrals
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerNeutrals(!base.isAttacksNeutrals());
-                guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksNeutrals()));
             } else {
                 addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
             }
@@ -128,7 +133,6 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         if (guibutton.id == 2) { // change Attack Players
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerPlayers(!base.isAttacksPlayers());
-                guibutton.displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(!base.isAttacksPlayers()));
             } else {
                 addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
             }
@@ -182,7 +186,9 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         ArrayList<String> tooltip = new ArrayList<>();
         switch (tooltipToDraw) {
             case 0:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TARGET_MOBS));
+                if (buttonList.get(0).isMouseOver()) {
+                    tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TARGET_MOBS));
+                }
                 break;
             case 1:
                 tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TARGET_NEUTRALS));
@@ -190,6 +196,11 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             case 2:
                 tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TARGET_PLAYERS));
                 break;
+            case 3:
+                tooltip.add(safeLocalize(OMLibNames.Localizations.Tooltip.TRUSTED_PLAYER_GUI));
+                break;
+            default:
+
         }
         if (!tooltip.isEmpty())
             this.drawHoveringText(tooltip, guiLeft + mouseX - k, guiTop + mouseY - l, Minecraft.getMinecraft().fontRenderer);
@@ -206,7 +217,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         }
         if (PlayerUtil.isPlayerAdmin(player, base)) {
 
-            this.buttonList.add(new GuiButton(3, guiLeft + 10, guiTop + 90, 155, 20, safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS)));
+            this.buttonList.add(new GuiButton(3, guiLeft + 10, guiTop + 95, 155, 20, safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS)));
             this.sliderLightValue = new GuiSlider(this, 4, guiLeft + 10, guiTop + 157,
                                                   safeLocalize(OMTNames.Localizations.GUI.LIGHT_VALUE), 0, 15, lightValue, this);
             this.sliderLightOpacity = new GuiSlider(this, 5, guiLeft + 10, guiTop + 179,

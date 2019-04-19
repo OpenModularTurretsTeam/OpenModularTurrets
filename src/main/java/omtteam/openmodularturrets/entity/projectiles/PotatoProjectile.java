@@ -117,6 +117,6 @@ public class PotatoProjectile extends TurretProjectile {
 
     @Override
     public double getDamageAmpBonus() {
-        return OMTConfig.TURRETS.disposable_turret.getDamageAmp();
+        return OMTConfig.TURRETS.potato_cannon_turret.getDamageAmp();
     }
 }

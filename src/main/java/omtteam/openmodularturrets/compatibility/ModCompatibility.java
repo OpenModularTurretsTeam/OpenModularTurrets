@@ -3,11 +3,9 @@ package omtteam.openmodularturrets.compatibility;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import omtteam.omlib.compatibility.OMLibModCompatibility;
-import omtteam.omlib.compatibility.hwyla.OMLibWailaPlugin;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.compatibility.computercraft.CCPeripheralProvider;
-import omtteam.openmodularturrets.compatibility.hwyla.WailaTurretBaseHandler;
-import omtteam.openmodularturrets.compatibility.hwyla.WailaTurretHandler;
+import omtteam.openmodularturrets.compatibility.hwyla.OMTWailaWrapper;
 import omtteam.openmodularturrets.compatibility.opencomputers.DriverTurretBase;
 import omtteam.openmodularturrets.reference.Reference;
 
@@ -58,8 +56,7 @@ public class ModCompatibility {
     }
 
     private static void addWailaPlugins() {
-        OMLibWailaPlugin.addDataProvider(new WailaTurretBaseHandler());
-        OMLibWailaPlugin.addDataProvider(new WailaTurretHandler());
+        OMTWailaWrapper.getInstance().register();
     }
 
     private static void registerOCCompat() {

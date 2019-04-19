@@ -98,6 +98,7 @@ public class GrenadeProjectile extends TurretProjectile {
             this.motionX = 0.0F;
             this.motionY = 0.0F;
             this.motionZ = 0.0F;
+            this.ticksExisted = 35;
         }
     }
 
@@ -118,6 +119,6 @@ public class GrenadeProjectile extends TurretProjectile {
 
     @Override
     public double getDamageAmpBonus() {
-        return OMTConfig.TURRETS.laser_turret.getDamageAmp();
+        return OMTConfig.TURRETS.grenade_turret.getDamageAmp();
     }
 }
