@@ -12,6 +12,8 @@ import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 @SideOnly(Side.CLIENT)
 public class ModelDamageAmp extends ModelBase {
     private final ModelRenderer bottomBar;
@@ -26,50 +28,50 @@ public class ModelDamageAmp extends ModelBase {
         textureWidth = 64;
         textureHeight = 64;
 
-        bottomBar = new ModelRenderer(this, 5, 15);
-        bottomBar.addBox(-1F, 1F, -13F, 2, 1, 11);
+        bottomBar = new ModelRenderer(this, 4, 15);
+        bottomBar.addBox(-1.5F, 1F, -13F, 3, 1, 11);
         bottomBar.setRotationPoint(0F, 16F, 0F);
         bottomBar.setTextureSize(64, 64);
         bottomBar.mirror = true;
         setRotation(bottomBar, 0F, 0F, 0F);
 
         rod1 = new ModelRenderer(this, 0, 0);
-        rod1.addBox(1F, -5F, -13F, 1, 6, 1);
+        rod1.addBox(1.001F, -5F, -13F, 1, 6, 1);
         rod1.setRotationPoint(0F, 16F, 0F);
         rod1.setTextureSize(64, 64);
         rod1.mirror = true;
         setRotation(rod1, 0F, 0F, 0F);
 
         rod2 = new ModelRenderer(this, 0, 0);
-        rod2.addBox(1F, -5F, -11F, 1, 6, 1);
+        rod2.addBox(1.001F, -5F, -11F, 1, 6, 1);
         rod2.setRotationPoint(0F, 16F, 0F);
         rod2.setTextureSize(64, 64);
         rod2.mirror = true;
         setRotation(rod2, 0F, 0F, 0F);
 
         rod3 = new ModelRenderer(this, 0, 0);
-        rod3.addBox(-2F, -5F, -9F, 1, 6, 1);
+        rod3.addBox(-2.001F, -5F, -9F, 1, 6, 1);
         rod3.setRotationPoint(0F, 16F, 0F);
         rod3.setTextureSize(64, 64);
         rod3.mirror = true;
         setRotation(rod3, 0F, 0F, 0F);
 
         rod4 = new ModelRenderer(this, 0, 0);
-        rod4.addBox(-2F, -5F, -13F, 1, 6, 1);
+        rod4.addBox(-2.001F, -5F, -13F, 1, 6, 1);
         rod4.setRotationPoint(0F, 16F, 0F);
         rod4.setTextureSize(64, 64);
         rod4.mirror = true;
         setRotation(rod4, 0F, 0F, 0F);
 
         rod5 = new ModelRenderer(this, 0, 0);
-        rod5.addBox(-2F, -5F, -11F, 1, 6, 1);
+        rod5.addBox(-2.001F, -5F, -11F, 1, 6, 1);
         rod5.setRotationPoint(0F, 16F, 0F);
         rod5.setTextureSize(64, 64);
         rod5.mirror = true;
         setRotation(rod5, 0F, 0F, 0F);
 
         rod6 = new ModelRenderer(this, 0, 0);
-        rod6.addBox(1F, -5F, -9F, 1, 6, 1);
+        rod6.addBox(1.001F, -5F, -9F, 1, 6, 1);
         rod6.setRotationPoint(0F, 16F, 0F);
         rod6.setTextureSize(64, 64);
         rod6.mirror = true;
@@ -77,17 +79,18 @@ public class ModelDamageAmp extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        super.render(entity, f, f1, f2, f3, f4, f5);
-        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+    @ParametersAreNonnullByDefault
+    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+        setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
 
-        bottomBar.render(f5);
-        rod1.render(f5);
-        rod2.render(f5);
-        rod3.render(f5);
-        rod4.render(f5);
-        rod5.render(f5);
-        rod6.render(f5);
+        bottomBar.render(scale);
+        rod1.render(scale);
+        rod2.render(scale);
+        rod3.render(scale);
+        rod4.render(scale);
+        rod5.render(scale);
+        rod6.render(scale);
     }
 
     @SuppressWarnings("SameParameterValue")

@@ -82,6 +82,8 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         this.mouseX = par1;
         this.mouseY = par2;
 
+        this.drawDefaultBackground();
+
         if (accessLevel != PlayerUtil.getPlayerAccessLevel(player, base).ordinal() && !isPlayerOwner(player, base)) {
             accessLevel = PlayerUtil.getPlayerAccessLevel(player, base).ordinal();
             if (accessLevel != 0) {

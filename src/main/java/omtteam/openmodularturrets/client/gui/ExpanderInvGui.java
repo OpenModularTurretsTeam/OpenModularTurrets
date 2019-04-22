@@ -19,6 +19,8 @@ public class ExpanderInvGui extends GuiContainer {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
 
+        this.drawDefaultBackground();
+
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 

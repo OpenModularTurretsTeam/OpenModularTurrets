@@ -129,6 +129,8 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         this.mouseX = par1;
         this.mouseY = par2;
 
+        this.drawDefaultBackground();
+
         if (accessLevel != PlayerUtil.getPlayerAccessLevel(player, base).ordinal()) {
             accessLevel = PlayerUtil.getPlayerAccessLevel(player, base).ordinal();
             if (accessLevel != 0) {
