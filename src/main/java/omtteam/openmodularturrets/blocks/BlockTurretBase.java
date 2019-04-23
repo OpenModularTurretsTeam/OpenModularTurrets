@@ -377,7 +377,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             EnumMachineMode machineMode = base.getMode();
             boolean active = base.isActive();
             probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.MODE) + ": \u00A7A"
-                                   + getLocalizationString(getMachineModeUnLocalization(machineMode)), probeInfo.defaultTextStyle());
+                                   + getLocalizationString(getMachineModeUnlocalization(machineMode)), probeInfo.defaultTextStyle());
 
             probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.ACTIVE)
                                    + ": " + getColoredBooleanColor(active) + getLocalizationString(getBooleanUnlocalizationYesNo(active)), probeInfo.defaultTextStyle());

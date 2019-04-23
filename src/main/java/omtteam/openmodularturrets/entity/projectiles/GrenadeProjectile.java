@@ -21,6 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 public class GrenadeProjectile extends TurretProjectile {
+    private boolean hit = false;
     @SuppressWarnings("unused")
     public GrenadeProjectile(World par1World) {
         super(par1World);
@@ -34,9 +35,8 @@ public class GrenadeProjectile extends TurretProjectile {
 
     @Override
     public void onUpdate() {
-
         super.onUpdate();
-        if (ticksExisted >= 40) {
+        if (ticksExisted >= 35) {
             if (!getEntityWorld().isRemote) {
                 float strength = OMTConfig.TURRETS.canGrenadesDestroyBlocks ? 1.4F : 0.1F;
                 getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
@@ -53,13 +53,7 @@ public class GrenadeProjectile extends TurretProjectile {
                     }
                     setTagsForTurretHit(mob);
 
-                    if (mob instanceof EntityPlayer) {
-                        if (canDamagePlayer((EntityPlayer) mob)) {
-                            mob.attackEntityFrom(new NormalDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage * 0.9F);
-                            mob.attackEntityFrom(new ArmorBypassDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage * 0.1F);
-                            mob.hurtResistantTime = -1;
-                        }
-                    } else if (canDamageEntity(mob)) {
+                    if ((mob instanceof EntityPlayer && canDamagePlayer((EntityPlayer) mob)) || canDamageEntity(mob)) {
                         mob.attackEntityFrom(new NormalDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage * 0.9F);
                         mob.attackEntityFrom(new ArmorBypassDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage * 0.1F);
                         mob.hurtResistantTime = -1;
@@ -77,7 +71,6 @@ public class GrenadeProjectile extends TurretProjectile {
     @Override
     @ParametersAreNonnullByDefault
     public void onHitBlock(IBlockState hitBlock, BlockPos pos) {
-
         if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
             return;
         }
@@ -94,12 +87,20 @@ public class GrenadeProjectile extends TurretProjectile {
 
     @Override
     public void onHitEntity(Entity entity) {
-        if (!(entity instanceof EntityPlayer && !canDamagePlayer((EntityPlayer) entity))) {
-            this.motionX = 0.0F;
-            this.motionY = 0.0F;
-            this.motionZ = 0.0F;
-            this.ticksExisted = 35;
+        if (hit) {
+            return;
         }
+        if ((entity instanceof EntityPlayer && canDamagePlayer((EntityPlayer) entity)) || canDamageEntity(entity)) {
+            this.setVelocity(this.motionX * 0.4F, this.motionY * 1.2F, this.motionZ * 0.4F);
+            this.markVelocityChanged();
+            this.hit = true;
+            this.ticksExisted = 32;
+        }
+    }
+
+    @Override
+    public boolean isImmuneToExplosions() {
+        return true;
     }
 
     @Override
