@@ -7,7 +7,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import omtteam.omlib.OMLib;
+import omtteam.omlib.api.gui.GuiParameters;
 import omtteam.omlib.api.gui.IHasTooltips;
+import omtteam.omlib.api.gui.ISupportsBackSystem;
+import omtteam.omlib.handler.GUIBackSystem;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.MessageCloseGUITile;
 import omtteam.omlib.network.messages.MessageOpenGUITile;
@@ -21,6 +24,7 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 
@@ -29,7 +33,7 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
 import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
 
-public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButtonList.GuiResponder, GuiSlider.FormatHelper {
+public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButtonList.GuiResponder, GuiSlider.FormatHelper, ISupportsBackSystem {
     protected final int xSize = 176;
     protected final int ySize = 205;
     private final TurretBase base;
@@ -56,6 +60,32 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
     @Override
     public boolean doesGuiPauseGame() {
         return false;
+    }
+
+    protected void buttonInit() {
+
+        if (PlayerUtil.canPlayerChangeSetting(player, base)) {
+            String mobsButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
+            String neutralsButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
+            String playersButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
+            this.buttonList.add(new GuiButton(0, guiLeft + 10, guiTop + 20, 155, 20, mobsButton));
+            this.buttonList.add(new GuiButton(1, guiLeft + 10, guiTop + 40, 155, 20, neutralsButton));
+            this.buttonList.add(new GuiButton(2, guiLeft + 10, guiTop + 60, 155, 20, playersButton));
+        }
+        if (PlayerUtil.isPlayerAdmin(player, base)) {
+
+            this.buttonList.add(new GuiButton(3, guiLeft + 10, guiTop + 95, 155, 20, safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS)));
+            this.sliderLightValue = new GuiSlider(this, 4, guiLeft + 10, guiTop + 157,
+                                                  safeLocalize(OMTNames.Localizations.GUI.LIGHT_VALUE), 0, 15, lightValue, this);
+            this.sliderLightOpacity = new GuiSlider(this, 5, guiLeft + 10, guiTop + 179,
+                                                    safeLocalize(OMTNames.Localizations.GUI.LIGHT_OPACITY), 0, 15, lightOpacity, this);
+
+            if (this.base.getTier() > 3) {
+                this.buttonList.add(sliderLightValue);
+                this.buttonList.add(sliderLightOpacity);
+            }
+        }
+        this.buttonList.add(new GuiButton(6, guiLeft + 185, guiTop + 20, 80, 20, safeLocalize(OMLibNames.Localizations.GUI.BACK)));
     }
 
     @Override
@@ -146,6 +176,9 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
                 addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
             }
         }
+        if (guibutton.id == 6) { //back button
+            GUIBackSystem.getInstance().openLastGui(player);
+        }
     }
 
     @Override
@@ -208,31 +241,6 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             this.drawHoveringText(tooltip, guiLeft + mouseX - k, guiTop + mouseY - l, Minecraft.getMinecraft().fontRenderer);
     }
 
-    protected void buttonInit() {
-        if (PlayerUtil.canPlayerChangeSetting(player, base)) {
-            String mobsButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
-            String neutralsButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
-            String playersButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
-            this.buttonList.add(new GuiButton(0, guiLeft + 10, guiTop + 20, 155, 20, mobsButton));
-            this.buttonList.add(new GuiButton(1, guiLeft + 10, guiTop + 40, 155, 20, neutralsButton));
-            this.buttonList.add(new GuiButton(2, guiLeft + 10, guiTop + 60, 155, 20, playersButton));
-        }
-        if (PlayerUtil.isPlayerAdmin(player, base)) {
-
-            this.buttonList.add(new GuiButton(3, guiLeft + 10, guiTop + 95, 155, 20, safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS)));
-            this.sliderLightValue = new GuiSlider(this, 4, guiLeft + 10, guiTop + 157,
-                                                  safeLocalize(OMTNames.Localizations.GUI.LIGHT_VALUE), 0, 15, lightValue, this);
-            this.sliderLightOpacity = new GuiSlider(this, 5, guiLeft + 10, guiTop + 179,
-                                                    safeLocalize(OMTNames.Localizations.GUI.LIGHT_OPACITY), 0, 15, lightOpacity, this);
-
-
-            if (this.base.getTier() > 3) {
-                this.buttonList.add(sliderLightValue);
-                this.buttonList.add(sliderLightOpacity);
-            }
-        }
-    }
-
     private void sendChangeToServerMobs(boolean setTo) {
         MessageToggleAttackMobs message = new MessageToggleAttackMobs(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(), setTo);
         OMTNetworkingHandler.INSTANCE.sendToServer(message);
@@ -270,5 +278,14 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
     public void onGuiClosed() {
         OMLibNetworkingHandler.INSTANCE.sendToServer(new MessageCloseGUITile(base));
         super.onGuiClosed();
+    }
+
+    @Override
+    @Nullable
+    public GuiParameters getGuiParameters() {
+        return new GuiParameters(OpenModularTurrets.instance, 20, player.getEntityWorld(),
+                                 base.getPos().getX(),
+                                 base.getPos().getY(),
+                                 base.getPos().getZ());
     }
 }

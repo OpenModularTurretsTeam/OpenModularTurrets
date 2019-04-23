@@ -11,7 +11,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import omtteam.omlib.api.gui.BlockingAbstractGuiContainer;
+import omtteam.omlib.api.gui.GuiParameters;
 import omtteam.omlib.api.gui.IHasTooltips;
+import omtteam.omlib.api.gui.ISupportsBackSystem;
 import omtteam.omlib.api.permission.TrustedPlayer;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.MessageCloseGUITile;
@@ -30,6 +32,7 @@ import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +46,7 @@ import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
  * Abstract class for all turret base GUIs.
  */
 
-public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasTooltips {
+public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasTooltips, ISupportsBackSystem {
     private final TurretBase base;
     private final EntityPlayer player;
     private int mouseX;
@@ -347,5 +350,14 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
     public void onGuiClosed() {
         OMLibNetworkingHandler.INSTANCE.sendToServer(new MessageCloseGUITile(base));
         super.onGuiClosed();
+    }
+
+    @Override
+    @Nullable
+    public GuiParameters getGuiParameters() {
+        return new GuiParameters(OpenModularTurrets.instance, 1, player.getEntityWorld(),
+                                 base.getPos().getX(),
+                                 base.getPos().getY(),
+                                 base.getPos().getZ());
     }
 }
