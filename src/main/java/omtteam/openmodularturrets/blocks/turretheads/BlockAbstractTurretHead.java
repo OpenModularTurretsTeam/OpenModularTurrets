@@ -36,8 +36,9 @@ import omtteam.openmodularturrets.util.TurretType;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
-import static omtteam.omlib.util.GeneralUtil.safeLocalize;
+import static omtteam.omlib.compatibility.theoneprobe.TOPCompatibility.getLocalizationString;
+import static omtteam.omlib.util.GeneralUtil.getBooleanUnlocalizationYesNo;
+import static omtteam.omlib.util.GeneralUtil.getColoredBooleanColor;
 import static omtteam.openmodularturrets.util.TurretHeadUtil.*;
 
 @SuppressWarnings("deprecation")
@@ -155,18 +156,23 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
             TurretHead turret = (TurretHead) te;
             boolean active = turret.getBase().isActive();
 
-            probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": "
-                                   + getColoredBooleanLocalizationYesNo(active));
-            probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F"
-                                   + turret.getBase().getOwner().getName());
-            probeInfo.text("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.AMMO) + ": \u00A7F"
-                                   + getAmmoLevel(turret, turret.getBase()));
-            probeInfo.text("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": \u00A7F"
-                                   + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * getAmpLevel(turret.getBase())) + "%");
-            probeInfo.text("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ACCURACY) + ": \u00A7F"
-                                   + String.format("%.2f", Math.min(100F, 100F - turret.getActualTurretAccuracy())) + "%");
-            probeInfo.text("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": \u00A7F"
-                                   + String.format("%.2f", 20F / (turret.getTurretBaseFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(turret.getBase(), turret)))) + "s/sec");
+            probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.ACTIVE)
+                                   + ": " + getColoredBooleanColor(active)
+                                   + getLocalizationString(getBooleanUnlocalizationYesNo(active)), probeInfo.defaultTextStyle());
+
+            String ownerName = turret.getBase().getOwner().getName();
+            probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.OWNER)
+                                   + ": \u00A7F" + ownerName, probeInfo.defaultTextStyle());
+
+            probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.AMMO) + ": \u00A7F"
+                                   + getAmmoLevel(turret, turret.getBase()), probeInfo.defaultTextStyle());
+            probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": \u00A7F"
+                                   + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * getAmpLevel(turret.getBase())) + "%", probeInfo.defaultTextStyle());
+            probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.ACCURACY) + ": \u00A7F"
+                                   + String.format("%.2f", Math.min(100F, 100F - turret.getActualTurretAccuracy())) + "%", probeInfo.defaultTextStyle());
+            probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": \u00A7F"
+                                   + String.format("%.2f", 20F / (turret.getTurretBaseFireRate()
+                    * (1 - TurretHeadUtil.getFireRateUpgrades(turret.getBase(), turret)))) + "s/sec", probeInfo.defaultTextStyle());
         }
     }
 }

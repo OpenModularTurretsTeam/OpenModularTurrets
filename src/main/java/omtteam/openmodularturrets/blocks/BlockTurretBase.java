@@ -54,6 +54,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+import static omtteam.omlib.compatibility.theoneprobe.TOPCompatibility.getLocalizationString;
 import static omtteam.omlib.util.GeneralUtil.*;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
@@ -375,10 +376,15 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             TurretBase base = (TurretBase) te;
             EnumMachineMode machineMode = base.getMode();
             boolean active = base.isActive();
-            probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7A" + getMachineModeLocalization(machineMode));
-            probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
+            probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.MODE) + ": \u00A7A"
+                                   + getLocalizationString(getMachineModeUnLocalization(machineMode)), probeInfo.defaultTextStyle());
+
+            probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.ACTIVE)
+                                   + ": " + getColoredBooleanColor(active) + getLocalizationString(getBooleanUnlocalizationYesNo(active)), probeInfo.defaultTextStyle());
+
             String ownerName = base.getOwner().getName();
-            probeInfo.text("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
+            probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.OWNER)
+                                   + ": \u00A7F" + ownerName, probeInfo.defaultTextStyle());
         }
     }
 }
