@@ -11,8 +11,6 @@ import omtteam.omlib.compatibility.opencomputers.AbstractOMTileEntityEnvironment
 import omtteam.omlib.util.EnumMachineMode;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
-import static omtteam.omlib.util.player.PlayerUtil.getPlayerUUID;
-
 /**
  * Created by nico on 09/06/17.
  * The instance of the component wrapper for a specific turret base.
@@ -60,7 +58,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
             return new Object[]{"Computer access deactivated!"};
         }
         base.setAttacksMobs(args.checkBoolean(0));
-        return null;
+        return new Object[]{true};
     }
 
     @SuppressWarnings("unused")
@@ -79,7 +77,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
             return new Object[]{"Computer access deactivated!"};
         }
         base.setAttacksNeutrals(args.checkBoolean(0));
-        return null;
+        return new Object[]{true};
     }
 
     @SuppressWarnings("unused")
@@ -98,7 +96,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
             return new Object[]{"Computer access deactivated!"};
         }
         base.setAttacksPlayers(args.checkBoolean(0));
-        return null;
+        return new Object[]{true};
     }
 
     @SuppressWarnings("unused")
@@ -107,7 +105,19 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
         }
-        return new Object[]{base.getTrustManager().getTrustedPlayers()};
+        return new Object[]{base.getTrustManager().getTrustedPlayersAsListMap()};
+    }
+
+    @SuppressWarnings("unused")
+    @Callback(doc = "function():table; tries to return a specific trusted player from this base")
+    public Object[] getTrustedPlayer(Context context, Arguments args) {
+        if (!base.isComputerAccessible()) {
+            return new Object[]{"Computer access deactivated!"};
+        }
+        if (base.getTrustManager().getTrustedPlayer(args.checkString(0)) != null) {
+            return new Object[]{base.getTrustManager().getTrustedPlayer(args.checkString(0)).asMap()};
+        }
+        return null;
     }
 
     @SuppressWarnings("unused")
@@ -122,8 +132,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
         }
         TrustedPlayer trustedPlayer = base.getTrustManager().getTrustedPlayer(args.checkString(0));
         trustedPlayer.setAccessLevel(EnumAccessLevel.values()[args.checkInteger(1)]);
-        trustedPlayer.setUuid(getPlayerUUID(args.checkString(0)));
-        return null;
+        return new Object[]{true};
     }
 
     @SuppressWarnings("unused")
@@ -133,7 +142,24 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
             return new Object[]{"Computer access deactivated!"};
         }
         base.getTrustManager().removeTrustedPlayer(args.checkString(0));
-        return null;
+        return new Object[]{true};
+    }
+
+    @SuppressWarnings("unused")
+    @Callback(doc = "function(name:String, accessLevel:Integer):string;" +
+            " change players access level. Can return error.")
+    public Object[] changeTrustedPlayerAccess(Context context, Arguments args) {
+        if (!base.isComputerAccessible()) {
+            return new Object[]{"Computer access deactivated!"};
+        }
+        if (base.getTrustManager().getTrustedPlayer(args.checkString(0)) == null) {
+            return new Object[]{"Not found!"};
+        } else if (!args.isInteger(1) || args.checkInteger(1) < 0 || args.checkInteger(1) > 3) {
+            return new Object[]{"Invalid Access Level!"};
+        }
+        TrustedPlayer trustedPlayer = base.getTrustManager().getTrustedPlayer(args.checkString(0));
+        trustedPlayer.setAccessLevel(EnumAccessLevel.values()[args.checkInteger(1)]);
+        return new Object[]{true};
     }
 
     @SuppressWarnings("unused")
@@ -168,12 +194,13 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
     public Object[] setMode(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
-        } else if (!args.isInteger(0) || args.checkInteger(0) <= EnumMachineMode.values().length) {
-            return new Object[]{"Set first parameter to any number between 0 and " + EnumMachineMode.values().length,
+        } else if (!args.isInteger(0) || args.checkInteger(0) >= EnumMachineMode.values().length ||
+                args.checkInteger(0) < 0) {
+            return new Object[]{"Set first parameter to any number between 0 and " + (EnumMachineMode.values().length - 1),
                     "0 - Always on, 1 - always off, 2 - inverted, 3 - not inverted"};
         }
         base.setMode(EnumMachineMode.values()[args.checkInteger(0)]);
-        return null;
+        return new Object[]{true};
     }
 
     @SuppressWarnings("unused")
@@ -192,7 +219,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
             case 3:
                 return new Object[]{"3 - not inverted"};
         }
-        return new Object[]{};
+        return null;
     }
 
     @SuppressWarnings("unused")

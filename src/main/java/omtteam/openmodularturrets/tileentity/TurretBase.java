@@ -61,12 +61,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static omtteam.omlib.compatibility.OMLibModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.OMLibModCompatibility.OpenComputersLoaded;
-import static omtteam.omlib.util.GeneralUtil.getMachineModeLocalization;
 import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 import static omtteam.omlib.util.player.PlayerUtil.getPlayerUUID;
 
@@ -760,10 +758,10 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 commands.setAttacksPlayers.toString(), commands.attacksMobs.toString(),
                 commands.setAttacksMobs.toString(), commands.attacksNeutrals.toString(),
                 commands.setAttacksNeutrals.toString(), commands.getTrustedPlayers.toString(),
-                commands.addTrustedPlayer.toString(), commands.removeTrustedPlayer.toString(),
-                commands.getActive.toString(), commands.getMode.toString(),
-                commands.getRedstone.toString(), commands.setMode.toString(),
-                commands.getType.toString()};
+                commands.getTrustedPlayer.toString(), commands.addTrustedPlayer.toString(),
+                commands.removeTrustedPlayer.toString(), commands.changeAccessLevel.toString(),
+                commands.getActive.toString(), commands.getMode.toString(), commands.getRedstone.toString(),
+                commands.setMode.toString(), commands.getType.toString()};
     }
 
     @Optional.Method(modid = "computercraft")
@@ -807,13 +805,11 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 this.attacksNeutrals = b;
                 return new Object[]{true};
             case getTrustedPlayers:
-                HashMap<String, Integer> result = new HashMap<>();
-                if (this.getTrustManager().getTrustedPlayers() != null && this.getTrustManager().getTrustedPlayers().size() > 0) {
-                    for (TrustedPlayer trustedPlayer : this.getTrustManager().getTrustedPlayers()) {
-                        result.put(trustedPlayer.getName(), trustedPlayer.getAccessLevel().ordinal());
-                    }
+                return new Object[]{this.getTrustManager().getTrustedPlayersAsListMap()};
+            case getTrustedPlayer:
+                if (this.getTrustManager().getTrustedPlayer(arguments[0].toString()) != null) {
+                    return new Object[]{this.getTrustManager().getTrustedPlayer(arguments[0].toString()).asMap()};
                 }
-                return new Object[]{result};
             case addTrustedPlayer:
                 if (arguments[0].toString().equals("")) {
                     return new Object[]{"wrong arguments"};
@@ -830,17 +826,26 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 trustedPlayer.setAccessLevel(EnumAccessLevel.values()[(Integer) arguments[1]]);
                 trustedPlayer.setUuid(getPlayerUUID(arguments[0].toString()));
 
-                return new Object[]{"successfully added player to trust list with parameters"};
+                return new Object[]{true};
             case removeTrustedPlayer:
                 if (arguments[0].toString().equals("")) {
                     return new Object[]{"wrong arguments"};
                 }
                 this.getTrustManager().removeTrustedPlayer(arguments[0].toString());
-                return new Object[]{"removed player from trusted list"};
+                return new Object[]{true};
+            case changeAccessLevel:
+                if (this.getTrustManager().getTrustedPlayer(arguments[0].toString()) == null) {
+                    return new Object[]{"Not found!"};
+                } else if (!(arguments[1] instanceof Integer) || (Integer) arguments[1] < 0 || (Integer) arguments[1] > 3) {
+                    return new Object[]{"Invalid Access Level!"};
+                }
+                trustedPlayer = this.getTrustManager().getTrustedPlayer(arguments[0].toString());
+                trustedPlayer.setAccessLevel(EnumAccessLevel.values()[(Integer) arguments[1]]);
+                return new Object[]{true};
             case getActive:
                 return new Object[]{this.active};
             case getMode:
-                return new Object[]{getMachineModeLocalization(this.mode)};
+                return new Object[]{this.mode.getName()};
             case getRedstone:
                 return new Object[]{this.redstone};
             case setMode:
@@ -879,7 +884,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     public enum commands {
         getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals,
-        getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getMode, getRedstone, setMode,
-        getType
+        getTrustedPlayers, getTrustedPlayer, addTrustedPlayer, removeTrustedPlayer, changeAccessLevel, getActive,
+        getMode, getRedstone, setMode, getType
     }
 }
