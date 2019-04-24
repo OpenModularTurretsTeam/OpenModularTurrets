@@ -69,7 +69,7 @@ public class PotatoProjectile extends TurretProjectile {
     public void onHitEntity(Entity entity) {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile) && !this.isDead) {
 
-            int damage = OMTConfig.TURRETS.potato_cannon_turret.getBaseDamage();
+            int damage = OMTConfig.TURRETS.potato_cannon_turret.baseDamage;
 
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
@@ -117,6 +117,6 @@ public class PotatoProjectile extends TurretProjectile {
 
     @Override
     public double getDamageAmpBonus() {
-        return OMTConfig.TURRETS.potato_cannon_turret.getDamageAmp();
+        return OMTConfig.TURRETS.potato_cannon_turret.damageAmp;
     }
 }

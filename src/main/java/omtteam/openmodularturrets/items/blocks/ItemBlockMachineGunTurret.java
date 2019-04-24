@@ -39,7 +39,7 @@ public class ItemBlockMachineGunTurret extends AbstractItemBlockBaseAddon {
             tooltip.add(TextFormatting.GOLD + "--" + safeLocalize("tooltip.info") + "--");
             tooltip.add(safeLocalize("tooltip.tier") + ": " + TextFormatting.WHITE + "2");
             tooltip.add(safeLocalize("tooltip.range") + ": " + TextFormatting.WHITE +
-                                OMTConfig.TURRETS.machine_gun_turret.getBaseRange());
+                                OMTConfig.TURRETS.machine_gun_turret.baseRange);
             tooltip.add(safeLocalize("tooltip.accuracy") + ": " + TextFormatting.WHITE +
                                 safeLocalize("turret.accuracy.medium"));
             tooltip.add(safeLocalize("tooltip.ammo") + ": " + TextFormatting.WHITE +
@@ -50,13 +50,13 @@ public class ItemBlockMachineGunTurret extends AbstractItemBlockBaseAddon {
             tooltip.add(
                     TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");
             tooltip.add(safeLocalize("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
-                                (OMTConfig.TURRETS.machine_gun_turret.getBaseDamage() / 2F) + " " + safeLocalize(
+                                (OMTConfig.TURRETS.machine_gun_turret.baseDamage / 2F) + " " + safeLocalize(
                     "tooltip.health"));
             tooltip.add(safeLocalize("tooltip.aoe") + ": " + TextFormatting.WHITE + "0");
             tooltip.add(safeLocalize("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
-                    20.0F / OMTConfig.TURRETS.machine_gun_turret.getBaseFireRate()));
+                    20.0F / OMTConfig.TURRETS.machine_gun_turret.baseFireRate));
             tooltip.add(safeLocalize("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
-                                OMTConfig.TURRETS.machine_gun_turret.getPowerUsage() + " RF");
+                                OMTConfig.TURRETS.machine_gun_turret.powerUsage + " RF");
             tooltip.add("");
             tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.turret.1"));
         }

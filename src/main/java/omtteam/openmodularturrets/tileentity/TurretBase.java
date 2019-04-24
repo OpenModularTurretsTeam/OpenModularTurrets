@@ -606,19 +606,19 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         int tier = getTier();
         switch (tier) {
             case 1:
-                return OMTConfig.BASES.baseTierOne.getBaseMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfig.BASES.baseTierOne.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
             case 2:
-                return OMTConfig.BASES.baseTierTwo.getBaseMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfig.BASES.baseTierTwo.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
             case 3:
-                return OMTConfig.BASES.baseTierThree.getBaseMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfig.BASES.baseTierThree.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
             case 4:
-                return OMTConfig.BASES.baseTierFour.getBaseMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfig.BASES.baseTierFour.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
             case 5:
-                return OMTConfig.BASES.baseTierFive.getBaseMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
+                return OMTConfig.BASES.baseTierFive.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
                         this.getWorld(), this.pos);
         }
         return 0;

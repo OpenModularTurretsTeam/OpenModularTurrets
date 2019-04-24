@@ -123,7 +123,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         TurretBase base = getBase(worldIn, pos);
-        if (this.getTurretType().getSettings().getBaseRange() > base.getCurrentMaxRange()) {
+        if (this.getTurretType().getSettings().baseRange > base.getCurrentMaxRange()) {
             base.setUpdateRange(true);
         }
     }

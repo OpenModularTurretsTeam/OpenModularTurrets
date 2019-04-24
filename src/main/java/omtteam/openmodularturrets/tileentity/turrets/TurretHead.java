@@ -187,23 +187,23 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     }
 
     public int getTurretBasePowerUsage() {
-        return this.getTurretType().getSettings().getPowerUsage();
+        return this.getTurretType().getSettings().powerUsage;
     }
 
     public int getTurretBaseFireRate() {
-        return this.getTurretType().getSettings().getBaseFireRate();
+        return this.getTurretType().getSettings().baseFireRate;
     }
 
     public double getBaseTurretAccuracy() {
-        return this.getTurretType().getSettings().getBaseAccuracyDeviation();
+        return this.getTurretType().getSettings().baseAccuracyDeviation;
     }
 
     public int getTurretBaseRange() {
-        return this.getTurretType().getSettings().getBaseRange();
+        return this.getTurretType().getSettings().baseRange;
     }
 
     public double getTurretDamageAmpBonus() {
-        return this.getTurretType().getSettings().getDamageAmp();
+        return this.getTurretType().getSettings().damageAmp;
     }
 
     public double getActualTurretAccuracy() {

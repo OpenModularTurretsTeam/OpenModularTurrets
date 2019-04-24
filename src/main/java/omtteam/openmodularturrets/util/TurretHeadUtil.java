@@ -291,10 +291,10 @@ public class TurretHeadUtil {
                     int chance = new Random().nextInt(99);
 
                     //For negating
-                    if (chance >= 0 && chance < turretHead.getTurretType().getSettings().getRecyclerNegateChance()) {
+                    if (chance >= 0 && chance < turretHead.getTurretType().getSettings().recyclerNegateChance) {
                         return new ItemStack(ammoCheck.getItem());
                         //For adding
-                    } else if (chance > turretHead.getTurretType().getSettings().getRecyclerNegateChance() && chance < (turretHead.getTurretType().getSettings().getRecyclerNegateChance() + turretHead.getTurretType().getSettings().getRecyclerAddChance())) {
+                    } else if (chance > turretHead.getTurretType().getSettings().recyclerNegateChance && chance < (turretHead.getTurretType().getSettings().recyclerNegateChance + turretHead.getTurretType().getSettings().recyclerAddChance)) {
                         exp.getInventory().insertItem(i, new ItemStack(ammoCheck.getItem(), 1), false);
                         return new ItemStack(ammoCheck.getItem());
                     } else {
@@ -373,11 +373,11 @@ public class TurretHeadUtil {
                     int chance = new Random().nextInt(99);
 
                     //For negating
-                    if (chance > 0 && chance < turretHead.getTurretType().getSettings().getRecyclerNegateChance()) {
+                    if (chance > 0 && chance < turretHead.getTurretType().getSettings().recyclerNegateChance) {
                         return new ItemStack(ammo_stack.getItem());
                         //For adding
-                    } else if (chance > turretHead.getTurretType().getSettings().getRecyclerNegateChance() && chance <
-                            (turretHead.getTurretType().getSettings().getRecyclerNegateChance() + turretHead.getTurretType().getSettings().getRecyclerAddChance())) {
+                    } else if (chance > turretHead.getTurretType().getSettings().recyclerNegateChance && chance <
+                            (turretHead.getTurretType().getSettings().recyclerNegateChance + turretHead.getTurretType().getSettings().recyclerAddChance)) {
 
                         base.getInventory().insertItem(i, new ItemStack(ammo_stack.getItem(), 1), false);
                         return new ItemStack(ammo_stack.getItem());
@@ -556,14 +556,14 @@ public class TurretHeadUtil {
         if (tier == 5) {
             if (base.getInventory().getStackInSlot(12) != ItemStack.EMPTY) {
                 if (base.getInventory().getStackInSlot(12).getItemDamage() == 3) {
-                    value += (turretHead.getTurretType().getSettings().getRangeUpgrade() * getStackSize(base.getInventory().getStackInSlot(12)));
+                    value += (turretHead.getTurretType().getSettings().rangeUpgrade * getStackSize(base.getInventory().getStackInSlot(12)));
                 }
             }
         }
 
         if (base.getInventory().getStackInSlot(11) != ItemStack.EMPTY) {
             if (base.getInventory().getStackInSlot(11).getItemDamage() == 3) {
-                value += (turretHead.getTurretType().getSettings().getRangeUpgrade() * getStackSize(base.getInventory().getStackInSlot(11)));
+                value += (turretHead.getTurretType().getSettings().rangeUpgrade * getStackSize(base.getInventory().getStackInSlot(11)));
             }
         }
 
@@ -606,14 +606,14 @@ public class TurretHeadUtil {
         if (tier == 5) {
             if (base.getInventory().getStackInSlot(12) != ItemStack.EMPTY) {
                 if (base.getInventory().getStackInSlot(12).getItemDamage() == 0) {
-                    accuracy += (turretHead.getTurretType().getSettings().getAccuracyUpgrade() * getStackSize(base.getInventory().getStackInSlot(12)));
+                    accuracy += (turretHead.getTurretType().getSettings().accuracyUpgrade * getStackSize(base.getInventory().getStackInSlot(12)));
                 }
             }
         }
 
         if (base.getInventory().getStackInSlot(11) != ItemStack.EMPTY) {
             if (base.getInventory().getStackInSlot(11).getItemDamage() == 0) {
-                accuracy += (turretHead.getTurretType().getSettings().getAccuracyUpgrade() * getStackSize(base.getInventory().getStackInSlot(11)));
+                accuracy += (turretHead.getTurretType().getSettings().accuracyUpgrade * getStackSize(base.getInventory().getStackInSlot(11)));
             }
         }
 
@@ -631,14 +631,14 @@ public class TurretHeadUtil {
         if (tier == 5) {
             if (base.getInventory().getStackInSlot(12) != ItemStack.EMPTY) {
                 if (base.getInventory().getStackInSlot(12).getItemDamage() == 1) {
-                    efficiency += (turretHead.getTurretType().getSettings().getEfficiencyUpgrade() * getStackSize(base.getInventory().getStackInSlot(12)));
+                    efficiency += (turretHead.getTurretType().getSettings().efficiencyUpgrade * getStackSize(base.getInventory().getStackInSlot(12)));
                 }
             }
         }
 
         if (base.getInventory().getStackInSlot(11) != ItemStack.EMPTY) {
             if (base.getInventory().getStackInSlot(11).getItemDamage() == 1) {
-                efficiency += (turretHead.getTurretType().getSettings().getEfficiencyUpgrade() * getStackSize(base.getInventory().getStackInSlot(11)));
+                efficiency += (turretHead.getTurretType().getSettings().efficiencyUpgrade * getStackSize(base.getInventory().getStackInSlot(11)));
             }
         }
 
@@ -656,14 +656,14 @@ public class TurretHeadUtil {
         if (tier == 5) {
             if (base.getInventory().getStackInSlot(12) != ItemStack.EMPTY) {
                 if (base.getInventory().getStackInSlot(12).getItemDamage() == 2) {
-                    rof += (turretHead.getTurretType().getSettings().getFireRateUpgrade() * getStackSize(base.getInventory().getStackInSlot(12)));
+                    rof += (turretHead.getTurretType().getSettings().fireRateUpgrade * getStackSize(base.getInventory().getStackInSlot(12)));
                 }
             }
         }
 
         if (base.getInventory().getStackInSlot(11) != ItemStack.EMPTY) {
             if (base.getInventory().getStackInSlot(11).getItemDamage() == 2) {
-                rof += (turretHead.getTurretType().getSettings().getFireRateUpgrade() * getStackSize(base.getInventory().getStackInSlot(11)));
+                rof += (turretHead.getTurretType().getSettings().fireRateUpgrade * getStackSize(base.getInventory().getStackInSlot(11)));
             }
         }
 

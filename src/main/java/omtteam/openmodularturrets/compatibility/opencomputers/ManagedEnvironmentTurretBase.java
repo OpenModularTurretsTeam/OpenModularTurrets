@@ -121,8 +121,8 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
     }
 
     @SuppressWarnings("unused")
-    @Callback(doc = "function(name:String, [accessLevel:Integer]):string;" +
-            " adds Trusted player to Trustlist. Can return error.")
+    @Callback(doc = "function(name:String, [accessLevel:Integer]):boolean;" +
+            " adds trusted player to trustlist. Can return error.")
     public Object[] addTrustedPlayer(Context context, Arguments args) {
         if (!base.isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};

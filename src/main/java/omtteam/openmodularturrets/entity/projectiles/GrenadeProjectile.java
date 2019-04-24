@@ -46,7 +46,7 @@ public class GrenadeProjectile extends TurretProjectile {
 
                 for (EntityLivingBase mob : targets) {
 
-                    int damage = OMTConfig.TURRETS.grenade_turret.getBaseDamage();
+                    int damage = OMTConfig.TURRETS.grenade_turret.baseDamage;
 
                     if (isAmped) {
                         damage += ((int) mob.getHealth() * (getDamageAmpBonus() * amp_level));
@@ -120,6 +120,6 @@ public class GrenadeProjectile extends TurretProjectile {
 
     @Override
     public double getDamageAmpBonus() {
-        return OMTConfig.TURRETS.grenade_turret.getDamageAmp();
+        return OMTConfig.TURRETS.grenade_turret.damageAmp;
     }
 }

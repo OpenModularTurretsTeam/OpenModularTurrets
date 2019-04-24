@@ -147,7 +147,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
 
     protected void damageEntity(Entity entity) {
         float damageModifier = this.getDamageModifier(entity); // The damage modifier of the turret based on entity
-        float damage = this.getTurretType().getSettings().getBaseDamage() * damageModifier;
+        float damage = this.getTurretType().getSettings().baseDamage * damageModifier;
         int fakeDrops = TurretHeadUtil.getFakeDropsLevel(base);
 
         if (this.getTurretDamageAmpBonus() * TurretHeadUtil.getAmpLevel(base) > 0) {

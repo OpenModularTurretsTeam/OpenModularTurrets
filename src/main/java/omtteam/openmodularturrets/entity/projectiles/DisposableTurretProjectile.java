@@ -69,7 +69,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
     public void onHitEntity(Entity entity) {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile) && !this.isDead) {
 
-            int damage = OMTConfig.TURRETS.disposable_turret.getBaseDamage();
+            int damage = OMTConfig.TURRETS.disposable_turret.baseDamage;
 
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
@@ -121,6 +121,6 @@ public class DisposableTurretProjectile extends TurretProjectile {
 
     @Override
     public double getDamageAmpBonus() {
-        return OMTConfig.TURRETS.disposable_turret.getDamageAmp();
+        return OMTConfig.TURRETS.disposable_turret.damageAmp;
     }
 }

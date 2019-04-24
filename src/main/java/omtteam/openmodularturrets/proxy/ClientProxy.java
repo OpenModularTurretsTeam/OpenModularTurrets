@@ -64,34 +64,34 @@ public class ClientProxy extends CommonProxy {
         StateMap ignoreConcealed = new StateMap.Builder().ignore(BlockAbstractTurretHead.CONCEALED).build();
         StateMap ignoreFacing = new StateMap.Builder().ignore(BlockBaseAddon.FACING).build();
         ModelLoader.setCustomStateMapper(ModBlocks.leverBlock, ignoreRotation);
-        if (OMTConfig.TURRETS.disposable_turret.isEnabled()) {
+        if (OMTConfig.TURRETS.disposable_turret.enabled) {
             ModelLoader.setCustomStateMapper(ModBlocks.disposableItemTurret, ignoreConcealed);
         }
-        if (OMTConfig.TURRETS.laser_turret.isEnabled()) {
+        if (OMTConfig.TURRETS.laser_turret.enabled) {
             ModelLoader.setCustomStateMapper(ModBlocks.grenadeLauncherTurret, ignoreConcealed);
         }
-        if (OMTConfig.TURRETS.teleporter_turret.isEnabled()) {
+        if (OMTConfig.TURRETS.teleporter_turret.enabled) {
             ModelLoader.setCustomStateMapper(ModBlocks.teleporterTurret, ignoreConcealed);
         }
-        if (OMTConfig.TURRETS.incendiary_turret.isEnabled()) {
+        if (OMTConfig.TURRETS.incendiary_turret.enabled) {
             ModelLoader.setCustomStateMapper(ModBlocks.incendiaryTurret, ignoreConcealed);
         }
-        if (OMTConfig.TURRETS.laser_turret.isEnabled()) {
+        if (OMTConfig.TURRETS.laser_turret.enabled) {
             ModelLoader.setCustomStateMapper(ModBlocks.laserTurret, ignoreConcealed);
         }
-        if (OMTConfig.TURRETS.railgun_turret.isEnabled()) {
+        if (OMTConfig.TURRETS.railgun_turret.enabled) {
             ModelLoader.setCustomStateMapper(ModBlocks.railGunTurret, ignoreConcealed);
         }
-        if (OMTConfig.TURRETS.relativistic_turret.isEnabled()) {
+        if (OMTConfig.TURRETS.relativistic_turret.enabled) {
             ModelLoader.setCustomStateMapper(ModBlocks.relativisticTurret, ignoreConcealed);
         }
-        if (OMTConfig.TURRETS.rocket_turret.isEnabled()) {
+        if (OMTConfig.TURRETS.rocket_turret.enabled) {
             ModelLoader.setCustomStateMapper(ModBlocks.rocketTurret, ignoreConcealed);
         }
-        if (OMTConfig.TURRETS.machine_gun_turret.isEnabled()) {
+        if (OMTConfig.TURRETS.machine_gun_turret.enabled) {
             ModelLoader.setCustomStateMapper(ModBlocks.machineGunTurret, ignoreConcealed);
         }
-        if (OMTConfig.TURRETS.potato_cannon_turret.isEnabled()) {
+        if (OMTConfig.TURRETS.potato_cannon_turret.enabled) {
             ModelLoader.setCustomStateMapper(ModBlocks.potatoCannonTurret, ignoreConcealed);
         }
         ModelLoaderRegistry.registerLoader(new TurretBaseBakedModel.ModelLoader());

@@ -69,7 +69,7 @@ public class RocketProjectile extends TurretProjectile {
     }
 
     private void damageEntityLivingBase(EntityLivingBase mob) {
-        int damage = OMTConfig.TURRETS.rocket_turret.getBaseDamage();
+        int damage = OMTConfig.TURRETS.rocket_turret.baseDamage;
 
         if (isAmped) {
             damage += ((int) mob.getHealth() * (getDamageAmpBonus() * amp_level));
@@ -153,6 +153,6 @@ public class RocketProjectile extends TurretProjectile {
 
     @Override
     public double getDamageAmpBonus() {
-        return OMTConfig.TURRETS.rocket_turret.getDamageAmp();
+        return OMTConfig.TURRETS.rocket_turret.damageAmp;
     }
 }

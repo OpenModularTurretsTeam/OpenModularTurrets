@@ -48,7 +48,7 @@ public class BlazingClayProjectile extends TurretProjectile {
                                                    this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-            int damage = OMTConfig.TURRETS.incendiary_turret.getBaseDamage();
+            int damage = OMTConfig.TURRETS.incendiary_turret.baseDamage;
             for (Entity mob : targets) {
 
                 if (mob instanceof EntityPlayer) {
@@ -78,7 +78,7 @@ public class BlazingClayProjectile extends TurretProjectile {
                                                    this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-            int damage = OMTConfig.TURRETS.incendiary_turret.getBaseDamage();
+            int damage = OMTConfig.TURRETS.incendiary_turret.baseDamage;
 
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
@@ -130,6 +130,6 @@ public class BlazingClayProjectile extends TurretProjectile {
 
     @Override
     public double getDamageAmpBonus() {
-        return OMTConfig.TURRETS.incendiary_turret.getDamageAmp();
+        return OMTConfig.TURRETS.incendiary_turret.damageAmp;
     }
 }

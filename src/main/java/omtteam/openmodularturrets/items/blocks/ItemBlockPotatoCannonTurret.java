@@ -39,7 +39,7 @@ public class ItemBlockPotatoCannonTurret extends AbstractItemBlockBaseAddon {
             tooltip.add(TextFormatting.GOLD + "--" + safeLocalize("tooltip.info") + "--");
             tooltip.add(safeLocalize("tooltip.tier") + ": " + TextFormatting.WHITE + "1");
             tooltip.add(safeLocalize("tooltip.range") + ": " + TextFormatting.WHITE +
-                                OMTConfig.TURRETS.potato_cannon_turret.getBaseRange());
+                                OMTConfig.TURRETS.potato_cannon_turret.baseRange);
             tooltip.add(safeLocalize("tooltip.accuracy") + ": " + TextFormatting.WHITE +
                                 safeLocalize("turret.accuracy.medium"));
             tooltip.add(safeLocalize("tooltip.ammo") + ": " + TextFormatting.WHITE +
@@ -50,13 +50,13 @@ public class ItemBlockPotatoCannonTurret extends AbstractItemBlockBaseAddon {
             tooltip.add(
                     TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");
             tooltip.add(safeLocalize("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
-                                (OMTConfig.TURRETS.potato_cannon_turret.getBaseDamage() / 2F) + " " + safeLocalize(
+                                (OMTConfig.TURRETS.potato_cannon_turret.baseDamage / 2F) + " " + safeLocalize(
                     "tooltip.health"));
             tooltip.add(safeLocalize("tooltip.aoe") + ": " + TextFormatting.WHITE + "0");
             tooltip.add(safeLocalize("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
-                    20.0F / OMTConfig.TURRETS.potato_cannon_turret.getBaseFireRate()));
+                    20.0F / OMTConfig.TURRETS.potato_cannon_turret.baseFireRate));
             tooltip.add(safeLocalize("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
-                                OMTConfig.TURRETS.potato_cannon_turret.getPowerUsage() + " RF");
+                                OMTConfig.TURRETS.potato_cannon_turret.powerUsage + " RF");
             tooltip.add("");
             tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.turret.6"));
         }
