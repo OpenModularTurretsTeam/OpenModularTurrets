@@ -81,7 +81,7 @@ public abstract class BlockTurretBaseAddon extends BlockAbstractTileEntity imple
             }
         }
         if (!found) {
-            this.dropBlockAsItem(worldIn, pos, state, 0);
+            worldIn.destroyBlock(pos, true);
         }
     }
 }

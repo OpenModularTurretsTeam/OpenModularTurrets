@@ -98,7 +98,7 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
 
     @Override
     public void update() {
-        if (this.getWorld().getWorldTime() % 15 == 0 && getBase() == null || dropBlock) {
+        if (this.getWorld().getWorldTime() % 15 == 0 && dropBlock) {
             this.getWorld().destroyBlock(this.pos, true);
         }
     }
