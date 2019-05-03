@@ -21,7 +21,7 @@ import omtteam.omlib.util.WorldUtil;
 import omtteam.openmodularturrets.api.lists.MobBlacklist;
 import omtteam.openmodularturrets.api.lists.MobList;
 import omtteam.openmodularturrets.api.lists.NeutralList;
-import omtteam.openmodularturrets.blocks.BlockBaseAddon;
+import omtteam.openmodularturrets.blocks.BlockBaseAttachment;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.items.AmmoMetaItem;
@@ -36,7 +36,7 @@ import static omtteam.omlib.compatibility.OMLibModCompatibility.OpenComputersLoa
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.inventory.InvUtil.getStackSize;
 import static omtteam.omlib.util.player.PlayerUtil.*;
-import static omtteam.openmodularturrets.blocks.BlockBaseAddon.BASE_ADDON_META;
+import static omtteam.openmodularturrets.blocks.BlockBaseAttachment.BASE_ADDON_META;
 import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 
 public class TurretHeadUtil {
@@ -827,7 +827,7 @@ public class TurretHeadUtil {
     public static boolean baseHasNoLootDeleter(TurretBase base) {
         List<IBlockState> states = WorldUtil.getTouchingBlockStates(base.getWorld(), base.getPos());
         for (IBlockState state : states) {
-            if (state.getBlock() instanceof BlockBaseAddon) {
+            if (state.getBlock() instanceof BlockBaseAttachment) {
                 if (state.getValue(BASE_ADDON_META) == 0) {
                     return false;
                 }

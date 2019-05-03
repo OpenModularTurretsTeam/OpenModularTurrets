@@ -16,6 +16,10 @@ class TeleporterTurretRenderer extends AbstractTurretRenderer {
         model = new ModelTeleporterTurret();
     }
 
+    @Override
+    protected byte addonsRendered() {
+        return 0b000;
+    }
     @SuppressWarnings("ConstantConditions")
     @Override
     public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {

@@ -16,6 +16,11 @@ class GrenadeLauncherTurretRenderer extends AbstractTurretRenderer {
         model = new ModelGrenadeLauncher();
     }
 
+    @Override
+    protected byte addonsRendered() {
+        return 0b111;
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
     public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {

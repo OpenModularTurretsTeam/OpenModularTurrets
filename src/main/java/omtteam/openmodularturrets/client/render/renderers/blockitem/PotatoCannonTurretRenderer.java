@@ -18,6 +18,11 @@ class PotatoCannonTurretRenderer extends AbstractTurretRenderer {
         model = new ModelPotatoCannonTurret();
     }
 
+    @Override
+    protected byte addonsRendered() {
+        return 0b111;
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
     @SideOnly(Side.CLIENT)

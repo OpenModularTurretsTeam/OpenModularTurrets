@@ -16,6 +16,11 @@ class RelativisticTurretRenderer extends AbstractTurretRenderer {
         model = new ModelRelativisticTurret();
     }
 
+    @Override
+    protected byte addonsRendered() {
+        return 0b010;
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
     public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {

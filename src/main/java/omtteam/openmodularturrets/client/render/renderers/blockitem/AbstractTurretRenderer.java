@@ -14,7 +14,7 @@ import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
-public class AbstractTurretRenderer extends TileEntitySpecialRenderer {
+public abstract class AbstractTurretRenderer extends TileEntitySpecialRenderer {
     protected final ModelSolarPanelAddon solar;
     protected final ModelDamageAmp amp;
     protected final ModelRedstoneReactor reac;
@@ -24,6 +24,13 @@ public class AbstractTurretRenderer extends TileEntitySpecialRenderer {
         this.amp = new ModelDamageAmp();
         this.reac = new ModelRedstoneReactor();
     }
+
+    /**
+     * This should give back which addons should be rendered
+     *
+     * @return least significant bit is damage, next is solar, next is redstone reactor
+     */
+    protected abstract byte addonsRendered();
 
     protected void render(TurretHead turretHead, boolean doRotation, ModelAbstractTurret model, double x, double y, double z) {
         int rotation;
@@ -61,16 +68,8 @@ public class AbstractTurretRenderer extends TileEntitySpecialRenderer {
         model.renderAll();
 
         if (turretHead.getBase() != null) {
-            if (TurretHeadUtil.hasSolarPanelAddon(turretHead.getBase())) {
-                ResourceLocation texturesSolar = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_solar_panel.png"));
-                Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
-                if (doRotation) {
-                    solar.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(directedTurret.getYaw(), directedTurret.getPitch()), MathUtil.getRotationXZFromYawPitch(directedTurret.getYaw(), directedTurret.getPitch()));
-                }
-                solar.renderAll();
-            }
 
-            if (TurretHeadUtil.hasDamageAmpAddon(turretHead.getBase())) {
+            if (TurretHeadUtil.hasDamageAmpAddon(turretHead.getBase()) && ((this.addonsRendered()) & 1) != 0) {
                 ResourceLocation texturesAmp = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_damage_amp.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
                 if (doRotation) {
@@ -79,7 +78,16 @@ public class AbstractTurretRenderer extends TileEntitySpecialRenderer {
                 amp.renderAll();
             }
 
-            if (TurretHeadUtil.hasRedstoneReactor(turretHead.getBase())) {
+            if (TurretHeadUtil.hasSolarPanelAddon(turretHead.getBase()) && ((this.addonsRendered() >>> 1) & 1) != 0) {
+                ResourceLocation texturesSolar = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_solar_panel.png"));
+                Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
+                if (doRotation) {
+                    solar.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(directedTurret.getYaw(), directedTurret.getPitch()), MathUtil.getRotationXZFromYawPitch(directedTurret.getYaw(), directedTurret.getPitch()));
+                }
+                solar.renderAll();
+            }
+
+            if (TurretHeadUtil.hasRedstoneReactor(turretHead.getBase()) && ((this.addonsRendered() >>> 2) & 1) != 0) {
                 ResourceLocation texturesReac = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_redstone_reactor.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesReac);
                 if (doRotation) {

@@ -18,6 +18,11 @@ class DisposableItemTurretRenderer extends AbstractTurretRenderer {
         model = new ModelDisposableItemTurret();
     }
 
+    @Override
+    protected byte addonsRendered() {
+        return 0b111;
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
     @SideOnly(Side.CLIENT)

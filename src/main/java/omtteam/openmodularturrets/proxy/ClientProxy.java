@@ -11,7 +11,7 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.render.camo.CamoBlockColor;
-import omtteam.openmodularturrets.blocks.BlockBaseAddon;
+import omtteam.openmodularturrets.blocks.BlockBaseAttachment;
 import omtteam.openmodularturrets.blocks.LeverBlock;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.client.render.models.TurretBaseBakedModel;
@@ -62,7 +62,7 @@ public class ClientProxy extends CommonProxy {
     public void initModelLoaders() {
         StateMap ignoreRotation = new StateMap.Builder().ignore(LeverBlock.ROTATION).build();
         StateMap ignoreConcealed = new StateMap.Builder().ignore(BlockAbstractTurretHead.CONCEALED).build();
-        StateMap ignoreFacing = new StateMap.Builder().ignore(BlockBaseAddon.FACING).build();
+        StateMap ignoreFacing = new StateMap.Builder().ignore(BlockBaseAttachment.FACING).build();
         ModelLoader.setCustomStateMapper(ModBlocks.leverBlock, ignoreRotation);
         if (OMTConfig.TURRETS.disposable_turret.enabled) {
             ModelLoader.setCustomStateMapper(ModBlocks.disposableItemTurret, ignoreConcealed);

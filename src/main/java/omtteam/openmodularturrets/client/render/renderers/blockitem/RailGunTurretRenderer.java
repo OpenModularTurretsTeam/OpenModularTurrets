@@ -18,6 +18,11 @@ class RailGunTurretRenderer extends AbstractTurretRenderer {
         model = new ModelRailgun();
     }
 
+    @Override
+    protected byte addonsRendered() {
+        return 0b111;
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
     @SideOnly(Side.CLIENT)

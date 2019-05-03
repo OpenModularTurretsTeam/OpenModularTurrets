@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraftforge.registries.IForgeRegistry;
 import omtteam.omlib.util.InitHelper;
 import omtteam.openmodularturrets.api.lists.TurretList;
-import omtteam.openmodularturrets.blocks.BlockBaseAddon;
+import omtteam.openmodularturrets.blocks.BlockBaseAttachment;
 import omtteam.openmodularturrets.blocks.BlockExpander;
 import omtteam.openmodularturrets.blocks.BlockTurretBase;
 import omtteam.openmodularturrets.blocks.LeverBlock;
@@ -40,7 +40,7 @@ public class ModBlocks {
     public static void initBlocks(IForgeRegistry<Block> registry) {
         turretBase = InitHelper.registerBlock(new BlockTurretBase(), registry, ModItems.subblocks);
         expander = InitHelper.registerBlock(new BlockExpander(), registry, ModItems.subblocks);
-        baseAddon = InitHelper.registerBlock(new BlockBaseAddon(), registry, ModItems.subblocks);
+        baseAddon = InitHelper.registerBlock(new BlockBaseAttachment(), registry, ModItems.subblocks);
 
         if (OMTConfig.TURRETS.disposable_turret.enabled) {
             disposableItemTurret = InitHelper.registerBlock(new BlockDisposableTurret(), registry, ModItems.subblocks);

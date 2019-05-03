@@ -37,10 +37,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * Created by Keridos on 25/11/17.
  * This Class
  */
-public class BlockBaseAddon extends BlockTurretBaseAddon implements IHasItemBlock {
+public class BlockBaseAttachment extends BlockTurretBaseAttachment implements IHasItemBlock {
     public static final PropertyInteger BASE_ADDON_META = PropertyInteger.create("meta", 0, 1);
 
-    public BlockBaseAddon() {
+    public BlockBaseAttachment() {
         super(Material.GLASS);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         if (!OMTConfig.TURRETS.turretBreakable) {
