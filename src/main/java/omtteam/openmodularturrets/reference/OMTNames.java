@@ -151,5 +151,6 @@ public class OMTNames {
         public static final String turretBaseTierFourGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_four.png";
         public static final String turretBaseTierFiveGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_five.png";
         public static final String configureGUI = Reference.MOD_ID + ":textures/gui/configure.png";
+        public static final String expanderGUI = Reference.MOD_ID + ":textures/gui/expander_inv.png";
     }
 }
