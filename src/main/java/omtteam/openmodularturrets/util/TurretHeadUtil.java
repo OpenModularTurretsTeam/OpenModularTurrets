@@ -12,7 +12,8 @@ import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -33,7 +34,6 @@ import java.util.*;
 
 import static omtteam.omlib.compatibility.OMLibModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.OMLibModCompatibility.OpenComputersLoaded;
-import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.inventory.InvUtil.getStackSize;
 import static omtteam.omlib.util.player.PlayerUtil.*;
 import static omtteam.openmodularturrets.blocks.BlockBaseAttachment.BASE_ADDON_META;
@@ -52,7 +52,7 @@ public class TurretHeadUtil {
                                                    pos.getY() + turretRange + warnDistance,
                                                    pos.getZ() + turretRange + warnDistance);
 
-            if (worldObj.getWorldTime() % 2000 == 0) {
+            if (worldObj.getWorldTime() % 1200 == 0) {
                 warnedPlayers.clear();
             }
 
@@ -74,8 +74,7 @@ public class TurretHeadUtil {
             player.playSound(ModSounds.warningSound, 1.0F, 1.0F);
         }
         if (OMTConfig.TURRETS.turretWarnMessage) {
-            addChatMessage(player, new TextComponentString(
-                    TextFormatting.DARK_RED + safeLocalize("status.warning")));
+            addChatMessage(player, new TextComponentTranslation("status.warning").setStyle(new Style().setColor(TextFormatting.RED)));
         }
     }
 
