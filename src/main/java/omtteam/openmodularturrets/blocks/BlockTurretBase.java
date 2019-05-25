@@ -23,7 +23,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -209,7 +209,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                     world.notifyBlockUpdate(pos, state, state, 6);
                     player.openGui(OpenModularTurrets.instance, 1, world, pos.getX(), pos.getY(), pos.getZ());
                 } else {
-                    addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
+                    addChatMessage(player, new TextComponentTranslation("status.ownership"));
                 }
             }
         }

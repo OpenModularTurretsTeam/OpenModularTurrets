@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -40,7 +41,7 @@ import static omtteam.openmodularturrets.blocks.BlockBaseAttachment.BASE_ADDON_M
 import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 
 public class TurretHeadUtil {
-    private static final HashSet<EntityPlayerMP> warnedPlayers = new HashSet<>();
+    private static final HashSet<Tuple<EntityPlayerMP, TurretBase>> warnedPlayers = new HashSet<>();
 
     public static void warnPlayers(TurretBase base, World worldObj, BlockPos pos, int turretRange) {
         if (base.isAttacksPlayers()) {
@@ -52,18 +53,18 @@ public class TurretHeadUtil {
                                                    pos.getY() + turretRange + warnDistance,
                                                    pos.getZ() + turretRange + warnDistance);
 
-            if (worldObj.getWorldTime() % 1200 == 0) {
+            if (worldObj.getWorldTime() % 12000 == 3) {
                 warnedPlayers.clear();
             }
 
             List<EntityPlayerMP> targets = worldObj.getEntitiesWithinAABB(EntityPlayerMP.class, axis);
 
             for (EntityPlayerMP target : targets) {
-                if (!target.getUniqueID().toString().equals(base.getOwner())
-                        && !isPlayerTrusted(target, base) &&
-                        !warnedPlayers.contains(target) && !target.capabilities.isCreativeMode) {
+                Tuple<EntityPlayerMP, TurretBase> entry = new Tuple<>(target, base);
+                if (!isPlayerOwner(target, base) && !isPlayerTrusted(target, base) &&
+                        !warnedPlayers.contains(entry) && !target.capabilities.isCreativeMode) {
                     dispatchWarnMessage(target, worldObj);
-                    warnedPlayers.add(target);
+                    warnedPlayers.add(entry);
                 }
             }
         }

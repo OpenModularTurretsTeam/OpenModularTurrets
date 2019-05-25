@@ -16,7 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -35,7 +35,6 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
 
 /**
@@ -157,7 +156,7 @@ public class BlockExpander extends BlockTurretBaseAttachment implements IHasItem
                 return true;
             }
         } else {
-            addChatMessage(playerIn, new TextComponentString(safeLocalize("status.ownership")));
+            addChatMessage(playerIn, new TextComponentTranslation("status.ownership"));
         }
         return true;
     }
