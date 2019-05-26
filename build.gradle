@@ -230,7 +230,7 @@ curseforge {
             optionalDependency 'ompd'
             optionalDependency 'ender-io'
             optionalDependency 'redstone-flux'
-            optionalDependency 'thermalexpansion'
+            optionalDependency 'thermal-expansion'
         }
 
         mainArtifact(jar) {
