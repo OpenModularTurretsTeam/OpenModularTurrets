@@ -61,33 +61,22 @@ compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
 
-// define the properties file
-ext.configFile = file "project.properties"
-
-configFile.withReader {
-    // read config.  it shall from now on be referenced as simply config or as project.config
-    def prop = new Properties()
-    prop.load(it)
-    project.ext.config = new ConfigSlurper().parse prop
-}
-config = project.ext.config
-
-version = "${config.mod_version}"
+version = "${mod_version}"
 if (hasProperty('appendBuildNumber')) {
     version = version + "-" + appendBuildNumber.toString()
 } else {
     version = version + "-0"
 }
 
-group = "${config.group_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "${config.mod_id}-${config.minecraft_version}"
+group = "${group_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "${mod_id}-${minecraft_version}"
 
 minecraft {
-    version = "${config.forge_version}"
+    version = "${forge_version}"
     runDir = "run"
 
     replace "@VERSION@", project.version
-    replace "omlib@[0.0.0,)", "omlib@[" + config.omlib_version + ",)"
+    replace "omlib@[0.0.0,)", "omlib@[" + omlib_version + ",)"
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -135,25 +124,25 @@ if (project.allprojects.findAll({ it.name == "OpenModularPassiveDefense" }).size
 }
 
 dependencies {
-    deobfProvided "mezz.jei:jei_${config.minecraft_version}:${config.jei_version}:api"
-    deobfProvided "mcp.mobius.waila:Hwyla:${config.hwyla_version}_${config.minecraft_version_short}"
-    deobfProvided "cofh:RedstoneFlux:${config.minecraft_version_short}-${config.redstoneflux_version}:universal"
-    deobfProvided "mcjty.theoneprobe:TheOneProbe-${config.minecraft_version_short}:${config.minecraft_version_short}-${config.top_version}"
-    deobfProvided "li.cil.oc:OpenComputers:MC${config.minecraft_version_short}.1-${config.oc_version}"
-    deobfProvided "net.industrial-craft:industrialcraft-2:${config.ic2_version}"
-    deobfProvided "net.darkhax.tesla:Tesla-${config.minecraft_version_short}:${config.tesla_version}"
-    //deobfProvided "ValkyrienWarfareRevamped:valkyrienwarfare:${config.valkyrienwarfare_version}:dev"
+    deobfProvided "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
+    deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}"
+    deobfProvided "cofh:RedstoneFlux:${minecraft_version_short}-${redstoneflux_version}:universal"
+    deobfProvided "mcjty.theoneprobe:TheOneProbe-${minecraft_version_short}:${minecraft_version_short}-${top_version}"
+    deobfProvided "li.cil.oc:OpenComputers:MC${minecraft_version_short}.1-${oc_version}"
+    deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}"
+    deobfProvided "net.darkhax.tesla:Tesla-${minecraft_version_short}:${tesla_version}"
+    //deobfProvided "ValkyrienWarfareRevamped:valkyrienwarfare:${valkyrienwarfare_version}:dev"
     if (!omlib_local) {
-        compileOnly "omtteam:omlib:${config.minecraft_version}-${config.omlib_version}:dev"
+        compileOnly "omtteam:omlib:${minecraft_version}-${omlib_version}:dev"
     } else {
         compile project(':OMLib')
     }
     if (ompd_local) {
         runtime project(':OpenModularPassiveDefense')
     }
-    //runtime "com.enderio:EnderIO:${config.minecraft_version}-${config.enderio_version}"
-    runtime "com.enderio.core:EnderCore:${config.minecraft_version}-${config.endercore_version}"
-    //runtime "com.github.azanor:baubles:${config.baubles_version}"
+    //runtime "com.enderio:EnderIO:${minecraft_version}-${enderio_version}"
+    runtime "com.enderio.core:EnderCore:${minecraft_version}-${endercore_version}"
+    //runtime "com.github.azanor:baubles:${baubles_version}"
 }
 
 task deobfJar(type: Jar) {
@@ -167,9 +156,9 @@ publishing {
     tasks.publish.dependsOn 'build'
     publications {
         mavenJava(MavenPublication) {
-            groupId config.group_prefix
-            version config.minecraft_version + "-" + project.version
-            artifactId config.mod_id
+            groupId group_prefix
+            version minecraft_version + "-" + project.version
+            artifactId mod_id
             artifact jar
             artifact sourceJar
             artifact deobfJar
@@ -200,11 +189,11 @@ def getCommmitReleaseType() {
         String commit = stdout.toString().trim()
 
         if (commit.startsWith("CRelease") || commit.startsWith("crelease")) {
-            System.out.println("FOUND NEW RELEASE - COMMIT: " + commit); return 'release'
+            System.out.println("FOUND NEW RELEASE - COMMIT: ".concat(commit)); return 'release'
         } else if (commit.startsWith("CBeta") || commit.startsWith("cbeta")) {
-            System.out.println("FOUND NEW BETA - COMMIT: " + commit); return 'beta'
+            System.out.println("FOUND NEW BETA - COMMIT: ".concat(commit)); return 'beta'
         } else if (commit.startsWith("CAlpha") || commit.startsWith("calpha")) {
-            System.out.println("FOUND NEW ALPHA - COMMIT: " + commit); return 'alpha'
+            System.out.println("FOUND NEW ALPHA - COMMIT: ".concat(commit)); return 'alpha'
         } else {
             System.out.println("SKIPPING CURSE RELEASE - COMMIT: " + commit); return 'none'
         }
@@ -222,7 +211,7 @@ curseforge {
         return
     }
     project {
-        id = config.curse_project_id
+        id = curse_project_id
         addGameVersion '1.12.2'
 
         relations {
