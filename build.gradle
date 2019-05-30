@@ -130,7 +130,7 @@ dependencies {
     deobfProvided "mcjty.theoneprobe:TheOneProbe-${minecraft_version_short}:${minecraft_version_short}-${top_version}"
     deobfProvided "li.cil.oc:OpenComputers:MC${minecraft_version_short}.1-${oc_version}"
     deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}"
-    deobfProvided "net.darkhax.tesla:Tesla-${${minecraft_version}}:${tesla_version}"
+    deobfProvided "net.darkhax.tesla:Tesla-${minecraft_version}:${tesla_version}"
     //deobfProvided "ValkyrienWarfareRevamped:valkyrienwarfare:${valkyrienwarfare_version}:dev"
     if (!omlib_local) {
         compileOnly "omtteam:omlib:${minecraft_version}-${omlib_version}:dev"
