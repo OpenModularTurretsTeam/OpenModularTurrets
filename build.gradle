@@ -121,7 +121,7 @@ dependencies {
     deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}"
     deobfProvided "cofh:RedstoneFlux:${minecraft_version_short}-${redstoneflux_version}:universal"
     deobfProvided "mcjty.theoneprobe:TheOneProbe-${minecraft_version_short}:${minecraft_version_short}-${top_version}"
-    deobfProvided "li.cil.oc:OpenComputers:MC${minecraft_version}.1-${oc_version}"
+    deobfProvided "li.cil.oc:OpenComputers:MC${minecraft_version}-${oc_version}"
     deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}"
     deobfProvided "net.darkhax.tesla:Tesla-${minecraft_version}:${tesla_version}"
     //deobfProvided "ValkyrienWarfareRevamped:valkyrienwarfare:${valkyrienwarfare_version}:dev"
