@@ -31,6 +31,7 @@ import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 import static omtteam.omlib.compatibility.OMLibModCompatibility.ComputerCraftLoaded;
@@ -246,7 +247,6 @@ public class TurretHeadUtil {
 
                 if (target != null && turret != null) {
 
-
                     if (base.isMultiTargeting() && isTargetAlreadyTargeted(base, target)) {
                         continue;
                     }
@@ -282,12 +282,11 @@ public class TurretHeadUtil {
         return totalExtraCap;
     }
 
-    private static ItemStack deductFromInvExpander(ItemStack itemStack, Expander exp, TurretBase base, TurretHead turretHead) {
-
+    private static ItemStack deductFromInvExpander(ItemStack itemStack, Expander exp, TurretBase base, @Nullable TurretHead turretHead) {
         for (int i = 0; i < exp.getInventory().getSlots(); i++) {
             ItemStack ammoCheck = exp.getInventory().getStackInSlot(i);
             if (ammoCheck != ItemStack.EMPTY && ammoCheck.getItem() == itemStack.getItem()) {
-                if (hasRecyclerAddon(base)) {
+                if (hasRecyclerAddon(base) && turretHead != null) { // turretHead == null, means do not pull ammo
                     int chance = new Random().nextInt(99);
 
                     //For negating
@@ -310,7 +309,7 @@ public class TurretHeadUtil {
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack getSpecificItemFromInvExpanders(World world, ItemStack itemStack, TurretBase base, TurretHead turretHead) {
+    public static ItemStack getSpecificItemFromInvExpanders(World world, ItemStack itemStack, TurretBase base, @Nullable TurretHead turretHead) {
         for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, base.getPos())) {
             if (tileEntity instanceof Expander && !((Expander) tileEntity).isPowerExpander()) {
                 Expander exp = (Expander) tileEntity;
