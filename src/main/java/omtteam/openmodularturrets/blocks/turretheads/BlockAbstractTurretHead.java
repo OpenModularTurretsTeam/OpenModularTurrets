@@ -129,6 +129,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
         return false;
     }

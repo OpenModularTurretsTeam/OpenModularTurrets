@@ -11,8 +11,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "A": {
-      "type": "forge:ore_dict",
-      "ore": "ingotSteel"
+      "item": "#INGOTSTEEL"
     },
     "B": {
       "item": "#MEKELITECIRCUIT"

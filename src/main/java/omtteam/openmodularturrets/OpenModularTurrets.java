@@ -56,7 +56,6 @@ public class OpenModularTurrets {
         modFixer.registerFix(FixTypes.BLOCK_ENTITY, new TENameFix());
     }
 
-    @SuppressWarnings("unused")
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit();

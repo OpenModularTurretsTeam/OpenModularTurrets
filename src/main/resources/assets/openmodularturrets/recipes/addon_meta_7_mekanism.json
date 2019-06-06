@@ -15,12 +15,10 @@
       "ore": "alloyElite"
     },
     "B": {
-      "type": "forge:ore_dict",
-      "ore": "circuitElite"
+      "item": "#MEKELITECIRCUIT"
     },
     "C": {
-      "type": "forge:ore_dict",
-      "ore": "circuitBasic"
+      "item": "#MEKBASICCIRCUIT"
     },
     "D": {
       "item": "#IOBUS"

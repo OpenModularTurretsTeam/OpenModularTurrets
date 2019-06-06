@@ -18,8 +18,7 @@
       "item": "#MEKADVCIRCUIT"
     },
     "C": {
-      "type": "forge:ore_dict",
-      "ore": "ingotSteel"
+      "item": "#INGOTSTEEL"
     },
     "D": {
       "item": "#IOBUS"

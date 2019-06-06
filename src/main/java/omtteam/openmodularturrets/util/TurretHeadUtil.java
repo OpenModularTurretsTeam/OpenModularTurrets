@@ -11,15 +11,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
+import omtteam.omlib.api.util.Tuple;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.WorldUtil;
+import omtteam.omlib.util.player.Player;
 import omtteam.openmodularturrets.api.lists.MobBlacklist;
 import omtteam.openmodularturrets.api.lists.MobList;
 import omtteam.openmodularturrets.api.lists.NeutralList;
@@ -32,7 +33,10 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import static omtteam.omlib.compatibility.OMLibModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.OMLibModCompatibility.OpenComputersLoaded;
@@ -42,7 +46,7 @@ import static omtteam.openmodularturrets.blocks.BlockBaseAttachment.BASE_ADDON_M
 import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
 
 public class TurretHeadUtil {
-    private static final HashSet<Tuple<EntityPlayerMP, TurretBase>> warnedPlayers = new HashSet<>();
+    private static final HashMap<Tuple<Player, BlockPos>, Long> warnedPlayers = new HashMap<>();
 
     public static void warnPlayers(TurretBase base, World worldObj, BlockPos pos, int turretRange) {
         if (base.isAttacksPlayers()) {
@@ -54,18 +58,20 @@ public class TurretHeadUtil {
                                                    pos.getY() + turretRange + warnDistance,
                                                    pos.getZ() + turretRange + warnDistance);
 
-            if (worldObj.getWorldTime() % 12000 == 3) {
-                warnedPlayers.clear();
-            }
-
             List<EntityPlayerMP> targets = worldObj.getEntitiesWithinAABB(EntityPlayerMP.class, axis);
 
             for (EntityPlayerMP target : targets) {
-                Tuple<EntityPlayerMP, TurretBase> entry = new Tuple<>(target, base);
-                if (!isPlayerOwner(target, base) && !isPlayerTrusted(target, base) &&
-                        !warnedPlayers.contains(entry) && !target.capabilities.isCreativeMode) {
+                Player player = new Player(target);
+                Tuple<Player, BlockPos> entry = new Tuple<>(player, base.getPos());
+                if (!isPlayerOwner(player, base) && !isPlayerTrusted(player, base) &&
+                        !target.capabilities.isCreativeMode) {
+                    if (warnedPlayers.containsKey(entry) && warnedPlayers.get(entry) < worldObj.getTotalWorldTime()) {
+                        warnedPlayers.remove(entry);
+                    } else if (warnedPlayers.containsKey(entry)) {
+                        continue;
+                    }
                     dispatchWarnMessage(target, worldObj);
-                    warnedPlayers.add(entry);
+                    warnedPlayers.put(entry, worldObj.getTotalWorldTime() + 12000);
                 }
             }
         }

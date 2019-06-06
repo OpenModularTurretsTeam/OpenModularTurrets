@@ -23,8 +23,7 @@
       "ore": "itemEnrichedAlloy"
     },
     "D": {
-      "type": "forge:ore_dict",
-      "ore": "ingotSteel"
+      "item": "#INGOTSTEEL"
     },
     "E": {
       "item": "#IOBUS"

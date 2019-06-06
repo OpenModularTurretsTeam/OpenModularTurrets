@@ -75,5 +75,26 @@
       "data": 0
     },
     "name": "IOBUS"
+  },
+  {
+    "ingredient": {
+      "item": "mekanism:controlcircuit",
+      "data": 0
+    },
+    "name": "MEKBASICCIRCUIT"
+  },
+  {
+    "ingredient": {
+      "item": "mekanism:controlcircuit",
+      "data": 1
+    },
+    "name": "MEKADVCIRCUIT"
+  },
+  {
+    "ingredient": {
+      "item": "mekanism:controlcircuit",
+      "data": 2
+    },
+    "name": "MEKELITECIRCUIT"
   }
 ]
