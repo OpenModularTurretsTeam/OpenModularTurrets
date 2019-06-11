@@ -91,7 +91,9 @@ public class GrenadeProjectile extends TurretProjectile {
             return;
         }
         if ((entity instanceof EntityPlayer && canDamagePlayer((EntityPlayer) entity)) || canDamageEntity(entity)) {
-            this.setVelocity(this.motionX * 0.4F, this.motionY * 1.2F, this.motionZ * 0.4F);
+            this.motionX = this.motionX * 0.4F;
+            this.motionY = this.motionY * 1.2F;
+            this.motionZ = this.motionZ * 0.4F;
             this.markVelocityChanged();
             this.hit = true;
             this.ticksExisted = 32;
