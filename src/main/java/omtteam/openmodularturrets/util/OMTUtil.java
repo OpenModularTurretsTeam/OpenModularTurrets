@@ -49,9 +49,15 @@ public class OMTUtil {
                     return false;
                 }
             }
-            Team team = entityPlayer.getTeam();
-            return (!PlayerUtil.isPlayerOwner(entityPlayer, base))
-                    || (team != null && team.getName().equals(base.getOwner().getTeamName()));
+            
+            if(PlayerUtil.isPlayerOwner(entityPlayer, base)) {
+				return false;
+			}
+			
+			Team team = entityPlayer.getTeam();
+			if(team != null && team.getName().equals(base.getOwner().getTeamName())) {
+				return false;
+			}
         }
         return true;
     }

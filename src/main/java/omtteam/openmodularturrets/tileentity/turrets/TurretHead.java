@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
+import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
 public abstract class TurretHead extends TileEntityBase implements ITickable, ITurretBaseAddonTileEntity {
@@ -284,7 +285,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             if (this.target instanceof EntityPlayerMP) {
                 EntityPlayerMP entity = (EntityPlayerMP) target;
 
-                if (isPlayerTrusted(entity, base) || entity.capabilities.isCreativeMode || !base.isAttacksPlayers()) {
+                if (/*isPlayerOwner(entity, base) || */isPlayerTrusted(entity, base) || entity.capabilities.isCreativeMode || !base.isAttacksPlayers()) {
                     this.target = null;
                     return;
                 }
