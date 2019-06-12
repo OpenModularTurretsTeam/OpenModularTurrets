@@ -123,9 +123,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             return;
         }
 
-        if (OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
-
-            //Prioritise redstone blocks
+        //Prioritise redstone blocks
+        if (OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9 < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
             ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackBlockFromBase(base, new ItemStack(
                     Blocks.REDSTONE_BLOCK));
 
@@ -134,12 +133,13 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                                                                                new ItemStack(Blocks.REDSTONE_BLOCK),
                                                                                base, null);
             }
-
-            if (redstoneBlock != ItemStack.EMPTY && OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9
-                    < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
+            if (redstoneBlock != ItemStack.EMPTY) {
                 base.storage.modifyEnergyStored(OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9);
                 return;
             }
+        }
+
+        if (OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
 
             ItemStack redstone = TurretHeadUtil.getSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE), null);
 

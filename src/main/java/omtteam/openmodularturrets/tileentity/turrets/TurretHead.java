@@ -15,6 +15,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.omlib.handler.OMConfig;
 import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
@@ -29,8 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
-import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
+import static omtteam.omlib.util.player.PlayerUtil.*;
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
 public abstract class TurretHead extends TileEntityBase implements ITickable, ITurretBaseAddonTileEntity {
@@ -51,7 +51,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     protected double targetSpeedX = 0;
     protected double targetSpeedY = 0;
     protected double targetSpeedZ = 0;
-
 
     public TurretHead(int turretTier) {
         this.turretTier = turretTier;
@@ -285,7 +284,11 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             if (this.target instanceof EntityPlayerMP) {
                 EntityPlayerMP entity = (EntityPlayerMP) target;
 
-                if (isPlayerOwner(entity, base) || isPlayerTrusted(entity, base) || entity.capabilities.isCreativeMode || !base.isAttacksPlayers()) {
+                if (!base.isAttacksPlayers()
+                        || isPlayerOwner(entity, base)
+                        || entity.capabilities.isCreativeMode
+                        || isPlayerTrusted(entity, base)
+                        || isPlayerOP(entity) && OMConfig.GENERAL.canOPAccessOwnedBlocks) {
                     this.target = null;
                     return;
                 }
