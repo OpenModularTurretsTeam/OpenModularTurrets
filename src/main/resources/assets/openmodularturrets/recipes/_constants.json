@@ -78,22 +78,22 @@
   },
   {
     "ingredient": {
-      "item": "mekanism:controlcircuit",
-      "data": 0
+      "type": "forge:ore_dict",
+      "ore": "circuitBasic"
     },
     "name": "MEKBASICCIRCUIT"
   },
   {
     "ingredient": {
-      "item": "mekanism:controlcircuit",
-      "data": 1
+      "type": "forge:ore_dict",
+      "ore": "circuitAdvanced"
     },
     "name": "MEKADVCIRCUIT"
   },
   {
     "ingredient": {
-      "item": "mekanism:controlcircuit",
-      "data": 2
+      "type": "forge:ore_dict",
+      "ore": "circuitElite"
     },
     "name": "MEKELITECIRCUIT"
   }

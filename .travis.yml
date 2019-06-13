@@ -7,8 +7,9 @@ notifications:
   email: false
 jdk:
   - oraclejdk8
-script: gradle clean check
+script:
+  - gradle clean check
+  - find ~/.gradle -type f -atime +30 -delete
+  - find ~/.gradle -type d -mindepth 1 -empty -delete
 after_script:
-- rm -rf libs/
-- find ~/.gradle -type f -atime +30 -delete
-- find ~/.gradle -type d -mindepth 1 -empty -delete
+  - rm -rf libs/
