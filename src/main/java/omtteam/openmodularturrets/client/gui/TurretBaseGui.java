@@ -255,19 +255,19 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         ArrayList<String> tooltip = new ArrayList<>();
         switch (tooltipToDraw) {
             case 1:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.PLUS_RANGE));
+                tooltip.add(safeLocalize(OMTNames.Localizations.Text.PLUS_RANGE));
                 break;
             case 2:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.MINUS_RANGE));
+                tooltip.add(safeLocalize(OMTNames.Localizations.Text.MINUS_RANGE));
                 break;
             case 5:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.CONFIGURE_BASE));
+                tooltip.add(safeLocalize(OMTNames.Localizations.Text.CONFIGURE_BASE));
                 break;
             case 6:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.MULTI_TARGETING));
+                tooltip.add(safeLocalize(OMTNames.Localizations.Text.MULTI_TARGETING));
                 break;
             case 7:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TOGGLE_MODE));
+                tooltip.add(safeLocalize(OMTNames.Localizations.Text.TOGGLE_MODE));
                 break;
         }
 
@@ -275,16 +275,16 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
             tooltip.add(base.getEnergyStored(EnumFacing.DOWN) + "/" + base.getMaxEnergyStored(EnumFacing.DOWN) + " RF");
         }
         if (base.getTier() > 1 && mouseX > k + 71 && mouseX < k + 71 + 40 && mouseY > l + 6 && mouseY < l + 6 + 14) {
-            tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.ADDON_SLOT));
+            tooltip.add(safeLocalize(OMTNames.Localizations.Text.ADDON_SLOT));
         }
         if (base.getTier() > 1 && mouseX > k + 71 && mouseX < k + 71 + 40 && mouseY > l + 39 && mouseY < l + 39 + 14) {
-            tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.UPGRADE_SLOT));
+            tooltip.add(safeLocalize(OMTNames.Localizations.Text.UPGRADE_SLOT));
         }
         if (mouseX > k + 10 && mouseX < k + 8 + 40 && mouseY > l + 6 && mouseY < l + 6 + 14) {
-            tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.AMMO_SLOT));
+            tooltip.add(safeLocalize(OMTNames.Localizations.Text.AMMO_SLOT));
         }
         if (mouseX > k + 123 && mouseX < k + 134 && mouseY > l + 35 && mouseY < l + 48) {
-            tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.BASE_MAX_RANGE));
+            tooltip.add(safeLocalize(OMTNames.Localizations.Text.BASE_MAX_RANGE));
         }
         Slot slot = getSlotUnderMouse();
         if (slot != null && !slot.getStack().isEmpty()) {

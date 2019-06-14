@@ -150,7 +150,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerMobs(!base.isAttacksMobs());
             } else {
-                addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
+                addChatMessage(player, new TextComponentString(safeLocalize(OMTNames.Localizations.Text.STATUS_OWNERSHIP)));
             }
         }
 
@@ -158,7 +158,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerNeutrals(!base.isAttacksNeutrals());
             } else {
-                addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
+                addChatMessage(player, new TextComponentString(safeLocalize(OMTNames.Localizations.Text.STATUS_OWNERSHIP)));
             }
         }
 
@@ -166,14 +166,14 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerPlayers(!base.isAttacksPlayers());
             } else {
-                addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
+                addChatMessage(player, new TextComponentString(safeLocalize(OMTNames.Localizations.Text.STATUS_OWNERSHIP)));
             }
         }
         if (guibutton.id == 3) { // Open TP GUI for this block
             if (PlayerUtil.isPlayerAdmin(player, base)) {
                 player.openGui(OMLib.instance, 0, player.getEntityWorld(), base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
             } else {
-                addChatMessage(player, new TextComponentString(safeLocalize("status.ownership")));
+                addChatMessage(player, new TextComponentString(safeLocalize(OMTNames.Localizations.Text.STATUS_OWNERSHIP)));
             }
         }
         if (guibutton.id == 6) { //back button
@@ -222,14 +222,14 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         switch (tooltipToDraw) {
             case 0:
                 if (buttonList.get(0).isMouseOver()) {
-                    tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TARGET_MOBS));
+                    tooltip.add(safeLocalize(OMTNames.Localizations.Text.TARGET_MOBS));
                 }
                 break;
             case 1:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TARGET_NEUTRALS));
+                tooltip.add(safeLocalize(OMTNames.Localizations.Text.TARGET_NEUTRALS));
                 break;
             case 2:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Tooltip.TARGET_PLAYERS));
+                tooltip.add(safeLocalize(OMTNames.Localizations.Text.TARGET_PLAYERS));
                 break;
             case 3:
                 tooltip.add(safeLocalize(OMLibNames.Localizations.Tooltip.TRUSTED_PLAYER_GUI));

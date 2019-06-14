@@ -36,29 +36,29 @@ public class ItemBlockRocketTurret extends AbstractItemBlockBaseAddon {
         } else {
             tooltip.add(safeLocalize(OMTNames.Localizations.GUI.TURRET_HEAD_DESCRIPTION));
             tooltip.add("");
-            tooltip.add(TextFormatting.GOLD + "--" + safeLocalize("tooltip.info") + "--");
-            tooltip.add(safeLocalize("tooltip.tier") + ": " + TextFormatting.WHITE + "4");
-            tooltip.add(safeLocalize("tooltip.range") + ": " + TextFormatting.WHITE +
+            tooltip.add(TextFormatting.GOLD + "--" + safeLocalize("text.openmodularturrets.info") + "--");
+            tooltip.add(safeLocalize("text.openmodularturrets.tier") + ": " + TextFormatting.WHITE + "4");
+            tooltip.add(safeLocalize("text.openmodularturrets.range") + ": " + TextFormatting.WHITE +
                                 OMTConfig.TURRETS.rocket_turret.baseRange);
-            tooltip.add(safeLocalize("tooltip.accuracy") + ": " + TextFormatting.WHITE +
-                                safeLocalize("turret.accuracy.exact"));
-            tooltip.add(safeLocalize("tooltip.ammo") + ": " + TextFormatting.WHITE +
-                                safeLocalize("turret.ammo.3"));
-            tooltip.add(safeLocalize("tooltip.tier_required") + ": " + TextFormatting.WHITE +
+            tooltip.add(safeLocalize("text.openmodularturrets.accuracy") + ": " + TextFormatting.WHITE +
+                                safeLocalize("text.openmodularturrets.turret.accuracy.exact"));
+            tooltip.add(safeLocalize("text.openmodularturrets.ammo") + ": " + TextFormatting.WHITE +
+                                safeLocalize("text.openmodularturrets.turret.ammo.3"));
+            tooltip.add(safeLocalize("text.openmodularturrets.tier_required") + ": " + TextFormatting.WHITE +
                                 safeLocalize("base.tier.4"));
             tooltip.add("");
             tooltip.add(
-                    TextFormatting.DARK_PURPLE + "--" + safeLocalize("tooltip.damage.label") + "--");
-            tooltip.add(safeLocalize("tooltip.damage.stat") + ": " + TextFormatting.WHITE +
+                    TextFormatting.DARK_PURPLE + "--" + safeLocalize("text.openmodularturrets.damage.label") + "--");
+            tooltip.add(safeLocalize("text.openmodularturrets.damage.stat") + ": " + TextFormatting.WHITE +
                                 (OMTConfig.TURRETS.rocket_turret.baseDamage / 2F) + " " + safeLocalize(
-                    "tooltip.health"));
-            tooltip.add(safeLocalize("tooltip.aoe") + ": " + TextFormatting.WHITE + "5");
-            tooltip.add(safeLocalize("tooltip.fire_rate") + ": " + TextFormatting.WHITE + df.format(
+                    "text.openmodularturrets.health"));
+            tooltip.add(safeLocalize("text.openmodularturrets.aoe") + ": " + TextFormatting.WHITE + "5");
+            tooltip.add(safeLocalize("text.openmodularturrets.fire_rate") + ": " + TextFormatting.WHITE + df.format(
                     20.0F / OMTConfig.TURRETS.rocket_turret.baseFireRate));
-            tooltip.add(safeLocalize("tooltip.energy.stat") + ": " + TextFormatting.WHITE +
+            tooltip.add(safeLocalize("text.openmodularturrets.energy.stat") + ": " + TextFormatting.WHITE +
                                 OMTConfig.TURRETS.rocket_turret.powerUsage + " RF");
             tooltip.add("");
-            tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.turret.3"));
+            tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.turret.3"));
         }
     }
 }

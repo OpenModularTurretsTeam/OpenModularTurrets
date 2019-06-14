@@ -70,33 +70,33 @@ public class AmmoMetaItem extends Item {
             switch (stack.getMetadata()) {
                 case 0:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("text.openmodularturrets.turret.ammo.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.ammo.blazing_clay"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.ammo.blazing_clay"));
                     return;
                 case 1:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("text.openmodularturrets.turret.ammo.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.ammo.bullet"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.ammo.bullet"));
                     return;
                 case 2:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("text.openmodularturrets.turret.ammo.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.ammo.ferro_slug"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.ammo.ferro_slug"));
                     return;
                 case 3:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("text.openmodularturrets.turret.ammo.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.ammo.grenade"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.ammo.grenade"));
                     return;
                 case 4:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.ammo.label"));
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("text.openmodularturrets.turret.ammo.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.ammo.rocket"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.ammo.rocket"));
             }
         }
     }

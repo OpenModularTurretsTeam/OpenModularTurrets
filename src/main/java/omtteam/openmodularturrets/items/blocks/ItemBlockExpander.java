@@ -71,98 +71,98 @@ public class ItemBlockExpander extends AbstractItemBlockBaseAddon {
             switch (stack.getMetadata()) {
                 case 0:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.inv1"));
+                    tooltip.add(TextFormatting.GOLD + safeLocalize("text.openmodularturrets.expander.inv1"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.expander.inv2"));
-                    tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.expander.inv3") + " 4.");
+                    tooltip.add(TextFormatting.WHITE + safeLocalize("text.openmodularturrets.expander.inv2"));
+                    tooltip.add(TextFormatting.WHITE + safeLocalize("text.openmodularturrets.expander.inv3") + " 4.");
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.inv.1"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.expander.inv.1"));
                     return;
                 case 1:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.inv1"));
+                    tooltip.add(TextFormatting.GOLD + safeLocalize("text.openmodularturrets.expander.inv1"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.expander.inv2"));
-                    tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.expander.inv3") + " 8.");
+                    tooltip.add(TextFormatting.WHITE + safeLocalize("text.openmodularturrets.expander.inv2"));
+                    tooltip.add(TextFormatting.WHITE + safeLocalize("text.openmodularturrets.expander.inv3") + " 8.");
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.inv.2"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.expander.inv.2"));
                     return;
                 case 2:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.inv1"));
+                    tooltip.add(TextFormatting.GOLD + safeLocalize("text.openmodularturrets.expander.inv1"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.expander.inv2"));
-                    tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.expander.inv3") + " 16.");
+                    tooltip.add(TextFormatting.WHITE + safeLocalize("text.openmodularturrets.expander.inv2"));
+                    tooltip.add(TextFormatting.WHITE + safeLocalize("text.openmodularturrets.expander.inv3") + " 16.");
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.inv.3"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.expander.inv.3"));
                     return;
                 case 3:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.inv1"));
+                    tooltip.add(TextFormatting.GOLD + safeLocalize("text.openmodularturrets.expander.inv1"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.expander.inv2"));
-                    tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.expander.inv3") + " 32.");
+                    tooltip.add(TextFormatting.WHITE + safeLocalize("text.openmodularturrets.expander.inv2"));
+                    tooltip.add(TextFormatting.WHITE + safeLocalize("text.openmodularturrets.expander.inv3") + " 32.");
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.inv.4"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.expander.inv.4"));
                     return;
                 case 4:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.inv1"));
+                    tooltip.add(TextFormatting.GOLD + safeLocalize("text.openmodularturrets.expander.inv1"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.expander.inv2"));
-                    tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.expander.inv3") + " 64.");
+                    tooltip.add(TextFormatting.WHITE + safeLocalize("text.openmodularturrets.expander.inv2"));
+                    tooltip.add(TextFormatting.WHITE + safeLocalize("text.openmodularturrets.expander.inv3") + " 64.");
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.inv.5"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.expander.inv.5"));
                     return;
                 case 5:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
+                    tooltip.add(TextFormatting.GOLD + safeLocalize("text.openmodularturrets.expander.power1"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.WHITE + safeLocalize(
-                            "tooltip.expander.power2") + " " + OMTConfig.MISCELLANEOUS.expanderPowerTierOneCapacity + " " + safeLocalize(
-                            "tooltip.expander.power3"));
+                            "text.openmodularturrets.expander.power2") + " " + OMTConfig.MISCELLANEOUS.expanderPowerTierOneCapacity + " " + safeLocalize(
+                            "text.openmodularturrets.expander.power3"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.1"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.expander.power.1"));
                     return;
                 case 6:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
+                    tooltip.add(TextFormatting.GOLD + safeLocalize("text.openmodularturrets.expander.power1"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.WHITE + safeLocalize(
-                            "tooltip.expander.power2") + " " + OMTConfig.MISCELLANEOUS.expanderPowerTierTwoCapacity + " " + safeLocalize(
-                            "tooltip.expander.power3"));
+                            "text.openmodularturrets.expander.power2") + " " + OMTConfig.MISCELLANEOUS.expanderPowerTierTwoCapacity + " " + safeLocalize(
+                            "text.openmodularturrets.expander.power3"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.2"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.expander.power.2"));
                     return;
                 case 7:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
+                    tooltip.add(TextFormatting.GOLD + safeLocalize("text.openmodularturrets.expander.power1"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.WHITE + safeLocalize(
-                            "tooltip.expander.power2") + " " + OMTConfig.MISCELLANEOUS.expanderPowerTierThreeCapacity + " " + safeLocalize(
-                            "tooltip.expander.power3"));
+                            "text.openmodularturrets.expander.power2") + " " + OMTConfig.MISCELLANEOUS.expanderPowerTierThreeCapacity + " " + safeLocalize(
+                            "text.openmodularturrets.expander.power3"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.3"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.expander.power.3"));
                     return;
                 case 8:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
+                    tooltip.add(TextFormatting.GOLD + safeLocalize("text.openmodularturrets.expander.power1"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.WHITE + safeLocalize(
-                            "tooltip.expander.power2") + " " + OMTConfig.MISCELLANEOUS.expanderPowerTierFourCapacity + " " + safeLocalize(
-                            "tooltip.expander.power3"));
+                            "text.openmodularturrets.expander.power2") + " " + OMTConfig.MISCELLANEOUS.expanderPowerTierFourCapacity + " " + safeLocalize(
+                            "text.openmodularturrets.expander.power3"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.4"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.expander.power.4"));
                     return;
                 case 9:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.expander.power1"));
+                    tooltip.add(TextFormatting.GOLD + safeLocalize("text.openmodularturrets.expander.power1"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.WHITE + safeLocalize(
-                            "tooltip.expander.power2") + " " + OMTConfig.MISCELLANEOUS.expanderPowerTierFiveCapacity + " " + safeLocalize(
-                            "tooltip.expander.power3"));
+                            "text.openmodularturrets.expander.power2") + " " + OMTConfig.MISCELLANEOUS.expanderPowerTierFiveCapacity + " " + safeLocalize(
+                            "text.openmodularturrets.expander.power3"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.expander.power.5"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.expander.power.5"));
             }
         }
     }

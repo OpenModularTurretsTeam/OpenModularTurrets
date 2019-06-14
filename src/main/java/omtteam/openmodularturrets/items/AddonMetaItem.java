@@ -73,86 +73,86 @@ public class AddonMetaItem extends Item {
             switch (stack.getMetadata()) {
                 case 0:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
+                    tooltip.add(TextFormatting.RED + safeLocalize("text.openmodularturrets.turret.addon.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.addon.concealer.1"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.concealer.1"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.concealer.flavour"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.concealer.flavour"));
                     return;
                 case 1:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
+                    tooltip.add(TextFormatting.RED + safeLocalize("text.openmodularturrets.turret.addon.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.upgrade.turretinfo"));
-                    tooltip.add(safeLocalize("turret.addon.amp.a.label"));
-                    tooltip.add(safeLocalize("turret.addon.amp.b.label"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.turretinfo"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.amp.a.label"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.amp.b.label"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.amp.flavour"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.amp.flavour"));
                     return;
                 case 2:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
+                    tooltip.add(TextFormatting.RED + safeLocalize("text.openmodularturrets.turret.addon.label"));
                     /*tooltip.add("");
                     tooltip.add(safeLocalize(
-                            "turret.addon.potentia.a") + OMTConfigHandler.getPotentiaToRFRatio() + " " + safeLocalize(
-                            "turret.addon.potentia.b"));
+                            "text.openmodularturrets.turret.addon.potentia.a") + OMTConfigHandler.getPotentiaToRFRatio() + " " + safeLocalize(
+                            "text.openmodularturrets.turret.addon.potentia.b"));
                     tooltip.add("");
                     tooltip.add(safeLocalize(
-                            "turret.addon.potentia.c") + OMTConfigHandler.getPotentiaAddonCapacity() + ".");
+                            "text.openmodularturrets.turret.addon.potentia.c") + OMTConfigHandler.getPotentiaAddonCapacity() + ".");
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.addon.potentia.d"));
-                    tooltip.add(safeLocalize("turret.addon.potentia.e"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.potentia.d"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.potentia.e"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.potentia.flavour"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.potentia.flavour"));
                     */
                     return;
                 case 3:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
+                    tooltip.add(TextFormatting.RED + safeLocalize("text.openmodularturrets.turret.addon.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.addon.recycler.1"));
-                    tooltip.add(safeLocalize("turret.addon.recycler.2"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.recycler.1"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.recycler.2"));
                     tooltip.add("");
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.recycler.flavour"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.recycler.flavour"));
                     return;
                 case 4:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
+                    tooltip.add(TextFormatting.RED + safeLocalize("text.openmodularturrets.turret.addon.label"));
                     tooltip.add("");
                     tooltip.add(safeLocalize(
-                            "turret.addon.redstone.a") + " " + OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen + " " + safeLocalize(
-                            "turret.addon.redstone.b"));
-                    tooltip.add(safeLocalize("turret.addon.redstone.c"));
+                            "text.openmodularturrets.turret.addon.redstone.a") + " " + OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen + " " + safeLocalize(
+                            "text.openmodularturrets.turret.addon.redstone.b"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.redstone.c"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.redstone.flavour"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.redstone.flavour"));
                     return;
                 case 5:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
+                    tooltip.add(TextFormatting.RED + safeLocalize("text.openmodularturrets.turret.addon.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.addon.serial.a"));
-                    tooltip.add(safeLocalize("turret.addon.serial.b"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.serial.a"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.serial.b"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.serial.flavour"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.serial.flavour"));
                     return;
                 case 6:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
+                    tooltip.add(TextFormatting.RED + safeLocalize("text.openmodularturrets.turret.addon.label"));
                     tooltip.add("");
                     tooltip.add(safeLocalize(
-                            "turret.addon.solar.a") + " " + OMTConfig.MISCELLANEOUS.solarPanelAddonGen + " " + safeLocalize(
-                            "turret.addon.solar.b"));
+                            "text.openmodularturrets.turret.addon.solar.a") + " " + OMTConfig.MISCELLANEOUS.solarPanelAddonGen + " " + safeLocalize(
+                            "text.openmodularturrets.turret.addon.solar.b"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.solar.flavour"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.solar.flavour"));
                 case 7:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.RED + safeLocalize("turret.addon.label"));
+                    tooltip.add(TextFormatting.RED + safeLocalize("text.openmodularturrets.turret.addon.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.addon.fakedrops.a"));
-                    tooltip.add(safeLocalize("turret.addon.fakedrops.b"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.fakedrops.a"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.fakedrops.b"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.addon.fakedrops.flavour"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.fakedrops.flavour"));
             }
         }
     }

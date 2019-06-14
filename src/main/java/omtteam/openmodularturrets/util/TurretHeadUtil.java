@@ -28,6 +28,7 @@ import omtteam.openmodularturrets.blocks.BlockBaseAttachment;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.items.AmmoMetaItem;
+import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
@@ -70,19 +71,19 @@ public class TurretHeadUtil {
                     } else if (warnedPlayers.containsKey(entry)) {
                         continue;
                     }
-                    dispatchWarnMessage(target, worldObj);
+                    dispatchWarnMessage(target);
                     warnedPlayers.put(entry, worldObj.getTotalWorldTime() + 12000);
                 }
             }
         }
     }
 
-    private static void dispatchWarnMessage(EntityPlayerMP player, World worldObj) {
+    private static void dispatchWarnMessage(EntityPlayerMP player) {
         if (OMTConfig.TURRETS.turretAlarmSound) {
             player.playSound(ModSounds.warningSound, 1.0F, 1.0F);
         }
         if (OMTConfig.TURRETS.turretWarnMessage) {
-            addChatMessage(player, new TextComponentTranslation("status.warning").setStyle(new Style().setColor(TextFormatting.RED)));
+            addChatMessage(player, new TextComponentTranslation(OMTNames.Localizations.Text.STATUS_WARNING).setStyle(new Style().setColor(TextFormatting.RED)));
         }
     }
 

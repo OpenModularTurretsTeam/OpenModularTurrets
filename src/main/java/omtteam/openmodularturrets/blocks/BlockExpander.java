@@ -156,7 +156,7 @@ public class BlockExpander extends BlockTurretBaseAttachment implements IHasItem
                 return true;
             }
         } else {
-            addChatMessage(playerIn, new TextComponentTranslation("status.ownership"));
+            addChatMessage(playerIn, new TextComponentTranslation(OMTNames.Localizations.Text.STATUS_OWNERSHIP));
         }
         return true;
     }

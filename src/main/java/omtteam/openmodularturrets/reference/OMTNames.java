@@ -88,55 +88,57 @@ public class OMTNames {
 
     public static class Localizations {
         public static class GUI {
-            public static final String BASE = "gui.omtteam.openmodularturrets:base";
-            public static final String RANGE = "gui.omtteam.openmodularturrets:range";
-            public static final String ATTACK_PLAYERS = "gui.omtteam.openmodularturrets:attack_players";
-            public static final String ATTACK_MOBS = "gui.omtteam.openmodularturrets:attack_mobs";
-            public static final String ATTACK_NEUTRALS = "gui.omtteam.openmodularturrets:attack_neutrals";
-            public static final String MULTI_TARGETING = "gui.omtteam.openmodularturrets:multi_targeting";
-            public static final String ADDONS = "gui.omtteam.openmodularturrets:addons";
-            public static final String UPGRADES = "gui.omtteam.openmodularturrets:upgrades";
-            public static final String AMMO = "gui.omtteam.openmodularturrets:ammo";
-            public static final String DAMAGE_AMP = "gui.omtteam.openmodularturrets:damage_amp";
-            public static final String INVENTORY = "gui.omtteam.openmodularturrets:inventory";
-            public static final String TARGET = "gui.omtteam.openmodularturrets:target";
-            public static final String TARGETING_OPTIONS = "gui.omtteam.openmodularturrets:targeting_options";
-            public static final String MULTI = "gui.omtteam.openmodularturrets:multi";
-            public static final String SINGLE = "gui.omtteam.openmodularturrets:single";
-            public static final String YAW = "gui.omtteam.openmodularturrets:yaw";
-            public static final String PITCH = "gui.omtteam.openmodularturrets:pitch";
-            public static final String AUTO_FIRE = "gui.omtteam.openmodularturrets:auto_fire";
-            public static final String TOGGLE = "gui.omtteam.openmodularturrets:toggle";
-            public static final String TURRET = "gui.omtteam.openmodularturrets:turret";
-            public static final String TURRET_BASE_DESCRIPTION = "gui.omtteam.openmodularturrets:turret_base_description";
-            public static final String TURRET_HEAD_DESCRIPTION = "gui.omtteam.openmodularturrets:turret_head_description";
-            public static final String TURRET_LEVER_DESCRIPTION = "gui.omtteam.openmodularturrets:turret_lever_description";
-            public static final String NO_TURRET = "gui.omtteam.openmodularturrets:no_turret";
-            public static final String TYPE = "gui.omtteam.openmodularturrets:type";
-            public static final String ACCURACY = "gui.omtteam.openmodularturrets:accuracy";
-            public static final String RATE_OF_FIRE = "gui.omtteam.openmodularturrets:rof";
-            public static final String DROP_TURRETS = "gui.omtteam.openmodularturrets:drop_turrets";
-            public static final String DROP_BASE = "gui.omtteam.openmodularturrets:drop_base";
-            public static final String CONFIGURE = "gui.omtteam.openmodularturrets:configure";
-            public static final String KILLS = "gui.omtteam.openmodularturrets:kills";
-            public static final String PLAYER_KILLS = "gui.omtteam.openmodularturrets:player_kills";
-            public static final String LIGHT_VALUE = "gui.omtteam.openmodularturrets:light_value";
-            public static final String LIGHT_OPACITY = "gui.omtteam.openmodularturrets:light_opacity";
+            public static final String BASE = "text.openmodularturrets.gui.base";
+            public static final String RANGE = "text.openmodularturrets.gui.range";
+            public static final String ATTACK_PLAYERS = "text.openmodularturrets.gui.attack_players";
+            public static final String ATTACK_MOBS = "text.openmodularturrets.gui.attack_mobs";
+            public static final String ATTACK_NEUTRALS = "text.openmodularturrets.gui.attack_neutrals";
+            public static final String MULTI_TARGETING = "text.openmodularturrets.gui.multi_targeting";
+            public static final String ADDONS = "text.openmodularturrets.gui.addons";
+            public static final String UPGRADES = "text.openmodularturrets.gui.upgrades";
+            public static final String AMMO = "text.openmodularturrets.gui.ammo";
+            public static final String DAMAGE_AMP = "text.openmodularturrets.gui.damage_amp";
+            public static final String INVENTORY = "text.openmodularturrets.gui.inventory";
+            public static final String TARGET = "text.openmodularturrets.gui.target";
+            public static final String TARGETING_OPTIONS = "text.openmodularturrets.gui.targeting_options";
+            public static final String MULTI = "text.openmodularturrets.gui.multi";
+            public static final String SINGLE = "text.openmodularturrets.gui.single";
+            public static final String YAW = "text.openmodularturrets.gui.yaw";
+            public static final String PITCH = "text.openmodularturrets.gui.pitch";
+            public static final String AUTO_FIRE = "text.openmodularturrets.gui.auto_fire";
+            public static final String TOGGLE = "text.openmodularturrets.gui.toggle";
+            public static final String TURRET = "text.openmodularturrets.gui.turret";
+            public static final String TURRET_BASE_DESCRIPTION = "text.openmodularturrets.gui.turret_base_description";
+            public static final String TURRET_HEAD_DESCRIPTION = "text.openmodularturrets.gui.turret_head_description";
+            public static final String TURRET_LEVER_DESCRIPTION = "text.openmodularturrets.gui.turret_lever_description";
+            public static final String NO_TURRET = "text.openmodularturrets.gui.no_turret";
+            public static final String TYPE = "text.openmodularturrets.gui.type";
+            public static final String ACCURACY = "text.openmodularturrets.gui.accuracy";
+            public static final String RATE_OF_FIRE = "text.openmodularturrets.gui.rof";
+            public static final String DROP_TURRETS = "text.openmodularturrets.gui.drop_turrets";
+            public static final String DROP_BASE = "text.openmodularturrets.gui.drop_base";
+            public static final String CONFIGURE = "text.openmodularturrets.gui.configure";
+            public static final String KILLS = "text.openmodularturrets.gui.kills";
+            public static final String PLAYER_KILLS = "text.openmodularturrets.gui.player_kills";
+            public static final String LIGHT_VALUE = "text.openmodularturrets.gui.light_value";
+            public static final String LIGHT_OPACITY = "text.openmodularturrets.gui.light_opacity";
         }
 
-        public static class Tooltip {
-            public static final String TARGET_NEUTRALS = "tooltip.omtteam.openmodularturrets:target_neutrals";
-            public static final String TARGET_MOBS = "tooltip.omtteam.openmodularturrets:target_mobs";
-            public static final String TARGET_PLAYERS = "tooltip.omtteam.openmodularturrets:target_players";
-            public static final String MINUS_RANGE = "tooltip.omtteam.openmodularturrets:minus_range";
-            public static final String PLUS_RANGE = "tooltip.omtteam.openmodularturrets:plus_range";
-            public static final String CONFIGURE_BASE = "tooltip.omtteam.openmodularturrets:configure_base";
-            public static final String MULTI_TARGETING = "tooltip.omtteam.openmodularturrets:multi_targeting";
-            public static final String AMMO_SLOT = "tooltip.omtteam.openmodularturrets:ammo_slot";
-            public static final String ADDON_SLOT = "tooltip.omtteam.openmodularturrets:addon_slot";
-            public static final String UPGRADE_SLOT = "tooltip.omtteam.openmodularturrets:upgrade_slot";
-            public static final String BASE_MAX_RANGE = "tooltip.omtteam.openmodularturrets:base_max_range";
-            public static final String TOGGLE_MODE = "tooltip.omtteam.openmodularturrets:toggle_mode";
+        public static class Text {
+            public static final String TARGET_NEUTRALS = "text.openmodularturrets.target_neutrals";
+            public static final String TARGET_MOBS = "text.openmodularturrets.target_mobs";
+            public static final String TARGET_PLAYERS = "text.openmodularturrets.target_players";
+            public static final String MINUS_RANGE = "text.openmodularturrets.minus_range";
+            public static final String PLUS_RANGE = "text.openmodularturrets.plus_range";
+            public static final String CONFIGURE_BASE = "text.openmodularturrets.configure_base";
+            public static final String MULTI_TARGETING = "text.openmodularturrets.multi_targeting";
+            public static final String AMMO_SLOT = "text.openmodularturrets.ammo_slot";
+            public static final String ADDON_SLOT = "text.openmodularturrets.addon_slot";
+            public static final String UPGRADE_SLOT = "text.openmodularturrets.upgrade_slot";
+            public static final String BASE_MAX_RANGE = "text.openmodularturrets.base_max_range";
+            public static final String TOGGLE_MODE = "text.openmodularturrets.toggle_mode";
+            public static final String STATUS_OWNERSHIP = "text.openmodularturrets.status.ownership";
+            public static final String STATUS_WARNING = "text.openmodularturrets.status.warning";
         }
     }
 

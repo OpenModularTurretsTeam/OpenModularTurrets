@@ -67,12 +67,12 @@ public class ItemBlockBaseAddon extends AbstractItemBlockBaseAddon {
             switch (stack.getMetadata()) {
                 case 0:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.base_addon_loot_deleter.inv1"));
+                    tooltip.add(TextFormatting.GOLD + safeLocalize("text.openmodularturrets.base_addon_loot_deleter.inv1"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.base_addon_loot_deleter.inv2"));
-                    tooltip.add(TextFormatting.WHITE + safeLocalize("tooltip.base_addon_loot_deleter.inv3"));
+                    tooltip.add(TextFormatting.WHITE + safeLocalize("text.openmodularturrets.base_addon_loot_deleter.inv2"));
+                    tooltip.add(TextFormatting.WHITE + safeLocalize("text.openmodularturrets.base_addon_loot_deleter.inv3"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base_addon_loot_deleter.inv.1"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base_addon_loot_deleter.inv.1"));
             }
         }
     }

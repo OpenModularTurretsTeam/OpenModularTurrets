@@ -71,51 +71,51 @@ public class UpgradeMetaItem extends Item {
             switch (stack.getMetadata()) {
                 case 0:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("text.openmodularturrets.turret.upgrade.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.upgrade.turretinfo"));
-                    tooltip.add(safeLocalize("turret.upgrade.stacks"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.turretinfo"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.stacks"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.upgrade.acc.flavour.a"));
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.upgrade.acc.flavour.b"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.upgrade.acc.flavour.a"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.upgrade.acc.flavour.b"));
                     return;
                 case 1:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("text.openmodularturrets.turret.upgrade.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.upgrade.turretinfo"));
-                    tooltip.add(safeLocalize("turret.upgrade.stacks"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.turretinfo"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.stacks"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.upgrade.eff.flavour"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.upgrade.eff.flavour"));
                     return;
                 case 2:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("text.openmodularturrets.turret.upgrade.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.upgrade.turretinfo"));
-                    tooltip.add(safeLocalize("turret.upgrade.stacks"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.turretinfo"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.stacks"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.upgrade.rof.flavour"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.upgrade.rof.flavour"));
                     return;
                 case 3:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("text.openmodularturrets.turret.upgrade.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.upgrade.turretinfo"));
-                    tooltip.add(safeLocalize("turret.upgrade.stacks"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.turretinfo"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.stacks"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.upgrade.range.flavour"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.upgrade.range.flavour"));
                     return;
                 case 4:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.BLUE + safeLocalize("turret.upgrade.label"));
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("text.openmodularturrets.turret.upgrade.label"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.upgrade.scatter.a"));
-                    tooltip.add(safeLocalize("turret.upgrade.scatter.b"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.scatter.a"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.scatter.b"));
                     tooltip.add("");
-                    tooltip.add(safeLocalize("turret.upgrade.stacks"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.stacks"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("turret.upgrade.scatter.flavour"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.upgrade.scatter.flavour"));
             }
         }
     }

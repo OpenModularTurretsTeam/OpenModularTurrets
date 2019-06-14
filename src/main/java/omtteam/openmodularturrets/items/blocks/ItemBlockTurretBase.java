@@ -67,73 +67,73 @@ public class ItemBlockTurretBase extends ItemBlock {
             switch (stack.getMetadata()) {
                 case 0:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
-                    tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturret.energy.label") + "--");
+                    tooltip.add(safeLocalize("text.openmodularturrets.rf.max") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierOne.baseMaxCharge);
-                    tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
+                    tooltip.add(safeLocalize("text.openmodularturrets.rf.io") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierOne.baseMaxIo);
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
-                    tooltip.add(safeLocalize("tooltip.extras.addons.0"));
+                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("text.openmodularturrets.extras.label") + "--");
+                    tooltip.add(safeLocalize("text.openmodularturrets.extras.addons.0"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.1"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.1"));
                     return;
                 case 1:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
-                    tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturret.energy.label") + "--");
+                    tooltip.add(safeLocalize("text.openmodularturrets.rf.max") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierTwo.baseMaxCharge);
-                    tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
+                    tooltip.add(safeLocalize("text.openmodularturrets.rf.io") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierTwo.baseMaxIo);
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
-                    tooltip.add(safeLocalize("tooltip.extras.addons.2"));
-                    tooltip.add(safeLocalize("tooltip.extras.upgrade.1"));
+                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("text.openmodularturrets.extras.label") + "--");
+                    tooltip.add(safeLocalize("text.openmodularturrets.extras.addons.2"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.extras.upgrade.1"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.2"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.2"));
                     return;
                 case 2:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
-                    tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturret.energy.label") + "--");
+                    tooltip.add(safeLocalize("text.openmodularturrets.rf.max") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierThree.baseMaxCharge);
-                    tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
+                    tooltip.add(safeLocalize("text.openmodularturrets.rf.io") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierThree.baseMaxIo);
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
-                    tooltip.add(safeLocalize("tooltip.extras.addons.2"));
-                    tooltip.add(safeLocalize("tooltip.extras.upgrade.1"));
+                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("text.openmodularturrets.extras.label") + "--");
+                    tooltip.add(safeLocalize("text.openmodularturrets.extras.addons.2"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.extras.upgrade.1"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.3"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.3"));
                     return;
                 case 3:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
-                    tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturret.energy.label") + "--");
+                    tooltip.add(safeLocalize("text.openmodularturrets.rf.max") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierFour.baseMaxCharge);
-                    tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
+                    tooltip.add(safeLocalize("text.openmodularturrets.rf.io") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierFour.baseMaxIo);
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
-                    tooltip.add(safeLocalize("tooltip.extras.addons.2"));
-                    tooltip.add(safeLocalize("tooltip.extras.upgrade.1"));
+                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("text.openmodularturrets.extras.label") + "--");
+                    tooltip.add(safeLocalize("text.openmodularturrets.extras.addons.2"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.extras.upgrade.1"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.4"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.4"));
                     return;
                 case 4:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("tooptip.energy.label") + "--");
-                    tooltip.add(safeLocalize("tooltip.rf.max") + ": " + TextFormatting.WHITE +
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturret.energy.label") + "--");
+                    tooltip.add(safeLocalize("text.openmodularturrets.rf.max") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierFive.baseMaxCharge);
-                    tooltip.add(safeLocalize("tooltip.rf.io") + ": " + TextFormatting.WHITE +
+                    tooltip.add(safeLocalize("text.openmodularturrets.rf.io") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierFive.baseMaxIo);
                     tooltip.add("");
-                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("tooltip.extras.label") + "--");
-                    tooltip.add(safeLocalize("tooltip.extras.addons.2"));
-                    tooltip.add(safeLocalize("tooltip.extras.upgrade.2"));
+                    tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("text.openmodularturrets.extras.label") + "--");
+                    tooltip.add(safeLocalize("text.openmodularturrets.extras.addons.2"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.extras.upgrade.2"));
                     tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.5a"));
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("flavour.base.5b"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.5a"));
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.5b"));
             }
         }
     }
