@@ -8,7 +8,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.scoreboard.Team;
+import omtteam.omlib.util.player.Player;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.api.lists.AmmoList;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
@@ -20,9 +20,6 @@ import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Set;
-
-import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
-import static omtteam.omlib.util.player.PlayerUtil.isPlayerTrusted;
 
 /**
  * Created by Keridos on 06/02/17.
@@ -43,26 +40,31 @@ public class OMTUtil {
     }
 
     public static boolean canDamagePlayer(EntityPlayer entityPlayer, TurretBase base) {
-        if (entityPlayer != null && !entityPlayer.getEntityWorld().isRemote) {
+        Player player = new Player(entityPlayer);
+        return canDamagePlayer(player, base);
+    }
+
+    public static boolean canDamagePlayer(Player player, TurretBase base) {
+        if (player != null) {
             if (!OMTConfig.TURRETS.turretDamageTrustedPlayers) {
-                if (PlayerUtil.isPlayerTrusted(entityPlayer, base)) {
+                if (PlayerUtil.isPlayerTrusted(player, base)) {
                     return false;
                 }
             }
-            Team team = entityPlayer.getTeam();
-            return !(PlayerUtil.isPlayerOwner(entityPlayer, base)
-                    || (team != null && team.getName().equals(base.getOwner().getTeamName())));
+            String team = player.getTeamName();
+            return !(PlayerUtil.isPlayerOwner(player, base)
+                    || (!team.isEmpty() && team.equals(base.getOwner().getTeamName())));
         }
         return true;
     }
 
     public static boolean canDamageEntity(Entity entity, TurretBase base) {
-        if (entity != null && !entity.getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
+        if (entity != null && !(entity instanceof TurretProjectile)) {
             if (entity instanceof EntityTameable) {
                 EntityLivingBase entityOwner = ((EntityTameable) entity).getOwner();
                 if (entityOwner instanceof EntityPlayer) {
                     EntityPlayer owner = (EntityPlayer) entityOwner;
-                    return !isPlayerOwner(owner, base) && !isPlayerTrusted(owner, base);
+                    return canDamagePlayer(owner, base);
                 }
             }
         }

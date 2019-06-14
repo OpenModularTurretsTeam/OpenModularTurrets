@@ -486,11 +486,10 @@ public class TurretHeadUtil {
     }
 
     public static Map<EnumFacing, TurretHead> getBaseTurrets(World world, BlockPos pos) {
-        if (world == null) {
-            return null;
-        }
         Map<EnumFacing, TurretHead> map = new HashMap<>();
-
+        if (world == null) {
+            return map;
+        }
         for (EnumFacing facing : EnumFacing.values()) {
             BlockPos offsetPos = pos.offset(facing);
 
