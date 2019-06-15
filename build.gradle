@@ -13,6 +13,7 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.3'
     }
 }
 plugins {
@@ -21,31 +22,50 @@ plugins {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven-publish'
+apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'idea'
 apply plugin: 'java'
 
 repositories {
-    mavenCentral()
-    maven { url = "http://tehnut.info/maven" }
-    maven { url = "http://maven.tterrag.com" }
-    maven { url = "http://dvs1.progwml6.com/files/maven" }
-    maven { url = "http://files.minecraftforge.net/maven" }
-    maven { url = "http://maven.cil.li/" }
-    maven { url = "http://maven.ic2.player.to" }
-    maven { url = "http://maven.mcmoddev.com" }
     maven { // The repo from which to get waila
-        name "Mobius Repo"
         url "http://mobiusstrip.eu/maven"
     }
     maven { // the repo from which to get NEI and stuff
-        name 'CB Repo'
         url "http://chickenbones.net/maven/"
     }
-    maven { url "http://maven.ironhide.de/" }
+    maven {
+        url "http://maven.cil.li/"
+    }
+    maven { // the repo from which to get EnderIO and tterrags mods
+        url "http://maven.tterrag.com/"
+    }
+    maven { // the repo from which to get EnderIO and tterrags mods
+        url "http://maven2.tterrag.com/"
+    }
+    maven {
+        name "ic2"
+        url "http://maven.ic2.player.to/"
+    }
+    maven {
+        url "http://tehnut.info/maven"
+    }
+    maven {
+        url "http://maven.ironhide.de/"
+    }
+    maven { // JEI
+        url "http://dvs1.progwml6.com/files/maven"
+    }
     maven { url = "http://dl.tsr.me/artifactory/libs-release-local" }
+
     maven { // CoFH
         name = "Covers Maven"
         url = "http://maven.covers1624.net"
+    }
+    maven {
+        url 'http://maven.mcmoddev.com'
+    }
+    maven {
+        url = "http://files.minecraftforge.net/maven"
     }
 }
 
@@ -118,24 +138,39 @@ if (project.allprojects.findAll({ it.name == "OpenModularPassiveDefense" }).size
 
 dependencies {
     deobfProvided "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
+    testCompile "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
     deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}"
+    testCompile "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}"
     deobfProvided "cofh:RedstoneFlux:${minecraft_version_short}-${redstoneflux_version}:universal"
+    testCompile "cofh:RedstoneFlux:${minecraft_version_short}-${redstoneflux_version}:universal"
     deobfProvided "mcjty.theoneprobe:TheOneProbe-${minecraft_version_short}:${minecraft_version_short}-${top_version}"
+    testCompile "mcjty.theoneprobe:TheOneProbe-${minecraft_version_short}:${minecraft_version_short}-${top_version}"
     deobfProvided "li.cil.oc:OpenComputers:MC${minecraft_version}-${oc_version}"
+    testCompile "li.cil.oc:OpenComputers:MC${minecraft_version}-${oc_version}"
     deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}"
+    testCompile "net.industrial-craft:industrialcraft-2:${ic2_version}"
     deobfProvided "net.darkhax.tesla:Tesla-${minecraft_version}:${tesla_version}"
+    testCompile "net.darkhax.tesla:Tesla-${minecraft_version}:${tesla_version}"
     //deobfProvided "ValkyrienWarfareRevamped:valkyrienwarfare:${valkyrienwarfare_version}:dev"
     if (!omlib_local) {
         compileOnly "omtteam:omlib:${minecraft_version}-${omlib_version}:dev"
+        testCompile "omtteam:omlib:${minecraft_version}-${omlib_version}:dev"
     } else {
         compile project(':OMLib')
+        testCompile project(':OMLib')
     }
     if (ompd_local) {
         runtime project(':OpenModularPassiveDefense')
     }
-    //runtime "com.enderio:EnderIO:${minecraft_version}-${enderio_version}"
-    runtime "com.enderio.core:EnderCore:${minecraft_version}-${endercore_version}"
-    //runtime "com.github.azanor:baubles:${baubles_version}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.2.0"
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.2.0")
+    testCompile("org.junit.platform:junit-platform-launcher:1.1.0")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.2.0")
+}
+
+junitPlatform {
+    platformVersion '1.0.3'
+    enableStandardTestTask true
 }
 
 task deobfJar(type: Jar) {
