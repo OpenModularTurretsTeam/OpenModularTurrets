@@ -64,14 +64,11 @@ tile.expander_inv_tier_three.name=Basis Inventar Erweiterung (Stufe 3)
 tile.expander_inv_tier_four.name=Basis Inventar Erweiterung (Stufe 4)
 tile.expander_inv_tier_five.name=Basis Inventar Erweiterung (Stufe 5)
 tile.base_addon_loot_deleter.name=Base Addon - Loot Deleter
-
-# for IGWMod
 tile.turret_base.name=Turm Basis
 
 itemGroup.openmodularturrets=Open Modular Turrets
 
 text.openmodularturrets.gui.base=Basis
-
 text.openmodularturrets.gui.attack_mobs=Attack. Mobs
 text.openmodularturrets.gui.attack_neutrals=Attack. Neutrale
 text.openmodularturrets.gui.attack_players=Attack.Spieler
@@ -230,13 +227,13 @@ text.openmodularturrets.turret.addon.potentia.c=Fügt einen Potentia Speicher hi
 text.openmodularturrets.turret.addon.potentia.d=Ordo Vis hinzuzufügen,
 text.openmodularturrets.turret.addon.potentia.e=multipliziert die RF Rate um 10.
 text.openmodularturrets.turret.addon.potentia.flavour=Weil RWE es nicht gebacken kriegt.
-text.openmodularturrets.turret.addon.serial.a=Erlaubt Open_computers und Computer_craft
+text.openmodularturrets.turret.addon.serial.a=Erlaubt OpenComputers und ComputerCraft
 text.openmodularturrets.turret.addon.serial.b=Kompatabilität.
 text.openmodularturrets.turret.addon.serial.flavour=Wer braucht OOP?
 text.openmodularturrets.turret.addon.recycler.1=Fügt eine Chance, keine Muntion zu verbrauchen und
 text.openmodularturrets.turret.addon.recycler.2=auch eine Chance Munition zu generieren, pro Schuss.
-text.openmodularturrets.turret.addon.recycler.3=Verbrauch Neg. Chance.
-text.openmodularturrets.turret.addon.recycler.4=Generationschance.
+text.openmodularturrets.turret.addon.recycler.3=Verbrauch Neg. Chance:
+text.openmodularturrets.turret.addon.recycler.4=Generationschance:
 text.openmodularturrets.turret.addon.recycler.flavour=Reduzieren, wiederverwenden, einschalten.
 text.openmodularturrets.turret.addon.concealer.1=Versteckt die Türme der Basis, wenn sie nicht schießen.
 text.openmodularturrets.turret.addon.concealer.flavour=DiggyDiggy Hole!

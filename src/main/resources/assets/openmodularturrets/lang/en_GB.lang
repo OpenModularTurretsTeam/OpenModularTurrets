@@ -64,8 +64,6 @@ tile.expander_inv_tier_three.name=Base Inventory Expander (Tier 3)
 tile.expander_inv_tier_four.name=Base Inventory Expander (Tier 4)
 tile.expander_inv_tier_five.name=Base Inventory Expander (Tier 5)
 tile.base_addon_loot_deleter.name=Base Addon - Loot Deleter
-
-#for IGWMod
 tile.turret_base.name=Turret Base
 
 itemGroup.openmodularturrets=Open Modular Turrets
@@ -234,8 +232,8 @@ text.openmodularturrets.turret.addon.serial.b=compatibility.
 text.openmodularturrets.turret.addon.serial.flavour=Who needs OOP?
 text.openmodularturrets.turret.addon.recycler.1=Adds a chance for a turret to not use ammo,
 text.openmodularturrets.turret.addon.recycler.2=as well as a chance to generate ammo, per shot.
-text.openmodularturrets.turret.addon.recycler.3=Ammo use negation chance.
-text.openmodularturrets.turret.addon.recycler.4=Ammo generation chance.
+text.openmodularturrets.turret.addon.recycler.3=Ammo use negation chance:
+text.openmodularturrets.turret.addon.recycler.4=Ammo generation chance:
 text.openmodularturrets.turret.addon.recycler.flavour=Reduce, reuse, reassert.
 text.openmodularturrets.turret.addon.concealer.1=Conceals turrets when they aren't shooting.
 text.openmodularturrets.turret.addon.concealer.flavour=DiggyDiggy Hole!
@@ -281,4 +279,3 @@ text.openmodularturrets.death.attack.grenade=%s may need some assembly.
 text.openmodularturrets.death.attack.rocket=%s found that rainbow connection in the form of a rocket.
 text.openmodularturrets.death.attack.laser=%s got disintegrated.
 text.openmodularturrets.death.attack.ferroslug=%s found atomized minerva.
-
