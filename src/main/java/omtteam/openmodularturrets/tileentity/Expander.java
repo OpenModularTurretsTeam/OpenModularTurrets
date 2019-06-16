@@ -10,13 +10,13 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 import omtteam.omlib.tileentity.TileEntityContainer;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import omtteam.openmodularturrets.util.OMTUtil;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
 
 import static omtteam.omlib.util.MathUtil.truncateDoubleToInt;
-import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing;
+import static omtteam.openmodularturrets.turret.TurretHeadUtil.getTurretBaseFacing;
 
 public class Expander extends TileEntityContainer implements ITickable, ITurretBaseAddonTileEntity {
     protected IItemHandlerModifiable inventory;

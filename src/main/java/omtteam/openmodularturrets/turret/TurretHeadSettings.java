@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.util;
+package omtteam.openmodularturrets.turret;
 
 import io.netty.buffer.ByteBuf;
 import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;

@@ -3,9 +3,9 @@ package omtteam.openmodularturrets.api;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import omtteam.omlib.util.WorldUtil;
+import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import org.lwjgl.util.Color;
 
 import java.util.ArrayList;

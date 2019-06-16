@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.util;
+package omtteam.openmodularturrets.turret;
 
 import omtteam.openmodularturrets.handler.config.TurretSetting;
 

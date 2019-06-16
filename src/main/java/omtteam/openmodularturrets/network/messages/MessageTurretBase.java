@@ -62,7 +62,7 @@ public class MessageTurretBase implements IMessage {
             this.trustedPlayers = base.getTrustManager().getTrustedPlayers();
             this.camoBlockRegName = Objects.requireNonNull(base.getCamoState().getBlock().getRegistryName()).toString();
             this.camoBlockMeta = base.getCamoState().getBlock().getMetaFromState(base.getCamoState());
-            this.maxRange = base.getCurrentMaxRange();
+            this.maxRange = base.getMaxRange();
             this.upperRange = base.getUpperBoundMaxRange();
             this.mode = base.getMode();
             this.kills = base.getKills();
@@ -170,7 +170,7 @@ public class MessageTurretBase implements IMessage {
                     base.setMode(message.mode);
                     base.setCamoState(Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(
                             new ResourceLocation(message.camoBlockRegName))).getStateFromMeta(message.camoBlockMeta));
-                    base.setCurrentMaxRange(message.maxRange);
+                    base.getTargetingSettings().setMaxRange(message.maxRange);
                     base.setUpperBoundMaxRange(message.upperRange);
                     base.setKills(message.kills);
                     base.setPlayerKills(message.playerKills);

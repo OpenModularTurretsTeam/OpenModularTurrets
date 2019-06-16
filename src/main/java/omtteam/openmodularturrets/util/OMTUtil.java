@@ -16,6 +16,8 @@ import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.items.AmmoMetaItem;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

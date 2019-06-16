@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.items.IDrawOutlineBase;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
 
 import javax.annotation.Nullable;
 

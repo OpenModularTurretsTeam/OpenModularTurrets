@@ -1,17 +1,16 @@
-package omtteam.openmodularturrets.util;
+package omtteam.openmodularturrets.turret;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.passive.EntityAmbientCreature;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -19,11 +18,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import omtteam.omlib.api.util.Tuple;
 import omtteam.omlib.power.OMEnergyStorage;
-import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.player.Player;
-import omtteam.openmodularturrets.api.lists.MobBlacklist;
-import omtteam.openmodularturrets.api.lists.MobList;
-import omtteam.openmodularturrets.api.lists.NeutralList;
+import omtteam.omlib.util.world.Pos;
+import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.blocks.BlockBaseAttachment;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
@@ -32,6 +29,7 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import omtteam.openmodularturrets.util.OMTUtil;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -87,142 +85,7 @@ public class TurretHeadUtil {
         }
     }
 
-    public static boolean isEntityValidNeutral(TurretBase base, EntityLivingBase possibleTarget) {
-        if (base.isAttacksNeutrals() && OMTConfig.TURRETS.globalCanTargetNeutrals) {
-            return !possibleTarget.isDead && (possibleTarget instanceof EntityAnimal ||
-                    possibleTarget instanceof EntityAmbientCreature || NeutralList.contains(possibleTarget));
-        }
-        return false;
-    }
-
-    public static boolean isEntityValidMob(TurretBase base, EntityLivingBase possibleTarget) {
-        if (base.isAttacksMobs() && OMTConfig.TURRETS.globalCanTargetMobs) {
-            return !possibleTarget.isDead && (possibleTarget.isCreatureType(EnumCreatureType.MONSTER, false) ||
-                    MobList.contains(possibleTarget));
-        }
-        return false;
-    }
-
-    public static Entity getTarget(TurretBase base, World worldObj, BlockPos pos, int turretRange, TurretHead turret) {
-        Entity target = null;
-
-        if (!worldObj.isRemote && base != null) {
-            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
-                                                   pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
-                                                   pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
-
-            List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
-
-            for (EntityLivingBase possibleTarget : targets) {
-                if (possibleTarget != null && EntityList.getEntityString(possibleTarget) != null) {
-                    if (MobBlacklist.contains(EntityList.getEntityString(possibleTarget))) continue;
-                }
-
-                boolean validTarget = true;
-
-                if (base.getController() != null && !base.getController().isEntityValidTarget(possibleTarget, getAimYaw(possibleTarget, pos), getAimPitch(possibleTarget, pos))) {
-                    validTarget = false;
-                }
-
-                if (!validTarget) {
-                    continue;
-                }
-
-                if (possibleTarget instanceof IEntityOwnable) {
-                    Entity entity = ((IEntityOwnable) possibleTarget).getOwner();
-                    if (entity instanceof EntityPlayer) {
-                        EntityPlayer owner = (EntityPlayer) entity;
-                        if (isPlayerOwner(owner, base) || isPlayerTrusted(owner, base)) {
-                            continue;
-                        }
-                    }
-                } else if (possibleTarget instanceof EntityHorse) {
-                    if (((EntityHorse) possibleTarget).isTame()) {
-                        continue;
-                    }
-                }
-
-                if (isEntityValidNeutral(base, possibleTarget)) {
-                    target = possibleTarget;
-                }
-
-                if (isEntityValidMob(base, possibleTarget)) {
-                    target = possibleTarget;
-                }
-
-                if (base.isAttacksPlayers() && OMTConfig.TURRETS.globalCanTargetPlayers) {
-                    if (possibleTarget instanceof EntityPlayerMP && !possibleTarget.isDead) {
-                        EntityPlayerMP entity = (EntityPlayerMP) possibleTarget;
-
-                        if (OMTUtil.canDamagePlayer(entity, base) && !entity.capabilities.isCreativeMode) {
-                            target = possibleTarget;
-                        }
-                    }
-                }
-
-                if (target != null && turret != null) {
-                    if (base.isMultiTargeting() && isTargetAlreadyTargeted(base, target)) {
-                        continue;
-                    }
-
-                    EntityLivingBase targetELB = (EntityLivingBase) target;
-                    if (canTurretSeeTarget(turret, targetELB) && targetELB.getHealth() > 0.0F) {
-                        return target;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public static Entity getTargetWithMinimumRange(TurretBase base, World worldObj, BlockPos pos, int turretRange, TurretHead turret) {
-        Entity target = null;
-
-        if (!worldObj.isRemote && base != null) {
-            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
-                                                   pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
-                                                   pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
-
-            List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
-
-            for (EntityLivingBase target1 : targets) {
-
-                if (isEntityValidNeutral(base, target1) && target1.getDistance(pos.getX(), pos.getY(), pos.getZ()) >= 3) {
-                    target = target1;
-                }
-
-                if (isEntityValidMob(base, target1) && target1.getDistance(pos.getX(), pos.getY(), pos.getZ()) >= 3) {
-                    target = target1;
-                }
-
-                if (base.isAttacksPlayers() && OMTConfig.TURRETS.globalCanTargetPlayers) {
-                    if (target1 instanceof EntityPlayerMP && !target1.isDead && target1.getDistance(pos.getX(), pos.getY(),
-                                                                                                    pos.getZ()) >= 3) {
-                        EntityPlayerMP entity = (EntityPlayerMP) target1;
-
-                        if (OMTUtil.canDamagePlayer(entity, base) && !entity.capabilities.isCreativeMode) {
-                            target = target1;
-                        }
-                    }
-                }
-
-                if (target != null && turret != null) {
-                    if (base.isMultiTargeting() && isTargetAlreadyTargeted(base, target)) {
-                        continue;
-                    }
-
-                    EntityLivingBase targetELB = (EntityLivingBase) target;
-
-                    if (canTurretSeeTarget(turret, targetELB) && targetELB.getHealth() > 0.0F) {
-                        return target;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public static Entity getTargetWithoutSlowEffect(TurretBase base, World worldObj, BlockPos pos, int turretRange, TurretHead turret) {
+    public static EntityLivingBase getTargetWithoutSlowEffect(TurretBase base, World worldObj, BlockPos pos, int turretRange, TurretHead turret) {
         EntityLivingBase target = null;
 
         if (!worldObj.isRemote && base != null) {
@@ -233,11 +96,11 @@ public class TurretHeadUtil {
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase target1 : targets) {
-                if (isEntityValidNeutral(base, target1) && !target1.isPotionActive(Potion.getPotionById(2))) {
+                if (TurretTargetSelector.isEntityValidNeutral(turret, target1) && !target1.isPotionActive(Potion.getPotionById(2))) {
                     target = target1;
                 }
 
-                if (isEntityValidMob(base, target1) && !target1.isPotionActive(Potion.getPotionById(2))) {
+                if (TurretTargetSelector.isEntityValidMob(turret, target1) && !target1.isPotionActive(Potion.getPotionById(2))) {
                     target = target1;
                 }
 
@@ -258,7 +121,7 @@ public class TurretHeadUtil {
                         continue;
                     }
 
-                    if (canTurretSeeTarget(turret, target) && target.getHealth() > 0.0F) {
+                    if (TurretTargetSelector.canSeeTargetFromPos(turret, target) && target.getHealth() > 0.0F) {
                         return target;
                     }
                 }
@@ -267,7 +130,7 @@ public class TurretHeadUtil {
         return null;
     }
 
-    private static boolean isTargetAlreadyTargeted(TurretBase base, Entity entity) {
+    public static boolean isTargetAlreadyTargeted(TurretBase base, Entity entity) {
         for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(base.getWorld(), base.getPos())) {
             if (tileEntity instanceof TurretHead) {
                 if (entity.equals(((TurretHead) tileEntity).target)) {
@@ -502,7 +365,7 @@ public class TurretHeadUtil {
         return map;
     }
 
-    public static float getAimYaw(Entity target, BlockPos pos) {
+    public static float getAimYaw(Entity target, Pos pos) {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
 
         /*if (ModCompatibility.ValkyrienWarfareLoaded) {
@@ -524,7 +387,7 @@ public class TurretHeadUtil {
         return yaw / (float) Math.PI * 180F;
     }
 
-    public static float getAimPitch(Entity target, BlockPos pos) {
+    public static float getAimPitch(Entity target, Pos pos) {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
 
         /*if (ModCompatibility.ValkyrienWarfareLoaded) {
@@ -850,54 +713,5 @@ public class TurretHeadUtil {
         if (base.getWorld().isDaytime() && !base.getWorld().isRaining() && base.getWorld().canBlockSeeSky(base.getPos().up(2))) {
             storage.receiveEnergy(OMTConfig.MISCELLANEOUS.solarPanelAddonGen, false);
         }
-    }
-
-    public static boolean canTurretSeeTarget(TurretHead turret, EntityLivingBase target) {
-        Vec3d traceStart = new Vec3d(turret.getPos().getX() + 0.5F, turret.getPos().getY() + 0.5F, turret.getPos().getZ() + 0.5F);
-
-        /*if (ModCompatibility.ValkyrienWarfareLoaded) {
-            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(turret.getWorld(), turret.getPos());
-            //Then the turret must be in Ship Space
-            if (shipEntity != null) {
-                traceStart = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, traceStart);
-            }
-        } */
-
-        Vec3d traceEnd = new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ);
-        Vec3d vecDelta = new Vec3d(traceEnd.x - traceStart.x,
-                                   traceEnd.y - traceStart.y,
-                                   traceEnd.z - traceStart.z);
-
-        // Normalize vector to the largest delta axis
-        vecDelta = vecDelta.normalize();
-
-        // Limit how many non solid block a turret can see through
-        for (int i = 0; i < 10; i++) {
-            // Offset start position toward the target to prevent self collision
-            traceStart = traceStart.add(vecDelta);
-
-            RayTraceResult traced = turret.getWorld().rayTraceBlocks(traceStart, traceEnd);
-
-            if (traced != null && traced.typeOfHit == RayTraceResult.Type.BLOCK) {
-                IBlockState hitBlock = turret.getWorld().getBlockState(traced.getBlockPos());
-
-                // If non solid block is in the way then proceed to continue
-                // tracing
-                if ((traced.getBlockPos().equals(turret.getPos())) || (!hitBlock.getMaterial().isSolid() && MathHelper.absMax(
-                        MathHelper.absMax(traceStart.x - traceEnd.x, traceStart.y - traceEnd.y),
-                        traceStart.z - traceEnd.z) > 1)) {
-                    // Start at new position and continue
-                    traceStart = traced.hitVec;
-                    continue;
-                }
-            }
-
-            EntityLivingBase targeted = traced == null ? target : null;
-
-            return targeted != null && targeted.equals(target);
-        }
-
-        // If all above failed, the target cannot be seen
-        return false;
     }
 }

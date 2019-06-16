@@ -1,8 +1,6 @@
 package omtteam.openmodularturrets.tileentity.turrets;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -11,11 +9,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.omlib.handler.OMConfig;
 import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
@@ -23,19 +19,21 @@ import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
-import omtteam.openmodularturrets.util.TurretType;
+import omtteam.openmodularturrets.turret.TargetingSettings;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretTargetSelector;
+import omtteam.openmodularturrets.turret.TurretType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
-import static omtteam.omlib.util.player.PlayerUtil.*;
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
 public abstract class TurretHead extends TileEntityBase implements ITickable, ITurretBaseAddonTileEntity {
     public float baseFitRotationX, baseFitRotationZ;
-    public Entity target = null;
+    public EntityLivingBase target = null;
     public float rotationAnimation = 0.00F;
     public boolean shouldConceal = false;
     protected TurretBase base;
@@ -154,20 +152,20 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         return false;
     }
 
-    Entity getTargetWithMinRange() {
-        return TurretHeadUtil.getTargetWithMinimumRange(base, this.getWorld(), this.pos,
-                                                        Math.min(getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(base, this), base.getCurrentMaxRange()), this);
+    protected EntityLivingBase getTarget() {
+        TurretTargetSelector selector = new TurretTargetSelector(this);
+        if (!this.getWorld().isRemote && base != null) {
+            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - base.getMaxRange() - 1, pos.getY() - base.getMaxRange() - 1,
+                                                   pos.getZ() - base.getMaxRange() - 1, pos.getX() + base.getMaxRange() + 1,
+                                                   pos.getY() + base.getMaxRange() + 1, pos.getZ() + base.getMaxRange() + 1);
+            List<EntityLivingBase> targets = this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
+            return selector.getBestEntity(targets);
+        }
+        return null;
     }
 
-    Entity getTargetWithoutEffect() {
-        return TurretHeadUtil.getTargetWithoutSlowEffect(base, this.getWorld(), this.pos,
-                                                         Math.min(getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(base, this), base.getCurrentMaxRange()),
-                                                         this);
-    }
-
-    private Entity getTarget() {
-        return TurretHeadUtil.getTarget(base, this.getWorld(), this.pos,
-                                        Math.min(getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(base, this), base.getCurrentMaxRange()), this);
+    public TargetingSettings getTargetingSettings() {
+        return base.getTargetingSettings();
     }
 
     TurretBase getBaseFromWorld() {
@@ -227,23 +225,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     @Nonnull
     protected abstract SoundEvent getLaunchSoundEffect();
 
-    boolean chebyshevDistance(Entity target) {
-        Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
-
-        /*if (ModCompatibility.ValkyrienWarfareLoaded) {
-            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
-
-            if (shipEntity != null) {
-                //The turret is on a Ship, time to convert the coordinates; converting the target positions to local ship space
-                targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
-            }
-        } */
-        if (this.base == null) {
-            return false;
-        }
-        return MathHelper.absMax(MathHelper.absMax(targetPos.x - this.getPos().getX(), targetPos.y - this.getPos().getY()),
-                                 targetPos.z - this.getPos().getZ()) > (this.base.getCurrentMaxRange());
-    }
 
     protected int getPowerRequiredForNextShot() {
         return Math.round(this.getTurretBasePowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(
@@ -274,42 +255,14 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
     protected void targetingChecks() {
         // is there a target, and has it died in the previous tick?
-        if (this.target == null || this.target.isDead || this.getWorld().getEntityByID(this.target.getEntityId()) == null || ((EntityLivingBase) this.target).getHealth() <= 0.0F) {
+        if (this.target == null || this.target.isDead || this.getWorld().getEntityByID(this.target.getEntityId()) == null || this.target.getHealth() <= 0.0F) {
             this.target = getTarget();
-        }
-
-        // did we get a target, and is it valid?
-        if (this.target != null) {
-            //Player checks: is target in creative mode?
-            if (this.target instanceof EntityPlayerMP) {
-                EntityPlayerMP entity = (EntityPlayerMP) target;
-
-                if (!base.isAttacksPlayers()
-                        || isPlayerOwner(entity, base)
-                        || entity.capabilities.isCreativeMode
-                        || isPlayerTrusted(entity, base)
-                        || isPlayerOP(entity) && OMConfig.GENERAL.canOPAccessOwnedBlocks) {
-                    this.target = null;
-                    return;
-                }
-            }
-
-            // Can the turret still see the target? (It's moving)
-            if (!TurretHeadUtil.canTurretSeeTarget(this, (EntityLivingBase) this.target)) {
-                this.target = null;
-                return;
-            }
-
-            //Is the target out of range now?
-            if (chebyshevDistance(target)) {
-                this.target = null;
-            }
         }
     }
 
     void concealmentChecks() {
         if (base != null && base.shouldConcealTurrets) {
-            if (!shouldConceal && (target == null || !TurretHeadUtil.canTurretSeeTarget(this, (EntityLivingBase) target)) && ticksWithoutTarget >= 40) {
+            if (!shouldConceal && (target == null || !TurretTargetSelector.canSeeTargetFromPos(this, target)) && ticksWithoutTarget >= 40) {
                 ticksWithoutTarget = 0;
                 shouldConceal = true;
                 playedDeploy = false;

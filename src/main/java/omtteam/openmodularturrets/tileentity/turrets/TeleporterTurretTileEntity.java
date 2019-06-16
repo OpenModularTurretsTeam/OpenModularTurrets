@@ -10,7 +10,10 @@ import net.minecraft.util.math.Vec3d;
 import omtteam.openmodularturrets.blocks.turretheads.BlockTeleporterTurret;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.EnumTargetingPriority;
+import omtteam.openmodularturrets.turret.TargetingSettings;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretTargetSelector;
 
 import javax.annotation.Nonnull;
 
@@ -56,8 +59,9 @@ public class TeleporterTurretTileEntity extends TurretHead {
 
             // is there a target, and has it died in the previous tick?
             if (target == null || target.isDead || this.getWorld().getEntityByID(
-                    target.getEntityId()) == null || ((EntityLivingBase) target).getHealth() <= 0.0F) {
-                target = getTargetWithMinRange();
+                    target.getEntityId()) == null || target.getHealth() <= 0.0F) {
+
+                target = getTarget();
             }
 
             // did we even get a target previously?
@@ -72,7 +76,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
 
             // Can the turret still see the target? (It's moving)
             if (target != null) {
-                if (!TurretHeadUtil.canTurretSeeTarget(this, (EntityLivingBase) target)) {
+                if (!TurretTargetSelector.canSeeTargetFromPos(this, target)) {
                     target = null;
                     return;
                 }
@@ -86,7 +90,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
                 }
             }
             if (target != null) {
-                if (chebyshevDistance(target)) {
+                if (TurretTargetSelector.chebyshevDistance(this, target)) {
                     target = null;
                     return;
                 }
@@ -95,7 +99,7 @@ public class TeleporterTurretTileEntity extends TurretHead {
             // Consume energy
             base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - power_required, null);
 
-            EntityLivingBase base = (EntityLivingBase) target;
+            EntityLivingBase base = target;
 
             Vec3d basePositionToSet = new Vec3d(this.getPos().getX() + 0.5F, this.getPos().getY() + 1.0F, this.getPos().getZ() + 0.5F);
 
@@ -138,5 +142,10 @@ public class TeleporterTurretTileEntity extends TurretHead {
     @Nonnull
     protected SoundEvent getLaunchSoundEffect() {
         return ModSounds.teleportLaunchSound;
+    }
+
+    @Override
+    public TargetingSettings getTargetingSettings() {
+        return super.getTargetingSettings().setPriority(EnumTargetingPriority.DISTANCE);
     }
 }

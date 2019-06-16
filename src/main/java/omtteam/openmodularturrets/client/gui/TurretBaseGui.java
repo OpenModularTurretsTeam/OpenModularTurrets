@@ -20,8 +20,8 @@ import omtteam.omlib.network.messages.MessageCloseGUITile;
 import omtteam.omlib.network.messages.MessageOpenGUITile;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.DebugHandler;
-import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.player.PlayerUtil;
+import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.client.gui.containers.TurretBaseContainer;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
@@ -29,7 +29,7 @@ import omtteam.openmodularturrets.network.messages.*;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -148,12 +148,12 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
     @Override
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 1) {
-            this.base.setCurrentMaxRange((this.base.getCurrentMaxRange() + 1));
+            this.base.setMaxRange((this.base.getMaxRange() + 1));
             sendChangeToServer();
         }
 
         if (guibutton.id == 2) {
-            this.base.setCurrentMaxRange((this.base.getCurrentMaxRange() - 1));
+            this.base.setMaxRange((this.base.getMaxRange() - 1));
             sendChangeToServer();
         }
 
@@ -214,8 +214,8 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.AMMO), 8, 6, 0);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.INVENTORY), 8, ySize - 97 + 4, 0);
 
-        fontRenderer.drawStringWithShadow("" + base.getCurrentMaxRange(), String.valueOf(base.getCurrentMaxRange()).length() == 1 ?
-                127 : 124, 39, base.getCurrentMaxRange() == getBaseUpperBoundRange() ? 16724530 : 40000);
+        fontRenderer.drawStringWithShadow("" + base.getMaxRange(), String.valueOf(base.getMaxRange()).length() == 1 ?
+                127 : 124, 39, base.getMaxRange() == getBaseUpperBoundRange() ? 16724530 : 40000);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.RANGE), 116, 6, 0);
 
         ArrayList<String> targetInfo = new ArrayList<>();
@@ -297,7 +297,7 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
 
     private void sendChangeToServer() {
         MessageAdjustMaxRange message = new MessageAdjustMaxRange(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
-                                                                  base.getCurrentMaxRange());
+                                                                  base.getMaxRange());
 
         OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }

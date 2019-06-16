@@ -30,14 +30,14 @@ import omtteam.openmodularturrets.items.blocks.ItemBlockLever;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.openmodularturrets.reference.OMTNames.Blocks.lever;
-import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBase;
-import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing;
+import static omtteam.openmodularturrets.turret.TurretHeadUtil.getTurretBase;
+import static omtteam.openmodularturrets.turret.TurretHeadUtil.getTurretBaseFacing;
 
 @SuppressWarnings("deprecation")
 public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock {

@@ -9,9 +9,10 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.omlib.util.world.Pos;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
 
 import javax.annotation.Nullable;
 
@@ -214,8 +215,8 @@ public abstract class AbstractDirectedTurret extends TurretHead {
 
             //Aim at target
             if (target != null && isTargetInYawPitch(target)) {
-                this.yaw = TurretHeadUtil.getAimYaw(this.target, this.pos);
-                this.pitch = TurretHeadUtil.getAimPitch(this.target, this.pos);
+                this.yaw = TurretHeadUtil.getAimYaw(this.target, new Pos(this.pos));
+                this.pitch = TurretHeadUtil.getAimPitch(this.target, new Pos(this.pos));
             }
 
             targetingTicks = 0;
@@ -241,7 +242,7 @@ public abstract class AbstractDirectedTurret extends TurretHead {
                 forceShot();
             }
 
-            //If we made it this far, reset ticks to zero?
+            //If we made it this far, reset ticks to zero
             this.ticks = 0;
         }
     }

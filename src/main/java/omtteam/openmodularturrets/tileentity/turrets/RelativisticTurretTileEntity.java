@@ -10,7 +10,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretTargetSelector;
 
 import javax.annotation.Nonnull;
 
@@ -55,7 +56,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
 
             // is there a target, and Has it died in the previous tick?
             if (target == null || target.isDead || this.getWorld().getEntityByID(
-                    target.getEntityId()) == null || ((EntityLivingBase) target).getHealth() <= 0.0F) {
+                    target.getEntityId()) == null || target.getHealth() <= 0.0F) {
                 target = getTargetWithoutEffect();
             }
 
@@ -71,7 +72,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
 
             // Can the turret still see the target? (It's moving)
             if (target != null) {
-                if (!TurretHeadUtil.canTurretSeeTarget(this, (EntityLivingBase) target)) {
+                if (!TurretTargetSelector.canSeeTargetFromPos(this, target)) {
                     target = null;
                     return;
                 }
@@ -85,7 +86,7 @@ public class RelativisticTurretTileEntity extends TurretHead {
                 }
             }
             if (target != null) {
-                if (chebyshevDistance(target)) {
+                if (TurretTargetSelector.chebyshevDistance(this, target)) {
                     target = null;
                     return;
                 }
@@ -93,8 +94,8 @@ public class RelativisticTurretTileEntity extends TurretHead {
 
             // Consume energy
             base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - power_required, null);
-            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 3, false, true));
-            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(Potion.getPotionById(18), 200, 3, false, true));
+            (target).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 3, false, true));
+            (target).addPotionEffect(new PotionEffect(Potion.getPotionById(18), 200, 3, false, true));
 
             target = null;
         }
@@ -122,5 +123,11 @@ public class RelativisticTurretTileEntity extends TurretHead {
     @Nonnull
     protected SoundEvent getLaunchSoundEffect() {
         return ModSounds.relativisticLaunchSound;
+    }
+
+    private EntityLivingBase getTargetWithoutEffect() {
+        return TurretHeadUtil.getTargetWithoutSlowEffect(base, this.getWorld(), this.pos,
+                                                         Math.min(getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(base, this), base.getMaxRange()),
+                                                         this);
     }
 }

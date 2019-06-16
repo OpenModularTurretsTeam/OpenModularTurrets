@@ -11,7 +11,7 @@ import omtteam.openmodularturrets.client.render.models.ModelSolarPanelAddon;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
 public abstract class AbstractTurretRenderer extends TileEntitySpecialRenderer {

@@ -14,8 +14,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import omtteam.openmodularturrets.util.OMTUtil;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;

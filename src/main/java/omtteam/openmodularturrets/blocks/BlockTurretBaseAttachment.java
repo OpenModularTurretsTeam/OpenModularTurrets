@@ -18,8 +18,8 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static omtteam.omlib.util.WorldUtil.getTouchingBlockStates;
-import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
+import static omtteam.omlib.util.world.WorldUtil.getTouchingBlockStates;
+import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntities;
 
 /**
  * Created by Keridos on 09/02/17.

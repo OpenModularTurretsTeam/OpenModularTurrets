@@ -14,13 +14,13 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import omtteam.omlib.util.MathUtil;
 import omtteam.omlib.util.RandomUtil;
-import omtteam.omlib.util.WorldUtil;
+import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import omtteam.openmodularturrets.util.OMTUtil;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import java.util.List;
 import java.util.Random;

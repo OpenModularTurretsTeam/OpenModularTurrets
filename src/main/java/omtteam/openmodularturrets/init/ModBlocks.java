@@ -17,7 +17,7 @@ import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.*;
-import omtteam.openmodularturrets.util.TurretType;
+import omtteam.openmodularturrets.turret.TurretType;
 
 
 public class ModBlocks {

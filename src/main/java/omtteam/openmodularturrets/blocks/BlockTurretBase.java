@@ -56,8 +56,8 @@ import java.util.List;
 
 import static omtteam.omlib.compatibility.theoneprobe.TOPCompatibility.getLocalizationString;
 import static omtteam.omlib.util.GeneralUtil.*;
-import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
+import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntities;
 
 public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHasItemBlock, TOPInfoProvider {
     public static final PropertyInteger TIER = PropertyInteger.create("tier", 1, 5);

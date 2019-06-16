@@ -7,11 +7,11 @@ import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.util.player.Player;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
 
-import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing;
+import static omtteam.openmodularturrets.turret.TurretHeadUtil.getTurretBaseFacing;
 
 /**
  * Created by Keridos on 25/11/17.

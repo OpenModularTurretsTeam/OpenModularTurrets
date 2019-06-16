@@ -29,9 +29,9 @@ import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretType;
 import omtteam.openmodularturrets.util.OMTUtil;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
-import omtteam.openmodularturrets.util.TurretType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -39,7 +39,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static omtteam.omlib.compatibility.theoneprobe.TOPCompatibility.getLocalizationString;
 import static omtteam.omlib.util.GeneralUtil.getBooleanUnlocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanColor;
-import static omtteam.openmodularturrets.util.TurretHeadUtil.*;
+import static omtteam.openmodularturrets.turret.TurretHeadUtil.*;
 
 @SuppressWarnings("deprecation")
 public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock, TOPInfoProvider {
@@ -123,7 +123,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         TurretBase base = getBase(worldIn, pos);
-        if (this.getTurretType().getSettings().baseRange > base.getCurrentMaxRange()) {
+        if (this.getTurretType().getSettings().baseRange > base.getMaxRange()) {
             base.setUpdateRange(true);
         }
     }

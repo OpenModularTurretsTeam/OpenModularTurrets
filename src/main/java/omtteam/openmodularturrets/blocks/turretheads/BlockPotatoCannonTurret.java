@@ -10,7 +10,7 @@ import omtteam.openmodularturrets.items.blocks.ItemBlockPotatoCannonTurret;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.PotatoCannonTurretTileEntity;
-import omtteam.openmodularturrets.util.TurretType;
+import omtteam.openmodularturrets.turret.TurretType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;

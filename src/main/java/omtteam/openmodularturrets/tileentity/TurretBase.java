@@ -43,8 +43,8 @@ import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.tileentity.TileEntityTrustedMachine;
 import omtteam.omlib.util.EnumMachineMode;
 import omtteam.omlib.util.NetworkUtil;
-import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.camo.CamoSettings;
+import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.api.network.IBaseController;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
@@ -53,9 +53,10 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import omtteam.openmodularturrets.turret.EnumTargetingPriority;
+import omtteam.openmodularturrets.turret.TargetingSettings;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import omtteam.openmodularturrets.util.OMTUtil;
-import omtteam.openmodularturrets.util.TargetingSettings;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -65,8 +66,8 @@ import java.util.List;
 
 import static omtteam.omlib.compatibility.OMLibModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.OMLibModCompatibility.OpenComputersLoaded;
-import static omtteam.omlib.util.WorldUtil.getTouchingTileEntities;
 import static omtteam.omlib.util.player.PlayerUtil.getPlayerUUID;
+import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntities;
 
 @SuppressWarnings("unused")
 @Optional.InterfaceList({
@@ -81,12 +82,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     protected FluidTank tank;
     private IBlockState camoBlockStateTemp;
     private boolean multiTargeting = false;
-    private int currentMaxRange;
     private int upperBoundMaxRange;
     private boolean rangeOverridden;
-    private boolean attacksMobs;
-    private boolean attacksNeutrals;
-    private boolean attacksPlayers;
+    private TargetingSettings targetingSettings;
     private boolean updateRange;
     private int ticks;
     private boolean forceFire = false;
@@ -98,13 +96,10 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
         super();
-        this.currentMaxRange = 0;
         this.upperBoundMaxRange = 0;
         this.rangeOverridden = false;
         this.storage = new OMEnergyStorage(MaxEnergyStorage, MaxIO);
-        this.attacksMobs = true;
-        this.attacksNeutrals = false;
-        this.attacksPlayers = false;
+        this.targetingSettings = new TargetingSettings(false, true, false, 0, EnumTargetingPriority.DISTANCE);
         this.tier = tier;
         this.camoBlockStateTemp = camoState;
         this.mode = EnumMachineMode.INVERTED;
@@ -253,12 +248,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Nonnull
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setInteger("currentMaxRange", this.currentMaxRange);
         tag.setInteger("upperBoundMaxRange", this.upperBoundMaxRange);
         tag.setBoolean("rangeOverridden", this.rangeOverridden);
-        tag.setBoolean("attacksMobs", this.attacksMobs);
-        tag.setBoolean("attacksNeutrals", this.attacksNeutrals);
-        tag.setBoolean("attacksPlayers", this.attacksPlayers);
         tag.setBoolean("shouldConcealTurrets", this.shouldConcealTurrets);
         tag.setBoolean("multiTargeting", this.multiTargeting);
         tag.setBoolean("forceFire", this.forceFire);
@@ -272,12 +263,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        this.currentMaxRange = tag.getInteger("currentMaxRange");
+        this.targetingSettings = TargetingSettings.readFromNBT(tag);
         this.upperBoundMaxRange = tag.getInteger("upperBoundMaxRange");
         this.rangeOverridden = tag.getBoolean("rangeOverridden");
-        this.attacksMobs = tag.getBoolean("attacksMobs");
-        this.attacksNeutrals = tag.getBoolean("attacksNeutrals");
-        this.attacksPlayers = tag.getBoolean("attacksPlayers");
         this.shouldConcealTurrets = tag.getBoolean("shouldConcealTurrets");
         this.multiTargeting = tag.getBoolean("multiTargeting");
         this.forceFire = tag.getBoolean("forceFire");
@@ -333,11 +321,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     private void updateControllerSettings() {
         if (controller != null) {
-            TargetingSettings settings = controller.getTargetingSettings();
-            this.attacksMobs = settings.isTargetMobs();
-            this.attacksNeutrals = settings.isTargetPassive();
-            this.attacksPlayers = settings.isTargetPlayers();
-            this.currentMaxRange = settings.getMaxRange();
+            targetingSettings = controller.getTargetingSettings();
         }
     }
 
@@ -381,12 +365,12 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             setBaseUpperBoundRange();
             updateControllerSettings();
 
-            if (this.currentMaxRange > this.upperBoundMaxRange) {
-                this.currentMaxRange = upperBoundMaxRange;
+            if (this.targetingSettings.getMaxRange() > this.upperBoundMaxRange) {
+                this.targetingSettings.setMaxRange(upperBoundMaxRange);
             }
 
             if (!this.rangeOverridden) {
-                this.currentMaxRange = upperBoundMaxRange;
+                this.targetingSettings.setMaxRange(upperBoundMaxRange);
             }
 
             //Concealment
@@ -401,7 +385,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 ticks = 0;
                 updateRedstoneReactor(this);
                 if (updateRange) {
-                    this.setCurrentMaxRange(upperBoundMaxRange);
+                    this.targetingSettings.setMaxRange(upperBoundMaxRange);
                     updateRange = false;
                 }
 
@@ -418,38 +402,22 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     public NBTTagCompound writeMemoryCardNBT() {
         NBTTagCompound nbtTagCompound = new NBTTagCompound();
-        nbtTagCompound.setInteger("currentMaxRange", this.currentMaxRange);
-        nbtTagCompound.setBoolean("attacksMobs", attacksMobs);
-        nbtTagCompound.setBoolean("attacksNeutrals", attacksNeutrals);
-        nbtTagCompound.setBoolean("attacksPlayers", attacksPlayers);
+        this.targetingSettings.writeToNBT(nbtTagCompound);
         nbtTagCompound.setBoolean("multiTargeting", multiTargeting);
         nbtTagCompound.setInteger("mode", mode.ordinal());
-        if (this.rangeOverridden) {
-            nbtTagCompound.setInteger("range", this.currentMaxRange);
-        }
         NBTTagCompound trustedPlayers = new NBTTagCompound();
         nbtTagCompound.setTag("trustedPlayers", this.getTrustManager().writeToNBT(trustedPlayers));
         return nbtTagCompound;
     }
 
     public void readMemoryCardNBT(NBTTagCompound nbtTagCompound) {
-        this.currentMaxRange = nbtTagCompound.getInteger("currentMaxRange");
-        this.attacksMobs = nbtTagCompound.getBoolean("attacksMobs");
-        this.attacksNeutrals = nbtTagCompound.getBoolean("attacksNeutrals");
-        this.attacksPlayers = nbtTagCompound.getBoolean("attacksPlayers");
         this.multiTargeting = nbtTagCompound.getBoolean("multiTargeting");
         if (nbtTagCompound.hasKey("mode")) {
             this.mode = EnumMachineMode.values()[nbtTagCompound.getInteger("mode")];
         } else {
             this.mode = EnumMachineMode.INVERTED;
         }
-        if (nbtTagCompound.hasKey("range")) {
-            this.rangeOverridden = true;
-            this.currentMaxRange = nbtTagCompound.getInteger("range");
-        } else {
-            this.rangeOverridden = false;
-            this.currentMaxRange = getUpperBoundMaxRange();
-        }
+        this.targetingSettings = TargetingSettings.readFromNBT(nbtTagCompound);
         if (nbtTagCompound.hasKey("trustedPlayers")) {
             this.getTrustManager().readFromNBT((NBTTagCompound) nbtTagCompound.getTag("trustedPlayers"));
         }
@@ -503,27 +471,27 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     public boolean isAttacksMobs() {
-        return attacksMobs;
+        return this.targetingSettings.isTargetMobs();
     }
 
     public void setAttacksMobs(boolean attacksMobs) {
-        this.attacksMobs = attacksMobs;
+        this.targetingSettings.setTargetMobs(attacksMobs);
     }
 
     public boolean isAttacksNeutrals() {
-        return attacksNeutrals;
+        return this.targetingSettings.isTargetPassive();
     }
 
     public void setAttacksNeutrals(boolean attacksNeutrals) {
-        this.attacksNeutrals = attacksNeutrals;
+        this.targetingSettings.setTargetPassive(attacksNeutrals);
     }
 
     public boolean isAttacksPlayers() {
-        return attacksPlayers;
+        return this.targetingSettings.isTargetPlayers();
     }
 
     public void setAttacksPlayers(boolean attacksPlayers) {
-        this.attacksPlayers = attacksPlayers;
+        this.targetingSettings.setTargetPlayers(attacksPlayers);
     }
 
     public boolean isMultiTargeting() {
@@ -572,20 +540,20 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         this.playerKills = playerKills;
     }
 
-    public int getCurrentMaxRange() {
-        return currentMaxRange;
+    public int getMaxRange() {
+        return targetingSettings.getMaxRange();
     }
 
-    public void setCurrentMaxRange(int newCurrentMaxRange) {
-        this.currentMaxRange = newCurrentMaxRange;
+    public void setMaxRange(int maxRange) {
+        this.targetingSettings.setMaxRange(maxRange);
         this.rangeOverridden = true;
 
-        if (currentMaxRange > this.upperBoundMaxRange) {
-            this.currentMaxRange = this.upperBoundMaxRange;
+        if (targetingSettings.getMaxRange() > this.upperBoundMaxRange) {
+            this.targetingSettings.setMaxRange(this.upperBoundMaxRange);
         }
 
-        if (currentMaxRange < 0) {
-            this.currentMaxRange = 0;
+        if (targetingSettings.getMaxRange() < 0) {
+            this.targetingSettings.setMaxRange(0);
         }
     }
 
@@ -624,6 +592,14 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return 0;
     }
 
+    public TargetingSettings getTargetingSettings() {
+        return targetingSettings;
+    }
+
+    public void setTargetingSettings(TargetingSettings targetingSettings) {
+        this.targetingSettings = targetingSettings;
+    }
+
     // API Functions. TODO: Add more?
 
     /**
@@ -646,9 +622,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
      * @return List of EntityLivingBase
      */
     public List<EntityLivingBase> getEntitiesWithinRange() {
-        AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - currentMaxRange - 1, pos.getY() - currentMaxRange - 1,
-                                               pos.getZ() - currentMaxRange - 1, pos.getX() + currentMaxRange + 1,
-                                               pos.getY() + currentMaxRange + 1, pos.getZ() + currentMaxRange + 1);
+        AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - targetingSettings.getMaxRange() - 1, pos.getY() - targetingSettings.getMaxRange() - 1,
+                                               pos.getZ() - targetingSettings.getMaxRange() - 1, pos.getX() + targetingSettings.getMaxRange() + 1,
+                                               pos.getY() + targetingSettings.getMaxRange() + 1, pos.getZ() + targetingSettings.getMaxRange() + 1);
 
         return this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
     }
@@ -778,31 +754,31 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             case getOwner:
                 return new Object[]{this.getOwner()};
             case attacksPlayers:
-                return new Object[]{this.attacksPlayers};
+                return new Object[]{this.targetingSettings.isTargetPlayers()};
             case setAttacksPlayers:
                 if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
                     return new Object[]{"wrong arguments"};
                 }
                 b = (arguments[0].toString().equals("true"));
-                this.attacksPlayers = b;
+                this.targetingSettings.setTargetPlayers(b);
                 return new Object[]{true};
             case attacksMobs:
-                return new Object[]{this.attacksMobs};
+                return new Object[]{this.targetingSettings.isTargetMobs()};
             case setAttacksMobs:
                 if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
                     return new Object[]{"wrong arguments"};
                 }
                 b = (arguments[0].toString().equals("true"));
-                this.attacksMobs = b;
+                this.targetingSettings.setTargetMobs(b);
                 return new Object[]{true};
             case attacksNeutrals:
-                return new Object[]{this.attacksNeutrals};
+                return new Object[]{this.targetingSettings.isTargetPassive()};
             case setAttacksNeutrals:
                 if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
                     return new Object[]{"wrong arguments"};
                 }
                 b = (arguments[0].toString().equals("true"));
-                this.attacksNeutrals = b;
+                this.targetingSettings.setTargetPassive(b);
                 return new Object[]{true};
             case getTrustedPlayers:
                 return new Object[]{this.getTrustManager().getTrustedPlayersAsListMap()};

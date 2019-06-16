@@ -74,7 +74,7 @@ public class MessageAdjustMaxRange implements IMessage {
                     machine = (TurretBase) entity;
                 }
                 if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
-                    machine.setCurrentMaxRange(message.getBaseRange());
+                    machine.getTargetingSettings().setMaxRange(message.getBaseRange());
                     machine.sendMessageToAllTracking();
                 }
             });

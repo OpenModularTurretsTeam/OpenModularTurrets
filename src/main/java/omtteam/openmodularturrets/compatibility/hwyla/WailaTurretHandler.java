@@ -13,14 +13,14 @@ import omtteam.omlib.compatibility.hwyla.IOMLibWailaDataProvider;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
-import omtteam.openmodularturrets.util.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
-import static omtteam.openmodularturrets.util.TurretHeadUtil.*;
+import static omtteam.openmodularturrets.turret.TurretHeadUtil.*;
 
 /**
  * Created by nico on 5/23/15.
