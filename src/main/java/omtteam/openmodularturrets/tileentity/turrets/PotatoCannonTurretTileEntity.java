@@ -40,6 +40,11 @@ public class PotatoCannonTurretTileEntity extends ProjectileTurret {
     }
 
     @Override
+    public Integer[] getDefaultPriorities() {
+        return new Integer[]{-5, -5, -5, 1, 10};
+    }
+
+    @Override
     public SoundEvent getLaunchSoundEffect() {
         return ModSounds.potatoLaunchSound;
     }

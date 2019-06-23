@@ -40,6 +40,11 @@ public class IncendiaryTurretTileEntity extends ProjectileTurret {
     }
 
     @Override
+    public Integer[] getDefaultPriorities() {
+        return new Integer[]{10, -5, -2, 10, 10};
+    }
+
+    @Override
     public SoundEvent getLaunchSoundEffect() {
         return ModSounds.incendiaryLaunchSound;
     }

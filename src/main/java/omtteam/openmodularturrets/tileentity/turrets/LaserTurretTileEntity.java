@@ -36,13 +36,13 @@ public class LaserTurretTileEntity extends RayTracingTurret {
     }
 
     @Override
-    public SoundEvent getLaunchSoundEffect() {
-        return ModSounds.laserLaunchSound;
+    public Integer[] getDefaultPriorities() {
+        return new Integer[]{5, 10, 2, -10, 10};
     }
 
     @Override
-    protected void doTargetedShot(Entity target, ItemStack ammo) {
-        shootRay(target.posX, target.posY + target.getEyeHeight(), target.posZ, getBaseTurretAccuracy());
+    public SoundEvent getLaunchSoundEffect() {
+        return ModSounds.laserLaunchSound;
     }
 
     @Override

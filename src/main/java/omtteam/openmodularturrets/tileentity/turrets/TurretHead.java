@@ -19,10 +19,7 @@ import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.turret.TargetingSettings;
-import omtteam.openmodularturrets.turret.TurretHeadUtil;
-import omtteam.openmodularturrets.turret.TurretTargetSelector;
-import omtteam.openmodularturrets.turret.TurretType;
+import omtteam.openmodularturrets.turret.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,6 +46,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     protected double targetSpeedX = 0;
     protected double targetSpeedY = 0;
     protected double targetSpeedZ = 0;
+    Integer[] priorities;
 
     public TurretHead(int turretTier) {
         this.turretTier = turretTier;
@@ -69,13 +67,20 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         readFromNBT(var1);
     }
 
-    @SuppressWarnings("NullableProblems")
+
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
         nbtTagCompound.setInteger("ticksBeforeFire", ticks);
         nbtTagCompound.setBoolean("shouldConceal", shouldConceal);
         nbtTagCompound.setBoolean("autoFire", autoFire);
+        if (this.priorities != null) {
+            nbtTagCompound.setInteger("priorityMaxHP", this.priorities[EnumTargetingPriority.MAX_HP.ordinal()]);
+            nbtTagCompound.setInteger("priorityHPRemaining", this.priorities[EnumTargetingPriority.HP_REMAINING.ordinal()]);
+            nbtTagCompound.setInteger("priorityDistance", this.priorities[EnumTargetingPriority.DISTANCE.ordinal()]);
+            nbtTagCompound.setInteger("priorityArmor", this.priorities[EnumTargetingPriority.ARMOR.ordinal()]);
+            nbtTagCompound.setInteger("priorityPlayer", this.priorities[EnumTargetingPriority.PLAYER.ordinal()]);
+        }
         return nbtTagCompound;
     }
 
@@ -85,6 +90,17 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         this.ticks = nbtTagCompound.getInteger("ticksBeforeFire");
         this.shouldConceal = nbtTagCompound.getBoolean("shouldConceal");
         this.autoFire = nbtTagCompound.getBoolean("autoFire");
+        if (nbtTagCompound.hasKey("priorityMaxHP")) {
+            this.priorities = new Integer[]{
+                    nbtTagCompound.getInteger("priorityMaxHP"),
+                    nbtTagCompound.getInteger("priorityHPRemaining"),
+                    nbtTagCompound.getInteger("priorityDistance"),
+                    nbtTagCompound.getInteger("priorityArmor"),
+                    nbtTagCompound.getInteger("priorityPlayer")};
+        } else {
+            this.priorities = this.getDefaultPriorities();
+        }
+
     }
 
     @Nonnull
@@ -94,7 +110,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     }
 
     // Set the rotation to fit the turret against the base and store its direction
-    boolean setSide() {
+    protected boolean setSide() {
         if (hasSetSide && !this.getWorld().isBlockLoaded(this.getPos().offset(turretBase))) {
             return false;
         }
@@ -153,7 +169,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     }
 
     protected EntityLivingBase getTarget() {
-        TurretTargetSelector selector = new TurretTargetSelector(this);
+        TurretTargetingUtils selector = new TurretTargetingUtils(this);
         if (!this.getWorld().isRemote && base != null) {
             AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - base.getMaxRange() - 1, pos.getY() - base.getMaxRange() - 1,
                                                    pos.getZ() - base.getMaxRange() - 1, pos.getX() + base.getMaxRange() + 1,
@@ -166,6 +182,13 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
     public TargetingSettings getTargetingSettings() {
         return base.getTargetingSettings();
+    }
+
+    public Integer[] getPriorities() {
+        if (priorities != null) {
+            return priorities;
+        }
+        return this.getDefaultPriorities();
     }
 
     TurretBase getBaseFromWorld() {
@@ -210,6 +233,21 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
                 * (1.0F - (TurretHeadUtil.getScattershotUpgrades(this.getBase())) / 25F);
     }
 
+    /**
+     * @param entity entity to be checked
+     * @return if the entity is valid for the turret to target currently (useful for special turrets)
+     */
+    public boolean isEntityValidTarget(EntityLivingBase entity) {
+        return true;
+    }
+
+    /**
+     * Priorities determine how much the corresponding priority should priorise, negative values invert that behaviour.
+     *
+     * @return priority value array with 5 entries, in the order MAX_HP, HP_REMAINING, DISTANCE, ARMOR, PLAYER
+     */
+    protected abstract Integer[] getDefaultPriorities();
+
     protected abstract boolean requiresAmmo();
 
     protected abstract boolean requiresSpecificAmmo();
@@ -253,8 +291,73 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         return ammo;
     }
 
+    protected boolean updateChecks() {
+        if (!setSide()) return false;
+        if (this.base == null) {
+            this.base = getBaseFromWorld();
+        }
+
+        ticks++;
+
+        // BASE IS OKAY
+        if (base == null || base.getTier() < this.turretTier) {
+            this.getWorld().destroyBlock(this.pos, true);
+        } else {
+            this.concealmentChecks();
+            TurretHeadUtil.updateSolarPanelAddon(base);
+
+            //turret tick rate;
+            if (target == null && targetingTicks < OMTConfig.TURRETS.turretTargetSearchTicks) {
+                targetingTicks++;
+                return false;
+            }
+            targetingTicks = 0;
+
+            int power_required = Math.round(this.getTurretBasePowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(
+                    base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
+
+            // power check
+            if ((base.getEnergyStored(EnumFacing.DOWN) < power_required) || (!base.isActive())) {
+                return false;
+            }
+
+            // is there a target, and Has it died in the previous tick?
+            targetingChecks();
+
+            // did we even get a target previously?
+            if (target == null) {
+                return false;
+            }
+
+            // has cooldown passed?
+            if (ticks < (this.getTurretBaseFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
+                return false;
+            }
+
+            // Can the turret still see the target? (It's moving)
+            if (target != null) {
+                if (!TurretTargetingUtils.canSeeTargetFromPos(this, target)) {
+                    target = null;
+                    return false;
+                }
+            }
+
+            if (target != null) {
+                if (TurretTargetingUtils.chebyshevDistance(this, target)) {
+                    target = null;
+                    return false;
+                }
+            }
+
+            // Consume energy
+            base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - power_required, null);
+            return true;
+        }
+        return false;
+    }
+
     protected void targetingChecks() {
-        // is there a target, and has it died in the previous tick?
+        // if no target or target has died, acquire a new target.
         if (this.target == null || this.target.isDead || this.getWorld().getEntityByID(this.target.getEntityId()) == null || this.target.getHealth() <= 0.0F) {
             this.target = getTarget();
         }
@@ -262,7 +365,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
     void concealmentChecks() {
         if (base != null && base.shouldConcealTurrets) {
-            if (!shouldConceal && (target == null || !TurretTargetSelector.canSeeTargetFromPos(this, target)) && ticksWithoutTarget >= 40) {
+            if (!shouldConceal && (target == null || !TurretTargetingUtils.canSeeTargetFromPos(this, target)) && ticksWithoutTarget >= 40) {
                 ticksWithoutTarget = 0;
                 shouldConceal = true;
                 playedDeploy = false;

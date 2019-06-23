@@ -7,15 +7,18 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import omtteam.omlib.handler.OMConfig;
 import omtteam.omlib.util.world.Pos;
+import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.api.lists.MobBlacklist;
 import omtteam.openmodularturrets.api.lists.MobList;
 import omtteam.openmodularturrets.api.lists.NeutralList;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
+import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.OMTUtil;
 
@@ -26,12 +29,12 @@ import static omtteam.omlib.util.player.PlayerUtil.*;
 import static omtteam.openmodularturrets.turret.TurretHeadUtil.getAimPitch;
 import static omtteam.openmodularturrets.turret.TurretHeadUtil.getAimYaw;
 
-public class TurretTargetSelector {
+public class TurretTargetingUtils {
     private TargetingSettings settings;
     private Pos pos;
     private TurretHead turret;
 
-    public TurretTargetSelector(TurretHead turret) {
+    public TurretTargetingUtils(TurretHead turret) {
         this.settings = turret.getTargetingSettings();
         this.pos = new Pos(turret.getPos());
         this.turret = turret;
@@ -53,7 +56,7 @@ public class TurretTargetSelector {
                                  targetPos.z - pos.getZ()) > (turret.getBase().getMaxRange());
     }
 
-    public static boolean canSeeTargetFromPos(TurretHead turret, EntityLivingBase entity) {
+    public static boolean canSeeTargetFromPos(TurretHead turret, Entity entity) {
         Pos pos = new Pos(turret.getPos());
         Vec3d traceStart = new Vec3d(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 
@@ -94,7 +97,7 @@ public class TurretTargetSelector {
                 }
             }
 
-            EntityLivingBase targeted = traced == null ? null : traced.typeOfHit != RayTraceResult.Type.MISS ? entity : null;
+            Entity targeted = traced == null ? null : traced.typeOfHit != RayTraceResult.Type.MISS ? entity : null;
 
             return targeted != null;
         }
@@ -127,9 +130,20 @@ public class TurretTargetSelector {
         this.settings = settings;
     }
 
+    public static boolean isTargetAlreadyTargeted(TurretBase base, Entity entity) {
+        for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(base.getWorld(), base.getPos())) {
+            if (tileEntity instanceof TurretHead) {
+                if (entity.equals(((TurretHead) tileEntity).target)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Nullable
     public EntityLivingBase getBestEntity(List<EntityLivingBase> entityList) {
-        int bestPriority = 0;
+        int bestPriority = Integer.MIN_VALUE;
         EntityLivingBase bestEntity = null;
         for (EntityLivingBase entity : entityList) {
             if (!validTarget(entity)) {
@@ -137,12 +151,11 @@ public class TurretTargetSelector {
             }
             int tempPriority = 1;
             for (EnumTargetingPriority priority : EnumTargetingPriority.values()) {
-                if (priority == settings.getPriority()) {
-                    tempPriority *= EnumTargetingPriority.getValueByPriority(entity, pos, priority) * 10;
-                } else {
-                    tempPriority *= EnumTargetingPriority.getValueByPriority(entity, pos, priority);
-                }
+                Integer[] priorities = turret.getPriorities();
+
+                tempPriority *= EnumTargetingPriority.getValueByPriority(entity, pos, priority, settings, priorities);
             }
+
             if (tempPriority > bestPriority) {
                 bestPriority = tempPriority;
                 bestEntity = entity;
@@ -155,18 +168,16 @@ public class TurretTargetSelector {
         if (entity instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) entity;
             if (!settings.isTargetPlayers() && OMTConfig.TURRETS.globalCanTargetPlayers
-                    || isPlayerOwner(player, turret)
-                    || player.capabilities.isCreativeMode
+                    || !OMTUtil.canDamagePlayer(player, turret.getBase())
                     || isPlayerTrusted(player, turret)
                     || isPlayerOP(player) && OMConfig.GENERAL.canOPAccessOwnedBlocks
-                    || !OMTUtil.canDamagePlayer(player, turret.getBase()) // TODO: merge this in canDamagePlayer()
                     || !player.isDead
             ) {
                 return false;
             }
         }
         // Can the turret still see the target? (It's moving)
-        if (canSeeTargetFromPos(turret, entity)) {
+        if (!canSeeTargetFromPos(turret, entity)) {
             return false;
         }
 
@@ -197,7 +208,11 @@ public class TurretTargetSelector {
             }
         }
 
-        if (turret.getBase().isMultiTargeting() && TurretHeadUtil.isTargetAlreadyTargeted(turret.getBase(), entity)) {
+        if (turret.getBase().isMultiTargeting() && isTargetAlreadyTargeted(turret.getBase(), entity)) {
+            return false;
+        }
+
+        if (!turret.isEntityValidTarget(entity)) {
             return false;
         }
 

@@ -40,6 +40,11 @@ public class GrenadeLauncherTurretTileEntity extends ProjectileTurret {
     }
 
     @Override
+    public Integer[] getDefaultPriorities() {
+        return new Integer[]{10, 10, 20, 1, 10};
+    }
+
+    @Override
     public SoundEvent getLaunchSoundEffect() {
         return ModSounds.grenadeLaunchSound;
     }

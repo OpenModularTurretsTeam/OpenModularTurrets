@@ -32,7 +32,7 @@ public abstract class AbstractDirectedTurret extends TurretHead {
     public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound var1 = new NBTTagCompound();
         this.writeToNBT(var1);
-        return new SPacketUpdateTileEntity(this.pos, 2, var1);
+        return new SPacketUpdateTileEntity(this.getPos(), 2, var1);
     }
 
     @Override
@@ -222,7 +222,7 @@ public abstract class AbstractDirectedTurret extends TurretHead {
             targetingTicks = 0;
         }
 
-        if (target != null || this.autoFire) {
+        if (target != null && !target.isDead || this.autoFire) {
             // has cooldown passed?
             if (this.ticks < (this.getTurretBaseFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
                 return;

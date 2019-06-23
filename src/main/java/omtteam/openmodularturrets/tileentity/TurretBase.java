@@ -53,7 +53,6 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
-import omtteam.openmodularturrets.turret.EnumTargetingPriority;
 import omtteam.openmodularturrets.turret.TargetingSettings;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import omtteam.openmodularturrets.util.OMTUtil;
@@ -99,7 +98,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         this.upperBoundMaxRange = 0;
         this.rangeOverridden = false;
         this.storage = new OMEnergyStorage(MaxEnergyStorage, MaxIO);
-        this.targetingSettings = new TargetingSettings(false, true, false, 0, EnumTargetingPriority.DISTANCE);
+        this.targetingSettings = new TargetingSettings(false, true, false, 0);
         this.tier = tier;
         this.camoBlockStateTemp = camoState;
         this.mode = EnumMachineMode.INVERTED;

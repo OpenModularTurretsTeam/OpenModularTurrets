@@ -2,10 +2,8 @@ package omtteam.openmodularturrets.turret;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -29,7 +27,6 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
-import omtteam.openmodularturrets.util.OMTUtil;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -83,62 +80,6 @@ public class TurretHeadUtil {
         if (OMTConfig.TURRETS.turretWarnMessage) {
             addChatMessage(player, new TextComponentTranslation(OMTNames.Localizations.Text.STATUS_WARNING).setStyle(new Style().setColor(TextFormatting.RED)));
         }
-    }
-
-    public static EntityLivingBase getTargetWithoutSlowEffect(TurretBase base, World worldObj, BlockPos pos, int turretRange, TurretHead turret) {
-        EntityLivingBase target = null;
-
-        if (!worldObj.isRemote && base != null) {
-            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
-                                                   pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
-                                                   pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
-
-            List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
-
-            for (EntityLivingBase target1 : targets) {
-                if (TurretTargetSelector.isEntityValidNeutral(turret, target1) && !target1.isPotionActive(Potion.getPotionById(2))) {
-                    target = target1;
-                }
-
-                if (TurretTargetSelector.isEntityValidMob(turret, target1) && !target1.isPotionActive(Potion.getPotionById(2))) {
-                    target = target1;
-                }
-
-                if (base.isAttacksPlayers() && OMTConfig.TURRETS.globalCanTargetPlayers) {
-                    if (target1 instanceof EntityPlayerMP && !target1.isDead && !target1.isPotionActive(
-                            Potion.getPotionById(2))) {
-                        EntityPlayerMP entity = (EntityPlayerMP) target1;
-
-                        if (OMTUtil.canDamagePlayer(entity, base) && !entity.capabilities.isCreativeMode) {
-                            target = target1;
-                        }
-                    }
-                }
-
-                if (target != null && turret != null) {
-
-                    if (base.isMultiTargeting() && isTargetAlreadyTargeted(base, target)) {
-                        continue;
-                    }
-
-                    if (TurretTargetSelector.canSeeTargetFromPos(turret, target) && target.getHealth() > 0.0F) {
-                        return target;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public static boolean isTargetAlreadyTargeted(TurretBase base, Entity entity) {
-        for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(base.getWorld(), base.getPos())) {
-            if (tileEntity instanceof TurretHead) {
-                if (entity.equals(((TurretHead) tileEntity).target)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public static int getPowerExpanderTotalExtraCapacity(World world, BlockPos pos) {

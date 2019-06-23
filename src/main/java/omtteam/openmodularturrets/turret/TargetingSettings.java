@@ -13,17 +13,15 @@ public class TargetingSettings {
     private boolean targetMobs;
     private boolean targetPassive;
     private int maxRange;
-    private EnumTargetingPriority priority;
 
     private TargetingSettings() {
     }
 
-    public TargetingSettings(boolean targetPlayers, boolean targetMobs, boolean targetPassive, int maxRange, EnumTargetingPriority priority) {
+    public TargetingSettings(boolean targetPlayers, boolean targetMobs, boolean targetPassive, int maxRange) {
         this.targetPlayers = targetPlayers;
         this.targetMobs = targetMobs;
         this.targetPassive = targetPassive;
         this.maxRange = maxRange;
-        this.priority = priority;
     }
 
     public boolean isTargetPlayers() {
@@ -50,24 +48,14 @@ public class TargetingSettings {
             settings.targetMobs = nbt.getBoolean("targetMobs");
             settings.targetPassive = nbt.getBoolean("targetPassive");
             settings.maxRange = nbt.getInteger("maxRange");
-            settings.priority = EnumTargetingPriority.values()[nbt.getInteger("priority")];
+
         } else {
             settings.targetPlayers = nbtTagCompound.getBoolean("attacksPlayers");
             settings.targetMobs = nbtTagCompound.getBoolean("attacksMobs");
             settings.targetPassive = nbtTagCompound.getBoolean("attacksNeutrals");
             settings.maxRange = nbtTagCompound.getInteger("currentMaxRange");
-            settings.priority = EnumTargetingPriority.DISTANCE;
         }
         return settings;
-    }
-
-    public EnumTargetingPriority getPriority() {
-        return priority;
-    }
-
-    public TargetingSettings setPriority(EnumTargetingPriority priority) {
-        this.priority = priority;
-        return this;
     }
 
     public TargetingSettings setTargetPlayers(boolean targetPlayers) {
@@ -98,13 +86,12 @@ public class TargetingSettings {
         return targetPlayers == that.targetPlayers &&
                 targetMobs == that.targetMobs &&
                 targetPassive == that.targetPassive &&
-                maxRange == that.maxRange &&
-                priority == that.priority;
+                maxRange == that.maxRange;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(targetPlayers, targetMobs, targetPassive, maxRange, priority);
+        return Objects.hash(targetPlayers, targetMobs, targetPassive, maxRange);
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
@@ -113,7 +100,6 @@ public class TargetingSettings {
         nbt.setBoolean("targetPlayers", this.targetPlayers);
         nbt.setBoolean("targetMobs", this.targetMobs);
         nbt.setBoolean("targetPassive", this.targetPassive);
-        nbt.setInteger("priority", this.priority.ordinal());
         nbtTagCompound.setTag("targetingSettings", nbt);
         return nbtTagCompound;
     }

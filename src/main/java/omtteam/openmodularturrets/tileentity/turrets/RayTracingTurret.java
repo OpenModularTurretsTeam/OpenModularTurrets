@@ -20,6 +20,7 @@ import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDa
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretTargetingUtils;
 import omtteam.openmodularturrets.util.OMTUtil;
 
 import java.util.List;
@@ -49,6 +50,11 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
 
     @Override
     protected void doTargetedShot(Entity target, ItemStack ammo) {
+        if (target.isDead || target instanceof EntityLivingBase && ((EntityLivingBase) target).getHealth() <= 0.0F ||
+                !TurretTargetingUtils.canSeeTargetFromPos(this, target)) {
+            this.target = null;
+            return;
+        }
         shootRay(target.posX, target.posY + target.getEyeHeight(), target.posZ, this.getActualTurretAccuracy());
     }
 
@@ -79,14 +85,15 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
                                          this.getPos().getZ() + 0.5D);
             // Calculate deviation based on targets height and its distance to the turret
             double deviationModifier = 1D * (target.height < 0.5 ? 1.5D : 1D)
-                    * ((vector.distanceTo(baseVector) * 0.5D / (this.getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(base, this))) + 0.3D);
+                    * ((vector.distanceTo(baseVector) * 0.5D
+                    / (this.getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(base, this))) + 0.3D);
 
-            xDev = RandomUtil.random.nextGaussian() * 0.035D * accuracy * deviationModifier;
-            yDev = RandomUtil.random.nextGaussian() * 0.035D * accuracy * deviationModifier;
-            zDev = RandomUtil.random.nextGaussian() * 0.035D * accuracy * deviationModifier;
+            xDev = RandomUtil.random.nextGaussian() * 0.035D / accuracy * deviationModifier;
+            yDev = RandomUtil.random.nextGaussian() * 0.035D / accuracy * deviationModifier;
+            zDev = RandomUtil.random.nextGaussian() * 0.035D / accuracy * deviationModifier;
 
             vector = vector.addVector(xDev, yDev, zDev);
-            baseVector = baseVector.add(vector.subtract(baseVector).normalize().scale(0.75D));
+            baseVector = baseVector.add(vector.subtract(baseVector).normalize().scale(0.8D));
 
             // Play Sound
             this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
@@ -95,7 +102,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
             RayTraceResult blockTraceResult = world.rayTraceBlocks(baseVector, vector, false, true, false);
 
             // Raytrace entities hit
-            List<RayTraceResult> entityHits = WorldUtil.traceEntities(null, baseVector, vector, world);
+            List<RayTraceResult> entityHits = WorldUtil.traceEntities(null, baseVector, vector, world); //TODO: check why sometimes we do not hit though the beam passes right through targets
             double blockRange = blockTraceResult != null ? blockTraceResult.hitVec.distanceTo(baseVector) : 500;
 
             for (RayTraceResult result : entityHits) { // Loop through all entities
@@ -121,7 +128,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
         if (entity != null && !entity.getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
             if (entity instanceof EntityPlayer) {
                 if (OMTUtil.canDamagePlayer((EntityPlayer) entity, base)) { // Player hit handling
-                    damageEntity(entity);
+                    damageEntity((EntityLivingBase) entity);
                     applyHitEffects(entity);
                     entity.hurtResistantTime = -1;
                     this.getWorld().playSound(null, entity.getPosition(), this.getHitSound(), SoundCategory.AMBIENT,
@@ -132,7 +139,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
                 }
             } else if (OMTUtil.canDamageEntity(entity, base)) {  // Entity hit Handling
                 OMTUtil.setTagsForTurretHit(entity, base);
-                damageEntity(entity);
+                damageEntity((EntityLivingBase) entity);
                 applyHitEffects(entity);
                 entity.hurtResistantTime = -1;
                 this.getWorld().playSound(null, entity.getPosition(), this.getHitSound(), SoundCategory.AMBIENT,
@@ -145,25 +152,19 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
         return false;
     }
 
-    protected void damageEntity(Entity entity) {
+    protected void damageEntity(EntityLivingBase entity) {
         float damageModifier = this.getDamageModifier(entity); // The damage modifier of the turret based on entity
         float damage = this.getTurretType().getSettings().baseDamage * damageModifier;
         int fakeDrops = TurretHeadUtil.getFakeDropsLevel(base);
 
         if (this.getTurretDamageAmpBonus() * TurretHeadUtil.getAmpLevel(base) > 0) {
-            if (entity instanceof EntityLivingBase) {
-                EntityLivingBase elb = (EntityLivingBase) entity;
-                damage += ((int) elb.getHealth() * this.getTurretDamageAmpBonus() * TurretHeadUtil.getAmpLevel(base));
-            }
+            damage += ((int) entity.getHealth() * this.getTurretDamageAmpBonus() * TurretHeadUtil.getAmpLevel(base));
         }
 
-        if (entity instanceof EntityLivingBase) {
-            EntityLivingBase elb = (EntityLivingBase) entity;
-            // Attack 2 times, once with normal, once with Bypassing Damage
-            elb.attackEntityFrom(new NormalDamageSource(this.getTurretType().getInternalName(), fakeDrops, base,
-                                                        (WorldServer) this.getWorld(), false), damage * this.getNormalDamageFactor());
-            elb.attackEntityFrom(new ArmorBypassDamageSource(this.getTurretType().getInternalName(), fakeDrops, base,
-                                                             (WorldServer) this.getWorld(), false), damage * this.getBypassDamageFactor());
-        }
+        // Attack 2 times, once with normal, once with Bypassing Damage
+        entity.attackEntityFrom(new NormalDamageSource(this.getTurretType().getInternalName(), fakeDrops, base,
+                                                       (WorldServer) this.getWorld(), false), damage * this.getNormalDamageFactor());
+        entity.attackEntityFrom(new ArmorBypassDamageSource(this.getTurretType().getInternalName(), fakeDrops, base,
+                                                            (WorldServer) this.getWorld(), false), damage * this.getBypassDamageFactor());
     }
 }

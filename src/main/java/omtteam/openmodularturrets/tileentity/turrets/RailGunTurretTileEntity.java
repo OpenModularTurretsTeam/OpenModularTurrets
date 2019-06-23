@@ -39,6 +39,11 @@ public class RailGunTurretTileEntity extends RayTracingTurret {
     }
 
     @Override
+    public Integer[] getDefaultPriorities() {
+        return new Integer[]{10, 10, 20, 40, 10};
+    }
+
+    @Override
     public SoundEvent getLaunchSoundEffect() {
         return ModSounds.railgunLaunchSound;
     }
