@@ -27,6 +27,10 @@ apply plugin: 'idea'
 apply plugin: 'java'
 
 repositories {
+
+    maven { // vw dependency
+        url = 'https://maven.daporkchop.net/'
+    }
     maven { // The repo from which to get waila
         url "http://mobiusstrip.eu/maven"
     }
@@ -136,6 +140,7 @@ if (project.allprojects.findAll({ it.name == "OpenModularPassiveDefense" }).size
 }
 
 dependencies {
+    compile 'valkyrienwarfare:api:1.0'
     deobfProvided "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
     testCompile "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
     deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}"
@@ -161,7 +166,6 @@ dependencies {
     if (ompd_local) {
         runtime project(':OpenModularPassiveDefense')
     }
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.2.0"
     testCompile("org.junit.jupiter:junit-jupiter-api:5.2.0")
     testCompile("org.junit.platform:junit-platform-launcher:1.1.0")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.2.0")

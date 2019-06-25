@@ -11,7 +11,11 @@ import omtteam.omlib.api.render.ColorOM;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.render.MessageRenderRay;
 import omtteam.omlib.util.EntityUtil;
+import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.init.ModSounds;
+import valkyrienwarfare.api.IPhysicsEntity;
+import valkyrienwarfare.api.IPhysicsEntityManager;
+import valkyrienwarfare.api.TransformType;
 
 public class LaserTurretTileEntity extends RayTracingTurret {
     private ColorOM color = new ColorOM(1F, 0.1F, 0, 0.38F);
@@ -42,11 +46,34 @@ public class LaserTurretTileEntity extends RayTracingTurret {
 
     @Override
     protected void doTargetedShot(Entity target, ItemStack ammo) {
-        shootRay(target.posX, target.posY + target.getEyeHeight(), target.posZ, getBaseTurretAccuracy());
+        Vec3d targetPos = target.getPositionVector();
+        double d0 = targetPos.x;
+        double d1 = targetPos.y + target.getEyeHeight();
+        double d2 = targetPos.z;
+        if (ModCompatibility.ValkyrienWarfareLoaded) {
+
+            IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
+                    getPos());
+            if (physicsEntity != null) {
+                Vec3d targetPosInShip = physicsEntity.transformVector(targetPos, TransformType.GLOBAL_TO_SUBSPACE);
+                d0 = targetPosInShip.x;
+                d1 = targetPosInShip.y + target.getEyeHeight();
+                d2 = targetPosInShip.z;
+            }
+        }
+        shootRay(d0, d1, d2, getBaseTurretAccuracy());
     }
 
     @Override
-    protected void renderRay(Vec3d start, Vec3d end) {
+    protected void renderRay(Vec3d start, Vec3d end) {if (ModCompatibility.ValkyrienWarfareLoaded) {
+
+        IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
+                getPos());
+        if (physicsEntity != null) {
+            start = physicsEntity.transformVector(start, TransformType.SUBSPACE_TO_GLOBAL);
+            end = physicsEntity.transformVector(end, TransformType.SUBSPACE_TO_GLOBAL);
+        }
+    }
         OMLibNetworkingHandler.INSTANCE.sendToAllAround(
                 new MessageRenderRay(start, end, color, 5, true),
                 new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(),
