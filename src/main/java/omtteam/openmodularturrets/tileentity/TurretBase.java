@@ -245,7 +245,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         if (!world.isRemote) {
             OMLibNetworkingHandler.INSTANCE.sendToAllTracking(new MessageCamoSettings(this),
                                                               new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 80));
-            this.markBlockForUpdate();
+            this.setUpdateNBT(true);
         }
     }
 
@@ -367,6 +367,12 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             this.getWorld().destroyBlock(this.pos, true);
             return;
         }
+        if (this.updateNBT) {
+            this.markBlockForUpdate();
+            OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageTurretBase(this),
+                                                          new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
+            this.updateNBT = false;
+        }
 
         if (!this.getWorld().isRemote) {
             for (EntityPlayerMP player : openClients) {
@@ -406,12 +412,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 }
 
                 this.scrubSyncPlayerList();
-                if (this.updateNBT) {
-                    this.markDirty();
-                    OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageTurretBase(this),
-                                                                  new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
-                    this.updateNBT = false;
-                }
             }
         }
     }
