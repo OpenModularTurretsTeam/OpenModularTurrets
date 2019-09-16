@@ -355,7 +355,7 @@ public class TurretHeadUtil {
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack getSpecificItemStackBlockFromBase(TurretBase base, ItemStack stack) {
+    public static ItemStack getSpecificItemStackFromBase(TurretBase base, ItemStack stack) {
         for (int i = 0; i <= 8; i++) {
             ItemStack ammo_stack = base.getInventory().getStackInSlot(i);
 
@@ -364,16 +364,15 @@ public class TurretHeadUtil {
                 return new ItemStack(ammo_stack.getItem());
             }
         }
-
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack getSpecificItemStackItemFromBase(TurretBase base, ItemStack ammoStackRequired, TurretHead turretHead) {
+    public static ItemStack getSpecificItemStackFromBase(TurretBase base, ItemStack stack, TurretHead turretHead) {
         for (int i = 0; i <= 8; i++) {
             ItemStack ammo_stack = base.getInventory().getStackInSlot(i);
 
-            if (ammo_stack != ItemStack.EMPTY && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == ammoStackRequired.getItem()
-                    && ammo_stack.getMetadata() == ammoStackRequired.getMetadata()) {
+            if (ammo_stack != ItemStack.EMPTY && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == stack.getItem()
+                    && ammo_stack.getMetadata() == stack.getMetadata()) {
                 if (hasRecyclerAddon(base)) {
                     int chance = new Random().nextInt(99);
 
@@ -396,7 +395,6 @@ public class TurretHeadUtil {
                 }
             }
         }
-
         return ItemStack.EMPTY;
     }
 
@@ -426,7 +424,6 @@ public class TurretHeadUtil {
                 }
             }
         }
-
         return result;
     }
 

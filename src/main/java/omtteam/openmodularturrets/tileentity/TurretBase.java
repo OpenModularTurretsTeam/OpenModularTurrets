@@ -125,7 +125,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
         //Prioritise redstone blocks
         if (OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9 < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
-            ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackBlockFromBase(base, new ItemStack(
+            ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackFromBase(base, new ItemStack(
                     Blocks.REDSTONE_BLOCK));
 
             if (redstoneBlock == ItemStack.EMPTY) {
@@ -141,7 +141,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
         if (OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
 
-            ItemStack redstone = TurretHeadUtil.getSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE), null);
+            ItemStack redstone = TurretHeadUtil.getSpecificItemStackFromBase(base, new ItemStack(Items.REDSTONE));
 
             if (redstone == ItemStack.EMPTY) {
                 redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
