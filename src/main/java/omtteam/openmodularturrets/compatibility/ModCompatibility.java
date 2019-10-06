@@ -30,9 +30,9 @@ public class ModCompatibility {
             OpenModularTurrets.getLogger().info("Enabling LUA integration. (Found OpenComputers/ComputerCraft)");
         }
 
-        ValkyrienWarfareLoaded = Loader.isModLoaded("valkyrienwarfare");
+        ValkyrienWarfareLoaded = Loader.isModLoaded("valkyrienskies");
         if (ValkyrienWarfareLoaded) {
-            OpenModularTurrets.getLogger().info("Valkyrien Warfare Found! You have a good taste in mods");
+            OpenModularTurrets.getLogger().info("ValkyrienSkies Found! You have a good taste in mods");
         }
     }
 

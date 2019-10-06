@@ -166,6 +166,7 @@ dependencies {
     if (ompd_local) {
         runtime project(':OpenModularPassiveDefense')
     }
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.2.0"
     testCompile("org.junit.jupiter:junit-jupiter-api:5.2.0")
     testCompile("org.junit.platform:junit-platform-launcher:1.1.0")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.2.0")

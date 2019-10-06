@@ -55,6 +55,11 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
                 d0 = targetPosInShip.x - (this.pos.getX() + 0.5);
                 d1 = targetPosInShip.y + (double) target.height * 0.5F  - (this.pos.getY() + 0.5);
                 d2 = targetPosInShip.z - (this.pos.getZ() + 0.5);
+                Vec3d targetSpeed = new Vec3d(speedX,speedY,speedZ);
+                Vec3d targetSpeedInShip = physicsEntity.rotateVector(targetSpeed, TransformType.GLOBAL_TO_SUBSPACE);
+                speedX = targetSpeedInShip.x;
+                speedY = targetSpeedInShip.y;
+                speedZ = targetSpeedInShip.z;
             }
         }
         double dist = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
