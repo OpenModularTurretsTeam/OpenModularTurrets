@@ -15,12 +15,16 @@ import net.minecraft.world.WorldServer;
 import omtteam.omlib.util.MathUtil;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.omlib.util.WorldUtil;
+import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.util.OMTUtil;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
+import valkyrienwarfare.api.IPhysicsEntity;
+import valkyrienwarfare.api.IPhysicsEntityManager;
+import valkyrienwarfare.api.TransformType;
 
 import java.util.List;
 import java.util.Random;
@@ -49,7 +53,22 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
 
     @Override
     protected void doTargetedShot(Entity target, ItemStack ammo) {
-        shootRay(target.posX, target.posY + target.getEyeHeight(), target.posZ, this.getActualTurretAccuracy());
+        Vec3d targetPos = target.getPositionVector();
+        double d0 = targetPos.x;
+        double d1 = targetPos.y + target.getEyeHeight();
+        double d2 = targetPos.z;
+        if (ModCompatibility.ValkyrienWarfareLoaded) {
+
+            IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
+                    getPos());
+            if (physicsEntity != null) {
+                Vec3d targetPosInShip = physicsEntity.transformVector(targetPos, TransformType.GLOBAL_TO_SUBSPACE);
+                d0 = targetPosInShip.x;
+                d1 = targetPosInShip.y + target.getEyeHeight();
+                d2 = targetPosInShip.z;
+            }
+        }
+        shootRay(d0, d1, d2, this.getActualTurretAccuracy());
     }
 
     @Override
@@ -77,6 +96,15 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
             Vec3d baseVector = new Vec3d(this.getPos().getX() + 0.5D,
                                          this.getPos().getY() + 0.6D,
                                          this.getPos().getZ() + 0.5D);
+            if (ModCompatibility.ValkyrienWarfareLoaded) {
+
+                IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
+                        getPos());
+                if (physicsEntity != null) {
+                    vector = physicsEntity.transformVector(vector, TransformType.SUBSPACE_TO_GLOBAL);
+                    baseVector = physicsEntity.transformVector(baseVector, TransformType.SUBSPACE_TO_GLOBAL);
+                }
+            }
             // Calculate deviation based on targets height and its distance to the turret
             double deviationModifier = 1D * (target.height < 0.5 ? 1.5D : 1D)
                     * ((vector.distanceTo(baseVector) * 0.5D / (this.getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(base, this))) + 0.3D);

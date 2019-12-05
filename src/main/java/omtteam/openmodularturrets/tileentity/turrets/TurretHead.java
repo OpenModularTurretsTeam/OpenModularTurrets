@@ -20,11 +20,15 @@ import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
+import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 import omtteam.openmodularturrets.util.TurretType;
+import valkyrienwarfare.api.IPhysicsEntity;
+import valkyrienwarfare.api.IPhysicsEntityManager;
+import valkyrienwarfare.api.TransformType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -230,14 +234,15 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     boolean chebyshevDistance(Entity target) {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
 
-        /*if (ModCompatibility.ValkyrienWarfareLoaded) {
-            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
-
-            if (shipEntity != null) {
-                //The turret is on a Ship, time to convert the coordinates; converting the target positions to local ship space
-                targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
-            }
-        } */
+        if (ModCompatibility.ValkyrienWarfareLoaded) {
+            // If the turret is in ship space, then move the entity vector into ship space
+			// as well before measuring distance
+			IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(this.getWorld(),
+					this.getPos());
+			if (physicsEntity != null) {
+				targetPos = physicsEntity.transformVector(targetPos, TransformType.GLOBAL_TO_SUBSPACE);
+			}
+        }
         if (this.base == null) {
             return false;
         }

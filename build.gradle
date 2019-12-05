@@ -27,6 +27,10 @@ apply plugin: 'idea'
 apply plugin: 'java'
 
 repositories {
+
+    maven { // vw dependency
+        url = 'https://maven.daporkchop.net/'
+    }
     maven { // The repo from which to get waila
         url "http://mobiusstrip.eu/maven"
     }
@@ -136,6 +140,7 @@ if (project.allprojects.findAll({ it.name == "OpenModularPassiveDefense" }).size
 }
 
 dependencies {
+    compile 'valkyrienwarfare:api:1.0'
     deobfProvided "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
     testCompile "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
     deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}"
