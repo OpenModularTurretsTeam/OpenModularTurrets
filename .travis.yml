@@ -1,5 +1,7 @@
 language: groovy
 sudo: false
+dist: trusty
+
 cache:
   directories:
     - $HOME/.gradle
