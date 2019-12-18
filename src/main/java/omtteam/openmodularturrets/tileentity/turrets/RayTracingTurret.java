@@ -138,9 +138,13 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
             }
             if (!hit) {
                 if (blockTraceResult != null && blockTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
-                    handleBlockHit(world.getBlockState(blockTraceResult.getBlockPos()), blockTraceResult.getBlockPos());
+                    if (baseVector.distanceTo(blockTraceResult.hitVec) <= blockRange) {
+                        this.renderRay(baseVector, blockTraceResult.hitVec);
+                        handleBlockHit(world.getBlockState(blockTraceResult.getBlockPos()), blockTraceResult.getBlockPos());
+                    }
+                }else {
+                    this.renderRay(baseVector, vector.add(vector.subtract(baseVector).scale(2D)));
                 }
-                this.renderRay(baseVector, vector.add(vector.subtract(baseVector).scale(2D)));
             }
         }
     }

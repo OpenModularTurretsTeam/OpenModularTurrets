@@ -65,15 +65,7 @@ public class LaserTurretTileEntity extends RayTracingTurret {
     }
 
     @Override
-    protected void renderRay(Vec3d start, Vec3d end) {if (ModCompatibility.ValkyrienWarfareLoaded) {
-
-        IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
-                getPos());
-        if (physicsEntity != null) {
-            start = physicsEntity.transformVector(start, TransformType.SUBSPACE_TO_GLOBAL);
-            end = physicsEntity.transformVector(end, TransformType.SUBSPACE_TO_GLOBAL);
-        }
-    }
+    protected void renderRay(Vec3d start, Vec3d end) {
         OMLibNetworkingHandler.INSTANCE.sendToAllAround(
                 new MessageRenderRay(start, end, color, 5, true),
                 new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(),
