@@ -60,7 +60,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
         if (ModCompatibility.ValkyrienWarfareLoaded) {
 
             IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
-                    getPos());
+                                                                                                        getPos());
             if (physicsEntity != null) {
                 Vec3d targetPosInShip = physicsEntity.transformVector(targetPos, TransformType.GLOBAL_TO_SUBSPACE);
                 d0 = targetPosInShip.x;
@@ -99,7 +99,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
             if (ModCompatibility.ValkyrienWarfareLoaded) {
 
                 IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
-                        getPos());
+                                                                                                            getPos());
                 if (physicsEntity != null) {
                     vector = physicsEntity.transformVector(vector, TransformType.SUBSPACE_TO_GLOBAL);
                     baseVector = physicsEntity.transformVector(baseVector, TransformType.SUBSPACE_TO_GLOBAL);
@@ -138,7 +138,12 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
             }
             if (!hit) {
                 if (blockTraceResult != null && blockTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
-                    handleBlockHit(world.getBlockState(blockTraceResult.getBlockPos()), blockTraceResult.getBlockPos());
+                    if (baseVector.distanceTo(blockTraceResult.hitVec) <= blockRange) {
+                        this.renderRay(baseVector, blockTraceResult.hitVec);
+                        handleBlockHit(world.getBlockState(blockTraceResult.getBlockPos()), blockTraceResult.getBlockPos());
+                    }
+                } else {
+                    this.renderRay(baseVector, vector.add(vector.subtract(baseVector).scale(2D)));
                 }
                 this.renderRay(baseVector, vector.add(vector.subtract(baseVector).scale(2D)));
             }

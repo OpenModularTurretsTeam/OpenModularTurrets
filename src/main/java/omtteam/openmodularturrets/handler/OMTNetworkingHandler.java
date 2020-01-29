@@ -22,8 +22,8 @@ public class OMTNetworkingHandler {
         INSTANCE.registerMessage(MessageAdjustMaxRange.MessageHandlerAdjustYAxisDetect.class,
                                  MessageAdjustMaxRange.class, 3, Side.SERVER);
 
-        INSTANCE.registerMessage(MessageDropTurrets.MessageHandlerDropTurrets.class, MessageDropTurrets.class, 4,
-                                 Side.SERVER);
+        INSTANCE.registerMessage(MessageDropTurrets.MessageHandlerDropTurrets.class, MessageDropTurrets.class,
+                                 4, Side.SERVER);
 
         INSTANCE.registerMessage(MessageDropBase.MessageHandlerDropBase.class, MessageDropBase.class,
                                  5, Side.SERVER);
@@ -31,16 +31,19 @@ public class OMTNetworkingHandler {
         INSTANCE.registerMessage(MessageSetBaseTargetingType.MessageHandlerSetBaseTargetingType.class,
                                  MessageSetBaseTargetingType.class, 6, Side.SERVER);
 
-        INSTANCE.registerMessage(MessageTurretBase.MessageHandlerTurretBase.class, MessageTurretBase.class, 7,
-                                 Side.CLIENT);
+        INSTANCE.registerMessage(MessageTurretBase.MessageHandlerTurretBase.class, MessageTurretBase.class,
+                                 7, Side.CLIENT);
 
-        INSTANCE.registerMessage(MessageToggleMode.MessageHandlerToggleMode.class, MessageToggleMode.class, 8,
-                                 Side.SERVER);
+        INSTANCE.registerMessage(MessageToggleMode.MessageHandlerToggleMode.class, MessageToggleMode.class,
+                                 8, Side.SERVER);
 
         INSTANCE.registerMessage(MessageAdjustLightValue.MessageHandlerAdjustLightValue.class,
                                  MessageAdjustLightValue.class, 9, Side.SERVER);
 
         INSTANCE.registerMessage(MessageAdjustLightOpacity.MessageHandlerAdjustLightOpacity.class,
                                  MessageAdjustLightOpacity.class, 10, Side.SERVER);
+
+        INSTANCE.registerMessage(MessageUpdateTurret.MessageHandlerUpdateTurret.class, MessageUpdateTurret.class,
+                                 11, Side.CLIENT);
     }
 }

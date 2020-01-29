@@ -9,8 +9,11 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.omlib.util.NetworkUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
+import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
+import omtteam.openmodularturrets.network.messages.MessageUpdateTurret;
 import omtteam.openmodularturrets.util.TurretHeadUtil;
 
 import javax.annotation.Nullable;
@@ -154,12 +157,6 @@ public abstract class AbstractDirectedTurret extends TurretHead {
             return;
         }
 
-        //Send a block update after every 5 ticks of inactivity?
-        if (this.ticks % 5 == 0) {
-            this.getWorld().notifyBlockUpdate(this.pos, this.getWorld().getBlockState(pos), this.getWorld().getBlockState(pos), 3);
-        }
-        this.ticks++;
-
         //Is turret base present and valid?
         if (this.base == null || this.base.getTier() < this.turretTier) {
             this.getWorld().destroyBlock(this.pos, true);
@@ -178,8 +175,10 @@ public abstract class AbstractDirectedTurret extends TurretHead {
         }
 
         if (this.ticks % 5 == 0) {
-            this.getWorld().notifyBlockUpdate(this.pos, this.getWorld().getBlockState(pos), this.getWorld().getBlockState(pos), 3);
+            OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageUpdateTurret(this.pos, this.yaw, this.pitch),
+                                                          NetworkUtil.getTargetPointFromTE(this, 100));
         }
+        this.ticks++;
 
         //Real time tick updates
         TurretHeadUtil.updateSolarPanelAddon(base);
