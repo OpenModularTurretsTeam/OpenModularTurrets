@@ -7,7 +7,6 @@
 gradle-app.setting
 
 # Mod/Forge related stuff
-libs
 eclipse
 *.iws
 *.ipr
@@ -20,7 +19,7 @@ bin
 /libs/
 /run/
 /classes/
-out/
+/out/
 
 # Other Stuff
 Thumbs.db
