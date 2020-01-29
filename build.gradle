@@ -27,9 +27,8 @@ apply plugin: 'idea'
 apply plugin: 'java'
 
 repositories {
-
-    maven { // vw dependency
-        url = 'https://maven.daporkchop.net/'
+    maven { // The repo from which to get VS
+        url "https://maven.daporkchop.net/"
     }
     maven { // The repo from which to get waila
         url "http://mobiusstrip.eu/maven"
@@ -38,37 +37,37 @@ repositories {
         url "http://chickenbones.net/maven/"
     }
     maven {
-        url "http://maven.cil.li/"
+        url "https://maven.cil.li/"
     }
     maven { // the repo from which to get EnderIO and tterrags mods
-        url "http://maven.tterrag.com/"
+        url "https://maven.tterrag.com/"
     }
     maven { // the repo from which to get EnderIO and tterrags mods
-        url "http://maven2.tterrag.com/"
+        url "https://maven2.tterrag.com/"
     }
     maven {
         name "ic2"
         url "http://maven.ic2.player.to/"
     }
     maven {
-        url "http://tehnut.info/maven"
+        url "https://tehnut.info/maven"
     }
     maven {
-        url "http://maven.ironhide.de/"
+        url "https://maven.ironhide.de/"
     }
     maven { // JEI
-        url "http://dvs1.progwml6.com/files/maven"
+        url "https://dvs1.progwml6.com/files/maven"
     }
-    maven { url = "http://dl.tsr.me/artifactory/libs-release-local" }
+    //maven { url = "http://dl.tsr.me/artifactory/libs-release-local" }
     maven { // CoFH
         name = "Covers Maven"
         url = "http://maven.covers1624.net"
     }
     maven {
-        url 'http://maven.mcmoddev.com'
+        url 'https://maven.mcmoddev.com'
     }
     maven {
-        url = "http://files.minecraftforge.net/maven"
+        url = "https://files.minecraftforge.net/maven"
     }
 }
 
@@ -98,7 +97,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "stable_39"
+    mappings = "snapshot_20171212"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     useDepAts = true
 }
@@ -123,10 +122,6 @@ processResources {
     }
 }
 
-configurations {
-    runtime.exclude group: 'ValkyrienWarfareRevamped', module: 'valkyrienwarfare'
-}
-
 def omlib_local = false
 if (project.allprojects.findAll({ it.name == "OMLib" }).size() > 0) {
     omlib_local = true
@@ -140,7 +135,12 @@ if (project.allprojects.findAll({ it.name == "OpenModularPassiveDefense" }).size
 }
 
 dependencies {
-    compile 'valkyrienwarfare:api:1.0'
+    deobfProvided ('valkyrienskies:valkyrienskies:1.12.2-1.0') {
+        transitive = false
+    }
+    testCompile ('valkyrienskies:valkyrienskies:1.12.2-1.0') {
+        transitive = false
+    }
     deobfProvided "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
     testCompile "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
     deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}"
@@ -155,7 +155,6 @@ dependencies {
     testCompile "net.industrial-craft:industrialcraft-2:${ic2_version}"
     deobfProvided "net.darkhax.tesla:Tesla-${minecraft_version}:${tesla_version}"
     testCompile "net.darkhax.tesla:Tesla-${minecraft_version}:${tesla_version}"
-    //deobfProvided "ValkyrienWarfareRevamped:valkyrienwarfare:${valkyrienwarfare_version}:dev"
     if (!omlib_local) {
         compileOnly "omtteam:omlib:${minecraft_version}-${omlib_version}:dev"
         testCompile "omtteam:omlib:${minecraft_version}-${omlib_version}:dev"
