@@ -108,7 +108,8 @@ public class TurretHeadUtil {
                     if (chance >= 0 && chance < turretHead.getTurretType().getSettings().recyclerNegateChance) {
                         return new ItemStack(ammoCheck.getItem());
                         //For adding
-                    } else if (chance > turretHead.getTurretType().getSettings().recyclerNegateChance && chance < (turretHead.getTurretType().getSettings().recyclerNegateChance + turretHead.getTurretType().getSettings().recyclerAddChance)) {
+                    } else if (chance > turretHead.getTurretType().getSettings().recyclerNegateChance &&
+                            chance < (turretHead.getTurretType().getSettings().recyclerNegateChance + turretHead.getTurretType().getSettings().recyclerAddChance)) {
                         exp.getInventory().insertItem(i, new ItemStack(ammoCheck.getItem(), 1), false);
                         return new ItemStack(ammoCheck.getItem());
                     } else {
@@ -312,7 +313,7 @@ public class TurretHeadUtil {
 
         if (ModCompatibility.ValkyrienWarfareLoaded) {
             IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE
-                    .getPhysicsEntityFromShipSpace(target.getEntityWorld(), pos);
+                    .getPhysicsEntityFromShipSpace(target.getEntityWorld(), pos.getBlockPos());
             if (physicsEntity != null) {
                 targetPos = physicsEntity.transformVector(targetPos, TransformType.GLOBAL_TO_SUBSPACE);
             }
@@ -334,7 +335,7 @@ public class TurretHeadUtil {
 
         if (ModCompatibility.ValkyrienWarfareLoaded) {
             IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE
-                    .getPhysicsEntityFromShipSpace(target.getEntityWorld(), pos);
+                    .getPhysicsEntityFromShipSpace(target.getEntityWorld(), pos.getBlockPos());
             if (physicsEntity != null) {
                 targetPos = physicsEntity.transformVector(targetPos, TransformType.GLOBAL_TO_SUBSPACE);
             }

@@ -8,6 +8,7 @@ import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -17,10 +18,14 @@ import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.api.lists.MobBlacklist;
 import omtteam.openmodularturrets.api.lists.MobList;
 import omtteam.openmodularturrets.api.lists.NeutralList;
+import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.OMTUtil;
+import valkyrienwarfare.api.IPhysicsEntity;
+import valkyrienwarfare.api.IPhysicsEntityManager;
+import valkyrienwarfare.api.TransformType;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -42,31 +47,36 @@ public class TurretTargetingUtils {
 
     public static boolean chebyshevDistance(TurretHead turret, EntityLivingBase entity) {
         Vec3d targetPos = new Vec3d(entity.posX, entity.posY, entity.posZ);
-        Pos pos = new Pos(turret.getPos());
+        Vec3d startPos = new Vec3d(turret.getPos());
 
-        /*if (ModCompatibility.ValkyrienWarfareLoaded) {
-            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
-
-            if (shipEntity != null) {
-                //The turret is on a Ship, time to convert the coordinates; converting the target positions to local ship space
-                targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
+        if (ModCompatibility.ValkyrienWarfareLoaded) {
+            IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(turret.getWorld(),
+                                                                                                        turret.getPos());
+            if (physicsEntity != null) {
+                startPos = physicsEntity.transformVector(startPos, TransformType.SUBSPACE_TO_GLOBAL);
             }
-        } */
+        }
+        BlockPos pos = new BlockPos(startPos);
         return MathHelper.absMax(MathHelper.absMax(targetPos.x - pos.getX(), targetPos.y - pos.getY()),
                                  targetPos.z - pos.getZ()) > (turret.getBase().getMaxRange());
     }
 
-    public static boolean canSeeTargetFromPos(TurretHead turret, Entity entity) {
+    /**
+     * @param turret the turret trying to find a target
+     * @param entity the entity to test
+     * @return if the turret can see the target.
+     */
+    public static boolean canSeeTargetFromPos(TurretHead turret, EntityLivingBase entity) {
         Pos pos = new Pos(turret.getPos());
         Vec3d traceStart = new Vec3d(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 
-        /*if (ModCompatibility.ValkyrienWarfareLoaded) {
-            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(turret.getWorld(), turret.getPos());
-            //Then the turret must be in Ship Space
-            if (shipEntity != null) {
-                traceStart = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, traceStart);
+        if (ModCompatibility.ValkyrienWarfareLoaded) {
+            IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(turret.getWorld(),
+                                                                                                        turret.getPos());
+            if (physicsEntity != null) {
+                traceStart = physicsEntity.transformVector(traceStart, TransformType.SUBSPACE_TO_GLOBAL);
             }
-        } */
+        }
 
         Vec3d traceEnd = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
         Vec3d vecDelta = new Vec3d(traceEnd.x - traceStart.x,
@@ -94,10 +104,10 @@ public class TurretTargetingUtils {
                     // Start at new position and continue
                     traceStart = traced.hitVec;
                     continue;
-                }
+                } else return false;
             }
 
-            Entity targeted = traced == null ? null : traced.typeOfHit != RayTraceResult.Type.MISS ? entity : null;
+            EntityLivingBase targeted = traced == null ? entity : traced.typeOfHit == RayTraceResult.Type.MISS ? entity : null;
 
             return targeted != null;
         }

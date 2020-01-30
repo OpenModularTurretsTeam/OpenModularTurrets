@@ -54,8 +54,8 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
 
     @Override
     protected void doTargetedShot(Entity target, ItemStack ammo) {
-        if (target.isDead || target instanceof EntityLivingBase && ((EntityLivingBase) target).getHealth() <= 0.0F ||
-                !TurretTargetingUtils.canSeeTargetFromPos(this, target)) {
+        if (target.isDead || target instanceof EntityLivingBase && (((EntityLivingBase) target).getHealth() <= 0.0F ||
+                !TurretTargetingUtils.canSeeTargetFromPos(this, (EntityLivingBase) target))) {
             this.target = null;
             return;
         }
