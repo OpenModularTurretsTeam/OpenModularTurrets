@@ -7,12 +7,20 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.omlib.util.world.Pos;
+import omtteam.omlib.util.NetworkUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
+import omtteam.openmodularturrets.compatibility.ModCompatibility;
+import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import omtteam.openmodularturrets.network.messages.MessageUpdateTurret;
+import valkyrienwarfare.api.IPhysicsEntity;
+import valkyrienwarfare.api.IPhysicsEntityManager;
+import valkyrienwarfare.api.TransformType;
 
 import javax.annotation.Nullable;
 
@@ -155,12 +163,6 @@ public abstract class AbstractDirectedTurret extends TurretHead {
             return;
         }
 
-        //Send a block update after every 5 ticks of inactivity?
-        if (this.ticks % 5 == 0) {
-            this.getWorld().notifyBlockUpdate(this.pos, this.getWorld().getBlockState(pos), this.getWorld().getBlockState(pos), 3);
-        }
-        this.ticks++;
-
         //Is turret base present and valid?
         if (this.base == null || this.base.getTier() < this.turretTier) {
             this.getWorld().destroyBlock(this.pos, true);
@@ -179,8 +181,22 @@ public abstract class AbstractDirectedTurret extends TurretHead {
         }
 
         if (this.ticks % 5 == 0) {
-            this.getWorld().notifyBlockUpdate(this.pos, this.getWorld().getBlockState(pos), this.getWorld().getBlockState(pos), 3);
+            if (ModCompatibility.ValkyrienWarfareLoaded) {
+                IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
+                                                                                                            getPos());
+                BlockPos pos = this.getPos();
+                if (physicsEntity != null) {
+                    pos = new BlockPos(physicsEntity.transformVector(new Vec3d(pos), TransformType.SUBSPACE_TO_GLOBAL));
+                }
+                OMTNetworkingHandler.INSTANCE.sendToAllAround(
+                        new MessageUpdateTurret(this.pos, this.yaw, this.pitch),
+                        NetworkUtil.getTargetPointFromBlockPos(this.getWorld().provider.getDimension(), pos, 100));
+            } else {
+                OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageUpdateTurret(this.pos, this.yaw, this.pitch),
+                                                              NetworkUtil.getTargetPointFromTE(this, 100));
+            }
         }
+        this.ticks++;
 
         //Real time tick updates
         TurretHeadUtil.updateSolarPanelAddon(base);

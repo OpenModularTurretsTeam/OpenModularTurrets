@@ -47,7 +47,7 @@ public class OMTUtil {
     }
 
     public static boolean canDamagePlayer(Player player, TurretBase base) {
-        if (player != null) {
+        if (base != null && player != null) {
             if (!OMTConfig.TURRETS.turretDamageTrustedPlayers) {
                 if (PlayerUtil.isPlayerTrusted(player, base)) {
                     return false;
@@ -57,7 +57,7 @@ public class OMTUtil {
             return !(PlayerUtil.isPlayerOwner(player, base)
                     || (!team.isEmpty() && team.equals(base.getOwner().getTeamName())));
         }
-        return true;
+        return false;
     }
 
     public static boolean canDamageEntity(Entity entity, TurretBase base) {
@@ -83,7 +83,8 @@ public class OMTUtil {
             if (!(entityLivingBase instanceof EntityPlayer) && TurretHeadUtil.getFakeDropsLevel(base) > -1) {
                 entityLivingBase.addTag("openmodularturrets:fake_drops_" + TurretHeadUtil.getFakeDropsLevel(base));
             }
-            if (!(entityLivingBase instanceof EntityPlayer) && !TurretHeadUtil.baseHasNoLootDeleter(base) && !entityLivingBase.getTags().contains("openmodularturrets:dont_drop_loot")) {
+            if (!(entityLivingBase instanceof EntityPlayer) && !TurretHeadUtil.baseHasNoLootDeleter(base)
+                    && !entityLivingBase.getTags().contains("openmodularturrets:dont_drop_loot")) {
                 entityLivingBase.addTag("openmodularturrets:dont_drop_loot");
             }
         }

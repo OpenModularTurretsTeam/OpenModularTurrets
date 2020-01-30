@@ -9,17 +9,22 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
+import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.turret.*;
+import valkyrienwarfare.api.IPhysicsEntity;
+import valkyrienwarfare.api.IPhysicsEntityManager;
+import valkyrienwarfare.api.TransformType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -274,7 +279,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         if (this.requiresAmmo()) {
             if (this.requiresSpecificAmmo()) {
                 for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-                    ammo = TurretHeadUtil.getSpecificItemStackItemFromBase(base, this.getAmmo(), this);
+                    ammo = TurretHeadUtil.getSpecificItemStackFromBase(base, this.getAmmo(), this);
                     if (ammo == ItemStack.EMPTY) {
                         ammo = TurretHeadUtil.getSpecificItemFromInvExpanders(this.getWorld(), this.getAmmo(), base, this);
                     }

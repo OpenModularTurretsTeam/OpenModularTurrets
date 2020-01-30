@@ -119,7 +119,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
         //Prioritise redstone blocks
         if (OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9 < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
-            ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackBlockFromBase(base, new ItemStack(
+            ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackFromBase(base, new ItemStack(
                     Blocks.REDSTONE_BLOCK));
 
             if (redstoneBlock == ItemStack.EMPTY) {
@@ -135,7 +135,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
         if (OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
 
-            ItemStack redstone = TurretHeadUtil.getSpecificItemStackItemFromBase(base, new ItemStack(Items.REDSTONE), null);
+            ItemStack redstone = TurretHeadUtil.getSpecificItemStackFromBase(base, new ItemStack(Items.REDSTONE));
 
             if (redstone == ItemStack.EMPTY) {
                 redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
@@ -239,7 +239,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         if (!world.isRemote) {
             OMLibNetworkingHandler.INSTANCE.sendToAllTracking(new MessageCamoSettings(this),
                                                               new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 80));
-            this.markBlockForUpdate();
+            this.setUpdateNBT(true);
         }
     }
 
@@ -350,6 +350,12 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             this.getWorld().destroyBlock(this.pos, true);
             return;
         }
+        if (this.updateNBT) {
+            this.markBlockForUpdate();
+            OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageTurretBase(this),
+                                                          new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
+            this.updateNBT = false;
+        }
 
         if (!this.getWorld().isRemote) {
             for (EntityPlayerMP player : openClients) {
@@ -389,12 +395,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 }
 
                 this.scrubSyncPlayerList();
-                if (this.updateNBT) {
-                    this.markDirty();
-                    OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageTurretBase(this),
-                                                                  new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
-                    this.updateNBT = false;
-                }
             }
         }
     }

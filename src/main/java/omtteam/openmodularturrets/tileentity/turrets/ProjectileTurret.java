@@ -9,10 +9,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import omtteam.omlib.util.RandomUtil;
+import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import valkyrienwarfare.api.IPhysicsEntity;
+import valkyrienwarfare.api.IPhysicsEntityManager;
+import valkyrienwarfare.api.TransformType;
 
 import java.util.Random;
 
@@ -41,6 +45,23 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
         double d0 = target.posX - (this.pos.getX() + 0.5);
         double d1 = target.posY + (double) target.height * 0.5F - (this.pos.getY() + 0.5);
         double d2 = target.posZ - (this.pos.getZ() + 0.5);
+        if (ModCompatibility.ValkyrienWarfareLoaded) {
+
+            IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
+                    getPos());
+            if (physicsEntity != null) {
+                Vec3d targetPos = target.getPositionVector();
+                Vec3d targetPosInShip = physicsEntity.transformVector(targetPos, TransformType.GLOBAL_TO_SUBSPACE);
+                d0 = targetPosInShip.x - (this.pos.getX() + 0.5);
+                d1 = targetPosInShip.y + (double) target.height * 0.5F  - (this.pos.getY() + 0.5);
+                d2 = targetPosInShip.z - (this.pos.getZ() + 0.5);
+                Vec3d targetSpeed = new Vec3d(speedX,speedY,speedZ);
+                Vec3d targetSpeedInShip = physicsEntity.rotateVector(targetSpeed, TransformType.GLOBAL_TO_SUBSPACE);
+                speedX = targetSpeedInShip.x;
+                speedY = targetSpeedInShip.y;
+                speedZ = targetSpeedInShip.z;
+            }
+        }
         double dist = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
         double inaccuracy = (this.getBaseTurretAccuracy() / 10) * (1 - TurretHeadUtil.getAccuraccyUpgrades(base, this))
                 * (1 + TurretHeadUtil.getScattershotUpgrades(base));
@@ -50,6 +71,17 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
         double adjustedX = d0 + speedX * time;
         double adjustedY = d1 + speedY * time;
         double adjustedZ = d2 + speedZ * time;
+        if (ModCompatibility.ValkyrienWarfareLoaded) {
+            IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
+                    getPos());
+            if (physicsEntity != null) {
+                Vec3d trace = new Vec3d(adjustedX, adjustedY, adjustedZ);
+                Vec3d trace2 = physicsEntity.rotateVector(trace, TransformType.SUBSPACE_TO_GLOBAL);
+                adjustedX = trace2.x;
+                adjustedY = trace2.y;
+                adjustedZ = trace2.z;
+            }
+        }
 
         // Calculate projectile speed scaling factor to travel to adjusted destination on time
         double dist2 = MathHelper.sqrt(adjustedX * adjustedX + adjustedY * adjustedY + adjustedZ * adjustedZ);
@@ -120,14 +152,17 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
             projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
 
             //If the turret is on a Ship, it needs to change to World coordinates from Ship coordinates
-            /*if (ModCompatibility.ValkyrienWarfareLoaded) {
-                Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(this.getWorld(), this.getPos());
-                if (shipEntity != null) {
-                    Vec3d inShipPos = new Vec3d(this.getPos().getX() + 0.5, this.getPos().getY() + 0.5, this.getPos().getZ() + 0.5);
-                    Vec3d inWorldPos = ValkyrienWarfareHelper.getVec3InWorldSpaceFromShipSpace(shipEntity, inShipPos);
-                    projectile.setPosition(inWorldPos.x, inWorldPos.y, inWorldPos.z);
+            if (ModCompatibility.ValkyrienWarfareLoaded) {
+                // If the turret is on a Ship, it needs to change to World coordinates from Ship
+                // coordinates
+                IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
+                        getPos());
+                if (physicsEntity != null) {
+                    Vec3d oldPos = projectile.getPositionVector();
+                    Vec3d newPos = physicsEntity.transformVector(oldPos, TransformType.SUBSPACE_TO_GLOBAL);
+                    projectile.setPosition(newPos.x, newPos.y, newPos.z);
                 }
-            } */
+            }
 
             // Set projectile heading
             projectile.shoot(adjustedX, adjustedY, adjustedZ, speedFactor, accuracy);

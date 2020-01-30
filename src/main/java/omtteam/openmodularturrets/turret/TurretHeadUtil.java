@@ -20,6 +20,7 @@ import omtteam.omlib.util.player.Player;
 import omtteam.omlib.util.world.Pos;
 import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.blocks.BlockBaseAttachment;
+import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.items.AmmoMetaItem;
@@ -27,6 +28,9 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import valkyrienwarfare.api.IPhysicsEntity;
+import valkyrienwarfare.api.IPhysicsEntityManager;
+import valkyrienwarfare.api.TransformType;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -160,7 +164,7 @@ public class TurretHeadUtil {
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack getSpecificItemStackBlockFromBase(TurretBase base, ItemStack stack) {
+    public static ItemStack getSpecificItemStackFromBase(TurretBase base, ItemStack stack) {
         for (int i = 0; i <= 8; i++) {
             ItemStack ammo_stack = base.getInventory().getStackInSlot(i);
 
@@ -169,16 +173,15 @@ public class TurretHeadUtil {
                 return new ItemStack(ammo_stack.getItem());
             }
         }
-
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack getSpecificItemStackItemFromBase(TurretBase base, ItemStack ammoStackRequired, TurretHead turretHead) {
+    public static ItemStack getSpecificItemStackFromBase(TurretBase base, ItemStack stack, TurretHead turretHead) {
         for (int i = 0; i <= 8; i++) {
             ItemStack ammo_stack = base.getInventory().getStackInSlot(i);
 
-            if (ammo_stack != ItemStack.EMPTY && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == ammoStackRequired.getItem()
-                    && ammo_stack.getMetadata() == ammoStackRequired.getMetadata()) {
+            if (ammo_stack != ItemStack.EMPTY && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == stack.getItem()
+                    && ammo_stack.getMetadata() == stack.getMetadata()) {
                 if (hasRecyclerAddon(base)) {
                     int chance = new Random().nextInt(99);
 
@@ -201,7 +204,6 @@ public class TurretHeadUtil {
                 }
             }
         }
-
         return ItemStack.EMPTY;
     }
 
@@ -231,7 +233,6 @@ public class TurretHeadUtil {
                 }
             }
         }
-
         return result;
     }
 
@@ -309,13 +310,13 @@ public class TurretHeadUtil {
     public static float getAimYaw(Entity target, Pos pos) {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
 
-        /*if (ModCompatibility.ValkyrienWarfareLoaded) {
-            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(target.getEntityWorld(), pos);
-            //We're in Ship space, convert target coords to local coords
-            if (shipEntity != null) {
-                targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
+        if (ModCompatibility.ValkyrienWarfareLoaded) {
+            IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE
+                    .getPhysicsEntityFromShipSpace(target.getEntityWorld(), pos);
+            if (physicsEntity != null) {
+                targetPos = physicsEntity.transformVector(targetPos, TransformType.GLOBAL_TO_SUBSPACE);
             }
-        } */
+        }
 
         double dX = (targetPos.x) - (pos.getX());
         double dZ = (targetPos.z) - (pos.getZ());
@@ -331,14 +332,13 @@ public class TurretHeadUtil {
     public static float getAimPitch(Entity target, Pos pos) {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
 
-        /*if (ModCompatibility.ValkyrienWarfareLoaded) {
-            Entity shipEntity = ValkyrienWarfareHelper.getShipManagingBlock(target.getEntityWorld(), pos);
-
-            //We're in Ship space, convert target coords to local coords
-            if (shipEntity != null) {
-                targetPos = ValkyrienWarfareHelper.getVec3InShipSpaceFromWorldSpace(shipEntity, targetPos);
+        if (ModCompatibility.ValkyrienWarfareLoaded) {
+            IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE
+                    .getPhysicsEntityFromShipSpace(target.getEntityWorld(), pos);
+            if (physicsEntity != null) {
+                targetPos = physicsEntity.transformVector(targetPos, TransformType.GLOBAL_TO_SUBSPACE);
             }
-        } */
+        }
 
         BlockPos targetBlockPos = new BlockPos(targetPos.x, targetPos.y, targetPos.z);
 

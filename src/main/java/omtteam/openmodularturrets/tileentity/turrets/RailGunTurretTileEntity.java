@@ -95,7 +95,9 @@ public class RailGunTurretTileEntity extends RayTracingTurret {
         if (!hitBlock.getMaterial().isSolid()) {
             return;
         } else if (OMTConfig.TURRETS.canRailgunDestroyBlocks) {
+            if(hitBlock.getBlockHardness(this.world,pos) < 200){
             this.getWorld().destroyBlock(pos, false);
+            }
         }
     }
 }
