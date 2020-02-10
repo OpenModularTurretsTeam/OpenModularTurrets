@@ -72,7 +72,7 @@ public class OMTConfig {
         public boolean useWhitelistForAmmo = true;
 
         @Config.RequiresMcRestart
-        @Config.Comment("If enabled: Which items fit into ammo slots of base?")
+        @Config.Comment("If enabled: Which items fit into ammo slots of base besides mods own ammo items?")
         public String[] stringAmmoAllowList = new String[]{"minecraft:cobblestone", "minecraft:planks"};
 
         @Config.RequiresMcRestart

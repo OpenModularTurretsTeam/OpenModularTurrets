@@ -132,14 +132,6 @@ public class TurretTargetingUtils {
         return false;
     }
 
-    public TargetingSettings getSettings() {
-        return settings;
-    }
-
-    public void setSettings(TargetingSettings settings) {
-        this.settings = settings;
-    }
-
     public static boolean isTargetAlreadyTargeted(TurretBase base, Entity entity) {
         for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(base.getWorld(), base.getPos())) {
             if (tileEntity instanceof TurretHead) {
@@ -149,6 +141,14 @@ public class TurretTargetingUtils {
             }
         }
         return false;
+    }
+
+    public TargetingSettings getSettings() {
+        return settings;
+    }
+
+    public void setSettings(TargetingSettings settings) {
+        this.settings = settings;
     }
 
     @Nullable
@@ -230,10 +230,6 @@ public class TurretTargetingUtils {
             return true;
         }
 
-        if (isEntityValidMob(turret, entity) && settings.isTargetMobs()) {
-            return true;
-        }
-
-        return true;
+        return isEntityValidMob(turret, entity) && settings.isTargetMobs();
     }
 }

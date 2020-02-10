@@ -11,7 +11,7 @@ public class TurretSetting {
     public int baseFireRate;
     @Config.RangeInt(min = 0)
     public int baseDamage;
-    @Config.RangeInt(min = 1)
+    @Config.RangeInt(min = 0)
     public int powerUsage;
     @Config.RangeDouble(min = 0D)
     public double baseAccuracyDeviation;

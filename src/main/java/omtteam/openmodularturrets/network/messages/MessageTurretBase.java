@@ -26,6 +26,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static omtteam.omlib.proxy.ClientProxy.getWorld;
+import static omtteam.openmodularturrets.compatibility.valkyrienwarfare.VWUtil.getTransformedBlockPos;
 
 /**
  * Created by Keridos on 05.10.14.
@@ -46,9 +47,11 @@ public class MessageTurretBase implements IMessage {
     public MessageTurretBase(TileEntity tileEntity) {
         if (tileEntity instanceof TurretBase) {
             TurretBase base = (TurretBase) tileEntity;
-            this.x = base.getPos().getX();
-            this.y = base.getPos().getY();
-            this.z = base.getPos().getZ();
+            BlockPos pos = getTransformedBlockPos(base);
+
+            this.x = pos.getX();
+            this.y = pos.getY();
+            this.z = pos.getZ();
             this.tier = base.getTier();
             this.lightValue = base.getCamoSettings().getLightValue();
             this.lightOpacity = base.getCamoSettings().getLightOpacity();

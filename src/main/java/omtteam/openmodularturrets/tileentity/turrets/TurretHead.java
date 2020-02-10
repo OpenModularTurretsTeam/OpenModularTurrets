@@ -36,7 +36,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     protected TurretBase base;
     protected int ticks, targetingTicks, turretTier;
     protected boolean hasSetSide = false;
-    private EnumFacing turretBase;
     protected boolean playedDeploy = false;
     protected boolean autoFire = false;
     protected int ticksWithoutTarget;
@@ -47,6 +46,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     protected double targetSpeedY = 0;
     protected double targetSpeedZ = 0;
     Integer[] priorities;
+    private EnumFacing turretBase;
 
     public TurretHead(int turretTier) {
         this.turretTier = turretTier;
@@ -66,7 +66,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         NBTTagCompound var1 = pkt.getNbtCompound();
         readFromNBT(var1);
     }
-
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
@@ -100,7 +99,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         } else {
             this.priorities = this.getDefaultPriorities();
         }
-
     }
 
     @Nonnull
@@ -242,7 +240,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     }
 
     /**
-     * Priorities determine how much the corresponding priority should priorise, negative values invert that behaviour.
+     * Priorities determine how much the corresponding priority should prioritise, negative values invert that behaviour.
      *
      * @return priority value array with 5 entries, in the order MAX_HP, HP_REMAINING, DISTANCE, ARMOR, PLAYER
      */
@@ -262,7 +260,6 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
     @Nonnull
     protected abstract SoundEvent getLaunchSoundEffect();
-
 
     protected int getPowerRequiredForNextShot() {
         return Math.round(this.getTurretBasePowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(

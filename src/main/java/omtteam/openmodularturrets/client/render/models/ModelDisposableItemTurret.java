@@ -72,7 +72,6 @@ public class ModelDisposableItemTurret extends ModelAbstractTurret {
         model.rotateAngleZ = z;
     }
 
-
     public void renderAll() {
         Base.render(0.0625F);
         Pole.render(0.0625F);

@@ -142,7 +142,6 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         drawTooltips();
     }
 
-
     @Override
     @ParametersAreNonnullByDefault
     protected void actionPerformed(GuiButton guibutton) {
@@ -212,7 +211,6 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         return name + ": " + Math.round(value);
     }
 
-
     @Override
     public void drawTooltips() {
         int k = (this.width - this.xSize) / 2;
@@ -235,7 +233,6 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
                 tooltip.add(safeLocalize(OMLibNames.Localizations.Tooltip.TRUSTED_PLAYER_GUI));
                 break;
             default:
-
         }
         if (!tooltip.isEmpty())
             this.drawHoveringText(tooltip, guiLeft + mouseX - k, guiTop + mouseY - l, Minecraft.getMinecraft().fontRenderer);

@@ -14,8 +14,8 @@ import omtteam.openmodularturrets.reference.Reference;
  * Created by Keridos on 23/01/2015. This Class
  */
 public class ModCompatibility {
-
     public static boolean ValkyrienWarfareLoaded = false;
+
     public static void checkForMods() {
         if (OMLibModCompatibility.ThermalExpansionLoaded) {
             OpenModularTurrets.getLogger().info("Hi there, dV=V0B(t1-t0)! (Found ThermalExpansion)");

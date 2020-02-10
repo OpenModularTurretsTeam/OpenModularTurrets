@@ -103,7 +103,6 @@ public class BlockExpander extends BlockTurretBaseAttachment implements IHasItem
         }
     }
 
-
     @Override
     @ParametersAreNonnullByDefault
     public boolean isFullBlock(IBlockState state) {

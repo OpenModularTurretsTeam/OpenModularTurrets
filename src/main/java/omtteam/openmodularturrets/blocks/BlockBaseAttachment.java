@@ -97,7 +97,6 @@ public class BlockBaseAttachment extends BlockTurretBaseAttachment implements IH
         return new BaseAddon();
     }
 
-
     @Override
     @ParametersAreNonnullByDefault
     public boolean isFullBlock(IBlockState state) {

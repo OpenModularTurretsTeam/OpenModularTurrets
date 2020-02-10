@@ -19,7 +19,6 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.*;
 import omtteam.openmodularturrets.turret.TurretType;
 
-
 public class ModBlocks {
     public static Block laserTurret;
     public static Block turretBase;

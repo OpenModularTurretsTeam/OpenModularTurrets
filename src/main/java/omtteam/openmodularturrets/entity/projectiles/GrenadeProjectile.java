@@ -22,6 +22,7 @@ import java.util.List;
 
 public class GrenadeProjectile extends TurretProjectile {
     private boolean hit = false;
+
     @SuppressWarnings("unused")
     public GrenadeProjectile(World par1World) {
         super(par1World);

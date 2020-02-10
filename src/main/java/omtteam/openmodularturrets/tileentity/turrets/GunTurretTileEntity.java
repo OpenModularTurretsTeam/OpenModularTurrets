@@ -43,6 +43,7 @@ public class GunTurretTileEntity extends ProjectileTurret {
     public Integer[] getDefaultPriorities() {
         return new Integer[]{1, 10, -5, -5, 10};
     }
+
     @Override
     public SoundEvent getLaunchSoundEffect() {
         return ModSounds.machinegunLaunchSound;

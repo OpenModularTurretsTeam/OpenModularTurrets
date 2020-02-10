@@ -1,6 +1,7 @@
 package omtteam.openmodularturrets.tileentity.turrets;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -35,7 +36,7 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
      * Tracks target and shoots at it
      */
     @Override
-    protected void doTargetedShot(Entity target, ItemStack ammo) {
+    protected void doTargetedShot(EntityLivingBase target, ItemStack ammo) {
         // Update target tracking (Player entity not setting motion data when moving via movement keys)
         double speedX = target instanceof EntityPlayerMP ? targetSpeedX : target.posX - target.prevPosX;
         double speedY = target instanceof EntityPlayerMP ? targetSpeedY : target.posY - target.prevPosY;
@@ -48,14 +49,14 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
         if (ModCompatibility.ValkyrienWarfareLoaded) {
 
             IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
-                    getPos());
+                                                                                                        getPos());
             if (physicsEntity != null) {
                 Vec3d targetPos = target.getPositionVector();
                 Vec3d targetPosInShip = physicsEntity.transformVector(targetPos, TransformType.GLOBAL_TO_SUBSPACE);
                 d0 = targetPosInShip.x - (this.pos.getX() + 0.5);
-                d1 = targetPosInShip.y + (double) target.height * 0.5F  - (this.pos.getY() + 0.5);
+                d1 = targetPosInShip.y + (double) target.height * 0.5F - (this.pos.getY() + 0.5);
                 d2 = targetPosInShip.z - (this.pos.getZ() + 0.5);
-                Vec3d targetSpeed = new Vec3d(speedX,speedY,speedZ);
+                Vec3d targetSpeed = new Vec3d(speedX, speedY, speedZ);
                 Vec3d targetSpeedInShip = physicsEntity.rotateVector(targetSpeed, TransformType.GLOBAL_TO_SUBSPACE);
                 speedX = targetSpeedInShip.x;
                 speedY = targetSpeedInShip.y;
@@ -73,7 +74,7 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
         double adjustedZ = d2 + speedZ * time;
         if (ModCompatibility.ValkyrienWarfareLoaded) {
             IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
-                    getPos());
+                                                                                                        getPos());
             if (physicsEntity != null) {
                 Vec3d trace = new Vec3d(adjustedX, adjustedY, adjustedZ);
                 Vec3d trace2 = physicsEntity.rotateVector(trace, TransformType.SUBSPACE_TO_GLOBAL);
@@ -156,7 +157,7 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
                 // If the turret is on a Ship, it needs to change to World coordinates from Ship
                 // coordinates
                 IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
-                        getPos());
+                                                                                                            getPos());
                 if (physicsEntity != null) {
                     Vec3d oldPos = projectile.getPositionVector();
                     Vec3d newPos = physicsEntity.transformVector(oldPos, TransformType.SUBSPACE_TO_GLOBAL);

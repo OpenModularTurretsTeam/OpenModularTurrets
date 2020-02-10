@@ -18,7 +18,7 @@ public class ModelRelativisticTurret extends ModelAbstractTurret {
 
     public ModelRelativisticTurret() {
         super(37, 28, 15);
-        
+
         Base.addBox(-6F, 7F, -6F, 12, 1, 12);
         Base.setRotationPoint(0F, 16F, 0F);
         Base.setTextureSize(64, 64);

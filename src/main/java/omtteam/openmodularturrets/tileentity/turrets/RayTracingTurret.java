@@ -53,9 +53,9 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
     protected abstract void handleBlockHit(IBlockState hitBlock, BlockPos pos);
 
     @Override
-    protected void doTargetedShot(Entity target, ItemStack ammo) {
-        if (target.isDead || target instanceof EntityLivingBase && (((EntityLivingBase) target).getHealth() <= 0.0F ||
-                !TurretTargetingUtils.canSeeTargetFromPos(this, (EntityLivingBase) target))) {
+    protected void doTargetedShot(EntityLivingBase target, ItemStack ammo) {
+        if (target.isDead || target.getHealth() <= 0.0F || !TurretTargetingUtils.canSeeTargetFromPos(this, target)
+                || !isEntityValidTarget(target)) {
             this.target = null;
             return;
         }
@@ -63,17 +63,6 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
         double d0 = targetPos.x;
         double d1 = targetPos.y + target.getEyeHeight();
         double d2 = targetPos.z;
-        if (ModCompatibility.ValkyrienWarfareLoaded) {
-
-            IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
-                                                                                                        getPos());
-            if (physicsEntity != null) {
-                Vec3d targetPosInShip = physicsEntity.transformVector(targetPos, TransformType.GLOBAL_TO_SUBSPACE);
-                d0 = targetPosInShip.x;
-                d1 = targetPosInShip.y + target.getEyeHeight();
-                d2 = targetPosInShip.z;
-            }
-        }
         shootRay(d0, d1, d2, this.getActualTurretAccuracy());
     }
 
@@ -103,11 +92,9 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
                                          this.getPos().getY() + 0.6D,
                                          this.getPos().getZ() + 0.5D);
             if (ModCompatibility.ValkyrienWarfareLoaded) {
-
                 IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
                                                                                                             getPos());
                 if (physicsEntity != null) {
-                    vector = physicsEntity.transformVector(vector, TransformType.SUBSPACE_TO_GLOBAL);
                     baseVector = physicsEntity.transformVector(baseVector, TransformType.SUBSPACE_TO_GLOBAL);
                 }
             }
@@ -161,7 +148,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
         if (entity != null && !entity.getEntityWorld().isRemote && !(entity instanceof TurretProjectile)) {
             if (entity instanceof EntityPlayer) {
                 if (OMTUtil.canDamagePlayer((EntityPlayer) entity, base)) { // Player hit handling
-                    damageEntity((EntityLivingBase) entity);
+                    damageEntity(entity);
                     applyHitEffects(entity);
                     entity.hurtResistantTime = -1;
                     this.getWorld().playSound(null, entity.getPosition(), this.getHitSound(), SoundCategory.AMBIENT,
@@ -172,7 +159,8 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
                 }
             } else if (OMTUtil.canDamageEntity(entity, base)) {  // Entity hit Handling
                 OMTUtil.setTagsForTurretHit(entity, base);
-                damageEntity((EntityLivingBase) entity);
+
+                damageEntity(entity);
                 applyHitEffects(entity);
                 entity.hurtResistantTime = -1;
                 this.getWorld().playSound(null, entity.getPosition(), this.getHitSound(), SoundCategory.AMBIENT,
@@ -185,13 +173,14 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
         return false;
     }
 
-    protected void damageEntity(EntityLivingBase entity) {
+    protected void damageEntity(Entity entity) {
         float damageModifier = this.getDamageModifier(entity); // The damage modifier of the turret based on entity
         float damage = this.getTurretType().getSettings().baseDamage * damageModifier;
         int fakeDrops = TurretHeadUtil.getFakeDropsLevel(base);
 
-        if (this.getTurretDamageAmpBonus() * TurretHeadUtil.getAmpLevel(base) > 0) {
-            damage += ((int) entity.getHealth() * this.getTurretDamageAmpBonus() * TurretHeadUtil.getAmpLevel(base));
+        if (this.getTurretDamageAmpBonus() * TurretHeadUtil.getAmpLevel(base) > 0 && entity instanceof EntityLivingBase) {
+            EntityLivingBase elb = (EntityLivingBase) entity;
+            damage += ((int) elb.getHealth() * this.getTurretDamageAmpBonus() * TurretHeadUtil.getAmpLevel(base));
         }
 
         // Attack 2 times, once with normal, once with Bypassing Damage

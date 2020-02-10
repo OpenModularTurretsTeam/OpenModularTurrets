@@ -43,7 +43,6 @@ public class DisposableItemTurretTileEntity extends ProjectileTurret {
         return new Integer[]{5, 5, -5, 1, 10};
     }
 
-
     @Override
     public SoundEvent getLaunchSoundEffect() {
         return ModSounds.disposableLaunchSound;

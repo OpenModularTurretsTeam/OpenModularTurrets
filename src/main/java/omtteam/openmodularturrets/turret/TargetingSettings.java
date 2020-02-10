@@ -24,22 +24,6 @@ public class TargetingSettings {
         this.maxRange = maxRange;
     }
 
-    public boolean isTargetPlayers() {
-        return targetPlayers;
-    }
-
-    public boolean isTargetMobs() {
-        return targetMobs;
-    }
-
-    public boolean isTargetPassive() {
-        return targetPassive;
-    }
-
-    public int getMaxRange() {
-        return maxRange;
-    }
-
     public static TargetingSettings readFromNBT(NBTTagCompound nbtTagCompound) {
         TargetingSettings settings = new TargetingSettings();
         if (nbtTagCompound.hasKey("targetingSettings")) {
@@ -48,7 +32,6 @@ public class TargetingSettings {
             settings.targetMobs = nbt.getBoolean("targetMobs");
             settings.targetPassive = nbt.getBoolean("targetPassive");
             settings.maxRange = nbt.getInteger("maxRange");
-
         } else {
             settings.targetPlayers = nbtTagCompound.getBoolean("attacksPlayers");
             settings.targetMobs = nbtTagCompound.getBoolean("attacksMobs");
@@ -58,9 +41,17 @@ public class TargetingSettings {
         return settings;
     }
 
+    public boolean isTargetPlayers() {
+        return targetPlayers;
+    }
+
     public TargetingSettings setTargetPlayers(boolean targetPlayers) {
         this.targetPlayers = targetPlayers;
         return this;
+    }
+
+    public boolean isTargetMobs() {
+        return targetMobs;
     }
 
     public TargetingSettings setTargetMobs(boolean targetMobs) {
@@ -68,9 +59,17 @@ public class TargetingSettings {
         return this;
     }
 
+    public boolean isTargetPassive() {
+        return targetPassive;
+    }
+
     public TargetingSettings setTargetPassive(boolean targetPassive) {
         this.targetPassive = targetPassive;
         return this;
+    }
+
+    public int getMaxRange() {
+        return maxRange;
     }
 
     public TargetingSettings setMaxRange(int maxRange) {

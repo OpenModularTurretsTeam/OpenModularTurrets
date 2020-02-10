@@ -194,6 +194,10 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         };
     }
 
+    private void sendTrackingMessage() {
+
+    }
+
     @Override
     @Nonnull
     public CamoSettings getCamoSettings() {
@@ -315,7 +319,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     @Override
     public void sendMessageToAllTracking() {
-        OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageTurretBase(this), NetworkUtil.getTargetPointFromTE(this, 20));
+        OMTNetworkingHandler.INSTANCE.
+                sendToAllTracking(new MessageTurretBase(this), NetworkUtil.
+                        getTargetPointFromBlockPos(this.getWorld().provider.getDimension(), this.pos, 100));
     }
 
     private void updateControllerSettings() {
@@ -352,8 +358,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         }
         if (this.updateNBT) {
             this.markBlockForUpdate();
-            OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageTurretBase(this),
-                                                          new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
+            this.sendMessageToAllTracking();
             this.updateNBT = false;
         }
 
@@ -736,7 +741,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 commands.getTrustedPlayer.toString(), commands.addTrustedPlayer.toString(),
                 commands.removeTrustedPlayer.toString(), commands.changeAccessLevel.toString(),
                 commands.getActive.toString(), commands.getMode.toString(), commands.getRedstone.toString(),
-                commands.setMode.toString(), commands.getType.toString()};
+                commands.setMode.toString(), commands.getType.toString(), commands.setAllAutoForceFire.toString(),
+                commands.setTurretAutoForceFire.toString(), commands.forceShootAllTurrets.toString(),
+                commands.forceShootTurret.toString()};
     }
 
     @Optional.Method(modid = "computercraft")
@@ -751,12 +758,12 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         }
         switch (commands.values()[method]) {
             case getOwner:
-                return new Object[]{this.getOwner()};
+                return new Object[]{this.getOwner().getName()};
             case attacksPlayers:
                 return new Object[]{this.targetingSettings.isTargetPlayers()};
             case setAttacksPlayers:
                 if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
-                    return new Object[]{"wrong arguments"};
+                    return new Object[]{"Wrong parameters!"};
                 }
                 b = (arguments[0].toString().equals("true"));
                 this.targetingSettings.setTargetPlayers(b);
@@ -765,7 +772,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 return new Object[]{this.targetingSettings.isTargetMobs()};
             case setAttacksMobs:
                 if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
-                    return new Object[]{"wrong arguments"};
+                    return new Object[]{"Wrong parameters!"};
                 }
                 b = (arguments[0].toString().equals("true"));
                 this.targetingSettings.setTargetMobs(b);
@@ -774,7 +781,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 return new Object[]{this.targetingSettings.isTargetPassive()};
             case setAttacksNeutrals:
                 if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
-                    return new Object[]{"wrong arguments"};
+                    return new Object[]{"Wrong parameters!"};
                 }
                 b = (arguments[0].toString().equals("true"));
                 this.targetingSettings.setTargetPassive(b);
@@ -787,7 +794,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 }
             case addTrustedPlayer:
                 if (arguments[0].toString().equals("")) {
-                    return new Object[]{"wrong arguments"};
+                    return new Object[]{"Wrong parameters!"};
                 }
                 if (!this.getTrustManager().addTrustedPlayer(arguments[0].toString())) {
                     return new Object[]{"Name not valid!"};
@@ -795,7 +802,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 if (arguments[1].toString().equals("")) {
                     return new Object[]{"successfully added"};
                 } else if (!(arguments[1] instanceof Integer)) {
-                    return new Object[]{"wrong arguments"};
+                    return new Object[]{"Wrong parameters!"};
                 }
                 TrustedPlayer trustedPlayer = this.getTrustManager().getTrustedPlayer(arguments[0].toString());
                 trustedPlayer.setAccessLevel(EnumAccessLevel.values()[(Integer) arguments[1]]);
@@ -804,7 +811,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 return new Object[]{true};
             case removeTrustedPlayer:
                 if (arguments[0].toString().equals("")) {
-                    return new Object[]{"wrong arguments"};
+                    return new Object[]{"Wrong parameters!"};
                 }
                 this.getTrustManager().removeTrustedPlayer(arguments[0].toString());
                 return new Object[]{true};
@@ -826,13 +833,40 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             case setMode:
                 String arg = arguments[0].toString();
                 if (!(arg.equals("0") || arg.equals("1") || arg.equals("2") || arg.equals("3"))) {
-                    return new Object[]{"wrong arguments, expect number between 0 and 3"};
+                    return new Object[]{"Wrong parameters! expects number between 0 and 3"};
                 }
-                int mode = (Integer.valueOf(arguments[0].toString()));
+                int mode = (Integer.parseInt(arguments[0].toString()));
                 this.setMode(EnumMachineMode.values()[mode]);
                 return new Object[]{true};
             case getType:
                 return new Object[]{this.getType()};
+            case setAllAutoForceFire:
+                if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
+                    return new Object[]{"Wrong parameters!"};
+                }
+                b = (arguments[0].toString().equals("true"));
+                this.setAllTurretsForceFire(b);
+                return new Object[]{true};
+            case setTurretAutoForceFire:
+                try {
+                    int t = Integer.parseInt(arguments[0].toString());
+                    if (!(t < 0 || t > 6) || !(arguments[1].toString().equals("true") || arguments[1].toString().equals("false")))
+                        return new Object[]{"Wrong parameters!"};
+                    return new Object[]{this.setTurretForceFire(EnumFacing.getFront(t), Boolean.parseBoolean(arguments[1].toString()))};
+                } catch (Exception e) {
+                    return new Object[]{"Wrong parameters!"};
+                }
+            case forceShootAllTurrets:
+                return new Object[]{this.forceShootAllTurrets()};
+            case forceShootTurret:
+                try {
+                    int t = Integer.parseInt(arguments[0].toString());
+                    if (!(t < 0 || t > 6))
+                        return new Object[]{"Wrong parameters!"};
+                    return new Object[]{this.forceShootTurret(EnumFacing.getFront(t))};
+                } catch (Exception e) {
+                    return new Object[]{"Wrong parameters!"};
+                }
             default:
                 break;
         }
@@ -860,6 +894,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     public enum commands {
         getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals,
         getTrustedPlayers, getTrustedPlayer, addTrustedPlayer, removeTrustedPlayer, changeAccessLevel, getActive,
-        getMode, getRedstone, setMode, getType
+        getMode, getRedstone, setMode, getType, setAllAutoForceFire, setTurretAutoForceFire, forceShootAllTurrets,
+        forceShootTurret
     }
 }

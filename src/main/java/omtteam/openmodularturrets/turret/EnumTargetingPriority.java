@@ -17,7 +17,7 @@ public enum EnumTargetingPriority {
         if (priority == ARMOR)
             return (int) (Math.floor(entity.getTotalArmorValue()) + 1) * priorities[ARMOR.ordinal()];
         if (priority == PLAYER)
-            return entity instanceof EntityPlayer ? 100 * priorities[PLAYER.ordinal()] : 1;
+            return entity instanceof EntityPlayer ? 100 * priorities[PLAYER.ordinal()] : -100;
         return 1;
     }
 }

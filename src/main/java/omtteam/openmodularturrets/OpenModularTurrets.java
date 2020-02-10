@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION, acceptedMinecraftVersions = Reference.ACCEPTED_MINECRAFT_VERSION, dependencies = Reference.DEPENDENCIES)
 public class OpenModularTurrets {
     public static final CreativeTabs modularTurretsTab = ModularTurretsTab.getInstance();
+    public final static int DATA_VERSION = 1;
     @SuppressWarnings("unused")
     @Mod.Instance(Reference.MOD_ID)
     public static OpenModularTurrets instance;
@@ -29,7 +30,6 @@ public class OpenModularTurrets {
     @SidedProxy(clientSide = "omtteam.openmodularturrets.proxy.ClientProxy", serverSide = "omtteam.openmodularturrets.proxy.ServerProxy")
     public static CommonProxy proxy;
     private static Logger logger;
-    public final static int DATA_VERSION = 1;
 
     public static Logger getLogger() {
         return logger;
