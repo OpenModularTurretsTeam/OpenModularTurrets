@@ -86,7 +86,7 @@ public class BulletProjectile extends TurretProjectile {
     public void playSound() {
         Random random = RandomUtil.random;
         getEntityWorld().playSound(null, new BlockPos(posX, posY, posZ), ModSounds.bulletHitSound, SoundCategory.AMBIENT,
-                                   OMTConfig.TURRETS.turretSoundVolume, random.nextFloat() + 0.5F);
+                                   (float) OMTConfig.TURRETS.turretSoundVolume, random.nextFloat() + 0.5F);
     }
 
     @Override

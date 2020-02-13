@@ -112,7 +112,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
 
             // Play Sound
             this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
-                                      OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
+                                      (float) OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
             // Raytrace to see if/where it hits a block
             RayTraceResult blockTraceResult = world.rayTraceBlocks(baseVector, vector, false, true, false);
 
@@ -152,7 +152,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
                     applyHitEffects(entity);
                     entity.hurtResistantTime = -1;
                     this.getWorld().playSound(null, entity.getPosition(), this.getHitSound(), SoundCategory.AMBIENT,
-                                              OMTConfig.TURRETS.turretSoundVolume, RandomUtil.random.nextFloat() + 0.5F);
+                                              (float) OMTConfig.TURRETS.turretSoundVolume, RandomUtil.random.nextFloat() + 0.5F);
                     return true;
                 } else {
                     return false;
@@ -164,7 +164,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
                 applyHitEffects(entity);
                 entity.hurtResistantTime = -1;
                 this.getWorld().playSound(null, entity.getPosition(), this.getHitSound(), SoundCategory.AMBIENT,
-                                          OMTConfig.TURRETS.turretSoundVolume, RandomUtil.random.nextFloat() + 0.5F);
+                                          (float) OMTConfig.TURRETS.turretSoundVolume, RandomUtil.random.nextFloat() + 0.5F);
                 return true;
             } else {
                 return false;

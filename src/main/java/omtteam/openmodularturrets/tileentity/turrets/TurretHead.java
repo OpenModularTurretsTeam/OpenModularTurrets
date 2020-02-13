@@ -367,7 +367,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
                 shouldConceal = true;
                 playedDeploy = false;
                 this.getWorld().playSound(null, this.pos, ModSounds.turretRetractSound, SoundCategory.BLOCKS,
-                                          OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
+                                          (float) OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
                 this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(pos).withProperty(CONCEALED, true), 3);
             } else {
                 ticksWithoutTarget++;
@@ -379,7 +379,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
                 if (!playedDeploy) {
                     this.getWorld().playSound(null, this.pos, ModSounds.turretDeploySound, SoundCategory.BLOCKS,
-                                              OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
+                                              (float) OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
                     playedDeploy = true;
                     this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(pos).withProperty(CONCEALED, false), 3);
                 }

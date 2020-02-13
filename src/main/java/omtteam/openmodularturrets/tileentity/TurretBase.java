@@ -734,16 +734,17 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Nonnull
     public String[] getMethodNames() {
         // list commands you want..
-        return new String[]{commands.getOwner.toString(), commands.attacksPlayers.toString(),
-                commands.setAttacksPlayers.toString(), commands.attacksMobs.toString(),
-                commands.setAttacksMobs.toString(), commands.attacksNeutrals.toString(),
+        return new String[]{commands.getOwner.toString(), commands.isAttacksPlayers.toString(),
+                commands.setAttacksPlayers.toString(), commands.isAttacksMobs.toString(),
+                commands.setAttacksMobs.toString(), commands.isAttacksNeutrals.toString(),
                 commands.setAttacksNeutrals.toString(), commands.getTrustedPlayers.toString(),
                 commands.getTrustedPlayer.toString(), commands.addTrustedPlayer.toString(),
                 commands.removeTrustedPlayer.toString(), commands.changeAccessLevel.toString(),
                 commands.getActive.toString(), commands.getMode.toString(), commands.getRedstone.toString(),
                 commands.setMode.toString(), commands.getType.toString(), commands.setAllAutoForceFire.toString(),
                 commands.setTurretAutoForceFire.toString(), commands.forceShootAllTurrets.toString(),
-                commands.forceShootTurret.toString()};
+                commands.forceShootTurret.toString(), commands.setAllYawPitch.toString(),
+                commands.setTurretYawPitch.toString(), commands.getMaxEnergyStorage.toString(), commands.getCurrentEnergyStorage.toString()};
     }
 
     @Optional.Method(modid = "computercraft")
@@ -759,7 +760,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         switch (commands.values()[method]) {
             case getOwner:
                 return new Object[]{this.getOwner().getName()};
-            case attacksPlayers:
+            case isAttacksPlayers:
                 return new Object[]{this.targetingSettings.isTargetPlayers()};
             case setAttacksPlayers:
                 if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
@@ -768,7 +769,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 b = (arguments[0].toString().equals("true"));
                 this.targetingSettings.setTargetPlayers(b);
                 return new Object[]{true};
-            case attacksMobs:
+            case isAttacksMobs:
                 return new Object[]{this.targetingSettings.isTargetMobs()};
             case setAttacksMobs:
                 if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
@@ -777,7 +778,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 b = (arguments[0].toString().equals("true"));
                 this.targetingSettings.setTargetMobs(b);
                 return new Object[]{true};
-            case attacksNeutrals:
+            case isAttacksNeutrals:
                 return new Object[]{this.targetingSettings.isTargetPassive()};
             case setAttacksNeutrals:
                 if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
@@ -867,10 +868,32 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 } catch (Exception e) {
                     return new Object[]{"Wrong parameters!"};
                 }
+            case setAllYawPitch:
+                try {
+                    this.setAllTurretsYawPitch(Float.parseFloat(arguments[0].toString()),
+                                               Float.parseFloat(arguments[1].toString()));
+                    return new Object[]{"set yaw and pitch successfully"};
+                } catch (Exception e) {
+                    return new Object[]{"Wrong parameters!"};
+                }
+            case setTurretYawPitch:
+                try {
+                    this.setTurretYawPitch(EnumFacing.getFront(Integer.parseInt(arguments[0].toString())),
+                                           Float.parseFloat(arguments[1].toString()),
+                                           Float.parseFloat(arguments[2].toString()));
+                    return new Object[]{"setting successful"};
+                } catch (Exception e) {
+                    return new Object[]{"Wrong parameters!"};
+                }
+            case getMaxEnergyStorage:
+                return new Object[]{this.getMaxEnergyStorageWithExtenders()};
+
+            case getCurrentEnergyStorage:
+                return new Object[]{this.getEnergyStored(null)};
             default:
                 break;
         }
-        return new Object[]{false};
+        return new Object[]{"Nonexisting command"};
     }
 
     @Optional.Method(modid = "computercraft")
@@ -892,9 +915,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     public enum commands {
-        getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals,
+        getOwner, isAttacksPlayers, setAttacksPlayers, isAttacksMobs, setAttacksMobs, isAttacksNeutrals, setAttacksNeutrals,
         getTrustedPlayers, getTrustedPlayer, addTrustedPlayer, removeTrustedPlayer, changeAccessLevel, getActive,
         getMode, getRedstone, setMode, getType, setAllAutoForceFire, setTurretAutoForceFire, forceShootAllTurrets,
-        forceShootTurret
+        forceShootTurret, setAllYawPitch, setTurretYawPitch, getMaxEnergyStorage, getCurrentEnergyStorage
     }
 }

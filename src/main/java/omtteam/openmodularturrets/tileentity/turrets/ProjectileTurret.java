@@ -131,7 +131,7 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
             this.getWorld().spawnEntity(projectile);
         }
         this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
-                                  OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
+                                  (float) OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
         ticks = 0;
 
         return true;
@@ -171,11 +171,11 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
             // Play sounds
             if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
                 this.getWorld().playSound(null, this.pos, ModSounds.amped, SoundCategory.BLOCKS,
-                                          OMTConfig.TURRETS.turretSoundVolume, RandomUtil.random.nextFloat() + 0.5F);
+                                          (float) OMTConfig.TURRETS.turretSoundVolume, RandomUtil.random.nextFloat() + 0.5F);
                 projectile.isAmped = true;
             }
             this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
-                                      OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
+                                      (float) OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
 
             // Spawn entity
             this.getWorld().spawnEntity(projectile);

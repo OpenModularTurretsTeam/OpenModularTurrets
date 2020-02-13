@@ -62,7 +62,7 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
 
             @Override
             public int getSlotLimit(int slot) {
-                return truncateDoubleToInt(Math.pow(2, tier + 1));
+                return truncateDoubleToInt(Math.pow(2, tier + 2));
             }
         };
     }
