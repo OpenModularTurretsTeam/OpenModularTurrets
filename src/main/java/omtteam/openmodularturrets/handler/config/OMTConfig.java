@@ -81,13 +81,19 @@ public class OMTConfig {
     }
 
     public static class ConfigMisc {
+        @Config.RangeInt(min = 1, max = 2000000000)
         public int expanderPowerTierOneCapacity = 2500;
+        @Config.RangeInt(min = 1, max = 2000000000)
         public int expanderPowerTierTwoCapacity = 25000;
+        @Config.RangeInt(min = 1, max = 2000000000)
         public int expanderPowerTierThreeCapacity = 75000;
+        @Config.RangeInt(min = 1, max = 2000000000)
         public int expanderPowerTierFourCapacity = 250000;
+        @Config.RangeInt(min = 1, max = 2000000000)
         public int expanderPowerTierFiveCapacity = 5000000;
-
+        @Config.RangeInt(min = 0)
         public int solarPanelAddonGen = 10;
+        @Config.RangeInt(min = 0)
         public int redstoneReactorAddonGen = 1600;
     }
 
@@ -108,15 +114,23 @@ public class OMTConfig {
         @Config.Comment("If turrets can target hostile mobs")
         public boolean globalCanTargetMobs = true;
 
+        @Config.Comment("If turrets should warn players with audible alarm if entering their warning range")
         public boolean turretAlarmSound = true;
 
         @Config.RequiresMcRestart
+        @Config.Comment("If turrets should be breakable with tools")
         public boolean turretBreakable = false;
-
+        @Config.Comment("If trusted players get damage when accidentally hit")
         public boolean turretDamageTrustedPlayers = false;
-        public float turretSoundVolume = 4F;
+        @Config.RangeDouble(min = 0D, max = 10D)
+        @Config.Comment("Volume of the sound of firing turrets")
+        public double turretSoundVolume = 4D;
+        @Config.Comment("How many ticks should a turret wait before searching for targets again")
+        @Config.RangeInt(min = 1)
         public int turretTargetSearchTicks = 10;
+        @Config.Comment("If turrets should warn players with a message if entering their warning range")
         public boolean turretWarnMessage = true;
+        @Config.Comment("The warning distance that is added to the range of the turret")
         public int turretWarningDistance = 5;
         @Config.Name("Disposable Turret")
         public TurretSetting disposable_turret = new TurretSetting(true, 10, 25, 2, 2, 50, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
