@@ -13,14 +13,14 @@ import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 @SuppressWarnings("unused")
-public class MessageAdjustMaxRange implements IMessage {
+public class MessageAdjustRange implements IMessage {
     private int x, y, z;
     private int range;
 
-    public MessageAdjustMaxRange() {
+    public MessageAdjustRange() {
     }
 
-    public MessageAdjustMaxRange(int x, int y, int z, int range) {
+    public MessageAdjustRange(int x, int y, int z, int range) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -60,10 +60,10 @@ public class MessageAdjustMaxRange implements IMessage {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static class MessageHandlerAdjustYAxisDetect implements IMessageHandler<MessageAdjustMaxRange, IMessage> {
+    public static class MessageHandlerAdjustYAxisDetect implements IMessageHandler<MessageAdjustRange, IMessage> {
         @Override
-        public IMessage onMessage(MessageAdjustMaxRange messageIn, MessageContext ctxIn) {
-            final MessageAdjustMaxRange message = messageIn;
+        public IMessage onMessage(MessageAdjustRange messageIn, MessageContext ctxIn) {
+            final MessageAdjustRange message = messageIn;
             final MessageContext ctx = ctxIn;
             ((WorldServer) ctx.getServerHandler().player.getEntityWorld()).addScheduledTask(() -> {
                 World world = ctx.getServerHandler().player.getEntityWorld();
@@ -74,7 +74,8 @@ public class MessageAdjustMaxRange implements IMessage {
                     machine = (TurretBase) entity;
                 }
                 if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
-                    machine.getTargetingSettings().setMaxRange(message.getBaseRange());
+                    machine.updateMaxRange();
+                    machine.getTargetingSettings().setRange(message.getBaseRange());
                     machine.sendMessageToAllTracking();
                 }
             });

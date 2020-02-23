@@ -68,12 +68,10 @@ import static omtteam.omlib.compatibility.OMLibModCompatibility.OpenComputersLoa
 import static omtteam.omlib.util.player.PlayerUtil.getPlayerUUID;
 import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntities;
 
-@SuppressWarnings("unused")
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "computercraft")}
 )
 public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile, ISyncableTE, ITickable {
-    public int trustedPlayerIndex = 0;
     public boolean shouldConcealTurrets;
     protected CamoSettings camoSettings;
     protected int tier;
@@ -81,10 +79,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     protected FluidTank tank;
     private IBlockState camoBlockStateTemp;
     private boolean multiTargeting = false;
-    private int upperBoundMaxRange;
-    private boolean rangeOverridden;
     private TargetingSettings targetingSettings;
-    private boolean updateRange;
     private int ticks;
     private boolean forceFire = false;
     private int kills;
@@ -95,10 +90,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
         super();
-        this.upperBoundMaxRange = 0;
-        this.rangeOverridden = false;
         this.storage = new OMEnergyStorage(MaxEnergyStorage, MaxIO);
-        this.targetingSettings = new TargetingSettings(false, true, false, 0);
+        this.targetingSettings = new TargetingSettings(false, true, false, 0, 0);
         this.tier = tier;
         this.camoBlockStateTemp = camoState;
         this.mode = EnumMachineMode.INVERTED;
@@ -116,32 +109,26 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         if (!TurretHeadUtil.hasRedstoneReactor(base) || storage == null) {
             return;
         }
-
         //Prioritise redstone blocks
         if (OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9 < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
             ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackFromBase(base, new ItemStack(
                     Blocks.REDSTONE_BLOCK));
 
             if (redstoneBlock == ItemStack.EMPTY) {
-                redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
-                                                                               new ItemStack(Blocks.REDSTONE_BLOCK),
-                                                                               base, null);
+                redstoneBlock = TurretHeadUtil.
+                        getSpecificItemFromInvExpanders(base.getWorld(), new ItemStack(Blocks.REDSTONE_BLOCK), base, null);
             }
             if (redstoneBlock != ItemStack.EMPTY) {
                 base.storage.modifyEnergyStored(OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9);
                 return;
             }
         }
-
         if (OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
-
             ItemStack redstone = TurretHeadUtil.getSpecificItemStackFromBase(base, new ItemStack(Items.REDSTONE));
-
             if (redstone == ItemStack.EMPTY) {
                 redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
                                                                           new ItemStack(Items.REDSTONE), base, null);
             }
-
             if (redstone != ItemStack.EMPTY) {
                 storage.modifyEnergyStored(OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen);
             }
@@ -155,13 +142,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
 
     protected void setupInventory() {
         inventory = new ItemStackHandler(13) {
-
-            @Override
-            protected void onContentsChanged(int slot) {
-                super.onContentsChanged(slot);
-                markDirty();
-            }
-
             @SuppressWarnings("BooleanMethodIsAlwaysInverted")
             public boolean isItemValidForSlot(int index, ItemStack stack) {
                 if (index < 9) {
@@ -192,10 +172,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 return false;
             }
         };
-    }
-
-    private void sendTrackingMessage() {
-
     }
 
     @Override
@@ -251,14 +227,13 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Nonnull
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setInteger("upperBoundMaxRange", this.upperBoundMaxRange);
-        tag.setBoolean("rangeOverridden", this.rangeOverridden);
         tag.setBoolean("shouldConcealTurrets", this.shouldConcealTurrets);
         tag.setBoolean("multiTargeting", this.multiTargeting);
         tag.setBoolean("forceFire", this.forceFire);
         tag.setInteger("tier", this.tier);
         tag.setInteger("mode", this.mode.ordinal());
         tag.setInteger("kills", this.kills);
+        targetingSettings.writeToNBT(tag);
         camoSettings.writeNBT(tag);
         return tag;
     }
@@ -267,8 +242,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         this.targetingSettings = TargetingSettings.readFromNBT(tag);
-        this.upperBoundMaxRange = tag.getInteger("upperBoundMaxRange");
-        this.rangeOverridden = tag.getBoolean("rangeOverridden");
         this.shouldConcealTurrets = tag.getBoolean("shouldConcealTurrets");
         this.multiTargeting = tag.getBoolean("multiTargeting");
         this.forceFire = tag.getBoolean("forceFire");
@@ -334,7 +307,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     public List<String> getDebugInfo() {
         List<String> debugInfo = new ArrayList<>();
         debugInfo.add("Camo: " + this.camoSettings.getCamoBlockState().getBlock().getRegistryName());
-        debugInfo.add("Force Fire: " + this.forceFire + ", UpperMaxRange: " + this.upperBoundMaxRange);
+        debugInfo.add("Force Fire: " + this.forceFire + ", UpperMaxRange: " + this.targetingSettings.getMaxRange());
         return debugInfo;
     }
 
@@ -369,19 +342,8 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         }
         ticks++;
         if (!this.getWorld().isRemote && ticks % 5 == 0) {
-
-            //maxRange update, needs to happen on both client and server else GUI information may become disjoint.
             //moved by Keridos, added the sync to MessageTurretBase, should sync properly now too.
-            setBaseUpperBoundRange();
             updateControllerSettings();
-
-            if (this.targetingSettings.getMaxRange() > this.upperBoundMaxRange) {
-                this.targetingSettings.setMaxRange(upperBoundMaxRange);
-            }
-
-            if (!this.rangeOverridden) {
-                this.targetingSettings.setMaxRange(upperBoundMaxRange);
-            }
 
             //Concealment
             this.shouldConcealTurrets = TurretHeadUtil.hasConcealmentAddon(this);
@@ -390,15 +352,13 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             this.storage.setCapacity(getMaxEnergyStorageWithExtenders());
 
             if (ticks % 20 == 0) {
-
                 //ConfigGeneral
                 ticks = 0;
                 updateRedstoneReactor(this);
-                if (updateRange) {
-                    this.targetingSettings.setMaxRange(upperBoundMaxRange);
-                    updateRange = false;
-                }
 
+                if (this.targetingSettings.getRange() > this.targetingSettings.getMaxRange()) {
+                    this.targetingSettings.setRange(this.targetingSettings.getMaxRange());
+                }
                 this.scrubSyncPlayerList();
             }
         }
@@ -427,7 +387,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         }
     }
 
-    private void setBaseUpperBoundRange() {
+    public void updateMaxRange() {
         int maxRange = 0;
         List<TileEntity> tileEntities = WorldUtil.getTouchingTileEntities(getWorld(), getPos());
         for (TileEntity te : tileEntities) {
@@ -435,7 +395,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 maxRange = Math.max(((TurretHead) te).getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(this, (TurretHead) te), maxRange);
             }
         }
-        this.upperBoundMaxRange = maxRange;
+        this.targetingSettings.setMaxRange(maxRange);
     }
 
     // Getters and Setters
@@ -468,10 +428,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         }
 
         return active;
-    }
-
-    public void setUpdateRange(boolean updateRange) {
-        this.updateRange = updateRange;
     }
 
     public boolean isAttacksMobs() {
@@ -544,29 +500,21 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         this.playerKills = playerKills;
     }
 
+    public int getRange() {
+        return targetingSettings.getRange();
+    }
+
+    public void setRange(int range) {
+        this.updateMaxRange();
+        this.targetingSettings.setRange(range);
+    }
+
     public int getMaxRange() {
         return targetingSettings.getMaxRange();
     }
 
-    public void setMaxRange(int maxRange) {
-        this.targetingSettings.setMaxRange(maxRange);
-        this.rangeOverridden = true;
-
-        if (targetingSettings.getMaxRange() > this.upperBoundMaxRange) {
-            this.targetingSettings.setMaxRange(this.upperBoundMaxRange);
-        }
-
-        if (targetingSettings.getMaxRange() < 0) {
-            this.targetingSettings.setMaxRange(0);
-        }
-    }
-
-    public int getUpperBoundMaxRange() {
-        return upperBoundMaxRange;
-    }
-
-    public void setUpperBoundMaxRange(int upperBoundMaxRange) {
-        this.upperBoundMaxRange = upperBoundMaxRange;
+    public void setMaxRange(int range) {
+        this.targetingSettings.setMaxRange(range);
     }
 
     @Nullable
@@ -626,9 +574,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
      * @return List of EntityLivingBase
      */
     public List<EntityLivingBase> getEntitiesWithinRange() {
-        AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - targetingSettings.getMaxRange() - 1, pos.getY() - targetingSettings.getMaxRange() - 1,
-                                               pos.getZ() - targetingSettings.getMaxRange() - 1, pos.getX() + targetingSettings.getMaxRange() + 1,
-                                               pos.getY() + targetingSettings.getMaxRange() + 1, pos.getZ() + targetingSettings.getMaxRange() + 1);
+        AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - targetingSettings.getRange() - 1, pos.getY() - targetingSettings.getRange() - 1,
+                                               pos.getZ() - targetingSettings.getRange() - 1, pos.getX() + targetingSettings.getRange() + 1,
+                                               pos.getY() + targetingSettings.getRange() + 1, pos.getZ() + targetingSettings.getRange() + 1);
 
         return this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
     }

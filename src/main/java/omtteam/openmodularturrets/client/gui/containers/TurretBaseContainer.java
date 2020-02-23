@@ -107,6 +107,7 @@ public class TurretBaseContainer extends Container {
                     }
                 } else if (stackInSlot.getItem() instanceof UpgradeMetaItem) {
                     if (!mergeItemStackWithStackLimit(stackInSlot, upgSlotStart, upgSlotEnd, false, this)) {
+                        base.updateMaxRange();
                         return ItemStack.EMPTY;
                     }
                 } else {
@@ -118,6 +119,7 @@ public class TurretBaseContainer extends Container {
             {
                 if (!mergeItemStackWithStackLimit(stackInSlot, 0, slotStart, false, this)) {
                     slotObject.onSlotChanged();
+                    base.updateMaxRange();
                     return ItemStack.EMPTY;
                 }
             }
@@ -127,6 +129,7 @@ public class TurretBaseContainer extends Container {
             } else {
                 slotObject.onSlotChanged();
             }
+            base.updateMaxRange();
 
             if (getStackSize(stackInSlot) == getStackSize(stack)) {
                 slotObject.onSlotChanged();
@@ -139,12 +142,12 @@ public class TurretBaseContainer extends Container {
 
     @Override
     public void detectAndSendChanges() {
-        super.detectAndSendChanges();
         DebugHandler.getInstance().setListeners(this.listeners);
         for (IContainerListener listener : this.listeners) {
             if (listener instanceof EntityPlayerMP) {
                 OMTNetworkingHandler.INSTANCE.sendTo(new MessageTurretBase(this.base), (EntityPlayerMP) listener);
             }
         }
+        super.detectAndSendChanges();
     }
 }

@@ -34,7 +34,7 @@ import static omtteam.openmodularturrets.compatibility.valkyrienwarfare.VWUtil.g
  */
 @SuppressWarnings("unused")
 public class MessageTurretBase implements IMessage {
-    private int x, y, z, rfStorageCurrent, rfStorageMax, tier, camoBlockMeta, maxRange, upperRange, kills, playerKills, lightValue, lightOpacity;
+    private int x, y, z, rfStorageCurrent, rfStorageMax, tier, camoBlockMeta, range, maxRange, kills, playerKills, lightValue, lightOpacity;
     private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting;
     private String camoBlockRegName;
     private List<TrustedPlayer> trustedPlayers = new ArrayList<>();
@@ -65,8 +65,7 @@ public class MessageTurretBase implements IMessage {
             this.trustedPlayers = base.getTrustManager().getTrustedPlayers();
             this.camoBlockRegName = Objects.requireNonNull(base.getCamoState().getBlock().getRegistryName()).toString();
             this.camoBlockMeta = base.getCamoState().getBlock().getMetaFromState(base.getCamoState());
-            this.maxRange = base.getMaxRange();
-            this.upperRange = base.getUpperBoundMaxRange();
+            this.range = base.getRange();
             this.mode = base.getMode();
             this.kills = base.getKills();
             this.playerKills = base.getPlayerKills();
@@ -84,8 +83,8 @@ public class MessageTurretBase implements IMessage {
         this.owner = Player.readFromByteBuf(buf);
         this.rfStorageCurrent = buf.readInt();
         this.rfStorageMax = buf.readInt();
+        this.range = buf.readInt();
         this.maxRange = buf.readInt();
-        this.upperRange = buf.readInt();
         this.kills = buf.readInt();
         this.playerKills = buf.readInt();
         this.mode = EnumMachineMode.values()[buf.readInt()];
@@ -118,8 +117,8 @@ public class MessageTurretBase implements IMessage {
         Player.writeToByteBuf(owner, buf);
         buf.writeInt(rfStorageCurrent);
         buf.writeInt(rfStorageMax);
+        buf.writeInt(range);
         buf.writeInt(maxRange);
-        buf.writeInt(upperRange);
         buf.writeInt(kills);
         buf.writeInt(playerKills);
         buf.writeInt(mode.ordinal());
@@ -173,8 +172,8 @@ public class MessageTurretBase implements IMessage {
                     base.setMode(message.mode);
                     base.setCamoState(Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(
                             new ResourceLocation(message.camoBlockRegName))).getStateFromMeta(message.camoBlockMeta));
+                    base.getTargetingSettings().setRange(message.range);
                     base.getTargetingSettings().setMaxRange(message.maxRange);
-                    base.setUpperBoundMaxRange(message.upperRange);
                     base.setKills(message.kills);
                     base.setPlayerKills(message.playerKills);
                 }

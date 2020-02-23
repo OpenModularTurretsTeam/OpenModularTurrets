@@ -58,7 +58,7 @@ public class TurretTargetingUtils {
         }
         BlockPos pos = new BlockPos(startPos);
         return MathHelper.absMax(MathHelper.absMax(targetPos.x - pos.getX(), targetPos.y - pos.getY()),
-                                 targetPos.z - pos.getZ()) > (turret.getBase().getMaxRange());
+                                 targetPos.z - pos.getZ()) > (turret.getBase().getRange());
     }
 
     /**
@@ -87,7 +87,7 @@ public class TurretTargetingUtils {
         vecDelta = vecDelta.normalize();
 
         // Limit how many non solid block a turret can see through
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             // Offset start position toward the target to prevent self collision
             traceStart = traceStart.add(vecDelta);
 

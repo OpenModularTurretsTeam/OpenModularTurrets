@@ -148,12 +148,12 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
     @Override
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 1) {
-            this.base.setMaxRange((this.base.getMaxRange() + 1));
+            this.base.setRange((this.base.getRange() + 1));
             sendChangeToServer();
         }
 
         if (guibutton.id == 2) {
-            this.base.setMaxRange((this.base.getMaxRange() - 1));
+            this.base.setRange((this.base.getRange() - 1));
             sendChangeToServer();
         }
 
@@ -214,8 +214,8 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.AMMO), 8, 6, 0);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.INVENTORY), 8, ySize - 97 + 4, 0);
 
-        fontRenderer.drawStringWithShadow("" + base.getMaxRange(), String.valueOf(base.getMaxRange()).length() == 1 ?
-                127 : 124, 39, base.getMaxRange() == getBaseUpperBoundRange() ? 16724530 : 40000);
+        fontRenderer.drawStringWithShadow("" + base.getTargetingSettings().getRange(), String.valueOf(base.getRange()).length() == 1 ?
+                127 : 124, 39, base.getTargetingSettings().getRange() == getBaseUpperBoundRange() ? 16724530 : 40000);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.RANGE), 116, 6, 0);
 
         ArrayList<String> targetInfo = new ArrayList<>();
@@ -296,8 +296,8 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
     }
 
     private void sendChangeToServer() {
-        MessageAdjustMaxRange message = new MessageAdjustMaxRange(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
-                                                                  base.getMaxRange());
+        MessageAdjustRange message = new MessageAdjustRange(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
+                                                            base.getRange());
 
         OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }

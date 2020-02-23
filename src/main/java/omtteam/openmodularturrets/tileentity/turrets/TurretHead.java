@@ -169,9 +169,9 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     protected EntityLivingBase getTarget() {
         TurretTargetingUtils selector = new TurretTargetingUtils(this);
         if (!this.getWorld().isRemote && base != null) {
-            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - base.getMaxRange() - 1, pos.getY() - base.getMaxRange() - 1,
-                                                   pos.getZ() - base.getMaxRange() - 1, pos.getX() + base.getMaxRange() + 1,
-                                                   pos.getY() + base.getMaxRange() + 1, pos.getZ() + base.getMaxRange() + 1);
+            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - base.getRange() - 1, pos.getY() - base.getRange() - 1,
+                                                   pos.getZ() - base.getRange() - 1, pos.getX() + base.getRange() + 1,
+                                                   pos.getY() + base.getRange() + 1, pos.getZ() + base.getRange() + 1);
             List<EntityLivingBase> targets = this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
             return selector.getBestEntity(targets);
         }
