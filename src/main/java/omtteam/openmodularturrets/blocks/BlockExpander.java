@@ -42,7 +42,7 @@ import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
  * This Class implements the block for expanders.
  */
 @SuppressWarnings("deprecation")
-public class BlockExpander extends BlockTurretBaseAttachment implements IHasItemBlock {
+public class BlockExpander extends AbstractBaseAttachment implements IHasItemBlock {
     private static final PropertyInteger EXPANDER_META = PropertyInteger.create("meta", 0, 9);
 
     public BlockExpander() {

@@ -329,7 +329,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             this.getWorld().destroyBlock(this.pos, true);
             return;
         }
-        if (this.updateNBT) {
+        if (!this.getWorld().isRemote && this.updateNBT) {
             this.markBlockForUpdate();
             this.sendMessageToAllTracking();
             this.updateNBT = false;
@@ -340,6 +340,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 OMTNetworkingHandler.INSTANCE.sendTo(new MessageTurretBase(this), player);
             }
         }
+
         ticks++;
         if (!this.getWorld().isRemote && ticks % 5 == 0) {
             //moved by Keridos, added the sync to MessageTurretBase, should sync properly now too.

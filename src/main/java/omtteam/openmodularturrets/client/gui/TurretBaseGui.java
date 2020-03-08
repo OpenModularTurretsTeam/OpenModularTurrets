@@ -308,6 +308,7 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
     }
 
     private void sendDropBaseToServer() {
+        player.closeScreen();
         MessageDropBase message = new MessageDropBase(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
         OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }

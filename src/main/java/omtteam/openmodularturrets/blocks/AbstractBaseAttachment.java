@@ -26,10 +26,10 @@ import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntities;
  * This Class
  */
 @SuppressWarnings("unused")
-public abstract class BlockTurretBaseAttachment extends BlockAbstractTileEntity implements ITurretBaseAddonBlock {
+public abstract class AbstractBaseAttachment extends BlockAbstractTileEntity implements ITurretBaseAddonBlock {
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
-    public BlockTurretBaseAttachment(Material material) {
+    public AbstractBaseAttachment(Material material) {
         super(material);
     }
 
