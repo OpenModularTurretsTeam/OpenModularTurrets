@@ -367,10 +367,11 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             this.getWorld().destroyBlock(this.pos, true);
             return;
         }
-        if (this.updateNBT) {
+        if (!this.getWorld().isRemote && this.updateNBT) {
             this.markBlockForUpdate();
             OMTNetworkingHandler.INSTANCE.sendToAllAround(new MessageTurretBase(this),
-                                                          new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
+                                                          new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(),
+                                                                                          this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 160));
             this.updateNBT = false;
         }
 
@@ -379,6 +380,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 OMTNetworkingHandler.INSTANCE.sendTo(new MessageTurretBase(this), player);
             }
         }
+
         ticks++;
         if (!this.getWorld().isRemote && ticks % 5 == 0) {
 
