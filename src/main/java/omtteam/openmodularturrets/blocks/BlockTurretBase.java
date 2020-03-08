@@ -14,7 +14,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -234,8 +233,8 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack
             stack) {
 
-        if (!worldIn.isRemote && worldIn.getTileEntity(pos) instanceof TurretBase) {
-            EntityPlayerMP player = (EntityPlayerMP) placer;
+        if (worldIn.getTileEntity(pos) instanceof TurretBase) {
+            EntityPlayer player = (EntityPlayer) placer;
             TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
             if (base == null) {
                 return;

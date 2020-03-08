@@ -37,7 +37,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * Created by Keridos on 25/11/17.
  * This Class
  */
-public class BlockBaseAttachment extends BlockTurretBaseAttachment implements IHasItemBlock {
+public class BlockBaseAttachment extends AbstractBaseAttachment implements IHasItemBlock {
     public static final PropertyInteger BASE_ADDON_META = PropertyInteger.create("meta", 0, 1);
 
     public BlockBaseAttachment() {
