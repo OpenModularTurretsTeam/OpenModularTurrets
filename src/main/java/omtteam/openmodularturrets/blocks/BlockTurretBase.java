@@ -205,7 +205,6 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             // Open GUI
             if (!player.isSneaking() && base != null) {
                 if (PlayerUtil.canPlayerAccessBlock(player, base)) {
-                    world.notifyBlockUpdate(pos, state, state, 6);
                     player.openGui(OpenModularTurrets.instance, 1, world, pos.getX(), pos.getY(), pos.getZ());
                 } else {
                     addChatMessage(player, new TextComponentTranslation(OMLibNames.Localizations.Text.STATUS_PERMISSION));
