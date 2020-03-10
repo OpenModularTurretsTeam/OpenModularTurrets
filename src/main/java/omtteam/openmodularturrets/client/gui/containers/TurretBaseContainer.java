@@ -29,6 +29,9 @@ import static omtteam.omlib.util.inventory.InvUtil.mergeItemStackWithStackLimit;
  */
 public class TurretBaseContainer extends Container {
     TurretBase base;
+    // Actual slot start index of turret base
+    int slotStart = 36;
+    int ammoSlotStart = 100, ammoSlotEnd = 0, addonSlotStart = 100, addonSlotEnd = 0, upgSlotStart = 100, upgSlotEnd = 0;
 
     public TurretBaseContainer(InventoryPlayer inventoryPlayer, TurretBase turretBase) {
         this.base = turretBase;
@@ -56,6 +59,22 @@ public class TurretBaseContainer extends Container {
         if (base.getTier() > 4) {
             addSlotToContainer(new UpgradeSlot(base.getInventory(), 12, 92, 52));
         }
+
+        int ammoSlotStart = 100, ammoSlotEnd = 0, addonSlotStart = 100, addonSlotEnd = 0, upgSlotStart = 100, upgSlotEnd = 0;
+        // Determine the slot range for each type( According to the class constructor )
+        for (int i = slotStart; i < this.inventorySlots.size(); i++) {
+            Class slotClass = this.getSlot(i).getClass();
+            if (slotClass == AmmoSlot.class) {
+                ammoSlotStart = Math.min(i, ammoSlotStart);
+                ammoSlotEnd = Math.max(i + 1, ammoSlotEnd);
+            } else if (slotClass == AddonSlot.class) {
+                addonSlotStart = Math.min(i, addonSlotStart);
+                addonSlotEnd = Math.max(i + 1, addonSlotEnd);
+            } else if (slotClass == UpgradeSlot.class) {
+                upgSlotStart = Math.min(i, upgSlotStart);
+                upgSlotEnd = Math.max(i + 1, upgSlotEnd);
+            }
+        }
     }
 
     @Override
@@ -78,25 +97,6 @@ public class TurretBaseContainer extends Container {
         if (slotObject != null && slotObject.getHasStack()) {
             ItemStack stackInSlot = slotObject.getStack();
             stack = stackInSlot.copy();
-
-            // Actual slot start index of turret base
-            int slotStart = 36;
-
-            int ammoSlotStart = 100, ammoSlotEnd = 0, addonSlotStart = 100, addonSlotEnd = 0, upgSlotStart = 100, upgSlotEnd = 0;
-            // Determine the slot range for each type( According to the class constructor )
-            for (int i = slotStart; i < this.inventorySlots.size(); i++) {
-                Class slotClass = this.getSlot(i).getClass();
-                if (slotClass == AmmoSlot.class) {
-                    ammoSlotStart = Math.min(i, ammoSlotStart);
-                    ammoSlotEnd = Math.max(i + 1, ammoSlotEnd);
-                } else if (slotClass == AddonSlot.class) {
-                    addonSlotStart = Math.min(i, addonSlotStart);
-                    addonSlotEnd = Math.max(i + 1, addonSlotEnd);
-                } else if (slotClass == UpgradeSlot.class) {
-                    upgSlotStart = Math.min(i, upgSlotStart);
-                    upgSlotEnd = Math.max(i + 1, upgSlotEnd);
-                }
-            }
 
             // Transfer from player inventory
             if (slot < slotStart) {
@@ -141,6 +141,14 @@ public class TurretBaseContainer extends Container {
     }
 
     @Override
+    public void putStackInSlot(int slotID, ItemStack stack) {
+        super.putStackInSlot(slotID, stack);
+        if (slotID >= upgSlotStart && slotID <= upgSlotEnd) {
+            base.updateMaxRange();
+        }
+    }
+
+    @Override
     public void detectAndSendChanges() {
         DebugHandler.getInstance().setListeners(this.listeners);
         for (IContainerListener listener : this.listeners) {
@@ -148,6 +156,7 @@ public class TurretBaseContainer extends Container {
                 OMTNetworkingHandler.INSTANCE.sendTo(new MessageTurretBase(this.base), (EntityPlayerMP) listener);
             }
         }
+        base.updateMaxRange();
         super.detectAndSendChanges();
     }
 }

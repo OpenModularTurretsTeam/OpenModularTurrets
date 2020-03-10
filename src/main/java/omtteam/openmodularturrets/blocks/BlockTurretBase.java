@@ -208,7 +208,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                     world.notifyBlockUpdate(pos, state, state, 6);
                     player.openGui(OpenModularTurrets.instance, 1, world, pos.getX(), pos.getY(), pos.getZ());
                 } else {
-                    addChatMessage(player, new TextComponentTranslation(OMTNames.Localizations.Text.STATUS_OWNERSHIP));
+                    addChatMessage(player, new TextComponentTranslation(OMLibNames.Localizations.Text.STATUS_PERMISSION));
                 }
             }
         }

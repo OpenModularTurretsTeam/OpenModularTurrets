@@ -66,6 +66,7 @@ public class MessageTurretBase implements IMessage {
             this.camoBlockRegName = Objects.requireNonNull(base.getCamoState().getBlock().getRegistryName()).toString();
             this.camoBlockMeta = base.getCamoState().getBlock().getMetaFromState(base.getCamoState());
             this.range = base.getRange();
+            this.maxRange = base.getMaxRange();
             this.mode = base.getMode();
             this.kills = base.getKills();
             this.playerKills = base.getPlayerKills();

@@ -136,9 +136,9 @@ public class UsableMetaItem extends Item {
                     tooltip.add("\u00A76: \u00A7b" + nbtTagCompound.getInteger("currentMaxRange"));
                     tooltip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": " + getMachineModeLocalization(EnumMachineMode.values()[nbtTagCompound.getInteger("mode")]));
                     tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.MULTI_TARGETING) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("multiTargeting")));
-                    tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksMobs")));
-                    tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksNeutrals")));
-                    tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksPlayers")));
+                    tooltip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksMobs")));
+                    tooltip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksNeutrals")));
+                    tooltip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksPlayers")));
                 } else // If the stack does not have valid tag data, a default message
                 {
                     tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc1"));

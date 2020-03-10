@@ -13,6 +13,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import omtteam.omlib.handler.OMConfig;
+import omtteam.omlib.util.TargetingSettings;
 import omtteam.omlib.util.world.Pos;
 import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.api.lists.MobBlacklist;

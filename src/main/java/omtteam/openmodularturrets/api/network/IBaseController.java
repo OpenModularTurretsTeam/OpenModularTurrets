@@ -5,7 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import omtteam.omlib.api.network.IController;
 import omtteam.omlib.api.permission.TrustedPlayer;
 import omtteam.omlib.util.EnumMachineMode;
-import omtteam.openmodularturrets.turret.TargetingSettings;
+import omtteam.omlib.util.TargetingSettings;
 
 import java.util.List;
 

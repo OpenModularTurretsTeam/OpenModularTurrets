@@ -65,9 +65,9 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
     protected void buttonInit() {
 
         if (PlayerUtil.canPlayerChangeSetting(player, base)) {
-            String mobsButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
-            String neutralsButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
-            String playersButton = safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
+            String mobsButton = safeLocalize(OMLibNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
+            String neutralsButton = safeLocalize(OMLibNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
+            String playersButton = safeLocalize(OMLibNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
             this.buttonList.add(new GuiButton(0, guiLeft + 10, guiTop + 20, 155, 20, mobsButton));
             this.buttonList.add(new GuiButton(1, guiLeft + 10, guiTop + 40, 155, 20, neutralsButton));
             this.buttonList.add(new GuiButton(2, guiLeft + 10, guiTop + 60, 155, 20, playersButton));
@@ -129,14 +129,14 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         this.mc.renderEngine.bindTexture(texture);
         this.drawTexturedModalRect((width - xSize) / 2, (height - ySize) / 2, 0, 0, xSize, ySize);
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.TARGETING_OPTIONS) + ": ", guiLeft + 10, guiTop + 9, 0);
+        fontRenderer.drawString(safeLocalize(OMLibNames.Localizations.GUI.TARGETING_OPTIONS) + ": ", guiLeft + 10, guiTop + 9, 0);
         if (accessLevel > 2) {
             fontRenderer.drawString(safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS) + ": ", guiLeft + 10, guiTop + 84, 0);
             fontRenderer.drawString(safeLocalize(OMLibNames.Localizations.GUI.LIGHT_VALUES) + ": ", guiLeft + 10, guiTop + 145, 0);
         }
-        buttonList.get(0).displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
-        buttonList.get(1).displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
-        buttonList.get(2).displayString = safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
+        buttonList.get(0).displayString = safeLocalize(OMLibNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
+        buttonList.get(1).displayString = safeLocalize(OMLibNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
+        buttonList.get(2).displayString = safeLocalize(OMLibNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
 
         super.drawScreen(par1, par2, par3);
         drawTooltips();
@@ -149,7 +149,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerMobs(!base.isAttacksMobs());
             } else {
-                addChatMessage(player, new TextComponentString(safeLocalize(OMTNames.Localizations.Text.STATUS_OWNERSHIP)));
+                addChatMessage(player, new TextComponentString(safeLocalize(OMLibNames.Localizations.Text.STATUS_PERMISSION)));
             }
         }
 
@@ -157,7 +157,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerNeutrals(!base.isAttacksNeutrals());
             } else {
-                addChatMessage(player, new TextComponentString(safeLocalize(OMTNames.Localizations.Text.STATUS_OWNERSHIP)));
+                addChatMessage(player, new TextComponentString(safeLocalize(OMLibNames.Localizations.Text.STATUS_PERMISSION)));
             }
         }
 
@@ -165,14 +165,14 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
                 sendChangeToServerPlayers(!base.isAttacksPlayers());
             } else {
-                addChatMessage(player, new TextComponentString(safeLocalize(OMTNames.Localizations.Text.STATUS_OWNERSHIP)));
+                addChatMessage(player, new TextComponentString(safeLocalize(OMLibNames.Localizations.Text.STATUS_PERMISSION)));
             }
         }
         if (guibutton.id == 3) { // Open TP GUI for this block
             if (PlayerUtil.isPlayerAdmin(player, base)) {
                 player.openGui(OMLib.instance, 0, player.getEntityWorld(), base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
             } else {
-                addChatMessage(player, new TextComponentString(safeLocalize(OMTNames.Localizations.Text.STATUS_OWNERSHIP)));
+                addChatMessage(player, new TextComponentString(safeLocalize(OMLibNames.Localizations.Text.STATUS_PERMISSION)));
             }
         }
         if (guibutton.id == 6) { //back button
@@ -220,14 +220,14 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         switch (tooltipToDraw) {
             case 0:
                 if (buttonList.get(0).isMouseOver()) {
-                    tooltip.add(safeLocalize(OMTNames.Localizations.Text.TARGET_MOBS));
+                    tooltip.add(safeLocalize(OMLibNames.Localizations.Tooltip.TARGET_MOBS));
                 }
                 break;
             case 1:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Text.TARGET_NEUTRALS));
+                tooltip.add(safeLocalize(OMLibNames.Localizations.Tooltip.TARGET_NEUTRALS));
                 break;
             case 2:
-                tooltip.add(safeLocalize(OMTNames.Localizations.Text.TARGET_PLAYERS));
+                tooltip.add(safeLocalize(OMLibNames.Localizations.Tooltip.TARGET_PLAYERS));
                 break;
             case 3:
                 tooltip.add(safeLocalize(OMLibNames.Localizations.Tooltip.TRUSTED_PLAYER_GUI));

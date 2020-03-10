@@ -35,7 +35,7 @@ import omtteam.omlib.api.permission.EnumAccessLevel;
 import omtteam.omlib.api.permission.TrustedPlayer;
 import omtteam.omlib.api.render.camo.ICamoSupport;
 import omtteam.omlib.api.tile.IDebugTile;
-import omtteam.omlib.network.ISyncableTE;
+import omtteam.omlib.api.tile.IHasTargetingSettings;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.network.messages.MessageCamoSettings;
 import omtteam.omlib.power.OMEnergyStorage;
@@ -43,6 +43,7 @@ import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.tileentity.TileEntityTrustedMachine;
 import omtteam.omlib.util.EnumMachineMode;
 import omtteam.omlib.util.NetworkUtil;
+import omtteam.omlib.util.TargetingSettings;
 import omtteam.omlib.util.camo.CamoSettings;
 import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.api.network.IBaseController;
@@ -53,7 +54,6 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
-import omtteam.openmodularturrets.turret.TargetingSettings;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import omtteam.openmodularturrets.util.OMTUtil;
 
@@ -71,7 +71,7 @@ import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntities;
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "computercraft")}
 )
-public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile, ISyncableTE, ITickable {
+public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile, ITickable, IHasTargetingSettings {
     public boolean shouldConcealTurrets;
     protected CamoSettings camoSettings;
     protected int tier;
@@ -139,7 +139,6 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     public IItemHandler getCapabilityInventory(EnumFacing facing) {
         return new RangedWrapper(inventory, 0, 9);
     }
-
     protected void setupInventory() {
         inventory = new ItemStackHandler(13) {
             @SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -291,7 +290,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     }
 
     @Override
-    public void sendMessageToAllTracking() {
+    public void informUpdate() {
         OMTNetworkingHandler.INSTANCE.
                 sendToAllTracking(new MessageTurretBase(this), NetworkUtil.
                         getTargetPointFromBlockPos(this.getWorld().provider.getDimension(), this.pos, 100));
@@ -331,7 +330,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         }
         if (!this.getWorld().isRemote && this.updateNBT) {
             this.markBlockForUpdate();
-            this.sendMessageToAllTracking();
+            this.informUpdate();
             this.updateNBT = false;
         }
 

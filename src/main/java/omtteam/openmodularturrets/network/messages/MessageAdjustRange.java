@@ -76,7 +76,7 @@ public class MessageAdjustRange implements IMessage {
                 if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
                     machine.updateMaxRange();
                     machine.getTargetingSettings().setRange(message.getBaseRange());
-                    machine.sendMessageToAllTracking();
+                    machine.informUpdate();
                 }
             });
             return null;

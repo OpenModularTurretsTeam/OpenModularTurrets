@@ -9,8 +9,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import omtteam.omlib.api.tile.IHasTargetingSettings;
 import omtteam.omlib.util.player.PlayerUtil;
-import omtteam.openmodularturrets.tileentity.TurretBase;
 
 @SuppressWarnings("unused")
 public class MessageToggleAttackNeutralMobs implements IMessage {
@@ -71,13 +71,12 @@ public class MessageToggleAttackNeutralMobs implements IMessage {
                 World world = ctx.getServerHandler().player.getEntityWorld();
                 EntityPlayerMP player = ctx.getServerHandler().player;
                 TileEntity entity = world.getTileEntity(new BlockPos(message.getX(), message.getY(), message.getZ()));
-                TurretBase machine = null;
-                if (entity instanceof TurretBase) {
-                    machine = (TurretBase) entity;
+                IHasTargetingSettings machine = null;
+                if (entity instanceof IHasTargetingSettings) {
+                    machine = (IHasTargetingSettings) entity;
                 }
                 if (machine != null && PlayerUtil.canPlayerChangeSetting(player, machine)) {
-                    machine.setAttacksNeutrals(message.doAttackNeutrals());
-                    machine.sendMessageToAllTracking();
+                    machine.getTargetingSettings().setTargetPassive(message.doAttackNeutrals());
                 }
             });
             return null;

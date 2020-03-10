@@ -2,6 +2,7 @@ package omtteam.openmodularturrets.turret;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import omtteam.omlib.util.TargetingSettings;
 import omtteam.omlib.util.world.Pos;
 
 public enum EnumTargetingPriority {

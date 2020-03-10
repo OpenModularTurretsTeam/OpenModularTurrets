@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.block.IHasItemBlock;
+import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
@@ -155,7 +156,7 @@ public class BlockExpander extends AbstractBaseAttachment implements IHasItemBlo
                 return true;
             }
         } else {
-            addChatMessage(playerIn, new TextComponentTranslation(OMTNames.Localizations.Text.STATUS_OWNERSHIP));
+            addChatMessage(playerIn, new TextComponentTranslation(OMLibNames.Localizations.Text.STATUS_PERMISSION));
         }
         return true;
     }

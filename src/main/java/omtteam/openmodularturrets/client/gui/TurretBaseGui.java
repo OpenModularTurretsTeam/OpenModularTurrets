@@ -238,9 +238,9 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         }
 
         targetInfo.add("");
-        targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
-        targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
-        targetInfo.add("\u00A77" + safeLocalize(OMTNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
+        targetInfo.add("\u00A77" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
+        targetInfo.add("\u00A77" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
+        targetInfo.add("\u00A77" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
 
         this.drawHoveringText(targetInfo, -128, 17, fontRenderer);
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);

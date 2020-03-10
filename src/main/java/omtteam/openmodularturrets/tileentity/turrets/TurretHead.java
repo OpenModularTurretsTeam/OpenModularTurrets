@@ -14,12 +14,16 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
+import omtteam.omlib.util.TargetingSettings;
 import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.turret.*;
+import omtteam.openmodularturrets.turret.EnumTargetingPriority;
+import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretTargetingUtils;
+import omtteam.openmodularturrets.turret.TurretType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

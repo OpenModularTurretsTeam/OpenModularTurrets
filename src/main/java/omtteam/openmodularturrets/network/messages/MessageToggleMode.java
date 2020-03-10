@@ -71,7 +71,7 @@ public class MessageToggleMode implements IMessage {
                 }
                 if (machine != null && PlayerUtil.isPlayerAdmin(player, machine)) {
                     machine.toggleMode();
-                    machine.sendMessageToAllTracking();
+                    machine.informUpdate();
                 }
             });
             return null;

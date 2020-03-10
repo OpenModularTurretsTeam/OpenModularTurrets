@@ -90,9 +90,6 @@ public class OMTNames {
         public static class GUI {
             public static final String BASE = "text.openmodularturrets.gui.base";
             public static final String RANGE = "text.openmodularturrets.gui.range";
-            public static final String ATTACK_PLAYERS = "text.openmodularturrets.gui.attack_players";
-            public static final String ATTACK_MOBS = "text.openmodularturrets.gui.attack_mobs";
-            public static final String ATTACK_NEUTRALS = "text.openmodularturrets.gui.attack_neutrals";
             public static final String MULTI_TARGETING = "text.openmodularturrets.gui.multi_targeting";
             public static final String ADDONS = "text.openmodularturrets.gui.addons";
             public static final String UPGRADES = "text.openmodularturrets.gui.upgrades";
@@ -100,7 +97,6 @@ public class OMTNames {
             public static final String DAMAGE_AMP = "text.openmodularturrets.gui.damage_amp";
             public static final String INVENTORY = "text.openmodularturrets.gui.inventory";
             public static final String TARGET = "text.openmodularturrets.gui.target";
-            public static final String TARGETING_OPTIONS = "text.openmodularturrets.gui.targeting_options";
             public static final String MULTI = "text.openmodularturrets.gui.multi";
             public static final String SINGLE = "text.openmodularturrets.gui.single";
             public static final String YAW = "text.openmodularturrets.gui.yaw";
@@ -125,9 +121,6 @@ public class OMTNames {
         }
 
         public static class Text {
-            public static final String TARGET_NEUTRALS = "text.openmodularturrets.target_neutrals";
-            public static final String TARGET_MOBS = "text.openmodularturrets.target_mobs";
-            public static final String TARGET_PLAYERS = "text.openmodularturrets.target_players";
             public static final String MINUS_RANGE = "text.openmodularturrets.minus_range";
             public static final String PLUS_RANGE = "text.openmodularturrets.plus_range";
             public static final String CONFIGURE_BASE = "text.openmodularturrets.configure_base";
@@ -137,7 +130,6 @@ public class OMTNames {
             public static final String UPGRADE_SLOT = "text.openmodularturrets.upgrade_slot";
             public static final String BASE_MAX_RANGE = "text.openmodularturrets.base_max_range";
             public static final String TOGGLE_MODE = "text.openmodularturrets.toggle_mode";
-            public static final String STATUS_OWNERSHIP = "text.openmodularturrets.status.ownership";
             public static final String STATUS_WARNING = "text.openmodularturrets.status.warning";
         }
     }
