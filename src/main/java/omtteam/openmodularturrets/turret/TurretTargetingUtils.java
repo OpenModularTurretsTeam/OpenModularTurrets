@@ -178,13 +178,13 @@ public class TurretTargetingUtils {
     private boolean validTarget(EntityLivingBase entity) {
         if (entity instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) entity;
-            if (!settings.isTargetPlayers() && OMTConfig.TURRETS.globalCanTargetPlayers
-                    || !OMTUtil.canDamagePlayer(player, turret.getBase())
-                    || isPlayerTrusted(player, turret)
-                    || isPlayerOP(player) && OMConfig.GENERAL.canOPAccessOwnedBlocks
-                    || !player.isDead
+            if (!(settings.isTargetPlayers() && OMTConfig.TURRETS.globalCanTargetPlayers)
+                    || isPlayerTrusted(player, turret) // Check if player is trusted)
+                    || (isPlayerOP(player) && OMConfig.GENERAL.canOPAccessOwnedBlocks) // Check if player is OP and settings are set
+                    || !OMTUtil.canDamagePlayer(player, turret.getBase()) // Check if we can damage the player
+                    || player.isDead // Do not target dead players
             ) {
-                return false;
+                return false; // return false if player fails checks.
             }
         }
         // Can the turret still see the target? (It's moving)
@@ -231,6 +231,10 @@ public class TurretTargetingUtils {
             return true;
         }
 
-        return isEntityValidMob(turret, entity) && settings.isTargetMobs();
+        if (isEntityValidMob(turret, entity) && settings.isTargetMobs()) {
+            return true;
+        }
+
+        return entity instanceof EntityPlayer;
     }
 }
