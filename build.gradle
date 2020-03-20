@@ -93,7 +93,7 @@ minecraft {
     runDir = "run"
 
     replace "@VERSION@", project.version
-    replace "omlib@[0.0.0,)", "omlib@[" + omlib_version + ", " + omlib_max_version + ")"
+    replace "omlib@[0.0.0,)", "omlib@[" + omlib_version + "," + omlib_max_version + ")"
 
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
@@ -240,9 +240,9 @@ def getCommmitReleaseType() {
     return 'none'
 }
 
-tasks.curseforge.enabled = project.hasProperty("curseforge_key") && !commit_release_type.equals('none')
+tasks.curseforge.enabled = project.hasProperty("curseforge_key") && commit_release_type != 'none'
 curseforge {
-    if (project.hasProperty("curseforge_key") && !commit_release_type.equals('none')) {
+    if (project.hasProperty("curseforge_key") && commit_release_type != 'none') {
         System.out.println("ATTEMPTING CURSE RELEASE")
         apiKey = project.properties["curseforge_key"]
     } else {
@@ -258,6 +258,9 @@ curseforge {
             optionalDependency 'ender-io'
             optionalDependency 'redstone-flux'
             optionalDependency 'thermal-expansion'
+            optionalDependency 'mekanism'
+            optionalDependency 'opencomputers'
+            optionalDependency 'computercraft'
         }
 
         mainArtifact(jar) {
@@ -267,13 +270,15 @@ curseforge {
         }
 
         addArtifact(sourceJar) {
-            changelog = file("${projectDir}/change_log.html").text
             releaseType = 'alpha'
+            changelog = file("${projectDir}/change_log.html").text
+            changelogType = 'html'
         }
 
         addArtifact(deobfJar) {
-            changelog = file("${projectDir}/change_log.html").text
             releaseType = 'alpha'
+            changelog = file("${projectDir}/change_log.html").text
+            changelogType = 'html'
         }
     }
 }
