@@ -86,12 +86,15 @@ if (hasProperty('appendBuildNumber')) {
 group = "${group_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${mod_id}-${minecraft_version}"
 
+String omlib_max_version= omlib_version.toString().replaceAll("[0-9]-[0-9]*", "99-9999")
+
 minecraft {
     version = "${forge_version}"
     runDir = "run"
 
     replace "@VERSION@", project.version
-    replace "omlib@[0.0.0,)", "omlib@[" + omlib_version + ",)"
+    replace "omlib@[0.0.0,)", "omlib@[" + omlib_version + ", " + omlib_max_version + ")"
+
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
