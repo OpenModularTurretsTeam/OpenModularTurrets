@@ -69,9 +69,6 @@ tile.turret_base.name=Turm Basis
 itemGroup.openmodularturrets=Open Modular Turrets
 
 text.openmodularturrets.gui.base=Basis
-text.openmodularturrets.gui.attack_mobs=Attack. Mobs
-text.openmodularturrets.gui.attack_neutrals=Attack. Neutrale
-text.openmodularturrets.gui.attack_players=Attack.Spieler
 text.openmodularturrets.gui.multi_targeting=Multiple Ziele
 text.openmodularturrets.gui.addons=Addons
 text.openmodularturrets.gui.upgrades=Upgr.
@@ -79,7 +76,6 @@ text.openmodularturrets.gui.ammo=Mun./Treibst.
 text.openmodularturrets.gui.damage_amp=Schadensbonus (% von HP)
 text.openmodularturrets.gui.inventory=Inventar
 text.openmodularturrets.gui.target=Ziel
-text.openmodularturrets.gui.targeting_options=Ziel-Optionen
 text.openmodularturrets.gui.multi=Multi
 text.openmodularturrets.gui.single=Einzel
 text.openmodularturrets.gui.yaw=Yaw
@@ -143,9 +139,6 @@ text.openmodularturrets.memory_card.desc1=Shift-RechtsClick um auf Karte zu kopi
 text.openmodularturrets.memory_card.desc2=Shift-RechtsClick irgendwo anders um Karte zu leeren.
 text.openmodularturrets.memory_card.desc3=RechtsClick um Daten von Karte zu kopieren.
 
-text.openmodularturrets.target_mobs=Ob die Türme der Basis Mobs angreifen.
-text.openmodularturrets.target_neutrals=Ob die Türme der Basis passive Kreaturen angreifen.
-text.openmodularturrets.target_players=Ob die Türme der Basis nicht vertraute Spieler angreifen.
 text.openmodularturrets.minus_range=Maximal Reichweite reduzieren
 text.openmodularturrets.plus_range=Maximale Reichweite erhöhen
 text.openmodularturrets.configure_base=Öffne den Basis Konfig. Schirm.
@@ -155,6 +148,7 @@ text.openmodularturrets.addon_slot=Addons (für mehr Funktionen) für den modula
 text.openmodularturrets.upgrade_slot=Upgrades für den modularen Turm.
 text.openmodularturrets.base_max_range=Maximale Reichweite, in der Türme nach Zielen suchen.
 text.openmodularturrets.toggle_mode=Wechsle An/Aus-Modus
+text.openmodularturrets:turret_limit=Turm Limit
 
 text.openmodularturrets.flavour.expander.power.1=Jetzt verschiedene Geschmacksrichtungen!
 text.openmodularturrets.flavour.expander.power.2=Kinetische Expansion.
@@ -269,7 +263,6 @@ text.openmodularturrets.turret.ammo.ferro_slug=Diese fortschrittlich aussehende 
 text.openmodularturrets.turret.ammo.grenade=Eine schöne Granate für den Granatwerfer Turm..
 text.openmodularturrets.turret.ammo.rocket=Die Rakete kommt natürlich im Raketenwerfen zum Einsatz!
 
-text.openmodularturrets.status.ownership=Du besitzt diesen Turm nicht, oder hast dazu keine Berechtigung.
 text.openmodularturrets.status.warning=Du betrittst einen turmgesicherten Bereich. Weitergehen auf eigene Gefahr.
 
 text.openmodularturrets.death.attack.disposable=Very %s, much dead, such wow...
@@ -279,3 +272,4 @@ text.openmodularturrets.death.attack.grenade=%s muss wieder zusammengesetzt werd
 text.openmodularturrets.death.attack.rocket=%s fand die Rakete am Ende des Regenbogens.
 text.openmodularturrets.death.attack.laser=%s wurde verdampft.
 text.openmodularturrets.death.attack.ferroslug=%s wurde von einer Railgun gelöchert..
+

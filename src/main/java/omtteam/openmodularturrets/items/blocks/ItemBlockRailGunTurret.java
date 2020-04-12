@@ -46,6 +46,7 @@ public class ItemBlockRailGunTurret extends AbstractItemBlockBaseAddon {
                                 safeLocalize("text.openmodularturrets.turret.ammo.5"));
             tooltip.add(safeLocalize("text.openmodularturrets.tier_required") + ": " + TextFormatting.WHITE +
                                 safeLocalize("base.tier.5"));
+            tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + TextFormatting.WHITE + OMTConfig.TURRETS.railgun_turret.maxSimultaneous);
             tooltip.add("");
             tooltip.add(
                     TextFormatting.DARK_PURPLE + "--" + safeLocalize("text.openmodularturrets.damage.label") + "--");

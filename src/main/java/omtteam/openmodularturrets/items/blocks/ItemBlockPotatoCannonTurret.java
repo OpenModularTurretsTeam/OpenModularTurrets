@@ -46,6 +46,7 @@ public class ItemBlockPotatoCannonTurret extends AbstractItemBlockBaseAddon {
                                 safeLocalize("text.openmodularturrets.turret.ammo.6"));
             tooltip.add(safeLocalize("text.openmodularturrets.tier_required") + ": " + TextFormatting.WHITE +
                                 safeLocalize("base.tier.1"));
+            tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + TextFormatting.WHITE + OMTConfig.TURRETS.potato_cannon_turret.maxSimultaneous);
             tooltip.add("");
             tooltip.add(
                     TextFormatting.DARK_PURPLE + "--" + safeLocalize("text.openmodularturrets.damage.label") + "--");

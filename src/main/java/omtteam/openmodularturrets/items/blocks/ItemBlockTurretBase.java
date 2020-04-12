@@ -67,7 +67,7 @@ public class ItemBlockTurretBase extends ItemBlock {
             switch (stack.getMetadata()) {
                 case 0:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturret.energy.label") + "--");
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturrets.energy.label") + "--");
                     tooltip.add(safeLocalize("text.openmodularturrets.rf.max") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierOne.baseMaxCharge);
                     tooltip.add(safeLocalize("text.openmodularturrets.rf.io") + ": " + TextFormatting.WHITE +
@@ -75,12 +75,14 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add("");
                     tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("text.openmodularturrets.extras.label") + "--");
                     tooltip.add(safeLocalize("text.openmodularturrets.extras.addons.0"));
+                    tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + TextFormatting.WHITE
+                                        + OMTConfig.BASES.baseTierOne.baseMaxTurrets);
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.1"));
                     return;
                 case 1:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturret.energy.label") + "--");
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturrets.energy.label") + "--");
                     tooltip.add(safeLocalize("text.openmodularturrets.rf.max") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierTwo.baseMaxCharge);
                     tooltip.add(safeLocalize("text.openmodularturrets.rf.io") + ": " + TextFormatting.WHITE +
@@ -89,6 +91,8 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("text.openmodularturrets.extras.label") + "--");
                     tooltip.add(safeLocalize("text.openmodularturrets.extras.addons.2"));
                     tooltip.add(safeLocalize("text.openmodularturrets.extras.upgrade.1"));
+                    tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + TextFormatting.WHITE
+                                        + OMTConfig.BASES.baseTierTwo.baseMaxTurrets);
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.2"));
                     return;
@@ -103,12 +107,14 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("text.openmodularturrets.extras.label") + "--");
                     tooltip.add(safeLocalize("text.openmodularturrets.extras.addons.2"));
                     tooltip.add(safeLocalize("text.openmodularturrets.extras.upgrade.1"));
+                    tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + TextFormatting.WHITE
+                                        + OMTConfig.BASES.baseTierThree.baseMaxTurrets);
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.3"));
                     return;
                 case 3:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturret.energy.label") + "--");
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturrets.energy.label") + "--");
                     tooltip.add(safeLocalize("text.openmodularturrets.rf.max") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierFour.baseMaxCharge);
                     tooltip.add(safeLocalize("text.openmodularturrets.rf.io") + ": " + TextFormatting.WHITE +
@@ -117,12 +123,14 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("text.openmodularturrets.extras.label") + "--");
                     tooltip.add(safeLocalize("text.openmodularturrets.extras.addons.2"));
                     tooltip.add(safeLocalize("text.openmodularturrets.extras.upgrade.1"));
+                    tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + TextFormatting.WHITE
+                                        + OMTConfig.BASES.baseTierFour.baseMaxTurrets);
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.4"));
                     return;
                 case 4:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturret.energy.label") + "--");
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturrets.energy.label") + "--");
                     tooltip.add(safeLocalize("text.openmodularturrets.rf.max") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierFive.baseMaxCharge);
                     tooltip.add(safeLocalize("text.openmodularturrets.rf.io") + ": " + TextFormatting.WHITE +
@@ -131,6 +139,8 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add(TextFormatting.GREEN + "--" + safeLocalize("text.openmodularturrets.extras.label") + "--");
                     tooltip.add(safeLocalize("text.openmodularturrets.extras.addons.2"));
                     tooltip.add(safeLocalize("text.openmodularturrets.extras.upgrade.2"));
+                    tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + TextFormatting.WHITE
+                                        + OMTConfig.BASES.baseTierFive.baseMaxTurrets);
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.5a"));
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.5b"));

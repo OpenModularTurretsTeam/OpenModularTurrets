@@ -46,6 +46,7 @@ public class ItemBlockTeleporterTurret extends AbstractItemBlockBaseAddon {
                                 safeLocalize("text.openmodularturrets.turret.ammo.4"));
             tooltip.add(safeLocalize("text.openmodularturrets.tier_required") + ": " + TextFormatting.WHITE +
                                 safeLocalize("base.tier.4"));
+            tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + TextFormatting.WHITE + OMTConfig.TURRETS.teleporter_turret.maxSimultaneous);
             tooltip.add("");
             tooltip.add(
                     TextFormatting.DARK_PURPLE + "--" + safeLocalize("text.openmodularturrets.damage.label") + "--");

@@ -149,6 +149,7 @@ text.openmodularturrets.addon_slot=Addons (for more functions) for the modular t
 text.openmodularturrets.upgrade_slot=Upgrades for the modular turret.
 text.openmodularturrets.base_max_range=Max range for turrets, in blocks.
 text.openmodularturrets.toggle_mode=Toggle on/off modes
+text.openmodularturrets:turret_limit=Turret Limit
 
 text.openmodularturrets.flavour.expander.power.1=Now with flavour!
 text.openmodularturrets.flavour.expander.power.2=Kinetic expansion.

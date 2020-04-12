@@ -278,4 +278,5 @@ text.openmodularturrets.death.attack.blazingclay=%s got cooked to a juicy medium
 text.openmodularturrets.death.attack.grenade=%s may need some assembly.
 text.openmodularturrets.death.attack.rocket=%s found that rainbow connection in the form of a rocket.
 text.openmodularturrets.death.attack.laser=%s got disintegrated.
-text.openmodularturrets.death.attack.ferroslug=%s found atomized minerva.
+
+text.openmodularturrets:turret_limit=Turret Limittext.openmodularturrets.death.attack.ferroslug=%s found atomized minerva.

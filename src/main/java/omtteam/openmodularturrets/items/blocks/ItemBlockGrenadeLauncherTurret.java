@@ -46,6 +46,7 @@ public class ItemBlockGrenadeLauncherTurret extends AbstractItemBlockBaseAddon {
                                 safeLocalize("text.openmodularturrets.turret.ammo.2"));
             tooltip.add(safeLocalize("text.openmodularturrets.tier_required") + ": " + TextFormatting.WHITE +
                                 safeLocalize("base.tier.3"));
+            tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + TextFormatting.WHITE + OMTConfig.TURRETS.grenade_turret.maxSimultaneous);
             tooltip.add("");
             tooltip.add(
                     TextFormatting.DARK_PURPLE + "--" + safeLocalize("text.openmodularturrets.damage.label") + "--");

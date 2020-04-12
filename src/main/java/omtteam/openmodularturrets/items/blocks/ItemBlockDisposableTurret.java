@@ -46,6 +46,7 @@ public class ItemBlockDisposableTurret extends AbstractItemBlockBaseAddon {
                                 safeLocalize("text.openmodularturrets.turret.ammo.0"));
             tooltip.add(safeLocalize("text.openmodularturrets.tier_required") + ": " + TextFormatting.WHITE +
                                 safeLocalize("base.tier.1"));
+            tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + OMTConfig.TURRETS.disposable_turret.maxSimultaneous);
             tooltip.add("");
             tooltip.add(
                     TextFormatting.DARK_PURPLE + "--" + safeLocalize("text.openmodularturrets.damage.label") + "--");

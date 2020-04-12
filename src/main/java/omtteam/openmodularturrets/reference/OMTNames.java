@@ -131,6 +131,7 @@ public class OMTNames {
             public static final String BASE_MAX_RANGE = "text.openmodularturrets.base_max_range";
             public static final String TOGGLE_MODE = "text.openmodularturrets.toggle_mode";
             public static final String STATUS_WARNING = "text.openmodularturrets.status.warning";
+            public static final String TURRET_LIMIT = "text.openmodularturrets:turret_limit";
         }
     }
 
