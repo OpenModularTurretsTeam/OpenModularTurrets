@@ -4,41 +4,40 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import omtteam.openmodularturrets.entity.projectiles.GrenadeProjectile;
+import omtteam.openmodularturrets.entity.projectiles.PlasmaProjectile;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
 
 import javax.annotation.Nonnull;
 
-public class GrenadeLauncherTurretTileEntity extends ProjectileTurret {
-    public GrenadeLauncherTurretTileEntity() {
-        super(3);
+public class PlasmaLauncherTurretTileEntity extends ProjectileTurret {
+    public PlasmaLauncherTurretTileEntity() {
+        super(5);
     }
 
     @Override
     protected float getProjectileGravity() {
-        return 0.03F;
+        return 0.01F;
     }
 
     @Override
     public boolean requiresAmmo() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean requiresSpecificAmmo() {
-        return true;
+        return false;
     }
 
     @Override
     public ItemStack getAmmo() {
-        return new ItemStack(ModItems.ammoMetaItem, 1, 3);
+        return null;
     }
 
     @Override
     public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
-        return new GrenadeProjectile(world, ammo, this.getBaseFromWorld());
+        return new PlasmaProjectile(world, this.base);
     }
 
     @Override
@@ -49,6 +48,6 @@ public class GrenadeLauncherTurretTileEntity extends ProjectileTurret {
     @Nonnull
     @Override
     public SoundEvent getLaunchSoundEffect() {
-        return ModSounds.grenadeLaunchSound;
+        return ModSounds.plasmaLaunchSound;
     }
 }

@@ -26,6 +26,7 @@ public class ModSounds {
     public static SoundEvent relativisticLaunchSound;
     public static SoundEvent rocketLaunchSound;
     public static SoundEvent teleportLaunchSound;
+    public static SoundEvent plasmaLaunchSound;
     public static SoundEvent warningSound;
     public static SoundEvent amped;
 
@@ -43,6 +44,7 @@ public class ModSounds {
         laserLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "laser")).setRegistryName("openmodularturrets", "laser"), registry);
         potatoLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "potato")).setRegistryName("openmodularturrets", "potato"), registry);
         railgunLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "rail_gun")).setRegistryName("openmodularturrets", "rail_gun"), registry);
+        plasmaLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "plasma_launch")).setRegistryName("openmodularturrets", "plasma_launch"), registry);
         relativisticLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "relativistic")).setRegistryName("openmodularturrets", "relativistic"), registry);
         rocketLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "rocket")).setRegistryName("openmodularturrets", "rocket"), registry);
         teleportLaunchSound = registerSound(new SoundEvent(new ResourceLocation("openmodularturrets", "teleport")).setRegistryName("openmodularturrets", "teleport"), registry);

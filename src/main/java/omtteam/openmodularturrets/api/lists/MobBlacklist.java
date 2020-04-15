@@ -46,4 +46,8 @@ public class MobBlacklist {
         }
         return false;
     }
+
+    public static void clear() {
+        list.clear();
+    }
 }

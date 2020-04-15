@@ -17,7 +17,6 @@ public class TileEntityRenderers {
         final GrenadeLauncherTurretRenderer grenadeLauncherTurretRenderer = new GrenadeLauncherTurretRenderer();
         final LaserTurretRenderer laserTurretRenderer = new LaserTurretRenderer();
         final RailGunTurretRenderer railGunTurretRenderer = new RailGunTurretRenderer();
-
         final IncendiaryTurretRenderer incendiaryTurretRenderer = new IncendiaryTurretRenderer();
         final RelativisticTurretRenderer relativisticTurretRenderer = new RelativisticTurretRenderer();
         final TeleporterTurretRenderer teleporterTurretRenderer = new TeleporterTurretRenderer();
@@ -33,6 +32,7 @@ public class TileEntityRenderers {
                                                      grenadeLauncherTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(LaserTurretTileEntity.class, laserTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(RailGunTurretTileEntity.class, railGunTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(PlasmaLauncherTurretTileEntity.class, grenadeLauncherTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(IncendiaryTurretTileEntity.class, incendiaryTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(RelativisticTurretTileEntity.class, relativisticTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(TeleporterTurretTileEntity.class, teleporterTurretRenderer);

@@ -9,6 +9,8 @@ import omtteam.openmodularturrets.entity.projectiles.PotatoProjectile;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.init.ModSounds;
 
+import javax.annotation.Nonnull;
+
 public class PotatoCannonTurretTileEntity extends ProjectileTurret {
     public PotatoCannonTurretTileEntity() {
         super(1);
@@ -44,6 +46,7 @@ public class PotatoCannonTurretTileEntity extends ProjectileTurret {
         return new Integer[]{-5, -5, -5, 1, 10};
     }
 
+    @Nonnull
     @Override
     public SoundEvent getLaunchSoundEffect() {
         return ModSounds.potatoLaunchSound;

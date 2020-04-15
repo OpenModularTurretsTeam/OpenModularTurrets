@@ -16,8 +16,10 @@ import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
 
+import javax.annotation.Nonnull;
+
 public class RailGunTurretTileEntity extends RayTracingTurret {
-    private ColorOM color = new ColorOM(1F, 0.5F, 0, 0.2F);
+    private final ColorOM color = new ColorOM(1F, 0.5F, 0, 0.2F);
 
     public RailGunTurretTileEntity() {
         super(5);
@@ -43,6 +45,7 @@ public class RailGunTurretTileEntity extends RayTracingTurret {
         return new Integer[]{10, 10, 20, 40, 10};
     }
 
+    @Nonnull
     @Override
     public SoundEvent getLaunchSoundEffect() {
         return ModSounds.railgunLaunchSound;

@@ -56,7 +56,7 @@ public class RocketProjectile extends TurretProjectile {
 
                 float speed = 0.24F;
                 this.shoot(d0, d1, d2, speed, 0.0F);
-            } else if (OMTConfig.TURRETS.canRocketsHome && target == null) {
+            } else if (OMTConfig.TURRETS.canRocketsHome) {
                 this.setDead();
             }
         }
@@ -68,27 +68,33 @@ public class RocketProjectile extends TurretProjectile {
         }
     }
 
-    private void damageEntityLivingBase(EntityLivingBase mob) {
-        int damage = OMTConfig.TURRETS.rocket_turret.baseDamage;
+    private void explode() {
+        if (!getEntityWorld().isRemote) {
+            float strength = OMTConfig.TURRETS.canRocketsDestroyBlocks ? 2.3F : 0.1F;
+            getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
+            AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
+                                                   this.posX + 5, this.posY + 5, this.posZ + 5);
+            List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-        if (isAmped) {
-            damage += ((int) mob.getHealth() * (getDamageAmpBonus() * amp_level));
-        }
+            for (EntityLivingBase entity : targets) {
+                int damage = OMTConfig.TURRETS.rocket_turret.baseDamage;
 
-        if (mob instanceof EntityPlayer) {
-            if (canDamagePlayer((EntityPlayer) mob)) {
-                mob.attackEntityFrom(new NormalDamageSource("rocket", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
-                mob.hurtResistantTime = -1;
+                if (isAmped) {
+                    damage += ((int) entity.getHealth() * (getDamageAmpBonus() * amp_level));
+                }
+
+                if (OMTConfig.TURRETS.canRocketsHurtEnderDragon && entity instanceof EntityDragon) {
+                    setTagsForTurretHit(entity);
+                    (entity).setHealth((entity).getHealth() - damage);
+                    entity.hurtResistantTime = -1;
+                } else if (canDamageEntity(entity)) {
+                    if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
+                    entity.attackEntityFrom(new NormalDamageSource("rocket", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
+                    entity.hurtResistantTime = -1;
+                }
             }
         }
-
-        if (OMTConfig.TURRETS.canRocketsHurtEnderDragon && mob instanceof EntityDragon) {
-            (mob).setHealth((mob).getHealth() - damage);
-            mob.hurtResistantTime = -1;
-        } else if (canDamageEntity(mob)) {
-            mob.attackEntityFrom(new NormalDamageSource("rocket", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
-            mob.hurtResistantTime = -1;
-        }
+        this.setDead();
     }
 
     @Override
@@ -103,36 +109,14 @@ public class RocketProjectile extends TurretProjectile {
             return;
         }
 
-        if (!getEntityWorld().isRemote) {
-            float strength = OMTConfig.TURRETS.canRocketsDestroyBlocks ? 2.3F : 0.1F;
-            getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
-            AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
-                                                   this.posX + 5, this.posY + 5, this.posZ + 5);
-            List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
-
-            for (EntityLivingBase mob : targets) {
-                damageEntityLivingBase(mob);
-                setTagsForTurretHit(mob);
-            }
-        }
-        this.setDead();
+        explode();
     }
 
     @Override
     public void onHitEntity(Entity entity) {
         if (!getEntityWorld().isRemote && !(entity instanceof EntityPlayer && !canDamagePlayer((EntityPlayer) entity))
                 && canDamageEntity(entity) && !(entity instanceof TurretProjectile)) {
-            float strength = OMTConfig.TURRETS.canRocketsDestroyBlocks ? 2.3F : 0.1F;
-            getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
-            AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
-                                                   this.posX + 5, this.posY + 5, this.posZ + 5);
-            List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
-
-            for (EntityLivingBase mob : targets) {
-                damageEntityLivingBase(mob);
-                setTagsForTurretHit(mob);
-            }
-            this.setDead();
+            explode();
         }
     }
 

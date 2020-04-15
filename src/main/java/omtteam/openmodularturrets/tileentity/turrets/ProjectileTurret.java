@@ -47,7 +47,6 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
         double d1 = target.posY + (double) target.height * 0.5F - (this.pos.getY() + 0.5);
         double d2 = target.posZ - (this.pos.getZ() + 0.5);
         if (ModCompatibility.ValkyrienWarfareLoaded) {
-
             IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
                                                                                                         getPos());
             if (physicsEntity != null) {
@@ -63,9 +62,9 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
                 speedZ = targetSpeedInShip.z;
             }
         }
+
         double dist = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-        double inaccuracy = (this.getBaseTurretAccuracy() / 10) * (1 - TurretHeadUtil.getAccuraccyUpgrades(base, this))
-                * (1 + TurretHeadUtil.getScattershotUpgrades(base));
+        double inaccuracy = (this.getActualTurretAccuracyDeviation()) / 20D;
 
         // Adjust new firing coordinate according to target speed
         double time = dist / (this.getProjectileGravity() == 0.00F ? 3.0 : 1.6);
@@ -105,14 +104,14 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
         ItemStack ammo = getAmmoStack();
 
         // Is there ammo?
-        if (ammo == ItemStack.EMPTY && this.requiresAmmo()) {
+        if (ammo == ItemStack.EMPTY && this.requiresAmmo() && OMTConfig.TURRETS.doTurretsNeedAmmo) {
             return false;
         }
 
         base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot(), null);
 
-        for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-            double accuracy = this.getActualTurretAccuracy() / 20D;
+        for (int i = 0; i <= this.cachedScattershot; i++) {
+            double accuracy = this.getActualTurretAccuracyDeviation() / 20D;
             TurretProjectile projectile = this.createProjectile(this.getWorld(), target, ammo);
             projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
             if (projectile.gravity == 0.00F) {
@@ -140,12 +139,12 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
     /**
      * Attempts to create and throw a projectile
      */
-    protected void shootProjectile(double adjustedX, double adjustedY, double adjustedZ, float speedFactor, float accuracy, ItemStack ammo) {
+    protected void shootProjectile(double adjustedX, double adjustedY, double adjustedZ, float speedFactor, float inaccuracy, ItemStack ammo) {
         // Consume energy
         base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot(), null);
 
         // Create one projectile per scatter-shot upgrade
-        for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
+        for (int i = 0; i <= this.cachedScattershot; i++) {
             // Create a projectile, consuming ammo if applicable
             TurretProjectile projectile = this.createProjectile(this.getWorld(), this.target, ammo);
 
@@ -166,7 +165,7 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
             }
 
             // Set projectile heading
-            projectile.shoot(adjustedX, adjustedY, adjustedZ, speedFactor, accuracy);
+            projectile.shoot(adjustedX, adjustedY, adjustedZ, speedFactor, inaccuracy);
 
             // Play sounds
             if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
@@ -175,7 +174,7 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
                 projectile.isAmped = true;
             }
             this.getWorld().playSound(null, this.pos, this.getLaunchSoundEffect(), SoundCategory.BLOCKS,
-                                      (float) OMTConfig.TURRETS.turretSoundVolume, new Random().nextFloat() + 0.5F);
+                                      (float) OMTConfig.TURRETS.turretSoundVolume, RandomUtil.random.nextFloat() + 0.5F);
 
             // Spawn entity
             this.getWorld().spawnEntity(projectile);

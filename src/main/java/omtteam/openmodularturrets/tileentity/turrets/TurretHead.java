@@ -49,11 +49,15 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     protected double targetSpeedX = 0;
     protected double targetSpeedY = 0;
     protected double targetSpeedZ = 0;
+    protected double cachedAccuracy = 0D;
+    protected int cachedScattershot = 0;
+    private boolean resetCaches;
     Integer[] priorities;
     private EnumFacing turretBase;
 
     public TurretHead(int turretTier) {
         this.turretTier = turretTier;
+        this.resetCaches = true;
     }
 
     @Nullable
@@ -201,6 +205,11 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         return base;
     }
 
+    // If the turret is still on cooldown (from previous shot/activation)
+    protected boolean isOnCooldown() {
+        return (ticks < (this.getTurretBaseFireRate() / (1 + TurretHeadUtil.getFireRateUpgrades(base, this))));
+    }
+
     public boolean getAutoFire() {
         return autoFire;
     }
@@ -217,7 +226,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         return this.getTurretType().getSettings().baseFireRate;
     }
 
-    public double getBaseTurretAccuracy() {
+    public double getBaseTurretAccuracyDeviation() {
         return this.getTurretType().getSettings().baseAccuracyDeviation;
     }
 
@@ -229,10 +238,18 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         return this.getTurretType().getSettings().damageAmp;
     }
 
-    public double getActualTurretAccuracy() {
-        return 100F - (100F - this.getBaseTurretAccuracy())
-                * (1.0F + TurretHeadUtil.getAccuraccyUpgrades(this.getBase(), this))
-                * (1.0F - (TurretHeadUtil.getScattershotUpgrades(this.getBase())) / 25F);
+    public double getActualTurretAccuracyDeviation() {
+        if (this.resetCaches) {
+            cachedAccuracy = (this.getBaseTurretAccuracyDeviation())
+                    / Math.pow(1 + (TurretHeadUtil.getAccuracyUpgrades(this.getBase(), this)), 1.5D)
+                    * (1 + TurretHeadUtil.getScattershotUpgrades(this.getBase()) / 10F);
+        }
+
+        return cachedAccuracy;
+    }
+
+    public void triggerResetCaches() {
+        this.resetCaches = true;
     }
 
     /**
@@ -272,7 +289,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
     protected ItemStack getAmmoStack() {
         ItemStack ammo = ItemStack.EMPTY;
-        if (this.requiresAmmo()) {
+        if (this.requiresAmmo() && OMTConfig.TURRETS.doTurretsNeedAmmo) {
             if (this.requiresSpecificAmmo()) {
                 for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
                     ammo = TurretHeadUtil.getSpecificItemStackFromBase(base, this.getAmmo(), this);
@@ -292,12 +309,19 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         return ammo;
     }
 
-    protected boolean updateChecks() {
-        if (!setSide()) return false;
+    public void update() {
+        if (!setSide()) return;
         if (this.base == null) {
             this.base = getBaseFromWorld();
         }
+        if (this.resetCaches) {
+            this.cachedScattershot = TurretHeadUtil.getScattershotUpgrades(this.getBase());
+            this.getActualTurretAccuracyDeviation();
+            this.resetCaches = false;
+        }
+    }
 
+    protected boolean updateChecks() {
         ticks++;
 
         // BASE IS OKAY
@@ -331,7 +355,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             }
 
             // has cooldown passed?
-            if (ticks < (this.getTurretBaseFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
+            if (isOnCooldown()) {
                 return false;
             }
 
@@ -359,7 +383,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
 
     protected void targetingChecks() {
         // if no target or target has died, acquire a new target.
-        if (this.target == null || this.target.isDead || this.getWorld().getEntityByID(this.target.getEntityId()) == null || this.target.getHealth() <= 0.0F) {
+        if (this.target == null || this.target.isDead || this.getWorld().getEntityByID(this.target.getEntityId()) == null || this.target.getHealth() <= 0.0F || !TurretTargetingUtils.canSeeTargetFromPos(this, target)) {
             this.target = getTarget();
         }
     }

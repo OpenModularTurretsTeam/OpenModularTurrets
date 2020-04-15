@@ -63,7 +63,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
         double d0 = targetPos.x;
         double d1 = targetPos.y + target.getEyeHeight();
         double d2 = targetPos.z;
-        shootRay(d0, d1, d2, this.getActualTurretAccuracy());
+        shootRay(d0, d1, d2, this.getActualTurretAccuracyDeviation());
     }
 
     @Override
@@ -73,7 +73,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
                                      this.getPos().getY() + 0.6D,
                                      this.getPos().getZ() + 0.5D);
         Vec3d result = baseVector.add(direction);
-        shootRay(result.x, result.y, result.z, this.getActualTurretAccuracy());
+        shootRay(result.x, result.y, result.z, this.getActualTurretAccuracyDeviation());
         return true;
     }
 
@@ -83,7 +83,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
         this.applyLaunchEffects();
 
         // Create one ray per scatter-shot upgrade
-        for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
+        for (int i = 0; i <= this.cachedScattershot; i++) {
             double xDev, yDev, zDev;
             boolean hit = false;
             // vector points at the target, baseVector is the origin of the raytrace
@@ -99,13 +99,13 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
                 }
             }
             // Calculate deviation based on targets height and its distance to the turret
-            double deviationModifier = 1D * (target.height < 0.5 ? 1.5D : 1D)
-                    * ((vector.distanceTo(baseVector) * 0.5D
+            double deviationModifier = 10D * (target.height < 0.5 ? 1.5D : 1D)
+                    * ((vector.distanceTo(baseVector) * 0.2D
                     / (this.getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(base, this))) + 0.3D);
 
-            xDev = RandomUtil.random.nextGaussian() * 0.035D / accuracy * deviationModifier;
-            yDev = RandomUtil.random.nextGaussian() * 0.035D / accuracy * deviationModifier;
-            zDev = RandomUtil.random.nextGaussian() * 0.035D / accuracy * deviationModifier;
+            xDev = RandomUtil.random.nextGaussian() * 0.003D * deviationModifier * accuracy;
+            yDev = RandomUtil.random.nextGaussian() * 0.003D * deviationModifier * accuracy;
+            zDev = RandomUtil.random.nextGaussian() * 0.003D * deviationModifier * accuracy;
 
             vector = vector.addVector(xDev, yDev, zDev);
             baseVector = baseVector.add(vector.subtract(baseVector).normalize().scale(0.8D));

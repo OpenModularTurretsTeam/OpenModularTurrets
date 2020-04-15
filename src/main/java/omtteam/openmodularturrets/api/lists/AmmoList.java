@@ -40,4 +40,8 @@ public class AmmoList {
         }
         return false;
     }
+
+    public static void clear() {
+        list.clear();
+    }
 }

@@ -9,6 +9,8 @@ import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
 
+import javax.annotation.Nonnull;
+
 public class IncendiaryTurretTileEntity extends ProjectileTurret {
     public IncendiaryTurretTileEntity() {
         super(2);
@@ -16,7 +18,7 @@ public class IncendiaryTurretTileEntity extends ProjectileTurret {
 
     @Override
     protected float getProjectileGravity() {
-        return 0.00F;
+        return 0.03F;
     }
 
     @Override
@@ -44,6 +46,7 @@ public class IncendiaryTurretTileEntity extends ProjectileTurret {
         return new Integer[]{10, -5, -2, 10, 10};
     }
 
+    @Nonnull
     @Override
     public SoundEvent getLaunchSoundEffect() {
         return ModSounds.incendiaryLaunchSound;

@@ -62,6 +62,9 @@ public class OMTUtil {
 
     public static boolean canDamageEntity(Entity entity, TurretBase base) {
         if (entity != null && !(entity instanceof TurretProjectile)) {
+            if (entity instanceof EntityPlayer) {
+                return canDamagePlayer((EntityPlayer) entity, base);
+            }
             if (entity instanceof EntityTameable) {
                 EntityLivingBase entityOwner = ((EntityTameable) entity).getOwner();
                 if (entityOwner instanceof EntityPlayer) {

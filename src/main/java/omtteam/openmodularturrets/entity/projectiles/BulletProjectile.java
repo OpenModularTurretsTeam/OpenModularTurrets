@@ -52,7 +52,6 @@ public class BulletProjectile extends TurretProjectile {
     @Override
     public void onHitEntity(Entity entity) {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile) && !this.isDead) {
-
             int damage = OMTConfig.TURRETS.machine_gun_turret.baseDamage;
 
             if (isAmped) {
@@ -62,16 +61,8 @@ public class BulletProjectile extends TurretProjectile {
                 }
             }
 
-            if (entity instanceof EntityPlayer) {
-                if (canDamagePlayer((EntityPlayer) entity)) {
-                    entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
-                    entity.hurtResistantTime = -1;
-                    playSound();
-                } else {
-                    return;
-                }
-            } else if (canDamageEntity(entity)) {
-                setTagsForTurretHit(entity);
+            if (canDamageEntity(entity)) {
+                if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
                 entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
                 entity.hurtResistantTime = -1;
             } else {

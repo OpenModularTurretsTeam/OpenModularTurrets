@@ -6,37 +6,37 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.api.lists.TurretList;
-import omtteam.openmodularturrets.items.blocks.ItemBlockMachineGunTurret;
+import omtteam.openmodularturrets.items.blocks.ItemBlockPlasmaLauncherTurret;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.tileentity.turrets.GunTurretTileEntity;
+import omtteam.openmodularturrets.tileentity.turrets.PlasmaLauncherTurretTileEntity;
 import omtteam.openmodularturrets.turret.TurretType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-public class BlockGunTurret extends BlockAbstractTurretHead {
-    public BlockGunTurret() {
+public class BlockPlasmaTurret extends BlockAbstractTurretHead {
+    public BlockPlasmaTurret() {
         super();
 
-        this.setUnlocalizedName(OMTNames.Blocks.machineGunTurret);
-        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.machineGunTurret);
+        this.setUnlocalizedName(OMTNames.Blocks.plasmaTurret);
+        this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.plasmaTurret);
     }
 
     @Override
     public ItemBlock getItemBlock(Block block) {
-        return new ItemBlockMachineGunTurret(block);
+        return new ItemBlockPlasmaLauncherTurret(block);
     }
 
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return new GunTurretTileEntity();
+        return new PlasmaLauncherTurretTileEntity();
     }
 
     @Override
     public TurretType getTurretType() {
-        return TurretList.getTurretType(OMTNames.Blocks.machineGunTurret);
+        return TurretList.getTurretType(OMTNames.Blocks.plasmaTurret);
     }
 }

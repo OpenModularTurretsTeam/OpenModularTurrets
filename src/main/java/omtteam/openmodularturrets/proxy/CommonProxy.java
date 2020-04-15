@@ -34,7 +34,6 @@ public class CommonProxy {
     }
 
     public void init() {
-        //OMTRecipeHandler.initRecipes();
         initEntityRenderers();
         OMTFakePlayer.init();
     }

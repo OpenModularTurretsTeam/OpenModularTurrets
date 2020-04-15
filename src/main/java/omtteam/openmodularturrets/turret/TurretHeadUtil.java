@@ -210,7 +210,11 @@ public class TurretHeadUtil {
 
     public static int getAmmoLevel(TurretHead turret, TurretBase base) {
         int result = 0;
+
         ItemStack ammoStackRequired = turret.getAmmo();
+        if (!OMTConfig.TURRETS.doTurretsNeedAmmo && ammoStackRequired != null) {
+            return Integer.MAX_VALUE;
+        }
         if (ammoStackRequired == null) {
             return base.getEnergyStored(EnumFacing.DOWN) / turret.getTurretBasePowerUsage();
         }
@@ -405,7 +409,7 @@ public class TurretHeadUtil {
         return value;
     }
 
-    public static float getAccuraccyUpgrades(TurretBase base, TurretHead turretHead) {
+    public static float getAccuracyUpgrades(TurretBase base, TurretHead turretHead) {
         float accuracy = 0.0F;
         int tier = base.getTier();
 

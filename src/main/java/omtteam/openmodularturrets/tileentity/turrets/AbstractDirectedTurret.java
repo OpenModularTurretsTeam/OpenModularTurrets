@@ -149,10 +149,7 @@ public abstract class AbstractDirectedTurret extends TurretHead {
 
     @Override
     public void update() {
-        if (!setSide()) return;
-        if (this.base == null) {
-            this.base = getBaseFromWorld();
-        }
+        super.update();
 
         //Is the turret head block still there?
         if (!(this.getWorld().getBlockState(this.getPos()).getBlock() instanceof BlockAbstractTurretHead)) {
@@ -226,13 +223,14 @@ public abstract class AbstractDirectedTurret extends TurretHead {
 
         if (target != null && !target.isDead || this.autoFire) {
             // has cooldown passed?
-            if (this.ticks < (this.getTurretBaseFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
+            if (isOnCooldown()) {
+                int baseFireRate = this.getTurretBaseFireRate();
                 return;
             }
 
             // Is there ammo?
             ItemStack ammo = getAmmoStack();
-            if (ammo == ItemStack.EMPTY && this.requiresAmmo()) {
+            if (ammo == ItemStack.EMPTY && this.requiresAmmo() && OMTConfig.TURRETS.doTurretsNeedAmmo) {
                 //TODO: Play some kind of clicking sound?
                 return;
             }

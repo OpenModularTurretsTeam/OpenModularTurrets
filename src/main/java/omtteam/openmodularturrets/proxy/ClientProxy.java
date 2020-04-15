@@ -94,6 +94,9 @@ public class ClientProxy extends CommonProxy {
         if (OMTConfig.TURRETS.potato_cannon_turret.enabled) {
             ModelLoader.setCustomStateMapper(ModBlocks.potatoCannonTurret, ignoreConcealed);
         }
+        if (OMTConfig.TURRETS.plasma_turret.enabled) {
+            ModelLoader.setCustomStateMapper(ModBlocks.plasmaTurret, ignoreConcealed);
+        }
         ModelLoaderRegistry.registerLoader(new TurretBaseBakedModel.ModelLoader());
         ModelLoader.setCustomStateMapper(ModBlocks.turretBase, new TurretBaseBakedModel.Statemapper());
 

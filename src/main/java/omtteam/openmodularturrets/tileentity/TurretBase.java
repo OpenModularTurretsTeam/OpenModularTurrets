@@ -67,6 +67,7 @@ import static omtteam.omlib.compatibility.OMLibModCompatibility.ComputerCraftLoa
 import static omtteam.omlib.compatibility.OMLibModCompatibility.OpenComputersLoaded;
 import static omtteam.omlib.util.player.PlayerUtil.getPlayerUUID;
 import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntities;
+import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntitiesByClass;
 
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "computercraft")}
@@ -86,7 +87,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private int playerKills;
     private IBaseController controller;
     private OMLibNetwork network;
-    private List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
+    private final List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
 
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
         super();
@@ -396,6 +397,12 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
             }
         }
         this.targetingSettings.setMaxRange(maxRange);
+    }
+
+    public void turretResetCaches() {
+        for (TurretHead turretHead : getTouchingTileEntitiesByClass(this.getWorld(), this.getPos(), TurretHead.class)) {
+            turretHead.triggerResetCaches();
+        }
     }
 
     // Getters and Setters

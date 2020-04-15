@@ -60,7 +60,6 @@ public class TurretBaseContainer extends Container {
             addSlotToContainer(new UpgradeSlot(base.getInventory(), 12, 92, 52));
         }
 
-        int ammoSlotStart = 100, ammoSlotEnd = 0, addonSlotStart = 100, addonSlotEnd = 0, upgSlotStart = 100, upgSlotEnd = 0;
         // Determine the slot range for each type( According to the class constructor )
         for (int i = slotStart; i < this.inventorySlots.size(); i++) {
             Class slotClass = this.getSlot(i).getClass();
@@ -108,6 +107,7 @@ public class TurretBaseContainer extends Container {
                 } else if (stackInSlot.getItem() instanceof UpgradeMetaItem) {
                     if (!mergeItemStackWithStackLimit(stackInSlot, upgSlotStart, upgSlotEnd, false, this)) {
                         base.updateMaxRange();
+                        base.turretResetCaches();
                         return ItemStack.EMPTY;
                     }
                 } else {
@@ -120,6 +120,7 @@ public class TurretBaseContainer extends Container {
                 if (!mergeItemStackWithStackLimit(stackInSlot, 0, slotStart, false, this)) {
                     slotObject.onSlotChanged();
                     base.updateMaxRange();
+                    base.turretResetCaches();
                     return ItemStack.EMPTY;
                 }
             }
@@ -130,6 +131,7 @@ public class TurretBaseContainer extends Container {
                 slotObject.onSlotChanged();
             }
             base.updateMaxRange();
+            base.turretResetCaches();
 
             if (getStackSize(stackInSlot) == getStackSize(stack)) {
                 slotObject.onSlotChanged();
@@ -145,6 +147,7 @@ public class TurretBaseContainer extends Container {
         super.putStackInSlot(slotID, stack);
         if (slotID >= upgSlotStart && slotID <= upgSlotEnd) {
             base.updateMaxRange();
+            base.turretResetCaches();
         }
     }
 
@@ -157,6 +160,7 @@ public class TurretBaseContainer extends Container {
             }
         }
         base.updateMaxRange();
+        base.turretResetCaches();
         super.detectAndSendChanges();
     }
 }

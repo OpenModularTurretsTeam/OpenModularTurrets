@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -37,7 +36,7 @@ public class GrenadeProjectile extends TurretProjectile {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (ticksExisted >= 35) {
+        if (ticksExisted >= 39) {
             if (!getEntityWorld().isRemote) {
                 float strength = OMTConfig.TURRETS.canGrenadesDestroyBlocks ? 1.4F : 0.1F;
                 getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
@@ -45,26 +44,22 @@ public class GrenadeProjectile extends TurretProjectile {
                                                        this.posX + 3, this.posY + 3, this.posZ + 3);
                 List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-                for (EntityLivingBase mob : targets) {
+                for (EntityLivingBase entity : targets) {
 
                     int damage = OMTConfig.TURRETS.grenade_turret.baseDamage;
 
                     if (isAmped) {
-                        damage += ((int) mob.getHealth() * (getDamageAmpBonus() * amp_level));
+                        damage += ((int) entity.getHealth() * (getDamageAmpBonus() * amp_level));
                     }
-                    setTagsForTurretHit(mob);
 
-                    if ((mob instanceof EntityPlayer && canDamagePlayer((EntityPlayer) mob)) || canDamageEntity(mob)) {
-                        mob.attackEntityFrom(new NormalDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage * 0.9F);
-                        mob.attackEntityFrom(new ArmorBypassDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage * 0.1F);
-                        mob.hurtResistantTime = -1;
+                    if (canDamageEntity(entity)) {
+                        if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
+                        entity.attackEntityFrom(new NormalDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage * 0.9F);
+                        entity.attackEntityFrom(new ArmorBypassDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage * 0.1F);
+                        entity.hurtResistantTime = -1;
                     }
                 }
                 this.setDead();
-            }
-
-            for (int i = 0; i <= 20; i++) {
-                getEntityWorld().spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, 1.0D, 1.0D, 1.0D);
             }
         }
     }
@@ -91,13 +86,13 @@ public class GrenadeProjectile extends TurretProjectile {
         if (hit) {
             return;
         }
-        if ((entity instanceof EntityPlayer && canDamagePlayer((EntityPlayer) entity)) || canDamageEntity(entity)) {
-            this.motionX = this.motionX * 0.4F;
+        if (canDamageEntity(entity)) {
+            this.motionX = this.motionX * 0.2F;
             this.motionY = this.motionY * 1.2F;
-            this.motionZ = this.motionZ * 0.4F;
+            this.motionZ = this.motionZ * 0.2F;
             this.markVelocityChanged();
             this.hit = true;
-            this.ticksExisted = 32;
+            this.ticksExisted = 30;
         }
     }
 

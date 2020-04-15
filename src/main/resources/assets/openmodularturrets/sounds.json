@@ -160,5 +160,14 @@
         "stream": false
       }
     ]
+  },
+  "plasma_launch": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:plasma_launch",
+        "stream": false
+      }
+    ]
   }
 }

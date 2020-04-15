@@ -20,7 +20,7 @@ public class TENameFix implements IFixableData {
         builder.put("minecraft:" + OMTNames.Blocks.disposableItemTurret, Reference.MOD_ID + ":" + OMTNames.Blocks.disposableItemTurret);
         builder.put("minecraft:" + OMTNames.Blocks.potatoCannonTurret, Reference.MOD_ID + ":" + OMTNames.Blocks.potatoCannonTurret);
         builder.put("minecraft:" + OMTNames.Blocks.rocketTurret, Reference.MOD_ID + ":" + OMTNames.Blocks.rocketTurret);
-        builder.put("minecraft:" + OMTNames.Blocks.gunTurret, Reference.MOD_ID + ":" + OMTNames.Blocks.gunTurret);
+        builder.put("minecraft:" + OMTNames.Blocks.machineGunTurret, Reference.MOD_ID + ":" + OMTNames.Blocks.machineGunTurret);
         builder.put("minecraft:" + OMTNames.Blocks.grenadeTurret, Reference.MOD_ID + ":" + OMTNames.Blocks.grenadeTurret);
         builder.put("minecraft:" + OMTNames.Blocks.laserTurret, Reference.MOD_ID + ":" + OMTNames.Blocks.laserTurret);
         builder.put("minecraft:" + OMTNames.Blocks.lever, Reference.MOD_ID + ":" + OMTNames.Blocks.lever);

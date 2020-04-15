@@ -18,9 +18,10 @@ public class RelativisticTurretTileEntity extends TurretHead {
     @SuppressWarnings("ConstantConditions")
     @Override
     public void update() {
+        super.update();
         if (this.updateChecks()) {
-            (target).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 3, false, true));
-            (target).addPotionEffect(new PotionEffect(Potion.getPotionById(18), 200, 3, false, true));
+            target.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 3, false, true));
+            target.addPotionEffect(new PotionEffect(Potion.getPotionById(18), 200, 3, false, true));
             this.getWorld().playSound(null, this.getPos(), this.getLaunchSoundEffect(), SoundCategory.BLOCKS, 0.6F, 1.0F);
             target = null;
         }

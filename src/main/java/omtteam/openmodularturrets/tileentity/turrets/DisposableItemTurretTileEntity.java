@@ -8,6 +8,8 @@ import omtteam.openmodularturrets.entity.projectiles.DisposableTurretProjectile;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.init.ModSounds;
 
+import javax.annotation.Nonnull;
+
 public class DisposableItemTurretTileEntity extends ProjectileTurret {
     public DisposableItemTurretTileEntity() {
         super(1);
@@ -43,6 +45,7 @@ public class DisposableItemTurretTileEntity extends ProjectileTurret {
         return new Integer[]{5, 5, -5, 1, 10};
     }
 
+    @Nonnull
     @Override
     public SoundEvent getLaunchSoundEffect() {
         return ModSounds.disposableLaunchSound;

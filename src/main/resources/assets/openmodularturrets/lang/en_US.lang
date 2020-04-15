@@ -52,6 +52,7 @@ tile.grenade_turret.name=Grenade Launcher Turret
 tile.relativistic_turret.name=Relativistic Turret
 tile.laser_turret.name=Laser Turret
 tile.rail_gun_turret.name=Rail Gun Turret
+tile.plasma_turret.name=Plasma Launcher Turret
 tile.lever_block.name=Basic Turret Base Crank
 tile.expander_power_tier_one.name=Base Power Expander (Tier 1)
 tile.expander_power_tier_two.name=Base Power Expander (Tier 2)
@@ -184,6 +185,7 @@ text.openmodularturrets.flavour.turret.7=Flaming Disjuncture.
 text.openmodularturrets.flavour.turret.8=Point of reference.
 text.openmodularturrets.flavour.turret.9a=It's like long strands of spaghetti,
 text.openmodularturrets.flavour.turret.9b=but in 11 dimensions.
+text.openmodularturrets.flavour.turret.plasma=Hot air -> stuff's on fire.
 
 text.openmodularturrets.turret.accuracy.low=Low
 text.openmodularturrets.turret.accuracy.medium=Medium

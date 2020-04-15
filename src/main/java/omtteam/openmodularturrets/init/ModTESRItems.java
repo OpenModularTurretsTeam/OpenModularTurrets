@@ -56,6 +56,10 @@ public class ModTESRItems {
             ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.railGunTurret), 0, RailGunTurretTileEntity.class);
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.railGunTurret), 0, new ModelResourceLocation(ModBlocks.railGunTurret.getRegistryName(), "inventory"));
         }
+        if (OMTConfig.TURRETS.plasma_turret.enabled) {
+            ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.plasmaTurret), 0, PlasmaLauncherTurretTileEntity.class);
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.plasmaTurret), 0, new ModelResourceLocation(ModBlocks.grenadeLauncherTurret.getRegistryName(), "inventory"));
+        }
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.leverBlock), 0, LeverTileEntity.class);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.leverBlock), 0, new ModelResourceLocation(ModBlocks.leverBlock.getRegistryName(), "inventory"));
     }

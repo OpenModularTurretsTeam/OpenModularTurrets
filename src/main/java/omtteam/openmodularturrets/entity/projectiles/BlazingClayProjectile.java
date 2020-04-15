@@ -49,19 +49,13 @@ public class BlazingClayProjectile extends TurretProjectile {
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             int damage = OMTConfig.TURRETS.incendiary_turret.baseDamage;
-            for (Entity mob : targets) {
+            for (Entity entity : targets) {
 
-                if (mob instanceof EntityPlayer) {
-                    if (canDamagePlayer((EntityPlayer) mob)) {
-                        mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
-                        mob.hurtResistantTime = -1;
-                        mob.setFire(5);
-                        playSound();
-                    }
-                } else if (canDamageEntity(mob)) {
-                    mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
-                    mob.hurtResistantTime = -1;
-                    mob.setFire(5);
+                if (canDamageEntity(entity)) {
+                    if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
+                    entity.attackEntityFrom(new NormalDamageSource("blazing_clay", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
+                    entity.hurtResistantTime = -1;
+                    entity.setFire(5);
                     playSound();
                 }
             }

@@ -114,4 +114,11 @@ public class OMTEventHandler {
             event.setCanceled(true);
         }
     }
+
+    @SubscribeEvent
+    public void configReloadEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (event.getModID().equalsIgnoreCase(Reference.MOD_ID)) {
+            ConfigManager.sync(Reference.MOD_ID, Config.Type.INSTANCE);
+        }
+    }
 }

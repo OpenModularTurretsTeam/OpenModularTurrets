@@ -68,7 +68,6 @@ public class PotatoProjectile extends TurretProjectile {
     @Override
     public void onHitEntity(Entity entity) {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile) && !this.isDead) {
-
             int damage = OMTConfig.TURRETS.potato_cannon_turret.baseDamage;
 
             if (isAmped) {
@@ -78,16 +77,9 @@ public class PotatoProjectile extends TurretProjectile {
                 }
             }
 
-            if (entity instanceof EntityPlayer) {
-                if (canDamagePlayer((EntityPlayer) entity)) {
-                    entity.attackEntityFrom(new NormalDamageSource("disposable", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
-                    entity.hurtResistantTime = -1;
-                } else {
-                    return;
-                }
-            } else if (canDamageEntity(entity)) {
-                setTagsForTurretHit(entity);
-                entity.attackEntityFrom(new NormalDamageSource("disposable", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
+            if (canDamageEntity(entity)) {
+                if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
+                entity.attackEntityFrom(new NormalDamageSource("potato", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
                 entity.hurtResistantTime = -1;
             } else {
                 return;

@@ -171,10 +171,10 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
             probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": \u00A7F"
                                    + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * getAmpLevel(turret.getBase())) + "%", probeInfo.defaultTextStyle());
             probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.ACCURACY) + ": \u00A7F"
-                                   + String.format("%.2f", Math.min(100F, 100F - turret.getActualTurretAccuracy())) + "%", probeInfo.defaultTextStyle());
+                                   + String.format("%.2f", Math.min(100F, 100F - turret.getActualTurretAccuracyDeviation())) + "%", probeInfo.defaultTextStyle());
             probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": \u00A7F"
                                    + String.format("%.2f", 20F / (turret.getTurretBaseFireRate()
-                    * (1 - TurretHeadUtil.getFireRateUpgrades(turret.getBase(), turret)))) + "s/sec", probeInfo.defaultTextStyle());
+                    / (1 + TurretHeadUtil.getFireRateUpgrades(turret.getBase(), turret)))) + "s/sec", probeInfo.defaultTextStyle());
         }
     }
 }

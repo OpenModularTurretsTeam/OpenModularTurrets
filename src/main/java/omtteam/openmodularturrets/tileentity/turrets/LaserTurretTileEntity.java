@@ -13,8 +13,10 @@ import omtteam.omlib.network.messages.render.MessageRenderRay;
 import omtteam.omlib.util.EntityUtil;
 import omtteam.openmodularturrets.init.ModSounds;
 
+import javax.annotation.Nonnull;
+
 public class LaserTurretTileEntity extends RayTracingTurret {
-    private ColorOM color = new ColorOM(1F, 0.1F, 0, 0.38F);
+    private final ColorOM color = new ColorOM(1F, 0.1F, 0, 0.38F);
 
     public LaserTurretTileEntity() {
         super(5);
@@ -40,6 +42,7 @@ public class LaserTurretTileEntity extends RayTracingTurret {
         return new Integer[]{5, 10, 2, -10, 10};
     }
 
+    @Nonnull
     @Override
     public SoundEvent getLaunchSoundEffect() {
         return ModSounds.laserLaunchSound;

@@ -9,7 +9,7 @@ public class OMTNames {
         public static final String turretBase = "turret_base";
         public static final String disposableItemTurret = "disposable_item_turret";
         public static final String rocketTurret = "rocket_turret";
-        public static final String gunTurret = "machine_gun_turret";
+        public static final String machineGunTurret = "machine_gun_turret";
         public static final String grenadeTurret = "grenade_turret";
         public static final String laserTurret = "laser_turret";
         public static final String potatoCannonTurret = "potato_cannon_turret";
@@ -17,6 +17,7 @@ public class OMTNames {
         public static final String relativisticTurret = "relativistic_turret";
         public static final String teleporterTurret = "teleporter_turret";
         public static final String railGunTurret = "rail_gun_turret";
+        public static final String plasmaTurret = "plasma_turret";
         public static final String lever = "lever_block";
 
         public static final String expander = "expander";

@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.entity.projectiles;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,6 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import omtteam.openmodularturrets.util.OMTUtil;
@@ -21,13 +23,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public abstract class TurretProjectile extends EntityThrowable {
+public abstract class TurretProjectile extends EntityThrowable implements IEntityAdditionalSpawnData {
     public float gravity;
     public boolean isAmped;
     public int amp_level;
     public int fakeDrops;
     public boolean dropLoot = true;
     protected TurretBase turretBase;
+    private BlockPos turretBasePos;
     ItemStack ammo;
     private int framesRendered = 0;
 
@@ -38,6 +41,7 @@ public abstract class TurretProjectile extends EntityThrowable {
     TurretProjectile(World world, TurretBase turretBase) {
         super(world);
         this.turretBase = turretBase;
+        this.turretBasePos = turretBase.getPos();
         if (TurretHeadUtil.getAmpLevel(turretBase) > 0) {
             isAmped = true;
             amp_level = TurretHeadUtil.getAmpLevel(turretBase);
@@ -50,12 +54,30 @@ public abstract class TurretProjectile extends EntityThrowable {
         super(world);
         this.ammo = ammo;
         this.turretBase = turretBase;
+        this.turretBasePos = turretBase.getPos();
         if (TurretHeadUtil.getAmpLevel(turretBase) > 0) {
             isAmped = true;
             amp_level = TurretHeadUtil.getAmpLevel(turretBase);
         }
         fakeDrops = TurretHeadUtil.getFakeDropsLevel(turretBase);
         dropLoot = TurretHeadUtil.baseHasNoLootDeleter(turretBase);
+    }
+
+    @Override
+    public void writeSpawnData(ByteBuf buf) {
+        buf.writeInt(turretBasePos.getX());
+        buf.writeInt(turretBasePos.getY());
+        buf.writeInt(turretBasePos.getZ());
+    }
+
+    @Override
+    public void readSpawnData(ByteBuf additionalData) {
+        int x, y, z;
+        x = additionalData.readInt();
+        y = additionalData.readInt();
+        z = additionalData.readInt();
+        turretBasePos = new BlockPos(x, y, z);
+        turretBase = (TurretBase) this.getEntityWorld().getTileEntity(turretBasePos);
     }
 
     protected boolean canDamagePlayer(EntityPlayer entityPlayer) {
@@ -76,7 +98,6 @@ public abstract class TurretProjectile extends EntityThrowable {
 
     @Override
     public void onUpdate() {
-
         if (this.ticksExisted > 40) {
             this.setDead();
             return;
@@ -132,12 +153,12 @@ public abstract class TurretProjectile extends EntityThrowable {
             f1 = 0.8F;
         }
 
-        this.motionX *= (double) f1;
-        this.motionY *= (double) f1;
-        this.motionZ *= (double) f1;
+        this.motionX *= f1;
+        this.motionY *= f1;
+        this.motionZ *= f1;
 
         if (!this.hasNoGravity()) {
-            this.motionY -= (double) f2;
+            this.motionY -= f2;
         }
 
         this.setPosition(this.posX, this.posY, this.posZ);

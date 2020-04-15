@@ -31,6 +31,7 @@ public class ModBlocks {
     public static Block teleporterTurret;
     public static Block rocketTurret;
     public static Block railGunTurret;
+    public static Block plasmaTurret;
     public static Block leverBlock;
 
     public static Block expander;
@@ -53,7 +54,7 @@ public class ModBlocks {
 
         if (OMTConfig.TURRETS.machine_gun_turret.enabled) {
             machineGunTurret = InitHelper.registerBlock(new BlockGunTurret(), registry, ModItems.subblocks);
-            TurretList.addTurret(new TurretType(OMTNames.Blocks.gunTurret, OMTConfig.TURRETS.machine_gun_turret));
+            TurretList.addTurret(new TurretType(OMTNames.Blocks.machineGunTurret, OMTConfig.TURRETS.machine_gun_turret));
         }
 
         if (OMTConfig.TURRETS.incendiary_turret.enabled) {
@@ -63,7 +64,7 @@ public class ModBlocks {
 
         if (OMTConfig.TURRETS.laser_turret.enabled) {
             grenadeLauncherTurret = InitHelper.registerBlock(new BlockGrenadeTurret(), registry, ModItems.subblocks);
-            TurretList.addTurret(new TurretType(OMTNames.Blocks.grenadeTurret, OMTConfig.TURRETS.laser_turret));
+            TurretList.addTurret(new TurretType(OMTNames.Blocks.grenadeTurret, OMTConfig.TURRETS.grenade_turret));
         }
 
         if (OMTConfig.TURRETS.relativistic_turret.enabled) {
@@ -91,6 +92,11 @@ public class ModBlocks {
             TurretList.addTurret(new TurretType(OMTNames.Blocks.railGunTurret, OMTConfig.TURRETS.railgun_turret));
         }
 
+        if (OMTConfig.TURRETS.plasma_turret.enabled) {
+            plasmaTurret = InitHelper.registerBlock(new BlockPlasmaTurret(), registry, ModItems.subblocks);
+            TurretList.addTurret(new TurretType(OMTNames.Blocks.plasmaTurret, OMTConfig.TURRETS.plasma_turret));
+        }
+
         leverBlock = InitHelper.registerBlock(new LeverBlock(), registry, ModItems.subblocks);
     }
 
@@ -99,7 +105,7 @@ public class ModBlocks {
         InitHelper.registerTileEntity(DisposableItemTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.disposableItemTurret);
         InitHelper.registerTileEntity(PotatoCannonTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.potatoCannonTurret);
         InitHelper.registerTileEntity(RocketTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.rocketTurret);
-        InitHelper.registerTileEntity(GunTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.gunTurret);
+        InitHelper.registerTileEntity(GunTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.machineGunTurret);
         InitHelper.registerTileEntity(GrenadeLauncherTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.grenadeTurret);
         InitHelper.registerTileEntity(LaserTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.laserTurret);
         InitHelper.registerTileEntity(LeverTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.lever);
@@ -107,6 +113,7 @@ public class ModBlocks {
         InitHelper.registerTileEntity(IncendiaryTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.incendiaryTurret);
         InitHelper.registerTileEntity(RelativisticTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.relativisticTurret);
         InitHelper.registerTileEntity(TeleporterTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.teleporterTurret);
+        InitHelper.registerTileEntity(PlasmaLauncherTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.plasmaTurret);
         InitHelper.registerTileEntity(Expander.class, Reference.MOD_ID, OMTNames.Blocks.expander);
         InitHelper.registerTileEntity(BaseAddon.class, Reference.MOD_ID, OMTNames.Blocks.baseAddon);
     }
