@@ -208,7 +208,7 @@ text.openmodularturrets.base.tier.4=Tier 4 Turret Base
 text.openmodularturrets.base.tier.5=Tier 5 Turret Base
 
 text.openmodularturrets.turret.addon.label=Turret Addon
-text.openmodularturrets.turret.addon.amp.a.label=Adds a few % of maxHP of target
+text.openmodularturrets.turret.addon.amp.a.label=Adds a few %% of maxHP of target
 text.openmodularturrets.turret.addon.amp.b.label=(dep. on turret) as damage per projectile.
 text.openmodularturrets.turret.addon.amp.flavour=Here we are juggernaught.
 text.openmodularturrets.turret.addon.redstone.a=Generates

@@ -79,7 +79,6 @@ text.openmodularturrets.gui.ammo=Ammo/Fuel
 text.openmodularturrets.gui.damage_amp=Damage Boost (rel. to HP)
 text.openmodularturrets.gui.inventory=Inventory
 text.openmodularturrets.gui.target=Target
-text.openmodularturrets.gui.targeting_options=Targeting Options
 text.openmodularturrets.gui.multi=Multi
 text.openmodularturrets.gui.single=Single
 text.openmodularturrets.gui.yaw=Yaw
@@ -143,9 +142,6 @@ text.openmodularturrets.memory_card.desc1=Shift-RightClick base stores data
 text.openmodularturrets.memory_card.desc2=Shift-RightClick anywhere else to clear
 text.openmodularturrets.memory_card.desc3=RightClick base copies data from card
 
-text.openmodularturrets.target_mobs=If the base's turrets target mobs.
-text.openmodularturrets.target_neutrals=If the base's turrets target passive creatures.
-text.openmodularturrets.target_players=If the base's turrets target (non-trusted) players.
 text.openmodularturrets.minus_range=Decrease the max range for the turret(s)
 text.openmodularturrets.plus_range=Increase the max range for the turret(s)
 text.openmodularturrets.configure_base=Enter the base's config screen.
@@ -269,7 +265,6 @@ text.openmodularturrets.turret.ammo.ferro_slug=This advanced looking slug is for
 text.openmodularturrets.turret.ammo.grenade=Nice grenade for the grenade launcher.
 text.openmodularturrets.turret.ammo.rocket=Rockets are being used by the rocket launcher, obviously!
 
-text.openmodularturrets.status.ownership=You do not own this turret, or you don't have permission to do that.
 text.openmodularturrets.status.warning=You are entering a turret-protected area. Continue at your own risk.
 
 text.openmodularturrets.death.attack.disposable=Very %s, much dead, such wow...
@@ -279,4 +274,8 @@ text.openmodularturrets.death.attack.grenade=%s may need some assembly.
 text.openmodularturrets.death.attack.rocket=%s found that rainbow connection in the form of a rocket.
 text.openmodularturrets.death.attack.laser=%s got disintegrated.
 
-text.openmodularturrets:turret_limit=Turret Limittext.openmodularturrets.death.attack.ferroslug=%s found atomized minerva.
+
+text.openmodularturrets.death.attack.ferroslug=%s found atomized minerva.
+tile.plasma_turret.name=Plasma Launcher Turret
+text.openmodularturrets.flavour.turret.plasma=Hot air -> stuff's on fire.
+text.openmodularturrets:turret_limit=Turret Limit

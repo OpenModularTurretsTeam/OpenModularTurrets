@@ -71,9 +71,6 @@ tile.turret_base.name=炮塔基座
 itemGroup.openmodularturrets=模块化炮塔
 
 text.openmodularturrets.gui.base=基座
-text.openmodularturrets.gui.attack_mobs=攻击怪物
-text.openmodularturrets.gui.attack_neutrals=攻击中立生物
-text.openmodularturrets.gui.attack_players=攻击玩家
 text.openmodularturrets.gui.multi_targeting=多目标射击
 text.openmodularturrets.gui.addons=附件
 text.openmodularturrets.gui.upgrades=升级
@@ -81,7 +78,6 @@ text.openmodularturrets.gui.ammo=弹药/燃料
 text.openmodularturrets.gui.damage_amp=攻击增强（与血量有关）
 text.openmodularturrets.gui.inventory=物品栏
 text.openmodularturrets.gui.target=目标
-text.openmodularturrets.gui.targeting_options=目标选项
 text.openmodularturrets.gui.multi=多个
 text.openmodularturrets.gui.single=单个
 text.openmodularturrets.gui.yaw=幅度
@@ -142,11 +138,6 @@ text.openmodularturrets.base_addon_loot_deleter.inv3=enemies killed by attached 
 text.openmodularturrets.memory_card.desc1=Shift右击炮塔基座储存配置
 text.openmodularturrets.memory_card.desc2=SShift右击其他地方清空
 text.openmodularturrets.memory_card.desc3=带有配置的卡右击基座写入数据
-
-
-text.openmodularturrets.target_mobs=炮塔是否瞄准怪物。
-text.openmodularturrets.target_neutrals=炮塔是否瞄准被动型生物。
-text.openmodularturrets.target_players=炮塔是否瞄准非信任玩家。
 
 text.openmodularturrets.minus_range=减少炮塔的最大搜寻范围。
 text.openmodularturrets.plus_range=增加炮塔的最大搜寻范围。
@@ -270,7 +261,6 @@ text.openmodularturrets.turret.ammo.ferro_slug=铁磁弹适用于磁轨炮炮塔
 text.openmodularturrets.turret.ammo.grenade=榴弹适用于榴弹发射炮塔。
 text.openmodularturrets.turret.ammo.rocket=制导火箭适用于火箭发射炮塔。
 
-text.openmodularturrets.status.ownership=这架炮塔不属于你
 text.openmodularturrets.status.warning=你进入了炮塔攻击范围,谁都保不住你
 
 text.openmodularturrets.death.attack.disposable=那个 %s 死的好惨...
@@ -284,3 +274,6 @@ text.openmodularturrets.death.attack.ferroslug=%s 看到了迷雾中的智慧女
 text.openmodularturrets.gui.light_value=Light value
 text.openmodularturrets.gui.light_opacity=Light opacity
 text.openmodularturrets.turret.upgrade.turretinfo=For effects see tooltips of turrets.
+tile.plasma_turret.name=Plasma Launcher Turret
+text.openmodularturrets:turret_limit=Turret Limit
+text.openmodularturrets.flavour.turret.plasma=Hot air -> stuff's on fire.

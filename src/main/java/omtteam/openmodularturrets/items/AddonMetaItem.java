@@ -145,6 +145,7 @@ public class AddonMetaItem extends Item {
                             "text.openmodularturrets.turret.addon.solar.b"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.solar.flavour"));
+                    return;
                 case 7:
                     tooltip.add("");
                     tooltip.add(TextFormatting.RED + safeLocalize("text.openmodularturrets.turret.addon.label"));
