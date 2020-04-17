@@ -236,9 +236,9 @@ def getCommmitReleaseType() {
     return 'none'
 }
 
-tasks.curseforge.enabled = project.hasProperty("curseforge_key") && !commit_release_type.equals('none')
+tasks.curseforge.enabled = project.hasProperty("curseforge_key") && commit_release_type != 'none'
 curseforge {
-    if (project.hasProperty("curseforge_key") && !commit_release_type.equals('none')) {
+    if (project.hasProperty("curseforge_key") && commit_release_type != 'none') {
         System.out.println("ATTEMPTING CURSE RELEASE")
         apiKey = project.properties["curseforge_key"]
     } else {
@@ -254,6 +254,9 @@ curseforge {
             optionalDependency 'ender-io'
             optionalDependency 'redstone-flux'
             optionalDependency 'thermal-expansion'
+            optionalDependency 'mekanism'
+            optionalDependency 'opencomputers'
+            optionalDependency 'computercraft'
         }
 
         mainArtifact(jar) {
@@ -263,13 +266,15 @@ curseforge {
         }
 
         addArtifact(sourceJar) {
-            changelog = file("${projectDir}/change_log.html").text
             releaseType = 'alpha'
+            changelog = file("${projectDir}/change_log.html").text
+            changelogType = 'html'
         }
 
         addArtifact(deobfJar) {
-            changelog = file("${projectDir}/change_log.html").text
             releaseType = 'alpha'
+            changelog = file("${projectDir}/change_log.html").text
+            changelogType = 'html'
         }
     }
 }
