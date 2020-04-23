@@ -19,6 +19,7 @@ import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing
  */
 public class BaseAddon extends TileEntityBase implements ITurretBaseAddonTileEntity, ITickable {
     private EnumFacing orientation;
+    private TurretBase base;
 
     public BaseAddon() {
         this.orientation = EnumFacing.NORTH;
@@ -38,7 +39,7 @@ public class BaseAddon extends TileEntityBase implements ITurretBaseAddonTileEnt
     }
 
     public TurretBase getBase() {
-        return TurretHeadUtil.getTurretBase(this.getWorld(), this.pos);
+        return base;
     }
 
     public void setSide() {
@@ -63,7 +64,10 @@ public class BaseAddon extends TileEntityBase implements ITurretBaseAddonTileEnt
 
     @Override
     public void update() {
-        if (this.getWorld().getWorldTime() % 15 == 0 && getBase() == null) {
+        if (base == null) {
+            base = TurretHeadUtil.getTurretBase(this.getWorld(), this.pos);
+        }
+        if (this.getWorld().getWorldTime() % 15 == 0 && base == null) {
             this.getWorld().destroyBlock(this.pos, true);
         }
     }

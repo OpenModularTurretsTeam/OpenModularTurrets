@@ -144,7 +144,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     @ParametersAreNonnullByDefault
     public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
         TileEntity head = world.getTileEntity(pos);
-        if (head instanceof TurretHead && ((TurretHead) head).getBase() == null) {
+        if (head instanceof TurretHead && !head.getWorld().isRemote && ((TurretHead) head).getBase() == null) {
             head.getWorld().destroyBlock(pos, true);
         }
     }

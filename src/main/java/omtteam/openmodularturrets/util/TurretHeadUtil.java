@@ -15,6 +15,7 @@ import net.minecraft.util.math.*;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import omtteam.omlib.api.util.Tuple;
@@ -454,7 +455,7 @@ public class TurretHeadUtil {
         return 0;
     }
 
-    public static TurretBase getTurretBase(World world, BlockPos pos) {
+    public static TurretBase getTurretBase(IBlockAccess world, BlockPos pos) {
         if (world == null) {
             return null;
         }
@@ -470,7 +471,7 @@ public class TurretHeadUtil {
         return null;
     }
 
-    public static EnumFacing getTurretBaseFacing(World world, BlockPos pos) {
+    public static EnumFacing getTurretBaseFacing(IBlockAccess world, BlockPos pos) {
         if (world == null) {
             return null;
         }
@@ -486,7 +487,7 @@ public class TurretHeadUtil {
         return null;
     }
 
-    public static Map<EnumFacing, TurretHead> getBaseTurrets(World world, BlockPos pos) {
+    public static Map<EnumFacing, TurretHead> getBaseTurrets(IBlockAccess world, BlockPos pos) {
         Map<EnumFacing, TurretHead> map = new HashMap<>();
         if (world == null) {
             return map;

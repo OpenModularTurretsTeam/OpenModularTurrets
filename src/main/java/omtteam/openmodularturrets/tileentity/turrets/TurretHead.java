@@ -112,6 +112,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 1.565F;
             this.turretBase = EnumFacing.EAST;
+            this.base = (TurretBase) this.getWorld().getTileEntity(this.pos.east());
             this.hasSetSide = true;
             return true;
         }
@@ -120,6 +121,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 4.705F;
             this.turretBase = EnumFacing.WEST;
+            this.base = (TurretBase) this.getWorld().getTileEntity(this.pos.west());
             this.hasSetSide = true;
             return true;
         }
@@ -128,6 +130,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 3.145F;
             this.turretBase = EnumFacing.SOUTH;
+            this.base = (TurretBase) this.getWorld().getTileEntity(this.pos.south());
             this.hasSetSide = true;
             return true;
         }
@@ -136,6 +139,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 0F;
             this.turretBase = EnumFacing.NORTH;
+            this.base = (TurretBase) this.getWorld().getTileEntity(this.pos.north());
             this.hasSetSide = true;
             return true;
         }
@@ -144,6 +148,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             this.baseFitRotationX = 3.145F;
             this.baseFitRotationZ = 0F;
             this.turretBase = EnumFacing.UP;
+            this.base = (TurretBase) this.getWorld().getTileEntity(this.pos.up());
             this.hasSetSide = true;
             return true;
         }
@@ -152,6 +157,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
             this.baseFitRotationX = 0F;
             this.baseFitRotationZ = 0F;
             this.turretBase = EnumFacing.DOWN;
+            this.base = (TurretBase) this.getWorld().getTileEntity(this.pos.down());
             this.hasSetSide = true;
             return true;
         }
