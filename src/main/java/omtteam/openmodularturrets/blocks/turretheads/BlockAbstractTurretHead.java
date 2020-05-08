@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +18,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import omtteam.omlib.api.block.IHasItemBlock;
@@ -26,6 +28,8 @@ import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.MathUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
+import omtteam.openmodularturrets.blocks.BlockTurretBase;
+import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
@@ -34,6 +38,7 @@ import omtteam.openmodularturrets.util.TurretHeadUtil;
 import omtteam.openmodularturrets.util.TurretType;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.omlib.compatibility.theoneprobe.TOPCompatibility.getLocalizationString;
@@ -49,8 +54,13 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
         super(Material.GLASS);
 
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
-        this.setBlockUnbreakable();
-        this.setResistance(6000000.0F);
+        if (OMTConfig.TURRETS.turretBreakable) {
+            this.setBlockUnbreakable();
+            this.setResistance(6000000.0F);
+        } else {
+            this.setHardness(40F);
+            this.setResistance(25F);
+        }
         this.setSoundType(SoundType.STONE);
         this.setDefaultState(this.blockState.getBaseState().withProperty(CONCEALED, false));
     }
@@ -144,8 +154,29 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     @ParametersAreNonnullByDefault
     public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
         TileEntity head = world.getTileEntity(pos);
-        if (head instanceof TurretHead && !head.getWorld().isRemote && ((TurretHead) head).getBase() == null) {
+        if (head instanceof TurretHead && !head.getWorld().isRemote
+                && ((TurretHead) head).getBase().getPos().equals(neighbor) && !(world.getBlockState(neighbor).getBlock() instanceof BlockTurretBase)) {
             head.getWorld().destroyBlock(pos, true);
+        }
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
+        if (OMTConfig.TURRETS.turretBreakable) {
+            return 40F;
+        } else {
+            return -1F;
+        }
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
+        if (OMTConfig.TURRETS.turretBreakable) {
+            return 25F;
+        } else {
+            return 600000.0F;
         }
     }
 

@@ -153,7 +153,6 @@ public class OMTConfig {
         public BaseSetting baseTierFive = new BaseSetting(10000000, 7500, 4, 25, 60);
         @Config.RequiresMcRestart
         public boolean allowBaseCamo = true;
-        @Config.RequiresMcRestart
         public boolean baseBreakable = false;
     }
 }

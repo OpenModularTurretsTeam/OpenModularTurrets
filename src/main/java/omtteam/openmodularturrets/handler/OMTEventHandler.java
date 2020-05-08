@@ -28,6 +28,8 @@ import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.util.OMTFakePlayer;
 import omtteam.openmodularturrets.util.OMTUtil;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created by Keridos on 02/05/17.
  * This class is the listener for all the Events we need to watch & modify.
@@ -46,14 +48,14 @@ public class OMTEventHandler {
     }
 
     @SubscribeEvent
-    public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+    public void onConfigChanged(@Nonnull ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.getModID().equals(Reference.MOD_ID)) {
             ConfigManager.sync(Reference.MOD_ID, Config.Type.INSTANCE);
         }
     }
 
     @SubscribeEvent
-    public void entityHurtEvent(LivingHurtEvent event) {
+    public void entityHurtEvent(@Nonnull LivingHurtEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
         int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
         if (fakeDrops >= 0) {
@@ -64,7 +66,7 @@ public class OMTEventHandler {
     }
 
     @SubscribeEvent
-    public void entityAttackedEvent(LivingAttackEvent event) {
+    public void entityAttackedEvent(@Nonnull LivingAttackEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
         int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
         if (fakeDrops >= 0) {
@@ -75,7 +77,7 @@ public class OMTEventHandler {
     }
 
     @SubscribeEvent
-    public void entityDeathEvent(LivingDeathEvent event) {
+    public void entityDeathEvent(@Nonnull LivingDeathEvent event) {
         if (event.getSource() instanceof AbstractOMTDamageSource) {
             ((AbstractOMTDamageSource) event.getSource()).getBase().increaseKillCounter();
             if (event.getEntity() instanceof EntityPlayer) {
@@ -85,17 +87,17 @@ public class OMTEventHandler {
     }
 
     @SubscribeEvent
-    public void blockRegisterEvent(RegistryEvent.Register<Block> event) {
+    public void blockRegisterEvent(@Nonnull RegistryEvent.Register<Block> event) {
         ModBlocks.initBlocks(event.getRegistry());
     }
 
     @SubscribeEvent
-    public void itemRegisterEvent(RegistryEvent.Register<Item> event) {
+    public void itemRegisterEvent(@Nonnull RegistryEvent.Register<Item> event) {
         ModItems.init(event.getRegistry());
     }
 
     @SubscribeEvent
-    public void soundRegistryEvent(RegistryEvent.Register<SoundEvent> event) {
+    public void soundRegistryEvent(@Nonnull RegistryEvent.Register<SoundEvent> event) {
         ModSounds.init(event.getRegistry());
     }
 
@@ -105,7 +107,7 @@ public class OMTEventHandler {
     }
 
     @SubscribeEvent
-    public void lootEvent(LivingDropsEvent event) {
+    public void lootEvent(@Nonnull LivingDropsEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
         int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
         if (((entity.getTags().contains("openmodularturrets:turret_hit") && !OMTConfig.GENERAL.doTurretsKillsDropMobLoot)
