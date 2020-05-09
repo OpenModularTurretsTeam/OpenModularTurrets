@@ -94,7 +94,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private int playerKills;
     private IBaseController controller;
     private OMLibNetwork network;
-    private List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
+    private final List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
 
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
         super();
@@ -426,6 +426,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         nbtTagCompound.setBoolean("attacksPlayers", attacksPlayers);
         nbtTagCompound.setBoolean("multiTargeting", multiTargeting);
         nbtTagCompound.setInteger("mode", mode.ordinal());
+        NBTTagCompound camoTag = new NBTTagCompound();
+        this.camoSettings.writeNBT(camoTag);
+        nbtTagCompound.setTag("camoSettings", camoTag);
         if (this.rangeOverridden) {
             nbtTagCompound.setInteger("range", this.currentMaxRange);
         }
@@ -440,6 +443,9 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         this.attacksNeutrals = nbtTagCompound.getBoolean("attacksNeutrals");
         this.attacksPlayers = nbtTagCompound.getBoolean("attacksPlayers");
         this.multiTargeting = nbtTagCompound.getBoolean("multiTargeting");
+        if (nbtTagCompound.hasKey("camoSettings")) {
+            this.camoSettings = CamoSettings.getSettingsFromNBT(nbtTagCompound.getCompoundTag("camoSettings"));
+        }
         if (nbtTagCompound.hasKey("mode")) {
             this.mode = EnumMachineMode.values()[nbtTagCompound.getInteger("mode")];
         } else {

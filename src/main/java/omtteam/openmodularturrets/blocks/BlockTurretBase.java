@@ -195,11 +195,13 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                 return true;
             }
             // Read Memory Card
-            if (!player.isSneaking() && base != null && player.getHeldItemMainhand() != ItemStack.EMPTY
+            if (!player.isSneaking() && base != null && PlayerUtil.isPlayerAdmin(player, base) && player.getHeldItemMainhand() != ItemStack.EMPTY
                     && player.getHeldItemMainhand().getItem() instanceof UsableMetaItem && player.getHeldItemMainhand().getItemDamage() == 2
                     && ((UsableMetaItem) player.getHeldItemMainhand().getItem()).hasDataStored(player.getHeldItemMainhand())) {
 
                 base.readMemoryCardNBT(((UsableMetaItem) player.getHeldItemMainhand().getItem()).getDataStored(player.getHeldItemMainhand()));
+                base.sendMessageToAllTracking();
+                base.updateCamoSettingsToPlayers();
                 return true;
             }
             // Open GUI
