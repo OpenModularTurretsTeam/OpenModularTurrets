@@ -5,6 +5,7 @@ import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import omtteam.omlib.compatibility.OMLibModCompatibility;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 
 import java.util.function.BooleanSupplier;
@@ -28,7 +29,10 @@ public class RecipeConfigFactory implements IConditionFactory {
             return () -> true;
         } else if (OMTConfig.GENERAL.recipes.equals("vanilla") && mod.equals("vanilla")) {
             return () -> true;
-        } else if (OMTConfig.GENERAL.recipes.equals("auto")) {
+        } else {
+            if (!OMTConfig.GENERAL.recipes.equals("auto")) {
+                OpenModularTurrets.getLogger().error("Recipe config broken, defaulting to auto recipes!");
+            }
             if (OMLibModCompatibility.EnderIOLoaded && mod.equals("enderio")) {
                 return () -> true;
             } else if (OMLibModCompatibility.MekanismLoaded && !OMLibModCompatibility.EnderIOLoaded && mod.equals("mekanism")) {
