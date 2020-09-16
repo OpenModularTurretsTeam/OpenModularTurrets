@@ -16,6 +16,7 @@ import omtteam.omlib.handler.OMConfig;
 import omtteam.omlib.util.TargetingSettings;
 import omtteam.omlib.util.world.Pos;
 import omtteam.omlib.util.world.WorldUtil;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.api.lists.MobBlacklist;
 import omtteam.openmodularturrets.api.lists.MobList;
 import omtteam.openmodularturrets.api.lists.NeutralList;
@@ -24,6 +25,7 @@ import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.OMTUtil;
+import org.apache.logging.log4j.Logger;
 import valkyrienwarfare.api.IPhysicsEntity;
 import valkyrienwarfare.api.IPhysicsEntityManager;
 import valkyrienwarfare.api.TransformType;
@@ -37,8 +39,8 @@ import static omtteam.openmodularturrets.turret.TurretHeadUtil.getAimYaw;
 
 public class TurretTargetingUtils {
     private TargetingSettings settings;
-    private Pos pos;
-    private TurretHead turret;
+    private final Pos pos;
+    private final TurretHead turret;
 
     public TurretTargetingUtils(TurretHead turret) {
         this.settings = turret.getTargetingSettings();
@@ -195,6 +197,12 @@ public class TurretTargetingUtils {
         //Is the target out of range now?
         if (chebyshevDistance(turret, entity)) {
             return false;
+        }
+
+        if (OMConfig.GENERAL.debugLogging) {
+            Logger logger = OpenModularTurrets.getLogger();
+            logger.info("Targeting, EntityString: " + EntityList.getEntityString(entity));
+            logger.info("Targeting, EntityKey: " + EntityList.getKey(entity));
         }
 
         if (EntityList.getEntityString(entity) != null && MobBlacklist.contains(EntityList.getEntityString(entity))) {
