@@ -42,6 +42,7 @@ import static omtteam.openmodularturrets.util.TurretHeadUtil.getTurretBaseFacing
 @SuppressWarnings("deprecation")
 public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock {
     public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 4);
+    public static final AxisAlignedBB baseBB = new AxisAlignedBB(-0.32F, -0.32F, -0.1F, 0.32F, 0.32F, 0.4F);
 
     public LeverBlock() {
         super(Material.GLASS);
@@ -89,6 +90,12 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
 
     @Override
     @ParametersAreNonnullByDefault
+    public boolean causesSuffocation(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         return (isBaseValid(worldIn.getTileEntity(pos.north())) ||
                 isBaseValid(worldIn.getTileEntity(pos.east())) ||
@@ -97,6 +104,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         float l = 0F;
         if (isBaseValid(worldIn.getTileEntity(pos.east()))) {
@@ -116,6 +124,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.DOWN || TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.UP) {
             return true;
@@ -123,10 +132,10 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
         TurretBase base = getTurretBase(worldIn, pos);
         LeverTileEntity lever = (LeverTileEntity) worldIn.getTileEntity(pos);
         OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
-        if (storage == null) {
+        if (storage == null || lever == null) {
             return true;
         }
-        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 0 &&
+        if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 0 &&
                 isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1));
             if (base != null) {
@@ -139,7 +148,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
             }
         }
 
-        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 90 &&
+        if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90F) == 90F &&
                 isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()));
             if (base != null) {
@@ -151,7 +160,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
             }
         }
 
-        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 180 &&
+        if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90F) == 180F &&
                 isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1)))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1));
             if (base != null) {
@@ -163,7 +172,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
             }
         }
 
-        if (lever != null && (worldIn.getBlockState(pos).getValue(ROTATION) * 90) == 270 &&
+        if ((worldIn.getBlockState(pos).getValue(ROTATION) * 90F) == 270F &&
                 isBaseValid(worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())))) {
             base = (TurretBase) worldIn.getTileEntity(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()));
             if (base != null) {
@@ -179,19 +188,32 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
+        EnumFacing facing = getTurretBaseFacing(source, pos);
+        if (facing != null) {
+            AxisAlignedBB axisAlignedBB = MathUtil.rotateAABB(baseBB, facing.getOpposite());
+            double[] offset = new double[3];
+            offset[0] = 0.5D + facing.getFrontOffsetX() * 0.1D;
+            offset[1] = 0.5D + facing.getFrontOffsetY() * 0.1D;
+            offset[2] = 0.5D + facing.getFrontOffsetZ() * 0.1D;
+            return axisAlignedBB.offset(offset[0], offset[1], offset[2]);
+        }
+
+        return new AxisAlignedBB(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F).offset(pos);
     }
 
     @Override
@@ -199,8 +221,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
         facing = getTurretBaseFacing(world, pos);
         if (getTurretBase(world, pos) != null && getTurretBase(world, pos).getTier() == 1) {
             if (facing != null) {
-                AxisAlignedBB axisAlignedBB = new AxisAlignedBB(-0.3F, -0.3F, -0.4F, 0.3F, 0.3F, 0.4F);
-                axisAlignedBB = MathUtil.rotateAABB(axisAlignedBB, facing.getOpposite());
+                AxisAlignedBB axisAlignedBB = MathUtil.rotateAABB(baseBB, facing.getOpposite());
                 double[] offset = new double[3];
                 offset[0] = 0.5D + facing.getFrontOffsetX() * 0.1D;
                 offset[1] = 0.5D + facing.getFrontOffsetY() * 0.1D;
@@ -212,6 +233,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos neighbor) {
         if (!(isBaseValid(worldIn.getTileEntity(pos.north())) ||
                 isBaseValid(worldIn.getTileEntity(pos.east())) ||

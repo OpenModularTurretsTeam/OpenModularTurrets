@@ -34,7 +34,7 @@ public class LeverTileEntity extends TileEntityBase implements ITickable, ITurre
         }
 
         if (base != null && isTurning) {
-            rotation = rotation + 30F;
+            rotation = rotation + 20F;
             if (rotation >= 360F) {
                 this.isTurning = false;
                 this.rotation = 0F;

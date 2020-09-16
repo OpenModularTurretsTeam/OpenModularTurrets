@@ -67,12 +67,14 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         if (state.getValue(CONCEALED)) {
             return new AxisAlignedBB(0F, 0F, 0F, 0F, 0F, 0F);
@@ -155,7 +157,8 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
         TileEntity head = world.getTileEntity(pos);
         if (head instanceof TurretHead && !head.getWorld().isRemote
-                && ((TurretHead) head).getBase().getPos().equals(neighbor) && !(world.getBlockState(neighbor).getBlock() instanceof BlockTurretBase)) {
+                && ((TurretHead) head).getBase() != null && ((TurretHead) head).getBase().getPos().equals(neighbor)
+                && !(world.getBlockState(neighbor).getBlock() instanceof BlockTurretBase)) {
             head.getWorld().destroyBlock(pos, true);
         }
     }
