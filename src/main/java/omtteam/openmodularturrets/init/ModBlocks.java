@@ -64,7 +64,7 @@ public class ModBlocks {
 
         if (OMTConfig.TURRETS.laser_turret.enabled) {
             grenadeLauncherTurret = InitHelper.registerBlock(new BlockGrenadeTurret(), registry, ModItems.subblocks);
-            TurretList.addTurret(new TurretType(OMTNames.Blocks.grenadeTurret, OMTConfig.TURRETS.laser_turret));
+            TurretList.addTurret(new TurretType(OMTNames.Blocks.grenadeTurret, OMTConfig.TURRETS.grenade_turret));
         }
 
         if (OMTConfig.TURRETS.relativistic_turret.enabled) {
