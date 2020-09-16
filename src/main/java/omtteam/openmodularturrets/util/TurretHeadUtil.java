@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import omtteam.omlib.api.util.Tuple;
 import omtteam.omlib.power.OMEnergyStorage;
+import omtteam.omlib.util.RandomUtil;
 import omtteam.omlib.util.WorldUtil;
 import omtteam.omlib.util.player.Player;
 import omtteam.openmodularturrets.api.lists.MobBlacklist;
@@ -28,6 +29,7 @@ import omtteam.openmodularturrets.api.lists.NeutralList;
 import omtteam.openmodularturrets.blocks.BlockBaseAttachment;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
+import omtteam.openmodularturrets.handler.config.TurretSetting;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.items.AmmoMetaItem;
 import omtteam.openmodularturrets.tileentity.Expander;
@@ -41,7 +43,6 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import static omtteam.omlib.compatibility.OMLibModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.OMLibModCompatibility.OpenComputersLoaded;
@@ -108,7 +109,7 @@ public class TurretHeadUtil {
     }
 
     public static Entity getTarget(TurretBase base, World worldObj, BlockPos pos, int turretRange, TurretHead turret) {
-        Entity target = null;
+        EntityLivingBase target = null;
 
         if (!worldObj.isRemote && base != null) {
             AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
@@ -169,7 +170,7 @@ public class TurretHeadUtil {
                         continue;
                     }
 
-                    EntityLivingBase targetELB = (EntityLivingBase) target;
+                    EntityLivingBase targetELB = target;
                     if (canTurretSeeTarget(turret, targetELB) && targetELB.getHealth() > 0.0F) {
                         return target;
                     }
@@ -180,7 +181,7 @@ public class TurretHeadUtil {
     }
 
     public static Entity getTargetWithMinimumRange(TurretBase base, World worldObj, BlockPos pos, int turretRange, TurretHead turret) {
-        Entity target = null;
+        EntityLivingBase target = null;
 
         if (!worldObj.isRemote && base != null) {
             AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
@@ -215,9 +216,7 @@ public class TurretHeadUtil {
                         continue;
                     }
 
-                    EntityLivingBase targetELB = (EntityLivingBase) target;
-
-                    if (canTurretSeeTarget(turret, targetELB) && targetELB.getHealth() > 0.0F) {
+                    if (canTurretSeeTarget(turret, target) && target.getHealth() > 0.0F) {
                         return target;
                     }
                 }
@@ -298,13 +297,14 @@ public class TurretHeadUtil {
             ItemStack ammoCheck = exp.getInventory().getStackInSlot(i);
             if (ammoCheck != ItemStack.EMPTY && ammoCheck.getItem() == itemStack.getItem()) {
                 if (hasRecyclerAddon(base) && turretHead != null) { // turretHead == null, means do not pull ammo
-                    int chance = new Random().nextInt(99);
+                    TurretSetting settings = turretHead.getTurretType().getSettings();
+                    float chance = RandomUtil.random.nextFloat() + 0.5F;
 
                     //For negating
-                    if (chance >= 0 && chance < turretHead.getTurretType().getSettings().recyclerNegateChance) {
+                    if (chance < settings.recyclerNegateChance) {
                         return new ItemStack(ammoCheck.getItem());
                         //For adding
-                    } else if (chance > turretHead.getTurretType().getSettings().recyclerNegateChance && chance < (turretHead.getTurretType().getSettings().recyclerNegateChance + turretHead.getTurretType().getSettings().recyclerAddChance)) {
+                    } else if (chance > settings.recyclerNegateChance && chance < (settings.recyclerNegateChance + settings.recyclerAddChance)) {
                         exp.getInventory().insertItem(i, new ItemStack(ammoCheck.getItem(), 1), false);
                         return new ItemStack(ammoCheck.getItem());
                     } else {
@@ -333,15 +333,33 @@ public class TurretHeadUtil {
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack getDisposableAmmoFromInvExpander(World world, TurretBase base) {
+    public static ItemStack getDisposableAmmoFromInvExpander(World world, TurretBase base, TurretHead turretHead) {
         for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, base.getPos())) {
             if (tileEntity instanceof Expander && !((Expander) tileEntity).isPowerExpander()) {
                 Expander exp = (Expander) tileEntity;
+                TurretSetting settings = turretHead.getTurretType().getSettings();
                 for (int i = 0; i < exp.getInventory().getSlots(); i++) {
                     ItemStack itemCheck = exp.getInventory().getStackInSlot(i);
+
                     if (itemCheck != ItemStack.EMPTY && isItemStackValidAmmo(itemCheck) && !(itemCheck.getItem() instanceof AmmoMetaItem)) {
-                        exp.getInventory().extractItem(i, 1, false);
-                        return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
+                        if (hasRecyclerAddon(base)) {
+                            float chance = RandomUtil.random.nextFloat() + 0.5F;
+
+                            //For negating
+                            if (chance < settings.recyclerNegateChance) {
+                                return new ItemStack(itemCheck.getItem());
+                                //For adding
+                            } else if (chance > settings.recyclerNegateChance && chance < (settings.recyclerNegateChance + settings.recyclerAddChance)) {
+                                exp.getInventory().insertItem(i, new ItemStack(itemCheck.getItem(), 1), false);
+                                return new ItemStack(itemCheck.getItem());
+                            } else {
+                                exp.getInventory().extractItem(i, 1, false);
+                                return new ItemStack(itemCheck.getItem());
+                            }
+                        } else {
+                            exp.getInventory().extractItem(i, 1, false);
+                            return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
+                        }
                     }
                 }
             }
@@ -349,12 +367,32 @@ public class TurretHeadUtil {
         return ItemStack.EMPTY;
     }
 
-    public static ItemStack getDisposableAmmoFromBase(TurretBase base) {
+    public static ItemStack getDisposableAmmoFromBase(TurretBase base, @Nullable TurretHead turretHead) {
+        if (turretHead == null) {
+            return ItemStack.EMPTY;
+        }
+        TurretSetting settings = turretHead.getTurretType().getSettings();
         for (int i = 0; i <= 8; i++) {
             ItemStack itemCheck = base.getInventory().getStackInSlot(i);
             if (itemCheck != ItemStack.EMPTY && isItemStackValidAmmo(itemCheck) && !(itemCheck.getItem() instanceof AmmoMetaItem)) {
-                base.getInventory().extractItem(i, 1, false);
-                return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
+                if (hasRecyclerAddon(base)) {
+                    float chance = RandomUtil.random.nextFloat() + 0.5F;
+
+                    //For negating
+                    if (chance < settings.recyclerNegateChance) {
+                        return new ItemStack(itemCheck.getItem());
+                        //For adding
+                    } else if (chance > settings.recyclerNegateChance && chance < (settings.recyclerNegateChance + settings.recyclerAddChance)) {
+                        base.getInventory().insertItem(i, new ItemStack(itemCheck.getItem(), 1), false);
+                        return new ItemStack(itemCheck.getItem());
+                    } else {
+                        base.getInventory().extractItem(i, 1, false);
+                        return new ItemStack(itemCheck.getItem());
+                    }
+                } else {
+                    base.getInventory().extractItem(i, 1, false);
+                    return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
+                }
             }
         }
         return ItemStack.EMPTY;
@@ -373,21 +411,20 @@ public class TurretHeadUtil {
     }
 
     public static ItemStack getSpecificItemStackFromBase(TurretBase base, ItemStack stack, TurretHead turretHead) {
+        TurretSetting settings = turretHead.getTurretType().getSettings();
         for (int i = 0; i <= 8; i++) {
             ItemStack ammo_stack = base.getInventory().getStackInSlot(i);
 
             if (ammo_stack != ItemStack.EMPTY && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == stack.getItem()
                     && ammo_stack.getMetadata() == stack.getMetadata()) {
                 if (hasRecyclerAddon(base)) {
-                    int chance = new Random().nextInt(99);
+                    float chance = RandomUtil.random.nextFloat() + 0.5F;
 
                     //For negating
-                    if (chance > 0 && chance < turretHead.getTurretType().getSettings().recyclerNegateChance) {
+                    if (chance < settings.recyclerNegateChance) {
                         return new ItemStack(ammo_stack.getItem());
                         //For adding
-                    } else if (chance > turretHead.getTurretType().getSettings().recyclerNegateChance && chance <
-                            (turretHead.getTurretType().getSettings().recyclerNegateChance + turretHead.getTurretType().getSettings().recyclerAddChance)) {
-
+                    } else if (chance > settings.recyclerNegateChance && chance < (settings.recyclerNegateChance + settings.recyclerAddChance)) {
                         base.getInventory().insertItem(i, new ItemStack(ammo_stack.getItem(), 1), false);
                         return new ItemStack(ammo_stack.getItem());
                     } else {

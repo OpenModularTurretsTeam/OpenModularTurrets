@@ -60,7 +60,7 @@ public abstract class AbstractBaseAttachment extends BlockAbstractTileEntity imp
     @ParametersAreNonnullByDefault
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         for (TileEntity tileEntity : getTouchingTileEntities(worldIn, pos)) {
-            if (tileEntity instanceof TurretBase) return true;
+            if (tileEntity instanceof TurretBase && super.canPlaceBlockAt(worldIn, pos)) return true;
         }
         return false;
     }

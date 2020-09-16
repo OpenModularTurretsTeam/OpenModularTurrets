@@ -32,8 +32,7 @@ public class RecipeConfigFactory implements IConditionFactory {
         } else {
             if (!OMTConfig.GENERAL.recipes.equals("auto")) {
                 OpenModularTurrets.getLogger().error("Recipe config broken, defaulting to auto recipes!");
-            }
-            if (OMLibModCompatibility.EnderIOLoaded && mod.equals("enderio")) {
+            } else if (OMLibModCompatibility.EnderIOLoaded && mod.equals("enderio")) {
                 return () -> true;
             } else if (OMLibModCompatibility.MekanismLoaded && !OMLibModCompatibility.EnderIOLoaded && mod.equals("mekanism")) {
                 return () -> true;

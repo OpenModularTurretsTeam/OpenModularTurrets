@@ -132,6 +132,12 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
 
     @Override
     @ParametersAreNonnullByDefault
+    public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
+        return false;
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         TurretBase base = getBase(worldIn, pos);

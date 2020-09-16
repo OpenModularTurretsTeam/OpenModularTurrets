@@ -273,9 +273,9 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
                 }
             } else {
                 for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-                    ammo = TurretHeadUtil.getDisposableAmmoFromBase(base);
+                    ammo = TurretHeadUtil.getDisposableAmmoFromBase(base, this);
                     if (ammo == ItemStack.EMPTY) {
-                        ammo = TurretHeadUtil.getDisposableAmmoFromInvExpander(this.getWorld(), base);
+                        ammo = TurretHeadUtil.getDisposableAmmoFromInvExpander(this.getWorld(), base, this);
                     }
                 }
             }

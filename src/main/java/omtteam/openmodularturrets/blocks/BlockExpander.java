@@ -86,9 +86,9 @@ public class BlockExpander extends AbstractBaseAttachment implements IHasItemBlo
     @Nonnull
     @ParametersAreNonnullByDefault
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        Expander te = ((Expander) worldIn.getTileEntity(pos));
-        if (te != null) {
-            return state.withProperty(FACING, te.getOrientation());
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof Expander) {
+            return state.withProperty(FACING, ((Expander) te).getOrientation());
         } else return state.withProperty(FACING, EnumFacing.NORTH);
     }
 
