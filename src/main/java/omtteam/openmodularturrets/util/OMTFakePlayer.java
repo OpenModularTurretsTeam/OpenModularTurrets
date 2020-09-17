@@ -21,6 +21,7 @@ public class OMTFakePlayer {
     private static ItemStack swordLooting2;
     private static ItemStack swordLooting3;
 
+    @SuppressWarnings("ConstantConditions")
     public static void init() {
         swordLooting0 = new ItemStack(OMLibItems.fakeSword, 1);
         swordLooting1 = new ItemStack(OMLibItems.fakeSword, 1);
@@ -37,8 +38,6 @@ public class OMTFakePlayer {
 
     public static ItemStack getSword(int fakeDrops) {
         switch (fakeDrops) {
-            case 0:
-                return swordLooting0;
             case 1:
                 return swordLooting1;
             case 2:

@@ -8,6 +8,7 @@ import omtteam.omlib.util.player.Player;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
@@ -53,7 +54,7 @@ class OMTUtilTest {
         base.getTrustManager().addTrustedPlayer(trustedPlayerNone);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void canDamagePlayer() {
         OMTConfig.TURRETS.turretDamageTrustedPlayers = false;
         assertFalse(OMTUtil.canDamagePlayer(owner, base));
@@ -77,7 +78,7 @@ class OMTUtilTest {
         assertTrue(OMTUtil.canDamagePlayer(playerUntrusted, base));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void canDamageEntity() {
 
     }

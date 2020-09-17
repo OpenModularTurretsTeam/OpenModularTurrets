@@ -63,7 +63,7 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
             }
         }
         double dist = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-        double inaccuracy = (this.getBaseTurretAccuracy() / 10) * (1 - TurretHeadUtil.getAccuraccyUpgrades(base, this))
+        double inaccuracy = (this.getBaseTurretAccuracy() / 10) * (1 - TurretHeadUtil.getAccuracyUpgrades(base, this))
                 * (1 + TurretHeadUtil.getScattershotUpgrades(base));
 
         // Adjust new firing coordinate according to target speed

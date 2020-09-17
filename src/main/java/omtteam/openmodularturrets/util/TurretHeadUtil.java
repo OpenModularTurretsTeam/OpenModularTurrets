@@ -112,9 +112,7 @@ public class TurretHeadUtil {
         EntityLivingBase target = null;
 
         if (!worldObj.isRemote && base != null) {
-            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
-                                                   pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
-                                                   pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
+            AxisAlignedBB axis = getTargetSearchingBox(pos, turretRange);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
@@ -186,9 +184,7 @@ public class TurretHeadUtil {
         EntityLivingBase target = null;
 
         if (!worldObj.isRemote && base != null) {
-            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
-                                                   pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
-                                                   pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
+            AxisAlignedBB axis = getTargetSearchingBox(pos, turretRange);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
@@ -229,26 +225,24 @@ public class TurretHeadUtil {
 
     public static Entity getTargetWithoutSlowEffect(TurretBase base, World worldObj, BlockPos pos, int turretRange, TurretHead turret) {
         EntityLivingBase target = null;
-
-        if (!worldObj.isRemote && base != null) {
-            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
-                                                   pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
-                                                   pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
+        Potion slownessPotion = Potion.getPotionById(2);
+        if (!worldObj.isRemote && base != null && slownessPotion != null) {
+            AxisAlignedBB axis = getTargetSearchingBox(pos, turretRange);
 
             List<EntityLivingBase> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             for (EntityLivingBase target1 : targets) {
-                if (isEntityValidNeutral(base, target1) && !target1.isPotionActive(Potion.getPotionById(2))) {
+                if (isEntityValidNeutral(base, target1) && !target1.isPotionActive(slownessPotion)) {
                     target = target1;
                 }
 
-                if (isEntityValidMob(base, target1) && !target1.isPotionActive(Potion.getPotionById(2))) {
+                if (isEntityValidMob(base, target1) && !target1.isPotionActive(slownessPotion)) {
                     target = target1;
                 }
 
                 if (base.isAttacksPlayers() && OMTConfig.TURRETS.globalCanTargetPlayers) {
                     if (target1 instanceof EntityPlayerMP && !target1.isDead && !target1.isPotionActive(
-                            Potion.getPotionById(2))) {
+                            slownessPotion)) {
                         EntityPlayerMP entity = (EntityPlayerMP) target1;
 
                         if (OMTUtil.canDamagePlayer(entity, base) && !entity.capabilities.isCreativeMode) {
@@ -639,7 +633,7 @@ public class TurretHeadUtil {
         return value;
     }
 
-    public static float getAccuraccyUpgrades(TurretBase base, TurretHead turretHead) {
+    public static float getAccuracyUpgrades(TurretBase base, TurretHead turretHead) {
         float accuracy = 0.0F;
         int tier = base.getTier();
 
@@ -896,7 +890,7 @@ public class TurretHeadUtil {
 
         if (ModCompatibility.ValkyrienWarfareLoaded) {
             IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(turret.getWorld(),
-                    turret.getPos());
+                                                                                                        turret.getPos());
             if (physicsEntity != null) {
                 traceStart = physicsEntity.transformVector(traceStart, TransformType.SUBSPACE_TO_GLOBAL);
             }
@@ -938,5 +932,11 @@ public class TurretHeadUtil {
 
         // If all above failed, the target cannot be seen
         return false;
+    }
+
+    public static AxisAlignedBB getTargetSearchingBox(BlockPos pos, int turretRange) {
+        return new AxisAlignedBB(pos.getX() - turretRange - 1, pos.getY() - turretRange - 1,
+                                 pos.getZ() - turretRange - 1, pos.getX() + turretRange + 1,
+                                 pos.getY() + turretRange + 1, pos.getZ() + turretRange + 1);
     }
 }
