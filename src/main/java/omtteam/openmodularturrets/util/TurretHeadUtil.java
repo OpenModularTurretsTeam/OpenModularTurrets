@@ -76,14 +76,14 @@ public class TurretHeadUtil {
                     } else if (warnedPlayers.containsKey(entry)) {
                         continue;
                     }
-                    dispatchWarnMessage(target, worldObj);
+                    dispatchWarnMessage(target);
                     warnedPlayers.put(entry, worldObj.getTotalWorldTime() + 12000);
                 }
             }
         }
     }
 
-    private static void dispatchWarnMessage(EntityPlayerMP player, World worldObj) {
+    private static void dispatchWarnMessage(EntityPlayerMP player) {
         if (OMTConfig.TURRETS.turretAlarmSound) {
             player.playSound(ModSounds.warningSound, 1.0F, 1.0F);
         }
@@ -121,6 +121,9 @@ public class TurretHeadUtil {
             for (EntityLivingBase possibleTarget : targets) {
                 if (possibleTarget != null && EntityList.getEntityString(possibleTarget) != null) {
                     if (MobBlacklist.contains(EntityList.getEntityString(possibleTarget))) continue;
+                }
+                if (possibleTarget == null) {
+                    continue;
                 }
 
                 boolean validTarget = true;
@@ -170,8 +173,7 @@ public class TurretHeadUtil {
                         continue;
                     }
 
-                    EntityLivingBase targetELB = target;
-                    if (canTurretSeeTarget(turret, targetELB) && targetELB.getHealth() > 0.0F) {
+                    if (canTurretSeeTarget(turret, target) && target.getHealth() > 0.0F) {
                         return target;
                     }
                 }
@@ -931,7 +933,7 @@ public class TurretHeadUtil {
 
             EntityLivingBase targeted = traced == null ? target : null;
 
-            return targeted != null && targeted.equals(target);
+            return targeted != null;
         }
 
         // If all above failed, the target cannot be seen
