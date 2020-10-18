@@ -81,7 +81,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         nbtTagCompound.setInteger("ticksBeforeFire", ticks);
         nbtTagCompound.setBoolean("shouldConceal", shouldConceal);
         nbtTagCompound.setBoolean("autoFire", autoFire);
-        if (this.priorities != null) {
+        if (this.priorities.length != 0) {
             nbtTagCompound.setInteger("priorityMaxHP", this.priorities[EnumTargetingPriority.MAX_HP.ordinal()]);
             nbtTagCompound.setInteger("priorityHPRemaining", this.priorities[EnumTargetingPriority.HP_REMAINING.ordinal()]);
             nbtTagCompound.setInteger("priorityDistance", this.priorities[EnumTargetingPriority.DISTANCE.ordinal()]);
