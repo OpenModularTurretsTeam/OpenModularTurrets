@@ -6,7 +6,7 @@ import net.minecraft.util.ITickable;
 import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.util.player.Player;
-import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
+import omtteam.openmodularturrets.api.tileentity.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
 
 import javax.annotation.Nonnull;

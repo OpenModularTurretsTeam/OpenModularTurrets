@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 public class GunTurretTileEntity extends ProjectileTurret {
     public GunTurretTileEntity() {
         super(2);
+        ammo = new ItemStack(ModItems.ammoMetaItem, 1, 1);
     }
 
     @Override
@@ -29,11 +30,6 @@ public class GunTurretTileEntity extends ProjectileTurret {
     @Override
     public boolean requiresSpecificAmmo() {
         return true;
-    }
-
-    @Override
-    public ItemStack getAmmo() {
-        return new ItemStack(ModItems.ammoMetaItem, 1, 1);
     }
 
     @Override

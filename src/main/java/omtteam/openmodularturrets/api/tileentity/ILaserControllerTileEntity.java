@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.api;
+package omtteam.openmodularturrets.api.tileentity;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;

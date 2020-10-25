@@ -26,7 +26,7 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 public class AmmoMetaItem extends Item {
     public final static String[] subNames = {
             OMTNames.Items.blazingClayItem, OMTNames.Items.bulletCraftableItem, OMTNames.Items.ferroSlug,
-            OMTNames.Items.grenadeCraftableItem, OMTNames.Items.rocketCraftableItem
+            OMTNames.Items.grenadeCraftableItem, OMTNames.Items.rocketCraftableItem, OMTNames.Items.fakeDisposableItem
     };
 
     public AmmoMetaItem() {
@@ -42,7 +42,7 @@ public class AmmoMetaItem extends Item {
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         if (isInCreativeTab(itemIn)) {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 6; i++) {
                 subItems.add(new ItemStack(ModItems.ammoMetaItem, 1, i));
             }
         }
@@ -97,6 +97,11 @@ public class AmmoMetaItem extends Item {
                     tooltip.add(TextFormatting.BLUE + safeLocalize("text.openmodularturrets.turret.ammo.label"));
                     tooltip.add("");
                     tooltip.add(safeLocalize("text.openmodularturrets.turret.ammo.rocket"));
+                case 5:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("text.openmodularturrets.turret.ammo.label"));
+                    tooltip.add("");
+                    tooltip.add("fake item, do not use");
             }
         }
     }

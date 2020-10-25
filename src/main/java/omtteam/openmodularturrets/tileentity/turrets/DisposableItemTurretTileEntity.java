@@ -6,6 +6,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import omtteam.openmodularturrets.entity.projectiles.DisposableTurretProjectile;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
+import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
 
 import javax.annotation.Nonnull;
@@ -13,6 +14,7 @@ import javax.annotation.Nonnull;
 public class DisposableItemTurretTileEntity extends ProjectileTurret {
     public DisposableItemTurretTileEntity() {
         super(1);
+        ammo = new ItemStack(ModItems.ammoMetaItem, 1, 5);
     }
 
     @Override
@@ -28,11 +30,6 @@ public class DisposableItemTurretTileEntity extends ProjectileTurret {
     @Override
     public boolean requiresSpecificAmmo() {
         return false;
-    }
-
-    @Override
-    public ItemStack getAmmo() {
-        return ItemStack.EMPTY;
     }
 
     @Override

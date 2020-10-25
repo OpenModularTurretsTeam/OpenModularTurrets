@@ -15,7 +15,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.util.TargetingSettings;
-import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
+import omtteam.openmodularturrets.api.tileentity.ITurretBaseAddonTileEntity;
+import omtteam.openmodularturrets.api.tileentity.ITurretHead;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
@@ -32,7 +33,7 @@ import java.util.Random;
 
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
-public abstract class TurretHead extends TileEntityBase implements ITickable, ITurretBaseAddonTileEntity {
+public abstract class TurretHead extends TileEntityBase implements ITurretHead, ITickable, ITurretBaseAddonTileEntity {
     public float baseFitRotationX, baseFitRotationZ;
     public EntityLivingBase target = null;
     public float rotationAnimation = 0.00F;
@@ -52,8 +53,9 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     protected double cachedAccuracy = 0D;
     protected int cachedScattershot = 0;
     private boolean resetCaches;
-    Integer[] priorities;
+    protected ItemStack ammo;
     private EnumFacing turretBase;
+    Integer[] priorities = {};
 
     public TurretHead(int turretTier) {
         this.turretTier = turretTier;
@@ -191,13 +193,13 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     }
 
     public Integer[] getPriorities() {
-        if (priorities != null) {
+        if (priorities.length != 0) {
             return priorities;
         }
         return this.getDefaultPriorities();
     }
 
-    TurretBase getBaseFromWorld() {
+    protected TurretBase getBaseFromWorld() {
         return TurretHeadUtil.getTurretBase(this.getWorld(), this.pos);
     }
 
@@ -206,7 +208,7 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     }
 
     // If the turret is still on cooldown (from previous shot/activation)
-    protected boolean isOnCooldown() {
+    public boolean isOnCooldown() {
         return (ticks < (this.getTurretBaseFireRate() / (1 + TurretHeadUtil.getFireRateUpgrades(base, this))));
     }
 
@@ -277,7 +279,9 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     }
 
     @Nullable
-    public abstract ItemStack getAmmo();
+    public ItemStack getAmmo() {
+        return ammo;
+    }
 
     @Nonnull
     protected abstract SoundEvent getLaunchSoundEffect();
@@ -291,19 +295,17 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
         ItemStack ammo = ItemStack.EMPTY;
         if (this.requiresAmmo() && OMTConfig.TURRETS.doTurretsNeedAmmo) {
             if (this.requiresSpecificAmmo()) {
-                for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-                    ammo = TurretHeadUtil.getSpecificItemStackFromBase(base, this.getAmmo(), this);
-                    if (ammo == ItemStack.EMPTY) {
-                        ammo = TurretHeadUtil.getSpecificItemFromInvExpanders(this.getWorld(), this.getAmmo(), base, this);
-                    }
+                ItemStack ammoNeeded = this.getAmmo();
+                if (ammoNeeded != null) {
+                    ammoNeeded.setCount(TurretHeadUtil.getScattershotUpgrades(base) + 1);
                 }
-            } else {
-                for (int i = 0; i <= TurretHeadUtil.getScattershotUpgrades(base); i++) {
-                    ammo = TurretHeadUtil.getDisposableAmmoFromBase(base);
-                    if (ammo == ItemStack.EMPTY) {
-                        ammo = TurretHeadUtil.getDisposableAmmoFromInvExpander(this.getWorld(), base);
-                    }
+                ammo = TurretHeadUtil.deductItemStackFromInventories(this.getAmmo(), base, this);
+            } else { // for Disposable
+                ItemStack ammoNeeded = this.getAmmo();
+                if (ammoNeeded != null) {
+                    ammoNeeded.setCount(TurretHeadUtil.getScattershotUpgrades(base) + 1);
                 }
+                ammo = TurretHeadUtil.deductItemStackFromInventories(this.getAmmo(), base, this);
             }
         }
         return ammo;

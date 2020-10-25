@@ -9,7 +9,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 import omtteam.omlib.tileentity.TileEntityContainer;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
-import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
+import omtteam.openmodularturrets.api.tileentity.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import omtteam.openmodularturrets.util.OMTUtil;
 

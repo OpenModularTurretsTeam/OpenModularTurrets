@@ -69,7 +69,7 @@ public abstract class AbstractTurretRenderer extends TileEntitySpecialRenderer {
 
         if (turretHead.getBase() != null) {
 
-            if (TurretHeadUtil.hasDamageAmpAddon(turretHead.getBase()) && ((this.addonsRendered()) & 1) != 0) {
+            if (TurretHeadUtil.getAmpLevel(turretHead.getBase()) > 0 && ((this.addonsRendered()) & 1) != 0) {
                 ResourceLocation texturesAmp = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_damage_amp.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
                 if (doRotation) {

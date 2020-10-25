@@ -23,6 +23,7 @@ public class RailGunTurretTileEntity extends RayTracingTurret {
 
     public RailGunTurretTileEntity() {
         super(5);
+        ammo = new ItemStack(ModItems.ammoMetaItem, 1, 2);
     }
 
     @Override
@@ -33,11 +34,6 @@ public class RailGunTurretTileEntity extends RayTracingTurret {
     @Override
     public boolean requiresSpecificAmmo() {
         return true;
-    }
-
-    @Override
-    public ItemStack getAmmo() {
-        return new ItemStack(ModItems.ammoMetaItem, 1, 2);
     }
 
     @Override

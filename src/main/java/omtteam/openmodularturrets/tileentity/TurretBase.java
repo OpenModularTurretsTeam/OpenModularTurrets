@@ -47,6 +47,7 @@ import omtteam.omlib.util.TargetingSettings;
 import omtteam.omlib.util.camo.CamoSettings;
 import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.api.network.IBaseController;
+import omtteam.openmodularturrets.api.tileentity.ITurretBase;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.network.messages.MessageTurretBase;
@@ -55,12 +56,14 @@ import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import omtteam.openmodularturrets.util.EnumSlotType;
 import omtteam.openmodularturrets.util.OMTUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static omtteam.omlib.compatibility.OMLibModCompatibility.ComputerCraftLoaded;
@@ -72,7 +75,7 @@ import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntitiesByClass;
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "computercraft")}
 )
-public class TurretBase extends TileEntityTrustedMachine implements IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile, ITickable, IHasTargetingSettings {
+public class TurretBase extends TileEntityTrustedMachine implements ITurretBase, IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile, ITickable, IHasTargetingSettings {
     public boolean shouldConcealTurrets;
     protected CamoSettings camoSettings;
     protected int tier;
@@ -88,6 +91,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     private IBaseController controller;
     private OMLibNetwork network;
     private final List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
+    private final HashMap<EnumSlotType, List<Integer>> slotMap = new HashMap<>();
 
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
         super();
@@ -98,6 +102,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         this.mode = EnumMachineMode.INVERTED;
         this.camoSettings = new CamoSettings();
         setupInventory();
+        setupSlotMap();
     }
 
     public TurretBase() {
@@ -112,24 +117,18 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         }
         //Prioritise redstone blocks
         if (OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9 < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
-            ItemStack redstoneBlock = TurretHeadUtil.getSpecificItemStackFromBase(base, new ItemStack(
-                    Blocks.REDSTONE_BLOCK));
+            ItemStack redstoneBlock = TurretHeadUtil.deductItemStackFromInventories(new ItemStack(
+                    Blocks.REDSTONE_BLOCK), base, null);
 
-            if (redstoneBlock == ItemStack.EMPTY) {
-                redstoneBlock = TurretHeadUtil.
-                        getSpecificItemFromInvExpanders(base.getWorld(), new ItemStack(Blocks.REDSTONE_BLOCK), base, null);
-            }
             if (redstoneBlock != ItemStack.EMPTY) {
                 base.storage.modifyEnergyStored(OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen * 9);
                 return;
             }
         }
         if (OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen < (storage.getMaxEnergyStored() - storage.getEnergyStored())) {
-            ItemStack redstone = TurretHeadUtil.getSpecificItemStackFromBase(base, new ItemStack(Items.REDSTONE));
-            if (redstone == ItemStack.EMPTY) {
-                redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorld(),
-                                                                          new ItemStack(Items.REDSTONE), base, null);
-            }
+            ItemStack redstone = TurretHeadUtil.deductItemStackFromInventories(new ItemStack(
+                    Items.REDSTONE), base, null);
+
             if (redstone != ItemStack.EMPTY) {
                 storage.modifyEnergyStored(OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen);
             }
@@ -140,7 +139,22 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     public IItemHandler getCapabilityInventory(EnumFacing facing) {
         return new RangedWrapper(inventory, 0, 9);
     }
+
+    @Override
+    public List<IItemHandler> getAmmoInventories() {
+        ArrayList<IItemHandler> list = new ArrayList<>();
+        list.add(this.getCapabilityInventory(EnumFacing.DOWN)); // local ammo
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            TileEntity te = world.getTileEntity(this.getPos().offset(facing));
+            if (te instanceof Expander && !((Expander) te).isPowerExpander()) {
+                list.add(((Expander) te).inventory);
+            }
+        }
+        return list;
+    }
+
     protected void setupInventory() {
+        slotMap.clear();
         inventory = new ItemStackHandler(13) {
             @SuppressWarnings("BooleanMethodIsAlwaysInverted")
             public boolean isItemValidForSlot(int index, ItemStack stack) {
@@ -158,6 +172,32 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
                 return super.insertItem(slot, stack, simulate);
             }
         };
+    }
+
+    private void setupSlotMap() {
+        List<Integer> ammoList = new ArrayList<>();
+        List<Integer> addonList = new ArrayList<>();
+        List<Integer> upgradeList = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            ammoList.add(i);
+        }
+        slotMap.put(EnumSlotType.AmmoSlot, ammoList);
+        switch (tier) {
+            case 5:
+                upgradeList.add(12);
+            case 4:
+            case 3:
+            case 2:
+                upgradeList.add(11);
+                slotMap.put(EnumSlotType.UpgradeSlot, upgradeList);
+                addonList.add(9);
+                addonList.add(10);
+                slotMap.put(EnumSlotType.AddonSlot, addonList);
+                break;
+            case 1:
+                slotMap.put(EnumSlotType.AddonSlot, addonList);
+                slotMap.put(EnumSlotType.UpgradeSlot, upgradeList);
+        }
     }
 
     protected void setupTank() {
@@ -272,6 +312,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
     @Override
     public void onLoad() {
         super.onLoad();
+        setupSlotMap();
         if (camoBlockStateTemp instanceof IExtendedBlockState) {
             this.camoSettings.setCamoBlockState(camoBlockStateTemp);
         } else {
@@ -437,96 +478,121 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return active;
     }
 
+    @Override
     public boolean isAttacksMobs() {
         return this.targetingSettings.isTargetMobs();
     }
 
+    @Override
     public void setAttacksMobs(boolean attacksMobs) {
         this.targetingSettings.setTargetMobs(attacksMobs);
     }
 
+    @Override
     public boolean isAttacksNeutrals() {
         return this.targetingSettings.isTargetPassive();
     }
 
+    @Override
     public void setAttacksNeutrals(boolean attacksNeutrals) {
         this.targetingSettings.setTargetPassive(attacksNeutrals);
     }
 
+    @Override
     public boolean isAttacksPlayers() {
         return this.targetingSettings.isTargetPlayers();
     }
 
+    @Override
     public void setAttacksPlayers(boolean attacksPlayers) {
         this.targetingSettings.setTargetPlayers(attacksPlayers);
     }
 
+    @Override
     public boolean isMultiTargeting() {
         return multiTargeting;
     }
 
+    @Override
     public void setMultiTargeting(boolean multiTargeting) {
         this.multiTargeting = multiTargeting;
     }
 
+    @Override
     public int getTier() {
         return tier;
     }
 
+    @Override
     public void setTier(int tier) {
         this.tier = tier;
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    @Override
     public boolean isComputerAccessible() {
         return (OpenComputersLoaded || ComputerCraftLoaded) && (this.tier == 5 || TurretHeadUtil.hasSerialPortAddon(
                 this));
     }
 
+    @Override
     public void increaseKillCounter() {
         kills++;
     }
 
+    @Override
     public void increasePlayerKillCounter() {
         playerKills++;
     }
 
+    @Override
     public int getKills() {
         return kills;
     }
 
+    @Override
     public void setKills(int kills) {
         this.kills = kills;
     }
 
+    @Override
     public int getPlayerKills() {
         return playerKills;
     }
 
+    @Override
     public void setPlayerKills(int playerKills) {
         this.playerKills = playerKills;
     }
 
+    @Override
     public int getRange() {
         return targetingSettings.getRange();
     }
 
+    @Override
     public void setRange(int range) {
         this.updateMaxRange();
         this.targetingSettings.setRange(range);
     }
 
+    @Override
     public int getMaxRange() {
         return targetingSettings.getMaxRange();
     }
 
+    @Override
     public void setMaxRange(int range) {
         this.targetingSettings.setMaxRange(range);
     }
 
     @Nullable
+    @Override
     public IBaseController getController() {
         return controller;
+    }
+
+    public HashMap<EnumSlotType, List<Integer>> getSlotMap() {
+        return slotMap;
     }
 
     private int getMaxEnergyStorageWithExtenders() {
@@ -551,6 +617,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return 0;
     }
 
+    @Override
     public TargetingSettings getTargetingSettings() {
         return targetingSettings;
     }
@@ -588,6 +655,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
     }
 
+    @Override
     public void setAllTurretsYawPitch(float yaw, float pitch) {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         for (TileEntity te : tileEntities) {
@@ -598,6 +666,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         }
     }
 
+    @Override
     public boolean setTurretYawPitch(EnumFacing facing, float yaw, float pitch) {
         TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
         if (turretHead instanceof AbstractDirectedTurret) {
@@ -608,6 +677,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return false;
     }
 
+    @Override
     public void setAllTurretsForceFire(boolean state) {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         for (TileEntity te : tileEntities) {
@@ -617,6 +687,7 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         }
     }
 
+    @Override
     public boolean setTurretForceFire(EnumFacing facing, boolean state) {
         TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
         if (turretHead instanceof TurretHead) {
@@ -626,12 +697,13 @@ public class TurretBase extends TileEntityTrustedMachine implements IPeripheral,
         return false;
     }
 
+    @Override
     public boolean forceShootTurret(EnumFacing facing) {
         TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
         return (turretHead instanceof AbstractDirectedTurret && ((AbstractDirectedTurret) turretHead).forceShot());
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
     public int forceShootAllTurrets() {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         int successes = 0;

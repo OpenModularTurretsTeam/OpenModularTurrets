@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.tileentity;
 import net.minecraft.util.ITickable;
 import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
-import omtteam.openmodularturrets.api.ITurretBaseAddonTileEntity;
+import omtteam.openmodularturrets.api.tileentity.ITurretBaseAddonTileEntity;
 
 import javax.annotation.Nonnull;
 

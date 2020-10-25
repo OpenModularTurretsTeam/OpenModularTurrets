@@ -52,6 +52,7 @@ public class OMTNames {
         public static final String grenadeCraftableItem = "ammo_grenade";
         public static final String rocketCraftableItem = "ammo_rocket";
         public static final String blazingClayItem = "ammo_blazing_clay";
+        public static final String fakeDisposableItem = "ammo_fake_disposable";
         public static final String fireRateUpgrade = "upgrade_fire_rate";
         public static final String efficiencyUpgrade = "upgrade_efficiency";
         public static final String rangeUpgrade = "upgrade_range";

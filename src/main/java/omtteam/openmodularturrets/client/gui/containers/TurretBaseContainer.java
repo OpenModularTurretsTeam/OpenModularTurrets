@@ -16,6 +16,7 @@ import omtteam.openmodularturrets.items.AddonMetaItem;
 import omtteam.openmodularturrets.items.UpgradeMetaItem;
 import omtteam.openmodularturrets.network.messages.MessageTurretBase;
 import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.util.EnumSlotType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -45,19 +46,19 @@ public class TurretBaseContainer extends Container {
                 this.addSlotToContainer(new Slot(inventoryPlayer, 9 + x + y * 9, 8 + x * 18, 84 + y * 18));
             }
         }
-
+        // TODO: maybe make this support more than 9 ammo slots.
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
                 addSlotToContainer(new AmmoSlot(base.getInventory(), x + y * 3, 8 + x * 18, 17 + y * 18));
             }
         }
         if (base.getTier() > 1) {
-            addSlotToContainer(new AddonSlot(base.getInventory(), 9, 72, 18));
-            addSlotToContainer(new AddonSlot(base.getInventory(), 10, 92, 18));
-            addSlotToContainer(new UpgradeSlot(base.getInventory(), 11, 72, 52));
+            addSlotToContainer(new AddonSlot(base.getInventory(), base.getSlotMap().get(EnumSlotType.AddonSlot).get(0), 72, 18));
+            addSlotToContainer(new AddonSlot(base.getInventory(), base.getSlotMap().get(EnumSlotType.AddonSlot).get(1), 92, 18));
+            addSlotToContainer(new UpgradeSlot(base.getInventory(), base.getSlotMap().get(EnumSlotType.UpgradeSlot).get(0), 72, 52));
         }
         if (base.getTier() > 4) {
-            addSlotToContainer(new UpgradeSlot(base.getInventory(), 12, 92, 52));
+            addSlotToContainer(new UpgradeSlot(base.getInventory(), base.getSlotMap().get(EnumSlotType.UpgradeSlot).get(1), 92, 52));
         }
 
         // Determine the slot range for each type( According to the class constructor )

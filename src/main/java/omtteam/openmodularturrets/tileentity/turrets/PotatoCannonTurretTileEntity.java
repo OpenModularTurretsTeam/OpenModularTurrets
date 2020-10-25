@@ -12,8 +12,10 @@ import omtteam.openmodularturrets.init.ModSounds;
 import javax.annotation.Nonnull;
 
 public class PotatoCannonTurretTileEntity extends ProjectileTurret {
+
     public PotatoCannonTurretTileEntity() {
         super(1);
+        ammo = new ItemStack(Items.POTATO);
     }
 
     @Override
@@ -31,10 +33,6 @@ public class PotatoCannonTurretTileEntity extends ProjectileTurret {
         return true;
     }
 
-    @Override
-    public ItemStack getAmmo() {
-        return new ItemStack(Items.POTATO);
-    }
 
     @Override
     public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {

@@ -14,36 +14,40 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.items.IItemHandler;
 import omtteam.omlib.api.util.Tuple;
 import omtteam.omlib.power.OMEnergyStorage;
+import omtteam.omlib.util.RandomUtil;
 import omtteam.omlib.util.player.Player;
 import omtteam.omlib.util.world.Pos;
 import omtteam.omlib.util.world.WorldUtil;
+import omtteam.openmodularturrets.api.lists.AmmoList;
 import omtteam.openmodularturrets.blocks.BlockBaseAttachment;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
-import omtteam.openmodularturrets.items.AmmoMetaItem;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import omtteam.openmodularturrets.util.EnumSlotType;
+import org.apache.commons.lang3.tuple.Triple;
 import valkyrienwarfare.api.IPhysicsEntity;
 import valkyrienwarfare.api.IPhysicsEntityManager;
 import valkyrienwarfare.api.TransformType;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import static omtteam.omlib.compatibility.OMLibModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compatibility.OMLibModCompatibility.OpenComputersLoaded;
 import static omtteam.omlib.util.inventory.InvUtil.getStackSize;
 import static omtteam.omlib.util.player.PlayerUtil.*;
 import static omtteam.openmodularturrets.blocks.BlockBaseAttachment.BASE_ADDON_META;
-import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
+import static omtteam.openmodularturrets.init.ModItems.ammoMetaItem;
 
 public class TurretHeadUtil {
     private static final HashMap<Tuple<Player, BlockPos>, Long> warnedPlayers = new HashMap<>();
@@ -97,115 +101,48 @@ public class TurretHeadUtil {
         return totalExtraCap;
     }
 
-    private static ItemStack deductFromInvExpander(ItemStack itemStack, Expander exp, TurretBase base, @Nullable TurretHead turretHead) {
-        for (int i = 0; i < exp.getInventory().getSlots(); i++) {
-            ItemStack ammoCheck = exp.getInventory().getStackInSlot(i);
-            if (ammoCheck != ItemStack.EMPTY && ammoCheck.getItem() == itemStack.getItem()) {
-                if (hasRecyclerAddon(base) && turretHead != null) { // turretHead == null, means do not pull ammo
-                    int chance = new Random().nextInt(99);
+    //TODO: write unit tests for this
+    public static ItemStack deductItemStackFromInventories(ItemStack itemStack, TurretBase base, @Nullable TurretHead turretHead) {
+        List<Triple<IItemHandler, Integer, Integer>> foundMap = new ArrayList<>();
+        int foundCount = 0;
+        if (hasRecyclerAddon(base) && turretHead != null) { //For negating ammo usage
+            int chance = RandomUtil.random.nextInt(99);
 
-                    //For negating
-                    if (chance >= 0 && chance < turretHead.getTurretType().getSettings().recyclerNegateChance) {
-                        return new ItemStack(ammoCheck.getItem());
-                        //For adding
-                    } else if (chance > turretHead.getTurretType().getSettings().recyclerNegateChance &&
-                            chance < (turretHead.getTurretType().getSettings().recyclerNegateChance + turretHead.getTurretType().getSettings().recyclerAddChance)) {
-                        exp.getInventory().insertItem(i, new ItemStack(ammoCheck.getItem(), 1), false);
-                        return new ItemStack(ammoCheck.getItem());
-                    } else {
-                        exp.getInventory().extractItem(i, 1, false);
-                        return new ItemStack(ammoCheck.getItem());
-                    }
-                } else {
-                    exp.getInventory().extractItem(i, 1, false);
-                    return new ItemStack(ammoCheck.getItem());
+            if (chance < turretHead.getTurretType().getSettings().recyclerNegateChance) {
+                return itemStack.copy();
+            }
+        }
+        for (IItemHandler inventory : base.getAmmoInventories()) {
+            for (int i = 0; i < inventory.getSlots(); i++) {
+                ItemStack ammoCheck = inventory.getStackInSlot(i);
+                // Second check if requested ammo is disposable ammo
+                boolean needDisposable = itemStack.getItem().equals(ammoMetaItem) && itemStack.getItemDamage() == 5;
+                if (ammoCheck != ItemStack.EMPTY && ammoCheck.getItem() == itemStack.getItem()
+                        || (needDisposable && AmmoList.contains(ammoCheck))) {
+                    foundMap.add(Triple.of(inventory, i, Math.min(ammoCheck.getCount(), itemStack.getCount())));
+                    foundCount += ammoCheck.getCount();
+                }
+                if (foundCount >= itemStack.getCount()) {
+                    break;
                 }
             }
-        }
-        return ItemStack.EMPTY;
-    }
-
-    public static ItemStack getSpecificItemFromInvExpanders(World world, ItemStack itemStack, TurretBase base, @Nullable TurretHead turretHead) {
-        for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, base.getPos())) {
-            if (tileEntity instanceof Expander && !((Expander) tileEntity).isPowerExpander()) {
-                Expander exp = (Expander) tileEntity;
-                ItemStack stack = deductFromInvExpander(itemStack, exp, base, turretHead);
-                if (stack != ItemStack.EMPTY) {
-                    return stack;
-                }
+            if (foundCount >= itemStack.getCount()) {
+                break;
             }
         }
-        return ItemStack.EMPTY;
-    }
+        foundCount = Math.min(foundCount, itemStack.getCount());
 
-    public static ItemStack getDisposableAmmoFromInvExpander(World world, TurretBase base) {
-        for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, base.getPos())) {
-            if (tileEntity instanceof Expander && !((Expander) tileEntity).isPowerExpander()) {
-                Expander exp = (Expander) tileEntity;
-                for (int i = 0; i < exp.getInventory().getSlots(); i++) {
-                    ItemStack itemCheck = exp.getInventory().getStackInSlot(i);
-                    if (itemCheck != ItemStack.EMPTY && isItemStackValidAmmo(itemCheck) && !(itemCheck.getItem() instanceof AmmoMetaItem)) {
-                        exp.getInventory().extractItem(i, 1, false);
-                        return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
-                    }
-                }
+        // remove items from inventories
+        if (foundCount == itemStack.getCount()) {
+            for (Triple<IItemHandler, Integer, Integer> entry : foundMap) {
+                int todo = foundCount;
+                entry.getLeft().extractItem(entry.getMiddle(), entry.getRight(), false);
+                todo -= entry.getRight();
+                if (todo == 0) break;
             }
         }
-        return ItemStack.EMPTY;
-    }
 
-    public static ItemStack getDisposableAmmoFromBase(TurretBase base) {
-        for (int i = 0; i <= 8; i++) {
-            ItemStack itemCheck = base.getInventory().getStackInSlot(i);
-            if (itemCheck != ItemStack.EMPTY && isItemStackValidAmmo(itemCheck) && !(itemCheck.getItem() instanceof AmmoMetaItem)) {
-                base.getInventory().extractItem(i, 1, false);
-                return new ItemStack(itemCheck.getItem(), 1, itemCheck.getItemDamage());
-            }
-        }
-        return ItemStack.EMPTY;
-    }
-
-    public static ItemStack getSpecificItemStackFromBase(TurretBase base, ItemStack stack) {
-        for (int i = 0; i <= 8; i++) {
-            ItemStack ammo_stack = base.getInventory().getStackInSlot(i);
-
-            if (ammo_stack != ItemStack.EMPTY && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == stack.getItem()) {
-                base.getInventory().extractItem(i, 1, false);
-                return new ItemStack(ammo_stack.getItem());
-            }
-        }
-        return ItemStack.EMPTY;
-    }
-
-    public static ItemStack getSpecificItemStackFromBase(TurretBase base, ItemStack stack, TurretHead turretHead) {
-        for (int i = 0; i <= 8; i++) {
-            ItemStack ammo_stack = base.getInventory().getStackInSlot(i);
-
-            if (ammo_stack != ItemStack.EMPTY && getStackSize(ammo_stack) > 0 && ammo_stack.getItem() == stack.getItem()
-                    && ammo_stack.getMetadata() == stack.getMetadata()) {
-                if (hasRecyclerAddon(base)) {
-                    int chance = new Random().nextInt(99);
-
-                    //For negating
-                    if (chance > 0 && chance < turretHead.getTurretType().getSettings().recyclerNegateChance) {
-                        return new ItemStack(ammo_stack.getItem());
-                        //For adding
-                    } else if (chance > turretHead.getTurretType().getSettings().recyclerNegateChance && chance <
-                            (turretHead.getTurretType().getSettings().recyclerNegateChance + turretHead.getTurretType().getSettings().recyclerAddChance)) {
-
-                        base.getInventory().insertItem(i, new ItemStack(ammo_stack.getItem(), 1), false);
-                        return new ItemStack(ammo_stack.getItem());
-                    } else {
-                        base.getInventory().extractItem(i, 1, false);
-                        return new ItemStack(ammo_stack.getItem());
-                    }
-                } else {
-                    base.getInventory().extractItem(i, 1, false);
-                    return new ItemStack(ammo_stack.getItem());
-                }
-            }
-        }
-        return ItemStack.EMPTY;
+        return foundCount < itemStack.getCount() ? ItemStack.EMPTY : itemStack;
     }
 
     public static int getAmmoLevel(TurretHead turret, TurretBase base) {
@@ -361,23 +298,11 @@ public class TurretHeadUtil {
 
     public static int getRangeUpgrades(TurretBase base, TurretHead turretHead) {
         int value = 0;
-        int tier = base.getTier();
-
-        if (tier == 1) {
-            return value;
-        }
-
-        if (tier == 5) {
-            if (base.getInventory().getStackInSlot(12) != ItemStack.EMPTY) {
-                if (base.getInventory().getStackInSlot(12).getItemDamage() == 3) {
-                    value += (turretHead.getTurretType().getSettings().rangeUpgrade * getStackSize(base.getInventory().getStackInSlot(12)));
+        for (int i : base.getSlotMap().get(EnumSlotType.UpgradeSlot)) {
+            if (base.getInventory().getStackInSlot(i) != ItemStack.EMPTY) {
+                if (base.getInventory().getStackInSlot(i).getItemDamage() == 3) {
+                    value += (turretHead.getTurretType().getSettings().rangeUpgrade * getStackSize(base.getInventory().getStackInSlot(i)));
                 }
-            }
-        }
-
-        if (base.getInventory().getStackInSlot(11) != ItemStack.EMPTY) {
-            if (base.getInventory().getStackInSlot(11).getItemDamage() == 3) {
-                value += (turretHead.getTurretType().getSettings().rangeUpgrade * getStackSize(base.getInventory().getStackInSlot(11)));
             }
         }
 
@@ -386,23 +311,11 @@ public class TurretHeadUtil {
 
     public static int getScattershotUpgrades(TurretBase base) {
         int value = 0;
-        int tier = base.getTier();
-
-        if (tier == 1) {
-            return value;
-        }
-
-        if (tier == 5) {
-            if (base.getInventory().getStackInSlot(12) != ItemStack.EMPTY) {
-                if (base.getInventory().getStackInSlot(12).getItemDamage() == 4) {
-                    value += getStackSize(base.getInventory().getStackInSlot(12));
+        for (int i : base.getSlotMap().get(EnumSlotType.UpgradeSlot)) {
+            if (base.getInventory().getStackInSlot(i) != ItemStack.EMPTY) {
+                if (base.getInventory().getStackInSlot(i).getItemDamage() == 4) {
+                    value += getStackSize(base.getInventory().getStackInSlot(i));
                 }
-            }
-        }
-
-        if (base.getInventory().getStackInSlot(11) != ItemStack.EMPTY) {
-            if (base.getInventory().getStackInSlot(11).getItemDamage() == 4) {
-                value += getStackSize(base.getInventory().getStackInSlot(11));
             }
         }
 
@@ -411,23 +324,11 @@ public class TurretHeadUtil {
 
     public static float getAccuracyUpgrades(TurretBase base, TurretHead turretHead) {
         float accuracy = 0.0F;
-        int tier = base.getTier();
-
-        if (tier == 1) {
-            return accuracy;
-        }
-
-        if (tier == 5) {
-            if (base.getInventory().getStackInSlot(12) != ItemStack.EMPTY) {
-                if (base.getInventory().getStackInSlot(12).getItemDamage() == 0) {
-                    accuracy += (turretHead.getTurretType().getSettings().accuracyUpgrade * getStackSize(base.getInventory().getStackInSlot(12)));
+        for (int i : base.getSlotMap().get(EnumSlotType.UpgradeSlot)) {
+            if (base.getInventory().getStackInSlot(i) != ItemStack.EMPTY) {
+                if (base.getInventory().getStackInSlot(i).getItemDamage() == 0) {
+                    accuracy += (turretHead.getTurretType().getSettings().accuracyUpgrade * getStackSize(base.getInventory().getStackInSlot(i)));
                 }
-            }
-        }
-
-        if (base.getInventory().getStackInSlot(11) != ItemStack.EMPTY) {
-            if (base.getInventory().getStackInSlot(11).getItemDamage() == 0) {
-                accuracy += (turretHead.getTurretType().getSettings().accuracyUpgrade * getStackSize(base.getInventory().getStackInSlot(11)));
             }
         }
 
@@ -436,23 +337,11 @@ public class TurretHeadUtil {
 
     public static float getEfficiencyUpgrades(TurretBase base, TurretHead turretHead) {
         float efficiency = 0.0F;
-        int tier = base.getTier();
-
-        if (tier == 1) {
-            return efficiency;
-        }
-
-        if (tier == 5) {
-            if (base.getInventory().getStackInSlot(12) != ItemStack.EMPTY) {
-                if (base.getInventory().getStackInSlot(12).getItemDamage() == 1) {
-                    efficiency += (turretHead.getTurretType().getSettings().efficiencyUpgrade * getStackSize(base.getInventory().getStackInSlot(12)));
+        for (int i : base.getSlotMap().get(EnumSlotType.UpgradeSlot)) {
+            if (base.getInventory().getStackInSlot(i) != ItemStack.EMPTY) {
+                if (base.getInventory().getStackInSlot(i).getItemDamage() == 1) {
+                    efficiency += (turretHead.getTurretType().getSettings().efficiencyUpgrade * getStackSize(base.getInventory().getStackInSlot(i)));
                 }
-            }
-        }
-
-        if (base.getInventory().getStackInSlot(11) != ItemStack.EMPTY) {
-            if (base.getInventory().getStackInSlot(11).getItemDamage() == 1) {
-                efficiency += (turretHead.getTurretType().getSettings().efficiencyUpgrade * getStackSize(base.getInventory().getStackInSlot(11)));
             }
         }
 
@@ -461,23 +350,11 @@ public class TurretHeadUtil {
 
     public static float getFireRateUpgrades(TurretBase base, TurretHead turretHead) {
         float rof = 0.0F;
-        int tier = base.getTier();
-
-        if (tier == 1) {
-            return rof;
-        }
-
-        if (tier == 5) {
-            if (base.getInventory().getStackInSlot(12) != ItemStack.EMPTY) {
-                if (base.getInventory().getStackInSlot(12).getItemDamage() == 2) {
-                    rof += (turretHead.getTurretType().getSettings().fireRateUpgrade * getStackSize(base.getInventory().getStackInSlot(12)));
+        for (int i : base.getSlotMap().get(EnumSlotType.UpgradeSlot)) {
+            if (base.getInventory().getStackInSlot(i) != ItemStack.EMPTY) {
+                if (base.getInventory().getStackInSlot(i).getItemDamage() == 2) {
+                    rof += (turretHead.getTurretType().getSettings().fireRateUpgrade * getStackSize(base.getInventory().getStackInSlot(i)));
                 }
-            }
-        }
-
-        if (base.getInventory().getStackInSlot(11) != ItemStack.EMPTY) {
-            if (base.getInventory().getStackInSlot(11).getItemDamage() == 2) {
-                rof += (turretHead.getTurretType().getSettings().fireRateUpgrade * getStackSize(base.getInventory().getStackInSlot(11)));
             }
         }
 
@@ -485,35 +362,14 @@ public class TurretHeadUtil {
     }
 
     public static boolean hasRedstoneReactor(TurretBase base) {
-        boolean found = false;
-        if (base.getTier() == 1) {
-            return false;
+        for (int i : base.getSlotMap().get(EnumSlotType.AddonSlot)) {
+            if (base.getInventory().getStackInSlot(i) != ItemStack.EMPTY) {
+                if (base.getInventory().getStackInSlot(i).getItemDamage() == 4) {
+                    return true;
+                }
+            }
         }
-
-        if (base.getInventory().getStackInSlot(9) != ItemStack.EMPTY) {
-            found = base.getInventory().getStackInSlot(9).getItemDamage() == 4;
-        }
-
-        if (base.getInventory().getStackInSlot(10) != ItemStack.EMPTY && !found) {
-            found = base.getInventory().getStackInSlot(10).getItemDamage() == 4;
-        }
-        return found;
-    }
-
-    public static boolean hasDamageAmpAddon(TurretBase base) {
-        boolean found = false;
-        if (base.getTier() == 1) {
-            return false;
-        }
-
-        if (base.getInventory().getStackInSlot(9) != ItemStack.EMPTY) {
-            found = base.getInventory().getStackInSlot(9).getItemDamage() == 1;
-        }
-
-        if (base.getInventory().getStackInSlot(10) != ItemStack.EMPTY && !found) {
-            found = base.getInventory().getStackInSlot(10).getItemDamage() == 1;
-        }
-        return found;
+        return false;
     }
 
     public static boolean hasConcealmentAddon(TurretBase base) {
@@ -589,21 +445,11 @@ public class TurretHeadUtil {
             return amp_level;
         }
 
-        int tier = base.getTier();
-
-        if (tier == 1) {
-            return amp_level;
-        }
-
-        if (base.getInventory().getStackInSlot(9) != ItemStack.EMPTY) {
-            if (base.getInventory().getStackInSlot(9).getItemDamage() == 1) {
-                amp_level += getStackSize(base.getInventory().getStackInSlot(9));
-            }
-        }
-
-        if (base.getInventory().getStackInSlot(10) != ItemStack.EMPTY) {
-            if (base.getInventory().getStackInSlot(10).getItemDamage() == 1) {
-                amp_level += getStackSize(base.getInventory().getStackInSlot(10));
+        for (int i : base.getSlotMap().get(EnumSlotType.AddonSlot)) {
+            if (base.getInventory().getStackInSlot(i) != ItemStack.EMPTY) {
+                if (base.getInventory().getStackInSlot(i).getItemDamage() == 1) {
+                    amp_level += getStackSize(base.getInventory().getStackInSlot(i));
+                }
             }
         }
 
