@@ -224,6 +224,9 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             } else if (base != null && worldIn.isBlockIndirectlyGettingPowered(pos) == 0) {
                 base.setRedstone(false);
             }
+            if (base != null) {
+                base.updateExpanders();
+            }
         }
     }
 

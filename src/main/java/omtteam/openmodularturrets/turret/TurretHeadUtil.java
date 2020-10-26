@@ -26,6 +26,7 @@ import omtteam.openmodularturrets.blocks.BlockBaseAttachment;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
+import omtteam.openmodularturrets.items.AmmoMetaItem;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
@@ -47,10 +48,11 @@ import static omtteam.omlib.compatibility.OMLibModCompatibility.OpenComputersLoa
 import static omtteam.omlib.util.inventory.InvUtil.getStackSize;
 import static omtteam.omlib.util.player.PlayerUtil.*;
 import static omtteam.openmodularturrets.blocks.BlockBaseAttachment.BASE_ADDON_META;
-import static omtteam.openmodularturrets.init.ModItems.ammoMetaItem;
 
 public class TurretHeadUtil {
     private static final HashMap<Tuple<Player, BlockPos>, Long> warnedPlayers = new HashMap<>();
+    //caching disposable fake item
+    private static final ItemStack disposableAmmoStack = new ItemStack(new AmmoMetaItem(), 1, 5);
 
     public static void warnPlayers(TurretBase base, World worldObj, BlockPos pos, int turretRange) {
         if (base.isAttacksPlayers()) {
@@ -90,18 +92,17 @@ public class TurretHeadUtil {
         }
     }
 
-    public static int getPowerExpanderTotalExtraCapacity(World world, BlockPos pos) {
+    public static int getPowerExpanderTotalExtraCapacity(TurretBase base) {
         int totalExtraCap = 0;
-        for (TileEntity tileEntity : WorldUtil.getTouchingTileEntities(world, pos)) {
-            if (tileEntity instanceof Expander && ((Expander) tileEntity).isPowerExpander()) {
-                totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue(
-                        (Expander) tileEntity);
+        for (Map.Entry<EnumFacing, Expander> expanderEntry : base.getExpanderMap().entrySet()) {
+            if (expanderEntry.getValue() != null && expanderEntry.getValue().isPowerExpander()) {
+                totalExtraCap = totalExtraCap + getPowerExtenderCapacityValue(expanderEntry.getValue());
             }
         }
         return totalExtraCap;
     }
 
-    //TODO: write unit tests for this
+    //TODO: write unit tests for this, note: almost impossible in 1.12, wait for port for 1.16 for this
     public static ItemStack deductItemStackFromInventories(ItemStack itemStack, TurretBase base, @Nullable TurretHead turretHead) {
         List<Triple<IItemHandler, Integer, Integer>> foundMap = new ArrayList<>();
         int foundCount = 0;
@@ -116,8 +117,8 @@ public class TurretHeadUtil {
             for (int i = 0; i < inventory.getSlots(); i++) {
                 ItemStack ammoCheck = inventory.getStackInSlot(i);
                 // Second check if requested ammo is disposable ammo
-                boolean needDisposable = itemStack.getItem().equals(ammoMetaItem) && itemStack.getItemDamage() == 5;
-                if (ammoCheck != ItemStack.EMPTY && ammoCheck.getItem() == itemStack.getItem()
+                boolean needDisposable = itemStack.isItemEqual(disposableAmmoStack);
+                if (ammoCheck != ItemStack.EMPTY && ammoCheck.isItemEqual(itemStack)
                         || (needDisposable && AmmoList.contains(ammoCheck))) {
                     foundMap.add(Triple.of(inventory, i, Math.min(ammoCheck.getCount(), itemStack.getCount())));
                     foundCount += ammoCheck.getCount();

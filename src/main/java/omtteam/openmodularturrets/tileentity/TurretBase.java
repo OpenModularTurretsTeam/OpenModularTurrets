@@ -92,6 +92,7 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     private OMLibNetwork network;
     private final List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
     private final HashMap<EnumSlotType, List<Integer>> slotMap = new HashMap<>();
+    protected HashMap<EnumFacing, Expander> expanderMap = new HashMap<>(); //Todo: use this (helpful for testing) for caching Expanders
 
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
         super();
@@ -103,6 +104,7 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
         this.camoSettings = new CamoSettings();
         setupInventory();
         setupSlotMap();
+        updateExpanders();
     }
 
     public TurretBase() {
@@ -135,6 +137,19 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
         }
     }
 
+    public void updateExpanders() {
+        if (world != null) {
+            for (EnumFacing facing : EnumFacing.VALUES) {
+                TileEntity te = world.getTileEntity(this.getPos().offset(facing));
+                if (te instanceof Expander) {
+                    expanderMap.put(facing, (Expander) te);
+                } else {
+                    expanderMap.put(facing, null);
+                }
+            }
+        }
+    }
+
     @Override
     public IItemHandler getCapabilityInventory(EnumFacing facing) {
         return new RangedWrapper(inventory, 0, 9);
@@ -145,9 +160,9 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
         ArrayList<IItemHandler> list = new ArrayList<>();
         list.add(this.getCapabilityInventory(EnumFacing.DOWN)); // local ammo
         for (EnumFacing facing : EnumFacing.VALUES) {
-            TileEntity te = world.getTileEntity(this.getPos().offset(facing));
-            if (te instanceof Expander && !((Expander) te).isPowerExpander()) {
-                list.add(((Expander) te).inventory);
+            Expander te = expanderMap.get(facing);
+            if (te != null && !te.isPowerExpander()) {
+                list.add(te.inventory);
             }
         }
         return list;
@@ -591,6 +606,10 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
         return controller;
     }
 
+    public HashMap<EnumFacing, Expander> getExpanderMap() {
+        return expanderMap;
+    }
+
     public HashMap<EnumSlotType, List<Integer>> getSlotMap() {
         return slotMap;
     }
@@ -600,19 +619,19 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
         switch (tier) {
             case 1:
                 return OMTConfig.BASES.baseTierOne.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
+                        this);
             case 2:
                 return OMTConfig.BASES.baseTierTwo.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
+                        this);
             case 3:
                 return OMTConfig.BASES.baseTierThree.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
+                        this);
             case 4:
                 return OMTConfig.BASES.baseTierFour.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
+                        this);
             case 5:
                 return OMTConfig.BASES.baseTierFive.baseMaxCharge + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.getWorld(), this.pos);
+                        this);
         }
         return 0;
     }

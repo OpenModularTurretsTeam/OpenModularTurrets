@@ -1,11 +1,11 @@
 package omtteam.openmodularturrets.api.tileentity;
 
-import jline.internal.Nullable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.items.IItemHandler;
 import omtteam.openmodularturrets.api.network.IBaseController;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public interface ITurretBase { //TODO: javadoc
