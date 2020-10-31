@@ -1,0 +1,277 @@
+item.throwable_bullet.name=Projétil Lançavel
+item.throwable_grenade.name=Granada Lançavel
+item.ammo_bullet.name=Munição - Projétil
+item.ammo_grenade.name=Munição - Granada
+item.ammo_rocket.name=Munição - Foguete
+item.ammo_ferro_slug.name=Munição - Lesma Ferromagnética
+item.ammo_blazing_clay.name=Munição - Argila Ardente
+item.upgrade_fire_rate.name=Aprimoramento - Taxa de Fogo
+item.upgrade_efficiency.name=Aprimoramento - Eficiência
+item.upgrade_range.name=Aprimoramento - Alcance
+item.upgrade_accuracy.name=Aprimoramento - Precisão
+item.upgrade_scatter_shot.name=Aprimoramento - Dispersão
+item.addon_redstone_reactor.name=Addon - Redstone Reactor
+item.addon_damage_amp.name=Extensão - Aumento de Dano
+item.addon_solar_panel.name=Extensão - Painel Solar
+item.addon_potentia.name=Extensão - Conversor de Potência
+item.addon_serial_port.name=Extensão - Porta serial
+item.addon_recycler.name=Extensão - Reciclador
+item.addon_concealer.name=Extensão - Ocultador de Torre
+item.addon_fake_drops.name=Extensão - Drops Falsos
+item.sensor_tier_one.name=Sensor (Nível 1)
+item.sensor_tier_two.name=Sensor (Nível 2)
+item.sensor_tier_three.name=Sensor (Nível 3)
+item.sensor_tier_four.name=Sensor (Nível 4)
+item.sensor_tier_five.name=Sensor (Nível 5)
+item.chamber_tier_one.name=Câmara (Nível 1)
+item.chamber_tier_two.name=Câmara (Nível 2)
+item.chamber_tier_three.name=Câmara (Nível 3)
+item.chamber_tier_four.name=Câmara (Nível 4)
+item.chamber_tier_five.name=Câmara (Nível 5)
+item.barrel_tier_one.name=Cano (Nível 1)
+item.barrel_tier_two.name=Cano (Nível 2)
+item.barrel_tier_three.name=Cano (Nível 3)
+item.barrel_tier_four.name=Cano (Nível 4)
+item.barrel_tier_five.name=Cano (Nível 5)
+item.io_bus.name=IO Bus
+item.memory_card.name=Cartão de Memória de Torre
+
+tile.turret_base_tier_one.name=Base de Torre (Nível 1)
+tile.turret_base_tier_two.name=Base de Torre (Nível 2)
+tile.turret_base_tier_three.name=Base de Torre (Nível 3)
+tile.turret_base_tier_four.name=Base de Torre (Nível 4)
+tile.turret_base_tier_five.name=Base de Torre (Nível 5)
+
+tile.disposable_item_turret.name=Torre de Item Descartável
+tile.potato_cannon_turret.name=Torre Canhão de Batata
+tile.rocket_turret.name=Torre Lançador de Foguetes
+tile.teleporter_turret.name=Torre de Teletransporte
+tile.machine_gun_turret.name=Torre Metralhadora
+tile.incendiary_turret.name=Torre Incendiária
+tile.grenade_turret.name=Torre Lançador de Granadas
+tile.relativistic_turret.name=Torre Relativística
+tile.laser_turret.name=Torre Laser
+tile.rail_gun_turret.name=Torre Canhão Elétrico
+tile.plasma_turret.name=Plasma Launcher Turret
+tile.lever_block.name=Manivela Básica de Torre Básica
+tile.expander_power_tier_one.name=Expansor de Poder da Base (Nível 1)
+tile.expander_power_tier_two.name=Expansor de Poder da Base (Nível 2)
+tile.expander_power_tier_three.name=Expansor de Poder da Base (Nível 3)
+tile.expander_power_tier_four.name=Expansor de Poder da Base (Nível 4)
+tile.expander_power_tier_five.name=Expansor de Poder da Base (Nível 5)
+tile.expander_inv_tier_one.name=Expansor de Inventário da Base (Nível 1)
+tile.expander_inv_tier_two.name=Expansor de Inventário da Base (Nível 2)
+tile.expander_inv_tier_three.name=Expansor de Inventário da Base (Nível 3)
+tile.expander_inv_tier_four.name=Expansor de Inventário da Base (Nível 4)
+tile.expander_inv_tier_five.name=Expansor de Inventário da Base (Nível 5)
+tile.base_addon_loot_deleter.name=Extensão de Base - Deleta Saque
+tile.turret_base.name=Base de Torre
+
+itemGroup.openmodularturrets=Open Modular Turrets
+
+text.openmodularturrets.gui.base=Base
+text.openmodularturrets.gui.multi_targeting=Multi Alvos
+text.openmodularturrets.gui.addons=Extensões
+text.openmodularturrets.gui.upgrades=Aprimo.
+text.openmodularturrets.gui.ammo=Balas/Combust.
+text.openmodularturrets.gui.damage_amp=Aumento de Dano (rel. para HP)
+text.openmodularturrets.gui.inventory=Inventário
+text.openmodularturrets.gui.target=Alvo
+text.openmodularturrets.gui.multi=Multi
+text.openmodularturrets.gui.single=Único
+text.openmodularturrets.gui.yaw=Guinada
+text.openmodularturrets.gui.pitch=lançar
+text.openmodularturrets.gui.toggle=Alternar
+text.openmodularturrets.gui.auto_fire=Auto-Fogo
+text.openmodularturrets.gui.turret=Torre
+text.openmodularturrets.gui.turret_base_description=O núcleo de uma Torre Modular.
+text.openmodularturrets.gui.turret_head_description=Uma cabeça de torre, coloque em uma base de torre.
+text.openmodularturrets.gui.turret_lever_description=Uma alavanca para gerar energia, colocada na base de nível 1.
+text.openmodularturrets.gui.no_turret=Sem Torre na base.
+text.openmodularturrets.gui.type=Tipo
+text.openmodularturrets.gui.range=Alcance
+text.openmodularturrets.gui.rof=Taxa de Fogo
+text.openmodularturrets.gui.accuracy=Precisão
+text.openmodularturrets.gui.drop_turrets=Soltar Torres
+text.openmodularturrets.gui.drop_base=Soltar Base
+text.openmodularturrets.gui.configure=Configuração
+text.openmodularturrets.gui.kills=Mortos (Total)
+text.openmodularturrets.gui.player_kills=Mortos (Jogadores)
+text.openmodularturrets.gui.light_value=Nível da Luz
+text.openmodularturrets.gui.light_opacity=Opacidade da Luz
+
+text.openmodularturrets.tier=Nível
+text.openmodularturrets.range=Alcance (em blocos)
+text.openmodularturrets.accuracy=Precisão
+text.openmodularturrets.ammo=Tipo de Munição
+text.openmodularturrets.tier_required=Nível da Base Requerida
+text.openmodularturrets.damage.label=Saída de danos
+text.openmodularturrets.damage.stat=Dano do projétil
+text.openmodularturrets.aoe=AOE Raio
+text.openmodularturrets.fire_rate=Tiro/s
+text.openmodularturrets.energy.stat=Energia usada por tiro
+text.openmodularturrets.info=Info
+text.openmodularturrets.health=Corações
+
+text.openmodularturrets.energy.label=Energia
+text.openmodularturrets.rf.max=Capacidade Máx 
+text.openmodularturrets.rf.io=Máx IO
+text.openmodularturrets.extras.label=Extras
+text.openmodularturrets.extras.addons.0=Nenhum
+text.openmodularturrets.extras.addons.1=1x Slots de extenção
+text.openmodularturrets.extras.addons.2=2x Slots de extenção
+text.openmodularturrets.extras.upgrade.0=Nenhum
+text.openmodularturrets.extras.upgrade.1=1x Slots de Aprimoramento
+text.openmodularturrets.extras.upgrade.2=2x Slots de Aprimoramento
+
+text.openmodularturrets.expander.power1=Expansor RF da base de torre
+text.openmodularturrets.expander.power2=Adicionar
+text.openmodularturrets.expander.power3=Capacidade de RF para uma base de torre.
+
+text.openmodularturrets.expander.inv1=Expansor de Inventário da Base de Torre
+text.openmodularturrets.expander.inv2=Adiciona 9 slots de inventário que a base da torre pode usar.
+text.openmodularturrets.expander.inv3=Cada slot só pode aceitar um tamanho máximo de pilha de
+
+text.openmodularturrets.base_addon_loot_deleter.inv1=Extensão da base de torre - Deletar Saque
+text.openmodularturrets.base_addon_loot_deleter.inv2=Remove todos os itens Caídos de
+text.openmodularturrets.base_addon_loot_deleter.inv3=Inimigos mortos pela base anexada.
+
+text.openmodularturrets.memory_card.desc1=Shift-Clique Direito para base armazena dados
+text.openmodularturrets.memory_card.desc2=Shift-Clique Direito para limpar qualquer lugar
+text.openmodularturrets.memory_card.desc3=Clique Direito para a base copia dados do cartão
+
+
+text.openmodularturrets.minus_range=Diminue o alcance máximo para a torre(s)
+text.openmodularturrets.plus_range=Aumente o alcance máximo da torre(s)
+text.openmodularturrets.configure_base=Entre na tela de configuração da base.
+text.openmodularturrets.multi_targeting=Alterar se as torres devem concentrar o fogo ou espalhá-lo.
+text.openmodularturrets.ammo_slot=Munição e combustível para a torre modular.
+text.openmodularturrets.addon_slot=Extensões (para mais funções) para a torre modular.
+text.openmodularturrets.upgrade_slot=Aprimoramentos para a torre modular.
+text.openmodularturrets.base_max_range=Alcance máximo para torres, em blocos.
+text.openmodularturrets.toggle_mode=Ativar/desativar os modos
+text.openmodularturrets:turret_limit=Limite da Torre
+
+text.openmodularturrets.flavour.expander.power.1=Agora com sabor!
+text.openmodularturrets.flavour.expander.power.2=Expansão cinética.
+text.openmodularturrets.flavour.expander.power.3=Lá, eles e eles são.
+text.openmodularturrets.flavour.expander.power.4=Pode ser usado como um dispositivo de afundamento.
+text.openmodularturrets.flavour.expander.power.5=Guerra assimétrica.
+
+text.openmodularturrets.flavour.expander.inv.1=Um pouco vai longe.
+text.openmodularturrets.flavour.expander.inv.2=Suprimentos!
+text.openmodularturrets.flavour.expander.inv.3=Cabelo, herdeiro e lebre.
+text.openmodularturrets.flavour.expander.inv.4=Pode ser usado como um dispositivo de flutuação.
+text.openmodularturrets.flavour.expander.inv.5=Muito espaço, muito estoque.
+
+text.openmodularturrets.flavour.base_addon_loot_deleter.inv.1=Só um pouco de fumaça.
+
+text.openmodularturrets.flavour.base.1=existem árvores, por toda parte...
+text.openmodularturrets.flavour.base.2=Vou tirar seu sangue.
+text.openmodularturrets.flavour.base.3=Eu disse bom dia senhor!
+text.openmodularturrets.flavour.base.4=Pressione o ataque!
+text.openmodularturrets.flavour.base.5a=Eu me pergunto se essa coisa
+text.openmodularturrets.flavour.base.5b=pode fazer um barril-rolar...
+
+text.openmodularturrets.flavour.turret.0=Pobre homem vai dormir.
+text.openmodularturrets.flavour.turret.1=TRRRAA!! TRRAATRRAA!!
+text.openmodularturrets.flavour.turret.2a=Outro exemplo é o indutivo
+text.openmodularturrets.flavour.turret.2b=Forma do paradoxo do cavalo.
+text.openmodularturrets.flavour.turret.3=Névoa Vermelha.
+text.openmodularturrets.flavour.turret.4=Vá em frente, Newton não se importa.
+text.openmodularturrets.flavour.turret.5=BFG.
+text.openmodularturrets.flavour.turret.6=Uma obra-prima de PVC.
+text.openmodularturrets.flavour.turret.7=Disjunção Flamejante.
+text.openmodularturrets.flavour.turret.8=Ponto de referência.
+text.openmodularturrets.flavour.turret.9a=É como longos fios de espaguete,
+text.openmodularturrets.flavour.turret.9b=mas em 11 dimensões.
+text.openmodularturrets.flavour.turret.plasma=Ar quente -> coisas pegando fogo.
+
+text.openmodularturrets.turret.accuracy.low=Baixo
+text.openmodularturrets.turret.accuracy.medium=Médio
+text.openmodularturrets.turret.accuracy.high=Alto
+text.openmodularturrets.turret.accuracy.exact=Preciso
+
+text.openmodularturrets.turret.ammo.0=Veja o arquivo config., por padão. cobble/tabúas
+text.openmodularturrets.turret.ammo.1=Projétil
+text.openmodularturrets.turret.ammo.2=Granada
+text.openmodularturrets.turret.ammo.3=Foguete Teleguiado
+text.openmodularturrets.turret.ammo.4=Nenhum
+text.openmodularturrets.turret.ammo.5=Lesma Ferromagnética
+text.openmodularturrets.turret.ammo.6=Batata
+text.openmodularturrets.turret.ammo.7=Argila Ardente
+
+text.openmodularturrets.base.tier.1=Base de Torre Nível 1
+text.openmodularturrets.base.tier.2=Base de Torre Nível 2
+text.openmodularturrets.base.tier.3=Base de Torre Nível 3
+text.openmodularturrets.base.tier.4=Base de Torre Nível 4
+text.openmodularturrets.base.tier.5=Base de Torre Nível 5
+
+text.openmodularturrets.turret.addon.label=Extensão de Torre
+text.openmodularturrets.turret.addon.amp.a.label=Adiciona alguns %% de MáxHP do alvo
+text.openmodularturrets.turret.addon.amp.b.label=(dep. na torre) como dano por projétil.
+text.openmodularturrets.turret.addon.amp.flavour=Aqui estamos nós rolo compressor.
+text.openmodularturrets.turret.addon.redstone.a=Gera
+text.openmodularturrets.turret.addon.redstone.b=RF
+text.openmodularturrets.turret.addon.redstone.c=pó de redstone no inventário para funcionar.
+text.openmodularturrets.turret.addon.redstone.flavour=Sublimação, refinado.
+text.openmodularturrets.turret.addon.solar.a=Gera
+text.openmodularturrets.turret.addon.solar.b=RF/t na luz do sol.
+text.openmodularturrets.turret.addon.solar.flavour=Bom Helios!
+text.openmodularturrets.turret.addon.potentia.a=Converte Potência canalizando em RF (
+text.openmodularturrets.turret.addon.potentia.b=RF por unidade).
+text.openmodularturrets.turret.addon.potentia.c=Adiciona uma capacidade de Potência interna de
+text.openmodularturrets.turret.addon.potentia.d=Adicionando vis Ordo através de uma rede
+text.openmodularturrets.turret.addon.potentia.e=multiplica a taxa de conversão de RF para x10.
+text.openmodularturrets.turret.addon.potentia.flavour=Porque Eskom não consegue acertar...
+text.openmodularturrets.turret.addon.serial.a=Ativa OpenComputers e ComputerCraft
+text.openmodularturrets.turret.addon.serial.b=compatibilidade.
+text.openmodularturrets.turret.addon.serial.flavour=Quem precisa de OOP?
+text.openmodularturrets.turret.addon.recycler.1=Adiciona uma chance de uma torre não usar munição,
+text.openmodularturrets.turret.addon.recycler.2=bem como a chance de gerar munição, por tiro.
+text.openmodularturrets.turret.addon.recycler.3=Chance de negação de uso de munição:
+text.openmodularturrets.turret.addon.recycler.4=Chance de geração de munição:
+text.openmodularturrets.turret.addon.recycler.flavour=Reduza, reutilize, reafirme.
+text.openmodularturrets.turret.addon.concealer.1=Esconde torres quando não estão atirando.
+text.openmodularturrets.turret.addon.concealer.flavour=Cava Cava Buraco!
+text.openmodularturrets.turret.addon.fakedrops.a=Faz mobs mortos por torres
+text.openmodularturrets.turret.addon.fakedrops.b=Dropar itens como se um jogador os matasse.
+text.openmodularturrets.turret.addon.fakedrops.flavour=Aumenta os ganhos!
+
+text.openmodularturrets.turret.upgrade.label=Aprimoramento de Torre
+text.openmodularturrets.turret.upgrade.turretinfo=Para efeitos, veja as dicas de torres.
+text.openmodularturrets.turret.upgrade.stacks=Empilha até 4 vezes na base.
+
+text.openmodularturrets.turret.upgrade.range=Alcance por bloco por aprimoramento.
+text.openmodularturrets.turret.upgrade.range.flavour=Você vai me passar o garfo?
+
+text.openmodularturrets.turret.upgrade.rof=Taxa de Fogo por aprimoramento.
+text.openmodularturrets.turret.upgrade.rof.flavour=Demorando, demorando.
+
+text.openmodularturrets.turret.upgrade.eff=RF usado por tiro, por aprimoramento.
+text.openmodularturrets.turret.upgrade.eff.flavour=Eureka!
+
+text.openmodularturrets.turret.upgrade.acc=Preciso por Aprimoramento.
+text.openmodularturrets.turret.upgrade.acc.flavour.a=Olhos de um sniper,
+text.openmodularturrets.turret.upgrade.acc.flavour.b=Eu vou atirar, você corre.
+
+text.openmodularturrets.turret.upgrade.scatter.a=Adiciona 2 projéteis a cada tiro, ao custo de
+text.openmodularturrets.turret.upgrade.scatter.b=+2 uso de munição, reduz a precisão e maior uso de RF.
+text.openmodularturrets.turret.upgrade.scatter.flavour=Você só precisa atirar mais balas.
+
+text.openmodularturrets.turret.ammo.label=Munição de Torre
+text.openmodularturrets.turret.ammo.blazing_clay=Argila Ardente para a Torre Incendiária
+text.openmodularturrets.turret.ammo.bullet=Uma bala simples para usar na torre metralhadora.
+text.openmodularturrets.turret.ammo.ferro_slug=Esta lesma de aparência avançada é para o canhão elétrico.
+text.openmodularturrets.turret.ammo.grenade=Uma bela granada para o lançador de granadas.
+text.openmodularturrets.turret.ammo.rocket=Foguetes estão sendo usados pelo lançador de foguetes, obviamente!
+
+text.openmodularturrets.status.warning=Você está entrando em uma área protegida por torre(s). Continue por sua própria conta e risco.
+
+text.openmodularturrets.death.attack.disposable=Muito %s, muito morto, Uau...
+text.openmodularturrets.death.attack.bullet=%s comeu um pouco de chumbo delicioso.
+text.openmodularturrets.death.attack.blazingclay=%s foi cozido em um suco meio-raro.
+text.openmodularturrets.death.attack.grenade=%s pode precisar de alguma montagem.
+text.openmodularturrets.death.attack.rocket=%s descobriu aquela conexão de arco-íris na forma de um foguete.
+text.openmodularturrets.death.attack.laser=%s se desintegrou.
+text.openmodularturrets.death.attack.ferroslug=%s encontrado minerva atomizado.
