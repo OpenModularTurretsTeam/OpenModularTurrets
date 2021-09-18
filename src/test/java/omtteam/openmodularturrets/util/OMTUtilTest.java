@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.util;
 import net.minecraft.world.World;
 import omtteam.omlib.api.permission.EnumAccessLevel;
 import omtteam.omlib.api.permission.TrustedPlayer;
-import omtteam.omlib.handler.OMConfig;
+import omtteam.omlib.util.GeneralUtil;
 import omtteam.omlib.util.player.Player;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.tileentity.TurretBase;
@@ -25,7 +25,7 @@ class OMTUtilTest {
     private World world;
 
     void setOfflineMode() {
-        OMConfig.GENERAL.offlineModeSupport = true;
+        GeneralUtil.offlineMode = true;
         playerTrustedNone = new Player(UUID.randomUUID(), "playerNone", "abc");
         playerUntrusted = new Player(UUID.randomUUID(), "playerUntrusted", "cdf");
         playerTeam = new Player(UUID.randomUUID(), "playerTeam", "test");
@@ -42,7 +42,7 @@ class OMTUtilTest {
 
     @BeforeEach
     void setUp() {
-        OMConfig.GENERAL.offlineModeSupport = false;
+        GeneralUtil.offlineMode = false;
         playerTrustedNone = new Player(UUID.randomUUID(), "playerNone", "abc");
         playerUntrusted = new Player(UUID.randomUUID(), "playerUntrusted", "cdf");
         playerTeam = new Player(UUID.randomUUID(), "playerTeam", "test");

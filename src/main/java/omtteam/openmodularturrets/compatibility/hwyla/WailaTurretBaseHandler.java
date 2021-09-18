@@ -70,7 +70,6 @@ public class WailaTurretBaseHandler implements IOMLibWailaDataProvider {
     public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, BlockPos pos) {
         if (te instanceof TurretBase) {
             TurretBase base = (TurretBase) te;
-            // te.writeToNBT(tag);
             tag.setBoolean("active", base.isActive());
             tag.setInteger("mode", base.getMode().ordinal());
             tag.setString("ownerName", base.getOwner().getName());

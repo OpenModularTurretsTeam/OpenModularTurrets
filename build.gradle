@@ -31,10 +31,10 @@ repositories {
         url "https://maven.daporkchop.net/"
     }
     maven { // The repo from which to get waila
-        url "http://mobiusstrip.eu/maven"
+        url "https://mobiusstrip.eu/maven"
     }
     maven { // the repo from which to get NEI and stuff
-        url "http://chickenbones.net/maven/"
+        url "https://chickenbones.net/maven/"
     }
     maven {
         url "https://maven.cil.li/"
@@ -42,15 +42,9 @@ repositories {
     maven { // the repo from which to get EnderIO and tterrags mods
         url "https://maven.tterrag.com/"
     }
-    maven { // the repo from which to get EnderIO and tterrags mods
-        url "https://maven2.tterrag.com/"
-    }
     maven {
         name "ic2"
-        url "http://maven.ic2.player.to/"
-    }
-    maven {
-        url "https://tehnut.info/maven"
+        url "https://maven.ic2.player.to/"
     }
     maven {
         url "https://maven.ironhide.de/"
@@ -58,16 +52,21 @@ repositories {
     maven { // JEI
         url "https://dvs1.progwml6.com/files/maven"
     }
-    //maven { url = "http://dl.tsr.me/artifactory/libs-release-local" }
     maven { // CoFH
         name = "Covers Maven"
-        url = "http://maven.covers1624.net"
+        url = "https://maven.covers1624.net"
     }
     maven {
         url 'https://maven.mcmoddev.com'
     }
     maven {
-        url = "https://files.minecraftforge.net/maven"
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
+    maven {
+        name = "Valkyrien Skies Internal"
+        url = "https://maven.valkyrienskies.org/repository/internal/"
     }
 }
 
@@ -138,16 +137,16 @@ if (project.allprojects.findAll({ it.name == "OpenModularPassiveDefense" }).size
 }
 
 dependencies {
-    deobfProvided ('valkyrienskies:valkyrienskies:1.12.2-1.0') {
+    deobfProvided ('org.valkyrienskies:api:1.0.0.9') {
         transitive = false
     }
-    testCompile ('valkyrienskies:valkyrienskies:1.12.2-1.0') {
+    testCompile ('org.valkyrienskies:api:1.0.0.9') {
         transitive = false
     }
     deobfProvided "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
     testCompile "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
-    deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}"
-    testCompile "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}"
+    deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}:api"
+    testCompile "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}:api"
     deobfProvided "cofh:RedstoneFlux:${minecraft_version_short}-${redstoneflux_version}:universal"
     testCompile "cofh:RedstoneFlux:${minecraft_version_short}-${redstoneflux_version}:universal"
     deobfProvided "mcjty.theoneprobe:TheOneProbe-${minecraft_version_short}:${minecraft_version_short}-${top_version}"
