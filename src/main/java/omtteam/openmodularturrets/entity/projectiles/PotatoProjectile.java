@@ -41,7 +41,7 @@ public class PotatoProjectile extends TurretProjectile {
             itemBound.motionY = this.motionY + this.gravity;
             itemBound.motionZ = this.motionZ;
             itemBound.setPickupDelay(10000);
-            itemBound.lifespan = 6000;
+            itemBound.lifespan = 40;
             world.spawnEntity(itemBound);
             spawned = true;
         }

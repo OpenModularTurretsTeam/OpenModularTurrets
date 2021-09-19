@@ -25,7 +25,7 @@ class OMTUtilTest {
     private World world;
 
     void setOfflineMode() {
-        GeneralUtil.offlineMode = true;
+        GeneralUtil.onlineMode = false;
         playerTrustedNone = new Player(UUID.randomUUID(), "playerNone", "abc");
         playerUntrusted = new Player(UUID.randomUUID(), "playerUntrusted", "cdf");
         playerTeam = new Player(UUID.randomUUID(), "playerTeam", "test");
@@ -42,7 +42,7 @@ class OMTUtilTest {
 
     @BeforeEach
     void setUp() {
-        GeneralUtil.offlineMode = false;
+        GeneralUtil.onlineMode = true;
         playerTrustedNone = new Player(UUID.randomUUID(), "playerNone", "abc");
         playerUntrusted = new Player(UUID.randomUUID(), "playerUntrusted", "cdf");
         playerTeam = new Player(UUID.randomUUID(), "playerTeam", "test");
