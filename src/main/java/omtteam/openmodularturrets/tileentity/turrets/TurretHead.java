@@ -217,9 +217,9 @@ public abstract class TurretHead extends TileEntityBase implements ITickable, IT
     }
 
     public double getActualTurretAccuracy() {
-        return 100F - (100F - this.getBaseTurretAccuracy())
-                * (1.0F + TurretHeadUtil.getAccuracyUpgrades(this.getBase(), this))
-                * (1.0F - (TurretHeadUtil.getScattershotUpgrades(this.getBase())) / 25F);
+        return 100F - Math.min((100F - this.getBaseTurretAccuracy())
+                                       * (1.0F + TurretHeadUtil.getAccuracyUpgrades(this.getBase(), this))
+                                       * (1.0F - (TurretHeadUtil.getScattershotUpgrades(this.getBase())) / 25F), 100);
     }
 
     protected abstract boolean requiresAmmo();
