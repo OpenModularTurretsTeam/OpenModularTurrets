@@ -1,24 +1,31 @@
-# Created by .gitignore support plugin (hsz.mobi)
-### Gradle template
 .gradle
-build/
-classes/
-
-# Ignore Gradle GUI config
-gradle-app.setting
-
-# Mod/Forge related stuff
-libs
-eclipse
-*.iws
-*.ipr
-*.iml
+.settings
+/.idea/
+/run/
+/build/
+/eclipse/
 .classpath
 .project
-.settings
-.idea
-bin
-logs
-
-# Other Stuff
-Thumbs.db
+/bin/
+/config/
+/crash-reports/
+/logs/
+options.txt
+/saves/
+usernamecache.json
+banned-ips.json
+banned-players.json
+eula.txt
+ops.json
+server.properties
+servers.dat
+usercache.json
+whitelist.json
+/out/
+*.iml
+*.ipr
+*.iws
+src/main/resources/mixins.*.json
+*.bat
+*.DS_Store
+!gradlew.bat

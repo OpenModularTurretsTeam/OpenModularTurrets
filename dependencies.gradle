@@ -1,0 +1,11 @@
+// Add your dependencies here
+
+dependencies {
+    compileOnly 'com.github.GTNewHorizons:waila:1.5.18:dev'
+    compileOnly 'com.github.GTNewHorizons:NotEnoughItems:2.2.6-GTNH:dev'
+    compileOnly 'com.github.GTNewHorizons:OpenComputers:1.7.5.23-GTNH:dev'
+
+    compileOnly 'net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev'
+    compileOnly('igwmod:IGW-Mod-1.7.10:1.1.12-34:userdev') {transitive=false}
+    compileOnly("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev")
+}
