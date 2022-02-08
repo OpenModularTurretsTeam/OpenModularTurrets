@@ -8,4 +8,5 @@ dependencies {
     compileOnly 'net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev'
     compileOnly('igwmod:IGW-Mod-1.7.10:1.1.12-34:userdev') {transitive=false}
     compileOnly("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev")
+    compileOnly("curse.maven:computercraft-67504:2269339")
 }
