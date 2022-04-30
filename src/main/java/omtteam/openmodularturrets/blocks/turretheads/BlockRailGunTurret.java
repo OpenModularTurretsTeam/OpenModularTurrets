@@ -34,7 +34,7 @@ public class BlockRailGunTurret extends BlockAbstractTurretHead {
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
-    public TileEntity createTileEntity(World world, IBlockState state) {
+    public TileEntity createTileEntity_OM(World world, IBlockState state) {
         return new RailGunTurretTileEntity();
     }
 

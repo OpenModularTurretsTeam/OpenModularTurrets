@@ -35,7 +35,7 @@ public abstract class AbstractDirectedTurret extends TurretHead {
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound var1 = new NBTTagCompound();
-        this.writeToNBT(var1);
+        this.saveToNBT(var1);
         return new SPacketUpdateTileEntity(this.getPos(), 2, var1);
     }
 
@@ -43,13 +43,13 @@ public abstract class AbstractDirectedTurret extends TurretHead {
     @SideOnly(Side.CLIENT)
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         NBTTagCompound var1 = pkt.getNbtCompound();
-        readFromNBT(var1);
+        loadFromNBT(var1);
     }
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
-        super.writeToNBT(nbtTagCompound);
+    public NBTTagCompound saveToNBT(NBTTagCompound nbtTagCompound) {
+        super.saveToNBT(nbtTagCompound);
         nbtTagCompound.setFloat("pitch", pitch);
         nbtTagCompound.setFloat("yaw", yaw);
         nbtTagCompound.setFloat("maxPitch", maxPitch);
@@ -60,8 +60,8 @@ public abstract class AbstractDirectedTurret extends TurretHead {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
-        super.readFromNBT(nbtTagCompound);
+    public void loadFromNBT(NBTTagCompound nbtTagCompound) {
+        super.loadFromNBT(nbtTagCompound);
         this.pitch = nbtTagCompound.getFloat("pitch");
         this.yaw = nbtTagCompound.getFloat("yaw");
         this.maxPitch = nbtTagCompound.getFloat("maxPitch");

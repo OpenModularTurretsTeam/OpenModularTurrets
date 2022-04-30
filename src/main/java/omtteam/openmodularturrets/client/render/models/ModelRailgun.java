@@ -21,11 +21,11 @@ public class ModelRailgun extends ModelAbstractTurret {
 
     public ModelRailgun() {
         super(0, 0, 0);
-        Base.addBox(-6F, 7F, -6F, 12, 1, 12);
-        Base.setRotationPoint(0F, 16F, 0F);
-        Base.setTextureSize(64, 64);
-        Base.mirror = true;
-        setRotation(Base, 0F, 0F, 0F);
+        base.addBox(-6F, 7F, -6F, 12, 1, 12);
+        base.setRotationPoint(0F, 16F, 0F);
+        base.setTextureSize(64, 64);
+        base.mirror = true;
+        setRotation(base, 0F, 0F, 0F);
         BarrelTop = new ModelRenderer(this, 25, 27);
         BarrelTop.addBox(-1F, 2F, -16F, 2, 1, 17);
         BarrelTop.setRotationPoint(0F, 15F, 0F);
@@ -90,7 +90,7 @@ public class ModelRailgun extends ModelAbstractTurret {
 
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
-        Base.render(f5);
+        base.render(f5);
         BarrelTop.render(f5);
         BarrelBot.render(f5);
         BarrelRight.render(f5);
@@ -132,7 +132,7 @@ public class ModelRailgun extends ModelAbstractTurret {
     }
 
     public void renderAll() {
-        Base.render(0.0625F);
+        base.render(0.0625F);
         BarrelTop.render(0.0625F);
         BarrelBot.render(0.0625F);
         BarrelRight.render(0.0625F);
@@ -151,7 +151,7 @@ public class ModelRailgun extends ModelAbstractTurret {
     }
 
     @Override
-    public boolean hasBoxUnder() {
+    public boolean hasHolder() {
         return false;
     }
 }

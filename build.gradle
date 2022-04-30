@@ -3,9 +3,10 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
+        mavenLocal()
         maven {
             name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = "https://maven.minecraftforge.net/"
         }
         maven {
             url "https://plugins.gradle.org/m2/"
@@ -27,11 +28,12 @@ apply plugin: 'idea'
 apply plugin: 'java'
 
 repositories {
+    mavenLocal()
     maven { // The repo from which to get VS
         url "https://maven.daporkchop.net/"
     }
     maven { // The repo from which to get waila
-        url "http://mobiusstrip.eu/maven"
+        url "http://www.mobiusstrip.eu/maven"
     }
     maven { // the repo from which to get NEI and stuff
         url "http://chickenbones.net/maven/"
@@ -42,15 +44,9 @@ repositories {
     maven { // the repo from which to get EnderIO and tterrags mods
         url "https://maven.tterrag.com/"
     }
-    maven { // the repo from which to get EnderIO and tterrags mods
-        url "https://maven2.tterrag.com/"
-    }
     maven {
         name "ic2"
         url "http://maven.ic2.player.to/"
-    }
-    maven {
-        url "https://tehnut.info/maven"
     }
     maven {
         url "https://maven.ironhide.de/"
@@ -64,20 +60,20 @@ repositories {
         url = "http://maven.covers1624.net"
     }
     maven {
-        url 'https://maven.mcmoddev.com'
+        url "https://maven.mcmoddev.com"
     }
     maven {
-        url = "https://files.minecraftforge.net/maven"
+        url = "https://maven.minecraftforge.net/"
+    }
+    maven {
+        url = "https://maven.blamejared.com/"
     }
 }
 
-sourceCompatibility = targetCompatibility = 1.8
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8"
 
 version = "${mod_version}"
-if (hasProperty('appendBuildNumber')) {
+if (hasProperty("appendBuildNumber")) {
     version = version + "-" + appendBuildNumber.toString()
 } else {
     version = version + "-0"
@@ -113,7 +109,7 @@ processResources {
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
+        include "mcmod.info"
 
         // replace version and mcversion
         expand 'version': project.version, 'mcversion': project.minecraft.version
@@ -121,12 +117,12 @@ processResources {
 
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+        exclude "mcmod.info"
     }
 }
 
 configurations {
-    runtime.exclude group: 'ValkyrienWarfareRevamped', module: 'valkyrienwarfare'
+    runtime.exclude group: "ValkyrienWarfareRevamped", module: "valkyrienwarfare"
 }
 
 def omlib_local = false
@@ -142,16 +138,16 @@ if (project.allprojects.findAll({ it.name == "OpenModularPassiveDefense" }).size
 }
 
 dependencies {
-    deobfProvided ('valkyrienskies:valkyrienskies:1.12.2-1.0') {
+    deobfProvided ("org.valkyrienskies:valkyrien-skies:1.0.0+e8d24a6a6b:all") {
         transitive = false
     }
-    testCompile ('valkyrienskies:valkyrienskies:1.12.2-1.0') {
+    testCompile ("org.valkyrienskies:valkyrien-skies:1.0.0+e8d24a6a6b") {
         transitive = false
     }
     deobfProvided "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
     testCompile "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
-    deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}"
-    testCompile "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}"
+    deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}:api"
+    testCompile "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}:api"
     deobfProvided "cofh:RedstoneFlux:${minecraft_version_short}-${redstoneflux_version}:universal"
     testCompile "cofh:RedstoneFlux:${minecraft_version_short}-${redstoneflux_version}:universal"
     deobfProvided "mcjty.theoneprobe:TheOneProbe-${minecraft_version_short}:${minecraft_version_short}-${top_version}"
@@ -160,17 +156,17 @@ dependencies {
     testCompile "li.cil.oc:OpenComputers:MC${minecraft_version}-${oc_version}"
     deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}"
     testCompile "net.industrial-craft:industrialcraft-2:${ic2_version}"
-    deobfProvided "net.darkhax.tesla:Tesla-${minecraft_version}:${tesla_version}"
-    testCompile "net.darkhax.tesla:Tesla-${minecraft_version}:${tesla_version}"
+    deobfProvided "net.darkhax.tesla:Tesla-${minecraft_version_short}:${tesla_version}"
+    testCompile "net.darkhax.tesla:Tesla-${minecraft_version_short}:${tesla_version}"
     if (!omlib_local) {
         compileOnly "omtteam:omlib:${minecraft_version}-${omlib_version}:dev"
         testCompile "omtteam:omlib:${minecraft_version}-${omlib_version}:dev"
     } else {
-        compile project(':OMLib')
-        testCompile project(':OMLib')
+        compile project(":OMLib")
+        testCompile project(":OMLib")
     }
     if (ompd_local) {
-        runtime project(':OpenModularPassiveDefense')
+        runtime project(":OpenModularPassiveDefense")
     }
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.2.0"
     testCompile("org.junit.jupiter:junit-jupiter-api:5.2.0")
@@ -179,19 +175,19 @@ dependencies {
 }
 
 junitPlatform {
-    platformVersion '1.0.3'
+    platformVersion "1.0.3"
     enableStandardTestTask true
 }
 
 task deobfJar(type: Jar) {
     from sourceSets.main.output
-    classifier = 'dev'
+    classifier = "dev"
 }
 
 tasks.build.dependsOn deobfJar, sourceJar
 
 publishing {
-    tasks.publish.dependsOn 'build'
+    tasks.publish.dependsOn "build"
     publications {
         mavenJava(MavenPublication) {
             groupId group_prefix
@@ -216,33 +212,33 @@ def getCommmitReleaseType() {
         def stdout = new ByteArrayOutputStream()
         try {
             exec {
-                commandLine 'git', 'log', '-1', '--pretty=tformat:%s'
+                commandLine "git", "log", "-1", "--pretty=tformat:%s"
                 standardOutput = stdout
             }
         } catch (Exception e) {
             System.print("SKIPPING CURSE RELEASE - FAILED TO RETRIEVE LAST COMMIT")
             e.printStackTrace()
-            return 'none'
+            return "none"
         }
         String commit = stdout.toString().trim()
 
         if (commit.startsWith("CRelease") || commit.startsWith("crelease")) {
-            System.out.println("FOUND NEW RELEASE - COMMIT: ".concat(commit)); return 'release'
+            System.out.println("FOUND NEW RELEASE - COMMIT: ".concat(commit)); return "release"
         } else if (commit.startsWith("CBeta") || commit.startsWith("cbeta")) {
-            System.out.println("FOUND NEW BETA - COMMIT: ".concat(commit)); return 'beta'
+            System.out.println("FOUND NEW BETA - COMMIT: ".concat(commit)); return "beta"
         } else if (commit.startsWith("CAlpha") || commit.startsWith("calpha")) {
-            System.out.println("FOUND NEW ALPHA - COMMIT: ".concat(commit)); return 'alpha'
+            System.out.println("FOUND NEW ALPHA - COMMIT: ".concat(commit)); return "alpha"
         } else {
-            System.out.println("SKIPPING CURSE RELEASE - COMMIT: " + commit); return 'none'
+            System.out.println("SKIPPING CURSE RELEASE - COMMIT: " + commit); return "none"
         }
     }
     System.out.println("SKIPPING CURSE RELEASE - NO CURSE API KEY")
-    return 'none'
+    return "none"
 }
 
-tasks.curseforge.enabled = project.hasProperty("curseforge_key") && commit_release_type != 'none'
+tasks.curseforge.enabled = project.hasProperty("curseforge_key") && commit_release_type != "none"
 curseforge {
-    if (project.hasProperty("curseforge_key") && commit_release_type != 'none') {
+    if (project.hasProperty("curseforge_key") && commit_release_type != "none") {
         System.out.println("ATTEMPTING CURSE RELEASE")
         apiKey = project.properties["curseforge_key"]
     } else {
@@ -250,35 +246,35 @@ curseforge {
     }
     project {
         id = curse_project_id
-        addGameVersion '1.12.2'
+        addGameVersion "1.12.2"
 
         relations {
-            requiredDependency 'omlib'
-            optionalDependency 'ompd'
-            optionalDependency 'ender-io'
-            optionalDependency 'redstone-flux'
-            optionalDependency 'thermal-expansion'
-            optionalDependency 'mekanism'
-            optionalDependency 'opencomputers'
-            optionalDependency 'computercraft'
+            requiredDependency "omlib"
+            optionalDependency "ompd"
+            optionalDependency "ender-io"
+            optionalDependency "redstone-flux"
+            optionalDependency "thermal-expansion"
+            optionalDependency "mekanism"
+            optionalDependency "opencomputers"
+            optionalDependency "computercraft"
         }
 
         mainArtifact(jar) {
             releaseType = commit_release_type
             changelog = file("${projectDir}/change_log.html").text
-            changelogType = 'html'
+            changelogType = "html"
         }
 
         addArtifact(sourceJar) {
-            releaseType = 'alpha'
+            releaseType = "alpha"
             changelog = file("${projectDir}/change_log.html").text
-            changelogType = 'html'
+            changelogType = "html"
         }
 
         addArtifact(deobfJar) {
-            releaseType = 'alpha'
+            releaseType = "alpha"
             changelog = file("${projectDir}/change_log.html").text
-            changelogType = 'html'
+            changelogType = "html"
         }
     }
 }

@@ -50,7 +50,7 @@ public abstract class AbstractBaseAttachment extends BlockAbstractTileEntity imp
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox_OM(IBlockState state, IBlockAccess source, BlockPos pos) {
         IBlockState blockState = this.getActualState(state, source, pos);
         EnumFacing facing = blockState.getValue(FACING);
         return getBoundingBoxFromFacing(facing);
@@ -58,7 +58,7 @@ public abstract class AbstractBaseAttachment extends BlockAbstractTileEntity imp
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+    public boolean canPlaceBlockAt_OM(World worldIn, BlockPos pos) {
         for (TileEntity tileEntity : getTouchingTileEntities(worldIn, pos)) {
             if (tileEntity instanceof TurretBase) return true;
         }
@@ -67,7 +67,7 @@ public abstract class AbstractBaseAttachment extends BlockAbstractTileEntity imp
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean causesSuffocation(IBlockState state) {
+    public boolean causesSuffocation_OM(IBlockState state) {
         return false;
     }
 

@@ -47,15 +47,15 @@ public class BaseAddon extends TileEntityBase implements ITurretBaseAddonTileEnt
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
-        super.writeToNBT(nbtTagCompound);
+    public NBTTagCompound saveToNBT(NBTTagCompound nbtTagCompound) {
+        super.saveToNBT(nbtTagCompound);
         nbtTagCompound.setByte("direction", (byte) orientation.ordinal());
         return nbtTagCompound;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
-        super.readFromNBT(nbtTagCompound);
+    public void loadFromNBT(NBTTagCompound nbtTagCompound) {
+        super.loadFromNBT(nbtTagCompound);
         if (nbtTagCompound.hasKey("direction")) {
             this.setOrientation(EnumFacing.getFront(nbtTagCompound.getByte("direction")));
         }

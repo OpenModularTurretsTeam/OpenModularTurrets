@@ -83,7 +83,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
-    public TileEntity createTileEntity(World world, IBlockState state) {
+    public TileEntity createTileEntity_OM(World world, IBlockState state) {
         int MaxCharge;
         int MaxIO;
         switch (state.getValue(TIER) - 1) {
@@ -114,7 +114,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean isOpaqueCube(IBlockState blockState) {
+    public boolean isOpaqueCube_OM(IBlockState blockState) {
         return false;
     }
 
@@ -132,7 +132,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
 
     @Override
     @Nonnull
-    protected BlockStateContainer createBlockState() {
+    protected BlockStateContainer createBlockState_OM() {
         return new ExtendedBlockState(this, new IProperty[]{TIER, LIGHT_VALUE, LIGHT_OPACITY}, new IUnlistedProperty[]{RENDERBLOCKSTATE});
     }
 
@@ -181,7 +181,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated_OM(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote && hand == EnumHand.MAIN_HAND) {
             TurretBase base = (TurretBase) world.getTileEntity(pos);
             if (OMTConfig.BASES.allowBaseCamo && handleCamoActivation(world, pos, state, player, hand, side, hitX, hitY, hitZ).isSuccess()) {
@@ -232,7 +232,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
 
     @Override
     @ParametersAreNonnullByDefault
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack
+    public void onBlockPlacedBy_OM(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack
             stack) {
 
         if (worldIn.getTileEntity(pos) instanceof TurretBase) {
@@ -275,7 +275,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+    public boolean canPlaceBlockAt_OM(World worldIn, BlockPos pos) {
         for (EnumFacing facing : EnumFacing.VALUES) {
             for (TileEntity tileEntity : getTouchingTileEntities(worldIn, pos.offset(facing))) {
                 if (tileEntity instanceof TurretBase) return false;

@@ -74,8 +74,8 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
-        super.writeToNBT(nbtTagCompound);
+    public NBTTagCompound saveToNBT(NBTTagCompound nbtTagCompound) {
+        super.saveToNBT(nbtTagCompound);
         nbtTagCompound.setBoolean("powerExpander", powerExpander);
         nbtTagCompound.setByte("direction", (byte) orientation.ordinal());
         nbtTagCompound.setInteger("tier", tier);
@@ -83,8 +83,8 @@ public class Expander extends TileEntityContainer implements ITickable, ITurretB
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
-        super.readFromNBT(nbtTagCompound);
+    public void loadFromNBT(NBTTagCompound nbtTagCompound) {
+        super.loadFromNBT(nbtTagCompound);
         this.powerExpander = nbtTagCompound.getBoolean("powerExpander");
         this.tier = nbtTagCompound.getInteger("tier");
         if (nbtTagCompound.hasKey("direction")) {

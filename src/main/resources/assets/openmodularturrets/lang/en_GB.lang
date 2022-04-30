@@ -52,6 +52,7 @@ tile.grenade_turret.name=Grenade Launcher Turret
 tile.relativistic_turret.name=Relativistic Turret
 tile.laser_turret.name=Laser Turret
 tile.rail_gun_turret.name=Rail Gun Turret
+tile.arc_turret.name=Arc Turret
 tile.lever_block.name=Basic Turret Base Crank
 tile.expander_power_tier_one.name=Base Power Expander (Tier 1)
 tile.expander_power_tier_two.name=Base Power Expander (Tier 2)
@@ -69,9 +70,6 @@ tile.turret_base.name=Turret Base
 itemGroup.openmodularturrets=Open Modular Turrets
 
 text.openmodularturrets.gui.base=Base
-text.openmodularturrets.gui.attack_mobs=Attack Mobs
-text.openmodularturrets.gui.attack_neutrals=Attack Neutrals
-text.openmodularturrets.gui.attack_players=Attack Players
 text.openmodularturrets.gui.multi_targeting=Multi Targeting
 text.openmodularturrets.gui.addons=Addons
 text.openmodularturrets.gui.upgrades=Upgr.
@@ -278,4 +276,4 @@ text.openmodularturrets.death.attack.laser=%s got disintegrated.
 text.openmodularturrets.death.attack.ferroslug=%s found atomized minerva.
 tile.plasma_turret.name=Plasma Launcher Turret
 text.openmodularturrets.flavour.turret.plasma=Hot air -> stuff's on fire.
-text.openmodularturrets:turret_limit=Turret Limit
+text.openmodularturrets:turret_limit=Turret Limittext.openmodularturrets.gui.damage=Damage

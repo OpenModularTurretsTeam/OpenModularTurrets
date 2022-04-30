@@ -79,7 +79,7 @@ public class BlockExpander extends AbstractBaseAttachment implements IHasItemBlo
 
     @Override
     @Nonnull
-    protected BlockStateContainer createBlockState() {
+    protected BlockStateContainer createBlockState_OM() {
         return new BlockStateContainer(this, EXPANDER_META, FACING);
     }
 
@@ -96,7 +96,7 @@ public class BlockExpander extends AbstractBaseAttachment implements IHasItemBlo
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
-    public TileEntity createTileEntity(World world, IBlockState state) {
+    public TileEntity createTileEntity_OM(World world, IBlockState state) {
         if (state.getValue(EXPANDER_META) < 5) {
             return new Expander(state.getValue(EXPANDER_META), false);
         } else {
@@ -106,7 +106,7 @@ public class BlockExpander extends AbstractBaseAttachment implements IHasItemBlo
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean isFullBlock(IBlockState state) {
+    public boolean isFullBlock_OM(IBlockState state) {
         return false;
     }
 
@@ -124,13 +124,13 @@ public class BlockExpander extends AbstractBaseAttachment implements IHasItemBlo
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube_OM(IBlockState state) {
         return false;
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated_OM(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (hand.equals(EnumHand.OFF_HAND)) return true;
         Expander expander = (Expander) worldIn.getTileEntity(pos);
         if (expander == null) {
@@ -172,7 +172,7 @@ public class BlockExpander extends AbstractBaseAttachment implements IHasItemBlo
 
     @Override
     @ParametersAreNonnullByDefault
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy_OM(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         Expander expander = (Expander) worldIn.getTileEntity(pos);
         if (expander != null) {
             expander.setOwner(expander.getBase().getOwner());

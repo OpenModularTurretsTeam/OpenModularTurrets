@@ -1,8 +1,6 @@
 package omtteam.openmodularturrets.api.lists;
 
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import omtteam.omlib.util.EntityUtil;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,38 +10,24 @@ import java.util.List;
  * This Class
  */
 @SuppressWarnings("unused")
-public class NeutralList {
-    private static final List<String> list = new ArrayList<>();
+public class NeutralList extends MobList {
+    private static NeutralList instance = null;
+    private final List<ResourceLocation> list = new ArrayList<>();
 
-    public static boolean contains(String mobIn) {
-        for (String mob : list) {
-            if (mob.equalsIgnoreCase(mobIn)) {
-                return true;
-            }
+    public static NeutralList getInstance() {
+        if (instance == null) {
+            instance = new NeutralList();
         }
-        return false;
+        return instance;
     }
 
-    public static boolean contains(EntityLivingBase mobIn) {
-        return contains(EntityList.getEntityString(mobIn));
+    @Override
+    public String getType() {
+        return "NeutralForce";
     }
 
-    public static boolean add(String mobIn) {
-        if (contains(mobIn) || EntityUtil.findClassById(mobIn) == null) {
-            return false;
-        } else {
-            list.add(mobIn);
-            return true;
-        }
-    }
-
-    public static boolean remove(String mobIn) {
-        for (String mob : list) {
-            if (mob.equalsIgnoreCase(mobIn)) {
-                list.remove(mobIn);
-                return true;
-            }
-        }
-        return false;
+    @Override
+    protected List<ResourceLocation> getList() {
+        return list;
     }
 }

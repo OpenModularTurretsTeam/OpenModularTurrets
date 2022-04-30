@@ -30,6 +30,11 @@ public abstract class AbstractItemBlockBaseAddon extends ItemBlock implements ID
         return ((ITurretBaseAddonBlock) this.getBlock()).getBoundingBoxFromFacing(facing, world, pos);
     }
 
+    @Override
+    public boolean canPlace(EnumFacing facing, World world, BlockPos pos) {
+        return world.isAirBlock(pos);
+    }
+
     @Nullable
     @Override
     public EnumFacing getBaseFacing(World world, BlockPos pos) {

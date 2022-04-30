@@ -30,7 +30,7 @@ public class PlasmaProjectile extends TurretProjectile {
 
     public PlasmaProjectile(World world, TurretBase turretBase) {
         super(world, turretBase);
-        this.gravity = 0.001F;
+        this.gravity = 0.01F;
     }
 
     @Override

@@ -18,6 +18,9 @@ public class OMTNames {
         public static final String teleporterTurret = "teleporter_turret";
         public static final String railGunTurret = "rail_gun_turret";
         public static final String plasmaTurret = "plasma_turret";
+        public static final String meleeTurret = "melee_turret";
+        public static final String arcTurret = "arc_turret";
+        public static final String crossbowTurret = "crossbow_turret";
         public static final String lever = "lever_block";
 
         public static final String expander = "expander";
@@ -96,6 +99,7 @@ public class OMTNames {
             public static final String ADDONS = "text.openmodularturrets.gui.addons";
             public static final String UPGRADES = "text.openmodularturrets.gui.upgrades";
             public static final String AMMO = "text.openmodularturrets.gui.ammo";
+            public static final String DAMAGE = "text.openmodularturrets.damage.label";
             public static final String DAMAGE_AMP = "text.openmodularturrets.gui.damage_amp";
             public static final String INVENTORY = "text.openmodularturrets.gui.inventory";
             public static final String TARGET = "text.openmodularturrets.gui.target";

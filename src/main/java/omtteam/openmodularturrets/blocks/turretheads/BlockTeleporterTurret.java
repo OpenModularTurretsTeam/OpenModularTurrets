@@ -46,7 +46,7 @@ public class BlockTeleporterTurret extends BlockAbstractTurretHead {
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
-    public TileEntity createTileEntity(World world, IBlockState state) {
+    public TileEntity createTileEntity_OM(World world, IBlockState state) {
         return new TeleporterTurretTileEntity();
     }
 
@@ -59,8 +59,8 @@ public class BlockTeleporterTurret extends BlockAbstractTurretHead {
                 float var23 = (rand.nextFloat() - 0.5F) * 0.2F;
                 worldIn.spawnParticle(EnumParticleTypes.PORTAL, pos.getX() + 0.5f + rand.nextGaussian(),
                                       pos.getY() + 0.5f + rand.nextGaussian(),
-                                      pos.getZ() + 0.5f + rand.nextGaussian(), (double) var21,
-                                      (double) var22, (double) var23);
+                                      pos.getZ() + 0.5f + rand.nextGaussian(), var21,
+                                      var22, var23);
             }
             shouldAnimate = false;
         }

@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import omtteam.openmodularturrets.api.lists.AmmoList;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
@@ -68,7 +69,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
     @Override
     public void onHitEntity(Entity entity) {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile) && !this.isDead) {
-            int damage = OMTConfig.TURRETS.disposable_turret.baseDamage;
+            int damage = OMTConfig.TURRETS.disposable_turret.baseDamage + AmmoList.getDamage(this.itemBound.getItem());
 
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {

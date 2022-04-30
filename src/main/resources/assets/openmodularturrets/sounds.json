@@ -169,5 +169,14 @@
         "stream": false
       }
     ]
+  },
+  "arc": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "openmodularturrets:arc",
+        "stream": false
+      }
+    ]
   }
 }

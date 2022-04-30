@@ -27,6 +27,7 @@ import valkyrienwarfare.api.IPhysicsEntity;
 import valkyrienwarfare.api.IPhysicsEntityManager;
 import valkyrienwarfare.api.TransformType;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
@@ -77,6 +78,11 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
         return true;
     }
 
+    @Nullable
+    protected Vec3d getRenderStartVector() {
+        return null;
+    }
+
     protected void shootRay(double adjustedX, double adjustedY, double adjustedZ, double accuracy) {
         // Consume energy
         base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot(), null);
@@ -124,7 +130,11 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
                 Entity entity = result.entityHit;
                 if (baseVector.distanceTo(result.hitVec) <= blockRange) { // if entity is nearer than block hit
                     if (onHitEntity(entity)) {
-                        this.renderRay(baseVector, vector);
+                        if (this.getRenderStartVector() != null) {
+                            this.renderRay(this.getRenderStartVector(), vector);
+                        } else {
+                            this.renderRay(baseVector, vector);
+                        }
                         hit = true;
                         break;
                     }

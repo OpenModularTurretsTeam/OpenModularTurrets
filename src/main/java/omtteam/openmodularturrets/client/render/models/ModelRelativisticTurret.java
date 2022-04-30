@@ -19,11 +19,11 @@ public class ModelRelativisticTurret extends ModelAbstractTurret {
     public ModelRelativisticTurret() {
         super(37, 28, 15);
 
-        Base.addBox(-6F, 7F, -6F, 12, 1, 12);
-        Base.setRotationPoint(0F, 16F, 0F);
-        Base.setTextureSize(64, 64);
-        Base.mirror = true;
-        setRotation(Base, 0F, 0F, 0F);
+        base.addBox(-6F, 7F, -6F, 12, 1, 12);
+        base.setRotationPoint(0F, 16F, 0F);
+        base.setTextureSize(64, 64);
+        base.mirror = true;
+        setRotation(base, 0F, 0F, 0F);
         Spike1 = new ModelRenderer(this, 24, 0);
         Spike1.addBox(-6F, 0F, -6F, 1, 8, 1);
         Spike1.setRotationPoint(0F, 15F, 0F);
@@ -66,7 +66,7 @@ public class ModelRelativisticTurret extends ModelAbstractTurret {
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        Base.render(f5);
+        base.render(f5);
         Spike1.render(f5);
         Spike2.render(f5);
         Spike3.render(f5);
@@ -108,7 +108,7 @@ public class ModelRelativisticTurret extends ModelAbstractTurret {
     }
 
     public void renderAll() {
-        Base.render(0.0625F);
+        base.render(0.0625F);
         Spike1.render(0.0625F);
         Spike2.render(0.0625F);
         Spike3.render(0.0625F);
@@ -123,7 +123,7 @@ public class ModelRelativisticTurret extends ModelAbstractTurret {
     }
 
     @Override
-    public boolean hasBoxUnder() {
+    public boolean hasHolder() {
         return false;
     }
 }

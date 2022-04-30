@@ -33,7 +33,6 @@ public class PotatoCannonTurretTileEntity extends ProjectileTurret {
         return true;
     }
 
-
     @Override
     public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
         return new PotatoProjectile(world, ammo, this.getBaseFromWorld());

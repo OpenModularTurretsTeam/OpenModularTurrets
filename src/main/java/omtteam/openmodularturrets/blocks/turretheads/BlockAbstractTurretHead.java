@@ -63,7 +63,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
 
     @Override
     @Nonnull
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox_OM(IBlockState state, IBlockAccess source, BlockPos pos) {
         if (state.getValue(CONCEALED)) {
             return new AxisAlignedBB(0F, 0F, 0F, 0F, 0F, 0F);
         }
@@ -95,33 +95,33 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
 
     @Override
     @Nonnull
-    protected BlockStateContainer createBlockState() {
+    protected BlockStateContainer createBlockState_OM() {
         return new BlockStateContainer(this, CONCEALED);
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube_OM(IBlockState state) {
         return false;
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean isFullBlock(IBlockState state) {
+    public boolean isFullBlock_OM(IBlockState state) {
         return false;
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+    public boolean canPlaceBlockAt_OM(World worldIn, BlockPos pos) {
         TurretBase base = getBase(worldIn, pos);
         return base != null && OMTUtil.getRemainingTurretSlots(base, this.getTurretType()) > 0;
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+    public void onBlockPlacedBy_OM(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy_OM(worldIn, pos, state, placer, stack);
         TurretBase base = getBase(worldIn, pos);
         if (this.getTurretType().getSettings().baseRange > base.getMaxRange()) {
             base.updateMaxRange();
@@ -137,13 +137,13 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean causesSuffocation(IBlockState state) {
+    public boolean causesSuffocation_OM(IBlockState state) {
         return false;
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+    public void onNeighborChange_OM(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
         TileEntity head = world.getTileEntity(pos);
         if (head instanceof TurretHead && ((TurretHead) head).getBase() == null) {
             head.getWorld().destroyBlock(pos, true);
@@ -169,6 +169,8 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
 
             probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.AMMO) + ": \u00A7F"
                                    + getAmmoLevel(turret, turret.getBase()), probeInfo.defaultTextStyle());
+            probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE) + ": \u00A7F"
+                                   + turret.getTurretType().getSettings().baseDamage, probeInfo.defaultTextStyle());
             probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": \u00A7F"
                                    + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * getAmpLevel(turret.getBase())) + "%", probeInfo.defaultTextStyle());
             probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.ACCURACY) + ": \u00A7F"

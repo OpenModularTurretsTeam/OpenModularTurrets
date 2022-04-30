@@ -52,21 +52,21 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
     protected double targetSpeedZ = 0;
     protected double cachedAccuracy = 0D;
     protected int cachedScattershot = 0;
-    private boolean resetCaches;
     protected ItemStack ammo;
-    private EnumFacing turretBase;
     Integer[] priorities = {};
+    public EnumFacing baseFacing;
+    private boolean resetCaches;
 
     public TurretHead(int turretTier) {
         this.turretTier = turretTier;
         this.resetCaches = true;
-    }
+    }   //TODO: Strategy Pattern für optionale Features wie Ammo oder Movement-Fähigkeit
 
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound var1 = new NBTTagCompound();
-        this.writeToNBT(var1);
+        this.saveToNBT(var1);
         return new SPacketUpdateTileEntity(this.pos, 2, var1);
     }
 
@@ -74,12 +74,12 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
     @SideOnly(Side.CLIENT)
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         NBTTagCompound var1 = pkt.getNbtCompound();
-        readFromNBT(var1);
+        loadFromNBT(var1);
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
-        super.writeToNBT(nbtTagCompound);
+    public NBTTagCompound saveToNBT(NBTTagCompound nbtTagCompound) {
+        super.saveToNBT(nbtTagCompound);
         nbtTagCompound.setInteger("ticksBeforeFire", ticks);
         nbtTagCompound.setBoolean("shouldConceal", shouldConceal);
         nbtTagCompound.setBoolean("autoFire", autoFire);
@@ -94,8 +94,8 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
-        super.readFromNBT(nbtTagCompound);
+    public void loadFromNBT(NBTTagCompound nbtTagCompound) {
+        super.loadFromNBT(nbtTagCompound);
         this.ticks = nbtTagCompound.getInteger("ticksBeforeFire");
         this.shouldConceal = nbtTagCompound.getBoolean("shouldConceal");
         this.autoFire = nbtTagCompound.getBoolean("autoFire");
@@ -119,7 +119,7 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
 
     // Set the rotation to fit the turret against the base and store its direction
     protected boolean setSide() {
-        if (hasSetSide && !this.getWorld().isBlockLoaded(this.getPos().offset(turretBase))) {
+        if (hasSetSide && !this.getWorld().isBlockLoaded(this.getPos().offset(baseFacing))) {
             return false;
         }
         if (hasSetSide) {
@@ -129,7 +129,7 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
         if (this.getWorld().isBlockLoaded(this.pos.east()) && this.getWorld().getTileEntity(this.pos.east()) instanceof TurretBase) {
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 1.565F;
-            this.turretBase = EnumFacing.EAST;
+            this.baseFacing = EnumFacing.EAST;
             this.hasSetSide = true;
             return true;
         }
@@ -137,7 +137,7 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
         if (this.getWorld().isBlockLoaded(this.pos.west()) && this.getWorld().getTileEntity(this.pos.west()) instanceof TurretBase) {
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 4.705F;
-            this.turretBase = EnumFacing.WEST;
+            this.baseFacing = EnumFacing.WEST;
             this.hasSetSide = true;
             return true;
         }
@@ -145,7 +145,7 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
         if (this.getWorld().isBlockLoaded(this.pos.south()) && this.getWorld().getTileEntity(this.pos.south()) instanceof TurretBase) {
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 3.145F;
-            this.turretBase = EnumFacing.SOUTH;
+            this.baseFacing = EnumFacing.SOUTH;
             this.hasSetSide = true;
             return true;
         }
@@ -153,7 +153,7 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
         if (this.getWorld().isBlockLoaded(this.pos.north()) && this.getWorld().getTileEntity(this.pos.north()) instanceof TurretBase) {
             this.baseFitRotationX = 1.56F;
             this.baseFitRotationZ = 0F;
-            this.turretBase = EnumFacing.NORTH;
+            this.baseFacing = EnumFacing.NORTH;
             this.hasSetSide = true;
             return true;
         }
@@ -161,7 +161,7 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
         if (this.getWorld().isBlockLoaded(this.pos.up()) && this.getWorld().getTileEntity(this.pos.up()) instanceof TurretBase) {
             this.baseFitRotationX = 3.145F;
             this.baseFitRotationZ = 0F;
-            this.turretBase = EnumFacing.UP;
+            this.baseFacing = EnumFacing.UP;
             this.hasSetSide = true;
             return true;
         }
@@ -169,7 +169,7 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
         if (this.getWorld().isBlockLoaded(this.pos.down()) && this.getWorld().getTileEntity(this.pos.down()) instanceof TurretBase) {
             this.baseFitRotationX = 0F;
             this.baseFitRotationZ = 0F;
-            this.turretBase = EnumFacing.DOWN;
+            this.baseFacing = EnumFacing.DOWN;
             this.hasSetSide = true;
             return true;
         }

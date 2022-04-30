@@ -72,14 +72,14 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
 
     @Override
     @Nonnull
-    protected BlockStateContainer createBlockState() {
+    protected BlockStateContainer createBlockState_OM() {
         return new BlockStateContainer(this, ROTATION);
     }
 
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
-    public TileEntity createTileEntity(World worldIn, IBlockState blockState) {
+    public TileEntity createTileEntity_OM(World worldIn, IBlockState blockState) {
         return new LeverTileEntity();
     }
 
@@ -89,7 +89,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+    public boolean canPlaceBlockAt_OM(World worldIn, BlockPos pos) {
         return (isBaseValid(worldIn.getTileEntity(pos.north())) ||
                 isBaseValid(worldIn.getTileEntity(pos.east())) ||
                 isBaseValid(worldIn.getTileEntity(pos.south())) ||
@@ -97,7 +97,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy_OM(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         float l = 0F;
         if (isBaseValid(worldIn.getTileEntity(pos.east()))) {
             l = 270F;
@@ -116,7 +116,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated_OM(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.DOWN || TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.UP) {
             return true;
         }
@@ -184,13 +184,13 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube_OM(IBlockState state) {
         return false;
     }
 
     @Override
     @Nonnull
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox_OM(IBlockState state, IBlockAccess source, BlockPos pos) {
         return new AxisAlignedBB(0.1F, 0.1F, 0.1F, 0.9F, 0.9F, 0.9F);
     }
 

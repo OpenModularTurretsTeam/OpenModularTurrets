@@ -13,7 +13,7 @@ import omtteam.openmodularturrets.entity.projectiles.DisposableTurretProjectile;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-class ItemProjectileRenderer extends Render {
+public class ItemProjectileRenderer extends Render {
 
     private final RenderItem itemRenderer;
 

@@ -30,9 +30,11 @@ import java.util.Set;
 public class OMTUtil {
     public static boolean isItemStackValidAmmo(ItemStack itemStack) {
         if (itemStack == ItemStack.EMPTY) return false;
-        return !OMTConfig.GENERAL.useWhitelistForAmmo || itemStack.getItem() == Items.POTATO ||
-                itemStack.getItem() == Items.REDSTONE || itemStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK)
-                || AmmoList.contains(itemStack) || itemStack.getItem() instanceof AmmoMetaItem;
+        return !OMTConfig.GENERAL.useWhitelistForAmmo || itemStack.getItem() == Items.POTATO
+                || itemStack.getItem() == Items.REDSTONE || itemStack.getItem() == Items.ARROW
+                || itemStack.getItem() == Items.TIPPED_ARROW
+                || itemStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK)
+                || AmmoList.getDamage(itemStack) > 0 || itemStack.getItem() instanceof AmmoMetaItem;
     }
 
     public static int getFakeDropsLevel(EntityLivingBase entity) {

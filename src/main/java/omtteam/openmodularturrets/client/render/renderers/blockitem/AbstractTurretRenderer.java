@@ -3,7 +3,6 @@ package omtteam.openmodularturrets.client.render.renderers.blockitem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
-import omtteam.omlib.util.MathUtil;
 import omtteam.openmodularturrets.client.render.models.ModelAbstractTurret;
 import omtteam.openmodularturrets.client.render.models.ModelDamageAmp;
 import omtteam.openmodularturrets.client.render.models.ModelRedstoneReactor;
@@ -33,7 +32,6 @@ public abstract class AbstractTurretRenderer extends TileEntitySpecialRenderer {
     protected abstract byte addonsRendered();
 
     protected void render(TurretHead turretHead, boolean doRotation, ModelAbstractTurret model, double x, double y, double z) {
-        int rotation;
         AbstractDirectedTurret directedTurret = null;
         if (doRotation) {
             directedTurret = (AbstractDirectedTurret) turretHead;
@@ -56,13 +54,12 @@ public abstract class AbstractTurretRenderer extends TileEntitySpecialRenderer {
         }
 
         if (turretHead.getWorld() != null) {
-            rotation = turretHead.getBlockMetadata();
-            GL11.glRotatef(rotation * 90, 0.0F, 1.0F, 0.0F);
             GL11.glScalef(1.0F, -1F, -1F);
-            if (doRotation) {
-                model.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(directedTurret.getYaw(), directedTurret.getPitch()), MathUtil.getRotationXZFromYawPitch(directedTurret.getYaw(), directedTurret.getPitch()));
-            }
             model.setBaseRotation(turretHead);
+            if (doRotation) {
+                model.setRotationForTarget(TurretHeadUtil.getRotationXYFromTurretHead(directedTurret),
+                                           TurretHeadUtil.getRotationXZFromTurretHead(directedTurret));
+            }
         }
 
         model.renderAll();
@@ -73,7 +70,8 @@ public abstract class AbstractTurretRenderer extends TileEntitySpecialRenderer {
                 ResourceLocation texturesAmp = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_damage_amp.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
                 if (doRotation) {
-                    amp.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(directedTurret.getYaw(), directedTurret.getPitch()), MathUtil.getRotationXZFromYawPitch(directedTurret.getYaw(), directedTurret.getPitch()));
+                    amp.setRotationForTarget(TurretHeadUtil.getRotationXYFromTurretHead(directedTurret),
+                                             TurretHeadUtil.getRotationXZFromTurretHead(directedTurret));
                 }
                 amp.renderAll();
             }
@@ -82,7 +80,8 @@ public abstract class AbstractTurretRenderer extends TileEntitySpecialRenderer {
                 ResourceLocation texturesSolar = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_solar_panel.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
                 if (doRotation) {
-                    solar.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(directedTurret.getYaw(), directedTurret.getPitch()), MathUtil.getRotationXZFromYawPitch(directedTurret.getYaw(), directedTurret.getPitch()));
+                    solar.setRotationForTarget(TurretHeadUtil.getRotationXYFromTurretHead(directedTurret),
+                                               TurretHeadUtil.getRotationXZFromTurretHead(directedTurret));
                 }
                 solar.renderAll();
             }
@@ -91,7 +90,8 @@ public abstract class AbstractTurretRenderer extends TileEntitySpecialRenderer {
                 ResourceLocation texturesReac = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_redstone_reactor.png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesReac);
                 if (doRotation) {
-                    reac.setRotationForTarget(MathUtil.getRotationXYFromYawPitch(directedTurret.getYaw(), directedTurret.getPitch()), MathUtil.getRotationXZFromYawPitch(directedTurret.getYaw(), directedTurret.getPitch()));
+                    reac.setRotationForTarget(TurretHeadUtil.getRotationXYFromTurretHead(directedTurret),
+                                              TurretHeadUtil.getRotationXZFromTurretHead(directedTurret));
                 }
                 reac.renderAll();
             }

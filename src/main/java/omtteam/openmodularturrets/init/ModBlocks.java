@@ -32,6 +32,9 @@ public class ModBlocks {
     public static Block rocketTurret;
     public static Block railGunTurret;
     public static Block plasmaTurret;
+    public static Block arcTurret;
+    public static Block meleeTurret;
+    public static Block crossbowTurret;
     public static Block leverBlock;
 
     public static Block expander;
@@ -97,6 +100,21 @@ public class ModBlocks {
             TurretList.addTurret(new TurretType(OMTNames.Blocks.plasmaTurret, OMTConfig.TURRETS.plasma_turret));
         }
 
+        if (OMTConfig.TURRETS.arc_turret.enabled) {
+            arcTurret = InitHelper.registerBlock(new BlockArcTurret(), registry, ModItems.subblocks);
+            TurretList.addTurret(new TurretType(OMTNames.Blocks.arcTurret, OMTConfig.TURRETS.arc_turret));
+        }
+
+        if (OMTConfig.TURRETS.melee_turret.enabled) {
+            meleeTurret = InitHelper.registerBlock(new BlockMeleeTurret(), registry, ModItems.subblocks);
+            TurretList.addTurret(new TurretType(OMTNames.Blocks.meleeTurret, OMTConfig.TURRETS.melee_turret));
+        }
+
+        if (OMTConfig.TURRETS.crossbow_turret.enabled) {
+            crossbowTurret = InitHelper.registerBlock(new BlockCrossbowTurret(), registry, ModItems.subblocks);
+            TurretList.addTurret(new TurretType(OMTNames.Blocks.crossbowTurret, OMTConfig.TURRETS.crossbow_turret));
+        }
+
         leverBlock = InitHelper.registerBlock(new LeverBlock(), registry, ModItems.subblocks);
     }
 
@@ -114,6 +132,9 @@ public class ModBlocks {
         InitHelper.registerTileEntity(RelativisticTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.relativisticTurret);
         InitHelper.registerTileEntity(TeleporterTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.teleporterTurret);
         InitHelper.registerTileEntity(PlasmaLauncherTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.plasmaTurret);
+        InitHelper.registerTileEntity(ArcTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.arcTurret);
+        InitHelper.registerTileEntity(MeleeTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.meleeTurret);
+        InitHelper.registerTileEntity(CrossbowTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.crossbowTurret);
         InitHelper.registerTileEntity(Expander.class, Reference.MOD_ID, OMTNames.Blocks.expander);
         InitHelper.registerTileEntity(BaseAddon.class, Reference.MOD_ID, OMTNames.Blocks.baseAddon);
     }

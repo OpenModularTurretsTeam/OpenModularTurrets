@@ -73,7 +73,7 @@ public class BlockBaseAttachment extends AbstractBaseAttachment implements IHasI
 
     @Override
     @Nonnull
-    protected BlockStateContainer createBlockState() {
+    protected BlockStateContainer createBlockState_OM() {
         return new BlockStateContainer(this, BASE_ADDON_META, FACING);
     }
 
@@ -93,13 +93,13 @@ public class BlockBaseAttachment extends AbstractBaseAttachment implements IHasI
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
-    public TileEntity createTileEntity(World world, IBlockState state) {
+    public TileEntity createTileEntity_OM(World world, IBlockState state) {
         return new BaseAddon();
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean isFullBlock(IBlockState state) {
+    public boolean isFullBlock_OM(IBlockState state) {
         return false;
     }
 
@@ -117,13 +117,13 @@ public class BlockBaseAttachment extends AbstractBaseAttachment implements IHasI
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube_OM(IBlockState state) {
         return false;
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated_OM(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (hand.equals(EnumHand.OFF_HAND)) return true;
         BaseAddon baseAddon = (BaseAddon) worldIn.getTileEntity(pos);
         if (baseAddon == null) {
@@ -139,7 +139,7 @@ public class BlockBaseAttachment extends AbstractBaseAttachment implements IHasI
 
     @Override
     @ParametersAreNonnullByDefault
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy_OM(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         BaseAddon baseAddon = (BaseAddon) worldIn.getTileEntity(pos);
         if (baseAddon != null) {
             baseAddon.setSide();

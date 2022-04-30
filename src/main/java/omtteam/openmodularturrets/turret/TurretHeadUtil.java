@@ -30,6 +30,7 @@ import omtteam.openmodularturrets.items.AmmoMetaItem;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.Expander;
 import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.EnumSlotType;
 import org.apache.commons.lang3.tuple.Triple;
@@ -119,7 +120,7 @@ public class TurretHeadUtil {
                 // Second check if requested ammo is disposable ammo
                 boolean needDisposable = itemStack.isItemEqual(disposableAmmoStack);
                 if (ammoCheck != ItemStack.EMPTY && ammoCheck.isItemEqual(itemStack)
-                        || (needDisposable && AmmoList.contains(ammoCheck))) {
+                        || (needDisposable && AmmoList.getDamage(ammoCheck) > 0)) {
                     foundMap.add(Triple.of(inventory, i, Math.min(ammoCheck.getCount(), itemStack.getCount())));
                     foundCount += ammoCheck.getCount();
                 }
@@ -261,8 +262,8 @@ public class TurretHeadUtil {
             }
         }
 
-        double dX = (targetPos.x) - (pos.getX());
-        double dZ = (targetPos.z) - (pos.getZ());
+        double dX = targetPos.x - (pos.getX() + 0.5F);
+        double dZ = targetPos.z - (pos.getZ() + 0.5F);
 
         float yaw = (float) ((Math.atan2(dZ, dX)));
         if (yaw < 0) {
@@ -283,17 +284,15 @@ public class TurretHeadUtil {
             }
         }
 
-        BlockPos targetBlockPos = new BlockPos(targetPos.x, targetPos.y, targetPos.z);
-
-        double dX = (targetBlockPos.getX() - 0.5F) - (pos.getX() + 0.5F);
-        double dY = (targetBlockPos.getY() + 0.5F) - (pos.getY() - 0.5F);
-        double dZ = (targetBlockPos.getZ() - 0.5F) - (pos.getZ() + 0.5F);
+        double dX = (targetPos.x - 0.5F) - (pos.getX() + 0.5F);
+        double dY = (targetPos.y + target.getEyeHeight()) - (pos.getY() + 0.5F);
+        double dZ = (targetPos.z - 0.5F) - (pos.getZ() + 0.5F);
 
         float pitch = (float) ((Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY)));
         if (pitch < 0) {
             pitch += 2 * Math.PI;
         }
-
+        // Convert it to base rotation dependent values
         return pitch / (float) Math.PI * 180F;
     }
 
@@ -302,7 +301,8 @@ public class TurretHeadUtil {
         for (int i : base.getSlotMap().get(EnumSlotType.UpgradeSlot)) {
             if (base.getInventory().getStackInSlot(i) != ItemStack.EMPTY) {
                 if (base.getInventory().getStackInSlot(i).getItemDamage() == 3) {
-                    value += (turretHead.getTurretType().getSettings().rangeUpgrade * getStackSize(base.getInventory().getStackInSlot(i)));
+                    value += (turretHead.getTurretType().getSettings().rangeUpgrade
+                            * getStackSize(base.getInventory().getStackInSlot(i)));
                 }
             }
         }
@@ -506,5 +506,70 @@ public class TurretHeadUtil {
         if (base.getWorld().isDaytime() && !base.getWorld().isRaining() && base.getWorld().canBlockSeeSky(base.getPos().up(2))) {
             storage.receiveEnergy(OMTConfig.MISCELLANEOUS.solarPanelAddonGen, false);
         }
+    }
+
+    // Yaw of the holder and weapon
+    public static float getRotationXYFromTurretHead(AbstractDirectedTurret turretHead) {
+        float yaw = turretHead.getYaw();
+        float pitch = turretHead.getPitch();
+        float rotationXY = 0F;
+        switch (turretHead.baseFacing) {
+            case UP:
+                rotationXY = (float) (((-pitch + 90f) / 180F * Math.PI));
+                break;
+            case DOWN:
+                rotationXY = (float) (((pitch - 90f) / 180F * Math.PI));
+                break;
+            case EAST:
+                if (yaw > 180F) {
+                    rotationXY = (float) (((pitch) / 180F * Math.PI));
+                } else {
+                    rotationXY = (float) (((pitch + 180F) / 180F * Math.PI));
+                }
+                break;
+            case WEST:
+                rotationXY = (float) (((yaw - 90f) / 180F * Math.PI));
+                break;
+            case NORTH:
+                rotationXY = (float) (((yaw - 90f) / 180F * Math.PI));
+                break;
+            case SOUTH:
+                rotationXY = (float) (((yaw - 90f) / 180F * Math.PI));
+                break;
+        }
+        return rotationXY;
+    }
+
+    // Pitch of the Weapon
+    public static float getRotationXZFromTurretHead(AbstractDirectedTurret turretHead) {
+        float yaw = turretHead.getYaw();
+        float pitch = turretHead.getPitch();
+        float rotationXZ = 0F;
+
+        switch (turretHead.baseFacing) {
+            case UP:
+                rotationXZ = (float) (((-yaw - 90f) / 180F * Math.PI));
+                break;
+            case DOWN:
+                rotationXZ = (float) (((yaw - 90f) / 180F * Math.PI));
+                break;
+            case EAST:
+                if (yaw > 180F) {
+                    rotationXZ = (float) (((-yaw + 90F) / 180F * Math.PI));
+                } else {
+                    rotationXZ = (float) (((yaw) / 180F * Math.PI));
+                }
+                break;
+            case WEST:
+                rotationXZ = (float) (((pitch - 90f) / 180F * Math.PI));
+                break;
+            case NORTH:
+                rotationXZ = (float) (((pitch - 90f) / 180F * Math.PI));
+                break;
+            case SOUTH:
+                rotationXZ = (float) (((pitch - 90f) / 180F * Math.PI));
+                break;
+        }
+        return rotationXZ;
     }
 }

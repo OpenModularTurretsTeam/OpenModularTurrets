@@ -58,7 +58,19 @@ public class ModTESRItems {
         }
         if (OMTConfig.TURRETS.plasma_turret.enabled) {
             ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.plasmaTurret), 0, PlasmaLauncherTurretTileEntity.class);
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.plasmaTurret), 0, new ModelResourceLocation(ModBlocks.plasmaTurret.getRegistryName(), "inventory")); //TODO: put in right models
+        }
+        if (OMTConfig.TURRETS.arc_turret.enabled) {
+            ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.arcTurret), 0, ArcTurretTileEntity.class);
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.arcTurret), 0, new ModelResourceLocation(ModBlocks.arcTurret.getRegistryName(), "inventory"));
+        }
+        if (OMTConfig.TURRETS.melee_turret.enabled) {
+            ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.plasmaTurret), 0, PlasmaLauncherTurretTileEntity.class);
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.plasmaTurret), 0, new ModelResourceLocation(ModBlocks.grenadeLauncherTurret.getRegistryName(), "inventory"));
+        }
+        if (OMTConfig.TURRETS.crossbow_turret.enabled) {
+            ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.crossbowTurret), 0, CrossbowTurretTileEntity.class);
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.crossbowTurret), 0, new ModelResourceLocation(ModBlocks.crossbowTurret.getRegistryName(), "inventory"));
         }
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(ModBlocks.leverBlock), 0, LeverTileEntity.class);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.leverBlock), 0, new ModelResourceLocation(ModBlocks.leverBlock.getRegistryName(), "inventory"));

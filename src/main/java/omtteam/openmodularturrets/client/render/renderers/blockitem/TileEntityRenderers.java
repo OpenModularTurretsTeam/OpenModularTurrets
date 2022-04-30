@@ -20,6 +20,9 @@ public class TileEntityRenderers {
         final IncendiaryTurretRenderer incendiaryTurretRenderer = new IncendiaryTurretRenderer();
         final RelativisticTurretRenderer relativisticTurretRenderer = new RelativisticTurretRenderer();
         final TeleporterTurretRenderer teleporterTurretRenderer = new TeleporterTurretRenderer();
+        final ArcTurretRenderer arcTurretRenderer = new ArcTurretRenderer();
+        final CrossbowTurretRenderer crossbowTurretRenderer = new CrossbowTurretRenderer();
+        final PlasmaLauncherTurretRenderer plasmaLauncherTurretRenderer = new PlasmaLauncherTurretRenderer();
 
         final LeverRenderer leverRenderer = new LeverRenderer();
 
@@ -32,10 +35,12 @@ public class TileEntityRenderers {
                                                      grenadeLauncherTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(LaserTurretTileEntity.class, laserTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(RailGunTurretTileEntity.class, railGunTurretRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(PlasmaLauncherTurretTileEntity.class, grenadeLauncherTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(PlasmaLauncherTurretTileEntity.class, plasmaLauncherTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(IncendiaryTurretTileEntity.class, incendiaryTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(RelativisticTurretTileEntity.class, relativisticTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(TeleporterTurretTileEntity.class, teleporterTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(ArcTurretTileEntity.class, arcTurretRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(CrossbowTurretTileEntity.class, crossbowTurretRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(LeverTileEntity.class, leverRenderer);
     }
 }

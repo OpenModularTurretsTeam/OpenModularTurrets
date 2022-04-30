@@ -1,10 +1,12 @@
 package omtteam.openmodularturrets.handler.config;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Config;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.api.lists.AmmoList;
-import omtteam.openmodularturrets.api.lists.MobBlacklist;
+import omtteam.openmodularturrets.api.lists.MobBlockList;
+import omtteam.openmodularturrets.api.lists.MobForceList;
 import omtteam.openmodularturrets.reference.Reference;
 
 import static omtteam.omlib.util.GeneralUtil.getItem;
@@ -26,18 +28,21 @@ public class OMTConfig {
 
     public static void parseLists() {
         parseDisposableAmmoList();
-        parseMobBlacklist();
+        parseModBlockList();
+        parseMobForceList();
+        parseNeutralForceList();
     }
 
     private static void parseDisposableAmmoList() {
         try {
+            AmmoList.clear();
             for (String itemListEntry : GENERAL.stringAmmoAllowList) {
+                int damage = itemListEntry.split(",").length > 1 ? Integer.parseInt(itemListEntry.split(",")[1]) : 1;
                 String[] item = itemListEntry.split(":");
-                AmmoList.clear();
                 if (item.length == 3) {
-                    AmmoList.add(new ItemStack(getItem(item[0], item[1]), 1, Integer.parseInt(item[2])));
+                    AmmoList.add(new ItemStack(getItem(item[0], item[1]), 1, Integer.parseInt(item[2])), damage);
                 } else {
-                    AmmoList.add(new ItemStack(getItem(item[0], item[1]), 2));
+                    AmmoList.add(new ItemStack(getItem(item[0], item[1]), 2), damage);
                 }
             }
         } catch (Exception e) {
@@ -46,15 +51,41 @@ public class OMTConfig {
         }
     }
 
-    private static void parseMobBlacklist() {
+    private static void parseModBlockList() {
         try {
             if (GENERAL.stringMobBlackList.length == 0) return;
-            MobBlacklist.clear();
+            MobBlockList.getInstance().clear();
             for (String itemListEntry : GENERAL.stringMobBlackList) {
-                MobBlacklist.add(itemListEntry);
+                MobBlockList.getInstance().add(new ResourceLocation(itemListEntry));
             }
         } catch (Exception e) {
-            OpenModularTurrets.getLogger().error("error while parsing mob blacklist config!");
+            OpenModularTurrets.getLogger().error("error while parsing mob block list config!");
+            e.printStackTrace();
+        }
+    }
+
+    private static void parseMobForceList() {
+        try {
+            if (GENERAL.stringMobForceList.length == 0) return;
+            MobForceList.getInstance().clear();
+            for (String itemListEntry : GENERAL.stringMobForceList) {
+                MobForceList.getInstance().add(new ResourceLocation(itemListEntry));
+            }
+        } catch (Exception e) {
+            OpenModularTurrets.getLogger().error("error while parsing mob force list config!");
+            e.printStackTrace();
+        }
+    }
+
+    private static void parseNeutralForceList() {
+        try {
+            if (GENERAL.stringNeutralForceList.length == 0) return;
+            MobBlockList.getInstance().clear();
+            for (String itemListEntry : GENERAL.stringNeutralForceList) {
+                MobBlockList.getInstance().add(new ResourceLocation(itemListEntry));
+            }
+        } catch (Exception e) {
+            OpenModularTurrets.getLogger().error("error while parsing neutral force list config!");
             e.printStackTrace();
         }
     }
@@ -73,11 +104,17 @@ public class OMTConfig {
         @Config.Comment("Use a whitelist for ammo (which items fit into ammo slots of base)?")
         public boolean useWhitelistForAmmo = true;
 
-        @Config.Comment("If enabled: Which items fit into ammo slots of base besides mods own ammo items?")
-        public String[] stringAmmoAllowList = new String[]{"minecraft:cobblestone", "minecraft:planks"};
+        @Config.Comment("If enabled: Which items (modid:item[:meta]) can be used as disposable ammo. Value behind ',' is damage bonus.")
+        public String[] stringAmmoAllowList = new String[]{"minecraft:cobblestone,2", "minecraft:planks,1"};
 
         @Config.Comment("Which entities should not be targeted by turrets?")
-        public String[] stringMobBlackList = new String[]{"ArmorStand"};
+        public String[] stringMobBlackList = new String[]{"minecraft:armor_stand"};
+
+        @Config.Comment("Which entities should always be seen as hostile by turrets?")
+        public String[] stringMobForceList = new String[]{"minecraft:creeper"};
+
+        @Config.Comment("Which entities should always be seen as neutral by turrets?")
+        public String[] stringNeutralForceList = new String[]{"minecraft:cow"};
     }
 
     public static class ConfigMisc {
@@ -159,7 +196,13 @@ public class OMTConfig {
         @Config.Name("Railgun Turret")
         public TurretSetting railgun_turret = new TurretSetting(true, 30, 100, 25, 25000, 3, 2, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
         @Config.Name("Plasma Turret")
-        public TurretSetting plasma_turret = new TurretSetting(true, 20, 60, 20, 40000, 8, 1, 0.1D, 0.2D, 1, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting plasma_turret = new TurretSetting(true, 20, 60, 20, 50000, 8, 1, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        @Config.Name("Melee Turret")
+        public TurretSetting melee_turret = new TurretSetting(true, 1, 20, 8, 2, 0, 4, 0.1D, 0.2D, 0, 0D, 0.08D, 0.1D, 0.05D);
+        @Config.Name("Arc Turret")
+        public TurretSetting arc_turret = new TurretSetting(true, 15, 60, 14, 40000, 0, 1, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        @Config.Name("Potato Cannon Turret")
+        public TurretSetting crossbow_turret = new TurretSetting(true, 15, 30, 5, 20, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
     }
 
     public static class ConfigBases {

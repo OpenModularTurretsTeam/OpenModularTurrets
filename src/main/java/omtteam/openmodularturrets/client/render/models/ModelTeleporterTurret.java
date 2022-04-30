@@ -19,11 +19,11 @@ public class ModelTeleporterTurret extends ModelAbstractTurret {
     public ModelTeleporterTurret() {
         super(37, 28, 15);
 
-        Base.addBox(-6F, 7F, -6F, 12, 1, 12);
-        Base.setRotationPoint(0F, 16F, 0F);
-        Base.setTextureSize(64, 64);
-        Base.mirror = true;
-        setRotation(Base, 0F, 0F, 0F);
+        base.addBox(-6F, 7F, -6F, 12, 1, 12);
+        base.setRotationPoint(0F, 16F, 0F);
+        base.setTextureSize(64, 64);
+        base.mirror = true;
+        setRotation(base, 0F, 0F, 0F);
         BaseStand = new ModelRenderer(this, 0, 51);
         BaseStand.addBox(-6F, -1F, -6F, 12, 1, 12);
         BaseStand.setRotationPoint(0F, 13F, 0F);
@@ -66,7 +66,7 @@ public class ModelTeleporterTurret extends ModelAbstractTurret {
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        Base.render(f5);
+        base.render(f5);
         BaseStand.render(f5);
         PillarLarge.render(f5);
         Spinner1.render(f5);
@@ -100,7 +100,7 @@ public class ModelTeleporterTurret extends ModelAbstractTurret {
     }
 
     public void renderAll() {
-        Base.render(0.0625F);
+        base.render(0.0625F);
         BaseStand.render(0.0625F);
         PillarLarge.render(0.0625F);
         Spinner1.render(0.0625F);
@@ -115,7 +115,7 @@ public class ModelTeleporterTurret extends ModelAbstractTurret {
     }
 
     @Override
-    public boolean hasBoxUnder() {
+    public boolean hasHolder() {
         return false;
     }
 }

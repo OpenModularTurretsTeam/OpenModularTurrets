@@ -17,8 +17,7 @@ import omtteam.omlib.util.TargetingSettings;
 import omtteam.omlib.util.world.Pos;
 import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.api.lists.MobBlacklist;
-import omtteam.openmodularturrets.api.lists.MobList;
+import omtteam.openmodularturrets.api.lists.MobForceList;
 import omtteam.openmodularturrets.api.lists.NeutralList;
 import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
@@ -38,9 +37,9 @@ import static omtteam.openmodularturrets.turret.TurretHeadUtil.getAimPitch;
 import static omtteam.openmodularturrets.turret.TurretHeadUtil.getAimYaw;
 
 public class TurretTargetingUtils {
-    private TargetingSettings settings;
     private final Pos pos;
     private final TurretHead turret;
+    private TargetingSettings settings;
 
     public TurretTargetingUtils(TurretHead turret) {
         this.settings = turret.getTargetingSettings();
@@ -122,7 +121,7 @@ public class TurretTargetingUtils {
     public static boolean isEntityValidNeutral(TurretHead turret, EntityLivingBase possibleTarget) {
         if (turret.getBase().isAttacksNeutrals() && OMTConfig.TURRETS.globalCanTargetNeutrals) {
             return !possibleTarget.isDead && (possibleTarget instanceof EntityAnimal ||
-                    possibleTarget instanceof EntityAmbientCreature || NeutralList.contains(possibleTarget));
+                    possibleTarget instanceof EntityAmbientCreature || NeutralList.getInstance().contains(possibleTarget));
         }
         return false;
     }
@@ -130,7 +129,7 @@ public class TurretTargetingUtils {
     public static boolean isEntityValidMob(TurretHead turret, EntityLivingBase possibleTarget) {
         if (turret.getBase().isAttacksMobs() && OMTConfig.TURRETS.globalCanTargetMobs) {
             return !possibleTarget.isDead && (possibleTarget.isCreatureType(EnumCreatureType.MONSTER, false) ||
-                    MobList.contains(possibleTarget));
+                    MobForceList.getInstance().contains(possibleTarget) && !NeutralList.getInstance().contains(possibleTarget));
         }
         return false;
     }
@@ -203,10 +202,6 @@ public class TurretTargetingUtils {
             Logger logger = OpenModularTurrets.getLogger();
             logger.info("Targeting, EntityString: " + EntityList.getEntityString(entity));
             logger.info("Targeting, EntityKey: " + EntityList.getKey(entity));
-        }
-
-        if (EntityList.getEntityString(entity) != null && MobBlacklist.contains(EntityList.getEntityString(entity))) {
-            return false;
         }
 
         if (turret.getBase().getController() != null && !turret.getBase().getController().isEntityValidTarget(entity, getAimYaw(entity, pos), getAimPitch(entity, pos))) {

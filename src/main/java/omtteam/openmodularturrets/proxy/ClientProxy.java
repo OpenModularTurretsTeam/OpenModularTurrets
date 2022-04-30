@@ -16,11 +16,11 @@ import omtteam.openmodularturrets.blocks.LeverBlock;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.client.render.models.TurretBaseBakedModel;
 import omtteam.openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
-import omtteam.openmodularturrets.client.render.renderers.projectiles.ProjectileRenderers;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModTESRItems;
+import omtteam.openmodularturrets.init.ProjectileRenderers;
 import omtteam.openmodularturrets.items.*;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -96,6 +96,15 @@ public class ClientProxy extends CommonProxy {
         }
         if (OMTConfig.TURRETS.plasma_turret.enabled) {
             ModelLoader.setCustomStateMapper(ModBlocks.plasmaTurret, ignoreConcealed);
+        }
+        if (OMTConfig.TURRETS.arc_turret.enabled) {
+            ModelLoader.setCustomStateMapper(ModBlocks.arcTurret, ignoreConcealed);
+        }
+        if (OMTConfig.TURRETS.crossbow_turret.enabled) {
+            ModelLoader.setCustomStateMapper(ModBlocks.crossbowTurret, ignoreConcealed);
+        }
+        if (OMTConfig.TURRETS.melee_turret.enabled) {
+            ModelLoader.setCustomStateMapper(ModBlocks.meleeTurret, ignoreConcealed);
         }
         ModelLoaderRegistry.registerLoader(new TurretBaseBakedModel.ModelLoader());
         ModelLoader.setCustomStateMapper(ModBlocks.turretBase, new TurretBaseBakedModel.Statemapper());

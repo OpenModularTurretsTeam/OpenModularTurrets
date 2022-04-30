@@ -13,5 +13,6 @@ public class ModEntities {
         EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID + ":bulletProjectile"), BulletProjectile.class, Reference.MOD_ID + ":bulletProjectile", 3, mod, 64, 64, true);
         EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID + ":blazingClayProjectile"), BlazingClayProjectile.class, Reference.MOD_ID + ":blazingClayProjectile", 5, mod, 64, 64, true);
         EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID + ":plasmaProjectile"), PlasmaProjectile.class, Reference.MOD_ID + ":plasmaProjectile", 6, mod, 64, 64, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID + ":arrowProjectile"), ArrowProjectile.class, Reference.MOD_ID + ":arrowProjectile", 6, mod, 64, 64, true);
     }
 }

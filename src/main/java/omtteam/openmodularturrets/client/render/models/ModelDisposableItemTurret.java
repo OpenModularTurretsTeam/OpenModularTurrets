@@ -14,21 +14,21 @@ public class ModelDisposableItemTurret extends ModelAbstractTurret {
     public ModelDisposableItemTurret() {
         super(37, 28, 19);
 
-        Base.addBox(-6F, 7F, -6F, 12, 1, 12);
-        Base.setRotationPoint(0F, 16F, 0F);
-        Base.setTextureSize(64, 32);
-        Base.mirror = true;
-        setRotation(Base, 0F, 0F, 0F);
-        Pole.addBox(-2F, 4F, -2F, 4, 4, 4);
-        Pole.setRotationPoint(0F, 16F, 0F);
-        Pole.setTextureSize(64, 32);
-        Pole.mirror = true;
-        setRotation(Pole, 0F, 0F, 0F);
-        BoxUnder.addBox(-4F, 3F, -4F, 8, 1, 8);
-        BoxUnder.setRotationPoint(0F, 16F, 0F);
-        BoxUnder.setTextureSize(64, 32);
-        BoxUnder.mirror = true;
-        setRotation(BoxUnder, 0F, 0F, 0F);
+        base.addBox(-6F, 7F, -6F, 12, 1, 12);
+        base.setRotationPoint(0F, 16F, 0F);
+        base.setTextureSize(64, 32);
+        base.mirror = true;
+        setRotation(base, 0F, 0F, 0F);
+        pole.addBox(-2F, 4F, -2F, 4, 4, 4);
+        pole.setRotationPoint(0F, 16F, 0F);
+        pole.setTextureSize(64, 32);
+        pole.mirror = true;
+        setRotation(pole, 0F, 0F, 0F);
+        holder.addBox(-4F, 3F, -4F, 8, 1, 8);
+        holder.setRotationPoint(0F, 16F, 0F);
+        holder.setTextureSize(64, 32);
+        holder.mirror = true;
+        setRotation(holder, 0F, 0F, 0F);
         BoxLeft = new ModelRenderer(this, 0, 19);
         BoxLeft.addBox(-4F, 4F, -4F, 8, 1, 8);
         BoxLeft.setRotationPoint(0F, 16F, 0F);
@@ -57,7 +57,7 @@ public class ModelDisposableItemTurret extends ModelAbstractTurret {
 
     @SuppressWarnings("SuspiciousNameCombination")
     public void setRotationForTarget(float y, float z) {
-        BoxUnder.rotateAngleY = z;
+        holder.rotateAngleY = z;
         BoxLeft.rotateAngleX = z;
         BoxRight.rotateAngleX = z;
         CrossBar.rotateAngleX = y;
@@ -73,9 +73,9 @@ public class ModelDisposableItemTurret extends ModelAbstractTurret {
     }
 
     public void renderAll() {
-        Base.render(0.0625F);
-        Pole.render(0.0625F);
-        BoxUnder.render(0.0625F);
+        base.render(0.0625F);
+        pole.render(0.0625F);
+        holder.render(0.0625F);
         BoxLeft.render(0.0625F);
         BoxRight.render(0.0625F);
         CrossBar.render(0.0625F);
@@ -88,7 +88,7 @@ public class ModelDisposableItemTurret extends ModelAbstractTurret {
     }
 
     @Override
-    public boolean hasBoxUnder() {
+    public boolean hasHolder() {
         return true;
     }
 }

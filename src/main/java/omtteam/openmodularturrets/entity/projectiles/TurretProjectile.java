@@ -30,8 +30,8 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
     public int fakeDrops;
     public boolean dropLoot = true;
     protected TurretBase turretBase;
-    private BlockPos turretBasePos;
     ItemStack ammo;
+    private BlockPos turretBasePos;
     private int framesRendered = 0;
 
     TurretProjectile(World world) {

@@ -76,11 +76,14 @@ import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntitiesByClass;
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "computercraft")}
 )
 public class TurretBase extends TileEntityTrustedMachine implements ITurretBase, IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile, ITickable, IHasTargetingSettings {
+    private final List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
+    private final HashMap<EnumSlotType, List<Integer>> slotMap = new HashMap<>();
     public boolean shouldConcealTurrets;
     protected CamoSettings camoSettings;
     protected int tier;
     protected IItemHandlerModifiable inventory;
     protected FluidTank tank;
+    protected HashMap<EnumFacing, Expander> expanderMap = new HashMap<>(); //Todo: use this (helpful for testing) for caching Expanders
     private IBlockState camoBlockStateTemp;
     private boolean multiTargeting = false;
     private TargetingSettings targetingSettings;
@@ -90,9 +93,6 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     private int playerKills;
     private IBaseController controller;
     private OMLibNetwork network;
-    private final List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
-    private final HashMap<EnumSlotType, List<Integer>> slotMap = new HashMap<>();
-    protected HashMap<EnumFacing, Expander> expanderMap = new HashMap<>(); //Todo: use this (helpful for testing) for caching Expanders
 
     public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
         super();
@@ -280,8 +280,8 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
 
     @Override
     @Nonnull
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
+    public NBTTagCompound saveToNBT(NBTTagCompound tag) {
+        super.saveToNBT(tag);
         tag.setBoolean("shouldConcealTurrets", this.shouldConcealTurrets);
         tag.setBoolean("multiTargeting", this.multiTargeting);
         tag.setBoolean("forceFire", this.forceFire);
@@ -294,8 +294,8 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
+    public void loadFromNBT(NBTTagCompound tag) {
+        super.loadFromNBT(tag);
         this.targetingSettings = TargetingSettings.readFromNBT(tag);
         this.shouldConcealTurrets = tag.getBoolean("shouldConcealTurrets");
         this.multiTargeting = tag.getBoolean("multiTargeting");

@@ -13,39 +13,32 @@ import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 
 @SideOnly(Side.CLIENT)
 public abstract class ModelAbstractTurret extends ModelBase {
-    public final ModelRenderer Base;
-    public final ModelRenderer Pole;
-    public final ModelRenderer BoxUnder;
+    protected ModelRenderer base;
+    protected ModelRenderer pole;
+    protected ModelRenderer holder;
 
-    public ModelAbstractTurret(int texOffYBase, int texOffYPole, int texOffYBoxUnder) {
+    public ModelAbstractTurret(int texOffYBase, int texOffYPole, int texOffHolder) {
         textureWidth = 64;
         textureHeight = 64;
-        this.Base = new ModelRenderer(this, 0, texOffYBase);
-        this.Pole = new ModelRenderer(this, 0, texOffYPole);
-        this.BoxUnder = new ModelRenderer(this, 0, texOffYBoxUnder);
+        this.base = new ModelRenderer(this, 0, texOffYBase);
+        this.pole = new ModelRenderer(this, 0, texOffYPole);
+        this.holder = new ModelRenderer(this, 0, texOffHolder);
     }
 
     public abstract void setRotation(ModelRenderer model, float x, float y, float z);
 
     public void setBaseRotation(TurretHead turretHead) {
-        Base.rotateAngleX = turretHead.baseFitRotationX;
-        Base.rotateAngleY = turretHead.baseFitRotationZ;
-        if (hasPole()) {
-            Pole.rotateAngleX = turretHead.baseFitRotationX;
-            Pole.rotateAngleY = turretHead.baseFitRotationZ;
-        }
-        if (hasBoxUnder()) {
-            BoxUnder.rotateAngleX = turretHead.baseFitRotationX;
-        }
+        base.rotateAngleX = turretHead.baseFitRotationX;
+        base.rotateAngleY = turretHead.baseFitRotationZ;
     }
 
-    @SuppressWarnings("unused")
     public abstract void renderAll();
 
-    @SuppressWarnings("unused")
     public abstract void setRotationForTarget(float y, float z);
+
+    //public void setRotationForTargetYawPitch(float yaw, float pitch);
 
     public abstract boolean hasPole();
 
-    public abstract boolean hasBoxUnder();
+    public abstract boolean hasHolder();
 }
