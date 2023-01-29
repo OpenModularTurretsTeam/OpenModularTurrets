@@ -1,19 +1,21 @@
 package openmodularturrets.items.addons;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
-
-import java.util.List;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PotentiaAddonItem extends AddonItem {
+
     public PotentiaAddonItem() {
         super();
 
@@ -30,12 +32,14 @@ public class PotentiaAddonItem extends AddonItem {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.RED + StatCollector.translateToLocal("turret.addon.label"));
         p_77624_3_.add("");
-        p_77624_3_.add(StatCollector.translateToLocal(
-                "turret.addon.potentia.a") + ConfigHandler.getPotentiaToRFRatio() + " " + StatCollector.translateToLocal(
-                "turret.addon.potentia.b"));
+        p_77624_3_.add(
+                StatCollector.translateToLocal("turret.addon.potentia.a") + ConfigHandler.getPotentiaToRFRatio()
+                        + " "
+                        + StatCollector.translateToLocal("turret.addon.potentia.b"));
         p_77624_3_.add("");
-        p_77624_3_.add(StatCollector.translateToLocal(
-                "turret.addon.potentia.c") + ConfigHandler.getPotentiaAddonCapacity() + ".");
+        p_77624_3_.add(
+                StatCollector.translateToLocal("turret.addon.potentia.c") + ConfigHandler.getPotentiaAddonCapacity()
+                        + ".");
         p_77624_3_.add("");
         p_77624_3_.add(StatCollector.translateToLocal("turret.addon.potentia.d"));
         p_77624_3_.add(StatCollector.translateToLocal("turret.addon.potentia.e"));

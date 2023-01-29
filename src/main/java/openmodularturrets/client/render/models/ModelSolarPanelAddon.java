@@ -11,7 +11,8 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelSolarPanelAddon extends ModelBase {
-    //fields
+
+    // fields
     private final ModelRenderer Shape1;
     private final ModelRenderer Shape2;
     private final ModelRenderer Shape3;

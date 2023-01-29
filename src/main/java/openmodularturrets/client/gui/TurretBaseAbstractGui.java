@@ -1,16 +1,14 @@
 package openmodularturrets.client.gui;
 
-import codechicken.lib.vec.Rectangle4i;
-import codechicken.nei.VisiblityData;
-import codechicken.nei.api.INEIGuiHandler;
-import codechicken.nei.api.TaggedInventoryArea;
-import cpw.mods.fml.common.Optional;
+import java.util.List;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.handler.NetworkingHandler;
 import openmodularturrets.network.messages.MessageAdjustYAxisDetect;
@@ -20,8 +18,11 @@ import openmodularturrets.network.messages.MessageSetBaseTargetingType;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.PlayerUtil;
-
-import java.util.List;
+import codechicken.lib.vec.Rectangle4i;
+import codechicken.nei.VisiblityData;
+import codechicken.nei.api.INEIGuiHandler;
+import codechicken.nei.api.TaggedInventoryArea;
+import cpw.mods.fml.common.Optional;
 
 /**
  * Created by nico on 6/4/15.
@@ -29,6 +30,7 @@ import java.util.List;
 
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
 class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
+
     int mouseX;
     int mouseY;
     private final EntityPlayer player;
@@ -54,8 +56,14 @@ class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
             this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
             this.buttonList.add(new GuiButton(4, x + 180, y + 25, 80, 20, "Drop Base"));
             this.buttonList.add(new GuiButton(5, x + 180, y + 50, 80, 20, "Configure"));
-            this.buttonList.add(new GuiButton(6, x + 180, y + 75, 80, 20,
-                    base.isMultiTargeting() ? "Target: Multi" : "Target: Single"));
+            this.buttonList.add(
+                    new GuiButton(
+                            6,
+                            x + 180,
+                            y + 75,
+                            80,
+                            20,
+                            base.isMultiTargeting() ? "Target: Multi" : "Target: Single"));
         } else if (trustedPlayer != null) {
             if (trustedPlayer.admin) {
                 this.buttonList.add(new GuiButton(3, x + 180, y, 80, 20, "Drop Turrets"));
@@ -110,11 +118,13 @@ class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
-    }
+    protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {}
 
     private void sendChangeToServer() {
-        MessageAdjustYAxisDetect message = new MessageAdjustYAxisDetect(base.xCoord, base.yCoord, base.zCoord,
+        MessageAdjustYAxisDetect message = new MessageAdjustYAxisDetect(
+                base.xCoord,
+                base.yCoord,
+                base.zCoord,
                 base.getyAxisDetect());
 
         NetworkingHandler.INSTANCE.sendToServer(message);
@@ -174,8 +184,8 @@ class TurretBaseAbstractGui extends GuiContainer implements INEIGuiHandler {
                     rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, (height - ySize) / 2, 80, 45);
                     intersects = rectangle.intersects(rectangleGUI);
                 }
-                if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting || base.getTrustedPlayer(
-                        player.getUniqueID()).admin) {
+                if (base.getTrustedPlayer(player.getUniqueID()).canChangeTargeting
+                        || base.getTrustedPlayer(player.getUniqueID()).admin) {
                     rectangleGUI = new Rectangle4i((width - xSize) / 2 + 180, (height - ySize) / 2 + 50, 80, 20);
                     if (!intersects) {
                         intersects = rectangle.intersects(rectangleGUI);

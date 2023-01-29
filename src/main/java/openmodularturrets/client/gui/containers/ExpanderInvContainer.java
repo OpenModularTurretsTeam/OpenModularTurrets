@@ -5,9 +5,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
 import openmodularturrets.tileentity.expander.AbstractInvExpander;
 
 public class ExpanderInvContainer extends Container {
+
     private final AbstractInvExpander tileEntity;
 
     public ExpanderInvContainer(InventoryPlayer inventoryPlayer, AbstractInvExpander te) {
@@ -89,15 +91,16 @@ public class ExpanderInvContainer extends Container {
                 slot.onSlotChanged();
                 stack.stackSize -= transfer;
                 flag = true;
-            } else if (slotStack.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getItemDamage() == slotStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(
-                    stack, slotStack)) {
-                int maxTransfer = totalLimit - slotStack.stackSize;
-                int transfer = maxTransfer > stack.stackSize ? stack.stackSize : maxTransfer;
-                slotStack.stackSize += transfer;
-                slot.onSlotChanged();
-                stack.stackSize -= transfer;
-                flag = true;
-            }
+            } else if (slotStack.getItem() == stack.getItem()
+                    && (!stack.getHasSubtypes() || stack.getItemDamage() == slotStack.getItemDamage())
+                    && ItemStack.areItemStackTagsEqual(stack, slotStack)) {
+                        int maxTransfer = totalLimit - slotStack.stackSize;
+                        int transfer = maxTransfer > stack.stackSize ? stack.stackSize : maxTransfer;
+                        slotStack.stackSize += transfer;
+                        slot.onSlotChanged();
+                        stack.stackSize -= transfer;
+                        flag = true;
+                    }
 
             i += increment;
         }

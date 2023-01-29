@@ -1,22 +1,22 @@
 package openmodularturrets.compatability;
 
+import net.minecraft.world.World;
+
+import openmodularturrets.tileentity.turretbase.TurretBase;
 import cpw.mods.fml.common.Optional;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;
-import net.minecraft.world.World;
-import openmodularturrets.tileentity.turretbase.TurretBase;
 
 /**
- * Created by Keridos on 05/02/2016.
- * This Class
+ * Created by Keridos on 05/02/2016. This Class
  */
 
 @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheralProvider", modid = "ComputerCraft")
 public class CCPeripheralProvider implements IPeripheralProvider {
+
     private static CCPeripheralProvider instance;
 
-    private CCPeripheralProvider() {
-    }
+    private CCPeripheralProvider() {}
 
     public static CCPeripheralProvider getInstance() {
         if (instance == null) {

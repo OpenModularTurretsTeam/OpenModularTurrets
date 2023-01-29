@@ -2,12 +2,15 @@ package openmodularturrets.client.render.renderers.items;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
 import openmodularturrets.client.render.models.ModelLever;
 import openmodularturrets.client.render.renderers.blockitem.LeverRenderer;
 import openmodularturrets.tileentity.LeverTileEntity;
+
 import org.lwjgl.opengl.GL11;
 
 class LeverItemRenderer implements IItemRenderer {
+
     private final LeverRenderer leverRenderer;
     private final LeverTileEntity leverTileEntity;
     private final ModelLever model;

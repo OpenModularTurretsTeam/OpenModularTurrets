@@ -1,14 +1,13 @@
 package api.undercurrent.iface.editorTypes;
 
-import java.lang.Float;
-
 public class FloatEditorType extends EditorType {
 
     private int fieldPrecision;
     private double maxValue;
     private double minValue;
 
-    public FloatEditorType(String fieldName, float fieldValue, String displayName, String displayDescription, int fieldPrecision, float maxValue, float minValue) throws Exception {
+    public FloatEditorType(String fieldName, float fieldValue, String displayName, String displayDescription,
+            int fieldPrecision, float maxValue, float minValue) throws Exception {
         super(EditorTypes.FLOAT);
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;

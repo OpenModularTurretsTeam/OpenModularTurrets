@@ -1,5 +1,7 @@
 package openmodularturrets.entity.projectiles;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -8,13 +10,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
 import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-import java.util.List;
-
 public class BlazingClayProjectile extends TurretProjectile {
+
     public BlazingClayProjectile(World p_i1776_1_) {
         super(p_i1776_1_);
         this.gravity = 0.00F;
@@ -38,8 +40,8 @@ public class BlazingClayProjectile extends TurretProjectile {
             return;
         }
         if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                               movingobjectposition.blockZ);
+            Block hitBlock = worldObj
+                    .getBlock(movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ);
             if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;
@@ -47,15 +49,22 @@ public class BlazingClayProjectile extends TurretProjectile {
         }
 
         if (movingobjectposition.typeOfHit.equals(0)) {
-            if (worldObj.isAirBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                    movingobjectposition.blockZ)) {
+            if (worldObj.isAirBlock(
+                    movingobjectposition.blockX,
+                    movingobjectposition.blockY,
+                    movingobjectposition.blockZ)) {
                 return;
             }
         }
 
         if (!worldObj.isRemote) {
-            AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 5, this.posY - 5, this.posZ - 5,
-                                                              this.posX + 5, this.posY + 5, this.posZ + 5);
+            AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(
+                    this.posX - 5,
+                    this.posY - 5,
+                    this.posZ - 5,
+                    this.posX + 5,
+                    this.posY + 5,
+                    this.posZ + 5);
             List<Entity> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
             int damage = ConfigHandler.getIncendiary_turret().getDamage();

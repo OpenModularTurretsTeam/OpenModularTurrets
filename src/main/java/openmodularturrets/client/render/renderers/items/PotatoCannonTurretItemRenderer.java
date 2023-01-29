@@ -2,17 +2,21 @@ package openmodularturrets.client.render.renderers.items;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
 import openmodularturrets.client.render.models.ModelDisposableItemTurret;
 import openmodularturrets.client.render.renderers.blockitem.PotatoCannonTurretRenderer;
 import openmodularturrets.tileentity.turrets.PotatoCannonTurretTileEntity;
+
 import org.lwjgl.opengl.GL11;
 
 class PotatoCannonTurretItemRenderer implements IItemRenderer {
+
     private final PotatoCannonTurretRenderer potatoCannonTurretRenderer;
     private final PotatoCannonTurretTileEntity potatoCannonTurretTileEntity;
     private final ModelDisposableItemTurret model;
 
-    public PotatoCannonTurretItemRenderer(PotatoCannonTurretRenderer potatoCannonTurretRenderer, PotatoCannonTurretTileEntity potatoCannonTurretTileEntity) {
+    public PotatoCannonTurretItemRenderer(PotatoCannonTurretRenderer potatoCannonTurretRenderer,
+            PotatoCannonTurretTileEntity potatoCannonTurretTileEntity) {
         this.potatoCannonTurretRenderer = potatoCannonTurretRenderer;
         this.potatoCannonTurretTileEntity = potatoCannonTurretTileEntity;
 

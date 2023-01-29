@@ -6,6 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.WorldServer;
+
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 /**
@@ -13,6 +14,7 @@ import openmodularturrets.tileentity.turretbase.TurretBase;
  */
 
 public class CommandChangeOwner extends CommandBase {
+
     @Override
     public String getCommandName() {
         return "omtchangeowner";
@@ -53,4 +55,3 @@ public class CommandChangeOwner extends CommandBase {
         }
     }
 }
-

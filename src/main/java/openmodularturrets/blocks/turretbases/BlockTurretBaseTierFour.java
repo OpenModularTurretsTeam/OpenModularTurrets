@@ -3,12 +3,14 @@ package openmodularturrets.blocks.turretbases;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierFourTileEntity;
 
 public class BlockTurretBaseTierFour extends BlockAbstractTurretBase {
+
     private final int MaxCharge = ConfigHandler.getBaseTierFourMaxCharge();
     private final int MaxIO = ConfigHandler.getBaseTierFourMaxIo();
 

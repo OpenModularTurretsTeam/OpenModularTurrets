@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.blocks.util.BlockAbstractContainer;
 import openmodularturrets.reference.ModInfo;
@@ -17,6 +18,7 @@ import openmodularturrets.tileentity.expander.ExpanderInvTierTwoTileEntity;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class BlockExpanderInvTierTwo extends BlockAbstractContainer {
+
     public BlockExpanderInvTierTwo() {
         super(Material.rock);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);
@@ -33,7 +35,8 @@ public class BlockExpanderInvTierTwo extends BlockAbstractContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_,
+            float p_149727_7_, float p_149727_8_, float p_149727_9_) {
         AbstractInvExpander expander = (AbstractInvExpander) world.getTileEntity(x, y, z);
         TurretBase base = expander.getBase();
         if (base != null && base.getTrustedPlayer(player.getUniqueID()) != null) {
@@ -73,4 +76,3 @@ public class BlockExpanderInvTierTwo extends BlockAbstractContainer {
         return false;
     }
 }
-

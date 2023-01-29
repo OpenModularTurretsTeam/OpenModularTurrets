@@ -6,10 +6,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 abstract class BlockAbstractTurretHead extends Block implements ITileEntityProvider {
+
     BlockAbstractTurretHead() {
         super(Material.glass);
 
@@ -32,12 +34,12 @@ abstract class BlockAbstractTurretHead extends Block implements ITileEntityProvi
 
     @Override
     public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-        return world.getTileEntity(x + 1, y, z) instanceof TurretBase ||
-                world.getTileEntity(x - 1, y, z) instanceof TurretBase ||
-                world.getTileEntity(x, y + 1, z) instanceof TurretBase ||
-                world.getTileEntity(x, y - 1, z) instanceof TurretBase ||
-                world.getTileEntity(x, y, z + 1) instanceof TurretBase ||
-                world.getTileEntity(x, y, z - 1) instanceof TurretBase;
+        return world.getTileEntity(x + 1, y, z) instanceof TurretBase
+                || world.getTileEntity(x - 1, y, z) instanceof TurretBase
+                || world.getTileEntity(x, y + 1, z) instanceof TurretBase
+                || world.getTileEntity(x, y - 1, z) instanceof TurretBase
+                || world.getTileEntity(x, y, z + 1) instanceof TurretBase
+                || world.getTileEntity(x, y, z - 1) instanceof TurretBase;
     }
 
     @Override

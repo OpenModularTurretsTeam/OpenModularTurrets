@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
 import openmodularturrets.client.gui.customSlot.AddonSlot;
 import openmodularturrets.client.gui.customSlot.UpgradeSlot;
 import openmodularturrets.handler.NetworkingHandler;
@@ -14,10 +15,10 @@ import openmodularturrets.network.messages.MessageTurretBase;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 /**
- * Created by Keridos on 09/12/2015.
- * This Class
+ * Created by Keridos on 09/12/2015. This Class
  */
 class TurretBaseContainer extends Container {
+
     TurretBase tileEntity;
 
     @Override
@@ -38,7 +39,8 @@ class TurretBaseContainer extends Container {
             // Actual slot start index of turret base
             int slotStart = 36;
 
-            int ammoSlotStart = 100, ammoSlotEnd = 0, addonSlotStart = 100, addonSlotEnd = 0, upgSlotStart = 100, upgSlotEnd = 0;
+            int ammoSlotStart = 100, ammoSlotEnd = 0, addonSlotStart = 100, addonSlotEnd = 0, upgSlotStart = 100,
+                    upgSlotEnd = 0;
             // Determine the slot range for each type( According to the class constructor )
             for (int i = slotStart; i < this.inventorySlots.size(); i++) {
                 Class slotClass = this.getSlot(i).getClass();

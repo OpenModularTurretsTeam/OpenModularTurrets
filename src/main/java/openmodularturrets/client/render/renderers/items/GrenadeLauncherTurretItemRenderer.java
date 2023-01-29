@@ -2,17 +2,21 @@ package openmodularturrets.client.render.renderers.items;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
 import openmodularturrets.client.render.models.ModelGrenadeLauncher;
 import openmodularturrets.client.render.renderers.blockitem.GrenadeLauncherTurretRenderer;
 import openmodularturrets.tileentity.turrets.GrenadeLauncherTurretTileEntity;
+
 import org.lwjgl.opengl.GL11;
 
 class GrenadeLauncherTurretItemRenderer implements IItemRenderer {
+
     private final GrenadeLauncherTurretRenderer grenadeLauncherTurretRenderer;
     private final GrenadeLauncherTurretTileEntity grenadeLauncherTurretTileEntity;
     private final ModelGrenadeLauncher model;
 
-    public GrenadeLauncherTurretItemRenderer(GrenadeLauncherTurretRenderer grenadeLauncherTurretRenderer, GrenadeLauncherTurretTileEntity grenadeLauncherTurretTileEntity) {
+    public GrenadeLauncherTurretItemRenderer(GrenadeLauncherTurretRenderer grenadeLauncherTurretRenderer,
+            GrenadeLauncherTurretTileEntity grenadeLauncherTurretTileEntity) {
         this.grenadeLauncherTurretRenderer = grenadeLauncherTurretRenderer;
         this.grenadeLauncherTurretTileEntity = grenadeLauncherTurretTileEntity;
 
@@ -33,8 +37,8 @@ class GrenadeLauncherTurretItemRenderer implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         GL11.glPushMatrix();
         GL11.glTranslated(-0.5, -0.5, -0.5);
-        this.grenadeLauncherTurretRenderer.renderTileEntityAt(this.grenadeLauncherTurretTileEntity, 0.0D, 0.0D, 0.0D,
-                                                              0.0F);
+        this.grenadeLauncherTurretRenderer
+                .renderTileEntityAt(this.grenadeLauncherTurretTileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
         GL11.glPopMatrix();
     }
 }

@@ -1,7 +1,8 @@
 package api.undercurrent.iface;
 
-import api.undercurrent.iface.editorTypes.EditorType;
 import java.util.ArrayList;
+
+import api.undercurrent.iface.editorTypes.EditorType;
 
 public class UCCollection {
 

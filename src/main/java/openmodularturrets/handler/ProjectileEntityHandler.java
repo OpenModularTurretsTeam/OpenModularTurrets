@@ -1,10 +1,11 @@
 package openmodularturrets.handler;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.entity.projectiles.*;
+import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class ProjectileEntityHandler {
+
     public static void registerProjectiles(ModularTurrets turrets) {
         EntityRegistry.registerModEntity(RocketProjectile.class, "rocketProjectile", 1, turrets, 16, 1, true);
         EntityRegistry.registerModEntity(GrenadeProjectile.class, "grenadeProjectile", 2, turrets, 16, 5, true);

@@ -1,13 +1,15 @@
 package openmodularturrets.items;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
+
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.items.addons.*;
 import openmodularturrets.items.ammo.*;
 import openmodularturrets.items.upgrades.*;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Items {
+
     public static Item bulletThrowable;
     public static Item grenadeThrowable;
     public static Item bulletCraftable;
@@ -91,7 +93,7 @@ public class Items {
             GameRegistry.registerItem(potentiaAddon, "potentiaAddon");
         }
 
-        //Computer mods Only
+        // Computer mods Only
         if (ModCompatibility.ComputercraftLoaded || ModCompatibility.OpenComputersLoaded) {
             serialPortAddon = new SerialPortAddonItem();
             GameRegistry.registerItem(serialPortAddon, "serialPortAddon");

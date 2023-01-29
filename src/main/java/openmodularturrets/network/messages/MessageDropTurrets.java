@@ -1,23 +1,25 @@
 package openmodularturrets.network.messages;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.turrets.TurretHead;
+import openmodularturrets.util.PlayerUtil;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import openmodularturrets.tileentity.turretbase.TurretBase;
-import openmodularturrets.tileentity.turrets.TurretHead;
-import openmodularturrets.util.PlayerUtil;
 
 public class MessageDropTurrets implements IMessage {
+
     private int x, y, z;
 
-    public MessageDropTurrets() {
-    }
+    public MessageDropTurrets() {}
 
     public static class MessageHandlerDropTurrets implements IMessageHandler<MessageDropTurrets, IMessage> {
+
         @Override
         public IMessage onMessage(MessageDropTurrets message, MessageContext ctx) {
             World world = ctx.getServerHandler().playerEntity.getEntityWorld();

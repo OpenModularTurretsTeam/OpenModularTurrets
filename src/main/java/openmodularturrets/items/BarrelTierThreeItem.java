@@ -1,14 +1,16 @@
 package openmodularturrets.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
+
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 class BarrelTierThreeItem extends Item {
+
     public BarrelTierThreeItem() {
         super();
 

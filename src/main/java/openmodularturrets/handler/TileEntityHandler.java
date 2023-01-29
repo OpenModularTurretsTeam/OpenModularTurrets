@@ -1,12 +1,13 @@
 package openmodularturrets.handler;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import openmodularturrets.tileentity.LeverTileEntity;
 import openmodularturrets.tileentity.expander.*;
 import openmodularturrets.tileentity.turretbase.*;
 import openmodularturrets.tileentity.turrets.*;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntityHandler {
+
     public static void init() {
         GameRegistry.registerTileEntity(TurretBase.class, "turretbase");
         GameRegistry.registerTileEntity(TurretBaseTierOneTileEntity.class, "turretWoodBase");

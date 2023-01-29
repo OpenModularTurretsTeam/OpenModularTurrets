@@ -1,24 +1,26 @@
 package openmodularturrets.network.messages;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.util.PlayerUtil;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import openmodularturrets.tileentity.turretbase.TurretBase;
-import openmodularturrets.util.PlayerUtil;
 
 public class MessageSetTurretOwner implements IMessage {
+
     private int x, y, z;
     private String player;
 
-    public MessageSetTurretOwner() {
-    }
+    public MessageSetTurretOwner() {}
 
     public static class MessageHandlerSetTurretOwner implements IMessageHandler<MessageSetTurretOwner, IMessage> {
+
         @Override
         public IMessage onMessage(MessageSetTurretOwner message, MessageContext ctx) {
             World world = ctx.getServerHandler().playerEntity.getEntityWorld();
@@ -59,7 +61,6 @@ public class MessageSetTurretOwner implements IMessage {
 
         ByteBufUtils.writeUTF8String(buf, this.player);
     }
-
 
     private int getX() {
         return x;

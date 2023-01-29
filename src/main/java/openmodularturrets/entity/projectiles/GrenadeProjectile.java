@@ -1,5 +1,7 @@
 package openmodularturrets.entity.projectiles;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,14 +9,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
 import openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-import java.util.List;
-
 public class GrenadeProjectile extends TurretProjectile {
+
     private boolean isAmped;
 
     public GrenadeProjectile(World par1World) {
@@ -32,8 +34,13 @@ public class GrenadeProjectile extends TurretProjectile {
         if (ticksExisted >= 50) {
             if (!worldObj.isRemote) {
                 worldObj.createExplosion(null, posX, posY, posZ, 0.1F, true);
-                AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(this.posX - 3, this.posY - 3, this.posZ - 3,
-                                                                  this.posX + 3, this.posY + 3, this.posZ + 3);
+                AxisAlignedBB axis = AxisAlignedBB.getBoundingBox(
+                        this.posX - 3,
+                        this.posY - 3,
+                        this.posZ - 3,
+                        this.posX + 3,
+                        this.posY + 3,
+                        this.posZ + 3);
                 List<Entity> targets = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
                 for (Entity mob : targets) {

@@ -4,12 +4,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
 import openmodularturrets.client.render.models.ModelLever;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.LeverTileEntity;
+
 import org.lwjgl.opengl.GL11;
 
 public class LeverRenderer extends TileEntitySpecialRenderer {
+
     private final ModelLever model;
 
     public LeverRenderer() {

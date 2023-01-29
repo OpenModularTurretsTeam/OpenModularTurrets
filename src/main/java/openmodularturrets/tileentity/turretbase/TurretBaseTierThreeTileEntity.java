@@ -1,9 +1,10 @@
 package openmodularturrets.tileentity.turretbase;
 
-import cpw.mods.fml.common.Optional;
 import openmodularturrets.handler.ConfigHandler;
+import cpw.mods.fml.common.Optional;
 
 public class TurretBaseTierThreeTileEntity extends TurretBase {
+
     public TurretBaseTierThreeTileEntity() {
         this(ConfigHandler.getBaseTierThreeMaxCharge(), ConfigHandler.getBaseTierThreeMaxIo());
     }

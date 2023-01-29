@@ -2,17 +2,21 @@ package openmodularturrets.client.render.renderers.items;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
 import openmodularturrets.client.render.models.ModelRelativisticTurret;
 import openmodularturrets.client.render.renderers.blockitem.RelativisticTurretRenderer;
 import openmodularturrets.tileentity.turrets.RelativisticTurretTileEntity;
+
 import org.lwjgl.opengl.GL11;
 
 class RelativisticTurretItemRenderer implements IItemRenderer {
+
     private final RelativisticTurretRenderer relativisticTurretRenderer;
     private final RelativisticTurretTileEntity relativisticTurretTileEntity;
     private final ModelRelativisticTurret model;
 
-    public RelativisticTurretItemRenderer(RelativisticTurretRenderer relativisticTurretRenderer, RelativisticTurretTileEntity relativisticTurretTileEntity) {
+    public RelativisticTurretItemRenderer(RelativisticTurretRenderer relativisticTurretRenderer,
+            RelativisticTurretTileEntity relativisticTurretTileEntity) {
         this.relativisticTurretRenderer = relativisticTurretRenderer;
         this.relativisticTurretTileEntity = relativisticTurretTileEntity;
 

@@ -3,11 +3,13 @@ package openmodularturrets.client.gui.containers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
+
 import openmodularturrets.handler.NetworkingHandler;
 import openmodularturrets.network.messages.MessageTurretBase;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
 public class ConfigContainer extends Container {
+
     private final TurretBase tileEntity;
 
     public ConfigContainer(TurretBase te) {

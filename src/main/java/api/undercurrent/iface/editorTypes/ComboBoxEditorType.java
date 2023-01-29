@@ -9,7 +9,8 @@ public class ComboBoxEditorType extends EditorType {
 
     private List<String> comboChoices;
 
-    public ComboBoxEditorType(String fieldName, String fieldValue, String displayName, String displayDescription, List<String> comboChoices) throws Exception {
+    public ComboBoxEditorType(String fieldName, String fieldValue, String displayName, String displayDescription,
+            List<String> comboChoices) throws Exception {
         super(EditorTypes.COMBO);
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;
@@ -40,8 +41,7 @@ public class ComboBoxEditorType extends EditorType {
 
     @Override
     public boolean validateValue(Object obj) throws Exception {
-        if(comboChoices.contains(obj))
-        {
+        if (comboChoices.contains(obj)) {
             return true;
         }
         return false;

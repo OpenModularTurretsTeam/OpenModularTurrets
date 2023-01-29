@@ -4,15 +4,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
 import openmodularturrets.client.render.models.ModelDamageAmp;
 import openmodularturrets.client.render.models.ModelRedstoneReactor;
 import openmodularturrets.client.render.models.ModelSolarPanelAddon;
 import openmodularturrets.client.render.models.ModelTeleporterTurret;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turrets.TurretHead;
+
 import org.lwjgl.opengl.GL11;
 
 public class TeleporterTurretRenderer extends TileEntitySpecialRenderer {
+
     private ModelSolarPanelAddon solar;
     private ModelDamageAmp amp;
     private ModelRedstoneReactor reac;

@@ -1,19 +1,21 @@
 package openmodularturrets.items.upgrades;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
-
-import java.util.List;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class RangeUpgradeItem extends UpgradeItem {
+
     public RangeUpgradeItem() {
         super();
 
@@ -30,8 +32,10 @@ public class RangeUpgradeItem extends UpgradeItem {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.BLUE + StatCollector.translateToLocal("turret.upgrade.label"));
         p_77624_3_.add("");
-        p_77624_3_.add("+ " + ConfigHandler.getRangeUpgradeBoost() + " " + StatCollector.translateToLocal(
-                "turret" + ".upgrade.range"));
+        p_77624_3_.add(
+                "+ " + ConfigHandler.getRangeUpgradeBoost()
+                        + " "
+                        + StatCollector.translateToLocal("turret" + ".upgrade.range"));
         p_77624_3_.add(StatCollector.translateToLocal("turret.upgrade.stacks"));
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.upgrade.range.flavour"));

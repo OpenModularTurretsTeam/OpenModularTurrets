@@ -1,5 +1,7 @@
 package openmodularturrets.items.blocks;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -7,9 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
-import java.util.List;
-
 public class ItemBlockExpanderInvTierFour extends ItemBlock {
+
     public ItemBlockExpanderInvTierFour(Block p_i45328_1_) {
         super(p_i45328_1_);
     }

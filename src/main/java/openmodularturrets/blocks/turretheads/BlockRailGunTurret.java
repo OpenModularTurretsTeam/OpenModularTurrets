@@ -1,14 +1,16 @@
 package openmodularturrets.blocks.turretheads;
 
+import java.util.Random;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
 
-import java.util.Random;
-
 public class BlockRailGunTurret extends BlockAbstractTurretHead {
+
     public BlockRailGunTurret() {
         super();
 
@@ -22,11 +24,18 @@ public class BlockRailGunTurret extends BlockAbstractTurretHead {
     }
 
     @Override
-    public void randomDisplayTick(World p_149734_1_, int p_149734_2_, int p_149734_3_, int p_149734_4_, Random p_149734_5_) {
+    public void randomDisplayTick(World p_149734_1_, int p_149734_2_, int p_149734_3_, int p_149734_4_,
+            Random p_149734_5_) {
         for (int i = 0; i <= 5; i++) {
             Random random = new Random();
-            p_149734_1_.spawnParticle("reddust", p_149734_2_ + (random.nextGaussian() / 10) + 0.5F, p_149734_3_,
-                                      p_149734_4_ + (random.nextGaussian() / 10) + 0.5F, (0), (50), (200));
+            p_149734_1_.spawnParticle(
+                    "reddust",
+                    p_149734_2_ + (random.nextGaussian() / 10) + 0.5F,
+                    p_149734_3_,
+                    p_149734_4_ + (random.nextGaussian() / 10) + 0.5F,
+                    (0),
+                    (50),
+                    (200));
         }
     }
 }

@@ -1,10 +1,8 @@
 package api.undercurrent.iface;
 
-import net.minecraft.tileentity.TileEntity;
-
 import java.util.ArrayList;
 
-public class UCTileDefinition  {
+public class UCTileDefinition {
 
     ArrayList<UCCollection> collections;
 

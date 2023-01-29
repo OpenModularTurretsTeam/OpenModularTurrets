@@ -1,11 +1,12 @@
 package openmodularturrets.reference;
 
 /**
- * Created by Keridos on 17.05.2015.
- * This Class
+ * Created by Keridos on 17.05.2015. This Class
  */
 public class Names {
+
     public static class Blocks {
+
         // Unlocalized
         public static final String unlocalisedTurretBaseTierOne = "baseTierWood";
         public static final String unlocalisedTurretBaseTierTwo = "baseTierOneBlock";
@@ -50,7 +51,8 @@ public class Names {
     }
 
     public static class Items {
-        //Unlocalised
+
+        // Unlocalised
         public static final String unlocalisedBulletThrowableItem = "bulletThrowable";
         public static final String unlocalisedGrenadeThrowableItem = "grenadeThrowable";
         public static final String unlocalisedFerroSlug = "ferroSlug";
@@ -95,6 +97,7 @@ public class Names {
     }
 
     public static class Localizations {
+
         public static final String OWNER = "gui.openmodularturrets:owner";
         public static final String INVERT = "gui.openmodularturrets:invert";
         public static final String ACTIVE = "gui.openmodularturrets:active";

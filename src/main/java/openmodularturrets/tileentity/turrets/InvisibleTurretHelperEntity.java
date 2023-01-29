@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 class InvisibleTurretHelperEntity extends EntityLivingBase {
+
     public InvisibleTurretHelperEntity(World p_i1594_1_) {
         super(p_i1594_1_);
     }
@@ -20,8 +21,7 @@ class InvisibleTurretHelperEntity extends EntityLivingBase {
     }
 
     @Override
-    public void setCurrentItemOrArmor(int p_70062_1_, ItemStack p_70062_2_) {
-    }
+    public void setCurrentItemOrArmor(int p_70062_1_, ItemStack p_70062_2_) {}
 
     @Override
     public ItemStack[] getLastActiveItems() {

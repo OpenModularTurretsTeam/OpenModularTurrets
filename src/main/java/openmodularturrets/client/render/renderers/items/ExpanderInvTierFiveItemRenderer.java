@@ -2,17 +2,21 @@ package openmodularturrets.client.render.renderers.items;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
 import openmodularturrets.client.render.models.ModelExpander;
 import openmodularturrets.client.render.renderers.blockitem.ExpanderInvTierFiveRenderer;
 import openmodularturrets.tileentity.expander.ExpanderInvTierFiveTileEntity;
+
 import org.lwjgl.opengl.GL11;
 
 class ExpanderInvTierFiveItemRenderer implements IItemRenderer {
+
     private final ExpanderInvTierFiveRenderer expanderInvTierFiveRenderer;
     private final ExpanderInvTierFiveTileEntity expanderInvTierFiveTileEntity;
     private final ModelExpander model;
 
-    public ExpanderInvTierFiveItemRenderer(ExpanderInvTierFiveRenderer expanderInvTierFiveRenderer, ExpanderInvTierFiveTileEntity expanderInvTierFiveTileEntity) {
+    public ExpanderInvTierFiveItemRenderer(ExpanderInvTierFiveRenderer expanderInvTierFiveRenderer,
+            ExpanderInvTierFiveTileEntity expanderInvTierFiveTileEntity) {
         this.expanderInvTierFiveRenderer = expanderInvTierFiveRenderer;
         this.expanderInvTierFiveTileEntity = expanderInvTierFiveTileEntity;
         this.model = new ModelExpander();
@@ -32,8 +36,8 @@ class ExpanderInvTierFiveItemRenderer implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         GL11.glPushMatrix();
         GL11.glTranslated(-0.5, -0.5, -0.5);
-        this.expanderInvTierFiveRenderer.renderTileEntityAt(this.expanderInvTierFiveTileEntity, 0.1D, 0.1D, -0.2D,
-                                                            0.0F);
+        this.expanderInvTierFiveRenderer
+                .renderTileEntityAt(this.expanderInvTierFiveTileEntity, 0.1D, 0.1D, -0.2D, 0.0F);
         GL11.glPopMatrix();
     }
 }

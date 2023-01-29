@@ -2,6 +2,7 @@ package openmodularturrets.client.gui.containers;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
+
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 
 public class TurretBaseTierOneContainer extends TurretBaseContainer {

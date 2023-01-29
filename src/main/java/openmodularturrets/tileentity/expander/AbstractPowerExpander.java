@@ -5,6 +5,7 @@ import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.TurretHeadUtil;
 
 public abstract class AbstractPowerExpander extends TileEntityOMT {
+
     public float baseFitRotationX;
     public float baseFitRotationZ;
     private boolean hasSetSide = false;

@@ -1,18 +1,20 @@
 package openmodularturrets.entity.projectiles;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
 import openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-import java.util.Random;
-
 public class FerroSlugProjectile extends TurretProjectile {
+
     public FerroSlugProjectile(World p_i1776_1_) {
         super(p_i1776_1_);
         this.gravity = 0.00F;
@@ -36,8 +38,8 @@ public class FerroSlugProjectile extends TurretProjectile {
             return;
         }
         if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            Block hitBlock = worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                               movingobjectposition.blockZ);
+            Block hitBlock = worldObj
+                    .getBlock(movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ);
             if (hitBlock != null && !hitBlock.getMaterial().isSolid()) {
                 // Go through non solid block
                 return;
@@ -46,8 +48,10 @@ public class FerroSlugProjectile extends TurretProjectile {
 
         if (movingobjectposition.entityHit != null && !worldObj.isRemote) {
             if (movingobjectposition.typeOfHit.equals(0)) {
-                if (worldObj.isAirBlock(movingobjectposition.blockX, movingobjectposition.blockY,
-                                        movingobjectposition.blockZ)) {
+                if (worldObj.isAirBlock(
+                        movingobjectposition.blockX,
+                        movingobjectposition.blockY,
+                        movingobjectposition.blockZ)) {
                     return;
                 }
             }
@@ -62,8 +66,13 @@ public class FerroSlugProjectile extends TurretProjectile {
             }
 
             Random random = new Random();
-            worldObj.playSoundEffect(posX, posY, posZ, "openmodularturrets:railGunHit",
-                                     ConfigHandler.getTurretSoundVolume(), random.nextFloat() + 0.5F);
+            worldObj.playSoundEffect(
+                    posX,
+                    posY,
+                    posZ,
+                    "openmodularturrets:railGunHit",
+                    ConfigHandler.getTurretSoundVolume(),
+                    random.nextFloat() + 0.5F);
 
             if (movingobjectposition.entityHit instanceof EntityPlayer) {
                 if (canDamagePlayer((EntityPlayer) movingobjectposition.entityHit)) {

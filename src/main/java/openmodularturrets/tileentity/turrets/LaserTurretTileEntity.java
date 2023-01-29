@@ -4,11 +4,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import openmodularturrets.entity.projectiles.LaserProjectile;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
 
 public class LaserTurretTileEntity extends TurretHead {
+
     public LaserTurretTileEntity() {
         super();
         this.turretTier = 5;

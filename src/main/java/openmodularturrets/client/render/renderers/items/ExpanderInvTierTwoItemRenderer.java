@@ -2,17 +2,21 @@ package openmodularturrets.client.render.renderers.items;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
 import openmodularturrets.client.render.models.ModelExpander;
 import openmodularturrets.client.render.renderers.blockitem.ExpanderInvTierTwoRenderer;
 import openmodularturrets.tileentity.expander.ExpanderInvTierTwoTileEntity;
+
 import org.lwjgl.opengl.GL11;
 
 class ExpanderInvTierTwoItemRenderer implements IItemRenderer {
+
     private final ExpanderInvTierTwoRenderer expanderInvTierTwoRenderer;
     private final ExpanderInvTierTwoTileEntity expanderInvTierTwoTileEntity;
     private final ModelExpander model;
 
-    public ExpanderInvTierTwoItemRenderer(ExpanderInvTierTwoRenderer expanderInvTierTwoRenderer, ExpanderInvTierTwoTileEntity expanderInvTierTwoTileEntity) {
+    public ExpanderInvTierTwoItemRenderer(ExpanderInvTierTwoRenderer expanderInvTierTwoRenderer,
+            ExpanderInvTierTwoTileEntity expanderInvTierTwoTileEntity) {
         this.expanderInvTierTwoRenderer = expanderInvTierTwoRenderer;
         this.expanderInvTierTwoTileEntity = expanderInvTierTwoTileEntity;
         this.model = new ModelExpander();
