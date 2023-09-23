@@ -15,7 +15,6 @@ import net.minecraft.world.WorldServer;
 import omtteam.omlib.util.MathUtil;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.omlib.util.world.WorldUtil;
-import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
@@ -23,9 +22,6 @@ import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import omtteam.openmodularturrets.turret.TurretTargetingUtils;
 import omtteam.openmodularturrets.util.OMTUtil;
-import valkyrienwarfare.api.IPhysicsEntity;
-import valkyrienwarfare.api.IPhysicsEntityManager;
-import valkyrienwarfare.api.TransformType;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -97,13 +93,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
             Vec3d baseVector = new Vec3d(this.getPos().getX() + 0.5D,
                                          this.getPos().getY() + 0.6D,
                                          this.getPos().getZ() + 0.5D);
-            if (ModCompatibility.ValkyrienWarfareLoaded) {
-                IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE.getPhysicsEntityFromShipSpace(getWorld(),
-                                                                                                            getPos());
-                if (physicsEntity != null) {
-                    baseVector = physicsEntity.transformVector(baseVector, TransformType.SUBSPACE_TO_GLOBAL);
-                }
-            }
+
             // Calculate deviation based on targets height and its distance to the turret
             double deviationModifier = 10D * (target.height < 0.5 ? 1.5D : 1D)
                     * ((vector.distanceTo(baseVector) * 0.2D

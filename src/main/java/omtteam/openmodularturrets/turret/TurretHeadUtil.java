@@ -23,7 +23,6 @@ import omtteam.omlib.util.world.Pos;
 import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.api.lists.AmmoList;
 import omtteam.openmodularturrets.blocks.BlockBaseAttachment;
-import omtteam.openmodularturrets.compatibility.ModCompatibility;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.items.AmmoMetaItem;
@@ -34,9 +33,6 @@ import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.util.EnumSlotType;
 import org.apache.commons.lang3.tuple.Triple;
-import valkyrienwarfare.api.IPhysicsEntity;
-import valkyrienwarfare.api.IPhysicsEntityManager;
-import valkyrienwarfare.api.TransformType;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -254,15 +250,6 @@ public class TurretHeadUtil {
     public static float getAimYaw(Entity target, Pos pos) {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
 
-        if (ModCompatibility.ValkyrienWarfareLoaded) {
-            IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE
-                    .getPhysicsEntityFromShipSpace(target.getEntityWorld(), pos.getBlockPos());
-            if (physicsEntity != null) {
-                targetPos = physicsEntity.transformVector(targetPos, TransformType.GLOBAL_TO_SUBSPACE);
-            }
-        }
-
-
         double dX = targetPos.x - (pos.getX() + 0.5F);
         double dZ = targetPos.z - (pos.getZ() + 0.5F);
 
@@ -277,14 +264,6 @@ public class TurretHeadUtil {
 
     public static float getAimPitch(Entity target, Pos pos) {
         Vec3d targetPos = new Vec3d(target.posX, target.posY, target.posZ);
-
-        if (ModCompatibility.ValkyrienWarfareLoaded) {
-            IPhysicsEntity physicsEntity = IPhysicsEntityManager.INSTANCE
-                    .getPhysicsEntityFromShipSpace(target.getEntityWorld(), pos.getBlockPos());
-            if (physicsEntity != null) {
-                targetPos = physicsEntity.transformVector(targetPos, TransformType.GLOBAL_TO_SUBSPACE);
-            }
-        }
 
         double dX = (targetPos.x - 0.5F) - (pos.getX() + 0.5F);
         double dY = (targetPos.y + target.getEyeHeight()) - (pos.getY() + 0.5F);

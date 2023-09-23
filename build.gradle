@@ -44,17 +44,9 @@ repositories {
     maven { // the repo from which to get EnderIO and tterrags mods
         url "https://maven.tterrag.com/"
     }
-    maven {
-        name "ic2"
-        url "http://maven.ic2.player.to/"
-    }
-    maven {
-        url "https://maven.ironhide.de/"
-    }
     maven { // JEI
         url "https://dvs1.progwml6.com/files/maven"
     }
-    //maven { url = "http://dl.tsr.me/artifactory/libs-release-local" }
     maven { // CoFH
         name = "Covers Maven"
         url = "http://maven.covers1624.net"

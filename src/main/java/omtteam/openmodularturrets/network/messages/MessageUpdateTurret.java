@@ -11,7 +11,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;
 
 import static omtteam.omlib.proxy.ClientProxy.getWorld;
-import static omtteam.openmodularturrets.compatibility.valkyrienwarfare.VWUtil.getTransformedBlockPos;
 
 @SuppressWarnings("unused")
 public class MessageUpdateTurret implements IMessage {
@@ -22,7 +21,7 @@ public class MessageUpdateTurret implements IMessage {
     }
 
     public MessageUpdateTurret(AbstractDirectedTurret turretHead) {
-        BlockPos pos = getTransformedBlockPos(turretHead);
+        BlockPos pos = turretHead.getPos();
 
         this.x = pos.getX();
         this.y = pos.getY();
