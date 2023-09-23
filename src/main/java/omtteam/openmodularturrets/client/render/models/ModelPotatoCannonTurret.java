@@ -1,79 +1,49 @@
 package omtteam.openmodularturrets.client.render.models;
 
+import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelPotatoCannonTurret extends ModelAbstractTurret {
     // fields
-    private final ModelRenderer BoxLeft;
-    private final ModelRenderer BoxRight;
-    private final ModelRenderer CrossBar;
-    private final ModelRenderer Barrel;
-    private final ModelRenderer Chamber;
+    private final ModelRenderer weapon;
 
     public ModelPotatoCannonTurret() {
         super(37, 28, 15);
 
-        base.addBox(-6F, 7F, -6F, 12, 1, 12);
-        base.setRotationPoint(0F, 16F, 0F);
-        base.setTextureSize(64, 32);
-        base.mirror = true;
-        setRotation(base, 0F, 0F, 0F);
-        pole.addBox(-2F, 4F, -2F, 4, 4, 4);
-        pole.setRotationPoint(0F, 16F, 0F);
-        pole.setTextureSize(64, 32);
-        pole.mirror = true;
-        setRotation(pole, 0F, 0F, 0F);
-        holder.addBox(-4F, 3F, -4F, 8, 1, 8);
-        holder.setRotationPoint(0F, 16F, 0F);
-        holder.setTextureSize(64, 64);
-        holder.mirror = true;
-        setRotation(holder, 0F, 0F, 0F);
-        BoxLeft = new ModelRenderer(this, 0, 15);
-        BoxLeft.addBox(-4F, 4F, -4F, 8, 1, 8);
-        BoxLeft.setRotationPoint(0F, 16F, 0F);
-        BoxLeft.setTextureSize(64, 64);
-        BoxLeft.mirror = true;
-        setRotation(BoxLeft, 0F, 0F, 1.570796F);
-        BoxRight = new ModelRenderer(this, 0, 15);
-        BoxRight.addBox(-4F, -5F, -4F, 8, 1, 8);
-        BoxRight.setRotationPoint(0F, 16F, 0F);
-        BoxRight.setTextureSize(64, 64);
-        BoxRight.mirror = true;
-        setRotation(BoxRight, 0F, 0F, 1.570796F);
-        CrossBar = new ModelRenderer(this, 0, 0);
-        CrossBar.addBox(-4F, -2F, 0F, 8, 1, 1);
-        CrossBar.setRotationPoint(0F, 16F, 0F);
-        CrossBar.setTextureSize(64, 64);
-        CrossBar.mirror = true;
-        setRotation(CrossBar, 0F, 0F, 0F);
-        Barrel = new ModelRenderer(this, 36, 0);
-        Barrel.addBox(-1F, -2F, -11F, 2, 3, 12);
-        Barrel.setRotationPoint(0F, 15F, 0F);
-        Barrel.setTextureSize(64, 64);
-        Barrel.mirror = true;
-        setRotation(Barrel, 0F, 0F, 0F);
-        Chamber = new ModelRenderer(this, 0, 4);
-        Chamber.addBox(-2F, -3F, 1F, 4, 4, 4);
-        Chamber.setRotationPoint(0F, 15F, 0F);
-        Chamber.setTextureSize(64, 64);
-        Chamber.mirror = true;
-        setRotation(Chamber, 0F, 0F, 0F);
+
+        base = new ModelRenderer(this);
+        base.setRotationPoint(0.0F, 16.0F, 0.0F);
+        base.cubeList.add(new ModelBox(base, 0, 28, -2.0F, 4.0F, -2.0F, 4, 4, 4, 0.0F, true));
+        base.cubeList.add(new ModelBox(base, 0, 37, -6.0F, 7.0F, -6.0F, 12, 1, 12, 0.0F, true));
+
+        holder = new ModelRenderer(this);
+        holder.setRotationPoint(0.0F, 0.0F, 0.0F);
+        base.addChild(holder);
+        holder.cubeList.add(new ModelBox(holder, 0, 15, -4.0F, 3.0F, -4.0F, 8, 1, 8, 0.0F, true));
+        holder.cubeList.add(new ModelBox(holder, 0, 0, -4.0F, -2.0F, 0.0F, 8, 1, 1, 0.0F, true));
+
+        ModelRenderer BoxLeft_r1;
+        BoxLeft_r1 = new ModelRenderer(this);
+        BoxLeft_r1.setRotationPoint(0.0F, 8.0F, 0.0F);
+        holder.addChild(BoxLeft_r1);
+        setRotation(BoxLeft_r1, 0.0F, 0.0F, 1.5708F);
+        BoxLeft_r1.cubeList.add(new ModelBox(BoxLeft_r1, 0, 15, -12.0F, 4.0F, -4.0F, 8, 1, 8, 0.0F, true));
+        BoxLeft_r1.cubeList.add(new ModelBox(BoxLeft_r1, 0, 15, -12.0F, -5.0F, -4.0F, 8, 1, 8, 0.0F, true));
+
+        weapon = new ModelRenderer(this);
+        weapon.setRotationPoint(0.0F, -1.0F, 0.0F);
+        holder.addChild(weapon);
+        weapon.cubeList.add(new ModelBox(weapon, 0, 4, -2.0F, -3.0F, 1.0F, 4, 4, 4, 0.0F, true));
+        weapon.cubeList.add(new ModelBox(weapon, 36, 0, -1.0F, -2.0F, -11.0F, 2, 3, 12, 0.0F, true));
     }
 
-    @SuppressWarnings("SuspiciousNameCombination")
     public void setRotationForTarget(float y, float z) {
+        weapon.rotateAngleX = y;
         holder.rotateAngleY = z;
-        BoxLeft.rotateAngleX = z;
-        BoxRight.rotateAngleX = z;
-        CrossBar.rotateAngleX = y;
-        CrossBar.rotateAngleY = z;
-        Barrel.rotateAngleX = y;
-        Barrel.rotateAngleY = z;
-        Chamber.rotateAngleX = y;
-        Chamber.rotateAngleY = z;
     }
 
     public void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -84,18 +54,12 @@ public class ModelPotatoCannonTurret extends ModelAbstractTurret {
 
     public void renderAll() {
         base.render(0.0625F);
-        pole.render(0.0625F);
-        holder.render(0.0625F);
-        BoxLeft.render(0.0625F);
-        BoxRight.render(0.0625F);
-        CrossBar.render(0.0625F);
-        Barrel.render(0.0625F);
-        Chamber.render(0.0625F);
     }
 
     @Override
-    public boolean hasPole() {
-        return true;
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+        setRotationAngles(f, f1, f2, f3, f4, f4, entity);
+        base.render(f5);
     }
 
     @Override

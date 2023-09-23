@@ -11,14 +11,15 @@ public class ModelArcTurret extends ModelAbstractTurret {
         textureWidth = 64;
         textureHeight = 64;
 
-        base.setRotationPoint(0.0F, 32.0F, 0.0F);
-        base.cubeList.add(new ModelBox(base, 0, 0, -6.0F, -1.0F, -6.0F, 12, 1, 12, 0.0F, false));
-        base.cubeList.add(new ModelBox(base, 0, 13, -3.0F, -5.0F, -3.0F, 6, 4, 6, 0.0F, false));
-        base.cubeList.add(new ModelBox(base, 0, 23, -0.5F, -14.0F, -0.5F, 1, 9, 1, 0.0F, false));
-        base.cubeList.add(new ModelBox(base, 0, 8, -1.0F, -16.0F, -1.0F, 2, 2, 2, 0.0F, false));
-        base.cubeList.add(new ModelBox(base, 18, 13, -2.0F, -9.25F, -2.0F, 4, 1, 4, 0.0F, false));
-        base.cubeList.add(new ModelBox(base, 0, 4, -1.5F, -11.25F, -1.5F, 3, 1, 3, 0.0F, false));
-        base.cubeList.add(new ModelBox(base, 0, 0, -1.5F, -13.0F, -1.5F, 3, 1, 3, -0.25F, false));
+        base = new ModelRenderer(this);
+        base.setRotationPoint(0.0F, 16.0F, 0.0F);
+        base.cubeList.add(new ModelBox(base, 0, 0, -6.0F, 7.0F, -6.0F, 12, 1, 12, 0.0F, false));
+        base.cubeList.add(new ModelBox(base, 0, 13, -3.0F, 3.0F, -3.0F, 6, 4, 6, 0.0F, false));
+        base.cubeList.add(new ModelBox(base, 0, 23, -0.5F, -6.0F, -0.5F, 1, 9, 1, 0.0F, false));
+        base.cubeList.add(new ModelBox(base, 0, 8, -1.0F, -8.0F, -1.0F, 2, 2, 2, 0.0F, false));
+        base.cubeList.add(new ModelBox(base, 18, 13, -2.0F, -1.25F, -2.0F, 4, 1, 4, 0.0F, false));
+        base.cubeList.add(new ModelBox(base, 0, 4, -1.5F, -3.25F, -1.5F, 3, 1, 3, 0.0F, false));
+        base.cubeList.add(new ModelBox(base, 0, 0, -1.5F, -5.0F, -1.5F, 3, 1, 3, -0.25F, false));
     }
 
     @Override
@@ -42,11 +43,6 @@ public class ModelArcTurret extends ModelAbstractTurret {
     @Override
     public void setRotationForTarget(float y, float z) {
 
-    }
-
-    @Override
-    public boolean hasPole() {
-        return false;
     }
 
     @Override

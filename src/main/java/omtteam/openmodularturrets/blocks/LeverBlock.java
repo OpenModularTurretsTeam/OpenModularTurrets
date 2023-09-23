@@ -212,7 +212,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos neighbor) {
+    public void neighborChanged_OM(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos neighbor) {
         if (!(isBaseValid(worldIn.getTileEntity(pos.north())) ||
                 isBaseValid(worldIn.getTileEntity(pos.east())) ||
                 isBaseValid(worldIn.getTileEntity(pos.south())) ||

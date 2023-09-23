@@ -7,10 +7,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import omtteam.openmodularturrets.client.gui.ConfigureGui;
 import omtteam.openmodularturrets.client.gui.ExpanderInvGui;
+import omtteam.openmodularturrets.client.gui.PowerGeneratorGui;
 import omtteam.openmodularturrets.client.gui.TurretBaseGui;
 import omtteam.openmodularturrets.client.gui.containers.ExpanderInvContainer;
+import omtteam.openmodularturrets.client.gui.containers.PowerGeneratorContainer;
 import omtteam.openmodularturrets.client.gui.containers.TurretBaseContainer;
 import omtteam.openmodularturrets.tileentity.Expander;
+import omtteam.openmodularturrets.tileentity.PowerGenerator;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 
 public class OMTGuiHandler implements IGuiHandler {
@@ -35,6 +38,8 @@ public class OMTGuiHandler implements IGuiHandler {
                 return new TurretBaseContainer(player.inventory, (TurretBase) tileEntity);
             case 2:
                 return new ExpanderInvContainer(player.inventory, (Expander) tileEntity);
+            case 3:
+                return new PowerGeneratorContainer(player.inventory, (PowerGenerator) tileEntity);
             default:
                 return null;
         }
@@ -49,6 +54,8 @@ public class OMTGuiHandler implements IGuiHandler {
                 return new TurretBaseGui(player.inventory, (TurretBase) tileEntity);
             case 2:
                 return new ExpanderInvGui(player.inventory, (Expander) tileEntity);
+            case 3:
+                return new PowerGeneratorGui(player.inventory, (PowerGenerator) tileEntity);
             case 20:
                 return new ConfigureGui(player.inventory, (TurretBase) tileEntity);
             default:

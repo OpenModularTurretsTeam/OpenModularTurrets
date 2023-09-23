@@ -117,15 +117,6 @@ public class AddonMetaItem extends Item {
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.recycler.flavour"));
                     return;
                 case 4:
-                    tooltip.add("");
-                    tooltip.add(TextFormatting.RED + safeLocalize("text.openmodularturrets.turret.addon.label"));
-                    tooltip.add("");
-                    tooltip.add(safeLocalize(
-                            "text.openmodularturrets.turret.addon.redstone.a") + " " + OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen + " " + safeLocalize(
-                            "text.openmodularturrets.turret.addon.redstone.b"));
-                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.redstone.c"));
-                    tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.redstone.flavour"));
                     return;
                 case 5:
                     tooltip.add("");

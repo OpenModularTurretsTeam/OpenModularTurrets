@@ -59,11 +59,11 @@ public class TurretHeadUtil {
         if (base.isAttacksPlayers()) {
             int warnDistance = OMTConfig.TURRETS.turretWarningDistance;
             AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - turretRange - warnDistance,
-                                                   pos.getY() - turretRange - warnDistance,
-                                                   pos.getZ() - turretRange - warnDistance,
-                                                   pos.getX() + turretRange + warnDistance,
-                                                   pos.getY() + turretRange + warnDistance,
-                                                   pos.getZ() + turretRange + warnDistance);
+                    pos.getY() - turretRange - warnDistance,
+                    pos.getZ() - turretRange - warnDistance,
+                    pos.getX() + turretRange + warnDistance,
+                    pos.getY() + turretRange + warnDistance,
+                    pos.getZ() + turretRange + warnDistance);
 
             List<EntityPlayerMP> targets = worldObj.getEntitiesWithinAABB(EntityPlayerMP.class, axis);
 
@@ -262,10 +262,12 @@ public class TurretHeadUtil {
             }
         }
 
+
         double dX = targetPos.x - (pos.getX() + 0.5F);
         double dZ = targetPos.z - (pos.getZ() + 0.5F);
 
-        float yaw = (float) ((Math.atan2(dZ, dX)));
+
+        float yaw = (float) ((Math.atan2(dX, dZ)));
         if (yaw < 0) {
             yaw += 2 * Math.PI;
         }
@@ -288,7 +290,9 @@ public class TurretHeadUtil {
         double dY = (targetPos.y + target.getEyeHeight()) - (pos.getY() + 0.5F);
         double dZ = (targetPos.z - 0.5F) - (pos.getZ() + 0.5F);
 
-        float pitch = (float) ((Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY)));
+        double distance = Math.sqrt(dZ * dZ + dX * dX);
+
+        float pitch = (float) Math.atan2(dY, distance);
         if (pitch < 0) {
             pitch += 2 * Math.PI;
         }
@@ -513,29 +517,43 @@ public class TurretHeadUtil {
         float yaw = turretHead.getYaw();
         float pitch = turretHead.getPitch();
         float rotationXY = 0F;
-        switch (turretHead.baseFacing) {
-            case UP:
-                rotationXY = (float) (((-pitch + 90f) / 180F * Math.PI));
-                break;
-            case DOWN:
-                rotationXY = (float) (((pitch - 90f) / 180F * Math.PI));
-                break;
-            case EAST:
-                if (yaw > 180F) {
-                    rotationXY = (float) (((pitch) / 180F * Math.PI));
-                } else {
-                    rotationXY = (float) (((pitch + 180F) / 180F * Math.PI));
-                }
-                break;
-            case WEST:
-                rotationXY = (float) (((yaw - 90f) / 180F * Math.PI));
-                break;
-            case NORTH:
-                rotationXY = (float) (((yaw - 90f) / 180F * Math.PI));
-                break;
-            case SOUTH:
-                rotationXY = (float) (((yaw - 90f) / 180F * Math.PI));
-                break;
+        if (turretHead != null) {
+            switch (turretHead.baseFacing) {
+                case UP:
+                    rotationXY = ((-pitch) * 0.017453292F);
+                    break;
+                case DOWN:
+                    rotationXY = ((-pitch) * 0.017453292F);
+                    break;
+                case EAST:
+                    if (yaw > 270F) {
+                        rotationXY = ((yaw) * 0.017453292F);
+                    } else {
+                        rotationXY = ((-yaw - 180F) * 0.017453292F);
+                    }
+                    break;
+                case WEST:
+                    if (yaw < 90F) {
+                        rotationXY = ((-yaw) * 0.017453292F);
+                    } else {
+                        rotationXY = ((yaw + 180F) * 0.017453292F);
+                    }
+                    break;
+                case NORTH:
+                    if (yaw > 180F) {
+                        rotationXY = ((-yaw - 90F) * 0.017453292F);
+                    } else {
+                        rotationXY = ((yaw - 90f) * 0.017453292F);
+                    }
+                    break;
+                case SOUTH:
+                    if (yaw < 180F) {
+                        rotationXY = ((-yaw + 90F) * 0.017453292F);
+                    } else {
+                        rotationXY = ((yaw + 90F) * 0.017453292F);
+                    }
+                    break;
+            }
         }
         return rotationXY;
     }
@@ -545,30 +563,45 @@ public class TurretHeadUtil {
         float yaw = turretHead.getYaw();
         float pitch = turretHead.getPitch();
         float rotationXZ = 0F;
-
-        switch (turretHead.baseFacing) {
-            case UP:
-                rotationXZ = (float) (((-yaw - 90f) / 180F * Math.PI));
-                break;
-            case DOWN:
-                rotationXZ = (float) (((yaw - 90f) / 180F * Math.PI));
-                break;
-            case EAST:
-                if (yaw > 180F) {
-                    rotationXZ = (float) (((-yaw + 90F) / 180F * Math.PI));
-                } else {
-                    rotationXZ = (float) (((yaw) / 180F * Math.PI));
-                }
-                break;
-            case WEST:
-                rotationXZ = (float) (((pitch - 90f) / 180F * Math.PI));
-                break;
-            case NORTH:
-                rotationXZ = (float) (((pitch - 90f) / 180F * Math.PI));
-                break;
-            case SOUTH:
-                rotationXZ = (float) (((pitch - 90f) / 180F * Math.PI));
-                break;
+        if (turretHead != null) {
+            switch (turretHead.baseFacing) {
+                case UP:
+                    rotationXZ = ((yaw + 180F) * 0.017453292F);
+                    break;
+                case DOWN:
+                    rotationXZ = (-yaw * 0.017453292F);
+                    break;
+                case EAST:
+                    if (yaw > 270F) {
+                        rotationXZ = ((-pitch - 90F) * 0.017453292F);
+                    } else if (yaw < 90F) {
+                        rotationXZ = ((pitch - 90F) * 0.017453292F);
+                    } else {
+                        rotationXZ = ((pitch + 90F) * 0.017453292F);
+                    }
+                    break;
+                case WEST:
+                    if (yaw < 90F) {
+                        rotationXZ = ((pitch + 90F) * 0.017453292F);
+                    } else {
+                        rotationXZ = ((-pitch - 90F) * 0.017453292F);
+                    }
+                    break;
+                case NORTH:
+                    if (yaw < 180F) {
+                        rotationXZ = ((-pitch - 90F) * 0.017453292F);
+                    } else {
+                        rotationXZ = ((pitch + 90F) * 0.017453292F);
+                    }
+                    break;
+                case SOUTH:
+                    if (yaw > 180F) {
+                        rotationXZ = ((-pitch - 90F) * 0.017453292F);
+                    } else {
+                        rotationXZ = ((pitch + 90F) * 0.017453292F);
+                    }
+                    break;
+            }
         }
         return rotationXZ;
     }

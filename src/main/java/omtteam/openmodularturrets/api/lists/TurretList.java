@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TurretList {
-    private static Map<String, TurretType> types = new HashMap<>();
+    private static final Map<String, TurretType> types = new HashMap<>();
 
     /**
      * Register all your turrets in this list or things will break.

@@ -38,7 +38,5 @@ public abstract class ModelAbstractTurret extends ModelBase {
 
     //public void setRotationForTargetYawPitch(float yaw, float pitch);
 
-    public abstract boolean hasPole();
-
     public abstract boolean hasHolder();
 }

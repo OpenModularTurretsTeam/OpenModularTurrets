@@ -4,18 +4,12 @@ import net.minecraft.block.Block;
 import net.minecraftforge.registries.IForgeRegistry;
 import omtteam.omlib.util.InitHelper;
 import omtteam.openmodularturrets.api.lists.TurretList;
-import omtteam.openmodularturrets.blocks.BlockBaseAttachment;
-import omtteam.openmodularturrets.blocks.BlockExpander;
-import omtteam.openmodularturrets.blocks.BlockTurretBase;
-import omtteam.openmodularturrets.blocks.LeverBlock;
+import omtteam.openmodularturrets.blocks.*;
 import omtteam.openmodularturrets.blocks.turretheads.*;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.tileentity.BaseAddon;
-import omtteam.openmodularturrets.tileentity.Expander;
-import omtteam.openmodularturrets.tileentity.LeverTileEntity;
-import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.tileentity.*;
 import omtteam.openmodularturrets.tileentity.turrets.*;
 import omtteam.openmodularturrets.turret.TurretType;
 
@@ -39,10 +33,11 @@ public class ModBlocks {
 
     public static Block expander;
     public static Block baseAddon;
-
+    public static Block powerGenerator;
     public static void initBlocks(IForgeRegistry<Block> registry) {
         turretBase = InitHelper.registerBlock(new BlockTurretBase(), registry, ModItems.subblocks);
         expander = InitHelper.registerBlock(new BlockExpander(), registry, ModItems.subblocks);
+        powerGenerator = InitHelper.registerBlock(new BlockPowerAttachment(), registry, ModItems.subblocks);
         baseAddon = InitHelper.registerBlock(new BlockBaseAttachment(), registry, ModItems.subblocks);
 
         if (OMTConfig.TURRETS.disposable_turret.enabled) {
@@ -137,5 +132,6 @@ public class ModBlocks {
         InitHelper.registerTileEntity(CrossbowTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.crossbowTurret);
         InitHelper.registerTileEntity(Expander.class, Reference.MOD_ID, OMTNames.Blocks.expander);
         InitHelper.registerTileEntity(BaseAddon.class, Reference.MOD_ID, OMTNames.Blocks.baseAddon);
+        InitHelper.registerTileEntity(PowerGenerator.class, Reference.MOD_ID, OMTNames.Blocks.powerGenerator);
     }
 }

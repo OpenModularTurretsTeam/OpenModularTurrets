@@ -13,12 +13,12 @@ public class ModelCrossbowTurret extends ModelAbstractTurret {
         super(0, 0, 0);
 
         base = new ModelRenderer(this);
-        base.setRotationPoint(0.0F, 24.0F, 0.0F);
-        base.cubeList.add(new ModelBox(base, 0, 0, -6.0F, -1.0F, -6.0F, 12, 1, 12, 0.0F, false));
-        base.cubeList.add(new ModelBox(base, 0, 23, -2.0F, -4.0F, -2.0F, 4, 3, 4, 0.0F, false));
+        base.setRotationPoint(0.0F, 16.0F, 0.0F);
+        base.cubeList.add(new ModelBox(base, 0, 0, -6.0F, 7.0F, -6.0F, 12, 1, 12, 0.0F, false));
+        base.cubeList.add(new ModelBox(base, 0, 23, -2.0F, 4.0F, -2.0F, 4, 3, 4, 0.0F, false));
 
         holder = new ModelRenderer(this);
-        holder.setRotationPoint(0.0F, -4.0F, 0.0F);
+        holder.setRotationPoint(0.0F, 4.0F, 0.0F);
         base.addChild(holder);
         holder.cubeList.add(new ModelBox(holder, 0, 30, -4.0F, -1.0F, -4.0F, 8, 1, 8, 0.0F, false));
         holder.cubeList.add(new ModelBox(holder, 0, 39, 4.0F, -8.0F, -4.0F, 1, 8, 8, 0.0F, false));
@@ -52,11 +52,6 @@ public class ModelCrossbowTurret extends ModelAbstractTurret {
 
     public void renderAll() {
         base.render(0.0625F);
-    }
-
-    @Override
-    public boolean hasPole() {
-        return false;
     }
 
     @Override

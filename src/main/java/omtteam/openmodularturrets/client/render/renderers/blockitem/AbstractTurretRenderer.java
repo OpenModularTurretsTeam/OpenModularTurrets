@@ -1,27 +1,17 @@
 package omtteam.openmodularturrets.client.render.renderers.blockitem;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.ResourceLocation;
 import omtteam.openmodularturrets.client.render.models.ModelAbstractTurret;
-import omtteam.openmodularturrets.client.render.models.ModelDamageAmp;
-import omtteam.openmodularturrets.client.render.models.ModelRedstoneReactor;
-import omtteam.openmodularturrets.client.render.models.ModelSolarPanelAddon;
-import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
 public abstract class AbstractTurretRenderer extends TileEntitySpecialRenderer {
-    protected final ModelSolarPanelAddon solar;
-    protected final ModelDamageAmp amp;
-    protected final ModelRedstoneReactor reac;
+
 
     public AbstractTurretRenderer() {
-        this.solar = new ModelSolarPanelAddon();
-        this.amp = new ModelDamageAmp();
-        this.reac = new ModelRedstoneReactor();
+
     }
 
     /**
@@ -37,6 +27,7 @@ public abstract class AbstractTurretRenderer extends TileEntitySpecialRenderer {
             directedTurret = (AbstractDirectedTurret) turretHead;
         }
         GL11.glPushMatrix();
+
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
         if (turretHead == null) {
             GL11.glScalef(0.7F, -0.7F, -0.7F);
@@ -53,49 +44,14 @@ public abstract class AbstractTurretRenderer extends TileEntitySpecialRenderer {
             return;
         }
 
-        if (turretHead.getWorld() != null) {
-            GL11.glScalef(1.0F, -1F, -1F);
-            model.setBaseRotation(turretHead);
-            if (doRotation) {
-                model.setRotationForTarget(TurretHeadUtil.getRotationXYFromTurretHead(directedTurret),
-                                           TurretHeadUtil.getRotationXZFromTurretHead(directedTurret));
-            }
+        GL11.glScalef(1.0F, -1F, -1F);
+        model.setBaseRotation(turretHead);
+        if (doRotation) {
+            model.setRotationForTarget(TurretHeadUtil.getRotationXYFromTurretHead(directedTurret),
+                    TurretHeadUtil.getRotationXZFromTurretHead(directedTurret));
         }
 
         model.renderAll();
-
-        if (turretHead.getBase() != null) {
-
-            if (TurretHeadUtil.getAmpLevel(turretHead.getBase()) > 0 && ((this.addonsRendered()) & 1) != 0) {
-                ResourceLocation texturesAmp = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_damage_amp.png"));
-                Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
-                if (doRotation) {
-                    amp.setRotationForTarget(TurretHeadUtil.getRotationXYFromTurretHead(directedTurret),
-                                             TurretHeadUtil.getRotationXZFromTurretHead(directedTurret));
-                }
-                amp.renderAll();
-            }
-
-            if (TurretHeadUtil.hasSolarPanelAddon(turretHead.getBase()) && ((this.addonsRendered() >>> 1) & 1) != 0) {
-                ResourceLocation texturesSolar = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_solar_panel.png"));
-                Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
-                if (doRotation) {
-                    solar.setRotationForTarget(TurretHeadUtil.getRotationXYFromTurretHead(directedTurret),
-                                               TurretHeadUtil.getRotationXZFromTurretHead(directedTurret));
-                }
-                solar.renderAll();
-            }
-
-            if (TurretHeadUtil.hasRedstoneReactor(turretHead.getBase()) && ((this.addonsRendered() >>> 2) & 1) != 0) {
-                ResourceLocation texturesReac = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/addon_redstone_reactor.png"));
-                Minecraft.getMinecraft().renderEngine.bindTexture(texturesReac);
-                if (doRotation) {
-                    reac.setRotationForTarget(TurretHeadUtil.getRotationXYFromTurretHead(directedTurret),
-                                              TurretHeadUtil.getRotationXZFromTurretHead(directedTurret));
-                }
-                reac.renderAll();
-            }
-        }
         GL11.glPopMatrix();
     }
 }

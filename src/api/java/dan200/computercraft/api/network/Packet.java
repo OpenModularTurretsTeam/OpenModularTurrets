@@ -9,6 +9,7 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 /**
  * Represents a packet which may be sent across a {@link IPacketNetwork}.
@@ -94,7 +95,7 @@ public class Packet {
 
         if (m_channel != packet.m_channel) return false;
         if (m_replyChannel != packet.m_replyChannel) return false;
-        if (m_payload != null ? !m_payload.equals(packet.m_payload) : packet.m_payload != null) return false;
+        if (!Objects.equals(m_payload, packet.m_payload)) return false;
         return m_sender.equals(packet.m_sender);
     }
 

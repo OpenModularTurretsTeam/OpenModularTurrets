@@ -38,6 +38,8 @@ public class OMTNames {
 
         public static final String baseAddon = "base_addon";
         public static final String baseAddonLootDeleter = "base_addon_loot_deleter";
+
+        public static final String powerGenerator = "power_generator";
     }
 
     public static class Items {
@@ -149,5 +151,6 @@ public class OMTNames {
         public static final String turretBaseTierFiveGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_five.png";
         public static final String configureGUI = Reference.MOD_ID + ":textures/gui/configure.png";
         public static final String expanderGUI = Reference.MOD_ID + ":textures/gui/expander_inv.png";
+        public static final String powerGeneratorGUI = Reference.MOD_ID + ":textures/gui/power_generator.png";
     }
 }

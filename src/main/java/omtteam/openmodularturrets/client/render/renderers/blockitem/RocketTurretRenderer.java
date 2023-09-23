@@ -25,10 +25,7 @@ class RocketTurretRenderer extends AbstractTurretRenderer {
     @Override
     public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         TurretHead turretHead = (TurretHead) te;
-        boolean doRotation = false;
-        if (turretHead instanceof AbstractDirectedTurret) {
-            doRotation = true;
-        }
+        boolean doRotation = turretHead instanceof AbstractDirectedTurret;
 
         ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/rocket_turret.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);

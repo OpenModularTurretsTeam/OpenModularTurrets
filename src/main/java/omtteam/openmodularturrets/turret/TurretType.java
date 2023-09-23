@@ -3,8 +3,8 @@ package omtteam.openmodularturrets.turret;
 import omtteam.openmodularturrets.handler.config.TurretSetting;
 
 public class TurretType {
-    private String internalName;
-    private TurretSetting settings;
+    private final String internalName;
+    private final TurretSetting settings;
 
     public TurretType(String internalName, TurretSetting settings) {
         this.internalName = internalName;
