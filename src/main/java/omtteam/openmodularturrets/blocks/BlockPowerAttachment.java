@@ -58,7 +58,7 @@ public class BlockPowerAttachment extends AbstractBaseAttachment {
 
     @Override
     @Nonnull
-    protected BlockStateContainer createBlockState_OM() {
+    public BlockStateContainer createBlockState_OM() {
         return new BlockStateContainer(this, FACING);
     }
 

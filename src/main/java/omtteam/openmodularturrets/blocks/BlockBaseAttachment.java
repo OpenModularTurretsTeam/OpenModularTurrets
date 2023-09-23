@@ -73,7 +73,7 @@ public class BlockBaseAttachment extends AbstractBaseAttachment implements IHasI
 
     @Override
     @Nonnull
-    protected BlockStateContainer createBlockState_OM() {
+    public BlockStateContainer createBlockState_OM() {
         return new BlockStateContainer(this, BASE_ADDON_META, FACING);
     }
 

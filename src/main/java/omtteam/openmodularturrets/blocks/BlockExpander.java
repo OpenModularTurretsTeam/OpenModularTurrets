@@ -79,7 +79,7 @@ public class BlockExpander extends AbstractBaseAttachment implements IHasItemBlo
 
     @Override
     @Nonnull
-    protected BlockStateContainer createBlockState_OM() {
+    public BlockStateContainer createBlockState_OM() {
         return new BlockStateContainer(this, EXPANDER_META, FACING);
     }
 

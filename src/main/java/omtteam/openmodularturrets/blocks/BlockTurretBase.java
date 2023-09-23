@@ -132,7 +132,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
 
     @Override
     @Nonnull
-    protected BlockStateContainer createBlockState_OM() {
+    public BlockStateContainer createBlockState_OM() {
         return new ExtendedBlockState(this, new IProperty[]{TIER, LIGHT_VALUE, LIGHT_OPACITY}, new IUnlistedProperty[]{RENDERBLOCKSTATE});
     }
 

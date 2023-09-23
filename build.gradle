@@ -130,12 +130,6 @@ if (project.allprojects.findAll({ it.name == "OpenModularPassiveDefense" }).size
 }
 
 dependencies {
-    deobfProvided ("org.valkyrienskies:valkyrien-skies:1.0.0+e8d24a6a6b:all") {
-        transitive = false
-    }
-    testCompile ("org.valkyrienskies:valkyrien-skies:1.0.0+e8d24a6a6b") {
-        transitive = false
-    }
     deobfProvided "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
     testCompile "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
     deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version_short}:api"
@@ -146,8 +140,6 @@ dependencies {
     testCompile "mcjty.theoneprobe:TheOneProbe-${minecraft_version_short}:${minecraft_version_short}-${top_version}"
     deobfProvided "li.cil.oc:OpenComputers:MC${minecraft_version}-${oc_version}"
     testCompile "li.cil.oc:OpenComputers:MC${minecraft_version}-${oc_version}"
-    deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}"
-    testCompile "net.industrial-craft:industrialcraft-2:${ic2_version}"
     deobfProvided "net.darkhax.tesla:Tesla-${minecraft_version_short}:${tesla_version}"
     testCompile "net.darkhax.tesla:Tesla-${minecraft_version_short}:${tesla_version}"
     if (!omlib_local) {

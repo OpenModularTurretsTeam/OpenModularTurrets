@@ -72,7 +72,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
 
     @Override
     @Nonnull
-    protected BlockStateContainer createBlockState_OM() {
+    public BlockStateContainer createBlockState_OM() {
         return new BlockStateContainer(this, ROTATION);
     }
 
@@ -97,6 +97,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void onBlockPlacedBy_OM(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         float l = 0F;
         if (isBaseValid(worldIn.getTileEntity(pos.east()))) {
@@ -116,6 +117,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean onBlockActivated_OM(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.DOWN || TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.UP) {
             return true;
@@ -212,6 +214,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void neighborChanged_OM(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos neighbor) {
         if (!(isBaseValid(worldIn.getTileEntity(pos.north())) ||
                 isBaseValid(worldIn.getTileEntity(pos.east())) ||
