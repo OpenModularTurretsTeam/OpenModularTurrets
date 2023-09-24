@@ -1,6 +1,0 @@
-{
-  "parent": "omlib:item/default_item",
-  "textures": {
-    "layer0": "openmodularturrets:items/sensor_tier_three"
-  }
-}

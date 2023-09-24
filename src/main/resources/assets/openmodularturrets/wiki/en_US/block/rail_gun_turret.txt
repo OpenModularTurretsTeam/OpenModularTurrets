@@ -1,5 +1,0 @@
-Rail Gun Turret
-    Tier 5 Turret
-
-    An electromagnetic catapult designed to hurl projectiles at extremely high speeds.
-    Fast, deadly, accurate, and now 100% armor piercing!

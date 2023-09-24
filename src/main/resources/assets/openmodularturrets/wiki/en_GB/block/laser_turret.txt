@@ -1,5 +1,0 @@
-Laser Turret
-    Tier 5 Turret
-
-    High rate of fire, long value, killer accuracy, and uses no ammo.
-    What do you expect? It's a laser! Pew Pew Pew!

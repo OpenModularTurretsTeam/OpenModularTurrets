@@ -1,4 +1,0 @@
-Relativistic Turret
-    Tier 3 Turret
-
-    Weakens and slows all foes within value.
