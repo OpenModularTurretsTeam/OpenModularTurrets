@@ -1,25 +1,32 @@
 modLoader="javafml"
-loaderVersion="[37,)"
-license="MIT"
+loaderVersion="[43,)"
+license="source is MIT, resources are CC-BY-NC"
 
 [[mods]]
-modId="examplelib"
+modId="openmodularturrets"
 version="${file.jarVersion}"
-displayName="Example Lib"
-authors="Example Author"
+displayName="OpenModularTurrets"
+authors="Keridos, jmlovelace, leinierperez"
 description='''
-This is an example library
+This is OpenModularTurrets. A mod that lets you build modular turrets to defend your base.
 '''
 
-[[dependencies.examplelib]]
-    modId="forge"
+
+[[dependencies.openmodularturrets]]
+    modId="omlib"
     mandatory=true
-    versionRange="[37,)"
+    versionRange="[4.0.0,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.examplelib]]
+[[dependencies.openmodularturrets]]
+    modId="forge"
+    mandatory=true
+    versionRange="[43,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.openmodularturrets]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.17.1,1.18)"
+    versionRange="[1.19.2,1.20)"
     ordering="NONE"
     side="BOTH"
