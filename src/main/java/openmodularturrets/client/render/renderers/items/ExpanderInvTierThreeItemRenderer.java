@@ -3,11 +3,11 @@ package openmodularturrets.client.render.renderers.items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
+import org.lwjgl.opengl.GL11;
+
 import openmodularturrets.client.render.models.ModelExpander;
 import openmodularturrets.client.render.renderers.blockitem.ExpanderInvTierThreeRenderer;
 import openmodularturrets.tileentity.expander.ExpanderInvTierThreeTileEntity;
-
-import org.lwjgl.opengl.GL11;
 
 class ExpanderInvTierThreeItemRenderer implements IItemRenderer {
 

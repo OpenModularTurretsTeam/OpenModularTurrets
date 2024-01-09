@@ -1,10 +1,10 @@
 package openmodularturrets.handler;
 
-import openmodularturrets.network.messages.*;
-import openmodularturrets.reference.ModInfo;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
+import openmodularturrets.network.messages.*;
+import openmodularturrets.reference.ModInfo;
 
 public class NetworkingHandler {
 

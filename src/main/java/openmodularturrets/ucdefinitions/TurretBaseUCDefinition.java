@@ -5,12 +5,12 @@ import java.util.Map;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import openmodularturrets.tileentity.turretbase.TurretBase;
 import api.undercurrent.iface.UCCollection;
 import api.undercurrent.iface.UCTileDefinition;
 import api.undercurrent.iface.editorTypes.BooleanEditorType;
 import api.undercurrent.iface.editorTypes.InfoEditorType;
 import api.undercurrent.iface.editorTypes.IntegerEditorType;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 
 /**
  * Created by Niel on 7/17/2016.

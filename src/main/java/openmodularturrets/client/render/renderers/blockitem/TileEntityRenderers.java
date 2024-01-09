@@ -1,11 +1,11 @@
 package openmodularturrets.client.render.renderers.blockitem;
 
-import openmodularturrets.tileentity.LeverTileEntity;
-import openmodularturrets.tileentity.expander.*;
-import openmodularturrets.tileentity.turrets.*;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import openmodularturrets.tileentity.LeverTileEntity;
+import openmodularturrets.tileentity.expander.*;
+import openmodularturrets.tileentity.turrets.*;
 
 public class TileEntityRenderers {
 

@@ -4,11 +4,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.common.network.IGuiHandler;
 import openmodularturrets.client.gui.*;
 import openmodularturrets.client.gui.containers.*;
 import openmodularturrets.tileentity.expander.AbstractInvExpander;
 import openmodularturrets.tileentity.turretbase.*;
-import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler {
 

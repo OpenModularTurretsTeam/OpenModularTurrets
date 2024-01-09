@@ -2,26 +2,7 @@
 
 repositories {
     maven {
-        name = 'GTNH'
-        url = 'http://jenkins.usrv.eu:8081/nexus/content/groups/public/'
-    }
-    maven {
         name = "IGW"
         url = "https://maven.k-4u.nl/"
-    }
-    maven {
-        name = 'ic2'
-        url = 'https://maven.ic2.player.to/'
-        metadataSources {
-            mavenPom()
-            artifact()
-        }
-    }
-    maven {
-        url 'https://cursemaven.com'
-    }
-    maven {
-        name = 'jitpack.io'
-        url = 'https://jitpack.io'
     }
 }

@@ -2,6 +2,7 @@ package openmodularturrets.blocks;
 
 import net.minecraft.block.Block;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import openmodularturrets.blocks.expanders.*;
 import openmodularturrets.blocks.misc.*;
 import openmodularturrets.blocks.turretbases.*;
@@ -9,7 +10,6 @@ import openmodularturrets.blocks.turretheads.*;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.blocks.*;
 import openmodularturrets.reference.Names;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Blocks {
 

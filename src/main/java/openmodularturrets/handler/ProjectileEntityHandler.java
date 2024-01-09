@@ -1,8 +1,8 @@
 package openmodularturrets.handler;
 
+import cpw.mods.fml.common.registry.EntityRegistry;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.entity.projectiles.*;
-import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class ProjectileEntityHandler {
 

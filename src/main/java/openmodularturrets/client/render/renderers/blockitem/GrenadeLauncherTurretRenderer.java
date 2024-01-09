@@ -5,6 +5,8 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
+import org.lwjgl.opengl.GL11;
+
 import openmodularturrets.client.render.models.ModelDamageAmp;
 import openmodularturrets.client.render.models.ModelGrenadeLauncher;
 import openmodularturrets.client.render.models.ModelRedstoneReactor;
@@ -12,8 +14,6 @@ import openmodularturrets.client.render.models.ModelSolarPanelAddon;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turrets.TurretHead;
 import openmodularturrets.util.TurretHeadUtil;
-
-import org.lwjgl.opengl.GL11;
 
 public class GrenadeLauncherTurretRenderer extends TileEntitySpecialRenderer {
 

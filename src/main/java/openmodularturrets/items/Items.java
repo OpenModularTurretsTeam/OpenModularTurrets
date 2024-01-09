@@ -2,11 +2,11 @@ package openmodularturrets.items;
 
 import net.minecraft.item.Item;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.items.addons.*;
 import openmodularturrets.items.ammo.*;
 import openmodularturrets.items.upgrades.*;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Items {
 

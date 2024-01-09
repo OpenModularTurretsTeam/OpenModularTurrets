@@ -2,15 +2,6 @@ package openmodularturrets;
 
 import net.minecraft.creativetab.CreativeTabs;
 
-import openmodularturrets.blocks.Blocks;
-import openmodularturrets.client.gui.ModularTurretsTab;
-import openmodularturrets.compatability.ModCompatibility;
-import openmodularturrets.handler.*;
-import openmodularturrets.handler.recipes.RecipeHandler;
-import openmodularturrets.items.Items;
-import openmodularturrets.proxy.CommonProxy;
-import openmodularturrets.reference.ModInfo;
-import openmodularturrets.util.CommandChangeOwner;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -20,6 +11,15 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import openmodularturrets.blocks.Blocks;
+import openmodularturrets.client.gui.ModularTurretsTab;
+import openmodularturrets.compatability.ModCompatibility;
+import openmodularturrets.handler.*;
+import openmodularturrets.handler.recipes.RecipeHandler;
+import openmodularturrets.items.Items;
+import openmodularturrets.proxy.CommonProxy;
+import openmodularturrets.reference.ModInfo;
+import openmodularturrets.util.CommandChangeOwner;
 
 @Mod(
         modid = ModInfo.ID,

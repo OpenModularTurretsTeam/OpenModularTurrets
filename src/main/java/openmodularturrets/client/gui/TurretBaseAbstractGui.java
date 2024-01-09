@@ -9,6 +9,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 
+import codechicken.lib.vec.Rectangle4i;
+import codechicken.nei.VisiblityData;
+import codechicken.nei.api.INEIGuiHandler;
+import codechicken.nei.api.TaggedInventoryArea;
+import cpw.mods.fml.common.Optional;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.handler.NetworkingHandler;
 import openmodularturrets.network.messages.MessageAdjustYAxisDetect;
@@ -18,11 +23,6 @@ import openmodularturrets.network.messages.MessageSetBaseTargetingType;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.PlayerUtil;
-import codechicken.lib.vec.Rectangle4i;
-import codechicken.nei.VisiblityData;
-import codechicken.nei.api.INEIGuiHandler;
-import codechicken.nei.api.TaggedInventoryArea;
-import cpw.mods.fml.common.Optional;
 
 /**
  * Created by nico on 6/4/15.

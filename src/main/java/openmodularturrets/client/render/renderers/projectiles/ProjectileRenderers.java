@@ -2,9 +2,9 @@ package openmodularturrets.client.render.renderers.projectiles;
 
 import net.minecraft.client.renderer.entity.RenderSnowball;
 
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import openmodularturrets.entity.projectiles.*;
 import openmodularturrets.items.Items;
-import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ProjectileRenderers {
 
