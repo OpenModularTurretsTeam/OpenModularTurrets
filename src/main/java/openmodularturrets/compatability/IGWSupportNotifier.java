@@ -1,6 +1,6 @@
 package openmodularturrets.compatability;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.File;
 import java.net.URL;
 import java.net.URLConnection;

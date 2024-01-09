@@ -4,11 +4,11 @@ import java.util.logging.Logger;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import openmodularturrets.reference.ModInfo;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import dan200.computercraft.api.ComputerCraftAPI;
+import openmodularturrets.reference.ModInfo;
 
 /**
  * Created by Keridos on 23/01/2015. This Class

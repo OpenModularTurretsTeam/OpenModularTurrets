@@ -3,11 +3,11 @@ package openmodularturrets.client.render.renderers.items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
+import org.lwjgl.opengl.GL11;
+
 import openmodularturrets.client.render.models.ModelMachineGun;
 import openmodularturrets.client.render.renderers.blockitem.MachineGunTurretRenderer;
 import openmodularturrets.tileentity.turrets.GunTurretTileEntity;
-
-import org.lwjgl.opengl.GL11;
 
 class MachineGunTurretItemRenderer implements IItemRenderer {
 

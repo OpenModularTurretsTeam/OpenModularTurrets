@@ -6,14 +6,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
-import openmodularturrets.entity.projectiles.RocketProjectile;
-import openmodularturrets.reference.ModInfo;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import openmodularturrets.entity.projectiles.RocketProjectile;
+import openmodularturrets.reference.ModInfo;
 
 @SideOnly(Side.CLIENT)
 class RocketRenderer extends Render {

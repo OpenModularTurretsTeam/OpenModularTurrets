@@ -2,10 +2,10 @@ package openmodularturrets.compatability;
 
 import net.minecraft.world.World;
 
-import openmodularturrets.tileentity.turretbase.TurretBase;
 import cpw.mods.fml.common.Optional;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 
 /**
  * Created by Keridos on 05/02/2016. This Class

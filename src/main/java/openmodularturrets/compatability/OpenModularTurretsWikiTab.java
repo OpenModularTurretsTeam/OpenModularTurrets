@@ -3,10 +3,10 @@ package openmodularturrets.compatability;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 
-import openmodularturrets.blocks.Blocks;
-import openmodularturrets.handler.ConfigHandler;
 import igwmod.gui.GuiWiki;
 import igwmod.gui.tabs.BaseWikiTab;
+import openmodularturrets.blocks.Blocks;
+import openmodularturrets.handler.ConfigHandler;
 
 /**
  * Created by Keridos on 23/01/2015. This Class

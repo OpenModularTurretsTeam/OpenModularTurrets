@@ -9,12 +9,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import org.lwjgl.opengl.GL11;
+
 import openmodularturrets.client.gui.containers.TurretBaseTierTwoContainer;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierTwoTileEntity;
-
-import org.lwjgl.opengl.GL11;
 
 public class TurretBaseTierTwoGui extends TurretBaseAbstractGui {
 

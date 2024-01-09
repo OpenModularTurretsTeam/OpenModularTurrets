@@ -2,11 +2,25 @@ package openmodularturrets.items;
 
 import net.minecraft.item.Item;
 
-import openmodularturrets.compatability.ModCompatibility;
-import openmodularturrets.items.addons.*;
-import openmodularturrets.items.ammo.*;
-import openmodularturrets.items.upgrades.*;
 import cpw.mods.fml.common.registry.GameRegistry;
+import openmodularturrets.compatability.ModCompatibility;
+import openmodularturrets.items.addons.ConcealerAddonItem;
+import openmodularturrets.items.addons.DamageAmpAddonItem;
+import openmodularturrets.items.addons.PotentiaAddonItem;
+import openmodularturrets.items.addons.RecyclerAddonItem;
+import openmodularturrets.items.addons.RedstoneReactorAddonItem;
+import openmodularturrets.items.addons.SerialPortAddonItem;
+import openmodularturrets.items.addons.SolarPanelAddonItem;
+import openmodularturrets.items.ammo.BlazingClayAmmoItem;
+import openmodularturrets.items.ammo.BulletAmmoItem;
+import openmodularturrets.items.ammo.FerroSlugItem;
+import openmodularturrets.items.ammo.GrenadeAmmoItem;
+import openmodularturrets.items.ammo.RocketAmmoItem;
+import openmodularturrets.items.upgrades.AccuracyUpgradeItem;
+import openmodularturrets.items.upgrades.EfficiencyUpgradeItem;
+import openmodularturrets.items.upgrades.FireRateUpgradeItem;
+import openmodularturrets.items.upgrades.RangeUpgradeItem;
+import openmodularturrets.items.upgrades.ScattershotUpgradeItem;
 
 public class Items {
 

@@ -1,7 +1,7 @@
 package openmodularturrets.compatability;
 
-import openmodularturrets.blocks.Blocks;
 import igwmod.api.WikiRegistry;
+import openmodularturrets.blocks.Blocks;
 
 /**
  * Created by Keridos on 23/01/2015. This Class

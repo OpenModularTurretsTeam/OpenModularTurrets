@@ -13,15 +13,20 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
+import org.lwjgl.opengl.GL11;
+
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.client.gui.containers.ConfigContainer;
 import openmodularturrets.handler.NetworkingHandler;
-import openmodularturrets.network.messages.*;
+import openmodularturrets.network.messages.MessageAddTrustedPlayer;
+import openmodularturrets.network.messages.MessageModifyPermissions;
+import openmodularturrets.network.messages.MessageRemoveTrustedPlayer;
+import openmodularturrets.network.messages.MessageToggleAttackMobs;
+import openmodularturrets.network.messages.MessageToggleAttackNeutralMobs;
+import openmodularturrets.network.messages.MessageToggleAttackPlayers;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.PlayerUtil;
-
-import org.lwjgl.opengl.GL11;
 
 public class ConfigureGui extends GuiContainer {
 

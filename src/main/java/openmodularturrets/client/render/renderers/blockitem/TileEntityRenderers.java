@@ -1,11 +1,29 @@
 package openmodularturrets.client.render.renderers.blockitem;
 
-import openmodularturrets.tileentity.LeverTileEntity;
-import openmodularturrets.tileentity.expander.*;
-import openmodularturrets.tileentity.turrets.*;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import openmodularturrets.tileentity.LeverTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderInvTierFiveTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderInvTierFourTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderInvTierOneTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderInvTierThreeTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderInvTierTwoTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderPowerTierFiveTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderPowerTierFourTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderPowerTierOneTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderPowerTierThreeTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderPowerTierTwoTileEntity;
+import openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
+import openmodularturrets.tileentity.turrets.GrenadeLauncherTurretTileEntity;
+import openmodularturrets.tileentity.turrets.GunTurretTileEntity;
+import openmodularturrets.tileentity.turrets.IncendiaryTurretTileEntity;
+import openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
+import openmodularturrets.tileentity.turrets.PotatoCannonTurretTileEntity;
+import openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
+import openmodularturrets.tileentity.turrets.RelativisticTurretTileEntity;
+import openmodularturrets.tileentity.turrets.RocketTurretTileEntity;
+import openmodularturrets.tileentity.turrets.TeleporterTurretTileEntity;
 
 public class TileEntityRenderers {
 

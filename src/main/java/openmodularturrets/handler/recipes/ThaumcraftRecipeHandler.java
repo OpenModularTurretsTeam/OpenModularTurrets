@@ -2,8 +2,8 @@ package openmodularturrets.handler.recipes;
 
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import openmodularturrets.items.Items;
 import cpw.mods.fml.common.registry.GameRegistry;
+import openmodularturrets.items.Items;
 
 class ThaumcraftRecipeHandler {
 

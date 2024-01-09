@@ -1,11 +1,11 @@
 // Add your dependencies here
 
 dependencies {
-    compile("curse.maven:cofh-lib-220333:2388748")
+    implementation("curse.maven:cofh-lib-220333:2388748")
 
-    compileOnly 'com.github.GTNewHorizons:waila:1.5.18:dev'
-    compileOnly 'com.github.GTNewHorizons:NotEnoughItems:2.2.6-GTNH:dev'
-    compileOnly 'com.github.GTNewHorizons:OpenComputers:1.7.5.23-GTNH:dev'
+    compileOnly 'com.github.GTNewHorizons:waila:1.6.5:dev'
+    compileOnly 'com.github.GTNewHorizons:NotEnoughItems:2.5.3-GTNH:dev'
+    compileOnly 'com.github.GTNewHorizons:OpenComputers:1.10.5-GTNH:dev'
 
     compileOnly 'net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev'
     compileOnly('igwmod:IGW-Mod-1.7.10:1.1.12-34:userdev') {transitive=false}

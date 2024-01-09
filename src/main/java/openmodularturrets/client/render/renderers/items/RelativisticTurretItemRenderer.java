@@ -3,11 +3,11 @@ package openmodularturrets.client.render.renderers.items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
+import org.lwjgl.opengl.GL11;
+
 import openmodularturrets.client.render.models.ModelRelativisticTurret;
 import openmodularturrets.client.render.renderers.blockitem.RelativisticTurretRenderer;
 import openmodularturrets.tileentity.turrets.RelativisticTurretTileEntity;
-
-import org.lwjgl.opengl.GL11;
 
 class RelativisticTurretItemRenderer implements IItemRenderer {
 

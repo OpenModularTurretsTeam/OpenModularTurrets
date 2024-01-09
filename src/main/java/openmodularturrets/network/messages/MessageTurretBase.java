@@ -8,14 +8,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import openmodularturrets.ModularTurrets;
-import openmodularturrets.tileentity.turretbase.TrustedPlayer;
-import openmodularturrets.tileentity.turretbase.TurretBase;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
+import openmodularturrets.ModularTurrets;
+import openmodularturrets.tileentity.turretbase.TrustedPlayer;
+import openmodularturrets.tileentity.turretbase.TurretBase;
 
 /**
  * Created by Keridos on 05.10.14. This Class is the Message that the electric floodlights TileEntity uses.

@@ -1,7 +1,7 @@
 package openmodularturrets.tileentity.turretbase;
 
-import openmodularturrets.handler.ConfigHandler;
 import cpw.mods.fml.common.Optional;
+import openmodularturrets.handler.ConfigHandler;
 
 public class TurretBaseTierTwoTileEntity extends TurretBase {
 

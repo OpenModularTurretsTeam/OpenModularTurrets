@@ -3,10 +3,10 @@ package openmodularturrets.items;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 
-import openmodularturrets.reference.ModInfo;
-import openmodularturrets.reference.Names;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import openmodularturrets.reference.ModInfo;
+import openmodularturrets.reference.Names;
 
 class GrenadeThrowableItem extends Item {
 

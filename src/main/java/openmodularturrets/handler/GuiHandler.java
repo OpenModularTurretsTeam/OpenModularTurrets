@@ -4,11 +4,28 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import openmodularturrets.client.gui.*;
-import openmodularturrets.client.gui.containers.*;
-import openmodularturrets.tileentity.expander.AbstractInvExpander;
-import openmodularturrets.tileentity.turretbase.*;
 import cpw.mods.fml.common.network.IGuiHandler;
+import openmodularturrets.client.gui.ConfigureGui;
+import openmodularturrets.client.gui.ExpanderInvGui;
+import openmodularturrets.client.gui.TurretBaseTierFiveGui;
+import openmodularturrets.client.gui.TurretBaseTierFourGui;
+import openmodularturrets.client.gui.TurretBaseTierOneGui;
+import openmodularturrets.client.gui.TurretBaseTierThreeGui;
+import openmodularturrets.client.gui.TurretBaseTierTwoGui;
+import openmodularturrets.client.gui.containers.ConfigContainer;
+import openmodularturrets.client.gui.containers.ExpanderInvContainer;
+import openmodularturrets.client.gui.containers.TurretBaseTierFiveContainer;
+import openmodularturrets.client.gui.containers.TurretBaseTierFourContainer;
+import openmodularturrets.client.gui.containers.TurretBaseTierOneContainer;
+import openmodularturrets.client.gui.containers.TurretBaseTierThreeContainer;
+import openmodularturrets.client.gui.containers.TurretBaseTierTwoContainer;
+import openmodularturrets.tileentity.expander.AbstractInvExpander;
+import openmodularturrets.tileentity.turretbase.TurretBase;
+import openmodularturrets.tileentity.turretbase.TurretBaseTierFiveTileEntity;
+import openmodularturrets.tileentity.turretbase.TurretBaseTierFourTileEntity;
+import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
+import openmodularturrets.tileentity.turretbase.TurretBaseTierThreeTileEntity;
+import openmodularturrets.tileentity.turretbase.TurretBaseTierTwoTileEntity;
 
 public class GuiHandler implements IGuiHandler {
 
