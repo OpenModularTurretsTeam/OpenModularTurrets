@@ -1,6 +1,9 @@
 package openmodularturrets.tileentity.turretbase;
 
-import static openmodularturrets.util.PlayerUtil.*;
+import static openmodularturrets.util.PlayerUtil.getPlayerNameFromUUID;
+import static openmodularturrets.util.PlayerUtil.getPlayerUIDUnstable;
+import static openmodularturrets.util.PlayerUtil.getPlayerUUID;
+import static openmodularturrets.util.PlayerUtil.isPlayerNameValid;
 
 import java.util.ArrayList;
 import java.util.HashMap;

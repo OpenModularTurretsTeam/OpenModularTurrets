@@ -3,7 +3,12 @@ package openmodularturrets.client.render.renderers.projectiles;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import openmodularturrets.entity.projectiles.*;
+import openmodularturrets.entity.projectiles.BlazingClayProjectile;
+import openmodularturrets.entity.projectiles.BulletProjectile;
+import openmodularturrets.entity.projectiles.DisposableTurretProjectile;
+import openmodularturrets.entity.projectiles.GrenadeProjectile;
+import openmodularturrets.entity.projectiles.LaserProjectile;
+import openmodularturrets.entity.projectiles.RocketProjectile;
 import openmodularturrets.items.Items;
 
 public class ProjectileRenderers {

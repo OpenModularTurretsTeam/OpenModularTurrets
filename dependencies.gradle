@@ -1,7 +1,7 @@
 // Add your dependencies here
 
 dependencies {
-    compile("curse.maven:cofh-lib-220333:2388748")
+    implementation("curse.maven:cofh-lib-220333:2388748")
 
     compileOnly 'com.github.GTNewHorizons:waila:1.6.5:dev'
     compileOnly 'com.github.GTNewHorizons:NotEnoughItems:2.5.3-GTNH:dev'

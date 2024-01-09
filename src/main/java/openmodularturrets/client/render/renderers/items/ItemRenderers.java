@@ -6,8 +6,26 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import openmodularturrets.blocks.Blocks;
 import openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
 import openmodularturrets.tileentity.LeverTileEntity;
-import openmodularturrets.tileentity.expander.*;
-import openmodularturrets.tileentity.turrets.*;
+import openmodularturrets.tileentity.expander.ExpanderInvTierFiveTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderInvTierFourTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderInvTierOneTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderInvTierThreeTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderInvTierTwoTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderPowerTierFiveTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderPowerTierFourTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderPowerTierOneTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderPowerTierThreeTileEntity;
+import openmodularturrets.tileentity.expander.ExpanderPowerTierTwoTileEntity;
+import openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
+import openmodularturrets.tileentity.turrets.GrenadeLauncherTurretTileEntity;
+import openmodularturrets.tileentity.turrets.GunTurretTileEntity;
+import openmodularturrets.tileentity.turrets.IncendiaryTurretTileEntity;
+import openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
+import openmodularturrets.tileentity.turrets.PotatoCannonTurretTileEntity;
+import openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
+import openmodularturrets.tileentity.turrets.RelativisticTurretTileEntity;
+import openmodularturrets.tileentity.turrets.RocketTurretTileEntity;
+import openmodularturrets.tileentity.turrets.TeleporterTurretTileEntity;
 
 public class ItemRenderers {
 
