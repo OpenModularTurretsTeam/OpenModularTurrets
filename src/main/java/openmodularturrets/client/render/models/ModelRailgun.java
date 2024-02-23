@@ -5,6 +5,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelRailgun extends ModelBase {
+
     // fields
     public final ModelRenderer Base;
     private final ModelRenderer BarrelTop;

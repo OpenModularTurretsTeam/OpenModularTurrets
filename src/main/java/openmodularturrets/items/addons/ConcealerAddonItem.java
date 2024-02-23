@@ -1,18 +1,20 @@
 package openmodularturrets.items.addons;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
-import java.util.List;
-
 public class ConcealerAddonItem extends AddonItem {
+
     public ConcealerAddonItem() {
         super();
 

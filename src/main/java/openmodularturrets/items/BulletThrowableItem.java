@@ -1,13 +1,15 @@
 package openmodularturrets.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
 class BulletThrowableItem extends Item {
+
     public BulletThrowableItem() {
         super();
         this.setUnlocalizedName(Names.Items.unlocalisedBulletThrowableItem);

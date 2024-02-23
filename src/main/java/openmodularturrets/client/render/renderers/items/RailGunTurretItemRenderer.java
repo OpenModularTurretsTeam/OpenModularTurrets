@@ -2,17 +2,21 @@ package openmodularturrets.client.render.renderers.items;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
+import org.lwjgl.opengl.GL11;
+
 import openmodularturrets.client.render.models.ModelLaserTurret;
 import openmodularturrets.client.render.renderers.blockitem.RailGunTurretRenderer;
 import openmodularturrets.tileentity.turrets.RailGunTurretTileEntity;
-import org.lwjgl.opengl.GL11;
 
 class RailGunTurretItemRenderer implements IItemRenderer {
+
     private final RailGunTurretRenderer railGunTurretRenderer;
     private final RailGunTurretTileEntity railGunTurretTileEntity;
     private final ModelLaserTurret model;
 
-    public RailGunTurretItemRenderer(RailGunTurretRenderer railGunTurretRenderer, RailGunTurretTileEntity railGunTurretTileEntity) {
+    public RailGunTurretItemRenderer(RailGunTurretRenderer railGunTurretRenderer,
+            RailGunTurretTileEntity railGunTurretTileEntity) {
         this.railGunTurretRenderer = railGunTurretRenderer;
         this.railGunTurretTileEntity = railGunTurretTileEntity;
 

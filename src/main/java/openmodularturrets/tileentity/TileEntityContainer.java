@@ -5,10 +5,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 /**
- * Created by Keridos on 05/12/2015.
- * This Class
+ * Created by Keridos on 05/12/2015. This Class
  */
 public class TileEntityContainer extends TileEntityOMT implements IInventory {
+
     protected ItemStack[] inv;
 
     @Override
@@ -71,18 +71,15 @@ public class TileEntityContainer extends TileEntityOMT implements IInventory {
     }
 
     @Override
-    public void openInventory() {
-    }
+    public void openInventory() {}
 
     @Override
-    public void closeInventory() {
-    }
+    public void closeInventory() {}
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.getDistanceSq(xCoord + 0.5,
-                                                                                              yCoord + 0.5,
-                                                                                              zCoord + 0.5) < 64;
+        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this
+                && player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
     }
 
     @Override

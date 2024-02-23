@@ -11,6 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.blocks.util.BlockAbstract;
 import openmodularturrets.reference.ModInfo;
@@ -19,6 +20,7 @@ import openmodularturrets.tileentity.LeverTileEntity;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 
 public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
+
     public LeverBlock() {
         super(Material.rock);
         this.setBlockName(Names.Blocks.unlocalisedLever);
@@ -41,14 +43,15 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
 
     @Override
     public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-        return (world.getTileEntity(x + 1, y, z) instanceof TurretBaseTierOneTileEntity ||
-                world.getTileEntity(x - 1, y, z) instanceof TurretBaseTierOneTileEntity ||
-                world.getTileEntity(x, y, z + 1) instanceof TurretBaseTierOneTileEntity ||
-                world.getTileEntity(x, y, z - 1) instanceof TurretBaseTierOneTileEntity);
+        return (world.getTileEntity(x + 1, y, z) instanceof TurretBaseTierOneTileEntity
+                || world.getTileEntity(x - 1, y, z) instanceof TurretBaseTierOneTileEntity
+                || world.getTileEntity(x, y, z + 1) instanceof TurretBaseTierOneTileEntity
+                || world.getTileEntity(x, y, z - 1) instanceof TurretBaseTierOneTileEntity);
     }
 
     @Override
-    public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
+    public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase,
+            ItemStack par6ItemStack) {
         float l = 0;
         if (par1World.getTileEntity(par2 + 1, par3, par4) instanceof TurretBaseTierOneTileEntity) {
             l = 270F;
@@ -67,12 +70,13 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
     }
 
     @Override
-    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9) {
+    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer,
+            int par6, float par7, float par8, float par9) {
         TurretBaseTierOneTileEntity base;
         LeverTileEntity lever = (LeverTileEntity) par1World.getTileEntity(par2, par3, par4);
 
-        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 0 && par1World.getTileEntity(par2, par3,
-                                                                                                par4 + 1) instanceof TurretBaseTierOneTileEntity) {
+        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 0
+                && par1World.getTileEntity(par2, par3, par4 + 1) instanceof TurretBaseTierOneTileEntity) {
             base = (TurretBaseTierOneTileEntity) par1World.getTileEntity(par2, par3, par4 + 1);
             if (base != null) {
                 lever.isTurning = true;
@@ -83,8 +87,8 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
             }
         }
 
-        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 90 && par1World.getTileEntity(par2 - 1, par3,
-                                                                                                 par4) instanceof TurretBaseTierOneTileEntity) {
+        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 90
+                && par1World.getTileEntity(par2 - 1, par3, par4) instanceof TurretBaseTierOneTileEntity) {
             base = (TurretBaseTierOneTileEntity) par1World.getTileEntity(par2 - 1, par3, par4);
             if (base != null) {
                 lever.isTurning = true;
@@ -95,8 +99,8 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
             }
         }
 
-        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 180 && par1World.getTileEntity(par2, par3,
-                                                                                                  par4 - 1) instanceof TurretBaseTierOneTileEntity) {
+        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 180
+                && par1World.getTileEntity(par2, par3, par4 - 1) instanceof TurretBaseTierOneTileEntity) {
             base = (TurretBaseTierOneTileEntity) par1World.getTileEntity(par2, par3, par4 - 1);
             if (base != null) {
                 lever.isTurning = true;
@@ -107,8 +111,8 @@ public class LeverBlock extends BlockAbstract implements ITileEntityProvider {
             }
         }
 
-        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 270 && par1World.getTileEntity(par2 + 1, par3,
-                                                                                                  par4) instanceof TurretBaseTierOneTileEntity) {
+        if ((par1World.getBlockMetadata(par2, par3, par4) * 90) == 270
+                && par1World.getTileEntity(par2 + 1, par3, par4) instanceof TurretBaseTierOneTileEntity) {
             base = (TurretBaseTierOneTileEntity) par1World.getTileEntity(par2 + 1, par3, par4);
             if (base != null) {
                 lever.isTurning = true;

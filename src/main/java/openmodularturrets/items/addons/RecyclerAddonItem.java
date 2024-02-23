@@ -1,19 +1,21 @@
 package openmodularturrets.items.addons;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
-import java.util.List;
-
 public class RecyclerAddonItem extends AddonItem {
+
     public RecyclerAddonItem() {
         super();
 
@@ -33,10 +35,14 @@ public class RecyclerAddonItem extends AddonItem {
         p_77624_3_.add(StatCollector.translateToLocal("turret.addon.recycler.1"));
         p_77624_3_.add(StatCollector.translateToLocal("turret.addon.recycler.2"));
         p_77624_3_.add("");
-        p_77624_3_.add(StatCollector.translateToLocal(
-                "turret.addon.recycler.3") + " " + ConfigHandler.getRecyclerNegateChance() + "%");
-        p_77624_3_.add(StatCollector.translateToLocal(
-                "turret.addon.recycler.4") + " " + ConfigHandler.getRecyclerAddChance() + "%");
+        p_77624_3_.add(
+                StatCollector.translateToLocal("turret.addon.recycler.3") + " "
+                        + ConfigHandler.getRecyclerNegateChance()
+                        + "%");
+        p_77624_3_.add(
+                StatCollector.translateToLocal("turret.addon.recycler.4") + " "
+                        + ConfigHandler.getRecyclerAddChance()
+                        + "%");
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("turret.addon.recycler.flavour"));
     }

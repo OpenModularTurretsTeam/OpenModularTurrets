@@ -9,7 +9,8 @@ public class DoubleEditorType extends EditorType {
     private double maxValue;
     private double minValue;
 
-    public DoubleEditorType(String fieldName, double fieldValue, String displayName, String displayDescription, int fieldPrecision, double maxValue, double minValue) throws Exception {
+    public DoubleEditorType(String fieldName, double fieldValue, String displayName, String displayDescription,
+            int fieldPrecision, double maxValue, double minValue) throws Exception {
         super(EditorTypes.DOUBLE);
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;

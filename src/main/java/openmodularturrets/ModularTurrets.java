@@ -1,5 +1,7 @@
 package openmodularturrets;
 
+import net.minecraft.creativetab.CreativeTabs;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -9,23 +11,35 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import net.minecraft.creativetab.CreativeTabs;
 import openmodularturrets.blocks.Blocks;
 import openmodularturrets.client.gui.ModularTurretsTab;
 import openmodularturrets.compatability.ModCompatibility;
-import openmodularturrets.handler.*;
+import openmodularturrets.handler.ConfigHandler;
+import openmodularturrets.handler.DungeonLootHandler;
+import openmodularturrets.handler.GuiHandler;
+import openmodularturrets.handler.NetworkingHandler;
+import openmodularturrets.handler.ProjectileEntityHandler;
+import openmodularturrets.handler.TileEntityHandler;
 import openmodularturrets.handler.recipes.RecipeHandler;
 import openmodularturrets.items.Items;
 import openmodularturrets.proxy.CommonProxy;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.util.CommandChangeOwner;
 
-@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = "1.7.10", dependencies = ModInfo.DEPENDENCIES)
+@Mod(
+        modid = ModInfo.ID,
+        name = ModInfo.NAME,
+        version = ModInfo.VERSION,
+        acceptedMinecraftVersions = "1.7.10",
+        dependencies = ModInfo.DEPENDENCIES)
 public class ModularTurrets {
+
     @Instance(ModInfo.ID)
     public static ModularTurrets instance;
 
-    @SidedProxy(clientSide = "openmodularturrets.proxy.ClientProxy", serverSide = "openmodularturrets.proxy" + "" + ".CommonProxy")
+    @SidedProxy(
+            clientSide = "openmodularturrets.proxy.ClientProxy",
+            serverSide = "openmodularturrets.proxy" + "" + ".CommonProxy")
     public static CommonProxy proxy;
 
     public static CreativeTabs modularTurretsTab;

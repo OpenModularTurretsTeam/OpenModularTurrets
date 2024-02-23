@@ -4,12 +4,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import openmodularturrets.entity.projectiles.RocketProjectile;
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.items.Items;
 
 public class RocketTurretTileEntity extends TurretHead {
+
     public RocketTurretTileEntity() {
         super();
         this.turretTier = 4;

@@ -1,12 +1,14 @@
 package openmodularturrets.items.ammo;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.reference.Names;
 
 public class BlazingClayAmmoItem extends AmmoItem {
+
     public BlazingClayAmmoItem() {
         super();
 

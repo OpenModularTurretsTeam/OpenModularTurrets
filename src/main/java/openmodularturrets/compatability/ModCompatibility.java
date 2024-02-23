@@ -1,18 +1,20 @@
 package openmodularturrets.compatability;
 
+import java.util.logging.Logger;
+
+import net.minecraft.nbt.NBTTagCompound;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import dan200.computercraft.api.ComputerCraftAPI;
-import net.minecraft.nbt.NBTTagCompound;
 import openmodularturrets.reference.ModInfo;
-
-import java.util.logging.Logger;
 
 /**
  * Created by Keridos on 23/01/2015. This Class
  */
 public class ModCompatibility {
+
     public static boolean IGWModLoaded = false;
     public static boolean ThermalExpansionLoaded = false;
     public static boolean EnderIOLoaded = false;
@@ -67,8 +69,8 @@ public class ModCompatibility {
     }
 
     public static void performModCompat() {
-        FMLInterModComms.sendMessage("Waila", "register",
-                                     "openmodularturrets.compatability.WailaTileHandler.callbackRegister");
+        FMLInterModComms
+                .sendMessage("Waila", "register", "openmodularturrets.compatability.WailaTileHandler.callbackRegister");
         addVersionCheckerInfo();
         if (ComputercraftLoaded) {
             registerCCCompat();

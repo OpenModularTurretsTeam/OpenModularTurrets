@@ -4,9 +4,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+
 import openmodularturrets.tileentity.turretbase.TurretBaseTierOneTileEntity;
 
 public class LeverTileEntity extends TileEntity {
+
     public float rotation = 0;
     public boolean isTurning = false;
     private TurretBaseTierOneTileEntity base;

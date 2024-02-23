@@ -4,6 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
 public class ModelPotatoCannonTurret extends ModelBase {
+
     // fields
     public final ModelRenderer Base;
     public final ModelRenderer Pole;

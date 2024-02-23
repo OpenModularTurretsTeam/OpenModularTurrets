@@ -1,17 +1,19 @@
 package openmodularturrets.items.blocks;
 
+import java.text.DecimalFormat;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+
 import openmodularturrets.handler.ConfigHandler;
 
-import java.text.DecimalFormat;
-import java.util.List;
-
 public class ItemBlockMachineGunTurret extends ItemBlock {
+
     private static final DecimalFormat df = new DecimalFormat("0.0");
 
     public ItemBlockMachineGunTurret(Block p_i45328_1_) {
@@ -23,25 +25,41 @@ public class ItemBlockMachineGunTurret extends ItemBlock {
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.GOLD + "--" + StatCollector.translateToLocal("tooltip.info") + "--");
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.tier") + ": " + EnumChatFormatting.WHITE + "2");
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.range") + ": " + EnumChatFormatting.WHITE +
-                               ConfigHandler.getGunTurretSettings().getRange());
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.accuracy") + ": " + EnumChatFormatting.WHITE +
-                               StatCollector.translateToLocal("turret.accuracy.medium"));
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.ammo") + ": " + EnumChatFormatting.WHITE +
-                               StatCollector.translateToLocal("turret.ammo.1"));
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.tierRequired") + ": " + EnumChatFormatting.WHITE +
-                               StatCollector.translateToLocal("base.tier.2"));
+        p_77624_3_.add(
+                StatCollector.translateToLocal("tooltip.range") + ": "
+                        + EnumChatFormatting.WHITE
+                        + ConfigHandler.getGunTurretSettings().getRange());
+        p_77624_3_.add(
+                StatCollector.translateToLocal("tooltip.accuracy") + ": "
+                        + EnumChatFormatting.WHITE
+                        + StatCollector.translateToLocal("turret.accuracy.medium"));
+        p_77624_3_.add(
+                StatCollector.translateToLocal("tooltip.ammo") + ": "
+                        + EnumChatFormatting.WHITE
+                        + StatCollector.translateToLocal("turret.ammo.1"));
+        p_77624_3_.add(
+                StatCollector.translateToLocal("tooltip.tierRequired") + ": "
+                        + EnumChatFormatting.WHITE
+                        + StatCollector.translateToLocal("base.tier.2"));
         p_77624_3_.add("");
         p_77624_3_.add(
                 EnumChatFormatting.DARK_PURPLE + "--" + StatCollector.translateToLocal("tooltip.damage.label") + "--");
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.damage.stat") + ": " + EnumChatFormatting.WHITE +
-                               (ConfigHandler.getGunTurretSettings().getDamage() / 2F) + " " + StatCollector.translateToLocal(
-                "tooltip.health"));
+        p_77624_3_.add(
+                StatCollector.translateToLocal("tooltip.damage.stat") + ": "
+                        + EnumChatFormatting.WHITE
+                        + (ConfigHandler.getGunTurretSettings().getDamage() / 2F)
+                        + " "
+                        + StatCollector.translateToLocal("tooltip.health"));
         p_77624_3_.add(StatCollector.translateToLocal("tooltip.aoe") + ": " + EnumChatFormatting.WHITE + "0");
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.firerate") + ": " + EnumChatFormatting.WHITE + df.format(
-                20.0F / ConfigHandler.getGunTurretSettings().getFireRate()));
-        p_77624_3_.add(StatCollector.translateToLocal("tooltip.energy.stat") + ": " + EnumChatFormatting.WHITE +
-                               ConfigHandler.getGunTurretSettings().getPowerUsage() + " RF");
+        p_77624_3_.add(
+                StatCollector.translateToLocal("tooltip.firerate") + ": "
+                        + EnumChatFormatting.WHITE
+                        + df.format(20.0F / ConfigHandler.getGunTurretSettings().getFireRate()));
+        p_77624_3_.add(
+                StatCollector.translateToLocal("tooltip.energy.stat") + ": "
+                        + EnumChatFormatting.WHITE
+                        + ConfigHandler.getGunTurretSettings().getPowerUsage()
+                        + " RF");
         p_77624_3_.add("");
         p_77624_3_.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("flavour.turret.1"));
     }

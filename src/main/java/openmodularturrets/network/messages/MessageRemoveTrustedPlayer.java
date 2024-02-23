@@ -1,24 +1,27 @@
 package openmodularturrets.network.messages;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.PlayerUtil;
 
 public class MessageRemoveTrustedPlayer implements IMessage {
+
     private int x, y, z;
     private String player;
 
-    public MessageRemoveTrustedPlayer() {
-    }
+    public MessageRemoveTrustedPlayer() {}
 
-    public static class MessageHandlerRemoveTrustedPlayer implements IMessageHandler<MessageRemoveTrustedPlayer, IMessage> {
+    public static class MessageHandlerRemoveTrustedPlayer
+            implements IMessageHandler<MessageRemoveTrustedPlayer, IMessage> {
+
         @Override
         public IMessage onMessage(MessageRemoveTrustedPlayer message, MessageContext ctx) {
             World world = ctx.getServerHandler().playerEntity.getEntityWorld();

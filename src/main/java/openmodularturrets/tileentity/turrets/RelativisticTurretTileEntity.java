@@ -9,12 +9,14 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import openmodularturrets.entity.projectiles.TurretProjectile;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.util.TurretHeadUtil;
 
 public class RelativisticTurretTileEntity extends TurretHead {
+
     public RelativisticTurretTileEntity() {
         super();
         this.turretTier = 3;
@@ -46,15 +48,16 @@ public class RelativisticTurretTileEntity extends TurretHead {
             concealmentChecks();
             TurretHeadUtil.updateSolarPanelAddon(base);
 
-            //turret tick rate;
+            // turret tick rate;
             if (target == null && targetingTicks < ConfigHandler.getTurretTargetSearchTicks()) {
                 targetingTicks++;
                 return;
             }
             targetingTicks = 0;
 
-            int power_required = Math.round(this.getTurretPowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(
-                    base)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
+            int power_required = Math.round(
+                    this.getTurretPowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(base))
+                            * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
 
             // power check
             if ((base.getEnergyStored(ForgeDirection.UNKNOWN) < power_required) || (!base.isActive())) {
@@ -62,8 +65,9 @@ public class RelativisticTurretTileEntity extends TurretHead {
             }
 
             // is there a target, and Has it died in the previous tick?
-            if (target == null || target.isDead || this.getWorldObj().getEntityByID(
-                    target.getEntityId()) == null || ((EntityLivingBase) target).getHealth() <= 0.0F) {
+            if (target == null || target.isDead
+                    || this.getWorldObj().getEntityByID(target.getEntityId()) == null
+                    || ((EntityLivingBase) target).getHealth() <= 0.0F) {
                 target = getTargetWithoutEffect();
             }
 
@@ -110,8 +114,13 @@ public class RelativisticTurretTileEntity extends TurretHead {
             target = null;
         }
 
-        this.getWorldObj().playSoundEffect(this.xCoord, this.yCoord, this.zCoord,
-                                           ModInfo.ID + ":" + this.getLaunchSoundEffect(), 0.6F, 1.0F);
+        this.getWorldObj().playSoundEffect(
+                this.xCoord,
+                this.yCoord,
+                this.zCoord,
+                ModInfo.ID + ":" + this.getLaunchSoundEffect(),
+                0.6F,
+                1.0F);
         ticks = 0;
     }
 

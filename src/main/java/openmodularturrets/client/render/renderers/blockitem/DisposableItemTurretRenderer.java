@@ -1,11 +1,14 @@
 package openmodularturrets.client.render.renderers.blockitem;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import openmodularturrets.client.render.models.ModelDamageAmp;
 import openmodularturrets.client.render.models.ModelDisposableItemTurret;
 import openmodularturrets.client.render.models.ModelRedstoneReactor;
@@ -13,9 +16,9 @@ import openmodularturrets.client.render.models.ModelSolarPanelAddon;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turrets.DisposableItemTurretTileEntity;
 import openmodularturrets.util.TurretHeadUtil;
-import org.lwjgl.opengl.GL11;
 
 public class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
+
     private final ModelSolarPanelAddon solar;
     private final ModelDamageAmp amp;
     private final ModelRedstoneReactor reac;
@@ -62,24 +65,24 @@ public class DisposableItemTurretRenderer extends TileEntitySpecialRenderer {
 
         if (turretHead.base != null) {
             if (TurretHeadUtil.hasSolarPanelAddon(turretHead.base)) {
-                ResourceLocation texturesSolar = (new ResourceLocation(ModInfo.ID + ":textures/blocks/solarPanelAddon" +
-                                                                               ".png"));
+                ResourceLocation texturesSolar = (new ResourceLocation(
+                        ModInfo.ID + ":textures/blocks/solarPanelAddon" + ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesSolar);
                 solar.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 solar.renderAll();
             }
 
             if (TurretHeadUtil.hasDamageAmpAddon(turretHead.base)) {
-                ResourceLocation texturesAmp = (new ResourceLocation(ModInfo.ID + ":textures/blocks/damageAmpAddon" +
-                                                                             ".png"));
+                ResourceLocation texturesAmp = (new ResourceLocation(
+                        ModInfo.ID + ":textures/blocks/damageAmpAddon" + ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesAmp);
                 amp.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 amp.renderAll();
             }
 
             if (TurretHeadUtil.hasRedstoneReactor(turretHead.base)) {
-                ResourceLocation texturesReac = (new ResourceLocation(ModInfo.ID + ":textures/blocks/redstoneReactor" +
-                                                                              ".png"));
+                ResourceLocation texturesReac = (new ResourceLocation(
+                        ModInfo.ID + ":textures/blocks/redstoneReactor" + ".png"));
                 Minecraft.getMinecraft().renderEngine.bindTexture(texturesReac);
                 reac.setRotationForTarget(turretHead.rotationXY, turretHead.rotationXZ);
                 reac.renderAll();

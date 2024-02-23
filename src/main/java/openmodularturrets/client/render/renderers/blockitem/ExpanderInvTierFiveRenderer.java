@@ -1,17 +1,20 @@
 package openmodularturrets.client.render.renderers.blockitem;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import openmodularturrets.client.render.models.ModelExpander;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.expander.AbstractInvExpander;
-import org.lwjgl.opengl.GL11;
 
 public class ExpanderInvTierFiveRenderer extends TileEntitySpecialRenderer {
+
     private final ModelExpander model;
 
     public ExpanderInvTierFiveRenderer() {

@@ -5,12 +5,14 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.PlayerUtil;
 import openmodularturrets.util.TurretHeadUtil;
 
 public abstract class TurretProjectile extends EntityThrowable {
+
     public float gravity;
     boolean isAmped;
     int amp_level;
@@ -42,8 +44,8 @@ public abstract class TurretProjectile extends EntityThrowable {
 
     boolean canDamagePlayer(EntityPlayer entityPlayer) {
         if (!ConfigHandler.turretDamageTrustedPlayers) {
-            if (this.turretBase.getTrustedPlayer(entityPlayer.getUniqueID()) != null || PlayerUtil.getPlayerUIDUnstable(
-                    this.turretBase.getOwner()).equals(entityPlayer.getUniqueID())) {
+            if (this.turretBase.getTrustedPlayer(entityPlayer.getUniqueID()) != null
+                    || PlayerUtil.getPlayerUIDUnstable(this.turretBase.getOwner()).equals(entityPlayer.getUniqueID())) {
                 return false;
             }
         }

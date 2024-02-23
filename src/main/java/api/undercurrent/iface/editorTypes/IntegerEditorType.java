@@ -1,4 +1,5 @@
 package api.undercurrent.iface.editorTypes;
+
 /**
  * Created by Niel on 10/16/2015.
  */
@@ -7,7 +8,8 @@ public class IntegerEditorType extends EditorType {
     private int minValue;
     private int maxValue;
 
-    public IntegerEditorType(String fieldName, int fieldValue, String displayName, String displayDescription, int minValue, int maxValue) {
+    public IntegerEditorType(String fieldName, int fieldValue, String displayName, String displayDescription,
+            int minValue, int maxValue) {
         super(EditorTypes.INT);
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;

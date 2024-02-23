@@ -1,19 +1,22 @@
 package openmodularturrets.client.render.renderers.projectiles;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import openmodularturrets.entity.projectiles.RocketProjectile;
-import openmodularturrets.reference.ModInfo;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import openmodularturrets.entity.projectiles.RocketProjectile;
+import openmodularturrets.reference.ModInfo;
+
 @SideOnly(Side.CLIENT)
 class RocketRenderer extends Render {
+
     private static final ResourceLocation rocketTextures = new ResourceLocation(
             ModInfo.ID.toLowerCase() + ":textures/blocks/rocket.png");
 
@@ -22,11 +25,18 @@ class RocketRenderer extends Render {
         GL11.glPushMatrix();
         GL11.glTranslatef((float) par2, (float) par4, (float) par6);
         GL11.glRotatef(
-                par1EntityRocket.prevRotationYaw + (par1EntityRocket.rotationYaw - par1EntityRocket.prevRotationYaw) * par9 - 90.0F,
-                0.0F, 1.0F, 0.0F);
+                par1EntityRocket.prevRotationYaw
+                        + (par1EntityRocket.rotationYaw - par1EntityRocket.prevRotationYaw) * par9
+                        - 90.0F,
+                0.0F,
+                1.0F,
+                0.0F);
         GL11.glRotatef(
-                par1EntityRocket.prevRotationPitch + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch) * par9,
-                0.0F, 0.0F, 1.0F);
+                par1EntityRocket.prevRotationPitch
+                        + (par1EntityRocket.rotationPitch - par1EntityRocket.prevRotationPitch) * par9,
+                0.0F,
+                0.0F,
+                1.0F);
         Tessellator tessellator = Tessellator.instance;
         byte b0 = 0;
         float f2 = 0.0F;

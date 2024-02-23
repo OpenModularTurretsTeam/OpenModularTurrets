@@ -7,11 +7,13 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+
 import openmodularturrets.tileentity.TileEntityContainer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 import openmodularturrets.util.TurretHeadUtil;
 
 public abstract class AbstractInvExpander extends TileEntityContainer {
+
     public float baseFitRotationX;
     public float baseFitRotationZ;
     protected TurretBase base;
@@ -124,12 +126,10 @@ public abstract class AbstractInvExpander extends TileEntityContainer {
         }
     }
 
-
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.getDistanceSq(xCoord + 0.5,
-                                                                                              yCoord + 0.5,
-                                                                                              zCoord + 0.5) < 64;
+        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this
+                && player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
     }
 
     @Override

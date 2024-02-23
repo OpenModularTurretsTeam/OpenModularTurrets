@@ -1,19 +1,25 @@
 package openmodularturrets.util;
 
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import net.minecraft.util.StatCollector;
 
+import cpw.mods.fml.common.registry.GameData;
+import cpw.mods.fml.common.registry.GameRegistry;
+
 /**
- * Created by Keridos on 17.05.2015.
- * This Class
+ * Created by Keridos on 17.05.2015. This Class
  */
 public class GeneralUtil {
+
     public static Item getMinecraftItem(String name) {
         Item item;
         item = GameData.getItemRegistry().getRaw("minecraft:" + name);

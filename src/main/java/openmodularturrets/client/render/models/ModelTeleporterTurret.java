@@ -5,7 +5,8 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelTeleporterTurret extends ModelBase {
-    //fields
+
+    // fields
     public final ModelRenderer Base;
     private final ModelRenderer BaseStand;
     public final ModelRenderer PillarLarge;
@@ -91,6 +92,5 @@ public class ModelTeleporterTurret extends ModelBase {
         Spinner4.render(0.0625F);
     }
 
-    public void setRotationForTarget(float y, float z) {
-    }
+    public void setRotationForTarget(float y, float z) {}
 }

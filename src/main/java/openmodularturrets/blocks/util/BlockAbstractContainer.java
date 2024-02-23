@@ -1,5 +1,7 @@
 package openmodularturrets.blocks.util;
 
+import java.util.Random;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EnumCreatureType;
@@ -9,15 +11,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import openmodularturrets.tileentity.TileEntityContainer;
 
-import java.util.Random;
-
 /**
- * Created by Keridos on 05/12/2015.
- * This Class
+ * Created by Keridos on 05/12/2015. This Class
  */
 public abstract class BlockAbstractContainer extends BlockContainer {
+
     protected BlockAbstractContainer(Material material) {
         super(material);
     }
@@ -41,9 +42,12 @@ public abstract class BlockAbstractContainer extends BlockContainer {
                     float ry = rand.nextFloat() * 0.8F + 0.1F;
                     float rz = rand.nextFloat() * 0.8F + 0.1F;
 
-                    EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz,
-                                                           new ItemStack(item.getItem(), item.stackSize,
-                                                                         item.getItemDamage()));
+                    EntityItem entityItem = new EntityItem(
+                            world,
+                            x + rx,
+                            y + ry,
+                            z + rz,
+                            new ItemStack(item.getItem(), item.stackSize, item.getItemDamage()));
 
                     if (item.hasTagCompound()) {
                         entityItem.getEntityItem().setTagCompound((NBTTagCompound) item.getTagCompound().copy());

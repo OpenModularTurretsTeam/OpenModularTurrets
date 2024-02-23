@@ -6,8 +6,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 /**
- * Created by Keridos on 05/12/2015.
- * This Class
+ * Created by Keridos on 05/12/2015. This Class
  */
 public class TileEntityOMT extends TileEntity {
 

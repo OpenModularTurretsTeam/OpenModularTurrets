@@ -1,20 +1,23 @@
 package openmodularturrets.client.gui;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
+
 import openmodularturrets.client.gui.containers.TurretBaseTierThreeContainer;
 import openmodularturrets.reference.ModInfo;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBaseTierThreeTileEntity;
-import org.lwjgl.opengl.GL11;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class TurretBaseTierThreeGui extends TurretBaseAbstractGui {
+
     public TurretBaseTierThreeGui(InventoryPlayer inventoryPlayer, TurretBaseTierThreeTileEntity tileEntity) {
         super(inventoryPlayer, tileEntity, new TurretBaseTierThreeContainer(inventoryPlayer, tileEntity));
     }
@@ -35,8 +38,10 @@ public class TurretBaseTierThreeGui extends TurretBaseAbstractGui {
         if (mouseX > k + 153 && mouseX < k + 153 + 14) {
             if (mouseY > l + 17 && mouseY < l + 17 + 51) {
                 ArrayList list = new ArrayList();
-                list.add(base.getEnergyStored(ForgeDirection.UNKNOWN) + "/" + base.getMaxEnergyStored(
-                        ForgeDirection.UNKNOWN) + " RF");
+                list.add(
+                        base.getEnergyStored(ForgeDirection.UNKNOWN) + "/"
+                                + base.getMaxEnergyStored(ForgeDirection.UNKNOWN)
+                                + " RF");
                 this.drawHoveringText(list, mouseX - k, mouseY - l, fontRenderer);
             }
         }
@@ -70,8 +75,8 @@ public class TurretBaseTierThreeGui extends TurretBaseAbstractGui {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
         this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
-        int expression = (base.getEnergyStored(ForgeDirection.UNKNOWN) * 51) / base.getMaxEnergyStored(
-                ForgeDirection.UNKNOWN);
+        int expression = (base.getEnergyStored(ForgeDirection.UNKNOWN) * 51)
+                / base.getMaxEnergyStored(ForgeDirection.UNKNOWN);
         drawTexturedModalRect(x + 153, y + 17, 178, 17, 14, 51);
 
         int next = new Random().nextInt(3);

@@ -10,7 +10,8 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
 public class ModelExpander extends ModelBase {
-    //fields
+
+    // fields
     public final ModelRenderer expander;
 
     public ModelExpander() {

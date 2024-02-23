@@ -6,6 +6,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.blocks.util.BlockAbstract;
 import openmodularturrets.reference.ModInfo;
@@ -13,6 +14,7 @@ import openmodularturrets.reference.Names;
 import openmodularturrets.tileentity.expander.ExpanderPowerTierOneTileEntity;
 
 public class BlockExpanderPowerTierOne extends BlockAbstract implements ITileEntityProvider {
+
     public BlockExpanderPowerTierOne() {
         super(Material.rock);
         this.setCreativeTab(ModularTurrets.modularTurretsTab);

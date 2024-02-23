@@ -2,17 +2,21 @@ package openmodularturrets.client.render.renderers.items;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
+import org.lwjgl.opengl.GL11;
+
 import openmodularturrets.client.render.models.ModelIncendiaryTurret;
 import openmodularturrets.client.render.renderers.blockitem.IncendiaryTurretRenderer;
 import openmodularturrets.tileentity.turrets.IncendiaryTurretTileEntity;
-import org.lwjgl.opengl.GL11;
 
 class IncendiaryTurretItemRenderer implements IItemRenderer {
+
     private final IncendiaryTurretRenderer incendiaryTurretRenderer;
     private final IncendiaryTurretTileEntity incendiaryTurretTileEntity;
     private final ModelIncendiaryTurret model;
 
-    public IncendiaryTurretItemRenderer(IncendiaryTurretRenderer incendiaryTurretRenderer, IncendiaryTurretTileEntity incendiaryTurretTileEntity) {
+    public IncendiaryTurretItemRenderer(IncendiaryTurretRenderer incendiaryTurretRenderer,
+            IncendiaryTurretTileEntity incendiaryTurretTileEntity) {
         this.incendiaryTurretRenderer = incendiaryTurretRenderer;
         this.incendiaryTurretTileEntity = incendiaryTurretTileEntity;
 

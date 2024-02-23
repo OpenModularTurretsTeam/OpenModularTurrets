@@ -2,17 +2,21 @@ package openmodularturrets.client.render.renderers.items;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
+import org.lwjgl.opengl.GL11;
+
 import openmodularturrets.client.render.models.ModelLaserTurret;
 import openmodularturrets.client.render.renderers.blockitem.LaserTurretRenderer;
 import openmodularturrets.tileentity.turrets.LaserTurretTileEntity;
-import org.lwjgl.opengl.GL11;
 
 class LaserTurretItemRenderer implements IItemRenderer {
+
     private final LaserTurretRenderer laserTurretRenderer;
     private final LaserTurretTileEntity laserTurretTileEntity;
     private final ModelLaserTurret model;
 
-    public LaserTurretItemRenderer(LaserTurretRenderer laserTurretRenderer, LaserTurretTileEntity laserTurretTileEntity) {
+    public LaserTurretItemRenderer(LaserTurretRenderer laserTurretRenderer,
+            LaserTurretTileEntity laserTurretTileEntity) {
         this.laserTurretRenderer = laserTurretRenderer;
         this.laserTurretTileEntity = laserTurretTileEntity;
 

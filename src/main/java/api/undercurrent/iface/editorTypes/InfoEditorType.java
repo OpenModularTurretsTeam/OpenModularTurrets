@@ -5,7 +5,8 @@ package api.undercurrent.iface.editorTypes;
  */
 public class InfoEditorType extends EditorType {
 
-    public InfoEditorType(String fieldName, String displayName, String displayDescription, String fieldValue) throws Exception {
+    public InfoEditorType(String fieldName, String displayName, String displayDescription, String fieldValue)
+            throws Exception {
         super(EditorTypes.INFO);
         this.fieldName = fieldName;
         this.displayName = displayName;
@@ -34,4 +35,3 @@ public class InfoEditorType extends EditorType {
         return false;
     }
 }
-

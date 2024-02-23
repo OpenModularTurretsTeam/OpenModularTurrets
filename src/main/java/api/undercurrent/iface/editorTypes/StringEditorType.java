@@ -8,7 +8,8 @@ public class StringEditorType extends EditorType {
     private int minLength;
     private int maxLength;
 
-    public StringEditorType(String fieldName, String fieldValue, String displayName, String displayDescription, int minLength, int maxLength) {
+    public StringEditorType(String fieldName, String fieldValue, String displayName, String displayDescription,
+            int minLength, int maxLength) {
         super(EditorTypes.STRING);
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;

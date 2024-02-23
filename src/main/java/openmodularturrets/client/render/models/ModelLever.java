@@ -5,6 +5,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelLever extends ModelBase {
+
     public final ModelRenderer Shape1;
     public final ModelRenderer Shape2;
 

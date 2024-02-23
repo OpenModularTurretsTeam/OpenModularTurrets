@@ -1,5 +1,28 @@
 package openmodularturrets.tileentity.turretbase;
 
+import static openmodularturrets.util.PlayerUtil.getPlayerNameFromUUID;
+import static openmodularturrets.util.PlayerUtil.getPlayerUIDUnstable;
+import static openmodularturrets.util.PlayerUtil.getPlayerUUID;
+import static openmodularturrets.util.PlayerUtil.isPlayerNameValid;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Logger;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.Packet;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import api.undercurrent.iface.IUCTile;
 import api.undercurrent.iface.UCTileDefinition;
 import cofh.api.energy.EnergyStorage;
@@ -16,17 +39,6 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.compatability.ModCompatibility;
 import openmodularturrets.handler.ConfigHandler;
 import openmodularturrets.handler.NetworkingHandler;
@@ -41,29 +53,23 @@ import thaumcraft.api.aspects.IAspectContainer;
 import thaumcraft.api.aspects.IEssentiaTransport;
 import thaumcraft.api.visnet.VisNetHandler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-import java.util.logging.Logger;
-
-import static openmodularturrets.util.PlayerUtil.*;
-
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "ComputerCraft"),
         @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers"),
         @Optional.Interface(iface = "thaumcraft.api.aspects.IAspectContainer", modid = "Thaumcraft"),
         @Optional.Interface(iface = "thaumcraft.api.aspects.IEssentiaTransport", modid = "Thaumcraft"),
-        @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2")})
+        @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2") })
 
-public abstract class TurretBase extends TileEntityContainer implements IEnergyHandler, SimpleComponent, ISidedInventory, IEssentiaTransport, IAspectContainer, IPeripheral, IEnergySink, IUCTile {
+public abstract class TurretBase extends TileEntityContainer implements IEnergyHandler, SimpleComponent,
+        ISidedInventory, IEssentiaTransport, IAspectContainer, IPeripheral, IEnergySink, IUCTile {
+
     public int trustedPlayerIndex = 0;
     public ItemStack camoStack;
 
-    //For concealment
+    // For concealment
     public boolean shouldConcealTurrets;
 
-    //For multiTargeting
+    // For multiTargeting
     private boolean multiTargeting = false;
 
     private final EnergyStorage storage;
@@ -106,21 +112,23 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
             return;
         }
 
-        if (ConfigHandler.getRedstoneReactorAddonGen() < (base.getMaxEnergyStored(
-                ForgeDirection.UNKNOWN) - base.getEnergyStored(ForgeDirection.UNKNOWN))) {
+        if (ConfigHandler.getRedstoneReactorAddonGen()
+                < (base.getMaxEnergyStored(ForgeDirection.UNKNOWN) - base.getEnergyStored(ForgeDirection.UNKNOWN))) {
 
-            //Prioritise redstone blocks
-            ItemStack redstoneBlock = TurretHeadUtil.useSpecificItemStackBlockFromBase(base, new ItemStack(
-                    Blocks.redstone_block));
+            // Prioritise redstone blocks
+            ItemStack redstoneBlock = TurretHeadUtil
+                    .useSpecificItemStackBlockFromBase(base, new ItemStack(Blocks.redstone_block));
 
             if (redstoneBlock == null) {
-                redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(),
+                redstoneBlock = TurretHeadUtil.getSpecificItemFromInvExpanders(
+                        base.getWorldObj(),
                         new ItemStack(Blocks.redstone_block),
                         base);
             }
 
-            if (redstoneBlock != null && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base.getMaxEnergyStored(
-                    ForgeDirection.UNKNOWN) - base.getEnergyStored(ForgeDirection.UNKNOWN))) {
+            if (redstoneBlock != null
+                    && ConfigHandler.getRedstoneReactorAddonGen() * 9 < (base.getMaxEnergyStored(ForgeDirection.UNKNOWN)
+                            - base.getEnergyStored(ForgeDirection.UNKNOWN))) {
                 base.storage.modifyEnergyStored(ConfigHandler.getRedstoneReactorAddonGen() * 9);
                 return;
             }
@@ -128,8 +136,8 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
             ItemStack redstone = TurretHeadUtil.useSpecificItemStackItemFromBase(base, Items.redstone);
 
             if (redstone == null) {
-                redstone = TurretHeadUtil.getSpecificItemFromInvExpanders(base.getWorldObj(),
-                        new ItemStack(Items.redstone), base);
+                redstone = TurretHeadUtil
+                        .getSpecificItemFromInvExpanders(base.getWorldObj(), new ItemStack(Items.redstone), base);
             }
 
             if (redstone != null) {
@@ -184,8 +192,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
     @Override
     public void onChunkUnload() {
-        if (wasAddedToEnergyNet &&
-                ModCompatibility.IC2Loaded) {
+        if (wasAddedToEnergyNet && ModCompatibility.IC2Loaded) {
             removeFromIc2EnergyNetwork();
 
             wasAddedToEnergyNet = false;
@@ -196,20 +203,20 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         int tier = getBaseTier();
         switch (tier) {
             case 1:
-                return ConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierOneMaxCharge() + TurretHeadUtil
+                        .getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             case 2:
-                return ConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierTwoMaxCharge() + TurretHeadUtil
+                        .getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             case 3:
-                return ConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierThreeMaxCharge() + TurretHeadUtil
+                        .getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             case 4:
-                return ConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierFourMaxCharge() + TurretHeadUtil
+                        .getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             case 5:
-                return ConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil.getPowerExpanderTotalExtraCapacity(
-                        this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                return ConfigHandler.getBaseTierFiveMaxCharge() + TurretHeadUtil
+                        .getPowerExpanderTotalExtraCapacity(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
         }
         return 0;
     }
@@ -221,7 +228,6 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         if (!isPlayerNameValid(name)) {
             return false;
         }
-
 
         if (ConfigHandler.offlineModeSupport) {
             if (trustedPlayer.getName().equals(getOwnerName())) {
@@ -237,12 +243,13 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         if (trustedPlayer.uuid != null || ConfigHandler.offlineModeSupport) {
             for (TrustedPlayer player : trustedPlayers) {
                 if (ConfigHandler.offlineModeSupport) {
-                    if (player.getName().toLowerCase().equals(name.toLowerCase()) || player.getName().equals(getOwnerName())) {
+                    if (player.getName().toLowerCase().equals(name.toLowerCase())
+                            || player.getName().equals(getOwnerName())) {
                         return false;
                     }
                 } else {
-                    if (player.getName().toLowerCase().equals(name.toLowerCase()) || trustedPlayer.uuid.toString().equals(
-                            owner)) {
+                    if (player.getName().toLowerCase().equals(name.toLowerCase())
+                            || trustedPlayer.uuid.toString().equals(owner)) {
                         return false;
                     }
                 }
@@ -252,7 +259,6 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         }
         return false;
     }
-
 
     public boolean removeTrustedPlayer(String name) {
         for (TrustedPlayer player : trustedPlayers) {
@@ -349,7 +355,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         par1.setBoolean("attacksPlayers", attacksPlayers);
         if (ConfigHandler.offlineModeSupport && !ownerName.isEmpty()) {
             par1.setString("owner", ownerName);
-        } else if (!ConfigHandler.offlineModeSupport){
+        } else if (!ConfigHandler.offlineModeSupport) {
             par1.setString("owner", owner);
         }
         if (ownerName.isEmpty() && getPlayerNameFromUUID(owner) != null) {
@@ -407,8 +413,15 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         } else if (getPlayerUUID(par1.getString("ownerName")) != null) {
             this.owner = getPlayerUUID(par1.getString("ownerName")).toString();
         } else if (!ConfigHandler.offlineModeSupport) {
-            Logger.getGlobal().info("Found non existent owner: " + par1.getString(
-                    "owner") + "at coordinates: " + this.xCoord + "," + this.yCoord + "," + this.zCoord + ". Dropping Turretbase");
+            Logger.getGlobal().info(
+                    "Found non existent owner: " + par1.getString("owner")
+                            + "at coordinates: "
+                            + this.xCoord
+                            + ","
+                            + this.yCoord
+                            + ","
+                            + this.zCoord
+                            + ". Dropping Turretbase");
             worldObj.func_147480_a(this.xCoord, this.yCoord, this.zCoord, true);
             return;
         }
@@ -485,9 +498,8 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.getDistanceSq(xCoord + 0.5,
-                yCoord + 0.5,
-                zCoord + 0.5) < 64;
+        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this
+                && player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
     }
 
     @Optional.Method(modid = "Thaumcraft")
@@ -539,13 +551,13 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
         ticks++;
         if (!worldObj.isRemote && ticks % 5 == 0) {
 
-            //Concealment
+            // Concealment
             this.shouldConcealTurrets = TurretHeadUtil.hasConcealmentAddon(this);
 
-            //Extenders
+            // Extenders
             this.storage.setCapacity(getMaxEnergyStorageWithExtenders());
 
-            //Thaumcraft
+            // Thaumcraft
             if (ModCompatibility.ThaumcraftLoaded && TurretHeadUtil.hasPotentiaUpgradeAddon(this)) {
                 if (amountOfPotentia > 0.05F && !(storage.getMaxEnergyStored() - storage.getEnergyStored() == 0)) {
                     if (VisNetHandler.drainVis(worldObj, xCoord, yCoord, zCoord, Aspect.ORDER, 5) == 5) {
@@ -560,9 +572,11 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
             if (ModCompatibility.IC2Loaded && ConfigHandler.EUSupport) {
                 if (storage.getMaxEnergyStored() != storage.getEnergyStored() && storageEU > 0) {
-                    storage.modifyEnergyStored(MathUtil.truncateDoubleToInt(
-                            Math.min(storage.getMaxEnergyStored() - storage.getEnergyStored(),
-                                    storageEU * ConfigHandler.EUtoRFRatio)));
+                    storage.modifyEnergyStored(
+                            MathUtil.truncateDoubleToInt(
+                                    Math.min(
+                                            storage.getMaxEnergyStored() - storage.getEnergyStored(),
+                                            storageEU * ConfigHandler.EUtoRFRatio)));
                     storageEU -= Math.min(
                             (storage.getMaxEnergyStored() - storage.getEnergyStored()) / ConfigHandler.EUtoRFRatio,
                             storageEU * ConfigHandler.EUtoRFRatio);
@@ -571,18 +585,18 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
             if (ticks == 20) {
 
-                //General
+                // General
                 ticks = 0;
                 updateRedstoneReactor(this);
 
-                //Thaumcraft
+                // Thaumcraft
                 if (ModCompatibility.ThaumcraftLoaded && amountOfPotentia <= maxAmountOfPotentia) {
                     amountOfPotentia = amountOfPotentia + drawEssentia();
                 }
 
-                //Computers
-                this.computerAccessible = (ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputercraftLoaded) && TurretHeadUtil.hasSerialPortAddon(
-                        this);
+                // Computers
+                this.computerAccessible = (ModCompatibility.OpenComputersLoaded || ModCompatibility.ComputercraftLoaded)
+                        && TurretHeadUtil.hasSerialPortAddon(this);
             }
         }
     }
@@ -633,7 +647,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     public void setOwnerName(String name) {
         ownerName = name;
     }
-    
+
     public boolean isMultiTargeting() {
         return multiTargeting;
     }
@@ -694,7 +708,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
+        return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
     }
 
     @Override
@@ -753,8 +767,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
     @Optional.Method(modid = "Thaumcraft")
     @Override
-    public void setSuction(Aspect aspect, int amount) {
-    }
+    public void setSuction(Aspect aspect, int amount) {}
 
     @Optional.Method(modid = "Thaumcraft")
     @Override
@@ -804,8 +817,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
 
     @Optional.Method(modid = "Thaumcraft")
     @Override
-    public void setAspects(AspectList aspects) {
-    }
+    public void setAspects(AspectList aspects) {}
 
     @Optional.Method(modid = "Thaumcraft")
     @Override
@@ -868,25 +880,25 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     @Callback(doc = "function():string; returns owner of turret base.")
     public Object[] getOwner(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
-        return new Object[]{this.getOwnerName()};
+        return new Object[] { this.getOwnerName() };
     }
 
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack hostile mobs.")
     public Object[] isAttacksMobs(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
-        return new Object[]{this.isAttacksMobs()};
+        return new Object[] { this.isAttacksMobs() };
     }
 
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean;  sets to attack hostile mobs or not.")
     public Object[] setAttacksMobs(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
         this.setAttacksMobs(args.checkBoolean(0));
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -897,16 +909,16 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack neutral mobs.")
     public Object[] isAttacksNeutrals(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
-        return new Object[]{this.isAttacksNeutrals()};
+        return new Object[] { this.isAttacksNeutrals() };
     }
 
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; sets to attack neutral mobs or not.")
     public Object[] setAttacksNeutrals(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
         this.setAttacksNeutrals(args.checkBoolean(0));
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -917,16 +929,16 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     @Callback(doc = "function():boolean; returns if the turret is currently set to attack players.")
     public Object[] isAttacksPlayers(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
-        return new Object[]{this.isAttacksPlayers()};
+        return new Object[] { this.isAttacksPlayers() };
     }
 
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; sets to attack players or not.")
     public Object[] setAttacksPlayers(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
         this.setAttacksPlayers(args.checkBoolean(0));
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -937,19 +949,21 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     @Callback(doc = "function():table; returns a table of trusted players on this base.")
     public Object[] getTrustedPlayers(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
-        return new Object[]{this.getTrustedPlayers()};
+        return new Object[] { this.getTrustedPlayers() };
     }
 
     @Optional.Method(modid = "OpenComputers")
-    @Callback(doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , " + "admin:boolean]):string; adds Trusted player to Trustlist.")
+    @Callback(
+            doc = "function(name:String, [canOpenGUI:boolean , canChangeTargeting:boolean , "
+                    + "admin:boolean]):string; adds Trusted player to Trustlist.")
     public Object[] addTrustedPlayer(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
         if (!this.addTrustedPlayer(args.checkString(0))) {
-            return new Object[]{"Name not valid!"};
+            return new Object[] { "Name not valid!" };
         }
         TrustedPlayer trustedPlayer = this.getTrustedPlayer(args.checkString(0));
         trustedPlayer.canOpenGUI = args.optBoolean(1, false);
@@ -964,7 +978,7 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     @Callback(doc = "function():string; removes Trusted player from Trustlist.")
     public Object[] removeTrustedPlayer(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
         this.removeTrustedPlayer(args.checkString(0));
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -975,34 +989,34 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     @Callback(doc = "function():int; returns maxiumum energy storage.")
     public Object[] getMaxEnergyStorage(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
-        return new Object[]{this.storage.getMaxEnergyStored()};
+        return new Object[] { this.storage.getMaxEnergyStored() };
     }
 
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():int; returns current energy stored.")
     public Object[] getCurrentEnergyStorage(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
-        return new Object[]{this.getEnergyStored(ForgeDirection.UNKNOWN)};
+        return new Object[] { this.getEnergyStored(ForgeDirection.UNKNOWN) };
     }
 
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; returns if the turret is currently active.")
     public Object[] getActive(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
-        return new Object[]{this.isActive()};
+        return new Object[] { this.isActive() };
     }
 
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; toggles turret redstone inversion state.")
     public Object[] setInverted(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
         this.setInverted(args.checkBoolean(0));
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -1013,18 +1027,18 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     @Callback(doc = "function():boolean; shows redstone inversion state.")
     public Object[] getInverted(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
-        return new Object[]{this.getInverted()};
+        return new Object[] { this.getInverted() };
     }
 
     @Optional.Method(modid = "OpenComputers")
     @Callback(doc = "function():boolean; shows redstone state.")
     public Object[] getRedstone(Context context, Arguments args) {
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
-        return new Object[]{this.getRedstone()};
+        return new Object[] { this.getRedstone() };
     }
 
     @Optional.Method(modid = "ComputerCraft")
@@ -1038,78 +1052,80 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     @Override
     public String[] getMethodNames() {
         // list commands you want..
-        return new String[]{commands.getOwner.toString(), commands.attacksPlayers.toString(),
+        return new String[] { commands.getOwner.toString(), commands.attacksPlayers.toString(),
                 commands.setAttacksPlayers.toString(), commands.attacksMobs.toString(),
                 commands.setAttacksMobs.toString(), commands.attacksNeutrals.toString(),
                 commands.setAttacksNeutrals.toString(), commands.getTrustedPlayers.toString(),
                 commands.addTrustedPlayer.toString(), commands.removeTrustedPlayer.toString(),
-                commands.getActive.toString(), commands.getInverted.toString(),
-                commands.getRedstone.toString(), commands.setInverted.toString(),
-                commands.getType.toString()};
+                commands.getActive.toString(), commands.getInverted.toString(), commands.getRedstone.toString(),
+                commands.setInverted.toString(), commands.getType.toString() };
     }
 
     @Optional.Method(modid = "ComputerCraft")
     @Override
-    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
+    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments)
+            throws LuaException, InterruptedException {
         // method is command
         boolean b;
         int i;
         if (!computerAccessible) {
-            return new Object[]{"Computer access deactivated!"};
+            return new Object[] { "Computer access deactivated!" };
         }
         switch (commands.values()[method]) {
             case getOwner:
-                return new Object[]{this.getOwnerName()};
+                return new Object[] { this.getOwnerName() };
             case attacksPlayers:
-                return new Object[]{this.attacksPlayers};
+                return new Object[] { this.attacksPlayers };
             case setAttacksPlayers:
                 if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
-                    return new Object[]{"wrong arguments"};
+                    return new Object[] { "wrong arguments" };
                 }
                 b = (arguments[0].toString().equals("true"));
                 this.attacksPlayers = b;
-                return new Object[]{true};
+                return new Object[] { true };
             case attacksMobs:
-                return new Object[]{this.attacksMobs};
+                return new Object[] { this.attacksMobs };
             case setAttacksMobs:
                 if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
-                    return new Object[]{"wrong arguments"};
+                    return new Object[] { "wrong arguments" };
                 }
                 b = (arguments[0].toString().equals("true"));
                 this.attacksMobs = b;
-                return new Object[]{true};
+                return new Object[] { true };
             case attacksNeutrals:
-                return new Object[]{this.attacksNeutrals};
+                return new Object[] { this.attacksNeutrals };
             case setAttacksNeutrals:
                 if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
-                    return new Object[]{"wrong arguments"};
+                    return new Object[] { "wrong arguments" };
                 }
                 b = (arguments[0].toString().equals("true"));
                 this.attacksNeutrals = b;
-                return new Object[]{true};
+                return new Object[] { true };
             case getTrustedPlayers:
                 HashMap<String, Integer> result = new HashMap<>();
                 if (this.getTrustedPlayers() != null && this.getTrustedPlayers().size() > 0) {
                     for (TrustedPlayer trustedPlayer : this.getTrustedPlayers()) {
-                        result.put(trustedPlayer.name,
-                                (trustedPlayer.canOpenGUI ? 1 : 0) + (trustedPlayer.canChangeTargeting ? 2 : 0) + (trustedPlayer.admin ? 4 : 0));
+                        result.put(
+                                trustedPlayer.name,
+                                (trustedPlayer.canOpenGUI ? 1 : 0) + (trustedPlayer.canChangeTargeting ? 2 : 0)
+                                        + (trustedPlayer.admin ? 4 : 0));
                     }
                 }
-                return new Object[]{result};
+                return new Object[] { result };
             case addTrustedPlayer:
                 if (arguments[0].toString().equals("")) {
-                    return new Object[]{"wrong arguments"};
+                    return new Object[] { "wrong arguments" };
                 }
                 if (!this.addTrustedPlayer(arguments[0].toString())) {
-                    return new Object[]{"Name not valid!"};
+                    return new Object[] { "Name not valid!" };
                 }
                 if (arguments[1].toString().equals("")) {
-                    return new Object[]{"successfully added"};
+                    return new Object[] { "successfully added" };
                 }
                 for (i = 1; i <= 4; i++) {
-                    if (arguments.length > i && !(arguments[i].toString().equals(
-                            "true") || arguments[i].toString().equals("false"))) {
-                        return new Object[]{"wrong arguments"};
+                    if (arguments.length > i
+                            && !(arguments[i].toString().equals("true") || arguments[i].toString().equals("false"))) {
+                        return new Object[] { "wrong arguments" };
                     }
                 }
                 TrustedPlayer trustedPlayer = this.getTrustedPlayer(arguments[0].toString());
@@ -1118,34 +1134,34 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
                 trustedPlayer.admin = arguments[3].toString().equals("true");
                 trustedPlayer.uuid = getPlayerUUID(arguments[0].toString());
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-                return new Object[]{"succesfully added player to trust list with parameters"};
+                return new Object[] { "succesfully added player to trust list with parameters" };
             case removeTrustedPlayer:
                 if (arguments[0].toString().equals("")) {
-                    return new Object[]{"wrong arguments"};
+                    return new Object[] { "wrong arguments" };
                 }
                 this.removeTrustedPlayer(arguments[0].toString());
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-                return new Object[]{"removed player from trusted list"};
+                return new Object[] { "removed player from trusted list" };
             case getActive:
-                return new Object[]{this.active};
+                return new Object[] { this.active };
             case getInverted:
-                return new Object[]{this.inverted};
+                return new Object[] { this.inverted };
             case getRedstone:
-                return new Object[]{this.redstone};
+                return new Object[] { this.redstone };
             case setInverted:
                 if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
-                    return new Object[]{"wrong arguments"};
+                    return new Object[] { "wrong arguments" };
                 }
                 b = (arguments[0].toString().equals("true"));
                 this.setInverted(b);
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-                return new Object[]{true};
+                return new Object[] { true };
             case getType:
-                return new Object[]{this.getType()};
+                return new Object[] { this.getType() };
             default:
                 break;
         }
-        return new Object[]{false};
+        return new Object[] { false };
     }
 
     @Optional.Method(modid = "ComputerCraft")
@@ -1173,8 +1189,20 @@ public abstract class TurretBase extends TileEntityContainer implements IEnergyH
     }
 
     public enum commands {
-        getOwner, attacksPlayers, setAttacksPlayers, attacksMobs, setAttacksMobs, attacksNeutrals, setAttacksNeutrals,
-        getTrustedPlayers, addTrustedPlayer, removeTrustedPlayer, getActive, getInverted, getRedstone, setInverted,
+        getOwner,
+        attacksPlayers,
+        setAttacksPlayers,
+        attacksMobs,
+        setAttacksMobs,
+        attacksNeutrals,
+        setAttacksNeutrals,
+        getTrustedPlayers,
+        addTrustedPlayer,
+        removeTrustedPlayer,
+        getActive,
+        getInverted,
+        getRedstone,
+        setInverted,
         getType
     }
 

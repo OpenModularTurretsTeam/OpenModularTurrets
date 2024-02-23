@@ -1,17 +1,18 @@
 package openmodularturrets.compatability;
 
-import igwmod.gui.GuiWiki;
-import igwmod.gui.tabs.BaseWikiTab;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+
+import igwmod.gui.GuiWiki;
+import igwmod.gui.tabs.BaseWikiTab;
 import openmodularturrets.blocks.Blocks;
 import openmodularturrets.handler.ConfigHandler;
 
 /**
- * Created by Keridos on 23/01/2015.
- * This Class
+ * Created by Keridos on 23/01/2015. This Class
  */
 class OpenModularTurretsWikiTab extends BaseWikiTab {
+
     public OpenModularTurretsWikiTab() {
         pageEntries.add("block/turretBase");
         pageEntries.add("block/leverBlock");

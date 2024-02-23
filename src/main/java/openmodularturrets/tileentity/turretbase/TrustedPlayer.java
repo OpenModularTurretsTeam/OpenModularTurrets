@@ -3,6 +3,7 @@ package openmodularturrets.tileentity.turretbase;
 import java.util.UUID;
 
 public class TrustedPlayer {
+
     public String name = "";
     public boolean canOpenGUI = false;
     public boolean canChangeTargeting = false;

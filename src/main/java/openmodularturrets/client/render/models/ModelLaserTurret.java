@@ -11,6 +11,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelLaserTurret extends ModelBase {
+
     // fields
     public final ModelRenderer Base;
     public final ModelRenderer Pole;

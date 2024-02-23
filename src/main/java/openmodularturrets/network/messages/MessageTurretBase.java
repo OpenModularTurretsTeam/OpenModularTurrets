@@ -1,36 +1,37 @@
 package openmodularturrets.network.messages;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 import openmodularturrets.ModularTurrets;
 import openmodularturrets.tileentity.turretbase.TrustedPlayer;
 import openmodularturrets.tileentity.turretbase.TurretBase;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 /**
- * Created by Keridos on 05.10.14.
- * This Class is the Message that the electric floodlights TileEntity uses.
+ * Created by Keridos on 05.10.14. This Class is the Message that the electric floodlights TileEntity uses.
  */
 public class MessageTurretBase implements IMessage {
+
     private int x, y, z, rfStorage, yAxisDetect;
     private boolean attacksMobs, attacksNeutrals, attacksPlayers, multiTargeting, waitForTrustedPlayer;
     private String owner, ownerName;
     private List<TrustedPlayer> trustedPlayers = new ArrayList<>();
     private ItemStack camoStack;
 
-    public MessageTurretBase() {
-    }
+    public MessageTurretBase() {}
 
     public static class MessageHandlerTurretBase implements IMessageHandler<MessageTurretBase, IMessage> {
+
         @Override
         public IMessage onMessage(MessageTurretBase message, MessageContext ctx) {
             TileEntity tileEntity = ModularTurrets.proxy.getWorld().getTileEntity(message.x, message.y, message.z);
@@ -136,4 +137,3 @@ public class MessageTurretBase implements IMessage {
         }
     }
 }
-

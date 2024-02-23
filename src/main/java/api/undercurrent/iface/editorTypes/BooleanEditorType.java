@@ -5,7 +5,8 @@ package api.undercurrent.iface.editorTypes;
  */
 public class BooleanEditorType extends EditorType {
 
-    public BooleanEditorType(String fieldName, String displayName, String displayDescription, boolean fieldValue) throws Exception {
+    public BooleanEditorType(String fieldName, String displayName, String displayDescription, boolean fieldValue)
+            throws Exception {
         super(EditorTypes.BOOLEAN);
         this.fieldName = fieldName;
         this.displayName = displayName;
@@ -41,7 +42,5 @@ public class BooleanEditorType extends EditorType {
             return false;
         }
 
-
     }
 }
-
