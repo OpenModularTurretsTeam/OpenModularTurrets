@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "G": {
+      "item": "minecraft:gunpowder"
+    },
+    "I": {
+      "tag": "c:iron_ingots"
+    },
+    "R": {
+      "tag": "c:redstone_dusts"
+    }
+  },
+  "pattern": [
+    " R ",
+    "IGI",
+    " I "
+  ],
+  "result": {
+    "count": 32,
+    "item": "openmodularturrets:ammo_grenade"
+  },
+  "show_notification": true
+}

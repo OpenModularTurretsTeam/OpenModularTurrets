@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": {
+      "item": "minecraft:flint"
+    },
+    "I": {
+      "tag": "c:iron_ingots"
+    },
+    "R": {
+      "tag": "c:redstone_dusts"
+    }
+  },
+  "pattern": [
+    " R ",
+    "RFR",
+    " I "
+  ],
+  "result": {
+    "count": 16,
+    "item": "openmodularturrets:ammo_ferro_slug"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "openmodularturrets:barrel_tier_three"
+    },
+    "C": {
+      "item": "openmodularturrets:chamber_tier_three"
+    },
+    "I": {
+      "item": "openmodularturrets:io_bus"
+    },
+    "X": {
+      "tag": "c:ingots/gold"
+    }
+  },
+  "pattern": [
+    " B ",
+    "XCX",
+    "XIX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:grenade_turret"
+  }
+}

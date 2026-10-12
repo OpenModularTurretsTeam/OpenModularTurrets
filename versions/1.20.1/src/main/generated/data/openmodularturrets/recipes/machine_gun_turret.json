@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "openmodularturrets:barrel_tier_two"
+    },
+    "C": {
+      "item": "openmodularturrets:chamber_tier_two"
+    },
+    "I": {
+      "item": "openmodularturrets:io_bus"
+    },
+    "X": {
+      "tag": "c:iron_ingots"
+    }
+  },
+  "pattern": [
+    " B ",
+    "XBX",
+    "ICI"
+  ],
+  "result": {
+    "item": "openmodularturrets:machine_gun_turret"
+  },
+  "show_notification": true
+}

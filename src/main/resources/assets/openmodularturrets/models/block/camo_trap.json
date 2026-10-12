@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "openmodularturrets:block/camo_trap"
+  }
+}

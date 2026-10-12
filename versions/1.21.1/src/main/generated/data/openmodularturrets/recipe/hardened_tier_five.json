@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "H": {
+      "item": "openmodularturrets:hardened_tier_four"
+    },
+    "M": {
+      "item": "minecraft:obsidian"
+    }
+  },
+  "pattern": [
+    "HMH",
+    "MHM",
+    "HMH"
+  ],
+  "result": {
+    "count": 16,
+    "id": "openmodularturrets:hardened_tier_five"
+  }
+}

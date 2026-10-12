@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:blaze_powder"
+    },
+    "C": {
+      "item": "minecraft:clay_ball"
+    },
+    "R": {
+      "tag": "c:redstone_dusts"
+    }
+  },
+  "pattern": [
+    "CRC",
+    "RBR",
+    "CRC"
+  ],
+  "result": {
+    "count": 32,
+    "item": "openmodularturrets:ammo_blazing_clay"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": {
+      "tag": "c:diamonds"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "I": {
+      "item": "openmodularturrets:io_bus"
+    },
+    "Q": {
+      "tag": "c:quartz"
+    },
+    "S": {
+      "item": "openmodularturrets:sensor_tier_four"
+    }
+  },
+  "pattern": [
+    "EQE",
+    "DSD",
+    "EIE"
+  ],
+  "result": {
+    "item": "openmodularturrets:teleporter_turret"
+  },
+  "show_notification": true
+}

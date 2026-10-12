@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_previous_base": {
+      "conditions": {
+        "items": [
+          {
+            "items": "openmodularturrets:turret_base_tier_two"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "openmodularturrets:turret_base_tier_three"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_previous_base"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "openmodularturrets:turret_base_tier_three"
+    ]
+  }
+}

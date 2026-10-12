@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "openmodularturrets:grenade_turret"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_turret_base": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "openmodularturrets:turret_base_tier_one"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_turret_base",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "openmodularturrets:grenade_turret"
+    ]
+  },
+  "sends_telemetry_event": false
+}

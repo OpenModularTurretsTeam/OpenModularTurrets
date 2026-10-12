@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_bars"
+    },
+    "M": {
+      "item": "minecraft:cobblestone"
+    }
+  },
+  "pattern": [
+    "BMB",
+    "MBM",
+    "BMB"
+  ],
+  "result": {
+    "count": 16,
+    "id": "openmodularturrets:fence_tier_one"
+  }
+}

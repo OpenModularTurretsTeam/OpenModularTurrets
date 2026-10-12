@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "openmodularturrets:block/turret_base_tier_three"
+    }
+  }
+}

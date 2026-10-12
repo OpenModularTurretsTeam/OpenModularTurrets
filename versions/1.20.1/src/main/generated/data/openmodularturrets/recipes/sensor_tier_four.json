@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "openmodularturrets:io_bus"
+    },
+    "D": {
+      "tag": "c:diamonds"
+    },
+    "G": {
+      "tag": "c:gold_ingots"
+    },
+    "Q": {
+      "tag": "c:quartz"
+    },
+    "S": {
+      "item": "openmodularturrets:sensor_tier_three"
+    }
+  },
+  "pattern": [
+    "GDG",
+    "BSB",
+    "QDQ"
+  ],
+  "result": {
+    "item": "openmodularturrets:sensor_tier_four"
+  },
+  "show_notification": true
+}

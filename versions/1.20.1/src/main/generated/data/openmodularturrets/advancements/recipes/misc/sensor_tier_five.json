@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_sensor": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "openmodularturrets:sensor_tier_four"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "openmodularturrets:sensor_tier_five"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_sensor",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "openmodularturrets:sensor_tier_five"
+    ]
+  },
+  "sends_telemetry_event": false
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "openmodularturrets:lever_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_turret_base": {
+      "conditions": {
+        "items": [
+          {
+            "items": "openmodularturrets:turret_base_tier_one"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_turret_base"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "openmodularturrets:lever_block"
+    ]
+  }
+}

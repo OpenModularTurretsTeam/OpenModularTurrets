@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "R": {
+      "tag": "c:dusts/redstone"
+    },
+    "T": {
+      "item": "minecraft:tnt"
+    }
+  },
+  "pattern": [
+    " I ",
+    "ITI",
+    "IRI"
+  ],
+  "result": {
+    "count": 32,
+    "id": "openmodularturrets:ammo_rocket"
+  }
+}

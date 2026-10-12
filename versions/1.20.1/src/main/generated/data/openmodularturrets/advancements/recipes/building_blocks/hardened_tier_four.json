@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_previous_tier": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "openmodularturrets:hardened_tier_three"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "openmodularturrets:hardened_tier_four"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_previous_tier",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "openmodularturrets:hardened_tier_four"
+    ]
+  },
+  "sends_telemetry_event": false
+}

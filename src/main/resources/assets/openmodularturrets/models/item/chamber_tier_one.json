@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "openmodularturrets:item/chamber_tier_one"
+  }
+}

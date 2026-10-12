@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "openmodularturrets:block/turret/potato_cannon_turret"
+    }
+  }
+}

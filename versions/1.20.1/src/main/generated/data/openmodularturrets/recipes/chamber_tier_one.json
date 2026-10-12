@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:cobblestone"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "R": {
+      "tag": "c:redstone_dusts"
+    }
+  },
+  "pattern": [
+    "CCC",
+    " PR",
+    "CCC"
+  ],
+  "result": {
+    "item": "openmodularturrets:chamber_tier_one"
+  },
+  "show_notification": true
+}

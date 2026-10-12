@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_bars"
+    },
+    "M": {
+      "tag": "c:gold_ingots"
+    }
+  },
+  "pattern": [
+    "BMB",
+    "MBM",
+    "BMB"
+  ],
+  "result": {
+    "count": 16,
+    "item": "openmodularturrets:fence_tier_three"
+  },
+  "show_notification": true
+}

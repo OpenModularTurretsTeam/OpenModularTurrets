@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "openmodularturrets:barrel_tier_one"
+    },
+    "C": {
+      "item": "openmodularturrets:chamber_tier_one"
+    },
+    "R": {
+      "tag": "c:dusts/redstone"
+    },
+    "X": {
+      "item": "minecraft:cobblestone"
+    }
+  },
+  "pattern": [
+    " B ",
+    "XCX",
+    "XRX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:disposable_turret"
+  }
+}

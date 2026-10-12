@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "openmodularturrets:io_bus"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "Q": {
+      "tag": "c:gems/quartz"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+  "pattern": [
+    "QRQ",
+    "REB",
+    "QRQ"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:addon_redstone_reactor"
+  }
+}

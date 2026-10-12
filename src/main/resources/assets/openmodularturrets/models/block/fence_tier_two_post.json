@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_glass_pane_post",
+  "textures": {
+    "pane": "openmodularturrets:block/fence_tier_two",
+    "edge": "openmodularturrets:block/fence_top"
+  }
+}

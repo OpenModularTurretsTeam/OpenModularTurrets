@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "openmodularturrets",
+  "version": "${version}",
+  "name": "Open Modular Turrets",
+  "description": "All a man needs are meat ingots, and big ass turrets. Adds a heap of new turrets and upgrades!",
+  "authors": [
+    "Poenjabiesous",
+    "UntouchedWagons",
+    "Keridos"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/openmodularturrets/"
+  },
+  "license": "GPL-3.0-only",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "omtteam.openmodularturrets.OMT"
+    ],
+    "client": [
+      "omtteam.openmodularturrets.client.OMTClient"
+    ],
+    "fabric-datagen": [
+      "omtteam.openmodularturrets.datagen.OMTDataGenerator"
+    ]
+  },
+  "mixins": [
+    "openmodularturrets.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "${minecraft_dependency}",
+    "java": ">=${java_version}",
+    "fabric-api": "*"
+  }
+}

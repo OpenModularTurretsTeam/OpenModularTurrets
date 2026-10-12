@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "openmodularturrets:block/turret/relativistic_turret"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "openmodularturrets:barrel_tier_three"
+    },
+    "D": {
+      "tag": "c:diamonds"
+    },
+    "Q": {
+      "tag": "c:quartz"
+    }
+  },
+  "pattern": [
+    "QDQ",
+    " B ",
+    "QDQ"
+  ],
+  "result": {
+    "item": "openmodularturrets:barrel_tier_four"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "H": {
+      "item": "openmodularturrets:hardened_tier_two"
+    },
+    "M": {
+      "item": "minecraft:bricks"
+    }
+  },
+  "pattern": [
+    "HMH",
+    "MHM",
+    "HMH"
+  ],
+  "result": {
+    "count": 16,
+    "id": "openmodularturrets:hardened_tier_three"
+  }
+}

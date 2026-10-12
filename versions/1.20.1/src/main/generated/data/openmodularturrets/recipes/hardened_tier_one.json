@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "minecraft:cobblestone"
+    },
+    "G": {
+      "item": "minecraft:gravel"
+    },
+    "S": {
+      "item": "minecraft:sand"
+    }
+  },
+  "pattern": [
+    "GCG",
+    "CSC",
+    "GCG"
+  ],
+  "result": {
+    "count": 16,
+    "item": "openmodularturrets:hardened_tier_one"
+  },
+  "show_notification": true
+}

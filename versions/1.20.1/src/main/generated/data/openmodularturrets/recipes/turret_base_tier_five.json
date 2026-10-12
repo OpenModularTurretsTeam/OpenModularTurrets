@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "openmodularturrets:io_bus"
+    },
+    "M": {
+      "item": "minecraft:obsidian"
+    },
+    "P": {
+      "item": "openmodularturrets:turret_base_tier_four"
+    },
+    "S": {
+      "item": "openmodularturrets:sensor_tier_five"
+    }
+  },
+  "pattern": [
+    "MPM",
+    "BSB",
+    "MBM"
+  ],
+  "result": {
+    "item": "openmodularturrets:turret_base_tier_five"
+  },
+  "show_notification": true
+}

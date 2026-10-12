@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "openmodularturrets:io_bus"
+    },
+    "C": {
+      "tag": "c:ingots/gold"
+    },
+    "Q": {
+      "tag": "c:gems/quartz"
+    }
+  },
+  "pattern": [
+    " Q ",
+    "QCQ",
+    " B "
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:upgrade_accuracy"
+  }
+}

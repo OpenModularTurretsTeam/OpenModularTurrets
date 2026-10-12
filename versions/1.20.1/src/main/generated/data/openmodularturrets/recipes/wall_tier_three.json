@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "H": {
+      "item": "openmodularturrets:hardened_tier_three"
+    }
+  },
+  "pattern": [
+    "HHH",
+    "HHH"
+  ],
+  "result": {
+    "count": 6,
+    "item": "openmodularturrets:wall_tier_three"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,23 @@
+# Gradle
+.gradle/
+build/
+versions/*/build/
+!versions/*/src/main/generated/
+versions/*/src/main/generated/.cache/
+
+# Runs
+run/
+versions/*/run/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+out/
+bin/
+.kotlin/
+
+# old mods
+oldmod/
+oldmod2/
+oldlib/

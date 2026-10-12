@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "openmodularturrets:io_bus"
+    },
+    "C": {
+      "item": "openmodularturrets:chamber_tier_four"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "Q": {
+      "tag": "c:quartz"
+    }
+  },
+  "pattern": [
+    "OQO",
+    " CB",
+    "OQO"
+  ],
+  "result": {
+    "item": "openmodularturrets:chamber_tier_five"
+  },
+  "show_notification": true
+}

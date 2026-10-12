@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "openmodularturrets:barrel_tier_four"
+    },
+    "C": {
+      "item": "openmodularturrets:chamber_tier_four"
+    },
+    "D": {
+      "tag": "c:gems/diamond"
+    },
+    "I": {
+      "item": "openmodularturrets:io_bus"
+    },
+    "Q": {
+      "tag": "c:gems/quartz"
+    }
+  },
+  "pattern": [
+    "QBQ",
+    "BCB",
+    "DID"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:rocket_turret"
+  }
+}

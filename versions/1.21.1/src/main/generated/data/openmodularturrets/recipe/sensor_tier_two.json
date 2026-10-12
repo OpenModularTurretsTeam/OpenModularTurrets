@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "openmodularturrets:io_bus"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "S": {
+      "item": "openmodularturrets:sensor_tier_one"
+    }
+  },
+  "pattern": [
+    " I ",
+    "ISI",
+    " B "
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:sensor_tier_two"
+  }
+}
