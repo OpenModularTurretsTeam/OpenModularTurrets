@@ -147,11 +147,6 @@ public class ConfigData {
     }
 
     public static class Miscellaneous {
-        public int expanderPowerTierOneCapacity = 2500;
-        public int expanderPowerTierTwoCapacity = 25000;
-        public int expanderPowerTierThreeCapacity = 75000;
-        public int expanderPowerTierFourCapacity = 250000;
-        public int expanderPowerTierFiveCapacity = 5000000;
         public int solarPanelAddonGen = 10;
         public int redstoneReactorAddonGen = 1600;
         /** Generator (new block): energy per tick while burning; one fuel burn tick = one generator tick. */
@@ -162,11 +157,6 @@ public class ConfigData {
 
         void validate(ConfigValidator v) {
             String p = "miscellaneous.";
-            expanderPowerTierOneCapacity = v.range(p + "expanderPowerTierOneCapacity", expanderPowerTierOneCapacity, 1, 2000000000);
-            expanderPowerTierTwoCapacity = v.range(p + "expanderPowerTierTwoCapacity", expanderPowerTierTwoCapacity, 1, 2000000000);
-            expanderPowerTierThreeCapacity = v.range(p + "expanderPowerTierThreeCapacity", expanderPowerTierThreeCapacity, 1, 2000000000);
-            expanderPowerTierFourCapacity = v.range(p + "expanderPowerTierFourCapacity", expanderPowerTierFourCapacity, 1, 2000000000);
-            expanderPowerTierFiveCapacity = v.range(p + "expanderPowerTierFiveCapacity", expanderPowerTierFiveCapacity, 1, 2000000000);
             solarPanelAddonGen = v.min(p + "solarPanelAddonGen", solarPanelAddonGen, 0);
             redstoneReactorAddonGen = v.min(p + "redstoneReactorAddonGen", redstoneReactorAddonGen, 0);
             generatorEnergyPerTick = v.range(p + "generatorEnergyPerTick", generatorEnergyPerTick, 1, 1000000);
