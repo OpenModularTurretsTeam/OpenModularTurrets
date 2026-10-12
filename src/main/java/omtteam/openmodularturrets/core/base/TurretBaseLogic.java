@@ -119,7 +119,7 @@ public class TurretBaseLogic {
         if (ticks % 5 == 0) {
             concealTurrets = shouldConcealTurrets();
             BaseTierStats stats = settings.baseTier(tier);
-            energy.setCapacity(getMaxEnergyWithExpanders());
+            energy.setCapacity(stats.maxCharge());
             energy.setMaxInsert(stats.maxIo());
             updateMaxRange();
             if (ticks % 20 == 0) {
@@ -146,7 +146,8 @@ public class TurretBaseLogic {
         Map<Face, TurretType> turrets = getTurrets();
         targets.keySet().retainAll(turrets.keySet());
         searchTicks.keySet().retainAll(turrets.keySet());
-        energy.setCapacity(getMaxEnergyWithExpanders());
+        BaseTierStats stats = settings.baseTier(tier);
+        energy.setCapacity(stats.maxCharge());
         updateMaxRange();
         // oldmod BlockAbstractTurretHead.onBlockPlacedBy: a newly placed turret that reaches further than the old
         // max range raises the range to the new maximum (not on the first scan after loading)
@@ -205,17 +206,6 @@ public class TurretBaseLogic {
     /** A turret on a base of a lower tier breaks (oldmod {@code AbstractDirectedTurret.update}). */
     public boolean supportsTurret(TurretType type) {
         return tier >= type.getRequiredBaseTier();
-    }
-
-    /** Tier capacity plus attached power expanders (oldmod {@code getMaxEnergyStorageWithExtenders}). */
-    public long getMaxEnergyWithExpanders() {
-        long capacity = settings.baseTier(tier).maxCharge();
-        for (Neighbour neighbour : neighbours.values()) {
-            if (neighbour instanceof Neighbour.Expander expander && expander.power()) {
-                capacity += settings.powerExpanderCapacity(expander.tier());
-            }
-        }
-        return capacity;
     }
 
     /**

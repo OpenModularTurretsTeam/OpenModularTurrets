@@ -9,6 +9,8 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 
 ## [Unreleased]
 
+## [4.0.0-alpha.2] - 2026-10-13
+
 ### Fixed
 
 - Shift-clicking addons and upgrades into a turret base no longer ignores their slot stack limit

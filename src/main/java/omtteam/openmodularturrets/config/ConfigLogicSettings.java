@@ -80,19 +80,6 @@ public final class ConfigLogicSettings implements LogicSettings {
     }
 
     @Override
-    public int powerExpanderCapacity(int expanderTier) {
-        ConfigData.Miscellaneous misc = OMTConfig.get().miscellaneous;
-        return switch (expanderTier) {
-            case 1 -> misc.expanderPowerTierOneCapacity;
-            case 2 -> misc.expanderPowerTierTwoCapacity;
-            case 3 -> misc.expanderPowerTierThreeCapacity;
-            case 4 -> misc.expanderPowerTierFourCapacity;
-            case 5 -> misc.expanderPowerTierFiveCapacity;
-            default -> 0;
-        };
-    }
-
-    @Override
     public int solarPanelGeneration() {
         return OMTConfig.get().miscellaneous.solarPanelAddonGen;
     }

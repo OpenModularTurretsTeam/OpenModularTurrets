@@ -14,9 +14,6 @@ public interface LogicSettings {
     /** @param tier 1–5 */
     BaseTierStats baseTier(int tier);
 
-    /** Extra capacity of a power expander, {@code expanderTier} 1–5. */
-    int powerExpanderCapacity(int expanderTier);
-
     /** {@code miscellaneous.solarPanelAddonGen}. */
     int solarPanelGeneration();
 
