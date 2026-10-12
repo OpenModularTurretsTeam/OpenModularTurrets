@@ -167,6 +167,7 @@ publishMods {
             projectId = modrinthProjectId
             accessToken = modrinthToken
             minecraftVersions.add(minecraftVersion)
+            environment = CLIENT_AND_SERVER
             requires("fabric-api")
         }
     }
