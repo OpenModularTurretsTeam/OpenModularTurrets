@@ -1,4 +1,5 @@
 # CLA
+
 You agree that all code you submit will be licensed under the MIT License or at our option any later version.
 You agree that all art you submit will be licensed under the CC-BY-NC-SA or at ouroption any later version.
 You agree to give us the right to use all code/art in perpetuity but otherwise retain all rights to your work.

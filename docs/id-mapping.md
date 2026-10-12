@@ -5,7 +5,7 @@ Old meta/damage-based variants are flattened into separate registry entries.
 ## Blocks
 
 | Old ID (1.12.2) | Meta | New ID |
-|---|---|---|
+| --- | --- | --- |
 | `openmodularturrets:turret_base` | 0 | `openmodularturrets:turret_base_tier_one` |
 | `openmodularturrets:turret_base` | 1 | `openmodularturrets:turret_base_tier_two` |
 | `openmodularturrets:turret_base` | 2 | `openmodularturrets:turret_base_tier_three` |
@@ -46,7 +46,7 @@ Old meta/damage-based variants are flattened into separate registry entries.
 ## Block entities
 
 | Old (1.12.2) | New ID |
-|---|---|
+| --- | --- |
 | `TurretBase` | `openmodularturrets:turret_base` |
 | all turret head tile entities | `openmodularturrets:turret` (one type for all turrets) |
 | `LeverTileEntity` | `openmodularturrets:lever` |
@@ -58,7 +58,7 @@ Not ported: OMT power generator (`BlockPowerAttachment`, had no function), loot 
 ## Entities
 
 | Old (1.12.2) | New ID |
-|---|---|
+| --- | --- |
 | `openmodularturrets:bulletProjectile` | `openmodularturrets:bullet` |
 | `openmodularturrets:blazingClayProjectile` | `openmodularturrets:blazing_clay` |
 | `openmodularturrets:grenadeProjectile` | `openmodularturrets:grenade` |
@@ -71,7 +71,7 @@ Not ported: OMT power generator (`BlockPowerAttachment`, had no function), loot 
 ## Items
 
 | Old ID (1.12.2) | Meta | New ID |
-|---|---|---|
+| --- | --- | --- |
 | `openmodularturrets:ammo_meta` | 0 | `openmodularturrets:ammo_blazing_clay` |
 | `openmodularturrets:ammo_meta` | 1 | `openmodularturrets:ammo_bullet` |
 | `openmodularturrets:ammo_meta` | 2 | `openmodularturrets:ammo_ferro_slug` |

@@ -9,6 +9,7 @@ This file guides Claude Code when working in this repository. Read it fully befo
 **OpenModularTurrets (OMT)** is being ported from **Minecraft 1.12.2 (Forge)** to **Fabric**, targeting **1.20.1 and 1.21.1 from a single codebase** using **Stonecutter**.
 
 Core gameplay:
+
 - **Turret bases** are the "brain". They handle:
   - all targeting
   - item (ammo) and power consumption
@@ -18,8 +19,9 @@ Core gameplay:
 - **Permissions** use a **trusted player** system. Each trusted player has a **power/access level** that limits what they can do (open the GUI, change targeting, manage other trusted players, and so on). The owner always has full rights.
 
 ### Reference material (READ-ONLY)
+
 | Folder | Contents |
-|---|---|
+| --- | --- |
 | `oldmod/` | Original 1.12.2 OMT source and resources (textures, models, lang, sounds) |
 | `oldmod2/` | Original 1.12.2 Open Modular Passive Defence source and resources (textures, models, lang, sounds) |
 | `oldlib/` | The library the old mod depended on (OMLib) |
@@ -30,6 +32,7 @@ Core gameplay:
 - Old textures and sounds may be reused. Copy them into the new resource structure; do not reference the old paths.
 
 ### Allowed dependencies
+
 - Fabric Loader and **Fabric API**. Fabric API, including Transfer API, Networking, Rendering and Datagen, is NOT considered a "library" in the sense above and may be used freely.
 - **Team Reborn Energy** for power, as the de facto Fabric energy standard. Jar-in-jar it. *(See Open Questions; confirm before adding.)*
 - Nothing else without asking the user first. No Architectury, no Cloth Config, no OMLib, no Kotlin.
@@ -39,7 +42,7 @@ Core gameplay:
 ## 2. Tech Stack
 
 | | 1.20.1 | 1.21.1 |
-|---|---|---|
+| --- | --- | --- |
 | Java | 17 | 21 |
 | Fabric Loader | 0.19.x | 0.19.x |
 | Fabric API | `0.92.x+1.20.1` | `0.116.x+1.21.1` |
@@ -89,6 +92,7 @@ Check exact latest patch versions of Loader, API, Loom and Stonecutter when sett
 ## 4. Stonecutter
 
 ### Setup (`settings.gradle.kts`)
+
 ```kotlin
 plugins { id("dev.kikugie.stonecutter") version "0.9.8" }
 
@@ -99,11 +103,14 @@ stonecutter {
     }
 }
 ```
+
 The Stonecutter DSL changes between releases. If this does not match the installed version, check the Stonecutter docs and update both this file and the build.
 
 ### Rules
+
 - **Committed source must always be in the `vcsVersion` (1.21.1) state.** Before committing, switch back to 1.21.1 if you switched to 1.20.1 (`./gradlew "Reset active project"` or `"Set active project to 1.21.1"`).
 - Version-conditional code uses Stonecutter comments:
+
   ```java
   //? if >=1.21 {
   ResourceLocation id = ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
@@ -111,12 +118,14 @@ The Stonecutter DSL changes between releases. If this does not match the install
   /*ResourceLocation id = new ResourceLocation(MOD_ID, path);
   *///?}
   ```
+
   Inactive branches must be wrapped in `/* … */` exactly as Stonecutter expects. Prefer letting Stonecutter generate this by switching versions over hand-writing it.
 - **Minimize conditional blocks.** Hide version differences behind small helpers in `omtteam.openmodularturrets.compat.VersionCompat` (or similar) rather than sprinkling `//? if` across gameplay code. Gameplay logic (targeting, permissions, consumption) should be version-agnostic.
 - Constants can be compared in conditions: `//? if >=1.21 {`, `//? if <1.21 {`, `//? if 1.20.1 {`.
 - Version-specific *properties* live in `versions/<v>/gradle.properties`. Read them in the build via `property("…")`.
 
 ### Commands
+
 ```bash
 ./gradlew "Set active project to 1.20.1"   # switch source to 1.20.1
 ./gradlew "Set active project to 1.21.1"   # switch back (VCS state)
@@ -131,6 +140,7 @@ The Stonecutter DSL changes between releases. If this does not match the install
 ```
 
 ### Publishing
+
 - Uses `me.modmuss50.mod-publish-plugin` (approved by the user), configured in `publishMods` in `build.gradle.kts`.
 - Settings in `gradle.properties`: `release_type` (release/beta/alpha), `curseforge_project_id` (224663, the old OMT page), `modrinth_project_id` (empty = Modrinth skipped).
 - Tokens are never committed: environment variables `CURSEFORGE_TOKEN` / `MODRINTH_TOKEN`, or `curseforge_token` / `modrinth_token` in `~/.gradle/gradle.properties`. Without a token the upload is a dry run (output in `versions/<v>/build/publishMods/`).
@@ -141,6 +151,7 @@ The Stonecutter DSL changes between releases. If this does not match the install
 **Definition of done for any change:** `./gradlew chiseledBuild` succeeds for **both** versions, and the source is left in the 1.21.1 state.
 
 ### Core Game Logic Source
+
 The game logic of the mod should be implemented in the "core" folder and be completely free from minecraft imports.
 The logic consists of:
 
@@ -159,7 +170,7 @@ The logic consists of:
 Wrap each of these behind a helper where possible.
 
 | Area | 1.20.1 | 1.21.1 |
-|---|---|---|
+| --- | --- | --- |
 | `ResourceLocation` | `new ResourceLocation(ns, path)` | `ResourceLocation.fromNamespaceAndPath(ns, path)` → use `OMT.id(path)` helper |
 | BlockEntity NBT | `load(CompoundTag)`, `saveAdditional(CompoundTag)` | `loadAdditional(CompoundTag, HolderLookup.Provider)`, `saveAdditional(CompoundTag, HolderLookup.Provider)` |
 | BE update packet tag | `getUpdateTag()` | `getUpdateTag(HolderLookup.Provider)` |
@@ -179,6 +190,7 @@ Wrap each of these behind a helper where possible.
 **Same in both** (no conditionals needed): `DamageTypes` / damage-type registry, `GuiGraphics`, `PoseStack`, the general Fabric Transfer API shape, and the `BlockEntityTicker` pattern.
 
 ### Resources strategy
+
 - **`assets/`** (textures, models, blockstates, lang, sounds): identical across versions. Keep them handwritten in shared `src/main/resources/assets/openmodularturrets/`.
 - **`data/`** (recipes, loot tables, tags, advancements): folder names and JSON formats differ. **Generate them with Fabric Datagen.**
   - Run datagen per version.
@@ -228,6 +240,7 @@ omtteam.openmodularturrets.client
 ```
 
 ### Turret ↔ base relationship
+
 - A turret block has a `FACING` property (all 6 `Direction`s). `FACING` is the direction **away from the base**. The base is at `pos.relative(facing.getOpposite())`.
 - Turrets can only be placed against a base face. A turret without a base does nothing and should break or drop if its base is removed, matching `oldmod` behaviour.
 - The **base** finds its turrets by checking its 6 neighbours.
@@ -247,18 +260,21 @@ omtteam.openmodularturrets.client
   They request ammo and energy from the base.
 
 ### Aiming on arbitrary faces
+
 - Compute the target direction in world space, then transform it into the turret's **local frame**, where the local "up" is `FACING`. Derive local yaw/pitch from that.
 - The renderer applies the mount rotation first (rotate the model so its up-axis aligns with `FACING`), then local yaw, then local pitch.
 - Put the math in one place, e.g. `TurretMath`, used by both server logic (can it aim there? turret pitch/yaw limits from `oldmod`) and the client renderer.
 - Sync yaw/pitch (or the target entity ID) to clients for smooth interpolated rendering. Interpolate on the client; don't sync every tick unless necessary.
 
 ### Targeting (base)
+
 - Run on the server tick via `BlockEntityTicker`. Throttle scans; do not scan entities every tick. Use the interval and logic from `oldmod`.
 - Settings come from `oldmod` and include target categories (hostile mobs, neutral/passive mobs, players), range (base tier + range upgrades), and any additional options.
 - **Never target** the owner or trusted players (respect `oldmod`'s exact rules). Respect line of sight.
 - Range is affected by tier and upgrades. Accuracy, fire rate, efficiency and scattershot are upgrades. Use the exact formulas from `oldmod`.
 
 ### Security / trusted players
+
 - Each base stores:
   - **owner** (UUID + last known name)
   - a list of **TrustedPlayer** (UUID, name, **access level**)
@@ -272,11 +288,13 @@ omtteam.openmodularturrets.client
 - Use UUIDs for identity; names are display-only. Resolve names to UUIDs server-side via the server's profile cache when adding a player.
 
 ### Power & items
+
 - Bases store energy internally. Expose it through the energy API on all sides; expose inventory through Fabric Transfer API (`ItemStorage.SIDED`).
 - Ammo is consumed from the base inventory and its **inventory expanders**. Power expanders add capacity. Port costs and capacities from `oldmod` into `config/`.
 - Power generation addons (e.g. solar, redstone reactor, if present in `oldmod`) are ticked by the base.
 
 ### Config
+
 - No config library. Write a minimal Gson-based JSON config at `config/openmodularturrets.json`.
 - Load it on init, write defaults if missing, and validate ranges.
 - Server-authoritative values that clients need (e.g. for tooltips) are synced on join.
@@ -286,7 +304,7 @@ omtteam.openmodularturrets.client
 ## 7. Porting Guide (1.12.2 Forge → modern Fabric)
 
 | 1.12.2 concept | Modern Fabric equivalent |
-|---|---|
+| --- | --- |
 | `TileEntity` + `ITickable` | `BlockEntity` + `BlockEntityTicker` via `getTicker` |
 | Forge capabilities (items/energy) | Fabric Transfer API (`ItemStorage.SIDED`) + energy API |
 | `IGuiHandler`, `GuiContainer`, `Container` | `MenuType` / `ExtendedScreenHandlerType`, `AbstractContainerMenu`, `AbstractContainerScreen` |
@@ -305,6 +323,7 @@ omtteam.openmodularturrets.client
 | `oldlib` helpers | Re-implement minimal versions in `lib/`, or replace with vanilla/Fabric API |
 
 **Porting workflow for each feature:**
+
 1. Find the feature in `oldmod/` (and any helpers it uses in `oldlib/`).
 2. Summarize the original behaviour and constants.
 3. Implement the modern equivalent in the new architecture.
