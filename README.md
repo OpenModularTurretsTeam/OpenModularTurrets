@@ -4,4 +4,5 @@ Repo for [OpenModularTurrets](https://minecraft.curseforge.com/projects/openmodu
 
 ## License
 
-The source code is licensed under the [MIT license](LICENSE), the mods art is licenced under the [CC-BY-NC license](https://creativecommons.org/licenses/by-nc/4.0/)
+The projects source code is licensed under the [MIT license](LICENSE), 
+the projects art is licenced under the [CC-BY-NC-SA 4.0 license](LICENSE-ART)
