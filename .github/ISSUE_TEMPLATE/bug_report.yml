@@ -1,0 +1,82 @@
+name: Bug report
+description: Something is broken, crashes or behaves wrong.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please search the existing issues first to avoid duplicates.
+        If the game crashed, attach the crash report or upload it to a paste site (e.g. https://mclo.gs) and link it below.
+  - type: dropdown
+    id: mc-version
+    attributes:
+      label: Minecraft version
+      options:
+        - "1.21.1"
+        - "1.20.1"
+        - Both
+    validations:
+      required: true
+  - type: input
+    id: mod-version
+    attributes:
+      label: Mod version
+      description: The OpenModularTurrets version, as shown in the jar name or the mod list.
+      placeholder: 4.0.0-alpha.1
+    validations:
+      required: true
+  - type: input
+    id: loader-versions
+    attributes:
+      label: Fabric Loader and Fabric API versions
+      placeholder: Loader 0.19.x, Fabric API 0.116.x+1.21.1
+    validations:
+      required: true
+  - type: dropdown
+    id: side
+    attributes:
+      label: Where does it happen?
+      options:
+        - Singleplayer
+        - Multiplayer (dedicated server)
+        - Multiplayer (LAN / open to LAN)
+        - Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected to happen instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Turret base tier, turret types, upgrades/addons and targeting settings help a lot.
+      placeholder: |
+        1. Place a tier 3 turret base
+        2. Mount a rocket turret on top
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / crash report
+      description: Paste the relevant part of `logs/latest.log` or the crash report, or link to it.
+      render: shell
+  - type: textarea
+    id: other-mods
+    attributes:
+      label: Other mods
+      description: Does the bug still happen with only OpenModularTurrets and Fabric API installed? If not, list the other mods (or link your modpack).
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched the existing issues and this bug has not been reported yet.
+          required: true
+        - label: I am using the latest version of the mod for my Minecraft version.

@@ -1,0 +1,28 @@
+name: Feature request
+description: Suggest something new that did not exist in the 1.12.2 version.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The port focuses on bringing the 1.12.2 content over first, so new features may take a while.
+        If you are asking for something the old version had, please use the "Missing or different from 1.12.2" template instead.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the situation or gameplay need behind the request.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: How would you like it to work?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other ways to solve this, including other mods that do something similar.

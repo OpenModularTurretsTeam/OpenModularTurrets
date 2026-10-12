@@ -1,0 +1,41 @@
+name: Missing or different from 1.12.2
+description: A feature, block, item or mechanic that is missing or works differently than in the old 1.12.2 version.
+labels: ["port"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This version is a port of OpenModularTurrets (and Open Modular Passive Defence) from Minecraft 1.12.2.
+        The goal is to match the old behaviour, so differences are worth reporting. Note that some things were dropped on purpose
+        (e.g. inventory/power expanders, OpenComputers/ComputerCraft integration) — check `CHANGELOG.md` and existing issues first.
+  - type: dropdown
+    id: mc-version
+    attributes:
+      label: Minecraft version
+      options:
+        - "1.21.1"
+        - "1.20.1"
+        - Both
+    validations:
+      required: true
+  - type: input
+    id: mod-version
+    attributes:
+      label: Mod version
+      placeholder: 4.0.0-alpha.1
+    validations:
+      required: true
+  - type: textarea
+    id: old-behaviour
+    attributes:
+      label: How it worked in 1.12.2
+      description: Values, ranges, recipes, permissions… The more precise, the better. Links to the old wiki or source are welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: new-behaviour
+    attributes:
+      label: How it works now
+      description: Or "missing" if it does not exist in the port.
+    validations:
+      required: true
