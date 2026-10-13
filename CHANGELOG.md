@@ -9,6 +9,18 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 
 ## [Unreleased]
 
+## [4.0.0-alpha.4] - 2026-10-13
+
+### Fixed
+
+- Projectiles now properly apply on-hit effects on their motion
+- Fixed a bug where grenades would hurl away if they hit entities
+
+### Changed
+
+- Grenade now flies for 1.5 seconds instead of 2 seconds
+- Grenade now explodes 4 ticks after hitting a valid enemy
+
 ## [4.0.0-alpha.3] - 2026-10-13
 
 ### Fixed

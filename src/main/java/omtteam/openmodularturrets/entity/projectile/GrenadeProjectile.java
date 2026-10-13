@@ -19,9 +19,9 @@ import omtteam.openmodularturrets.registry.ModItems;
  * dealing 90 % normal and 10 % armor-piercing damage within 3 blocks.
  */
 public class GrenadeProjectile extends TurretProjectile implements ItemSupplier {
-    private static final int FUSE_TICKS = 39;
-    /** oldmod: hitting an entity shortens the fuse to the last 9 ticks. */
-    private static final int TICKS_AFTER_ENTITY_HIT = 30;
+    private static final int FUSE_TICKS = 29;
+    /** oldmod: hitting an entity shortens the fuse to the last 4 ticks. */
+    private static final int TICKS_AFTER_ENTITY_HIT = 25;
     private static final double RADIUS = 3;
     private boolean hitEntity;
 
@@ -71,7 +71,7 @@ public class GrenadeProjectile extends TurretProjectile implements ItemSupplier 
     protected void onHitEntity(Entity entity) {
         if (hitEntity || !canDamage(entity)) return;
         Vec3 motion = getDeltaMovement();
-        setDeltaMovement(motion.x * 0.2D, motion.y * 1.2D, motion.z * 0.2D);
+        setDeltaMovement(motion.x * 0.2D, motion.y * 0.2D, motion.z * 0.2D);
         hasImpulse = true;
         hitEntity = true;
         tickCount = TICKS_AFTER_ENTITY_HIT;

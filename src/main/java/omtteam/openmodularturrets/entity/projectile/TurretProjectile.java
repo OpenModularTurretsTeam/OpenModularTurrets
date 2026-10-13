@@ -103,6 +103,9 @@ public abstract class TurretProjectile extends Projectile {
         }
 
         setPos(position.add(motion));
+        // need this for applying hit effects
+        motion = getDeltaMovement();
+
         updateRotation();
         double drag = isInWater() ? 0.8D : 0.99D;
         if (isInWater() && level().isClientSide()) {
