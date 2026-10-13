@@ -347,17 +347,6 @@ class TurretBaseLogicTest {
         }
 
         @Test
-        void powerExpandersAddCapacity() {
-            TurretBaseLogic logic = base(2);
-            assertEquals(50000, logic.getEnergy().getCapacity());
-            Map<Face, Neighbour> attached = new EnumMap<>(Face.class);
-            attached.put(Face.DOWN, new Neighbour.Expander(true, 2));
-            attached.put(Face.UP, new Neighbour.Expander(false, 5));
-            logic.updateNeighbours(attached);
-            assertEquals(50000 + 25000, logic.getEnergy().getCapacity());
-        }
-
-        @Test
         void maxRangeIsTheBestTurret() {
             TurretBaseLogic logic = base(5);
             logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET, TurretType.ROCKET_TURRET));

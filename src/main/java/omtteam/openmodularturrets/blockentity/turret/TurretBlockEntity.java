@@ -136,8 +136,9 @@ public class TurretBlockEntity extends CompatBlockEntity {
 
     /**
      * oldmod {@code AbstractDirectedTurret.update} / {@code TurretHead.updateChecks}: aiming turrets turn towards the
-     * target's eyes every tick (oldmod turrets had no effective yaw/pitch limits; line of sight is checked by the
-     * base), then the weapon fires once the cooldown passed. Projectiles are shot at the predicted position (oldmod
+     * target's eyes every tick (oldmod turrets had no effective yaw/pitch limits; the pitch is now limited to
+     * {@link TurretMath#MIN_PITCH} so the head never points into the base, and the base only picks targets above it),
+     * then the weapon fires once the cooldown passed. Projectiles are shot at the predicted position (oldmod
      * {@code ProjectileTurret.doTargetedShot}).
      */
     private void engage(Entity target) {
@@ -145,7 +146,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
         Vec3 centre = Vec3.atCenterOf(worldPosition);
         if (weapon.kind().aims()) {
             Vector3 toEyes = new Vector3(target.getX() - centre.x, target.getEyeY() - centre.y, target.getZ() - centre.z);
-            TurretMath.Angles angles = TurretMath.anglesFor(getFace(), toEyes);
+            TurretMath.Angles angles = TurretMath.limit(TurretMath.anglesFor(getFace(), toEyes));
             yaw = angles.yaw();
             pitch = angles.pitch();
         }

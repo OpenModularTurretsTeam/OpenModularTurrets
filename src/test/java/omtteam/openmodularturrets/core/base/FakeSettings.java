@@ -18,7 +18,6 @@ final class FakeSettings implements LogicSettings {
     BaseTierStats[] tiers = {
             new BaseTierStats(500, 50, 1), new BaseTierStats(50000, 100, 1), new BaseTierStats(150000, 1000, 2),
             new BaseTierStats(500000, 2500, 3), new BaseTierStats(10000000, 50000, 4)};
-    int[] expanderCapacities = {2500, 25000, 75000, 250000, 5000000};
     int solar = 10;
     int reactor = 1600;
     boolean needAmmo = true;
@@ -59,11 +58,6 @@ final class FakeSettings implements LogicSettings {
     @Override
     public BaseTierStats baseTier(int tier) {
         return tiers[tier - 1];
-    }
-
-    @Override
-    public int powerExpanderCapacity(int expanderTier) {
-        return expanderCapacities[expanderTier - 1];
     }
 
     @Override

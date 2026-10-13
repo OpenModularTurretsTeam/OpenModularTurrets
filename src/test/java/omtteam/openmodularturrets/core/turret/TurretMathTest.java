@@ -7,6 +7,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TurretMathTest {
     private static final double EPS = 1e-6;
@@ -42,6 +44,15 @@ class TurretMathTest {
         assertEquals(90, TurretMath.anglesFor(Face.UP, new Vector3(0, 5, 0)).pitch(), EPS);
         assertEquals(90, TurretMath.anglesFor(Face.NORTH, new Vector3(0, 0, -5)).pitch(), EPS);
         assertEquals(-90, TurretMath.anglesFor(Face.DOWN, new Vector3(0, 5, 0)).pitch(), EPS, "into the base");
+    }
+
+    @Test
+    void turretsCannotAimIntoTheirBase() {
+        assertTrue(TurretMath.canAim(Face.UP, new Vector3(5, -1, 0)), "slightly below the mounting plane");
+        assertFalse(TurretMath.canAim(Face.UP, new Vector3(1, -5, 0)));
+        assertFalse(TurretMath.canAim(Face.EAST, new Vector3(-5, 0, 0)), "straight through the base");
+        assertEquals(TurretMath.MIN_PITCH, TurretMath.limit(new TurretMath.Angles(30, -80)).pitch(), EPS);
+        assertEquals(30, TurretMath.limit(new TurretMath.Angles(30, -80)).yaw(), EPS);
     }
 
     @Test

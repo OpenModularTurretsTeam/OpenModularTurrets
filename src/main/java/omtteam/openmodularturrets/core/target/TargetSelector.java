@@ -5,10 +5,13 @@ import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.PlayerInfo;
 import omtteam.openmodularturrets.core.security.TrustManager;
 import omtteam.openmodularturrets.core.settings.LogicSettings;
+import omtteam.openmodularturrets.core.turret.TurretMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.BaseWorld;
 import omtteam.openmodularturrets.core.world.BlockPosition;
 import omtteam.openmodularturrets.core.world.Box;
+import omtteam.openmodularturrets.core.world.Face;
+import omtteam.openmodularturrets.core.world.Vector3;
 
 import java.util.Collection;
 import java.util.List;
@@ -58,7 +61,7 @@ public final class TargetSelector {
      *
      * @param takenByOthers entity ids targeted by the base's other turrets (only excluded when multi-targeting)
      */
-    public Optional<TargetEntity> findBest(TurretType type, BlockPosition turret, TargetingSettings targeting,
+    public Optional<TargetEntity> findBest(TurretType type, BlockPosition turret, Face face, TargetingSettings targeting,
                                            boolean multiTargeting, Collection<Integer> takenByOthers) {
         List<TargetEntity> candidates = world.getLivingEntities(Box.around(turret, targeting.getRange() + 1));
         int[] weights = type.getDefaultPriorities();
@@ -66,7 +69,7 @@ public final class TargetSelector {
         long bestScore = Long.MIN_VALUE;
         for (TargetEntity entity : candidates) {
             if (multiTargeting && takenByOthers.contains(entity.getId())) continue;
-            if (!isValidTarget(entity, type, turret, targeting)) continue;
+            if (!isValidTarget(entity, type, turret, face, targeting)) continue;
             long score = TargetingPriority.score(entity, turret, weights);
             if (score > bestScore) {
                 bestScore = score;
@@ -78,8 +81,11 @@ public final class TargetSelector {
 
     /**
      * oldmod {@code validTarget} (without the multi-targeting check, see {@link #findBest}).
+     *
+     * @param face the base face the turret is mounted on
      */
-    public boolean isValidTarget(TargetEntity entity, TurretType type, BlockPosition turret, TargetingSettings targeting) {
+    public boolean isValidTarget(TargetEntity entity, TurretType type, BlockPosition turret, Face face,
+                                 TargetingSettings targeting) {
         if (!entity.isAlive() || entity.getHealth() <= 0) return false;
         Classification classification = classify(entity);
         if (classification == Classification.BLOCKED) return false;
@@ -90,7 +96,7 @@ public final class TargetSelector {
             if (trust.isProtectedFromTargeting(player.get())) return false;
         }
         if (!isInRange(entity, turret, targeting.getRange())) return false;
-        if (!canSee(entity, turret)) return false;
+        if (!canSee(entity, turret, face)) return false;
 
         Optional<PlayerIdentity> owner = entity.getOwner();
         if (owner.isPresent() && trust.isOwnerOrTrusted(owner.get())) return false;
@@ -118,8 +124,15 @@ public final class TargetSelector {
         return distance <= range;
     }
 
-    /** oldmod {@code canSeeTargetFromPos}: from the turret's centre to the entity's eyes. */
-    public boolean canSee(TargetEntity entity, BlockPosition turret) {
-        return world.hasLineOfSight(turret.x() + 0.5, turret.y() + 0.5, turret.z() + 0.5, entity);
+    /**
+     * oldmod {@code canSeeTargetFromPos}: from the turret's centre to the entity's eyes. Additionally the turret must
+     * be able to turn there without pointing into its base ({@link TurretMath#canAim}).
+     */
+    public boolean canSee(TargetEntity entity, BlockPosition turret, Face face) {
+        double x = turret.x() + 0.5;
+        double y = turret.y() + 0.5;
+        double z = turret.z() + 0.5;
+        Vector3 toEyes = new Vector3(entity.getX() - x, entity.getY() + entity.getEyeHeight() - y, entity.getZ() - z);
+        return TurretMath.canAim(face, toEyes) && world.hasLineOfSight(x, y, z, entity);
     }
 }

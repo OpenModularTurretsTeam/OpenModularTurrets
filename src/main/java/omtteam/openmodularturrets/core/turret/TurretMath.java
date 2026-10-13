@@ -16,6 +16,11 @@ public final class TurretMath {
     private static final double SPEED_GRAVITY = 1.6D;
     /** oldmod: the aim point is lowered by 0.1 blocks. */
     private static final double AIM_DROP = 0.1D;
+    /**
+     * Lowest local pitch a turret can aim at; anything lower would point into its own base (the base block covers
+     * up to about -45° below the mounting plane). New, oldmod turrets had no effective limits.
+     */
+    public static final float MIN_PITCH = -45.0F;
 
     private TurretMath() {
     }
@@ -57,6 +62,16 @@ public final class TurretMath {
         float yaw = (float) Math.toDegrees(Math.atan2(local.x(), local.z()));
         float pitch = (float) Math.toDegrees(Math.atan2(local.y(), horizontal));
         return new Angles(yaw, pitch);
+    }
+
+    /** Whether a turret on {@code face} can turn towards {@code direction} without pointing into its base. */
+    public static boolean canAim(Face face, Vector3 direction) {
+        return anglesFor(face, direction).pitch() >= MIN_PITCH;
+    }
+
+    /** {@code angles} with the pitch limited to {@link #MIN_PITCH}. */
+    public static Angles limit(Angles angles) {
+        return angles.pitch() >= MIN_PITCH ? angles : new Angles(angles.yaw(), MIN_PITCH);
     }
 
     /** World direction (unit length) of a turret on {@code face} with the given angles. */

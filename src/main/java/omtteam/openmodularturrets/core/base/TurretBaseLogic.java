@@ -578,7 +578,7 @@ public class TurretBaseLogic {
         targets.forEach((otherFace, id) -> {
             if (otherFace != face) takenByOthers.add(id);
         });
-        Optional<TargetEntity> target = targetSelector.findBest(type, world.getPosition().relative(face), targeting,
+        Optional<TargetEntity> target = targetSelector.findBest(type, world.getPosition().relative(face), face, targeting,
                 multiTargeting, takenByOthers);
         if (target.isPresent()) {
             targets.put(face, target.get().getId());
@@ -595,7 +595,8 @@ public class TurretBaseLogic {
         TurretType type = getTurrets().get(face);
         if (id == null || type == null) return Optional.empty();
         Optional<TargetEntity> target = world.getEntity(id)
-                .filter(entity -> targetSelector.isValidTarget(entity, type, world.getPosition().relative(face), targeting));
+                .filter(entity -> targetSelector.isValidTarget(entity, type, world.getPosition().relative(face), face,
+                        targeting));
         if (target.isEmpty()) targets.remove(face);
         return target;
     }

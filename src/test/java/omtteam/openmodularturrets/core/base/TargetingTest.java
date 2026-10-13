@@ -235,6 +235,14 @@ class TargetingTest {
         }
 
         @Test
+        void targetsBehindTheBaseAreIgnored() {
+            logic.setRange(5);
+            zombie(101, 61, 100);
+            search();
+            assertEquals(Optional.empty(), targetId());
+        }
+
+        @Test
         void deadTargetsAreReplacedImmediately() {
             FakeTarget first = zombie(103, 65, 100);
             FakeTarget second = zombie(106, 65, 100);

@@ -96,9 +96,11 @@ public class BlockEntityBaseWorld implements BaseWorld {
     }
 
     /**
-     * oldmod {@code canSeeTargetFromPos}: the trace starts one block towards the target (so the turret does not see
-     * itself) and only blocks with a collision shape stop it. The target is passed to {@link ClipContext} as the
-     * collision context entity (it must not be null), like vanilla's {@code LivingEntity.hasLineOfSight}.
+     * oldmod {@code canSeeTargetFromPos}, from a turret's block centre: the trace starts where it leaves the turret's
+     * own block (so the turret does not see itself) and only blocks with a collision shape stop it. The base counts
+     * as an obstacle, so turrets cannot see through it. (oldmod skipped a whole block from the centre, which could
+     * jump over the base and the blocks behind it.) The target is passed to {@link ClipContext} as the collision
+     * context entity (it must not be null), like vanilla's {@code LivingEntity.hasLineOfSight}.
      */
     @Override
     public boolean hasLineOfSight(double fromX, double fromY, double fromZ, TargetEntity target) {
@@ -107,12 +109,12 @@ public class BlockEntityBaseWorld implements BaseWorld {
         Vec3 end = new Vec3(target.getX(), target.getY() + target.getEyeHeight(), target.getZ());
         Vec3 start = new Vec3(fromX, fromY, fromZ);
         Vec3 delta = end.subtract(start);
-        if (delta.lengthSqr() > 1) {
-            start = start.add(delta.normalize());
-        }
+        double largestAxis = Math.max(Math.max(Math.abs(delta.x), Math.abs(delta.y)), Math.abs(delta.z));
+        if (largestAxis <= 0.5D) return true;
+        start = start.add(delta.scale(0.5D / largestAxis)).add(delta.normalize().scale(1.0E-3D));
         BlockHitResult hit = current.clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
                 living.getEntity()));
-        return hit.getType() == HitResult.Type.MISS || hit.getBlockPos().equals(pos);
+        return hit.getType() == HitResult.Type.MISS;
     }
 
     @Override

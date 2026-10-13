@@ -9,6 +9,12 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 
 ## [Unreleased]
 
+## [4.0.0-alpha.3] - 2026-10-13
+
+### Fixed
+
+- Turrets no longer target mobs behind their own base through solid blocks, and can no longer aim into their base
+
 ## [4.0.0-alpha.2] - 2026-10-13
 
 ### Fixed
