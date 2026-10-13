@@ -2,7 +2,8 @@ package omtteam.openmodularturrets.client.screen;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -59,13 +60,13 @@ public class TrustedPlayerList extends AbstractWidget {
     }
 
     @Override
-    public void onClick(double mouseX, double mouseY) {
-        int row = (int) ((mouseY - getY() - PADDING) / ROW_HEIGHT) + scrollRows;
+    public void onClick(MouseButtonEvent event, boolean doubleClick) {
+        int row = (int) ((event.y() - getY() - PADDING) / ROW_HEIGHT) + scrollRows;
         selected = row >= 0 && row < entries.size() ? entries.get(row).getUuid() : null;
     }
 
     @Override
-    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         Font font = Minecraft.getInstance().font;
         graphics.enableScissor(getX(), getY(), getX() + width, getY() + height);
         int rows = Math.min(visibleRows(), entries.size() - scrollRows);
@@ -77,7 +78,7 @@ public class TrustedPlayerList extends AbstractWidget {
             }
             Component text = Component.literal(entry.getName() + ", ")
                     .append(TrustedPlayersScreen.levelName(entry.getAccessLevel()));
-            graphics.drawString(font, text, getX() + PADDING + 2, rowY + 1, 0xFFFFFF, false);
+            graphics.text(font, text, getX() + PADDING + 2, rowY + 1, 0xFFFFFFFF, false);
         }
         graphics.disableScissor();
     }

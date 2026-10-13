@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
  * {@link OMTDataGenerator#buildRegistry}.
  */
 public class OMTDamageTypeProvider extends FabricDynamicRegistryProvider {
-    public OMTDamageTypeProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+    public OMTDamageTypeProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
 

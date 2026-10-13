@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "openmodularturrets:item/lever_block",
+    "model": {
+      "type": "openmodularturrets:lever"
+    }
+  }
+}

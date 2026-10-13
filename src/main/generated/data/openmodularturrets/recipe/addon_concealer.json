@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "openmodularturrets:io_bus",
+    "C": "minecraft:chest",
+    "I": "#c:ingots/iron",
+    "Q": "#c:gems/quartz"
+  },
+  "pattern": [
+    "IQI",
+    "QCB",
+    "IQI"
+  ],
+  "result": {
+    "id": "openmodularturrets:addon_concealer"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "H": "openmodularturrets:hardened_tier_one",
+    "P": "#minecraft:planks",
+    "S": "openmodularturrets:sensor_tier_one"
+  },
+  "pattern": [
+    "HPH",
+    "PSP",
+    "HPH"
+  ],
+  "result": {
+    "count": 4,
+    "id": "openmodularturrets:camo_trap"
+  }
+}

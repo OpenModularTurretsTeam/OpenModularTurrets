@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "openmodularturrets:item/relativistic_turret",
+    "model": {
+      "type": "openmodularturrets:turret",
+      "turret": "relativistic_turret"
+    }
+  }
+}

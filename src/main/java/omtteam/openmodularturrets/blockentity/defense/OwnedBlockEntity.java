@@ -2,6 +2,7 @@ package omtteam.openmodularturrets.blockentity.defense;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.LivingEntity;
@@ -53,17 +54,17 @@ public class OwnedBlockEntity extends CompatBlockEntity {
     }
 
     @Override
-    protected void readData(CompoundTag tag, HolderLookup.Provider registries) {
-        CompoundTag ownerTag = tag.getCompound("Owner");
-        owner = tag.contains("Owner", Tag.TAG_COMPOUND) && ownerTag.hasUUID("UUID")
-                ? new PlayerIdentity(ownerTag.getUUID("UUID"), ownerTag.getString("Name")) : null;
+    protected void readData(CompoundTag tag) {
+        CompoundTag ownerTag = tag.getCompoundOrEmpty("Owner");
+        owner = ownerTag.read("UUID", UUIDUtil.CODEC)
+                .map(uuid -> new PlayerIdentity(uuid, ownerTag.getStringOr("Name", ""))).orElse(null);
     }
 
     @Override
-    protected void writeData(CompoundTag tag, HolderLookup.Provider registries) {
+    protected void writeData(CompoundTag tag) {
         if (owner != null) {
             CompoundTag ownerTag = new CompoundTag();
-            ownerTag.putUUID("UUID", owner.uuid());
+            ownerTag.store("UUID", UUIDUtil.CODEC, owner.uuid());
             ownerTag.putString("Name", owner.name());
             tag.put("Owner", ownerTag);
         }

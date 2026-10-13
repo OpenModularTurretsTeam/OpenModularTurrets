@@ -28,10 +28,7 @@ import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.blockentity.defense.CamoTrapBlockEntity;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
 import org.jetbrains.annotations.Nullable;
-//? if >=1.21 {
-import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.LevelReader;
-//?}
 
 /**
  * Camouflage trap (OMPD {@code BlockCamoTrap} + OMLib {@code BlockAbstractCamoTileEntity}): looks like another full
@@ -42,9 +39,6 @@ import net.minecraft.world.level.LevelReader;
  * harvest tool to the camouflage's tool).
  */
 public class CamoTrapBlock extends BaseEntityBlock implements InteractiveBlock {
-    //? if >=1.21 {
-    private static final MapCodec<CamoTrapBlock> CODEC = simpleCodec(CamoTrapBlock::new);
-    //?}
 
     public CamoTrapBlock(Properties properties) {
         super(properties);
@@ -60,20 +54,14 @@ public class CamoTrapBlock extends BaseEntityBlock implements InteractiveBlock {
                 .sound(SoundType.GRAVEL)
                 .noOcclusion()
                 .dynamicShape()
-                .isViewBlocking((state, level, pos) -> false);
+                .isViewBlocking((state, level, pos, box) -> false);
     }
 
-    //? if >=1.21 {
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-    //?}
 
     /** Drawn by the block entity renderer (camouflage or the trap's own model). */
     @Override
     public RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
+        return RenderShape.INVISIBLE;
     }
 
     @Override
@@ -108,19 +96,11 @@ public class CamoTrapBlock extends BaseEntityBlock implements InteractiveBlock {
         return super.getDestroyProgress(state, player, level, pos);
     }
 
-    //? if >=1.21 {
     /** OMPD {@code getPickBlock}: picking gives the camouflage, so the trap is not revealed. */
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return cloneItem(level, pos, state);
     }
-    //?} else {
-    /*/^* OMPD {@code getPickBlock}: picking gives the camouflage, so the trap is not revealed. ^/
-    @Override
-    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
-        return cloneItem(level, pos, state);
-    }
-    *///?}
 
     private ItemStack cloneItem(BlockGetter level, BlockPos pos, BlockState state) {
         if (level.getBlockEntity(pos) instanceof CamoTrapBlockEntity trap && trap.getCamo() != null) {
@@ -150,7 +130,7 @@ public class CamoTrapBlock extends BaseEntityBlock implements InteractiveBlock {
                 player.sendSystemMessage(Component.translatable("message.openmodularturrets.not_owner"));
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 
     /** The disguise for a held block, if allowed: a full, non-air block without block entity, not another trap. */

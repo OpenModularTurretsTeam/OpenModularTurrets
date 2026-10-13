@@ -31,7 +31,7 @@ public final class TrustPacketHandler {
         }
         String name = packet.name().trim();
         Optional<PlayerIdentity> target = name.isEmpty() ? Optional.empty()
-                : PlayerLookup.findByName(player.getServer(), name);
+                : PlayerLookup.findByName(player.level().getServer(), name);
         if (target.isEmpty()) {
             player.sendSystemMessage(Component.translatable("message.openmodularturrets.player_not_found", name));
             return;

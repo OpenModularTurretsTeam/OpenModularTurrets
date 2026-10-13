@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "openmodularturrets:turret_base_tier_one"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

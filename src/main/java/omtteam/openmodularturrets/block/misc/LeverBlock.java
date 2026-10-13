@@ -17,9 +17,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -29,16 +30,13 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.misc.LeverBlockEntity;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
-//? if >=1.21 {
-import com.mojang.serialization.MapCodec;
-//?}
 
 /**
  * Basic turret base crank (oldmod {@code LeverBlock}): placed next to a tier 1 base, each turn adds 50 energy.
  * {@link #FACING} points towards the base.
  */
 public class LeverBlock extends BaseEntityBlock implements InteractiveBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     /** oldmod {@code storage.receiveEnergy(50, false)} per turn (limited by the base's max input). */
     private static final long ENERGY_PER_TURN = 50;
     /** oldmod bounding box 0.1–0.9. */
@@ -46,9 +44,6 @@ public class LeverBlock extends BaseEntityBlock implements InteractiveBlock {
     /** oldmod placement check order: a base to the north wins over south, west and east. */
     private static final Direction[] SEARCH_ORDER = {Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
 
-    //? if >=1.21 {
-    private static final MapCodec<LeverBlock> CODEC = simpleCodec(LeverBlock::new);
-    //?}
 
     public LeverBlock(Properties properties) {
         super(properties);
@@ -60,12 +55,6 @@ public class LeverBlock extends BaseEntityBlock implements InteractiveBlock {
         return Properties.of().mapColor(MapColor.STONE).sound(SoundType.STONE).strength(2.0F, 15.0F).noOcclusion();
     }
 
-    //? if >=1.21 {
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-    //?}
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
@@ -79,7 +68,7 @@ public class LeverBlock extends BaseEntityBlock implements InteractiveBlock {
 
     @Override
     public RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
+        return RenderShape.INVISIBLE;
     }
 
     @Override
@@ -117,9 +106,9 @@ public class LeverBlock extends BaseEntityBlock implements InteractiveBlock {
 
     /** oldmod {@code neighborChanged}: drops when the base is gone. */
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbourBlock, BlockPos neighbourPos,
-                                boolean movedByPiston) {
-        super.neighborChanged(state, level, pos, neighbourBlock, neighbourPos, movedByPiston);
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbourBlock,
+                                @Nullable Orientation orientation, boolean movedByPiston) {
+        super.neighborChanged(state, level, pos, neighbourBlock, orientation, movedByPiston);
         if (!level.isClientSide() && !canSurvive(state, level, pos)) {
             level.destroyBlock(pos, true);
         }
@@ -136,6 +125,6 @@ public class LeverBlock extends BaseEntityBlock implements InteractiveBlock {
                 level.blockEvent(pos, this, LeverBlockEntity.EVENT_TURN, 0);
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 }

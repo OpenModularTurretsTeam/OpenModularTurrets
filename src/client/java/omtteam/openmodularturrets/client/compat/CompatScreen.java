@@ -1,11 +1,11 @@
 package omtteam.openmodularturrets.client.compat;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 /**
- * Screen base class hiding the rendering and scrolling differences between 1.20.1 and 1.21.
+ * Screen base class for the plain (non-container) screens.
  * Subclasses draw their panel in {@link #renderPanel} (behind widgets) and extras in {@link #renderForeground}
  * (above widgets), and handle the mouse wheel in {@link #onScroll}.
  */
@@ -15,10 +15,10 @@ public abstract class CompatScreen extends Screen {
     }
 
     /** Draws the panel texture and labels; called after the dimmed background, before widgets. */
-    protected abstract void renderPanel(GuiGraphics graphics, int mouseX, int mouseY, float partialTick);
+    protected abstract void renderPanel(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick);
 
     /** Draws tooltips and other overlays; called after widgets. */
-    protected void renderForeground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    protected void renderForeground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
     }
 
     /** Mouse wheel; {@code delta} is positive when scrolling up. */
@@ -26,16 +26,15 @@ public abstract class CompatScreen extends Screen {
         return false;
     }
 
-    //? if >=1.21 {
     @Override
-    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(graphics, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
         renderPanel(graphics, mouseX, mouseY, partialTick);
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         renderForeground(graphics, mouseX, mouseY, partialTick);
     }
 
@@ -43,20 +42,6 @@ public abstract class CompatScreen extends Screen {
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         return onScroll(mouseX, mouseY, scrollY) || super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
-    //?} else {
-    /*@Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(graphics);
-        renderPanel(graphics, mouseX, mouseY, partialTick);
-        super.render(graphics, mouseX, mouseY, partialTick);
-        renderForeground(graphics, mouseX, mouseY, partialTick);
-    }
-
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        return onScroll(mouseX, mouseY, delta) || super.mouseScrolled(mouseX, mouseY, delta);
-    }
-    *///?}
 
     @Override
     public boolean isPauseScreen() {

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "minecraft:cobblestone"
+  },
+  "pattern": [
+    "CCC",
+    "C  ",
+    "C  "
+  ],
+  "result": {
+    "id": "openmodularturrets:lever_block"
+  }
+}

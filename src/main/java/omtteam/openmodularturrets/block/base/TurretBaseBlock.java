@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.Containers;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -19,6 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
@@ -33,25 +33,11 @@ import omtteam.openmodularturrets.network.PacketValidation;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 import org.jetbrains.annotations.Nullable;
-//? if <1.21 {
-/*import net.minecraft.world.InteractionHand;
-*///?}
-//? if >=1.21 {
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-//?}
 
 /**
  * Turret base, one block per tier (1–5). Ported from oldmod {@code BlockTurretBase} (meta-based tiers flattened).
  */
 public class TurretBaseBlock extends BaseEntityBlock {
-    //? if >=1.21 {
-    public static final MapCodec<TurretBaseBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.intRange(1, 5).fieldOf("tier").forGetter(TurretBaseBlock::getTier),
-            propertiesCodec()
-    ).apply(instance, TurretBaseBlock::new));
-    //?}
 
     private final int tier;
 
@@ -71,7 +57,7 @@ public class TurretBaseBlock extends BaseEntityBlock {
                 .mapColor(MapColor.STONE)
                 .sound(SoundType.STONE)
                 .requiresCorrectToolForDrops()
-                .pushReaction(PushReaction.BLOCK)
+                .pushReaction(PushReaction.IMMOVEABLE)
                 .isValidSpawn((state, level, pos, entityType) -> false);
         if (bases.baseBreakable) {
             properties.strength(settings.baseHardness, settings.baseBlastResistance);
@@ -81,12 +67,6 @@ public class TurretBaseBlock extends BaseEntityBlock {
         return properties;
     }
 
-    //? if >=1.21 {
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-    //?}
 
     public int getTier() {
         return tier;
@@ -145,27 +125,19 @@ public class TurretBaseBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbourBlock, BlockPos neighbourPos,
-                                boolean movedByPiston) {
-        super.neighborChanged(state, level, pos, neighbourBlock, neighbourPos, movedByPiston);
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbourBlock,
+                                @Nullable Orientation orientation, boolean movedByPiston) {
+        super.neighborChanged(state, level, pos, neighbourBlock, orientation, movedByPiston);
         if (!level.isClientSide() && level.getBlockEntity(pos) instanceof TurretBaseBlockEntity base) {
             base.onNeighbourChanged();
         }
     }
 
-    //? if >=1.21 {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
                                                BlockHitResult hit) {
         return onUse(level, pos, player);
     }
-    //?} else {
-    /*@Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
-                                 BlockHitResult hit) {
-        return hand == InteractionHand.MAIN_HAND ? onUse(level, pos, player) : InteractionResult.PASS;
-    }
-    *///?}
 
     /**
      * oldmod {@code onBlockActivated}: right-click (not sneaking) opens the GUI if the player has access, otherwise
@@ -187,14 +159,5 @@ public class TurretBaseBlock extends BaseEntityBlock {
             PacketValidation.sendNoPermission(serverPlayer);
         }
         return InteractionResult.CONSUME;
-    }
-
-    /** Drops the whole inventory (ammo, addons, upgrades) when the base is removed (OMLib {@code dropItems}). */
-    @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof TurretBaseBlockEntity base) {
-            Containers.dropContents(level, pos, base.getInventory());
-        }
-        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 }

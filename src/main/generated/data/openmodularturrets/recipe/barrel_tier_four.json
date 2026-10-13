@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "openmodularturrets:barrel_tier_three",
+    "D": "#c:gems/diamond",
+    "Q": "#c:gems/quartz"
+  },
+  "pattern": [
+    "QDQ",
+    " B ",
+    "QDQ"
+  ],
+  "result": {
+    "id": "openmodularturrets:barrel_tier_four"
+  }
+}

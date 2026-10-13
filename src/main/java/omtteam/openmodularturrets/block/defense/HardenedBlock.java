@@ -15,17 +15,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
 import org.jetbrains.annotations.Nullable;
-//? if >=1.21 {
-import com.mojang.serialization.MapCodec;
-//?}
 
 /**
  * Hardened block (OMPD {@code BlockHardened}), one block per tier.
  */
 public class HardenedBlock extends BaseEntityBlock implements InteractiveBlock {
-    //? if >=1.21 {
-    private static final MapCodec<HardenedBlock> CODEC = simpleCodec(properties -> new HardenedBlock(DefenseTier.ONE, properties));
-    //?}
 
     private final DefenseTier tier;
 
@@ -34,12 +28,6 @@ public class HardenedBlock extends BaseEntityBlock implements InteractiveBlock {
         this.tier = tier;
     }
 
-    //? if >=1.21 {
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-    //?}
 
     public DefenseTier getTier() {
         return tier;

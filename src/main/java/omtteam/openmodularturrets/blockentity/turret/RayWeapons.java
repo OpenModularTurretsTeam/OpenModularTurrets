@@ -98,8 +98,8 @@ public final class RayWeapons {
             double deviationModifier = 10D * (target.getBbHeight() < 0.5 ? 1.5D : 1D)
                     * (aim.distanceTo(origin) * 0.2D / logic.getRange(type) + 0.3D);
             double scale = 0.003D * deviationModifier * accuracy;
-            Vec3 end = aim.add(level.random.nextGaussian() * scale, level.random.nextGaussian() * scale,
-                    level.random.nextGaussian() * scale);
+            Vec3 end = aim.add(level.getRandom().nextGaussian() * scale, level.getRandom().nextGaussian() * scale,
+                    level.getRandom().nextGaussian() * scale);
             Vec3 start = origin.add(end.subtract(origin).normalize().scale(0.8D));
             playSound(level, turret.getBlockPos(), TurretWeapon.of(type).launchSound());
 
@@ -153,7 +153,7 @@ public final class RayWeapons {
         }
         if (spec.hitSound() != null) {
             level.playSound(null, entity.blockPosition(), spec.hitSound(), SoundSource.AMBIENT,
-                    (float) OMTConfig.get().turrets.turretSoundVolume, level.random.nextFloat() + 0.5F);
+                    (float) OMTConfig.get().turrets.turretSoundVolume, level.getRandom().nextFloat() + 0.5F);
         }
         return true;
     }
@@ -224,6 +224,6 @@ public final class RayWeapons {
 
     private static void playSound(ServerLevel level, BlockPos pos, SoundEvent sound) {
         level.playSound(null, pos, sound, SoundSource.BLOCKS, (float) OMTConfig.get().turrets.turretSoundVolume,
-                level.random.nextFloat() + 0.5F);
+                level.getRandom().nextFloat() + 0.5F);
     }
 }

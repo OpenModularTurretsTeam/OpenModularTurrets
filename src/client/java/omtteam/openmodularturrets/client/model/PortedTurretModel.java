@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.client.model;
 
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
  * around X (pitch); static turrets (arc, relativistic, teleporter) have neither.
  */
 public class PortedTurretModel extends TurretModel {
-    private final ResourceLocation texture;
+    private final Identifier texture;
     @Nullable
     private final ModelPart yawPart;
     @Nullable
@@ -19,7 +19,7 @@ public class PortedTurretModel extends TurretModel {
      * @param yawPath   path of the part that turns, e.g. {@code base/holder}; {@code null} for static turrets
      * @param pitchPath path of the part that tilts, e.g. {@code base/holder/weapon}
      */
-    public PortedTurretModel(ModelPart root, ResourceLocation texture, @Nullable String yawPath, @Nullable String pitchPath) {
+    public PortedTurretModel(ModelPart root, Identifier texture, @Nullable String yawPath, @Nullable String pitchPath) {
         super(root);
         this.texture = texture;
         this.yawPart = find(root, yawPath);
@@ -37,7 +37,7 @@ public class PortedTurretModel extends TurretModel {
     }
 
     @Override
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         return texture;
     }
 

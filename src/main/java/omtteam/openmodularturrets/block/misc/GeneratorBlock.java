@@ -8,7 +8,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import omtteam.openmodularturrets.block.InteractiveBlock;
@@ -34,21 +33,15 @@ import omtteam.openmodularturrets.compat.MenuCompat;
 import omtteam.openmodularturrets.menu.GeneratorMenu;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
-//? if >=1.21 {
-import com.mojang.serialization.MapCodec;
-//?}
 
 /**
  * Generator (new block, not in oldmod): a furnace-like fuel burner that powers adjacent turret bases. Anyone may
  * use it (no owner). {@link #FACING} is the front, {@link #LIT} is set while burning.
  */
 public class GeneratorBlock extends BaseEntityBlock implements InteractiveBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    //? if >=1.21 {
-    private static final MapCodec<GeneratorBlock> CODEC = simpleCodec(GeneratorBlock::new);
-    //?}
 
     public GeneratorBlock(Properties properties) {
         super(properties);
@@ -61,12 +54,6 @@ public class GeneratorBlock extends BaseEntityBlock implements InteractiveBlock 
                 .requiresCorrectToolForDrops().lightLevel(state -> state.getValue(LIT) ? 13 : 0);
     }
 
-    //? if >=1.21 {
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-    //?}
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
@@ -102,15 +89,7 @@ public class GeneratorBlock extends BaseEntityBlock implements InteractiveBlock 
             MenuCompat.open(serverPlayer, Component.translatable(getDescriptionId()), pos,
                     (containerId, inventory, menuPlayer) -> GeneratorMenu.server(containerId, inventory, generator));
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
-    }
-
-    @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof GeneratorBlockEntity generator) {
-            Containers.dropContents(level, pos, generator.getFuelContainer());
-        }
-        super.onRemove(state, level, pos, newState, movedByPiston);
+        return InteractionResult.SUCCESS;
     }
 
     /** Furnace-style crackle and smoke at the front while burning. */

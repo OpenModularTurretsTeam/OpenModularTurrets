@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "openmodularturrets:item/railgun_turret",
+    "model": {
+      "type": "openmodularturrets:turret",
+      "turret": "railgun_turret"
+    }
+  }
+}

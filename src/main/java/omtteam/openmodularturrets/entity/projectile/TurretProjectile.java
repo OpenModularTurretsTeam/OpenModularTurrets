@@ -23,9 +23,7 @@ import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import org.jetbrains.annotations.Nullable;
-//? if >=1.21 {
 import net.minecraft.network.syncher.SynchedEntityData;
-//?}
 
 
 /**
@@ -153,17 +151,10 @@ public abstract class TurretProjectile extends Projectile {
         return false;
     }
 
-    //? if >=1.21 {
     @Override
     public boolean ignoreExplosion(Explosion explosion) {
         return isImmuneToExplosions() || super.ignoreExplosion(explosion);
     }
-    //?} else {
-    /*@Override
-    public boolean ignoreExplosion() {
-        return isImmuneToExplosions() || super.ignoreExplosion();
-    }
-    *///?}
 
     /** oldmod {@code writeToNBTOptional}: projectiles are never saved. */
     @Override
@@ -171,13 +162,7 @@ public abstract class TurretProjectile extends Projectile {
         return false;
     }
 
-    //? if >=1.21 {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
-    //?} else {
-    /*@Override
-    protected void defineSynchedData() {
-    }
-    *///?}
 }

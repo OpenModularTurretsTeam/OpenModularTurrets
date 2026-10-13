@@ -1,15 +1,14 @@
 package omtteam.openmodularturrets.security;
 
-import com.mojang.authlib.GameProfile;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.GameProfileCache;
+import net.minecraft.server.players.NameAndId;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 
 import java.util.Optional;
 
 /**
- * Resolves player names to UUIDs on the server (online players first, then the server's profile cache).
+ * Resolves player names to UUIDs on the server (online players first, then the server's name cache).
  * Replaces OMLib {@code PlayerUtil.getPlayerFromUsernameCache}.
  */
 public final class PlayerLookup {
@@ -21,14 +20,12 @@ public final class PlayerLookup {
         if (online != null) {
             return Optional.of(PlayerAdapter.identity(online));
         }
-        GameProfileCache cache = server.getProfileCache();
-        if (cache == null) return Optional.empty();
-        return cache.get(name)
-                .filter(profile -> profile.getId() != null)
+        return server.services().nameToIdCache().get(name)
+                .filter(profile -> profile.id() != null)
                 .map(PlayerLookup::identity);
     }
 
-    private static PlayerIdentity identity(GameProfile profile) {
-        return new PlayerIdentity(profile.getId(), profile.getName());
+    private static PlayerIdentity identity(NameAndId profile) {
+        return new PlayerIdentity(profile.id(), profile.name());
     }
 }

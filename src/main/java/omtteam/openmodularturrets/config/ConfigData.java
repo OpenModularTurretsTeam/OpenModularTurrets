@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.config;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import omtteam.openmodularturrets.OMT;
@@ -58,15 +58,15 @@ public class ConfigData {
         public List<String> neutralForceList = new ArrayList<>(List.of("minecraft:cow"));
 
         // Parsed ammo allow list (id -> damage bonus), built by validate()
-        private transient Map<ResourceLocation, Integer> ammoItemDamageBonus = Map.of();
+        private transient Map<Identifier, Integer> ammoItemDamageBonus = Map.of();
         private transient Map<TagKey<Item>, Integer> ammoTagDamageBonus = Map.of();
         // Parsed entity lists, built by validate(). Entities on both force lists are in neither set.
-        private transient Set<ResourceLocation> blockedEntities = Set.of();
-        private transient Set<ResourceLocation> forcedHostileEntities = Set.of();
-        private transient Set<ResourceLocation> forcedNeutralEntities = Set.of();
+        private transient Set<Identifier> blockedEntities = Set.of();
+        private transient Set<Identifier> forcedHostileEntities = Set.of();
+        private transient Set<Identifier> forcedNeutralEntities = Set.of();
 
         /** Disposable ammo items and their damage bonus. */
-        public Map<ResourceLocation, Integer> ammoItemDamageBonus() {
+        public Map<Identifier, Integer> ammoItemDamageBonus() {
             return ammoItemDamageBonus;
         }
 
@@ -76,17 +76,17 @@ public class ConfigData {
         }
 
         /** Entities that are never targeted. */
-        public Set<ResourceLocation> blockedEntities() {
+        public Set<Identifier> blockedEntities() {
             return blockedEntities;
         }
 
         /** Entities that are always seen as hostile. */
-        public Set<ResourceLocation> forcedHostileEntities() {
+        public Set<Identifier> forcedHostileEntities() {
             return forcedHostileEntities;
         }
 
         /** Entities that are always seen as neutral. */
-        public Set<ResourceLocation> forcedNeutralEntities() {
+        public Set<Identifier> forcedNeutralEntities() {
             return forcedNeutralEntities;
         }
 
@@ -97,13 +97,13 @@ public class ConfigData {
             neutralForceList = v.ids("general.neutralForceList", neutralForceList);
             parseAmmoList();
 
-            Set<ResourceLocation> hostile = parseIds(mobForceList);
-            Set<ResourceLocation> neutral = parseIds(neutralForceList);
+            Set<Identifier> hostile = parseIds(mobForceList);
+            Set<Identifier> neutral = parseIds(neutralForceList);
             // An entity on both force lists is ignored on both. The entries stay in the file so the error
             // is logged again on every startup until the user fixes it.
-            Set<ResourceLocation> conflicts = new HashSet<>(hostile);
+            Set<Identifier> conflicts = new HashSet<>(hostile);
             conflicts.retainAll(neutral);
-            for (ResourceLocation id : conflicts) {
+            for (Identifier id : conflicts) {
                 OMT.LOGGER.error("OMTConfigError: {} is in both general.mobForceList and general.neutralForceList, "
                         + "ignoring it in both lists", id);
             }
@@ -120,16 +120,16 @@ public class ConfigData {
          * (oldmod {@code OMTConfig.parseDisposableAmmoList}); later duplicates win.
          */
         private void parseAmmoList() {
-            Map<ResourceLocation, Integer> items = new LinkedHashMap<>();
+            Map<Identifier, Integer> items = new LinkedHashMap<>();
             Map<TagKey<Item>, Integer> tags = new LinkedHashMap<>();
             for (String entry : ammoAllowList) {
                 String[] parts = entry.split(",");
                 String id = parts[0].trim();
                 int bonus = parts.length > 1 ? Integer.parseInt(parts[1].trim()) : 1;
                 if (id.startsWith("#")) {
-                    tags.put(TagKey.create(Registries.ITEM, ResourceLocation.tryParse(id.substring(1))), bonus);
+                    tags.put(TagKey.create(Registries.ITEM, Identifier.tryParse(id.substring(1))), bonus);
                 } else {
-                    items.put(ResourceLocation.tryParse(id), bonus);
+                    items.put(Identifier.tryParse(id), bonus);
                 }
             }
             ammoItemDamageBonus = Map.copyOf(items);
@@ -137,10 +137,10 @@ public class ConfigData {
         }
 
         /** Entries were already checked by {@link ConfigValidator#ids}. */
-        private static Set<ResourceLocation> parseIds(List<String> ids) {
-            Set<ResourceLocation> result = new HashSet<>();
+        private static Set<Identifier> parseIds(List<String> ids) {
+            Set<Identifier> result = new HashSet<>();
             for (String id : ids) {
-                result.add(ResourceLocation.tryParse(id));
+                result.add(Identifier.tryParse(id));
             }
             return result;
         }

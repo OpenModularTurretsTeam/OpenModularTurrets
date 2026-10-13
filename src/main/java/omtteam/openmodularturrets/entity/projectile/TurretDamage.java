@@ -43,7 +43,7 @@ public final class TurretDamage {
             causing = TurretKiller.withLooting(serverLevel, lootingLevel);
         }
         target.hurt(TurretDamageSource.of(level, type, direct, causing, basePos, lootingLevel), amount);
-        target.invulnerableTime = 0;
+        target.setInvulnerableTime(0);
     }
 
     /**

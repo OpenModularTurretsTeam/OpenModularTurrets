@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "openmodularturrets:barrel_tier_two",
+    "C": "openmodularturrets:chamber_tier_two",
+    "I": "openmodularturrets:io_bus",
+    "X": "#c:ingots/iron"
+  },
+  "pattern": [
+    "B B",
+    "CXC",
+    "IXI"
+  ],
+  "result": {
+    "id": "openmodularturrets:incendiary_turret"
+  }
+}

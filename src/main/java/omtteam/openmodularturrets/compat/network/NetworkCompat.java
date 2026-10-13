@@ -2,13 +2,9 @@ package omtteam.openmodularturrets.compat.network;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-//? if >=1.21 {
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-//?} else {
-/*import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-*///?}
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -33,20 +29,13 @@ public final class NetworkCompat {
     /**
      * Registers a client-to-server packet and its server-side handler. Call from common init.
      */
-    public static <T> PacketType<T> registerC2S(ResourceLocation id, BiConsumer<FriendlyByteBuf, T> encoder,
+    public static <T> PacketType<T> registerC2S(Identifier id, BiConsumer<FriendlyByteBuf, T> encoder,
                                                 Function<FriendlyByteBuf, T> decoder, ServerHandler<T> handler) {
         PacketType<T> type = new PacketType<>(id, encoder, decoder);
-        //? if >=1.21 {
-        PayloadTypeRegistry.playC2S().register(type.payloadType(), type.codec());
+        PayloadTypeRegistry.serverboundPlay().register(type.payloadType(), type.codec());
         // Fabric runs payload handlers on the server thread on 1.20.5+
         ServerPlayNetworking.registerGlobalReceiver(type.payloadType(),
                 (payload, context) -> handler.handle(payload.packet(), context.player()));
-        //?} else {
-        /*ServerPlayNetworking.registerGlobalReceiver(id, (server, player, listener, buf, sender) -> {
-            T packet = type.decode(buf); // decode before the buffer is released
-            server.execute(() -> handler.handle(packet, player));
-        });
-        *///?}
         return type;
     }
 
@@ -54,12 +43,10 @@ public final class NetworkCompat {
      * Registers a server-to-client packet. Call from common init; register the client handler with
      * {@code ClientNetworkCompat#registerHandler} from client init.
      */
-    public static <T> PacketType<T> registerS2C(ResourceLocation id, BiConsumer<FriendlyByteBuf, T> encoder,
+    public static <T> PacketType<T> registerS2C(Identifier id, BiConsumer<FriendlyByteBuf, T> encoder,
                                                 Function<FriendlyByteBuf, T> decoder) {
         PacketType<T> type = new PacketType<>(id, encoder, decoder);
-        //? if >=1.21 {
-        PayloadTypeRegistry.playS2C().register(type.payloadType(), type.codec());
-        //?}
+        PayloadTypeRegistry.clientboundPlay().register(type.payloadType(), type.codec());
         return type;
     }
 
@@ -67,20 +54,10 @@ public final class NetworkCompat {
      * Whether the player's client can receive packets of this type (i.e. has the mod installed).
      */
     public static boolean canSend(ServerPlayer player, PacketType<?> type) {
-        //? if >=1.21 {
         return ServerPlayNetworking.canSend(player, type.payloadType());
-        //?} else {
-        /*return ServerPlayNetworking.canSend(player, type.id());
-        *///?}
     }
 
     public static <T> void sendToPlayer(ServerPlayer player, PacketType<T> type, T packet) {
-        //? if >=1.21 {
         ServerPlayNetworking.send(player, type.wrap(packet));
-        //?} else {
-        /*FriendlyByteBuf buf = PacketByteBufs.create();
-        type.encode(buf, packet);
-        ServerPlayNetworking.send(player, type.id(), buf);
-        *///?}
     }
 }

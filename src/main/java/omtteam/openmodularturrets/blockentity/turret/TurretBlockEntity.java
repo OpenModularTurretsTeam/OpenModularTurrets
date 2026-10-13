@@ -317,12 +317,10 @@ public class TurretBlockEntity extends CompatBlockEntity {
     // ---- NBT ----
 
     @Override
-    protected void readData(CompoundTag tag, HolderLookup.Provider registries) {
-        if (tag.contains("TicksSinceShot")) {
-            ticksSinceShot = tag.getInt("TicksSinceShot");
-        }
-        yaw = tag.getFloat("Yaw");
-        pitch = tag.getFloat("Pitch");
+    protected void readData(CompoundTag tag) {
+        tag.getInt("TicksSinceShot").ifPresent(ticks -> ticksSinceShot = ticks);
+        yaw = tag.getFloatOr("Yaw", 0);
+        pitch = tag.getFloatOr("Pitch", 0);
         if (!renderInitialised) {
             renderYaw = prevRenderYaw = yaw;
             renderPitch = prevRenderPitch = pitch;
@@ -331,14 +329,14 @@ public class TurretBlockEntity extends CompatBlockEntity {
     }
 
     @Override
-    protected void writeData(CompoundTag tag, HolderLookup.Provider registries) {
-        writeClientData(tag, registries);
+    protected void writeData(CompoundTag tag) {
+        writeClientData(tag);
         tag.putInt("TicksSinceShot", ticksSinceShot);
     }
 
     /** Clients only need the aim. */
     @Override
-    protected void writeClientData(CompoundTag tag, HolderLookup.Provider registries) {
+    protected void writeClientData(CompoundTag tag) {
         tag.putFloat("Yaw", yaw);
         tag.putFloat("Pitch", pitch);
     }

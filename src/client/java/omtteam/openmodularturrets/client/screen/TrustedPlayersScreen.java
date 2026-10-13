@@ -1,14 +1,16 @@
 package omtteam.openmodularturrets.client.screen;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.client.compat.ClientNetworkCompat;
@@ -19,7 +21,6 @@ import omtteam.openmodularturrets.network.OMTPackets;
 import omtteam.openmodularturrets.network.TrustPackets;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ import java.util.Optional;
  * server checks the permission and the change comes back through the block entity sync.
  */
 public class TrustedPlayersScreen extends CompatScreen {
-    private static final ResourceLocation TEXTURE = OMT.id("textures/gui/trusted_players.png");
+    private static final Identifier TEXTURE = OMT.id("textures/gui/trusted_players.png");
     private static final int WIDTH = 256;
     private static final int HEIGHT = 256;
 
@@ -102,7 +103,7 @@ public class TrustedPlayersScreen extends CompatScreen {
     }
 
     private void back() {
-        if (minecraft != null) minecraft.setScreen(parent);
+        if (minecraft != null) minecraft.gui.setScreen(parent);
     }
 
     private void addPlayer() {
@@ -134,12 +135,12 @@ public class TrustedPlayersScreen extends CompatScreen {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (nameField.isFocused() && (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)) {
+    public boolean keyPressed(KeyEvent event) {
+        if (nameField.isFocused() && event.isConfirmation()) {
             addPlayer();
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(event);
     }
 
     @Override
@@ -148,17 +149,17 @@ public class TrustedPlayersScreen extends CompatScreen {
     }
 
     @Override
-    protected void renderPanel(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.blit(TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
-        graphics.drawString(font, Component.translatable("gui.openmodularturrets.add_trusted_player").append(":"),
-                left + 10, top + 220, 0x000000, false);
-        graphics.drawString(font, Component.translatable("gui.openmodularturrets.permissions"),
-                left + 186, top + 220, 0x000000, false);
+    protected void renderPanel(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, left, top, 0, 0, WIDTH, HEIGHT, 256, 256);
+        graphics.text(font, Component.translatable("gui.openmodularturrets.add_trusted_player").append(":"),
+                left + 10, top + 220, 0xFF000000, false);
+        graphics.text(font, Component.translatable("gui.openmodularturrets.permissions"),
+                left + 186, top + 220, 0xFF000000, false);
     }
 
     /** Hovering the "Permissions" label explains the selected player's level. */
     @Override
-    protected void renderForeground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    protected void renderForeground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         int labelWidth = font.width(Component.translatable("gui.openmodularturrets.permissions"));
         boolean overLabel = mouseX >= left + 186 && mouseX < left + 186 + labelWidth
                 && mouseY >= top + 218 && mouseY < top + 229;
@@ -166,7 +167,7 @@ public class TrustedPlayersScreen extends CompatScreen {
         Component text = list.getSelected()
                 .map(entry -> Component.translatable("tooltip.openmodularturrets." + describe(entry)))
                 .orElse(Component.translatable("tooltip.openmodularturrets.info_access_level"));
-        graphics.renderTooltip(font, text.copy().withStyle(ChatFormatting.WHITE), mouseX, mouseY);
+        graphics.setTooltipForNextFrame(font, text.copy().withStyle(ChatFormatting.WHITE), mouseX, mouseY);
     }
 
     private static String describe(TrustedPlayer entry) {

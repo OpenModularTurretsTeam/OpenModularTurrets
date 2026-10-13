@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "openmodularturrets:io_bus",
+    "C": "minecraft:flint",
+    "Q": "#c:gems/quartz"
+  },
+  "pattern": [
+    " Q ",
+    "QCQ",
+    " B "
+  ],
+  "result": {
+    "id": "openmodularturrets:upgrade_scatter_shot"
+  }
+}

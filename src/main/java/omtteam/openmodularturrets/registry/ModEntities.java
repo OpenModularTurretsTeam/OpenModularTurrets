@@ -1,5 +1,7 @@
 package omtteam.openmodularturrets.registry;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
@@ -41,7 +43,7 @@ public final class ModEntities {
     private static <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {
         // noSave: projectiles are never saved (TurretProjectile.shouldBeSaved), so no data fixer is needed
         EntityType<T> type = builder.sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).noSave()
-                .build(OMT.id(name).toString());
+                .build(ResourceKey.create(Registries.ENTITY_TYPE, OMT.id(name)));
         return Registry.register(BuiltInRegistries.ENTITY_TYPE, OMT.id(name), type);
     }
 

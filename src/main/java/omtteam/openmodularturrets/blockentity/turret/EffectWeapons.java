@@ -47,7 +47,7 @@ public final class EffectWeapons {
     /** oldmod {@code RelativisticTurretTileEntity}: slowness and weakness IV; slowed entities are not targeted again. */
     private static void slow(Entity target) {
         if (target instanceof LivingEntity living) {
-            living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, EFFECT_TICKS, EFFECT_AMPLIFIER, false, true));
+            living.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, EFFECT_TICKS, EFFECT_AMPLIFIER, false, true));
             living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, EFFECT_TICKS, EFFECT_AMPLIFIER, false, true));
         }
     }

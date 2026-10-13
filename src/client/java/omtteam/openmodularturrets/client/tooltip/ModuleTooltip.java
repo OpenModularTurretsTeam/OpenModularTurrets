@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.client.tooltip;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +26,7 @@ public final class ModuleTooltip {
         boolean upgrade = stack.getItem() instanceof UpgradeItem;
         boolean addon = stack.getItem() instanceof AddonItem;
         if (!upgrade && !addon) return;
-        if (!Screen.hasShiftDown()) {
+        if (!Minecraft.getInstance().hasShiftDown()) {
             lines.add(TurretBaseTooltip.shiftHint());
             return;
         }

@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.blockentity;
 
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ContainerStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
@@ -8,6 +8,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.Containers;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.Container;
 import net.minecraft.world.level.Level;
@@ -151,7 +155,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity {
     /** Ammo slots as exposed to automation on all sides. */
     public Storage<ItemVariant> getAmmoStorage() {
         if (ammoStorage == null) {
-            ammoStorage = new CombinedStorage<>(InventoryStorage.of(inventory, null).getSlots()
+            ammoStorage = new CombinedStorage<>(ContainerStorage.of(inventory, null).getSlots()
                     .subList(TurretBaseInventory.AMMO_START, TurretBaseInventory.AMMO_START + TurretBaseInventory.AMMO_COUNT));
         }
         return ammoStorage;
@@ -165,20 +169,36 @@ public class TurretBaseBlockEntity extends CompatBlockEntity {
     // ---- NBT ----
 
     @Override
-    protected void readData(CompoundTag tag, HolderLookup.Provider registries) {
+    protected void readData(CompoundTag tag) {
         SecurityNbt.load(getTrustManager(), tag);
         logic.loadState(TurretBaseNbt.load(tag));
-        // client updates carry no items; the open menu syncs its slots itself
-        if (tag.contains("Items", Tag.TAG_LIST)) {
+    }
+
+    /** Drops the whole inventory (ammo, addons, upgrades) when the base is removed (OMLib {@code dropItems}). */
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        if (level != null) {
+            Containers.dropContents(level, pos, inventory);
+        }
+    }
+
+    /** Client updates carry no items; the open menu syncs its slots itself. */
+    @Override
+    protected void readItems(ValueInput input) {
+        if (input.contains(ContainerHelper.TAG_ITEMS)) {
             inventory.getItems().clear();
-            VersionCompat.loadItems(tag, inventory.getItems(), registries);
+            ContainerHelper.loadAllItems(input, inventory.getItems());
         }
     }
 
     @Override
-    protected void writeData(CompoundTag tag, HolderLookup.Provider registries) {
-        writeClientData(tag, registries);
-        VersionCompat.saveItems(tag, inventory.getItems(), registries);
+    protected void writeItems(ValueOutput output) {
+        ContainerHelper.saveAllItems(output, inventory.getItems());
+    }
+
+    @Override
+    protected void writeData(CompoundTag tag) {
+        writeClientData(tag);
     }
 
     /**
@@ -186,7 +206,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity {
      * the open menu.
      */
     @Override
-    protected void writeClientData(CompoundTag tag, HolderLookup.Provider registries) {
+    protected void writeClientData(CompoundTag tag) {
         SecurityNbt.save(getTrustManager(), tag);
         TurretBaseNbt.save(logic.getState(), tag);
     }

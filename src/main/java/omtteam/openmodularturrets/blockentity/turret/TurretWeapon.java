@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.blockentity.turret;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.ItemStack;
 import omtteam.openmodularturrets.core.base.AmmoDraw;
 import omtteam.openmodularturrets.core.turret.TurretType;
@@ -47,20 +48,20 @@ public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, Sound
     public static TurretWeapon of(TurretType type) {
         return switch (type) {
             case DISPOSABLE_TURRET -> projectile(ModSounds.DISPOSABLE_LAUNCH, true, (level, ammo, target) ->
-                    withItem(ModEntities.DISPOSABLE.create(level), ammo));
+                    withItem(ModEntities.DISPOSABLE.create(level, EntitySpawnReason.TRIGGERED), ammo));
             case POTATO_CANNON_TURRET -> projectile(ModSounds.POTATO_LAUNCH, true, (level, ammo, target) ->
-                    withItem(ModEntities.POTATO.create(level), ammo));
+                    withItem(ModEntities.POTATO.create(level, EntitySpawnReason.TRIGGERED), ammo));
             // oldmod CrossbowTurretTileEntity used the potato launch sound
-            case CROSSBOW_TURRET -> projectile(ModSounds.POTATO_LAUNCH, true, (level, ammo, target) -> ModEntities.ARROW.create(level));
-            case MACHINE_GUN_TURRET -> projectile(ModSounds.MACHINE_GUN_LAUNCH, false, (level, ammo, target) -> ModEntities.BULLET.create(level));
-            case INCENDIARY_TURRET -> projectile(ModSounds.INCENDIARY_LAUNCH, true, (level, ammo, target) -> ModEntities.BLAZING_CLAY.create(level));
-            case GRENADE_TURRET -> projectile(ModSounds.GRENADE_LAUNCH, true, (level, ammo, target) -> ModEntities.GRENADE.create(level));
+            case CROSSBOW_TURRET -> projectile(ModSounds.POTATO_LAUNCH, true, (level, ammo, target) -> ModEntities.ARROW.create(level, EntitySpawnReason.TRIGGERED));
+            case MACHINE_GUN_TURRET -> projectile(ModSounds.MACHINE_GUN_LAUNCH, false, (level, ammo, target) -> ModEntities.BULLET.create(level, EntitySpawnReason.TRIGGERED));
+            case INCENDIARY_TURRET -> projectile(ModSounds.INCENDIARY_LAUNCH, true, (level, ammo, target) -> ModEntities.BLAZING_CLAY.create(level, EntitySpawnReason.TRIGGERED));
+            case GRENADE_TURRET -> projectile(ModSounds.GRENADE_LAUNCH, true, (level, ammo, target) -> ModEntities.GRENADE.create(level, EntitySpawnReason.TRIGGERED));
             case ROCKET_TURRET -> projectile(ModSounds.ROCKET_LAUNCH, false, (level, ammo, target) -> {
-                RocketProjectile rocket = ModEntities.ROCKET.create(level);
+                RocketProjectile rocket = ModEntities.ROCKET.create(level, EntitySpawnReason.TRIGGERED);
                 if (rocket != null) rocket.setTarget(target);
                 return rocket;
             });
-            case PLASMA_TURRET -> projectile(ModSounds.PLASMA_LAUNCH, true, (level, ammo, target) -> ModEntities.PLASMA.create(level));
+            case PLASMA_TURRET -> projectile(ModSounds.PLASMA_LAUNCH, true, (level, ammo, target) -> ModEntities.PLASMA.create(level, EntitySpawnReason.TRIGGERED));
             // oldmod MeleeTurretTileEntity used the relativistic launch sound
             case MELEE_TURRET -> effect(ModSounds.RELATIVISTIC_LAUNCH);
             case RELATIVISTIC_TURRET -> effect(ModSounds.RELATIVISTIC_LAUNCH);

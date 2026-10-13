@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "openmodularturrets:barrel_tier_five",
+    "C": "openmodularturrets:chamber_tier_five",
+    "I": "openmodularturrets:io_bus",
+    "O": "minecraft:obsidian"
+  },
+  "pattern": [
+    " B ",
+    "OCO",
+    "IOI"
+  ],
+  "result": {
+    "id": "openmodularturrets:laser_turret"
+  }
+}

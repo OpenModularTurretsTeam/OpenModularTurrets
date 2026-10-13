@@ -76,7 +76,7 @@ public class RocketProjectile extends TurretProjectile {
             if (OMTConfig.get().turrets.canRocketsHurtEnderDragon && entity instanceof EnderDragon) {
                 // oldmod: the dragon ignores most damage sources, so its health is reduced directly
                 entity.setHealth(entity.getHealth() - damage);
-                entity.invulnerableTime = 0;
+                entity.setInvulnerableTime(0);
             } else if (canDamage(entity)) {
                 hurt(entity, ModDamageTypes.ROCKET, damage);
             }

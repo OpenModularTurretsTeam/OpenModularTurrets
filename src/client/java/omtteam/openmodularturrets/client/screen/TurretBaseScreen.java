@@ -1,16 +1,18 @@
 package omtteam.openmodularturrets.client.screen;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
-import omtteam.openmodularturrets.client.compat.ClientCompat;
 import omtteam.openmodularturrets.client.compat.ClientNetworkCompat;
 import omtteam.openmodularturrets.core.base.TargetingSettings;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
@@ -36,7 +38,7 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
     /** The energy bar flickers between three fill textures (oldmod {@code drawEnergyBar}). */
     private static final int[] ENERGY_FILL_U = {196, 215, 234};
 
-    private final ResourceLocation texture;
+    private final Identifier texture;
     private final Random random = new Random();
     private Optional<AccessLevel> shownAccess = Optional.empty();
     private Button targetButton;
@@ -118,7 +120,7 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
     private void openConfigure() {
         if (minecraft == null || minecraft.player == null) return;
         minecraft.player.closeContainer();
-        minecraft.setScreen(new ConfigureScreen(menu.getPos()));
+        minecraft.gui.setScreen(new ConfigureScreen(menu.getPos()));
     }
 
     @Override
@@ -132,43 +134,42 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        ClientCompat.renderContainerBackground(this, graphics, mouseX, mouseY, partialTick);
-        super.render(graphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         renderInfoPanel(graphics);
-        renderTooltip(graphics, mouseX, mouseY);
         renderAreaTooltips(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(texture, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
         long capacity = menu.getCapacity();
         int filled = (int) (menu.getEnergy() * 51 / (capacity == 0 ? 1 : capacity));
-        graphics.blit(texture, leftPos + 153, topPos + 17, 178, 17, 14, 51);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 153, topPos + 17, 178, 17, 14, 51, 256, 256);
         int u = ENERGY_FILL_U[random.nextInt(ENERGY_FILL_U.length)];
-        graphics.blit(texture, leftPos + 153, topPos + 17 + 51 - filled, u, 68 - filled, 14, filled);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 153, topPos + 17 + 51 - filled, u, 68 - filled, 14, filled, 256, 256);
     }
 
     @Override
-    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         if (menu.getTier() > 1) {
-            graphics.drawString(font, ScreenTexts.gui("addons"), 71, 6, 0x000000, false);
-            graphics.drawString(font, ScreenTexts.gui("upgrades"), 71, 39, 0x000000, false);
+            graphics.text(font, ScreenTexts.gui("addons"), 71, 6, 0xFF000000, false);
+            graphics.text(font, ScreenTexts.gui("upgrades"), 71, 39, 0xFF000000, false);
         }
-        graphics.drawString(font, ScreenTexts.gui("ammo"), 8, 6, 0x000000, false);
-        graphics.drawString(font, ScreenTexts.gui("inventory"), 8, inventoryLabelY, 0x000000, false);
-        graphics.drawString(font, ScreenTexts.gui("range"), 116, 6, 0x000000, false);
+        graphics.text(font, ScreenTexts.gui("ammo"), 8, 6, 0xFF000000, false);
+        graphics.text(font, ScreenTexts.gui("inventory"), 8, inventoryLabelY, 0xFF000000, false);
+        graphics.text(font, ScreenTexts.gui("range"), 116, 6, 0xFF000000, false);
         base().ifPresent(base -> {
             TargetingSettings targeting = base.getLogic().getTargetingSettings();
             String range = String.valueOf(targeting.getRange());
-            int color = targeting.getRange() == targeting.getMaxRange() ? 0xFF3232 : 0x009C40;
-            graphics.drawString(font, range, range.length() == 1 ? 127 : 124, 39, color, true);
+            int color = targeting.getRange() == targeting.getMaxRange() ? 0xFFFF3232 : 0xFF009C40;
+            graphics.text(font, range, range.length() == 1 ? 127 : 124, 39, color, true);
         });
     }
 
     /** oldmod info box to the left of the GUI: owner, mode, kills, trusted players, targeting. */
-    private void renderInfoPanel(GuiGraphics graphics) {
+    private void renderInfoPanel(GuiGraphicsExtractor graphics) {
         Optional<TurretBaseBlockEntity> found = base();
         if (found.isEmpty()) return;
         TurretBaseLogic logic = found.get().getLogic();
@@ -198,11 +199,13 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
         lines.add(ScreenTexts.gui("attack_mobs").append(": ").withStyle(ChatFormatting.GRAY).append(ScreenTexts.yesNo(targeting.isTargetMobs())));
         lines.add(ScreenTexts.gui("attack_neutrals").append(": ").withStyle(ChatFormatting.GRAY).append(ScreenTexts.yesNo(targeting.isTargetPassive())));
         lines.add(ScreenTexts.gui("attack_players").append(": ").withStyle(ChatFormatting.GRAY).append(ScreenTexts.yesNo(targeting.isTargetPlayers())));
-        graphics.renderComponentTooltip(font, lines, leftPos - 128 - 12, topPos + 17 + 12);
+        // drawn right away (not as the hover tooltip), like oldmod's always-visible info box
+        graphics.tooltip(font, lines.stream().map(line -> ClientTooltipComponent.create(line.getVisualOrderText())).toList(),
+                leftPos - 128 - 12, topPos + 17 + 12, DefaultTooltipPositioner.INSTANCE, null, false);
     }
 
     /** oldmod {@code drawTooltips}: energy, slot group labels and the range number. */
-    private void renderAreaTooltips(GuiGraphics graphics, int mouseX, int mouseY) {
+    private void renderAreaTooltips(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         int x = mouseX - leftPos;
         int y = mouseY - topPos;
         Component tooltip = null;
@@ -217,6 +220,6 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
         } else if (x > 123 && x < 134 && y > 35 && y < 48) {
             tooltip = Component.translatable("tooltip.openmodularturrets.base_max_range");
         }
-        if (tooltip != null) graphics.renderTooltip(font, tooltip, mouseX, mouseY);
+        if (tooltip != null) graphics.setTooltipForNextFrame(font, tooltip, mouseX, mouseY);
     }
 }

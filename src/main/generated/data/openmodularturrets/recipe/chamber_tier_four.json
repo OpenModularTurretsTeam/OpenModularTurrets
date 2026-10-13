@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "openmodularturrets:io_bus",
+    "C": "openmodularturrets:chamber_tier_three",
+    "D": "#c:gems/diamond",
+    "Q": "#c:gems/quartz"
+  },
+  "pattern": [
+    "QDQ",
+    " CB",
+    "QDQ"
+  ],
+  "result": {
+    "id": "openmodularturrets:chamber_tier_four"
+  }
+}
