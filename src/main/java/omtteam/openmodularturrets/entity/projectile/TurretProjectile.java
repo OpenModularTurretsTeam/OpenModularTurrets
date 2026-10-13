@@ -29,18 +29,18 @@ import net.minecraft.network.syncher.SynchedEntityData;
 
 
 /**
- * Base class of all turret projectiles. Ported from oldmod {@code TurretProjectile}: custom straight-line movement
+ * Base class of all turret projectiles. Ported from 1.12.2 {@code TurretProjectile}: custom straight-line movement
  * with optional gravity, a 40 tick lifetime, hits on any pickable entity near the flight path and on solid blocks.
  * Projectiles are never saved.
  */
 public abstract class TurretProjectile extends Projectile {
-    /** oldmod {@code onUpdate}: projectiles live at most 40 ticks. */
+    /** 1.12.2 {@code onUpdate}: projectiles live at most 40 ticks. */
     private static final int MAX_AGE = 40;
 
     @Nullable
     private BlockPos basePos;
     private int ampLevel;
-    /** Captured when fired, like oldmod's {@code fakeDrops}; without a base: no loot. */
+    /** Captured when fired, like the 1.12.2 {@code fakeDrops}; without a base: no loot. */
     private int lootingLevel = TurretBaseLogic.NO_LOOT;
 
     protected TurretProjectile(EntityType<? extends TurretProjectile> type, Level level) {
@@ -49,7 +49,7 @@ public abstract class TurretProjectile extends Projectile {
 
     /**
      * Links the projectile to the base that fired it (trust checks, kill counting) and copies the base's damage amp
-     * level (oldmod constructor).
+     * level (as in the 1.12.2 constructor).
      */
     public void setBase(TurretBaseBlockEntity base) {
         this.basePos = base.getBlockPos();
@@ -60,14 +60,14 @@ public abstract class TurretProjectile extends Projectile {
     /** The turret type whose config (damage, damage amp) applies. */
     protected abstract TurretType getTurretType();
 
-    /** Downward acceleration per tick (oldmod {@code gravity}). */
+    /** Downward acceleration per tick (1.12.2 {@code gravity}). */
     protected abstract float getDropPerTick();
 
     /** Called on the server when the flight path touches a pickable entity. */
     protected abstract void onHitEntity(Entity entity);
 
     /**
-     * Called on the server when the projectile hits a block with a collision shape (oldmod: a solid material),
+     * Called on the server when the projectile hits a block with a collision shape (1.12.2: a solid material),
      * other than a turret.
      */
     protected abstract void onHitBlock(BlockState state, BlockPos pos);
@@ -94,7 +94,7 @@ public abstract class TurretProjectile extends Projectile {
                     ClipContext.Fluid.NONE, this));
             if (hit.getType() == HitResult.Type.BLOCK) {
                 BlockState state = level().getBlockState(hit.getBlockPos());
-                // projectiles fly through turrets (oldmod: BlockAbstractTurretHead is ignored)
+                // projectiles fly through turrets (1.12.2: BlockAbstractTurretHead is ignored)
                 if (!(state.getBlock() instanceof TurretBlock)) {
                     onHitBlock(state, hit.getBlockPos());
                     if (isRemoved()) return;
@@ -109,7 +109,7 @@ public abstract class TurretProjectile extends Projectile {
         updateRotation();
         double drag = isInWater() ? 0.8D : 0.99D;
         if (isInWater() && level().isClientSide()) {
-            // oldmod: four bubbles per tick behind the projectile while in water
+            // Four bubbles per tick behind the projectile while in water
             for (int i = 0; i < 4; i++) {
                 level().addParticle(ParticleTypes.BUBBLE, getX() - motion.x * 0.25D, getY() - motion.y * 0.25D,
                         getZ() - motion.z * 0.25D, motion.x, motion.y, motion.z);
@@ -124,7 +124,7 @@ public abstract class TurretProjectile extends Projectile {
 
     // ---- Damage helpers ----
 
-    /** oldmod {@code damage += (int) health * (damageAmp * ampLevel)}: the damage amp addon adds a share of the health. */
+    /** 1.12.2 {@code damage += (int) health * (damageAmp * ampLevel)}: the damage amp addon adds a share of the health. */
     protected int damageWithAmp(int damage, Entity target) {
         if (ampLevel > 0 && target instanceof LivingEntity living) {
             damage += (int) ((int) living.getHealth() * (OMTConfig.get().turrets.get(getTurretType()).damageAmp * ampLevel));
@@ -148,7 +148,7 @@ public abstract class TurretProjectile extends Projectile {
 
     // ---- Entity plumbing ----
 
-    /** oldmod {@code isImmuneToExplosions}; grenades and plasma survive explosions. */
+    /** 1.12.2 {@code isImmuneToExplosions}; grenades and plasma survive explosions. */
     protected boolean isImmuneToExplosions() {
         return false;
     }
@@ -165,7 +165,7 @@ public abstract class TurretProjectile extends Projectile {
     }
     *///?}
 
-    /** oldmod {@code writeToNBTOptional}: projectiles are never saved. */
+    /** 1.12.2 {@code writeToNBTOptional}: projectiles are never saved. */
     @Override
     public boolean shouldBeSaved() {
         return false;

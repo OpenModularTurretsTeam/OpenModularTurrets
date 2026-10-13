@@ -12,7 +12,7 @@ import omtteam.openmodularturrets.registry.ModDamageTypes;
 import omtteam.openmodularturrets.registry.ModSounds;
 
 /**
- * Machine gun bullet (oldmod {@code BulletProjectile}): flies straight, damages the first entity it touches.
+ * Machine gun bullet
  */
 public class BulletProjectile extends TurretProjectile {
     public BulletProjectile(EntityType<? extends BulletProjectile> type, Level level) {

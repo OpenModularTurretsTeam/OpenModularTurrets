@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.core.base;
 
 /**
- * Slot layout per base tier (oldmod {@code TurretBase.setupSlotMap}).
+ * Slot layout per base tier (1.12.2 {@code TurretBase.setupSlotMap}).
  */
 public final class BaseTier {
     public static final int MIN = 1;

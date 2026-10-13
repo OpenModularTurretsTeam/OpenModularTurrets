@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 
 /**
- * C2S packets of the base and configure screens. Ported from oldmod {@code MessageAdjustRange},
+ * C2S packets of the base and configure screens. Ported from 1.12.2 {@code MessageAdjustRange},
  * {@code MessageToggleMode}, {@code MessageSetBaseTargetingType}, {@code MessageToggleAttack*},
  * {@code MessageDropBase} and {@code MessageDropTurrets}.
  */
@@ -37,7 +37,7 @@ public final class BasePackets {
         }
     }
 
-    /** Change settings: set the targeting range (oldmod sends the new absolute range). */
+    /** Change settings: set the targeting range (as in 1.12.2, the new absolute range is sent). */
     public record SetRange(BlockPos pos, int range) {
         public static void write(FriendlyByteBuf buf, SetRange packet) {
             buf.writeBlockPos(packet.pos);

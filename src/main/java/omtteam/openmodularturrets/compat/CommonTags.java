@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 *///?}
 
 /**
- * Common ({@code c:}) item tags replacing the oldmod ore dictionary entries. The tag ids differ between versions
+ * Common ({@code c:}) item tags replacing the 1.12.2 ore dictionary entries. The tag ids differ between versions
  * ({@code c:iron_ingots} on 1.20.1, {@code c:ingots/iron} on 1.21), Fabric API provides both.
  * <p>
  * 1.20.1 has no common tags for redstone/lapis blocks and wooden chests; recipes use the vanilla items there

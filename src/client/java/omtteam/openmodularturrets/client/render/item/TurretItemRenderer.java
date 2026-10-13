@@ -15,7 +15,7 @@ import omtteam.openmodularturrets.core.turret.TurretType;
 import java.util.Map;
 
 /**
- * Turret items show the turret model (oldmod: turret renderer with {@code turretHead == null}); the display
+ * Turret items show the turret model (1.12.2: turret renderer with {@code turretHead == null}); the display
  * transforms are in the item model JSON ({@code parent: builtin/entity}).
  */
 public class TurretItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {

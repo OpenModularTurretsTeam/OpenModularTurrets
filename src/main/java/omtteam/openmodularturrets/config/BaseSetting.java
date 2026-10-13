@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.config;
 
 /**
- * Per-tier turret base settings. Fields and defaults ported from oldmod {@code handler/config/BaseSetting}.
+ * Per-tier turret base settings. Fields and defaults ported from 1.12.2 {@code handler/config/BaseSetting}.
  */
 public class BaseSetting {
     public int baseMaxCharge;

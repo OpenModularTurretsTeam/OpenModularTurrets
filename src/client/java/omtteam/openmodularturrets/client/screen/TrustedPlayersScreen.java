@@ -87,7 +87,7 @@ public class TrustedPlayersScreen extends CompatScreen {
                 .bounds(left + 185, top + 230, 23, 20).tooltip(tooltip("tp_decrease_access")).build());
         addRenderableWidget(Button.builder(Component.literal("+"), button -> changeSelected(1))
                 .bounds(left + 226, top + 230, 23, 20).tooltip(tooltip("tp_increase_access")).build());
-        // oldmod position: to the right of the panel
+        // positioned to the right of the panel
         addRenderableWidget(Button.builder(Component.translatable("gui.openmodularturrets.back"), button -> back())
                 .bounds(left + 261, top + 10, 80, 20).build());
         refreshList();
@@ -122,7 +122,7 @@ public class TrustedPlayersScreen extends CompatScreen {
                 new TrustPackets.ChangeAccess(pos, entry.getUuid(), delta)));
     }
 
-    /** oldmod closes the screen as soon as the player is no longer an admin. */
+    /** As in 1.12.2, the screen closes as soon as the player is no longer an admin. */
     @Override
     public void tick() {
         super.tick();

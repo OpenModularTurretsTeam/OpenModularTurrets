@@ -36,17 +36,17 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 //?}
 
 /**
- * A turret, one block per {@link TurretType}. Ported from oldmod {@code BlockAbstractTurretHead}.
+ * A turret, one block per {@link TurretType}. Ported from 1.12.2 {@code BlockAbstractTurretHead}.
  * <p>
  * {@link #FACING} points away from the base, which is at {@code pos.relative(FACING.getOpposite())}. Turrets are
- * unbreakable (oldmod {@code setBlockUnbreakable}); they are removed with the base GUI's "Drop turrets" button or
+ * unbreakable (1.12.2 {@code setBlockUnbreakable}); they are removed with the base GUI's "Drop turrets" button or
  * drop when their base disappears.
  */
 public class TurretBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
-    /** oldmod {@code CONCEALED}: retracted into the base by the concealer addon (no shape). */
+    /** 1.12.2 {@code CONCEALED}: retracted into the base by the concealer addon (no shape). */
     public static final BooleanProperty CONCEALED = BooleanProperty.create("concealed");
-    /** oldmod bounding box 0.2–0.8 on every axis. */
+    /** Bounding box 0.2–0.8 on every axis. */
     private static final VoxelShape SHAPE = Block.box(3.2, 3.2, 3.2, 12.8, 12.8, 12.8);
 
     //? if >=1.21 {
@@ -98,7 +98,7 @@ public class TurretBlock extends BaseEntityBlock {
         return state.getValue(CONCEALED) ? Shapes.empty() : SHAPE;
     }
 
-    /** Drawn only by the block entity renderer (oldmod: invisible block + TESR). */
+    /** Drawn only by the block entity renderer (1.12.2: invisible block + TESR). */
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
@@ -117,7 +117,7 @@ public class TurretBlock extends BaseEntityBlock {
     }
 
     /**
-     * oldmod {@code canPlaceBlockAt}: there must be a base next to the turret with a free turret slot for this type.
+     * 1.12.2 {@code canPlaceBlockAt}: there must be a base next to the turret with a free turret slot for this type.
      * The clicked base is preferred; otherwise the first neighbouring base in {@link Direction} order is used.
      * Disabled turrets and turrets whose tier the base cannot hold cannot be placed.
      */
@@ -145,7 +145,7 @@ public class TurretBlock extends BaseEntityBlock {
         return logic.supportsTurret(turretType) && logic.getRemainingTurretSlots(turretType) > 0;
     }
 
-    /** oldmod {@code onNeighborChange}: a turret whose base is gone drops itself. */
+    /** 1.12.2 {@code onNeighborChange}: a turret whose base is gone drops itself. */
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbourBlock, BlockPos neighbourPos,
                                 boolean movedByPiston) {

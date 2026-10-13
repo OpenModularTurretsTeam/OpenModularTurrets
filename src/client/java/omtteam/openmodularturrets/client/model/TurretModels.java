@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 /**
- * Model layers of the turrets. The melee turret had no model in oldmod and stays invisible (user decision).
+ * Model layers of the turrets. The melee turret had no model in 1.12.2 and stays invisible (user decision).
  */
 public final class TurretModels {
     private static final String HOLDER = "base/holder";
@@ -35,7 +35,7 @@ public final class TurretModels {
         aimed(TurretType.ROCKET_TURRET, TurretModelDefinitions::rocketTurret);
         aimed(TurretType.LASER_TURRET, TurretModelDefinitions::laserTurret);
         aimed(TurretType.PLASMA_TURRET, TurretModelDefinitions::plasmaTurret);
-        // oldmod ModelRailgun: yaw and pitch both on the weapon (no holder)
+        // 1.12.2 ModelRailgun: yaw and pitch both on the weapon (no holder)
         add(TurretType.RAILGUN_TURRET, TurretModelDefinitions::railgunTurret, "base/weapon", "base/weapon");
         add(TurretType.ARC_TURRET, TurretModelDefinitions::arcTurret, null, null);
         add(TurretType.RELATIVISTIC_TURRET, TurretModelDefinitions::relativisticTurret, null, null);

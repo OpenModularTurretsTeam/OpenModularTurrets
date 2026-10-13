@@ -15,12 +15,11 @@ import omtteam.openmodularturrets.registry.ModDamageTypes;
 import omtteam.openmodularturrets.registry.ModItems;
 
 /**
- * Grenade (oldmod {@code GrenadeProjectile}): stops on blocks, bounces up off entities and explodes after 39 ticks,
+ * Grenade: stops on blocks, bounces up off entities and explodes after some time,
  * dealing 90 % normal and 10 % armor-piercing damage within 3 blocks.
  */
 public class GrenadeProjectile extends TurretProjectile implements ItemSupplier {
     private static final int FUSE_TICKS = 29;
-    /** oldmod: hitting an entity shortens the fuse to the last 4 ticks. */
     private static final int TICKS_AFTER_ENTITY_HIT = 25;
     private static final double RADIUS = 3;
     private boolean hitEntity;
@@ -29,7 +28,7 @@ public class GrenadeProjectile extends TurretProjectile implements ItemSupplier 
         super(type, level);
     }
 
-    /** Shown as the ammo item (oldmod {@code RenderSnowball}). */
+    /** Shown as the ammo item  */
     @Override
     public ItemStack getItem() {
         return new ItemStack(ModItems.AMMO_GRENADE);
@@ -82,7 +81,6 @@ public class GrenadeProjectile extends TurretProjectile implements ItemSupplier 
         setDeltaMovement(Vec3.ZERO);
     }
 
-    /** oldmod {@code isImmuneToExplosions}. */
     @Override
     protected boolean isImmuneToExplosions() {
         return true;

@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.config;
 
 /**
- * Per-turret-type settings. Fields and defaults ported from oldmod {@code handler/config/TurretSetting}.
+ * Per-turret-type settings. Fields and defaults ported from 1.12.2 {@code handler/config/TurretSetting}.
  */
 public class TurretSetting {
     public boolean enabled;
@@ -46,7 +46,7 @@ public class TurretSetting {
     }
 
     /**
-     * Ranges from the oldmod {@code @Config.Range*} annotations, except {@code baseFireRate} (old max 20, but most
+     * Ranges from the 1.12.2 {@code @Config.Range*} annotations, except {@code baseFireRate} (old max 20, but most
      * defaults exceed it) and {@code baseAccuracyDeviation} (old max 1, but it is used as a percentage).
      */
     void validate(ConfigValidator v, String path) {

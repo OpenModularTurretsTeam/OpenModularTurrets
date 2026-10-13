@@ -13,7 +13,7 @@ import java.util.Optional;
  * permission.
  */
 public final class PacketValidation {
-    /** oldmod {@code TurretBaseContainer.canInteractWith}: squared distance below 64. */
+    /** 1.12.2 {@code TurretBaseContainer.canInteractWith}: squared distance below 64. */
     private static final double MAX_DISTANCE_SQR = 64.0;
 
     private PacketValidation() {

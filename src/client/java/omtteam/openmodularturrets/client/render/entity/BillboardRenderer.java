@@ -11,7 +11,7 @@ import net.minecraft.world.entity.Entity;
 import omtteam.openmodularturrets.client.compat.ClientCompat;
 
 /**
- * A camera-facing sprite (oldmod used {@code RenderSnowball} with the "throwable bullet" item for bullets). Drawn from
+ * A camera-facing sprite (1.12.2 used {@code RenderSnowball} with the "throwable bullet" item for bullets). Drawn from
  * both sides, so it is visible whichever way the camera orientation is defined.
  */
 public class BillboardRenderer<T extends Entity> extends EntityRenderer<T> {

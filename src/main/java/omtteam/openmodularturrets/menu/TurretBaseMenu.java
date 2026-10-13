@@ -21,12 +21,12 @@ import omtteam.openmodularturrets.security.PlayerAdapter;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Turret base inventory menu. Ported from oldmod {@code TurretBaseContainer}: 3x3 ammo slots, addon and upgrade slots
+ * Turret base inventory menu. Ported from 1.12.2 {@code TurretBaseContainer}: 3x3 ammo slots, addon and upgrade slots
  * depending on the tier, and the player inventory. Energy is synced as container data; everything else the screen
  * shows comes from the block entity sync.
  */
 public class TurretBaseMenu extends AbstractContainerMenu {
-    /** oldmod {@code canInteractWith}: squared distance below 64. */
+    /** 1.12.2 {@code canInteractWith}: squared distance below 64. */
     private static final double MAX_DISTANCE_SQR = 64.0;
     private static final int DATA_ENERGY = 0;
     private static final int DATA_CAPACITY = 1;
@@ -106,7 +106,7 @@ public class TurretBaseMenu extends AbstractContainerMenu {
     }
 
     /**
-     * oldmod {@code transferStackInSlot}: addons and upgrades go to their slots, everything else to the ammo slots;
+     * 1.12.2 {@code transferStackInSlot}: addons and upgrades go to their slots, everything else to the ammo slots;
      * base slots move to the player inventory.
      */
     @Override
@@ -160,7 +160,7 @@ public class TurretBaseMenu extends AbstractContainerMenu {
                 && base.getTrustManager().canOpenGui(PlayerAdapter.info(player));
     }
 
-    /** Base slot with the oldmod slot rules (ammo / addon / upgrade, stack limits). */
+    /** Base slot with the 1.12.2 slot rules (ammo / addon / upgrade, stack limits). */
     private static class BaseSlot extends Slot {
         BaseSlot(Container container, int index, int x, int y) {
             super(container, index, x, y);

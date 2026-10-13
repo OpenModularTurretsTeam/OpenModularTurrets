@@ -6,7 +6,7 @@ This file guides Claude Code when working in this repository. Read it fully befo
 
 ## 1. Project Overview
 
-**OpenModularTurrets (OMT)** is being ported from **Minecraft 1.12.2 (Forge)** to **Fabric**, targeting **1.20.1 and 1.21.1 from a single codebase** using **Stonecutter**.
+**OpenModularTurrets (OMT)** is being maintained on **Fabric**, targeting **1.20.1 and 1.21.1 from a single codebase** using **Stonecutter**.
 
 Core gameplay:
 
@@ -18,22 +18,9 @@ Core gameplay:
 - **Turrets** are mounted on any of the **6 faces** of a base. They rotate (yaw and pitch, relative to their mounting face) to aim at the target the base selects, then fire.
 - **Permissions** use a **trusted player** system. Each trusted player has a **power/access level** that limits what they can do (open the GUI, change targeting, manage other trusted players, and so on). The owner always has full rights.
 
-### Reference material (READ-ONLY)
-
-| Folder | Contents |
-| --- | --- |
-| `oldmod/` | Original 1.12.2 OMT source and resources (textures, models, lang, sounds) |
-| `oldmod2/` | Original 1.12.2 Open Modular Passive Defence source and resources (textures, models, lang, sounds) |
-| `oldlib/` | The library the old mod depended on (OMLib) |
-
-- **Never modify, move, or build** anything in `oldmod/`, `oldmod2/` or `oldlib/`. They are references only and must not be part of the Gradle build.
-- **The new mod must NOT depend on OMLib or any other gameplay/utility library.** If old code calls into `oldlib/`, re-implement only the needed functionality inside this mod, in a simplified, modern form, under `omtteam.openmodularturrets.lib` or a suitable package.
-- When porting a feature, **always look up the original behaviour in `oldmod/` or `oldmod2/` first**: values, formulas, ranges, ammo usage, power costs, and permission semantics. Do not invent mechanics or numbers. If the old behaviour is unclear or seems broken, ask the user instead of guessing.
-- Old textures and sounds may be reused. Copy them into the new resource structure; do not reference the old paths.
-
 ### Allowed dependencies
 
-- Fabric Loader and **Fabric API**. Fabric API, including Transfer API, Networking, Rendering and Datagen, is NOT considered a "library" in the sense above and may be used freely.
+- Fabric Loader and **Fabric API**. Fabric API, including Transfer API, Networking, Rendering and Datagen, may be used freely.
 - **Team Reborn Energy** for power, as the de facto Fabric energy standard. Jar-in-jar it. *(See Open Questions; confirm before adding.)*
 - Nothing else without asking the user first. No Architectury, no Cloth Config, no OMLib, no Kotlin.
 
@@ -75,12 +62,9 @@ Check exact latest patch versions of Loader, API, Loom and Stonecutter when sett
 │       ├── gradle.properties   # minecraft_version, fabric_api, java_version=21 …
 │       └── src/main/generated/ # datagen output for 1.21.1 (committed)
 ├── src/
-│   ├── main/java/omtteam/openmodularturrets/...
-│   ├── main/resources/         # SHARED assets + fabric.mod.json (templated)
-│   └── client/java/...         # client-only code (split source sets)
-├── oldmod/                     # READ-ONLY reference (1.12.2)
-├── oldmod2/                    # READ-ONLY reference (OMPD 1.12.2)
-└── oldlib/                     # READ-ONLY reference (OMLib)
+    ├── main/java/omtteam/openmodularturrets/...
+    ├── main/resources/         # SHARED assets + fabric.mod.json (templated)
+    └── client/java/...         # client-only code (split source sets)
 ```
 
 - **Mod ID:** `openmodularturrets`. **Base package:** `omtteam.openmodularturrets`.
@@ -212,7 +196,7 @@ omtteam.openmodularturrets
 │   ├── base/                    # TurretBaseBlock (tiers 1–5)
 │   ├── turret/                  # AbstractTurretBlock + one class per turret type
 │   ├── expander/                # inventory & power expanders
-│   └── misc/                    # lever, hard walls, fences, etc. (per oldmod)
+│   └── misc/                    # lever, hard walls, fences, etc.
 ├── blockentity/
 │   ├── TurretBaseBlockEntity    # targeting, inventory, energy, upgrades, addons, permissions
 │   └── turret/                  # AbstractTurretBlockEntity + subclasses
@@ -226,15 +210,14 @@ omtteam.openmodularturrets
 ├── menu/                        # AbstractContainerMenu implementations
 ├── network/                     # packets (C2S: settings/trust changes; S2C: sync)
 ├── config/                      # self-written config (JSON via Gson), no library
-├── compat/                      # VersionCompat helpers (Stonecutter-conditional code lives here)
-└── lib/                         # small utilities re-implemented from oldlib (only what's needed)
+└── compat/                      # VersionCompat helpers (Stonecutter-conditional code lives here)
 
 (client source set)
 omtteam.openmodularturrets.client
 ├── OMTClient.java               # ClientModInitializer
 ├── render/blockentity/          # turret renderers (rotating heads), base renderer
 ├── render/entity/               # projectile renderers
-├── model/                       # Java entity-style models ported from old models
+├── model/                       # Java entity-style turret models
 ├── screen/                      # base GUI, configuration/targeting/trust screens
 └── network/                     # client packet handlers
 ```
@@ -242,11 +225,11 @@ omtteam.openmodularturrets.client
 ### Turret ↔ base relationship
 
 - A turret block has a `FACING` property (all 6 `Direction`s). `FACING` is the direction **away from the base**. The base is at `pos.relative(facing.getOpposite())`.
-- Turrets can only be placed against a base face. A turret without a base does nothing and should break or drop if its base is removed, matching `oldmod` behaviour.
+- Turrets can only be placed against a base face. A turret without a base does nothing and should break or drop if its base is removed.
 - The **base** finds its turrets by checking its 6 neighbours.
 - The **base** owns all state:
   - targeting settings
-  - the current target (or targets per turret, see `oldmod`)
+  - the current target (or targets per turret)
   - ammo
   - energy
   - upgrades and addons
@@ -263,35 +246,35 @@ omtteam.openmodularturrets.client
 
 - Compute the target direction in world space, then transform it into the turret's **local frame**, where the local "up" is `FACING`. Derive local yaw/pitch from that.
 - The renderer applies the mount rotation first (rotate the model so its up-axis aligns with `FACING`), then local yaw, then local pitch.
-- Put the math in one place, e.g. `TurretMath`, used by both server logic (can it aim there? turret pitch/yaw limits from `oldmod`) and the client renderer.
+- Put the math in one place, e.g. `TurretMath`, used by both server logic (can it aim there?) and the client renderer.
 - Sync yaw/pitch (or the target entity ID) to clients for smooth interpolated rendering. Interpolate on the client; don't sync every tick unless necessary.
 
 ### Targeting (base)
 
-- Run on the server tick via `BlockEntityTicker`. Throttle scans; do not scan entities every tick. Use the interval and logic from `oldmod`.
-- Settings come from `oldmod` and include target categories (hostile mobs, neutral/passive mobs, players), range (base tier + range upgrades), and any additional options.
-- **Never target** the owner or trusted players (respect `oldmod`'s exact rules). Respect line of sight.
-- Range is affected by tier and upgrades. Accuracy, fire rate, efficiency and scattershot are upgrades. Use the exact formulas from `oldmod`.
+- Run on the server tick via `BlockEntityTicker`. Throttle scans; do not scan entities every tick.
+- Settings include target categories (hostile mobs, neutral/passive mobs, players), range (base tier + range upgrades), and any additional options.
+- **Never target** the owner or trusted players. Respect line of sight.
+- Range is affected by tier and upgrades. Accuracy, fire rate, efficiency and scattershot are upgrades. The formulas live in `core/`; don't change them without asking the user.
 
 ### Security / trusted players
 
 - Each base stores:
   - **owner** (UUID + last known name)
   - a list of **TrustedPlayer** (UUID, name, **access level**)
-- Access levels gate actions. Mirror the exact levels and semantics from `oldmod` (`TrustedPlayer`, its permission checks, and related GUI code). Expected shape:
+- Access levels gate actions (`core.security`):
   - a low level can open the GUI / view
   - a higher level can change targeting and settings
   - the highest level can manage trusted players
   - nobody but the owner can change the owner
 - **Every C2S packet must re-validate permissions on the server** (player distance to the block, access level for the specific action). Never trust the client.
-- Breaking or opening a base also respects permissions. Port the old behaviour.
+- Breaking or opening a base also respects permissions.
 - Use UUIDs for identity; names are display-only. Resolve names to UUIDs server-side via the server's profile cache when adding a player.
 
 ### Power & items
 
 - Bases store energy internally. Expose it through the energy API on all sides; expose inventory through Fabric Transfer API (`ItemStorage.SIDED`).
-- Ammo is consumed from the base inventory and its **inventory expanders**. Power expanders add capacity. Port costs and capacities from `oldmod` into `config/`.
-- Power generation addons (e.g. solar, redstone reactor, if present in `oldmod`) are ticked by the base.
+- Ammo is consumed from the base inventory. Costs and capacities are configurable in `config/`.
+- Power generation addons (solar, redstone reactor) are ticked by the base.
 
 ### Config
 
@@ -301,37 +284,16 @@ omtteam.openmodularturrets.client
 
 ---
 
-## 7. Porting Guide (1.12.2 Forge → modern Fabric)
+## 7. Change Workflow
 
-| 1.12.2 concept | Modern Fabric equivalent |
-| --- | --- |
-| `TileEntity` + `ITickable` | `BlockEntity` + `BlockEntityTicker` via `getTicker` |
-| Forge capabilities (items/energy) | Fabric Transfer API (`ItemStorage.SIDED`) + energy API |
-| `IGuiHandler`, `GuiContainer`, `Container` | `MenuType` / `ExtendedScreenHandlerType`, `AbstractContainerMenu`, `AbstractContainerScreen` |
-| `SimpleNetworkWrapper` / `IMessage` | Fabric Networking API (see version table) |
-| `TileEntitySpecialRenderer` | `BlockEntityRenderer` registered via `BlockEntityRenderers.register` |
-| Techne/OBJ/Java `ModelBase` | `LayerDefinition` / `ModelPart` (entity-style models) baked from `ModelLayerLocation` |
-| `@Config` / Forge config | Own Gson JSON config |
-| `.lang` files | `assets/openmodularturrets/lang/en_us.json` |
-| `textures/blocks`, `textures/items` | `textures/block`, `textures/item` |
-| Metadata / `IBlockState` meta | `BlockState` properties (no metadata; split tiers into separate blocks/items) |
-| Ore dictionary | Tags (`c:` common tags, e.g. `c:ingots/iron`) |
-| `EntityThrowable` | `ThrowableItemProjectile` / `Projectile` |
-| Item damage-value subtypes | Separate items per subtype (flatten) |
-| `IRecipe` registration in code | Datagen JSON recipes |
-| OpenComputers / ComputerCraft integration | **Out of scope for now** (ask before adding) |
-| `oldlib` helpers | Re-implement minimal versions in `lib/`, or replace with vanilla/Fabric API |
+1. Implement gameplay logic in `core/` (with unit tests) where possible; keep Minecraft-facing code thin.
+2. Wrap version differences in `compat/`.
+3. Add assets, lang entries and datagen entries; regenerate data for **both** versions.
+4. Add a `CHANGELOG.md` entry for user-visible changes.
+5. Run `./gradlew chiseledBuild`.
 
-**Porting workflow for each feature:**
-
-1. Find the feature in `oldmod/` (and any helpers it uses in `oldlib/`).
-2. Summarize the original behaviour and constants.
-3. Implement the modern equivalent in the new architecture.
-4. Wrap version differences in `compat/`.
-5. Add assets and datagen entries.
-6. Run `./gradlew chiseledBuild`.
-
-**Flattening:** old meta- or damage-based variants (base tiers, ammo types, upgrades, addons, expanders) become **individual registered blocks/items** with lowercase snake_case IDs. Keep a mapping table of old ID → new ID in `docs/id-mapping.md`.
+- Every variant (base tier, ammo type, upgrade, addon) is an **individual registered block/item** with a lowercase snake_case ID. `docs/id-mapping.md` maps the 1.12.2 IDs to the current ones.
+- OpenComputers / ComputerCraft integration is **out of scope for now** (ask before adding).
 
 ---
 
@@ -343,9 +305,9 @@ omtteam.openmodularturrets.client
 - No static mutable state for per-world data. Base state lives in block entities.
 - Use `Level#isClientSide()` checks properly; never load client classes on the server.
 - All user-facing text goes through translation keys (`block.openmodularturrets.x`, `gui.openmodularturrets.x`, `tooltip.openmodularturrets.x`).
-- Prefer small, focused classes. Avoid copying the 1.12.2 class hierarchy blindly when a simpler modern design works.
-- Add a short Javadoc to any non-obvious formula, noting where it came from in `oldmod`.
-- Don't add new features not present in `oldmod` unless the user asks.
+- Prefer small, focused classes.
+- Add a short Javadoc to any non-obvious formula.
+- Don't add new features or change balance values unless the user asks.
 
 ---
 
@@ -364,22 +326,21 @@ Update this checklist as work progresses.
 - [x] Networking for settings and trust changes (server-validated)
 - [x] Targeting logic (core `TargetSelector`, per-turret targets in `TurretBaseLogic`; aiming/yaw-pitch limits come with the turret framework)
 - [x] Turret block framework (6-face mounting, `TurretMath`, aiming sync)
-- [x] Turret renderers (rotating heads on any face) — all oldmod models; melee stays invisible (no oldmod model); ray/arc beams
+- [x] Turret renderers (rotating heads on any face) — all turret models; melee stays invisible (no model); ray/arc beams
 - [x] Individual turrets + projectiles (all 14 turrets: projectile, ray and effect weapons; projectile visuals and particles)
 - [x] Ammo items (items, tooltips, recipes)
 - [x] Upgrades and addons (items, tooltips, recipes, base effects, fake drops loot rule)
 - [x] Expanders are to be skipped
-- [x] Misc blocks from `oldmod` and `oldmod2/` (crank; OMPD hardened blocks, walls, fences, camouflage trap; loot deleter and power generator skipped)
-- [x] Recipes, loot tables, tags via datagen for all ported content (plasma, arc, melee and crossbow turrets have no recipe, like oldmod)
-- [x] Lang, sounds, creative tab (all oldmod sounds registered; lang for all ported content)
+- [x] Misc blocks (crank; OMPD hardened blocks, walls, fences, camouflage trap; loot deleter and power generator skipped)
+- [x] Recipes, loot tables, tags via datagen for all content (plasma, arc, melee and crossbow turrets have no recipe)
+- [x] Lang, sounds, creative tab
 - [ ] Camouflage for turret bases and the camouflage trap, one shared system:
-  - Disguise is set and reset the same way on both blocks (via gui with simple phatom slot) and rendered the same way.
-  - A small camo settings GUI on both blocks (oldmod: light value / light opacity, `ConfigureGui` sliders for tier 4+ bases), changes server-validated.
-  - Port the old turret base camo behaviour from `oldmod` (`BlockAbstractCamoTileEntity`, `CamoSettings`, `MessageAdjustLightValue` / `MessageAdjustLightOpacity`).
+  - Disguise is set and reset the same way on both blocks (via gui with simple phantom slot) and rendered the same way.
+  - A small camo settings GUI on both blocks (light value / light opacity sliders, for tier 4+ bases), changes server-validated.
 - [ ] Playtest both versions (client + dedicated server)
 - [x] Publishing to CurseForge / Modrinth via Gradle (`chiseledPublish`; CurseForge 224663, Modrinth `open-modular-turrets`)
 - [x] Changelog system (`CHANGELOG.md`, `changelogEntry`, `releaseChangelog`; publish uploads the version's section)
-- [x] Generator block (new, not in oldmod/oldmod2; design agreed with the user, see section 10)
+- [x] Generator block (new in this version; design agreed with the user, see section 10)
 
 ---
 
@@ -388,6 +349,6 @@ Update this checklist as work progresses.
 1. **Energy API:** Team Reborn Energy is acceptable (jar-in-jar)
 2. **Mappings:** Mojang official
 3. **Package name:** keep `omtteam.openmodularturrets`
-4. **Scope:** all turrets, addons and blocks from `oldmod` are to be ported 1:1,
+4. **Scope:** the port from 1.12.2 is complete; this repo maintains the 1.20.1 / 1.21.1 versions. Expanders were dropped.
 5. **Team/faction integration:** Should vanilla scoreboard teams count as trusted? Yes, but only at the lowest rank, so turrets do not shoot them.
 6. **Generator** (new block, user decisions): burns any furnace fuel (Fabric `FuelRegistry`, remainders like empty buckets stay in the slot), one burn tick = `generatorEnergyPerTick` (default 40 RF/t); pauses while its buffer (`generatorCapacity`, default 50,000) is full; pushes up to `generatorMaxOutput` (default 200 RF/t) into all neighbours via Team Reborn Energy; one block, furnace-like GUI with energy bar, no owner/trust; hoppers insert fuel only.

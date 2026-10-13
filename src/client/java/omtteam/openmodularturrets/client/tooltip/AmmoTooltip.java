@@ -10,7 +10,7 @@ import omtteam.openmodularturrets.item.AmmoItem;
 import java.util.List;
 
 /**
- * Ammo item tooltip, ported from oldmod {@code AmmoMetaItem.addInformation}.
+ * Ammo item tooltip, ported from 1.12.2 {@code AmmoMetaItem.addInformation}.
  */
 public final class AmmoTooltip {
     private AmmoTooltip() {

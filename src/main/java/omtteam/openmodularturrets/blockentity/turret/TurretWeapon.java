@@ -14,23 +14,23 @@ import omtteam.openmodularturrets.registry.ModSounds;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * How a turret type fires: the projectile it spawns (oldmod {@code createProjectile}) or a ray, its launch sound and
+ * How a turret type fires: the projectile it spawns (1.12.2 {@code createProjectile}) or a ray, its launch sound and
  * projectile speed.
  */
 public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, SoundEvent launchSound, float speed,
                            boolean leadWithGravity) {
     public enum Kind {
-        /** Spawns projectile entities (oldmod {@code ProjectileTurret}). */
+        /** Spawns projectile entities (1.12.2 {@code ProjectileTurret}). */
         PROJECTILE,
-        /** Hits instantly along a ray (oldmod {@code RayTracingTurret}: laser, railgun, arc), see {@link RayWeapons}. */
+        /** Hits instantly along a ray (1.12.2 {@code RayTracingTurret}: laser, railgun, arc), see {@link RayWeapons}. */
         RAY,
         /**
-         * Acts on the target without aiming (oldmod {@code TurretHead.updateChecks} turrets: relativistic,
+         * Acts on the target without aiming (1.12.2 {@code TurretHead.updateChecks} turrets: relativistic,
          * teleporter, melee), see {@link EffectWeapons}.
          */
         EFFECT;
 
-        /** Whether the turret turns towards its target (oldmod {@code AbstractDirectedTurret}). */
+        /** Whether the turret turns towards its target (1.12.2 {@code AbstractDirectedTurret}). */
         public boolean aims() {
             return this != EFFECT;
         }
@@ -41,7 +41,7 @@ public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, Sound
         TurretProjectile create(ServerLevel level, @Nullable AmmoDraw ammo, @Nullable Entity target);
     }
 
-    /** oldmod {@code doTargetedShot}: projectiles are shot with speed 3.0 (times the lead correction factor). */
+    /** 1.12.2 {@code doTargetedShot}: projectiles are shot with speed 3.0 (times the lead correction factor). */
     private static final float PROJECTILE_SPEED = 3.0F;
 
     public static TurretWeapon of(TurretType type) {
@@ -50,7 +50,7 @@ public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, Sound
                     withItem(ModEntities.DISPOSABLE.create(level), ammo));
             case POTATO_CANNON_TURRET -> projectile(ModSounds.POTATO_LAUNCH, true, (level, ammo, target) ->
                     withItem(ModEntities.POTATO.create(level), ammo));
-            // oldmod CrossbowTurretTileEntity used the potato launch sound
+            // 1.12.2 CrossbowTurretTileEntity used the potato launch sound
             case CROSSBOW_TURRET -> projectile(ModSounds.POTATO_LAUNCH, true, (level, ammo, target) -> ModEntities.ARROW.create(level));
             case MACHINE_GUN_TURRET -> projectile(ModSounds.MACHINE_GUN_LAUNCH, false, (level, ammo, target) -> ModEntities.BULLET.create(level));
             case INCENDIARY_TURRET -> projectile(ModSounds.INCENDIARY_LAUNCH, true, (level, ammo, target) -> ModEntities.BLAZING_CLAY.create(level));
@@ -61,7 +61,7 @@ public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, Sound
                 return rocket;
             });
             case PLASMA_TURRET -> projectile(ModSounds.PLASMA_LAUNCH, true, (level, ammo, target) -> ModEntities.PLASMA.create(level));
-            // oldmod MeleeTurretTileEntity used the relativistic launch sound
+            // 1.12.2 MeleeTurretTileEntity used the relativistic launch sound
             case MELEE_TURRET -> effect(ModSounds.RELATIVISTIC_LAUNCH);
             case RELATIVISTIC_TURRET -> effect(ModSounds.RELATIVISTIC_LAUNCH);
             case TELEPORTER_TURRET -> effect(ModSounds.TELEPORT_LAUNCH);
@@ -72,7 +72,7 @@ public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, Sound
     }
 
     /**
-     * @param leadWithGravity oldmod {@code getProjectileGravity() != 0} of the turret: the aim lead assumes a slower
+     * @param leadWithGravity 1.12.2 {@code getProjectileGravity() != 0} of the turret: the aim lead assumes a slower
      *                        projectile (the incendiary turret declared gravity although its projectile has none)
      */
     private static TurretWeapon projectile(SoundEvent sound, boolean leadWithGravity, ProjectileFactory factory) {

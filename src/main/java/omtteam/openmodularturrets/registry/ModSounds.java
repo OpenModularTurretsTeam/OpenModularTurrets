@@ -6,7 +6,7 @@ import net.minecraft.sounds.SoundEvent;
 import omtteam.openmodularturrets.OMT;
 
 /**
- * All sounds (oldmod {@code ModSounds}); the files and {@code sounds.json} are copied from oldmod.
+ * All sounds (1.12.2 {@code ModSounds}); the files and {@code sounds.json} are copied from the 1.12.2 version.
  */
 public final class ModSounds {
     public static final SoundEvent TURRET_DEPLOY = register("turret_deploy");

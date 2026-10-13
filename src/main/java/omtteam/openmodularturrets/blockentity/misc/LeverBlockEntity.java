@@ -9,13 +9,13 @@ import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 
 /**
- * The crank's animation state (oldmod {@code LeverTileEntity}): one full turn of 30° per tick after each use.
+ * The crank's animation state (1.12.2 {@code LeverTileEntity}): one full turn of 30° per tick after each use.
  * The server tracks it to ignore uses during the turn; clients start it from a block event.
  */
 public class LeverBlockEntity extends CompatBlockEntity {
     /** Block event id that starts the turn on clients. */
     public static final int EVENT_TURN = 1;
-    /** oldmod: 30° per tick, 12 ticks per turn. */
+    /** 30° per tick, 12 ticks per turn. */
     private static final float DEGREES_PER_TICK = 30F;
 
     private float rotation;

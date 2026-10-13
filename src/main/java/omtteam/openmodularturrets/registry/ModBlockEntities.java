@@ -48,7 +48,7 @@ public final class ModBlockEntities {
     }
 
     public static void init() {
-        // Exposed on all sides, like oldmod
+        // Exposed on all sides, as in 1.12.2
         ItemStorage.SIDED.registerForBlockEntity((base, side) -> base.getAmmoStorage(), TURRET_BASE);
         EnergyStorage.SIDED.registerForBlockEntity((base, side) -> base.getEnergyStorage(), TURRET_BASE);
         ItemStorage.SIDED.registerForBlockEntity((generator, side) -> generator.getItemStorage(), GENERATOR);

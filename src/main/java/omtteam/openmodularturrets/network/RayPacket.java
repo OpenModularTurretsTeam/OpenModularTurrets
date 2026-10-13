@@ -13,7 +13,7 @@ import omtteam.openmodularturrets.compat.network.NetworkCompat;
  * @param duration ticks the ray stays visible
  */
 public record RayPacket(Vec3 from, Vec3 to, int argb, int duration, boolean lightning) {
-    /** oldmod sent rays to players within 120 blocks of the start. */
+    /** Rays are sent to players within 120 blocks of the start. */
     private static final double RANGE = 120;
 
     public static void write(FriendlyByteBuf buf, RayPacket packet) {

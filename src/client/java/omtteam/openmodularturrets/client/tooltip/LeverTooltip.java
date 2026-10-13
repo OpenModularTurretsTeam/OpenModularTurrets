@@ -10,7 +10,7 @@ import omtteam.openmodularturrets.registry.ModItems;
 import java.util.List;
 
 /**
- * Crank tooltip (oldmod {@code ItemBlockLever.addInformation}).
+ * Crank tooltip (1.12.2 {@code ItemBlockLever.addInformation}).
  */
 public final class LeverTooltip {
     private LeverTooltip() {

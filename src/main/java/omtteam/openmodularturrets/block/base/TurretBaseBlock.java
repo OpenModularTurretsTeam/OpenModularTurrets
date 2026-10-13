@@ -43,7 +43,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 //?}
 
 /**
- * Turret base, one block per tier (1–5). Ported from oldmod {@code BlockTurretBase} (meta-based tiers flattened).
+ * Turret base, one block per tier (1–5). Ported from 1.12.2 {@code BlockTurretBase} (meta-based tiers flattened).
  */
 public class TurretBaseBlock extends BaseEntityBlock {
     //? if >=1.21 {
@@ -62,7 +62,7 @@ public class TurretBaseBlock extends BaseEntityBlock {
 
     /**
      * Unbreakable unless {@code bases.baseBreakable}; hardness and blast resistance per tier from the config
-     * (read once at startup, like oldmod's {@code @Config.RequiresMcRestart}).
+     * (read once at startup, like 1.12.2's {@code @Config.RequiresMcRestart}).
      */
     public static Properties createProperties(int tier) {
         ConfigData.Bases bases = OMTConfig.get().bases;
@@ -115,7 +115,7 @@ public class TurretBaseBlock extends BaseEntityBlock {
     }
 
     /**
-     * oldmod {@code canPlaceBlockAt}: no other base may touch the position or any of its neighbours, so a turret can
+     * 1.12.2 {@code canPlaceBlockAt}: no other base may touch the position or any of its neighbours, so a turret can
      * never be attached to two bases.
      */
     public static boolean canPlaceAt(LevelReader level, BlockPos pos) {
@@ -168,7 +168,7 @@ public class TurretBaseBlock extends BaseEntityBlock {
     *///?}
 
     /**
-     * oldmod {@code onBlockActivated}: right-click (not sneaking) opens the GUI if the player has access, otherwise
+     * 1.12.2 {@code onBlockActivated}: right-click (not sneaking) opens the GUI if the player has access, otherwise
      * a permission message is shown. The check runs on the server, which then tells the client what to open.
      */
     private InteractionResult onUse(Level level, BlockPos pos, Player player) {

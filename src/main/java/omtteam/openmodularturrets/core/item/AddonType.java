@@ -1,9 +1,9 @@
 package omtteam.openmodularturrets.core.item;
 
 /**
- * Addons that go into the addon slots of a base. Ported from oldmod {@code AddonMetaItem} (meta 0–7).
+ * Addons that go into the addon slots of a base. Ported from 1.12.2 {@code AddonMetaItem} (meta 0–7).
  * <p>
- * {@link #POTENTIA} (Thaumcraft, already without function and recipe in oldmod) and {@link #SERIAL_PORT}
+ * {@link #POTENTIA} (Thaumcraft, already without function and recipe in 1.12.2) and {@link #SERIAL_PORT}
  * (OpenComputers/ComputerCraft, out of scope) have no item.
  */
 public enum AddonType {
@@ -28,7 +28,7 @@ public enum AddonType {
         return serializedName;
     }
 
-    /** oldmod {@code AddonSlot.getItemStackLimit}: damage amp and fake drops stack to 4, the others to 1. */
+    /** 1.12.2 {@code AddonSlot.getItemStackLimit}: damage amp and fake drops stack to 4, the others to 1. */
     public int getMaxPerSlot() {
         return maxPerSlot;
     }

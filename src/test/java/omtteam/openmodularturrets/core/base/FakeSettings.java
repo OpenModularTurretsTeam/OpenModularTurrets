@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Test settings using the oldmod defaults for the turrets used in tests.
+ * Test settings using the 1.12.2 defaults for the turrets used in tests.
  */
 final class FakeSettings implements LogicSettings {
     final Map<TurretType, TurretStats> turrets = new EnumMap<>(TurretType.class);
@@ -32,7 +32,7 @@ final class FakeSettings implements LogicSettings {
     final Set<String> forcedNeutral = new HashSet<>(Set.of("minecraft:cow"));
 
     FakeSettings() {
-        // oldmod OMTConfig defaults
+        // 1.12.2 OMTConfig defaults
         turrets.put(TurretType.DISPOSABLE_TURRET, stats(10, 25, 2, 2, 50, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D));
         turrets.put(TurretType.POTATO_CANNON_TURRET, stats(15, 35, 3, 10, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D));
         turrets.put(TurretType.MACHINE_GUN_TURRET, stats(18, 8, 2, 100, 30, 4, 0.06D, 0.1D, 2, 0.2D, 0.08D, 0.1D));

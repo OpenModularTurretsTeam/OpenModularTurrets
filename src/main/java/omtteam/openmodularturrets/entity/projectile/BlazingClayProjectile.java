@@ -14,8 +14,7 @@ import omtteam.openmodularturrets.registry.ModDamageTypes;
 import omtteam.openmodularturrets.registry.ModItems;
 
 /**
- * Incendiary turret ammo (oldmod {@code BlazingClayProjectile}): on impact it damages and ignites every living
- * entity within 5 blocks for 5 seconds.
+ * Incendiary turret ammo
  */
 public class BlazingClayProjectile extends TurretProjectile implements ItemSupplier {
     private static final double RADIUS = 5;
@@ -25,7 +24,7 @@ public class BlazingClayProjectile extends TurretProjectile implements ItemSuppl
         super(type, level);
     }
 
-    /** Shown as the ammo item (oldmod {@code RenderSnowball}). */
+    /** Shown as the ammo item (1.12.2 {@code RenderSnowball}). */
     @Override
     public ItemStack getItem() {
         return new ItemStack(ModItems.AMMO_BLAZING_CLAY);
@@ -41,14 +40,14 @@ public class BlazingClayProjectile extends TurretProjectile implements ItemSuppl
         return 0.0F;
     }
 
-    /** oldmod: the damage amp bonus is computed from the directly hit entity and applied to all. */
+    /** The damage amp bonus is computed from the directly hit entity and applied to all. */
     @Override
     protected void onHitEntity(Entity entity) {
         if (!canDamage(entity)) return;
         burnArea(damageWithAmp(baseDamage(), entity));
     }
 
-    /** oldmod: hitting a block deals the base damage without amp bonus. */
+    /** Hitting a block deals the base damage without amp bonus. */
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos) {
         burnArea(baseDamage());

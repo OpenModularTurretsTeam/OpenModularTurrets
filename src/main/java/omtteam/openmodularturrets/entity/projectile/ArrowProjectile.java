@@ -9,8 +9,7 @@ import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 
 /**
- * Crossbow turret arrow (oldmod {@code ArrowProjectile}). oldmod also applied potion effects of tipped arrows, but the
- * turret only fires plain arrows, so there are none.
+ * Crossbow turret arrow
  */
 public class ArrowProjectile extends TurretProjectile {
     public ArrowProjectile(EntityType<? extends ArrowProjectile> type, Level level) {

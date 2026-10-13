@@ -12,7 +12,7 @@ import omtteam.openmodularturrets.compat.VersionCompat;
 import java.util.UUID;
 
 /**
- * The fake player credited with turret kills when a base has fake drops addons (oldmod {@code OMTFakePlayer}).
+ * The fake player credited with turret kills when a base has fake drops addons (1.12.2 {@code OMTFakePlayer}).
  * Vanilla then treats the kill as a player kill (player-only drops, experience), and the Looting level is read from
  * the sword the fake player holds.
  */

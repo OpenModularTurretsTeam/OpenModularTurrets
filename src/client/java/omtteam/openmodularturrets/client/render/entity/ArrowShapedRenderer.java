@@ -13,13 +13,13 @@ import net.minecraft.world.entity.Entity;
 import omtteam.openmodularturrets.client.compat.ClientCompat;
 
 /**
- * Arrow geometry (two crossed fins at the back and four crossed side quads), as vanilla's arrow renderer. oldmod used
- * it for the crossbow turret's arrows ({@code RenderTippedArrow}) and, with its own texture, for rockets
+ * Arrow geometry (two crossed fins at the back and four crossed side quads), as vanilla's arrow renderer. The 1.12.2
+ * version used it for the crossbow turret's arrows ({@code RenderTippedArrow}) and, with its own texture, for rockets
  * ({@code RocketRenderer}).
  */
 public class ArrowShapedRenderer<T extends Entity> extends EntityRenderer<T> {
     private final ResourceLocation texture;
-    /** oldmod {@code RocketRenderer}: skip the first frames so the projectile does not flash inside the turret. */
+    /** As 1.12.2 {@code RocketRenderer}: skip the first frames so the projectile does not flash inside the turret. */
     private final int hiddenTicks;
 
     public ArrowShapedRenderer(EntityRendererProvider.Context context, ResourceLocation texture, int hiddenTicks) {

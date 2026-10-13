@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.core.settings;
 
 /**
- * Configurable stats of a turret type (oldmod {@code TurretSetting}).
+ * Configurable stats of a turret type (1.12.2 {@code TurretSetting}).
  *
  * @param baseFireRate          ticks between shots
  * @param baseAccuracyDeviation inaccuracy in percent

@@ -41,7 +41,7 @@ public abstract class TargetEntity {
     /** The owning player of a tamed animal, if any. */
     public abstract Optional<PlayerIdentity> getOwner();
 
-    /** A tamed horse (oldmod never targeted those, owned or not). */
+    /** A tamed horse (1.12.2 never targeted those, owned or not). */
     public abstract boolean isTamedHorse();
 
     /** Has the slowness effect (the relativistic turret ignores slowed entities). */

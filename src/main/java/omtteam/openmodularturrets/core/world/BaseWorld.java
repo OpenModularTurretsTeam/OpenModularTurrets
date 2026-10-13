@@ -22,7 +22,7 @@ public interface BaseWorld {
     List<ItemSlot> getUpgradeSlots();
 
     /**
-     * oldmod {@code updateSolarPanelAddon}: daytime, not raining and the sky is visible from two blocks above
+     * 1.12.2 {@code updateSolarPanelAddon}: daytime, not raining and the sky is visible from two blocks above
      * the base.
      */
     boolean canGenerateSolarPower();
@@ -34,11 +34,11 @@ public interface BaseWorld {
     Optional<TargetEntity> getEntity(int id);
 
     /**
-     * Whether no solid, collidable block is between the point and the target's eyes (oldmod
+     * Whether no solid, collidable block is between the point and the target's eyes (1.12.2
      * {@code canSeeTargetFromPos}: blocks without collision such as grass, and fluids, do not block the view).
      */
     boolean hasLineOfSight(double fromX, double fromY, double fromZ, TargetEntity target);
 
-    /** Plays the alarm and/or sends the warning message to a player (oldmod {@code dispatchWarnMessage}). */
+    /** Plays the alarm and/or sends the warning message to a player (1.12.2 {@code dispatchWarnMessage}). */
     void warnPlayer(TargetEntity player);
 }

@@ -39,7 +39,7 @@ import com.mojang.serialization.MapCodec;
 //?}
 
 /**
- * Generator (new block, not in oldmod): a furnace-like fuel burner that powers adjacent turret bases. Anyone may
+ * Generator (new block, not in 1.12.2): a furnace-like fuel burner that powers adjacent turret bases. Anyone may
  * use it (no owner). {@link #FACING} is the front, {@link #LIT} is set while burning.
  */
 public class GeneratorBlock extends BaseEntityBlock implements InteractiveBlock {

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Decides which entities a turret may target and which one it prefers. Ported from oldmod
+ * Decides which entities a turret may target and which one it prefers. Ported from 1.12.2
  * {@code TurretTargetingUtils} and {@code TurretHead.getTarget}.
  */
 public final class TargetSelector {
@@ -39,7 +39,7 @@ public final class TargetSelector {
 
     /**
      * Classification in the order block list → neutral force list → mob force list → default category, so the
-     * neutral force list can protect passive mod entities that are wrongly classified as monsters. (oldmod never
+     * neutral force list can protect passive mod entities that are wrongly classified as monsters. (1.12.2 never
      * used the block list and let a monster on the neutral list stay hostile.)
      */
     public Classification classify(TargetEntity entity) {
@@ -55,7 +55,7 @@ public final class TargetSelector {
     }
 
     /**
-     * The best target for a turret (oldmod {@code getTarget} + {@code getBestEntity}): candidates in the cube
+     * The best target for a turret (1.12.2 {@code getTarget} + {@code getBestEntity}): candidates in the cube
      * {@code turret ± (range + 1)}, filtered by {@link #isValidTarget}, highest {@link TargetingPriority#score} wins
      * (first one on ties).
      *
@@ -80,7 +80,7 @@ public final class TargetSelector {
     }
 
     /**
-     * oldmod {@code validTarget} (without the multi-targeting check, see {@link #findBest}).
+     * 1.12.2 {@code validTarget} (without the multi-targeting check, see {@link #findBest}).
      *
      * @param face the base face the turret is mounted on
      */
@@ -102,7 +102,7 @@ public final class TargetSelector {
         if (owner.isPresent() && trust.isOwnerOrTrusted(owner.get())) return false;
         if (owner.isEmpty() && entity.isTamedHorse()) return false;
 
-        // oldmod RelativisticTurretTileEntity.isEntityValidTarget: slowed entities are already "handled"
+        // 1.12.2 RelativisticTurretTileEntity.isEntityValidTarget: slowed entities are already "handled"
         if (type == TurretType.RELATIVISTIC_TURRET && entity.hasSlowness()) return false;
 
         if (classification == Classification.NEUTRAL && targeting.isTargetPassive() && settings.globalCanTargetNeutrals()) {
@@ -115,7 +115,7 @@ public final class TargetSelector {
     }
 
     /**
-     * oldmod {@code chebyshevDistance}: the largest axis distance between the turret's block corner and the
+     * 1.12.2 {@code chebyshevDistance}: the largest axis distance between the turret's block corner and the
      * entity's position must not exceed the base range.
      */
     public static boolean isInRange(TargetEntity entity, BlockPosition turret, int range) {
@@ -125,7 +125,7 @@ public final class TargetSelector {
     }
 
     /**
-     * oldmod {@code canSeeTargetFromPos}: from the turret's centre to the entity's eyes. Additionally the turret must
+     * 1.12.2 {@code canSeeTargetFromPos}: from the turret's centre to the entity's eyes. Additionally the turret must
      * be able to turn there without pointing into its base ({@link TurretMath#canAim}).
      */
     public boolean canSee(TargetEntity entity, BlockPosition turret, Face face) {

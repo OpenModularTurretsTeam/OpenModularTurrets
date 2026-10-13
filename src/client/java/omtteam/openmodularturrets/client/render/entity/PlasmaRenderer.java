@@ -19,8 +19,8 @@ import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.entity.projectile.PlasmaProjectile;
 
 /**
- * Plasma ball (oldmod {@code PlasmaRenderer} + {@code ModelPlasmaProjectile}): two crossed 4x4 planes, scaled by
- * 0.675 and turned along the flight direction. oldmod rotated around a point 0.9 blocks below the ball; here it turns
+ * Plasma ball (1.12.2 {@code PlasmaRenderer} + {@code ModelPlasmaProjectile}): two crossed 4x4 planes, scaled by
+ * 0.675 and turned along the flight direction. 1.12.2 rotated around a point 0.9 blocks below the ball; here it turns
  * around its own centre.
  */
 public class PlasmaRenderer extends EntityRenderer<PlasmaProjectile> {
@@ -35,7 +35,7 @@ public class PlasmaRenderer extends EntityRenderer<PlasmaProjectile> {
         this.shot = context.bakeLayer(LAYER).getChild("shot");
     }
 
-    /** oldmod {@code ModelPlasmaProjectile}, with the pivot moved to the ball's centre. */
+    /** 1.12.2 {@code ModelPlasmaProjectile}, with the pivot moved to the ball's centre. */
     public static LayerDefinition createLayer() {
         MeshDefinition mesh = new MeshDefinition();
         mesh.getRoot().addOrReplaceChild("shot", CubeListBuilder.create()

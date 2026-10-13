@@ -9,7 +9,7 @@ import java.util.UUID;
 
 /**
  * Owner and trust list of a base, and every permission decision based on them. Ported from OMLib
- * {@code TrustedPlayersManager}, {@code ITrustedPlayersManager} and {@code PlayerUtil}, and from oldmod
+ * {@code TrustedPlayersManager}, {@code ITrustedPlayersManager} and {@code PlayerUtil}, and from 1.12.2
  * {@code OMTUtil.canDamagePlayer} / {@code TurretTargetingUtils.validTarget}.
  * <p>
  * Rules:
@@ -148,7 +148,7 @@ public class TrustManager {
     }
 
     /**
-     * Whether turrets must never select this player as a target (oldmod {@code TurretTargetingUtils.validTarget}):
+     * Whether turrets must never select this player as a target (1.12.2 {@code TurretTargetingUtils.validTarget}):
      * owner, trusted (any level, including team members), privileged operators and players that may not be
      * damaged.
      */
@@ -158,14 +158,14 @@ public class TrustManager {
 
     /**
      * Whether a player (or a pet owned by that player) counts as friendly: owner or trusted at any level
-     * (oldmod pet check in {@code validTarget}). Works for offline players.
+     * (1.12.2 pet check in {@code validTarget}). Works for offline players.
      */
     public boolean isOwnerOrTrusted(PlayerIdentity player) {
         return isOwner(player.uuid()) || getTrustLevel(player).isPresent();
     }
 
     /**
-     * Whether a projectile of this base may hurt the player (oldmod {@code OMTUtil.canDamagePlayer}). The owner and
+     * Whether a projectile of this base may hurt the player (1.12.2 {@code OMTUtil.canDamagePlayer}). The owner and
      * the owner's team are never hurt; listed trusted players only if {@code turretDamageTrustedPlayers} is set.
      */
     public boolean canDamagePlayer(PlayerIdentity player) {

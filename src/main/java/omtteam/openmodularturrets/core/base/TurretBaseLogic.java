@@ -30,7 +30,7 @@ import java.util.UUID;
 import java.util.random.RandomGenerator;
 
 /**
- * Game logic of one turret base, independent of Minecraft. Ported from oldmod {@code TurretBase} and the base-related
+ * Game logic of one turret base, independent of Minecraft. Ported from 1.12.2 {@code TurretBase} and the base-related
  * parts of {@code TurretHeadUtil}, {@code OMTUtil} and OMLib's machine classes.
  * <p>
  * The block entity owns one instance, forwards world events to it ({@link #setRedstone}, {@link #onInventoryChanged},
@@ -38,7 +38,7 @@ import java.util.random.RandomGenerator;
  * upgraded stats.
  */
 public class TurretBaseLogic {
-    /** oldmod {@code TurretHeadUtil.warnPlayers}: a warned player is warned again after this many ticks. */
+    /** 1.12.2 {@code TurretHeadUtil.warnPlayers}: a warned player is warned again after this many ticks. */
     static final long WARNING_COOLDOWN_TICKS = 12000;
 
     private final int tier;
@@ -50,9 +50,9 @@ public class TurretBaseLogic {
     private final EnergyStore energy;
 
     private final TargetSelector targetSelector;
-    /** Current target entity id per turret face (oldmod {@code TurretHead.target}). */
+    /** Current target entity id per turret face (1.12.2 {@code TurretHead.target}). */
     private final Map<Face, Integer> targets = new EnumMap<>(Face.class);
-    /** Ticks since the last target search per turret face (oldmod {@code TurretHead.targetingTicks}). */
+    /** Ticks since the last target search per turret face (1.12.2 {@code TurretHead.targetingTicks}). */
     private final Map<Face, Integer> searchTicks = new EnumMap<>(Face.class);
     private final Map<Face, Neighbour> neighbours = new EnumMap<>(Face.class);
     private boolean neighboursKnown;
@@ -106,7 +106,7 @@ public class TurretBaseLogic {
     // ---- Ticking ----
 
     /**
-     * Server tick (oldmod {@code TurretBase.update}). Every tick: solar panel, player warnings (throttled); every 5
+     * Server tick (1.12.2 {@code TurretBase.update}). Every tick: solar panel, player warnings (throttled); every 5
      * ticks: concealment, energy capacity and max range; every 20 ticks: redstone reactor and range clamp.
      */
     public void tick(long gameTime) {
@@ -149,7 +149,7 @@ public class TurretBaseLogic {
         BaseTierStats stats = settings.baseTier(tier);
         energy.setCapacity(stats.maxCharge());
         updateMaxRange();
-        // oldmod BlockAbstractTurretHead.onBlockPlacedBy: a newly placed turret that reaches further than the old
+        // 1.12.2 BlockAbstractTurretHead.onBlockPlacedBy: a newly placed turret that reaches further than the old
         // max range raises the range to the new maximum (not on the first scan after loading)
         if (wasKnown) {
             for (Map.Entry<Face, TurretType> turret : turrets.entrySet()) {
@@ -192,7 +192,7 @@ public class TurretBaseLogic {
     }
 
     /**
-     * How many more turrets of this type may be attached (oldmod {@code OMTUtil.getRemainingTurretSlots}): limited by
+     * How many more turrets of this type may be attached (1.12.2 {@code OMTUtil.getRemainingTurretSlots}): limited by
      * the tier's {@code baseMaxTurrets} and the type's {@code maxSimultaneous}.
      */
     public int getRemainingTurretSlots(TurretType type) {
@@ -203,13 +203,13 @@ public class TurretBaseLogic {
         return Math.max(0, Math.min(byTier, byType));
     }
 
-    /** A turret on a base of a lower tier breaks (oldmod {@code AbstractDirectedTurret.update}). */
+    /** A turret on a base of a lower tier breaks (1.12.2 {@code AbstractDirectedTurret.update}). */
     public boolean supportsTurret(TurretType type) {
         return tier >= type.getRequiredBaseTier();
     }
 
     /**
-     * Max range = best {@code baseRange + range upgrades} of the attached turrets (oldmod {@code updateMaxRange}).
+     * Max range = best {@code baseRange + range upgrades} of the attached turrets (1.12.2 {@code updateMaxRange}).
      * Skipped until the neighbours are known, so the player's range is not reset while loading.
      */
     public void updateMaxRange() {
@@ -235,7 +235,7 @@ public class TurretBaseLogic {
     }
 
     /**
-     * Shots available to a turret (oldmod {@code TurretHeadUtil.getAmmoLevel}): matching items in the base and its
+     * Shots available to a turret (1.12.2 {@code TurretHeadUtil.getAmmoLevel}): matching items in the base and its
      * inventory expanders; for energy turrets the stored energy divided by the power usage; unlimited if ammo is
      * disabled.
      */
@@ -258,7 +258,7 @@ public class TurretBaseLogic {
     }
 
     /**
-     * Takes the ammunition for one shot: {@code 1 + scattershot upgrades} items, all or nothing (oldmod
+     * Takes the ammunition for one shot: {@code 1 + scattershot upgrades} items, all or nothing (1.12.2
      * {@code TurretHead.getAmmoStack} / {@code deductItemStackFromInventories}). With a recycler addon there is a
      * {@code recyclerNegateChance} chance that nothing is removed.
      * <p>
@@ -352,12 +352,12 @@ public class TurretBaseLogic {
         return getAddonCount(type) > 0;
     }
 
-    /** oldmod {@code TurretHeadUtil.getScattershotUpgrades}. */
+    /** 1.12.2 {@code TurretHeadUtil.getScattershotUpgrades}. */
     public int getScattershotCount() {
         return getUpgradeCount(UpgradeType.SCATTERSHOT);
     }
 
-    /** oldmod {@code TurretHeadUtil.getAmpLevel}. */
+    /** 1.12.2 {@code TurretHeadUtil.getAmpLevel}. */
     public int getDamageAmpLevel() {
         return getAddonCount(AddonType.DAMAGE_AMP);
     }
@@ -366,7 +366,7 @@ public class TurretBaseLogic {
     public static final int NO_LOOT = -1;
 
     /**
-     * Loot of entities killed by this base's turrets (user decision, inverting oldmod): without a fake drops addon
+     * Loot of entities killed by this base's turrets (user decision, inverting 1.12.2): without a fake drops addon
      * they drop nothing; the first addon enables player-kill loot, each further addon adds one level of Looting,
      * up to {@code maxLooting} (the enchantment's maximum level).
      *
@@ -377,7 +377,7 @@ public class TurretBaseLogic {
         return addons == 0 ? NO_LOOT : Math.min(addons - 1, Math.max(0, maxLooting));
     }
 
-    /** oldmod {@code TurretHeadUtil.hasConcealmentAddon}. */
+    /** 1.12.2 {@code TurretHeadUtil.hasConcealmentAddon}. */
     public boolean shouldConcealTurrets() {
         return tier > 1 && (hasAddon(AddonType.CONCEALER) || settings.turretsConcealWithoutAddon());
     }
@@ -389,7 +389,7 @@ public class TurretBaseLogic {
 
     // ---- Upgraded turret stats ----
 
-    /** Turret range: {@code baseRange + rangeUpgrade * range upgrades} (oldmod {@code getRangeUpgrades}). */
+    /** Turret range: {@code baseRange + rangeUpgrade * range upgrades} (1.12.2 {@code getRangeUpgrades}). */
     public int getRange(TurretType type) {
         TurretStats stats = settings.turret(type);
         return stats.baseRange() + stats.rangeUpgrade() * getUpgradeCount(UpgradeType.RANGE);
@@ -397,7 +397,7 @@ public class TurretBaseLogic {
 
     /**
      * Energy per shot: {@code round(powerUsage * (1 - efficiency) * (1 + scattershot))}
-     * (oldmod {@code TurretHead.getPowerRequiredForNextShot}).
+     * (1.12.2 {@code TurretHead.getPowerRequiredForNextShot}).
      */
     public int getPowerPerShot(TurretType type) {
         TurretStats stats = settings.turret(type);
@@ -407,7 +407,7 @@ public class TurretBaseLogic {
 
     /**
      * Ticks between shots: {@code baseFireRate / (1 + fireRateUpgrade * fire rate upgrades)}
-     * (oldmod {@code TurretHead.isOnCooldown}). A turret may fire once its tick counter reaches this value.
+     * (1.12.2 {@code TurretHead.isOnCooldown}). A turret may fire once its tick counter reaches this value.
      */
     public double getFireCooldownTicks(TurretType type) {
         TurretStats stats = settings.turret(type);
@@ -416,7 +416,7 @@ public class TurretBaseLogic {
 
     /**
      * Inaccuracy in percent: {@code base / (1 + accuracy)^1.5 * (1 + scattershot / 10)}
-     * (oldmod {@code TurretHead.getActualTurretAccuracyDeviation}).
+     * (1.12.2 {@code TurretHead.getActualTurretAccuracyDeviation}).
      */
     public double getAccuracyDeviation(TurretType type) {
         TurretStats stats = settings.turret(type);
@@ -424,7 +424,7 @@ public class TurretBaseLogic {
         return stats.baseAccuracyDeviation() / Math.pow(1 + accuracy, 1.5D) * (1 + getScattershotCount() / 10F);
     }
 
-    /** Damage bonus factor of the damage amp addon: {@code damageAmp * amp level} (oldmod projectile code). */
+    /** Damage bonus factor of the damage amp addon: {@code damageAmp * amp level} (1.12.2 projectile code). */
     public double getDamageAmpBonus(TurretType type) {
         return settings.turret(type).damageAmp() * getDamageAmpLevel();
     }
@@ -435,7 +435,7 @@ public class TurretBaseLogic {
         return energy;
     }
 
-    /** Whether there is enough energy for the next shot (oldmod power check before firing). */
+    /** Whether there is enough energy for the next shot (1.12.2 power check before firing). */
     public boolean hasEnergyForShot(TurretType type) {
         return energy.getAmount() >= getPowerPerShot(type);
     }
@@ -446,7 +446,7 @@ public class TurretBaseLogic {
     }
 
     /**
-     * oldmod {@code TurretBase.updateRedstoneReactor}: burns a redstone block if its full output fits, otherwise
+     * 1.12.2 {@code TurretBase.updateRedstoneReactor}: burns a redstone block if its full output fits, otherwise
      * a redstone dust if that fits.
      */
     private void updateRedstoneReactor() {
@@ -461,7 +461,7 @@ public class TurretBaseLogic {
         }
     }
 
-    /** oldmod {@code TurretHeadUtil.updateSolarPanelAddon}; inserted like external energy (limited by max IO). */
+    /** 1.12.2 {@code TurretHeadUtil.updateSolarPanelAddon}; inserted like external energy (limited by max IO). */
     private void updateSolarPanel() {
         if (hasAddon(AddonType.SOLAR_PANEL) && world.canGenerateSolarPower()) {
             energy.insert(settings.solarPanelGeneration(), false);
@@ -482,7 +482,7 @@ public class TurretBaseLogic {
         return mode;
     }
 
-    /** oldmod {@code MessageToggleMode}: cycles always on, always off, inverted, non-inverted. */
+    /** 1.12.2 {@code MessageToggleMode}: cycles always on, always off, inverted, non-inverted. */
     public void cycleMode() {
         setMode(mode.next());
     }
@@ -513,7 +513,7 @@ public class TurretBaseLogic {
         markSync();
     }
 
-    /** oldmod {@code setRange}: refreshes the max range first; values outside {@code [0, maxRange]} are ignored. */
+    /** 1.12.2 {@code setRange}: refreshes the max range first; values outside {@code [0, maxRange]} are ignored. */
     public void setRange(int range) {
         updateMaxRange();
         targeting.setRange(range);
@@ -530,7 +530,7 @@ public class TurretBaseLogic {
     }
 
     /**
-     * Living entities in the cube {@code base ± (range + 1)} (oldmod {@code getEntitiesWithinRange}).
+     * Living entities in the cube {@code base ± (range + 1)} (1.12.2 {@code getEntitiesWithinRange}).
      */
     public List<TargetEntity> getEntitiesWithinRange() {
         return world.getLivingEntities(Box.around(world.getPosition(), targeting.getRange() + 1));
@@ -539,7 +539,7 @@ public class TurretBaseLogic {
     // ---- Targeting ----
 
     /**
-     * Per-turret target tracking, from oldmod {@code AbstractDirectedTurret.update} and
+     * Per-turret target tracking, from 1.12.2 {@code AbstractDirectedTurret.update} and
      * {@code TurretHead.targetingChecks}:
      * <ul>
      *     <li>inactive base: all targets are dropped;</li>
@@ -548,7 +548,7 @@ public class TurretBaseLogic {
      *     <li>with a target it re-checks it every tick and searches a new one as soon as the old one is no longer
      *     valid.</li>
      * </ul>
-     * oldmod only dropped a target when it died or went out of sight; here it is dropped as soon as it is no
+     * 1.12.2 only dropped a target when it died or went out of sight; here it is dropped as soon as it is no
      * longer a valid target at all (out of range, became trusted, setting changed, …).
      */
     private void updateTargets() {
@@ -613,7 +613,7 @@ public class TurretBaseLogic {
     // ---- Player warnings ----
 
     /**
-     * oldmod {@code TurretHeadUtil.warnPlayers}, called per turret while the base is active and has enough energy for
+     * 1.12.2 {@code TurretHeadUtil.warnPlayers}, called per turret while the base is active and has enough energy for
      * a shot: players in the cube {@code turret ± (baseRange + warning distance)} who are not owner, trusted or in
      * creative mode are warned once every {@value #WARNING_COOLDOWN_TICKS} ticks.
      */

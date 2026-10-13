@@ -21,7 +21,7 @@ public class TargetingSettings {
         this.range = Math.max(0, Math.min(range, this.maxRange));
     }
 
-    /** Defaults of a new turret base (oldmod {@code TurretBase} constructor): only hostile mobs. */
+    /** Defaults of a new turret base (1.12.2 {@code TurretBase} constructor): only hostile mobs. */
     public static TargetingSettings defaults() {
         return new TargetingSettings(false, true, false, 0, 0);
     }
@@ -54,7 +54,7 @@ public class TargetingSettings {
         return range;
     }
 
-    /** Ignored if outside {@code [0, maxRange]} (as in oldmod). */
+    /** Ignored if outside {@code [0, maxRange]}. */
     public void setRange(int range) {
         if (range >= 0 && range <= maxRange) {
             this.range = range;

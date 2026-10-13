@@ -26,7 +26,7 @@ import java.util.concurrent.CompletableFuture;
 *///?}
 
 /**
- * Crafting recipes, ported from the oldmod {@code *_vanilla.json} recipes (ore dictionary entries become {@code c:}
+ * Crafting recipes, ported from the 1.12.2 {@code *_vanilla.json} recipes (ore dictionary entries become {@code c:}
  * tags). The EnderIO/Mekanism variants are not ported.
  */
 public class OMTRecipeProvider extends FabricRecipeProvider {
@@ -62,7 +62,7 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
         addons(save);
     }
 
-    /** oldmod {@code intermediate_regular_0_vanilla.json}. */
+    /** 1.12.2 {@code intermediate_regular_0_vanilla.json}. */
     private void intermediates(Consumer<ShapedRecipeBuilder> save) {
         save.accept(ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.IO_BUS)
                 .pattern(" G ")
@@ -75,7 +75,7 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
     }
 
     /**
-     * oldmod {@code intermediate_tiered_0..14_vanilla.json}: sensors, chambers and barrels, each tier crafted from
+     * 1.12.2 {@code intermediate_tiered_0..14_vanilla.json}: sensors, chambers and barrels, each tier crafted from
      * the previous one. Ore dictionary {@code cobblestone} and {@code obsidian} have no common tag on 1.20.1, the
      * vanilla items are used on both versions.
      */
@@ -152,7 +152,7 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_barrel", has(barrels.get(3))));
     }
 
-    /** oldmod {@code turret_base_0..4_vanilla.json}: each tier upgrades the previous base with a sensor. */
+    /** 1.12.2 {@code turret_base_0..4_vanilla.json}: each tier upgrades the previous base with a sensor. */
     private void turretBases(Consumer<ShapedRecipeBuilder> save) {
         save.accept(ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.TURRET_BASE_TIER_ONE)
                 .pattern("CPC").pattern("PSP").pattern("CPC")
@@ -169,7 +169,7 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
     }
 
     /**
-     * oldmod {@code *_turret_vanilla.json}. Plasma, arc, melee and crossbow turrets had no recipe in oldmod.
+     * 1.12.2 {@code *_turret_vanilla.json}. Plasma, arc, melee and crossbow turrets had no recipe in 1.12.2.
      * S = sensor, C = chamber, B = barrel (index = tier - 1).
      */
     private void turrets(Consumer<ShapedRecipeBuilder> save) {
@@ -200,13 +200,13 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
                 .define('B', b.get(4)).define('C', c.get(4)).define('O', Items.OBSIDIAN).define('I', ModItems.IO_BUS));
     }
 
-    /** oldmod {@code lever_block_vanilla.json}: its pattern had lost its spaces; restored as a crank (user decision). */
+    /** 1.12.2 {@code lever_block_vanilla.json}: its pattern had lost its spaces; restored as a crank (user decision). */
     private void misc(Consumer<ShapedRecipeBuilder> save) {
         save.accept(ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.LEVER)
                 .pattern("CCC").pattern("C  ").pattern("C  ")
                 .define('C', Items.COBBLESTONE)
                 .unlockedBy("has_turret_base", has(ModItems.TURRET_BASE_TIER_ONE)));
-        // New block (not in oldmod): a furnace in an iron casing with an I/O bus
+        // New block (not in 1.12.2): a furnace in an iron casing with an I/O bus
         save.accept(ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.GENERATOR)
                 .pattern("CIC").pattern("IFI").pattern("CBC")
                 .define('C', Items.COBBLESTONE).define('I', CommonTags.IRON_INGOTS).define('F', Items.FURNACE)
@@ -214,7 +214,7 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_io_bus", has(ModItems.IO_BUS)));
     }
 
-    /** OMPD recipes ({@code oldmod2 recipes/*.json}), 1.12 block names updated. */
+    /** OMPD recipes (1.12.2 {@code recipes/*.json}), 1.12 block names updated. */
     private void passiveDefense(Consumer<ShapedRecipeBuilder> save) {
         List<BlockItem> hardened = ModItems.HARDENED;
         save.accept(ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, hardened.get(0), 16)
@@ -275,7 +275,7 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_previous_base", has(previous));
     }
 
-    /** oldmod {@code upgrade_meta_0..4_vanilla.json}: quartz around a core item, IO bus below. */
+    /** 1.12.2 {@code upgrade_meta_0..4_vanilla.json}: quartz around a core item, IO bus below. */
     private void upgrades(Consumer<ShapedRecipeBuilder> save) {
         save.accept(upgrade(ModItems.UPGRADE_ACCURACY).define('C', CommonTags.GOLD_INGOTS));
         save.accept(upgrade(ModItems.UPGRADE_EFFICIENCY).define('C', Items.ENDER_EYE));
@@ -294,7 +294,7 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_io_bus", has(ModItems.IO_BUS));
     }
 
-    /** oldmod {@code addon_meta_0,1,3,4,6,7_vanilla.json}. */
+    /** 1.12.2 {@code addon_meta_0,1,3,4,6,7_vanilla.json}. */
     private void addons(Consumer<ShapedRecipeBuilder> save) {
         save.accept(ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.ADDON_CONCEALER)
                 .pattern("IQI")
@@ -353,7 +353,7 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
     }
 
     /**
-     * oldmod {@code ammo_meta_0..4_vanilla.json}. The old bullet, ferro slug, grenade and rocket patterns had lost
+     * 1.12.2 {@code ammo_meta_0..4_vanilla.json}. The old bullet, ferro slug, grenade and rocket patterns had lost
      * their spaces; the shapes are restored from the EnderIO/Mekanism variants (bullet: gunpowder centred).
      */
     private void ammo(Consumer<ShapedRecipeBuilder> save) {

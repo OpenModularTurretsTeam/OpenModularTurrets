@@ -19,14 +19,14 @@ import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 
 /**
- * Turrets that act on their target without aiming (oldmod {@code TurretHead} subclasses using {@code updateChecks}):
+ * Turrets that act on their target without aiming (1.12.2 {@code TurretHead} subclasses using {@code updateChecks}):
  * relativistic, teleporter and melee.
  */
 public final class EffectWeapons {
-    /** oldmod: slowness IV and weakness IV for 10 seconds. */
+    /** Slowness IV and weakness IV for 10 seconds. */
     private static final int EFFECT_TICKS = 200;
     private static final int EFFECT_AMPLIFIER = 3;
-    /** oldmod played these turrets' sounds at volume 0.6 and pitch 1. */
+    /** 1.12.2 played these turrets' sounds at volume 0.6 and pitch 1. */
     private static final float SOUND_VOLUME = 0.6F;
 
     private EffectWeapons() {
@@ -44,7 +44,7 @@ public final class EffectWeapons {
         playSound(level, turret.getBlockPos(), TurretWeapon.of(type).launchSound());
     }
 
-    /** oldmod {@code RelativisticTurretTileEntity}: slowness and weakness IV; slowed entities are not targeted again. */
+    /** 1.12.2 {@code RelativisticTurretTileEntity}: slowness and weakness IV; slowed entities are not targeted again. */
     private static void slow(Entity target) {
         if (target instanceof LivingEntity living) {
             living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, EFFECT_TICKS, EFFECT_AMPLIFIER, false, true));
@@ -53,8 +53,8 @@ public final class EffectWeapons {
     }
 
     /**
-     * oldmod {@code TeleporterTurretTileEntity}: pulls the target onto the block in front of the turret (oldmod: on
-     * top of it, which is the same for turrets on top of a base) and shows portal particles (oldmod
+     * 1.12.2 {@code TeleporterTurretTileEntity}: pulls the target onto the block in front of the turret (1.12.2: on
+     * top of it, which is the same for turrets on top of a base) and shows portal particles (1.12.2
      * {@code BlockTeleporterTurret.randomDisplayTick}).
      */
     private static void teleport(ServerLevel level, TurretBlockEntity turret, Entity target) {
@@ -67,9 +67,9 @@ public final class EffectWeapons {
     }
 
     /**
-     * oldmod {@code MeleeTurretTileEntity}: damages every damageable living entity within 3 blocks horizontally and
-     * 1 block vertically of the turret block. oldmod's {@code expand(3, 1, 3)} only grew towards +x/+y/+z; the box is
-     * symmetric here (user decision). No damage amp bonus, like oldmod.
+     * 1.12.2 {@code MeleeTurretTileEntity}: damages every damageable living entity within 3 blocks horizontally and
+     * 1 block vertically of the turret block. 1.12.2's {@code expand(3, 1, 3)} only grew towards +x/+y/+z; the box is
+     * symmetric here (user decision). No damage amp bonus, as in 1.12.2.
      */
     private static void strike(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base) {
         float damage = OMTConfig.get().turrets.get(TurretType.MELEE_TURRET).baseDamage;

@@ -19,7 +19,7 @@ import omtteam.openmodularturrets.security.PlayerAdapter;
 import java.util.Optional;
 
 /**
- * Base configuration: target categories and the trusted player screen. Ported from oldmod {@code ConfigureGui}.
+ * Base configuration: target categories and the trusted player screen. Ported from 1.12.2 {@code ConfigureGui}.
  * The light value/opacity sliders belong to the camouflage feature and come with it.
  */
 public class ConfigureScreen extends CompatScreen {
@@ -96,7 +96,7 @@ public class ConfigureScreen extends CompatScreen {
         if (minecraft != null) minecraft.setScreen(new TrustedPlayersScreen(pos, this));
     }
 
-    /** oldmod "Back": reopen the base GUI (a server-side menu). */
+    /** "Back": reopen the base GUI (a server-side menu). */
     private void back() {
         ClientNetworkCompat.sendToServer(OMTPackets.BASE_ACTION,
                 new BasePackets.SimpleAction(pos, BasePackets.Action.OPEN_MENU));
@@ -111,7 +111,7 @@ public class ConfigureScreen extends CompatScreen {
         });
     }
 
-    /** oldmod: players below "change settings" are sent back to the base GUI. */
+    /** Players below "change settings" are sent back to the base GUI. */
     @Override
     public void tick() {
         super.tick();

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TurretTypeTest {
     @Test
-    void ammoMatchesOldmodTurrets() {
+    void ammoMatchesOriginalTurrets() {
         assertEquals(Optional.of(AmmoType.DISPOSABLE), TurretType.DISPOSABLE_TURRET.getAmmo());
         assertEquals(Optional.of(AmmoType.POTATO), TurretType.POTATO_CANNON_TURRET.getAmmo());
         assertEquals(Optional.of(AmmoType.ARROW), TurretType.CROSSBOW_TURRET.getAmmo());
@@ -32,7 +32,7 @@ class TurretTypeTest {
     }
 
     @Test
-    void requiredTiersMatchOldmod() {
+    void requiredTiersMatchOriginal() {
         assertEquals(1, TurretType.DISPOSABLE_TURRET.getRequiredBaseTier());
         assertEquals(2, TurretType.MACHINE_GUN_TURRET.getRequiredBaseTier());
         assertEquals(3, TurretType.GRENADE_TURRET.getRequiredBaseTier());

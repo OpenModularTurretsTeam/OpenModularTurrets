@@ -22,9 +22,9 @@ public class OMTBlockLootProvider extends FabricBlockLootTableProvider {
 
     @Override
     public void generate() {
-        // oldmod getDrops: the base drops itself (contents are dropped separately)
+        // 1.12.2 getDrops: the base drops itself (contents are dropped separately)
         ModBlocks.TURRET_BASES.forEach(this::dropSelf);
-        // oldmod: turrets drop themselves when their base is removed or with "Drop turrets"
+        // turrets drop themselves when their base is removed or with "Drop turrets"
         ModBlocks.TURRETS.values().forEach(this::dropSelf);
         dropSelf(ModBlocks.LEVER);
         dropSelf(ModBlocks.GENERATOR);

@@ -9,7 +9,7 @@ import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 
 /**
- * Potato cannon ammo (oldmod {@code PotatoProjectile}).
+ * Potato cannon ammo (1.12.2 {@code PotatoProjectile}).
  */
 public class PotatoProjectile extends ItemCarryingProjectile {
     public PotatoProjectile(EntityType<? extends PotatoProjectile> type, Level level) {
@@ -26,7 +26,7 @@ public class PotatoProjectile extends ItemCarryingProjectile {
         return 0.03F;
     }
 
-    /** oldmod: the potato item lives on (unpickable) if the projectile expires without hitting anything. */
+    /** As in 1.12.2, the potato item lives on (unpickable) if the projectile expires without hitting anything. */
     @Override
     protected boolean removeItemWithProjectile() {
         return false;

@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A turret model ported from oldmod. oldmod's {@code setRotationForTarget} turned one part around Y (yaw) and one
+ * A turret model ported from 1.12.2. The old {@code setRotationForTarget} turned one part around Y (yaw) and one
  * around X (pitch); static turrets (arc, relativistic, teleporter) have neither.
  */
 public class PortedTurretModel extends TurretModel {

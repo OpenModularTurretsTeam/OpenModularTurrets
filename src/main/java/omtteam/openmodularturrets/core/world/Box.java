@@ -5,8 +5,8 @@ package omtteam.openmodularturrets.core.world;
  */
 public record Box(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
     /**
-     * The cube oldmod used around a block: from {@code pos - radius} to {@code pos + radius} on every axis
-     * (block corner coordinates, as in oldmod's {@code AxisAlignedBB}).
+     * The cube 1.12.2 used around a block: from {@code pos - radius} to {@code pos + radius} on every axis
+     * (block corner coordinates, as in 1.12.2's {@code AxisAlignedBB}).
      */
     public static Box around(BlockPosition pos, double radius) {
         return new Box(pos.x() - radius, pos.y() - radius, pos.z() - radius,

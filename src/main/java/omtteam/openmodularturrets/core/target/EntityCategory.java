@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.core.target;
 
 /**
- * Default classification of an entity before the config force lists apply (oldmod
+ * Default classification of an entity before the config force lists apply (1.12.2
  * {@code TurretTargetingUtils.isEntityValidMob} / {@code isEntityValidNeutral}).
  */
 public enum EntityCategory {

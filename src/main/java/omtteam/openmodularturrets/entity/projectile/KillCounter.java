@@ -6,7 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 
 /**
- * oldmod {@code OMTEventHandler.entityDeathEvent}: deaths caused by turret damage count as kills of the base.
+ * 1.12.2 {@code OMTEventHandler.entityDeathEvent}: deaths caused by turret damage count as kills of the base.
  */
 public final class KillCounter {
     private KillCounter() {

@@ -18,7 +18,7 @@ import java.util.Set;
 
 /**
  * The contents of {@code config/openmodularturrets.json}. Categories, names and defaults are ported from
- * oldmod {@code handler/config/OMTConfig}.
+ * 1.12.2 {@code handler/config/OMTConfig}.
  */
 public class ConfigData {
     public Turrets turrets = new Turrets();
@@ -34,7 +34,7 @@ public class ConfigData {
     }
 
     /**
-     * oldmod {@code doTurretsKillsDropMobLoot} and {@code doLootAddonsOverrideMobLootSetting} were removed: loot of turret
+     * 1.12.2 {@code doTurretsKillsDropMobLoot} and {@code doLootAddonsOverrideMobLootSetting} were removed: loot of turret
      * kills is controlled only by the fake drops addon (see {@code TurretBaseLogic#getLootingLevel}).
      */
     public static class General {
@@ -53,7 +53,7 @@ public class ConfigData {
         public List<String> mobForceList = new ArrayList<>(List.of("minecraft:creeper"));
         /**
          * Entities that are always seen as neutral, overriding their classification. Meant for passive mod entities
-         * that are wrongly classified as hostile mobs. (oldmod added these to the block list by mistake.)
+         * that are wrongly classified as hostile mobs. (1.12.2 added these to the block list by mistake.)
          */
         public List<String> neutralForceList = new ArrayList<>(List.of("minecraft:cow"));
 
@@ -117,7 +117,7 @@ public class ConfigData {
 
         /**
          * Entries were already checked by {@link ConfigValidator#ammoEntries}. The damage bonus defaults to 1
-         * (oldmod {@code OMTConfig.parseDisposableAmmoList}); later duplicates win.
+         * (1.12.2 {@code OMTConfig.parseDisposableAmmoList}); later duplicates win.
          */
         private void parseAmmoList() {
             Map<ResourceLocation, Integer> items = new LinkedHashMap<>();

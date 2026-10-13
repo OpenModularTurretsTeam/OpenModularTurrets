@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 
 /**
- * Turret model geometry, converted box by box from the oldmod {@code client/render/models/Model*} classes by a
+ * Turret model geometry, converted box by box from the 1.12.2 {@code client/render/models/Model*} classes by a
  * script (same pivots, rotations, texture offsets and mirror flags). Models are Y-down with the base plate at the
  * bottom; {@link omtteam.openmodularturrets.client.render.blockentity.TurretRenderer} orients them.
  */
@@ -17,7 +17,7 @@ public final class TurretModelDefinitions {
     private TurretModelDefinitions() {
     }
 
-    /** oldmod {@code ModelMachineGun}. */
+    /** 1.12.2 {@code ModelMachineGun}. */
     public static LayerDefinition machineGunTurret() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -40,7 +40,7 @@ public final class TurretModelDefinitions {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    /** oldmod {@code ModelDisposableItemTurret}. */
+    /** 1.12.2 {@code ModelDisposableItemTurret}. */
     public static LayerDefinition disposableTurret() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -62,7 +62,7 @@ public final class TurretModelDefinitions {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    /** oldmod {@code ModelPotatoCannonTurret}. */
+    /** 1.12.2 {@code ModelPotatoCannonTurret}. */
     public static LayerDefinition potatoCannonTurret() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -85,7 +85,7 @@ public final class TurretModelDefinitions {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    /** oldmod {@code ModelCrossbowTurret}. */
+    /** 1.12.2 {@code ModelCrossbowTurret}. */
     public static LayerDefinition crossbowTurret() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -112,7 +112,7 @@ public final class TurretModelDefinitions {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    /** oldmod {@code ModelIncendiaryTurret}. */
+    /** 1.12.2 {@code ModelIncendiaryTurret}. */
     public static LayerDefinition incendiaryTurret() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -136,7 +136,7 @@ public final class TurretModelDefinitions {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    /** oldmod {@code ModelGrenadeLauncher}. */
+    /** 1.12.2 {@code ModelGrenadeLauncher}. */
     public static LayerDefinition grenadeTurret() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -160,7 +160,7 @@ public final class TurretModelDefinitions {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    /** oldmod {@code ModelRocketTurret}. */
+    /** 1.12.2 {@code ModelRocketTurret}. */
     public static LayerDefinition rocketTurret() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -184,7 +184,7 @@ public final class TurretModelDefinitions {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    /** oldmod {@code ModelLaserTurret} (fixed: holder attached, pivots made relative). */
+    /** 1.12.2 {@code ModelLaserTurret} (fixed: holder attached, pivots made relative). */
     public static LayerDefinition laserTurret() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -210,7 +210,7 @@ public final class TurretModelDefinitions {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    /** oldmod {@code ModelRailgun}. */
+    /** 1.12.2 {@code ModelRailgun}. */
     public static LayerDefinition railgunTurret() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -232,7 +232,7 @@ public final class TurretModelDefinitions {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    /** oldmod {@code ModelPlasmaLauncherTurret}. */
+    /** 1.12.2 {@code ModelPlasmaLauncherTurret}. */
     public static LayerDefinition plasmaTurret() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -256,7 +256,7 @@ public final class TurretModelDefinitions {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    /** oldmod {@code ModelArcTurret}. */
+    /** 1.12.2 {@code ModelArcTurret}. */
     public static LayerDefinition arcTurret() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -272,7 +272,7 @@ public final class TurretModelDefinitions {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    /** oldmod {@code ModelRelativisticTurret}. */
+    /** 1.12.2 {@code ModelRelativisticTurret}. */
     public static LayerDefinition relativisticTurret() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -290,7 +290,7 @@ public final class TurretModelDefinitions {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    /** oldmod {@code ModelTeleporterTurret}. */
+    /** 1.12.2 {@code ModelTeleporterTurret}. */
     public static LayerDefinition teleporterTurret() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();

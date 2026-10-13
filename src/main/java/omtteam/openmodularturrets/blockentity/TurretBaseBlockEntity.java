@@ -59,7 +59,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity {
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TurretBaseBlockEntity base) {
-        // oldmod TileEntityOwnedBlock: a base without owner (e.g. placed by a machine) drops itself
+        // 1.12.2 TileEntityOwnedBlock: a base without owner (e.g. placed by a machine) drops itself
         if (base.getOwner() == null) {
             level.destroyBlock(pos, true);
             return;
@@ -102,7 +102,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity {
         neighboursScanned = true;
     }
 
-    /** A turret counts if it faces away from this base (oldmod {@code TurretHeadUtil.getBaseTurrets}). */
+    /** A turret counts if it faces away from this base (1.12.2 {@code TurretHeadUtil.getBaseTurrets}). */
     private Optional<Neighbour> scanNeighbour(BlockPos pos, Direction direction) {
         BlockState state = level.getBlockState(pos);
         if (state.getBlock() instanceof TurretBlock turret && state.getValue(TurretBlock.FACING) == direction) {

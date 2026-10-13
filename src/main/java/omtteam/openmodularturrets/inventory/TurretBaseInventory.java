@@ -11,7 +11,7 @@ import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.UpgradeItem;
 
 /**
- * The 13 slots of a turret base (oldmod {@code TurretBase.setupInventory} / {@code setupSlotMap}):
+ * The 13 slots of a turret base (1.12.2 {@code TurretBase.setupInventory} / {@code setupSlotMap}):
  * <ul>
  *     <li>0–8: ammo (the only slots exposed to automation)</li>
  *     <li>9–10: addons (tier 2+)</li>
@@ -58,7 +58,7 @@ public class TurretBaseInventory implements Container {
     }
 
     /**
-     * Whether a slot exists on a base tier (oldmod {@code TurretBaseContainer} only adds the usable slots).
+     * Whether a slot exists on a base tier (1.12.2 {@code TurretBaseContainer} only adds the usable slots).
      */
     public static boolean isSlotUsable(int slot, int tier) {
         if (isAddonSlot(slot)) return slot - ADDON_START < BaseTier.addonSlots(tier);
@@ -67,7 +67,7 @@ public class TurretBaseInventory implements Container {
     }
 
     /**
-     * What a player may put into a slot through the GUI (oldmod {@code AmmoSlot}, {@code AddonSlot},
+     * What a player may put into a slot through the GUI (1.12.2 {@code AmmoSlot}, {@code AddonSlot},
      * {@code UpgradeSlot}).
      */
     public static boolean mayPlace(int slot, ItemStack stack) {

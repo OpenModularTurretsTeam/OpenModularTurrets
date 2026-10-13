@@ -19,7 +19,7 @@ import org.joml.Quaternionf;
 import java.util.Map;
 
 /**
- * Turret renderer (oldmod {@code AbstractTurretRenderer}): orients the model on its mounting face with the frame
+ * Turret renderer (1.12.2 {@code AbstractTurretRenderer}): orients the model on its mounting face with the frame
  * from {@link TurretMath}, then applies the interpolated yaw and pitch. Concealed turrets are not drawn.
  * Turrets without a ported model render nothing yet.
  */
@@ -45,7 +45,7 @@ public class TurretRenderer implements BlockEntityRenderer<TurretBlockEntity> {
     }
 
     /**
-     * Draws a model whose pose origin is the block centre in the turret's local frame. oldmod models are Y-down
+     * Draws a model whose pose origin is the block centre in the turret's local frame. The 1.12.2 models are Y-down
      * with the pivot 16 pixels above the base plate: lift by one block and flip y and z.
      */
     public static void renderModel(TurretModel model, PoseStack poseStack, MultiBufferSource buffers, int packedLight,

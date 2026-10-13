@@ -21,13 +21,13 @@ import omtteam.openmodularturrets.block.misc.LeverBlock;
 import omtteam.openmodularturrets.blockentity.misc.LeverBlockEntity;
 
 /**
- * The crank (oldmod {@code LeverRenderer} + {@code ModelLever}): an arm pointing into the base and a handle, both
+ * The crank (1.12.2 {@code LeverRenderer} + {@code ModelLever}): an arm pointing into the base and a handle, both
  * turning around the arm while cranking.
  */
 public class LeverRenderer implements BlockEntityRenderer<LeverBlockEntity> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(OMT.id("lever_block"), "main");
     public static final ResourceLocation TEXTURE = OMT.id("textures/block/lever_block.png");
-    /** oldmod {@code rotateAngleZ = rotation / 55}: the crank angle in degrees divided by 55 (about one turn). */
+    /** 1.12.2 {@code rotateAngleZ = rotation / 55}: the crank angle in degrees divided by 55 (about one turn). */
     private static final float ANGLE_DIVISOR = 55F;
 
     private final ModelPart arm;
@@ -42,7 +42,7 @@ public class LeverRenderer implements BlockEntityRenderer<LeverBlockEntity> {
         this.handle = root.getChild("handle");
     }
 
-    /** oldmod {@code ModelLever} (Shape1 = arm, Shape2 = handle), 32x32 texture. */
+    /** 1.12.2 {@code ModelLever} (Shape1 = arm, Shape2 = handle), 32x32 texture. */
     public static LayerDefinition createLayer() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -65,7 +65,7 @@ public class LeverRenderer implements BlockEntityRenderer<LeverBlockEntity> {
                        int packedOverlay) {
         poseStack.pushPose();
         poseStack.translate(0.5D, 1.5D, 0.5D);
-        // oldmod: rotation index 0 = base to the south, then west, north, east (Direction's 2D order)
+        // Rotation index 0 = base to the south, then west, north, east (Direction's 2D order)
         poseStack.mulPose(Axis.YP.rotationDegrees(facing.get2DDataValue() * -90F));
         poseStack.scale(1.0F, -1.0F, -1.0F);
         float angle = crankDegrees / ANGLE_DIVISOR;

@@ -38,29 +38,29 @@ public final class ModItems {
     // Turrets
     public static final Map<TurretType, BlockItem> TURRETS = registerTurrets();
 
-    // Ammunition (oldmod AmmoMetaItem meta 0–4)
+    // Ammunition (1.12.2 AmmoMetaItem meta 0–4)
     public static final AmmoItem AMMO_BLAZING_CLAY = registerAmmo("ammo_blazing_clay", AmmoType.BLAZING_CLAY);
     public static final AmmoItem AMMO_BULLET = registerAmmo("ammo_bullet", AmmoType.BULLET);
     public static final AmmoItem AMMO_FERRO_SLUG = registerAmmo("ammo_ferro_slug", AmmoType.FERRO_SLUG);
     public static final AmmoItem AMMO_GRENADE = registerAmmo("ammo_grenade", AmmoType.GRENADE);
     public static final AmmoItem AMMO_ROCKET = registerAmmo("ammo_rocket", AmmoType.ROCKET);
 
-    // Intermediate products (oldmod IntermediateProductRegular)
+    // Intermediate products (1.12.2 IntermediateProductRegular)
     public static final Item IO_BUS = register("io_bus", new Item(new Item.Properties()));
 
-    // Tiered intermediate products (oldmod IntermediateProductTiered meta 0–14), index = tier - 1
+    // Tiered intermediate products (1.12.2 IntermediateProductTiered meta 0–14), index = tier - 1
     public static final List<Item> SENSORS = registerTiered("sensor");
     public static final List<Item> CHAMBERS = registerTiered("chamber");
     public static final List<Item> BARRELS = registerTiered("barrel");
 
-    // Upgrades (oldmod UpgradeMetaItem meta 0–4)
+    // Upgrades (1.12.2 UpgradeMetaItem meta 0–4)
     public static final UpgradeItem UPGRADE_ACCURACY = registerUpgrade(UpgradeType.ACCURACY);
     public static final UpgradeItem UPGRADE_EFFICIENCY = registerUpgrade(UpgradeType.EFFICIENCY);
     public static final UpgradeItem UPGRADE_FIRE_RATE = registerUpgrade(UpgradeType.FIRE_RATE);
     public static final UpgradeItem UPGRADE_RANGE = registerUpgrade(UpgradeType.RANGE);
     public static final UpgradeItem UPGRADE_SCATTER_SHOT = registerUpgrade(UpgradeType.SCATTERSHOT);
 
-    // Addons (oldmod AddonMetaItem; potentia and serial port are not ported, see AddonType)
+    // Addons (1.12.2 AddonMetaItem; potentia and serial port are not ported, see AddonType)
     public static final AddonItem ADDON_CONCEALER = registerAddon(AddonType.CONCEALER);
     public static final AddonItem ADDON_DAMAGE_AMP = registerAddon(AddonType.DAMAGE_AMP);
     public static final AddonItem ADDON_RECYCLER = registerAddon(AddonType.RECYCLER);

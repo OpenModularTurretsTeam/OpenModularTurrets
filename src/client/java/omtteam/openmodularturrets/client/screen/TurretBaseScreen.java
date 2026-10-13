@@ -28,12 +28,12 @@ import java.util.Optional;
 import java.util.Random;
 
 /**
- * Turret base GUI. Ported from oldmod {@code TurretBaseGui}: inventory, energy bar, range, info panel and the
+ * Turret base GUI. Ported from 1.12.2 {@code TurretBaseGui}: inventory, energy bar, range, info panel and the
  * admin/settings buttons. Buttons only send requests; the server checks permissions.
  */
 public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
     private static final String[] TIER_NAMES = {"one", "two", "three", "four", "five"};
-    /** The energy bar flickers between three fill textures (oldmod {@code drawEnergyBar}). */
+    /** The energy bar flickers between three fill textures (1.12.2 {@code drawEnergyBar}). */
     private static final int[] ENERGY_FILL_U = {196, 215, 234};
 
     private final ResourceLocation texture;
@@ -114,7 +114,7 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
                 new BasePackets.SetRange(menu.getPos(), base.getLogic().getTargetingSettings().getRange() + delta)));
     }
 
-    /** oldmod opened the configure GUI through the server; a plain screen needs no server menu. */
+    /** 1.12.2 opened the configure GUI through the server; a plain screen needs no server menu. */
     private void openConfigure() {
         if (minecraft == null || minecraft.player == null) return;
         minecraft.player.closeContainer();
@@ -167,7 +167,7 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
         });
     }
 
-    /** oldmod info box to the left of the GUI: owner, mode, kills, trusted players, targeting. */
+    /** Info box to the left of the GUI: owner, mode, kills, trusted players, targeting. */
     private void renderInfoPanel(GuiGraphics graphics) {
         Optional<TurretBaseBlockEntity> found = base();
         if (found.isEmpty()) return;
@@ -201,7 +201,7 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
         graphics.renderComponentTooltip(font, lines, leftPos - 128 - 12, topPos + 17 + 12);
     }
 
-    /** oldmod {@code drawTooltips}: energy, slot group labels and the range number. */
+    /** 1.12.2 {@code drawTooltips}: energy, slot group labels and the range number. */
     private void renderAreaTooltips(GuiGraphics graphics, int mouseX, int mouseY) {
         int x = mouseX - leftPos;
         int y = mouseY - topPos;

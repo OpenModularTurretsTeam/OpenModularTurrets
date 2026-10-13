@@ -12,7 +12,7 @@ import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Damage dealt by a turret (oldmod {@code AbstractOMTDamageSource}). Remembers the base (kill counting) and whether
+ * Damage dealt by a turret (1.12.2 {@code AbstractOMTDamageSource}). Remembers the base (kill counting) and whether
  * the victim may drop loot.
  */
 public class TurretDamageSource extends DamageSource {

@@ -23,7 +23,7 @@ public final class ItemClassifier {
     public static boolean isAmmo(ItemStack stack, AmmoType type) {
         return switch (type) {
             case POTATO -> stack.is(Items.POTATO);
-            // oldmod compared item and damage, so only plain arrows are fired
+            // 1.12.2 compared item and damage, so only plain arrows are fired
             case ARROW -> stack.is(Items.ARROW);
             case DISPOSABLE -> AmmoRules.getDisposableAmmoDamageBonus(stack) > 0;
             case BLAZING_CLAY, BULLET, FERRO_SLUG, GRENADE, ROCKET ->

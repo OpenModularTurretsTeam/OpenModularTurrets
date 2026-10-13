@@ -14,7 +14,7 @@ import omtteam.openmodularturrets.registry.ModDamageTypes;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Rocket (oldmod {@code RocketProjectile}): explodes on impact, damaging everything within 5 blocks. Homes in on its
+ * Rocket (1.12.2 {@code RocketProjectile}): explodes on impact, damaging everything within 5 blocks. Homes in on its
  * target if {@code canRocketsHome} is set.
  */
 public class RocketProjectile extends TurretProjectile {
@@ -43,8 +43,8 @@ public class RocketProjectile extends TurretProjectile {
     }
 
     /**
-     * oldmod {@code onEntityUpdate}: with homing enabled the rocket steers towards its target every tick and is
-     * removed when the target is gone. (In oldmod this code was never reached because {@code onUpdate} did not call
+     * 1.12.2 {@code onEntityUpdate}: with homing enabled the rocket steers towards its target every tick and is
+     * removed when the target is gone. (In 1.12.2 this code was never reached because {@code onUpdate} did not call
      * it.)
      */
     @Override
@@ -58,7 +58,7 @@ public class RocketProjectile extends TurretProjectile {
                     target.getZ() - getZ(), HOMING_SPEED, 0.0F);
         }
         if (level().isClientSide()) {
-            // oldmod onEntityUpdate: 21 smoke particles per tick around the rocket (never reached in oldmod)
+            // 1.12.2 onEntityUpdate: 21 smoke particles per tick around the rocket (never reached in 1.12.2)
             for (int i = 0; i <= 20; i++) {
                 level().addParticle(ParticleTypes.SMOKE, getX() + random.nextGaussian() / 10, getY() + random.nextGaussian() / 10,
                         getZ() + random.nextGaussian() / 10, 0, 0, 0);
@@ -74,7 +74,7 @@ public class RocketProjectile extends TurretProjectile {
         for (LivingEntity entity : level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(RADIUS))) {
             int damage = damageWithAmp(baseDamage(), entity);
             if (OMTConfig.get().turrets.canRocketsHurtEnderDragon && entity instanceof EnderDragon) {
-                // oldmod: the dragon ignores most damage sources, so its health is reduced directly
+                // the dragon ignores most damage sources, so its health is reduced directly
                 entity.setHealth(entity.getHealth() - damage);
                 entity.invulnerableTime = 0;
             } else if (canDamage(entity)) {

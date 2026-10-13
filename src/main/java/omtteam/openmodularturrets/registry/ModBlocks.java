@@ -43,9 +43,9 @@ public final class ModBlocks {
      */
     public static final Map<TurretType, TurretBlock> TURRETS = registerTurrets();
 
-    // Misc (oldmod)
+    // Misc
     public static final LeverBlock LEVER = register("lever_block", new LeverBlock(LeverBlock.createProperties()));
-    /** New block (not in oldmod). */
+    /** New block (not in the 1.12.2 version). */
     public static final GeneratorBlock GENERATOR = register("generator", new GeneratorBlock(GeneratorBlock.createProperties()));
 
     // Passive defense (OMPD), one block per tier

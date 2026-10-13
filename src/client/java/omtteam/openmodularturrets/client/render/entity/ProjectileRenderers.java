@@ -10,7 +10,7 @@ import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.registry.ModEntities;
 
 /**
- * Projectile renderers, following oldmod {@code ProjectileRenderers}.
+ * Projectile renderers, following the 1.12.2 {@code ProjectileRenderers}.
  */
 public final class ProjectileRenderers {
     private static final ResourceLocation ARROW_TEXTURE = VersionCompat.id("minecraft", "textures/entity/projectiles/arrow.png");
@@ -25,13 +25,13 @@ public final class ProjectileRenderers {
     public static void register() {
         EntityModelLayerRegistry.registerModelLayer(PlasmaRenderer.LAYER, PlasmaRenderer::createLayer);
         EntityRendererRegistry.register(ModEntities.BULLET, context -> new BillboardRenderer<>(context, BULLET_TEXTURE, BULLET_SIZE));
-        // oldmod RenderSnowball with the ammo item
+        // 1.12.2 RenderSnowball with the ammo item
         EntityRendererRegistry.register(ModEntities.GRENADE, ThrownItemRenderer::new);
         EntityRendererRegistry.register(ModEntities.BLAZING_CLAY, ThrownItemRenderer::new);
         EntityRendererRegistry.register(ModEntities.ARROW, context -> new ArrowShapedRenderer<>(context, ARROW_TEXTURE, 0));
         EntityRendererRegistry.register(ModEntities.ROCKET, context -> new ArrowShapedRenderer<>(context, ROCKET_TEXTURE, 2));
         EntityRendererRegistry.register(ModEntities.PLASMA, PlasmaRenderer::new);
-        // shown by the item entity they carry (oldmod: the item itself was the visual)
+        // shown by the item entity they carry (1.12.2: the item itself was the visual)
         EntityRendererRegistry.register(ModEntities.POTATO, NoopRenderer::new);
         EntityRendererRegistry.register(ModEntities.DISPOSABLE, NoopRenderer::new);
     }

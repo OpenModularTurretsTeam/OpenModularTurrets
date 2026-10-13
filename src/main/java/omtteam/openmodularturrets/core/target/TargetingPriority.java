@@ -3,11 +3,11 @@ package omtteam.openmodularturrets.core.target;
 import omtteam.openmodularturrets.core.world.BlockPosition;
 
 /**
- * Factors that decide which valid target a turret prefers (oldmod {@code EnumTargetingPriority}). Each turret type
+ * Factors that decide which valid target a turret prefers (1.12.2 {@code EnumTargetingPriority}). Each turret type
  * has one weight per factor; the score of an entity is the <b>sum</b> of all weighted factors, the highest score wins.
  * Negative weights invert a factor, a weight of 0 ignores it.
  * <p>
- * oldmod multiplied the factors, which broke the ranking: a single zero factor (full health, weight 0) zeroed every
+ * 1.12.2 multiplied the factors, which broke the ranking: a single zero factor (full health, weight 0) zeroed every
  * score, negative weights flipped the sign, and the constant -100 for non-players inverted the whole mob ranking
  * (user decision: fix).
  */
@@ -19,7 +19,7 @@ public enum TargetingPriority {
     PLAYER;
 
     /**
-     * oldmod {@code getValueByPriority}. Distance is measured from the turret's block corner; oldlib used a cube
+     * 1.12.2 {@code getValueByPriority}. Distance is measured from the turret's block corner; 1.12.2 used a cube
      * root instead of a square root there by mistake (user decision: real distance).
      */
     public long value(TargetEntity entity, BlockPosition turret, int weight) {

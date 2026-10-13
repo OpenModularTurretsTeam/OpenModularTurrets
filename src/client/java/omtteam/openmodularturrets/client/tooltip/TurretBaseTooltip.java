@@ -14,7 +14,7 @@ import omtteam.openmodularturrets.config.OMTConfig;
 import java.util.List;
 
 /**
- * Turret base item tooltip, ported from oldmod {@code ItemBlockTurretBase.addInformation}. Uses the server's config
+ * Turret base item tooltip, ported from 1.12.2 {@code ItemBlockTurretBase.addInformation}. Uses the server's config
  * values when connected to a server.
  */
 public final class TurretBaseTooltip {

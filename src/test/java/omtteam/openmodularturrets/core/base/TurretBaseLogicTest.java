@@ -493,7 +493,7 @@ class TurretBaseLogicTest {
         }
 
         @Test
-        void cycleModeFollowsOldmodOrder() {
+        void cycleModeFollowsOriginalOrder() {
             TurretBaseLogic logic = base(1);
             assertEquals(MachineMode.INVERTED, logic.getMode());
             logic.cycleMode();

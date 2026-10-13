@@ -7,8 +7,7 @@ import omtteam.openmodularturrets.core.base.EnergyStore;
 import team.reborn.energy.api.EnergyStorage;
 
 /**
- * Exposes a core {@link EnergyStore} through Team Reborn Energy, with transaction support. Insert-only, like the
- * oldmod base (it was a consumer only).
+ * Exposes a core {@link EnergyStore} through Team Reborn Energy, with transaction support. Insert-only.
  */
 public class BaseEnergyStorage extends SnapshotParticipant<Long> implements EnergyStorage {
     private final EnergyStore store;

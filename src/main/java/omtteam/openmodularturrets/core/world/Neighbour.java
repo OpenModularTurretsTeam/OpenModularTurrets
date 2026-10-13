@@ -11,7 +11,7 @@ public sealed interface Neighbour permits Neighbour.Turret, Neighbour.Expander {
     }
 
     /**
-     * An inventory or power expander (oldmod {@code Expander}). Its slots are provided through
+     * An inventory or power expander (1.12.2 {@code Expander}). Its slots are provided through
      * {@link BaseWorld#getAmmoSlots()}.
      *
      * @param tier 1–5

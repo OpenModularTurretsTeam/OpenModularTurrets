@@ -13,7 +13,7 @@ import omtteam.openmodularturrets.item.UpgradeItem;
 import java.util.List;
 
 /**
- * Upgrade and addon tooltips, ported from oldmod {@code UpgradeMetaItem.addInformation} and
+ * Upgrade and addon tooltips, ported from 1.12.2 {@code UpgradeMetaItem.addInformation} and
  * {@code AddonMetaItem.addInformation}.
  */
 public final class ModuleTooltip {
@@ -99,7 +99,7 @@ public final class ModuleTooltip {
                 lines.add(flavour("addon.recycler.flavour"));
             }
             case REDSTONE_REACTOR -> {
-                // oldmod showed nothing here although the texts existed
+                // 1.12.2 showed nothing here although the texts existed
                 int generation = OMTConfig.get().miscellaneous.redstoneReactorAddonGen;
                 lines.add(text("addon.redstone.a").append(" " + generation + " ").append(translated("addon.redstone.b")));
                 lines.add(text("addon.redstone.c"));

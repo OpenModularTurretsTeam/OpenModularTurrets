@@ -96,9 +96,9 @@ public class BlockEntityBaseWorld implements BaseWorld {
     }
 
     /**
-     * oldmod {@code canSeeTargetFromPos}, from a turret's block centre: the trace starts where it leaves the turret's
+     * 1.12.2 {@code canSeeTargetFromPos}, from a turret's block centre: the trace starts where it leaves the turret's
      * own block (so the turret does not see itself) and only blocks with a collision shape stop it. The base counts
-     * as an obstacle, so turrets cannot see through it. (oldmod skipped a whole block from the centre, which could
+     * as an obstacle, so turrets cannot see through it. (1.12.2 skipped a whole block from the centre, which could
      * jump over the base and the blocks behind it.) The target is passed to {@link ClipContext} as the collision
      * context entity (it must not be null), like vanilla's {@code LivingEntity.hasLineOfSight}.
      */
@@ -122,7 +122,7 @@ public class BlockEntityBaseWorld implements BaseWorld {
         if (!(player instanceof LivingTargetEntity living) || !(living.getEntity() instanceof ServerPlayer serverPlayer)) {
             return;
         }
-        // oldmod dispatchWarnMessage: only the warned player hears the alarm
+        // 1.12.2 dispatchWarnMessage: only the warned player hears the alarm
         if (OMTConfig.get().turrets.turretAlarmSound) {
             serverPlayer.playNotifySound(ModSounds.WARNING, SoundSource.BLOCKS, 1.0F, 1.0F);
         }

@@ -11,14 +11,14 @@ import omtteam.openmodularturrets.core.world.Vector3;
  * (0° = forward, 90° = right); pitch is the elevation above the mounting plane (90° = straight away from the base).
  */
 public final class TurretMath {
-    /** oldmod {@code ProjectileTurret.doTargetedShot}: travel speed used to estimate the flight time. */
+    /** 1.12.2 {@code ProjectileTurret.doTargetedShot}: travel speed used to estimate the flight time. */
     private static final double SPEED_STRAIGHT = 3.0D;
     private static final double SPEED_GRAVITY = 1.6D;
-    /** oldmod: the aim point is lowered by 0.1 blocks. */
+    /** The aim point is lowered by 0.1 blocks. */
     private static final double AIM_DROP = 0.1D;
     /**
      * Lowest local pitch a turret can aim at; anything lower would point into its own base (the base block covers
-     * up to about -45° below the mounting plane). New, oldmod turrets had no effective limits.
+     * up to about -45° below the mounting plane). New; the 1.12.2 turrets had no effective limits.
      */
     public static final float MIN_PITCH = -45.0F;
 
@@ -87,7 +87,7 @@ public final class TurretMath {
     }
 
     /**
-     * oldmod {@code ProjectileTurret.doTargetedShot}: estimates the flight time from the distance (projectiles with
+     * 1.12.2 {@code ProjectileTurret.doTargetedShot}: estimates the flight time from the distance (projectiles with
      * gravity are assumed slower), moves the aim point along the target's velocity for that time, lowers it by 0.1
      * and scales the projectile speed so it arrives in time.
      *

@@ -103,7 +103,7 @@ public class LivingTargetEntity extends TargetEntity {
         return entity.hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
     }
 
-    /** oldmod: {@code isCreatureType(MONSTER)}, {@code EntityAnimal} / {@code EntityAmbientCreature}. */
+    /** 1.12.2: {@code isCreatureType(MONSTER)}, {@code EntityAnimal} / {@code EntityAmbientCreature}. */
     @Override
     public EntityCategory getCategory() {
         if (entity.getType().getCategory() == MobCategory.MONSTER) return EntityCategory.MONSTER;

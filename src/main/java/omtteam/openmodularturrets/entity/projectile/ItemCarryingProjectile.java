@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A projectile that is shown as the fired item (oldmod {@code PotatoProjectile} / {@code DisposableTurretProjectile}
+ * A projectile that is shown as the fired item (1.12.2 {@code PotatoProjectile} / {@code DisposableTurretProjectile}
  * spawned an unpickable item entity flying alongside).
  */
 public abstract class ItemCarryingProjectile extends TurretProjectile {

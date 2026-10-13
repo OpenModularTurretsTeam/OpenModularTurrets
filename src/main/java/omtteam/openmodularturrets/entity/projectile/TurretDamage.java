@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 /**
- * Damage rules shared by projectiles, rays and the melee turret (oldmod {@code OMTUtil.canDamageEntity} and the
+ * Damage rules shared by projectiles, rays and the melee turret (1.12.2 {@code OMTUtil.canDamageEntity} and the
  * {@code attackEntityFrom} calls).
  */
 public final class TurretDamage {
@@ -27,8 +27,8 @@ public final class TurretDamage {
     }
 
     /**
-     * Deals damage of the given type and removes the hurt cooldown (oldmod {@code hurtResistantTime = -1}).
-     * Non-positive amounts are skipped (oldmod also "dealt" 0 damage, e.g. the laser's armor-piercing part).
+     * Deals damage of the given type and removes the hurt cooldown (1.12.2 {@code hurtResistantTime = -1}).
+     * Non-positive amounts are skipped (1.12.2 also "dealt" 0 damage, e.g. the laser's armor-piercing part).
      * <p>
      * With a fake drops addon ({@code lootingLevel} ≥ 0) non-player victims are hurt "by" the {@link TurretKiller}
      * fake player holding a sword with that Looting level, so a kill drops player-kill loot; without the addon a kill
@@ -47,7 +47,7 @@ public final class TurretDamage {
     }
 
     /**
-     * oldmod {@code OMTUtil.canDamageEntity}: never turret projectiles; players and pets of players only if the
+     * 1.12.2 {@code OMTUtil.canDamageEntity}: never turret projectiles; players and pets of players only if the
      * base's trust rules allow it. Without a loaded base players are spared and everything else is hit.
      */
     public static boolean canDamage(Level level, @Nullable BlockPos basePos, Entity entity) {

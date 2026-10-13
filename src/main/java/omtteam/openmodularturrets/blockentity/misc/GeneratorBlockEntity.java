@@ -28,7 +28,7 @@ import team.reborn.energy.api.EnergyStorageUtil;
 import team.reborn.energy.api.base.SimpleEnergyStorage;
 
 /**
- * Generator (new block, not in oldmod): burns furnace fuel into energy and pushes it into all neighbouring energy
+ * Generator (new block, not in the 1.12.2 version): burns furnace fuel into energy and pushes it into all neighbouring energy
  * storages (turret bases, cables). One burn tick of a fuel produces {@code generatorEnergyPerTick}. Burning pauses
  * while the buffer is full, so no fuel is wasted.
  */

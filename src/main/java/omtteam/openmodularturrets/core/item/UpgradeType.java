@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.core.item;
 
 /**
- * Upgrades that go into the upgrade slots of a base. Ported from oldmod {@code UpgradeMetaItem} (meta 0–4).
+ * Upgrades that go into the upgrade slots of a base. Ported from 1.12.2 {@code UpgradeMetaItem} (meta 0–4).
  */
 public enum UpgradeType {
     ACCURACY("accuracy"),
@@ -10,7 +10,7 @@ public enum UpgradeType {
     RANGE("range"),
     SCATTERSHOT("scatter_shot");
 
-    /** oldmod {@code UpgradeSlot.getSlotStackLimit}: "Stacks up to 4 times". */
+    /** 1.12.2 {@code UpgradeSlot.getSlotStackLimit}: "Stacks up to 4 times". */
     public static final int MAX_PER_SLOT = 4;
 
     private final String serializedName;

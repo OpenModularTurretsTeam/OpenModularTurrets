@@ -4,7 +4,7 @@ import net.minecraft.world.item.Item;
 import omtteam.openmodularturrets.core.item.UpgradeType;
 
 /**
- * Turret upgrade for the upgrade slots of a base. Ported from oldmod {@code UpgradeMetaItem} (one item per meta).
+ * Turret upgrade for the upgrade slots of a base. Ported from 1.12.2 {@code UpgradeMetaItem} (one item per meta).
  */
 public class UpgradeItem extends Item {
     private final UpgradeType upgradeType;

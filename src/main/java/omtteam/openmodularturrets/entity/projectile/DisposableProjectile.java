@@ -10,8 +10,7 @@ import omtteam.openmodularturrets.inventory.AmmoRules;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 
 /**
- * Disposable item turret ammo (oldmod {@code DisposableTurretProjectile}): the fired item adds its allow-list damage
- * bonus.
+ * Disposable item turret ammo
  */
 public class DisposableProjectile extends ItemCarryingProjectile {
     public DisposableProjectile(EntityType<? extends DisposableProjectile> type, Level level) {
@@ -28,7 +27,7 @@ public class DisposableProjectile extends ItemCarryingProjectile {
         return 0.03F;
     }
 
-    /** oldmod: the shown item had a 40 tick lifespan, the same as the projectile. */
+    /** As in 1.12.2, the shown item had a 40 tick lifespan, the same as the projectile. */
     @Override
     protected boolean removeItemWithProjectile() {
         return true;

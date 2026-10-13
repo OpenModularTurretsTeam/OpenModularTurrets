@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Which items may go into the ammo slots of a turret base. Ported from oldmod {@code OMTUtil.isItemStackValidAmmo}
+ * Which items may go into the ammo slots of a turret base. Ported from 1.12.2 {@code OMTUtil.isItemStackValidAmmo}
  * and {@code AmmoList}.
  */
 public final class AmmoRules {

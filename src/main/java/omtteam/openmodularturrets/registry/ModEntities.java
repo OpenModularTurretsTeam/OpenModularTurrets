@@ -18,7 +18,7 @@ import omtteam.openmodularturrets.entity.projectile.RocketProjectile;
 import java.util.List;
 
 /**
- * Projectile entity types (oldmod {@code ModEntities}; potato and disposable projectiles were not registered there).
+ * Projectile entity types (1.12.2 {@code ModEntities}; potato and disposable projectiles were not registered there).
  */
 public final class ModEntities {
     public static final EntityType<BulletProjectile> BULLET = register("bullet", EntityType.Builder.of(BulletProjectile::new, MobCategory.MISC));
@@ -37,7 +37,7 @@ public final class ModEntities {
     private ModEntities() {
     }
 
-    /** oldmod tracking range 64 blocks (4 chunks); small, fast projectiles. */
+    /** Tracking range 64 blocks (4 chunks); small, fast projectiles. */
     private static <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {
         // noSave: projectiles are never saved (TurretProjectile.shouldBeSaved), so no data fixer is needed
         EntityType<T> type = builder.sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).noSave()

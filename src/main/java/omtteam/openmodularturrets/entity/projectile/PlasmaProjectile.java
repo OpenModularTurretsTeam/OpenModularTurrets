@@ -13,7 +13,7 @@ import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 
 /**
- * Plasma ball (oldmod {@code PlasmaProjectile}): lives 30 ticks and bursts on impact, dealing half normal and half
+ * Plasma ball (1.12.2 {@code PlasmaProjectile}): lives 30 ticks and bursts on impact, dealing half normal and half
  * armor-piercing damage within 2 blocks.
  */
 public class PlasmaProjectile extends TurretProjectile {
@@ -29,7 +29,7 @@ public class PlasmaProjectile extends TurretProjectile {
         return TurretType.PLASMA_TURRET;
     }
 
-    /** oldmod used 0.01 on the server (and 0.001 on the client by mistake). */
+    /** 1.12.2 used 0.01 on the server (and 0.001 on the client by mistake). */
     @Override
     protected float getDropPerTick() {
         return 0.01F;
@@ -47,7 +47,7 @@ public class PlasmaProjectile extends TurretProjectile {
         Vec3 motion = getDeltaMovement();
         setPos(getX() + motion.x * 0.8, getY() + motion.y * 0.8, getZ() + motion.z * 0.8);
         setDeltaMovement(Vec3.ZERO);
-        // oldmod MessageSpawnParticleQuad: 15 flame and 15 large smoke particles in a 2x1x2 area, speed 0.2
+        // 1.12.2 MessageSpawnParticleQuad: 15 flame and 15 large smoke particles in a 2x1x2 area, speed 0.2
         if (level() instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(ParticleTypes.FLAME, getX(), getY(), getZ(), 15, 1.0D, 0.5D, 1.0D, 0.2D);
             serverLevel.sendParticles(ParticleTypes.LARGE_SMOKE, getX(), getY(), getZ(), 15, 1.0D, 0.5D, 1.0D, 0.2D);
@@ -67,7 +67,7 @@ public class PlasmaProjectile extends TurretProjectile {
         if (canDamage(entity)) burst();
     }
 
-    /** oldmod only burst when the block corner was within ~0.7 blocks (distanceSq ≤ 0.5) of the projectile. */
+    /** 1.12.2 only burst when the block corner was within ~0.7 blocks (distanceSq ≤ 0.5) of the projectile. */
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos) {
         if (pos.distToLowCornerSqr(getX(), getY(), getZ()) <= 0.5D) {
@@ -75,7 +75,7 @@ public class PlasmaProjectile extends TurretProjectile {
         }
     }
 
-    /** oldmod {@code isImmuneToExplosions}. */
+    /** 1.12.2 {@code isImmuneToExplosions}. */
     @Override
     protected boolean isImmuneToExplosions() {
         return true;

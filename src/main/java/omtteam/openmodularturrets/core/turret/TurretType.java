@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.core.turret;
 import java.util.Optional;
 
 /**
- * All turret types with the minimum base tier they need and the ammunition they consume. Ported from the oldmod turret
+ * All turret types with the minimum base tier they need and the ammunition they consume. Ported from the 1.12.2 turret
  * tile entities ({@code super(tier)}, {@code ammo = …}, {@code requiresAmmo()}).
  * <p>
  * Numeric stats (range, fire rate, power, upgrades) are configurable and come from
@@ -42,7 +42,7 @@ public enum TurretType {
         return id;
     }
 
-    /** A turret on a base of a lower tier breaks (oldmod {@code base.getTier() < turretTier}). */
+    /** A turret on a base of a lower tier breaks (1.12.2 {@code base.getTier() < turretTier}). */
     public int getRequiredBaseTier() {
         return requiredBaseTier;
     }
@@ -53,8 +53,8 @@ public enum TurretType {
     }
 
     /**
-     * Default targeting weights in {@link omtteam.openmodularturrets.core.target.TargetingPriority} order (oldmod
-     * {@code getDefaultPriorities}). Melee, relativistic and teleporter had only four values in oldmod (a crash
+     * Default targeting weights in {@link omtteam.openmodularturrets.core.target.TargetingPriority} order (1.12.2
+     * {@code getDefaultPriorities}). Melee, relativistic and teleporter had only four values in 1.12.2 (a crash
      * bug); their PLAYER weight is 10 like every other turret (user decision).
      */
     public int[] getDefaultPriorities() {

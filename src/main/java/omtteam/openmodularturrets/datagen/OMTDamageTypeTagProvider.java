@@ -11,7 +11,7 @@ import omtteam.openmodularturrets.registry.ModDamageTypes;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * oldmod {@code setProjectile()} → {@code minecraft:is_projectile}; {@code ArmorBypassDamageSource} →
+ * 1.12.2 {@code setProjectile()} → {@code minecraft:is_projectile}; {@code ArmorBypassDamageSource} →
  * {@code minecraft:bypasses_armor}.
  */
 public class OMTDamageTypeTagProvider extends FabricTagProvider<DamageType> {

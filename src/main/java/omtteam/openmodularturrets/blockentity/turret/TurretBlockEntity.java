@@ -31,21 +31,21 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 /**
- * A turret (oldmod {@code TurretHead} / {@code AbstractDirectedTurret} / {@code ProjectileTurret}). Thin by design: the
+ * A turret (1.12.2 {@code TurretHead} / {@code AbstractDirectedTurret} / {@code ProjectileTurret}). Thin by design: the
  * base owns targeting, ammo, energy and upgrades; the turret aims at the base's target, keeps its cooldown and
  * fires. The weapon (projectile or ray) comes from {@link TurretWeapon}.
  */
 public class TurretBlockEntity extends CompatBlockEntity {
-    /** oldmod {@code concealmentChecks}: retract after 40 ticks without a target. */
+    /** 1.12.2 {@code concealmentChecks}: retract after 40 ticks without a target. */
     private static final int CONCEAL_AFTER_TICKS = 40;
-    /** oldmod {@code AbstractDirectedTurret.update}: the aim was sent to clients every 5 ticks. */
+    /** 1.12.2 {@code AbstractDirectedTurret.update}: the aim was sent to clients every 5 ticks. */
     private static final int SYNC_INTERVAL = 5;
     /** Smaller aim changes are not synced. */
     private static final float SYNC_THRESHOLD_DEGREES = 0.5F;
     /** Share of the remaining angle the client model turns per tick. */
     private static final float CLIENT_TURN_RATE = 0.5F;
 
-    /** Ticks since the last shot (oldmod {@code ticks}). */
+    /** Ticks since the last shot (1.12.2 {@code ticks}). */
     private int ticksSinceShot;
     private int ticksWithoutTarget;
     private boolean playedDeploy;
@@ -61,7 +61,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
     @Nullable
     private AmmoDraw lastAmmo;
 
-    /** Target tracking for the lead (oldmod tracked players manually, others via prevPos). */
+    /** Target tracking for the lead (1.12.2 tracked players manually, others via prevPos). */
     private int trackedTargetId = -1;
     @Nullable
     private Vec3 trackedTargetPos;
@@ -114,7 +114,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
         if (!level.isLoaded(basePos)) return;
         Optional<TurretBaseBlockEntity> base = turret.getBase();
         TurretType type = turret.getTurretType();
-        // oldmod: a turret without base, or on a base of a lower tier, drops itself
+        // a turret without base, or on a base of a lower tier, drops itself
         if (base.isEmpty() || !base.get().getLogic().supportsTurret(type)) {
             level.destroyBlock(pos, true);
             return;
@@ -135,10 +135,10 @@ public class TurretBlockEntity extends CompatBlockEntity {
     }
 
     /**
-     * oldmod {@code AbstractDirectedTurret.update} / {@code TurretHead.updateChecks}: aiming turrets turn towards the
-     * target's eyes every tick (oldmod turrets had no effective yaw/pitch limits; the pitch is now limited to
+     * 1.12.2 {@code AbstractDirectedTurret.update} / {@code TurretHead.updateChecks}: aiming turrets turn towards the
+     * target's eyes every tick (1.12.2 turrets had no effective yaw/pitch limits; the pitch is now limited to
      * {@link TurretMath#MIN_PITCH} so the head never points into the base, and the base only picks targets above it),
-     * then the weapon fires once the cooldown passed. Projectiles are shot at the predicted position (oldmod
+     * then the weapon fires once the cooldown passed. Projectiles are shot at the predicted position (1.12.2
      * {@code ProjectileTurret.doTargetedShot}).
      */
     private void engage(Entity target) {
@@ -169,7 +169,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
             case RAY -> {
                 Optional<TurretBaseBlockEntity> base = beginShot();
                 if (base.isPresent()) {
-                    // oldmod: rays start 0.1 blocks above the turret centre, the arc is drawn from its tip
+                    // rays start 0.1 blocks above the turret centre, the arc is drawn from its tip
                     Vector3 up = Vector3.of(getFace());
                     Vec3 origin = centre.add(up.x() * 0.1D, up.y() * 0.1D, up.z() * 0.1D);
                     Vec3 tip = centre.add(up.x() * 0.5D, up.y() * 0.5D, up.z() * 0.5D);
@@ -197,7 +197,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
     }
 
     /**
-     * oldmod {@code TurretHead.concealmentChecks}: with a concealer addon the turret retracts (no shape, retract
+     * 1.12.2 {@code TurretHead.concealmentChecks}: with a concealer addon the turret retracts (no shape, retract
      * sound) after 40 ticks without a target and deploys again as soon as it has one.
      */
     private void updateConcealment(TurretBaseLogic logic, boolean hasTarget) {
@@ -230,7 +230,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
     }
 
     /**
-     * Common part of every shot (oldmod {@code updateChecks} / {@code AbstractDirectedTurret.update}): the cooldown
+     * Common part of every shot (1.12.2 {@code updateChecks} / {@code AbstractDirectedTurret.update}): the cooldown
      * must have passed and the base must be active with enough energy; ammo turrets take {@code 1 + scattershot}
      * items. Then the energy is consumed and the cooldown restarts.
      *
@@ -247,7 +247,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
         }
         if (logic.getRequiredAmmo(type).isPresent()) {
             Optional<AmmoDraw> drawn = logic.drawAmmo(type);
-            if (drawn.isEmpty()) return Optional.empty(); // oldmod: "TODO: Play some kind of clicking sound?"
+            if (drawn.isEmpty()) return Optional.empty(); // 1.12.2: "TODO: Play some kind of clicking sound?"
             lastAmmo = drawn.get();
         }
         logic.consumeShotEnergy(type);
@@ -256,7 +256,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
     }
 
     /**
-     * Fires projectiles in {@code direction} (oldmod {@code ProjectileTurret.shootProjectile}): one per scattershot
+     * Fires projectiles in {@code direction} (1.12.2 {@code ProjectileTurret.shootProjectile}): one per scattershot
      * level, with the turret's inaccuracy.
      *
      * @param speedFactor lead correction from {@link TurretMath#lead} (1 = no correction)

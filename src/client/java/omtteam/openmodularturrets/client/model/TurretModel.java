@@ -6,7 +6,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * A turret model (oldmod {@code ModelAbstractTurret}). Models are built like oldmod's Java models (Y down, the base
+ * A turret model (1.12.2 {@code ModelAbstractTurret}). Models are built like the 1.12.2 Java models (Y down, the base
  * plate at the bottom); {@link omtteam.openmodularturrets.client.render.blockentity.TurretRenderer} orients them on
  * the mounting face.
  */

@@ -376,7 +376,7 @@ class TargetingTest {
     @Nested
     class Priorities {
         @Test
-        void factorsFollowOldmod() {
+        void factorsFollowOriginal() {
             FakeTarget zombie = FakeTarget.mob(103, 69, 100, "minecraft:zombie", EntityCategory.MONSTER);
             zombie.health = 15.5F;
             zombie.armor = 2;

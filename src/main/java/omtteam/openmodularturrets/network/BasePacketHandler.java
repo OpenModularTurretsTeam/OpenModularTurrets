@@ -15,7 +15,7 @@ import omtteam.openmodularturrets.security.PlayerAdapter;
 import java.util.Optional;
 
 /**
- * Server handlers for {@link BasePackets}. Each action requires the access level the oldmod message handler checked.
+ * Server handlers for {@link BasePackets}. Each action requires the access level the 1.12.2 message handler checked.
  */
 public final class BasePacketHandler {
     private BasePacketHandler() {
@@ -51,7 +51,7 @@ public final class BasePacketHandler {
     }
 
     public static void handleSetRange(BasePackets.SetRange packet, ServerPlayer player) {
-        // oldmod required admin here although the GUI showed the buttons to "change settings" players (user decision)
+        // 1.12.2 required admin here although the GUI showed the buttons to "change settings" players (user decision)
         authorize(player, packet.pos(), AccessLevel.CHANGE_SETTINGS).ifPresent(base -> base.getLogic().setRange(packet.range()));
     }
 
@@ -66,7 +66,7 @@ public final class BasePacketHandler {
         });
     }
 
-    /** oldmod {@code MessageDropTurrets}: destroys (and drops) every turret on the base's faces. */
+    /** 1.12.2 {@code MessageDropTurrets}: destroys (and drops) every turret on the base's faces. */
     private static void dropTurrets(ServerLevel level, BlockPos pos, TurretBaseLogic logic) {
         for (Face face : logic.getTurrets().keySet()) {
             level.destroyBlock(pos.offset(face.getStepX(), face.getStepY(), face.getStepZ()), true);

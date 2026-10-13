@@ -33,16 +33,16 @@ import java.util.Map;
 import java.util.function.ToDoubleFunction;
 
 /**
- * Instant-hit ray weapons (oldmod {@code RayTracingTurret} with {@code LaserTurretTileEntity},
+ * Instant-hit ray weapons (1.12.2 {@code RayTracingTurret} with {@code LaserTurretTileEntity},
  * {@code RailGunTurretTileEntity} and {@code ArcTurretTileEntity}).
  */
 public final class RayWeapons {
-    /** oldmod {@code blockRange} when nothing was hit. */
+    /** 1.12.2 {@code blockRange} when nothing was hit. */
     private static final double NO_BLOCK_HIT = 500;
-    /** oldmod {@code ArcTurretTileEntity}: {@code hop = 2} on launch, one jump per hit. */
+    /** 1.12.2 {@code ArcTurretTileEntity}: {@code hop = 2} on launch, one jump per hit. */
     private static final int ARC_HOPS = 2;
     /**
-     * oldmod arc damage modifier {@code 1 / (3 - hop)}: the directly hit entity is damaged at hop 2 (full damage), the
+     * 1.12.2 arc damage modifier {@code 1 / (3 - hop)}: the directly hit entity is damaged at hop 2 (full damage), the
      * jump target only after the chain reached hop 0 (a third).
      */
     private static final double ARC_JUMP_FACTOR = 1D / 3D;
@@ -50,7 +50,7 @@ public final class RayWeapons {
     /**
      * Per-turret ray behaviour.
      *
-     * @param damageModifier oldmod {@code getDamageModifier(entity)} for the directly hit entity
+     * @param damageModifier 1.12.2 {@code getDamageModifier(entity)} for the directly hit entity
      * @param normalFactor   share of the damage dealt as normal damage
      * @param bypassFactor   share dealt as armor-piercing damage
      */
@@ -59,12 +59,12 @@ public final class RayWeapons {
                         @Nullable ResourceKey<DamageType> normalType, @Nullable ResourceKey<DamageType> bypassType) {
     }
 
-    /** Colours from oldmod {@code ColorOM(r, g, b, a)}; the arc lightning (no oldmod colour) is light blue. */
+    /** Colours from 1.12.2 {@code ColorOM(r, g, b, a)}; the arc lightning (no 1.12.2 colour) is light blue. */
     private static final Map<TurretType, Spec> SPECS = Map.of(
-            // oldmod: (30 - armor) / 20 + 0.1 -> 0.6x to 1.6x, normal damage only
+            // (30 - armor) / 20 + 0.1 -> 0.6x to 1.6x, normal damage only
             TurretType.LASER_TURRET, new Spec(argb(1F, 0.1F, 0F, 0.38F), 5, false, ModSounds.LASER_HIT,
                     entity -> (30 - armor(entity)) / 20F + 0.1F, 1F, 0F, ModDamageTypes.LASER, null),
-            // oldmod: armor / 20 + 0.6, armor-piercing only
+            // armor / 20 + 0.6, armor-piercing only
             TurretType.RAILGUN_TURRET, new Spec(argb(1F, 0.5F, 0F, 0.2F), 3, false, ModSounds.RAIL_GUN_HIT,
                     entity -> armor(entity) / 20F + 0.6F, 0F, 1F, null, ModDamageTypes.RAILGUN),
             TurretType.ARC_TURRET, new Spec(argb(0.6F, 0.8F, 1F, 0.6F), 3, true, null,
@@ -82,7 +82,7 @@ public final class RayWeapons {
     }
 
     /**
-     * oldmod {@code doTargetedShot} + {@code shootRay}: one ray per scattershot level towards the target's eyes,
+     * 1.12.2 {@code doTargetedShot} + {@code shootRay}: one ray per scattershot level towards the target's eyes,
      * scattered by the turret's accuracy (more for small or far targets). The first damageable entity on the ray
      * before the first solid block is hit.
      */
@@ -94,7 +94,7 @@ public final class RayWeapons {
         double accuracy = logic.getAccuracyDeviation(type);
         Vec3 aim = new Vec3(target.getX(), target.getEyeY(), target.getZ());
         for (int i = 0; i <= logic.getScattershotCount(); i++) {
-            // oldmod deviationModifier: small targets and far targets scatter more
+            // 1.12.2 deviationModifier: small targets and far targets scatter more
             double deviationModifier = 10D * (target.getBbHeight() < 0.5 ? 1.5D : 1D)
                     * (aim.distanceTo(origin) * 0.2D / logic.getRange(type) + 0.3D);
             double scale = 0.003D * deviationModifier * accuracy;
@@ -121,14 +121,14 @@ public final class RayWeapons {
                     ray(level, spec, start, blockHit.getLocation());
                     handleBlockHit(level, type, blockHit.getBlockPos());
                 } else {
-                    // oldmod drew the ray three times as long when it hit nothing
+                    // 1.12.2 drew the ray three times as long when it hit nothing
                     ray(level, spec, start, end.add(end.subtract(start).scale(2D)));
                 }
             }
         }
     }
 
-    /** Entities whose bounding box crosses the segment, nearest first (oldmod {@code WorldUtil.traceEntities}). */
+    /** Entities whose bounding box crosses the segment, nearest first (1.12.2 {@code WorldUtil.traceEntities}). */
     private static List<Entity> entitiesOnRay(ServerLevel level, Vec3 start, Vec3 end) {
         List<Entity> result = new ArrayList<>();
         for (Entity entity : level.getEntities((Entity) null, new AABB(start, end).inflate(1.0D),
@@ -140,7 +140,7 @@ public final class RayWeapons {
     }
 
     /**
-     * oldmod {@code onHitEntity}: damage, hit effects and hit sound if the entity may be damaged.
+     * 1.12.2 {@code onHitEntity}: damage, hit effects and hit sound if the entity may be damaged.
      *
      * @param arc whether the hit starts an arc chain
      */
@@ -159,7 +159,7 @@ public final class RayWeapons {
     }
 
     /**
-     * oldmod {@code ArcTurretTileEntity.applyHitEffects}: each hit uses one hop; the arc jumps to the first damageable
+     * 1.12.2 {@code ArcTurretTileEntity.applyHitEffects}: each hit uses one hop; the arc jumps to the first damageable
      * living entity within {@code 3 * remaining hops} blocks that was not hit yet. With two hops the arc reaches one
      * extra entity (the second jump has range 0), which takes {@link #ARC_JUMP_FACTOR} of the damage.
      */
@@ -171,7 +171,7 @@ public final class RayWeapons {
         double range = 3 * remaining;
         for (LivingEntity next : level.getEntitiesOfClass(LivingEntity.class, new AABB(from.position(), from.position()).inflate(range))) {
             if (!hitIds.contains(next.getId()) && TurretDamage.canDamage(level, base.getBlockPos(), next)) {
-                // oldmod order: the chain continues from the next target before it is damaged
+                // 1.12.2 order: the chain continues from the next target before it is damaged
                 shootArcChain(level, base, turret, spec, next, remaining, hitIds);
                 damage(level, turret, base, spec, next, ARC_JUMP_FACTOR);
                 double eye = from.getEyeHeight();
@@ -182,7 +182,7 @@ public final class RayWeapons {
     }
 
     /**
-     * oldmod {@code RayTracingTurret.damageEntity}: base damage times the modifier, plus the damage amp bonus,
+     * 1.12.2 {@code RayTracingTurret.damageEntity}: base damage times the modifier, plus the damage amp bonus,
      * split into a normal and an armor-piercing part.
      */
     private static void damage(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base, Spec spec,
@@ -204,8 +204,8 @@ public final class RayWeapons {
     }
 
     /**
-     * oldmod {@code RailGunTurretTileEntity.handleBlockHit}: with {@code canRailgunDestroyBlocks} the railgun breaks
-     * the hit block (no drops) if its hardness is below 200. Unbreakable blocks (hardness -1) are kept; oldmod
+     * 1.12.2 {@code RailGunTurretTileEntity.handleBlockHit}: with {@code canRailgunDestroyBlocks} the railgun breaks
+     * the hit block (no drops) if its hardness is below 200. Unbreakable blocks (hardness -1) are kept; 1.12.2
      * would have destroyed them too.
      */
     private static void handleBlockHit(ServerLevel level, TurretType type, BlockPos pos) {

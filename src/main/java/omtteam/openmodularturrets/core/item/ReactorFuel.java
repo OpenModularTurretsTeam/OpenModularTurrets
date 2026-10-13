@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.core.item;
 
 /**
- * Items burned by the redstone reactor addon (oldmod {@code TurretBase.updateRedstoneReactor}).
+ * Items burned by the redstone reactor addon (1.12.2 {@code TurretBase.updateRedstoneReactor}).
  */
 public enum ReactorFuel {
     REDSTONE(1),
