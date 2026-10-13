@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_chamber": {
+      "conditions": {
+        "items": [
+          {
+            "items": "openmodularturrets:chamber_tier_four"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "openmodularturrets:chamber_tier_five"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_chamber"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "openmodularturrets:chamber_tier_five"
+    ]
+  }
+}

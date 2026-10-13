@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": "openmodularturrets:io_bus",
+    "P": "minecraft:ender_pearl",
+    "S": "openmodularturrets:sensor_tier_three",
+    "X": "#c:ingots/gold"
+  },
+  "pattern": [
+    "XPX",
+    "PSP",
+    "XIX"
+  ],
+  "result": {
+    "id": "openmodularturrets:relativistic_turret"
+  }
+}

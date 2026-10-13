@@ -1,12 +1,11 @@
 package omtteam.openmodularturrets.client;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.special.SpecialModelRenderers;
+import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.client.compat.ClientCompat;
 import omtteam.openmodularturrets.client.network.ClientPacketHandlers;
 import omtteam.openmodularturrets.client.model.TurretModels;
@@ -25,8 +24,6 @@ import omtteam.openmodularturrets.client.tooltip.LeverTooltip;
 import omtteam.openmodularturrets.client.tooltip.ModuleTooltip;
 import omtteam.openmodularturrets.client.tooltip.TurretBaseTooltip;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
-import omtteam.openmodularturrets.registry.ModBlocks;
-import omtteam.openmodularturrets.registry.ModItems;
 import omtteam.openmodularturrets.registry.ModMenus;
 
 /**
@@ -40,14 +37,13 @@ public class OMTClient implements ClientModInitializer {
         MenuScreens.register(ModMenus.GENERATOR, GeneratorScreen::new);
         TurretModels.registerLayers();
         RayRenderer.init();
-        BlockEntityRenderers.register(ModBlockEntities.TURRET, TurretRenderer::new);
-        EntityModelLayerRegistry.registerModelLayer(LeverRenderer.LAYER, LeverRenderer::createLayer);
-        BlockEntityRenderers.register(ModBlockEntities.LEVER, LeverRenderer::new);
-        BuiltinItemRendererRegistry.INSTANCE.register(ModItems.LEVER, new LeverItemRenderer());
-        BlockEntityRenderers.register(ModBlockEntities.CAMO_TRAP, CamoTrapRenderer::new);
-        // OMPD fences have transparent parts
-        ModBlocks.FENCES.forEach(fence -> BlockRenderLayerMap.INSTANCE.putBlock(fence, RenderType.cutout()));
-        TurretItemRenderer.register(ModItems.TURRETS);
+        BlockEntityRendererRegistry.register(ModBlockEntities.TURRET, TurretRenderer::new);
+        ModelLayerRegistry.registerModelLayer(LeverRenderer.LAYER, LeverRenderer::createLayer);
+        BlockEntityRendererRegistry.register(ModBlockEntities.LEVER, LeverRenderer::new);
+        BlockEntityRendererRegistry.register(ModBlockEntities.CAMO_TRAP, CamoTrapRenderer::new);
+        // 3D item models, referenced from assets/openmodularturrets/items/*.json
+        SpecialModelRenderers.ID_MAPPER.put(OMT.id("turret"), TurretItemRenderer.Unbaked.MAP_CODEC);
+        SpecialModelRenderers.ID_MAPPER.put(OMT.id("lever"), LeverItemRenderer.Unbaked.MAP_CODEC);
         ProjectileRenderers.register();
         ClientCompat.registerTooltip(TurretBaseTooltip::append);
         ClientCompat.registerTooltip(AmmoTooltip::append);

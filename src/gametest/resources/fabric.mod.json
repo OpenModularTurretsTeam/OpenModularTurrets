@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "openmodularturrets-test",
+  "version": "1.0.0",
+  "name": "Open Modular Turrets visual test",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-client-gametest": [
+      "omtteam.openmodularturrets.test.TurretVisualTest"
+    ]
+  },
+  "depends": {
+    "openmodularturrets": "*"
+  }
+}

@@ -44,7 +44,7 @@ public final class BasePacketHandler {
                 case TOGGLE_MODE -> logic.cycleMode();
                 case TOGGLE_MULTI_TARGETING -> logic.setMultiTargeting(!logic.isMultiTargeting());
                 case DROP_BASE -> player.level().destroyBlock(packet.pos(), true);
-                case DROP_TURRETS -> dropTurrets(player.serverLevel(), packet.pos(), logic);
+                case DROP_TURRETS -> dropTurrets(player.level(), packet.pos(), logic);
                 case OPEN_MENU -> openMenu(player, base);
             }
         });

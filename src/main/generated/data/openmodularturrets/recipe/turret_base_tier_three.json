@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "openmodularturrets:io_bus",
+    "M": "#c:ingots/gold",
+    "P": "openmodularturrets:turret_base_tier_two",
+    "S": "openmodularturrets:sensor_tier_three"
+  },
+  "pattern": [
+    "MPM",
+    "BSB",
+    "MBM"
+  ],
+  "result": {
+    "id": "openmodularturrets:turret_base_tier_three"
+  }
+}

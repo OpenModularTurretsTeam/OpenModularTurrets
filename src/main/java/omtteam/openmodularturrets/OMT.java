@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets;
 
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
@@ -41,9 +41,9 @@ public class OMT implements ModInitializer {
     }
 
     /**
-     * Creates a {@link ResourceLocation} in the mod namespace.
+     * Creates a {@link Identifier} in the mod namespace.
      */
-    public static ResourceLocation id(String path) {
+    public static Identifier id(String path) {
         return VersionCompat.id(MOD_ID, path);
     }
 }

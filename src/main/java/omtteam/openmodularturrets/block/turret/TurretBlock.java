@@ -13,10 +13,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -29,11 +30,6 @@ import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
-//? if >=1.21 {
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-//?}
 
 /**
  * A turret, one block per {@link TurretType}. Ported from oldmod {@code BlockAbstractTurretHead}.
@@ -43,19 +39,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
  * drop when their base disappears.
  */
 public class TurretBlock extends BaseEntityBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
     /** oldmod {@code CONCEALED}: retracted into the base by the concealer addon (no shape). */
     public static final BooleanProperty CONCEALED = BooleanProperty.create("concealed");
     /** oldmod bounding box 0.2–0.8 on every axis. */
     private static final VoxelShape SHAPE = Block.box(3.2, 3.2, 3.2, 12.8, 12.8, 12.8);
 
-    //? if >=1.21 {
-    public static final MapCodec<TurretBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.STRING.xmap(id -> TurretType.byId(id).orElseThrow(), TurretType::getId).fieldOf("turret")
-                    .forGetter(TurretBlock::getTurretType),
-            propertiesCodec()
-    ).apply(instance, TurretBlock::new));
-    //?}
 
     private final TurretType turretType;
 
@@ -71,18 +60,12 @@ public class TurretBlock extends BaseEntityBlock {
                 .sound(SoundType.STONE)
                 .strength(-1.0F, 6000000.0F)
                 .noOcclusion()
-                .pushReaction(PushReaction.BLOCK)
+                .pushReaction(PushReaction.IMMOVEABLE)
                 .isValidSpawn((state, level, pos, entityType) -> false)
                 .isSuffocating((state, level, pos) -> false)
-                .isViewBlocking((state, level, pos) -> false);
+                .isViewBlocking((state, level, pos, box) -> false);
     }
 
-    //? if >=1.21 {
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-    //?}
 
     public TurretType getTurretType() {
         return turretType;
@@ -101,7 +84,7 @@ public class TurretBlock extends BaseEntityBlock {
     /** Drawn only by the block entity renderer (oldmod: invisible block + TESR). */
     @Override
     public RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
+        return RenderShape.INVISIBLE;
     }
 
     @Override
@@ -147,12 +130,11 @@ public class TurretBlock extends BaseEntityBlock {
 
     /** oldmod {@code onNeighborChange}: a turret whose base is gone drops itself. */
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbourBlock, BlockPos neighbourPos,
-                                boolean movedByPiston) {
-        super.neighborChanged(state, level, pos, neighbourBlock, neighbourPos, movedByPiston);
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbourBlock,
+                                @Nullable Orientation orientation, boolean movedByPiston) {
+        super.neighborChanged(state, level, pos, neighbourBlock, orientation, movedByPiston);
         BlockPos basePos = pos.relative(state.getValue(FACING).getOpposite());
-        if (!level.isClientSide() && neighbourPos.equals(basePos)
-                && !(level.getBlockEntity(basePos) instanceof TurretBaseBlockEntity)) {
+        if (!level.isClientSide() && !(level.getBlockEntity(basePos) instanceof TurretBaseBlockEntity)) {
             level.destroyBlock(pos, true);
         }
     }

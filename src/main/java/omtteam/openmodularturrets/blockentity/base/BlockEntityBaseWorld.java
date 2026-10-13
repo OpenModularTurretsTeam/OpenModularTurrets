@@ -4,6 +4,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -71,7 +73,7 @@ public class BlockEntityBaseWorld implements BaseWorld {
     @Override
     public boolean canGenerateSolarPower() {
         Level current = level.get();
-        return current != null && current.isDay() && !current.isRaining() && current.canSeeSky(pos.above(2));
+        return current != null && current.isBrightOutside() && !current.isRaining() && current.canSeeSky(pos.above(2));
     }
 
     @Override
@@ -124,7 +126,9 @@ public class BlockEntityBaseWorld implements BaseWorld {
         }
         // oldmod dispatchWarnMessage: only the warned player hears the alarm
         if (OMTConfig.get().turrets.turretAlarmSound) {
-            serverPlayer.playNotifySound(ModSounds.WARNING, SoundSource.BLOCKS, 1.0F, 1.0F);
+            serverPlayer.connection.send(new ClientboundSoundPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(ModSounds.WARNING),
+                    SoundSource.BLOCKS, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), 1.0F, 1.0F,
+                    serverPlayer.getRandom().nextLong()));
         }
         if (OMTConfig.get().turrets.turretWarnMessage) {
             serverPlayer.sendSystemMessage(Component.translatable("message.openmodularturrets.turret_warning")

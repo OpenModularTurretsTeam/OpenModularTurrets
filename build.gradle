@@ -1,0 +1,86 @@
+plugins {
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+	id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+base.archivesName = project.archives_base_name
+
+loom {
+	splitEnvironmentSourceSets()
+
+	mods {
+		"openmodularturrets" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+}
+
+fabricApi {
+	configureDataGeneration {
+		client = true
+		modId = "openmodularturrets"
+		outputDirectory = file("src/main/generated")
+	}
+
+	// In-game check: builds a turret site and takes screenshots (gradlew runClientGameTest,
+	// screenshots in build/run/clientGameTest/screenshots)
+	configureTests {
+		createSourceSet = true
+		modId = "openmodularturrets-test"
+		enableGameTests = false
+		enableClientGameTests = true
+		eula = false
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// Energy API (jar-in-jar)
+	implementation "teamreborn:energy:${project.team_reborn_energy_version}"
+	include "teamreborn:energy:${project.team_reborn_energy_version}"
+
+	// Unit tests for the core game logic (test only, not shipped)
+	testImplementation platform("org.junit:junit-bom:${project.junit_version}")
+	testImplementation "org.junit.jupiter:junit-jupiter"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+}
+
+processResources {
+	def version = project.version
+	inputs.property "version", version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = "UTF-8"
+	it.options.release = 25
+	it.options.compilerArgs += ["-Xmaxerrs", "5000"]
+}
+
+test {
+	useJUnitPlatform()
+}
+
+java {
+	withSourcesJar()
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+}
+
+jar {
+	def projectName = project.name
+	inputs.property "projectName", projectName
+
+	from("LICENSE") {
+		rename { "${it}_$projectName"}
+	}
+}

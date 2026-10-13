@@ -1,5 +1,8 @@
 package omtteam.openmodularturrets.registry;
 
+import java.util.function.Function;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
@@ -46,7 +49,7 @@ public final class ModItems {
     public static final AmmoItem AMMO_ROCKET = registerAmmo("ammo_rocket", AmmoType.ROCKET);
 
     // Intermediate products (oldmod IntermediateProductRegular)
-    public static final Item IO_BUS = register("io_bus", new Item(new Item.Properties()));
+    public static final Item IO_BUS = register("io_bus", Item::new);
 
     // Tiered intermediate products (oldmod IntermediateProductTiered meta 0–14), index = tier - 1
     public static final List<Item> SENSORS = registerTiered("sensor");
@@ -88,32 +91,35 @@ public final class ModItems {
     private static List<Item> registerTiered(String kind) {
         List<Item> items = new ArrayList<>();
         for (String tier : TIER_NAMES) {
-            items.add(register(kind + "_tier_" + tier, new Item(new Item.Properties())));
+            items.add(register(kind + "_tier_" + tier, Item::new));
         }
         return List.copyOf(items);
     }
 
     private static UpgradeItem registerUpgrade(UpgradeType type) {
-        return register("upgrade_" + type.getSerializedName(), new UpgradeItem(type, new Item.Properties()));
+        return register("upgrade_" + type.getSerializedName(), properties -> new UpgradeItem(type, properties));
     }
 
     private static AddonItem registerAddon(AddonType type) {
-        return register("addon_" + type.getSerializedName(), new AddonItem(type, new Item.Properties()));
+        return register("addon_" + type.getSerializedName(), properties -> new AddonItem(type, properties));
     }
 
     private static AmmoItem registerAmmo(String name, AmmoType type) {
-        return register(name, new AmmoItem(type, new Item.Properties()));
+        return register(name, properties -> new AmmoItem(type, properties));
     }
 
-    private static <T extends Item> T register(String name, T item) {
+    private static <T extends Item> T register(String name, Function<Item.Properties, T> factory) {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, OMT.id(name));
+        T item = factory.apply(new Item.Properties().setId(key));
         ITEMS.add(item);
-        return Registry.register(BuiltInRegistries.ITEM, OMT.id(name), item);
+        return Registry.register(BuiltInRegistries.ITEM, key, item);
     }
 
     private static BlockItem registerBlock(Block block) {
-        BlockItem item = new BlockItem(block, new Item.Properties());
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, BuiltInRegistries.BLOCK.getKey(block));
+        BlockItem item = new BlockItem(block, new Item.Properties().setId(key).useBlockDescriptionPrefix());
         ITEMS.add(item);
-        return Registry.register(BuiltInRegistries.ITEM, BuiltInRegistries.BLOCK.getKey(block), item);
+        return Registry.register(BuiltInRegistries.ITEM, key, item);
     }
 
     /** Loads the class, registering all items. */

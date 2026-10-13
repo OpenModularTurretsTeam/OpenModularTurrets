@@ -9,6 +9,13 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 
 ## [Unreleased]
 
+### Changed
+
+- Ported to Minecraft 26.3 (Fabric, Java 25) as a single-version build; 1.20.1 and 1.21.1 are no longer built from
+  this project
+- Camouflage traps are now drawn with the surrounding block lighting and biome tint
+- Old saved turret bases, turrets and generators are not compatible with this version (use a new world)
+
 ## [4.0.0-alpha.4] - 2026-10-13
 
 ### Fixed

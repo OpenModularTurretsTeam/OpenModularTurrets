@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.registry;
 
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -14,7 +14,7 @@ import omtteam.openmodularturrets.config.OMTConfig;
 
 public final class ModCreativeTabs {
     public static final CreativeModeTab MAIN = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, OMT.id("main"),
-            FabricItemGroup.builder()
+            FabricCreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.openmodularturrets"))
                     .icon(() -> new ItemStack(ModItems.AMMO_ROCKET)) // oldmod ModularTurretsTab: ammo meta 4
                     // disabled turrets are hidden (oldmod did not register them at all)

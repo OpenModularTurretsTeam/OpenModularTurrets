@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "openmodularturrets:io_bus",
+    "G": "#c:ingots/gold",
+    "L": "minecraft:glowstone_dust",
+    "O": "minecraft:obsidian",
+    "S": "openmodularturrets:sensor_tier_four"
+  },
+  "pattern": [
+    "GLG",
+    "BSB",
+    "OLO"
+  ],
+  "result": {
+    "id": "openmodularturrets:sensor_tier_five"
+  }
+}

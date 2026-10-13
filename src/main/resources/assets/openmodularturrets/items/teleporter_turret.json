@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "openmodularturrets:item/teleporter_turret",
+    "model": {
+      "type": "openmodularturrets:turret",
+      "turret": "teleporter_turret"
+    }
+  }
+}

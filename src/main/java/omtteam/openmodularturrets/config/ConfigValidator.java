@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.config;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.openmodularturrets.OMT;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ final class ConfigValidator {
 
     /** Removes null entries and entries that are not valid resource locations. */
     List<String> ids(String name, List<String> ids) {
-        return filter(name, ids, entry -> ResourceLocation.tryParse(entry) != null);
+        return filter(name, ids, entry -> Identifier.tryParse(entry) != null);
     }
 
     /**
@@ -55,7 +55,7 @@ final class ConfigValidator {
             if (parts.length > 2) return false;
             String id = parts[0].trim();
             if (id.startsWith("#")) id = id.substring(1);
-            if (ResourceLocation.tryParse(id) == null) return false;
+            if (Identifier.tryParse(id) == null) return false;
             if (parts.length == 2) {
                 try {
                     Integer.parseInt(parts[1].trim());

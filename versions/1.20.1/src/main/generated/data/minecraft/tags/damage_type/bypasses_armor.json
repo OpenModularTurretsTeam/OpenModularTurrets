@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "openmodularturrets:grenade_armor_bypass",
-    "openmodularturrets:plasma_armor_bypass",
-    "openmodularturrets:arc_armor_bypass",
-    "openmodularturrets:railgun"
-  ]
-}

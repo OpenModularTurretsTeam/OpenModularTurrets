@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "openmodularturrets:io_bus",
+    "C": "minecraft:cobblestone",
+    "F": "minecraft:furnace",
+    "I": "#c:ingots/iron"
+  },
+  "pattern": [
+    "CIC",
+    "IFI",
+    "CBC"
+  ],
+  "result": {
+    "id": "openmodularturrets:generator"
+  }
+}

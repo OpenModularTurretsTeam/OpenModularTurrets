@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -52,7 +53,8 @@ public class DefenseFenceBlock extends IronBarsBlock implements EntityBlock, Int
 
     /** OMPD {@code onEntityCollidedWithBlock}. */
     @Override
-    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effects,
+                             boolean isPrecise) {
         if (level.isClientSide() || entity instanceof ItemEntity) return;
         boolean owner = entity instanceof Player player && level.getBlockEntity(pos) instanceof OwnedBlockEntity be
                 && be.isOwner(player);

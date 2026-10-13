@@ -1,10 +1,10 @@
 package omtteam.openmodularturrets.client.render.entity;
 
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.registry.ModEntities;
@@ -13,9 +13,9 @@ import omtteam.openmodularturrets.registry.ModEntities;
  * Projectile renderers, following oldmod {@code ProjectileRenderers}.
  */
 public final class ProjectileRenderers {
-    private static final ResourceLocation ARROW_TEXTURE = VersionCompat.id("minecraft", "textures/entity/projectiles/arrow.png");
-    private static final ResourceLocation ROCKET_TEXTURE = OMT.id("textures/entity/projectile/rocket.png");
-    private static final ResourceLocation BULLET_TEXTURE = OMT.id("textures/entity/projectile/bullet.png");
+    private static final Identifier ARROW_TEXTURE = VersionCompat.id("minecraft", "textures/entity/projectiles/arrow.png");
+    private static final Identifier ROCKET_TEXTURE = OMT.id("textures/entity/projectile/rocket.png");
+    private static final Identifier BULLET_TEXTURE = OMT.id("textures/entity/projectile/bullet.png");
     /** Vanilla's thrown snowball is drawn at half a block. */
     private static final float BULLET_SIZE = 0.5F;
 
@@ -23,7 +23,7 @@ public final class ProjectileRenderers {
     }
 
     public static void register() {
-        EntityModelLayerRegistry.registerModelLayer(PlasmaRenderer.LAYER, PlasmaRenderer::createLayer);
+        ModelLayerRegistry.registerModelLayer(PlasmaRenderer.LAYER, PlasmaRenderer::createLayer);
         EntityRendererRegistry.register(ModEntities.BULLET, context -> new BillboardRenderer<>(context, BULLET_TEXTURE, BULLET_SIZE));
         // oldmod RenderSnowball with the ammo item
         EntityRendererRegistry.register(ModEntities.GRENADE, ThrownItemRenderer::new);

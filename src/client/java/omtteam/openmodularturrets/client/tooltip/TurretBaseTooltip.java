@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.client.tooltip;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.BlockItem;
@@ -25,7 +25,7 @@ public final class TurretBaseTooltip {
 
     public static void append(ItemStack stack, TooltipFlag flag, List<Component> lines) {
         if (!(stack.getItem() instanceof BlockItem item) || !(item.getBlock() instanceof TurretBaseBlock base)) return;
-        if (!Screen.hasShiftDown()) {
+        if (!Minecraft.getInstance().hasShiftDown()) {
             lines.add(shiftHint());
             return;
         }

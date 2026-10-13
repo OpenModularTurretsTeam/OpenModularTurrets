@@ -4,16 +4,15 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.client.compat.ClientCompat;
 import omtteam.openmodularturrets.client.compat.ClientNetworkCompat;
 import omtteam.openmodularturrets.network.OMTPackets;
 import omtteam.openmodularturrets.network.RayPacket;
-import org.joml.Matrix4f;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -42,7 +41,7 @@ public final class RayRenderer {
         ClientNetworkCompat.registerHandler(OMTPackets.RAY, RayRenderer::add);
         ClientTickEvents.END_CLIENT_TICK.register(client -> tick());
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> RAYS.clear());
-        WorldRenderEvents.AFTER_TRANSLUCENT.register(context -> render(context.matrixStack(), context.camera().getPosition()));
+        LevelRenderEvents.COLLECT_SUBMITS.register(RayRenderer::render);
     }
 
     private static void add(RayPacket packet) {
@@ -73,24 +72,26 @@ public final class RayRenderer {
         }
     }
 
-    private static void render(PoseStack poseStack, Vec3 camera) {
-        if (RAYS.isEmpty() || poseStack == null) return;
-        MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
-        VertexConsumer consumer = buffers.getBuffer(RenderType.lightning());
+    private static void render(LevelRenderContext context) {
+        if (RAYS.isEmpty()) return;
+        Vec3 camera = Minecraft.getInstance().gameRenderer.mainCamera().position();
+        // drawn later in the frame: take a snapshot, the list changes every tick
+        List<ActiveRay> rays = List.copyOf(RAYS);
+        PoseStack poseStack = context.poseStack();
         poseStack.pushPose();
         poseStack.translate(-camera.x, -camera.y, -camera.z);
-        Matrix4f pose = poseStack.last().pose();
-        for (ActiveRay ray : RAYS) {
-            for (int i = 0; i + 1 < ray.points().size(); i++) {
-                beam(consumer, pose, ray.points().get(i), ray.points().get(i + 1), ray.argb());
+        context.submitNodeCollector().submitCustomGeometry(poseStack, RenderTypes.lightning(), (pose, consumer) -> {
+            for (ActiveRay ray : rays) {
+                for (int i = 0; i + 1 < ray.points().size(); i++) {
+                    beam(consumer, pose, ray.points().get(i), ray.points().get(i + 1), ray.argb());
+                }
             }
-        }
+        });
         poseStack.popPose();
-        buffers.endBatch(RenderType.lightning());
     }
 
     /** Two crossed quads along the segment, each drawn from both sides. */
-    private static void beam(VertexConsumer consumer, Matrix4f pose, Vec3 a, Vec3 b, int argb) {
+    private static void beam(VertexConsumer consumer, PoseStack.Pose pose, Vec3 a, Vec3 b, int argb) {
         Vec3 direction = b.subtract(a).normalize();
         Vec3 helper = Math.abs(direction.y) > 0.9 ? new Vec3(1, 0, 0) : new Vec3(0, 1, 0);
         Vec3 side1 = direction.cross(helper).normalize().scale(HALF_WIDTH);
@@ -99,7 +100,7 @@ public final class RayRenderer {
         quad(consumer, pose, a, b, side2, argb);
     }
 
-    private static void quad(VertexConsumer consumer, Matrix4f pose, Vec3 a, Vec3 b, Vec3 side, int argb) {
+    private static void quad(VertexConsumer consumer, PoseStack.Pose pose, Vec3 a, Vec3 b, Vec3 side, int argb) {
         Vec3[] corners = {a.add(side), b.add(side), b.subtract(side), a.subtract(side)};
         for (Vec3 corner : corners) {
             ClientCompat.vertex(consumer, pose, (float) corner.x, (float) corner.y, (float) corner.z, argb);

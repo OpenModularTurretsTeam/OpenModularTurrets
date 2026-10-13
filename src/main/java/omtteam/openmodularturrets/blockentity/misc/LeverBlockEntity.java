@@ -60,10 +60,10 @@ public class LeverBlockEntity extends CompatBlockEntity {
     }
 
     @Override
-    protected void readData(CompoundTag tag, HolderLookup.Provider registries) {
+    protected void readData(CompoundTag tag) {
     }
 
     @Override
-    protected void writeData(CompoundTag tag, HolderLookup.Provider registries) {
+    protected void writeData(CompoundTag tag) {
     }
 }

@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.config;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.openmodularturrets.core.settings.BaseTierStats;
 import omtteam.openmodularturrets.core.settings.LogicSettings;
 import omtteam.openmodularturrets.core.settings.TurretStats;
@@ -33,8 +33,8 @@ public final class ConfigLogicSettings implements LogicSettings {
         cachedFor = current;
     }
 
-    private static Set<String> toStrings(Set<ResourceLocation> ids) {
-        return ids.stream().map(ResourceLocation::toString).collect(Collectors.toUnmodifiableSet());
+    private static Set<String> toStrings(Set<Identifier> ids) {
+        return ids.stream().map(Identifier::toString).collect(Collectors.toUnmodifiableSet());
     }
 
     @Override

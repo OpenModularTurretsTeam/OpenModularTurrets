@@ -43,6 +43,6 @@ public final class PassiveDefense {
                 player.sendSystemMessage(Component.translatable("message.openmodularturrets.not_owner"));
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 }

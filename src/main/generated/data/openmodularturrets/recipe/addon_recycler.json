@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "openmodularturrets:io_bus",
+    "C": "minecraft:ender_chest",
+    "G": "#c:ingots/gold",
+    "M": "minecraft:magma_cream"
+  },
+  "pattern": [
+    "GMG",
+    "MCB",
+    "GMG"
+  ],
+  "result": {
+    "id": "openmodularturrets:addon_recycler"
+  }
+}

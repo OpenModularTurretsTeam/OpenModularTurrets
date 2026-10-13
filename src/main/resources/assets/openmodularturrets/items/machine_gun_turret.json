@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "openmodularturrets:item/machine_gun_turret",
+    "model": {
+      "type": "openmodularturrets:turret",
+      "turret": "machine_gun_turret"
+    }
+  }
+}

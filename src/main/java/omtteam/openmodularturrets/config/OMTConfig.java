@@ -54,7 +54,7 @@ public final class OMTConfig {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             ServerPlayer player = handler.getPlayer();
             // The singleplayer host already uses this config
-            if (!server.isSingleplayerOwner(player.getGameProfile()) && NetworkCompat.canSend(player, OMTPackets.CONFIG_SYNC)) {
+            if (!server.isSingleplayerOwner(player.nameAndId()) && NetworkCompat.canSend(player, OMTPackets.CONFIG_SYNC)) {
                 NetworkCompat.sendToPlayer(player, OMTPackets.CONFIG_SYNC, new ConfigSyncPacket(GSON.toJson(local)));
             }
         });

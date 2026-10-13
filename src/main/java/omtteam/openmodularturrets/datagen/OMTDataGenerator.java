@@ -8,7 +8,7 @@ import omtteam.openmodularturrets.registry.ModDamageTypes;
 
 /**
  * Datagen entrypoint. Generates the version-specific {@code data/} files (recipes, loot tables, tags, …)
- * into {@code versions/<v>/src/main/generated}.
+ * into {@code src/main/generated}.
  */
 public class OMTDataGenerator implements DataGeneratorEntrypoint {
     @Override

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "openmodularturrets:chamber_tier_one",
+    "I": "#c:ingots/iron",
+    "R": "#c:dusts/redstone"
+  },
+  "pattern": [
+    "III",
+    " CR",
+    "III"
+  ],
+  "result": {
+    "id": "openmodularturrets:chamber_tier_two"
+  }
+}

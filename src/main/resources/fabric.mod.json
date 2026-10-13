@@ -29,9 +29,9 @@
     "openmodularturrets.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=${loader_version}",
-    "minecraft": "${minecraft_dependency}",
-    "java": ">=${java_version}",
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3",
+    "java": ">=25",
     "fabric-api": "*"
   }
 }

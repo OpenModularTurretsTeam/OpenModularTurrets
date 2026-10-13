@@ -2,11 +2,7 @@ package omtteam.openmodularturrets.compat;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-//? if >=1.21 {
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
-//?} else {
-/*import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
-*///?}
 
 /**
  * Common ({@code c:}) item tags replacing the oldmod ore dictionary entries. The tag ids differ between versions
@@ -24,17 +20,10 @@ public final class CommonTags {
     public static final TagKey<Item> GOLD_INGOTS = ConventionalItemTags.GOLD_INGOTS;
     /** Ore dictionary {@code paneGlass}. */
     public static final TagKey<Item> GLASS_PANES = ConventionalItemTags.GLASS_PANES;
-    //? if >=1.21 {
     /** Ore dictionary {@code gemQuartz}. */
     public static final TagKey<Item> QUARTZ_GEMS = ConventionalItemTags.QUARTZ_GEMS;
     /** Ore dictionary {@code gemDiamond}. */
     public static final TagKey<Item> DIAMOND_GEMS = ConventionalItemTags.DIAMOND_GEMS;
-    //?} else {
-    /*/^* Ore dictionary {@code gemQuartz}. ^/
-    public static final TagKey<Item> QUARTZ_GEMS = ConventionalItemTags.QUARTZ;
-    /^* Ore dictionary {@code gemDiamond}. ^/
-    public static final TagKey<Item> DIAMOND_GEMS = ConventionalItemTags.DIAMONDS;
-    *///?}
 
     private CommonTags() {
     }

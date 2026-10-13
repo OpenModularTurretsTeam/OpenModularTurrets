@@ -1,13 +1,10 @@
 # Gradle
 .gradle/
 build/
-versions/*/build/
-!versions/*/src/main/generated/
-versions/*/src/main/generated/.cache/
+src/main/generated/.cache/
 
 # Runs
 run/
-versions/*/run/
 
 # IDE
 .idea/
@@ -15,9 +12,3 @@ versions/*/run/
 .vscode/
 out/
 bin/
-.kotlin/
-
-# old mods
-oldmod/
-oldmod2/
-oldlib/

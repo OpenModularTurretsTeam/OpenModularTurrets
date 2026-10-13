@@ -33,7 +33,7 @@ public class TurretDamageSource extends DamageSource {
      */
     public static TurretDamageSource of(Level level, ResourceKey<DamageType> type, @Nullable Entity direct,
                                         @Nullable Entity causing, @Nullable BlockPos basePos, int lootingLevel) {
-        Holder<DamageType> holder = level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(type);
+        Holder<DamageType> holder = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(type);
         return new TurretDamageSource(holder, direct, causing, basePos, lootingLevel);
     }
 

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "openmodularturrets:barrel_tier_four",
+    "L": "minecraft:glowstone_dust",
+    "O": "minecraft:obsidian"
+  },
+  "pattern": [
+    "OOO",
+    "LBL",
+    "OOO"
+  ],
+  "result": {
+    "id": "openmodularturrets:barrel_tier_five"
+  }
+}

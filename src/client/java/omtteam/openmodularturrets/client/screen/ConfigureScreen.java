@@ -1,11 +1,12 @@
 package omtteam.openmodularturrets.client.screen;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.client.compat.ClientNetworkCompat;
@@ -23,7 +24,7 @@ import java.util.Optional;
  * The light value/opacity sliders belong to the camouflage feature and come with it.
  */
 public class ConfigureScreen extends CompatScreen {
-    private static final ResourceLocation TEXTURE = OMT.id("textures/gui/configure.png");
+    private static final Identifier TEXTURE = OMT.id("textures/gui/configure.png");
     private static final int WIDTH = 176;
     private static final int HEIGHT = 205;
 
@@ -93,7 +94,7 @@ public class ConfigureScreen extends CompatScreen {
     }
 
     private void openTrustedPlayers() {
-        if (minecraft != null) minecraft.setScreen(new TrustedPlayersScreen(pos, this));
+        if (minecraft != null) minecraft.gui.setScreen(new TrustedPlayersScreen(pos, this));
     }
 
     /** oldmod "Back": reopen the base GUI (a server-side menu). */
@@ -128,11 +129,11 @@ public class ConfigureScreen extends CompatScreen {
     }
 
     @Override
-    protected void renderPanel(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.blit(TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
-        graphics.drawString(font, ScreenTexts.gui("targeting_options").append(":"), left + 10, top + 9, 0x000000, false);
+    protected void renderPanel(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, left, top, 0, 0, WIDTH, HEIGHT, 256, 256);
+        graphics.text(font, ScreenTexts.gui("targeting_options").append(":"), left + 10, top + 9, 0xFF000000, false);
         if (isAdmin()) {
-            graphics.drawString(font, ScreenTexts.gui("trusted_players").append(":"), left + 10, top + 84, 0x000000, false);
+            graphics.text(font, ScreenTexts.gui("trusted_players").append(":"), left + 10, top + 84, 0xFF000000, false);
         }
     }
 }

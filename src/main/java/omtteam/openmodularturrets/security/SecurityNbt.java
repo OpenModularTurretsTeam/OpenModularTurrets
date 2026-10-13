@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.security;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.UUIDUtil;
 import omtteam.openmodularturrets.core.security.AccessLevel;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.TrustManager;
@@ -36,14 +36,14 @@ public final class SecurityNbt {
 
     /** Entries without a valid UUID are dropped. */
     public static void load(TrustManager manager, CompoundTag tag) {
-        PlayerIdentity owner = tag.contains(OWNER, Tag.TAG_COMPOUND) ? loadIdentity(tag.getCompound(OWNER)) : null;
+        PlayerIdentity owner = tag.getCompound(OWNER).map(SecurityNbt::loadIdentity).orElse(null);
         List<TrustedPlayer> entries = new ArrayList<>();
-        ListTag list = tag.getList(TRUSTED_PLAYERS, Tag.TAG_COMPOUND);
+        ListTag list = tag.getListOrEmpty(TRUSTED_PLAYERS);
         for (int i = 0; i < list.size(); i++) {
-            CompoundTag entryTag = list.getCompound(i);
+            CompoundTag entryTag = list.getCompoundOrEmpty(i);
             PlayerIdentity identity = loadIdentity(entryTag);
             if (identity != null) {
-                AccessLevel level = AccessLevel.bySerializedName(entryTag.getString("AccessLevel"), AccessLevel.NONE);
+                AccessLevel level = AccessLevel.bySerializedName(entryTag.getStringOr("AccessLevel", ""), AccessLevel.NONE);
                 entries.add(new TrustedPlayer(identity, level));
             }
         }
@@ -52,12 +52,12 @@ public final class SecurityNbt {
 
     private static CompoundTag saveIdentity(PlayerIdentity identity) {
         CompoundTag tag = new CompoundTag();
-        tag.putUUID("UUID", identity.uuid());
+        tag.store("UUID", UUIDUtil.CODEC, identity.uuid());
         tag.putString("Name", identity.name());
         return tag;
     }
 
     private static PlayerIdentity loadIdentity(CompoundTag tag) {
-        return tag.hasUUID("UUID") ? new PlayerIdentity(tag.getUUID("UUID"), tag.getString("Name")) : null;
+        return tag.read("UUID", UUIDUtil.CODEC).map(uuid -> new PlayerIdentity(uuid, tag.getStringOr("Name", ""))).orElse(null);
     }
 }

@@ -1,24 +1,16 @@
 package omtteam.openmodularturrets.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import omtteam.openmodularturrets.registry.ModBlocks;
-//? if >=1.21 {
 import net.minecraft.core.HolderLookup;
 
 import java.util.concurrent.CompletableFuture;
-//?}
 
-public class OMTBlockLootProvider extends FabricBlockLootTableProvider {
-    //? if >=1.21 {
-    public OMTBlockLootProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+public class OMTBlockLootProvider extends FabricBlockLootSubProvider {
+    public OMTBlockLootProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
-    //?} else {
-    /*public OMTBlockLootProvider(FabricDataOutput output) {
-        super(output);
-    }
-    *///?}
 
     @Override
     public void generate() {

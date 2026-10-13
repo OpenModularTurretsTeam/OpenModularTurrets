@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "omtteam.openmodularturrets.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_25",
   "mixins": [
     "LivingEntityMixin"
   ],

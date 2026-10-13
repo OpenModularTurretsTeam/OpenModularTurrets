@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "openmodularturrets:barrel_tier_two",
+    "G": "#c:ingots/gold"
+  },
+  "pattern": [
+    "GGG",
+    " B ",
+    "GGG"
+  ],
+  "result": {
+    "id": "openmodularturrets:barrel_tier_three"
+  }
+}

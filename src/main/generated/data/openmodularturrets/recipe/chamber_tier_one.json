@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "minecraft:cobblestone",
+    "P": "#minecraft:planks",
+    "R": "#c:dusts/redstone"
+  },
+  "pattern": [
+    "CCC",
+    " PR",
+    "CCC"
+  ],
+  "result": {
+    "id": "openmodularturrets:chamber_tier_one"
+  }
+}

@@ -35,11 +35,10 @@ public class CamoTrapBlockEntity extends OwnedBlockEntity {
     }
 
     @Override
-    protected void readData(CompoundTag tag, HolderLookup.Provider registries) {
-        super.readData(tag, registries);
+    protected void readData(CompoundTag tag) {
+        super.readData(tag);
         BlockState previous = camo;
-        camo = tag.contains("Camo", Tag.TAG_COMPOUND)
-                ? NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound("Camo")) : null;
+        camo = tag.getCompound("Camo").map(camoTag -> NbtUtils.readBlockState(BuiltInRegistries.BLOCK, camoTag)).orElse(null);
         // the renderer draws the camouflage; make the client re-render the block when it changed
         if (level != null && level.isClientSide() && previous != camo) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_IMMEDIATE);
@@ -47,8 +46,8 @@ public class CamoTrapBlockEntity extends OwnedBlockEntity {
     }
 
     @Override
-    protected void writeData(CompoundTag tag, HolderLookup.Provider registries) {
-        super.writeData(tag, registries);
+    protected void writeData(CompoundTag tag) {
+        super.writeData(tag);
         if (camo != null) {
             tag.put("Camo", NbtUtils.writeBlockState(camo));
         }

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_barrel": {
+      "conditions": {
+        "items": [
+          {
+            "items": "openmodularturrets:barrel_tier_three"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "openmodularturrets:barrel_tier_four"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_barrel"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "openmodularturrets:barrel_tier_four"
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.client.model;
 
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
@@ -55,7 +55,7 @@ public final class TurretModels {
     }
 
     public static void registerLayers() {
-        ENTRIES.values().forEach(entry -> EntityModelLayerRegistry.registerModelLayer(entry.layer(), entry.definition()::get));
+        ENTRIES.values().forEach(entry -> ModelLayerRegistry.registerModelLayer(entry.layer(), entry.definition()::get));
     }
 
     /** Bakes all ported models. */

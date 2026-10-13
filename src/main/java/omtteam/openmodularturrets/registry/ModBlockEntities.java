@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.registry;
 
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -23,26 +24,26 @@ import java.util.stream.Stream;
 public final class ModBlockEntities {
     public static final BlockEntityType<TurretBaseBlockEntity> TURRET_BASE = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE, OMT.id("turret_base"),
-            BlockEntityType.Builder.of(TurretBaseBlockEntity::new, ModBlocks.TURRET_BASES.toArray(Block[]::new)).build(null));
+            FabricBlockEntityTypeBuilder.create(TurretBaseBlockEntity::new, ModBlocks.TURRET_BASES.toArray(Block[]::new)).build());
 
     public static final BlockEntityType<TurretBlockEntity> TURRET = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE, OMT.id("turret"),
-            BlockEntityType.Builder.of(TurretBlockEntity::new, ModBlocks.TURRETS.values().toArray(Block[]::new)).build(null));
+            FabricBlockEntityTypeBuilder.create(TurretBlockEntity::new, ModBlocks.TURRETS.values().toArray(Block[]::new)).build());
 
     /** OMPD hardened blocks, walls and fences (owner only). */
     public static final BlockEntityType<OwnedBlockEntity> OWNED = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE, OMT.id("owned_block"),
-            BlockEntityType.Builder.of(OwnedBlockEntity::new, Stream.of(ModBlocks.HARDENED, ModBlocks.WALLS, ModBlocks.FENCES)
-                    .flatMap(List::stream).toArray(Block[]::new)).build(null));
+            FabricBlockEntityTypeBuilder.create(OwnedBlockEntity::new, Stream.of(ModBlocks.HARDENED, ModBlocks.WALLS, ModBlocks.FENCES)
+                    .flatMap(List::stream).toArray(Block[]::new)).build());
     public static final BlockEntityType<CamoTrapBlockEntity> CAMO_TRAP = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE, OMT.id("camo_trap"),
-            BlockEntityType.Builder.of(CamoTrapBlockEntity::new, ModBlocks.CAMO_TRAP).build(null));
+            FabricBlockEntityTypeBuilder.create(CamoTrapBlockEntity::new, ModBlocks.CAMO_TRAP).build());
     public static final BlockEntityType<LeverBlockEntity> LEVER = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE, OMT.id("lever"),
-            BlockEntityType.Builder.of(LeverBlockEntity::new, ModBlocks.LEVER).build(null));
+            FabricBlockEntityTypeBuilder.create(LeverBlockEntity::new, ModBlocks.LEVER).build());
     public static final BlockEntityType<GeneratorBlockEntity> GENERATOR = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE, OMT.id("generator"),
-            BlockEntityType.Builder.of(GeneratorBlockEntity::new, ModBlocks.GENERATOR).build(null));
+            FabricBlockEntityTypeBuilder.create(GeneratorBlockEntity::new, ModBlocks.GENERATOR).build());
 
     private ModBlockEntities() {
     }

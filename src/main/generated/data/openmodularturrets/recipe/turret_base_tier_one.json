@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "minecraft:cobblestone",
+    "P": "#minecraft:planks",
+    "S": "openmodularturrets:sensor_tier_one"
+  },
+  "pattern": [
+    "CPC",
+    "PSP",
+    "CPC"
+  ],
+  "result": {
+    "id": "openmodularturrets:turret_base_tier_one"
+  }
+}
