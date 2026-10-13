@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "openmodularturrets:barrel_tier_one"
+    },
+    "C": {
+      "item": "openmodularturrets:chamber_tier_one"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "R": {
+      "tag": "c:redstone_dusts"
+    },
+    "S": {
+      "item": "minecraft:string"
+    }
+  },
+  "pattern": [
+    "SBS",
+    "PCP",
+    "PRP"
+  ],
+  "result": {
+    "item": "openmodularturrets:crossbow_turret"
+  },
+  "show_notification": true
+}

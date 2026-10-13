@@ -332,7 +332,7 @@ Update this checklist as work progresses.
 - [x] Upgrades and addons (items, tooltips, recipes, base effects, fake drops loot rule)
 - [x] Expanders are to be skipped
 - [x] Misc blocks (crank; OMPD hardened blocks, walls, fences, camouflage trap; loot deleter and power generator skipped)
-- [x] Recipes, loot tables, tags via datagen for all content (plasma, arc, melee and crossbow turrets have no recipe)
+- [x] Recipes, loot tables, tags via datagen for all content
 - [x] Lang, sounds, creative tab
 - [ ] Camouflage for turret bases and the camouflage trap, one shared system:
   - Disguise is set and reset the same way on both blocks (via gui with simple phantom slot) and rendered the same way.
