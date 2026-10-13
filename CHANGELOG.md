@@ -9,6 +9,22 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 
 ## [Unreleased]
 
+## [4.0.0-beta.1] - 2026-10-14
+
+### Fixed
+
+- The melee turret is now visible: its blades extend and spin while it is active
+
+### Changed
+
+- The melee turret can only be mounted on top of or below a turret base
+- The melee turret no longer needs a target from its base: it strikes everything in a 3x2x3 area around itself and its base
+- Turret hits no longer knock their targets back
+
+### Added
+
+- Crafting recipes for the melee, crossbow, arc and plasma turrets
+
 ## [4.0.0-alpha.4] - 2026-10-13
 
 ### Fixed
