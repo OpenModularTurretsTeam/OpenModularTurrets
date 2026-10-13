@@ -103,8 +103,8 @@ public class TrustManager {
      */
     public Optional<AccessLevel> getTrustLevel(PlayerIdentity player) {
         Optional<TrustedPlayer> entry = getTrustedPlayer(player.uuid());
-        if (entry.isPresent()) return Optional.of(entry.get().getAccessLevel());
-        return isTeamMember(player) ? Optional.of(AccessLevel.NONE) : Optional.empty();
+        return entry.map(TrustedPlayer::getAccessLevel).or(()
+                -> isTeamMember(player) ? Optional.of(AccessLevel.NONE) : Optional.empty());
     }
 
     /**

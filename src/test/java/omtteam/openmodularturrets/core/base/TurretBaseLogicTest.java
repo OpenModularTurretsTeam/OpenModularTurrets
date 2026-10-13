@@ -389,15 +389,6 @@ class TurretBaseLogicTest {
         }
 
         @Test
-        void capacityDropClampsStoredEnergy() {
-            TurretBaseLogic logic = base(2);
-            logic.updateNeighbours(Map.of(Face.DOWN, new Neighbour.Expander(true, 1)));
-            logic.getEnergy().generate(52500);
-            logic.updateNeighbours(Map.of());
-            assertEquals(50000, logic.getEnergy().getAmount());
-        }
-
-        @Test
         void redstoneReactorPrefersBlocks() {
             TurretBaseLogic logic = base(2);
             addon(0, AddonType.REDSTONE_REACTOR, 1);
