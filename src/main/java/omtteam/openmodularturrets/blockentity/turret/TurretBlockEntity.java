@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -18,16 +19,18 @@ import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.AmmoDraw;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
-import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.turret.TurretMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Vector3;
+import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.registry.ModSounds;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -44,6 +47,8 @@ public class TurretBlockEntity extends CompatBlockEntity {
     private static final float SYNC_THRESHOLD_DEGREES = 0.5F;
     /** Share of the remaining angle the client model turns per tick. */
     private static final float CLIENT_TURN_RATE = 0.5F;
+    /** Degrees the melee turret's top piece turns per tick while active. */
+    private static final float CLIENT_SPIN_RATE = 36.0F;
 
     /** Ticks since the last shot (1.12.2 {@code ticks}). */
     private int ticksSinceShot;
@@ -56,6 +61,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
     private float syncedYaw;
     private float syncedPitch;
     private int ticksSinceSync;
+    private boolean active;
 
     /** Ammo taken by the last {@link #beginShot()}, if the turret uses ammo. */
     @Nullable
@@ -71,6 +77,8 @@ public class TurretBlockEntity extends CompatBlockEntity {
     private float renderPitch;
     private float prevRenderYaw;
     private float prevRenderPitch;
+    private float renderSpin;
+    private float prevRenderSpin;
     private boolean renderInitialised;
 
     public TurretBlockEntity(BlockPos pos, BlockState state) {
@@ -114,24 +122,40 @@ public class TurretBlockEntity extends CompatBlockEntity {
         if (!level.isLoaded(basePos)) return;
         Optional<TurretBaseBlockEntity> base = turret.getBase();
         TurretType type = turret.getTurretType();
-        // a turret without base, or on a base of a lower tier, drops itself
-        if (base.isEmpty() || !base.get().getLogic().supportsTurret(type)) {
+        // a turret without base, on a base of a lower tier or on a face it cannot mount on drops itself
+        if (base.isEmpty() || !base.get().getLogic().supportsTurret(type) || !type.canMountOn(turret.getFace())) {
             level.destroyBlock(pos, true);
             return;
         }
         turret.ticksSinceShot++;
         turret.ticksSinceSync++;
         TurretBaseLogic logic = base.get().getLogic();
-        if (logic.isActive()) {
+        boolean engaging = false;
+        if (logic.isActive() && type == TurretType.MELEE_TURRET) {
+            engaging = turret.strikeInReach((ServerLevel) level, base.get());
+        } else if (logic.isActive()) {
             Optional<Entity> target = logic.getTarget(turret.getFace())
                     .filter(LivingTargetEntity.class::isInstance)
                     .map(t -> (Entity) ((LivingTargetEntity) t).getEntity());
             turret.updateConcealment(logic, target.isPresent());
             target.ifPresentOrElse(turret::engage, turret::forgetTarget);
+            engaging = target.isPresent();
         } else {
             turret.forgetTarget();
         }
+        if (engaging != turret.active) {
+            turret.active = engaging;
+            turret.syncToClient();
+        }
         turret.syncAimIfChanged();
+    }
+
+    /**
+     * Whether the base is active and this turret has a target (melee turret: something in reach); synced to clients
+     * (melee blades spin).
+     */
+    public boolean isActive() {
+        return active;
     }
 
     /**
@@ -178,6 +202,26 @@ public class TurretBlockEntity extends CompatBlockEntity {
             }
             case EFFECT -> beginShot().ifPresent(base -> EffectWeapons.fire(this, base, target));
         }
+    }
+
+    /**
+     * The melee turret ignores the base's target: it is active while anything it may damage is in
+     * {@link EffectWeapons#meleeArea} and strikes it once the cooldown passed.
+     *
+     * @return whether anything is in reach
+     */
+    private boolean strikeInReach(ServerLevel level, TurretBaseBlockEntity base) {
+        // only entities the base may damage count (never the owner, nor trusted players by default)
+        List<LivingEntity> victims = new ArrayList<>();
+        for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, EffectWeapons.meleeArea(this))) {
+            if (entity.isAlive() && !entity.isSpectator() && TurretDamage.canDamage(level, base.getBlockPos(), entity)) {
+                victims.add(entity);
+            }
+        }
+        updateConcealment(base.getLogic(), !victims.isEmpty());
+        if (victims.isEmpty()) return false;
+        beginShot().ifPresent(shooter -> EffectWeapons.strike(this, shooter, victims));
+        return true;
     }
 
     private void forgetTarget() {
@@ -296,12 +340,23 @@ public class TurretBlockEntity extends CompatBlockEntity {
 
     // ---- Client ----
 
-    /** Turns the rendered model smoothly towards the synced aim. */
+    /** Turns the rendered model smoothly towards the synced aim and spins it while active. */
     public static void clientTick(Level level, BlockPos pos, BlockState state, TurretBlockEntity turret) {
         turret.prevRenderYaw = turret.renderYaw;
         turret.prevRenderPitch = turret.renderPitch;
         turret.renderYaw += TurretMath.angleDifference(turret.renderYaw, turret.yaw) * CLIENT_TURN_RATE;
         turret.renderPitch += (turret.pitch - turret.renderPitch) * CLIENT_TURN_RATE;
+        // kept in [0, 360) so the interpolation never jumps
+        turret.renderSpin %= 360.0F;
+        turret.prevRenderSpin = turret.renderSpin;
+        if (turret.active) {
+            turret.renderSpin += CLIENT_SPIN_RATE;
+        }
+    }
+
+    /** Interpolated spin angle of the melee turret's top piece, in degrees. */
+    public float getRenderSpin(float partialTick) {
+        return prevRenderSpin + (renderSpin - prevRenderSpin) * partialTick;
     }
 
     /** Interpolated yaw for rendering. */
@@ -323,6 +378,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
         }
         yaw = tag.getFloat("Yaw");
         pitch = tag.getFloat("Pitch");
+        active = tag.getBoolean("Active");
         if (!renderInitialised) {
             renderYaw = prevRenderYaw = yaw;
             renderPitch = prevRenderPitch = pitch;
@@ -336,10 +392,11 @@ public class TurretBlockEntity extends CompatBlockEntity {
         tag.putInt("TicksSinceShot", ticksSinceShot);
     }
 
-    /** Clients only need the aim. */
+    /** Clients only need the aim and whether the turret is active. */
     @Override
     protected void writeClientData(CompoundTag tag, HolderLookup.Provider registries) {
         tag.putFloat("Yaw", yaw);
         tag.putFloat("Pitch", pitch);
+        tag.putBoolean("Active", active);
     }
 }

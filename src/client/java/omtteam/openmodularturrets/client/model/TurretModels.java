@@ -3,24 +3,27 @@ package omtteam.openmodularturrets.client.model;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.resources.ResourceLocation;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Model layers of the turrets. The melee turret had no model in 1.12.2 and stays invisible (user decision).
+ * Model layers of the turrets.
  */
 public final class TurretModels {
     private static final String HOLDER = "base/holder";
     private static final String HOLDER_WEAPON = "base/holder/weapon";
 
-    private record Entry(ModelLayerLocation layer, Supplier<LayerDefinition> definition, @Nullable String yawPath,
-                         @Nullable String pitchPath) {
+    private record Entry(ModelLayerLocation layer, Supplier<LayerDefinition> definition,
+                         Function<ModelPart, TurretModel> factory) {
     }
 
     private static final Map<TurretType, Entry> ENTRIES = new EnumMap<>(TurretType.class);
@@ -40,6 +43,7 @@ public final class TurretModels {
         add(TurretType.ARC_TURRET, TurretModelDefinitions::arcTurret, null, null);
         add(TurretType.RELATIVISTIC_TURRET, TurretModelDefinitions::relativisticTurret, null, null);
         add(TurretType.TELEPORTER_TURRET, TurretModelDefinitions::teleporterTurret, null, null);
+        put(TurretType.MELEE_TURRET, TurretModelDefinitions::meleeTurret, MeleeTurretModel::new);
     }
 
     private TurretModels() {
@@ -51,18 +55,23 @@ public final class TurretModels {
 
     private static void add(TurretType type, Supplier<LayerDefinition> definition, @Nullable String yawPath,
                             @Nullable String pitchPath) {
-        ENTRIES.put(type, new Entry(new ModelLayerLocation(OMT.id(type.getId()), "main"), definition, yawPath, pitchPath));
+        ResourceLocation texture = OMT.id("textures/block/turret/" + type.getId() + ".png");
+        put(type, definition, part -> new PortedTurretModel(part, texture, yawPath, pitchPath));
+    }
+
+    private static void put(TurretType type, Supplier<LayerDefinition> definition,
+                            Function<ModelPart, TurretModel> factory) {
+        ENTRIES.put(type, new Entry(new ModelLayerLocation(OMT.id(type.getId()), "main"), definition, factory));
     }
 
     public static void registerLayers() {
         ENTRIES.values().forEach(entry -> EntityModelLayerRegistry.registerModelLayer(entry.layer(), entry.definition()::get));
     }
 
-    /** Bakes all ported models. */
+    /** Bakes all turret models. */
     public static Map<TurretType, TurretModel> bake(EntityModelSet models) {
         Map<TurretType, TurretModel> baked = new EnumMap<>(TurretType.class);
-        ENTRIES.forEach((type, entry) -> baked.put(type, new PortedTurretModel(models.bakeLayer(entry.layer()),
-                OMT.id("textures/block/turret/" + type.getId() + ".png"), entry.yawPath(), entry.pitchPath())));
+        ENTRIES.forEach((type, entry) -> baked.put(type, entry.factory().apply(models.bakeLayer(entry.layer()))));
         return baked;
     }
 

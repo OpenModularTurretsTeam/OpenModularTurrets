@@ -18,9 +18,11 @@ import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 
+import java.util.List;
+
 /**
  * Turrets that act on their target without aiming (1.12.2 {@code TurretHead} subclasses using {@code updateChecks}):
- * relativistic, teleporter and melee.
+ * relativistic and teleporter act on the base's target, the melee turret strikes everything in reach.
  */
 public final class EffectWeapons {
     /** Slowness IV and weakness IV for 10 seconds. */
@@ -38,8 +40,7 @@ public final class EffectWeapons {
         switch (type) {
             case RELATIVISTIC_TURRET -> slow(target);
             case TELEPORTER_TURRET -> teleport(level, turret, target);
-            case MELEE_TURRET -> strike(level, turret, base);
-            default -> throw new IllegalArgumentException(type + " is not an effect turret");
+            default -> throw new IllegalArgumentException(type + " is not a targeted effect turret, see strike");
         }
         playSound(level, turret.getBlockPos(), TurretWeapon.of(type).launchSound());
     }
@@ -67,18 +68,26 @@ public final class EffectWeapons {
     }
 
     /**
-     * 1.12.2 {@code MeleeTurretTileEntity}: damages every damageable living entity within 3 blocks horizontally and
-     * 1 block vertically of the turret block. 1.12.2's {@code expand(3, 1, 3)} only grew towards +x/+y/+z; the box is
-     * symmetric here (user decision). No damage amp bonus, as in 1.12.2.
+     * The melee turret's reach: the turret and its base plus one block around them horizontally, 3×2×3 blocks (user
+     * decision; the melee turret only mounts on top of or below its base).
      */
-    private static void strike(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base) {
+    public static AABB meleeArea(TurretBlockEntity turret) {
+        return new AABB(turret.getBlockPos()).minmax(new AABB(turret.getBasePos())).inflate(1.0D, 0.0D, 1.0D);
+    }
+
+    /**
+     * 1.12.2 {@code MeleeTurretTileEntity}: damages every damageable living entity in reach. The melee turret needs no
+     * target from the base; it strikes whenever something is in {@link #meleeArea} (user decision; 1.12.2 struck a
+     * 7×3×7 area once the base had a target). No damage amp bonus, as in 1.12.2.
+     */
+    public static void strike(TurretBlockEntity turret, TurretBaseBlockEntity base, List<LivingEntity> victims) {
+        ServerLevel level = (ServerLevel) turret.getLevel();
         float damage = OMTConfig.get().turrets.get(TurretType.MELEE_TURRET).baseDamage;
         int looting = base.getLogic().getLootingLevel(VersionCompat.maxLootingLevel(level));
-        for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, new AABB(turret.getBlockPos()).inflate(3, 1, 3))) {
-            if (TurretDamage.canDamage(level, base.getBlockPos(), entity)) {
-                TurretDamage.hurt(level, entity, ModDamageTypes.MELEE, damage, null, base.getBlockPos(), looting);
-            }
+        for (LivingEntity entity : victims) {
+            TurretDamage.hurt(level, entity, ModDamageTypes.MELEE, damage, null, base.getBlockPos(), looting);
         }
+        playSound(level, turret.getBlockPos(), TurretWeapon.of(TurretType.MELEE_TURRET).launchSound());
     }
 
     private static void playSound(ServerLevel level, BlockPos pos, SoundEvent sound) {

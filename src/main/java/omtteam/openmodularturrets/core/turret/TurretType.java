@@ -1,5 +1,7 @@
 package omtteam.openmodularturrets.core.turret;
 
+import omtteam.openmodularturrets.core.world.Face;
+
 import java.util.Optional;
 
 /**
@@ -59,6 +61,14 @@ public enum TurretType {
      */
     public int[] getDefaultPriorities() {
         return priorities.clone();
+    }
+
+    /**
+     * Whether this turret may sit on the given face of its base. The melee turret's blades spin flat around the face
+     * normal, so it only mounts on top of or below a base (user decision); all other turrets mount on any face.
+     */
+    public boolean canMountOn(Face face) {
+        return this != MELEE_TURRET || face == Face.UP || face == Face.DOWN;
     }
 
     public static Optional<TurretType> byId(String id) {

@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.core.turret;
 
+import omtteam.openmodularturrets.core.world.Face;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumSet;
@@ -28,6 +29,15 @@ class TurretTypeTest {
                 TurretType.TELEPORTER_TURRET, TurretType.ARC_TURRET, TurretType.LASER_TURRET, TurretType.PLASMA_TURRET);
         for (TurretType type : TurretType.values()) {
             assertEquals(energyOnly.contains(type), type.getAmmo().isEmpty(), type.name());
+        }
+    }
+
+    @Test
+    void meleeTurretMountsOnlyOnTopOrBottom() {
+        for (Face face : Face.values()) {
+            boolean vertical = face == Face.UP || face == Face.DOWN;
+            assertEquals(vertical, TurretType.MELEE_TURRET.canMountOn(face), face.name());
+            assertTrue(TurretType.MACHINE_GUN_TURRET.canMountOn(face), face.name());
         }
     }
 

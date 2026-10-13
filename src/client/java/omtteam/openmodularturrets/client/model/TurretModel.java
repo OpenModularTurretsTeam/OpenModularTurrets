@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.client.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -24,6 +25,17 @@ public abstract class TurretModel {
      * {@link omtteam.openmodularturrets.core.turret.TurretMath}).
      */
     public abstract void setAim(float yawDegrees, float pitchDegrees);
+
+    /**
+     * Sets whether the turret is active (its base is active and it has a target) and the current spin angle in
+     * degrees. Only the melee turret uses this.
+     */
+    public void setActivity(boolean active, float spinDegrees) {
+    }
+
+    public RenderType getRenderType() {
+        return RenderType.entityCutout(getTexture());
+    }
 
     public void render(PoseStack poseStack, VertexConsumer consumer, int packedLight, int packedOverlay) {
         root.render(poseStack, consumer, packedLight, packedOverlay);

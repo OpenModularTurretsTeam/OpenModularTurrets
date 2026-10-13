@@ -27,6 +27,7 @@ import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.turret.TurretType;
+import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
 //? if >=1.21 {
@@ -119,7 +120,8 @@ public class TurretBlock extends BaseEntityBlock {
     /**
      * 1.12.2 {@code canPlaceBlockAt}: there must be a base next to the turret with a free turret slot for this type.
      * The clicked base is preferred; otherwise the first neighbouring base in {@link Direction} order is used.
-     * Disabled turrets and turrets whose tier the base cannot hold cannot be placed.
+     * Disabled turrets, turrets whose tier the base cannot hold and turrets on a face they cannot mount on
+     * ({@link TurretType#canMountOn}) cannot be placed.
      */
     @Nullable
     @Override
@@ -128,19 +130,21 @@ public class TurretBlock extends BaseEntityBlock {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         Direction clicked = context.getClickedFace();
-        if (canAttachTo(level, pos.relative(clicked.getOpposite()))) {
+        if (canAttachTo(level, pos, clicked)) {
             return defaultBlockState().setValue(FACING, clicked);
         }
         for (Direction direction : Direction.values()) {
-            if (canAttachTo(level, pos.relative(direction))) {
+            if (canAttachTo(level, pos, direction.getOpposite())) {
                 return defaultBlockState().setValue(FACING, direction.getOpposite());
             }
         }
         return null;
     }
 
-    private boolean canAttachTo(Level level, BlockPos basePos) {
-        if (!(level.getBlockEntity(basePos) instanceof TurretBaseBlockEntity base)) return false;
+    /** @param facing direction from the base to the turret */
+    private boolean canAttachTo(Level level, BlockPos pos, Direction facing) {
+        if (!turretType.canMountOn(Face.valueOf(facing.name()))) return false;
+        if (!(level.getBlockEntity(pos.relative(facing.getOpposite())) instanceof TurretBaseBlockEntity base)) return false;
         TurretBaseLogic logic = base.getLogic();
         return logic.supportsTurret(turretType) && logic.getRemainingTurretSlots(turretType) > 0;
     }

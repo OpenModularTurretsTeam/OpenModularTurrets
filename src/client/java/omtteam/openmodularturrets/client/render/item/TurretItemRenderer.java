@@ -45,6 +45,7 @@ public class TurretItemRenderer implements BuiltinItemRendererRegistry.DynamicIt
         TurretModel model = models.get(type);
         if (model == null) return;
         model.setAim(0, 0);
+        model.setActivity(false, 0);
         poseStack.pushPose();
         poseStack.translate(0.5D, 0.5D, 0.5D);
         TurretRenderer.renderModel(model, poseStack, buffers, packedLight, packedOverlay);

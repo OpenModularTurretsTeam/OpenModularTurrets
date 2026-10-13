@@ -2,7 +2,6 @@ package omtteam.openmodularturrets.client.render.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
@@ -21,7 +20,6 @@ import java.util.Map;
 /**
  * Turret renderer (1.12.2 {@code AbstractTurretRenderer}): orients the model on its mounting face with the frame
  * from {@link TurretMath}, then applies the interpolated yaw and pitch. Concealed turrets are not drawn.
- * Turrets without a ported model render nothing yet.
  */
 public class TurretRenderer implements BlockEntityRenderer<TurretBlockEntity> {
     private final Map<TurretType, TurretModel> models;
@@ -37,6 +35,7 @@ public class TurretRenderer implements BlockEntityRenderer<TurretBlockEntity> {
         TurretModel model = models.get(turret.getTurretType());
         if (model == null) return;
         model.setAim(turret.getRenderYaw(partialTick), turret.getRenderPitch(partialTick));
+        model.setActivity(turret.isActive(), turret.getRenderSpin(partialTick));
         poseStack.pushPose();
         poseStack.translate(0.5D, 0.5D, 0.5D);
         poseStack.mulPose(rotationFor(turret.getFace()));
@@ -53,7 +52,7 @@ public class TurretRenderer implements BlockEntityRenderer<TurretBlockEntity> {
         poseStack.pushPose();
         poseStack.translate(0.0D, 1.0D, 0.0D);
         poseStack.scale(1.0F, -1.0F, -1.0F);
-        model.render(poseStack, buffers.getBuffer(RenderType.entityCutout(model.getTexture())), packedLight, packedOverlay);
+        model.render(poseStack, buffers.getBuffer(model.getRenderType()), packedLight, packedOverlay);
         poseStack.popPose();
     }
 

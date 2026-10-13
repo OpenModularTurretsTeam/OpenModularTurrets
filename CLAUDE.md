@@ -326,7 +326,7 @@ Update this checklist as work progresses.
 - [x] Networking for settings and trust changes (server-validated)
 - [x] Targeting logic (core `TargetSelector`, per-turret targets in `TurretBaseLogic`; aiming/yaw-pitch limits come with the turret framework)
 - [x] Turret block framework (6-face mounting, `TurretMath`, aiming sync)
-- [x] Turret renderers (rotating heads on any face) — all turret models; melee stays invisible (no model); ray/arc beams
+- [x] Turret renderers (rotating heads on any face) — all turret models; melee turret has spinning blades (top/bottom mount only); ray/arc beams
 - [x] Individual turrets + projectiles (all 14 turrets: projectile, ray and effect weapons; projectile visuals and particles)
 - [x] Ammo items (items, tooltips, recipes)
 - [x] Upgrades and addons (items, tooltips, recipes, base effects, fake drops loot rule)

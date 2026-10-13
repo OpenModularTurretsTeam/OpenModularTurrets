@@ -256,6 +256,25 @@ public final class TurretModelDefinitions {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
+    /**
+     * Melee turret (no model in 1.12.2), laid out after its 128×128 textures: base plate and shaft stay still, the
+     * {@code top} part (hub, cap and a flat 32×32 blade cross through the cap's middle) spins.
+     */
+    public static LayerDefinition meleeTurret() {
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition root = mesh.getRoot();
+        PartDefinition base = root.addOrReplaceChild("base", CubeListBuilder.create()
+                .texOffs(0, 32).addBox(-6.0F, 7.0F, -6.0F, 12, 1, 12)
+                .texOffs(0, 17).addBox(-2.0F, 4.0F, -2.0F, 4, 3, 4)
+                , PartPose.offset(0.0F, 16.0F, 0.0F));
+        PartDefinition top = base.addOrReplaceChild("top", CubeListBuilder.create()
+                .texOffs(0, 10).addBox(-3.0F, 3.0F, -3.0F, 6, 1, 6)
+                .texOffs(0, 0).addBox(-4.0F, 1.0F, -4.0F, 8, 2, 8)
+                .texOffs(0, 0).addBox(-16.0F, 2.0F, -16.0F, 32, 0, 32)
+                , PartPose.offset(0.0F, 0.0F, 0.0F));
+        return LayerDefinition.create(mesh, 128, 128);
+    }
+
     /** 1.12.2 {@code ModelArcTurret}. */
     public static LayerDefinition arcTurret() {
         MeshDefinition mesh = new MeshDefinition();
