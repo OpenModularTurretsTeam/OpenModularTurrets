@@ -3,6 +3,28 @@ plugins {
     id("net.fabricmc.fabric-loom-remap") version "1.18.4" apply false
     // Uploads to CurseForge / Modrinth (build-time only)
     id("me.modmuss50.mod-publish-plugin") version "2.2.1" apply false
+    // Formatting checks (./gradlew spotlessCheck / spotlessApply)
+    id("com.diffplug.spotless") version "8.10.4"
+}
+
+// Deliberately lightweight: a full formatter (google-java-format etc.) would mangle the Stonecutter
+// conditional comments (//? if ... and the /* ... *///?} blocks holding the inactive branch).
+// For the same reason imports are not reordered (conditional imports sit between //? lines).
+spotless {
+    java {
+        target("src/**/*.java", "versions/*/src/**/*.java")
+        targetExclude("versions/*/src/main/generated/**")
+        leadingTabsToSpaces(4)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    format("misc") {
+        target("*.md", "*.gradle.kts", "versions/*/*.gradle.kts", ".gitignore", "src/**/*.json", "src/**/*.properties")
+        targetExclude("CHANGELOG.md")
+        leadingTabsToSpaces(2)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }
 
 stonecutter active "1.21.1"

@@ -239,7 +239,7 @@ omtteam.openmodularturrets.client
   - cooldown
   - firing visuals and sounds
   - spawning projectiles
-  
+
   They request ammo and energy from the base.
 
 ### Aiming on arbitrary faces
