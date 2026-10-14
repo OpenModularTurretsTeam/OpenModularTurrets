@@ -19,6 +19,7 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
+import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.network.RayPacket;
@@ -94,10 +95,7 @@ public final class RayWeapons {
         double accuracy = logic.getAccuracyDeviation(type);
         Vec3 aim = new Vec3(target.getX(), target.getEyeY(), target.getZ());
         for (int i = 0; i <= logic.getScattershotCount(); i++) {
-            // 1.12.2 deviationModifier: small targets and far targets scatter more
-            double deviationModifier = 10D * (target.getBbHeight() < 0.5 ? 1.5D : 1D)
-                    * (aim.distanceTo(origin) * 0.2D / logic.getRange(type) + 0.3D);
-            double scale = 0.003D * deviationModifier * accuracy;
+            double scale = ProjectileMath.raySpread(accuracy, target.getBbHeight(), aim.distanceTo(origin), logic.getRange(type));
             Vec3 end = aim.add(level.random.nextGaussian() * scale, level.random.nextGaussian() * scale,
                     level.random.nextGaussian() * scale);
             Vec3 start = origin.add(end.subtract(origin).normalize().scale(0.8D));

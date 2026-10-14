@@ -21,7 +21,9 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
+import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
+import omtteam.openmodularturrets.core.world.Vector3;
 import org.jetbrains.annotations.Nullable;
 //? if >=1.21 {
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -34,9 +36,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
  * Projectiles are never saved.
  */
 public abstract class TurretProjectile extends Projectile {
-    /** 1.12.2 {@code onUpdate}: projectiles live at most 40 ticks. */
-    private static final int MAX_AGE = 40;
-
     @Nullable
     private BlockPos basePos;
     private int ampLevel;
@@ -77,7 +76,7 @@ public abstract class TurretProjectile extends Projectile {
     @Override
     public void tick() {
         super.tick();
-        if (!level().isClientSide() && tickCount > MAX_AGE) {
+        if (!level().isClientSide() && tickCount > ProjectileMath.MAX_AGE) {
             discard();
             return;
         }
@@ -107,7 +106,6 @@ public abstract class TurretProjectile extends Projectile {
         motion = getDeltaMovement();
 
         updateRotation();
-        double drag = isInWater() ? 0.8D : 0.99D;
         if (isInWater() && level().isClientSide()) {
             // Four bubbles per tick behind the projectile while in water
             for (int i = 0; i < 4; i++) {
@@ -115,11 +113,9 @@ public abstract class TurretProjectile extends Projectile {
                         getZ() - motion.z * 0.25D, motion.x, motion.y, motion.z);
             }
         }
-        motion = motion.scale(drag);
-        if (!isNoGravity()) {
-            motion = motion.subtract(0, getDropPerTick(), 0);
-        }
-        setDeltaMovement(motion);
+        Vector3 next = ProjectileMath.nextMotion(new Vector3(motion.x, motion.y, motion.z), isInWater(), isNoGravity(),
+                getDropPerTick());
+        setDeltaMovement(next.x(), next.y(), next.z());
     }
 
     // ---- Damage helpers ----
@@ -127,7 +123,8 @@ public abstract class TurretProjectile extends Projectile {
     /** 1.12.2 {@code damage += (int) health * (damageAmp * ampLevel)}: the damage amp addon adds a share of the health. */
     protected int damageWithAmp(int damage, Entity target) {
         if (ampLevel > 0 && target instanceof LivingEntity living) {
-            damage += (int) ((int) living.getHealth() * (OMTConfig.get().turrets.get(getTurretType()).damageAmp * ampLevel));
+            return ProjectileMath.damageWithAmp(damage, ampLevel, OMTConfig.get().turrets.get(getTurretType()).damageAmp,
+                    living.getHealth());
         }
         return damage;
     }

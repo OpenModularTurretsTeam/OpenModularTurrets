@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 
@@ -55,8 +56,9 @@ public class PlasmaProjectile extends TurretProjectile {
         for (LivingEntity target : level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(RADIUS))) {
             if (canDamage(target)) {
                 int damage = damageWithAmp(baseDamage(), target);
-                hurt(target, ModDamageTypes.PLASMA, damage * 0.5F);
-                hurt(target, ModDamageTypes.PLASMA_ARMOR_BYPASS, damage * 0.5F);
+                ProjectileMath.Split split = ProjectileMath.plasmaSplit(damage);
+                hurt(target, ModDamageTypes.PLASMA, split.normal());
+                hurt(target, ModDamageTypes.PLASMA_ARMOR_BYPASS, split.armorBypass());
             }
         }
         discard();

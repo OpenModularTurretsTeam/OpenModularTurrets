@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 import omtteam.openmodularturrets.registry.ModItems;
@@ -60,8 +61,9 @@ public class GrenadeProjectile extends TurretProjectile implements ItemSupplier 
         for (LivingEntity target : level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(RADIUS))) {
             if (canDamage(target)) {
                 int damage = damageWithAmp(baseDamage(), target);
-                hurt(target, ModDamageTypes.GRENADE, damage * 0.9F);
-                hurt(target, ModDamageTypes.GRENADE_ARMOR_BYPASS, damage * 0.1F);
+                ProjectileMath.Split split = ProjectileMath.grenadeSplit(damage);
+                hurt(target, ModDamageTypes.GRENADE, split.normal());
+                hurt(target, ModDamageTypes.GRENADE_ARMOR_BYPASS, split.armorBypass());
             }
         }
         discard();

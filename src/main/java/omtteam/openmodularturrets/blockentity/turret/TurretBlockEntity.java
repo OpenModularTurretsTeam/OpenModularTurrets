@@ -19,6 +19,7 @@ import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.AmmoDraw;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
+import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.core.turret.TurretMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
@@ -314,7 +315,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
         if (base.isEmpty()) return false;
         TurretBaseLogic logic = base.get().getLogic();
         TurretType type = getTurretType();
-        float inaccuracy = (float) (logic.getAccuracyDeviation(type) / 20D);
+        float inaccuracy = ProjectileMath.inaccuracy(logic.getAccuracyDeviation(type));
         Vec3 origin = Vec3.atCenterOf(worldPosition);
         for (int i = 0; i <= logic.getScattershotCount(); i++) {
             TurretProjectile projectile = weapon.factory().create(serverLevel, lastAmmo, target);
