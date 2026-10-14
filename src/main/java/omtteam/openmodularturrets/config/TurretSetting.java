@@ -4,22 +4,33 @@ package omtteam.openmodularturrets.config;
  * Per-turret-type settings. Fields and defaults ported from 1.12.2 {@code handler/config/TurretSetting}.
  */
 public class TurretSetting {
+    @Comment("If this turret type can be crafted and placed.")
     public boolean enabled;
+    @Comment("Base range in blocks, before range upgrades.") @Range(min = 1, max = 100)
     public int baseRange;
-    /** Ticks between shots (shots per second = 20 / baseFireRate). */
+    @Comment("Ticks between shots (shots per second = 20 / value). Lower is faster.") @Range(min = 1)
     public int baseFireRate;
+    @Comment("Damage per hit before the damage amp addon.") @Range(min = 0)
     public int baseDamage;
+    @Comment("Energy used per shot.") @Range(min = 0)
     public int powerUsage;
-    /** Inaccuracy in percent; displayed accuracy is {@code 100 - deviation}. */
+    @Comment("Inaccuracy in percent (accuracy = 100 - value). 0 is perfectly accurate.") @Range(min = 0, max = 100)
     public double baseAccuracyDeviation;
-    /** Maximum number of turrets of this type per base. */
+    @Comment("Maximum number of turrets of this type per base.") @Range(min = 1, max = 6)
     public int maxSimultaneous;
+    @Comment("Share of the target's health added as damage per damage amp addon level.") @Range(min = 0, max = 1)
     public double damageAmp;
+    @Comment("Fire rate bonus per fire rate upgrade.") @Range(min = 0, max = 1)
     public double fireRateUpgrade;
+    @Comment("Range in blocks added per range upgrade.") @Range(min = 0, max = 10)
     public int rangeUpgrade;
+    @Comment("Accuracy bonus per accuracy upgrade.") @Range(min = 0, max = 1)
     public double accuracyUpgrade;
+    @Comment("Energy saving per efficiency upgrade.") @Range(min = 0, max = 1)
     public double efficiencyUpgrade;
+    @Comment("Chance that the recycler addon saves the ammo of a shot.") @Range(min = 0, max = 1)
     public double recyclerNegateChance;
+    @Comment("Chance that the recycler addon returns extra ammo.") @Range(min = 0, max = 1)
     public double recyclerAddChance;
 
     public TurretSetting() {
@@ -43,25 +54,5 @@ public class TurretSetting {
         this.efficiencyUpgrade = efficiencyUpgrade;
         this.recyclerNegateChance = recyclerNegateChance;
         this.recyclerAddChance = recyclerAddChance;
-    }
-
-    /**
-     * Ranges from the 1.12.2 {@code @Config.Range*} annotations, except {@code baseFireRate} (old max 20, but most
-     * defaults exceed it) and {@code baseAccuracyDeviation} (old max 1, but it is used as a percentage).
-     */
-    void validate(ConfigValidator v, String path) {
-        baseRange = v.range(path + ".baseRange", baseRange, 1, 100);
-        baseFireRate = v.min(path + ".baseFireRate", baseFireRate, 1);
-        baseDamage = v.min(path + ".baseDamage", baseDamage, 0);
-        powerUsage = v.min(path + ".powerUsage", powerUsage, 0);
-        baseAccuracyDeviation = v.range(path + ".baseAccuracyDeviation", baseAccuracyDeviation, 0D, 100D);
-        maxSimultaneous = v.range(path + ".maxSimultaneous", maxSimultaneous, 1, 6);
-        damageAmp = v.range(path + ".damageAmp", damageAmp, 0D, 1D);
-        fireRateUpgrade = v.range(path + ".fireRateUpgrade", fireRateUpgrade, 0D, 1D);
-        rangeUpgrade = v.range(path + ".rangeUpgrade", rangeUpgrade, 0, 10);
-        accuracyUpgrade = v.range(path + ".accuracyUpgrade", accuracyUpgrade, 0D, 1D);
-        efficiencyUpgrade = v.range(path + ".efficiencyUpgrade", efficiencyUpgrade, 0D, 1D);
-        recyclerNegateChance = v.range(path + ".recyclerNegateChance", recyclerNegateChance, 0D, 1D);
-        recyclerAddChance = v.range(path + ".recyclerAddChance", recyclerAddChance, 0D, 1D);
     }
 }

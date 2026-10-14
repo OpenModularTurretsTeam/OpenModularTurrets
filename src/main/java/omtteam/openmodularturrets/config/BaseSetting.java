@@ -4,10 +4,15 @@ package omtteam.openmodularturrets.config;
  * Per-tier turret base settings. Fields and defaults ported from 1.12.2 {@code handler/config/BaseSetting}.
  */
 public class BaseSetting {
+    @Comment("Energy capacity of the base.") @Range(min = 1)
     public int baseMaxCharge;
+    @Comment("Maximum energy the base accepts per tick.") @Range(min = 1)
     public int baseMaxIo;
+    @Comment("Number of turrets that can be attached to the base.") @Range(min = 1)
     public int baseMaxTurrets;
+    @Comment("Blast resistance (only used if bases.baseBreakable is true).") @Range(min = 1)
     public int baseBlastResistance;
+    @Comment("Hardness (only used if bases.baseBreakable is true).") @Range(min = 1)
     public int baseHardness;
 
     public BaseSetting() {
@@ -19,13 +24,5 @@ public class BaseSetting {
         this.baseMaxTurrets = baseMaxTurrets;
         this.baseBlastResistance = baseBlastResistance;
         this.baseHardness = baseHardness;
-    }
-
-    void validate(ConfigValidator v, String path) {
-        baseMaxCharge = v.min(path + ".baseMaxCharge", baseMaxCharge, 1);
-        baseMaxIo = v.min(path + ".baseMaxIo", baseMaxIo, 1);
-        baseMaxTurrets = v.min(path + ".baseMaxTurrets", baseMaxTurrets, 1);
-        baseBlastResistance = v.min(path + ".baseBlastResistance", baseBlastResistance, 1);
-        baseHardness = v.min(path + ".baseHardness", baseHardness, 1);
     }
 }

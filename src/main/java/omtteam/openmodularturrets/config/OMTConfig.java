@@ -24,8 +24,10 @@ import java.util.Map;
  * Loads, validates and saves {@code config/openmodularturrets.json}, and syncs it from the server to clients.
  * <p>
  * Missing keys are filled in with defaults, unknown keys are dropped and out-of-range values are clamped; the file
- * is rewritten whenever that happens. The file is read leniently, so {@code //} comments are allowed (but are lost
- * when the file gets rewritten).
+ * is rewritten whenever that happens. The file is JSON with {@code //} comments (read leniently): every key is
+ * documented with its description, range and default, see {@link ConfigWriter}. The file is also rewritten when it
+ * differs from what the mod would write, which refreshes the comments after an update; comments added by users are
+ * not kept.
  */
 public final class OMTConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
@@ -75,7 +77,7 @@ public final class OMTConfig {
             }
             ParseResult result = parse(json);
             data = result.data();
-            changed = result.changed();
+            changed = result.changed() || !commented(data).equals(readText(path));
         } else {
             data = new ConfigData();
             changed = true;
@@ -83,12 +85,25 @@ public final class OMTConfig {
         if (changed) {
             try {
                 Files.createDirectories(path.getParent());
-                Files.writeString(path, GSON.toJson(data));
+                Files.writeString(path, commented(data));
             } catch (IOException e) {
                 OMT.LOGGER.error("Could not write {}", path, e);
             }
         }
         local = active = data;
+    }
+
+    /** The file contents for {@code data}: JSON with the comments from {@link Comment} and {@link Range}. */
+    private static String commented(ConfigData data) {
+        return ConfigWriter.write(data, new ConfigData());
+    }
+
+    private static String readText(Path path) {
+        try {
+            return Files.readString(path);
+        } catch (IOException e) {
+            return "";
+        }
     }
 
     /**

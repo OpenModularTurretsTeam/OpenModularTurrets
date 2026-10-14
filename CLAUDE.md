@@ -280,6 +280,7 @@ omtteam.openmodularturrets.client
 
 - No config library. Write a minimal Gson-based JSON config at `config/openmodularturrets.json`.
 - Load it on init, write defaults if missing, and validate ranges.
+- Fields are documented with `@Comment` and range-checked with `@Range` (package `config`). `ConfigWriter` writes them as `//` comments (JSONC) above each key, together with the default, and `ConfigRanges` clamps on load. Add both annotations to every new config field.
 - Server-authoritative values that clients need (e.g. for tooltips) are synced on join.
 
 ---
