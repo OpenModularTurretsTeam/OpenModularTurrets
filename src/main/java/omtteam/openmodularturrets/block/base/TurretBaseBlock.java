@@ -32,6 +32,7 @@ import omtteam.openmodularturrets.network.BasePacketHandler;
 import omtteam.openmodularturrets.network.PacketValidation;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.security.PlayerAdapter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 //? if <1.21 {
 /*import net.minecraft.world.InteractionHand;
@@ -83,7 +84,7 @@ public class TurretBaseBlock extends BaseEntityBlock {
 
     //? if >=1.21 {
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
     //?}
@@ -93,7 +94,7 @@ public class TurretBaseBlock extends BaseEntityBlock {
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state) {
+    public @NotNull RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
@@ -155,8 +156,8 @@ public class TurretBaseBlock extends BaseEntityBlock {
 
     //? if >=1.21 {
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
-                                               BlockHitResult hit) {
+    protected @NotNull InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
+                                                        BlockHitResult hit) {
         return onUse(level, pos, player);
     }
     //?} else {

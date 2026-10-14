@@ -9,6 +9,7 @@ import omtteam.openmodularturrets.core.base.BaseTier;
 import omtteam.openmodularturrets.core.item.UpgradeType;
 import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.UpgradeItem;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The 13 slots of a turret base (1.12.2 {@code TurretBase.setupInventory} / {@code setupSlotMap}):
@@ -102,19 +103,19 @@ public class TurretBaseInventory implements Container {
     }
 
     @Override
-    public ItemStack getItem(int slot) {
+    public @NotNull ItemStack getItem(int slot) {
         return items.get(slot);
     }
 
     @Override
-    public ItemStack removeItem(int slot, int amount) {
+    public @NotNull ItemStack removeItem(int slot, int amount) {
         ItemStack result = ContainerHelper.removeItem(items, slot, amount);
         if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int slot) {
+    public @NotNull ItemStack removeItemNoUpdate(int slot) {
         return ContainerHelper.takeItem(items, slot);
     }
 

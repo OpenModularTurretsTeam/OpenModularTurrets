@@ -29,6 +29,7 @@ import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 //? if >=1.21 {
 import com.mojang.serialization.Codec;
@@ -80,7 +81,7 @@ public class TurretBlock extends BaseEntityBlock {
 
     //? if >=1.21 {
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
     //?}
@@ -95,13 +96,13 @@ public class TurretBlock extends BaseEntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return state.getValue(CONCEALED) ? Shapes.empty() : SHAPE;
     }
 
     /** Drawn only by the block entity renderer (1.12.2: invisible block + TESR). */
     @Override
-    public RenderShape getRenderShape(BlockState state) {
+    public @NotNull RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 

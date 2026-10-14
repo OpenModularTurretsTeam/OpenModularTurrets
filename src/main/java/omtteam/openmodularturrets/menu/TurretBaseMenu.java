@@ -18,6 +18,7 @@ import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.UpgradeItem;
 import omtteam.openmodularturrets.registry.ModMenus;
 import omtteam.openmodularturrets.security.PlayerAdapter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -110,7 +111,7 @@ public class TurretBaseMenu extends AbstractContainerMenu {
      * base slots move to the player inventory.
      */
     @Override
-    public ItemStack quickMoveStack(Player player, int index) {
+    public @NotNull ItemStack quickMoveStack(Player player, int index) {
         Slot slot = slots.get(index);
         if (!slot.hasItem()) return ItemStack.EMPTY;
         ItemStack stack = slot.getItem();

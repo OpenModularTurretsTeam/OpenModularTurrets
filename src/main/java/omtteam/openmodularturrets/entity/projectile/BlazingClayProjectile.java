@@ -12,6 +12,7 @@ import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 import omtteam.openmodularturrets.registry.ModItems;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Incendiary turret ammo
@@ -26,7 +27,7 @@ public class BlazingClayProjectile extends TurretProjectile implements ItemSuppl
 
     /** Shown as the ammo item (1.12.2 {@code RenderSnowball}). */
     @Override
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         return new ItemStack(ModItems.AMMO_BLAZING_CLAY);
     }
 

@@ -13,6 +13,7 @@ import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 import omtteam.openmodularturrets.registry.ModItems;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Grenade: stops on blocks, bounces up off entities and explodes after some time,
@@ -30,7 +31,7 @@ public class GrenadeProjectile extends TurretProjectile implements ItemSupplier 
 
     /** Shown as the ammo item  */
     @Override
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         return new ItemStack(ModItems.AMMO_GRENADE);
     }
 

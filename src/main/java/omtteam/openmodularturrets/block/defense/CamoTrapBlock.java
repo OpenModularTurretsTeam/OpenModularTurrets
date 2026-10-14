@@ -27,6 +27,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.blockentity.defense.CamoTrapBlockEntity;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 //? if >=1.21 {
 import com.mojang.serialization.MapCodec;
@@ -65,14 +66,14 @@ public class CamoTrapBlock extends BaseEntityBlock implements InteractiveBlock {
 
     //? if >=1.21 {
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
     //?}
 
     /** Drawn by the block entity renderer (camouflage or the trap's own model). */
     @Override
-    public RenderShape getRenderShape(BlockState state) {
+    public @NotNull RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 
@@ -91,7 +92,7 @@ public class CamoTrapBlock extends BaseEntityBlock implements InteractiveBlock {
 
     /** OMPD {@code addCollisionBoxToList}: solid only for the owner. */
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         if (context instanceof EntityCollisionContext entityContext && entityContext.getEntity() instanceof Player player
                 && level.getBlockEntity(pos) instanceof CamoTrapBlockEntity trap && trap.isOwner(player)) {
             return Shapes.block();
@@ -111,7 +112,7 @@ public class CamoTrapBlock extends BaseEntityBlock implements InteractiveBlock {
     //? if >=1.21 {
     /** OMPD {@code getPickBlock}: picking gives the camouflage, so the trap is not revealed. */
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public @NotNull ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
         return cloneItem(level, pos, state);
     }
     //?} else {

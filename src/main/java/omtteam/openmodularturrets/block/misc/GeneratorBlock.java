@@ -33,6 +33,7 @@ import omtteam.openmodularturrets.blockentity.misc.GeneratorBlockEntity;
 import omtteam.openmodularturrets.compat.MenuCompat;
 import omtteam.openmodularturrets.menu.GeneratorMenu;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 //? if >=1.21 {
 import com.mojang.serialization.MapCodec;
@@ -63,7 +64,7 @@ public class GeneratorBlock extends BaseEntityBlock implements InteractiveBlock 
 
     //? if >=1.21 {
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
     //?}
@@ -79,7 +80,7 @@ public class GeneratorBlock extends BaseEntityBlock implements InteractiveBlock 
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state) {
+    public @NotNull RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 

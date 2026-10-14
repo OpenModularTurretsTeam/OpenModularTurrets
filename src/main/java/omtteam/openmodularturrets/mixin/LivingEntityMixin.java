@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,6 +24,7 @@ public abstract class LivingEntityMixin {
     @ModifyExpressionValue(method = "dropAllDeathLoot",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;shouldDropLoot()Z"))
     private boolean openmodularturrets$turretLootRule(boolean original, @Local(argsOnly = true) DamageSource source) {
+        //noinspection ConstantValue
         return original && TurretLoot.mayDropLoot((LivingEntity) (Object) this, source);
     }
 

@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
+import org.jetbrains.annotations.NotNull;
 //? if <1.21 {
 /*import net.minecraft.network.FriendlyByteBuf;
 *///?}
@@ -56,7 +57,7 @@ public final class MenuCompat {
             }
 
             @Override
-            public Component getDisplayName() {
+            public @NotNull Component getDisplayName() {
                 return title;
             }
 

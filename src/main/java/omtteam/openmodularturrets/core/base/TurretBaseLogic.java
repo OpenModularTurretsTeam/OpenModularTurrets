@@ -186,7 +186,7 @@ public class TurretBaseLogic {
     public Map<Face, TurretType> getTurrets() {
         Map<Face, TurretType> turrets = new EnumMap<>(Face.class);
         neighbours.forEach((face, neighbour) -> {
-            if (neighbour instanceof Neighbour.Turret turret) turrets.put(face, turret.type());
+            if (neighbour instanceof Neighbour.Turret(TurretType type)) turrets.put(face, type);
         });
         return turrets;
     }

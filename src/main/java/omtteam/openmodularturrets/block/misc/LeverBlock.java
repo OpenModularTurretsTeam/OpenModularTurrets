@@ -28,6 +28,7 @@ import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.misc.LeverBlockEntity;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 //? if >=1.21 {
 import com.mojang.serialization.MapCodec;
@@ -62,7 +63,7 @@ public class LeverBlock extends BaseEntityBlock implements InteractiveBlock {
 
     //? if >=1.21 {
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
     //?}
@@ -73,12 +74,12 @@ public class LeverBlock extends BaseEntityBlock implements InteractiveBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state) {
+    public @NotNull RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 

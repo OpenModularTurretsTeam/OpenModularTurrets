@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 //? if >=1.21 {
 import com.mojang.serialization.MapCodec;
@@ -36,7 +37,7 @@ public class HardenedBlock extends BaseEntityBlock implements InteractiveBlock {
 
     //? if >=1.21 {
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
     //?}
@@ -46,7 +47,7 @@ public class HardenedBlock extends BaseEntityBlock implements InteractiveBlock {
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state) {
+    public @NotNull RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 

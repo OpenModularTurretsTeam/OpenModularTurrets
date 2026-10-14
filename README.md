@@ -5,6 +5,7 @@ Repo for [OpenModularTurrets](https://minecraft.curseforge.com/projects/openmodu
 Build turret bases, mount up to four turrets on them and keep your home safe from mobs and unwanted visitors, whether you're online or offline. Open Modular Turrets has long been a popular choice in PvP modpacks, and it is now available on Fabric for Minecraft 1.20.1 and 1.21.1.
 
 ## Forge/Neoforge?
+
 You can use the OMT fabric mod on Neoforge/Forge using Sinytra Connector, Connector Extras and ForgifiedFabricApi. Find them here:  
 https://www.curseforge.com/minecraft/mc-mods/sinytra-connector  
 https://www.curseforge.com/minecraft/mc-mods/connector-extras  
@@ -27,7 +28,7 @@ https://www.curseforge.com/minecraft/mc-mods/forgified-fabric-api
   For Neoforge/Forge:
 - (Neo)forge + Sinytra Connector + Connector Extras + ForgifiedFabricAPI
 
-## Alpha
+## Pre-Release
 
 This is an alpha release of the Fabric port. Expect bugs, and please report them. Camouflage for turret bases and the camouflage trap is not implemented yet.
 
