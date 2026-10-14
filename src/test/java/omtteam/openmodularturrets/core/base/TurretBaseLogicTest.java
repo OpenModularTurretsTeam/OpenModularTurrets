@@ -210,6 +210,46 @@ class TurretBaseLogicTest {
     }
 
     @Nested
+    class CreativeUpgrade {
+        @Test
+        void removesAmmoUsage() {
+            TurretBaseLogic logic = base(5);
+            upgrade(0, UpgradeType.CREATIVE, 1);
+            assertEquals(Optional.empty(), logic.getRequiredAmmo(TurretType.MACHINE_GUN_TURRET));
+            assertEquals(Integer.MAX_VALUE, logic.getAmmoLevel(TurretType.MACHINE_GUN_TURRET));
+        }
+
+        @Test
+        void withoutItDoesNotChangeAmmo() {
+            TurretBaseLogic logic = base(5);
+            assertEquals(Optional.of(AmmoType.BULLET), logic.getRequiredAmmo(TurretType.MACHINE_GUN_TURRET));
+        }
+
+        @Test
+        void fillsEnergyOnTick() {
+            TurretBaseLogic logic = base(5);
+            logic.tick(1); // sets the tier's capacity
+            tick(logic, 5);
+            assertEquals(0, logic.getEnergy().getAmount());
+            upgrade(0, UpgradeType.CREATIVE, 1);
+            logic.tick(6);
+            assertTrue(logic.getEnergy().getCapacity() > 0);
+            assertEquals(logic.getEnergy().getCapacity(), logic.getEnergy().getAmount());
+        }
+
+        @Test
+        void refillsAfterConsumption() {
+            TurretBaseLogic logic = base(5);
+            tick(logic, 5);
+            upgrade(0, UpgradeType.CREATIVE, 1);
+            logic.tick(6);
+            logic.getEnergy().consume(1000);
+            logic.tick(7);
+            assertEquals(logic.getEnergy().getCapacity(), logic.getEnergy().getAmount());
+        }
+    }
+
+    @Nested
     class Upgrades {
         @Test
         void rangeUpgrades() {

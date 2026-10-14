@@ -8,7 +8,9 @@ public enum UpgradeType {
     EFFICIENCY("efficiency"),
     FIRE_RATE("fire_rate"),
     RANGE("range"),
-    SCATTERSHOT("scatter_shot");
+    SCATTERSHOT("scatter_shot"),
+    /** New in 4.0: fills the energy storage and removes the ammo usage of the base's turrets. */
+    CREATIVE("creative");
 
     /** 1.12.2 {@code UpgradeSlot.getSlotStackLimit}: "Stacks up to 4 times". */
     public static final int MAX_PER_SLOT = 4;

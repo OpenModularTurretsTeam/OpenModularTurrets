@@ -59,6 +59,7 @@ public final class ModItems {
     public static final UpgradeItem UPGRADE_FIRE_RATE = registerUpgrade(UpgradeType.FIRE_RATE);
     public static final UpgradeItem UPGRADE_RANGE = registerUpgrade(UpgradeType.RANGE);
     public static final UpgradeItem UPGRADE_SCATTER_SHOT = registerUpgrade(UpgradeType.SCATTERSHOT);
+    public static final UpgradeItem UPGRADE_CREATIVE = registerUpgrade(UpgradeType.CREATIVE);
 
     // Addons (1.12.2 AddonMetaItem; potentia and serial port are not ported, see AddonType)
     public static final AddonItem ADDON_CONCEALER = registerAddon(AddonType.CONCEALER);

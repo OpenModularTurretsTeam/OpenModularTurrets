@@ -182,6 +182,7 @@ Wrap each of these behind a helper where possible.
   - Add that directory as a resource source dir.
   - Commit the generated files.
 - Do not handwrite files into `data/` in shared resources.
+- Do not generate new images via AI, f.ex. for textures, if an image is needed, just use a placeholder image and notify the user of the missing images.
 
 ---
 

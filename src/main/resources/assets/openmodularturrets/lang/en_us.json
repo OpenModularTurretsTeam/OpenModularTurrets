@@ -69,6 +69,7 @@
   "item.openmodularturrets.upgrade_fire_rate": "Upgrade - Fire Rate",
   "item.openmodularturrets.upgrade_range": "Upgrade - Range",
   "item.openmodularturrets.upgrade_scatter_shot": "Upgrade - Scatter Shot",
+  "item.openmodularturrets.upgrade_creative": "Upgrade - Creative",
   "death.attack.openmodularturrets.arc": "%s was struck by an arc turret.",
   "death.attack.openmodularturrets.arrow": "%s was shot by a crossbow turret.",
   "death.attack.openmodularturrets.blazing_clay": "%s got cooked to a juicy medium-rare.",
@@ -199,6 +200,9 @@
   "tooltip.openmodularturrets.upgrade.scatter.a": "Adds 2 projectiles to each shot, at the cost of",
   "tooltip.openmodularturrets.upgrade.scatter.b": "+2 ammo usage, decr. accuracy and increased RF usage.",
   "tooltip.openmodularturrets.upgrade.scatter.flavour": "You just need to shoot more bullets.",
+  "tooltip.openmodularturrets.upgrade.creative.a": "Fills the energy storage of the base completely",
+  "tooltip.openmodularturrets.upgrade.creative.b": "and turrets on this base use no ammo.",
+  "tooltip.openmodularturrets.upgrade.creative.flavour": "Infinite power, infinite bullets.",
   "tooltip.openmodularturrets.upgrade.stacks": "Stacks up to 4 times.",
   "tooltip.openmodularturrets.upgrade.turretinfo": "For effects see tooltips of turrets.",
   "tooltip.openmodularturrets.upgrade_slot": "Upgrades for the modular turret."

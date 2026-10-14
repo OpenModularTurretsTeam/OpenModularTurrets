@@ -69,6 +69,12 @@ public final class ModuleTooltip {
                 lines.add(Component.empty());
                 lines.add(flavour("upgrade.scatter.flavour"));
             }
+            case CREATIVE -> {
+                lines.add(text("upgrade.creative.a"));
+                lines.add(text("upgrade.creative.b"));
+                lines.add(Component.empty());
+                lines.add(flavour("upgrade.creative.flavour"));
+            }
         }
     }
 

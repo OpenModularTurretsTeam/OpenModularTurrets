@@ -65,6 +65,7 @@
   "item.openmodularturrets.upgrade_fire_rate": "Upgrade - Feuerrate",
   "item.openmodularturrets.upgrade_range": "Upgrade - Reichweite",
   "item.openmodularturrets.upgrade_scatter_shot": "Upgrade - Schrotschuss",
+  "item.openmodularturrets.upgrade_creative": "Upgrade - Kreativ",
   "death.attack.openmodularturrets.blazing_clay": "%s wurde medium-rare gebraten.",
   "death.attack.openmodularturrets.bullet": "%s aß zu viel leckeres Blei.",
   "death.attack.openmodularturrets.disposable": "Very %s, much dead, such wow...",
@@ -184,6 +185,9 @@
   "tooltip.openmodularturrets.upgrade.scatter.a": "Fügt 2 Projektile zu jedem Schuss hinzu für",
   "tooltip.openmodularturrets.upgrade.scatter.b": "+2 Munitionsverbrauch, weniger Genauigkeit, und mehr RF Verbrauch.",
   "tooltip.openmodularturrets.upgrade.scatter.flavour": "Einfach mit mehr Kugeln schiessen.",
+  "tooltip.openmodularturrets.upgrade.creative.a": "Füllt den Energiespeicher der Basis vollständig auf",
+  "tooltip.openmodularturrets.upgrade.creative.b": "und Türme dieser Basis verbrauchen keine Munition.",
+  "tooltip.openmodularturrets.upgrade.creative.flavour": "Unendlich Energie, unendlich Kugeln.",
   "tooltip.openmodularturrets.upgrade.stacks": "Stackt bis zu 4 mal.",
   "tooltip.openmodularturrets.upgrade.turretinfo": "Für Effekt siehe Turm-Tooltips.",
   "tooltip.openmodularturrets.upgrade_slot": "Upgrades für den modularen Turm."

@@ -107,11 +107,13 @@ public class TurretBaseLogic {
 
     /**
      * Server tick (1.12.2 {@code TurretBase.update}). Every tick: solar panel, player warnings (throttled); every 5
-     * ticks: concealment, energy capacity and max range; every 20 ticks: redstone reactor and range clamp.
+     * ticks: concealment, energy capacity and max range; every 20 ticks: redstone reactor and range clamp. The
+     * creative upgrade fills the energy storage every tick, right before the targeting.
      */
     public void tick(long gameTime) {
         ticks++;
         updateSolarPanel();
+        chargeCreative();
         updateTargets();
         if (gameTime % Math.max(1, settings.targetSearchTicks()) == 0) {
             warnPlayers(gameTime);
@@ -227,17 +229,17 @@ public class TurretBaseLogic {
     // ---- Ammo ----
 
     /**
-     * The ammunition a turret type consumes from this base, or empty if it fires without ammo (energy turrets, or
-     * {@code doTurretsNeedAmmo} disabled).
+     * The ammunition a turret type consumes from this base, or empty if it fires without ammo (energy turrets,
+     * {@code doTurretsNeedAmmo} disabled, or a creative upgrade in the base).
      */
     public Optional<AmmoType> getRequiredAmmo(TurretType type) {
-        return settings.turretsNeedAmmo() ? type.getAmmo() : Optional.empty();
+        return settings.turretsNeedAmmo() && !hasCreativeUpgrade() ? type.getAmmo() : Optional.empty();
     }
 
     /**
      * Shots available to a turret (1.12.2 {@code TurretHeadUtil.getAmmoLevel}): matching items in the base and its
      * inventory expanders; for energy turrets the stored energy divided by the power usage; unlimited if ammo is
-     * disabled.
+     * disabled or the base has a creative upgrade.
      */
     public int getAmmoLevel(TurretType type) {
         Optional<AmmoType> ammo = type.getAmmo();
@@ -245,7 +247,7 @@ public class TurretBaseLogic {
             int usage = settings.turret(type).powerUsage();
             return usage <= 0 ? Integer.MAX_VALUE : (int) Math.min(Integer.MAX_VALUE, energy.getAmount() / usage);
         }
-        if (!settings.turretsNeedAmmo()) return Integer.MAX_VALUE;
+        if (getRequiredAmmo(type).isEmpty()) return Integer.MAX_VALUE;
         return countAmmo(ammo.get());
     }
 
@@ -350,6 +352,18 @@ public class TurretBaseLogic {
 
     public boolean hasAddon(AddonType type) {
         return getAddonCount(type) > 0;
+    }
+
+    /** Whether a creative upgrade is installed: full energy, no ammo usage. */
+    public boolean hasCreativeUpgrade() {
+        return getUpgradeCount(UpgradeType.CREATIVE) > 0;
+    }
+
+    /** The creative upgrade tops up the energy storage completely (ignoring max IO). */
+    private void chargeCreative() {
+        if (hasCreativeUpgrade()) {
+            energy.generate(energy.getFreeSpace());
+        }
     }
 
     /** 1.12.2 {@code TurretHeadUtil.getScattershotUpgrades}. */
