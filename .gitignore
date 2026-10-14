@@ -2,6 +2,7 @@
 .gradle/
 build/
 versions/*/build/
+versions/*/logs/
 !versions/*/src/main/generated/
 versions/*/src/main/generated/.cache/
 
@@ -16,8 +17,10 @@ versions/*/run/
 out/
 bin/
 .kotlin/
+/.editorconfig
 
 # old mods
 oldmod/
 oldmod2/
 oldlib/
+
