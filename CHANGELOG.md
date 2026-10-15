@@ -9,10 +9,21 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 
 ## [Unreleased]
 
+### Added
+
+- The potato cannon turret can now also fire poisonous potatoes
+
+### Fixed
+
+- Projectile turrets now lead the target with the real flight time (air drag) and raise the aim by the projectile drop, so slow projectiles no longer hit below the target
+- Projectile turrets aim at the target's eyes instead of its body when a ledge hides the body, so shots no longer hit the block in front of it
+- Potato cannon and disposable turret projectiles are now visible right at the turret instead of a few blocks away
+
 ### Changed
 
 - BREAKING: Renamed Relativistic Turret to Slowing Turret internally (lang files with  be changed later)
   - This will cause all existing relativistic turrets to disappear
+- The inaccuracy of the turrets was increased due to the targeting fixes which made turrets way too accurate
 
 ## [4.0.0-beta.2] - 2026-10-15
 

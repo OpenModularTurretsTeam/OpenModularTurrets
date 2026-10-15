@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
+import omtteam.openmodularturrets.blockentity.base.BlockEntityBaseWorld;
 import omtteam.openmodularturrets.blockentity.base.LivingTargetEntity;
 import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.config.OMTConfig;
@@ -185,11 +186,9 @@ public class TurretBlockEntity extends CompatBlockEntity {
 
         switch (weapon.kind()) {
             case PROJECTILE -> {
-                Vector3 toBody = new Vector3(target.getX() - centre.x, target.getY() + target.getBbHeight() * 0.5D - centre.y,
+                Vector3 toBody = new Vector3(target.getX() - centre.x, aimHeight(target, centre) - centre.y,
                         target.getZ() - centre.z);
-                TurretMath.Lead lead = TurretMath.lead(toBody, velocity, weapon.leadWithGravity());
-                Vector3 direction = lead.direction();
-                fire(new Vec3(direction.x(), direction.y(), direction.z()), lead.speedFactor(), target);
+                fire(toBody, velocity, target);
             }
             case RAY -> {
                 Optional<TurretBaseBlockEntity> base = beginShot();
@@ -203,6 +202,20 @@ public class TurretBlockEntity extends CompatBlockEntity {
             }
             case EFFECT -> beginShot().ifPresent(base -> EffectWeapons.fire(this, base, target));
         }
+    }
+
+    /**
+     * Height to shoot at: the body centre, or the eyes when a ledge or the like hides the centre (the base only
+     * picks targets whose eyes are visible, so the shot would otherwise hit the block in front of the target).
+     */
+    private double aimHeight(Entity target, Vec3 centre) {
+        double body = target.getY() + target.getBbHeight() * 0.5D;
+        double eyes = target.getEyeY();
+        if (level == null || eyes <= body
+                || BlockEntityBaseWorld.isClear(level, centre, new Vec3(target.getX(), body, target.getZ()), target)) {
+            return body;
+        }
+        return eyes;
     }
 
     /**
@@ -304,10 +317,11 @@ public class TurretBlockEntity extends CompatBlockEntity {
      * Fires projectiles in {@code direction} (1.12.2 {@code ProjectileTurret.shootProjectile}): one per scattershot
      * level, with the turret's inaccuracy.
      *
-     * @param speedFactor lead correction from {@link TurretMath#lead} (1 = no correction)
+     * @param toAim    aim point minus turret centre
+     * @param velocity target movement per tick
      * @return whether a shot was fired
      */
-    public boolean fire(Vec3 direction, float speedFactor, @Nullable Entity target) {
+    public boolean fire(Vector3 toAim, Vector3 velocity, @Nullable Entity target) {
         if (!(level instanceof ServerLevel serverLevel)) return false;
         TurretWeapon weapon = TurretWeapon.of(getTurretType());
         if (weapon.kind() != TurretWeapon.Kind.PROJECTILE) return false;
@@ -322,7 +336,10 @@ public class TurretBlockEntity extends CompatBlockEntity {
             if (projectile == null) continue;
             projectile.setBase(base.get());
             projectile.setPos(origin);
-            projectile.shoot(direction.x, direction.y, direction.z, weapon.speed() * speedFactor, inaccuracy);
+            // the lead depends on the projectile's gravity, so it is worked out per projectile
+            TurretMath.Lead lead = TurretMath.lead(toAim, velocity, weapon.speed(), projectile.getGravityEffect());
+            Vector3 direction = lead.direction();
+            projectile.shoot(direction.x(), direction.y(), direction.z(), weapon.speed() * lead.speedFactor(), inaccuracy);
             if (logic.getDamageAmpLevel() > 0) {
                 playSound(ModSounds.AMPED);
             }

@@ -43,8 +43,8 @@ class ProjectileMathTest {
     }
 
     @Test
-    void inaccuracyIsAccuracyDeviationOverTwenty() {
-        assertEquals(0.5F, ProjectileMath.inaccuracy(10D));
+    void inaccuracyIsAccuracyDeviationOverFive() {
+        assertEquals(2.0F, ProjectileMath.inaccuracy(10D));
     }
 
     @Test

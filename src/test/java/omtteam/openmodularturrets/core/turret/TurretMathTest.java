@@ -65,21 +65,42 @@ class TurretMathTest {
 
     @Test
     void leadFollowsTheTarget() {
-        // target 6 blocks away moving 0.5 blocks/tick sideways; flight time 6 / 3 = 2 ticks
-        TurretMath.Lead lead = TurretMath.lead(new Vector3(0, 0, 6), new Vector3(0.5, 0, 0), false);
-        assertVector(new Vector3(1, -0.1, 6), lead.direction());
-        assertEquals(Math.sqrt(37) / 6, lead.speedFactor(), 1e-5);
+        // 6 blocks at speed 3 take a little over 2 ticks (air drag); the target moves 0.5 blocks/tick sideways
+        TurretMath.Lead lead = TurretMath.lead(new Vector3(0, 0, 6), new Vector3(0.5, 0, 0), 3.0, 0);
+        double time = ProjectileMath.flightTime(6, 3.0);
+        assertTrue(time > 2.0 && time < 2.1, "was " + time);
+        assertEquals(0.5 * time, lead.direction().x(), EPS);
+        assertEquals(-0.1, lead.direction().y(), EPS);
+        assertEquals(Math.sqrt(36 + 0.25 * time * time) / 6, lead.speedFactor(), 1e-5);
     }
 
     @Test
-    void gravityProjectilesLeadMore() {
-        TurretMath.Lead lead = TurretMath.lead(new Vector3(0, 0, 8), new Vector3(0.4, 0, 0), true);
-        assertEquals(2.0, lead.direction().x(), EPS); // 8 / 1.6 = 5 ticks
+    void leadAimsAboveTheTargetByTheDrop() {
+        Vector3 offset = new Vector3(0, 0, 30);
+        TurretMath.Lead straight = TurretMath.lead(offset, Vector3.ZERO, 3.0, 0);
+        TurretMath.Lead lobbed = TurretMath.lead(offset, Vector3.ZERO, 3.0, 0.03);
+        double time = ProjectileMath.flightTime(30, 3.0);
+        assertEquals(ProjectileMath.dropAfter(time, 0.03), lobbed.direction().y() - straight.direction().y(), EPS);
+        assertTrue(lobbed.direction().y() - straight.direction().y() > 1.0);
+    }
+
+    @Test
+    void dropMatchesTheEntityPhysics() {
+        // tick 1 moves without any fall yet, then the fall velocity builds up: 0.03, 0.0597, ...
+        assertEquals(0.0, ProjectileMath.dropAfter(1, 0.03), EPS);
+        assertEquals(0.03, ProjectileMath.dropAfter(2, 0.03), EPS);
+        assertEquals(0.03 + 0.0597, ProjectileMath.dropAfter(3, 0.03), EPS);
+        assertEquals(0.0, ProjectileMath.dropAfter(40, 0), EPS);
+    }
+
+    @Test
+    void flightTimeIsCappedAtTheProjectileLifetime() {
+        assertEquals(ProjectileMath.MAX_AGE, ProjectileMath.flightTime(500, 3.0), EPS);
     }
 
     @Test
     void stationaryTargetsNeedNoCorrection() {
-        TurretMath.Lead lead = TurretMath.lead(new Vector3(2, 3, 6), Vector3.ZERO, false);
+        TurretMath.Lead lead = TurretMath.lead(new Vector3(2, 3, 6), Vector3.ZERO, 3.0, 0);
         assertEquals(1.0F, lead.speedFactor(), 1e-6);
     }
 

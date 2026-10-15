@@ -37,7 +37,7 @@ public class BlazingClayProjectile extends TurretProjectile implements ItemSuppl
     }
 
     @Override
-    protected float getDropPerTick() {
+    public float getGravityEffect() {
         return 0.0F;
     }
 

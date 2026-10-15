@@ -38,7 +38,7 @@ public class RocketProjectile extends TurretProjectile {
     }
 
     @Override
-    protected float getDropPerTick() {
+    public float getGravityEffect() {
         return 0.0F;
     }
 

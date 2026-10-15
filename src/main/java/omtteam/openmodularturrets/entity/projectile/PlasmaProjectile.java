@@ -32,7 +32,7 @@ public class PlasmaProjectile extends TurretProjectile {
 
     /** 1.12.2 used 0.01 on the server (and 0.001 on the client by mistake). */
     @Override
-    protected float getDropPerTick() {
+    public float getGravityEffect() {
         return 0.01F;
     }
 

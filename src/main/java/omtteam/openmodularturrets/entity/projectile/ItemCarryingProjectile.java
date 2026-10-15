@@ -40,7 +40,7 @@ public abstract class ItemCarryingProjectile extends TurretProjectile {
             Vec3 motion = getDeltaMovement();
             Vec3 start = position().subtract(motion.scale(0.5D));
             carried = new ItemEntity(level(), start.x, start.y - 0.2F, start.z, item.copy());
-            carried.setDeltaMovement(motion.add(0, getDropPerTick(), 0));
+            carried.setDeltaMovement(motion.add(0, getGravityEffect(), 0));
             carried.setNeverPickUp();
             level().addFreshEntity(carried);
         }

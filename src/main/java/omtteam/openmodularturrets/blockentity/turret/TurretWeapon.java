@@ -17,8 +17,7 @@ import org.jetbrains.annotations.Nullable;
  * How a turret type fires: the projectile it spawns (1.12.2 {@code createProjectile}) or a ray, its launch sound and
  * projectile speed.
  */
-public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, SoundEvent launchSound, float speed,
-                           boolean leadWithGravity) {
+public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, SoundEvent launchSound, float speed) {
     public enum Kind {
         /** Spawns projectile entities (1.12.2 {@code ProjectileTurret}). */
         PROJECTILE,
@@ -46,21 +45,21 @@ public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, Sound
 
     public static TurretWeapon of(TurretType type) {
         return switch (type) {
-            case DISPOSABLE_TURRET -> projectile(ModSounds.DISPOSABLE_LAUNCH, true, (level, ammo, target) ->
+            case DISPOSABLE_TURRET -> projectile(ModSounds.DISPOSABLE_LAUNCH, (level, ammo, target) ->
                     withItem(ModEntities.DISPOSABLE.create(level), ammo));
-            case POTATO_CANNON_TURRET -> projectile(ModSounds.POTATO_LAUNCH, true, (level, ammo, target) ->
+            case POTATO_CANNON_TURRET -> projectile(ModSounds.POTATO_LAUNCH, (level, ammo, target) ->
                     withItem(ModEntities.POTATO.create(level), ammo));
             // 1.12.2 CrossbowTurretTileEntity used the potato launch sound
-            case CROSSBOW_TURRET -> projectile(ModSounds.POTATO_LAUNCH, true, (level, ammo, target) -> ModEntities.ARROW.create(level));
-            case MACHINE_GUN_TURRET -> projectile(ModSounds.MACHINE_GUN_LAUNCH, false, (level, ammo, target) -> ModEntities.BULLET.create(level));
-            case INCENDIARY_TURRET -> projectile(ModSounds.INCENDIARY_LAUNCH, true, (level, ammo, target) -> ModEntities.BLAZING_CLAY.create(level));
-            case GRENADE_TURRET -> projectile(ModSounds.GRENADE_LAUNCH, true, (level, ammo, target) -> ModEntities.GRENADE.create(level));
-            case ROCKET_TURRET -> projectile(ModSounds.ROCKET_LAUNCH, false, (level, ammo, target) -> {
+            case CROSSBOW_TURRET -> projectile(ModSounds.POTATO_LAUNCH, (level, ammo, target) -> ModEntities.ARROW.create(level));
+            case MACHINE_GUN_TURRET -> projectile(ModSounds.MACHINE_GUN_LAUNCH, (level, ammo, target) -> ModEntities.BULLET.create(level));
+            case INCENDIARY_TURRET -> projectile(ModSounds.INCENDIARY_LAUNCH, (level, ammo, target) -> ModEntities.BLAZING_CLAY.create(level));
+            case GRENADE_TURRET -> projectile(ModSounds.GRENADE_LAUNCH, (level, ammo, target) -> ModEntities.GRENADE.create(level));
+            case ROCKET_TURRET -> projectile(ModSounds.ROCKET_LAUNCH, (level, ammo, target) -> {
                 RocketProjectile rocket = ModEntities.ROCKET.create(level);
                 if (rocket != null) rocket.setTarget(target);
                 return rocket;
             });
-            case PLASMA_TURRET -> projectile(ModSounds.PLASMA_LAUNCH, true, (level, ammo, target) -> ModEntities.PLASMA.create(level));
+            case PLASMA_TURRET -> projectile(ModSounds.PLASMA_LAUNCH, (level, ammo, target) -> ModEntities.PLASMA.create(level));
             // 1.12.2 MeleeTurretTileEntity used the relativistic launch sound
             case MELEE_TURRET -> effect(ModSounds.RELATIVISTIC_LAUNCH);
             case SLOWING_TURRET -> effect(ModSounds.RELATIVISTIC_LAUNCH);
@@ -71,20 +70,16 @@ public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, Sound
         };
     }
 
-    /**
-     * @param leadWithGravity 1.12.2 {@code getProjectileGravity() != 0} of the turret: the aim lead assumes a slower
-     *                        projectile (the incendiary turret declared gravity although its projectile has none)
-     */
-    private static TurretWeapon projectile(SoundEvent sound, boolean leadWithGravity, ProjectileFactory factory) {
-        return new TurretWeapon(Kind.PROJECTILE, factory, sound, PROJECTILE_SPEED, leadWithGravity);
+    private static TurretWeapon projectile(SoundEvent sound, ProjectileFactory factory) {
+        return new TurretWeapon(Kind.PROJECTILE, factory, sound, PROJECTILE_SPEED);
     }
 
     private static TurretWeapon ray(SoundEvent sound) {
-        return new TurretWeapon(Kind.RAY, null, sound, 0, false);
+        return new TurretWeapon(Kind.RAY, null, sound, 0);
     }
 
     private static TurretWeapon effect(SoundEvent sound) {
-        return new TurretWeapon(Kind.EFFECT, null, sound, 0, false);
+        return new TurretWeapon(Kind.EFFECT, null, sound, 0);
     }
 
     private static TurretProjectile withItem(@Nullable ItemCarryingProjectile projectile, @Nullable AmmoDraw ammo) {

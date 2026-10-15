@@ -107,13 +107,21 @@ public class BlockEntityBaseWorld implements BaseWorld {
         Level current = level.get();
         if (current == null || !(target instanceof LivingTargetEntity living)) return false;
         Vec3 end = new Vec3(target.getX(), target.getY() + target.getEyeHeight(), target.getZ());
-        Vec3 start = new Vec3(fromX, fromY, fromZ);
-        Vec3 delta = end.subtract(start);
+        return isClear(current, new Vec3(fromX, fromY, fromZ), end, living.getEntity());
+    }
+
+    /**
+     * Whether nothing solid lies between a turret's centre {@code from} and {@code to}, see {@link #hasLineOfSight}.
+     *
+     * @param context the entity passed to {@link ClipContext} as collision context (must not be null)
+     */
+    public static boolean isClear(Level level, Vec3 from, Vec3 to, Entity context) {
+        Vec3 delta = to.subtract(from);
         double largestAxis = Math.max(Math.max(Math.abs(delta.x), Math.abs(delta.y)), Math.abs(delta.z));
         if (largestAxis <= 0.5D) return true;
-        start = start.add(delta.scale(0.5D / largestAxis)).add(delta.normalize().scale(1.0E-3D));
-        BlockHitResult hit = current.clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
-                living.getEntity()));
+        Vec3 start = from.add(delta.scale(0.5D / largestAxis)).add(delta.normalize().scale(1.0E-3D));
+        BlockHitResult hit = level.clip(new ClipContext(start, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
+                context));
         return hit.getType() == HitResult.Type.MISS;
     }
 

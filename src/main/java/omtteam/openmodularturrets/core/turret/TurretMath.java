@@ -11,9 +11,6 @@ import omtteam.openmodularturrets.core.world.Vector3;
  * (0° = forward, 90° = right); pitch is the elevation above the mounting plane (90° = straight away from the base).
  */
 public final class TurretMath {
-    /** 1.12.2 {@code ProjectileTurret.doTargetedShot}: travel speed used to estimate the flight time. */
-    private static final double SPEED_STRAIGHT = 3.0D;
-    private static final double SPEED_GRAVITY = 1.6D;
     /** The aim point is lowered by 0.1 blocks. */
     private static final double AIM_DROP = 0.1D;
     /**
@@ -87,20 +84,24 @@ public final class TurretMath {
     }
 
     /**
-     * 1.12.2 {@code ProjectileTurret.doTargetedShot}: estimates the flight time from the distance (projectiles with
-     * gravity are assumed slower), moves the aim point along the target's velocity for that time, lowers it by 0.1
-     * and scales the projectile speed so it arrives in time.
+     * 1.12.2 {@code ProjectileTurret.doTargetedShot}, now with the real flight physics: the flight time follows from
+     * the distance and the speed (with air drag), the aim point moves along the target's velocity for that time and
+     * is raised by how far the projectile drops during it. The aim point is then lowered by 0.1 and the projectile
+     * speed scaled so it arrives in time.
      *
      * @param offset   target aim point minus turret centre
      * @param velocity target movement per tick
+     * @param speed    launch speed in blocks per tick
+     * @param gravity  downward acceleration of the projectile per tick
      */
-    public static Lead lead(Vector3 offset, Vector3 velocity, boolean gravity) {
+    public static Lead lead(Vector3 offset, Vector3 velocity, double speed, double gravity) {
         double distance = offset.length();
         if (distance < 1.0E-6) return new Lead(offset, 1.0F);
-        double time = distance / (gravity ? SPEED_GRAVITY : SPEED_STRAIGHT);
+        double time = ProjectileMath.flightTime(distance, speed);
         Vector3 adjusted = offset.add(velocity.scale(time));
         float speedFactor = (float) (adjusted.length() / distance);
-        return new Lead(adjusted.subtract(new Vector3(0, AIM_DROP, 0)), speedFactor);
+        Vector3 aim = adjusted.add(new Vector3(0, ProjectileMath.dropAfter(time, gravity) - AIM_DROP, 0));
+        return new Lead(aim, speedFactor);
     }
 
     /**

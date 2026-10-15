@@ -9,10 +9,10 @@ import omtteam.openmodularturrets.core.world.Vector3;
 public final class ProjectileMath {
     /** 1.12.2 {@code onUpdate}: projectiles live at most 40 ticks. */
     public static final int MAX_AGE = 40;
-    private static final double DRAG_AIR = 0.99D;
+    public static final double DRAG_AIR = 0.99D;
     private static final double DRAG_WATER = 0.8D;
     /** Percent of accuracy deviation per unit of vanilla projectile inaccuracy. */
-    private static final double INACCURACY_DIVISOR = 20D;
+    private static final double INACCURACY_DIVISOR = 5D;
 
     private ProjectileMath() {
     }
@@ -51,6 +51,31 @@ public final class ProjectileMath {
     public static Vector3 nextMotion(Vector3 motion, boolean inWater, boolean noGravity, double dropPerTick) {
         Vector3 result = motion.scale(inWater ? DRAG_WATER : DRAG_AIR);
         return noGravity ? result : result.subtract(new Vector3(0, dropPerTick, 0));
+    }
+
+    /**
+     * Ticks a projectile needs to cover {@code distance}, with the air drag slowing it down: the distance after
+     * {@code n} ticks is {@code speed * (1 - drag^n) / (1 - drag)}. A projectile that never gets that far (it
+     * lives {@link #MAX_AGE} ticks) is given {@code MAX_AGE}.
+     */
+    public static double flightTime(double distance, double speed) {
+        double reach = 1.0D - distance * (1.0D - DRAG_AIR) / speed;
+        if (reach <= 0.0D) return MAX_AGE;
+        return Math.min(MAX_AGE, Math.log(reach) / Math.log(DRAG_AIR));
+    }
+
+    /**
+     * How far a projectile has dropped below its straight line after {@code ticks} ticks of flight, simulated like
+     * the entity (move, then drag, then gravity).
+     */
+    public static double dropAfter(double ticks, double dropPerTick) {
+        double drop = 0.0D;
+        double fall = 0.0D;
+        for (int tick = 0; tick < ticks; tick++) {
+            drop += fall * Math.min(1.0D, ticks - tick);
+            fall = fall * DRAG_AIR + dropPerTick;
+        }
+        return drop;
     }
 
     /** Vanilla projectile inaccuracy for an accuracy deviation in percent. */

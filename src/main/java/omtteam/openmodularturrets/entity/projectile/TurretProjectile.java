@@ -59,8 +59,12 @@ public abstract class TurretProjectile extends Projectile {
     /** The turret type whose config (damage, damage amp) applies. */
     protected abstract TurretType getTurretType();
 
-    /** Downward acceleration per tick (1.12.2 {@code gravity}). */
-    protected abstract float getDropPerTick();
+    /**
+     * Gravity effect of this projectile: the drop per tick of flight time, i.e. how much its downward motion grows
+     * with every tick it flies (blocks per tick, 1.12.2 {@code gravity}). The turret raises its aim by the drop
+     * accumulated over the flight time to the target.
+     */
+    public abstract float getGravityEffect();
 
     /** Called on the server when the flight path touches a pickable entity. */
     protected abstract void onHitEntity(Entity entity);
@@ -114,7 +118,7 @@ public abstract class TurretProjectile extends Projectile {
             }
         }
         Vector3 next = ProjectileMath.nextMotion(new Vector3(motion.x, motion.y, motion.z), isInWater(), isNoGravity(),
-                getDropPerTick());
+                getGravityEffect());
         setDeltaMovement(next.x(), next.y(), next.z());
     }
 

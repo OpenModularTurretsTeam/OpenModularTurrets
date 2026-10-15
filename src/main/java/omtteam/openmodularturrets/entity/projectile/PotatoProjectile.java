@@ -22,7 +22,7 @@ public class PotatoProjectile extends ItemCarryingProjectile {
     }
 
     @Override
-    protected float getDropPerTick() {
+    public float getGravityEffect() {
         return 0.03F;
     }
 

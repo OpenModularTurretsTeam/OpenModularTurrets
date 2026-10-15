@@ -42,7 +42,7 @@ public class GrenadeProjectile extends TurretProjectile implements ItemSupplier 
     }
 
     @Override
-    protected float getDropPerTick() {
+    public float getGravityEffect() {
         return 0.03F;
     }
 
