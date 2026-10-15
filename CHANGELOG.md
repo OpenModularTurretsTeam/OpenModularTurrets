@@ -9,6 +9,17 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 
 ## [Unreleased]
 
+## [4.0.0-beta.2] - 2026-10-15
+
+### Changed
+
+- The config file is now documented: every key has a comment with its description, range and default
+- The crossbow turret now fires the new Crossbow Bolt ammo (iron ingot, stick, feather) instead of vanilla arrows (placeholder texture)
+
+### Added
+
+- Creative upgrade: fills the base's energy storage and removes the ammo usage of its turrets (placeholder texture)
+
 ## [4.0.0-beta.1] - 2026-10-14
 
 ### Fixed
