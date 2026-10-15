@@ -9,6 +9,8 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 
 ## [Unreleased]
 
+## [4.0.0-beta.3] - 2026-10-15
+
 ### Added
 
 - The potato cannon turret can now also fire poisonous potatoes
