@@ -15,7 +15,7 @@ public enum AmmoType {
     GRENADE("grenade"),
     /** 1.12.2 {@code AmmoMetaItem} meta 4. */
     ROCKET("rocket"),
-    /** Vanilla potato. */
+    /** Vanilla potato or poisonous potato. */
     POTATO("potato"),
     /** New in 4.0: crossbow bolt, ammo of the crossbow turret. */
     BOLT("bolt"),

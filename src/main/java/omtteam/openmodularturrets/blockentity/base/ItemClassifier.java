@@ -22,7 +22,7 @@ public final class ItemClassifier {
 
     public static boolean isAmmo(ItemStack stack, AmmoType type) {
         return switch (type) {
-            case POTATO -> stack.is(Items.POTATO);
+            case POTATO -> stack.is(Items.POTATO) || stack.is(Items.POISONOUS_POTATO);
             case DISPOSABLE -> AmmoRules.getDisposableAmmoDamageBonus(stack) > 0;
             case BLAZING_CLAY, BOLT, BULLET, FERRO_SLUG, GRENADE, ROCKET ->
                     stack.getItem() instanceof AmmoItem ammo && ammo.getAmmoType() == type;
