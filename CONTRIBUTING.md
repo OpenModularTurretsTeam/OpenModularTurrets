@@ -12,7 +12,6 @@ Use the [issue templates](https://github.com/OpenModularTurretsTeam/OpenModularT
 
 - **Bug report** for crashes and broken behaviour. Include the Minecraft, mod, Fabric Loader and Fabric API versions,
   and your log or crash report.
-- **Missing or different from 1.12.2** for anything the old version had that is missing or behaves differently.
 - **Feature request** for new ideas. The port comes first, so new features may take a while.
 
 ## Development setup
@@ -22,6 +21,9 @@ You need:
 - **Java 25 or newer** to run Gradle (a Fabric Loom 1.18 requirement). The Java 17 and 21 compile toolchains are
   downloaded automatically if they are missing.
 - Git and an IDE with Gradle support (IntelliJ IDEA is recommended).
+
+
+###  Building the mods for both 1.20.1 and 1.21.1
 
 ```bash
 git clone -b 1.20.1+ git@github.com:OpenModularTurretsTeam/OpenModularTurrets.git
@@ -70,6 +72,7 @@ cd OpenModularTurrets
 ## Code style
 
 - Java only, 4-space indent, no wildcard imports.
+- The project uses spotless for code styling
 - Mojang mappings (`BlockEntity`, `ResourceLocation`, `AbstractContainerMenu`, …).
 - Registry IDs and resource names are lowercase `snake_case`.
 - All user-facing text goes through translation keys (`block.openmodularturrets.…`, `gui.openmodularturrets.…`,
@@ -88,9 +91,10 @@ cd OpenModularTurrets
    ```
 
    Types are `added`, `changed`, `fixed` and `removed`.
-3. Make sure `./gradlew chiseledBuild` and `./gradlew check` pass and the source is back in the 1.21.1 state.
-4. If you can, test in game on both versions, and on a dedicated server for anything involving networking or GUIs.
-5. Describe what you changed and how you tested it in the pull request.
+3. Make sure `./gradlew chiseledBuild`, `./gradlew check` and `./gradlew spotlessCheck` pass and the source is back in the 1.21.1 state.
+4. If spotlessCheck fails you can use `./gradlew spotlessApply` to automatically apply code styling.
+5. If you can, test in game on both versions, and on a dedicated server for anything involving networking or GUIs.
+6. Describe what you changed and how you tested it in the pull request.
 
 ## License
 
