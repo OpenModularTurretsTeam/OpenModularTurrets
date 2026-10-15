@@ -377,6 +377,14 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
                 .define('C', Items.CLAY_BALL)
                 .define('R', CommonTags.REDSTONE_DUSTS)
                 .unlockedBy("has_blaze_powder", has(Items.BLAZE_POWDER)));
+        save.accept(ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.AMMO_BOLT, 16)
+                .pattern(" I ")
+                .pattern(" S ")
+                .pattern(" F ")
+                .define('I', CommonTags.IRON_INGOTS)
+                .define('S', Items.STICK)
+                .define('F', Items.FEATHER)
+                .unlockedBy("has_feather", has(Items.FEATHER)));
         save.accept(ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.AMMO_BULLET, 64)
                 .pattern(" I ")
                 .pattern(" GR")

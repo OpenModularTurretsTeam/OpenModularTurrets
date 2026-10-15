@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": {
+      "item": "minecraft:feather"
+    },
+    "I": {
+      "tag": "c:iron_ingots"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    " I ",
+    " S ",
+    " F "
+  ],
+  "result": {
+    "count": 16,
+    "item": "openmodularturrets:ammo_bolt"
+  },
+  "show_notification": true
+}

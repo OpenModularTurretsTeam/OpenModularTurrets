@@ -18,8 +18,7 @@ import java.util.Set;
  */
 public final class AmmoRules {
     /** Vanilla items that some turret uses as ammo or fuel. */
-    private static final Set<Item> BUILTIN_AMMO = Set.of(Items.POTATO, Items.REDSTONE, Items.ARROW, Items.TIPPED_ARROW,
-            Items.REDSTONE_BLOCK);
+    private static final Set<Item> BUILTIN_AMMO = Set.of(Items.POTATO, Items.REDSTONE, Items.REDSTONE_BLOCK);
 
     private AmmoRules() {
     }

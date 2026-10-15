@@ -6,14 +6,15 @@ import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import omtteam.openmodularturrets.OMT;
-import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.registry.ModEntities;
 
 /**
  * Projectile renderers, following the 1.12.2 {@code ProjectileRenderers}.
  */
 public final class ProjectileRenderers {
-    private static final ResourceLocation ARROW_TEXTURE = VersionCompat.id("minecraft", "textures/entity/projectiles/arrow.png");
+    private static final ResourceLocation BOLT_TEXTURE = OMT.id("textures/entity/projectile/bolt.png");
+    /** The bolt is shorter than an arrow (10 instead of 16 pixels). */
+    private static final int BOLT_HALF_LENGTH = 5;
     private static final ResourceLocation ROCKET_TEXTURE = OMT.id("textures/entity/projectile/rocket.png");
     private static final ResourceLocation BULLET_TEXTURE = OMT.id("textures/entity/projectile/bullet.png");
     /** Vanilla's thrown snowball is drawn at half a block. */
@@ -28,7 +29,7 @@ public final class ProjectileRenderers {
         // 1.12.2 RenderSnowball with the ammo item
         EntityRendererRegistry.register(ModEntities.GRENADE, ThrownItemRenderer::new);
         EntityRendererRegistry.register(ModEntities.BLAZING_CLAY, ThrownItemRenderer::new);
-        EntityRendererRegistry.register(ModEntities.ARROW, context -> new ArrowShapedRenderer<>(context, ARROW_TEXTURE, 0));
+        EntityRendererRegistry.register(ModEntities.ARROW, context -> new ArrowShapedRenderer<>(context, BOLT_TEXTURE, 0, BOLT_HALF_LENGTH));
         EntityRendererRegistry.register(ModEntities.ROCKET, context -> new ArrowShapedRenderer<>(context, ROCKET_TEXTURE, 2));
         EntityRendererRegistry.register(ModEntities.PLASMA, PlasmaRenderer::new);
         // shown by the item entity they carry (1.12.2: the item itself was the visual)

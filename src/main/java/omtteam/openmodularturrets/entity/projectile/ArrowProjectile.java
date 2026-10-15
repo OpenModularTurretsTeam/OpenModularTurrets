@@ -9,7 +9,7 @@ import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 
 /**
- * Crossbow turret arrow
+ * Crossbow turret bolt (shown as an arrow)
  */
 public class ArrowProjectile extends TurretProjectile {
     public ArrowProjectile(EntityType<? extends ArrowProjectile> type, Level level) {

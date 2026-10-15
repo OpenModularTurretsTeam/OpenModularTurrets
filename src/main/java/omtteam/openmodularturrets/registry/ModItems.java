@@ -40,6 +40,7 @@ public final class ModItems {
 
     // Ammunition (1.12.2 AmmoMetaItem meta 0–4)
     public static final AmmoItem AMMO_BLAZING_CLAY = registerAmmo("ammo_blazing_clay", AmmoType.BLAZING_CLAY);
+    public static final AmmoItem AMMO_BOLT = registerAmmo("ammo_bolt", AmmoType.BOLT);
     public static final AmmoItem AMMO_BULLET = registerAmmo("ammo_bullet", AmmoType.BULLET);
     public static final AmmoItem AMMO_FERRO_SLUG = registerAmmo("ammo_ferro_slug", AmmoType.FERRO_SLUG);
     public static final AmmoItem AMMO_GRENADE = registerAmmo("ammo_grenade", AmmoType.GRENADE);

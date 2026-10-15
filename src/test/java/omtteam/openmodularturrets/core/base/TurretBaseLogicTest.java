@@ -138,7 +138,7 @@ class TurretBaseLogicTest {
             FakeSlot first = FakeSlot.ammo(AmmoType.POTATO, 1);
             FakeSlot second = FakeSlot.ammo(AmmoType.POTATO, 5);
             ammoSlot(0, first);
-            ammoSlot(1, FakeSlot.ammo(AmmoType.ARROW, 10));
+            ammoSlot(1, FakeSlot.ammo(AmmoType.BOLT, 10));
             ammoSlot(2, second);
             assertEquals(3, logic.drawAmmo(TurretType.POTATO_CANNON_TURRET).orElseThrow().count());
             assertEquals(0, first.count);

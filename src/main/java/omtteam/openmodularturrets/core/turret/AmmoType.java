@@ -17,8 +17,8 @@ public enum AmmoType {
     ROCKET("rocket"),
     /** Vanilla potato. */
     POTATO("potato"),
-    /** Vanilla (untipped) arrow. */
-    ARROW("arrow"),
+    /** New in 4.0: crossbow bolt, ammo of the crossbow turret. */
+    BOLT("bolt"),
     /**
      * Any item on the config's ammo allow list (1.12.2 "fake disposable item", meta 5). The item's damage bonus is
      * reported with each draw.

@@ -14,7 +14,7 @@ import java.util.Optional;
 public enum TurretType {
     DISPOSABLE_TURRET("disposable_turret", 1, AmmoType.DISPOSABLE, new int[]{5, 5, -5, 1, 10}),
     POTATO_CANNON_TURRET("potato_cannon_turret", 1, AmmoType.POTATO, new int[]{-5, -5, -5, 1, 10}),
-    CROSSBOW_TURRET("crossbow_turret", 1, AmmoType.ARROW, new int[]{-5, -5, -5, 1, 10}),
+    CROSSBOW_TURRET("crossbow_turret", 1, AmmoType.BOLT, new int[]{-5, -5, -5, 1, 10}),
     MELEE_TURRET("melee_turret", 1, null, new int[]{1, 1, 0, 10, 10}),
     MACHINE_GUN_TURRET("machine_gun_turret", 2, AmmoType.BULLET, new int[]{1, 10, -5, -5, 10}),
     INCENDIARY_TURRET("incendiary_turret", 2, AmmoType.BLAZING_CLAY, new int[]{10, -5, -2, 10, 10}),

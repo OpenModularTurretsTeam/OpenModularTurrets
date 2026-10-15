@@ -77,6 +77,7 @@ Not ported: OMT power generator (`BlockPowerAttachment`, had no function), loot 
 | `openmodularturrets:ammo_meta` | 2 | `openmodularturrets:ammo_ferro_slug` |
 | `openmodularturrets:ammo_meta` | 3 | `openmodularturrets:ammo_grenade` |
 | `openmodularturrets:ammo_meta` | 4 | `openmodularturrets:ammo_rocket` |
+| *(new)* | – | `openmodularturrets:ammo_bolt` |
 | `openmodularturrets:ammo_meta` | 5 | *(not ported: internal "fake disposable item")* |
 | `openmodularturrets:intermediate_regular` | 0 | `openmodularturrets:io_bus` |
 | `openmodularturrets:intermediate_tiered` | 0 | `openmodularturrets:sensor_tier_one` |
