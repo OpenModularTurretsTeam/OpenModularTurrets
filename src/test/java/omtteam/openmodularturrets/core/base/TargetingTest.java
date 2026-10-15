@@ -291,7 +291,7 @@ class TargetingTest {
     class TurretRules {
         @Test
         void relativisticTurretIgnoresSlowedTargets() {
-            logic = base(3, Map.of(Face.UP, new Neighbour.Turret(TurretType.RELATIVISTIC_TURRET)));
+            logic = base(3, Map.of(Face.UP, new Neighbour.Turret(TurretType.SLOWING_TURRET)));
             logic.setRange(10);
             FakeTarget zombie = zombie(105, 65, 100);
             zombie.slowed = true;

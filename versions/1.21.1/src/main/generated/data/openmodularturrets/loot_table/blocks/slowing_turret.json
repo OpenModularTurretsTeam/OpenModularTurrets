@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "openmodularturrets:relativistic_turret"
+          "name": "openmodularturrets:slowing_turret"
         }
       ],
       "rolls": 1.0

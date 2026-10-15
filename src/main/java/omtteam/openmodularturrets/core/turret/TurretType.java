@@ -19,7 +19,7 @@ public enum TurretType {
     MACHINE_GUN_TURRET("machine_gun_turret", 2, AmmoType.BULLET, new int[]{1, 10, -5, -5, 10}),
     INCENDIARY_TURRET("incendiary_turret", 2, AmmoType.BLAZING_CLAY, new int[]{10, -5, -2, 10, 10}),
     GRENADE_TURRET("grenade_turret", 3, AmmoType.GRENADE, new int[]{10, 10, 20, 1, 10}),
-    RELATIVISTIC_TURRET("relativistic_turret", 3, null, new int[]{1, 1, 0, 10, 10}),
+    SLOWING_TURRET("slowing_turret", 3, null, new int[]{1, 1, 0, 10, 10}),
     ROCKET_TURRET("rocket_turret", 4, AmmoType.ROCKET, new int[]{10, 10, 20, 1, 10}),
     TELEPORTER_TURRET("teleporter_turret", 4, null, new int[]{1, -10, 0, 10, 10}),
     ARC_TURRET("arc_turret", 4, null, new int[]{5, 10, 2, -10, 10}),

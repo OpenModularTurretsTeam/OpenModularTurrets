@@ -18,7 +18,7 @@ Old meta/damage-based variants are flattened into separate registry entries.
 | `openmodularturrets:machine_gun_turret` | – | `openmodularturrets:machine_gun_turret` |
 | `openmodularturrets:incendiary_turret` | – | `openmodularturrets:incendiary_turret` |
 | `openmodularturrets:grenade_turret` | – | `openmodularturrets:grenade_turret` |
-| `openmodularturrets:relativistic_turret` | – | `openmodularturrets:relativistic_turret` |
+| `openmodularturrets:relativistic_turret` | – | `openmodularturrets:slowing_turret` |
 | `openmodularturrets:rocket_turret` | – | `openmodularturrets:rocket_turret` |
 | `openmodularturrets:teleporter_turret` | – | `openmodularturrets:teleporter_turret` |
 | `openmodularturrets:arc_turret` | – | `openmodularturrets:arc_turret` |

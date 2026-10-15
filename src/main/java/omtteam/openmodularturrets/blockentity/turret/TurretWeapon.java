@@ -63,7 +63,7 @@ public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, Sound
             case PLASMA_TURRET -> projectile(ModSounds.PLASMA_LAUNCH, true, (level, ammo, target) -> ModEntities.PLASMA.create(level));
             // 1.12.2 MeleeTurretTileEntity used the relativistic launch sound
             case MELEE_TURRET -> effect(ModSounds.RELATIVISTIC_LAUNCH);
-            case RELATIVISTIC_TURRET -> effect(ModSounds.RELATIVISTIC_LAUNCH);
+            case SLOWING_TURRET -> effect(ModSounds.RELATIVISTIC_LAUNCH);
             case TELEPORTER_TURRET -> effect(ModSounds.TELEPORT_LAUNCH);
             case ARC_TURRET -> ray(ModSounds.ARC_LAUNCH);
             case LASER_TURRET -> ray(ModSounds.LASER_LAUNCH);

@@ -209,8 +209,8 @@ public class ConfigData {
         @SerializedName("grenade_turret")
         public TurretSetting grenadeTurret = new TurretSetting(true, 18, 40, 8, 3000, 30, 3, 0.08D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
         @Comment("Relativistic turret.")
-        @SerializedName("relativistic_turret")
-        public TurretSetting relativisticTurret = new TurretSetting(true, 20, 25, 0, 5000, 0, 4, 0D, 0.1D, 2, 0, 0.08D, 0.1D, 0.05D);
+        @SerializedName("slowing_turret")
+        public TurretSetting slowingTurret = new TurretSetting(true, 20, 25, 0, 5000, 0, 4, 0D, 0.1D, 2, 0, 0.08D, 0.1D, 0.05D);
         @Comment("Rocket turret.")
         @SerializedName("rocket_turret")
         public TurretSetting rocketTurret = new TurretSetting(true, 30, 30, 10, 5000, 10, 3, 0.08D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
@@ -246,7 +246,7 @@ public class ConfigData {
                 case MACHINE_GUN_TURRET -> machineGunTurret;
                 case INCENDIARY_TURRET -> incendiaryTurret;
                 case GRENADE_TURRET -> grenadeTurret;
-                case RELATIVISTIC_TURRET -> relativisticTurret;
+                case SLOWING_TURRET -> slowingTurret;
                 case ROCKET_TURRET -> rocketTurret;
                 case TELEPORTER_TURRET -> teleporterTurret;
                 case ARC_TURRET -> arcTurret;

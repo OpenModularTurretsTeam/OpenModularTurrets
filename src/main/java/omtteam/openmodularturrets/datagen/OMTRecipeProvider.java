@@ -185,7 +185,7 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
                 .define('B', b.get(1)).define('C', c.get(1)).define('X', CommonTags.IRON_INGOTS).define('I', ModItems.IO_BUS));
         save.accept(turret(TurretType.GRENADE_TURRET, " B ", "XCX", "XIX")
                 .define('B', b.get(2)).define('C', c.get(2)).define('X', CommonTags.GOLD_INGOTS).define('I', ModItems.IO_BUS));
-        save.accept(turret(TurretType.RELATIVISTIC_TURRET, "XPX", "PSP", "XIX")
+        save.accept(turret(TurretType.SLOWING_TURRET, "XPX", "PSP", "XIX")
                 .define('P', Items.ENDER_PEARL).define('S', ModItems.SENSORS.get(2)).define('X', CommonTags.GOLD_INGOTS)
                 .define('I', ModItems.IO_BUS));
         save.accept(turret(TurretType.ROCKET_TURRET, "QBQ", "BCB", "DID")
@@ -199,7 +199,7 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
         save.accept(turret(TurretType.RAILGUN_TURRET, "OBO", "OBO", "ICI")
                 .define('B', b.get(4)).define('C', c.get(4)).define('O', Items.OBSIDIAN).define('I', ModItems.IO_BUS));
         save.accept(turret(TurretType.MELEE_TURRET, " I ", "ISI", "CRC")
-                .define('I', CommonTags.IRON_INGOTS).define('S', ModItems.SENSORS.get(0)).define('C', Items.COBBLESTONE)
+                .define('I', CommonTags.IRON_INGOTS).define('S', ModItems.SENSORS.getFirst()).define('C', Items.COBBLESTONE)
                 .define('R', CommonTags.REDSTONE_DUSTS));
         save.accept(turret(TurretType.CROSSBOW_TURRET, "SBS", "PCP", "PRP")
                 .define('S', Items.STRING).define('B', b.get(0)).define('C', c.get(0)).define('P', ItemTags.PLANKS)

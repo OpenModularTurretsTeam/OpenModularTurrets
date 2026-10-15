@@ -38,7 +38,7 @@ public final class EffectWeapons {
         ServerLevel level = (ServerLevel) turret.getLevel();
         TurretType type = turret.getTurretType();
         switch (type) {
-            case RELATIVISTIC_TURRET -> slow(target);
+            case SLOWING_TURRET -> slow(target);
             case TELEPORTER_TURRET -> teleport(level, turret, target);
             default -> throw new IllegalArgumentException(type + " is not a targeted effect turret, see strike");
         }

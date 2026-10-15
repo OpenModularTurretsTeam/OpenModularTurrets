@@ -25,7 +25,7 @@ class TurretTypeTest {
 
     @Test
     void energyTurretsNeedNoAmmo() {
-        Set<TurretType> energyOnly = EnumSet.of(TurretType.MELEE_TURRET, TurretType.RELATIVISTIC_TURRET,
+        Set<TurretType> energyOnly = EnumSet.of(TurretType.MELEE_TURRET, TurretType.SLOWING_TURRET,
                 TurretType.TELEPORTER_TURRET, TurretType.ARC_TURRET, TurretType.LASER_TURRET, TurretType.PLASMA_TURRET);
         for (TurretType type : TurretType.values()) {
             assertEquals(energyOnly.contains(type), type.getAmmo().isEmpty(), type.name());

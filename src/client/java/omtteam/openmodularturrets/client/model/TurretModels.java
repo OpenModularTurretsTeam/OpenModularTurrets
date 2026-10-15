@@ -41,7 +41,7 @@ public final class TurretModels {
         // 1.12.2 ModelRailgun: yaw and pitch both on the weapon (no holder)
         add(TurretType.RAILGUN_TURRET, TurretModelDefinitions::railgunTurret, "base/weapon", "base/weapon");
         add(TurretType.ARC_TURRET, TurretModelDefinitions::arcTurret, null, null);
-        add(TurretType.RELATIVISTIC_TURRET, TurretModelDefinitions::relativisticTurret, null, null);
+        add(TurretType.SLOWING_TURRET, TurretModelDefinitions::relativisticTurret, null, null);
         add(TurretType.TELEPORTER_TURRET, TurretModelDefinitions::teleporterTurret, null, null);
         put(TurretType.MELEE_TURRET, TurretModelDefinitions::meleeTurret, MeleeTurretModel::new);
     }

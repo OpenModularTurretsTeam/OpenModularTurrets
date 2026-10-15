@@ -9,6 +9,11 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 
 ## [Unreleased]
 
+### Changed
+
+- BREAKING: Renamed Relativistic Turret to Slowing Turret internally (lang files with  be changed later)
+  - This will cause all existing relativistic turrets to disappear
+
 ## [4.0.0-beta.2] - 2026-10-15
 
 ### Changed
