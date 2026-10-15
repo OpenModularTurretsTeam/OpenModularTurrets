@@ -19,8 +19,7 @@ spotless {
         endWithNewline()
     }
     format("misc") {
-        target("*.md", "*.gradle.kts", "versions/*/*.gradle.kts", ".gitignore", "src/**/*.json", "src/**/*.properties")
-        targetExclude("CHANGELOG.md")
+        target("*.gradle.kts", "versions/*/*.gradle.kts", ".gitignore", "src/**/*.json", "src/**/*.properties")
         leadingTabsToSpaces(2)
         trimTrailingWhitespace()
         endWithNewline()

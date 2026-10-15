@@ -7,9 +7,9 @@ Build turret bases, mount up to four turrets on them and keep your home safe fro
 ## Forge/Neoforge?
 
 You can use the OMT fabric mod on Neoforge/Forge using Sinytra Connector, Connector Extras and ForgifiedFabricApi. Find them here:
-https://www.curseforge.com/minecraft/mc-mods/sinytra-connector
-https://www.curseforge.com/minecraft/mc-mods/connector-extras
-https://www.curseforge.com/minecraft/mc-mods/forgified-fabric-api
+[Sinytra Connector](https://www.curseforge.com/minecraft/mc-mods/sinytra-connector)
+[Connector Extras](https://www.curseforge.com/minecraft/mc-mods/connector-extras)
+[Forgified Fabric API](https://www.curseforge.com/minecraft/mc-mods/forgified-fabric-api)
 
 ## Features
 
@@ -24,13 +24,14 @@ https://www.curseforge.com/minecraft/mc-mods/forgified-fabric-api
 
 ## Requirements
 
-- Fabric Loader and Fabric API
-  For Neoforge/Forge:
-- (Neo)forge + Sinytra Connector + Connector Extras + ForgifiedFabricAPI
+- Fabric Loader and Fabric API or
+- For Neoforge/Forge:
+  - (Neo)forge + Sinytra Connector + Connector Extras + Forgified Fabric API
 
 ## Pre-Release
 
-This is an alpha release of the Fabric port. Expect bugs, and please report them. Camouflage for turret bases and the camouflage trap is not implemented yet.
+This is an early release of the Fabric port. Expect bugs, and please report them.
+Camouflage for turret bases and the camouflage trap is not implemented yet.
 
 ## License
 
