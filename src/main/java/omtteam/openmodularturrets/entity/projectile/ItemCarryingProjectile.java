@@ -4,6 +4,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -34,8 +35,12 @@ public abstract class ItemCarryingProjectile extends TurretProjectile {
     public void tick() {
         super.tick();
         if (carried == null && !isRemoved() && !level().isClientSide() && !item.isEmpty()) {
-            carried = new ItemEntity(level(), getX(), getY() - 0.2F, getZ(), item.copy());
-            carried.setDeltaMovement(getDeltaMovement().add(0, getDropPerTick(), 0));
+            // Spawned half a step behind the projectile: at the muzzle the item would sit inside the weapon, a full
+            // step (several blocks) out it would only show up well away from the turret.
+            Vec3 motion = getDeltaMovement();
+            Vec3 start = position().subtract(motion.scale(0.5D));
+            carried = new ItemEntity(level(), start.x, start.y - 0.2F, start.z, item.copy());
+            carried.setDeltaMovement(motion.add(0, getDropPerTick(), 0));
             carried.setNeverPickUp();
             level().addFreshEntity(carried);
         }
