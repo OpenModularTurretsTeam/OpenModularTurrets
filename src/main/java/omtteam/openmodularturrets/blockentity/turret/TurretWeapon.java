@@ -3,7 +3,9 @@ package omtteam.openmodularturrets.blockentity.turret;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import omtteam.openmodularturrets.core.base.AmmoDraw;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.entity.projectile.ItemCarryingProjectile;
@@ -46,9 +48,9 @@ public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, Sound
     public static TurretWeapon of(TurretType type) {
         return switch (type) {
             case DISPOSABLE_TURRET -> projectile(ModSounds.DISPOSABLE_LAUNCH, (level, ammo, target) ->
-                    withItem(ModEntities.DISPOSABLE.create(level), ammo));
+                    withItem(ModEntities.DISPOSABLE.create(level), ammo, Items.COBBLESTONE));
             case POTATO_CANNON_TURRET -> projectile(ModSounds.POTATO_LAUNCH, (level, ammo, target) ->
-                    withItem(ModEntities.POTATO.create(level), ammo));
+                    withItem(ModEntities.POTATO.create(level), ammo, Items.POTATO));
             // 1.12.2 CrossbowTurretTileEntity used the potato launch sound
             case CROSSBOW_TURRET -> projectile(ModSounds.POTATO_LAUNCH, (level, ammo, target) -> ModEntities.ARROW.create(level));
             case MACHINE_GUN_TURRET -> projectile(ModSounds.MACHINE_GUN_LAUNCH, (level, ammo, target) -> ModEntities.BULLET.create(level));
@@ -82,9 +84,14 @@ public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, Sound
         return new TurretWeapon(Kind.EFFECT, null, sound, 0);
     }
 
-    private static TurretProjectile withItem(@Nullable ItemCarryingProjectile projectile, @Nullable AmmoDraw ammo) {
-        if (projectile != null && ammo != null && ammo.item() instanceof ItemStack stack) {
-            projectile.setItem(stack);
+    /**
+     * Shows the fired item on the projectile; without drawn ammo (creative upgrade, ammo disabled in the config)
+     * {@code fallback} is shown so the projectile is not invisible.
+     */
+    private static TurretProjectile withItem(@Nullable ItemCarryingProjectile projectile, @Nullable AmmoDraw ammo,
+                                             Item fallback) {
+        if (projectile != null) {
+            projectile.setItem(ammo != null && ammo.item() instanceof ItemStack stack ? stack : new ItemStack(fallback));
         }
         return projectile;
     }

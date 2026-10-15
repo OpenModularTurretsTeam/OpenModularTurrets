@@ -18,6 +18,7 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 - Projectile turrets now lead the target with the real flight time (air drag) and raise the aim by the projectile drop, so slow projectiles no longer hit below the target
 - Projectile turrets aim at the target's eyes instead of its body when a ledge hides the body, so shots no longer hit the block in front of it
 - Potato cannon and disposable turret projectiles are now visible right at the turret instead of a few blocks away
+- Potato cannon and disposable turret projectiles show a potato or cobblestone when fired without ammo (creative upgrade)
 
 ### Changed
 
