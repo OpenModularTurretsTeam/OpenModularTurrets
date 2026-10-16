@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.blockentity;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedSlottedStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -155,7 +155,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity {
     /** Ammo slots as exposed to automation on all sides. */
     public Storage<ItemVariant> getAmmoStorage() {
         if (ammoStorage == null) {
-            ammoStorage = new CombinedStorage<>(InventoryStorage.of(inventory, null).getSlots()
+            ammoStorage = new CombinedSlottedStorage<>(InventoryStorage.of(inventory, null).getSlots()
                     .subList(TurretBaseInventory.AMMO_START, TurretBaseInventory.AMMO_START + TurretBaseInventory.AMMO_COUNT));
         }
         return ammoStorage;

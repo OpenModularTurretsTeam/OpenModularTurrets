@@ -21,6 +21,9 @@
     "client": [
       "omtteam.openmodularturrets.client.OMTClient"
     ],
+    "jade": [
+      "omtteam.openmodularturrets.compat.jade.OMTJadePlugin"
+    ],
     "fabric-datagen": [
       "omtteam.openmodularturrets.datagen.OMTDataGenerator"
     ]
@@ -28,6 +31,9 @@
   "mixins": [
     "openmodularturrets.mixins.json"
   ],
+  "suggests": {
+    "jade": "*"
+  },
   "depends": {
     "fabricloader": ">=${loader_version}",
     "minecraft": "${minecraft_dependency}",

@@ -39,6 +39,14 @@ fabricApi {
     }
 }
 
+repositories {
+    // Jade (optional integration, compile only)
+    exclusiveContent {
+        forRepository { maven("https://api.modrinth.com/maven") { name = "Modrinth" } }
+        filter { includeGroup("maven.modrinth") }
+    }
+}
+
 dependencies {
     minecraft("com.mojang:minecraft:$minecraftVersion")
     mappings(loom.officialMojangMappings())
@@ -47,6 +55,9 @@ dependencies {
     // Energy API (jar-in-jar)
     modImplementation("teamreborn:energy:${property("team_reborn_energy_version")}")
     include("teamreborn:energy:${property("team_reborn_energy_version")}")
+
+    // Jade tooltips (optional, not bundled: the mod only registers the plugin when Jade is installed)
+    modCompileOnly("maven.modrinth:jade:${property("jade_version")}")
 
     // Unit tests for the core game logic (test only, not shipped)
     testImplementation(platform("org.junit:junit-bom:${property("junit_version")}"))

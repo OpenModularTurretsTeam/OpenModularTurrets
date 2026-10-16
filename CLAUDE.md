@@ -22,6 +22,7 @@ Core gameplay:
 
 - Fabric Loader and **Fabric API**. Fabric API, including Transfer API, Networking, Rendering and Datagen, may be used freely.
 - **Team Reborn Energy** for power, as the de facto Fabric energy standard. Jar-in-jar it. *(See Open Questions; confirm before adding.)*
+- **Jade** (optional integration, `compat/jade/`, registered through the `jade` entrypoint). Compile-only (`modCompileOnly`, Modrinth maven), never bundled and never required at runtime.
 - Nothing else without asking the user first. No Architectury, no Cloth Config, no OMLib, no Kotlin.
 
 ---
@@ -336,6 +337,7 @@ Update this checklist as work progresses.
 - [x] Misc blocks (crank; OMPD hardened blocks, walls, fences, camouflage trap; loot deleter and power generator skipped)
 - [x] Recipes, loot tables, tags via datagen for all content
 - [x] Lang, sounds, creative tab
+- [x] Jade tooltips for turret bases and turrets (replaces the 1.12.2 WAILA handlers)
 - [ ] Camouflage for turret bases and the camouflage trap, one shared system:
   - Disguise is set and reset the same way on both blocks (via gui with simple phantom slot) and rendered the same way.
   - A small camo settings GUI on both blocks (light value / light opacity sliders, for tier 4+ bases), changes server-validated.
