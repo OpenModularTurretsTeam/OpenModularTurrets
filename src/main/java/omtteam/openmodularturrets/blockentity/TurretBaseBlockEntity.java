@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.blockentity;
 
+import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -11,15 +12,23 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import omtteam.openmodularturrets.block.base.TurretBaseBlock;
+import omtteam.openmodularturrets.block.base.LightTurretBaseBlock;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.base.BlockEntityBaseWorld;
 import omtteam.openmodularturrets.blockentity.base.TurretBaseNbt;
+import omtteam.openmodularturrets.camo.CamoData;
+import omtteam.openmodularturrets.camo.CamoHost;
+import omtteam.openmodularturrets.camo.CamoLightProperties;
 import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
+import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.camo.CamoLight;
+import omtteam.openmodularturrets.core.camo.CamoPermissions;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.TrustManager;
@@ -29,6 +38,7 @@ import omtteam.openmodularturrets.energy.BaseEnergyStorage;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.security.LevelSecurityEnvironment;
+import omtteam.openmodularturrets.security.PlayerAdapter;
 import omtteam.openmodularturrets.security.SecurityNbt;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +52,7 @@ import java.util.Random;
  * connects it to the world: it forwards redstone, inventory and neighbour changes, ticks it, exposes the inventory
  * and energy to automation, and saves/syncs its state.
  */
-public class TurretBaseBlockEntity extends CompatBlockEntity {
+public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost, RenderAttachmentBlockEntity {
     private final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged,
             player -> Container.stillValidBlockEntity(this, player));
     private final TurretBaseLogic logic;
@@ -50,6 +60,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity {
     @Nullable
     private Storage<ItemVariant> ammoStorage;
     private boolean neighboursScanned;
+    private final CamoData camoData = new CamoData();
 
     public TurretBaseBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TURRET_BASE, pos, state);
@@ -166,12 +177,72 @@ public class TurretBaseBlockEntity extends CompatBlockEntity {
         return energyStorage;
     }
 
+    // ---- Camouflage ----
+
+    @Nullable
+    @Override
+    public BlockState getCamo() {
+        return camoData.get();
+    }
+
+    @Override
+    public void setCamo(@Nullable BlockState camo) {
+        if (camoData.set(camo)) {
+            syncToClient();
+        }
+    }
+
+    @Override
+    public boolean isCamoEnabled() {
+        return OMTConfig.get().bases.allowBaseCamo;
+    }
+
+    /** Only the tier 4 and 5 bases have adjustable light. */
+    @Override
+    public boolean supportsLight() {
+        return getBlockState().getBlock() instanceof LightTurretBaseBlock;
+    }
+
+    @Override
+    public CamoLight getLight() {
+        return CamoLightProperties.read(getBlockState());
+    }
+
+    @Override
+    public void setLight(CamoLight light) {
+        if (level != null && supportsLight()) {
+            CamoLightProperties.apply(level, worldPosition, light);
+        }
+    }
+
+    @Override
+    public boolean canSeeThroughCamo(Player player) {
+        return getTrustManager().canOpenGui(PlayerAdapter.info(player));
+    }
+
+    @Override
+    public boolean canSetCamo(Player player) {
+        return CamoPermissions.canSetDisguise(getTrustManager(), PlayerAdapter.info(player));
+    }
+
+    @Override
+    public boolean canChangeLight(Player player) {
+        return CamoPermissions.canChangeLight(getTrustManager(), PlayerAdapter.info(player));
+    }
+
+    /** What the model reads while the chunk is meshed (Fabric rendering data attachment). */
+    @Override
+    public @Nullable Object getRenderAttachmentData() {
+        return isCamoEnabled() ? camoData.get() : null;
+    }
+
     // ---- NBT ----
 
     @Override
     protected void readData(CompoundTag tag, HolderLookup.Provider registries) {
         SecurityNbt.load(getTrustManager(), tag);
         logic.loadState(TurretBaseNbt.load(tag));
+        CamoData.remeshIfChanged(this, camoData.read(tag));
         // client updates carry no items; the open menu syncs its slots itself
         if (tag.contains("Items", Tag.TAG_LIST)) {
             inventory.getItems().clear();
@@ -193,5 +264,6 @@ public class TurretBaseBlockEntity extends CompatBlockEntity {
     protected void writeClientData(CompoundTag tag, HolderLookup.Provider registries) {
         SecurityNbt.save(getTrustManager(), tag);
         TurretBaseNbt.save(logic.getState(), tag);
+        camoData.write(tag);
     }
 }

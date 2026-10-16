@@ -11,7 +11,13 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 
 ### Added
 
+- Turret bases and camouflage traps can be camouflaged as any full block (opaque or transparent) through a new camouflage menu with a disguise slot; tier 4 and 5 bases and the camouflage trap also get light value and light opacity sliders
 - Jade tooltips for turret bases (mode, active, owner) and turrets (active, owner and, for players who may open the base: ammo, damage boost, accuracy, rate of fire)
+
+### Changed
+
+- The camouflage of the camouflage trap is drawn like a real block now: ambient occlusion, transparent blocks and biome-blended grass and leaf colours
+- Setting the camouflage of the camouflage trap uses the new camouflage menu (right-click it as the owner) instead of right-clicking with a block
 
 ## [4.0.0-beta.3] - 2026-10-15
 

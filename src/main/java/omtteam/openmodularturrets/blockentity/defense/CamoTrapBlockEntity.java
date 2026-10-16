@@ -1,56 +1,94 @@
 package omtteam.openmodularturrets.blockentity.defense;
 
+import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
+import omtteam.openmodularturrets.camo.CamoData;
+import omtteam.openmodularturrets.camo.CamoHost;
+import omtteam.openmodularturrets.camo.CamoLightProperties;
+import omtteam.openmodularturrets.core.camo.CamoLight;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * The camouflage trap (OMPD {@code TileEntityCamo}): owner plus the block it looks like. Without camouflage it shows
- * its own texture.
+ * its own texture. Its light settings are block state properties, like on the tier 4 and 5 turret bases.
  */
-public class CamoTrapBlockEntity extends OwnedBlockEntity {
-    @Nullable
-    private BlockState camo;
+public class CamoTrapBlockEntity extends OwnedBlockEntity implements CamoHost, RenderAttachmentBlockEntity {
+    private final CamoData camoData = new CamoData();
 
     public CamoTrapBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CAMO_TRAP, pos, state);
     }
 
-    /** The disguise, or {@code null} for the trap's own look. */
     @Nullable
+    @Override
     public BlockState getCamo() {
-        return camo;
+        return camoData.get();
     }
 
+    @Override
     public void setCamo(@Nullable BlockState camo) {
-        this.camo = camo;
-        syncToClient();
+        if (camoData.set(camo)) {
+            syncToClient();
+        }
+    }
+
+    @Override
+    public boolean isCamoEnabled() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsLight() {
+        return true;
+    }
+
+    @Override
+    public CamoLight getLight() {
+        return CamoLightProperties.read(getBlockState());
+    }
+
+    @Override
+    public void setLight(CamoLight light) {
+        if (level != null) {
+            CamoLightProperties.apply(level, worldPosition, light);
+        }
+    }
+
+    @Override
+    public boolean canSeeThroughCamo(Player player) {
+        return isOwner(player);
+    }
+
+    @Override
+    public boolean canSetCamo(Player player) {
+        return isOwner(player);
+    }
+
+    @Override
+    public boolean canChangeLight(Player player) {
+        return isOwner(player);
+    }
+
+    /** What the model reads while the chunk is meshed (Fabric rendering data attachment). */
+    @Override
+    public @Nullable Object getRenderAttachmentData() {
+        return camoData.get();
     }
 
     @Override
     protected void readData(CompoundTag tag, HolderLookup.Provider registries) {
         super.readData(tag, registries);
-        BlockState previous = camo;
-        camo = tag.contains("Camo", Tag.TAG_COMPOUND)
-                ? NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound("Camo")) : null;
-        // the renderer draws the camouflage; make the client re-render the block when it changed
-        if (level != null && level.isClientSide() && previous != camo) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_IMMEDIATE);
-        }
+        CamoData.remeshIfChanged(this, camoData.read(tag));
     }
 
     @Override
     protected void writeData(CompoundTag tag, HolderLookup.Provider registries) {
         super.writeData(tag, registries);
-        if (camo != null) {
-            tag.put("Camo", NbtUtils.writeBlockState(camo));
-        }
+        camoData.write(tag);
     }
 }

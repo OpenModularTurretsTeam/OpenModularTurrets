@@ -4,6 +4,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import omtteam.openmodularturrets.OMT;
+import omtteam.openmodularturrets.block.base.LightTurretBaseBlock;
 import omtteam.openmodularturrets.block.base.TurretBaseBlock;
 import omtteam.openmodularturrets.block.defense.CamoTrapBlock;
 import omtteam.openmodularturrets.block.defense.DefenseFenceBlock;
@@ -14,6 +15,7 @@ import omtteam.openmodularturrets.block.defense.PassiveDefense;
 import omtteam.openmodularturrets.block.misc.GeneratorBlock;
 import omtteam.openmodularturrets.block.misc.LeverBlock;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
+import omtteam.openmodularturrets.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.turret.TurretType;
 
 import java.util.ArrayList;
@@ -61,6 +63,9 @@ public final class ModBlocks {
     }
 
     private static TurretBaseBlock registerBase(String name, int tier) {
+        if (tier >= CamoLight.MIN_BASE_TIER) {
+            return register(name, new LightTurretBaseBlock(tier, LightTurretBaseBlock.createProperties(tier)));
+        }
         return register(name, new TurretBaseBlock(tier, TurretBaseBlock.createProperties(tier)));
     }
 

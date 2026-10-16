@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -23,6 +24,8 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
+import omtteam.openmodularturrets.camo.CamoBlock;
+import omtteam.openmodularturrets.camo.CamoRules;
 import omtteam.openmodularturrets.config.BaseSetting;
 import omtteam.openmodularturrets.config.ConfigData;
 import omtteam.openmodularturrets.config.OMTConfig;
@@ -45,8 +48,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 /**
  * Turret base, one block per tier (1–5). Ported from 1.12.2 {@code BlockTurretBase} (meta-based tiers flattened).
+ * Can be camouflaged as any full block, so it neither occludes nor blocks light by itself: it still conducts
+ * redstone and blocks all light like the solid block it was, unless {@link LightTurretBaseBlock} says otherwise.
  */
-public class TurretBaseBlock extends BaseEntityBlock {
+public class TurretBaseBlock extends BaseEntityBlock implements CamoBlock {
     //? if >=1.21 {
     public static final MapCodec<TurretBaseBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.intRange(1, 5).fieldOf("tier").forGetter(TurretBaseBlock::getTier),
@@ -72,6 +77,9 @@ public class TurretBaseBlock extends BaseEntityBlock {
                 .mapColor(MapColor.STONE)
                 .sound(SoundType.STONE)
                 .requiresCorrectToolForDrops()
+                // a transparent disguise (glass, leaves, ...) must not hide the faces of the neighbours
+                .noOcclusion()
+                .isRedstoneConductor((state, level, pos) -> true)
                 .pushReaction(PushReaction.BLOCK)
                 .isValidSpawn((state, level, pos, entityType) -> false);
         if (bases.baseBreakable) {
@@ -97,6 +105,27 @@ public class TurretBaseBlock extends BaseEntityBlock {
     public @NotNull RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
+
+    /** Without adjustable light the base blocks all light, like the solid block it used to be. */
+    @Override
+    @SuppressWarnings("deprecation")
+    public int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
+        return 15;
+    }
+
+    //? if >=1.21 {
+    /** Picking a camouflaged base gives the disguise, so the base is not revealed. */
+    @Override
+    public @NotNull ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+        return CamoRules.pickItem(level, pos, super.getCloneItemStack(level, pos, state));
+    }
+    //?} else {
+    /*/^* Picking a camouflaged base gives the disguise, so the base is not revealed. ^/
+    @Override
+    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+        return CamoRules.pickItem(level, pos, super.getCloneItemStack(level, pos, state));
+    }
+    *///?}
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {

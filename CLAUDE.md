@@ -6,7 +6,7 @@ This file guides Claude Code when working in this repository. Read it fully befo
 
 ## 1. Project Overview
 
-**OpenModularTurrets (OMT)** is being maintained on **Fabric**, targeting **1.20.1 and 1.21.1 from a single codebase** using **Stonecutter**.
+**OpenModularTurrets (OMT)** is being maintained on **Fabric**, targeting **1.20.1 and 1.21.1 from a single codebase** using **Stonecutter**. The port from 1.12.2 is complete; this repo maintains the 1.20.1 / 1.21.1 versions. Inventory and power expanders were dropped and are not to be re-added.
 
 Core gameplay:
 
@@ -21,7 +21,7 @@ Core gameplay:
 ### Allowed dependencies
 
 - Fabric Loader and **Fabric API**. Fabric API, including Transfer API, Networking, Rendering and Datagen, may be used freely.
-- **Team Reborn Energy** for power, as the de facto Fabric energy standard. Jar-in-jar it. *(See Open Questions; confirm before adding.)*
+- **Team Reborn Energy** for power, as the de facto Fabric energy standard. Jar-in-jar it (approved).
 - **Jade** (optional integration, `compat/jade/`, registered through the `jade` entrypoint). Compile-only (`modCompileOnly`, Modrinth maven), never bundled and never required at runtime.
 - Nothing else without asking the user first. No Architectury, no Cloth Config, no OMLib, no Kotlin.
 
@@ -197,13 +197,13 @@ omtteam.openmodularturrets
 ├── block/
 │   ├── base/                    # TurretBaseBlock (tiers 1–5)
 │   ├── turret/                  # AbstractTurretBlock + one class per turret type
-│   ├── expander/                # inventory & power expanders
 │   └── misc/                    # lever, hard walls, fences, etc.
 ├── blockentity/
 │   ├── TurretBaseBlockEntity    # targeting, inventory, energy, upgrades, addons, permissions
 │   └── turret/                  # AbstractTurretBlockEntity + subclasses
 ├── targeting/                   # TargetingSettings, TargetSelector, line-of-sight, priorities
 ├── core/                        # The core logic files for turret base logic (targeting/upgrades/ticking etc.)
+├── camo/                        # CamoHost (bases + camo trap), CamoRules, CamoData, light block state properties
 ├── security/                    # TrustedPlayer, AccessLevel, PermissionManager
 ├── energy/                      # internal energy storage + energy API adapter
 ├── inventory/                   # base inventory, slot filters, Transfer API exposure
@@ -270,6 +270,7 @@ omtteam.openmodularturrets.client
   - nobody but the owner can change the owner
 - **Every C2S packet must re-validate permissions on the server** (player distance to the block, access level for the specific action). Never trust the client.
 - Breaking or opening a base also respects permissions.
+- **Teams:** members of the owner's vanilla scoreboard team count as trusted, but only at the lowest rank, so turrets do not shoot them.
 - Use UUIDs for identity; names are display-only. Resolve names to UUIDs server-side via the server's profile cache when adding a player.
 
 ### Power & items
@@ -277,6 +278,7 @@ omtteam.openmodularturrets.client
 - Bases store energy internally. Expose it through the energy API on all sides; expose inventory through Fabric Transfer API (`ItemStorage.SIDED`).
 - Ammo is consumed from the base inventory. Costs and capacities are configurable in `config/`.
 - Power generation addons (solar, redstone reactor) are ticked by the base.
+- **Generator** (separate block, no owner/trust): burns any furnace fuel (Fabric `FuelRegistry`; remainders like empty buckets stay in the slot). One burn tick yields `generatorEnergyPerTick` (default 40 RF/t). It pauses while its buffer (`generatorCapacity`, default 50,000) is full and pushes up to `generatorMaxOutput` (default 200 RF/t) into all neighbours via Team Reborn Energy. It has a furnace-like GUI with an energy bar; hoppers insert fuel only.
 
 ### Config
 
@@ -323,7 +325,7 @@ Update this checklist as work progresses.
 - [x] `compat/` helpers (id, NBT save/load, item data, networking registration)
 - [x] Config system (incl. server → client sync on join)
 - [x] Core Game Logic for turret base and trusted player system (`core.security`, `core.base.TurretBaseLogic`, `core.target`, turret/ammo/upgrade/addon enums)
-- [x] Turret base blocks (all tiers) + block entity (inventory, energy) — camo pending, expanders skipped
+- [x] Turret base blocks (all tiers) + block entity (inventory, energy) — expanders skipped
 - [x] Security: owner, trusted players, access levels, permission checks, trusted players screen + server-validated packets
 - [x] Base GUI (inventory, energy display, targeting settings, trust management) — camo light sliders pending with camo
 - [x] Networking for settings and trust changes (server-validated)
@@ -338,21 +340,10 @@ Update this checklist as work progresses.
 - [x] Recipes, loot tables, tags via datagen for all content
 - [x] Lang, sounds, creative tab
 - [x] Jade tooltips for turret bases and turrets (replaces the 1.12.2 WAILA handlers)
-- [ ] Camouflage for turret bases and the camouflage trap, one shared system:
+- [x] Camouflage for turret bases and the camouflage trap, one shared system (`core.camo`, `camo/`, `CamoMenu`, `CamoBakedModel`):
   - Disguise is set and reset the same way on both blocks (via gui with simple phantom slot) and rendered the same way.
-  - A small camo settings GUI on both blocks (light value / light opacity sliders, for tier 4+ bases), changes server-validated.
+  - A small camo settings GUI on both blocks (light value / light opacity sliders for tier 4+ bases and the trap), changes server-validated.
 - [ ] Playtest both versions (client + dedicated server)
 - [x] Publishing to CurseForge / Modrinth via Gradle (`chiseledPublish`; CurseForge 224663, Modrinth `open-modular-turrets`)
 - [x] Changelog system (`CHANGELOG.md`, `changelogEntry`, `releaseChangelog`; publish uploads the version's section)
-- [x] Generator block (new in this version; design agreed with the user, see section 10)
-
----
-
-## 10. Further Information
-
-1. **Energy API:** Team Reborn Energy is acceptable (jar-in-jar)
-2. **Mappings:** Mojang official
-3. **Package name:** keep `omtteam.openmodularturrets`
-4. **Scope:** the port from 1.12.2 is complete; this repo maintains the 1.20.1 / 1.21.1 versions. Expanders were dropped.
-5. **Team/faction integration:** Should vanilla scoreboard teams count as trusted? Yes, but only at the lowest rank, so turrets do not shoot them.
-6. **Generator** (new block, user decisions): burns any furnace fuel (Fabric `FuelRegistry`, remainders like empty buckets stay in the slot), one burn tick = `generatorEnergyPerTick` (default 40 RF/t); pauses while its buffer (`generatorCapacity`, default 50,000) is full; pushes up to `generatorMaxOutput` (default 200 RF/t) into all neighbours via Team Reborn Energy; one block, furnace-like GUI with energy bar, no owner/trust; hoppers insert fuel only.
+- [x] Generator block (new in this version; design agreed with the user, see "Power & items")

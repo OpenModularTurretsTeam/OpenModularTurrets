@@ -1,10 +1,13 @@
 package omtteam.openmodularturrets.compat.jade;
 
 import omtteam.openmodularturrets.block.base.TurretBaseBlock;
+import omtteam.openmodularturrets.camo.CamoHost;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.ITooltip;
@@ -40,6 +43,8 @@ public class OMTJadePlugin implements IWailaPlugin {
     public void registerClient(IWailaClientRegistration registration) {
         registration.registerBlockComponent(TurretBaseJadeProvider.INSTANCE, TurretBaseBlock.class);
         registration.registerBlockComponent(TurretJadeProvider.INSTANCE, TurretBlock.class);
+        // players who may not see through the camouflage get the disguise instead of the real block
+        registration.addRayTraceCallback((hit, accessor, original) -> disguised(registration, accessor));
         // Jade's item view would list the ammo slots of the base; it stalls on "Collecting items..." there
         registration.addTooltipCollectedCallback(
                 //? if >=1.21 {
@@ -47,6 +52,19 @@ public class OMTJadePlugin implements IWailaPlugin {
                 //?} else {
                 /*(tooltip, accessor) -> hideItemStorage(tooltip, accessor));
                 *///?}
+    }
+
+    /**
+     * The disguise as the block Jade looks at: without block entity, so none of our providers (nor Jade's own
+     * storage views) run for it, and with the disguise's item as icon and name.
+     */
+    private static Accessor<?> disguised(IWailaClientRegistration registration, Accessor<?> accessor) {
+        if (accessor instanceof BlockAccessor block && block.getBlockEntity() instanceof CamoHost host
+                && host.isCamoEnabled() && host.getCamo() != null && !host.canSeeThroughCamo(block.getPlayer())) {
+            return registration.blockAccessor().from(block).blockState(host.getCamo()).blockEntity((BlockEntity) null)
+                    .fakeBlock(new ItemStack(host.getCamo().getBlock())).build();
+        }
+        return accessor;
     }
 
     private static void hideItemStorage(ITooltip tooltip, Accessor<?> accessor) {

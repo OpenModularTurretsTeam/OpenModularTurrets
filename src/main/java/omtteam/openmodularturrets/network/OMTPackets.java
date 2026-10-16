@@ -37,6 +37,11 @@ public final class OMTPackets {
             OMT.id("set_targeting"), BasePackets.SetTargeting::write, BasePackets.SetTargeting::read,
             BasePacketHandler::handleSetTargeting);
 
+    // Camouflage menu
+    public static final PacketType<CamoPackets.SetLight> CAMO_LIGHT = NetworkCompat.registerC2S(
+            OMT.id("camo_light"), CamoPackets.SetLight::write, CamoPackets.SetLight::read,
+            CamoPacketHandler::handleSetLight);
+
     private OMTPackets() {
     }
 

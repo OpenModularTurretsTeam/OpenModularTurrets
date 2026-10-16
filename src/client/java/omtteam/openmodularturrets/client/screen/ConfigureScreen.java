@@ -19,8 +19,8 @@ import omtteam.openmodularturrets.security.PlayerAdapter;
 import java.util.Optional;
 
 /**
- * Base configuration: target categories and the trusted player screen. Ported from 1.12.2 {@code ConfigureGui}.
- * The light value/opacity sliders belong to the camouflage feature and come with it.
+ * Base configuration: target categories, the trusted player screen and the way to the camouflage menu (which has
+ * the light sliders of 1.12.2 {@code ConfigureGui}). Ported from 1.12.2 {@code ConfigureGui}.
  */
 public class ConfigureScreen extends CompatScreen {
     private static final ResourceLocation TEXTURE = OMT.id("textures/gui/configure.png");
@@ -69,6 +69,12 @@ public class ConfigureScreen extends CompatScreen {
                     .tooltip(Tooltip.create(Component.translatable("tooltip.openmodularturrets.trusted_player_gui")))
                     .build());
         }
+        if (isAdmin() && base().map(TurretBaseBlockEntity::isCamoEnabled).orElse(false)) {
+            addRenderableWidget(Button.builder(ScreenTexts.gui("camouflage"), b -> openCamo())
+                    .bounds(left + 10, top + 135, 155, 20)
+                    .tooltip(Tooltip.create(Component.translatable("tooltip.openmodularturrets.camouflage")))
+                    .build());
+        }
         addRenderableWidget(Button.builder(ScreenTexts.gui("back"), b -> back()).bounds(left + 185, top + 20, 80, 20).build());
         updateLabels();
     }
@@ -94,6 +100,12 @@ public class ConfigureScreen extends CompatScreen {
 
     private void openTrustedPlayers() {
         if (minecraft != null) minecraft.setScreen(new TrustedPlayersScreen(pos, this));
+    }
+
+    /** Opens the camouflage menu (a server-side menu, like the base GUI). */
+    private void openCamo() {
+        ClientNetworkCompat.sendToServer(OMTPackets.BASE_ACTION,
+                new BasePackets.SimpleAction(pos, BasePackets.Action.OPEN_CAMO));
     }
 
     /** "Back": reopen the base GUI (a server-side menu). */
