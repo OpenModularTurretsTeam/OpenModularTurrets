@@ -29,6 +29,9 @@ public final class TrustPacketHandler {
             PacketValidation.sendNoPermission(player);
             return;
         }
+        if (player.getServer() == null) {
+            return;
+        }
         String name = packet.name().trim();
         Optional<PlayerIdentity> target = name.isEmpty() ? Optional.empty()
                 : PlayerLookup.findByName(player.getServer(), name);

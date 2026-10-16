@@ -36,13 +36,15 @@ public final class EffectWeapons {
 
     public static void fire(TurretBlockEntity turret, TurretBaseBlockEntity base, Entity target) {
         ServerLevel level = (ServerLevel) turret.getLevel();
-        TurretType type = turret.getTurretType();
-        switch (type) {
-            case SLOWING_TURRET -> slow(target);
-            case TELEPORTER_TURRET -> teleport(level, turret, target);
-            default -> throw new IllegalArgumentException(type + " is not a targeted effect turret, see strike");
+        if (level instanceof ServerLevel) {
+            TurretType type = turret.getTurretType();
+            switch (type) {
+                case SLOWING_TURRET -> slow(target);
+                case TELEPORTER_TURRET -> teleport(level, turret, target);
+                default -> throw new IllegalArgumentException(type + " is not a targeted effect turret, see strike");
+            }
+            playSound(level, turret.getBlockPos(), TurretWeapon.of(type).launchSound());
         }
-        playSound(level, turret.getBlockPos(), TurretWeapon.of(type).launchSound());
     }
 
     /** 1.12.2 {@code RelativisticTurretTileEntity}: slowness and weakness IV; slowed entities are not targeted again. */
@@ -82,12 +84,14 @@ public final class EffectWeapons {
      */
     public static void strike(TurretBlockEntity turret, TurretBaseBlockEntity base, List<LivingEntity> victims) {
         ServerLevel level = (ServerLevel) turret.getLevel();
-        float damage = OMTConfig.get().turrets.get(TurretType.MELEE_TURRET).baseDamage;
-        int looting = base.getLogic().getLootingLevel(VersionCompat.maxLootingLevel(level));
-        for (LivingEntity entity : victims) {
-            TurretDamage.hurt(level, entity, ModDamageTypes.MELEE, damage, null, base.getBlockPos(), looting);
+        if (level instanceof ServerLevel) {
+            float damage = OMTConfig.get().turrets.get(TurretType.MELEE_TURRET).baseDamage;
+            int looting = base.getLogic().getLootingLevel(VersionCompat.maxLootingLevel(level));
+            for (LivingEntity entity : victims) {
+                TurretDamage.hurt(level, entity, ModDamageTypes.MELEE, damage, null, base.getBlockPos(), looting);
+            }
+            playSound(level, turret.getBlockPos(), TurretWeapon.of(TurretType.MELEE_TURRET).launchSound());
         }
-        playSound(level, turret.getBlockPos(), TurretWeapon.of(TurretType.MELEE_TURRET).launchSound());
     }
 
     private static void playSound(ServerLevel level, BlockPos pos, SoundEvent sound) {

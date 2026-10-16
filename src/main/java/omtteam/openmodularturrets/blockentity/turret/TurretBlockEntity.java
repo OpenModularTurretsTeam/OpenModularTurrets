@@ -324,7 +324,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
     public boolean fire(Vector3 toAim, Vector3 velocity, @Nullable Entity target) {
         if (!(level instanceof ServerLevel serverLevel)) return false;
         TurretWeapon weapon = TurretWeapon.of(getTurretType());
-        if (weapon.kind() != TurretWeapon.Kind.PROJECTILE) return false;
+        if (weapon.kind() != TurretWeapon.Kind.PROJECTILE || weapon.factory() == null) return false;
         Optional<TurretBaseBlockEntity> base = beginShot();
         if (base.isEmpty()) return false;
         TurretBaseLogic logic = base.get().getLogic();

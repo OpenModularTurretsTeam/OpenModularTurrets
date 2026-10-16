@@ -9,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -104,9 +105,12 @@ public class TurretBaseBlockEntity extends CompatBlockEntity {
 
     /** A turret counts if it faces away from this base (1.12.2 {@code TurretHeadUtil.getBaseTurrets}). */
     private Optional<Neighbour> scanNeighbour(BlockPos pos, Direction direction) {
-        BlockState state = level.getBlockState(pos);
+        if (level instanceof ServerLevel) {
+            BlockState state = level.getBlockState(pos);
+
         if (state.getBlock() instanceof TurretBlock turret && state.getValue(TurretBlock.FACING) == direction) {
             return Optional.of(new Neighbour.Turret(turret.getTurretType()));
+        }
         }
         return Optional.empty();
     }

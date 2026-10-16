@@ -299,18 +299,18 @@ public class TurretBaseLogic {
     }
 
     /** Removes {@code amount} items of a reactor fuel from the ammo slots, all or nothing. */
-    private boolean extractFuel(ReactorFuel fuel, int amount) {
+    private boolean extractFuel(ReactorFuel fuel) {
         List<ItemSlot> matching = new ArrayList<>();
         int available = 0;
         for (ItemSlot slot : world.getAmmoSlots()) {
             if (slot.getCount() > 0 && slot.isReactorFuel(fuel)) {
                 matching.add(slot);
                 available += slot.getCount();
-                if (available >= amount) break;
+                if (available >= 1) break;
             }
         }
-        if (available < amount) return false;
-        int remaining = amount;
+        if (available < 1) return false;
+        int remaining = 1;
         for (ItemSlot slot : matching) {
             remaining -= slot.extract(Math.min(remaining, slot.getCount()));
             if (remaining <= 0) break;
@@ -468,7 +468,7 @@ public class TurretBaseLogic {
         int generation = settings.redstoneReactorGeneration();
         for (ReactorFuel fuel : new ReactorFuel[]{ReactorFuel.REDSTONE_BLOCK, ReactorFuel.REDSTONE}) {
             long output = (long) generation * fuel.getMultiplier();
-            if (output < energy.getFreeSpace() && extractFuel(fuel, 1)) {
+            if (output < energy.getFreeSpace() && extractFuel(fuel)) {
                 energy.generate(output);
                 return;
             }

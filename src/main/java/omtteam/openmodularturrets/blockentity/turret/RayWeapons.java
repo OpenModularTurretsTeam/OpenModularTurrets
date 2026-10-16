@@ -89,6 +89,9 @@ public final class RayWeapons {
      */
     public static void shoot(TurretBlockEntity turret, TurretBaseBlockEntity base, Entity target, Vec3 origin, Vec3 renderOrigin) {
         ServerLevel level = (ServerLevel) turret.getLevel();
+        if (!(level instanceof ServerLevel)) {
+            return;
+        }
         TurretType type = turret.getTurretType();
         Spec spec = SPECS.get(type);
         TurretBaseLogic logic = base.getLogic();
