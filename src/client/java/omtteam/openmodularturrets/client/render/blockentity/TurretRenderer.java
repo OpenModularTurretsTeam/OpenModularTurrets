@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * Turret renderer (1.12.2 {@code AbstractTurretRenderer}): orients the model on its mounting face with the frame
  * from {@link TurretMath}, then applies the interpolated yaw and pitch. Concealed turrets are not drawn. A base with a damage amp addon
- * adds the {@link DamageAmpRingRenderer ring} above every turret's base plate.
+ * adds the {@link DamageAmpRenderer corner LEDs} to every turret's base plate.
  */
 public class TurretRenderer implements BlockEntityRenderer<TurretBlockEntity> {
     private final Map<TurretType, TurretModel> models;
@@ -41,8 +41,8 @@ public class TurretRenderer implements BlockEntityRenderer<TurretBlockEntity> {
         poseStack.translate(0.5D, 0.5D, 0.5D);
         poseStack.mulPose(rotationFor(turret.getFace()));
         renderModel(model, poseStack, buffers, packedLight, packedOverlay);
-        if (turret.hasDamageAmp() && turret.getLevel() != null) {
-            DamageAmpRingRenderer.render(poseStack, buffers, turret.getLevel().getGameTime() + partialTick);
+        if (turret.hasDamageAmp()) {
+            DamageAmpRenderer.render(poseStack, buffers);
         }
         poseStack.popPose();
     }

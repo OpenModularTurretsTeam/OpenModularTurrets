@@ -64,7 +64,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
     private float syncedPitch;
     private int ticksSinceSync;
     private boolean active;
-    /** Whether the base has a damage amp addon; synced to clients (the turret shows a ring). */
+    /** Whether the base has a damage amp addon; synced to clients (the turret shows its damage amp LEDs). */
     private boolean damageAmp;
 
     /** Ammo taken by the last {@link #beginShot()}, if the turret uses ammo. */
@@ -420,7 +420,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
         tag.putInt("TicksSinceShot", ticksSinceShot);
     }
 
-    /** Clients only need the aim, whether the turret is active and whether it shows the damage amp ring. */
+    /** Clients only need the aim, whether the turret is active and whether it shows the damage amp LEDs. */
     @Override
     protected void writeClientData(CompoundTag tag, HolderLookup.Provider registries) {
         tag.putFloat("Yaw", yaw);
