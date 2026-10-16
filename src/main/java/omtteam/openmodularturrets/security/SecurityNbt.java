@@ -25,20 +25,22 @@ public final class SecurityNbt {
         if (manager.getOwner() != null) {
             tag.put(OWNER, saveIdentity(manager.getOwner()));
         }
+        tag.put(TRUSTED_PLAYERS, saveTrustedPlayers(manager.getTrustedPlayers()));
+    }
+
+    public static ListTag saveTrustedPlayers(List<TrustedPlayer> trustedPlayers) {
         ListTag list = new ListTag();
-        for (TrustedPlayer entry : manager.getTrustedPlayers()) {
+        for (TrustedPlayer entry : trustedPlayers) {
             CompoundTag entryTag = saveIdentity(entry.getIdentity());
             entryTag.putString("AccessLevel", entry.getAccessLevel().getSerializedName());
             list.add(entryTag);
         }
-        tag.put(TRUSTED_PLAYERS, list);
+        return list;
     }
 
     /** Entries without a valid UUID are dropped. */
-    public static void load(TrustManager manager, CompoundTag tag) {
-        PlayerIdentity owner = tag.contains(OWNER, Tag.TAG_COMPOUND) ? loadIdentity(tag.getCompound(OWNER)) : null;
+    public static List<TrustedPlayer> loadTrustedPlayers(ListTag list) {
         List<TrustedPlayer> entries = new ArrayList<>();
-        ListTag list = tag.getList(TRUSTED_PLAYERS, Tag.TAG_COMPOUND);
         for (int i = 0; i < list.size(); i++) {
             CompoundTag entryTag = list.getCompound(i);
             PlayerIdentity identity = loadIdentity(entryTag);
@@ -47,7 +49,13 @@ public final class SecurityNbt {
                 entries.add(new TrustedPlayer(identity, level));
             }
         }
-        manager.load(owner, entries);
+        return entries;
+    }
+
+    /** Entries without a valid UUID are dropped. */
+    public static void load(TrustManager manager, CompoundTag tag) {
+        PlayerIdentity owner = tag.contains(OWNER, Tag.TAG_COMPOUND) ? loadIdentity(tag.getCompound(OWNER)) : null;
+        manager.load(owner, loadTrustedPlayers(tag.getList(TRUSTED_PLAYERS, Tag.TAG_COMPOUND)));
     }
 
     private static CompoundTag saveIdentity(PlayerIdentity identity) {

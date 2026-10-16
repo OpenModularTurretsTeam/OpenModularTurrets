@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import omtteam.openmodularturrets.item.MemoryCardInteraction;
 
 /**
  * Right-click handling through Fabric's {@link UseBlockCallback}, whose signature is the same on 1.20.1 and 1.21
@@ -20,6 +21,9 @@ public interface InteractiveBlock {
     static void registerCallback() {
         UseBlockCallback.EVENT.register((player, level, hand, hit) -> {
             if (player.isSpectator()) return InteractionResult.PASS;
+            // a memory card in hand takes priority over what the block does on right-click
+            InteractionResult card = MemoryCardInteraction.use(player, level, hand, hit.getBlockPos());
+            if (card != InteractionResult.PASS) return card;
             BlockState state = level.getBlockState(hit.getBlockPos());
             if (state.getBlock() instanceof InteractiveBlock block) {
                 return block.onUse(state, level, hit.getBlockPos(), player, hand, hit);

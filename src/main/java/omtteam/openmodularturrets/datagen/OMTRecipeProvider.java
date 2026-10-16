@@ -72,6 +72,18 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
                 .define('R', CommonTags.REDSTONE_DUSTS)
                 .define('I', CommonTags.IRON_INGOTS)
                 .unlockedBy("has_redstone", has(CommonTags.REDSTONE_DUSTS)));
+        // 1.12.2 usable_meta_2_vanilla.json
+        save.accept(ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.MEMORY_CARD)
+                .pattern("RGR")
+                .pattern("IPI")
+                .pattern("LBL")
+                .define('R', CommonTags.REDSTONE_DUSTS)
+                .define('G', CommonTags.GOLD_INGOTS)
+                .define('I', CommonTags.IRON_INGOTS)
+                .define('P', Items.PAPER)
+                .define('L', Items.LAPIS_LAZULI)
+                .define('B', ModItems.IO_BUS)
+                .unlockedBy("has_io_bus", has(ModItems.IO_BUS)));
     }
 
     /**

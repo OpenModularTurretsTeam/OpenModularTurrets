@@ -12,6 +12,7 @@ import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.AmmoItem;
+import omtteam.openmodularturrets.item.MemoryCardItem;
 import omtteam.openmodularturrets.item.UpgradeItem;
 
 import java.util.ArrayList;
@@ -48,6 +49,10 @@ public final class ModItems {
 
     // Intermediate products (1.12.2 IntermediateProductRegular)
     public static final Item IO_BUS = register("io_bus", new Item(new Item.Properties()));
+
+    // Memory card (1.12.2 UsableMetaItem meta 2)
+    public static final MemoryCardItem MEMORY_CARD = register("memory_card",
+            new MemoryCardItem(new Item.Properties().stacksTo(1)));
 
     // Tiered intermediate products (1.12.2 IntermediateProductTiered meta 0–14), index = tier - 1
     public static final List<Item> SENSORS = registerTiered("sensor");

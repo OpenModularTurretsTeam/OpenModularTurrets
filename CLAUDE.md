@@ -343,6 +343,7 @@ Update this checklist as work progresses.
 - [x] Camouflage for turret bases and the camouflage trap, one shared system (`core.camo`, `camo/`, `CamoMenu`, `CamoBakedModel`):
   - Disguise is set and reset the same way on both blocks (via gui with simple phantom slot) and rendered the same way.
   - A small camo settings GUI on both blocks (light value / light opacity sliders for tier 4+ bases and the trap), changes server-validated.
+- [x] Memory card (copy/paste of base and camo trap settings, admin/owner permissions, shift tooltip)
 - [ ] Playtest both versions (client + dedicated server)
 - [x] Publishing to CurseForge / Modrinth via Gradle (`chiseledPublish`; CurseForge 224663, Modrinth `open-modular-turrets`)
 - [x] Changelog system (`CHANGELOG.md`, `changelogEntry`, `releaseChangelog`; publish uploads the version's section)
