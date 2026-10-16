@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Added
+
+- Turrets on a base with a damage amp addon show a small red light on each corner of their base plate
+
 ## [4.0.0] - 2026-11-03
 
 ### Added
