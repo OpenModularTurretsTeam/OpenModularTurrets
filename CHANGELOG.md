@@ -9,6 +9,8 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 
 ## [Unreleased]
 
+## [4.0.0-beta.4] - 2026-10-17
+
 ### Added
 
 - Turret bases and camouflage traps can be camouflaged as any full block (opaque or transparent) through a new camouflage menu with a disguise slot; tier 4 and 5 bases and the camouflage trap also get light value and light opacity sliders
