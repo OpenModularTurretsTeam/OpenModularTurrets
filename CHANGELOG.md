@@ -16,6 +16,10 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 - Camouflage traps have a trusted player list now: the owner and trusted players can stand on a trap, its admins open its menus and manage the list (new "Trusted" button in the camouflage menu; levels are "trusted" and "admin")
 - Jade tooltips for turret bases (mode, active, owner) and turrets (active, owner and, for players who may open the base: ammo, damage boost, accuracy, rate of fire)
 
+### Fixed
+
+- Arc Turret now chains a bit farther and bounces up to two times. It was only bouncing once before.
+
 ### Changed
 
 - The camouflage of the camouflage trap is drawn like a real block now: ambient occlusion, transparent blocks and biome-blended grass and leaf colours

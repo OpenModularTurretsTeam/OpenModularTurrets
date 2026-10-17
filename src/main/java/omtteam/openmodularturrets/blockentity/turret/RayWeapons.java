@@ -167,9 +167,9 @@ public final class RayWeapons {
     private static void shootArcChain(ServerLevel level, TurretBaseBlockEntity base, TurretBlockEntity turret, Spec spec,
                                       Entity from, int hops, List<Integer> hitIds) {
         if (hops <= 0) return;
-        int remaining = hops - 1;
         hitIds.add(from.getId());
-        double range = 3 * remaining;
+        double range = 3 * hops;
+        int remaining = hops - 1;
         for (LivingEntity next : level.getEntitiesOfClass(LivingEntity.class, new AABB(from.position(), from.position()).inflate(range))) {
             if (!hitIds.contains(next.getId()) && TurretDamage.canDamage(level, base.getBlockPos(), next)) {
                 // 1.12.2 order: the chain continues from the next target before it is damaged
