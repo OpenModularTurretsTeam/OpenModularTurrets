@@ -320,4 +320,59 @@ class TrustManagerTest {
             assertTrue(manager.canChangeSettings(renamed));
         }
     }
+
+    @Nested
+    class TrapProfile {
+        private TrustManager trap;
+
+        @BeforeEach
+        void setUpTrap() {
+            trap = new TrustManager(environment, () -> changes++, AccessProfile.TRUSTED_AND_ADMIN);
+            trap.setOwner(OWNER.identity());
+        }
+
+        @Test
+        void levelsStepBetweenTrustedAndAdminOnly() {
+            assertEquals(TrustResult.SUCCESS, trap.addTrustedPlayer(OWNER, ALICE.identity()));
+            assertEquals(AccessLevel.NONE, trap.getTrustedPlayer(ALICE.uuid()).orElseThrow().getAccessLevel());
+            assertEquals(TrustResult.SUCCESS, trap.changeAccessLevel(OWNER, ALICE.uuid(), 1));
+            assertEquals(AccessLevel.ADMIN, trap.getTrustedPlayer(ALICE.uuid()).orElseThrow().getAccessLevel());
+            assertEquals(TrustResult.OUT_OF_RANGE, trap.changeAccessLevel(OWNER, ALICE.uuid(), 1));
+            assertEquals(TrustResult.SUCCESS, trap.changeAccessLevel(OWNER, ALICE.uuid(), -1));
+            assertEquals(AccessLevel.NONE, trap.getTrustedPlayer(ALICE.uuid()).orElseThrow().getAccessLevel());
+            assertEquals(TrustResult.OUT_OF_RANGE, trap.changeAccessLevel(OWNER, ALICE.uuid(), -1));
+        }
+
+        @Test
+        void levelsOutsideTheProfileCannotBeSet() {
+            assertEquals(TrustResult.SUCCESS, trap.addTrustedPlayer(OWNER, ALICE.identity()));
+            assertEquals(TrustResult.OUT_OF_RANGE, trap.setAccessLevel(OWNER, ALICE.uuid(), AccessLevel.OPEN_GUI));
+            assertEquals(AccessLevel.NONE, trap.getTrustedPlayer(ALICE.uuid()).orElseThrow().getAccessLevel());
+        }
+
+        @Test
+        void loadingClampsLevelsToTheProfile() {
+            trap.load(OWNER.identity(), List.of(
+                    new TrustedPlayer(ALICE.identity(), AccessLevel.CHANGE_SETTINGS),
+                    new TrustedPlayer(BOB.identity(), AccessLevel.ADMIN)));
+            assertEquals(AccessLevel.NONE, trap.getTrustedPlayer(ALICE.uuid()).orElseThrow().getAccessLevel());
+            assertEquals(AccessLevel.ADMIN, trap.getTrustedPlayer(BOB.uuid()).orElseThrow().getAccessLevel());
+        }
+
+        @Test
+        void trustedPlayersAreFriendlyButNotAdmins() {
+            assertEquals(TrustResult.SUCCESS, trap.addTrustedPlayer(OWNER, ALICE.identity()));
+            assertTrue(trap.isOwnerOrTrusted(ALICE.identity()));
+            assertFalse(trap.isAdmin(ALICE));
+            assertFalse(trap.isOwnerOrTrusted(STRANGER.identity()));
+            assertTrue(trap.isAdmin(OWNER));
+        }
+
+        @Test
+        void operatorAccessIsClampedToTheProfile() {
+            environment.operatorsCanAccess = true;
+            assertEquals(AccessLevel.NONE, trap.getAccessLevel(operator(STRANGER)).orElseThrow());
+            assertFalse(trap.isAdmin(operator(STRANGER)));
+        }
+    }
 }

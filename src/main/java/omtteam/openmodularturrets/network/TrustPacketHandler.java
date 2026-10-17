@@ -2,13 +2,13 @@ package omtteam.openmodularturrets.network;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.PlayerInfo;
 import omtteam.openmodularturrets.core.security.TrustManager;
 import omtteam.openmodularturrets.core.security.TrustResult;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 import omtteam.openmodularturrets.security.PlayerLookup;
+import omtteam.openmodularturrets.security.TrustHost;
 
 import java.util.Optional;
 
@@ -21,10 +21,10 @@ public final class TrustPacketHandler {
     }
 
     public static void handleAdd(TrustPackets.Add packet, ServerPlayer player) {
-        Optional<TurretBaseBlockEntity> base = PacketValidation.findBase(player, packet.pos());
-        if (base.isEmpty()) return;
+        Optional<TrustHost> host = PacketValidation.findTrustHost(player, packet.pos());
+        if (host.isEmpty()) return;
         PlayerInfo actor = PlayerAdapter.info(player);
-        TrustManager trust = base.get().getTrustManager();
+        TrustManager trust = host.get().getTrustManager();
         if (!trust.isAdmin(actor)) {
             PacketValidation.sendNoPermission(player);
             return;
@@ -52,16 +52,16 @@ public final class TrustPacketHandler {
     }
 
     public static void handleRemove(TrustPackets.Remove packet, ServerPlayer player) {
-        PacketValidation.findBase(player, packet.pos()).ifPresent(base -> {
-            TrustResult result = base.getTrustManager().removeTrustedPlayer(PlayerAdapter.info(player), packet.player());
+        PacketValidation.findTrustHost(player, packet.pos()).ifPresent(host -> {
+            TrustResult result = host.getTrustManager().removeTrustedPlayer(PlayerAdapter.info(player), packet.player());
             if (result == TrustResult.NO_PERMISSION) PacketValidation.sendNoPermission(player);
         });
     }
 
     public static void handleChangeAccess(TrustPackets.ChangeAccess packet, ServerPlayer player) {
         if (packet.delta() != 1 && packet.delta() != -1) return;
-        PacketValidation.findBase(player, packet.pos()).ifPresent(base -> {
-            TrustResult result = base.getTrustManager()
+        PacketValidation.findTrustHost(player, packet.pos()).ifPresent(host -> {
+            TrustResult result = host.getTrustManager()
                     .changeAccessLevel(PlayerAdapter.info(player), packet.player(), packet.delta());
             if (result == TrustResult.NO_PERMISSION) PacketValidation.sendNoPermission(player);
         });

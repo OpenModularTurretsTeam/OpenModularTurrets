@@ -12,13 +12,14 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 ### Added
 
 - Turret bases and camouflage traps can be camouflaged as any full block (opaque or transparent) through a new camouflage menu with a disguise slot; tier 4 and 5 bases and the camouflage trap also get light value and light opacity sliders
-- Turret memory card (craftable): sneak + right-click a turret base (admin access) or camouflage trap (owner) to store its settings, right-click another one to write them. Targeting, mode, trust list, disguise and light are stored; the tooltip lists them while shift is held
+- Turret memory card (craftable): sneak + right-click a turret base or camouflage trap (admin access) to store its settings, right-click another one to write them. Targeting, mode, trust list, disguise and light are stored (traps: trust list, disguise and light); the tooltip lists them while shift is held
+- Camouflage traps have a trusted player list now: the owner and trusted players can stand on a trap, its admins open its menus and manage the list (new "Trusted" button in the camouflage menu; levels are "trusted" and "admin")
 - Jade tooltips for turret bases (mode, active, owner) and turrets (active, owner and, for players who may open the base: ammo, damage boost, accuracy, rate of fire)
 
 ### Changed
 
 - The camouflage of the camouflage trap is drawn like a real block now: ambient occlusion, transparent blocks and biome-blended grass and leaf colours
-- Setting the camouflage of the camouflage trap uses the new camouflage menu (right-click it as the owner) instead of right-clicking with a block
+- Setting the camouflage of the camouflage trap uses the new camouflage menu (right-click it as an admin) instead of right-clicking with a block
 
 ## [4.0.0-beta.3] - 2026-10-15
 

@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
-import omtteam.openmodularturrets.camo.CamoMenus;
 import omtteam.openmodularturrets.compat.MenuCompat;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.security.AccessLevel;
@@ -38,7 +37,6 @@ public final class BasePacketHandler {
             case TOGGLE_MODE, DROP_BASE, DROP_TURRETS -> AccessLevel.ADMIN;
             case TOGGLE_MULTI_TARGETING -> AccessLevel.CHANGE_SETTINGS;
             case OPEN_MENU -> AccessLevel.OPEN_GUI;
-            case OPEN_CAMO -> AccessLevel.ADMIN;
         };
         authorize(player, packet.pos(), required).ifPresent(base -> {
             TurretBaseLogic logic = base.getLogic();
@@ -48,7 +46,6 @@ public final class BasePacketHandler {
                 case DROP_BASE -> player.level().destroyBlock(packet.pos(), true);
                 case DROP_TURRETS -> dropTurrets(player.serverLevel(), packet.pos(), logic);
                 case OPEN_MENU -> openMenu(player, base);
-                case OPEN_CAMO -> CamoMenus.open(player, base);
             }
         });
     }

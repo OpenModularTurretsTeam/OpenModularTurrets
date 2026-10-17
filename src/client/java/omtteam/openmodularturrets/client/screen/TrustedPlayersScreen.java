@@ -5,26 +5,26 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import omtteam.openmodularturrets.OMT;
-import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.client.compat.ClientNetworkCompat;
 import omtteam.openmodularturrets.client.compat.CompatScreen;
 import omtteam.openmodularturrets.core.security.AccessLevel;
+import omtteam.openmodularturrets.core.security.AccessProfile;
 import omtteam.openmodularturrets.core.security.TrustedPlayer;
 import omtteam.openmodularturrets.network.OMTPackets;
 import omtteam.openmodularturrets.network.TrustPackets;
 import omtteam.openmodularturrets.security.PlayerAdapter;
-import org.jetbrains.annotations.Nullable;
+import omtteam.openmodularturrets.security.TrustHost;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Optional;
 
 /**
- * Trusted player management of a base. Ported from OMLib {@code TrustedPlayersGUI} (layout, texture and buttons).
+ * Trusted player management of a base or camouflage trap. Ported from OMLib {@code TrustedPlayersGUI} (layout, texture
+ * and buttons). A trap only has the levels "trusted" and "admin", so the screen names and describes those.
  * <p>
  * Shows the client copy of the trust list (synced with the block entity). Every button only sends a request; the
  * server checks the permission and the change comes back through the block entity sync.
@@ -35,37 +35,45 @@ public class TrustedPlayersScreen extends CompatScreen {
     private static final int HEIGHT = 256;
 
     private final BlockPos pos;
-    @Nullable
-    private final Screen parent;
+    private final Runnable onBack;
     private int left;
     private int top;
     private EditBox nameField;
     private TrustedPlayerList list;
 
     /**
-     * @param parent the screen the "Back" button returns to (OMLib {@code GUIBackSystem}); {@code null} closes the
-     *               screen instead
+     * @param onBack what the "Back" button does (OMLib {@code GUIBackSystem}), e.g. returning to the screen this one
+     *               was opened from or asking the server to reopen a menu
      */
-    public TrustedPlayersScreen(BlockPos pos, @Nullable Screen parent) {
+    public TrustedPlayersScreen(BlockPos pos, Runnable onBack) {
         super(Component.translatable("gui.openmodularturrets.trusted_players"));
         this.pos = pos;
-        this.parent = parent;
+        this.onBack = onBack;
     }
 
     static Component levelName(AccessLevel level) {
         return Component.translatable("gui.openmodularturrets.access_level." + level.getSerializedName());
     }
 
-    private Optional<TurretBaseBlockEntity> base() {
+    private Optional<TrustHost> host() {
         if (minecraft == null || minecraft.level == null) return Optional.empty();
-        return minecraft.level.getBlockEntity(pos) instanceof TurretBaseBlockEntity base
-                ? Optional.of(base) : Optional.empty();
+        return minecraft.level.getBlockEntity(pos) instanceof TrustHost host ? Optional.of(host) : Optional.empty();
+    }
+
+    /** Whether the block only knows "trusted" and "admin". */
+    private boolean isSimpleProfile() {
+        return host().map(host -> !host.getTrustManager().getProfile().allows(AccessLevel.OPEN_GUI)).orElse(false);
+    }
+
+    private Component levelNameForHost(AccessLevel level) {
+        return isSimpleProfile() && level == AccessLevel.NONE
+                ? Component.translatable("gui.openmodularturrets.access_level.trusted") : levelName(level);
     }
 
     /** Client-side check for the UI only; the server checks again. */
     private boolean isAdmin() {
         return minecraft != null && minecraft.player != null
-                && base().map(base -> base.getTrustManager().isAdmin(PlayerAdapter.info(minecraft.player))).orElse(false);
+                && host().map(host -> host.getTrustManager().isAdmin(PlayerAdapter.info(minecraft.player))).orElse(false);
     }
 
     @Override
@@ -74,6 +82,7 @@ public class TrustedPlayersScreen extends CompatScreen {
         top = (height - HEIGHT) / 2;
 
         list = addRenderableWidget(new TrustedPlayerList(left + 5, top + 5, 246, 212));
+        list.setLevelNamer(this::levelNameForHost);
         nameField = addRenderableWidget(new EditBox(font, left + 11, top + 231, 100, 18,
                 Component.translatable("gui.openmodularturrets.add_trusted_player")));
         nameField.setMaxLength(TrustPackets.MAX_NAME_LENGTH);
@@ -98,11 +107,11 @@ public class TrustedPlayersScreen extends CompatScreen {
     }
 
     private void refreshList() {
-        base().ifPresent(base -> list.setEntries(base.getTrustManager().getTrustedPlayers()));
+        host().ifPresent(host -> list.setEntries(host.getTrustManager().getTrustedPlayers()));
     }
 
     private void back() {
-        if (minecraft != null) minecraft.setScreen(parent);
+        onBack.run();
     }
 
     private void addPlayer() {
@@ -164,12 +173,15 @@ public class TrustedPlayersScreen extends CompatScreen {
                 && mouseY >= top + 218 && mouseY < top + 229;
         if (!overLabel) return;
         Component text = list.getSelected()
-                .map(entry -> Component.translatable("tooltip.openmodularturrets." + describe(entry)))
+                .map(entry -> Component.translatable("tooltip.openmodularturrets." + describe(entry, isSimpleProfile())))
                 .orElse(Component.translatable("tooltip.openmodularturrets.info_access_level"));
         graphics.renderTooltip(font, text.copy().withStyle(ChatFormatting.WHITE), mouseX, mouseY);
     }
 
-    private static String describe(TrustedPlayer entry) {
+    private static String describe(TrustedPlayer entry, boolean simpleProfile) {
+        if (simpleProfile) {
+            return entry.getAccessLevel() == AccessLevel.NONE ? "tp_trusted" : "tp_can_administer_trap";
+        }
         return switch (entry.getAccessLevel()) {
             case NONE -> "tp_none";
             case OPEN_GUI -> "tp_can_open_gui";

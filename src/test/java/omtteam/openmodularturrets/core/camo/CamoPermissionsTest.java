@@ -1,9 +1,9 @@
 package omtteam.openmodularturrets.core.camo;
 
 import omtteam.openmodularturrets.core.security.AccessLevel;
-import omtteam.openmodularturrets.core.security.SecurityEnvironment;
-import omtteam.openmodularturrets.core.security.PlayerIdentity;
+import omtteam.openmodularturrets.core.security.AccessProfile;
 import omtteam.openmodularturrets.core.security.PlayerInfo;
+import omtteam.openmodularturrets.core.security.SecurityEnvironment;
 import omtteam.openmodularturrets.core.security.TrustManager;
 import omtteam.openmodularturrets.core.security.TrustResult;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,61 +20,71 @@ class CamoPermissionsTest {
     private static final PlayerInfo OWNER = player("Owner");
     private static final PlayerInfo ADMIN = player("Admin");
     private static final PlayerInfo SETTINGS = player("Settings");
+    private static final PlayerInfo TRUSTED = player("Trusted");
     private static final PlayerInfo STRANGER = player("Stranger");
 
-    private TrustManager trust;
+    private static final SecurityEnvironment NO_TEAMS = new SecurityEnvironment() {
+        @Override
+        public Optional<String> getTeam(UUID uuid, String name) {
+            return Optional.empty();
+        }
+
+        @Override
+        public boolean operatorsCanAccessOwnedBlocks() {
+            return false;
+        }
+
+        @Override
+        public boolean turretsDamageTrustedPlayers() {
+            return false;
+        }
+    };
+
+    private TrustManager base;
+    private TrustManager trap;
 
     private static PlayerInfo player(String name) {
         return new PlayerInfo(UUID.nameUUIDFromBytes(name.getBytes()), name, false);
     }
 
+    private static void trust(TrustManager manager, PlayerInfo player, AccessLevel level) {
+        assertEquals(TrustResult.SUCCESS, manager.addTrustedPlayer(OWNER, player.identity()));
+        assertEquals(TrustResult.SUCCESS, manager.setAccessLevel(OWNER, player.uuid(), level));
+    }
+
     @BeforeEach
     void setUp() {
-        trust = new TrustManager(new SecurityEnvironment() {
-            @Override
-            public Optional<String> getTeam(UUID uuid, String name) {
-                return Optional.empty();
-            }
-
-            @Override
-            public boolean operatorsCanAccessOwnedBlocks() {
-                return false;
-            }
-
-            @Override
-            public boolean turretsDamageTrustedPlayers() {
-                return false;
-            }
-        }, () -> { });
-        trust.setOwner(OWNER.identity());
-        assertEquals(TrustResult.SUCCESS, trust.addTrustedPlayer(OWNER, ADMIN.identity()));
-        assertEquals(TrustResult.SUCCESS, trust.setAccessLevel(OWNER, ADMIN.uuid(), AccessLevel.ADMIN));
-        assertEquals(TrustResult.SUCCESS, trust.addTrustedPlayer(OWNER, SETTINGS.identity()));
-        assertEquals(TrustResult.SUCCESS, trust.setAccessLevel(OWNER, SETTINGS.uuid(), AccessLevel.CHANGE_SETTINGS));
+        base = new TrustManager(NO_TEAMS, () -> { });
+        base.setOwner(OWNER.identity());
+        trust(base, ADMIN, AccessLevel.ADMIN);
+        trust(base, SETTINGS, AccessLevel.CHANGE_SETTINGS);
+        trap = new TrustManager(NO_TEAMS, () -> { }, AccessProfile.TRUSTED_AND_ADMIN);
+        trap.setOwner(OWNER.identity());
+        trust(trap, ADMIN, AccessLevel.ADMIN);
+        trust(trap, TRUSTED, AccessLevel.NONE);
     }
 
     @Test
-    void onlyTheOwnerSetsTheDisguise() {
-        assertTrue(CamoPermissions.canSetDisguise(trust, OWNER));
-        assertFalse(CamoPermissions.canSetDisguise(trust, ADMIN));
-        assertFalse(CamoPermissions.canSetDisguise(trust, SETTINGS));
-        assertFalse(CamoPermissions.canSetDisguise(trust, STRANGER));
+    void onlyTheOwnerSetsTheDisguiseOfABase() {
+        assertTrue(CamoPermissions.canSetDisguise(base, OWNER));
+        assertFalse(CamoPermissions.canSetDisguise(base, ADMIN));
+        assertFalse(CamoPermissions.canSetDisguise(base, SETTINGS));
+        assertFalse(CamoPermissions.canSetDisguise(base, STRANGER));
     }
 
     @Test
-    void adminsChangeTheLight() {
-        assertTrue(CamoPermissions.canChangeLight(trust, OWNER));
-        assertTrue(CamoPermissions.canChangeLight(trust, ADMIN));
-        assertFalse(CamoPermissions.canChangeLight(trust, SETTINGS));
-        assertFalse(CamoPermissions.canChangeLight(trust, STRANGER));
+    void adminsChangeTheLightOfABase() {
+        assertTrue(CamoPermissions.canChangeLight(base, OWNER));
+        assertTrue(CamoPermissions.canChangeLight(base, ADMIN));
+        assertFalse(CamoPermissions.canChangeLight(base, SETTINGS));
+        assertFalse(CamoPermissions.canChangeLight(base, STRANGER));
     }
 
     @Test
-    void blocksWithOnlyAnOwnerAreOwnerOnly() {
-        assertTrue(CamoPermissions.canSetDisguise(OWNER.identity(), OWNER));
-        assertTrue(CamoPermissions.canChangeLight(OWNER.identity(), OWNER));
-        assertFalse(CamoPermissions.canSetDisguise(OWNER.identity(), STRANGER));
-        assertFalse(CamoPermissions.canChangeLight(OWNER.identity(), STRANGER));
-        assertFalse(CamoPermissions.canSetDisguise((PlayerIdentity) null, OWNER));
+    void trapAdminsManageTheTrapAndTrustedPlayersDoNot() {
+        assertTrue(CamoPermissions.canManageTrap(trap, OWNER));
+        assertTrue(CamoPermissions.canManageTrap(trap, ADMIN));
+        assertFalse(CamoPermissions.canManageTrap(trap, TRUSTED));
+        assertFalse(CamoPermissions.canManageTrap(trap, STRANGER));
     }
 }

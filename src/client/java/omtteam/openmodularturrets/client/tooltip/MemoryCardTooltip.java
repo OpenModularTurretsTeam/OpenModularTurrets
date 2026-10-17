@@ -48,6 +48,7 @@ public final class MemoryCardTooltip {
         if (data.get().base() != null) {
             appendBase(data.get().base(), lines);
         }
+        appendTrust(data.get().trust(), lines);
         if (data.get().camo() != null) {
             appendCamo(data.get().camo(), lines);
         }
@@ -63,7 +64,12 @@ public final class MemoryCardTooltip {
         lines.add(line("attack_neutrals", yesNo(base.targetPassive())));
         lines.add(line("attack_players", yesNo(base.targetPlayers())));
         lines.add(line("range", white(String.valueOf(base.range()))));
-        List<TrustedPlayer> trusted = base.trustedPlayers();
+    }
+
+    private static void appendTrust(MemoryCardData.TrustSettings settings, List<Component> lines) {
+        lines.add(Component.empty());
+        lines.add(heading("trust"));
+        List<TrustedPlayer> trusted = settings.trustedPlayers();
         lines.add(line("trusted_players", white(String.valueOf(trusted.size()))));
         for (TrustedPlayer player : trusted.subList(0, Math.min(MAX_LISTED_PLAYERS, trusted.size()))) {
             lines.add(Component.literal("  " + player.getName() + " ").withStyle(ChatFormatting.GRAY)

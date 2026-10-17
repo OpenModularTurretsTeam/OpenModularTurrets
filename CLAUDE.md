@@ -270,6 +270,7 @@ omtteam.openmodularturrets.client
   - nobody but the owner can change the owner
 - **Every C2S packet must re-validate permissions on the server** (player distance to the block, access level for the specific action). Never trust the client.
 - Breaking or opening a base also respects permissions.
+- **Access profiles:** a `TrustManager` only uses the levels of its `AccessProfile` (`ALL` for bases; `TRUSTED_AND_ADMIN` for the camouflage trap, whose trusted players can stand on it and whose admins use its menus and manage the list). Requested, loaded and pasted levels are clamped to the profile. Everything that manages a trust list goes through the `TrustHost` interface.
 - **Teams:** members of the owner's vanilla scoreboard team count as trusted, but only at the lowest rank, so turrets do not shoot them.
 - Use UUIDs for identity; names are display-only. Resolve names to UUIDs server-side via the server's profile cache when adding a player.
 
@@ -343,7 +344,7 @@ Update this checklist as work progresses.
 - [x] Camouflage for turret bases and the camouflage trap, one shared system (`core.camo`, `camo/`, `CamoMenu`, `CamoBakedModel`):
   - Disguise is set and reset the same way on both blocks (via gui with simple phantom slot) and rendered the same way.
   - A small camo settings GUI on both blocks (light value / light opacity sliders for tier 4+ bases and the trap), changes server-validated.
-- [x] Memory card (copy/paste of base and camo trap settings, admin/owner permissions, shift tooltip)
+- [x] Memory card (copy/paste of base and camo trap settings, shift tooltip); camo trap with trusted players (`AccessProfile.TRUSTED_AND_ADMIN`)
 - [ ] Playtest both versions (client + dedicated server)
 - [x] Publishing to CurseForge / Modrinth via Gradle (`chiseledPublish`; CurseForge 224663, Modrinth `open-modular-turrets`)
 - [x] Changelog system (`CHANGELOG.md`, `changelogEntry`, `releaseChangelog`; publish uploads the version's section)

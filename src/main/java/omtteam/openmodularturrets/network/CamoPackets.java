@@ -10,6 +10,17 @@ public final class CamoPackets {
     private CamoPackets() {
     }
 
+    /** Opens the camouflage menu of a base or trap (from the configure and trusted player screens). */
+    public record OpenMenu(BlockPos pos) {
+        public static void write(FriendlyByteBuf buf, OpenMenu packet) {
+            buf.writeBlockPos(packet.pos);
+        }
+
+        public static OpenMenu read(FriendlyByteBuf buf) {
+            return new OpenMenu(buf.readBlockPos());
+        }
+    }
+
     /** Sets light value and light opacity of a camouflaged block (1.12.2 {@code MessageAdjustLightValue/Opacity}). */
     public record SetLight(BlockPos pos, int value, int opacity) {
         public static void write(FriendlyByteBuf buf, SetLight packet) {

@@ -16,6 +16,7 @@ import java.util.Optional;
 public final class MemoryCardNbt {
     private static final String SOURCE = "Source";
     private static final String BASE = "Base";
+    private static final String TRUST = "Trust";
     private static final String CAMO = "Camo";
 
     private MemoryCardNbt() {
@@ -33,9 +34,9 @@ public final class MemoryCardNbt {
             baseTag.putBoolean("TargetMobs", base.targetMobs());
             baseTag.putBoolean("TargetPassive", base.targetPassive());
             baseTag.putInt("Range", base.range());
-            baseTag.put("TrustedPlayers", SecurityNbt.saveTrustedPlayers(base.trustedPlayers()));
             tag.put(BASE, baseTag);
         }
+        tag.put(TRUST, SecurityNbt.saveTrustedPlayers(data.trust().trustedPlayers()));
         if (data.camo() != null) {
             MemoryCardData.CamoSettings camo = data.camo();
             CompoundTag camoTag = new CompoundTag();
@@ -63,9 +64,12 @@ public final class MemoryCardNbt {
             base = new MemoryCardData.BaseSettings(
                     MachineMode.bySerializedName(baseTag.getString("Mode"), MachineMode.INVERTED),
                     baseTag.getBoolean("MultiTargeting"), baseTag.getBoolean("TargetPlayers"),
-                    baseTag.getBoolean("TargetMobs"), baseTag.getBoolean("TargetPassive"), baseTag.getInt("Range"),
-                    SecurityNbt.loadTrustedPlayers(baseTag.getList("TrustedPlayers", Tag.TAG_COMPOUND)));
+                    baseTag.getBoolean("TargetMobs"), baseTag.getBoolean("TargetPassive"), baseTag.getInt("Range"));
         }
+        // cards written before the trust list had its own section kept it in the base settings
+        var trustList = tag.contains(TRUST, Tag.TAG_LIST) ? tag.getList(TRUST, Tag.TAG_COMPOUND)
+                : tag.getCompound(BASE).getList("TrustedPlayers", Tag.TAG_COMPOUND);
+        MemoryCardData.TrustSettings trust = new MemoryCardData.TrustSettings(SecurityNbt.loadTrustedPlayers(trustList));
         MemoryCardData.CamoSettings camo = null;
         if (tag.contains(CAMO, Tag.TAG_COMPOUND)) {
             CompoundTag camoTag = tag.getCompound(CAMO);
@@ -75,7 +79,7 @@ public final class MemoryCardNbt {
                             ? new CamoLight(camoTag.getInt("LightValue"), camoTag.getInt("LightOpacity")) : null);
         }
         try {
-            return Optional.of(new MemoryCardData(source, base, camo));
+            return Optional.of(new MemoryCardData(source, base, trust, camo));
         } catch (IllegalArgumentException e) {
             return Optional.empty();
         }

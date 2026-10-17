@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
+import omtteam.openmodularturrets.security.TrustHost;
 
 import java.util.Optional;
 
@@ -27,6 +28,13 @@ public final class PacketValidation {
         if (player.distanceToSqr(Vec3.atCenterOf(pos)) >= MAX_DISTANCE_SQR) return Optional.empty();
         return player.level().getBlockEntity(pos) instanceof TurretBaseBlockEntity base
                 ? Optional.of(base) : Optional.empty();
+    }
+
+    /** Like {@link #findBase}, for any block with a trust list (turret bases and camouflage traps). */
+    public static Optional<TrustHost> findTrustHost(ServerPlayer player, BlockPos pos) {
+        if (!player.level().isLoaded(pos)) return Optional.empty();
+        if (player.distanceToSqr(Vec3.atCenterOf(pos)) >= MAX_DISTANCE_SQR) return Optional.empty();
+        return player.level().getBlockEntity(pos) instanceof TrustHost host ? Optional.of(host) : Optional.empty();
     }
 
     /** OMLib {@code status_permission} message. */

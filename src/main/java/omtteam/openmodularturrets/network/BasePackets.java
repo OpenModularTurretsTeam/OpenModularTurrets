@@ -23,9 +23,7 @@ public final class BasePackets {
         /** Admin: destroy all attached turrets (drops them). */
         DROP_TURRETS,
         /** Open GUI: (re)open the base menu, e.g. from the configure screen's "Back" button. */
-        OPEN_MENU,
-        /** Admin: open the camouflage menu. */
-        OPEN_CAMO
+        OPEN_MENU
     }
 
     public record SimpleAction(BlockPos pos, Action action) {

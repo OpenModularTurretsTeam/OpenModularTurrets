@@ -42,6 +42,10 @@ public final class OMTPackets {
             OMT.id("camo_light"), CamoPackets.SetLight::write, CamoPackets.SetLight::read,
             CamoPacketHandler::handleSetLight);
 
+    public static final PacketType<CamoPackets.OpenMenu> OPEN_CAMO_MENU = NetworkCompat.registerC2S(
+            OMT.id("open_camo_menu"), CamoPackets.OpenMenu::write, CamoPackets.OpenMenu::read,
+            CamoPacketHandler::handleOpenMenu);
+
     private OMTPackets() {
     }
 

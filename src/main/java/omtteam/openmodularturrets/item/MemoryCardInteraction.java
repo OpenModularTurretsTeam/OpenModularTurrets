@@ -28,7 +28,7 @@ import java.util.Optional;
  * <ul>
  *     <li>turret base: copying and writing the settings (targeting, mode, trust list) needs the admin access level;
  *     the camouflage part follows the camouflage rules (disguise: owner, light: admin)</li>
- *     <li>camouflage trap: copying and writing need the owner</li>
+ *     <li>camouflage trap: copying and writing (trust list, disguise, light) need an admin of the trap</li>
  * </ul>
  * Players without permission get nothing from a trap (it must not reveal itself), and a message from a base (its GUI
  * says the same).
@@ -72,13 +72,15 @@ public final class MemoryCardInteraction {
             return;
         }
         MemoryCardItem.setData(stack, new MemoryCardData(MemoryCardData.Source.TURRET_BASE,
-                MemoryCardRules.capture(base.getLogic()), base.isCamoEnabled() ? camoSettings(base) : null));
+                MemoryCardRules.capture(base.getLogic()), MemoryCardRules.captureTrust(base.getTrustManager()),
+                base.isCamoEnabled() ? camoSettings(base) : null));
         notify(player, "card_copied");
     }
 
     private static void copyFromTrap(ServerPlayer player, ItemStack stack, CamoTrapBlockEntity trap) {
-        if (!trap.canSetCamo(player)) return;
-        MemoryCardItem.setData(stack, new MemoryCardData(MemoryCardData.Source.CAMO_TRAP, null, camoSettings(trap)));
+        if (!MemoryCardRules.canCopy(trap.getTrustManager(), PlayerAdapter.info(player))) return;
+        MemoryCardItem.setData(stack, new MemoryCardData(MemoryCardData.Source.CAMO_TRAP, null,
+                MemoryCardRules.captureTrust(trap.getTrustManager()), camoSettings(trap)));
         notify(player, "card_copied");
     }
 
@@ -93,13 +95,14 @@ public final class MemoryCardInteraction {
     private static void pasteToBase(ServerPlayer player, MemoryCardData data, TurretBaseBlockEntity base) {
         List<String> skipped = new ArrayList<>();
         boolean applied = false;
-        if (data.base() != null) {
-            if (MemoryCardRules.canPaste(base.getTrustManager(), PlayerAdapter.info(player))) {
+        if (MemoryCardRules.canPaste(base.getTrustManager(), PlayerAdapter.info(player))) {
+            if (data.base() != null) {
                 MemoryCardRules.apply(data.base(), base.getLogic());
-                applied = true;
-            } else {
-                skipped.add("settings");
             }
+            MemoryCardRules.applyTrust(data.trust(), base.getTrustManager());
+            applied = true;
+        } else {
+            skipped.add("settings");
         }
         if (data.camo() != null && base.isCamoEnabled()) {
             applied |= pasteCamo(player, data.camo(), base, skipped);
@@ -108,9 +111,13 @@ public final class MemoryCardInteraction {
     }
 
     private static void pasteToTrap(ServerPlayer player, MemoryCardData data, CamoTrapBlockEntity trap) {
-        if (data.camo() == null || !trap.canSetCamo(player)) return;
+        if (!MemoryCardRules.canPaste(trap.getTrustManager(), PlayerAdapter.info(player))) return;
+        MemoryCardRules.applyTrust(data.trust(), trap.getTrustManager());
         List<String> skipped = new ArrayList<>();
-        report(player, pasteCamo(player, data.camo(), trap, skipped), skipped);
+        if (data.camo() != null) {
+            pasteCamo(player, data.camo(), trap, skipped);
+        }
+        report(player, true, skipped);
     }
 
     /** Disguise and light, each only if the player may change it. */

@@ -12,7 +12,7 @@ public enum TrustResult {
     ALREADY_TRUSTED,
     /** The owner cannot be put on their own trust list. */
     IS_OWNER,
-    /** The access level is already the lowest / highest one. */
+    /** The access level is already the lowest / highest one, or is not part of the block's access profile. */
     OUT_OF_RANGE;
 
     public boolean isSuccess() {

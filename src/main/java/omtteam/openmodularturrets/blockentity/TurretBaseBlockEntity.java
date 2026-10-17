@@ -39,6 +39,7 @@ import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.security.LevelSecurityEnvironment;
 import omtteam.openmodularturrets.security.PlayerAdapter;
+import omtteam.openmodularturrets.security.TrustHost;
 import omtteam.openmodularturrets.security.SecurityNbt;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,7 +53,7 @@ import java.util.Random;
  * connects it to the world: it forwards redstone, inventory and neighbour changes, ticks it, exposes the inventory
  * and energy to automation, and saves/syncs its state.
  */
-public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost, RenderAttachmentBlockEntity {
+public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost, RenderAttachmentBlockEntity {
     private final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged,
             player -> Container.stillValidBlockEntity(this, player));
     private final TurretBaseLogic logic;
@@ -149,6 +150,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
     }
 
     /** Owner, trusted players and every permission check. */
+    @Override
     public TrustManager getTrustManager() {
         return logic.getTrustManager();
     }

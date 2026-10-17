@@ -7,10 +7,12 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
+import omtteam.openmodularturrets.core.security.AccessLevel;
 import omtteam.openmodularturrets.core.security.TrustedPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,11 +27,18 @@ public class TrustedPlayerList extends AbstractWidget {
     private UUID selected;
     private int scrollRows;
 
+    private Function<AccessLevel, Component> levelNamer = TrustedPlayersScreen::levelName;
+
     public TrustedPlayerList(int x, int y, int width, int height) {
         super(x, y, width, height, Component.empty());
     }
 
     /** Replaces the entries; the selection is kept by UUID. */
+    /** How the access levels are called in the list (a trap calls its lowest level "trusted"). */
+    public void setLevelNamer(Function<AccessLevel, Component> levelNamer) {
+        this.levelNamer = levelNamer;
+    }
+
     public void setEntries(List<TrustedPlayer> players) {
         entries.clear();
         entries.addAll(players);
@@ -76,7 +85,7 @@ public class TrustedPlayerList extends AbstractWidget {
                 graphics.fill(getX() + 1, rowY - 1, getX() + width - 1, rowY + ROW_HEIGHT - 1, 0x80FFFFFF);
             }
             Component text = Component.literal(entry.getName() + ", ")
-                    .append(TrustedPlayersScreen.levelName(entry.getAccessLevel()));
+                    .append(levelNamer.apply(entry.getAccessLevel()));
             graphics.drawString(font, text, getX() + PADDING + 2, rowY + 1, 0xFFFFFF, false);
         }
         graphics.disableScissor();

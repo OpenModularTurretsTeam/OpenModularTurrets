@@ -27,12 +27,24 @@ import java.util.UUID;
 public class TrustManager {
     private final SecurityEnvironment environment;
     private final Runnable onChange;
+    private final AccessProfile profile;
     private final List<TrustedPlayer> trustedPlayers = new ArrayList<>();
     private PlayerIdentity owner;
 
+    /** A manager that uses all access levels. */
     public TrustManager(SecurityEnvironment environment, Runnable onChange) {
+        this(environment, onChange, AccessProfile.ALL);
+    }
+
+    /** @param profile the access levels this manager uses; stored and requested levels are clamped to it */
+    public TrustManager(SecurityEnvironment environment, Runnable onChange, AccessProfile profile) {
         this.environment = Objects.requireNonNull(environment, "environment");
         this.onChange = Objects.requireNonNull(onChange, "onChange");
+        this.profile = Objects.requireNonNull(profile, "profile");
+    }
+
+    public AccessProfile getProfile() {
+        return profile;
     }
 
     // ---- State ----
@@ -62,7 +74,7 @@ public class TrustManager {
 
     /**
      * Replaces the whole state without permission checks (loading from disk, memory cards). Entries for the owner
-     * and duplicate UUIDs are skipped.
+     * and duplicate UUIDs are skipped; levels outside the {@link #getProfile() profile} are clamped down.
      */
     public void load(PlayerIdentity owner, List<TrustedPlayer> entries) {
         this.owner = owner;
@@ -70,7 +82,7 @@ public class TrustManager {
         for (TrustedPlayer entry : entries) {
             boolean isOwner = owner != null && owner.is(entry.getUuid());
             if (!isOwner && getTrustedPlayer(entry.getUuid()).isEmpty()) {
-                trustedPlayers.add(entry.copy());
+                trustedPlayers.add(new TrustedPlayer(entry.getIdentity(), profile.clamp(entry.getAccessLevel())));
             }
         }
         onChange.run();
@@ -116,7 +128,7 @@ public class TrustManager {
         if (isOwner(player)) return Optional.of(AccessLevel.ADMIN);
         Optional<AccessLevel> level = getTrustLevel(player.identity());
         if (isPrivilegedOperator(player) && level.map(l -> !l.isAtLeast(AccessLevel.OPEN_GUI)).orElse(true)) {
-            return Optional.of(AccessLevel.OPEN_GUI);
+            return Optional.of(profile.clamp(AccessLevel.OPEN_GUI));
         }
         return level;
     }
@@ -200,14 +212,14 @@ public class TrustManager {
     }
 
     /**
-     * Raises ({@code +1}) or lowers ({@code -1}) the level of a trusted player by one step (OMLib
+     * Raises ({@code +1}) or lowers ({@code -1}) the level of a trusted player by one step of the profile (OMLib
      * {@code changePermission(String, int)}).
      */
     public TrustResult changeAccessLevel(PlayerInfo actor, UUID player, int delta) {
         if (!isAdmin(actor)) return TrustResult.NO_PERMISSION;
         Optional<TrustedPlayer> entry = getTrustedPlayer(player);
         if (entry.isEmpty()) return TrustResult.NOT_FOUND;
-        AccessLevel newLevel = entry.get().getAccessLevel().shift(delta);
+        AccessLevel newLevel = profile.step(entry.get().getAccessLevel(), delta);
         if (newLevel == null) return TrustResult.OUT_OF_RANGE;
         entry.get().setAccessLevel(newLevel);
         onChange.run();
@@ -216,6 +228,7 @@ public class TrustManager {
 
     public TrustResult setAccessLevel(PlayerInfo actor, UUID player, AccessLevel level) {
         if (!isAdmin(actor)) return TrustResult.NO_PERMISSION;
+        if (!profile.allows(level)) return TrustResult.OUT_OF_RANGE;
         Optional<TrustedPlayer> entry = getTrustedPlayer(player);
         if (entry.isEmpty()) return TrustResult.NOT_FOUND;
         entry.get().setAccessLevel(level);

@@ -24,11 +24,11 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.blockentity.defense.CamoTrapBlockEntity;
-import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
 import omtteam.openmodularturrets.camo.CamoBlock;
 import omtteam.openmodularturrets.camo.CamoLightProperties;
 import omtteam.openmodularturrets.camo.CamoMenus;
 import omtteam.openmodularturrets.camo.CamoRules;
+import omtteam.openmodularturrets.security.PlayerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 //? if >=1.21 {
@@ -38,9 +38,10 @@ import net.minecraft.world.level.LevelReader;
 
 /**
  * Camouflage trap (OMPD {@code BlockCamoTrap} + OMLib {@code BlockAbstractCamoTileEntity}): looks like another full
- * block, but only its owner can stand on it; everyone else falls through.
+ * block, but only its owner and trusted players can stand on it; everyone else falls through. Its admins manage the
+ * trusted players.
  * <p>
- * The owner right-clicks it to open the camouflage menu, where the disguise, its light value and its light opacity
+ * An admin right-clicks it to open the camouflage menu, where the disguise, its light value and its light opacity
  * are set (the same menu as on turret bases). It mines like the block it imitates (OMPD switched the harvest tool
  * to the camouflage's tool). Sneaking skips the menu, so blocks can still be placed against it.
  */
@@ -109,15 +110,17 @@ public class CamoTrapBlock extends BaseEntityBlock implements InteractiveBlock, 
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
         if (!level.isClientSide()) {
-            OwnedBlockEntity.setOwnerOnPlace(level.getBlockEntity(pos) instanceof OwnedBlockEntity be ? be : null, placer);
+            if (placer instanceof Player player && level.getBlockEntity(pos) instanceof CamoTrapBlockEntity trap) {
+                trap.getTrustManager().setOwner(PlayerAdapter.identity(player));
+            }
         }
     }
 
-    /** OMPD {@code addCollisionBoxToList}: solid only for the owner. */
+    /** OMPD {@code addCollisionBoxToList}: solid only for the owner and trusted players. */
     @Override
     public @NotNull VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         if (context instanceof EntityCollisionContext entityContext && entityContext.getEntity() instanceof Player player
-                && level.getBlockEntity(pos) instanceof CamoTrapBlockEntity trap && trap.isOwner(player)) {
+                && level.getBlockEntity(pos) instanceof CamoTrapBlockEntity trap && trap.isTrusted(player)) {
             return Shapes.block();
         }
         return Shapes.empty();
@@ -147,13 +150,13 @@ public class CamoTrapBlock extends BaseEntityBlock implements InteractiveBlock, 
     *///?}
 
     /**
-     * The owner opens the camouflage menu with the main hand; everyone else gets nothing, so a trap does not reveal
-     * itself.
+     * Admins (the owner always is one) open the camouflage menu with the main hand; everyone else gets nothing, so a
+     * trap does not reveal itself.
      */
     @Override
     public InteractionResult onUse(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (hand != InteractionHand.MAIN_HAND || player.isShiftKeyDown()
-                || !(level.getBlockEntity(pos) instanceof CamoTrapBlockEntity trap) || !trap.isOwner(player)) {
+                || !(level.getBlockEntity(pos) instanceof CamoTrapBlockEntity trap) || !trap.canSetCamo(player)) {
             return InteractionResult.PASS;
         }
         if (player instanceof ServerPlayer serverPlayer) {

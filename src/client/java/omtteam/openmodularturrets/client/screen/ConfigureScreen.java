@@ -13,6 +13,7 @@ import omtteam.openmodularturrets.client.compat.CompatScreen;
 import omtteam.openmodularturrets.core.base.TargetingSettings;
 import omtteam.openmodularturrets.core.security.AccessLevel;
 import omtteam.openmodularturrets.network.BasePackets;
+import omtteam.openmodularturrets.network.CamoPackets;
 import omtteam.openmodularturrets.network.OMTPackets;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 
@@ -99,13 +100,12 @@ public class ConfigureScreen extends CompatScreen {
     }
 
     private void openTrustedPlayers() {
-        if (minecraft != null) minecraft.setScreen(new TrustedPlayersScreen(pos, this));
+        if (minecraft != null) minecraft.setScreen(new TrustedPlayersScreen(pos, () -> minecraft.setScreen(this)));
     }
 
     /** Opens the camouflage menu (a server-side menu, like the base GUI). */
     private void openCamo() {
-        ClientNetworkCompat.sendToServer(OMTPackets.BASE_ACTION,
-                new BasePackets.SimpleAction(pos, BasePackets.Action.OPEN_CAMO));
+        ClientNetworkCompat.sendToServer(OMTPackets.OPEN_CAMO_MENU, new CamoPackets.OpenMenu(pos));
     }
 
     /** "Back": reopen the base GUI (a server-side menu). */

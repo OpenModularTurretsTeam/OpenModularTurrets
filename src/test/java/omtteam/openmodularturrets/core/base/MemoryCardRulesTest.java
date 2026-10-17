@@ -4,8 +4,10 @@ import omtteam.openmodularturrets.core.card.MemoryCardData;
 import omtteam.openmodularturrets.core.card.MemoryCardRules;
 import omtteam.openmodularturrets.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.security.AccessLevel;
+import omtteam.openmodularturrets.core.security.AccessProfile;
 import omtteam.openmodularturrets.core.security.PlayerInfo;
 import omtteam.openmodularturrets.core.security.SecurityEnvironment;
+import omtteam.openmodularturrets.core.security.TrustManager;
 import omtteam.openmodularturrets.core.security.TrustResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -87,6 +89,7 @@ class MemoryCardRulesTest {
 
         TurretBaseLogic target = base(OTHER_OWNER);
         MemoryCardRules.apply(MemoryCardRules.capture(source), target);
+        MemoryCardRules.applyTrust(MemoryCardRules.captureTrust(source.getTrustManager()), target.getTrustManager());
 
         assertEquals(MachineMode.NONINVERTED, target.getMode());
         assertTrue(target.isMultiTargeting());
@@ -103,7 +106,7 @@ class MemoryCardRulesTest {
         trust(source, OWNER, OTHER_OWNER, AccessLevel.ADMIN);
         TurretBaseLogic target = base(OTHER_OWNER);
 
-        MemoryCardRules.apply(MemoryCardRules.capture(source), target);
+        MemoryCardRules.applyTrust(MemoryCardRules.captureTrust(source.getTrustManager()), target.getTrustManager());
 
         assertEquals(OTHER_OWNER.identity(), target.getTrustManager().getOwner());
         assertTrue(target.getTrustManager().getTrustedPlayers().isEmpty());
@@ -116,7 +119,7 @@ class MemoryCardRulesTest {
         TurretBaseLogic target = base(OWNER);
         trust(target, OWNER, SETTINGS, AccessLevel.CHANGE_SETTINGS);
 
-        MemoryCardRules.apply(MemoryCardRules.capture(source), target);
+        MemoryCardRules.applyTrust(MemoryCardRules.captureTrust(source.getTrustManager()), target.getTrustManager());
 
         assertTrue(target.getTrustManager().getTrustedPlayer(SETTINGS.uuid()).isEmpty());
         assertTrue(target.getTrustManager().getTrustedPlayer(ADMIN.uuid()).isPresent());
@@ -126,7 +129,7 @@ class MemoryCardRulesTest {
     void capturedTrustListIsACopy() {
         TurretBaseLogic source = base(OWNER);
         trust(source, OWNER, ADMIN, AccessLevel.ADMIN);
-        MemoryCardData.BaseSettings captured = MemoryCardRules.capture(source);
+        MemoryCardData.TrustSettings captured = MemoryCardRules.captureTrust(source.getTrustManager());
 
         source.getTrustManager().removeTrustedPlayer(OWNER, ADMIN.uuid());
 
@@ -137,7 +140,7 @@ class MemoryCardRulesTest {
     void rangeIsClampedToWhatTheTargetCanReach() {
         TurretBaseLogic target = base(OWNER);
         MemoryCardData.BaseSettings settings = new MemoryCardData.BaseSettings(MachineMode.INVERTED, false, false,
-                true, false, 99, List.of());
+                true, false, 99);
 
         MemoryCardRules.apply(settings, target);
 
@@ -163,14 +166,47 @@ class MemoryCardRulesTest {
     }
 
     @Test
+    void trustListsAreClampedToTheLevelsOfTheTarget() {
+        TurretBaseLogic source = base(OWNER);
+        trust(source, OWNER, SETTINGS, AccessLevel.CHANGE_SETTINGS);
+        trust(source, OWNER, ADMIN, AccessLevel.ADMIN);
+        TrustManager trap = new TrustManager(NO_TEAMS, () -> { }, AccessProfile.TRUSTED_AND_ADMIN);
+        trap.setOwner(OTHER_OWNER.identity());
+
+        MemoryCardRules.applyTrust(MemoryCardRules.captureTrust(source.getTrustManager()), trap);
+
+        assertEquals(AccessLevel.NONE, trap.getTrustedPlayer(SETTINGS.uuid()).orElseThrow().getAccessLevel());
+        assertEquals(AccessLevel.ADMIN, trap.getTrustedPlayer(ADMIN.uuid()).orElseThrow().getAccessLevel());
+    }
+
+    @Test
+    void trapAdminsCopyAndPasteLikeBaseAdmins() {
+        TrustManager trap = new TrustManager(NO_TEAMS, () -> { }, AccessProfile.TRUSTED_AND_ADMIN);
+        trap.setOwner(OWNER.identity());
+        assertEquals(TrustResult.SUCCESS, trap.addTrustedPlayer(OWNER, ADMIN.identity()));
+        assertEquals(TrustResult.SUCCESS, trap.setAccessLevel(OWNER, ADMIN.uuid(), AccessLevel.ADMIN));
+        assertEquals(TrustResult.SUCCESS, trap.addTrustedPlayer(OWNER, OPENER.identity()));
+
+        assertTrue(MemoryCardRules.canCopy(trap, OWNER));
+        assertTrue(MemoryCardRules.canPaste(trap, ADMIN));
+        assertFalse(MemoryCardRules.canCopy(trap, OPENER));
+        assertFalse(MemoryCardRules.canPaste(trap, STRANGER));
+    }
+
+    @Test
     void cardsFromABaseNeedBaseSettingsAndTrapCardsDoNot() {
         MemoryCardData.CamoSettings camo = new MemoryCardData.CamoSettings("minecraft:stone", CamoLight.DEFAULT);
         MemoryCardData.BaseSettings baseSettings = MemoryCardRules.capture(base(OWNER));
+        MemoryCardData.TrustSettings noTrust = new MemoryCardData.TrustSettings(List.of());
 
-        assertThrows(IllegalArgumentException.class, () -> new MemoryCardData(MemoryCardData.Source.TURRET_BASE, null, camo));
-        assertThrows(IllegalArgumentException.class, () -> new MemoryCardData(MemoryCardData.Source.CAMO_TRAP, baseSettings, camo));
-        assertThrows(IllegalArgumentException.class, () -> new MemoryCardData(MemoryCardData.Source.CAMO_TRAP, null, null));
-        assertNull(new MemoryCardData(MemoryCardData.Source.CAMO_TRAP, null, camo).base());
-        assertEquals(camo, new MemoryCardData(MemoryCardData.Source.TURRET_BASE, baseSettings, camo).camo());
+        assertThrows(IllegalArgumentException.class,
+                () -> new MemoryCardData(MemoryCardData.Source.TURRET_BASE, null, noTrust, camo));
+        assertThrows(IllegalArgumentException.class,
+                () -> new MemoryCardData(MemoryCardData.Source.CAMO_TRAP, baseSettings, noTrust, camo));
+        assertThrows(IllegalArgumentException.class,
+                () -> new MemoryCardData(MemoryCardData.Source.CAMO_TRAP, null, noTrust, null));
+        assertNull(new MemoryCardData(MemoryCardData.Source.CAMO_TRAP, null, noTrust, camo).base());
+        assertNull(new MemoryCardData(MemoryCardData.Source.TURRET_BASE, baseSettings, noTrust, null).camo());
+        assertEquals(camo, new MemoryCardData(MemoryCardData.Source.TURRET_BASE, baseSettings, noTrust, camo).camo());
     }
 }
