@@ -26,6 +26,7 @@ import omtteam.openmodularturrets.client.tooltip.LeverTooltip;
 import omtteam.openmodularturrets.client.tooltip.MemoryCardTooltip;
 import omtteam.openmodularturrets.client.tooltip.ModuleTooltip;
 import omtteam.openmodularturrets.client.tooltip.TurretBaseTooltip;
+import omtteam.openmodularturrets.client.tooltip.TurretTooltip;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.registry.ModItems;
@@ -53,6 +54,7 @@ public class OMTClient implements ClientModInitializer {
         TurretItemRenderer.register(ModItems.TURRETS);
         ProjectileRenderers.register();
         ClientCompat.registerTooltip(TurretBaseTooltip::append);
+        ClientCompat.registerTooltip(TurretTooltip::append);
         ClientCompat.registerTooltip(AmmoTooltip::append);
         ClientCompat.registerTooltip(ModuleTooltip::append);
         ClientCompat.registerTooltip(LeverTooltip::append);

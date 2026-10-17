@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * Turrets that act on their target without aiming (1.12.2 {@code TurretHead} subclasses using {@code updateChecks}):
- * relativistic and teleporter act on the base's target, the melee turret strikes everything in reach.
+ * slowing and teleporter act on the base's target, the melee turret strikes everything in reach.
  */
 public final class EffectWeapons {
     /** Slowness IV and weakness IV for 10 seconds. */

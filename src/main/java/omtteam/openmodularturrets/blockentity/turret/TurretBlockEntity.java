@@ -331,7 +331,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
         TurretType type = getTurretType();
         float inaccuracy = ProjectileMath.inaccuracy(logic.getAccuracyDeviation(type));
         Vec3 origin = Vec3.atCenterOf(worldPosition);
-        for (int i = 0; i <= logic.getScattershotCount(); i++) {
+        for (int i = 0; i <= logic.getScattershotCount(type); i++) {
             TurretProjectile projectile = weapon.factory().create(serverLevel, lastAmmo, target);
             if (projectile == null) continue;
             projectile.setBase(base.get());

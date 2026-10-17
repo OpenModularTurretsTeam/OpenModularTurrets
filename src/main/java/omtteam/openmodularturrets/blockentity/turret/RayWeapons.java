@@ -97,7 +97,7 @@ public final class RayWeapons {
         TurretBaseLogic logic = base.getLogic();
         double accuracy = logic.getAccuracyDeviation(type);
         Vec3 aim = new Vec3(target.getX(), target.getEyeY(), target.getZ());
-        for (int i = 0; i <= logic.getScattershotCount(); i++) {
+        for (int i = 0; i <= logic.getScattershotCount(type); i++) {
             double scale = ProjectileMath.raySpread(accuracy, target.getBbHeight(), aim.distanceTo(origin), logic.getRange(type));
             Vec3 end = aim.add(level.random.nextGaussian() * scale, level.random.nextGaussian() * scale,
                     level.random.nextGaussian() * scale);

@@ -44,7 +44,7 @@ public abstract class TargetEntity {
     /** A tamed horse (1.12.2 never targeted those, owned or not). */
     public abstract boolean isTamedHorse();
 
-    /** Has the slowness effect (the relativistic turret ignores slowed entities). */
+    /** Has the slowness effect (the slowing turret ignores slowed entities). */
     public abstract boolean hasSlowness();
 
     public abstract EntityCategory getCategory();

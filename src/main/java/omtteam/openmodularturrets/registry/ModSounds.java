@@ -23,7 +23,7 @@ public final class ModSounds {
     public static final SoundEvent POTATO_LAUNCH = register("potato");
     public static final SoundEvent RAIL_GUN_LAUNCH = register("rail_gun");
     public static final SoundEvent PLASMA_LAUNCH = register("plasma_launch");
-    public static final SoundEvent RELATIVISTIC_LAUNCH = register("relativistic");
+    public static final SoundEvent SLOWING_LAUNCH = register("slowing");
     public static final SoundEvent ROCKET_LAUNCH = register("rocket");
     public static final SoundEvent TELEPORT_LAUNCH = register("teleport");
     public static final SoundEvent ARC_LAUNCH = register("arc");

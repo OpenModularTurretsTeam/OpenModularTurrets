@@ -39,6 +39,7 @@ final class FakeSettings implements LogicSettings {
         turrets.put(TurretType.LASER_TURRET, stats(25, 10, 4, 8000, 10, 4, 0.06D, 0.125D, 2, 0.2D, 0.08D, 0.1D));
         turrets.put(TurretType.SLOWING_TURRET, stats(20, 25, 0, 5000, 0, 4, 0D, 0.1D, 2, 0, 0.08D, 0.1D));
         turrets.put(TurretType.ROCKET_TURRET, stats(30, 30, 10, 5000, 10, 3, 0.08D, 0.1D, 2, 0.2D, 0.08D, 0.1D));
+        turrets.put(TurretType.RAILGUN_TURRET, stats(30, 100, 25, 25000, 3, 2, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D));
     }
 
     static TurretStats stats(int range, int fireRate, int damage, int power, double accuracy, int maxSimultaneous,

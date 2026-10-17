@@ -384,7 +384,7 @@ Update this checklist as work progresses.
     - [x] Arc turret
     - [x] Laser turret
     - [x] Railgun turret
-    - [x] Railgun with 8 scattershot upgrades: the volley deals exactly `baseDamage * (armor / 20 + 0.6)` per hitting ray (`railgunScattershotDamagePerRay`; target at the 1024 max health cap)
+    - [x] Railgun ignores scattershot upgrades: with 8 of them it shoots one ray dealing `baseDamage * (armor / 20 + 0.6)` for the normal energy (`railgunIgnoresScattershot`; target at the 1024 max health cap)
   - Effect turrets (hit = effect applied; no projectile or ray):
     - [x] Slowing turret (slowness lowers the movement speed; `EffectTurretGameTests`)
     - [x] Teleporter turret (target pulled onto the turret)

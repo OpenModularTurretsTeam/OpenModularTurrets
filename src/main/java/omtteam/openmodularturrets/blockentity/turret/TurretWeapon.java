@@ -26,7 +26,7 @@ public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, Sound
         /** Hits instantly along a ray (1.12.2 {@code RayTracingTurret}: laser, railgun, arc), see {@link RayWeapons}. */
         RAY,
         /**
-         * Acts on the target without aiming (1.12.2 {@code TurretHead.updateChecks} turrets: relativistic,
+         * Acts on the target without aiming (1.12.2 {@code TurretHead.updateChecks} turrets: slowing,
          * teleporter, melee), see {@link EffectWeapons}.
          */
         EFFECT;
@@ -62,9 +62,9 @@ public record TurretWeapon(Kind kind, @Nullable ProjectileFactory factory, Sound
                 return rocket;
             });
             case PLASMA_TURRET -> projectile(ModSounds.PLASMA_LAUNCH, (level, ammo, target) -> ModEntities.PLASMA.create(level));
-            // 1.12.2 MeleeTurretTileEntity used the relativistic launch sound
-            case MELEE_TURRET -> effect(ModSounds.RELATIVISTIC_LAUNCH);
-            case SLOWING_TURRET -> effect(ModSounds.RELATIVISTIC_LAUNCH);
+            // 1.12.2 MeleeTurretTileEntity used the relativistic (now slowing) launch sound
+            case MELEE_TURRET -> effect(ModSounds.SLOWING_LAUNCH);
+            case SLOWING_TURRET -> effect(ModSounds.SLOWING_LAUNCH);
             case TELEPORTER_TURRET -> effect(ModSounds.TELEPORT_LAUNCH);
             case ARC_TURRET -> ray(ModSounds.ARC_LAUNCH);
             case LASER_TURRET -> ray(ModSounds.LASER_LAUNCH);

@@ -56,7 +56,7 @@ public enum TurretType {
 
     /**
      * Default targeting weights in {@link omtteam.openmodularturrets.core.target.TargetingPriority} order (1.12.2
-     * {@code getDefaultPriorities}). Melee, relativistic and teleporter had only four values in 1.12.2 (a crash
+     * {@code getDefaultPriorities}). Melee, slowing (1.12.2 relativistic) and teleporter had only four values in 1.12.2 (a crash
      * bug); their PLAYER weight is 10 like every other turret (user decision).
      */
     public int[] getDefaultPriorities() {
@@ -69,6 +69,14 @@ public enum TurretType {
      */
     public boolean canMountOn(Face face) {
         return this != MELEE_TURRET || face == Face.UP || face == Face.DOWN;
+    }
+
+    /**
+     * Whether scattershot upgrades affect this turret. The railgun ignores them (user decision): it hardly scatters,
+     * so every extra ray hit and a volley dealt a multiple of its already high damage.
+     */
+    public boolean usesScattershot() {
+        return this != RAILGUN_TURRET;
     }
 
     public static Optional<TurretType> byId(String id) {

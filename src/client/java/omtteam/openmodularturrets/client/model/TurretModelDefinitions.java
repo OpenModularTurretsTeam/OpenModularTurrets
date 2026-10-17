@@ -292,7 +292,7 @@ public final class TurretModelDefinitions {
     }
 
     /** 1.12.2 {@code ModelRelativisticTurret}. */
-    public static LayerDefinition relativisticTurret() {
+    public static LayerDefinition slowingTurret() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
         PartDefinition base = root.addOrReplaceChild("base", CubeListBuilder.create()

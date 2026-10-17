@@ -271,7 +271,7 @@ public class TurretBaseLogic {
     public Optional<AmmoDraw> drawAmmo(TurretType type) {
         AmmoType ammo = getRequiredAmmo(type).orElseThrow(
                 () -> new IllegalArgumentException(type + " does not need ammo"));
-        int needed = getScattershotCount() + 1;
+        int needed = getScattershotCount(type) + 1;
 
         List<ItemSlot> matching = new ArrayList<>();
         int available = 0;
@@ -366,9 +366,12 @@ public class TurretBaseLogic {
         }
     }
 
-    /** 1.12.2 {@code TurretHeadUtil.getScattershotUpgrades}. */
-    public int getScattershotCount() {
-        return getUpgradeCount(UpgradeType.SCATTERSHOT);
+    /**
+     * Scattershot upgrades that apply to a turret (1.12.2 {@code TurretHeadUtil.getScattershotUpgrades}); always 0
+     * for turrets that {@linkplain TurretType#usesScattershot() ignore them}.
+     */
+    public int getScattershotCount(TurretType type) {
+        return type.usesScattershot() ? getUpgradeCount(UpgradeType.SCATTERSHOT) : 0;
     }
 
     /** 1.12.2 {@code TurretHeadUtil.getAmpLevel}. */
@@ -416,7 +419,7 @@ public class TurretBaseLogic {
     public int getPowerPerShot(TurretType type) {
         TurretStats stats = settings.turret(type);
         double efficiency = stats.efficiencyUpgrade() * getUpgradeCount(UpgradeType.EFFICIENCY);
-        return (int) Math.round(stats.powerUsage() * (1 - efficiency) * (1 + getScattershotCount()));
+        return (int) Math.round(stats.powerUsage() * (1 - efficiency) * (1 + getScattershotCount(type)));
     }
 
     /**
@@ -435,7 +438,7 @@ public class TurretBaseLogic {
     public double getAccuracyDeviation(TurretType type) {
         TurretStats stats = settings.turret(type);
         double accuracy = stats.accuracyUpgrade() * getUpgradeCount(UpgradeType.ACCURACY);
-        return stats.baseAccuracyDeviation() / Math.pow(1 + accuracy, 1.5D) * (1 + getScattershotCount() / 10F);
+        return stats.baseAccuracyDeviation() / Math.pow(1 + accuracy, 1.5D) * (1 + getScattershotCount(type) / 10F);
     }
 
     /** Damage bonus factor of the damage amp addon: {@code damageAmp * amp level} (1.12.2 projectile code). */

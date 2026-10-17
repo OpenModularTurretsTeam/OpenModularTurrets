@@ -95,10 +95,10 @@
       }
     ]
   },
-  "relativistic": {
+  "slowing": {
     "sounds": [
       {
-        "name": "openmodularturrets:relativistic",
+        "name": "openmodularturrets:slowing",
         "stream": false
       }
     ]

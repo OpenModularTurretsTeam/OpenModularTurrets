@@ -65,20 +65,21 @@ public class RayTurretGameTests implements FabricGameTest {
     }
 
     /**
-     * Each scattershot ray of the railgun deals its full damage ({@code baseDamage * (armor / 20 + 0.6)},
-     * armor-piercing, the hurt cooldown is removed after every hit), so one volley deals exactly that per ray that
-     * hit and nothing more. 1.12.2 dealt suspiciously high damage with many scattershot upgrades, because the
-     * railgun barely scatters and all rays hit. The target has the highest possible health (vanilla caps max health
-     * at 1024) so it survives the volley.
+     * The railgun ignores scattershot upgrades: in 1.12.2 it barely scattered, so all extra rays hit and a volley
+     * dealt a multiple of its damage (each ray deals full damage, the hurt cooldown is removed after every hit). With
+     * 8 upgrades it must still shoot one ray dealing {@code baseDamage * (armor / 20 + 0.6)} for the normal energy.
+     * The target has the highest possible health (vanilla caps max health at 1024).
      */
     @GameTest(template = EMPTY_STRUCTURE, batch = "railgun_scattershot", timeoutTicks = TIMEOUT_TICKS)
-    public void railgunScattershotDamagePerRay(GameTestHelper helper) {
+    public void railgunIgnoresScattershot(GameTestHelper helper) {
         TurretBaseBlockEntity base = TurretScene.build(helper, TurretType.RAILGUN_TURRET);
         // tier 5: two upgrade slots with up to four upgrades each
         base.getInventory().setItem(TurretBaseInventory.UPGRADE_START, new ItemStack(ModItems.UPGRADE_SCATTER_SHOT, 4));
         base.getInventory().setItem(TurretBaseInventory.UPGRADE_START + 1, new ItemStack(ModItems.UPGRADE_SCATTER_SHOT, 4));
-        helper.assertTrue(base.getLogic().getScattershotCount() == SCATTERSHOT_UPGRADES,
-                "Base has " + base.getLogic().getScattershotCount() + " scattershot upgrades");
+        helper.assertTrue(base.getLogic().getScattershotCount(TurretType.LASER_TURRET) == SCATTERSHOT_UPGRADES,
+                "Base has " + base.getLogic().getScattershotCount(TurretType.LASER_TURRET) + " scattershot upgrades");
+        long startEnergy = base.getLogic().getEnergy().getAmount();
+        int powerPerShot = OMTConfig.get().turrets.get(TurretType.RAILGUN_TURRET).powerUsage;
 
         BlockPos turretPos = helper.absolutePos(TurretScene.TURRET);
         List<Shot> shots = SHOTS.computeIfAbsent(turretPos, pos -> new CopyOnWriteArrayList<>());
@@ -92,10 +93,11 @@ public class RayTurretGameTests implements FabricGameTest {
         // all rays of a volley are shot in the same tick, so the first tick with shots has the whole volley
         helper.onEachTick(() -> {
             if (shots.isEmpty()) return;
-            helper.assertTrue(shots.size() == SCATTERSHOT_UPGRADES + 1,
-                    "Railgun shot " + shots.size() + " rays instead of " + (SCATTERSHOT_UPGRADES + 1));
+            helper.assertTrue(shots.size() == 1, "Railgun shot " + shots.size() + " rays instead of 1");
+            long used = startEnergy - base.getLogic().getEnergy().getAmount();
+            helper.assertTrue(used == powerPerShot, "Railgun used " + used + " energy instead of " + powerPerShot);
             long hits = shots.stream().filter(shot -> shot.hit() == target).count();
-            helper.assertTrue(hits > 0, "No railgun ray hit the target");
+            helper.assertTrue(hits > 0, "The railgun ray did not hit the target");
             float perRay = (float) (OMTConfig.get().turrets.get(TurretType.RAILGUN_TURRET).baseDamage
                     * (target.getArmorValue() / 20F + 0.6F));
             float expected = perRay * hits;

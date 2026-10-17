@@ -280,6 +280,20 @@ class TurretBaseLogicTest {
         }
 
         @Test
+        void railgunIgnoresScattershot() {
+            TurretBaseLogic logic = base(5);
+            upgrade(0, UpgradeType.SCATTERSHOT, 4);
+            assertEquals(4, logic.getScattershotCount(TurretType.LASER_TURRET));
+            assertEquals(0, logic.getScattershotCount(TurretType.RAILGUN_TURRET));
+            assertEquals(25000, logic.getPowerPerShot(TurretType.RAILGUN_TURRET), "no extra energy per ray");
+            assertEquals(3, logic.getAccuracyDeviation(TurretType.RAILGUN_TURRET), 1e-9, "no extra scatter");
+            FakeSlot slugs = FakeSlot.ammo(AmmoType.FERRO_SLUG, 5);
+            ammoSlot(0, slugs);
+            assertEquals(1, logic.drawAmmo(TurretType.RAILGUN_TURRET).orElseThrow().count(), "one slug per shot");
+            assertEquals(4, slugs.count);
+        }
+
+        @Test
         void fireCooldown() {
             TurretBaseLogic logic = base(5);
             assertEquals(8, logic.getFireCooldownTicks(TurretType.MACHINE_GUN_TURRET), 1e-9);
