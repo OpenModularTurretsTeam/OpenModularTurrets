@@ -108,16 +108,16 @@ public final class RayWeapons {
                     ClipContext.Fluid.NONE, target));
             double blockRange = blockHit.getType() == HitResult.Type.BLOCK ? blockHit.getLocation().distanceTo(start) : NO_BLOCK_HIT;
 
-            boolean hit = false;
+            Entity hit = null;
             for (Entity entity : entitiesOnRay(level, start, end)) {
                 if (entity.getBoundingBox().clip(start, end).map(p -> p.distanceTo(start) <= blockRange).orElse(true)
                         && hitEntity(level, turret, base, spec, entity, type == TurretType.ARC_TURRET)) {
                     ray(level, spec, type == TurretType.ARC_TURRET ? renderOrigin : start, end);
-                    hit = true;
+                    hit = entity;
                     break;
                 }
             }
-            if (!hit) {
+            if (hit == null) {
                 if (blockHit.getType() == HitResult.Type.BLOCK) {
                     ray(level, spec, start, blockHit.getLocation());
                     handleBlockHit(level, type, blockHit.getBlockPos());
@@ -126,6 +126,7 @@ public final class RayWeapons {
                     ray(level, spec, start, end.add(end.subtract(start).scale(2D)));
                 }
             }
+            RayShotCallback.EVENT.invoker().onRayShot(turret, start, end, hit);
         }
     }
 

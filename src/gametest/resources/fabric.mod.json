@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "openmodularturrets-gametest",
+  "version": "1.0.0",
+  "name": "Open Modular Turrets Game Tests",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "omtteam.openmodularturrets.gametest.EffectTurretGameTests",
+      "omtteam.openmodularturrets.gametest.RayTurretGameTests",
+      "omtteam.openmodularturrets.gametest.ProjectileTurretGameTests"
+    ]
+  },
+  "depends": {
+    "openmodularturrets": "*",
+    "fabric-gametest-api-v1": "*"
+  }
+}

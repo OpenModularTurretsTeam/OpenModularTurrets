@@ -65,7 +65,9 @@ Check exact latest patch versions of Loader, API, Loom and Stonecutter when sett
 ├── src/
     ├── main/java/omtteam/openmodularturrets/...
     ├── main/resources/         # SHARED assets + fabric.mod.json (templated)
-    └── client/java/...         # client-only code (split source sets)
+    ├── client/java/...         # client-only code (split source sets)
+    ├── test/java/...           # JUnit tests for core/
+    └── gametest/               # server game tests (own mod id openmodularturrets-gametest)
 ```
 
 - **Mod ID:** `openmodularturrets`. **Base package:** `omtteam.openmodularturrets`.
@@ -118,6 +120,7 @@ The Stonecutter DSL changes between releases. If this does not match the install
 ./gradlew :1.20.1:build                    # build a single version
 ./gradlew :1.21.1:runClient                # run client for a version
 ./gradlew :1.21.1:runServer
+./gradlew :1.21.1:runGameTest              # server game tests for one version (also run by check / build)
 ./gradlew :1.20.1:runDatagen               # regenerate data for a version
 ./gradlew :1.21.1:runDatagen
 ./gradlew chiseledPublish                  # upload all versions to CurseForge/Modrinth (custom task)
@@ -147,6 +150,19 @@ The logic consists of:
 
 `./gradlew check` runs `verifyCoreIsolation`, which fails if anything under `core/` imports `net.minecraft`, `net.fabricmc`,
 `com.mojang`, `team.reborn` or non-core mod packages. Tests live in `src/test/java` (JUnit, test-only dependency).
+
+### Game tests
+
+In-game behaviour (turrets firing, effects on entities) is tested with Fabric GameTest in `src/gametest` (Loom
+`fabricApi.configureTests`, own source set and mod id, never shipped). Classes implement `FabricGameTest`, are listed under
+the `fabric-gametest` entrypoint in `src/gametest/resources/fabric.mod.json` and use `EMPTY_STRUCTURE` (8×8×8 air)
+with the scene built in code. `check` (and so `build` / `chiseledBuild`) runs them on a dedicated test server in
+`versions/<v>/build/run/gameTest` (the world is deleted before every run).
+
+- `TurretScene` builds a ready-to-fire base + turret (owner, always on, full energy, max range) and spawns targets (husks without AI). A base placed with `setBlock` has no owner: set one right away or it drops itself.
+- `TurretScene` also loads the turret's ammo into the base (energy alone is not enough for the railgun and the projectile turrets).
+- Turrets that scatter get up to 10 attempts, each with a fresh target (`TargetAttempts`); a miss replaces the target, a hit passes. A ray attempt ends with its ray, a projectile attempt when its first projectile is gone.
+- Turret ranges reach into neighbouring tests, so every turret test gets its own `batch` and ends with `TurretScene.succeedWhen`, which removes the turret, base and entities once it passed (1.20.1 keeps a finished batch's blocks and entities next to the following one).
 
 ---
 
@@ -353,7 +369,26 @@ Update this checklist as work progresses.
   - Disguise is set and reset the same way on both blocks (via gui with simple phantom slot) and rendered the same way.
   - A small camo settings GUI on both blocks (light value / light opacity sliders for tier 4+ bases and the trap), changes server-validated.
 - [x] Memory card (copy/paste of base and camo trap settings, shift tooltip); camo trap with trusted players (`AccessProfile.TRUSTED_AND_ADMIN`)
-- [ ] Playtest both versions (client + dedicated server)
+- [x] Playtest both versions (client + dedicated server)
+- [x] Game tests for every turret (`src/gametest`, see "Game tests"). Each turret, on a base of its tier with energy and ammo, must hit a hostile target 5 blocks in front of it. Inaccurate turrets get up to 10 attempts (fresh target each time); the test fails if none of them hits. Additionally, projectile turrets must spawn their projectile and ray turrets must trace their ray to the target.
+  - Projectile turrets (projectile spawned + hit; `ProjectileTurretGameTests`, spawns observed through `ServerEntityEvents.ENTITY_LOAD`; explosion and fire damage count as hits):
+    - [x] Disposable turret
+    - [x] Potato cannon turret
+    - [x] Crossbow turret
+    - [x] Machine gun turret
+    - [x] Incendiary turret
+    - [x] Grenade turret
+    - [x] Rocket turret
+    - [x] Plasma turret
+  - Ray turrets (ray traced to the target + hit; `RayTurretGameTests`, rays observed through `RayShotCallback`):
+    - [x] Arc turret
+    - [x] Laser turret
+    - [x] Railgun turret
+    - [x] Railgun with 8 scattershot upgrades: the volley deals exactly `baseDamage * (armor / 20 + 0.6)` per hitting ray (`railgunScattershotDamagePerRay`; target at the 1024 max health cap)
+  - Effect turrets (hit = effect applied; no projectile or ray):
+    - [x] Slowing turret (slowness lowers the movement speed; `EffectTurretGameTests`)
+    - [x] Teleporter turret (target pulled onto the turret)
+    - [x] Melee turret (only reaches the 3×2×3 area around itself and its base, so it is tested with a target in reach instead of 5 blocks away)
 - [x] Publishing to CurseForge / Modrinth via Gradle (`chiseledPublish`; CurseForge 224663, Modrinth `open-modular-turrets`)
 - [x] Changelog system (`CHANGELOG.md`, `changelogEntry`, `releaseChangelog`; publish uploads the version's section)
 - [x] Generator block (new in this version; design agreed with the user, see "Power & items")

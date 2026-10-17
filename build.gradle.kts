@@ -37,6 +37,22 @@ fabricApi {
         // versions/<v>/src/main/generated, committed per version
         outputDirectory = project.file("src/main/generated")
     }
+    // Server game tests in src/gametest (./gradlew :<v>:runGameTest, also part of check)
+    configureTests {
+        createSourceSet = true
+        modId = "$modId-gametest"
+        enableClientGameTests = false
+    }
+}
+
+// runConfigs.all above points every run at the shared run directory; game tests get a fresh world of their own
+loom.runConfigs.named("gameTest") {
+    runDirectory = project.file("build/run/gameTest")
+}
+// ... and a new world for every run, so nothing is left over from earlier runs
+tasks.named("runGameTest") {
+    val world = project.file("build/run/gameTest/world")
+    doFirst { world.deleteRecursively() }
 }
 
 repositories {
