@@ -16,7 +16,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import omtteam.openmodularturrets.block.base.TurretBaseBlock;
-import omtteam.openmodularturrets.block.base.LightTurretBaseBlock;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.base.BlockEntityBaseWorld;
 import omtteam.openmodularturrets.blockentity.base.TurretBaseNbt;
@@ -202,7 +201,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
     /** Only the tier 4 and 5 bases have adjustable light. */
     @Override
     public boolean supportsLight() {
-        return getBlockState().getBlock() instanceof LightTurretBaseBlock;
+        return getBlockState().getBlock() instanceof TurretBaseBlock base && base.supportsLight();
     }
 
     @Override

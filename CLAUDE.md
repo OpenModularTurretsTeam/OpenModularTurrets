@@ -288,6 +288,14 @@ omtteam.openmodularturrets.client
 - Fields are documented with `@Comment` and range-checked with `@Range` (package `config`). `ConfigWriter` writes them as `//` comments (JSONC) above each key, together with the default, and `ConfigRanges` clamps on load. Add both annotations to every new config field.
 - Server-authoritative values that clients need (e.g. for tooltips) are synced on join.
 
+### Known performance / memory trade-offs
+
+Deliberately not optimized yet; revisit only if profiling shows a problem.
+
+- **Light block state properties on every base tier.** `TurretBaseBlock` declares `light_value` and `light_opacity` (16 × 16 = 256 states) for tiers 1–5, because the block states are built in the super constructor before the tier is known. Tiers 1–3 therefore carry 255 unused states each (765 extra `BlockState` objects, about 1–3 KB each, so roughly 1–2.5 MB of heap, plus one model-lookup entry per state on the client). Their values always stay at the defaults, so there is no per-tick cost.
+  - Option: a separate subclass or block class for tiers 4–5 that adds the properties (the earlier `LightTurretBaseBlock` design), or a constructor-independent way to pick the properties per tier.
+  - Option: store the light settings in the block entity instead of block state properties (smaller state count, but the light engine then needs a block state change anyway to update).
+
 ---
 
 ## 7. Change Workflow

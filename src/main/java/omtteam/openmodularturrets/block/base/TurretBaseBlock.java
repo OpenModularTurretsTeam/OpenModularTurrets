@@ -20,15 +20,18 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.camo.CamoBlock;
+import omtteam.openmodularturrets.camo.CamoLightProperties;
 import omtteam.openmodularturrets.camo.CamoRules;
 import omtteam.openmodularturrets.config.BaseSetting;
 import omtteam.openmodularturrets.config.ConfigData;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.security.PlayerInfo;
 import omtteam.openmodularturrets.core.security.TrustManager;
 import omtteam.openmodularturrets.network.BasePacketHandler;
@@ -49,7 +52,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 /**
  * Turret base, one block per tier (1–5). Ported from 1.12.2 {@code BlockTurretBase} (meta-based tiers flattened).
  * Can be camouflaged as any full block, so it neither occludes nor blocks light by itself: it still conducts
- * redstone and blocks all light like the solid block it was, unless {@link LightTurretBaseBlock} says otherwise.
+ * redstone and blocks all light like the solid block it was, unless the light settings say otherwise.
+ * <p>
+ * The light value and light opacity (1.12.2 properties {@code light_value} / {@code light_opacity}) can only be set
+ * on tier {@value CamoLight#MIN_BASE_TIER} and up; lower tiers keep the defaults (no light, fully opaque to light).
+ * The properties exist on every tier because the block states are built before the tier is known.
  */
 public class TurretBaseBlock extends BaseEntityBlock implements CamoBlock {
     //? if >=1.21 {
@@ -64,6 +71,13 @@ public class TurretBaseBlock extends BaseEntityBlock implements CamoBlock {
     public TurretBaseBlock(int tier, Properties properties) {
         super(properties);
         this.tier = tier;
+        registerDefaultState(CamoLightProperties.withDefaults(defaultBlockState()));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        CamoLightProperties.addTo(builder);
     }
 
     /**
@@ -87,7 +101,7 @@ public class TurretBaseBlock extends BaseEntityBlock implements CamoBlock {
         } else {
             properties.strength(-1.0F, 3600000.0F);
         }
-        return properties;
+        return properties.lightLevel(CamoLightProperties::lightLevel);
     }
 
     //? if >=1.21 {
@@ -101,16 +115,28 @@ public class TurretBaseBlock extends BaseEntityBlock implements CamoBlock {
         return tier;
     }
 
+    /** Whether light value and opacity can be adjusted on this base (tier 4 and 5). */
+    public boolean supportsLight() {
+        return CamoLight.supportedByBaseTier(tier);
+    }
+
     @Override
     public @NotNull RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
-    /** Without adjustable light the base blocks all light, like the solid block it used to be. */
+    /** Without adjustable light the base blocks all light (the default opacity), like the solid block it used to be. */
     @Override
     @SuppressWarnings("deprecation")
     public int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
-        return 15;
+        return CamoLightProperties.lightBlock(state);
+    }
+
+    /** Fully transparent bases let sky light through, like glass. */
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        return CamoLightProperties.lightBlock(state) == 0;
     }
 
     //? if >=1.21 {
