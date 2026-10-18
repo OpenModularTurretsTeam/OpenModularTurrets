@@ -55,5 +55,6 @@ class ProjectileMathTest {
         assertEquals(0.003D * 10D * 0.3D * 10D, near, EPS);
         assertEquals(0.003D * 10D * 0.5D * 10D, far, EPS);
         assertEquals(near * 1.5D, small, EPS);
+        assertEquals(near, ProjectileMath.raySpread(10D, 0.5D, 0D, 10D), EPS, "half a block high is not small");
     }
 }

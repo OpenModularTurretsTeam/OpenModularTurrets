@@ -5,6 +5,7 @@ import omtteam.openmodularturrets.core.item.ReactorFuel;
 import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.security.PlayerInfo;
 import omtteam.openmodularturrets.core.security.SecurityEnvironment;
+import omtteam.openmodularturrets.core.settings.BaseTierStats;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
@@ -125,9 +126,11 @@ class TurretBaseLogicTest {
             TurretBaseLogic logic = base(1);
             FakeSlot potatoes = FakeSlot.ammo(AmmoType.POTATO, 3);
             ammoSlot(4, potatoes);
+            int dirtyBefore = dirtyCount;
             Optional<AmmoDraw> draw = logic.drawAmmo(TurretType.POTATO_CANNON_TURRET);
             assertEquals(Optional.of(new AmmoDraw(AmmoType.POTATO, 1, 0, false, AmmoType.POTATO)), draw);
             assertEquals(2, potatoes.count);
+            assertEquals(dirtyBefore + 1, dirtyCount, "the used ammo must be saved");
         }
 
         @Test
@@ -162,6 +165,9 @@ class TurretBaseLogicTest {
             ammoSlot(0, potatoes);
             assertEquals(Optional.empty(), logic.drawAmmo(TurretType.POTATO_CANNON_TURRET));
             assertEquals(1, potatoes.count);
+            potatoes.count = 2; // exactly enough for one shot with a scattershot upgrade
+            assertEquals(2, logic.drawAmmo(TurretType.POTATO_CANNON_TURRET).orElseThrow().count());
+            assertEquals(0, potatoes.count);
         }
 
         @Test
@@ -192,6 +198,10 @@ class TurretBaseLogicTest {
             random.value = 0.5;
             assertFalse(logic.drawAmmo(TurretType.POTATO_CANNON_TURRET).orElseThrow().recycled());
             assertEquals(4, potatoes.count);
+
+            random.value = 0.1; // exactly the chance: only values below it save the ammo
+            assertFalse(logic.drawAmmo(TurretType.POTATO_CANNON_TURRET).orElseThrow().recycled());
+            assertEquals(3, potatoes.count);
         }
 
         @Test
@@ -266,10 +276,17 @@ class TurretBaseLogicTest {
         @Test
         void rangeUpgrades() {
             TurretBaseLogic logic = base(5);
+            logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET));
             assertEquals(18, logic.getRange(TurretType.MACHINE_GUN_TURRET));
+            int syncsBefore = syncCount;
+            int dirtyBefore = dirtyCount;
             upgrade(0, TurretBaseUpgradeType.RANGE, 2);
             upgrade(1, TurretBaseUpgradeType.RANGE, 1);
+            logic.onInventoryChanged();
             assertEquals(18 + 2 * 3, logic.getRange(TurretType.MACHINE_GUN_TURRET));
+            assertEquals(24, logic.getTargetingSettings().getMaxRange(), "the max range follows the upgrades at once");
+            assertEquals(syncsBefore + 1, syncCount, "clients show the new max range");
+            assertEquals(dirtyBefore + 1, dirtyCount, "the inventory change is saved");
         }
 
         @Test
@@ -277,6 +294,7 @@ class TurretBaseLogicTest {
             upgrade(0, TurretBaseUpgradeType.RANGE, 1);
             upgrade(1, TurretBaseUpgradeType.RANGE, 1);
             assertEquals(0, base(1).getUpgradeCount(TurretBaseUpgradeType.RANGE));
+            assertEquals(1, base(2).getUpgradeCount(TurretBaseUpgradeType.RANGE));
             assertEquals(1, base(4).getUpgradeCount(TurretBaseUpgradeType.RANGE));
             assertEquals(2, base(5).getUpgradeCount(TurretBaseUpgradeType.RANGE));
         }
@@ -360,6 +378,7 @@ class TurretBaseLogicTest {
             settings.concealWithoutAddon = false;
             TurretBaseLogic logic = base(2);
             assertFalse(logic.shouldConcealTurrets());
+            assertFalse(logic.isConcealingTurrets());
             addon(1, AddonType.CONCEALER, 1);
             logic.onInventoryChanged();
             assertTrue(logic.isConcealingTurrets());
@@ -379,11 +398,14 @@ class TurretBaseLogicTest {
         }
 
         @Test
-        void placingAShorterTurretKeepsTheRange() {
+        void placingAShorterOrEqualTurretKeepsTheRange() {
             TurretBaseLogic logic = base(4);
             logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET));
             logic.setRange(10);
             logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET, TurretType.MACHINE_GUN_TURRET));
+            assertEquals(10, logic.getTargetingSettings().getRange());
+            // a second rocket turret reaches exactly as far as the first one
+            logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET, TurretType.MACHINE_GUN_TURRET, TurretType.ROCKET_TURRET));
             assertEquals(10, logic.getTargetingSettings().getRange());
         }
 
@@ -433,6 +455,15 @@ class TurretBaseLogicTest {
             logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET));
             assertEquals(18, logic.getTargetingSettings().getMaxRange());
             assertEquals(18, logic.getTargetingSettings().getRange());
+            // both ends of [0, max range] are allowed, values outside are ignored
+            logic.setRange(0);
+            assertEquals(0, logic.getTargetingSettings().getRange());
+            logic.setRange(-1);
+            assertEquals(0, logic.getTargetingSettings().getRange());
+            logic.setRange(18);
+            assertEquals(18, logic.getTargetingSettings().getRange());
+            logic.setRange(19);
+            assertEquals(18, logic.getTargetingSettings().getRange());
         }
 
         @Test
@@ -464,6 +495,38 @@ class TurretBaseLogicTest {
             assertTrue(logic.consumeShotEnergy(TurretType.MACHINE_GUN_TURRET));
             assertFalse(logic.consumeShotEnergy(TurretType.MACHINE_GUN_TURRET));
             assertEquals(50, logic.getEnergy().getAmount());
+            logic.getEnergy().generate(50);
+            assertTrue(logic.hasEnergyForShot(TurretType.MACHINE_GUN_TURRET), "exactly enough energy is enough");
+            assertTrue(logic.consumeShotEnergy(TurretType.MACHINE_GUN_TURRET));
+            assertEquals(0, logic.getEnergy().getAmount());
+        }
+
+        /**
+         * A config reload replaces the settings; existing bases pick them up on their next refresh (every 5 ticks),
+         * a neighbour update applies the tier's capacity at once, and setRange refreshes the max range first.
+         */
+        @Test
+        void configChangesReachTheBase() {
+            TurretBaseLogic logic = base(1); // capacity 500, io 50
+            logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET)); // max range 18
+            settings.tiers[0] = new BaseTierStats(800, 70, 1);
+            settings.turrets.put(TurretType.MACHINE_GUN_TURRET,
+                    FakeSettings.stats(20, 8, 2, 100, 30, 4, 0.06D, 0.1D, 2, 0.2D, 0.08D, 0.1D));
+            logic.setRange(20);
+            assertEquals(20, logic.getTargetingSettings().getRange(), "setRange accepts the new max range at once");
+
+            tick(logic, 5);
+            assertEquals(800, logic.getEnergy().getCapacity());
+            assertEquals(70, logic.getEnergy().insert(1000, true), "the new insertion rate");
+
+            settings.turrets.put(TurretType.MACHINE_GUN_TURRET,
+                    FakeSettings.stats(22, 8, 2, 100, 30, 4, 0.06D, 0.1D, 2, 0.2D, 0.08D, 0.1D));
+            tick(logic, 5);
+            assertEquals(22, logic.getTargetingSettings().getMaxRange());
+
+            settings.tiers[0] = new BaseTierStats(900, 70, 1);
+            logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET));
+            assertEquals(900, logic.getEnergy().getCapacity(), "a neighbour update applies the capacity at once");
         }
 
         @Test
@@ -478,8 +541,8 @@ class TurretBaseLogicTest {
         }
 
         @Test
-        void redstoneReactorKeepsFuelThatDoesNotFit() {
-            TurretBaseLogic logic = base(2);
+        void redstoneReactorBurnsABlockOnlyIfItFits() {
+            TurretBaseLogic logic = base(2); // capacity 50000
             addon(0, AddonType.REDSTONE_REACTOR, 1);
             FakeSlot blocks = FakeSlot.fuel(ReactorFuel.REDSTONE_BLOCK, 1);
             ammoSlot(0, blocks);
@@ -487,6 +550,10 @@ class TurretBaseLogicTest {
             tick(logic, 20);
             assertEquals(40000, logic.getEnergy().getAmount());
             assertEquals(1, blocks.count);
+            logic.getEnergy().consume(4400); // 14400 free: the block fits exactly
+            tick(logic, 20);
+            assertEquals(50000, logic.getEnergy().getAmount());
+            assertEquals(0, blocks.count);
         }
 
         @Test
@@ -575,8 +642,16 @@ class TurretBaseLogicTest {
             logic.getTrustManager().addTrustedPlayer(OWNER, STRANGER.identity());
             logic.cycleMode();
             logic.setTargetPlayers(true);
+            assertFalse(logic.isMultiTargeting());
             logic.setMultiTargeting(true);
+            assertTrue(logic.isMultiTargeting());
             assertEquals(syncsBefore + 5, syncCount);
+            logic.setTargetMobs(false);
+            logic.setTargetPassive(true);
+            logic.setRange(0);
+            logic.increaseKillCounter();
+            logic.increasePlayerKillCounter();
+            assertEquals(syncsBefore + 10, syncCount, "targeting, range and kill counts are shown by clients");
             int dirtyBefore = dirtyCount;
             int syncsAfterSettings = syncCount;
             logic.getEnergy().generate(10);
@@ -617,6 +692,8 @@ class TurretBaseLogicTest {
         @Test
         void newBaseHasTheDefaultState() {
             assertEquals(TurretBaseLogic.State.defaults(), base(1).getState());
+            assertThrows(IllegalArgumentException.class, () -> base(0));
+            assertThrows(IllegalArgumentException.class, () -> base(6));
         }
     }
 
@@ -641,6 +718,8 @@ class TurretBaseLogicTest {
             logic.warnPlayers(10);
             logic.warnPlayers(20);
             assertEquals(List.of(stranger), world.warned);
+            logic.warnPlayers(10 + TurretBaseLogic.WARNING_COOLDOWN_TICKS);
+            assertEquals(1, world.warned.size(), "the cooldown includes its last tick");
             logic.warnPlayers(10 + TurretBaseLogic.WARNING_COOLDOWN_TICKS + 1);
             assertEquals(2, world.warned.size());
         }

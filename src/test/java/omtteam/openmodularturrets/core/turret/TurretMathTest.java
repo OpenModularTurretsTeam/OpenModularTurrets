@@ -89,6 +89,8 @@ class TurretMathTest {
         // tick 1 moves without any fall yet, then the fall velocity builds up: 0.03, 0.0597, ...
         assertEquals(0.0, ProjectileMath.dropAfter(1, 0.03), EPS);
         assertEquals(0.03, ProjectileMath.dropAfter(2, 0.03), EPS);
+        // a partial last tick counts with its share: half of tick 2's fall
+        assertEquals(0.015, ProjectileMath.dropAfter(1.5, 0.03), EPS);
         assertEquals(0.03 + 0.0597, ProjectileMath.dropAfter(3, 0.03), EPS);
         assertEquals(0.0, ProjectileMath.dropAfter(40, 0), EPS);
     }

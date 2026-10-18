@@ -249,12 +249,16 @@ class TrustManagerTest {
         @Test
         void accessLevelStepsStopAtTheEnds() {
             trust(ALICE, AccessLevel.NONE);
+            changes = 0;
             assertEquals(TrustResult.OUT_OF_RANGE, manager.changeAccessLevel(OWNER, ALICE.uuid(), -1));
             for (int i = 0; i < 3; i++) {
                 assertEquals(TrustResult.SUCCESS, manager.changeAccessLevel(OWNER, ALICE.uuid(), 1));
             }
             assertEquals(AccessLevel.ADMIN, manager.getTrustedPlayer(ALICE.uuid()).orElseThrow().getAccessLevel());
             assertEquals(TrustResult.OUT_OF_RANGE, manager.changeAccessLevel(OWNER, ALICE.uuid(), 1));
+            assertEquals(3, changes, "each successful step notifies, the refused ones do not");
+            assertEquals(TrustResult.SUCCESS, manager.setAccessLevel(OWNER, ALICE.uuid(), AccessLevel.NONE));
+            assertEquals(4, changes);
         }
 
         @Test
@@ -267,9 +271,13 @@ class TrustManagerTest {
         @Test
         void removingRevokesAccessImmediately() {
             trust(ALICE, AccessLevel.ADMIN);
+            trust(BOB, AccessLevel.OPEN_GUI);
+            changes = 0;
             assertEquals(TrustResult.SUCCESS, manager.removeTrustedPlayer(OWNER, ALICE.uuid()));
             assertFalse(manager.canOpenGui(ALICE));
             assertFalse(manager.isProtectedFromTargeting(ALICE));
+            assertTrue(manager.canOpenGui(BOB), "only the removed player loses access");
+            assertEquals(1, changes);
         }
     }
 
@@ -287,19 +295,25 @@ class TrustManagerTest {
         @Test
         void settingTheOwnerRemovesTheirListEntry() {
             trust(ALICE, AccessLevel.ADMIN);
+            trust(BOB, AccessLevel.NONE);
+            changes = 0;
             manager.setOwner(ALICE.identity());
-            assertTrue(manager.getTrustedPlayers().isEmpty());
+            assertEquals(List.of(BOB.uuid()), manager.getTrustedPlayers().stream().map(TrustedPlayer::getUuid).toList(),
+                    "only the new owner's own entry is removed");
             assertFalse(manager.isAdmin(OWNER));
+            assertEquals(1, changes);
         }
 
         @Test
         void loadSkipsOwnerAndDuplicates() {
+            changes = 0;
             manager.load(OWNER.identity(), List.of(
                     new TrustedPlayer(ALICE.identity(), AccessLevel.ADMIN),
                     new TrustedPlayer(ALICE.identity(), AccessLevel.NONE),
                     new TrustedPlayer(OWNER.identity(), AccessLevel.NONE)));
             assertEquals(1, manager.getTrustedPlayers().size());
             assertEquals(AccessLevel.ADMIN, manager.getTrustedPlayer(ALICE.uuid()).orElseThrow().getAccessLevel());
+            assertEquals(1, changes);
         }
 
         @Test
@@ -313,11 +327,15 @@ class TrustManagerTest {
         void refreshNameUpdatesDisplayNamesOnly() {
             trust(ALICE, AccessLevel.CHANGE_SETTINGS);
             PlayerInfo renamed = new PlayerInfo(ALICE.uuid(), "Alicia", false);
+            changes = 0;
             manager.refreshName(renamed);
             manager.refreshName(new PlayerInfo(OWNER.uuid(), "Boss", false));
             assertEquals("Alicia", manager.getTrustedPlayer(ALICE.uuid()).orElseThrow().getName());
             assertEquals("Boss", manager.getOwner().name());
             assertTrue(manager.canChangeSettings(renamed));
+            assertEquals(2, changes);
+            manager.refreshName(renamed);
+            assertEquals(2, changes, "an unchanged name changes nothing");
         }
     }
 

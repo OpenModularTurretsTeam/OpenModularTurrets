@@ -9,10 +9,14 @@ import omtteam.openmodularturrets.core.security.PlayerInfo;
 import omtteam.openmodularturrets.core.security.SecurityEnvironment;
 import omtteam.openmodularturrets.core.security.TrustManager;
 import omtteam.openmodularturrets.core.security.TrustResult;
+import omtteam.openmodularturrets.core.turret.TurretType;
+import omtteam.openmodularturrets.core.world.Face;
+import omtteam.openmodularturrets.core.world.Neighbour;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.random.RandomGenerator;
@@ -139,12 +143,13 @@ class MemoryCardRulesTest {
     @Test
     void rangeIsClampedToWhatTheTargetCanReach() {
         TurretBaseLogic target = base(OWNER);
-        MemoryCardData.BaseSettings settings = new MemoryCardData.BaseSettings(MachineMode.INVERTED, false, false,
-                true, false, 99);
+        target.updateNeighbours(Map.of(Face.UP, new Neighbour.Turret(TurretType.MACHINE_GUN_TURRET))); // max 18
 
-        MemoryCardRules.apply(settings, target);
+        MemoryCardRules.apply(new MemoryCardData.BaseSettings(MachineMode.INVERTED, false, false, true, false, 10), target);
+        assertEquals(10, target.getTargetingSettings().getRange(), "a range the target can reach is pasted as it is");
 
-        assertEquals(target.getTargetingSettings().getMaxRange(), target.getTargetingSettings().getRange());
+        MemoryCardRules.apply(new MemoryCardData.BaseSettings(MachineMode.INVERTED, false, false, true, false, 99), target);
+        assertEquals(18, target.getTargetingSettings().getRange());
     }
 
     @Test

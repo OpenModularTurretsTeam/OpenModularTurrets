@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.random.RandomGenerator;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -213,6 +214,10 @@ class TargetingTest {
             assertTrue(TargetSelector.isInRange(FakeTarget.mob(105, 65, 100, "a", EntityCategory.MONSTER), TURRET, 5));
             assertFalse(TargetSelector.isInRange(FakeTarget.mob(105.5, 65, 100, "a", EntityCategory.MONSTER), TURRET, 5));
             assertTrue(TargetSelector.isInRange(FakeTarget.mob(104, 69, 96, "a", EntityCategory.MONSTER), TURRET, 5));
+            // the entity query of a search reaches that far too
+            FakeTarget atTheEdge = zombie(105, 65, 100);
+            search();
+            assertEquals(Optional.of(atTheEdge.getId()), targetId());
         }
 
         @Test
@@ -233,6 +238,7 @@ class TargetingTest {
             world.blockedView = entity -> entity == zombie;
             search();
             assertEquals(Optional.empty(), targetId());
+            assertArrayEquals(new double[]{100.5, 65.5, 100.5}, world.lastSightFrom, "seen from the turret's centre");
         }
 
         @Test
@@ -252,6 +258,10 @@ class TargetingTest {
             (chosen == first.getId() ? first : second).alive = false;
             logic.tick(++time);
             assertEquals(Optional.of(chosen == first.getId() ? second.getId() : first.getId()), targetId());
+            // a target at 0 health is dead even before the game flags it
+            (chosen == first.getId() ? second : first).health = 0;
+            logic.tick(++time);
+            assertEquals(Optional.empty(), targetId());
         }
     }
 
@@ -397,6 +407,8 @@ class TargetingTest {
             assertEquals(3 * 4, TargetingPriority.ARMOR.value(zombie, TURRET, 4));
             assertEquals(0, TargetingPriority.PLAYER.value(zombie, TURRET, 10));
             assertEquals(1000, TargetingPriority.PLAYER.value(new FakeTarget(0, 0, 0, STRANGER), TURRET, 10));
+            FakeTarget diagonal = FakeTarget.mob(101, 67, 102, "minecraft:zombie", EntityCategory.MONSTER);
+            assertEquals(3 * -1, TargetingPriority.DISTANCE.value(diagonal, TURRET, -1), "distance counts all three axes");
         }
 
         @Test
@@ -410,6 +422,17 @@ class TargetingTest {
             far.health = 10;
             search();
             assertEquals(Optional.of(far.getId()), targetId());
+
+            // equal scores: the first one found wins, so the choice does not flip between equal targets
+            world.entities.clear();
+            logic = base(4, Map.of(Face.UP, new Neighbour.Turret(TurretType.ROCKET_TURRET)));
+            logic.setRange(20);
+            FakeTarget first = zombie(110, 65, 100);
+            FakeTarget twin = zombie(90, 65, 100);
+            first.health = 10;
+            twin.health = 10;
+            search();
+            assertEquals(Optional.of(first.getId()), targetId());
         }
 
         @Test

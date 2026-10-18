@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -94,9 +95,32 @@ class TurretTypeTest {
     }
 
     @Test
+    void builderSetsEveryOption() {
+        AmmoType shell = AmmoType.of("othermod", "shell");
+        TurretType type = TurretType.builder("othermod", "options_turret")
+                .requiredBaseTier(5)
+                .ammo(shell)
+                .priorities(1, 2, 3, 4, 5)
+                .mountFaces(Face.UP)
+                .ignoresScattershot()
+                .skipsSlowedTargets()
+                .build();
+        assertEquals(5, type.getRequiredBaseTier());
+        assertEquals(Optional.of(shell), type.getAmmo());
+        assertArrayEquals(new int[]{1, 2, 3, 4, 5}, type.getDefaultPriorities());
+        assertTrue(type.canMountOn(Face.UP));
+        assertFalse(type.canMountOn(Face.DOWN));
+        assertFalse(type.usesScattershot());
+        assertTrue(type.skipsSlowedTargets());
+        assertEquals(1, TurretType.builder("othermod", "t").requiredBaseTier(1).build().getRequiredBaseTier(),
+                "tier 1 is the lowest allowed tier");
+    }
+
+    @Test
     void builderRejectsInvalidValues() {
         assertThrows(IllegalArgumentException.class, () -> TurretType.builder("Bad", "turret"));
         assertThrows(IllegalArgumentException.class, () -> TurretType.builder("mod", "with space"));
+        assertThrows(IllegalArgumentException.class, () -> TurretType.builder("mod", "t").requiredBaseTier(0));
         assertThrows(IllegalArgumentException.class, () -> TurretType.builder("mod", "t").requiredBaseTier(6));
         assertThrows(IllegalArgumentException.class, () -> TurretType.builder("mod", "t").priorities(1, 2, 3));
         assertThrows(IllegalArgumentException.class, () -> TurretType.builder("mod", "t").mountFaces());

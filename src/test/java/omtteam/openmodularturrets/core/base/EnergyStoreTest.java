@@ -26,6 +26,7 @@ class EnergyStoreTest {
         assertEquals(1000, store.getAmount());
         assertEquals(0, store.insert(100, false));
         assertEquals(0, store.insert(-5, false));
+        assertEquals(3, changes, "two insertions and the generation; nothing that did not fit");
     }
 
     @Test
@@ -64,6 +65,9 @@ class EnergyStoreTest {
         store.setCapacity(2000);
         assertEquals(800, store.getAmount());
         assertEquals(0, changes);
+        store.setCapacity(800);
+        assertEquals(800, store.getAmount());
+        assertEquals(0, changes, "a capacity equal to the stored energy changes nothing");
         store.setCapacity(500);
         assertEquals(500, store.getAmount());
         assertEquals(0, store.getFreeSpace());

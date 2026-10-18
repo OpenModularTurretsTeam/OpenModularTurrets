@@ -20,6 +20,8 @@ final class FakeWorld implements BaseWorld {
     final List<TargetEntity> entities = new ArrayList<>();
     final List<TargetEntity> warned = new ArrayList<>();
     boolean solar;
+    /** Where the last line of sight check started (x, y, z). */
+    double[] lastSightFrom;
     /** Entities whose line of sight is blocked. */
     Predicate<TargetEntity> blockedView = entity -> false;
 
@@ -60,6 +62,7 @@ final class FakeWorld implements BaseWorld {
 
     @Override
     public boolean hasLineOfSight(double fromX, double fromY, double fromZ, TargetEntity target) {
+        lastSightFrom = new double[]{fromX, fromY, fromZ};
         return !blockedView.test(target);
     }
 
