@@ -57,6 +57,14 @@ tasks.named("runGameTest") {
     doFirst { world.deleteRecursively() }
 }
 
+// The client source set has no resources, so Gradle never creates build/resources/client, but Loom still puts that
+// folder on the classpath of every game run and Fabric Loader warns about it ("Class path entries reference missing
+// files"). Creating the empty folder before a run avoids the warning.
+val clientResources = layout.buildDirectory.dir("resources/client")
+tasks.withType<net.fabricmc.loom.task.AbstractRunTask>().configureEach {
+    doFirst { clientResources.get().asFile.mkdirs() }
+}
+
 repositories {
     // Jade (optional integration, compile only)
     exclusiveContent {
