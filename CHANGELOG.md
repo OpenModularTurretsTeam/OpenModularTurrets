@@ -12,16 +12,26 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 - Turret API for other mods: they can add turrets (with their own weapons, ammo, models and config entries under `turrets.addon_turrets`) through the `openmodularturrets` entrypoint, see `docs/turret-api.md`
 - Turret API: custom turret logic. Self-targeting weapons find their own targets instead of using the base's, projectile and ray weapons can run code when they hit an entity, and `OMTApi.canDamage` / `OMTApi.hurt` apply the base's trust and damage rules
+- The crank plays its windup sound when it charges a tier 1 base
+- Turret tooltips (with shift): what the turret does, the base tier it needs, its ammo and its energy per shot
 - Energy Multiplier Upgrade for the Generator (up to 4 in its new upgrade slot): each doubles energy production and fuel use; the energy per fuel item stays the same
 - Upgrade tooltips show which machine the upgrade fits into (turret base or generator)
 
 ### Changed
 
+- German translation completed (missing turret names, death messages, trust list messages and tooltips)
+- English (UK) translation completed (73 entries were missing and showed the American text); fixed its broken Turret Limit label
+- The Relativistic Turret is now called Slowing Turret in all languages
+- The Slowing Turret's sound event is renamed from `openmodularturrets:relativistic` to `openmodularturrets:slowing` (resource packs replacing it need the new name)
+- The Rail Gun Turret ignores Scatter Shot upgrades (no extra rays, ammo, energy or scatter); with them, it dealt a multiple of its damage, since it barely scatters and every ray hit. Its tooltip and the upgrade's details say so
+- The Melee, Slowing and Teleporter Turrets ignore Scatter Shot upgrades; they act once per shot, so the upgrades only multiplied their energy use. Their tooltips and the upgrade's details say so now.
 - The Generator has 9 fuel slots instead of 1, so it runs much longer without refuelling
 - Generator: energy storage raised from 50,000 to 1,000,000 RF and output limit from 200 to 65,536 RF/t; existing config files still on the old defaults are updated, other values stay
 
 ### Fixed
 
+- The `turretBreakable` config option did nothing; turrets can now be broken with a pickaxe when it is enabled
+- Turret projectiles that flew into a chunk without entity ticking froze there; they remove themselves now, as in 1.12.2
 - On the very first start (no config file yet), the disposable ammo list and the entity black and force lists were ignored until the next restart
 
 ## [4.0.0-beta.4] - 2026-10-17
