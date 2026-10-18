@@ -12,6 +12,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import omtteam.openmodularturrets.api.weapon.AreaWeapon;
+import omtteam.openmodularturrets.api.weapon.EffectWeapon;
+import omtteam.openmodularturrets.api.weapon.ProjectileWeapon;
+import omtteam.openmodularturrets.api.weapon.RayWeapon;
+import omtteam.openmodularturrets.api.weapon.TurretWeapon;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.base.BlockEntityBaseWorld;
@@ -30,6 +35,7 @@ import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.registry.ModSounds;
+import omtteam.openmodularturrets.registry.TurretRegistry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -39,7 +45,7 @@ import java.util.Optional;
 /**
  * A turret (1.12.2 {@code TurretHead} / {@code AbstractDirectedTurret} / {@code ProjectileTurret}). Thin by design: the
  * base owns targeting, ammo, energy and upgrades; the turret aims at the base's target, keeps its cooldown and
- * fires. The weapon (projectile or ray) comes from {@link TurretWeapon}.
+ * fires. The weapon ({@link TurretWeapon}: projectile, ray, effect or area) comes from the turret's definition.
  */
 public class TurretBlockEntity extends CompatBlockEntity {
     /** 1.12.2 {@code AbstractDirectedTurret.update}: the aim was sent to clients every 5 ticks. */
@@ -88,6 +94,11 @@ public class TurretBlockEntity extends CompatBlockEntity {
         return ((TurretBlock) getBlockState().getBlock()).getTurretType();
     }
 
+    /** What a shot of this turret does (from its {@link omtteam.openmodularturrets.api.TurretDefinition}). */
+    public TurretWeapon getWeapon() {
+        return TurretRegistry.get(getTurretType()).weapon();
+    }
+
     /** Direction from the base to this turret. */
     public Direction getFacing() {
         return getBlockState().getValue(TurretBlock.FACING);
@@ -122,8 +133,8 @@ public class TurretBlockEntity extends CompatBlockEntity {
         turret.ticksSinceSync++;
         TurretBaseLogic logic = base.get().getLogic();
         boolean engaging = false;
-        if (logic.isActive() && type == TurretType.MELEE_TURRET) {
-            engaging = turret.strikeInReach((ServerLevel) level, base.get());
+        if (logic.isActive() && turret.getWeapon() instanceof AreaWeapon area) {
+            engaging = turret.strikeInReach((ServerLevel) level, base.get(), area);
         } else if (logic.isActive()) {
             Optional<Entity> target = logic.getTarget(turret.getFace())
                     .filter(LivingTargetEntity.class::isInstance)
@@ -157,9 +168,9 @@ public class TurretBlockEntity extends CompatBlockEntity {
      * {@code ProjectileTurret.doTargetedShot}).
      */
     private void engage(Entity target) {
-        TurretWeapon weapon = TurretWeapon.of(getTurretType());
+        TurretWeapon weapon = getWeapon();
         Vec3 centre = Vec3.atCenterOf(worldPosition);
-        if (weapon.kind().aims()) {
+        if (weapon.aims()) {
             Vector3 toEyes = new Vector3(target.getX() - centre.x, target.getEyeY() - centre.y, target.getZ() - centre.z);
             TurretMath.Angles angles = TurretMath.limit(TurretMath.anglesFor(getFace(), toEyes));
             yaw = angles.yaw();
@@ -173,23 +184,21 @@ public class TurretBlockEntity extends CompatBlockEntity {
         trackedTargetId = target.getId();
         trackedTargetPos = position;
 
-        switch (weapon.kind()) {
-            case PROJECTILE -> {
-                Vector3 toBody = new Vector3(target.getX() - centre.x, aimHeight(target, centre) - centre.y,
-                        target.getZ() - centre.z);
-                fire(toBody, velocity, target);
+        if (weapon instanceof ProjectileWeapon) {
+            Vector3 toBody = new Vector3(target.getX() - centre.x, aimHeight(target, centre) - centre.y,
+                    target.getZ() - centre.z);
+            fire(toBody, velocity, target);
+        } else if (weapon instanceof RayWeapon ray) {
+            Optional<TurretBaseBlockEntity> base = beginShot();
+            if (base.isPresent()) {
+                // rays start 0.1 blocks above the turret centre, the arc is drawn from its tip
+                Vector3 up = Vector3.of(getFace());
+                Vec3 origin = centre.add(up.x() * 0.1D, up.y() * 0.1D, up.z() * 0.1D);
+                Vec3 tip = centre.add(up.x() * 0.5D, up.y() * 0.5D, up.z() * 0.5D);
+                RayWeapons.shoot(this, base.get(), ray, target, origin, tip);
             }
-            case RAY -> {
-                Optional<TurretBaseBlockEntity> base = beginShot();
-                if (base.isPresent()) {
-                    // rays start 0.1 blocks above the turret centre, the arc is drawn from its tip
-                    Vector3 up = Vector3.of(getFace());
-                    Vec3 origin = centre.add(up.x() * 0.1D, up.y() * 0.1D, up.z() * 0.1D);
-                    Vec3 tip = centre.add(up.x() * 0.5D, up.y() * 0.5D, up.z() * 0.5D);
-                    RayWeapons.shoot(this, base.get(), target, origin, tip);
-                }
-            }
-            case EFFECT -> beginShot().ifPresent(base -> EffectWeapons.fire(this, base, target));
+        } else if (weapon instanceof EffectWeapon effect) {
+            beginShot().ifPresent(base -> EffectWeapons.fireEffect(this, base, effect, target));
         }
     }
 
@@ -208,22 +217,22 @@ public class TurretBlockEntity extends CompatBlockEntity {
     }
 
     /**
-     * The melee turret ignores the base's target: it is active while anything it may damage is in
-     * {@link EffectWeapons#meleeArea} and strikes it once the cooldown passed.
+     * Area weapons (melee turret) ignore the base's target: the turret is active while anything it may damage is in
+     * the weapon's {@linkplain AreaWeapon#area() area} and strikes it once the cooldown passed.
      *
      * @return whether anything is in reach
      */
-    private boolean strikeInReach(ServerLevel level, TurretBaseBlockEntity base) {
+    private boolean strikeInReach(ServerLevel level, TurretBaseBlockEntity base, AreaWeapon weapon) {
         // only entities the base may damage count (never the owner, nor trusted players by default)
         List<LivingEntity> victims = new ArrayList<>();
-        for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, EffectWeapons.meleeArea(this))) {
+        for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, weapon.area().apply(this))) {
             if (entity.isAlive() && !entity.isSpectator() && TurretDamage.canDamage(level, base.getBlockPos(), entity)) {
                 victims.add(entity);
             }
         }
         updateConcealment(base.getLogic(), !victims.isEmpty());
         if (victims.isEmpty()) return false;
-        beginShot().ifPresent(shooter -> EffectWeapons.strike(this, shooter, victims));
+        beginShot().ifPresent(shooter -> EffectWeapons.fireArea(this, shooter, weapon, victims));
         return true;
     }
 
@@ -292,8 +301,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
      */
     public boolean fire(Vector3 toAim, Vector3 velocity, @Nullable Entity target) {
         if (!(level instanceof ServerLevel serverLevel)) return false;
-        TurretWeapon weapon = TurretWeapon.of(getTurretType());
-        if (weapon.kind() != TurretWeapon.Kind.PROJECTILE || weapon.factory() == null) return false;
+        if (!(getWeapon() instanceof ProjectileWeapon weapon)) return false;
         Optional<TurretBaseBlockEntity> base = beginShot();
         if (base.isEmpty()) return false;
         TurretBaseLogic logic = base.get().getLogic();

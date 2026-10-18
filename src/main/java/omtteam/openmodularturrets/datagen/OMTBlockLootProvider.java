@@ -25,7 +25,10 @@ public class OMTBlockLootProvider extends FabricBlockLootTableProvider {
         // 1.12.2 getDrops: the base drops itself (contents are dropped separately)
         ModBlocks.TURRET_BASES.forEach(this::dropSelf);
         // turrets drop themselves when their base is removed or with "Drop turrets"
-        ModBlocks.TURRETS.values().forEach(this::dropSelf);
+        ModBlocks.TURRETS.forEach((type, turret) -> {
+            // turrets of other mods come with their own data
+            if (type.isBuiltIn()) dropSelf(turret);
+        });
         dropSelf(ModBlocks.LEVER);
         dropSelf(ModBlocks.GENERATOR);
         ModBlocks.HARDENED.forEach(this::dropSelf);

@@ -454,7 +454,7 @@ class TargetingTest {
         @Test
         void everyTurretHasFiveWeights() {
             for (TurretType type : TurretType.values()) {
-                assertEquals(TargetingPriority.values().length, type.getDefaultPriorities().length, type.name());
+                assertEquals(TargetingPriority.values().length, type.getDefaultPriorities().length, type.getId());
             }
             assertEquals(10, TurretType.MELEE_TURRET.getDefaultPriorities()[TargetingPriority.PLAYER.ordinal()]);
         }

@@ -11,18 +11,20 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
+import omtteam.openmodularturrets.api.weapon.AreaWeapon;
+import omtteam.openmodularturrets.api.weapon.EffectWeapon;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
-import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 
 import java.util.List;
 
 /**
- * Turrets that act on their target without aiming (1.12.2 {@code TurretHead} subclasses using {@code updateChecks}):
- * slowing and teleporter act on the base's target, the melee turret strikes everything in reach.
+ * Turrets that act without aiming (1.12.2 {@code TurretHead} subclasses using {@code updateChecks}): slowing and
+ * teleporter act on the base's target ({@link EffectWeapon}), the melee turret strikes everything in reach
+ * ({@link AreaWeapon}).
  */
 public final class EffectWeapons {
     /** Slowness IV and weakness IV for 10 seconds. */
@@ -34,21 +36,25 @@ public final class EffectWeapons {
     private EffectWeapons() {
     }
 
-    public static void fire(TurretBlockEntity turret, TurretBaseBlockEntity base, Entity target) {
-        ServerLevel level = (ServerLevel) turret.getLevel();
-        if (level instanceof ServerLevel) {
-            TurretType type = turret.getTurretType();
-            switch (type) {
-                case SLOWING_TURRET -> slow(target);
-                case TELEPORTER_TURRET -> teleport(level, turret, target);
-                default -> throw new IllegalArgumentException(type + " is not a targeted effect turret, see strike");
-            }
-            playSound(level, turret.getBlockPos(), TurretWeapon.of(type).launchSound());
+    /** Fires an {@link EffectWeapon} at the base's target. Energy and ammo are already consumed. */
+    static void fireEffect(TurretBlockEntity turret, TurretBaseBlockEntity base, EffectWeapon weapon, Entity target) {
+        if (turret.getLevel() instanceof ServerLevel level) {
+            weapon.effect().apply(level, turret, base, target);
+            playSound(level, turret.getBlockPos(), weapon.launchSound());
+        }
+    }
+
+    /** Fires an {@link AreaWeapon} at everything in reach. Energy and ammo are already consumed. */
+    static void fireArea(TurretBlockEntity turret, TurretBaseBlockEntity base, AreaWeapon weapon,
+                         List<LivingEntity> victims) {
+        if (turret.getLevel() instanceof ServerLevel level) {
+            weapon.strike().strike(level, turret, base, victims);
+            playSound(level, turret.getBlockPos(), weapon.launchSound());
         }
     }
 
     /** 1.12.2 {@code RelativisticTurretTileEntity}: slowness and weakness IV; slowed entities are not targeted again. */
-    private static void slow(Entity target) {
+    public static void slow(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base, Entity target) {
         if (target instanceof LivingEntity living) {
             living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, EFFECT_TICKS, EFFECT_AMPLIFIER, false, true));
             living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, EFFECT_TICKS, EFFECT_AMPLIFIER, false, true));
@@ -60,7 +66,7 @@ public final class EffectWeapons {
      * top of it, which is the same for turrets on top of a base) and shows portal particles (1.12.2
      * {@code BlockTeleporterTurret.randomDisplayTick}).
      */
-    private static void teleport(ServerLevel level, TurretBlockEntity turret, Entity target) {
+    public static void teleport(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base, Entity target) {
         Direction facing = turret.getFacing();
         BlockPos destination = turret.getBlockPos().relative(facing);
         target.teleportTo(destination.getX() + 0.5D, destination.getY(), destination.getZ() + 0.5D);
@@ -78,19 +84,16 @@ public final class EffectWeapons {
     }
 
     /**
-     * 1.12.2 {@code MeleeTurretTileEntity}: damages every damageable living entity in reach. The melee turret needs no
-     * target from the base; it strikes whenever something is in {@link #meleeArea} (user decision; 1.12.2 struck a
-     * 7×3×7 area once the base had a target). No damage amp bonus, as in 1.12.2.
+     * 1.12.2 {@code MeleeTurretTileEntity}: damages every damageable living entity in reach with the turret's base
+     * damage. The melee turret needs no target from the base; it strikes whenever something is in {@link #meleeArea}
+     * (user decision; 1.12.2 struck a 7×3×7 area once the base had a target). No damage amp bonus, as in 1.12.2.
      */
-    public static void strike(TurretBlockEntity turret, TurretBaseBlockEntity base, List<LivingEntity> victims) {
-        ServerLevel level = (ServerLevel) turret.getLevel();
-        if (level instanceof ServerLevel) {
-            float damage = OMTConfig.get().turrets.get(TurretType.MELEE_TURRET).baseDamage;
-            int looting = base.getLogic().getLootingLevel(VersionCompat.maxLootingLevel(level));
-            for (LivingEntity entity : victims) {
-                TurretDamage.hurt(level, entity, ModDamageTypes.MELEE, damage, null, base.getBlockPos(), looting);
-            }
-            playSound(level, turret.getBlockPos(), TurretWeapon.of(TurretType.MELEE_TURRET).launchSound());
+    public static void strike(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base,
+                              List<LivingEntity> victims) {
+        float damage = OMTConfig.get().turrets.get(turret.getTurretType()).baseDamage;
+        int looting = base.getLogic().getLootingLevel(VersionCompat.maxLootingLevel(level));
+        for (LivingEntity entity : victims) {
+            TurretDamage.hurt(level, entity, ModDamageTypes.MELEE, damage, null, base.getBlockPos(), looting);
         }
     }
 

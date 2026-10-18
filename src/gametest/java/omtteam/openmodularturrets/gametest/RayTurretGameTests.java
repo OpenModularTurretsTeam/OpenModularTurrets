@@ -108,7 +108,8 @@ public class RayTurretGameTests implements FabricGameTest {
         });
     }
 
-    private static void hitsTargetInFront(GameTestHelper helper, TurretType type) {
+    /** Builds the scene for a ray turret and passes once one of its rays hit and damaged the target. */
+    static void hitsTargetInFront(GameTestHelper helper, TurretType type) {
         TurretScene.build(helper, type, TIMEOUT_TICKS);
         BlockPos turretPos = helper.absolutePos(TurretScene.TURRET);
         Vec3 turretCentre = Vec3.atCenterOf(turretPos);

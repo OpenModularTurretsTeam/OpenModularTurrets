@@ -14,11 +14,13 @@ import omtteam.openmodularturrets.block.defense.PassiveDefense;
 import omtteam.openmodularturrets.block.misc.GeneratorBlock;
 import omtteam.openmodularturrets.block.misc.LeverBlock;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
+import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.core.turret.TurretType;
+import omtteam.openmodularturrets.core.turret.TurretTypes;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -38,8 +40,9 @@ public final class ModBlocks {
             TURRET_BASE_TIER_THREE, TURRET_BASE_TIER_FOUR, TURRET_BASE_TIER_FIVE);
 
     /**
-     * One block per turret type, registry id = {@link TurretType#getId()}. Disabled turrets are registered too (the
-     * registry must match between client and server); they just cannot be placed.
+     * One block per turret type (built-in and added by other mods), registry id = {@link TurretType#getId()}.
+     * Disabled turrets are registered too (the registry must match between client and server); they just cannot be
+     * placed.
      */
     public static final Map<TurretType, TurretBlock> TURRETS = registerTurrets();
 
@@ -65,9 +68,11 @@ public final class ModBlocks {
     }
 
     private static Map<TurretType, TurretBlock> registerTurrets() {
-        Map<TurretType, TurretBlock> turrets = new EnumMap<>(TurretType.class);
-        for (TurretType type : TurretType.values()) {
-            turrets.put(type, register(type.getId(), new TurretBlock(type, TurretBlock.createProperties())));
+        if (!TurretTypes.isFrozen()) throw new IllegalStateException("Turret blocks registered before the turret types");
+        Map<TurretType, TurretBlock> turrets = new LinkedHashMap<>();
+        for (TurretType type : TurretTypes.all()) {
+            turrets.put(type, Registry.register(BuiltInRegistries.BLOCK, VersionCompat.id(type.getNamespace(), type.getPath()),
+                    new TurretBlock(type, TurretBlock.createProperties())));
         }
         return Collections.unmodifiableMap(turrets);
     }

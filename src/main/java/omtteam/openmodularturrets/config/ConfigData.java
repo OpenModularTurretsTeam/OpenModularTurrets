@@ -6,7 +6,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import omtteam.openmodularturrets.OMT;
+import omtteam.openmodularturrets.api.TurretDefinition;
 import omtteam.openmodularturrets.core.turret.TurretType;
+import omtteam.openmodularturrets.registry.TurretRegistry;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -236,23 +238,44 @@ public class ConfigData {
         @SerializedName("crossbow_turret")
         public TurretSetting crossbowTurret = new TurretSetting(true, 15, 30, 5, 20, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
 
+        @Comment("Turrets added by other mods, by turret id. Entries are added and removed with the mods.")
+        @SerializedName("addon_turrets")
+        public Map<String, TurretSetting> addonTurrets = addonDefaults();
+
+        /** The default stats of every turret added by another mod (they must be registered before). */
+        private static Map<String, TurretSetting> addonDefaults() {
+            Map<String, TurretSetting> defaults = new LinkedHashMap<>();
+            for (TurretDefinition turret : TurretRegistry.turrets()) {
+                if (!turret.type().isBuiltIn()) {
+                    defaults.put(turret.type().getId(), TurretSetting.of(turret.defaultStats()));
+                }
+            }
+            return defaults;
+        }
+
         /** Settings of a turret type. */
         public TurretSetting get(TurretType type) {
-            return switch (type) {
-                case DISPOSABLE_TURRET -> disposableTurret;
-                case POTATO_CANNON_TURRET -> potatoCannonTurret;
-                case CROSSBOW_TURRET -> crossbowTurret;
-                case MELEE_TURRET -> meleeTurret;
-                case MACHINE_GUN_TURRET -> machineGunTurret;
-                case INCENDIARY_TURRET -> incendiaryTurret;
-                case GRENADE_TURRET -> grenadeTurret;
-                case SLOWING_TURRET -> slowingTurret;
-                case ROCKET_TURRET -> rocketTurret;
-                case TELEPORTER_TURRET -> teleporterTurret;
-                case ARC_TURRET -> arcTurret;
-                case LASER_TURRET -> laserTurret;
-                case RAILGUN_TURRET -> railgunTurret;
-                case PLASMA_TURRET -> plasmaTurret;
+            if (!type.isBuiltIn()) {
+                TurretSetting setting = addonTurrets.get(type.getId());
+                // only missing in configs created before the turret was registered
+                return setting != null ? setting : TurretSetting.of(TurretRegistry.get(type).defaultStats());
+            }
+            return switch (type.getPath()) {
+                case "disposable_turret" -> disposableTurret;
+                case "potato_cannon_turret" -> potatoCannonTurret;
+                case "crossbow_turret" -> crossbowTurret;
+                case "melee_turret" -> meleeTurret;
+                case "machine_gun_turret" -> machineGunTurret;
+                case "incendiary_turret" -> incendiaryTurret;
+                case "grenade_turret" -> grenadeTurret;
+                case "slowing_turret" -> slowingTurret;
+                case "rocket_turret" -> rocketTurret;
+                case "teleporter_turret" -> teleporterTurret;
+                case "arc_turret" -> arcTurret;
+                case "laser_turret" -> laserTurret;
+                case "railgun_turret" -> railgunTurret;
+                case "plasma_turret" -> plasmaTurret;
+                default -> throw new IllegalArgumentException("Unknown built-in turret " + type);
             };
         }
     }

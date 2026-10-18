@@ -20,7 +20,10 @@ public class OMTBlockTagProvider extends FabricTagProvider.BlockTagProvider {
         // 1.12.2 Material.ROCK: needs a pickaxe (only relevant if bases are breakable)
         ModBlocks.TURRET_BASES.forEach(getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)::add);
         // turrets too (only relevant if turrets are breakable)
-        ModBlocks.TURRETS.values().forEach(getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)::add);
+        ModBlocks.TURRETS.forEach((type, turret) -> {
+            // turrets of other mods come with their own data
+            if (type.isBuiltIn()) getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE).add(turret);
+        });
         // OMPD: setHarvestLevel("pickaxe", 2) -> iron pickaxe
         Stream.of(ModBlocks.HARDENED, ModBlocks.WALLS, ModBlocks.FENCES).flatMap(List::stream).forEach(block -> {
             getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE).add(block);

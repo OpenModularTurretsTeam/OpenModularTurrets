@@ -1,47 +1,126 @@
 package omtteam.openmodularturrets.core.turret;
 
+import omtteam.openmodularturrets.core.target.TargetingPriority;
 import omtteam.openmodularturrets.core.world.Face;
 
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
- * All turret types with the minimum base tier they need and the ammunition they consume. Ported from the 1.12.2 turret
- * tile entities ({@code super(tier)}, {@code ammo = …}, {@code requiresAmmo()}).
+ * A turret type: its id, the minimum base tier it needs, the ammunition it consumes and its targeting rules. The 14
+ * built-in types are constants here (ported from the 1.12.2 turret tile entities: {@code super(tier)},
+ * {@code ammo = …}, {@code requiresAmmo()}); other mods add types with {@link #builder} through the turret API
+ * ({@code omtteam.openmodularturrets.api}), which registers them in {@link TurretTypes}.
  * <p>
  * Numeric stats (range, fire rate, power, upgrades) are configurable and come from
- * {@link omtteam.openmodularturrets.core.settings.LogicSettings}.
+ * {@link omtteam.openmodularturrets.core.settings.LogicSettings}. Types are compared by identity; there is exactly one
+ * instance per id.
  */
-public enum TurretType {
-    DISPOSABLE_TURRET("disposable_turret", 1, AmmoType.DISPOSABLE, new int[]{5, 5, -5, 1, 10}),
-    POTATO_CANNON_TURRET("potato_cannon_turret", 1, AmmoType.POTATO, new int[]{-5, -5, -5, 1, 10}),
-    CROSSBOW_TURRET("crossbow_turret", 1, AmmoType.BOLT, new int[]{-5, -5, -5, 1, 10}),
-    MELEE_TURRET("melee_turret", 1, null, new int[]{1, 1, 0, 10, 10}),
-    MACHINE_GUN_TURRET("machine_gun_turret", 2, AmmoType.BULLET, new int[]{1, 10, -5, -5, 10}),
-    INCENDIARY_TURRET("incendiary_turret", 2, AmmoType.BLAZING_CLAY, new int[]{10, -5, -2, 10, 10}),
-    GRENADE_TURRET("grenade_turret", 3, AmmoType.GRENADE, new int[]{10, 10, 20, 1, 10}),
-    SLOWING_TURRET("slowing_turret", 3, null, new int[]{1, 1, 0, 10, 10}),
-    ROCKET_TURRET("rocket_turret", 4, AmmoType.ROCKET, new int[]{10, 10, 20, 1, 10}),
-    TELEPORTER_TURRET("teleporter_turret", 4, null, new int[]{1, -10, 0, 10, 10}),
-    ARC_TURRET("arc_turret", 4, null, new int[]{5, 10, 2, -10, 10}),
-    LASER_TURRET("laser_turret", 5, null, new int[]{5, 10, 2, -10, 10}),
-    RAILGUN_TURRET("railgun_turret", 5, AmmoType.FERRO_SLUG, new int[]{10, 10, 20, 40, 10}),
-    PLASMA_TURRET("plasma_turret", 5, null, new int[]{10, 10, 20, 1, 10});
+public final class TurretType {
+    /** Namespace of the built-in turrets (the mod id). */
+    public static final String BUILTIN_NAMESPACE = "openmodularturrets";
+    private static final Pattern NAMESPACE = Pattern.compile("[a-z0-9_.-]+");
+    private static final Pattern PATH = Pattern.compile("[a-z0-9_./-]+");
+    private static final Set<Face> ALL_FACES = EnumSet.allOf(Face.class);
 
-    private final String id;
+    public static final TurretType DISPOSABLE_TURRET = builtIn("disposable_turret", 1, AmmoType.DISPOSABLE)
+            .priorities(5, 5, -5, 1, 10).build();
+    public static final TurretType POTATO_CANNON_TURRET = builtIn("potato_cannon_turret", 1, AmmoType.POTATO)
+            .priorities(-5, -5, -5, 1, 10).build();
+    public static final TurretType CROSSBOW_TURRET = builtIn("crossbow_turret", 1, AmmoType.BOLT)
+            .priorities(-5, -5, -5, 1, 10).build();
+    /**
+     * The melee turret's blades spin flat around the face normal, so it only mounts on top of or below a base (user
+     * decision).
+     */
+    public static final TurretType MELEE_TURRET = builtIn("melee_turret", 1, null)
+            .priorities(1, 1, 0, 10, 10).mountFaces(Face.UP, Face.DOWN).ignoresScattershot().build();
+    public static final TurretType MACHINE_GUN_TURRET = builtIn("machine_gun_turret", 2, AmmoType.BULLET)
+            .priorities(1, 10, -5, -5, 10).build();
+    public static final TurretType INCENDIARY_TURRET = builtIn("incendiary_turret", 2, AmmoType.BLAZING_CLAY)
+            .priorities(10, -5, -2, 10, 10).build();
+    public static final TurretType GRENADE_TURRET = builtIn("grenade_turret", 3, AmmoType.GRENADE)
+            .priorities(10, 10, 20, 1, 10).build();
+    /** 1.12.2 {@code RelativisticTurretTileEntity.isEntityValidTarget}: slowed entities are already "handled". */
+    public static final TurretType SLOWING_TURRET = builtIn("slowing_turret", 3, null)
+            .priorities(1, 1, 0, 10, 10).ignoresScattershot().skipsSlowedTargets().build();
+    public static final TurretType ROCKET_TURRET = builtIn("rocket_turret", 4, AmmoType.ROCKET)
+            .priorities(10, 10, 20, 1, 10).build();
+    public static final TurretType TELEPORTER_TURRET = builtIn("teleporter_turret", 4, null)
+            .priorities(1, -10, 0, 10, 10).ignoresScattershot().build();
+    public static final TurretType ARC_TURRET = builtIn("arc_turret", 4, null)
+            .priorities(5, 10, 2, -10, 10).build();
+    public static final TurretType LASER_TURRET = builtIn("laser_turret", 5, null)
+            .priorities(5, 10, 2, -10, 10).build();
+    /**
+     * The railgun ignores scattershot upgrades (user decision): it hardly scatters, so every extra ray hit and a
+     * volley dealt a multiple of its already high damage.
+     */
+    public static final TurretType RAILGUN_TURRET = builtIn("railgun_turret", 5, AmmoType.FERRO_SLUG)
+            .priorities(10, 10, 20, 40, 10).ignoresScattershot().build();
+    public static final TurretType PLASMA_TURRET = builtIn("plasma_turret", 5, null)
+            .priorities(10, 10, 20, 1, 10).build();
+
+    /** The built-in types in their original order. */
+    static final List<TurretType> BUILT_IN = List.of(DISPOSABLE_TURRET, POTATO_CANNON_TURRET, CROSSBOW_TURRET,
+            MELEE_TURRET, MACHINE_GUN_TURRET, INCENDIARY_TURRET, GRENADE_TURRET, SLOWING_TURRET, ROCKET_TURRET,
+            TELEPORTER_TURRET, ARC_TURRET, LASER_TURRET, RAILGUN_TURRET, PLASMA_TURRET);
+
+    private final String namespace;
+    private final String path;
     private final int requiredBaseTier;
     private final AmmoType ammo;
     private final int[] priorities;
+    private final Set<Face> mountFaces;
+    private final boolean usesScattershot;
+    private final boolean skipsSlowedTargets;
 
-    TurretType(String id, int requiredBaseTier, AmmoType ammo, int[] priorities) {
-        this.id = id;
-        this.requiredBaseTier = requiredBaseTier;
-        this.ammo = ammo;
-        this.priorities = priorities;
+    private TurretType(Builder builder) {
+        this.namespace = builder.namespace;
+        this.path = builder.path;
+        this.requiredBaseTier = builder.requiredBaseTier;
+        this.ammo = builder.ammo;
+        this.priorities = builder.priorities.clone();
+        this.mountFaces = Set.copyOf(builder.mountFaces);
+        this.usesScattershot = builder.usesScattershot;
+        this.skipsSlowedTargets = builder.skipsSlowedTargets;
     }
 
-    /** Registry path, also the key of the turret's config section. */
+    /**
+     * Starts a new turret type. The id {@code namespace:path} becomes the registry id of the turret block and item;
+     * use your mod id as namespace.
+     */
+    public static Builder builder(String namespace, String path) {
+        return new Builder(namespace, path);
+    }
+
+    private static Builder builtIn(String path, int tier, AmmoType ammo) {
+        return builder(BUILTIN_NAMESPACE, path).requiredBaseTier(tier).ammo(ammo);
+    }
+
+    /** Namespace of the id, the mod id of the mod that adds the turret. */
+    public String getNamespace() {
+        return namespace;
+    }
+
+    /** Path of the id: registry path of the turret, also the key of a built-in turret's config section. */
+    public String getPath() {
+        return path;
+    }
+
+    /** {@code namespace:path}. */
     public String getId() {
-        return id;
+        return namespace + ":" + path;
+    }
+
+    /** Whether this is one of the turrets of this mod (not added by another mod). */
+    public boolean isBuiltIn() {
+        return BUILTIN_NAMESPACE.equals(namespace);
     }
 
     /** A turret on a base of a lower tier breaks (1.12.2 {@code base.getTier() < turretTier}). */
@@ -55,39 +134,113 @@ public enum TurretType {
     }
 
     /**
-     * Default targeting weights in {@link omtteam.openmodularturrets.core.target.TargetingPriority} order (1.12.2
-     * {@code getDefaultPriorities}). Melee, slowing (1.12.2 relativistic) and teleporter had only four values in 1.12.2 (a crash
-     * bug); their PLAYER weight is 10 like every other turret (user decision).
+     * Default targeting weights in {@link TargetingPriority} order (1.12.2 {@code getDefaultPriorities}). Melee,
+     * slowing (1.12.2 relativistic) and teleporter had only four values in 1.12.2 (a crash bug); their PLAYER weight
+     * is 10 like every other turret (user decision).
      */
     public int[] getDefaultPriorities() {
         return priorities.clone();
     }
 
-    /**
-     * Whether this turret may sit on the given face of its base. The melee turret's blades spin flat around the face
-     * normal, so it only mounts on top of or below a base (user decision); all other turrets mount on any face.
-     */
+    /** Whether this turret may sit on the given face of its base. */
     public boolean canMountOn(Face face) {
-        return this != MELEE_TURRET || face == Face.UP || face == Face.DOWN;
+        return mountFaces.contains(face);
     }
 
     /**
-     * Whether scattershot upgrades affect this turret (extra shots, ammo, energy and scatter). The railgun ignores
-     * them (user decision): it hardly scatters, so every extra ray hit and a volley dealt a multiple of its already
-     * high damage. The effect turrets (melee, slowing, teleporter) ignore them too: they act once per shot, so the
-     * upgrades only cost extra energy.
+     * Whether scattershot upgrades affect this turret (extra shots, ammo, energy and scatter). Turrets that act once
+     * per shot (melee, slowing, teleporter) ignore them, as the upgrades would only cost extra energy.
      */
     public boolean usesScattershot() {
-        return switch (this) {
-            case RAILGUN_TURRET, MELEE_TURRET, SLOWING_TURRET, TELEPORTER_TURRET -> false;
-            default -> true;
-        };
+        return usesScattershot;
     }
 
+    /** Whether entities that already have slowness are not targeted. */
+    public boolean skipsSlowedTargets() {
+        return skipsSlowedTargets;
+    }
+
+    /** All registered types, see {@link TurretTypes#all()}. */
+    public static List<TurretType> values() {
+        return TurretTypes.all();
+    }
+
+    /** See {@link TurretTypes#byId}. */
     public static Optional<TurretType> byId(String id) {
-        for (TurretType type : values()) {
-            if (type.id.equals(id)) return Optional.of(type);
+        return TurretTypes.byId(id);
+    }
+
+    @Override
+    public String toString() {
+        return getId();
+    }
+
+    /** Builds a {@link TurretType}; every setting has a default except the id. */
+    public static final class Builder {
+        private final String namespace;
+        private final String path;
+        private int requiredBaseTier = 1;
+        private AmmoType ammo;
+        private int[] priorities = {1, 1, 1, 1, 10};
+        private Set<Face> mountFaces = ALL_FACES;
+        private boolean usesScattershot = true;
+        private boolean skipsSlowedTargets;
+
+        private Builder(String namespace, String path) {
+            if (!NAMESPACE.matcher(Objects.requireNonNull(namespace)).matches()) {
+                throw new IllegalArgumentException("Invalid turret namespace: " + namespace);
+            }
+            if (!PATH.matcher(Objects.requireNonNull(path)).matches()) {
+                throw new IllegalArgumentException("Invalid turret path: " + path);
+            }
+            this.namespace = namespace;
+            this.path = path;
         }
-        return Optional.empty();
+
+        /** Minimum base tier, 1–5 (default 1). */
+        public Builder requiredBaseTier(int tier) {
+            if (tier < 1 || tier > 5) throw new IllegalArgumentException("Base tier must be 1-5: " + tier);
+            this.requiredBaseTier = tier;
+            return this;
+        }
+
+        /** The ammunition the turret consumes per shot; {@code null} (the default) for energy-only turrets. */
+        public Builder ammo(AmmoType ammo) {
+            this.ammo = ammo;
+            return this;
+        }
+
+        /** Default targeting weights, one per {@link TargetingPriority} in declaration order. */
+        public Builder priorities(int... weights) {
+            if (weights.length != TargetingPriority.values().length) {
+                throw new IllegalArgumentException("Expected " + TargetingPriority.values().length
+                        + " priority weights, got " + Arrays.toString(weights));
+            }
+            this.priorities = weights.clone();
+            return this;
+        }
+
+        /** The base faces the turret may mount on (default: all six). */
+        public Builder mountFaces(Face... faces) {
+            if (faces.length == 0) throw new IllegalArgumentException("A turret needs at least one mount face");
+            this.mountFaces = EnumSet.copyOf(Arrays.asList(faces));
+            return this;
+        }
+
+        /** Scattershot upgrades do not affect the turret (no extra shots, ammo, energy or scatter). */
+        public Builder ignoresScattershot() {
+            this.usesScattershot = false;
+            return this;
+        }
+
+        /** Entities that already have slowness are not targeted. */
+        public Builder skipsSlowedTargets() {
+            this.skipsSlowedTargets = true;
+            return this;
+        }
+
+        public TurretType build() {
+            return new TurretType(this);
+        }
     }
 }

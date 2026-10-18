@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.util.Map;
 
 /**
  * Clamps every {@link Range}-annotated field of a config object, including those of nested config objects. Keys
@@ -25,6 +27,10 @@ final class ConfigRanges {
                     field.setDouble(target, v.range(name, field.getDouble(target), range.min(), range.max()));
                 } else if (isSection(field.getType())) {
                     validate(field.get(target), v, name + ".");
+                } else if (isSectionMap(field)) {
+                    for (Map.Entry<?, ?> entry : ((Map<?, ?>) field.get(target)).entrySet()) {
+                        validate(entry.getValue(), v, name + "." + entry.getKey() + ".");
+                    }
                 }
             } catch (IllegalAccessException e) {
                 throw new IllegalStateException(e);
@@ -49,5 +55,12 @@ final class ConfigRanges {
     /** Whether a field holds a nested group of settings (as opposed to a value). */
     static boolean isSection(Class<?> type) {
         return type.getPackage() == ConfigRanges.class.getPackage() && !type.isEnum() && !type.isInterface();
+    }
+
+    /** Whether a field is a {@code Map<String, section>}, e.g. settings per turret id. */
+    static boolean isSectionMap(Field field) {
+        return Map.class.isAssignableFrom(field.getType())
+                && field.getGenericType() instanceof ParameterizedType map
+                && map.getActualTypeArguments()[1] instanceof Class<?> value && isSection(value);
     }
 }

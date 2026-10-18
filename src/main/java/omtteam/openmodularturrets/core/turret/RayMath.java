@@ -17,21 +17,9 @@ public final class RayMath {
     private RayMath() {
     }
 
-    /**
-     * 1.12.2 {@code getDamageModifier(entity)} for the directly hit entity:
-     * <ul>
-     *     <li>laser: {@code (30 - armor) / 20 + 0.1}, so 1.6x without armor down to 0.6x at 20 armor</li>
-     *     <li>railgun: {@code armor / 20 + 0.6}, so 0.6x without armor up to 1.6x at 20 armor</li>
-     *     <li>arc: always 1</li>
-     * </ul>
-     */
-    public static double damageModifier(TurretType type, int armor) {
-        return switch (type) {
-            case LASER_TURRET -> (30 - armor) / 20F + 0.1F;
-            case RAILGUN_TURRET -> armor / 20F + 0.6F;
-            case ARC_TURRET -> 1F;
-            default -> throw new IllegalArgumentException(type + " is not a ray turret");
-        };
+    /** 1.12.2 {@code getDamageModifier(entity)} for the directly hit entity, see the {@link RayProfile} constants. */
+    public static double damageModifier(RayProfile profile, int armor) {
+        return profile.armorModifier().applyAsDouble(armor);
     }
 
     /**
@@ -50,16 +38,11 @@ public final class RayMath {
     }
 
     /**
-     * How a ray's damage is dealt: the laser only normal damage, the railgun only armor-piercing damage, the arc 60 %
-     * normal and 40 % armor-piercing.
+     * How a ray's damage is dealt ({@link RayProfile#normalShare()} / {@link RayProfile#bypassShare()}): the laser
+     * only normal damage, the railgun only armor-piercing damage, the arc 60 % normal and 40 % armor-piercing.
      */
-    public static ProjectileMath.Split split(TurretType type, float damage) {
-        return switch (type) {
-            case LASER_TURRET -> new ProjectileMath.Split(damage, 0F);
-            case RAILGUN_TURRET -> new ProjectileMath.Split(0F, damage);
-            case ARC_TURRET -> new ProjectileMath.Split(damage * 0.6F, damage * 0.4F);
-            default -> throw new IllegalArgumentException(type + " is not a ray turret");
-        };
+    public static ProjectileMath.Split split(RayProfile profile, float damage) {
+        return new ProjectileMath.Split(damage * profile.normalShare(), damage * profile.bypassShare());
     }
 
     /** 1.12.2 {@code ArcTurretTileEntity.applyHitEffects}: the arc jumps up to {@code 3 * remaining hops} blocks. */

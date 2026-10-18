@@ -3,11 +3,12 @@ package omtteam.openmodularturrets.core.turret;
 import omtteam.openmodularturrets.core.world.Face;
 import org.junit.jupiter.api.Test;
 
-import java.util.EnumSet;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TurretTypeTest {
@@ -25,10 +26,10 @@ class TurretTypeTest {
 
     @Test
     void energyTurretsNeedNoAmmo() {
-        Set<TurretType> energyOnly = EnumSet.of(TurretType.MELEE_TURRET, TurretType.SLOWING_TURRET,
+        Set<TurretType> energyOnly = Set.of(TurretType.MELEE_TURRET, TurretType.SLOWING_TURRET,
                 TurretType.TELEPORTER_TURRET, TurretType.ARC_TURRET, TurretType.LASER_TURRET, TurretType.PLASMA_TURRET);
-        for (TurretType type : TurretType.values()) {
-            assertEquals(energyOnly.contains(type), type.getAmmo().isEmpty(), type.name());
+        for (TurretType type : TurretType.BUILT_IN) {
+            assertEquals(energyOnly.contains(type), type.getAmmo().isEmpty(), type.getId());
         }
     }
 
@@ -51,10 +52,74 @@ class TurretTypeTest {
     }
 
     @Test
-    void idsRoundTrip() {
-        for (TurretType type : TurretType.values()) {
-            assertEquals(Optional.of(type), TurretType.byId(type.getId()));
-            assertTrue(type.getId().endsWith("_turret"));
+    void scattershotIsIgnoredByRailgunAndEffectTurrets() {
+        Set<TurretType> ignoring = Set.of(TurretType.RAILGUN_TURRET, TurretType.MELEE_TURRET,
+                TurretType.SLOWING_TURRET, TurretType.TELEPORTER_TURRET);
+        for (TurretType type : TurretType.BUILT_IN) {
+            assertEquals(!ignoring.contains(type), type.usesScattershot(), type.getId());
         }
+    }
+
+    @Test
+    void onlyTheSlowingTurretSkipsSlowedTargets() {
+        for (TurretType type : TurretType.BUILT_IN) {
+            assertEquals(type == TurretType.SLOWING_TURRET, type.skipsSlowedTargets(), type.getId());
+        }
+    }
+
+    @Test
+    void idsRoundTrip() {
+        assertEquals(14, TurretType.BUILT_IN.size());
+        for (TurretType type : TurretType.BUILT_IN) {
+            assertEquals(Optional.of(type), TurretType.byId(type.getId()));
+            assertEquals(Optional.of(type), TurretType.byId(type.getPath()), "bare paths are built-in ids");
+            assertTrue(type.isBuiltIn());
+            assertEquals("openmodularturrets:" + type.getPath(), type.getId());
+            assertTrue(type.getPath().endsWith("_turret"));
+        }
+    }
+
+    @Test
+    void builderDefaults() {
+        TurretType type = TurretType.builder("othermod", "test_turret").build();
+        assertEquals("othermod:test_turret", type.getId());
+        assertFalse(type.isBuiltIn());
+        assertEquals(1, type.getRequiredBaseTier());
+        assertTrue(type.getAmmo().isEmpty());
+        assertTrue(type.usesScattershot());
+        assertFalse(type.skipsSlowedTargets());
+        for (Face face : Face.values()) {
+            assertTrue(type.canMountOn(face));
+        }
+    }
+
+    @Test
+    void builderRejectsInvalidValues() {
+        assertThrows(IllegalArgumentException.class, () -> TurretType.builder("Bad", "turret"));
+        assertThrows(IllegalArgumentException.class, () -> TurretType.builder("mod", "with space"));
+        assertThrows(IllegalArgumentException.class, () -> TurretType.builder("mod", "t").requiredBaseTier(6));
+        assertThrows(IllegalArgumentException.class, () -> TurretType.builder("mod", "t").priorities(1, 2, 3));
+        assertThrows(IllegalArgumentException.class, () -> TurretType.builder("mod", "t").mountFaces());
+    }
+
+    @Test
+    void registeredTypesFollowTheBuiltInOnes() {
+        TurretType added = TurretTypes.register(TurretType.builder("othermod", "registered_turret").build());
+        assertEquals(TurretType.BUILT_IN, TurretTypes.all().subList(0, TurretType.BUILT_IN.size()));
+        assertTrue(TurretTypes.all().contains(added));
+        assertEquals(Optional.of(added), TurretTypes.byId("othermod:registered_turret"));
+        assertEquals(Optional.empty(), TurretTypes.byId("registered_turret"), "bare paths are built-in ids");
+        assertThrows(IllegalArgumentException.class,
+                () -> TurretTypes.register(TurretType.builder("othermod", "registered_turret").build()));
+        assertThrows(IllegalArgumentException.class,
+                () -> TurretTypes.register(TurretType.builder("openmodularturrets", "laser_turret").build()));
+        assertThrows(UnsupportedOperationException.class, () -> TurretTypes.all().clear());
+    }
+
+    @Test
+    void ammoTypesAreValues() {
+        assertEquals(AmmoType.of("openmodularturrets", "bullet"), AmmoType.BULLET);
+        assertEquals("othermod:shell", AmmoType.of("othermod", "shell").getId());
+        assertThrows(IllegalArgumentException.class, () -> AmmoType.of("othermod", "Shell"));
     }
 }

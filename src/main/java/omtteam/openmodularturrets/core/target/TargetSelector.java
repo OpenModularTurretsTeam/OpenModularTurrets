@@ -103,7 +103,7 @@ public final class TargetSelector {
         if (owner.isEmpty() && entity.isTamedHorse()) return false;
 
         // 1.12.2 RelativisticTurretTileEntity.isEntityValidTarget: slowed entities are already "handled"
-        if (type == TurretType.SLOWING_TURRET && entity.hasSlowness()) return false;
+        if (type.skipsSlowedTargets() && entity.hasSlowness()) return false;
 
         if (classification == Classification.NEUTRAL && targeting.isTargetPassive() && settings.globalCanTargetNeutrals()) {
             return true;

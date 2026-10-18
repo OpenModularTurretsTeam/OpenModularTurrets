@@ -67,10 +67,7 @@ public final class ConfigLogicSettings implements LogicSettings {
 
     @Override
     public TurretStats turret(TurretType type) {
-        TurretSetting s = OMTConfig.get().turrets.get(type);
-        return new TurretStats(s.enabled, s.baseRange, s.baseFireRate, s.baseDamage, s.powerUsage,
-                s.baseAccuracyDeviation, s.maxSimultaneous, s.damageAmp, s.fireRateUpgrade, s.rangeUpgrade,
-                s.accuracyUpgrade, s.efficiencyUpgrade, s.recyclerNegateChance, s.recyclerAddChance);
+        return OMTConfig.get().turrets.get(type).toStats();
     }
 
     @Override

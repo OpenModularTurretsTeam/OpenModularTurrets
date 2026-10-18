@@ -17,7 +17,7 @@ import omtteam.openmodularturrets.item.UpgradeItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -87,7 +87,7 @@ public final class ModItems {
     }
 
     private static Map<TurretType, BlockItem> registerTurrets() {
-        Map<TurretType, BlockItem> turrets = new EnumMap<>(TurretType.class);
+        Map<TurretType, BlockItem> turrets = new LinkedHashMap<>();
         ModBlocks.TURRETS.forEach((type, block) -> turrets.put(type, registerBlock(block)));
         return Collections.unmodifiableMap(turrets);
     }

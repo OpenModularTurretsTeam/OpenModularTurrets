@@ -8,6 +8,7 @@ import net.minecraft.world.item.Items;
 import omtteam.openmodularturrets.config.ConfigData;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.item.AmmoItem;
+import omtteam.openmodularturrets.registry.TurretRegistry;
 
 import java.util.Map;
 import java.util.Set;
@@ -17,18 +18,22 @@ import java.util.Set;
  * and {@code AmmoList}.
  */
 public final class AmmoRules {
-    /** Vanilla items that some turret uses as ammo or fuel. */
-    private static final Set<Item> BUILTIN_AMMO = Set.of(Items.POTATO, Items.POISONOUS_POTATO, Items.REDSTONE, Items.REDSTONE_BLOCK);
+    /** Vanilla items the redstone reactor addon burns. */
+    private static final Set<Item> REACTOR_FUEL = Set.of(Items.REDSTONE, Items.REDSTONE_BLOCK);
 
     private AmmoRules() {
     }
 
+    /**
+     * Ammo of any turret ({@link TurretRegistry#isAnyAmmo}, which includes potatoes and the disposable ammo list),
+     * any {@link AmmoItem} and reactor fuel; everything without {@code useWhitelistForAmmo}.
+     */
     public static boolean isValidAmmo(ItemStack stack) {
         if (stack.isEmpty()) return false;
         return !OMTConfig.get().general.useWhitelistForAmmo
-                || BUILTIN_AMMO.contains(stack.getItem())
+                || REACTOR_FUEL.contains(stack.getItem())
                 || stack.getItem() instanceof AmmoItem
-                || getDisposableAmmoDamageBonus(stack) > 0;
+                || TurretRegistry.isAnyAmmo(stack);
     }
 
     /**

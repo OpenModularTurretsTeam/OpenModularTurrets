@@ -14,6 +14,7 @@ import omtteam.openmodularturrets.registry.ModEntities;
 import omtteam.openmodularturrets.registry.ModItems;
 import omtteam.openmodularturrets.registry.ModMenus;
 import omtteam.openmodularturrets.registry.ModSounds;
+import omtteam.openmodularturrets.registry.TurretRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +28,7 @@ public class OMT implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Initializing Open Modular Turrets");
+        TurretRegistry.load(); // first: the config needs the turrets' default stats, the blocks their types
         OMTPackets.init();
         OMTConfig.init(); // before blocks: block properties come from the config
         ModSounds.init();

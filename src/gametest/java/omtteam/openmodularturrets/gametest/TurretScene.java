@@ -6,11 +6,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
+import omtteam.openmodularturrets.api.AmmoDefinition;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.core.base.MachineMode;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
@@ -18,9 +17,8 @@ import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
-import omtteam.openmodularturrets.item.AmmoItem;
 import omtteam.openmodularturrets.registry.ModBlocks;
-import omtteam.openmodularturrets.registry.ModItems;
+import omtteam.openmodularturrets.registry.TurretRegistry;
 
 import java.util.UUID;
 
@@ -73,20 +71,16 @@ public final class TurretScene {
         logic.getEnergy().generate(logic.getEnergy().getCapacity());
         logic.updateMaxRange();
         logic.setRange(logic.getTargetingSettings().getMaxRange());
-        type.getAmmo().ifPresent(ammo -> base.getInventory().setItem(TurretBaseInventory.AMMO_START,
-                new ItemStack(ammoItem(ammo), 64)));
+        type.getAmmo().ifPresent(ammo -> base.getInventory().setItem(TurretBaseInventory.AMMO_START, ammoStack(ammo)));
         return base;
     }
 
-    private static Item ammoItem(AmmoType ammo) {
-        return switch (ammo) {
-            case POTATO -> Items.POTATO;
-            case DISPOSABLE -> Items.COBBLESTONE;
-            default -> ModItems.ALL.stream()
-                    .filter(item -> item instanceof AmmoItem ammoItem && ammoItem.getAmmoType() == ammo)
-                    .findFirst()
-                    .orElseThrow();
-        };
+    /** A full stack of the ammo's {@linkplain AmmoDefinition#sample() sample}. */
+    private static ItemStack ammoStack(AmmoType ammo) {
+        ItemStack stack = TurretRegistry.ammo(ammo).orElseThrow(() -> new IllegalStateException("No ammo definition for " + ammo))
+                .sample().get();
+        stack.setCount(stack.getMaxStackSize());
+        return stack;
     }
 
     /** {@link GameTestHelper#succeedWhen}, then the scene is {@linkplain #clear cleared}. */

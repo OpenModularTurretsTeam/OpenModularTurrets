@@ -9,7 +9,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class ConfigWriterTest {
@@ -74,5 +76,34 @@ class ConfigWriterTest {
         assertEquals(1D, sample.ratio);
         assertEquals(0D, sample.inner.chance);
         assertTrue(validator.changed());
+    }
+
+    static class WithMap {
+        @Comment("Per id.")
+        Map<String, Inner> byId = new LinkedHashMap<>();
+        Map<String, Inner> empty = new LinkedHashMap<>();
+    }
+
+    @Test
+    void sectionMapsAreWrittenAndClampedLikeSections() {
+        WithMap defaults = new WithMap();
+        defaults.byId.put("mod:a", new Inner());
+        WithMap config = new WithMap();
+        config.byId.put("mod:a", new Inner());
+        config.byId.put("mod:b", new Inner());
+        config.byId.get("mod:a").chance = 0.5D;
+        config.byId.get("mod:b").chance = 3D;
+
+        ConfigValidator validator = new ConfigValidator();
+        ConfigRanges.validate(config, validator, "");
+        assertEquals(1D, config.byId.get("mod:b").chance);
+        assertTrue(validator.changed());
+
+        String text = ConfigWriter.write(config, defaults);
+        assertTrue(text.contains("// Per id.\n  \"byId\": {\n    \"mod:a\": {\n      // Range: 0.0 to 1.0\n"
+                + "      // Default: 0.25\n      \"chance\": 0.5\n    },\n\n    \"mod:b\": {\n"), text);
+        assertTrue(text.contains("\"empty\": {}"), text);
+        JsonObject json = JsonParser.parseString(text).getAsJsonObject();
+        assertEquals(0.5D, json.getAsJsonObject("byId").getAsJsonObject("mod:a").get("chance").getAsDouble());
     }
 }

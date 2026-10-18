@@ -9,6 +9,14 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 
 ## [Unreleased]
 
+### Added
+
+- Turret API for other mods: they can add turrets (with their own weapons, ammo, models and config entries under `turrets.addon_turrets`) through the `openmodularturrets` entrypoint, see `docs/turret-api.md`
+
+### Fixed
+
+- On the very first start (no config file yet), the disposable ammo list and the entity black and force lists were ignored until the next restart
+
 ## [4.0.0-beta.4] - 2026-10-17
 
 ### Added

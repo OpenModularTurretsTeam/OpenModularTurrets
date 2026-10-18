@@ -43,7 +43,7 @@ public class OMTClient implements ClientModInitializer {
         MenuScreens.register(ModMenus.GENERATOR, GeneratorScreen::new);
         MenuScreens.register(ModMenus.CAMO, CamoScreen::new);
         CamoModels.register();
-        TurretModels.registerLayers();
+        TurretModels.init();
         RayRenderer.init();
         BlockEntityRenderers.register(ModBlockEntities.TURRET, TurretRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(LeverRenderer.LAYER, LeverRenderer::createLayer);

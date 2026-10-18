@@ -5,7 +5,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
@@ -13,7 +12,7 @@ import omtteam.openmodularturrets.config.ConfigData;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.registry.ModItems;
+import omtteam.openmodularturrets.registry.TurretRegistry;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +39,8 @@ public final class TurretTooltip {
             return;
         }
         ConfigData.Turrets turrets = OMTConfig.get().turrets;
-        lines.add(translated("turret." + type.getId() + ".description").withStyle(ChatFormatting.GRAY));
+        lines.add(Component.translatable("tooltip." + type.getNamespace() + ".turret." + type.getPath() + ".description")
+                .withStyle(ChatFormatting.GRAY));
         lines.add(Component.empty());
         lines.add(value("turret.tier", Component.literal(String.valueOf(type.getRequiredBaseTier()))));
         lines.add(value("turret.ammo", ammo(type, turrets.doTurretsNeedAmmo)));
@@ -50,20 +50,8 @@ public final class TurretTooltip {
     private static Component ammo(TurretType type, boolean ammoNeeded) {
         Optional<AmmoType> ammo = type.getAmmo();
         if (ammo.isEmpty() || !ammoNeeded) return translated("turret.ammo.none");
-        return switch (ammo.get()) {
-            case POTATO -> translated("turret.ammo.potato");
-            case DISPOSABLE -> translated("turret.ammo.disposable");
-            case BLAZING_CLAY -> name(ModItems.AMMO_BLAZING_CLAY);
-            case BOLT -> name(ModItems.AMMO_BOLT);
-            case BULLET -> name(ModItems.AMMO_BULLET);
-            case FERRO_SLUG -> name(ModItems.AMMO_FERRO_SLUG);
-            case GRENADE -> name(ModItems.AMMO_GRENADE);
-            case ROCKET -> name(ModItems.AMMO_ROCKET);
-        };
-    }
-
-    private static Component name(Item item) {
-        return Component.translatable(item.getDescriptionId());
+        return TurretRegistry.ammo(ammo.get()).map(definition -> definition.displayName().get())
+                .orElseGet(() -> Component.literal(ammo.get().getId()));
     }
 
     /** "Label: value" with a white value. */

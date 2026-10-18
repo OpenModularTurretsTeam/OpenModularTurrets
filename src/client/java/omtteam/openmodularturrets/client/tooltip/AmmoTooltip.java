@@ -25,7 +25,8 @@ public final class AmmoTooltip {
         lines.add(Component.empty());
         lines.add(Component.translatable("tooltip.openmodularturrets.ammo.label").withStyle(ChatFormatting.BLUE));
         lines.add(Component.empty());
-        lines.add(Component.translatable("tooltip.openmodularturrets.ammo." + ammo.getAmmoType().getSerializedName())
+        lines.add(Component.translatable("tooltip." + ammo.getAmmoType().getNamespace() + ".ammo."
+                        + ammo.getAmmoType().getPath())
                 .withStyle(ChatFormatting.GRAY));
     }
 }

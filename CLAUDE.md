@@ -210,8 +210,11 @@ Wrap each of these behind a helper where possible.
 ```
 omtteam.openmodularturrets
 ├── OMT.java                     # ModInitializer, MOD_ID, id() helper, logger
+├── api/                         # public turret API: OMTPlugin entrypoint, TurretDefinition, AmmoDefinition,
+│   └── weapon/                  # OMTApi lookups; weapon kinds (Projectile/Ray/Effect/AreaWeapon)
 ├── registry/                    # ModBlocks, ModItems, ModBlockEntities, ModEntities,
-│                                # ModMenus, ModSounds, ModCreativeTabs, ModDataComponents (1.21)
+│                                # ModMenus, ModSounds, ModCreativeTabs, ModDataComponents (1.21),
+│                                # TurretRegistry (definitions, plugin loading), BuiltinTurrets
 ├── block/
 │   ├── base/                    # TurretBaseBlock (tiers 1–5)
 │   ├── turret/                  # AbstractTurretBlock + one class per turret type
@@ -235,6 +238,7 @@ omtteam.openmodularturrets
 (client source set)
 omtteam.openmodularturrets.client
 ├── OMTClient.java               # ClientModInitializer
+├── api/                         # OMTClientPlugin entrypoint, TurretModelRegistrar
 ├── render/blockentity/          # turret renderers (rotating heads), base renderer
 ├── render/entity/               # projectile renderers
 ├── model/                       # Java entity-style turret models
@@ -261,6 +265,28 @@ omtteam.openmodularturrets.client
   - spawning projectiles
 
   They request ammo and energy from the base.
+
+### Turret API (adding turrets)
+
+Other mods add turrets through `omtteam.openmodularturrets.api` (developer guide: `docs/turret-api.md`). The
+built-in turrets use the same path, so there is no special casing per turret type anywhere:
+
+- `core.turret.TurretType` is a namespaced value class (built-in constants keep their names), built with
+  `TurretType.builder(ns, path)`; `TurretTypes` is the registry (built-in first, frozen after loading). Per-type
+  behaviour is data on the type (`canMountOn`, `usesScattershot`, `skipsSlowedTargets`) or on the weapon, never a
+  `switch`/`==` on a specific type. `AmmoType` is a value class too (`AmmoType.of(ns, path)`); compare with `equals`.
+- `OMTPlugin` (entrypoint `openmodularturrets`) registers `TurretDefinition`s (type + `TurretWeapon` + default
+  `TurretStats`) and `AmmoDefinition`s. `TurretRegistry.load()` runs first in `OMT.onInitialize` (built-ins via
+  `BuiltinTurrets`, then plugins), then freezes the types; `ModBlocks`/`ModItems` register a block and item per
+  type with the type's id, all on the shared `TURRET` block entity type.
+- Weapons (`api.weapon`): `ProjectileWeapon`, `RayWeapon` (damage rules = core `RayProfile`), `EffectWeapon`,
+  `AreaWeapon`; `TurretBlockEntity` dispatches on the kind, `RayWeapons` / `EffectWeapons` do the work.
+- Config: built-in turrets keep their typed sections; other mods' turrets live in `turrets.addon_turrets` (a
+  `Map<String, TurretSetting>` keyed by id, defaults from their definition). `ConfigWriter`/`ConfigRanges` handle
+  such section maps.
+- Client: `OMTClientPlugin` (entrypoint `openmodularturrets_client`) registers models via `TurretModelRegistrar`;
+  `TurretModels.init()` collects built-in and plugin models.
+- The game test mod registers a test turret through the API (`ApiTestTurrets`, `ApiTurretGameTests`).
 
 ### Aiming on arbitrary faces
 
@@ -394,3 +420,5 @@ Update this checklist as work progresses.
 - [x] Publishing to CurseForge / Modrinth via Gradle (`chiseledPublish`; CurseForge 224663, Modrinth `open-modular-turrets`)
 - [x] Changelog system (`CHANGELOG.md`, `changelogEntry`, `releaseChangelog`; publish uploads the version's section)
 - [x] Generator block (new in this version; design agreed with the user, see "Power & items")
+- [x] Turret API for other mods (`api/`, `docs/turret-api.md`); built-in turrets registered through it, game test
+  for an API turret

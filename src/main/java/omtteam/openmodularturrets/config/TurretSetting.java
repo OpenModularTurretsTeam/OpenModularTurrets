@@ -1,5 +1,7 @@
 package omtteam.openmodularturrets.config;
 
+import omtteam.openmodularturrets.core.settings.TurretStats;
+
 /**
  * Per-turret-type settings. Fields and defaults ported from 1.12.2 {@code handler/config/TurretSetting}.
  */
@@ -54,5 +56,17 @@ public class TurretSetting {
         this.efficiencyUpgrade = efficiencyUpgrade;
         this.recyclerNegateChance = recyclerNegateChance;
         this.recyclerAddChance = recyclerAddChance;
+    }
+
+    public static TurretSetting of(TurretStats s) {
+        return new TurretSetting(s.enabled(), s.baseRange(), s.baseFireRate(), s.baseDamage(), s.powerUsage(),
+                s.baseAccuracyDeviation(), s.maxSimultaneous(), s.damageAmp(), s.fireRateUpgrade(), s.rangeUpgrade(),
+                s.accuracyUpgrade(), s.efficiencyUpgrade(), s.recyclerNegateChance(), s.recyclerAddChance());
+    }
+
+    public TurretStats toStats() {
+        return new TurretStats(enabled, baseRange, baseFireRate, baseDamage, powerUsage, baseAccuracyDeviation,
+                maxSimultaneous, damageAmp, fireRateUpgrade, rangeUpgrade, accuracyUpgrade, efficiencyUpgrade,
+                recyclerNegateChance, recyclerAddChance);
     }
 }

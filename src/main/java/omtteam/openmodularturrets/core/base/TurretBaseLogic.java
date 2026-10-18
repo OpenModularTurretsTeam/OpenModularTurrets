@@ -279,7 +279,7 @@ public class TurretBaseLogic {
             }
         }
         if (available < needed) return Optional.empty();
-        int damageBonus = ammo == AmmoType.DISPOSABLE ? matching.get(0).getDisposableDamageBonus() : 0;
+        int damageBonus = ammo.equals(AmmoType.DISPOSABLE) ?matching.get(0).getDisposableDamageBonus() : 0;
         Object item = matching.get(0).snapshot();
 
         if (hasAddon(AddonType.RECYCLER) && random.nextDouble() < settings.turret(type).recyclerNegateChance()) {

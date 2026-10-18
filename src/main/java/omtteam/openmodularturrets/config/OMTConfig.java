@@ -72,14 +72,14 @@ public final class OMTConfig {
                 json = JsonParser.parseReader(reader);
             } catch (Exception e) {
                 OMT.LOGGER.error("Could not read {}, using defaults (the file is left untouched)", path, e);
-                local = active = new ConfigData();
+                local = active = validatedDefaults();
                 return;
             }
             ParseResult result = parse(json);
             data = result.data();
             changed = result.changed() || !commented(data).equals(readText(path));
         } else {
-            data = new ConfigData();
+            data = validatedDefaults();
             changed = true;
         }
         if (changed) {
@@ -91,6 +91,13 @@ public final class OMTConfig {
             }
         }
         local = active = data;
+    }
+
+    /** The defaults with their lists parsed (ammo allow list, entity lists), as after loading a file. */
+    private static ConfigData validatedDefaults() {
+        ConfigData data = new ConfigData();
+        data.validate(new ConfigValidator());
+        return data;
     }
 
     /** The file contents for {@code data}: JSON with the comments from {@link Comment} and {@link Range}. */

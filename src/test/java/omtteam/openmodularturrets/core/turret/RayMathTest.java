@@ -3,41 +3,43 @@ package omtteam.openmodularturrets.core.turret;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RayMathTest {
     private static final double EPS = 1e-5;
 
     @Test
     void laserIsWeakerAgainstArmor() {
-        assertEquals(1.6, RayMath.damageModifier(TurretType.LASER_TURRET, 0), EPS);
-        assertEquals(1.1, RayMath.damageModifier(TurretType.LASER_TURRET, 10), EPS);
-        assertEquals(0.6, RayMath.damageModifier(TurretType.LASER_TURRET, 20), EPS);
+        assertEquals(1.6, RayMath.damageModifier(RayProfile.LASER, 0), EPS);
+        assertEquals(1.1, RayMath.damageModifier(RayProfile.LASER, 10), EPS);
+        assertEquals(0.6, RayMath.damageModifier(RayProfile.LASER, 20), EPS);
     }
 
     @Test
     void railgunIsStrongerAgainstArmor() {
-        assertEquals(0.6, RayMath.damageModifier(TurretType.RAILGUN_TURRET, 0), EPS);
-        assertEquals(0.7, RayMath.damageModifier(TurretType.RAILGUN_TURRET, 2), EPS);
-        assertEquals(1.6, RayMath.damageModifier(TurretType.RAILGUN_TURRET, 20), EPS);
+        assertEquals(0.6, RayMath.damageModifier(RayProfile.RAILGUN, 0), EPS);
+        assertEquals(0.7, RayMath.damageModifier(RayProfile.RAILGUN, 2), EPS);
+        assertEquals(1.6, RayMath.damageModifier(RayProfile.RAILGUN, 20), EPS);
     }
 
     @Test
     void arcIgnoresArmor() {
-        assertEquals(1, RayMath.damageModifier(TurretType.ARC_TURRET, 0), EPS);
-        assertEquals(1, RayMath.damageModifier(TurretType.ARC_TURRET, 20), EPS);
+        assertEquals(1, RayMath.damageModifier(RayProfile.ARC, 0), EPS);
+        assertEquals(1, RayMath.damageModifier(RayProfile.ARC, 20), EPS);
     }
 
     @Test
-    void onlyRayTurretsHaveRayRules() {
-        assertThrows(IllegalArgumentException.class, () -> RayMath.damageModifier(TurretType.MACHINE_GUN_TURRET, 0));
-        assertThrows(IllegalArgumentException.class, () -> RayMath.split(TurretType.PLASMA_TURRET, 10F));
+    void onlyTheArcChains() {
+        assertTrue(RayProfile.ARC.arcChain());
+        assertFalse(RayProfile.LASER.arcChain());
+        assertFalse(RayProfile.RAILGUN.arcChain());
     }
 
     @Test
     void damageIsBaseDamageTimesModifier() {
         // the railgun game test: 25 base damage against a husk (2 armor)
-        double modifier = RayMath.damageModifier(TurretType.RAILGUN_TURRET, 2);
+        double modifier = RayMath.damageModifier(RayProfile.RAILGUN, 2);
         assertEquals(17.5, RayMath.damage(25, modifier, 0, 20F), EPS);
     }
 
@@ -60,9 +62,9 @@ class RayMathTest {
 
     @Test
     void splits() {
-        assertEquals(new ProjectileMath.Split(10F, 0F), RayMath.split(TurretType.LASER_TURRET, 10F));
-        assertEquals(new ProjectileMath.Split(0F, 10F), RayMath.split(TurretType.RAILGUN_TURRET, 10F));
-        ProjectileMath.Split arc = RayMath.split(TurretType.ARC_TURRET, 10F);
+        assertEquals(new ProjectileMath.Split(10F, 0F), RayMath.split(RayProfile.LASER, 10F));
+        assertEquals(new ProjectileMath.Split(0F, 10F), RayMath.split(RayProfile.RAILGUN, 10F));
+        ProjectileMath.Split arc = RayMath.split(RayProfile.ARC, 10F);
         assertEquals(6F, arc.normal(), EPS);
         assertEquals(4F, arc.armorBypass(), EPS);
     }
