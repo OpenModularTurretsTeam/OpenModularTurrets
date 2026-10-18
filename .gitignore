@@ -3,6 +3,9 @@
 build/
 versions/*/build/
 versions/*/logs/
+# Minecraft's log4j setup writes logs/latest.log into the working directory of anything that loads game
+# classes (unit tests, tools started from the repo root)
+/logs/
 !versions/*/src/main/generated/
 versions/*/src/main/generated/.cache/
 
