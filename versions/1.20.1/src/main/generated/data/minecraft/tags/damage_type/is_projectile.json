@@ -1,15 +1,15 @@
 {
   "replace": false,
   "values": [
-    "openmodularturrets:grenade",
-    "openmodularturrets:arrow",
     "openmodularturrets:bullet",
-    "openmodularturrets:plasma",
-    "openmodularturrets:plasma_armor_bypass",
     "openmodularturrets:blazing_clay",
-    "openmodularturrets:disposable",
-    "openmodularturrets:rocket",
+    "openmodularturrets:grenade",
     "openmodularturrets:grenade_armor_bypass",
-    "openmodularturrets:potato"
+    "openmodularturrets:rocket",
+    "openmodularturrets:arrow",
+    "openmodularturrets:potato",
+    "openmodularturrets:disposable",
+    "openmodularturrets:plasma",
+    "openmodularturrets:plasma_armor_bypass"
   ]
 }

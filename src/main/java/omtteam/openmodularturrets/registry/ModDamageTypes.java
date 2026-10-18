@@ -6,6 +6,7 @@ import net.minecraft.world.damagesource.DamageType;
 import omtteam.openmodularturrets.OMT;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,12 +38,12 @@ public final class ModDamageTypes {
     public static final ResourceKey<DamageType> ARC_ARMOR_BYPASS = create("arc_armor_bypass", "arc");
     public static final ResourceKey<DamageType> MELEE = create("melee", "melee");
 
-    /** Types tagged {@code minecraft:bypasses_armor}. */
-    public static final Set<ResourceKey<DamageType>> ARMOR_BYPASSING = Set.of(GRENADE_ARMOR_BYPASS, PLASMA_ARMOR_BYPASS,
+    /** Types tagged {@code minecraft:bypasses_armor}, in the order datagen writes them (a list keeps the output stable). */
+    public static final List<ResourceKey<DamageType>> ARMOR_BYPASSING = List.of(GRENADE_ARMOR_BYPASS, PLASMA_ARMOR_BYPASS,
             RAILGUN, ARC_ARMOR_BYPASS);
 
-    /** Types tagged {@code minecraft:is_projectile} (1.12.2 {@code setProjectile()}). */
-    public static final Set<ResourceKey<DamageType>> PROJECTILE = Set.of(BULLET, BLAZING_CLAY, GRENADE,
+    /** Types tagged {@code minecraft:is_projectile} (1.12.2 {@code setProjectile()}), in datagen order. */
+    public static final List<ResourceKey<DamageType>> PROJECTILE = List.of(BULLET, BLAZING_CLAY, GRENADE,
             GRENADE_ARMOR_BYPASS, ROCKET, ARROW, POTATO, DISPOSABLE, PLASMA, PLASMA_ARMOR_BYPASS);
 
     private ModDamageTypes() {
