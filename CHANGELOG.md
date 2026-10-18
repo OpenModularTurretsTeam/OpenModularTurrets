@@ -33,6 +33,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 - The `turretBreakable` config option did nothing; turrets can now be broken with a pickaxe when it is enabled
 - Turret projectiles that flew into a chunk without entity ticking froze there; they remove themselves now, as in 1.12.2
 - On the very first start (no config file yet), the disposable ammo list and the entity black and force lists were ignored until the next restart
+- The Redstone Reactor addon now burns a redstone block or dust when its energy fits the free storage exactly; before, it needed more room than that
 
 ## [4.0.0-beta.4] - 2026-10-17
 

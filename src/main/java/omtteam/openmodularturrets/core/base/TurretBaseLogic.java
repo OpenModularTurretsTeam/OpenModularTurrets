@@ -467,7 +467,7 @@ public class TurretBaseLogic {
         int generation = settings.redstoneReactorGeneration();
         for (ReactorFuel fuel : new ReactorFuel[]{ReactorFuel.REDSTONE_BLOCK, ReactorFuel.REDSTONE}) {
             long output = (long) generation * fuel.getMultiplier();
-            if (output < energy.getFreeSpace() && extractFuel(fuel)) {
+            if (output <= energy.getFreeSpace() && extractFuel(fuel)) {
                 energy.generate(output);
                 return;
             }
