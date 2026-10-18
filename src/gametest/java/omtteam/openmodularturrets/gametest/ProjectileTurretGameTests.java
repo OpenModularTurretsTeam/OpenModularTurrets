@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
@@ -91,6 +92,8 @@ public class ProjectileTurretGameTests implements FabricGameTest {
         TurretProjectile[] followed = {null};
         // projectiles fired before the current target appeared can still hit it, so any own projectile counts
         boolean[] fired = {false};
+        int[] shots = {0};
+        long[] lastShotTick = {-1};
         TurretScene.onEachTick(helper, () -> {
             while (checkedSpawns[0] < SPAWNS.size()) {
                 Spawn spawn = SPAWNS.get(checkedSpawns[0]++);
@@ -101,7 +104,17 @@ public class ProjectileTurretGameTests implements FabricGameTest {
                 helper.assertTrue(spawn.projectile().getType() == projectileType,
                         type + " fired " + spawn.projectile().getType() + " instead of " + projectileType);
                 fired[0] = true;
+                shots[0]++;
+                lastShotTick[0] = helper.getTick();
                 if (followed[0] == null) followed[0] = spawn.projectile();
+            }
+            // a timeout says nothing about why, so fail just before it with the test's state
+            if (helper.getTick() >= TIMEOUT_TICKS - 2) {
+                LivingEntity target = attempts.target();
+                helper.fail(type + " made no progress: attempt " + attempts.attempt() + ", " + shots[0] + " shots (last at tick "
+                        + lastShotTick[0] + "), followed projectile " + (followed[0] == null ? "none"
+                        : "at " + followed[0].position() + ", age " + followed[0].tickCount + ", removed " + followed[0].isRemoved())
+                        + ", target at " + target.position() + " with " + target.getHealth() + " health, alive " + target.isAlive());
             }
             if (attempts.targetDamaged()) {
                 helper.assertTrue(fired[0], type + " target was damaged before any projectile was fired");

@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.entity.projectile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -33,7 +34,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 /**
  * Base class of all turret projectiles. Ported from 1.12.2 {@code TurretProjectile}: custom straight-line movement
  * with optional gravity, a 40 tick lifetime, hits on any pickable entity near the flight path and on solid blocks.
- * Projectiles are never saved.
+ * Projectiles are never saved, and remove themselves instead of flying into a chunk that does not tick entities.
  */
 public abstract class TurretProjectile extends Projectile {
     @Nullable
@@ -105,7 +106,15 @@ public abstract class TurretProjectile extends Projectile {
             }
         }
 
-        setPos(position.add(motion));
+        Vec3 nextPosition = position.add(motion);
+        if (level() instanceof ServerLevel serverLevel
+                && !serverLevel.isPositionEntityTicking(BlockPos.containing(nextPosition))) {
+            // 1.12.2: a projectile flying into an unloaded chunk removed itself; here also into a loaded chunk that
+            // does not tick entities, where it would freeze instead of landing or expiring
+            discard();
+            return;
+        }
+        setPos(nextPosition);
         // need this for applying hit effects
         motion = getDeltaMovement();
 
