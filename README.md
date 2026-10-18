@@ -42,11 +42,12 @@ The project uses Stonecutter to build 1.20.1 and 1.21.1 from one source tree (Gr
 
 ```bash
 ./gradlew chiseledBuild   # build both versions
-./gradlew check           # unit tests and core isolation check
+./gradlew check           # unit tests, architecture rules, game tests, code quality report
 ./gradlew :1.21.1:runClient
 ```
 
-See [CLAUDE.md](CLAUDE.md) for the project layout and conventions, and [CHANGELOG.md](CHANGELOG.md) for changes.
+See [docs/architecture.md](docs/architecture.md) for how the code is structured and how to add things,
+[CLAUDE.md](CLAUDE.md) for the conventions, and [CHANGELOG.md](CHANGELOG.md) for changes.
 
 ## License
 
