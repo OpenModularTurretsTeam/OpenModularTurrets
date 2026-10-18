@@ -15,6 +15,7 @@ import java.util.UUID;
 import java.util.random.RandomGenerator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** {@link TurretState}; lives here for the base test fakes. */
@@ -117,6 +118,18 @@ class TurretStateTest {
             assertTrue(shot.isPresent());
             assertTrue(shot.get().ammo().isEmpty());
             assertEquals(5, bullets.count);
+        }
+
+        @Test
+        void readinessIgnoresAmmoAndConsumesNothing() {
+            world.ammoSlots.set(0, FakeSlot.empty());
+            ticks(7);
+            assertFalse(state.isReady(logic, TurretType.MACHINE_GUN_TURRET), "cooldown not passed");
+            state.tick();
+            assertTrue(state.isReady(logic, TurretType.MACHINE_GUN_TURRET), "no ammo, but ready");
+            assertEquals(1000, logic.getEnergy().getAmount());
+            logic.setMode(MachineMode.ALWAYS_OFF);
+            assertFalse(state.isReady(logic, TurretType.MACHINE_GUN_TURRET), "inactive base");
         }
 
         @Test

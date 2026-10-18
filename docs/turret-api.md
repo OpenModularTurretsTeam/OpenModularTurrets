@@ -65,6 +65,58 @@ block entity type. Get them with `OMTApi.block(type)` / `OMTApi.item(type)` once
 | `RayWeapon` | instant ray to the target; damage from a `RayProfile`, visuals and damage types from the builder | laser, railgun, arc |
 | `EffectWeapon` | runs a `TargetEffect` on the base's target, no aiming | slowing, teleporter |
 | `AreaWeapon` | ignores the base's target, strikes every damageable living entity in an area | melee |
+| `SelfTargetingWeapon` | ignores the base's target, picks its own from all entities around the base | – |
+
+### Custom logic
+
+Every weapon kind takes your code. Energy and ammo are taken by OMT before your code runs, once per shot,
+and the shot follows the turret's cooldown (fire rate and its upgrades).
+
+**On the base's target** (the base does targeting, trust, line of sight and priorities): an `EffectWeapon` gets the
+world, the turret, the base and the target once per shot.
+
+```java
+new EffectWeapon(ExampleSounds.ZAP, (level, turret, base, target) -> {
+    if (target instanceof LivingEntity living) {
+        living.addEffect(new MobEffectInstance(MobEffects.POISON, 100));
+    }
+});
+```
+
+**Own targeting**: a `SelfTargetingWeapon` ignores the base's target. Once the turret is ready to fire (cooldown
+passed, base active, enough energy), its picker gets the world, the turret and the base, looks for targets itself
+and returns the ones to shoot at. `base.getLogic().getRange(turret.getTurretType())` is the turret's range (base tier
+and range upgrades). If it returns any, OMT takes energy and ammo and calls the shot with them; if not, nothing is
+consumed and the picker is asked again 5 ticks later. With `aims = true` the turret turns towards the first picked
+entity. Filter with `OMTApi.canDamage(base, entity)` to spare the owner, trusted players and their pets, and damage
+with `OMTApi.hurt(base, entity, damageType, amount, direct)` so kills count for the base and the fake drops addon
+applies.
+
+```java
+new SelfTargetingWeapon(ExampleSounds.ZAP, true,
+        (level, turret, base) -> {
+            AABB area = new AABB(base.getBlockPos()).inflate(base.getLogic().getRange(turret.getTurretType()));
+            return List.copyOf(level.getEntitiesOfClass(Monster.class, area, e -> OMTApi.canDamage(base, e)));
+        },
+        (level, turret, base, targets) -> targets.forEach(
+                e -> OMTApi.hurt(base, e, ExampleDamageTypes.ZAP, 4, null)));
+```
+
+**Projectile hits**: `ProjectileWeapon.onHit` runs code when one of the weapon's projectiles damages an entity
+(a direct hit or its explosion), once per projectile and entity, after the damage. It gets the world, the
+projectile, the base that fired it (null if it is gone) and the hit entity. It works with the built-in projectiles
+too. Your own projectiles that deal no damage call `notifyHit(entity)` themselves.
+
+```java
+ProjectileWeapon.of(ExampleSounds.FLAK, (level, ammo, target) -> ExampleEntities.FLAK.create(level))
+        .onHit((level, projectile, base, hit) -> hit.setGlowingTag(true));
+```
+
+**Ray hits**: `RayWeapon.builder(…).onEntityHit((level, turret, base, hit) -> …)` runs after a ray damaged an
+entity: the entity it hit and, with an arc chain profile, every entity the arc jumps to. Each ray of a scattershot
+counts on its own. `onBlockHit` is called when a ray hits a block instead.
+
+All callbacks run on the server thread.
 
 Projectiles extend `omtteam.openmodularturrets.entity.projectile.TurretProjectile` (or `ItemCarryingProjectile`);
 `getTurretType()` selects the config entry for damage and damage amp, `hurt(…)` / `canDamage(…)` apply the base's

@@ -5,6 +5,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.entity.Entity;
+import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
+import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import omtteam.openmodularturrets.core.turret.RayMath;
 import omtteam.openmodularturrets.core.turret.RayProfile;
 import org.jetbrains.annotations.Nullable;
@@ -24,11 +27,13 @@ import java.util.Objects;
  * @param normalDamage damage type of the normal part, null if the profile deals none
  * @param bypassDamage damage type of the armor-piercing part, null if the profile deals none
  * @param blockHit     called when the ray hits a block instead of an entity, or null
+ * @param entityHit    called for every entity the ray damages, or null; see {@link Builder#onEntityHit}
  */
 public record RayWeapon(SoundEvent launchSound, RayProfile profile, int argb, int duration, boolean lightning,
                         boolean drawFromTip, @Nullable SoundEvent hitSound,
                         @Nullable ResourceKey<DamageType> normalDamage, @Nullable ResourceKey<DamageType> bypassDamage,
-                        @Nullable BlockHitHandler blockHit) implements TurretWeapon {
+                        @Nullable BlockHitHandler blockHit, @Nullable EntityHitHandler entityHit)
+        implements TurretWeapon {
     public RayWeapon {
         Objects.requireNonNull(launchSound, "launchSound");
         Objects.requireNonNull(profile, "profile");
@@ -54,6 +59,12 @@ public record RayWeapon(SoundEvent launchSound, RayProfile profile, int argb, in
         void onBlockHit(ServerLevel level, BlockPos pos);
     }
 
+    /** Called for an entity a ray damaged (e.g. to add an effect). */
+    @FunctionalInterface
+    public interface EntityHitHandler {
+        void onEntityHit(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base, Entity hit);
+    }
+
     public static final class Builder {
         private final SoundEvent launchSound;
         private final RayProfile profile;
@@ -65,6 +76,7 @@ public record RayWeapon(SoundEvent launchSound, RayProfile profile, int argb, in
         private ResourceKey<DamageType> normalDamage;
         private ResourceKey<DamageType> bypassDamage;
         private BlockHitHandler blockHit;
+        private EntityHitHandler entityHit;
 
         private Builder(SoundEvent launchSound, RayProfile profile) {
             this.launchSound = launchSound;
@@ -110,13 +122,22 @@ public record RayWeapon(SoundEvent launchSound, RayProfile profile, int argb, in
             return this;
         }
 
+        /**
+         * Called for every entity a ray damages, after the damage: the entity it hit and, for arc chain profiles,
+         * every entity the arc jumps to. Each ray of a scattershot counts on its own.
+         */
+        public Builder onEntityHit(EntityHitHandler handler) {
+            this.entityHit = handler;
+            return this;
+        }
+
         /** @throws IllegalStateException if the profile deals a part without a damage type */
         public RayWeapon build() {
             if (profile.normalShare() > 0 && normalDamage == null || profile.bypassShare() > 0 && bypassDamage == null) {
                 throw new IllegalStateException("Ray weapon needs a damage type for every part its profile deals");
             }
             return new RayWeapon(launchSound, profile, argb, duration, lightning, drawFromTip, hitSound, normalDamage,
-                    bypassDamage, blockHit);
+                    bypassDamage, blockHit, entityHit);
         }
     }
 }

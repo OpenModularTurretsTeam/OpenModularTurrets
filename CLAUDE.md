@@ -280,13 +280,16 @@ built-in turrets use the same path, so there is no special casing per turret typ
   `BuiltinTurrets`, then plugins), then freezes the types; `ModBlocks`/`ModItems` register a block and item per
   type with the type's id, all on the shared `TURRET` block entity type.
 - Weapons (`api.weapon`): `ProjectileWeapon`, `RayWeapon` (damage rules = core `RayProfile`), `EffectWeapon`,
-  `AreaWeapon`; `TurretBlockEntity` dispatches on the kind, `RayWeapons` / `EffectWeapons` do the work.
+  `AreaWeapon`, `SelfTargetingWeapon` (finds its own targets); projectile and ray weapons
+  take entity hit handlers; `TurretBlockEntity` dispatches on the kind, `RayWeapons` / `EffectWeapons` do the work.
 - Config: built-in turrets keep their typed sections; other mods' turrets live in `turrets.addon_turrets` (a
   `Map<String, TurretSetting>` keyed by id, defaults from their definition). `ConfigWriter`/`ConfigRanges` handle
   such section maps.
 - Client: `OMTClientPlugin` (entrypoint `openmodularturrets_client`) registers models via `TurretModelRegistrar`;
   `TurretModels.init()` collects built-in and plugin models.
-- The game test mod registers a test turret through the API (`ApiTestTurrets`, `ApiTurretGameTests`).
+- The game test mod registers one test turret per weapon kind through the API (`ApiTestTurrets`, with its own
+  projectile entity `ApiTestProjectile` registered in `ApiTestEntities`) and tests registration and every custom-logic
+  hook in `ApiTurretGameTests`.
 
 ### Aiming on arbitrary faces
 

@@ -26,7 +26,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class ProjectileTurretGameTests implements FabricGameTest {
     /** The slowest projectile turret (plasma) fires every 60 ticks; room for all attempts plus flight times. */
-    private static final int TIMEOUT_TICKS = 1500;
+    static final int TIMEOUT_TICKS = 1500;
     /** Projectiles are spawned at the turret's centre. */
     private static final double MAX_SPAWN_DISTANCE = 0.5D;
 
@@ -84,7 +84,7 @@ public class ProjectileTurretGameTests implements FabricGameTest {
         hitsTargetInFront(helper, TurretType.PLASMA_TURRET, ModEntities.PLASMA);
     }
 
-    private static void hitsTargetInFront(GameTestHelper helper, TurretType type, EntityType<?> projectileType) {
+    static void hitsTargetInFront(GameTestHelper helper, TurretType type, EntityType<?> projectileType) {
         TurretScene.build(helper, type, TIMEOUT_TICKS);
         Vec3 turretCentre = Vec3.atCenterOf(helper.absolutePos(TurretScene.TURRET));
         int[] checkedSpawns = {SPAWNS.size()};

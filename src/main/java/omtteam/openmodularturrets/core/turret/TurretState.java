@@ -54,6 +54,14 @@ public final class TurretState {
     }
 
     /**
+     * Whether {@link #beginShot} could start a shot apart from the ammo: the cooldown passed and the base is active
+     * with enough energy. Nothing is consumed.
+     */
+    public boolean isReady(TurretBaseLogic logic, TurretType type) {
+        return ticksSinceShot >= logic.getFireCooldownTicks(type) && logic.isActive() && logic.hasEnergyForShot(type);
+    }
+
+    /**
      * Common part of every shot (1.12.2 {@code updateChecks} / {@code AbstractDirectedTurret.update}): the cooldown
      * must have passed and the base must be active with enough energy; ammo turrets take their ammo
      * ({@link TurretBaseLogic#drawAmmo}). Then the energy is consumed and the cooldown restarts.
@@ -61,9 +69,7 @@ public final class TurretState {
      * @return the shot, or empty if the turret cannot shoot now (nothing was consumed)
      */
     public Optional<Shot> beginShot(TurretBaseLogic logic, TurretType type) {
-        if (ticksSinceShot < logic.getFireCooldownTicks(type) || !logic.isActive() || !logic.hasEnergyForShot(type)) {
-            return Optional.empty();
-        }
+        if (!isReady(logic, type)) return Optional.empty();
         Optional<AmmoDraw> ammo = Optional.empty();
         if (logic.getRequiredAmmo(type).isPresent()) {
             ammo = logic.drawAmmo(type);

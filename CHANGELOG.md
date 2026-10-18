@@ -12,6 +12,7 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 ### Added
 
 - Turret API for other mods: they can add turrets (with their own weapons, ammo, models and config entries under `turrets.addon_turrets`) through the `openmodularturrets` entrypoint, see `docs/turret-api.md`
+- Turret API: custom turret logic. Self-targeting weapons find their own targets instead of using the base's, projectile and ray weapons can run code when they hit an entity, and `OMTApi.canDamage` / `OMTApi.hurt` apply the base's trust and damage rules
 
 ### Fixed
 

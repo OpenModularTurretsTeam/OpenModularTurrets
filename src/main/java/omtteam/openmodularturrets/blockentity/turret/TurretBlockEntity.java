@@ -16,6 +16,7 @@ import omtteam.openmodularturrets.api.weapon.AreaWeapon;
 import omtteam.openmodularturrets.api.weapon.EffectWeapon;
 import omtteam.openmodularturrets.api.weapon.ProjectileWeapon;
 import omtteam.openmodularturrets.api.weapon.RayWeapon;
+import omtteam.openmodularturrets.api.weapon.SelfTargetingWeapon;
 import omtteam.openmodularturrets.api.weapon.TurretWeapon;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
@@ -45,7 +46,7 @@ import java.util.Optional;
 /**
  * A turret (1.12.2 {@code TurretHead} / {@code AbstractDirectedTurret} / {@code ProjectileTurret}). Thin by design: the
  * base owns targeting, ammo, energy and upgrades; the turret aims at the base's target, keeps its cooldown and
- * fires. The weapon ({@link TurretWeapon}: projectile, ray, effect or area) comes from the turret's definition.
+ * fires. The weapon ({@link TurretWeapon}: projectile, ray, effect, area or self-targeting) comes from the turret's definition.
  */
 public class TurretBlockEntity extends CompatBlockEntity {
     /** 1.12.2 {@code AbstractDirectedTurret.update}: the aim was sent to clients every 5 ticks. */
@@ -76,6 +77,10 @@ public class TurretBlockEntity extends CompatBlockEntity {
     private int trackedTargetId = -1;
     @Nullable
     private Vec3 trackedTargetPos;
+
+    /** {@link SelfTargetingWeapon}: ticks until the picker is asked again, and whether it last picked anything. */
+    private int ticksUntilPick;
+    private boolean picked;
 
     /** Client only: smoothed render angles. */
     private float renderYaw;
@@ -135,6 +140,8 @@ public class TurretBlockEntity extends CompatBlockEntity {
         boolean engaging = false;
         if (logic.isActive() && turret.getWeapon() instanceof AreaWeapon area) {
             engaging = turret.strikeInReach((ServerLevel) level, base.get(), area);
+        } else if (logic.isActive() && turret.getWeapon() instanceof SelfTargetingWeapon weapon) {
+            engaging = turret.pickAndFire((ServerLevel) level, base.get(), weapon);
         } else if (logic.isActive()) {
             Optional<Entity> target = logic.getTarget(turret.getFace())
                     .filter(LivingTargetEntity.class::isInstance)
@@ -171,10 +178,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
         TurretWeapon weapon = getWeapon();
         Vec3 centre = Vec3.atCenterOf(worldPosition);
         if (weapon.aims()) {
-            Vector3 toEyes = new Vector3(target.getX() - centre.x, target.getEyeY() - centre.y, target.getZ() - centre.z);
-            TurretMath.Angles angles = TurretMath.limit(TurretMath.anglesFor(getFace(), toEyes));
-            yaw = angles.yaw();
-            pitch = angles.pitch();
+            aimAt(target);
         }
 
         Vec3 position = target.position();
@@ -200,6 +204,15 @@ public class TurretBlockEntity extends CompatBlockEntity {
         } else if (weapon instanceof EffectWeapon effect) {
             beginShot().ifPresent(base -> EffectWeapons.fireEffect(this, base, effect, target));
         }
+    }
+
+    /** Turns towards the target's eyes, within {@link TurretMath#limit}. */
+    private void aimAt(Entity target) {
+        Vec3 centre = Vec3.atCenterOf(worldPosition);
+        Vector3 toEyes = new Vector3(target.getX() - centre.x, target.getEyeY() - centre.y, target.getZ() - centre.z);
+        TurretMath.Angles angles = TurretMath.limit(TurretMath.anglesFor(getFace(), toEyes));
+        yaw = angles.yaw();
+        pitch = angles.pitch();
     }
 
     /**
@@ -236,9 +249,39 @@ public class TurretBlockEntity extends CompatBlockEntity {
         return true;
     }
 
+    /**
+     * Self-targeting weapons ignore the base's target: once the turret is ready to fire, the weapon's picker finds
+     * its own targets, and the turret fires if it picked anything. A pick that found nothing is retried after
+     * {@link SelfTargetingWeapon#RETRY_TICKS}, so idle turrets do not scan every tick.
+     *
+     * @return whether the last pick found anything
+     */
+    private boolean pickAndFire(ServerLevel level, TurretBaseBlockEntity base, SelfTargetingWeapon weapon) {
+        TurretBaseLogic logic = base.getLogic();
+        TurretType type = getTurretType();
+        if (ticksUntilPick > 0) {
+            ticksUntilPick--;
+        } else if (state.isReady(logic, type)) {
+            List<Entity> targets = List.copyOf(weapon.picker().pick(level, this, base));
+            picked = !targets.isEmpty();
+            if (picked) {
+                if (weapon.aims()) aimAt(targets.get(0));
+                beginShot().ifPresent(shooter -> {
+                    weapon.shot().fire(level, this, shooter, targets);
+                    playSound(weapon.launchSound());
+                });
+            } else {
+                ticksUntilPick = SelfTargetingWeapon.RETRY_TICKS;
+            }
+        }
+        updateConcealment(logic, picked);
+        return picked;
+    }
+
     private void forgetTarget() {
         trackedTargetId = -1;
         trackedTargetPos = null;
+        picked = false;
     }
 
     private void syncAimIfChanged() {
@@ -312,6 +355,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
             TurretProjectile projectile = weapon.factory().create(serverLevel, lastAmmo, target);
             if (projectile == null) continue;
             projectile.setBase(base.get());
+            projectile.setHitHandler(weapon.hitHandler());
             projectile.setPos(origin);
             // the lead depends on the projectile's gravity, so it is worked out per projectile
             TurretMath.Lead lead = TurretMath.lead(toAim, velocity, weapon.speed(), projectile.getGravityEffect());

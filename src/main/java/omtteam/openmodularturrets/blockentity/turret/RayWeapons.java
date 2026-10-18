@@ -142,7 +142,10 @@ public final class RayWeapons {
         }
     }
 
-    /** Deals {@link RayMath#damage}, split into a normal and an armor-piercing part ({@link RayMath#split}). */
+    /**
+     * Deals {@link RayMath#damage}, split into a normal and an armor-piercing part ({@link RayMath#split}), then calls
+     * the weapon's {@linkplain RayWeapon#entityHit() entity hit handler}.
+     */
     private static void damage(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base,
                                RayWeapon weapon, Entity entity, double modifier) {
         TurretBaseLogic logic = base.getLogic();
@@ -157,6 +160,9 @@ public final class RayWeapons {
         }
         if (weapon.bypassDamage() != null) {
             TurretDamage.hurt(level, entity, weapon.bypassDamage(), split.armorBypass(), null, base.getBlockPos(), looting);
+        }
+        if (weapon.entityHit() != null) {
+            weapon.entityHit().onEntityHit(level, turret, base, entity);
         }
     }
 

@@ -5,6 +5,9 @@
   "name": "Open Modular Turrets Game Tests",
   "environment": "*",
   "entrypoints": {
+    "main": [
+      "omtteam.openmodularturrets.gametest.ApiTestEntities"
+    ],
     "fabric-gametest": [
       "omtteam.openmodularturrets.gametest.EffectTurretGameTests",
       "omtteam.openmodularturrets.gametest.RayTurretGameTests",

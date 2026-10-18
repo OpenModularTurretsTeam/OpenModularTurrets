@@ -17,6 +17,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import omtteam.openmodularturrets.api.weapon.ProjectileWeapon;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.compat.VersionCompat;
@@ -26,6 +27,9 @@ import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Vector3;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashSet;
+import java.util.Set;
 //? if >=1.21 {
 import net.minecraft.network.syncher.SynchedEntityData;
 //?}
@@ -42,6 +46,12 @@ public abstract class TurretProjectile extends Projectile {
     private int ampLevel;
     /** Captured when fired, like the 1.12.2 {@code fakeDrops}; without a base: no loot. */
     private int lootingLevel = TurretBaseLogic.NO_LOOT;
+    /** From the weapon that fired the projectile (see {@link ProjectileWeapon#onHit}). */
+    @Nullable
+    private ProjectileWeapon.HitHandler hitHandler;
+    /** Ids of the entities {@link #hitHandler} was called for. */
+    @Nullable
+    private Set<Integer> notifiedHits;
 
     protected TurretProjectile(EntityType<? extends TurretProjectile> type, Level level) {
         super(type, level);
@@ -55,6 +65,11 @@ public abstract class TurretProjectile extends Projectile {
         this.basePos = base.getBlockPos();
         this.ampLevel = base.getLogic().getDamageAmpLevel();
         this.lootingLevel = base.getLogic().getLootingLevel(VersionCompat.maxLootingLevel(level()));
+    }
+
+    /** Set by the turret that fires the projectile, from its {@link ProjectileWeapon}. */
+    public void setHitHandler(@Nullable ProjectileWeapon.HitHandler hitHandler) {
+        this.hitHandler = hitHandler;
     }
 
     /** The turret type whose config (damage, damage amp) applies. */
@@ -149,6 +164,22 @@ public abstract class TurretProjectile extends Projectile {
     /** Damage via {@link TurretDamage#hurt}, with this projectile as direct source. */
     protected void hurt(Entity target, ResourceKey<DamageType> type, float amount) {
         TurretDamage.hurt(level(), target, type, amount, this, basePos, lootingLevel);
+        if (amount > 0) {
+            notifyHit(target);
+        }
+    }
+
+    /**
+     * Calls the weapon's {@link ProjectileWeapon#onHit hit handler} for an entity this projectile hit, once per entity
+     * ({@link #hurt} does this; projectiles that deal no damage call it themselves).
+     */
+    public void notifyHit(Entity target) {
+        if (hitHandler == null || !(level() instanceof ServerLevel serverLevel)) return;
+        if (notifiedHits == null) notifiedHits = new HashSet<>();
+        if (!notifiedHits.add(target.getId())) return;
+        TurretBaseBlockEntity base = basePos != null && serverLevel.isLoaded(basePos)
+                && serverLevel.getBlockEntity(basePos) instanceof TurretBaseBlockEntity b ? b : null;
+        hitHandler.onHit(serverLevel, this, base, target);
     }
 
     /** {@link TurretDamage#canDamage} for this projectile's base. */
