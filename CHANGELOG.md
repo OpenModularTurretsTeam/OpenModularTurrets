@@ -1,11 +1,10 @@
 # Changelog
 
-All notable changes to Open Modular Turrets (Fabric). The format follows
-[Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+All notable changes to Open Modular Turrets (Fabric).
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-Add every user-visible change as a one-line entry under **Unreleased** (sections: Added, Changed, Fixed, Removed),
-by hand or with `./gradlew changelogEntry --type=added --entry="…"`. Before a release, `./gradlew releaseChangelog`
-turns *Unreleased* into the release section; `chiseledPublish` uploads exactly that section.
+Add every user-visible change as a one-line entry under **Unreleased** (sections: Added, Changed, Fixed, Removed), by hand or with `./gradlew changelogEntry --type=added --entry="…"`.
+Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the release section; `chiseledPublish` uploads exactly that section.
 
 ## [Unreleased]
 
