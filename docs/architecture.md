@@ -193,6 +193,7 @@ When the cycle test fails it prints the cycle, the class dependencies inside it 
 | Tool | Command | Output |
 | --- | --- | --- |
 | PMD: complexity, size, nesting, coupling (rules in `gradle/pmd/ruleset.xml`) | `./gradlew :1.21.1:pmdMain :1.21.1:pmdClient` (also part of `check`) | `versions/1.21.1/build/reports/pmd/main.html`, `client.html` |
+| Test coverage of `core` and `api` (JaCoCo, unit and game tests) | part of `check`, which prints a summary per package | `versions/1.21.1/build/reports/jacoco/test/html/index.html` |
 | Dependency map | `./gradlew dependencyMap` | `build/reports/dependency-map/index.html` |
 
 PMD reports only for now; it does not fail the build.

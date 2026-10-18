@@ -4,6 +4,8 @@ plugins {
     `maven-publish`
     // Code quality report (gradle/pmd/ruleset.xml): complexity and size, report only
     pmd
+    // Test coverage of core and api, from the unit tests and the game tests
+    jacoco
 }
 
 val modId = property("mod_id") as String
@@ -92,6 +94,59 @@ dependencies {
     // Architecture rules (src/test/.../architecture): they read the compiled main and client classes
     testImplementation("com.tngtech.archunit:archunit-junit5:${property("archunit_version")}")
     testRuntimeOnly(sourceSets["client"].output)
+}
+
+// ---- Test coverage (JaCoCo): check prints the line coverage of core and api ----
+// Both the unit tests and the game test server record coverage; core is mostly covered by the unit tests, api only
+// by the game tests (API turrets). Active version only (both versions share the source).
+// Report: versions/<v>/build/reports/jacoco/test/html/index.html
+val coverageActive = stonecutter.current.isActive
+val coveredPackages = listOf("omtteam/openmodularturrets/core/**", "omtteam/openmodularturrets/api/**")
+jacoco {
+    toolVersion = property("jacoco_version") as String
+}
+tasks.test {
+    extensions.configure<JacocoTaskExtension> { isEnabled = coverageActive }
+}
+tasks.named<JavaExec>("runGameTest") {
+    jacoco.applyTo(this)
+    extensions.configure<JacocoTaskExtension> { isEnabled = coverageActive }
+}
+tasks.jacocoTestReport {
+    enabled = coverageActive
+    dependsOn(tasks.test, tasks.named("runGameTest"))
+    executionData.setFrom(layout.buildDirectory.files("jacoco/test.exec", "jacoco/runGameTest.exec"))
+    sourceDirectories.setFrom(sourceSets.main.get().java.srcDirs)
+    classDirectories.setFrom(sourceSets.main.get().output.classesDirs.asFileTree.matching { include(coveredPackages) })
+    reports {
+        csv.required = true
+        xml.required = true
+        html.required = true
+    }
+    val csv = reports.csv.outputLocation
+    val html = reports.html.outputLocation
+    doLast {
+        // line coverage per package, summed per area (core, api)
+        val rows = csv.get().asFile.readLines().drop(1).map { it.split(',') }
+        val byPackage = sortedMapOf<String, IntArray>()
+        for (row in rows) {
+            val lines = byPackage.getOrPut(row[1].removePrefix("omtteam.openmodularturrets.")) { IntArray(2) }
+            lines[0] += row[7].toInt() // LINE_MISSED
+            lines[1] += row[8].toInt() // LINE_COVERED
+        }
+        fun percent(l: IntArray) = "%5.1f%%  (%d/%d lines)".format(100.0 * l[1] / maxOf(1, l[0] + l[1]), l[1], l[0] + l[1])
+        println("Test coverage (unit and game tests):")
+        for (area in listOf("core", "api")) {
+            val packages = byPackage.filterKeys { it == area || it.startsWith("$area.") }
+            val total = IntArray(2).also { t -> packages.values.forEach { t[0] += it[0]; t[1] += it[1] } }
+            println("  %-24s %s".format(area, percent(total)))
+            packages.forEach { (name, lines) -> println("    %-22s %s".format(name, percent(lines))) }
+        }
+        println("  Report: ${html.get().asFile.resolve("index.html").toURI()}")
+    }
+}
+tasks.check {
+    dependsOn(tasks.jacocoTestReport)
 }
 
 // Report only for now: the limits in gradle/pmd/ruleset.xml are not enforced yet. Runs for the active version only
