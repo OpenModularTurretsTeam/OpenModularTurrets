@@ -223,7 +223,7 @@
   "tooltip.openmodularturrets.upgrade.scatter.a": "Fügt 2 Projektile zu jedem Schuss hinzu für",
   "tooltip.openmodularturrets.upgrade.scatter.b": "+2 Munitionsverbrauch, weniger Genauigkeit, und mehr RF Verbrauch.",
   "tooltip.openmodularturrets.upgrade.scatter.flavour": "Einfach mit mehr Kugeln schiessen.",
-  "tooltip.openmodularturrets.upgrade.scatter.railgun": "Der Rail Gun Turm ignoriert dieses Upgrade.",
+  "tooltip.openmodularturrets.upgrade.scatter.ignored": "Rail Gun, Nahkampf-, Verlangsamungs- und Teleport Turm ignorieren dieses Upgrade.",
   "tooltip.openmodularturrets.turret.ignores_scattershot": "Ignoriert Schrotschuss-Upgrades.",
   "tooltip.openmodularturrets.turret.tier": "Basis-Stufe",
   "tooltip.openmodularturrets.turret.ammo": "Munition",

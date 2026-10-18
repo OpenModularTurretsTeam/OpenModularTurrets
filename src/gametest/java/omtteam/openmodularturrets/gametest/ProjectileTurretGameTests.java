@@ -19,7 +19,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * them hits.
  * <p>
  * An attempt follows the first projectile shot at its target: it is a miss when that projectile is gone (hit
- * something else, or expired) and the target was not damaged. Explosions (grenade, rocket) and fire (incendiary)
+ * something else, or expired) and the target was not damaged. Damage from any projectile of the turret counts, since
+ * projectiles still in flight when a target is replaced can hit the new one. Explosions (grenade, rocket) and fire (incendiary)
  * count as hits, since they damage the target too.
  */
 public class ProjectileTurretGameTests implements FabricGameTest {
@@ -83,12 +84,14 @@ public class ProjectileTurretGameTests implements FabricGameTest {
     }
 
     private static void hitsTargetInFront(GameTestHelper helper, TurretType type, EntityType<?> projectileType) {
-        TurretScene.build(helper, type);
+        TurretScene.build(helper, type, TIMEOUT_TICKS);
         Vec3 turretCentre = Vec3.atCenterOf(helper.absolutePos(TurretScene.TURRET));
         int[] checkedSpawns = {SPAWNS.size()};
         TargetAttempts attempts = new TargetAttempts(helper, type, TurretScene.TARGET_IN_FRONT);
         TurretProjectile[] followed = {null};
-        helper.onEachTick(() -> {
+        // projectiles fired before the current target appeared can still hit it, so any own projectile counts
+        boolean[] fired = {false};
+        TurretScene.onEachTick(helper, () -> {
             while (checkedSpawns[0] < SPAWNS.size()) {
                 Spawn spawn = SPAWNS.get(checkedSpawns[0]++);
                 if (spawn.projectile().level() != helper.getLevel()
@@ -97,10 +100,11 @@ public class ProjectileTurretGameTests implements FabricGameTest {
                 }
                 helper.assertTrue(spawn.projectile().getType() == projectileType,
                         type + " fired " + spawn.projectile().getType() + " instead of " + projectileType);
+                fired[0] = true;
                 if (followed[0] == null) followed[0] = spawn.projectile();
             }
             if (attempts.targetDamaged()) {
-                helper.assertTrue(followed[0] != null, type + " target was damaged before any projectile was fired");
+                helper.assertTrue(fired[0], type + " target was damaged before any projectile was fired");
                 attempts.hit();
             } else if (followed[0] != null && followed[0].isRemoved()) {
                 followed[0] = null;

@@ -72,11 +72,16 @@ public enum TurretType {
     }
 
     /**
-     * Whether scattershot upgrades affect this turret. The railgun ignores them (user decision): it hardly scatters,
-     * so every extra ray hit and a volley dealt a multiple of its already high damage.
+     * Whether scattershot upgrades affect this turret (extra shots, ammo, energy and scatter). The railgun ignores
+     * them (user decision): it hardly scatters, so every extra ray hit and a volley dealt a multiple of its already
+     * high damage. The effect turrets (melee, slowing, teleporter) ignore them too: they act once per shot, so the
+     * upgrades only cost extra energy.
      */
     public boolean usesScattershot() {
-        return this != RAILGUN_TURRET;
+        return switch (this) {
+            case RAILGUN_TURRET, MELEE_TURRET, SLOWING_TURRET, TELEPORTER_TURRET -> false;
+            default -> true;
+        };
     }
 
     public static Optional<TurretType> byId(String id) {

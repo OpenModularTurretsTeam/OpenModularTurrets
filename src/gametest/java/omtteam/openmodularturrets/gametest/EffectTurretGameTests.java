@@ -15,10 +15,12 @@ import omtteam.openmodularturrets.core.turret.TurretType;
  * reaches the target of a test running next to it.
  */
 public class EffectTurretGameTests implements FabricGameTest {
+    private static final int TIMEOUT_TICKS = 200;
+
     /** The slowing turret puts slowness on a target 5 blocks in front, which lowers its movement speed. */
-    @GameTest(template = EMPTY_STRUCTURE, batch = "slowing_turret", timeoutTicks = 200)
+    @GameTest(template = EMPTY_STRUCTURE, batch = "slowing_turret", timeoutTicks = TIMEOUT_TICKS)
     public void slowingTurretSlowsTarget(GameTestHelper helper) {
-        TurretScene.build(helper, TurretType.SLOWING_TURRET);
+        TurretScene.build(helper, TurretType.SLOWING_TURRET, TIMEOUT_TICKS);
         LivingEntity target = TurretScene.spawnTarget(helper, TurretScene.TARGET_IN_FRONT);
         double normalSpeed = target.getAttributeValue(Attributes.MOVEMENT_SPEED);
         helper.assertTrue(!target.hasEffect(MobEffects.MOVEMENT_SLOWDOWN), "Target is slowed before the turret fired");
@@ -34,9 +36,9 @@ public class EffectTurretGameTests implements FabricGameTest {
      * The teleporter turret pulls a target 5 blocks in front onto the block in front of the turret. Only the
      * horizontal position is checked: the target may sink into the turret block, which is not a full block.
      */
-    @GameTest(template = EMPTY_STRUCTURE, batch = "teleporter_turret", timeoutTicks = 200)
+    @GameTest(template = EMPTY_STRUCTURE, batch = "teleporter_turret", timeoutTicks = TIMEOUT_TICKS)
     public void teleporterTurretPullsTarget(GameTestHelper helper) {
-        TurretScene.build(helper, TurretType.TELEPORTER_TURRET);
+        TurretScene.build(helper, TurretType.TELEPORTER_TURRET, TIMEOUT_TICKS);
         LivingEntity target = TurretScene.spawnTarget(helper, TurretScene.TARGET_IN_FRONT);
         Vec3 destination = Vec3.atBottomCenterOf(helper.absolutePos(TurretScene.TURRET.above()));
 
@@ -50,9 +52,9 @@ public class EffectTurretGameTests implements FabricGameTest {
      * The melee turret only reaches the 3×2×3 area around itself and its base, so its target stands next to the
      * base instead of 5 blocks away.
      */
-    @GameTest(template = EMPTY_STRUCTURE, batch = "melee_turret", timeoutTicks = 200)
+    @GameTest(template = EMPTY_STRUCTURE, batch = "melee_turret", timeoutTicks = TIMEOUT_TICKS)
     public void meleeTurretDamagesTargetInReach(GameTestHelper helper) {
-        TurretScene.build(helper, TurretType.MELEE_TURRET);
+        TurretScene.build(helper, TurretType.MELEE_TURRET, TIMEOUT_TICKS);
         LivingEntity target = TurretScene.spawnTarget(helper, TurretScene.BASE.east());
         float maxHealth = target.getMaxHealth();
 

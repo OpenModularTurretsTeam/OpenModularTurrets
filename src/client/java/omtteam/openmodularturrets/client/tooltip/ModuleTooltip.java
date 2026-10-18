@@ -64,7 +64,7 @@ public final class ModuleTooltip {
             case SCATTERSHOT -> {
                 lines.add(text("upgrade.scatter.a"));
                 lines.add(text("upgrade.scatter.b"));
-                lines.add(translated("upgrade.scatter.railgun").withStyle(ChatFormatting.GOLD));
+                lines.add(translated("upgrade.scatter.ignored").withStyle(ChatFormatting.GOLD));
                 lines.add(Component.empty());
                 lines.add(text("upgrade.stacks"));
                 lines.add(Component.empty());

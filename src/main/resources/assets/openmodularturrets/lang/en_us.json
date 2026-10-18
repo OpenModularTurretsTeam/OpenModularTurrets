@@ -238,7 +238,7 @@
   "tooltip.openmodularturrets.upgrade.scatter.a": "Adds 2 projectiles to each shot, at the cost of",
   "tooltip.openmodularturrets.upgrade.scatter.b": "+2 ammo usage, decr. accuracy and increased RF usage.",
   "tooltip.openmodularturrets.upgrade.scatter.flavour": "You just need to shoot more bullets.",
-  "tooltip.openmodularturrets.upgrade.scatter.railgun": "The Rail Gun Turret ignores this upgrade.",
+  "tooltip.openmodularturrets.upgrade.scatter.ignored": "Rail Gun, Melee, Slowing and Teleporter Turrets ignore this upgrade.",
   "tooltip.openmodularturrets.turret.ignores_scattershot": "Ignores Scatter Shot upgrades.",
   "tooltip.openmodularturrets.turret.tier": "Base Tier",
   "tooltip.openmodularturrets.turret.ammo": "Ammo",

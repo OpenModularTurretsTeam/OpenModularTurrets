@@ -31,7 +31,9 @@ import java.util.UUID;
  * <p>
  * 1.20.1 places the batches next to each other and keeps their blocks and entities, so a finished test's turret
  * would still shoot at the next test's target, and its target would be picked by the next test's turret. Tests
- * therefore end with {@link #succeedWhen}, which clears the scene once the test passed.
+ * therefore end with {@link #succeedWhen} or {@link #succeed}, which clear the scene once the test passed. A failing
+ * test clears it too: {@link #onEachTick} clears it when a check throws, and {@link #build} clears it one tick before
+ * the test times out.
  */
 public final class TurretScene {
     public static final BlockPos BASE = new BlockPos(1, 1, 1);
@@ -44,8 +46,10 @@ public final class TurretScene {
     private TurretScene() {
     }
 
-    public static TurretBaseBlockEntity build(GameTestHelper helper, TurretType type) {
+    /** Builds the scene and clears it one tick before {@code timeoutTicks} (the test's timeout). */
+    public static TurretBaseBlockEntity build(GameTestHelper helper, TurretType type, int timeoutTicks) {
         removeEntities(helper);
+        helper.runAfterDelay(timeoutTicks - 1, () -> clear(helper));
         for (int x = 0; x < 8; x++) {
             for (int z = 0; z < 8; z++) {
                 helper.setBlock(new BlockPos(x, 0, z), Blocks.STONE);
@@ -83,6 +87,18 @@ public final class TurretScene {
         helper.succeedWhen(() -> {
             check.run();
             clear(helper);
+        });
+    }
+
+    /** {@link GameTestHelper#onEachTick}, clearing the scene when {@code check} fails the test. */
+    public static void onEachTick(GameTestHelper helper, Runnable check) {
+        helper.onEachTick(() -> {
+            try {
+                check.run();
+            } catch (RuntimeException e) {
+                clear(helper);
+                throw e;
+            }
         });
     }
 

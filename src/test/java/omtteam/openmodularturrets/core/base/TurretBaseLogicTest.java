@@ -294,6 +294,17 @@ class TurretBaseLogicTest {
         }
 
         @Test
+        void effectTurretsIgnoreScattershot() {
+            TurretBaseLogic logic = base(5);
+            upgrade(0, UpgradeType.SCATTERSHOT, 4);
+            for (TurretType type : new TurretType[]{TurretType.MELEE_TURRET, TurretType.SLOWING_TURRET,
+                    TurretType.TELEPORTER_TURRET}) {
+                assertEquals(0, logic.getScattershotCount(type), type.toString());
+            }
+            assertEquals(5000, logic.getPowerPerShot(TurretType.SLOWING_TURRET), "no extra energy");
+        }
+
+        @Test
         void fireCooldown() {
             TurretBaseLogic logic = base(5);
             assertEquals(8, logic.getFireCooldownTicks(TurretType.MACHINE_GUN_TURRET), 1e-9);

@@ -72,7 +72,7 @@ public class RayTurretGameTests implements FabricGameTest {
      */
     @GameTest(template = EMPTY_STRUCTURE, batch = "railgun_scattershot", timeoutTicks = TIMEOUT_TICKS)
     public void railgunIgnoresScattershot(GameTestHelper helper) {
-        TurretBaseBlockEntity base = TurretScene.build(helper, TurretType.RAILGUN_TURRET);
+        TurretBaseBlockEntity base = TurretScene.build(helper, TurretType.RAILGUN_TURRET, TIMEOUT_TICKS);
         // tier 5: two upgrade slots with up to four upgrades each
         base.getInventory().setItem(TurretBaseInventory.UPGRADE_START, new ItemStack(ModItems.UPGRADE_SCATTER_SHOT, 4));
         base.getInventory().setItem(TurretBaseInventory.UPGRADE_START + 1, new ItemStack(ModItems.UPGRADE_SCATTER_SHOT, 4));
@@ -91,7 +91,7 @@ public class RayTurretGameTests implements FabricGameTest {
         helper.assertTrue(startHealth == TARGET_HEALTH, "Target health is " + startHealth);
 
         // all rays of a volley are shot in the same tick, so the first tick with shots has the whole volley
-        helper.onEachTick(() -> {
+        TurretScene.onEachTick(helper, () -> {
             if (shots.isEmpty()) return;
             helper.assertTrue(shots.size() == 1, "Railgun shot " + shots.size() + " rays instead of 1");
             long used = startEnergy - base.getLogic().getEnergy().getAmount();
@@ -109,7 +109,7 @@ public class RayTurretGameTests implements FabricGameTest {
     }
 
     private static void hitsTargetInFront(GameTestHelper helper, TurretType type) {
-        TurretScene.build(helper, type);
+        TurretScene.build(helper, type, TIMEOUT_TICKS);
         BlockPos turretPos = helper.absolutePos(TurretScene.TURRET);
         Vec3 turretCentre = Vec3.atCenterOf(turretPos);
         List<Shot> shots = SHOTS.computeIfAbsent(turretPos, pos -> new CopyOnWriteArrayList<>());
@@ -117,7 +117,7 @@ public class RayTurretGameTests implements FabricGameTest {
         TargetAttempts attempts = new TargetAttempts(helper, type, TurretScene.TARGET_IN_FRONT);
         int[] checkedShots = {0};
         // every ray is checked as it is shot; one that does not hit the current target is a miss
-        helper.onEachTick(() -> {
+        TurretScene.onEachTick(helper, () -> {
             while (checkedShots[0] < shots.size()) {
                 Shot shot = shots.get(checkedShots[0]++);
                 LivingEntity target = attempts.target();
