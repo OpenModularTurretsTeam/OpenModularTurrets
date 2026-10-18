@@ -145,6 +145,16 @@ class TurretBaseLogicTest {
         }
 
         @Test
+        void countOnlyIncludesTheRequestedAmmo() {
+            TurretBaseLogic logic = base(5);
+            ammoSlot(0, FakeSlot.ammo(AmmoType.BOLT, 10));
+            ammoSlot(1, FakeSlot.ammo(AmmoType.POTATO, 4));
+            ammoSlot(2, FakeSlot.fuel(ReactorFuel.REDSTONE, 3));
+            assertEquals(4, logic.countAmmo(AmmoType.POTATO));
+            assertEquals(0, logic.countAmmo(AmmoType.BULLET));
+        }
+
+        @Test
         void drawIsAllOrNothing() {
             TurretBaseLogic logic = base(5);
             upgrade(0, UpgradeType.SCATTERSHOT, 1);
@@ -346,6 +356,7 @@ class TurretBaseLogicTest {
         void concealment() {
             settings.concealWithoutAddon = true;
             assertFalse(base(1).shouldConcealTurrets());
+            assertTrue(base(2).shouldConcealTurrets(), "the config conceals without an addon from tier 2");
             settings.concealWithoutAddon = false;
             TurretBaseLogic logic = base(2);
             assertFalse(logic.shouldConcealTurrets());
@@ -453,6 +464,29 @@ class TurretBaseLogicTest {
             assertTrue(logic.consumeShotEnergy(TurretType.MACHINE_GUN_TURRET));
             assertFalse(logic.consumeShotEnergy(TurretType.MACHINE_GUN_TURRET));
             assertEquals(50, logic.getEnergy().getAmount());
+        }
+
+        @Test
+        void redstoneReactorWithoutFuelGeneratesNothing() {
+            TurretBaseLogic logic = base(2);
+            addon(0, AddonType.REDSTONE_REACTOR, 1);
+            FakeSlot potatoes = FakeSlot.ammo(AmmoType.POTATO, 5);
+            ammoSlot(0, potatoes);
+            tick(logic, 20);
+            assertEquals(0, logic.getEnergy().getAmount());
+            assertEquals(5, potatoes.count);
+        }
+
+        @Test
+        void redstoneReactorKeepsFuelThatDoesNotFit() {
+            TurretBaseLogic logic = base(2);
+            addon(0, AddonType.REDSTONE_REACTOR, 1);
+            FakeSlot blocks = FakeSlot.fuel(ReactorFuel.REDSTONE_BLOCK, 1);
+            ammoSlot(0, blocks);
+            logic.getEnergy().generate(40000); // 10000 free: a block (14400) does not fit, and there is no dust
+            tick(logic, 20);
+            assertEquals(40000, logic.getEnergy().getAmount());
+            assertEquals(1, blocks.count);
         }
 
         @Test

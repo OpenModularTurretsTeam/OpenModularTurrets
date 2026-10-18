@@ -332,6 +332,16 @@ class TargetingTest {
         }
 
         @Test
+        void aValidTargetIsKeptWhileOthersAppear() {
+            FakeTarget first = zombie(110, 65, 100);
+            search();
+            assertEquals(Optional.of(first.getId()), targetId());
+            zombie(102, 65, 100);
+            search();
+            assertEquals(Optional.of(first.getId()), targetId(), "no new search while the target stays valid");
+        }
+
+        @Test
         void removedTurretsLoseTheirTarget() {
             zombie(105, 65, 100);
             search();
