@@ -28,6 +28,12 @@ public final class ModuleTooltip {
         boolean upgrade = stack.getItem() instanceof UpgradeItem;
         boolean addon = stack.getItem() instanceof AddonItem;
         if (!upgrade && !addon) return;
+        // which machine an upgrade fits into, also without shift (each machine has its own upgrades)
+        if (stack.getItem() instanceof TurretBaseUpgradeItem) {
+            lines.add(text("upgrade.machine.turret_base"));
+        } else if (stack.getItem() instanceof GeneratorUpgradeItem) {
+            lines.add(text("upgrade.machine.generator"));
+        }
         if (!Screen.hasShiftDown()) {
             lines.add(TurretBaseTooltip.shiftHint());
             return;

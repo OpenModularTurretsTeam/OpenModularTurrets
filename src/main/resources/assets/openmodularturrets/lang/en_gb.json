@@ -272,5 +272,7 @@
   "tooltip.openmodularturrets.upgrade.energy_multiplier.a": "Doubles the energy the generator produces per upgrade,",
   "tooltip.openmodularturrets.upgrade.energy_multiplier.b": "but it also burns its fuel twice as fast.",
   "tooltip.openmodularturrets.upgrade.energy_multiplier.flavour": "Same coal, more hurry.",
-  "tooltip.openmodularturrets.generator_upgrade_slot": "Upgrades for the generator."
+  "tooltip.openmodularturrets.generator_upgrade_slot": "Upgrades for the generator.",
+  "tooltip.openmodularturrets.upgrade.machine.turret_base": "Fits into: Turret Base",
+  "tooltip.openmodularturrets.upgrade.machine.generator": "Fits into: Generator"
 }
