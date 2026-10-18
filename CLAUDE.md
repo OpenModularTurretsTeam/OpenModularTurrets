@@ -163,7 +163,7 @@ with the scene built in code. `check` (and so `build` / `chiseledBuild`) runs th
 
 - `TurretScene` builds a ready-to-fire base + turret (owner, always on, full energy, max range) and spawns targets (husks without AI). A base placed with `setBlock` has no owner: set one right away or it drops itself.
 - `TurretScene` also loads the turret's ammo into the base (energy alone is not enough for the railgun and the projectile turrets).
-- Turrets that scatter get up to 10 attempts, each with a fresh target (`TargetAttempts`); a miss replaces the target, a hit passes. A ray attempt ends with its ray, a projectile attempt when its first projectile is gone. Projectile tests fail just before their timeout with their state (shots, followed projectile, target) instead of timing out silently.
+- Turrets that scatter get up to 10 attempts, each with a fresh target (`TargetAttempts`); a miss replaces the target, a hit passes. A ray attempt ends with its ray, a projectile attempt when its first projectile is gone. The test server does not tick entities in the chunks next to a test, and projectiles remove themselves before flying into such a chunk, so `TurretScene` force-loads the chunks around the scene while a test runs (otherwise a grenade that lands just past the target would vanish instead of exploding). Projectile tests fail just before their timeout with their state (shots, followed projectile, target) instead of timing out silently.
 - Turret ranges reach into neighbouring tests, so every turret test gets its own `batch` and ends with `TurretScene.succeedWhen`, which removes the turret, base and entities once it passed (1.20.1 keeps a finished batch's blocks and entities next to the following one).
 
 ---

@@ -42,6 +42,12 @@ public final class TurretScene {
     public static final BlockPos TARGET_IN_FRONT = TURRET.east(5);
 
     private static final PlayerIdentity OWNER = new PlayerIdentity(UUID.randomUUID(), "GameTestOwner");
+    /**
+     * Chunks around the scene that are force-loaded while a test runs. The test server does not tick entities in the
+     * chunks next to a test, and projectiles remove themselves before flying into such a chunk, so a grenade that
+     * lands just past the target would vanish instead of exploding next to it.
+     */
+    private static final int FORCED_CHUNK_RADIUS = 2;
 
     private TurretScene() {
     }
@@ -49,6 +55,7 @@ public final class TurretScene {
     /** Builds the scene and clears it one tick before {@code timeoutTicks} (the test's timeout). */
     public static TurretBaseBlockEntity build(GameTestHelper helper, TurretType type, int timeoutTicks) {
         removeEntities(helper);
+        forceChunks(helper, true);
         helper.runAfterDelay(timeoutTicks - 1, () -> clear(helper));
         for (int x = 0; x < 8; x++) {
             for (int z = 0; z < 8; z++) {
@@ -108,11 +115,24 @@ public final class TurretScene {
         helper.succeed();
     }
 
-    /** Removes the turret, its base and all entities of the scene. */
+    /** Removes the turret, its base and all entities of the scene, and releases the forced chunks. */
     public static void clear(GameTestHelper helper) {
         helper.setBlock(TURRET, Blocks.AIR);
         helper.setBlock(BASE, Blocks.AIR);
         removeEntities(helper);
+        forceChunks(helper, false);
+    }
+
+    /** Force-loads (or releases) the chunks within {@link #FORCED_CHUNK_RADIUS} of the turret, so their entities tick. */
+    private static void forceChunks(GameTestHelper helper, boolean forced) {
+        BlockPos turret = helper.absolutePos(TURRET);
+        int centreX = turret.getX() >> 4;
+        int centreZ = turret.getZ() >> 4;
+        for (int x = centreX - FORCED_CHUNK_RADIUS; x <= centreX + FORCED_CHUNK_RADIUS; x++) {
+            for (int z = centreZ - FORCED_CHUNK_RADIUS; z <= centreZ + FORCED_CHUNK_RADIUS; z++) {
+                helper.getLevel().setChunkForced(x, z, forced);
+            }
+        }
     }
 
     /** Removes all entities but players in the scene (without death animation or drops). */
