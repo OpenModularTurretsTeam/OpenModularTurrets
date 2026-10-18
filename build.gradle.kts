@@ -149,6 +149,45 @@ tasks.check {
     dependsOn(tasks.jacocoTestReport)
 }
 
+// ---- Mutation testing (PIT): ./gradlew :1.21.1:pitest, on demand ----
+// Plants small mistakes in core (flipped conditions, changed boundaries, removed calls) and checks whether a unit test
+// fails. Surviving mistakes show behaviour the tests do not pin down. Report only, not part of check.
+// Report: versions/<v>/build/reports/pitest/index.html
+val pitest = configurations.create("pitest") {
+    isCanBeConsumed = false
+}
+dependencies {
+    pitest("org.pitest:pitest-command-line:${property("pitest_version")}")
+    pitest("org.pitest:pitest-junit5-plugin:${property("pitest_junit5_version")}")
+}
+tasks.register<JavaExec>("pitest") {
+    group = "verification"
+    description = "Mutation testing of the core logic (report in build/reports/pitest)"
+    dependsOn(tasks.testClasses)
+    classpath = pitest + sourceSets.test.get().runtimeClasspath
+    mainClass = "org.pitest.mutationtest.commandline.MutationCoverageReport"
+    javaLauncher = javaToolchains.launcherFor(java.toolchain)
+    val reportDir = layout.buildDirectory.dir("reports/pitest")
+    val sources = sourceSets.main.get().java.srcDirs
+    outputs.dir(reportDir)
+    argumentProviders.add(CommandLineArgumentProvider {
+        listOf(
+            "--reportDir", reportDir.get().asFile.path,
+            "--targetClasses", "omtteam.openmodularturrets.core.*",
+            "--targetTests", "omtteam.openmodularturrets.core.*",
+            // the tests and their fakes share the core packages
+            "--excludedClasses", "*Test,*Test\$*,*.Fake*",
+            "--sourceDirs", sources.joinToString(","),
+            "--threads", Runtime.getRuntime().availableProcessors().toString(),
+            "--outputFormats", "HTML,XML",
+            "--timestampedReports=false",
+        )
+    })
+    doLast {
+        println("PIT report: ${reportDir.get().asFile.resolve("index.html").toURI()}")
+    }
+}
+
 // Report only for now: the limits in gradle/pmd/ruleset.xml are not enforced yet. Runs for the active version only
 // (both versions share the source); reports in versions/<v>/build/reports/pmd/{main,client}.html
 pmd {

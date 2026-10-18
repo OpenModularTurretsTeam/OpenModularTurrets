@@ -194,10 +194,16 @@ When the cycle test fails it prints the cycle, the class dependencies inside it 
 | --- | --- | --- |
 | PMD: complexity, size, nesting, coupling (rules in `gradle/pmd/ruleset.xml`) | `./gradlew :1.21.1:pmdMain :1.21.1:pmdClient` (also part of `check`) | `versions/1.21.1/build/reports/pmd/main.html`, `client.html` |
 | Test coverage of `core` and `api` (JaCoCo, unit and game tests) | part of `check`, which prints a summary per package | `versions/1.21.1/build/reports/jacoco/test/html/index.html` |
+| Mutation testing of `core` (PIT) | `./gradlew :1.21.1:pitest` | `versions/1.21.1/build/reports/pitest/index.html` |
 | Dependency map | `./gradlew dependencyMap` | `build/reports/dependency-map/index.html` |
 
 PMD reports only for now; it does not fail the build.
 Once the limits are agreed, switching off `isIgnoreFailures` in `build.gradle.kts` makes new code above them fail.
+
+Coverage says which lines the tests run; mutation testing says whether they check the results.
+PIT plants small mistakes in core (a flipped condition, `<` instead of `<=`, a removed call) and runs the unit tests against each one.
+A mistake no test notices ("survived") marks behaviour the tests do not pin down, often an edge case or a missing save or sync call.
+Not every survivor is a gap: where `>` and `>=` behave the same for every possible value, the change cannot be noticed.
 
 ## Known weak spots
 

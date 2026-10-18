@@ -147,6 +147,7 @@ If this does not match the installed version, check the Stonecutter docs and upd
 ./gradlew :1.20.1:runDatagen               # regenerate data for a version
 ./gradlew :1.21.1:runDatagen
 ./gradlew dependencyMap                    # interactive package dependency map -> build/reports/dependency-map/index.html
+./gradlew :1.21.1:pitest                   # mutation testing of core -> versions/1.21.1/build/reports/pitest/index.html
 ./gradlew chiseledPublish                  # upload all versions to CurseForge/Modrinth (custom task)
 ./gradlew :1.21.1:publishMods              # upload one version
 ```
@@ -181,6 +182,7 @@ The logic consists of:
 `ArchitectureTest` (`src/test/.../architecture`, ArchUnit) checks core isolation, that main never uses client code, and package cycles against its `KNOWN_CYCLES` list (a ratchet: update the list when a cycle shrinks; never add to it without asking the user).
 PMD (`gradle/pmd/ruleset.xml`, report only, active version) measures complexity and size: `versions/1.21.1/build/reports/pmd/`.
 JaCoCo records coverage in the unit tests and on the game test server; `check` prints the line coverage of `core` and `api` per package (active version only).
+PIT (`./gradlew :1.21.1:pitest`, on demand, not part of `check`) runs mutation testing on `core`; surviving mutations show behaviour the tests do not pin down.
 
 `./gradlew check` runs `verifyCoreIsolation`, which fails if anything under `core/` imports `net.minecraft`, `net.fabricmc`, `com.mojang`, `team.reborn` or non-core mod packages.
 Tests live in `src/test/java` (JUnit, test-only dependency).
