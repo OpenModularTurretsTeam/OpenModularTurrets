@@ -7,13 +7,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.core.item.AddonType;
-import omtteam.openmodularturrets.core.item.UpgradeType;
+import omtteam.openmodularturrets.core.item.GeneratorUpgradeType;
+import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.AmmoItem;
 import omtteam.openmodularturrets.item.MemoryCardItem;
-import omtteam.openmodularturrets.item.UpgradeItem;
+import omtteam.openmodularturrets.item.GeneratorUpgradeItem;
+import omtteam.openmodularturrets.item.TurretBaseUpgradeItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,13 +61,18 @@ public final class ModItems {
     public static final List<Item> CHAMBERS = registerTiered("chamber");
     public static final List<Item> BARRELS = registerTiered("barrel");
 
-    // Upgrades (1.12.2 UpgradeMetaItem meta 0–4)
-    public static final UpgradeItem UPGRADE_ACCURACY = registerUpgrade(UpgradeType.ACCURACY);
-    public static final UpgradeItem UPGRADE_EFFICIENCY = registerUpgrade(UpgradeType.EFFICIENCY);
-    public static final UpgradeItem UPGRADE_FIRE_RATE = registerUpgrade(UpgradeType.FIRE_RATE);
-    public static final UpgradeItem UPGRADE_RANGE = registerUpgrade(UpgradeType.RANGE);
-    public static final UpgradeItem UPGRADE_SCATTER_SHOT = registerUpgrade(UpgradeType.SCATTERSHOT);
-    public static final UpgradeItem UPGRADE_CREATIVE = registerUpgrade(UpgradeType.CREATIVE);
+    // Turret base upgrades (1.12.2 UpgradeMetaItem meta 0–4)
+    public static final TurretBaseUpgradeItem UPGRADE_ACCURACY = registerUpgrade(TurretBaseUpgradeType.ACCURACY);
+    public static final TurretBaseUpgradeItem UPGRADE_EFFICIENCY = registerUpgrade(TurretBaseUpgradeType.EFFICIENCY);
+    public static final TurretBaseUpgradeItem UPGRADE_FIRE_RATE = registerUpgrade(TurretBaseUpgradeType.FIRE_RATE);
+    public static final TurretBaseUpgradeItem UPGRADE_RANGE = registerUpgrade(TurretBaseUpgradeType.RANGE);
+    public static final TurretBaseUpgradeItem UPGRADE_SCATTER_SHOT = registerUpgrade(TurretBaseUpgradeType.SCATTERSHOT);
+    public static final TurretBaseUpgradeItem UPGRADE_CREATIVE = registerUpgrade(TurretBaseUpgradeType.CREATIVE);
+
+    // Generator upgrades
+    public static final GeneratorUpgradeItem UPGRADE_ENERGY_MULTIPLIER = register(
+            "upgrade_" + GeneratorUpgradeType.ENERGY_MULTIPLIER.getSerializedName(),
+            new GeneratorUpgradeItem(GeneratorUpgradeType.ENERGY_MULTIPLIER, new Item.Properties()));
 
     // Addons (1.12.2 AddonMetaItem; potentia and serial port are not ported, see AddonType)
     public static final AddonItem ADDON_CONCEALER = registerAddon(AddonType.CONCEALER);
@@ -100,8 +107,8 @@ public final class ModItems {
         return List.copyOf(items);
     }
 
-    private static UpgradeItem registerUpgrade(UpgradeType type) {
-        return register("upgrade_" + type.getSerializedName(), new UpgradeItem(type, new Item.Properties()));
+    private static TurretBaseUpgradeItem registerUpgrade(TurretBaseUpgradeType type) {
+        return register("upgrade_" + type.getSerializedName(), new TurretBaseUpgradeItem(type, new Item.Properties()));
     }
 
     private static AddonItem registerAddon(AddonType type) {

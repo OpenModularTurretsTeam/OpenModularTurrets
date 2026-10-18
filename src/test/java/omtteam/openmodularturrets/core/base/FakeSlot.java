@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.core.base;
 import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.item.ItemSlot;
 import omtteam.openmodularturrets.core.item.ReactorFuel;
-import omtteam.openmodularturrets.core.item.UpgradeType;
+import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 
 import java.util.Optional;
@@ -13,7 +13,7 @@ final class FakeSlot implements ItemSlot {
     AmmoType ammo;
     int disposableBonus;
     ReactorFuel fuel;
-    UpgradeType upgrade;
+    TurretBaseUpgradeType upgrade;
     AddonType addon;
     int count;
 
@@ -41,7 +41,7 @@ final class FakeSlot implements ItemSlot {
         return slot;
     }
 
-    static FakeSlot upgrade(UpgradeType type, int count) {
+    static FakeSlot upgrade(TurretBaseUpgradeType type, int count) {
         FakeSlot slot = new FakeSlot();
         slot.upgrade = type;
         slot.count = count;
@@ -76,7 +76,7 @@ final class FakeSlot implements ItemSlot {
     }
 
     @Override
-    public Optional<UpgradeType> getUpgrade() {
+    public Optional<TurretBaseUpgradeType> getUpgrade() {
         return Optional.ofNullable(upgrade);
     }
 

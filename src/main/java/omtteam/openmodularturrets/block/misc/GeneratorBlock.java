@@ -110,6 +110,7 @@ public class GeneratorBlock extends BaseEntityBlock implements InteractiveBlock 
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof GeneratorBlockEntity generator) {
             Containers.dropContents(level, pos, generator.getFuelContainer());
+            Containers.dropContents(level, pos, generator.getUpgradeContainer());
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
     }

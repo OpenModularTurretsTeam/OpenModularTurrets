@@ -137,6 +137,8 @@ public final class OMTConfig {
     private static ParseResult parse(JsonElement json) {
         JsonObject defaults = GSON.toJsonTree(new ConfigData()).getAsJsonObject();
         boolean[] changed = {false};
+        // before merging: a file without a version gets the current one from the defaults
+        if (json.isJsonObject()) changed[0] = ConfigMigration.migrate(json.getAsJsonObject());
         JsonElement merged = json.isJsonObject() ? merge(defaults, json.getAsJsonObject(), "", changed) : defaults;
         if (!json.isJsonObject()) {
             OMT.LOGGER.warn("Config: root is not a JSON object, using defaults");

@@ -72,6 +72,7 @@
   "item.openmodularturrets.upgrade_range": "Upgrade - Reichweite",
   "item.openmodularturrets.upgrade_scatter_shot": "Upgrade - Schrotschuss",
   "item.openmodularturrets.upgrade_creative": "Upgrade - Kreativ",
+  "item.openmodularturrets.upgrade_energy_multiplier": "Upgrade - Energiemultiplikator",
   "config.jade.plugin_openmodularturrets.turret": "Turm",
   "config.jade.plugin_openmodularturrets.turret_base": "Turmbasis",
   "death.attack.openmodularturrets.blazing_clay": "%s wurde medium-rare gebraten.",
@@ -266,5 +267,10 @@
   "tooltip.openmodularturrets.upgrade.creative.flavour": "Unendlich Energie, unendlich Kugeln.",
   "tooltip.openmodularturrets.upgrade.stacks": "Stackt bis zu 4 mal.",
   "tooltip.openmodularturrets.upgrade.turretinfo": "Für Effekt siehe Turm-Tooltips.",
-  "tooltip.openmodularturrets.upgrade_slot": "Upgrades für den modularen Turm."
+  "tooltip.openmodularturrets.upgrade_slot": "Upgrades für den modularen Turm.",
+  "tooltip.openmodularturrets.generator_upgrade.label": "Generator-Upgrade",
+  "tooltip.openmodularturrets.upgrade.energy_multiplier.a": "Verdoppelt pro Upgrade die Energie, die der Generator erzeugt,",
+  "tooltip.openmodularturrets.upgrade.energy_multiplier.b": "aber er verbrennt seinen Brennstoff auch doppelt so schnell.",
+  "tooltip.openmodularturrets.upgrade.energy_multiplier.flavour": "Gleiche Kohle, mehr Eile.",
+  "tooltip.openmodularturrets.generator_upgrade_slot": "Upgrades für den Generator."
 }

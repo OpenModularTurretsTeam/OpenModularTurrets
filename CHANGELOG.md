@@ -13,6 +13,12 @@ turns *Unreleased* into the release section; `chiseledPublish` uploads exactly t
 
 - Turret API for other mods: they can add turrets (with their own weapons, ammo, models and config entries under `turrets.addon_turrets`) through the `openmodularturrets` entrypoint, see `docs/turret-api.md`
 - Turret API: custom turret logic. Self-targeting weapons find their own targets instead of using the base's, projectile and ray weapons can run code when they hit an entity, and `OMTApi.canDamage` / `OMTApi.hurt` apply the base's trust and damage rules
+- Energy Multiplier Upgrade for the Generator (up to 4 in its new upgrade slot): each doubles energy production and fuel use; the energy per fuel item stays the same
+
+### Changed
+
+- The Generator has 9 fuel slots instead of 1, so it runs much longer without refuelling
+- Generator: energy storage raised from 50,000 to 1,000,000 RF and output limit from 200 to 65,536 RF/t; existing config files still on the old defaults are updated, other values stay
 
 ### Fixed
 

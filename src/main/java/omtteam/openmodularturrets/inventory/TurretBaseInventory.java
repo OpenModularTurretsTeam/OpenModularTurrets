@@ -6,8 +6,8 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import omtteam.openmodularturrets.core.base.BaseTier;
-import omtteam.openmodularturrets.core.item.UpgradeType;
 import omtteam.openmodularturrets.item.AddonItem;
+import omtteam.openmodularturrets.item.TurretBaseUpgradeItem;
 import omtteam.openmodularturrets.item.UpgradeItem;
 import org.jetbrains.annotations.NotNull;
 
@@ -74,13 +74,13 @@ public class TurretBaseInventory implements Container {
     public static boolean mayPlace(int slot, ItemStack stack) {
         if (isAmmoSlot(slot)) return AmmoRules.isValidAmmo(stack);
         if (isAddonSlot(slot)) return stack.getItem() instanceof AddonItem;
-        if (isUpgradeSlot(slot)) return stack.getItem() instanceof UpgradeItem;
+        if (isUpgradeSlot(slot)) return stack.getItem() instanceof TurretBaseUpgradeItem;
         return false;
     }
 
     /** Stack limit of a slot for an item (upgrades 4, damage amp / fake drops 4, other addons 1). */
     public static int getSlotLimit(int slot, ItemStack stack) {
-        if (isUpgradeSlot(slot)) return UpgradeType.MAX_PER_SLOT;
+        if (isUpgradeSlot(slot) && stack.getItem() instanceof UpgradeItem upgrade) return upgrade.getUpgradeType().maxPerSlot();
         if (isAddonSlot(slot) && stack.getItem() instanceof AddonItem addon) return addon.getAddonType().getMaxPerSlot();
         return stack.getMaxStackSize();
     }

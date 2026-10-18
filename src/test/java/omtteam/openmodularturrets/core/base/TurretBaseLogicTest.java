@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.core.base;
 
 import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.item.ReactorFuel;
-import omtteam.openmodularturrets.core.item.UpgradeType;
+import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.security.PlayerInfo;
 import omtteam.openmodularturrets.core.security.SecurityEnvironment;
 import omtteam.openmodularturrets.core.turret.AmmoType;
@@ -97,7 +97,7 @@ class TurretBaseLogicTest {
         world.ammoSlots.set(index, slot);
     }
 
-    private void upgrade(int index, UpgradeType type, int count) {
+    private void upgrade(int index, TurretBaseUpgradeType type, int count) {
         world.upgradeSlots.set(index, FakeSlot.upgrade(type, count));
     }
 
@@ -133,7 +133,7 @@ class TurretBaseLogicTest {
         @Test
         void drawSpansSlotsWithoutTakingTooMuch() {
             TurretBaseLogic logic = base(5);
-            upgrade(0, UpgradeType.SCATTERSHOT, 2); // 3 items per shot
+            upgrade(0, TurretBaseUpgradeType.SCATTERSHOT, 2); // 3 items per shot
             FakeSlot first = FakeSlot.ammo(AmmoType.POTATO, 1);
             FakeSlot second = FakeSlot.ammo(AmmoType.POTATO, 5);
             ammoSlot(0, first);
@@ -157,7 +157,7 @@ class TurretBaseLogicTest {
         @Test
         void drawIsAllOrNothing() {
             TurretBaseLogic logic = base(5);
-            upgrade(0, UpgradeType.SCATTERSHOT, 1);
+            upgrade(0, TurretBaseUpgradeType.SCATTERSHOT, 1);
             FakeSlot potatoes = FakeSlot.ammo(AmmoType.POTATO, 1);
             ammoSlot(0, potatoes);
             assertEquals(Optional.empty(), logic.drawAmmo(TurretType.POTATO_CANNON_TURRET));
@@ -226,7 +226,7 @@ class TurretBaseLogicTest {
         @Test
         void removesAmmoUsage() {
             TurretBaseLogic logic = base(5);
-            upgrade(0, UpgradeType.CREATIVE, 1);
+            upgrade(0, TurretBaseUpgradeType.CREATIVE, 1);
             assertEquals(Optional.empty(), logic.getRequiredAmmo(TurretType.MACHINE_GUN_TURRET));
             assertEquals(Integer.MAX_VALUE, logic.getAmmoLevel(TurretType.MACHINE_GUN_TURRET));
         }
@@ -243,7 +243,7 @@ class TurretBaseLogicTest {
             logic.tick(1); // sets the tier's capacity
             tick(logic, 5);
             assertEquals(0, logic.getEnergy().getAmount());
-            upgrade(0, UpgradeType.CREATIVE, 1);
+            upgrade(0, TurretBaseUpgradeType.CREATIVE, 1);
             logic.tick(6);
             assertTrue(logic.getEnergy().getCapacity() > 0);
             assertEquals(logic.getEnergy().getCapacity(), logic.getEnergy().getAmount());
@@ -253,7 +253,7 @@ class TurretBaseLogicTest {
         void refillsAfterConsumption() {
             TurretBaseLogic logic = base(5);
             tick(logic, 5);
-            upgrade(0, UpgradeType.CREATIVE, 1);
+            upgrade(0, TurretBaseUpgradeType.CREATIVE, 1);
             logic.tick(6);
             logic.getEnergy().consume(1000);
             logic.tick(7);
@@ -267,34 +267,34 @@ class TurretBaseLogicTest {
         void rangeUpgrades() {
             TurretBaseLogic logic = base(5);
             assertEquals(18, logic.getRange(TurretType.MACHINE_GUN_TURRET));
-            upgrade(0, UpgradeType.RANGE, 2);
-            upgrade(1, UpgradeType.RANGE, 1);
+            upgrade(0, TurretBaseUpgradeType.RANGE, 2);
+            upgrade(1, TurretBaseUpgradeType.RANGE, 1);
             assertEquals(18 + 2 * 3, logic.getRange(TurretType.MACHINE_GUN_TURRET));
         }
 
         @Test
         void upgradeSlotsDependOnTier() {
-            upgrade(0, UpgradeType.RANGE, 1);
-            upgrade(1, UpgradeType.RANGE, 1);
-            assertEquals(0, base(1).getUpgradeCount(UpgradeType.RANGE));
-            assertEquals(1, base(4).getUpgradeCount(UpgradeType.RANGE));
-            assertEquals(2, base(5).getUpgradeCount(UpgradeType.RANGE));
+            upgrade(0, TurretBaseUpgradeType.RANGE, 1);
+            upgrade(1, TurretBaseUpgradeType.RANGE, 1);
+            assertEquals(0, base(1).getUpgradeCount(TurretBaseUpgradeType.RANGE));
+            assertEquals(1, base(4).getUpgradeCount(TurretBaseUpgradeType.RANGE));
+            assertEquals(2, base(5).getUpgradeCount(TurretBaseUpgradeType.RANGE));
         }
 
         @Test
         void powerPerShot() {
             TurretBaseLogic logic = base(5);
             assertEquals(100, logic.getPowerPerShot(TurretType.MACHINE_GUN_TURRET));
-            upgrade(0, UpgradeType.EFFICIENCY, 2);
+            upgrade(0, TurretBaseUpgradeType.EFFICIENCY, 2);
             assertEquals(84, logic.getPowerPerShot(TurretType.MACHINE_GUN_TURRET)); // 100 * (1 - 0.16)
-            upgrade(1, UpgradeType.SCATTERSHOT, 1);
+            upgrade(1, TurretBaseUpgradeType.SCATTERSHOT, 1);
             assertEquals(168, logic.getPowerPerShot(TurretType.MACHINE_GUN_TURRET)); // * (1 + 1)
         }
 
         @Test
         void railgunIgnoresScattershot() {
             TurretBaseLogic logic = base(5);
-            upgrade(0, UpgradeType.SCATTERSHOT, 4);
+            upgrade(0, TurretBaseUpgradeType.SCATTERSHOT, 4);
             assertEquals(4, logic.getScattershotCount(TurretType.LASER_TURRET));
             assertEquals(0, logic.getScattershotCount(TurretType.RAILGUN_TURRET));
             assertEquals(25000, logic.getPowerPerShot(TurretType.RAILGUN_TURRET), "no extra energy per ray");
@@ -308,7 +308,7 @@ class TurretBaseLogicTest {
         @Test
         void effectTurretsIgnoreScattershot() {
             TurretBaseLogic logic = base(5);
-            upgrade(0, UpgradeType.SCATTERSHOT, 4);
+            upgrade(0, TurretBaseUpgradeType.SCATTERSHOT, 4);
             for (TurretType type : new TurretType[]{TurretType.MELEE_TURRET, TurretType.SLOWING_TURRET,
                     TurretType.TELEPORTER_TURRET}) {
                 assertEquals(0, logic.getScattershotCount(type), type.toString());
@@ -320,7 +320,7 @@ class TurretBaseLogicTest {
         void fireCooldown() {
             TurretBaseLogic logic = base(5);
             assertEquals(8, logic.getFireCooldownTicks(TurretType.MACHINE_GUN_TURRET), 1e-9);
-            upgrade(0, UpgradeType.FIRE_RATE, 2);
+            upgrade(0, TurretBaseUpgradeType.FIRE_RATE, 2);
             assertEquals(8 / 1.2, logic.getFireCooldownTicks(TurretType.MACHINE_GUN_TURRET), 1e-9);
         }
 
@@ -328,8 +328,8 @@ class TurretBaseLogicTest {
         void accuracyDeviation() {
             TurretBaseLogic logic = base(5);
             assertEquals(30, logic.getAccuracyDeviation(TurretType.MACHINE_GUN_TURRET), 1e-9);
-            upgrade(0, UpgradeType.ACCURACY, 2);
-            upgrade(1, UpgradeType.SCATTERSHOT, 1);
+            upgrade(0, TurretBaseUpgradeType.ACCURACY, 2);
+            upgrade(1, TurretBaseUpgradeType.SCATTERSHOT, 1);
             double expected = 30 / Math.pow(1.4, 1.5) * 1.1;
             assertEquals(expected, logic.getAccuracyDeviation(TurretType.MACHINE_GUN_TURRET), 1e-6);
         }

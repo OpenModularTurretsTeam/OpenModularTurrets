@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.item.ItemSlot;
 import omtteam.openmodularturrets.core.item.ReactorFuel;
-import omtteam.openmodularturrets.core.item.UpgradeType;
+import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.inventory.AmmoRules;
 
@@ -40,7 +40,7 @@ public record ContainerItemSlot(Container container, int index) implements ItemS
     }
 
     @Override
-    public Optional<UpgradeType> getUpgrade() {
+    public Optional<TurretBaseUpgradeType> getUpgrade() {
         return ItemClassifier.getUpgrade(stack());
     }
 

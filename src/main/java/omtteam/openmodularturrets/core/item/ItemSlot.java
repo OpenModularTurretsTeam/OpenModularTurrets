@@ -20,7 +20,7 @@ public interface ItemSlot {
 
     boolean isReactorFuel(ReactorFuel fuel);
 
-    Optional<UpgradeType> getUpgrade();
+    Optional<TurretBaseUpgradeType> getUpgrade();
 
     Optional<AddonType> getAddon();
 

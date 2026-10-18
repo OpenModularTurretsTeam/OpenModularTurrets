@@ -10,11 +10,15 @@ import omtteam.openmodularturrets.client.compat.ClientCompat;
 import omtteam.openmodularturrets.menu.GeneratorMenu;
 
 /**
- * Generator GUI: fuel slot with a furnace-style flame and the turret base energy bar.
+ * Generator GUI: 3×3 fuel slots, the blue upgrade slot, a furnace-style flame and the turret base energy bar. The
+ * area around the upgrade slot is left empty for later slots.
  */
 public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> {
     private static final ResourceLocation TEXTURE = OMT.id("textures/gui/generator.png");
     private static final int FLAME_SIZE = 14;
+    /** The flame sits left of the energy bar, level with the middle fuel row. */
+    private static final int FLAME_X = 136;
+    private static final int FLAME_Y = 36;
     private static final int ENERGY_HEIGHT = 51;
 
     public GeneratorScreen(GeneratorMenu menu, Inventory inventory, Component title) {
@@ -31,6 +35,10 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> {
         int y = mouseY - topPos;
         if (x > 153 && x < 167 && y > 17 && y < 68) {
             graphics.renderTooltip(font, Component.literal(menu.getEnergy() + "/" + menu.getCapacity() + " RF"), mouseX, mouseY);
+        } else if (hoveredSlot != null && !hoveredSlot.hasItem()
+                && hoveredSlot.x == GeneratorMenu.UPGRADE_X && hoveredSlot.y == GeneratorMenu.UPGRADE_Y) {
+            graphics.renderTooltip(font, Component.translatable("tooltip.openmodularturrets.generator_upgrade_slot"),
+                    mouseX, mouseY);
         }
     }
 
@@ -39,7 +47,7 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> {
         graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         int flame = (int) Math.ceil(menu.getBurnProgress() * FLAME_SIZE);
         if (flame > 0) {
-            graphics.blit(TEXTURE, leftPos + 81, topPos + 36 + FLAME_SIZE - flame, 176, 72 + FLAME_SIZE - flame,
+            graphics.blit(TEXTURE, leftPos + FLAME_X, topPos + FLAME_Y + FLAME_SIZE - flame, 176, 72 + FLAME_SIZE - flame,
                     FLAME_SIZE, flame);
         }
         long capacity = menu.getCapacity();

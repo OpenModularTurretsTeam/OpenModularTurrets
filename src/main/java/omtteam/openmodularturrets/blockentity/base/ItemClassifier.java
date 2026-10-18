@@ -4,10 +4,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.item.ReactorFuel;
-import omtteam.openmodularturrets.core.item.UpgradeType;
+import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.item.AddonItem;
-import omtteam.openmodularturrets.item.UpgradeItem;
+import omtteam.openmodularturrets.item.TurretBaseUpgradeItem;
 import omtteam.openmodularturrets.registry.TurretRegistry;
 
 import java.util.Optional;
@@ -31,8 +31,8 @@ public final class ItemClassifier {
         };
     }
 
-    public static Optional<UpgradeType> getUpgrade(ItemStack stack) {
-        return stack.getItem() instanceof UpgradeItem upgrade ? Optional.of(upgrade.getUpgradeType()) : Optional.empty();
+    public static Optional<TurretBaseUpgradeType> getUpgrade(ItemStack stack) {
+        return stack.getItem() instanceof TurretBaseUpgradeItem upgrade ? Optional.of(upgrade.getUpgradeType()) : Optional.empty();
     }
 
     public static Optional<AddonType> getAddon(ItemStack stack) {

@@ -15,7 +15,7 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.core.base.EnergyStore;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.item.AddonItem;
-import omtteam.openmodularturrets.item.UpgradeItem;
+import omtteam.openmodularturrets.item.TurretBaseUpgradeItem;
 import omtteam.openmodularturrets.registry.ModMenus;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -117,7 +117,7 @@ public class TurretBaseMenu extends AbstractContainerMenu {
         ItemStack stack = slot.getItem();
         ItemStack original = stack.copy();
         if (index < baseSlotStart) {
-            boolean module = stack.getItem() instanceof AddonItem || stack.getItem() instanceof UpgradeItem;
+            boolean module = stack.getItem() instanceof AddonItem || stack.getItem() instanceof TurretBaseUpgradeItem;
             int start = module ? baseSlotStart + TurretBaseInventory.AMMO_COUNT : baseSlotStart;
             int end = module ? baseSlotEnd : baseSlotStart + TurretBaseInventory.AMMO_COUNT;
             if (!moveToBaseSlots(stack, start, end)) return ItemStack.EMPTY;

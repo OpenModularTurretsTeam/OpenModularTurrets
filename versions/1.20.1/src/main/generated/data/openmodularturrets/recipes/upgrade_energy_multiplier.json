@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "openmodularturrets:io_bus"
+    },
+    "C": {
+      "item": "minecraft:blaze_rod"
+    },
+    "Q": {
+      "tag": "c:quartz"
+    }
+  },
+  "pattern": [
+    " Q ",
+    "QCQ",
+    " B "
+  ],
+  "result": {
+    "item": "openmodularturrets:upgrade_energy_multiplier"
+  },
+  "show_notification": true
+}

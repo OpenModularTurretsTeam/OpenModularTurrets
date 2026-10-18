@@ -4,17 +4,13 @@ import net.minecraft.world.item.Item;
 import omtteam.openmodularturrets.core.item.UpgradeType;
 
 /**
- * Turret upgrade for the upgrade slots of a base. Ported from 1.12.2 {@code UpgradeMetaItem} (one item per meta).
+ * An upgrade item. Each machine has its own subclass and upgrade list ({@link TurretBaseUpgradeItem},
+ * {@link GeneratorUpgradeItem}); a machine's upgrade slots only accept its own subclass.
  */
-public class UpgradeItem extends Item {
-    private final UpgradeType upgradeType;
-
-    public UpgradeItem(UpgradeType upgradeType, Properties properties) {
+public abstract class UpgradeItem extends Item {
+    protected UpgradeItem(Properties properties) {
         super(properties);
-        this.upgradeType = upgradeType;
     }
 
-    public UpgradeType getUpgradeType() {
-        return upgradeType;
-    }
+    public abstract UpgradeType getUpgradeType();
 }

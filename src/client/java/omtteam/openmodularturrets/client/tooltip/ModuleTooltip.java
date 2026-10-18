@@ -8,6 +8,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.item.AddonItem;
+import omtteam.openmodularturrets.item.GeneratorUpgradeItem;
+import omtteam.openmodularturrets.item.TurretBaseUpgradeItem;
 import omtteam.openmodularturrets.item.UpgradeItem;
 
 import java.util.List;
@@ -31,10 +33,14 @@ public final class ModuleTooltip {
             return;
         }
         lines.add(Component.empty());
-        if (stack.getItem() instanceof UpgradeItem item) {
+        if (stack.getItem() instanceof TurretBaseUpgradeItem item) {
             lines.add(translated("upgrade.label").withStyle(ChatFormatting.BLUE));
             lines.add(Component.empty());
             appendUpgrade(item, lines);
+        } else if (stack.getItem() instanceof GeneratorUpgradeItem item) {
+            lines.add(translated("generator_upgrade.label").withStyle(ChatFormatting.BLUE));
+            lines.add(Component.empty());
+            appendGeneratorUpgrade(item, lines);
         } else if (stack.getItem() instanceof AddonItem item) {
             lines.add(translated("addon.label").withStyle(ChatFormatting.RED));
             lines.add(Component.empty());
@@ -42,7 +48,7 @@ public final class ModuleTooltip {
         }
     }
 
-    private static void appendUpgrade(UpgradeItem item, List<Component> lines) {
+    private static void appendUpgrade(TurretBaseUpgradeItem item, List<Component> lines) {
         switch (item.getUpgradeType()) {
             case ACCURACY -> {
                 effectsAndStacking(lines);
@@ -75,6 +81,18 @@ public final class ModuleTooltip {
                 lines.add(text("upgrade.creative.b"));
                 lines.add(Component.empty());
                 lines.add(flavour("upgrade.creative.flavour"));
+            }
+        }
+    }
+
+    private static void appendGeneratorUpgrade(GeneratorUpgradeItem item, List<Component> lines) {
+        switch (item.getUpgradeType()) {
+            case ENERGY_MULTIPLIER -> {
+                lines.add(text("upgrade.energy_multiplier.a"));
+                lines.add(text("upgrade.energy_multiplier.b"));
+                lines.add(text("upgrade.stacks"));
+                lines.add(Component.empty());
+                lines.add(flavour("upgrade.energy_multiplier.flavour"));
             }
         }
     }

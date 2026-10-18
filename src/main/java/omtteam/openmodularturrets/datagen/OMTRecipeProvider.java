@@ -306,6 +306,8 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
         save.accept(upgrade(ModItems.UPGRADE_FIRE_RATE).define('C', Items.BLAZE_POWDER));
         save.accept(upgrade(ModItems.UPGRADE_RANGE).define('C', CommonTags.DIAMOND_GEMS));
         save.accept(upgrade(ModItems.UPGRADE_SCATTER_SHOT).define('C', Items.FLINT));
+        // generator upgrade (new): same pattern, a blaze rod for burning faster
+        save.accept(upgrade(ModItems.UPGRADE_ENERGY_MULTIPLIER).define('C', Items.BLAZE_ROD));
     }
 
     private static ShapedRecipeBuilder upgrade(ItemLike result) {

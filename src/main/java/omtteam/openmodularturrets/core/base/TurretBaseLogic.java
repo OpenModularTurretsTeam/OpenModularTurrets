@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.core.base;
 import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.item.ItemSlot;
 import omtteam.openmodularturrets.core.item.ReactorFuel;
-import omtteam.openmodularturrets.core.item.UpgradeType;
+import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.security.PlayerInfo;
 import omtteam.openmodularturrets.core.security.SecurityEnvironment;
 import omtteam.openmodularturrets.core.security.TrustManager;
@@ -329,7 +329,7 @@ public class TurretBaseLogic {
     }
 
     /** Number of upgrade items of a type (stack sizes count). */
-    public int getUpgradeCount(UpgradeType type) {
+    public int getUpgradeCount(TurretBaseUpgradeType type) {
         int count = 0;
         for (ItemSlot slot : usableUpgradeSlots()) {
             if (slot.getCount() > 0 && slot.getUpgrade().filter(type::equals).isPresent()) count += slot.getCount();
@@ -352,7 +352,7 @@ public class TurretBaseLogic {
 
     /** Whether a creative upgrade is installed: full energy, no ammo usage. */
     public boolean hasCreativeUpgrade() {
-        return getUpgradeCount(UpgradeType.CREATIVE) > 0;
+        return getUpgradeCount(TurretBaseUpgradeType.CREATIVE) > 0;
     }
 
     /** The creative upgrade tops up the energy storage completely (ignoring max IO). */
@@ -367,7 +367,7 @@ public class TurretBaseLogic {
      * for turrets that {@linkplain TurretType#usesScattershot() ignore them}.
      */
     public int getScattershotCount(TurretType type) {
-        return type.usesScattershot() ? getUpgradeCount(UpgradeType.SCATTERSHOT) : 0;
+        return type.usesScattershot() ? getUpgradeCount(TurretBaseUpgradeType.SCATTERSHOT) : 0;
     }
 
     /** 1.12.2 {@code TurretHeadUtil.getAmpLevel}. */
@@ -405,7 +405,7 @@ public class TurretBaseLogic {
     /** Turret range: {@code baseRange + rangeUpgrade * range upgrades} (1.12.2 {@code getRangeUpgrades}). */
     public int getRange(TurretType type) {
         TurretStats stats = settings.turret(type);
-        return stats.baseRange() + stats.rangeUpgrade() * getUpgradeCount(UpgradeType.RANGE);
+        return stats.baseRange() + stats.rangeUpgrade() * getUpgradeCount(TurretBaseUpgradeType.RANGE);
     }
 
     /**
@@ -414,7 +414,7 @@ public class TurretBaseLogic {
      */
     public int getPowerPerShot(TurretType type) {
         TurretStats stats = settings.turret(type);
-        double efficiency = stats.efficiencyUpgrade() * getUpgradeCount(UpgradeType.EFFICIENCY);
+        double efficiency = stats.efficiencyUpgrade() * getUpgradeCount(TurretBaseUpgradeType.EFFICIENCY);
         return (int) Math.round(stats.powerUsage() * (1 - efficiency) * (1 + getScattershotCount(type)));
     }
 
@@ -424,7 +424,7 @@ public class TurretBaseLogic {
      */
     public double getFireCooldownTicks(TurretType type) {
         TurretStats stats = settings.turret(type);
-        return stats.baseFireRate() / (1 + stats.fireRateUpgrade() * getUpgradeCount(UpgradeType.FIRE_RATE));
+        return stats.baseFireRate() / (1 + stats.fireRateUpgrade() * getUpgradeCount(TurretBaseUpgradeType.FIRE_RATE));
     }
 
     /**
@@ -433,7 +433,7 @@ public class TurretBaseLogic {
      */
     public double getAccuracyDeviation(TurretType type) {
         TurretStats stats = settings.turret(type);
-        double accuracy = stats.accuracyUpgrade() * getUpgradeCount(UpgradeType.ACCURACY);
+        double accuracy = stats.accuracyUpgrade() * getUpgradeCount(TurretBaseUpgradeType.ACCURACY);
         return stats.baseAccuracyDeviation() / Math.pow(1 + accuracy, 1.5D) * (1 + getScattershotCount(type) / 10F);
     }
 
