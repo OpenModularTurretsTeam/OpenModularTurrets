@@ -356,6 +356,19 @@ Deliberately not optimized yet; revisit only if profiling shows a problem.
 - Every variant (base tier, ammo type, upgrade, addon) is an **individual registered block/item** with a lowercase snake_case ID. `docs/id-mapping.md` maps the 1.12.2 IDs to the current ones.
 - OpenComputers / ComputerCraft integration is **out of scope for now** (ask before adding).
 
+### Designing APIs
+
+The user wants close control over every API (public interfaces for other mods, such as `api/`, but also new
+cross-cutting interfaces inside the mod). Design them step by step, together with the user:
+
+1. **Overall shape first:** present a few ideas (e.g. 2–3 approaches with their trade-offs and a recommendation) and
+   wait for the user's choice before writing code.
+2. **Then each level in turn:** repeat this for each package, then each class or interface, then each public method or
+   callback signature (names, parameters, return values, nullability, when it is called). Propose, wait for the
+   decision, then implement that piece.
+3. Do not implement a whole API in one go, and do not pick a signature on your own because it seems obvious; a small
+   choice (e.g. which parameters a callback gets) is still the user's call.
+
 ---
 
 ## 8. Coding Conventions
