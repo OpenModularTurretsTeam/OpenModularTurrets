@@ -109,14 +109,6 @@ public class TurretBlockEntity extends CompatBlockEntity {
         return level.getBlockEntity(getBasePos()) instanceof TurretBaseBlockEntity base ? Optional.of(base) : Optional.empty();
     }
 
-    public float getYaw() {
-        return yaw;
-    }
-
-    public float getPitch() {
-        return pitch;
-    }
-
     // ---- Server ----
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TurretBlockEntity turret) {

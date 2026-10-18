@@ -33,12 +33,12 @@ public class TrustedPlayerList extends AbstractWidget {
         super(x, y, width, height, Component.empty());
     }
 
-    /** Replaces the entries; the selection is kept by UUID. */
     /** How the access levels are called in the list (a trap calls its lowest level "trusted"). */
     public void setLevelNamer(Function<AccessLevel, Component> levelNamer) {
         this.levelNamer = levelNamer;
     }
 
+    /** Replaces the entries; the selection is kept by UUID. */
     public void setEntries(List<TrustedPlayer> players) {
         entries.clear();
         entries.addAll(players);

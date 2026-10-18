@@ -15,8 +15,6 @@ import omtteam.openmodularturrets.entity.projectile.PlasmaProjectile;
 import omtteam.openmodularturrets.entity.projectile.PotatoProjectile;
 import omtteam.openmodularturrets.entity.projectile.RocketProjectile;
 
-import java.util.List;
-
 /**
  * Projectile entity types (1.12.2 {@code ModEntities}; potato and disposable projectiles were not registered there).
  */
@@ -29,10 +27,6 @@ public final class ModEntities {
     public static final EntityType<PotatoProjectile> POTATO = register("potato", EntityType.Builder.of(PotatoProjectile::new, MobCategory.MISC));
     public static final EntityType<DisposableProjectile> DISPOSABLE = register("disposable", EntityType.Builder.of(DisposableProjectile::new, MobCategory.MISC));
     public static final EntityType<PlasmaProjectile> PLASMA = register("plasma", EntityType.Builder.of(PlasmaProjectile::new, MobCategory.MISC));
-
-    /** All projectile types (for renderer registration). */
-    public static final List<EntityType<? extends Entity>> PROJECTILES = List.of(BULLET, BLAZING_CLAY, GRENADE, ROCKET,
-            ARROW, POTATO, DISPOSABLE, PLASMA);
 
     private ModEntities() {
     }

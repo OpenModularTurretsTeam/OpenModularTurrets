@@ -24,10 +24,6 @@ public class EnergyStore {
         return capacity;
     }
 
-    public long getMaxInsert() {
-        return maxInsert;
-    }
-
     public long getFreeSpace() {
         return Math.max(0, capacity - amount);
     }

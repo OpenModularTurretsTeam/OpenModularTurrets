@@ -35,7 +35,6 @@ public final class TurretMath {
 
     /** Local yaw and pitch in degrees. */
     public record Angles(float yaw, float pitch) {
-        public static final Angles ZERO = new Angles(0, 0);
     }
 
     /**

@@ -41,8 +41,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
  * A turret, one block per {@link TurretType}. Ported from 1.12.2 {@code BlockAbstractTurretHead}.
  * <p>
  * {@link #FACING} points away from the base, which is at {@code pos.relative(FACING.getOpposite())}. Turrets are
- * unbreakable (1.12.2 {@code setBlockUnbreakable}); they are removed with the base GUI's "Drop turrets" button or
- * drop when their base disappears.
+ * unbreakable (1.12.2 {@code setBlockUnbreakable}) unless {@code turrets.turretBreakable}; they are removed
+ * with the base GUI's "Drop turrets" button or drop when their base disappears.
  */
 public class TurretBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -50,6 +50,8 @@ public class TurretBlock extends BaseEntityBlock {
     public static final BooleanProperty CONCEALED = BooleanProperty.create("concealed");
     /** Bounding box 0.2–0.8 on every axis. */
     private static final VoxelShape SHAPE = Block.box(3.2, 3.2, 3.2, 12.8, 12.8, 12.8);
+    /** Hardness when {@code turretBreakable}. */
+    private static final float BREAKABLE_HARDNESS = 3.0F;
 
     //? if >=1.21 {
     public static final MapCodec<TurretBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -67,11 +69,16 @@ public class TurretBlock extends BaseEntityBlock {
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP).setValue(CONCEALED, false));
     }
 
+    /**
+     * Unbreakable unless {@code turretBreakable} (read once at startup, like the base's {@code baseBreakable}); when
+     * breakable, it mines like the lever (hardness 3, pickaxe). Blast resistance stays at the 1.12.2 6000000.
+     */
     public static Properties createProperties() {
         return Properties.of()
                 .mapColor(MapColor.METAL)
                 .sound(SoundType.STONE)
-                .strength(-1.0F, 6000000.0F)
+                .requiresCorrectToolForDrops()
+                .strength(OMTConfig.get().turrets.turretBreakable ? BREAKABLE_HARDNESS : -1.0F, 6000000.0F)
                 .noOcclusion()
                 .pushReaction(PushReaction.BLOCK)
                 .isValidSpawn((state, level, pos, entityType) -> false)

@@ -181,10 +181,6 @@ public class TurretBaseLogic {
 
     // ---- Neighbours / turrets ----
 
-    public Map<Face, Neighbour> getNeighbours() {
-        return Collections.unmodifiableMap(neighbours);
-    }
-
     public Map<Face, TurretType> getTurrets() {
         Map<Face, TurretType> turrets = new EnumMap<>(Face.class);
         neighbours.forEach((face, neighbour) -> {
@@ -489,10 +485,6 @@ public class TurretBaseLogic {
 
     public boolean isActive() {
         return mode.isActive(redstone);
-    }
-
-    public boolean isRedstonePowered() {
-        return redstone;
     }
 
     public MachineMode getMode() {

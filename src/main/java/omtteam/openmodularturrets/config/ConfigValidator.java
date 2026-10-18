@@ -27,10 +27,6 @@ final class ConfigValidator {
         return value;
     }
 
-    int min(String name, int value, int min) {
-        return range(name, value, min, Integer.MAX_VALUE);
-    }
-
     double range(String name, double value, double min, double max) {
         if (Double.isNaN(value) || value < min || value > max) {
             double fixed = Double.isNaN(value) ? min : Math.max(min, Math.min(max, value));

@@ -12,7 +12,6 @@ import net.minecraft.world.level.Level;
 //? if >=1.21 {
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.component.CustomData;
 //?}
 
@@ -74,29 +73,6 @@ public final class VersionCompat {
     // ---- ItemStack NBT ----
 
     /**
-     * Serializes a stack (empty stacks become an empty tag).
-     */
-    public static CompoundTag saveStack(ItemStack stack, HolderLookup.Provider registries) {
-        //? if >=1.21 {
-        Tag tag = stack.saveOptional(registries);
-        return tag instanceof CompoundTag compound ? compound : new CompoundTag();
-        //?} else {
-        /*return stack.save(new CompoundTag());
-        *///?}
-    }
-
-    /**
-     * Deserializes a stack written by {@link #saveStack}; returns {@link ItemStack#EMPTY} on invalid data.
-     */
-    public static ItemStack loadStack(CompoundTag tag, HolderLookup.Provider registries) {
-        //? if >=1.21 {
-        return ItemStack.parseOptional(registries, tag);
-        //?} else {
-        /*return ItemStack.of(tag);
-        *///?}
-    }
-
-    /**
      * Writes a slot list to {@code tag} under {@code "Items"} (vanilla container format).
      */
     public static void saveItems(CompoundTag tag, NonNullList<ItemStack> items, HolderLookup.Provider registries) {
@@ -119,14 +95,6 @@ public final class VersionCompat {
     }
 
     // ---- Custom item data (NBT on 1.20.1, CUSTOM_DATA component on 1.21+) ----
-
-    public static boolean hasCustomData(ItemStack stack) {
-        //? if >=1.21 {
-        return stack.has(DataComponents.CUSTOM_DATA);
-        //?} else {
-        /*return stack.hasTag();
-        *///?}
-    }
 
     /**
      * Returns a <b>copy</b> of the custom data of a stack (empty tag if none). Use {@link #setCustomData}

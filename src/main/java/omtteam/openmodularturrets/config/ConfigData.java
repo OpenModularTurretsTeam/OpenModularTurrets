@@ -180,7 +180,7 @@ public class ConfigData {
         public boolean globalCanTargetMobs = true;
         @Comment("Turrets warn players with an audible alarm when they enter the warning range.")
         public boolean turretAlarmSound = true;
-        @Comment("Turrets are breakable with tools.")
+        @Comment("Turrets are breakable with a pickaxe (needs a restart).")
         public boolean turretBreakable = false;
         @Comment("Trusted players take damage when accidentally hit.")
         public boolean turretDamageTrustedPlayers = false;

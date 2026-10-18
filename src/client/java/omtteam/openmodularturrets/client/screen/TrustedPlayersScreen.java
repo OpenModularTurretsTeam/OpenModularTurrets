@@ -12,7 +12,6 @@ import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.client.compat.ClientNetworkCompat;
 import omtteam.openmodularturrets.client.compat.CompatScreen;
 import omtteam.openmodularturrets.core.security.AccessLevel;
-import omtteam.openmodularturrets.core.security.AccessProfile;
 import omtteam.openmodularturrets.core.security.TrustedPlayer;
 import omtteam.openmodularturrets.network.OMTPackets;
 import omtteam.openmodularturrets.network.TrustPackets;

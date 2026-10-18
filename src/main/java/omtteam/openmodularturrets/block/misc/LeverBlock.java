@@ -2,6 +2,7 @@ package omtteam.openmodularturrets.block.misc;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -28,6 +29,7 @@ import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.misc.LeverBlockEntity;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
+import omtteam.openmodularturrets.registry.ModSounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 //? if >=1.21 {
@@ -126,7 +128,10 @@ public class LeverBlock extends BaseEntityBlock implements InteractiveBlock {
         }
     }
 
-    /** 1.12.2 {@code onBlockActivated}: a new turn (and its energy) only starts when the previous one finished. */
+    /**
+     * 1.12.2 {@code onBlockActivated}: a new turn (and its energy) only starts when the previous one finished. Each
+     * turn that charges the base plays the windup sound.
+     */
     @Override
     public InteractionResult onUse(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
@@ -135,6 +140,7 @@ public class LeverBlock extends BaseEntityBlock implements InteractiveBlock {
             if (base != null) {
                 base.getLogic().getEnergy().insert(ENERGY_PER_TURN, false);
                 level.blockEvent(pos, this, LeverBlockEntity.EVENT_TURN, 0);
+                level.playSound(null, pos, ModSounds.WINDUP, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide());

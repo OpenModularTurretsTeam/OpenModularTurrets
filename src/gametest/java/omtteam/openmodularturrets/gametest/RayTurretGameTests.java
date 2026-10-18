@@ -98,8 +98,8 @@ public class RayTurretGameTests implements FabricGameTest {
             helper.assertTrue(used == powerPerShot, "Railgun used " + used + " energy instead of " + powerPerShot);
             long hits = shots.stream().filter(shot -> shot.hit() == target).count();
             helper.assertTrue(hits > 0, "The railgun ray did not hit the target");
-            float perRay = (float) (OMTConfig.get().turrets.get(TurretType.RAILGUN_TURRET).baseDamage
-                    * (target.getArmorValue() / 20F + 0.6F));
+            float perRay = OMTConfig.get().turrets.get(TurretType.RAILGUN_TURRET).baseDamage
+                    * (target.getArmorValue() / 20F + 0.6F);
             float expected = perRay * hits;
             float dealt = startHealth - target.getHealth();
             helper.assertTrue(Math.abs(dealt - expected) < 0.01F, "Railgun dealt " + dealt + " damage with " + hits

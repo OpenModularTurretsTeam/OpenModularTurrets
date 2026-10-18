@@ -5,6 +5,7 @@ import omtteam.openmodularturrets.core.security.PlayerInfo;
 import omtteam.openmodularturrets.core.security.SecurityEnvironment;
 import omtteam.openmodularturrets.core.settings.BaseTierStats;
 import omtteam.openmodularturrets.core.target.EntityCategory;
+import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.target.TargetSelector;
 import omtteam.openmodularturrets.core.target.TargetingPriority;
 import omtteam.openmodularturrets.core.turret.TurretType;
@@ -92,7 +93,7 @@ class TargetingTest {
     }
 
     private Optional<Integer> targetId() {
-        return logic.getTarget(Face.UP).map(t -> t.getId());
+        return logic.getTarget(Face.UP).map(TargetEntity::getId);
     }
 
     @Nested
@@ -406,7 +407,7 @@ class TargetingTest {
             // potato cannon weights {-5, -5, -5, 1, 10}: prefers near, healthy-looking (low max HP) targets
             logic = base(1, Map.of(Face.UP, new Neighbour.Turret(TurretType.POTATO_CANNON_TURRET)));
             logic.setRange(15);
-            FakeTarget far = zombie(110, 65, 100);
+            zombie(110, 65, 100);
             FakeTarget near = zombie(102, 65, 100);
             search();
             assertEquals(Optional.of(near.getId()), targetId());
@@ -418,7 +419,7 @@ class TargetingTest {
             settings.turrets.put(TurretType.MELEE_TURRET, FakeSettings.stats(10, 20, 8, 2, 0, 4, 0.1D, 0.2D, 0, 0D, 0.08D, 0.1D));
             logic = base(1, Map.of(Face.UP, new Neighbour.Turret(TurretType.MELEE_TURRET)));
             logic.setRange(10);
-            FakeTarget plain = zombie(101, 65, 100);
+            zombie(101, 65, 100);
             FakeTarget armored = zombie(108, 65, 100);
             armored.armor = 10;
             search();
