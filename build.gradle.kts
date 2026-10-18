@@ -2,6 +2,8 @@ plugins {
     id("net.fabricmc.fabric-loom-remap")
     id("me.modmuss50.mod-publish-plugin")
     `maven-publish`
+    // Code quality report (gradle/pmd/ruleset.xml): complexity and size, report only
+    pmd
 }
 
 val modId = property("mod_id") as String
@@ -79,6 +81,27 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:${property("junit_version")}"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    // Architecture rules (src/test/.../architecture): they read the compiled main and client classes
+    testImplementation("com.tngtech.archunit:archunit-junit5:${property("archunit_version")}")
+    testRuntimeOnly(sourceSets["client"].output)
+}
+
+// Report only for now: the limits in gradle/pmd/ruleset.xml are not enforced yet. Runs for the active version only
+// (both versions share the source); reports in versions/<v>/build/reports/pmd/{main,client}.html
+pmd {
+    toolVersion = property("pmd_version") as String
+    sourceSets = listOf(project.sourceSets["main"], project.sourceSets["client"])
+    ruleSets = listOf()
+    ruleSetFiles = rootProject.files("gradle/pmd/ruleset.xml")
+    isIgnoreFailures = true
+    isConsoleOutput = false
+}
+tasks.withType<Pmd>().configureEach {
+    enabled = stonecutter.current.isActive
+    reports {
+        html.required = true
+        xml.required = true
+    }
 }
 
 java {
