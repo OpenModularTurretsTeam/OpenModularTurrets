@@ -123,6 +123,7 @@ The Stonecutter DSL changes between releases. If this does not match the install
 ./gradlew :1.21.1:runGameTest              # server game tests for one version (also run by check / build)
 ./gradlew :1.20.1:runDatagen               # regenerate data for a version
 ./gradlew :1.21.1:runDatagen
+./gradlew dependencyMap                    # interactive package dependency map -> build/reports/dependency-map/index.html
 ./gradlew chiseledPublish                  # upload all versions to CurseForge/Modrinth (custom task)
 ./gradlew :1.21.1:publishMods              # upload one version
 ```

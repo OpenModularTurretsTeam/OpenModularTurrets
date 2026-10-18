@@ -126,3 +126,157 @@ tasks.register("releaseChangelog") {
         println("CHANGELOG.md: released ${sections.sumOf { s -> s.lines().count { it.startsWith("- ") } }} entries as $version")
     }
 }
+
+// ---- Dependency map (./gradlew dependencyMap) ----
+
+/**
+ * Writes an interactive map of the package dependencies to build/reports/dependency-map/index.html: one node per
+ * package (tests as their own nodes), one arrow per package pair with the class imports behind it, the libraries each
+ * package uses and the architecture rules (core isolation, no client code in main). Built from the active import lines
+ * of src/{main,client,gametest,test}; imports in comments (inactive Stonecutter branches) do not count. Cycles and
+ * layers are worked out by the page (gradle/dependency-map/template.html).
+ */
+abstract class DependencyMapTask : DefaultTask() {
+    @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val sources: DirectoryProperty
+
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val template: RegularFileProperty
+
+    @get:OutputFile
+    abstract val output: RegularFileProperty
+
+    private class SourceClass(val fqcn: String, val set: String, val imports: List<String>, val lines: Int, val path: String)
+
+    @TaskAction
+    fun write() {
+        val base = "omtteam.openmodularturrets"
+        val libraries = listOf(
+            "net.minecraft." to "Minecraft", "com.mojang." to "Minecraft", "net.fabricmc." to "Fabric",
+            "team.reborn." to "Team Reborn Energy", "snownee.jade." to "Jade", "com.google.gson." to "Gson",
+            "org.junit." to "JUnit",
+        )
+        val importLine = Regex("""^import\s+(static\s+)?([\w.]+?)(\.\*)?;""")
+        val srcDir = sources.get().asFile
+        val repo = srcDir.parentFile
+
+        val classes = linkedMapOf<String, SourceClass>()
+        for (set in listOf("main", "client", "gametest", "test")) {
+            val dir = srcDir.resolve("$set/java")
+            if (!dir.isDirectory) continue
+            dir.walkTopDown().filter { it.isFile && it.extension == "java" && it.name != "package-info.java" }
+                .sortedBy { it.path }.forEach { file ->
+                    val fqcn = file.relativeTo(dir).path.removeSuffix(".java").replace(java.io.File.separatorChar, '.')
+                    val text = file.readText()
+                    val imports = mutableListOf<String>()
+                    var inComment = false
+                    for (line in text.lines()) {
+                        val trimmed = line.trimStart()
+                        if (inComment) {
+                            if ("*/" in line) inComment = false
+                            continue
+                        }
+                        if (trimmed.startsWith("/*")) {
+                            inComment = "*/" !in trimmed.substring(2)
+                            continue
+                        }
+                        val match = importLine.find(line) ?: continue
+                        val target = match.groupValues[2]
+                        imports += if (match.groupValues[1].isNotEmpty()) target.substringBeforeLast('.') else target
+                    }
+                    classes[fqcn] = SourceClass(fqcn, set, imports, text.count { it == '\n' } + 1, file.relativeTo(repo).path)
+                }
+        }
+
+        // tests share packages with the main code, so they are keyed apart
+        fun packageOf(c: SourceClass) = c.fqcn.substringBeforeLast('.').let { if (c.set == "test") "test:$it" else it }
+        fun short(pkg: String): String = when {
+            pkg.startsWith("test:") -> "test: " + short(pkg.removePrefix("test:"))
+            pkg == base -> "(root)"
+            pkg.startsWith("$base.") -> pkg.removePrefix("$base.")
+            else -> pkg
+        }
+        fun simpleName(fqcn: String) = fqcn.substringAfterLast('.')
+        /** An imported name -> the class file of this mod it refers to (nested classes map to their file). */
+        fun resolve(target: String): String? {
+            var candidate = target
+            while (true) {
+                if (candidate in classes) return candidate
+                val dot = candidate.lastIndexOf('.')
+                if (dot < 0) return null
+                candidate = candidate.substring(0, dot)
+            }
+        }
+        fun isCore(id: String) = id.startsWith("core")
+
+        class Node(val id: String, var set: String) {
+            val classes = mutableListOf<Map<String, Any>>()
+            var lines = 0
+            val external = sortedMapOf<String, java.util.SortedSet<String>>()
+        }
+        val nodes = sortedMapOf<String, Node>()
+        val edges = sortedMapOf<String, Triple<String, String, java.util.SortedSet<String>>>()
+        for (c in classes.values) {
+            val pkg = packageOf(c)
+            val node = nodes.getOrPut(pkg) { Node(short(pkg), c.set) }
+            if (node.set != c.set) node.set = "mixed"
+            node.classes += mapOf("name" to simpleName(c.fqcn), "lines" to c.lines, "path" to c.path)
+            node.lines += c.lines
+            for (target in c.imports) {
+                if (target == base || target.startsWith("$base.")) {
+                    val to = resolve(target) ?: continue
+                    val toPkg = packageOf(classes.getValue(to))
+                    if (toPkg == pkg) continue
+                    edges.getOrPut("$pkg→$toPkg") { Triple(short(pkg), short(toPkg), sortedSetOf()) }
+                        .third += simpleName(c.fqcn) + "\u0000" + simpleName(to)
+                } else {
+                    val group = libraries.firstOrNull { target.startsWith(it.first) }?.second ?: continue
+                    node.external.getOrPut(group) { sortedSetOf() } += simpleName(c.fqcn)
+                }
+            }
+        }
+        val setOf = nodes.values.associate { it.id to it.set }
+        val data = mapOf(
+            "classCount" to classes.size,
+            "nodes" to nodes.values.map { n ->
+                mapOf(
+                    "id" to n.id, "set" to n.set, "lines" to n.lines,
+                    "classes" to n.classes.sortedBy { it["name"] as String },
+                    "external" to n.external.mapValues { it.value.toList() },
+                    "violations" to n.external.keys.filter { isCore(n.id) && it != "JUnit" }.map { "core uses $it" },
+                )
+            },
+            "edges" to edges.values.map { (source, target, imports) ->
+                mapOf(
+                    "source" to source, "target" to target,
+                    "imports" to imports.map { it.split('\u0000') },
+                    "violations" to listOfNotNull(
+                        "core depends on non-core code".takeIf { isCore(source) && !isCore(target) },
+                        "main code depends on client code".takeIf { setOf[source] == "main" && setOf[target] == "client" },
+                    ),
+                )
+            },
+        )
+        val json = groovy.json.JsonOutput.toJson(data).replace("</", "<\\/")
+        val page = template.get().asFile.readText()
+        check("/*DATA*/null" in page) { "The template has no /*DATA*/null placeholder" }
+        val file = output.get().asFile
+        file.parentFile.mkdirs()
+        file.writeText(
+            "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n" +
+                    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n" +
+                    page.replace("/*DATA*/null", json) + "\n</html>\n"
+        )
+        println("Dependency map: ${nodes.size} packages, ${edges.size} dependencies, ${classes.size} classes -> ${file.toURI()}")
+    }
+}
+
+tasks.register<DependencyMapTask>("dependencyMap") {
+    group = "documentation"
+    description = "Writes an interactive package dependency map to build/reports/dependency-map/index.html"
+    sources = layout.projectDirectory.dir("src")
+    template = layout.projectDirectory.file("gradle/dependency-map/template.html")
+    output = layout.buildDirectory.file("reports/dependency-map/index.html")
+}
