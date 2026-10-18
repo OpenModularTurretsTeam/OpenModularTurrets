@@ -52,7 +52,6 @@ public class BlockEntityBaseWorld implements BaseWorld {
         for (int i = 0; i < TurretBaseInventory.AMMO_COUNT; i++) {
             slots.add(new ContainerItemSlot(inventory, TurretBaseInventory.AMMO_START + i));
         }
-        // TODO: append the slots of attached inventory expanders once they are ported
         return slots;
     }
 

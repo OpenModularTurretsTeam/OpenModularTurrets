@@ -67,7 +67,7 @@ public final class TurretState {
         Optional<AmmoDraw> ammo = Optional.empty();
         if (logic.getRequiredAmmo(type).isPresent()) {
             ammo = logic.drawAmmo(type);
-            if (ammo.isEmpty()) return Optional.empty(); // 1.12.2: "TODO: Play some kind of clicking sound?"
+            if (ammo.isEmpty()) return Optional.empty();
         }
         logic.consumeShotEnergy(type);
         ticksSinceShot = 0;
