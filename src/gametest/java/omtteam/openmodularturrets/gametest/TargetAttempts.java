@@ -31,6 +31,11 @@ final class TargetAttempts {
         return target;
     }
 
+    /** The number of the current attempt, starting at 1. */
+    int attempt() {
+        return attempt;
+    }
+
     /** Whether the current target took damage. */
     boolean targetDamaged() {
         return target.getHealth() < target.getMaxHealth();

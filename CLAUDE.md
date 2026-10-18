@@ -144,9 +144,11 @@ The game logic of the mod should be implemented in the "core" folder and be comp
 The logic consists of:
 
 1. The turret base behaviour (targeting, ammo handling, upgrade/addon handling)
-2. The trusted player permission system
+   and the turret's own rules (`TurretState`: fire cooldown, concealer cycle; `RayMath`, `ProjectileMath`: damage formulas)
+2. The trusted player permission system (incl. who turret damage may hit: `DamageRules`)
 3. an abstract representation of a target entity
-4. Unit Tests to test its behaviour.
+4. The generator's burning rules (`core.generator.GeneratorLogic`)
+5. Unit Tests to test its behaviour.
 
 `./gradlew check` runs `verifyCoreIsolation`, which fails if anything under `core/` imports `net.minecraft`, `net.fabricmc`,
 `com.mojang`, `team.reborn` or non-core mod packages. Tests live in `src/test/java` (JUnit, test-only dependency).

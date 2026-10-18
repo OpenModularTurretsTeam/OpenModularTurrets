@@ -11,6 +11,8 @@ import net.minecraft.world.level.Level;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.base.LivingTargetEntity;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
+import omtteam.openmodularturrets.core.security.DamageRules;
+import omtteam.openmodularturrets.core.security.DamageRules.Victim;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.TrustManager;
 import omtteam.openmodularturrets.security.PlayerAdapter;
@@ -46,23 +48,19 @@ public final class TurretDamage {
         target.invulnerableTime = 0;
     }
 
-    /**
-     * 1.12.2 {@code OMTUtil.canDamageEntity}: never turret projectiles; players and pets of players only if the
-     * base's trust rules allow it. Without a loaded base players are spared and everything else is hit.
-     */
+    /** {@link DamageRules#canDamage} with the trust list of the base at {@code basePos}. */
     public static boolean canDamage(Level level, @Nullable BlockPos basePos, Entity entity) {
-        if (entity instanceof TurretProjectile) return false;
-        Optional<TrustManager> trust = trustManager(level, basePos);
-        if (entity instanceof Player player) {
-            return trust.map(t -> t.canDamagePlayer(PlayerAdapter.identity(player))).orElse(false);
-        }
+        return DamageRules.canDamage(trustManager(level, basePos), victim(entity));
+    }
+
+    private static Victim victim(Entity entity) {
+        if (entity instanceof TurretProjectile) return new Victim.Projectile();
+        if (entity instanceof Player player) return new Victim.Player(PlayerAdapter.identity(player));
         if (entity instanceof LivingEntity living) {
             Optional<PlayerIdentity> owner = new LivingTargetEntity(living).getOwner();
-            if (owner.isPresent()) {
-                return trust.map(t -> t.canDamagePlayer(owner.get())).orElse(false);
-            }
+            if (owner.isPresent()) return new Victim.Pet(owner.get());
         }
-        return true;
+        return new Victim.Other();
     }
 
     private static Optional<TrustManager> trustManager(Level level, @Nullable BlockPos basePos) {

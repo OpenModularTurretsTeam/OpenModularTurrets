@@ -30,7 +30,17 @@ public final class ProjectileMath {
      */
     public static int damageWithAmp(int damage, int ampLevel, double damageAmp, float targetHealth) {
         if (ampLevel <= 0) return damage;
-        return damage + (int) ((int) targetHealth * (damageAmp * ampLevel));
+        return damage + (int) ampBonus(targetHealth, damageAmp * ampLevel);
+    }
+
+    /**
+     * The damage amp addon's extra damage, shared by projectiles and rays: a share of the target's current health,
+     * rounded down to whole points first.
+     *
+     * @param ampFactor the configured amp factor per addon level times the addon level
+     */
+    public static double ampBonus(float targetHealth, double ampFactor) {
+        return (int) targetHealth * ampFactor;
     }
 
     /** Grenades deal 90 % normal and 10 % armor-piercing damage. */

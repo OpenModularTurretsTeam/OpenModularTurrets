@@ -21,11 +21,14 @@ import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.config.ConfigData;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.generator.GeneratorLogic;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
 import team.reborn.energy.api.EnergyStorage;
 import team.reborn.energy.api.EnergyStorageUtil;
 import team.reborn.energy.api.base.SimpleEnergyStorage;
+
+import java.util.OptionalLong;
 
 /**
  * Generator (new block, not in the 1.12.2 version): burns furnace fuel into energy and pushes it into all neighbouring energy
@@ -40,8 +43,7 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
         }
     };
     private final SimpleEnergyStorage energy;
-    private int burnTime;
-    private int burnDuration;
+    private final GeneratorLogic logic = new GeneratorLogic();
     @Nullable
     private Storage<ItemVariant> itemStorage;
 
@@ -97,11 +99,11 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
     }
 
     public int getBurnTime() {
-        return burnTime;
+        return logic.getBurnTime();
     }
 
     public int getBurnDuration() {
-        return burnDuration;
+        return logic.getBurnDuration();
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, GeneratorBlockEntity generator) {
@@ -112,29 +114,33 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
         }
     }
 
-    /** Burns one tick of fuel if the buffer has room; returns whether it burned. */
+    /** Burns one tick of fuel ({@link GeneratorLogic#burn}); returns whether it burned. */
     private boolean burn() {
-        if (energy.amount >= energy.capacity) return false;
-        if (burnTime <= 0 && !consumeFuel()) return false;
-        burnTime--;
-        energy.amount = Math.min(energy.capacity, energy.amount + OMTConfig.get().miscellaneous.generatorEnergyPerTick);
+        OptionalLong produced = logic.burn(energy.capacity - energy.amount,
+                OMTConfig.get().miscellaneous.generatorEnergyPerTick, this::consumeFuel);
+        if (produced.isEmpty()) return false;
+        energy.amount += produced.getAsLong();
         setChanged();
         return true;
     }
 
-    /** Starts burning the next fuel item, leaving its remainder (lava bucket → bucket) like a furnace. */
-    private boolean consumeFuel() {
+    /**
+     * Removes the next fuel item, leaving its remainder (lava bucket → bucket) like a furnace.
+     *
+     * @return its burn time, 0 if the slot holds no fuel
+     */
+    private int consumeFuel() {
         ItemStack stack = fuel.getItem(0);
-        if (stack.isEmpty() || !isFuel(stack.getItem())) return false;
+        if (stack.isEmpty() || !isFuel(stack.getItem())) return 0;
         Item remainder = stack.getItem().getCraftingRemainingItem();
-        burnDuration = burnTime = FuelRegistry.INSTANCE.get(stack.getItem());
+        int ticks = FuelRegistry.INSTANCE.get(stack.getItem());
         stack.shrink(1);
         if (stack.isEmpty() && remainder != null) {
             fuel.setItem(0, new ItemStack(remainder));
         } else {
             fuel.setChanged();
         }
-        return true;
+        return ticks;
     }
 
     /** Pushes up to {@code generatorMaxOutput} per tick into all neighbours together. */
@@ -153,16 +159,15 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
         VersionCompat.loadItems(tag, items, registries);
         fuel.setItem(0, items.get(0));
         energy.amount = Math.min(energy.capacity, tag.getLong("Energy"));
-        burnTime = tag.getInt("BurnTime");
-        burnDuration = tag.getInt("BurnDuration");
+        logic.load(tag.getInt("BurnTime"), tag.getInt("BurnDuration"));
     }
 
     @Override
     protected void writeData(CompoundTag tag, HolderLookup.Provider registries) {
         VersionCompat.saveItems(tag, NonNullList.of(ItemStack.EMPTY, fuel.getItem(0)), registries);
         tag.putLong("Energy", energy.amount);
-        tag.putInt("BurnTime", burnTime);
-        tag.putInt("BurnDuration", burnDuration);
+        tag.putInt("BurnTime", logic.getBurnTime());
+        tag.putInt("BurnDuration", logic.getBurnDuration());
     }
 
     /** The GUI gets its values from the menu and the flame from the block state. */

@@ -22,6 +22,7 @@ import omtteam.openmodularturrets.core.base.AmmoDraw;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.core.turret.TurretMath;
+import omtteam.openmodularturrets.core.turret.TurretState;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Vector3;
@@ -41,8 +42,6 @@ import java.util.Optional;
  * fires. The weapon (projectile or ray) comes from {@link TurretWeapon}.
  */
 public class TurretBlockEntity extends CompatBlockEntity {
-    /** 1.12.2 {@code concealmentChecks}: retract after 40 ticks without a target. */
-    private static final int CONCEAL_AFTER_TICKS = 40;
     /** 1.12.2 {@code AbstractDirectedTurret.update}: the aim was sent to clients every 5 ticks. */
     private static final int SYNC_INTERVAL = 5;
     /** Smaller aim changes are not synced. */
@@ -52,10 +51,8 @@ public class TurretBlockEntity extends CompatBlockEntity {
     /** Degrees the melee turret's top piece turns per tick while active. */
     private static final float CLIENT_SPIN_RATE = 36.0F;
 
-    /** Ticks since the last shot (1.12.2 {@code ticks}). */
-    private int ticksSinceShot;
-    private int ticksWithoutTarget;
-    private boolean playedDeploy;
+    /** Cooldown and concealment (see {@link TurretState}). */
+    private final TurretState state = new TurretState();
 
     /** Aim relative to the mounting face (see {@link TurretMath}), in degrees; synced to clients. */
     private float yaw;
@@ -121,7 +118,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
             level.destroyBlock(pos, true);
             return;
         }
-        turret.ticksSinceShot++;
+        turret.state.tick();
         turret.ticksSinceSync++;
         TurretBaseLogic logic = base.get().getLogic();
         boolean engaging = false;
@@ -246,30 +243,21 @@ public class TurretBlockEntity extends CompatBlockEntity {
         }
     }
 
-    /**
-     * 1.12.2 {@code TurretHead.concealmentChecks}: with a concealer addon the turret retracts (no shape, retract
-     * sound) after 40 ticks without a target and deploys again as soon as it has one.
-     */
+    /** Applies {@link TurretState#updateConcealment}: a retracted turret has no shape. */
     private void updateConcealment(TurretBaseLogic logic, boolean hasTarget) {
         boolean concealed = getBlockState().getValue(TurretBlock.CONCEALED);
-        if (!logic.isConcealingTurrets()) {
-            if (concealed) setConcealed(false);
-            return;
-        }
-        if (hasTarget) {
-            ticksWithoutTarget = 0;
-            if (!playedDeploy) {
+        switch (state.updateConcealment(logic.isConcealingTurrets(), concealed, hasTarget)) {
+            case DEPLOY -> {
                 playSound(ModSounds.TURRET_DEPLOY);
-                playedDeploy = true;
                 setConcealed(false);
             }
-        } else if (!concealed && ticksWithoutTarget >= CONCEAL_AFTER_TICKS) {
-            ticksWithoutTarget = 0;
-            playedDeploy = false;
-            playSound(ModSounds.TURRET_RETRACT);
-            setConcealed(true);
-        } else {
-            ticksWithoutTarget++;
+            case RETRACT -> {
+                playSound(ModSounds.TURRET_RETRACT);
+                setConcealed(true);
+            }
+            case REVEAL -> setConcealed(false);
+            case NONE -> {
+            }
         }
     }
 
@@ -280,9 +268,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
     }
 
     /**
-     * Common part of every shot (1.12.2 {@code updateChecks} / {@code AbstractDirectedTurret.update}): the cooldown
-     * must have passed and the base must be active with enough energy; ammo turrets take {@code 1 + scattershot}
-     * items. Then the energy is consumed and the cooldown restarts.
+     * Starts a shot ({@link TurretState#beginShot}) and keeps its ammo in {@link #lastAmmo}.
      *
      * @return the base, or empty if the turret cannot shoot now (nothing was consumed)
      */
@@ -290,18 +276,9 @@ public class TurretBlockEntity extends CompatBlockEntity {
         lastAmmo = null;
         Optional<TurretBaseBlockEntity> base = getBase();
         if (base.isEmpty()) return Optional.empty();
-        TurretBaseLogic logic = base.get().getLogic();
-        TurretType type = getTurretType();
-        if (ticksSinceShot < logic.getFireCooldownTicks(type) || !logic.isActive() || !logic.hasEnergyForShot(type)) {
-            return Optional.empty();
-        }
-        if (logic.getRequiredAmmo(type).isPresent()) {
-            Optional<AmmoDraw> drawn = logic.drawAmmo(type);
-            if (drawn.isEmpty()) return Optional.empty(); // 1.12.2: "TODO: Play some kind of clicking sound?"
-            lastAmmo = drawn.get();
-        }
-        logic.consumeShotEnergy(type);
-        ticksSinceShot = 0;
+        Optional<TurretState.Shot> shot = state.beginShot(base.get().getLogic(), getTurretType());
+        if (shot.isEmpty()) return Optional.empty();
+        lastAmmo = shot.get().ammo().orElse(null);
         return base;
     }
 
@@ -384,7 +361,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
     @Override
     protected void readData(CompoundTag tag, HolderLookup.Provider registries) {
         if (tag.contains("TicksSinceShot")) {
-            ticksSinceShot = tag.getInt("TicksSinceShot");
+            state.setTicksSinceShot(tag.getInt("TicksSinceShot"));
         }
         yaw = tag.getFloat("Yaw");
         pitch = tag.getFloat("Pitch");
@@ -399,7 +376,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
     @Override
     protected void writeData(CompoundTag tag, HolderLookup.Provider registries) {
         writeClientData(tag, registries);
-        tag.putInt("TicksSinceShot", ticksSinceShot);
+        tag.putInt("TicksSinceShot", state.getTicksSinceShot());
     }
 
     /** Clients only need the aim and whether the turret is active. */
