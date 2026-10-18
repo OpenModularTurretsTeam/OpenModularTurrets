@@ -67,7 +67,6 @@ final class BuiltinTurrets {
                 (level, ammo, target) -> withItem(ModEntities.DISPOSABLE.create(level), ammo, Items.COBBLESTONE));
         if (type == TurretType.POTATO_CANNON_TURRET) return ProjectileWeapon.of(ModSounds.POTATO_LAUNCH,
                 (level, ammo, target) -> withItem(ModEntities.POTATO.create(level), ammo, Items.POTATO));
-        // 1.12.2 CrossbowTurretTileEntity used the potato launch sound
         if (type == TurretType.CROSSBOW_TURRET) return ProjectileWeapon.of(ModSounds.POTATO_LAUNCH,
                 (level, ammo, target) -> ModEntities.ARROW.create(level));
         if (type == TurretType.MACHINE_GUN_TURRET) return ProjectileWeapon.of(ModSounds.MACHINE_GUN_LAUNCH,
@@ -84,7 +83,6 @@ final class BuiltinTurrets {
                 });
         if (type == TurretType.PLASMA_TURRET) return ProjectileWeapon.of(ModSounds.PLASMA_LAUNCH,
                 (level, ammo, target) -> ModEntities.PLASMA.create(level));
-        // 1.12.2 MeleeTurretTileEntity used the relativistic (now slowing) launch sound
         if (type == TurretType.MELEE_TURRET) return new AreaWeapon(ModSounds.SLOWING_LAUNCH, EffectWeapons::meleeArea,
                 EffectWeapons::strike);
         if (type == TurretType.SLOWING_TURRET) return new EffectWeapon(ModSounds.SLOWING_LAUNCH, EffectWeapons::slow);

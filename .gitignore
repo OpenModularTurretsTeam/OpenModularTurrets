@@ -10,7 +10,7 @@ versions/*/src/main/generated/.cache/
 run/
 versions/*/run/
 
-# IDE
+# IDE etc.
 .idea/
 *.iml
 .vscode/
@@ -18,9 +18,9 @@ out/
 bin/
 .kotlin/
 /.editorconfig
+/.claude/
 
 # old mods
 oldmod/
 oldmod2/
 oldlib/
-
