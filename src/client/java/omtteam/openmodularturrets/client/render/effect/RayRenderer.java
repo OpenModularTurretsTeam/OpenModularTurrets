@@ -16,7 +16,6 @@ import omtteam.openmodularturrets.network.RayPacket;
 import org.joml.Matrix4f;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -66,11 +65,7 @@ public final class RayRenderer {
     }
 
     private static void tick() {
-        Iterator<ActiveRay> iterator = RAYS.iterator();
-        while (iterator.hasNext()) {
-            ActiveRay ray = iterator.next();
-            if (--ray.ticksLeft()[0] <= 0) iterator.remove();
-        }
+        RAYS.removeIf(ray -> --ray.ticksLeft()[0] <= 0);
     }
 
     private static void render(PoseStack poseStack, Vec3 camera) {

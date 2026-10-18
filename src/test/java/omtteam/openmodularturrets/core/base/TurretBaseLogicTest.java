@@ -7,7 +7,6 @@ import omtteam.openmodularturrets.core.security.PlayerInfo;
 import omtteam.openmodularturrets.core.security.SecurityEnvironment;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.core.world.Box;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
 import org.junit.jupiter.api.BeforeEach;
@@ -203,6 +202,9 @@ class TurretBaseLogicTest {
 
             logic.getEnergy().generate(80000);
             assertEquals(10, logic.getAmmoLevel(TurretType.LASER_TURRET)); // 80000 / 8000
+            settings.turrets.put(TurretType.LASER_TURRET, FakeSettings.stats(25, 10, 4, 0, 10, 4, 0.06D, 0.125D, 2,
+                    0.2D, 0.08D, 0.1D));
+            assertEquals(Integer.MAX_VALUE, logic.getAmmoLevel(TurretType.LASER_TURRET), "no power usage: unlimited");
 
             settings.needAmmo = false;
             assertEquals(Integer.MAX_VALUE, logic.getAmmoLevel(TurretType.MACHINE_GUN_TURRET));
@@ -574,18 +576,13 @@ class TurretBaseLogicTest {
             TurretBaseLogic copy = base(5);
             copy.loadState(state);
             assertEquals(state, copy.getState());
+            assertEquals(1, copy.getKills());
+            assertEquals(1, copy.getPlayerKills());
         }
-    }
 
-    @Nested
-    class Entities {
         @Test
-        void entitiesWithinRangeUseTheOldCube() {
-            TurretBaseLogic logic = base(5);
-            logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET));
-            logic.setRange(5);
-            logic.getEntitiesWithinRange();
-            assertEquals(new Box(94, 58, 94, 106, 70, 106), world.queriedBoxes.get(0));
+        void newBaseHasTheDefaultState() {
+            assertEquals(TurretBaseLogic.State.defaults(), base(1).getState());
         }
     }
 

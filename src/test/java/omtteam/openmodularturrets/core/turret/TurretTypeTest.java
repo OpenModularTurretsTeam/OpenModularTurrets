@@ -118,7 +118,7 @@ class TurretTypeTest {
 
     @Test
     void ammoTypesAreValues() {
-        assertEquals(AmmoType.of("openmodularturrets", "bullet"), AmmoType.BULLET);
+        assertEquals(AmmoType.BULLET, AmmoType.of("openmodularturrets", "bullet"));
         assertEquals("othermod:shell", AmmoType.of("othermod", "shell").getId());
         assertThrows(IllegalArgumentException.class, () -> AmmoType.of("othermod", "Shell"));
     }

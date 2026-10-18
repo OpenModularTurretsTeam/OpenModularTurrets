@@ -145,7 +145,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
         } else if (logic.isActive()) {
             Optional<Entity> target = logic.getTarget(turret.getFace())
                     .filter(LivingTargetEntity.class::isInstance)
-                    .map(t -> (Entity) ((LivingTargetEntity) t).getEntity());
+                    .map(t -> ((LivingTargetEntity) t).getEntity());
             turret.updateConcealment(logic, target.isPresent());
             target.ifPresentOrElse(turret::engage, turret::forgetTarget);
             engaging = target.isPresent();

@@ -19,7 +19,6 @@ final class FakeWorld implements BaseWorld {
     final List<ItemSlot> upgradeSlots = new ArrayList<>(List.of(FakeSlot.empty(), FakeSlot.empty()));
     final List<TargetEntity> entities = new ArrayList<>();
     final List<TargetEntity> warned = new ArrayList<>();
-    final List<Box> queriedBoxes = new ArrayList<>();
     boolean solar;
     /** Entities whose line of sight is blocked. */
     Predicate<TargetEntity> blockedView = entity -> false;
@@ -51,7 +50,6 @@ final class FakeWorld implements BaseWorld {
 
     @Override
     public List<TargetEntity> getLivingEntities(Box box) {
-        queriedBoxes.add(box);
         return entities.stream().filter(e -> box.contains(e.getX(), e.getY(), e.getZ())).toList();
     }
 

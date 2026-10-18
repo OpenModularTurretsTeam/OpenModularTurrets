@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.blockentity.base;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.effect.MobEffects;
@@ -120,7 +121,7 @@ public class LivingTargetEntity extends TargetEntity {
         MinecraftServer server = entity.getServer();
         String name = "";
         if (server != null && server.getProfileCache() != null) {
-            name = server.getProfileCache().get(owner).map(profile -> profile.getName()).orElse("");
+            name = server.getProfileCache().get(owner).map(GameProfile::getName).orElse("");
         }
         return Optional.of(new PlayerIdentity(owner, name));
     }

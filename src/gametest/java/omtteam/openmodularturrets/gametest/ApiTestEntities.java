@@ -16,7 +16,7 @@ import java.util.Objects;
  */
 public final class ApiTestEntities implements ModInitializer {
     public static final EntityType<ApiTestProjectile> PROJECTILE = register("api_projectile",
-            EntityType.Builder.<ApiTestProjectile>of(ApiTestProjectile::new, MobCategory.MISC)
+            EntityType.Builder.of(ApiTestProjectile::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).noSave());
 
     private static <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {

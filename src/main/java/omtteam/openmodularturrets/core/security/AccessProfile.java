@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.core.security;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -13,30 +12,30 @@ import java.util.Set;
  * <p>
  * Every profile contains {@link AccessLevel#NONE} (the baseline of new trusted players and team members) and
  * {@link AccessLevel#ADMIN} (needed to manage the list).
+ *
+ * @param levels the allowed levels in increasing order, without duplicates
  */
-public final class AccessProfile {
+public record AccessProfile(List<AccessLevel> levels) {
     public static final AccessProfile ALL = of(AccessLevel.values());
     /** Trusted players (walk through, no rights) and admins (manage the block). */
     public static final AccessProfile TRUSTED_AND_ADMIN = of(AccessLevel.NONE, AccessLevel.ADMIN);
 
-    private final List<AccessLevel> levels;
-
-    private AccessProfile(Set<AccessLevel> allowed) {
+    /**
+     * Sorts the levels and drops duplicates.
+     *
+     * @throws IllegalArgumentException if {@link AccessLevel#NONE} or {@link AccessLevel#ADMIN} is missing
+     */
+    public AccessProfile {
+        Set<AccessLevel> allowed = EnumSet.noneOf(AccessLevel.class);
+        allowed.addAll(levels);
         if (!allowed.contains(AccessLevel.NONE) || !allowed.contains(AccessLevel.ADMIN)) {
             throw new IllegalArgumentException("A profile needs at least the levels NONE and ADMIN: " + allowed);
         }
-        this.levels = List.copyOf(new ArrayList<>(allowed));
+        levels = List.copyOf(allowed);
     }
 
     public static AccessProfile of(AccessLevel... allowed) {
-        Set<AccessLevel> set = EnumSet.noneOf(AccessLevel.class);
-        set.addAll(List.of(allowed));
-        return new AccessProfile(set);
-    }
-
-    /** The allowed levels in increasing order. */
-    public List<AccessLevel> levels() {
-        return levels;
+        return new AccessProfile(List.of(allowed));
     }
 
     public boolean allows(AccessLevel level) {

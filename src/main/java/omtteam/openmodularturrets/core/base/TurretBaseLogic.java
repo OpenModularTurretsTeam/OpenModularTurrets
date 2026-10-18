@@ -538,13 +538,6 @@ public class TurretBaseLogic {
         markSync();
     }
 
-    /**
-     * Living entities in the cube {@code base ± (range + 1)} (1.12.2 {@code getEntitiesWithinRange}).
-     */
-    public List<TargetEntity> getEntitiesWithinRange() {
-        return world.getLivingEntities(Box.around(world.getPosition(), targeting.getRange() + 1));
-    }
-
     // ---- Targeting ----
 
     /**

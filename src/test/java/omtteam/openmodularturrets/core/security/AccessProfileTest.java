@@ -52,5 +52,15 @@ class AccessProfileTest {
     void aProfileNeedsTheBaselineAndAdmin() {
         assertThrows(IllegalArgumentException.class, () -> AccessProfile.of(AccessLevel.ADMIN));
         assertThrows(IllegalArgumentException.class, () -> AccessProfile.of(AccessLevel.NONE, AccessLevel.OPEN_GUI));
+        assertThrows(IllegalArgumentException.class, () -> new AccessProfile(List.of()));
+    }
+
+    /** The record's public constructor normalizes and validates like {@link AccessProfile#of}. */
+    @Test
+    void theConstructorSortsAndDeduplicates() {
+        AccessProfile profile = new AccessProfile(List.of(AccessLevel.ADMIN, AccessLevel.NONE, AccessLevel.ADMIN));
+        assertEquals(List.of(AccessLevel.NONE, AccessLevel.ADMIN), profile.levels());
+        assertEquals(TRAP, profile);
+        assertThrows(IllegalArgumentException.class, () -> new AccessProfile(List.of(AccessLevel.OPEN_GUI)));
     }
 }

@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.blockentity.defense;
 
-import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -30,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
  * trap, admins (the owner always is one) also open its menus and manage the list. Traps saved before the trust list
  * existed load with the owner they had.
  */
-public class CamoTrapBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost, RenderAttachmentBlockEntity {
+public class CamoTrapBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost {
     private final CamoData camoData = new CamoData();
     private final TrustManager trustManager = new TrustManager(new LevelSecurityEnvironment(this::getLevel),
             this::syncToClient, AccessProfile.TRUSTED_AND_ADMIN);
@@ -99,9 +98,9 @@ public class CamoTrapBlockEntity extends CompatBlockEntity implements CamoHost, 
         return CamoPermissions.canManageTrap(trustManager, PlayerAdapter.info(player));
     }
 
-    /** What the model reads while the chunk is meshed (Fabric rendering data attachment). */
+    /** What the model reads while the chunk is meshed (Fabric block entity render data). */
     @Override
-    public @Nullable Object getRenderAttachmentData() {
+    public @Nullable Object getRenderData() {
         return camoData.get();
     }
 

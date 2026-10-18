@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.blockentity;
 
-import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -52,7 +51,7 @@ import java.util.Random;
  * connects it to the world: it forwards redstone, inventory and neighbour changes, ticks it, exposes the inventory
  * and energy to automation, and saves/syncs its state.
  */
-public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost, RenderAttachmentBlockEntity {
+public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost {
     private final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged,
             player -> Container.stillValidBlockEntity(this, player));
     private final TurretBaseLogic logic;
@@ -231,9 +230,9 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
         return CamoPermissions.canChangeLight(getTrustManager(), PlayerAdapter.info(player));
     }
 
-    /** What the model reads while the chunk is meshed (Fabric rendering data attachment). */
+    /** What the model reads while the chunk is meshed (Fabric block entity render data). */
     @Override
-    public @Nullable Object getRenderAttachmentData() {
+    public @Nullable Object getRenderData() {
         return isCamoEnabled() ? camoData.get() : null;
     }
 

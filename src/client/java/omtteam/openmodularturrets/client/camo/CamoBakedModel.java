@@ -4,10 +4,8 @@ import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.material.MaterialFinder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
-import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
-import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachedBlockView;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -50,7 +48,7 @@ public final class CamoBakedModel extends ForwardingBakedModel {
         DisguiseTransform transform = new DisguiseTransform(view, pos, camo, Minecraft.getInstance().getBlockColors());
         context.pushTransform(transform);
         try {
-            ((FabricBakedModel) camoModel).emitBlockQuads(view, camo, pos, randomSupplier, context);
+            camoModel.emitBlockQuads(view, camo, pos, randomSupplier, context);
         } finally {
             context.popTransform();
         }
@@ -58,11 +56,7 @@ public final class CamoBakedModel extends ForwardingBakedModel {
 
     @Nullable
     private static BlockState camoAt(BlockAndTintGetter view, BlockPos pos) {
-        if (view instanceof RenderAttachedBlockView attached
-                && attached.getBlockEntityRenderAttachment(pos) instanceof BlockState camo) {
-            return camo;
-        }
-        return null;
+        return view.getBlockEntityRenderData(pos) instanceof BlockState camo ? camo : null;
     }
 
     /**

@@ -28,13 +28,6 @@ public enum AccessLevel {
         return ordinal() >= other.ordinal();
     }
 
-    /** The level {@code delta} steps up or down, or {@code null} if that leaves the valid range. */
-    public AccessLevel shift(int delta) {
-        int index = ordinal() + delta;
-        AccessLevel[] values = values();
-        return index >= 0 && index < values.length ? values[index] : null;
-    }
-
     public static AccessLevel bySerializedName(String name, AccessLevel fallback) {
         for (AccessLevel level : values()) {
             if (level.serializedName.equals(name)) return level;
