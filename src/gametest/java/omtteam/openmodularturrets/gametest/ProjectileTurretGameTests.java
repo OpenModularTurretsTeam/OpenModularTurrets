@@ -1,9 +1,13 @@
 package omtteam.openmodularturrets.gametest;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+//? if neoforge {
+/*import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+import omtteam.openmodularturrets.OMT;
+*///?}
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -24,7 +28,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * projectiles still in flight when a target is replaced can hit the new one. Explosions (grenade, rocket) and fire (incendiary)
  * count as hits, since they damage the target too.
  */
-public class ProjectileTurretGameTests implements FabricGameTest {
+//? if neoforge {
+/*@GameTestHolder(OMT.MOD_ID)
+@PrefixGameTestTemplate(false)
+*///?}
+public class ProjectileTurretGameTests implements OMTGameTests {
     /** The slowest projectile turret (plasma) fires every 60 ticks; room for all attempts plus flight times. */
     static final int TIMEOUT_TICKS = 1500;
     /** Projectiles are spawned at the turret's centre. */
@@ -36,12 +44,11 @@ public class ProjectileTurretGameTests implements FabricGameTest {
     /** Turret projectiles spawned during the tests, with their spawn position. */
     private static final List<Spawn> SPAWNS = new CopyOnWriteArrayList<>();
 
-    static {
-        ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
-            if (entity instanceof TurretProjectile projectile) {
-                SPAWNS.add(new Spawn(projectile, projectile.position()));
-            }
-        });
+    /** Records turret projectiles; called by the test mod's loader entrypoint for every entity added on the server. */
+    public static void onEntityLoad(Entity entity) {
+        if (entity instanceof TurretProjectile projectile) {
+            SPAWNS.add(new Spawn(projectile, projectile.position()));
+        }
     }
 
     @GameTest(template = EMPTY_STRUCTURE, batch = "disposable_turret", timeoutTicks = TIMEOUT_TICKS)

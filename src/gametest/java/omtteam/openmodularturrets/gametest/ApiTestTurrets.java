@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @OMTPlugin.Register
 public final class ApiTestTurrets implements OMTPlugin {
-    public static final String NAMESPACE = "openmodularturrets-gametest";
+    public static final String NAMESPACE = OMTGameTestMod.MOD_ID;
     public static final AmmoType ARROW_AMMO = AmmoType.of(NAMESPACE, "arrow");
     public static final TurretType API_RAY_TURRET = TurretType.builder(NAMESPACE, "api_ray_turret")
             .requiredBaseTier(2).ammo(ARROW_AMMO).build();

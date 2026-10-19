@@ -1,6 +1,10 @@
 package omtteam.openmodularturrets.gametest;
 
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+//? if neoforge {
+/*import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+import omtteam.openmodularturrets.OMT;
+*///?}
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.effect.MobEffects;
@@ -14,7 +18,11 @@ import omtteam.openmodularturrets.core.turret.TurretType;
  * so a single attempt is enough. Every test has its own batch: batches run one after another, so a turret never
  * reaches the target of a test running next to it.
  */
-public class EffectTurretGameTests implements FabricGameTest {
+//? if neoforge {
+/*@GameTestHolder(OMT.MOD_ID)
+@PrefixGameTestTemplate(false)
+*///?}
+public class EffectTurretGameTests implements OMTGameTests {
     private static final int TIMEOUT_TICKS = 200;
 
     /** The slowing turret puts slowness on a target 5 blocks in front, which lowers its movement speed. */

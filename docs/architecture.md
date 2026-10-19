@@ -57,7 +57,7 @@ Source sets (Loom split source sets, plus the two test sets):
 | `src/main` | everything that runs on both sides | yes |
 | `src/client` | rendering, screens, client networking | yes, client only |
 | `src/test` | JUnit tests of the core, config tests, architecture rules | no |
-| `src/gametest` | Fabric game tests in a real server world (own mod id) | no |
+| `src/gametest` | game tests in a real server world, shared by Fabric and NeoForge (own test mod `openmodularturrets_gametest`) | no |
 
 Packages below `omtteam.openmodularturrets` (main):
 

@@ -23,15 +23,26 @@ sourceSets.test { java { include("$packagePath/core/**") } }
 // GameTests (src/gametest) are not set up for NeoForge yet: the test classes still use FabricGameTest. See the
 // shared-test setup in OpenModularLighting (OMLGameTests, TestTransfer, gametest source set as a second mod).
 
+// In-world tests (src/gametest): a separate test mod (openmodularturrets_gametest) that is never shipped, sharing
+// its test classes with Fabric. `check` runs them on a headless GameTest server.
+val gametest: SourceSet = sourceSets.create("gametest") {
+    compileClasspath += sourceSets.main.get().output
+    runtimeClasspath += sourceSets.main.get().output
+}
+
 neoForge {
     version = property("neoforge_version") as String
     addModdingDependenciesTo(client)
     addModdingDependenciesTo(sourceSets.test.get()) // unit tests use game libraries (Gson), as on Loom
+    addModdingDependenciesTo(gametest)
 
     mods {
         register(modId) {
             sourceSet(sourceSets.main.get())
             sourceSet(client)
+        }
+        register("${modId}_gametest") {
+            sourceSet(gametest)
         }
     }
 
@@ -46,6 +57,7 @@ neoForge {
         // number of failed tests, which fails the task
         register("gameTestServer") {
             type = "gameTestServer"
+            sourceSet = gametest
             systemProperty("neoforge.enabledGameTestNamespaces", modId)
         }
     }
@@ -111,6 +123,8 @@ val convertFabricData = tasks.register("convertFabricData") {
     }
 }
 sourceSets.main { resources.srcDir(convertFabricData) }
+
+tasks.check { dependsOn("runGameTestServer") }
 
 tasks.jar { from(client.output) }
 tasks.named<Jar>("sourcesJar") { from(client.allSource) }

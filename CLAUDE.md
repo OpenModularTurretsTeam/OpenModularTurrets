@@ -93,7 +93,7 @@ Do not hard-code guesses into the build without verifying.
     ├── main/resources/         # SHARED assets + fabric.mod.json and META-INF/neoforge.mods.toml (templated)
     ├── client/java/...         # client-only code (split source sets)
     ├── test/java/...           # JUnit tests for core/
-    └── gametest/               # server game tests (own mod id openmodularturrets-gametest)
+    └── gametest/               # server game tests for both loaders (own mod id openmodularturrets_gametest)
 ```
 
 - **Mod ID:** `openmodularturrets`.
@@ -235,7 +235,8 @@ New questions that these do not answer go through §7 "Designing APIs".
 
 - Shared test classes for both loaders: they implement a shared interface (e.g. `OMTGameTests`, like OpenModularLighting's `OMLGameTests`) instead of `FabricGameTest`, use the mod's own empty 8 × 8 × 8 structure (`structure/` and, for 1.20.1, `structures/`), and carry `@GameTestHolder(MOD_ID)` + `@PrefixGameTestTemplate(false)` behind `//? if neoforge`.
 - `TestTransfer` with `hasEnergy`, `insertEnergy`, `insertItem`, `extractItem` (Fabric lookups / NeoForge capabilities) replaces direct Fabric lookups in tests.
-- The test battery keeps its energy in the item's custom data, with loader-specific energy access.
+  OMT's tests have no direct lookups (items go through vanilla hoppers, energy through the generator push), so OMT has no `TestTransfer` yet; add it when a test needs one.
+- The test battery keeps its energy in the item's custom data, with loader-specific energy access (OMT has no battery).
 - Test mod id with an underscore on both loaders (`openmodularturrets_gametest`); NeoForge mod ids cannot contain hyphens.
 - No test class may sit in a main-mod package (NeoForge modules cannot share packages); reach protected methods through public vanilla API.
 
@@ -254,6 +255,7 @@ New questions that these do not answer go through §7 "Designing APIs".
 ./gradlew :1.21.1-fabric:runClient                # run client for a node
 ./gradlew :1.21.1-fabric:runServer
 ./gradlew :1.21.1-fabric:runGameTest              # server game tests for one node (also run by check / build)
+./gradlew :1.21.1-neoforge:runGameTestServer      # the same game tests on NeoForge (also run by check / build)
 ./gradlew :1.20.1-fabric:runDatagen               # regenerate data for a node
 ./gradlew :1.21.1-fabric:runDatagen
 ./gradlew :1.21.1-neoforge:runClient              # NeoForge client (run dir versions/1.21.1-neoforge/run; port in progress)
@@ -300,9 +302,11 @@ Tests live in `src/test/java` (JUnit, test-only dependency).
 
 ### Game tests
 
-In-game behaviour (turrets firing, effects on entities) is tested with Fabric GameTest in `src/gametest` (Loom `fabricApi.configureTests`, own source set and mod id, never shipped).
-Classes implement `FabricGameTest`, are listed under the `fabric-gametest` entrypoint in `src/gametest/resources/fabric.mod.json` and use `EMPTY_STRUCTURE` (8×8×8 air) with the scene built in code.
-`check` (and so `build` / `chiseledBuild`) runs them on a dedicated test server in `versions/<v>/build/run/gameTest` (the world is deleted before every run).
+In-game behaviour (turrets firing, effects on entities) is tested with GameTests in `src/gametest`, a test mod (`openmodularturrets_gametest`, never shipped) whose test classes are shared by both loaders.
+Classes implement `OMTGameTests` and use its `EMPTY_STRUCTURE` (the mod's own 8×8×8 air structure in `data/openmodularturrets/structure/`, and `structures/` for 1.20.1) with the scene built in code.
+On Fabric (Loom `fabricApi.configureTests`) they are listed under the `fabric-gametest` entrypoint in `src/gametest/resources/fabric.mod.json`; on NeoForge they carry `@GameTestHolder(OMT.MOD_ID)` and `@PrefixGameTestTemplate(false)` behind `//? if neoforge` (the gametest source set is a second mod, `META-INF/neoforge.mods.toml`).
+The test mod's loader entrypoints (`gametest/platform/<loader>`) run its registration steps (`OMTGameTestMod`) and forward entity loads to `ProjectileTurretGameTests.onEntityLoad`.
+`check` (and so `build` / `chiseledBuild`) runs them on a dedicated test server: `runGameTest` on Fabric (`versions/<v>/build/run/gameTest`, the world is deleted before every run), `runGameTestServer` on NeoForge.
 
 - `TurretScene` builds a ready-to-fire base + turret (owner, always on, full energy, max range) and spawns targets (husks without AI).
   A base placed with `setBlock` has no owner: set one right away or it drops itself.
@@ -312,8 +316,8 @@ Classes implement `FabricGameTest`, are listed under the `fabric-gametest` entry
   The test server does not tick entities in the chunks next to a test, and projectiles remove themselves before flying into such a chunk, so `TurretScene` force-loads the chunks around the scene while a test runs (otherwise a grenade that lands just past the target would vanish instead of exploding).
   Projectile tests fail just before their timeout with their state (shots, followed projectile, target) instead of timing out silently.
 - Turret ranges reach into neighbouring tests, so every turret test gets its own `batch` and ends with `TurretScene.succeedWhen`, which removes the turret, base and entities once it passed (1.20.1 keeps a finished batch's blocks and entities next to the following one).
-- `BaseGuiGameTests` clicks a base through `ServerPlayerGameMode#useItemOn` (the real server path, including Fabric's `UseBlockCallback`) and checks that the menu opens for the owner only.
-  Fabric's `FakePlayer` refuses to open menus, so the test uses a small subclass that opens them without sending a packet.
+- `BaseGuiGameTests` clicks a base through `ServerPlayerGameMode#useItemOn` (the real server path, including the loader's block-use event) and checks that the menu opens for the owner only.
+  The loaders' `FakePlayer`s refuse to open menus, so the test uses a small subclass that opens them without sending a packet (NeoForge opens block menus through the two-argument `openMenu`, which it overrides too).
   Cast `getBlockEntity` results where 1.20.1 returns a plain `BlockEntity` (IntelliJ only sees 1.21 and calls such casts redundant).
 
 ---
@@ -595,7 +599,7 @@ Update this checklist as work progresses.
   Each turret, on a base of its tier with energy and ammo, must hit a hostile target 5 blocks in front of it.
   Inaccurate turrets get up to 10 attempts (fresh target each time); the test fails if none of them hits.
   Additionally, projectile turrets must spawn their projectile and ray turrets must trace their ray to the target.
-  - Projectile turrets (projectile spawned + hit; `ProjectileTurretGameTests`, spawns observed through `ServerEntityEvents.ENTITY_LOAD`; explosion and fire damage count as hits):
+  - Projectile turrets (projectile spawned + hit; `ProjectileTurretGameTests`, spawns observed through the loaders' entity-load events; explosion and fire damage count as hits):
     - [x] Disposable turret
     - [x] Potato cannon turret
     - [x] Crossbow turret
@@ -629,10 +633,10 @@ Update this checklist as work progresses.
 - [x] Use `LoaderInfo` (config folder in `OMTConfig`) and `Fuel` (generator: `isFuel(stack)`, burn time, stack-aware remainder) instead of `FabricLoader` / `FuelRegistry`; game test for the lava bucket remainder (the plugin entrypoints in `TurretRegistry` / `TurretModels` stay for "Turret API plugin discovery")
 - [x] Registration: `OMT.init(plugins)` + `OMT.registrationSteps()` (sounds, blocks, items, block entities, entity types, creative tab, menus), NeoForge per `RegisterEvent` with the common-setup check; capabilities (items, energy); shared handlers `InteractiveBlock.handleUse`, `OMTConfig.onPlayerJoin`, `KillCounter.onDeath` (NeoForge `LivingDeathEvent` at lowest priority); `VersionCompat.creativeTabBuilder()` / `fakePlayer()`; plain `c:` tags; `RayShotCallback` as a plain listener list; Fabric render data behind `CompatBlockEntity.renderData()`; `ModSounds` registers in `init()` (the turret definitions use the sounds earlier).
   OMT has no recipe conditions.
-  NeoForge now compiles all of `main` except `datagen` and `compat/jade`, and loads up to common setup (checked with `runGameTestServer`, which then stops: no NeoForge game tests yet).
+  NeoForge now compiles all of `main` except `datagen` and `compat/jade`.
 - [x] Mixins on NeoForge: the same `openmodularturrets.mixins.json` under `[[mixins]]` in `neoforge.mods.toml`; both `LivingEntityMixin` injection points exist in NeoForge's patched `LivingEntity` (checked once with `mixin.debug.export` on the NeoForge game test server)
 - [x] Client: `OMTClient` lists the content (screens, model layers, block entity and entity renderers, item renderers via `ItemStackRenderer`, cutout blocks, tooltips, disconnect); `OMTFabricClient` / `OMTNeoForgeClient` register it and wire ticks, disconnect and the ray rendering; fence models carry `"render_type": "minecraft:cutout"`; camo models `FabricCamoModel` (Renderer API) / `NeoForgeCamoModel` (`ModelData` + forwarding colour provider), `CompatBlockEntity.remesh()` refreshes the model data.
   Both clients start to the title screen without errors; in-world rendering on NeoForge (turrets, projectiles, rays, item renderers, camouflage) still needs a playtest.
 - [x] Turret API plugin discovery on NeoForge: `@OMTPlugin.Register` / `@OMTClientPlugin.Register`, found in the mod scan data by `NeoForgePlugins`; `ApiTestTurrets` carries the annotation, so the NeoForge game tests will cover it; `docs/turret-api.md` explains both loaders and the sound timing on NeoForge
-- [ ] GameTests shared with NeoForge (OpenModularLighting: `OMLGameTests`, empty structure, `TestTransfer`, no test classes in main packages)
+- [x] GameTests shared with NeoForge: `OMTGameTests` with the own empty structure, NeoForge annotations behind a condition, test mod `openmodularturrets_gametest` on both loaders (`OMTGameTestMod` + `gametest/platform/<loader>` entrypoints), `runGameTestServer` part of `check`; all 35 tests pass on NeoForge too (covers the capabilities, the FE adapter, plugin discovery and the GUI path); no `TestTransfer` needed yet
 - [ ] Jade on NeoForge (`@WailaPlugin`)

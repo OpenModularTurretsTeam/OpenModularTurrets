@@ -1,6 +1,10 @@
 package omtteam.openmodularturrets.gametest;
 
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+//? if neoforge {
+/*import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+import omtteam.openmodularturrets.OMT;
+*///?}
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -22,7 +26,11 @@ import java.util.UUID;
  * pushes its energy into neighbours. Every test has its own batch and removes its blocks when it passed (1.20.1 keeps a
  * finished batch's blocks).
  */
-public class GeneratorGameTests implements FabricGameTest {
+//? if neoforge {
+/*@GameTestHolder(OMT.MOD_ID)
+@PrefixGameTestTemplate(false)
+*///?}
+public class GeneratorGameTests implements OMTGameTests {
     private static final BlockPos GENERATOR = new BlockPos(1, 1, 1);
     private static final BlockPos BASE = GENERATOR.east();
     /** Furnace burn time of coal. */

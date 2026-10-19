@@ -1,8 +1,16 @@
 package omtteam.openmodularturrets.gametest;
 
 import com.mojang.authlib.GameProfile;
+//? if fabric {
 import net.fabricmc.fabric.api.entity.FakePlayer;
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+//?} else {
+/*import net.neoforged.neoforge.common.util.FakePlayer;
+*///?}
+//? if neoforge {
+/*import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+import omtteam.openmodularturrets.OMT;
+*///?}
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
@@ -22,6 +30,10 @@ import omtteam.openmodularturrets.menu.TurretBaseMenu;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 import org.jetbrains.annotations.Nullable;
+//? if neoforge {
+/*import net.minecraft.network.RegistryFriendlyByteBuf;
+import java.util.function.Consumer;
+*///?}
 
 import java.util.OptionalInt;
 import java.util.UUID;
@@ -29,12 +41,16 @@ import java.util.UUID;
 /**
  * Right-clicking a turret base opens its GUI for players with access, and only for them.
  * <p>
- * The click goes through {@code ServerPlayerGameMode#useItemOn}, the vanilla entry point that Fabric's
- * {@code UseBlockCallback} hooks into, so the whole path is covered: the callback, the base's
- * {@code InteractiveBlock#onUse}, the permission check and the menu. Players are Fabric fake players, one per
- * test, so no state is shared between tests.
+ * The click goes through {@code ServerPlayerGameMode#useItemOn}, the vanilla entry point that the loader's block-use
+ * event hooks into (Fabric {@code UseBlockCallback}, NeoForge {@code RightClickBlock}), so the whole path is covered:
+ * the event, the base's {@code InteractiveBlock#onUse}, the permission check and the menu. Players are the loader's
+ * fake players (the same class name and constructor on both), one per test, so no state is shared between tests.
  */
-public class BaseGuiGameTests implements FabricGameTest {
+//? if neoforge {
+/*@GameTestHolder(OMT.MOD_ID)
+@PrefixGameTestTemplate(false)
+*///?}
+public class BaseGuiGameTests implements OMTGameTests {
     private static final BlockPos BASE = TurretScene.BASE;
 
     /** The owner gets the base menu on a click with an empty hand and with a block in hand. */
@@ -83,10 +99,10 @@ public class BaseGuiGameTests implements FabricGameTest {
         helper.succeed();
     }
 
-    /** A fake player with its own profile; every test uses new profiles, as fake players are cached by profile. */
     /**
-     * Fabric's {@link FakePlayer} refuses to open menus. This one opens them like a real player but sends no packet
-     * to a client (there is none): the menu factory is called and the menu becomes the player's current menu.
+     * A fake player with its own profile; every test uses new profiles, as fake players are cached by profile. The
+     * loader's {@link FakePlayer} refuses to open menus; this one opens them like a real player but sends no packet to
+     * a client (there is none): the menu factory is called and the menu becomes the player's current menu.
      */
     private static final class GuiTestPlayer extends FakePlayer {
         private int menuCounter;
@@ -104,6 +120,14 @@ public class BaseGuiGameTests implements FabricGameTest {
             containerMenu = menu;
             return OptionalInt.of(menu.containerId);
         }
+
+        //? if neoforge {
+        /*/^* NeoForge opens block menus with extra data for the client (none here), through this variant. ^/
+        @Override
+        public OptionalInt openMenu(@Nullable MenuProvider provider, @Nullable Consumer<RegistryFriendlyByteBuf> extraDataWriter) {
+            return openMenu(provider);
+        }
+        *///?}
     }
 
     /** A new player for every call: no state is shared between tests. */

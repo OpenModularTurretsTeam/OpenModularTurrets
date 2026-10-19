@@ -37,7 +37,7 @@ fabricApi {
     // Server game tests in src/gametest (./gradlew :<v>:runGameTest, also part of check)
     configureTests {
         createSourceSet = true
-        modId = "$modId-gametest"
+        modId = "${modId}_gametest"
         enableClientGameTests = false
     }
 }

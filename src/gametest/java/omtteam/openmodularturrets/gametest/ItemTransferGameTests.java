@@ -1,6 +1,10 @@
 package omtteam.openmodularturrets.gametest;
 
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+//? if neoforge {
+/*import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+import omtteam.openmodularturrets.OMT;
+*///?}
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -25,7 +29,11 @@ import java.util.UUID;
  * it. Every test has its own batch and empties and removes its blocks when it passed (1.20.1 keeps a finished batch's
  * blocks and entities).
  */
-public class ItemTransferGameTests implements FabricGameTest {
+//? if neoforge {
+/*@GameTestHolder(OMT.MOD_ID)
+@PrefixGameTestTemplate(false)
+*///?}
+public class ItemTransferGameTests implements OMTGameTests {
     private static final BlockPos MACHINE = new BlockPos(1, 1, 1);
     private static final BlockPos ABOVE = MACHINE.above();
     private static final BlockPos BELOW = MACHINE.below();
