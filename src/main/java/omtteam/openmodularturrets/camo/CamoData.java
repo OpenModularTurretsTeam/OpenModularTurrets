@@ -4,10 +4,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -48,11 +46,9 @@ public final class CamoData {
     }
 
     /** Makes the client redraw the block after its disguise changed (the model reads it while meshing the chunk). */
-    public static void remeshIfChanged(BlockEntity blockEntity, boolean changed) {
-        Level level = blockEntity.getLevel();
-        if (changed && level != null && level.isClientSide()) {
-            BlockState state = blockEntity.getBlockState();
-            level.sendBlockUpdated(blockEntity.getBlockPos(), state, state, Block.UPDATE_IMMEDIATE);
+    public static void remeshIfChanged(CompatBlockEntity blockEntity, boolean changed) {
+        if (changed) {
+            blockEntity.remesh();
         }
     }
 }

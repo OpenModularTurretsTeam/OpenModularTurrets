@@ -18,7 +18,6 @@ val client: SourceSet = sourceSets.create("client") {
 // PORTING IN PROGRESS: compat/jade still waits for its NeoForge step; once it is ported, only datagen stays excluded.
 val notPorted = listOf("datagen", "compat/jade")
 sourceSets.main { java { notPorted.forEach { exclude("$packagePath/$it/**") } } }
-client.java { include("$packagePath/client/platform/**", "$packagePath/client/ScreenRegistrar.java") }
 sourceSets.test { java { include("$packagePath/core/**") } }
 
 // GameTests (src/gametest) are not set up for NeoForge yet: the test classes still use FabricGameTest. See the

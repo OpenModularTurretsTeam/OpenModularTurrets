@@ -1,7 +1,6 @@
 package omtteam.openmodularturrets.client.render.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Direction;
@@ -12,7 +11,7 @@ import omtteam.openmodularturrets.client.render.blockentity.LeverRenderer;
 /**
  * The crank item shows the crank model; display transforms are in the item model JSON.
  */
-public class LeverItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
+public class LeverItemRenderer implements ItemStackRenderer {
     private LeverRenderer renderer;
 
     @Override

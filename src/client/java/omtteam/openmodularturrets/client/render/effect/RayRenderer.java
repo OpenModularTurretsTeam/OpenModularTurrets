@@ -2,9 +2,6 @@ package omtteam.openmodularturrets.client.render.effect;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -21,7 +18,8 @@ import java.util.Random;
 
 /**
  * Draws turret rays (laser, railgun) and arcs (OMLib {@code Ray} render objects) as thin glowing beams for a few
- * ticks. Client-only visual state, cleared on disconnect.
+ * ticks. Client-only visual state, cleared on disconnect. The loader client entrypoints call {@link #tick},
+ * {@link #clear} and {@link #render}.
  */
 public final class RayRenderer {
     private static final float HALF_WIDTH = 0.025F;
@@ -37,11 +35,14 @@ public final class RayRenderer {
     private RayRenderer() {
     }
 
+    /** Registers the ray packet handler. */
     public static void init() {
         ClientNetworkCompat.registerHandler(OMTPackets.RAY, RayRenderer::add);
-        ClientTickEvents.END_CLIENT_TICK.register(client -> tick());
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> RAYS.clear());
-        WorldRenderEvents.AFTER_TRANSLUCENT.register(context -> render(context.matrixStack(), context.camera().getPosition()));
+    }
+
+    /** Removes all rays (on disconnect). */
+    public static void clear() {
+        RAYS.clear();
     }
 
     private static void add(RayPacket packet) {
@@ -64,11 +65,13 @@ public final class RayRenderer {
         return points;
     }
 
-    private static void tick() {
+    /** Ages the rays; called at the end of every client tick. */
+    public static void tick() {
         RAYS.removeIf(ray -> --ray.ticksLeft()[0] <= 0);
     }
 
-    private static void render(PoseStack poseStack, Vec3 camera) {
+    /** Draws the rays; called after the translucent blocks, with the world's pose stack and the camera position. */
+    public static void render(PoseStack poseStack, Vec3 camera) {
         if (RAYS.isEmpty() || poseStack == null) return;
         MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
         VertexConsumer consumer = buffers.getBuffer(RenderType.lightning());

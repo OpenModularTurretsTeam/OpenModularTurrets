@@ -224,6 +224,7 @@ New questions that these do not answer go through §7 "Designing APIs".
 - Shared client start-up class (`OMTClient`, like `OMLClient`) with `init()`, `registerScreens(ScreenRegistrar)` and tooltip content; `ScreenRegistrar` (generic method, takes `MenuScreens::register` and `event::register`) lives in `client/`.
 - Renderers and colour providers expose their content (e.g. a `BlockColor` method plus the block list, a render method taking level, pose stack, buffers and camera); the loader entrypoints register them.
 - Render types on NeoForge come from `"render_type"` in the model JSON; Fabric keeps `BlockRenderLayerMap` (keep both in sync).
+- OMT (decided by the user): client turret plugins are handed in by the loader client entrypoint like on the server (`OMTClient.init(plugins)`; none on NeoForge yet); entity renderers, block entity renderers and model layers go through `OMTClient.registerEntityRenderers(EntityRendererRegistrar)`, `registerBlockEntityRenderers(BlockEntityRendererRegistrar)` (both generic interfaces in `client.render`, there to avoid a package cycle) and `registerModelLayers(BiConsumer)`; on NeoForge the camouflage disguise reaches the model as `CompatBlockEntity.RENDER_DATA` model data, and a colour provider on the hosts forwards the disguise's colour.
 
 **Data**
 
@@ -386,7 +387,7 @@ omtteam.openmodularturrets
 
 (client source set)
 omtteam.openmodularturrets.client
-├── OMTClient.java               # ClientModInitializer
+├── OMTClient.java               # shared client start-up (loader entrypoints in client/platform/<loader>)
 ├── api/                         # OMTClientPlugin entrypoint, TurretModelRegistrar
 ├── render/blockentity/          # turret renderers (rotating heads), base renderer
 ├── render/entity/               # projectile renderers
@@ -431,7 +432,7 @@ The built-in turrets use the same path, so there is no special casing per turret
 - Weapons (`api.weapon`): `ProjectileWeapon`, `RayWeapon` (damage rules = core `RayProfile`), `EffectWeapon`, `AreaWeapon`, `SelfTargetingWeapon` (finds its own targets); projectile and ray weapons take entity hit handlers; `TurretBlockEntity` dispatches on the kind, `RayWeapons` / `EffectWeapons` do the work.
 - Config: built-in turrets keep their typed sections; other mods' turrets live in `turrets.addon_turrets` (a `Map<String, TurretSetting>` keyed by id, defaults from their definition).
   `ConfigWriter`/`ConfigRanges` handle such section maps.
-- Client: `OMTClientPlugin` (entrypoint `openmodularturrets_client`) registers models via `TurretModelRegistrar`; `TurretModels.init()` collects built-in and plugin models.
+- Client: `OMTClientPlugin` (entrypoint `openmodularturrets_client`) registers models via `TurretModelRegistrar`; `TurretModels.init(plugins)` collects built-in and plugin models (the loader client entrypoint passes the plugins it found).
 - The game test mod registers one test turret per weapon kind through the API (`ApiTestTurrets`, with its own projectile entity `ApiTestProjectile` registered in `ApiTestEntities`) and tests registration and every custom-logic hook in `ApiTurretGameTests`.
 
 ### Aiming on arbitrary faces
@@ -584,7 +585,7 @@ Update this checklist as work progresses.
 - [x] Recipes, loot tables, tags via datagen for all content
 - [x] Lang, sounds, creative tab
 - [x] Jade tooltips for turret bases and turrets (replaces the 1.12.2 WAILA handlers)
-- [x] Camouflage for turret bases and the camouflage trap, one shared system (`core.camo`, `camo/`, `CamoMenu`, `CamoBakedModel`):
+- [x] Camouflage for turret bases and the camouflage trap, one shared system (`core.camo`, `camo/`, `CamoMenu`, `FabricCamoModel` / `NeoForgeCamoModel`):
   - Disguise is set and reset the same way on both blocks (via gui with simple phantom slot) and rendered the same way.
   - A small camo settings GUI on both blocks (light value / light opacity sliders for tier 4+ bases and the trap), changes server-validated.
 - [x] Memory card (copy/paste of base and camo trap settings, shift tooltip); camo trap with trusted players (`AccessProfile.TRUSTED_AND_ADMIN`)
@@ -629,7 +630,8 @@ Update this checklist as work progresses.
   OMT has no recipe conditions.
   NeoForge now compiles all of `main` except `datagen` and `compat/jade`, and loads up to common setup (checked with `runGameTestServer`, which then stops: no NeoForge game tests yet).
 - [x] Mixins on NeoForge: the same `openmodularturrets.mixins.json` under `[[mixins]]` in `neoforge.mods.toml`; both `LivingEntityMixin` injection points exist in NeoForge's patched `LivingEntity` (checked once with `mixin.debug.export` on the NeoForge game test server)
-- [ ] Client: screens, block entity/entity renderers, model layers, built-in item renderer, render layers, tooltips; camo models (Fabric Renderer API → NeoForge `ModelData`)
+- [x] Client: `OMTClient` lists the content (screens, model layers, block entity and entity renderers, item renderers via `ItemStackRenderer`, cutout blocks, tooltips, disconnect); `OMTFabricClient` / `OMTNeoForgeClient` register it and wire ticks, disconnect and the ray rendering; fence models carry `"render_type": "minecraft:cutout"`; camo models `FabricCamoModel` (Renderer API) / `NeoForgeCamoModel` (`ModelData` + forwarding colour provider), `CompatBlockEntity.remesh()` refreshes the model data.
+  Both clients start to the title screen without errors; in-world rendering on NeoForge (turrets, projectiles, rays, item renderers, camouflage) still needs a playtest.
 - [ ] Turret API plugin discovery (`api/`, Fabric entrypoint → NeoForge)
 - [ ] GameTests shared with NeoForge (OpenModularLighting: `OMLGameTests`, empty structure, `TestTransfer`, no test classes in main packages)
 - [ ] Jade on NeoForge (`@WailaPlugin`)

@@ -104,7 +104,8 @@ A registry class registers its content when it is loaded, so it must not be touc
 
 Last, the entrypoint wires its loader to the shared code: the item and energy access of the base and the generator (`FabricBlockLookups`, NeoForge capabilities), block use (`InteractiveBlock.handleUse`), the config sync on join (`OMTConfig.onPlayerJoin`) and the kill counter (`KillCounter.onDeath`).
 
-On the client, `OMTClient` registers screens, renderers, turret models (also from other mods), tooltips and the client packet handlers.
+On the client, the loader client entrypoint (`OMTFabricClient`, `OMTNeoForgeClient`) installs the client platform services and calls `OMTClient.init(plugins)` (client packet handlers, ray packets, turret models, also from other mods).
+It then registers what `OMTClient` lists with its loader: screens, model layers, block entity and entity renderers, item renderers, cutout blocks and tooltips, plus the camouflage models (`FabricCamoModel`, `NeoForgeCamoModel`) and the ray rendering.
 
 ### A turret base tick (server)
 
