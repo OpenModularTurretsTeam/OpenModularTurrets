@@ -9,6 +9,7 @@ Read it fully before making changes.
 
 **OpenModularTurrets (OMT)** is being maintained on **Fabric**, targeting **1.20.1 and 1.21.1 from a single codebase** using **Stonecutter**.
 The port from 1.12.2 is complete; this repo maintains the 1.20.1 / 1.21.1 versions.
+A **NeoForge 1.21.1** build is being added on the branch `neoforge-test`, with the setup worked out in OpenModularLighting (`../OpenModularLighting`, branch `neoforge-test`; see §4 "Loaders" and §9).
 Inventory and power expanders were dropped and are not to be re-added.
 
 Core gameplay:
@@ -33,6 +34,8 @@ Core gameplay:
   Jar-in-jar it (approved).
 - **Jade** (optional integration, `compat/jade/`, registered through the `jade` entrypoint).
   Compile-only (`modCompileOnly`, Modrinth maven), never bundled and never required at runtime.
+- **NeoForge** 21.1.x (1.21.1 only), built with **ModDevGradle** (approved by the user; build-time only).
+  On NeoForge, the Fabric-only APIs above are replaced by NeoForge's own (capabilities, events, payload registration); see §4 "Loaders".
 - Nothing else without asking the user first.
   No Architectury, no Cloth Config, no OMLib, no Kotlin.
 
@@ -40,14 +43,18 @@ Core gameplay:
 
 ## 2. Tech Stack
 
-| | 1.20.1 | 1.21.1 |
-| --- | --- | --- |
-| Java | 17 | 21 |
-| Fabric Loader | 0.19.x | 0.19.x |
-| Fabric API | `0.92.x+1.20.1` | `0.116.x+1.21.1` |
-| Mappings | Mojang official (+ Parchment optional) | Mojang official (+ Parchment optional) |
+| | 1.20.1 (Fabric) | 1.21.1 (Fabric) | 1.21.1 (NeoForge) |
+| --- | --- | --- | --- |
+| Java | 17 | 21 | 21 |
+| Loader | Fabric Loader 0.19.x | Fabric Loader 0.19.x | NeoForge 21.1.x |
+| API | Fabric API `0.92.x+1.20.1` | Fabric API `0.116.x+1.21.1` | – |
+| Gradle plugin | Loom 1.18 | Loom 1.18 | ModDevGradle 2.0 |
+| Mappings | Mojang official (+ Parchment optional) | Mojang official (+ Parchment optional) | Mojang official (NeoForge runtime names) |
 
-- Build system: Gradle 9.8 (Kotlin DSL) + Fabric Loom 1.18 (`net.fabricmc.fabric-loom-remap`, the variant for obfuscated MC versions) + **Stonecutter 0.9**.
+- Build system: Gradle 9.8 (Kotlin DSL) + **Stonecutter 0.9**, with Fabric Loom 1.18 (`net.fabricmc.fabric-loom-remap`, the variant for obfuscated MC versions) on the Fabric nodes and ModDevGradle 2.0 (`net.neoforged.moddev`) on the NeoForge node.
+- Shared build logic is the convention plugin `buildSrc/src/main/kotlin/mod-common.gradle.kts` (Java toolchain, metadata templating, JUnit, `verifyCoreIsolation`, licenses in the jar via `bundled_licenses`, publishing).
+  It is mod-independent and should stay identical to OpenModularLighting's copy.
+  The OMT-specific quality tools (ArchUnit, JaCoCo, PIT, PMD) stay in `build.fabric.gradle.kts`.
 - **Gradle itself must run on Java 25+** (Loom 1.18 requirement).
   The compile toolchains (17 / 21) are resolved separately (foojay auto-provisions them if missing).
 - **Use Mojang mappings** (`loom.officialMojangMappings()`).
@@ -66,20 +73,24 @@ Do not hard-code guesses into the build without verifying.
 ```
 .
 ├── CLAUDE.md
-├── build.gradle.kts            # shared build script, runs once per version
-├── stonecutter.gradle.kts      # Stonecutter controller (active version, chiseled tasks)
-├── settings.gradle.kts         # declares Stonecutter versions
+├── build.fabric.gradle.kts     # Fabric nodes (Loom, Fabric API, datagen, GameTests, ArchUnit/JaCoCo/PIT/PMD)
+├── build.neoforge.gradle.kts   # NeoForge node (ModDevGradle; temporary "ported packages" filter)
+├── buildSrc/                   # mod-common convention plugin: build logic shared by all loaders
+├── stonecutter.gradle.kts      # Stonecutter controller (active version, loader constants, chiseled tasks)
+├── settings.gradle.kts         # declares the Stonecutter nodes (<minecraft version>-<loader>)
 ├── gradle.properties           # shared properties (mod_id, mod_version, maven_group …)
 ├── versions/
-│   ├── 1.20.1/
+│   ├── 1.20.1-fabric/
 │   │   ├── gradle.properties   # minecraft_version, fabric_api, java_version=17 …
 │   │   └── src/main/generated/ # datagen output for 1.20.1 (committed)
-│   └── 1.21.1/
-│       ├── gradle.properties   # minecraft_version, fabric_api, java_version=21 …
-│       └── src/main/generated/ # datagen output for 1.21.1 (committed)
+│   ├── 1.21.1-fabric/
+│   │   ├── gradle.properties   # minecraft_version, fabric_api, java_version=21 …
+│   │   └── src/main/generated/ # datagen output for 1.21.1 (committed; NeoForge converts it, datagen_from)
+│   └── 1.21.1-neoforge/
+│       └── gradle.properties   # neoforge_version, minecraft_dependency (Maven range), publish_enabled=false …
 ├── src/
     ├── main/java/omtteam/openmodularturrets/...
-    ├── main/resources/         # SHARED assets + fabric.mod.json (templated)
+    ├── main/resources/         # SHARED assets + fabric.mod.json and META-INF/neoforge.mods.toml (templated)
     ├── client/java/...         # client-only code (split source sets)
     ├── test/java/...           # JUnit tests for core/
     └── gametest/               # server game tests (own mod id openmodularturrets-gametest)
@@ -104,8 +115,9 @@ plugins { id("dev.kikugie.stonecutter") version "0.9.8" }
 
 stonecutter {
     create(rootProject) {
-        versions("1.20.1", "1.21.1")
-        vcsVersion = "1.21.1"   // the version the committed source is written for
+        versions("1.20.1-fabric" to "1.20.1", "1.21.1-fabric" to "1.21.1", "1.21.1-neoforge" to "1.21.1")
+        mapBuilds { _, node -> "build.${node.project.substringAfterLast('-')}.gradle.kts" }
+        vcsVersion = "1.21.1-fabric" // the version the committed source is written for
     }
 }
 ```
@@ -115,7 +127,7 @@ If this does not match the installed version, check the Stonecutter docs and upd
 
 ### Rules
 
-- **Committed source must always be in the `vcsVersion` (1.21.1) state.** Before committing, switch back to 1.21.1 if you switched to 1.20.1 (`./gradlew "Reset active project"` or `"Set active project to 1.21.1"`).
+- **Committed source must always be in the `vcsVersion` (`1.21.1-fabric`) state.** Before committing, switch back if you switched to another node (`./gradlew "Reset active project"` or `"Set active project to 1.21.1-fabric"`).
 - Version-conditional code uses Stonecutter comments:
 
   ```java
@@ -134,27 +146,122 @@ If this does not match the installed version, check the Stonecutter docs and upd
 - Version-specific *properties* live in `versions/<v>/gradle.properties`.
   Read them in the build via `property("…")`.
 
+### Loaders
+
+Each Stonecutter node is `<minecraft version>-<loader>`; the loader picks the build script (`build.<loader>.gradle.kts`).
+The setup and the patterns come from OpenModularLighting (branch `neoforge-test`), where the whole port is done; port OMT the same way, step by step, and design new cross-cutting interfaces with the user (§7 "Designing APIs").
+
+- **Whole loader-specific classes** go into a `platform/<loader>/` package (`platform/fabric/`, `platform/neoforge/`, also under `client/`).
+  `mod-common` leaves the other loaders' `platform/` packages out of the compilation, so these classes need no Stonecutter comments.
+- **Shared code calls the loader through services:** `platform.Platform` holds the `PlatformServices` record (`LoaderInfo`, `Fuel`, `Network`, `Menus`), `client.platform.ClientPlatform` the `ClientPlatformServices` (`ClientNetwork`).
+  The entrypoints install them first thing (`OMTFabric`, `OMTNeoForge`, `OMTFabricClient`, `OMTNeoForgeClient`); a getter before that or a second install throws.
+  `NetworkCompat`, `ClientNetworkCompat` and `MenuCompat` forward to them.
+- **Small differences** inside a shared class use the loader constants: `//? if fabric {` / `//? if neoforge {` (set in `stonecutter.gradle.kts`).
+  Keep them inside `compat/` and `platform/`, never in gameplay code.
+- `core/` stays loader-free (`verifyCoreIsolation` also forbids `net.neoforged`).
+- **Porting in progress:** `build.neoforge.gradle.kts` compiles only the packages (or single files) listed in `ported`.
+  Add one once it no longer uses Fabric API or Team Reborn Energy directly; at the end the filter becomes an exclusion of `datagen` only (Fabric-only by design: NeoForge gets the converted Fabric data, `convertFabricData`).
+- `publish_enabled=false` in `versions/1.21.1-neoforge/gradle.properties` keeps the NeoForge node a dry run even with tokens; remove it only when the user wants NeoForge releases.
+- The mod version is `<mod_version>+<minecraft version>-<loader>`, so the jars of both loaders can be told apart.
+
+### NeoForge port: design decisions (made by the user)
+
+These were decided step by step while porting OpenModularLighting (branch `neoforge-test`), which is the reference implementation.
+Apply them to OMT the same way; do not re-open them without asking.
+New questions that these do not answer go through §7 "Designing APIs".
+
+**Overall approach**
+
+- Native NeoForge support, not Sinytra Connector, not Forgified Fabric API, not Architectury, not a MultiLoader subproject layout.
+- Stonecutter loader axis: one source set, nodes `<minecraft version>-<loader>`, one build script per loader; NeoForge only for 1.21.1 (1.20.1 stays Fabric-only).
+- ModDevGradle for the NeoForge node (build-time only).
+- Whole loader-specific classes in `platform/<loader>/` (left out of the other loaders' builds); `//? if fabric` / `//? if neoforge` only for small differences inside `compat/` and `platform/`.
+- Mod-independent build logic in `buildSrc` (`mod-common`), copied between the mods; publishing stays disabled for NeoForge (`publish_enabled=false`) until the user says otherwise.
+
+**Platform layer**
+
+- Two directions: where the loader is in charge (registration, events, capabilities, client registrations), the loader entrypoint calls shared code ("wiring"); only where gameplay code must reach the loader there is a service.
+- Services are small interfaces (not one big one), handed over by **startup injection**: each entrypoint creates its implementations and installs them once, first thing.
+- Holder: a record `PlatformServices` with every service plus a static holder `Platform` with short getters (`Platform.network()`); client: `ClientPlatformServices` / `ClientPlatform`.
+  A new service is a new record component, so every entrypoint stops compiling until it supplies one.
+- Fail fast: a getter before `install`, or a second `install`, throws `IllegalStateException`.
+- The existing `compat/` facades (`NetworkCompat`, `ClientNetworkCompat`, `MenuCompat`) keep their signatures and forward to the services, so call sites do not change.
+- `OMT` stays the shared class (constants, start-up); the loader entrypoints are `OMTFabric` / `OMTNeoForge` (`OMTFabricClient` / `OMTNeoForgeClient`).
+
+**Services (names and scope as decided)**
+
+- `LoaderInfo`: `configDir()` and `isModLoaded(modId)`; named implementation classes per loader.
+- `Fuel`: `burnTime(stack)` and `remainder(stack)` (the loader's stack-aware remainder hook, like a furnace).
+- `Network` / `ClientNetwork`: NeoForge registrations are recorded and applied in `RegisterPayloadHandlersEvent` (later registration throws); a server-to-client packet without a client handler is logged and dropped; channels are `optional()`; handlers run on the main thread.
+- `Menus`: `createBlockMenuType(factory)` / `openBlockMenu(player, title, pos, factory)`; opening data is a `BlockPos` only.
+- `Energy`: `isBattery(stack)`, `dischargeItem(container, slot, target, maxAmount)`, `pushToBlock(level, pos, side, source, maxAmount)` (side = face of the target block; the generator needs the push).
+
+**Energy and items**
+
+- Energy approach: one loader-neutral buffer plus thin adapters per loader (not Team Reborn Energy as the internal model, not a buffer per loader).
+- The buffer is `core.energy.EnergyStore` (OMT's `core.base.EnergyStore`, extended in OpenModularLighting): `final`; `insert` / `extract` (limited by `maxInsert` / `maxExtract`) for other blocks, `generate` / `consume` / `drain` for the owner, `setAmountUnchecked` for loading and rollback.
+  `onChange` may fire for a Fabric transaction that is rolled back later (an extra `setChanged()` is accepted).
+- Block entities expose `@Nullable EnergyAccess getEnergyAccess(side)` (core interface; a store or a view over several).
+- Fabric adapter: one `SnapshotParticipant` per store, cached in `platform/fabric` with weak keys **and weak values** (a plain `WeakHashMap` would leak, because the adapter references its store).
+  NeoForge adapter: `IEnergyStorage`, clamped to `int`; 1 E = 1 FE.
+- Item transfer: the vanilla `Container` stays the inventory; `inventory.ItemAccess` (record: container, first slot, slot count, insert filter, extract filter; `insertOnly(container)`) describes what other blocks may do, exposed by `getItemAccess(side)`.
+  Adapters build on the loaders' own container wrappers (Fabric `InventoryStorage`, slotted for Jade; NeoForge `RangedWrapper` + `InvWrapper`).
+
+**Registration and events**
+
+- Registration approach B: each registry class is registered in the `RegisterEvent` of its own registry on NeoForge (not everything in the first event).
+  `OMT.init()` loads the config and registers the packets; `OMT.registrationSteps()` lists `RegistrationStep(registry, call)` records in dependency order; Fabric runs them in order.
+  NeoForge throws at common setup if a step never ran.
+- Shared handlers called by the loaders' events: `InteractiveBlock.handleUse(player, level, hand, hit)` and `OMTConfig.onPlayerJoin(ServerPlayer)` (config `init()` only loads).
+- Creative tab: `VersionCompat.creativeTabBuilder()` with a loader condition (no service).
+- Common tags: plain `TagKey`s with the `c:` ids, no Fabric `ConventionalItemTags`.
+- Recipe conditions: the condition logic stays shared; each loader registers it with its own API in `platform/<loader>`.
+
+**Client**
+
+- Shared client start-up class (`OMTClient`, like `OMLClient`) with `init()`, `registerScreens(ScreenRegistrar)` and tooltip content; `ScreenRegistrar` (generic method, takes `MenuScreens::register` and `event::register`) lives in `client/`.
+- Renderers and colour providers expose their content (e.g. a `BlockColor` method plus the block list, a render method taking level, pose stack, buffers and camera); the loader entrypoints register them.
+- Render types on NeoForge come from `"render_type"` in the model JSON; Fabric keeps `BlockRenderLayerMap` (keep both in sync).
+
+**Data**
+
+- No NeoForge datagen: the NeoForge build converts the Fabric output of `datagen_from` (`fabric:load_conditions` → `neoforge:conditions`, `condition` → `type`); only conditions in the mod's own namespace convert, anything else fails the build.
+
+**GameTests**
+
+- Shared test classes for both loaders: they implement a shared interface (e.g. `OMTGameTests`, like OpenModularLighting's `OMLGameTests`) instead of `FabricGameTest`, use the mod's own empty 8 × 8 × 8 structure (`structure/` and, for 1.20.1, `structures/`), and carry `@GameTestHolder(MOD_ID)` + `@PrefixGameTestTemplate(false)` behind `//? if neoforge`.
+- `TestTransfer` with `hasEnergy`, `insertEnergy`, `insertItem`, `extractItem` (Fabric lookups / NeoForge capabilities) replaces direct Fabric lookups in tests.
+- The test battery keeps its energy in the item's custom data, with loader-specific energy access.
+- Test mod id with an underscore on both loaders (`openmodularturrets_gametest`); NeoForge mod ids cannot contain hyphens.
+- No test class may sit in a main-mod package (NeoForge modules cannot share packages); reach protected methods through public vanilla API.
+
+**Jade**
+
+- `@WailaPlugin` on the plugin without a loader condition (NeoForge finds it by the annotation, Fabric keeps the `jade` entrypoint).
+- Jade stays off the NeoForge GameTest server (it sends a packet to the vanilla mock players, which NeoForge refuses).
+
 ### Commands
 
 ```bash
-./gradlew "Set active project to 1.20.1"   # switch source to 1.20.1
-./gradlew "Set active project to 1.21.1"   # switch back (VCS state)
-./gradlew chiseledBuild                    # build ALL versions (custom task in stonecutter.gradle.kts)
-./gradlew :1.20.1:build                    # build a single version
-./gradlew :1.21.1:runClient                # run client for a version
-./gradlew :1.21.1:runServer
-./gradlew :1.21.1:runGameTest              # server game tests for one version (also run by check / build)
-./gradlew :1.20.1:runDatagen               # regenerate data for a version
-./gradlew :1.21.1:runDatagen
-./gradlew dependencyMap                    # interactive package dependency map -> build/reports/dependency-map/index.html
-./gradlew :1.21.1:pitest                   # mutation testing of core -> versions/1.21.1/build/reports/pitest/index.html
-./gradlew chiseledPublish                  # upload all versions to CurseForge/Modrinth (custom task)
-./gradlew :1.21.1:publishMods              # upload one version
+./gradlew "Set active project to 1.20.1-fabric"   # switch source to 1.20.1
+./gradlew "Set active project to 1.21.1-fabric"   # switch back (VCS state)
+./gradlew chiseledBuild                           # build ALL nodes (custom task in stonecutter.gradle.kts)
+./gradlew :1.20.1-fabric:build                    # build a single node
+./gradlew :1.21.1-fabric:runClient                # run client for a node
+./gradlew :1.21.1-fabric:runServer
+./gradlew :1.21.1-fabric:runGameTest              # server game tests for one node (also run by check / build)
+./gradlew :1.20.1-fabric:runDatagen               # regenerate data for a node
+./gradlew :1.21.1-fabric:runDatagen
+./gradlew :1.21.1-neoforge:runClient              # NeoForge client (run dir versions/1.21.1-neoforge/run; port in progress)
+./gradlew dependencyMap                           # interactive package dependency map -> build/reports/dependency-map/index.html
+./gradlew :1.21.1-fabric:pitest                   # mutation testing of core -> versions/1.21.1-fabric/build/reports/pitest/index.html
+./gradlew chiseledPublish                         # upload all nodes to CurseForge/Modrinth (custom task)
+./gradlew :1.21.1-fabric:publishMods              # upload one node
 ```
 
 ### Publishing
 
-- Uses `me.modmuss50.mod-publish-plugin` (approved by the user), configured in `publishMods` in `build.gradle.kts`.
+- Uses `me.modmuss50.mod-publish-plugin` (approved by the user), configured in `publishMods` in `buildSrc/src/main/kotlin/mod-common.gradle.kts` (the loader scripts only set the jar to upload).
 - Settings in `gradle.properties`: `release_type` (release/beta/alpha), `curseforge_project_id` (224663, the old OMT page), `modrinth_project_id` (empty = Modrinth skipped).
 - Tokens are never committed: environment variables `CURSEFORGE_TOKEN` / `MODRINTH_TOKEN`, or `curseforge_token` / `modrinth_token` in `~/.gradle/gradle.properties`.
   Without a token the upload is a dry run (output in `versions/<v>/build/publishMods/`).
@@ -165,7 +272,7 @@ If this does not match the installed version, check the Stonecutter docs and upd
   (Task names may differ slightly depending on Stonecutter's version.
   Use `./gradlew tasks` if unsure.)
 
-**Definition of done for any change:** `./gradlew chiseledBuild` succeeds for **both** versions, and the source is left in the 1.21.1 state.
+**Definition of done for any change:** `./gradlew chiseledBuild` succeeds for **all** nodes, and the source is left in the `1.21.1-fabric` state.
 
 ### Core Game Logic Source
 
@@ -182,7 +289,7 @@ The logic consists of:
 `ArchitectureTest` (`src/test/.../architecture`, ArchUnit) checks core isolation, that main never uses client code, and package cycles against its `KNOWN_CYCLES` list (a ratchet: update the list when a cycle shrinks; never add to it without asking the user).
 PMD (`gradle/pmd/ruleset.xml`, report only, active version) measures complexity and size: `versions/1.21.1/build/reports/pmd/`.
 JaCoCo records coverage in the unit tests and on the game test server; `check` prints the line coverage of `core` and `api` per package (active version only).
-PIT (`./gradlew :1.21.1:pitest`, on demand, not part of `check`) runs mutation testing on `core`; surviving mutations show behaviour the tests do not pin down.
+PIT (`./gradlew :1.21.1-fabric:pitest`, on demand, not part of `check`) runs mutation testing on `core`; surviving mutations show behaviour the tests do not pin down.
 
 `./gradlew check` runs `verifyCoreIsolation`, which fails if anything under `core/` imports `net.minecraft`, `net.fabricmc`, `com.mojang`, `team.reborn` or non-core mod packages.
 Tests live in `src/test/java` (JUnit, test-only dependency).
@@ -507,3 +614,18 @@ Update this checklist as work progresses.
 - [x] Changelog system (`CHANGELOG.md`, `changelogEntry`, `releaseChangelog`; publish uploads the version's section)
 - [x] Generator block (new in this version; design agreed with the user, see "Power & items")
 - [x] Turret API for other mods (`api/`, `docs/turret-api.md`); built-in turrets registered through it, game test for an API turret
+
+### NeoForge 1.21.1 (branch `neoforge-test`; follow OpenModularLighting's steps)
+
+- [x] Build: Stonecutter nodes `<version>-<loader>`, `buildSrc` (`mod-common`, `bundled_licenses`), `build.neoforge.gradle.kts` (ModDevGradle, porting filter, data converted from the Fabric output), `neoforge.mods.toml` template, publishing disabled for NeoForge
+- [ ] Platform services copied from OpenModularLighting: `LoaderInfo`, `Fuel`, `Network` + `ClientNetwork`, `Menus`; facades forward to them; entrypoints split (`OMT.init()`, `OMTClient.init()`, `platform/<loader>` entrypoints)
+- [ ] Copied, not used yet: `inventory.ItemAccess` + Fabric/NeoForge adapters, `registry.RegistrationStep`, `client.ScreenRegistrar`
+- [ ] Energy: OMT's `core.base.EnergyStore` → OpenModularLighting's `core.energy.EnergyStore` (+ `maxExtract`, `extract`, `drain`) and `EnergyAccess`; service `Energy` (`isBattery`, `dischargeItem`, `pushToBlock` for the generator); Team Reborn / FE adapters (replaces `BaseEnergyStorage`)
+- [ ] Item transfer: turret base ammo slots and generator through `ItemAccess` (`getItemAccess(side)`), lookups/capabilities
+- [ ] Use `LoaderInfo` (config folder) and `Fuel` (generator) instead of `FabricLoader` / `FuelRegistry`
+- [ ] Registration: `OMT.init()` + `OMT.registrationSteps()` (also sounds, entity types), NeoForge per `RegisterEvent`; capabilities; block use, config sync, creative tab, recipe conditions, `c:` tags
+- [ ] Mixins on NeoForge (`[[mixins]]` in `neoforge.mods.toml`)
+- [ ] Client: screens, block entity/entity renderers, model layers, built-in item renderer, render layers, tooltips; camo models (Fabric Renderer API → NeoForge `ModelData`)
+- [ ] Turret API plugin discovery (`api/`, Fabric entrypoint → NeoForge)
+- [ ] GameTests shared with NeoForge (OpenModularLighting: `OMLGameTests`, empty structure, `TestTransfer`, no test classes in main packages)
+- [ ] Jade on NeoForge (`@WailaPlugin`)

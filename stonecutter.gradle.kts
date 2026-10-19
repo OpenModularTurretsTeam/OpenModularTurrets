@@ -1,8 +1,9 @@
 plugins {
     id("dev.kikugie.stonecutter")
+    // Loader plugins, applied by build.fabric.gradle.kts / build.neoforge.gradle.kts
+    // (the publish plugin comes from buildSrc, see buildSrc/build.gradle.kts)
     id("net.fabricmc.fabric-loom-remap") version "1.18.4" apply false
-    // Uploads to CurseForge / Modrinth (build-time only)
-    id("me.modmuss50.mod-publish-plugin") version "2.2.1" apply false
+    id("net.neoforged.moddev") version "2.0.148" apply false
     // Formatting checks (./gradlew spotlessCheck / spotlessApply)
     id("com.diffplug.spotless") version "8.10.4"
 }
@@ -19,14 +20,21 @@ spotless {
         endWithNewline()
     }
     format("misc") {
-        target("*.gradle.kts", "versions/*/*.gradle.kts", ".gitignore", "src/**/*.json", "src/**/*.properties")
+        target("*.gradle.kts", "buildSrc/*.gradle.kts", "buildSrc/src/**/*.gradle.kts", "versions/*/*.gradle.kts", ".gitignore",
+            "src/**/*.json", "src/**/*.properties", "src/**/*.toml")
         leadingTabsToSpaces(2)
         trimTrailingWhitespace()
         endWithNewline()
     }
 }
 
-stonecutter active "1.21.1"
+stonecutter active "1.21.1-fabric"
+
+// Loader constants for conditions: //? if fabric { ... //? if neoforge {
+// Prefer whole classes in platform/<loader>/ packages (left out of the other loaders' builds) over conditions.
+stonecutter parameters {
+    constants.match(current.project.substringAfterLast('-'), "fabric", "neoforge")
+}
 
 // Builds every version in one go: ./gradlew chiseledBuild
 tasks.register("chiseledBuild") {
@@ -154,7 +162,7 @@ abstract class DependencyMapTask : DefaultTask() {
     fun write() {
         val base = "omtteam.openmodularturrets"
         val libraries = listOf(
-            "net.minecraft." to "Minecraft", "com.mojang." to "Minecraft", "net.fabricmc." to "Fabric",
+            "net.minecraft." to "Minecraft", "com.mojang." to "Minecraft", "net.fabricmc." to "Fabric", "net.neoforged." to "NeoForge",
             "team.reborn." to "Team Reborn Energy", "snownee.jade." to "Jade", "com.google.gson." to "Gson",
             "org.junit." to "JUnit",
         )

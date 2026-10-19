@@ -35,12 +35,12 @@ cd OpenModularTurrets
 ### Useful commands
 
 ```bash
-./gradlew chiseledBuild                    # build both versions
-./gradlew :1.21.1:runClient                # start a client (also :1.20.1:runClient, :runServer)
-./gradlew check                            # unit tests + core isolation check
-./gradlew :1.21.1:runDatagen               # regenerate recipes, loot tables, tags (run for both versions)
-./gradlew "Set active project to 1.20.1"   # switch the source to 1.20.1
-./gradlew "Set active project to 1.21.1"   # switch back
+./gradlew chiseledBuild                         # build both versions
+./gradlew :1.21.1-fabric:runClient              # start a client (also :1.20.1-fabric:runClient, :runServer)
+./gradlew check                                 # unit tests + core isolation check
+./gradlew :1.21.1-fabric:runDatagen             # regenerate recipes, loot tables, tags (run for both versions)
+./gradlew "Set active project to 1.20.1-fabric" # switch the source to 1.20.1
+./gradlew "Set active project to 1.21.1-fabric" # switch back
 ```
 
 ## Working with two Minecraft versions

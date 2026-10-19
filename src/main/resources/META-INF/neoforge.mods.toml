@@ -1,0 +1,35 @@
+modLoader = "javafml"
+loaderVersion = "${neoforge_loader_range}"
+license = "GPL-3.0-only"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${version}"
+displayName = "${mod_name}"
+authors = "Poenjabiesous, UntouchedWagons, Keridos"
+description = "All a man needs are meat ingots, and big ass turrets. Adds a heap of new turrets and upgrades!"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/openmodularturrets/"
+
+# PORTING IN PROGRESS: the mixins (openmodularturrets.mixins.json) are not declared yet, their classes are not
+# compiled on NeoForge so far. Add them with [[mixins]] config = "openmodularturrets.mixins.json" once they are.
+
+[[dependencies.${mod_id}]]
+modId = "neoforge"
+type = "required"
+versionRange = "[${neoforge_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_dependency}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "jade"
+type = "optional"
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"
