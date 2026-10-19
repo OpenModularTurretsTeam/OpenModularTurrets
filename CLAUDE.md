@@ -375,7 +375,7 @@ omtteam.openmodularturrets
 ├── core/                        # The core logic files for turret base logic (targeting/upgrades/ticking etc.)
 ├── camo/                        # CamoHost (bases + camo trap), CamoRules, CamoData, light block state properties
 ├── security/                    # TrustedPlayer, AccessLevel, PermissionManager
-├── inventory/                   # base inventory, slot filters, Transfer API exposure
+├── inventory/                   # base inventory, slot filters, ItemAccess (what other blocks may move)
 ├── item/                        # ammo, upgrades, addons, additional items
 ├── entity/projectile/           # bullets, grenades, rockets, lasers, slugs, …
 ├── menu/                        # AbstractContainerMenu implementations
@@ -476,7 +476,7 @@ The built-in turrets use the same path, so there is no special casing per turret
 ### Power & items
 
 - Bases store energy internally.
-  Expose it through the energy API on all sides; expose inventory through Fabric Transfer API (`ItemStorage.SIDED`).
+  Expose it through the energy API on all sides (`getEnergyAccess(side)`); expose the ammo slots through `getItemAccess(side)` (Fabric `ItemStorage.SIDED` via `FabricBlockLookups`, NeoForge item handler capability).
 - Ammo is consumed from the base inventory.
   Costs and capacities are configurable in `config/`.
 - Power generation addons (solar, redstone reactor) are ticked by the base.
@@ -486,7 +486,7 @@ The built-in turrets use the same path, so there is no special casing per turret
   Energy multiplier upgrades (one upgrade slot, up to 4) burn `2^n` fuel ticks per tick, so production and fuel use both scale by `2^n` while one fuel item still yields the same energy (`GeneratorLogic.multiplier`).
   It pauses while its buffer (`generatorCapacity`, default 1,000,000) is full and pushes up to `generatorMaxOutput` (default 65,536 RF/t, a flat limit) into all neighbours via Team Reborn Energy.
   GUI: 3×3 fuel grid on the left, the blue upgrade slot centred in the free area (the rest of it stays free for later slots that are not fuel slots), the flame next to the energy bar.
-  Hoppers insert fuel only.
+  Hoppers insert fuel only and take out only leftovers (empty buckets).
 - **Upgrades are per machine:** `core.item.UpgradeType` is the common interface, each machine has its own enum (`TurretBaseUpgradeType`, `GeneratorUpgradeType`) and item subclass of `item.UpgradeItem` (`TurretBaseUpgradeItem`, `GeneratorUpgradeItem`).
   A machine's upgrade slots accept only its own subclass.
   A new machine gets its own enum and item subclass.
@@ -619,10 +619,10 @@ Update this checklist as work progresses.
 
 - [x] Build: Stonecutter nodes `<version>-<loader>`, `buildSrc` (`mod-common`, `bundled_licenses`), `build.neoforge.gradle.kts` (ModDevGradle, porting filter, data converted from the Fabric output), `neoforge.mods.toml` template, publishing disabled for NeoForge
 - [x] Platform services copied from OpenModularLighting: `LoaderInfo`, `Fuel`, `Network` + `ClientNetwork`, `Menus`; facades forward to them; entrypoints split (`OMT.init()`, `OMTClient.init()`, `platform/<loader>` entrypoints)
-- [x] Copied, not used yet: `inventory.ItemAccess` + Fabric/NeoForge adapters, `registry.RegistrationStep`, `client.ScreenRegistrar`
+- [x] Copied from OpenModularLighting: `inventory.ItemAccess` + Fabric/NeoForge adapters (in use since the item transfer step), `registry.RegistrationStep`, `client.ScreenRegistrar` (not used yet)
 - [x] ArchUnit: the cycle `compat` / `compat.network` ↔ `platform` (facades call the services, the service interfaces use the facades' types) is accepted in `KNOWN_CYCLES` (decided by the user)
 - [x] Energy: `core.energy.EnergyStore` (from OpenModularLighting: + `maxExtract`, `extract`, `drain`) and `EnergyAccess`, exposed by `getEnergyAccess(side)` on the base and the generator (which now uses the core store too); service `Energy` with `pushToBlock` only; adapters `FabricEnergyStorages` / `NeoForgeEnergyHandler` (replace `BaseEnergyStorage`); Fabric lookups in `platform/fabric/FabricBlockLookups`; game test for the generator push
-- [ ] Item transfer: turret base ammo slots and generator through `ItemAccess` (`getItemAccess(side)`), lookups/capabilities
+- [x] Item transfer: turret base ammo slots and generator fuel slots through `ItemAccess` (`getItemAccess(side)`); Fabric lookups via `FabricItemStorages`; hopper game tests (`ItemTransferGameTests`); the NeoForge capabilities come with the registration step
 - [ ] Use `LoaderInfo` (config folder) and `Fuel` (generator) instead of `FabricLoader` / `FuelRegistry`
 - [ ] Registration: `OMT.init()` + `OMT.registrationSteps()` (also sounds, entity types), NeoForge per `RegisterEvent`; capabilities; block use, config sync, creative tab, recipe conditions, `c:` tags
 - [ ] Mixins on NeoForge (`[[mixins]]` in `neoforge.mods.toml`)

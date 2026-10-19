@@ -76,7 +76,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `block.*` | blocks: bases, turrets, defenses (hardened blocks, walls, fences, camo trap), lever, generator |
 | `blockentity.*` | block entities; `blockentity.base` holds the adapters to core |
 | `entity.projectile` | turret projectiles and turret damage (`TurretDamage`) |
-| `item`, `inventory`, `menu` | items (ammo, upgrades, addons, memory card), base inventory rules, container menus |
+| `item`, `inventory`, `menu` | items (ammo, upgrades, addons, memory card), base inventory rules and `ItemAccess` (the slots other blocks may use, wrapped by the loader adapters), container menus |
 | `network` | packets: client→server requests (always re-validated) and server→client sync |
 | `config` | the JSON config: fields, comments, ranges, migration, server→client sync |
 | `security`, `camo` | Minecraft side of trust lists (NBT, player lookup) and camouflage |

@@ -1,10 +1,6 @@
 package omtteam.openmodularturrets.blockentity.misc;
 
 import net.fabricmc.fabric.api.registry.FuelRegistry;
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.FilteringStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -25,6 +21,7 @@ import omtteam.openmodularturrets.core.energy.EnergyAccess;
 import omtteam.openmodularturrets.core.energy.EnergyStore;
 import omtteam.openmodularturrets.core.generator.GeneratorLogic;
 import omtteam.openmodularturrets.core.item.GeneratorUpgradeType;
+import omtteam.openmodularturrets.inventory.ItemAccess;
 import omtteam.openmodularturrets.item.GeneratorUpgradeItem;
 import omtteam.openmodularturrets.platform.Platform;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
@@ -68,8 +65,9 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
     private final List<GeneratorLogic.FuelSlot> fuelSlots = IntStream.range(0, FUEL_SLOTS)
             .<GeneratorLogic.FuelSlot>mapToObj(slot -> () -> consumeFuel(slot))
             .toList();
-    @Nullable
-    private Storage<ItemVariant> itemStorage;
+    /** Hoppers and pipes may only insert fuel and only extract leftovers (empty buckets). */
+    private final ItemAccess itemAccess = new ItemAccess(fuel, 0, FUEL_SLOTS,
+            stack -> isFuel(stack.getItem()), stack -> !isFuel(stack.getItem()));
 
     public GeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.GENERATOR, pos, state);
@@ -108,22 +106,9 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
         return energy;
     }
 
-    /** Hoppers and pipes may only insert fuel and only extract leftovers (empty buckets). */
-    public Storage<ItemVariant> getItemStorage() {
-        if (itemStorage == null) {
-            itemStorage = new FilteringStorage<>(InventoryStorage.of(fuel, null)) {
-                @Override
-                protected boolean canInsert(ItemVariant resource) {
-                    return isFuel(resource.getItem());
-                }
-
-                @Override
-                protected boolean canExtract(ItemVariant resource) {
-                    return !isFuel(resource.getItem());
-                }
-            };
-        }
-        return itemStorage;
+    /** The fuel slots as exposed to automation on all sides (the loader adapters wrap it). */
+    public ItemAccess getItemAccess(@Nullable Direction side) {
+        return itemAccess;
     }
 
     public long getEnergy() {

@@ -18,8 +18,10 @@ public final class FabricBlockLookups {
     }
 
     public static void register() {
-        ItemStorage.SIDED.registerForBlockEntity((base, side) -> base.getAmmoStorage(), ModBlockEntities.TURRET_BASE);
-        ItemStorage.SIDED.registerForBlockEntity((generator, side) -> generator.getItemStorage(), ModBlockEntities.GENERATOR);
+        ItemStorage.SIDED.registerForBlockEntity((base, side) -> FabricItemStorages.of(base.getItemAccess(side)),
+                ModBlockEntities.TURRET_BASE);
+        ItemStorage.SIDED.registerForBlockEntity((generator, side) -> FabricItemStorages.of(generator.getItemAccess(side)),
+                ModBlockEntities.GENERATOR);
         registerEnergy(ModBlockEntities.TURRET_BASE, (base, side) -> base.getEnergyAccess(side));
         registerEnergy(ModBlockEntities.GENERATOR, (generator, side) -> generator.getEnergyAccess(side));
     }

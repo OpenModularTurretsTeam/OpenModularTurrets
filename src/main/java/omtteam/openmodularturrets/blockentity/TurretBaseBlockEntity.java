@@ -1,9 +1,5 @@
 package omtteam.openmodularturrets.blockentity;
 
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedSlottedStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -33,6 +29,7 @@ import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.TrustManager;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
+import omtteam.openmodularturrets.inventory.ItemAccess;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.security.LevelSecurityEnvironment;
@@ -54,9 +51,10 @@ import java.util.Random;
 public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost {
     private final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged,
             player -> Container.stillValidBlockEntity(this, player));
+    /** The ammo slots: anything the inventory accepts goes in, everything may come out. */
+    private final ItemAccess ammoAccess = new ItemAccess(inventory, TurretBaseInventory.AMMO_START,
+            TurretBaseInventory.AMMO_COUNT, stack -> true, stack -> true);
     private final TurretBaseLogic logic;
-    @Nullable
-    private Storage<ItemVariant> ammoStorage;
     private boolean neighboursScanned;
     private final CamoData camoData = new CamoData();
 
@@ -161,13 +159,9 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
         return inventory;
     }
 
-    /** Ammo slots as exposed to automation on all sides. */
-    public Storage<ItemVariant> getAmmoStorage() {
-        if (ammoStorage == null) {
-            ammoStorage = new CombinedSlottedStorage<>(InventoryStorage.of(inventory, null).getSlots()
-                    .subList(TurretBaseInventory.AMMO_START, TurretBaseInventory.AMMO_START + TurretBaseInventory.AMMO_COUNT));
-        }
-        return ammoStorage;
+    /** Ammo slots as exposed to automation on all sides (the loader adapters wrap it). */
+    public ItemAccess getItemAccess(@Nullable Direction side) {
+        return ammoAccess;
     }
 
     /** Energy as exposed to automation on all sides (insert only). */
