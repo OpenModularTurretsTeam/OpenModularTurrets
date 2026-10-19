@@ -628,7 +628,7 @@ Update this checklist as work progresses.
 - [x] Registration: `OMT.init(plugins)` + `OMT.registrationSteps()` (sounds, blocks, items, block entities, entity types, creative tab, menus), NeoForge per `RegisterEvent` with the common-setup check; capabilities (items, energy); shared handlers `InteractiveBlock.handleUse`, `OMTConfig.onPlayerJoin`, `KillCounter.onDeath` (NeoForge `LivingDeathEvent` at lowest priority); `VersionCompat.creativeTabBuilder()` / `fakePlayer()`; plain `c:` tags; `RayShotCallback` as a plain listener list; Fabric render data behind `CompatBlockEntity.renderData()`; `ModSounds` registers in `init()` (the turret definitions use the sounds earlier).
   OMT has no recipe conditions.
   NeoForge now compiles all of `main` except `datagen` and `compat/jade`, and loads up to common setup (checked with `runGameTestServer`, which then stops: no NeoForge game tests yet).
-- [ ] Mixins on NeoForge (`[[mixins]]` in `neoforge.mods.toml`)
+- [x] Mixins on NeoForge: the same `openmodularturrets.mixins.json` under `[[mixins]]` in `neoforge.mods.toml`; both `LivingEntityMixin` injection points exist in NeoForge's patched `LivingEntity` (checked once with `mixin.debug.export` on the NeoForge game test server)
 - [ ] Client: screens, block entity/entity renderers, model layers, built-in item renderer, render layers, tooltips; camo models (Fabric Renderer API → NeoForge `ModelData`)
 - [ ] Turret API plugin discovery (`api/`, Fabric entrypoint → NeoForge)
 - [ ] GameTests shared with NeoForge (OpenModularLighting: `OMLGameTests`, empty structure, `TestTransfer`, no test classes in main packages)

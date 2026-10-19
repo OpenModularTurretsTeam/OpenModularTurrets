@@ -10,8 +10,9 @@ authors = "Poenjabiesous, UntouchedWagons, Keridos"
 description = "All a man needs are meat ingots, and big ass turrets. Adds a heap of new turrets and upgrades!"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/openmodularturrets/"
 
-# PORTING IN PROGRESS: the mixins (openmodularturrets.mixins.json) are not declared yet, their classes are not
-# compiled on NeoForge so far. Add them with [[mixins]] config = "openmodularturrets.mixins.json" once they are.
+# Same config as on Fabric (NeoForge runs with Mojang names, so no refmap is needed; MixinExtras comes with NeoForge)
+[[mixins]]
+config = "openmodularturrets.mixins.json"
 
 [[dependencies.${mod_id}]]
 modId = "neoforge"
