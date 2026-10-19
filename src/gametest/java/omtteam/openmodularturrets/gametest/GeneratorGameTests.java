@@ -80,6 +80,21 @@ public class GeneratorGameTests implements FabricGameTest {
         });
     }
 
+    /** Burning a lava bucket leaves the empty bucket in its slot, like a furnace. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "generator_remainder", timeoutTicks = TIMEOUT_TICKS)
+    public void burntLavaBucketLeavesTheBucket(GameTestHelper helper) {
+        helper.setBlock(GENERATOR, ModBlocks.GENERATOR);
+        GeneratorBlockEntity generator = (GeneratorBlockEntity) helper.getBlockEntity(GENERATOR);
+        generator.getFuelContainer().setItem(0, new ItemStack(Items.LAVA_BUCKET));
+        helper.succeedWhen(() -> {
+            helper.assertTrue(generator.getBurnTime() > 0, "The lava bucket is not burning");
+            helper.assertTrue(generator.getFuelContainer().getItem(0).is(Items.BUCKET),
+                    "The slot holds " + generator.getFuelContainer().getItem(0) + " instead of the empty bucket");
+            generator.getFuelContainer().clearContent();
+            helper.setBlock(GENERATOR, Blocks.AIR);
+        });
+    }
+
     /** Each machine's upgrade slots only accept its own upgrades. */
     @GameTest(template = EMPTY_STRUCTURE, batch = "generator_upgrade_slots")
     public void upgradesOnlyFitTheirMachine(GameTestHelper helper) {

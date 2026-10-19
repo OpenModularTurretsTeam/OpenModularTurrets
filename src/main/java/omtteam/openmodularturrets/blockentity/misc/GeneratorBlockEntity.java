@@ -1,13 +1,11 @@
 package omtteam.openmodularturrets.blockentity.misc;
 
-import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -44,7 +42,7 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
     private final SimpleContainer fuel = new SimpleContainer(FUEL_SLOTS) {
         @Override
         public boolean canPlaceItem(int slot, ItemStack stack) {
-            return isFuel(stack.getItem());
+            return isFuel(stack);
         }
     };
     /** One upgrade slot holding up to 4 generator upgrades. */
@@ -67,7 +65,7 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
             .toList();
     /** Hoppers and pipes may only insert fuel and only extract leftovers (empty buckets). */
     private final ItemAccess itemAccess = new ItemAccess(fuel, 0, FUEL_SLOTS,
-            stack -> isFuel(stack.getItem()), stack -> !isFuel(stack.getItem()));
+            GeneratorBlockEntity::isFuel, stack -> !isFuel(stack));
 
     public GeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.GENERATOR, pos, state);
@@ -81,9 +79,8 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
         return stack.getItem() instanceof GeneratorUpgradeItem;
     }
 
-    public static boolean isFuel(Item item) {
-        Integer ticks = FuelRegistry.INSTANCE.get(item);
-        return ticks != null && ticks > 0;
+    public static boolean isFuel(ItemStack stack) {
+        return Platform.fuel().burnTime(stack) > 0;
     }
 
     public SimpleContainer getFuelContainer() {
@@ -153,12 +150,12 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
      */
     private int consumeFuel(int slot) {
         ItemStack stack = fuel.getItem(slot);
-        if (stack.isEmpty() || !isFuel(stack.getItem())) return 0;
-        Item remainder = stack.getItem().getCraftingRemainingItem();
-        int ticks = FuelRegistry.INSTANCE.get(stack.getItem());
+        int ticks = Platform.fuel().burnTime(stack);
+        if (ticks <= 0) return 0;
+        ItemStack remainder = Platform.fuel().remainder(stack);
         stack.shrink(1);
-        if (stack.isEmpty() && remainder != null) {
-            fuel.setItem(slot, new ItemStack(remainder));
+        if (stack.isEmpty() && !remainder.isEmpty()) {
+            fuel.setItem(slot, remainder);
         } else {
             fuel.setChanged();
         }

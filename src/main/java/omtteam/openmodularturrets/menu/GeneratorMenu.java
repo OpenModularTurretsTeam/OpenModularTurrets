@@ -78,7 +78,7 @@ public class GeneratorMenu extends AbstractContainerMenu {
             addSlot(new Slot(fuel, slot, FUEL_X + slot % FUEL_COLUMNS * 18, FUEL_Y + slot / FUEL_COLUMNS * 18) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
-                    return GeneratorBlockEntity.isFuel(stack.getItem());
+                    return GeneratorBlockEntity.isFuel(stack);
                 }
             });
         }
@@ -125,7 +125,7 @@ public class GeneratorMenu extends AbstractContainerMenu {
                 // safeInsert keeps the slot limit of 4 (moveItemStackTo would fill up to 64)
                 slots.get(UPGRADE_SLOT).safeInsert(stack);
                 if (stack.getCount() == original.getCount()) return ItemStack.EMPTY;
-            } else if (!GeneratorBlockEntity.isFuel(stack.getItem())
+            } else if (!GeneratorBlockEntity.isFuel(stack)
                     || !moveItemStackTo(stack, FUEL_START, FUEL_END, false)) {
                 return ItemStack.EMPTY;
             }

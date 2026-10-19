@@ -7,12 +7,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.level.ServerPlayer;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.compat.network.NetworkCompat;
 import omtteam.openmodularturrets.network.ConfigSyncPacket;
 import omtteam.openmodularturrets.network.OMTPackets;
+import omtteam.openmodularturrets.platform.Platform;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -63,7 +63,7 @@ public final class OMTConfig {
     }
 
     public static void load() {
-        Path path = FabricLoader.getInstance().getConfigDir().resolve(FILE_NAME);
+        Path path = Platform.loaderInfo().configDir().resolve(FILE_NAME);
         ConfigData data;
         boolean changed;
         if (Files.exists(path)) {

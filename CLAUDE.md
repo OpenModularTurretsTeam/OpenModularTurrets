@@ -481,7 +481,7 @@ The built-in turrets use the same path, so there is no special casing per turret
   Costs and capacities are configurable in `config/`.
 - Power generation addons (solar, redstone reactor) are ticked by the base.
 - **Generator** (separate block, no owner/trust): a long-running power source for places without other power infrastructure.
-  Burns any furnace fuel (Fabric `FuelRegistry`; remainders like empty buckets stay in the slot) from its 9 fuel slots, using them in order.
+  Burns any furnace fuel (the loader's fuel values through the `Fuel` service; remainders like empty buckets stay in the slot) from its 9 fuel slots, using them in order.
   One fuel tick yields `generatorEnergyPerTick` (default 40 RF).
   Energy multiplier upgrades (one upgrade slot, up to 4) burn `2^n` fuel ticks per tick, so production and fuel use both scale by `2^n` while one fuel item still yields the same energy (`GeneratorLogic.multiplier`).
   It pauses while its buffer (`generatorCapacity`, default 1,000,000) is full and pushes up to `generatorMaxOutput` (default 65,536 RF/t, a flat limit) into all neighbours via Team Reborn Energy.
@@ -623,7 +623,7 @@ Update this checklist as work progresses.
 - [x] ArchUnit: the cycle `compat` / `compat.network` ↔ `platform` (facades call the services, the service interfaces use the facades' types) is accepted in `KNOWN_CYCLES` (decided by the user)
 - [x] Energy: `core.energy.EnergyStore` (from OpenModularLighting: + `maxExtract`, `extract`, `drain`) and `EnergyAccess`, exposed by `getEnergyAccess(side)` on the base and the generator (which now uses the core store too); service `Energy` with `pushToBlock` only; adapters `FabricEnergyStorages` / `NeoForgeEnergyHandler` (replace `BaseEnergyStorage`); Fabric lookups in `platform/fabric/FabricBlockLookups`; game test for the generator push
 - [x] Item transfer: turret base ammo slots and generator fuel slots through `ItemAccess` (`getItemAccess(side)`); Fabric lookups via `FabricItemStorages`; hopper game tests (`ItemTransferGameTests`); the NeoForge capabilities come with the registration step
-- [ ] Use `LoaderInfo` (config folder) and `Fuel` (generator) instead of `FabricLoader` / `FuelRegistry`
+- [x] Use `LoaderInfo` (config folder in `OMTConfig`) and `Fuel` (generator: `isFuel(stack)`, burn time, stack-aware remainder) instead of `FabricLoader` / `FuelRegistry`; game test for the lava bucket remainder (the plugin entrypoints in `TurretRegistry` / `TurretModels` stay for "Turret API plugin discovery")
 - [ ] Registration: `OMT.init()` + `OMT.registrationSteps()` (also sounds, entity types), NeoForge per `RegisterEvent`; capabilities; block use, config sync, creative tab, recipe conditions, `c:` tags
 - [ ] Mixins on NeoForge (`[[mixins]]` in `neoforge.mods.toml`)
 - [ ] Client: screens, block entity/entity renderers, model layers, built-in item renderer, render layers, tooltips; camo models (Fabric Renderer API → NeoForge `ModelData`)
