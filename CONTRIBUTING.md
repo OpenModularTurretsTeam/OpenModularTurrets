@@ -109,5 +109,5 @@ cd OpenModularTurrets
 
 ## License
 
-By contributing, you agree that your code is licensed under the [MIT license](LICENSE) and your art (textures, models, sounds) under [CC BY-NC 4.0](LICENSE-ART).
+By contributing, you agree that your code is licensed under the [MIT license](LICENSE) and your art (textures, models, sounds) under [CC BY-NC-SA 4.0](LICENSE-ART), as [LICENSE-DUAL](LICENSE-DUAL) describes.
 You also agree to the restriction from the [CLA](CLA.md).

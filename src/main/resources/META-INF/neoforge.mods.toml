@@ -1,6 +1,6 @@
 modLoader = "javafml"
 loaderVersion = "${neoforge_loader_range}"
-license = "GPL-3.0-only"
+license = "MIT (code), CC-BY-NC-SA-4.0 (art)"
 
 [[mods]]
 modId = "${mod_id}"

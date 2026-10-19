@@ -1,7 +1,7 @@
 # Test mod (src/gametest), never shipped: NeoForge counterpart of fabric.mod.json next to it
 modLoader = "javafml"
 loaderVersion = "[4,)"
-license = "GPL-3.0-only"
+license = "MIT"
 
 [[mods]]
 modId = "openmodularturrets_gametest"
