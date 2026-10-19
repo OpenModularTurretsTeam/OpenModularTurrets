@@ -9,7 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
@@ -28,13 +27,11 @@ import omtteam.openmodularturrets.camo.CamoBlock;
 import omtteam.openmodularturrets.camo.CamoLightProperties;
 import omtteam.openmodularturrets.camo.CamoMenus;
 import omtteam.openmodularturrets.camo.CamoRules;
+import omtteam.openmodularturrets.compat.BlockCodec;
+import omtteam.openmodularturrets.compat.CompatEntityBlock;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-//? if >=1.21 {
-import com.mojang.serialization.MapCodec;
-import net.minecraft.world.level.LevelReader;
-//?}
 
 /**
  * Camouflage trap (OMPD {@code BlockCamoTrap} + OMLib {@code BlockAbstractCamoTileEntity}): looks like another full
@@ -45,13 +42,11 @@ import net.minecraft.world.level.LevelReader;
  * are set (the same menu as on turret bases). It mines like the block it imitates (OMPD switched the harvest tool
  * to the camouflage's tool). Sneaking skips the menu, so blocks can still be placed against it.
  */
-public class CamoTrapBlock extends BaseEntityBlock implements InteractiveBlock, CamoBlock {
-    //? if >=1.21 {
-    private static final MapCodec<CamoTrapBlock> CODEC = simpleCodec(CamoTrapBlock::new);
-    //?}
+public class CamoTrapBlock extends CompatEntityBlock implements InteractiveBlock, CamoBlock {
+    private static final BlockCodec<CamoTrapBlock> CODEC = codecOf(CamoTrapBlock::new);
 
     public CamoTrapBlock(Properties properties) {
-        super(properties);
+        super(CODEC, properties);
         registerDefaultState(CamoLightProperties.withDefaults(defaultBlockState()));
     }
 
@@ -68,13 +63,6 @@ public class CamoTrapBlock extends BaseEntityBlock implements InteractiveBlock, 
                 .lightLevel(CamoLightProperties::lightLevel)
                 .isViewBlocking((state, level, pos) -> false);
     }
-
-    //? if >=1.21 {
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-    //?}
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
@@ -135,19 +123,11 @@ public class CamoTrapBlock extends BaseEntityBlock implements InteractiveBlock, 
         return super.getDestroyProgress(state, player, level, pos);
     }
 
-    //? if >=1.21 {
     /** OMPD {@code getPickBlock}: picking gives the camouflage, so the trap is not revealed. */
     @Override
-    public @NotNull ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
-        return CamoRules.pickItem(level, pos, super.getCloneItemStack(level, pos, state));
+    protected ItemStack pickItem(BlockGetter level, BlockPos pos, ItemStack picked) {
+        return CamoRules.pickItem(level, pos, picked);
     }
-    //?} else {
-    /*/^* OMPD {@code getPickBlock}: picking gives the camouflage, so the trap is not revealed. ^/
-    @Override
-    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
-        return CamoRules.pickItem(level, pos, super.getCloneItemStack(level, pos, state));
-    }
-    *///?}
 
     /**
      * Admins (the owner always is one) open the camouflage menu with the main hand; everyone else gets nothing, so a

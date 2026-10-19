@@ -215,8 +215,8 @@ Wrap each of these behind a helper where possible.
 | BE update packet tag | `getUpdateTag()` | `getUpdateTag(HolderLookup.Provider)` |
 | ItemStack extra data | `stack.getTag()` / NBT | **Data Components** (register custom `DataComponentType`s, or `CUSTOM_DATA`) |
 | ItemStack NBT save | `stack.save(tag)` / `ItemStack.of(tag)` | `stack.save(provider)` / `ItemStack.parse(provider, tag)` (codecs) |
-| Block interaction | `Block#use(...)` → `InteractionResult` | `useWithoutItem(...)` and `useItemOn(...)` → `ItemInteractionResult` |
-| Block codecs | not required | `BaseEntityBlock` and others require `codec()` returning a `MapCodec` |
+| Block interaction | `Block#use(...)` → `InteractionResult` | `useWithoutItem(...)` and `useItemOn(...)` → `ItemInteractionResult`; use `InteractiveBlock` (Fabric `UseBlockCallback`), which is the same on both |
+| Block codecs | not required | `BaseEntityBlock` and others require `codec()` returning a `MapCodec`; extend `CompatEntityBlock` and pass a `BlockCodec` (`codecOf(...)`) to its constructor |
 | Networking | `ResourceLocation` channel + `FriendlyByteBuf` | `CustomPacketPayload` + `StreamCodec` + `PayloadTypeRegistry` |
 | Extended menus | `ExtendedScreenHandlerFactory` writing to a buf | `ExtendedScreenHandlerFactory<D>` with a `StreamCodec` for `D` |
 | Entity synced data | `defineSynchedData()` | `defineSynchedData(SynchedEntityData.Builder)` |
@@ -271,7 +271,7 @@ omtteam.openmodularturrets
 ├── menu/                        # AbstractContainerMenu implementations
 ├── network/                     # packets (C2S: settings/trust changes; S2C: sync)
 ├── config/                      # self-written config (JSON via Gson), no library
-└── compat/                      # VersionCompat helpers (Stonecutter-conditional code lives here)
+└── compat/                      # VersionCompat, CompatBlockEntity, CompatEntityBlock (Stonecutter-conditional code lives here)
 
 (client source set)
 omtteam.openmodularturrets.client

@@ -7,40 +7,30 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
+import omtteam.openmodularturrets.compat.BlockCodec;
+import omtteam.openmodularturrets.compat.CompatEntityBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-//? if >=1.21 {
-import com.mojang.serialization.MapCodec;
-//?}
 
 /**
  * Hardened block (OMPD {@code BlockHardened}), one block per tier.
  */
-public class HardenedBlock extends BaseEntityBlock implements InteractiveBlock {
-    //? if >=1.21 {
-    private static final MapCodec<HardenedBlock> CODEC = simpleCodec(properties -> new HardenedBlock(DefenseTier.ONE, properties));
-    //?}
+public class HardenedBlock extends CompatEntityBlock implements InteractiveBlock {
+    private static final BlockCodec<HardenedBlock> CODEC =
+            codecOf(properties -> new HardenedBlock(DefenseTier.ONE, properties));
 
     private final DefenseTier tier;
 
     public HardenedBlock(DefenseTier tier, Properties properties) {
-        super(properties);
+        super(CODEC, properties);
         this.tier = tier;
     }
-
-    //? if >=1.21 {
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-    //?}
 
     public DefenseTier getTier() {
         return tier;

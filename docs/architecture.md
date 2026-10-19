@@ -167,6 +167,9 @@ A C2S handler must start with `PacketValidation` and an access check.
 
 The source is written for 1.21.1; Stonecutter comments switch it to 1.20.1.
 Put the difference into a small helper in `compat` (for example `VersionCompat`) and call that, instead of `//? if` blocks in gameplay code.
+Blocks with a block entity extend `compat.CompatEntityBlock`, which hides the block codec (pass a `BlockCodec` made with `codecOf`) and the pick block signature (override `pickItem`).
+Block entities extend `compat.CompatBlockEntity`.
+Right-click handling goes through `InteractiveBlock`, not vanilla's `use` methods.
 The table of known differences is in `CLAUDE.md`, section 5.
 
 ### Recipes, loot tables, tags
@@ -216,5 +219,4 @@ They are known and measured, not hidden:
 - **`TurretBaseLogic` is large** (about 700 lines): targeting, ammo, energy, upgrades, addons and warnings in one class.
   Candidates to move out are the ammo drawing and the energy generation.
 - **29 PMD findings** above the complexity limits, mostly long methods with many branches (`RayWeapons.shoot`, `TargetSelector`, `TurretBaseScreen`, `ConfigWriter`).
-- **Stonecutter conditionals outside `compat`**: `TurretBaseBlock` has six; they belong behind helpers.
 - **Light block state properties on every base tier**: a deliberate memory trade-off, described in `CLAUDE.md` ("Known performance / memory trade-offs").

@@ -1,10 +1,12 @@
 package omtteam.openmodularturrets.block.base;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -12,7 +14,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
@@ -24,12 +25,15 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
+import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.camo.CamoBlock;
 import omtteam.openmodularturrets.camo.CamoLightProperties;
 import omtteam.openmodularturrets.camo.CamoRules;
 import omtteam.openmodularturrets.config.BaseSetting;
 import omtteam.openmodularturrets.config.ConfigData;
+import omtteam.openmodularturrets.compat.BlockCodec;
+import omtteam.openmodularturrets.compat.CompatEntityBlock;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.security.PlayerInfo;
@@ -40,14 +44,6 @@ import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-//? if <1.21 {
-/*import net.minecraft.world.InteractionHand;
-*///?}
-//? if >=1.21 {
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-//?}
 
 /**
  * Turret base, one block per tier (1–5). Ported from 1.12.2 {@code BlockTurretBase} (meta-based tiers flattened).
@@ -58,18 +54,14 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
  * on tier {@value CamoLight#MIN_BASE_TIER} and up; lower tiers keep the defaults (no light, fully opaque to light).
  * The properties exist on every tier because the block states are built before the tier is known.
  */
-public class TurretBaseBlock extends BaseEntityBlock implements CamoBlock {
-    //? if >=1.21 {
-    public static final MapCodec<TurretBaseBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.intRange(1, 5).fieldOf("tier").forGetter(TurretBaseBlock::getTier),
-            propertiesCodec()
-    ).apply(instance, TurretBaseBlock::new));
-    //?}
+public class TurretBaseBlock extends CompatEntityBlock implements InteractiveBlock, CamoBlock {
+    private static final BlockCodec<TurretBaseBlock> CODEC =
+            codecOf("tier", Codec.intRange(1, 5), TurretBaseBlock::getTier, TurretBaseBlock::new);
 
     private final int tier;
 
     public TurretBaseBlock(int tier, Properties properties) {
-        super(properties);
+        super(CODEC, properties);
         this.tier = tier;
         registerDefaultState(CamoLightProperties.withDefaults(defaultBlockState()));
     }
@@ -104,13 +96,6 @@ public class TurretBaseBlock extends BaseEntityBlock implements CamoBlock {
         return properties.lightLevel(CamoLightProperties::lightLevel);
     }
 
-    //? if >=1.21 {
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-    //?}
-
     public int getTier() {
         return tier;
     }
@@ -139,19 +124,11 @@ public class TurretBaseBlock extends BaseEntityBlock implements CamoBlock {
         return CamoLightProperties.lightBlock(state) == 0;
     }
 
-    //? if >=1.21 {
     /** Picking a camouflaged base gives the disguise, so the base is not revealed. */
     @Override
-    public @NotNull ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
-        return CamoRules.pickItem(level, pos, super.getCloneItemStack(level, pos, state));
+    protected ItemStack pickItem(BlockGetter level, BlockPos pos, ItemStack picked) {
+        return CamoRules.pickItem(level, pos, picked);
     }
-    //?} else {
-    /*/^* Picking a camouflaged base gives the disguise, so the base is not revealed. ^/
-    @Override
-    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
-        return CamoRules.pickItem(level, pos, super.getCloneItemStack(level, pos, state));
-    }
-    *///?}
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -209,26 +186,14 @@ public class TurretBaseBlock extends BaseEntityBlock implements CamoBlock {
         }
     }
 
-    //? if >=1.21 {
-    @Override
-    protected @NotNull InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
-                                                        BlockHitResult hit) {
-        return onUse(level, pos, player);
-    }
-    //?} else {
-    /*@Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
-                                 BlockHitResult hit) {
-        return hand == InteractionHand.MAIN_HAND ? onUse(level, pos, player) : InteractionResult.PASS;
-    }
-    *///?}
-
     /**
      * 1.12.2 {@code onBlockActivated}: right-click (not sneaking) opens the GUI if the player has access, otherwise
      * a permission message is shown. The check runs on the server, which then tells the client what to open.
      */
-    private InteractionResult onUse(Level level, BlockPos pos, Player player) {
-        if (player.isShiftKeyDown()) return InteractionResult.PASS;
+    @Override
+    public InteractionResult onUse(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+                                   BlockHitResult hit) {
+        if (hand != InteractionHand.MAIN_HAND || player.isShiftKeyDown()) return InteractionResult.PASS;
         if (level.isClientSide()) return InteractionResult.SUCCESS;
         if (!(player instanceof ServerPlayer serverPlayer)
                 || !(level.getBlockEntity(pos) instanceof TurretBaseBlockEntity base)) {

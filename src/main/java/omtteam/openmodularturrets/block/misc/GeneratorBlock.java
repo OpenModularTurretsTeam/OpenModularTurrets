@@ -14,7 +14,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
@@ -30,29 +29,26 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.blockentity.misc.GeneratorBlockEntity;
+import omtteam.openmodularturrets.compat.BlockCodec;
+import omtteam.openmodularturrets.compat.CompatEntityBlock;
 import omtteam.openmodularturrets.compat.MenuCompat;
 import omtteam.openmodularturrets.menu.GeneratorMenu;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-//? if >=1.21 {
-import com.mojang.serialization.MapCodec;
-//?}
 
 /**
  * Generator (new block, not in 1.12.2): a furnace-like fuel burner that powers adjacent turret bases. Anyone may
  * use it (no owner). {@link #FACING} is the front, {@link #LIT} is set while burning.
  */
-public class GeneratorBlock extends BaseEntityBlock implements InteractiveBlock {
+public class GeneratorBlock extends CompatEntityBlock implements InteractiveBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    //? if >=1.21 {
-    private static final MapCodec<GeneratorBlock> CODEC = simpleCodec(GeneratorBlock::new);
-    //?}
+    private static final BlockCodec<GeneratorBlock> CODEC = codecOf(GeneratorBlock::new);
 
     public GeneratorBlock(Properties properties) {
-        super(properties);
+        super(CODEC, properties);
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, false));
     }
 
@@ -61,13 +57,6 @@ public class GeneratorBlock extends BaseEntityBlock implements InteractiveBlock 
         return Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).strength(3.5F)
                 .requiresCorrectToolForDrops().lightLevel(state -> state.getValue(LIT) ? 13 : 0);
     }
-
-    //? if >=1.21 {
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-    //?}
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

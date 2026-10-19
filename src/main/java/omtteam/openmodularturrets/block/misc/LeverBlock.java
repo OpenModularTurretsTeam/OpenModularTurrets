@@ -10,7 +10,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
@@ -28,19 +27,18 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.misc.LeverBlockEntity;
+import omtteam.openmodularturrets.compat.BlockCodec;
+import omtteam.openmodularturrets.compat.CompatEntityBlock;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.registry.ModSounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-//? if >=1.21 {
-import com.mojang.serialization.MapCodec;
-//?}
 
 /**
  * Basic turret base crank (1.12.2 {@code LeverBlock}): placed next to a tier 1 base, each turn adds 50 energy.
  * {@link #FACING} points towards the base.
  */
-public class LeverBlock extends BaseEntityBlock implements InteractiveBlock {
+public class LeverBlock extends CompatEntityBlock implements InteractiveBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     /** 1.12.2 {@code storage.receiveEnergy(50, false)} per turn (limited by the base's max input). */
     private static final long ENERGY_PER_TURN = 50;
@@ -49,12 +47,10 @@ public class LeverBlock extends BaseEntityBlock implements InteractiveBlock {
     /** Placement check order: a base to the north wins over south, west and east. */
     private static final Direction[] SEARCH_ORDER = {Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
 
-    //? if >=1.21 {
-    private static final MapCodec<LeverBlock> CODEC = simpleCodec(LeverBlock::new);
-    //?}
+    private static final BlockCodec<LeverBlock> CODEC = codecOf(LeverBlock::new);
 
     public LeverBlock(Properties properties) {
-        super(properties);
+        super(CODEC, properties);
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.SOUTH));
     }
 
@@ -62,13 +58,6 @@ public class LeverBlock extends BaseEntityBlock implements InteractiveBlock {
     public static Properties createProperties() {
         return Properties.of().mapColor(MapColor.STONE).sound(SoundType.STONE).strength(2.0F, 15.0F).noOcclusion();
     }
-
-    //? if >=1.21 {
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-    //?}
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

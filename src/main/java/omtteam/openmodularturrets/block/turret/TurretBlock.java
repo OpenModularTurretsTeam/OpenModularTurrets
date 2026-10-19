@@ -1,11 +1,11 @@
 package omtteam.openmodularturrets.block.turret;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
@@ -24,6 +24,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
+import omtteam.openmodularturrets.compat.BlockCodec;
+import omtteam.openmodularturrets.compat.CompatEntityBlock;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.turret.TurretType;
@@ -31,11 +33,6 @@ import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-//? if >=1.21 {
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-//?}
 
 /**
  * A turret, one block per {@link TurretType}. Ported from 1.12.2 {@code BlockAbstractTurretHead}.
@@ -44,7 +41,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
  * unbreakable (1.12.2 {@code setBlockUnbreakable}) unless {@code turrets.turretBreakable}; they are removed
  * with the base GUI's "Drop turrets" button or drop when their base disappears.
  */
-public class TurretBlock extends BaseEntityBlock {
+public class TurretBlock extends CompatEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     /** 1.12.2 {@code CONCEALED}: retracted into the base by the concealer addon (no shape). */
     public static final BooleanProperty CONCEALED = BooleanProperty.create("concealed");
@@ -53,18 +50,14 @@ public class TurretBlock extends BaseEntityBlock {
     /** Hardness when {@code turretBreakable}. */
     private static final float BREAKABLE_HARDNESS = 3.0F;
 
-    //? if >=1.21 {
-    public static final MapCodec<TurretBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.STRING.xmap(id -> TurretType.byId(id).orElseThrow(), TurretType::getId).fieldOf("turret")
-                    .forGetter(TurretBlock::getTurretType),
-            propertiesCodec()
-    ).apply(instance, TurretBlock::new));
-    //?}
+    private static final BlockCodec<TurretBlock> CODEC = codecOf("turret",
+            Codec.STRING.xmap(id -> TurretType.byId(id).orElseThrow(), TurretType::getId),
+            TurretBlock::getTurretType, TurretBlock::new);
 
     private final TurretType turretType;
 
     public TurretBlock(TurretType turretType, Properties properties) {
-        super(properties);
+        super(CODEC, properties);
         this.turretType = turretType;
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP).setValue(CONCEALED, false));
     }
@@ -85,13 +78,6 @@ public class TurretBlock extends BaseEntityBlock {
                 .isSuffocating((state, level, pos) -> false)
                 .isViewBlocking((state, level, pos) -> false);
     }
-
-    //? if >=1.21 {
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-    //?}
 
     public TurretType getTurretType() {
         return turretType;
