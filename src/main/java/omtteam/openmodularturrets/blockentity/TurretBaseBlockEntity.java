@@ -222,9 +222,9 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
         return CamoPermissions.canChangeLight(getTrustManager(), PlayerAdapter.info(player));
     }
 
-    /** What the model reads while the chunk is meshed (Fabric block entity render data). */
+    /** The camouflage the model shows. */
     @Override
-    public @Nullable Object getRenderData() {
+    protected @Nullable Object renderData() {
         return isCamoEnabled() ? camoData.get() : null;
     }
 

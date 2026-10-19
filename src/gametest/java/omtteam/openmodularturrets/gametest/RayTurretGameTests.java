@@ -44,7 +44,7 @@ public class RayTurretGameTests implements FabricGameTest {
     private static final Map<BlockPos, List<Shot>> SHOTS = new ConcurrentHashMap<>();
 
     static {
-        RayShotCallback.EVENT.register((turret, start, end, hit) -> SHOTS
+        RayShotCallback.register((turret, start, end, hit) -> SHOTS
                 .computeIfAbsent(turret.getBlockPos(), pos -> new CopyOnWriteArrayList<>())
                 .add(new Shot(start, end, hit)));
     }

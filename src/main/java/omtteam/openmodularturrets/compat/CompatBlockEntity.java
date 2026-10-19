@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 //? if <1.21 {
 /*import net.minecraft.core.RegistryAccess;
 *///?}
@@ -54,6 +55,21 @@ public abstract class CompatBlockEntity extends BlockEntity {
             level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_CLIENTS);
         }
     }
+
+    /**
+     * What the block's model reads while the chunk is meshed (the camouflage), {@code null} for nothing. Fabric reads
+     * it as block entity render data; NeoForge's model data follows with the client port.
+     */
+    protected @Nullable Object renderData() {
+        return null;
+    }
+
+    //? if fabric {
+    @Override
+    public @Nullable Object getRenderData() {
+        return renderData();
+    }
+    //?}
 
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {

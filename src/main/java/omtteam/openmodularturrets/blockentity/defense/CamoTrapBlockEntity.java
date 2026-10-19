@@ -98,9 +98,9 @@ public class CamoTrapBlockEntity extends CompatBlockEntity implements CamoHost, 
         return CamoPermissions.canManageTrap(trustManager, PlayerAdapter.info(player));
     }
 
-    /** What the model reads while the chunk is meshed (Fabric block entity render data). */
+    /** The camouflage the model shows. */
     @Override
-    public @Nullable Object getRenderData() {
+    protected @Nullable Object renderData() {
         return camoData.get();
     }
 

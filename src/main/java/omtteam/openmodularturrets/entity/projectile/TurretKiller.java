@@ -1,8 +1,8 @@
 package omtteam.openmodularturrets.entity.projectile;
 
 import com.mojang.authlib.GameProfile;
-import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -28,7 +28,7 @@ public final class TurretKiller {
      * before each hit: the loot is computed during the hit when it kills.
      */
     public static Player withLooting(ServerLevel level, int lootingLevel) {
-        FakePlayer player = FakePlayer.get(level, PROFILE);
+        ServerPlayer player = VersionCompat.fakePlayer(level, PROFILE);
         ItemStack sword = new ItemStack(Items.IRON_SWORD);
         if (lootingLevel > 0) {
             VersionCompat.enchantLooting(sword, level, lootingLevel);

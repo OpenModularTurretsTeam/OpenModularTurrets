@@ -14,11 +14,10 @@ val client: SourceSet = sourceSets.create("client") {
     runtimeClasspath += sourceSets.main.get().output
 }
 
-// PORTING IN PROGRESS: only these packages (or single files) compile on NeoForge so far. Each is added once it no
-// longer uses Fabric API or Team Reborn Energy directly; then the filter becomes an exclusion of datagen only
-// (Fabric-only by design: NeoForge gets the converted Fabric output, convertFabricData below).
-val ported = listOf("core", "platform", "inventory/ItemAccess.java", "registry/RegistrationStep.java", "compat/network", "compat/MenuCompat.java")
-sourceSets.main { java { ported.forEach { include("$packagePath/$it/**") } } }
+// datagen is Fabric-only by design (NeoForge gets the converted Fabric output, convertFabricData below).
+// PORTING IN PROGRESS: compat/jade still waits for its NeoForge step; once it is ported, only datagen stays excluded.
+val notPorted = listOf("datagen", "compat/jade")
+sourceSets.main { java { notPorted.forEach { exclude("$packagePath/$it/**") } } }
 client.java { include("$packagePath/client/platform/**", "$packagePath/client/ScreenRegistrar.java") }
 sourceSets.test { java { include("$packagePath/core/**") } }
 

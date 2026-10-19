@@ -90,16 +90,19 @@ Packages below `omtteam.openmodularturrets` (main):
 
 ### Startup
 
-The loader entrypoint (`OMTFabric`, `OMTNeoForge`) first installs the platform services, then calls `OMT.init()`, which runs the registrations in a fixed order.
+The loader entrypoint (`OMTFabric`, `OMTNeoForge`) first installs the platform services, then calls `OMT.init(plugins)` with the turret plugins of other mods it found.
 The order matters:
 
-1. `TurretRegistry.load()`: built-in turrets (`registry.BuiltinTurrets`), then other mods' turrets from the `openmodularturrets` entrypoint.
+1. `TurretRegistry.load(plugins)`: built-in turrets (`registry.BuiltinTurrets`), then the plugins (on Fabric the `openmodularturrets` entrypoints; none on NeoForge yet).
    The turret types are frozen afterwards.
-2. `OMTPackets.init()`: packet types.
+2. `OMTPackets.init()`: packet types (NeoForge accepts them only until its payload registration event).
 3. `OMTConfig.init()`: needs the turret types for their default stats; blocks need the config for their properties.
-4. Sounds, blocks, items, block entities, entities, creative tab, menus.
 
-Afterwards `OMTFabric` registers the Fabric API lookups (`FabricBlockLookups`: items and energy of the base and the generator).
+Then the registrations of `OMT.registrationSteps()`: sounds, blocks, items, block entities, entities, creative tab, menus.
+Fabric runs them in this order; NeoForge runs each in the `RegisterEvent` of its registry (and fails at common setup if one never ran).
+A registry class registers its content when it is loaded, so it must not be touched before its step; `ModSounds` is the exception (loading it only creates the sounds, which the turret definitions use in step 1).
+
+Last, the entrypoint wires its loader to the shared code: the item and energy access of the base and the generator (`FabricBlockLookups`, NeoForge capabilities), block use (`InteractiveBlock.handleUse`), the config sync on join (`OMTConfig.onPlayerJoin`) and the kill counter (`KillCounter.onDeath`).
 
 On the client, `OMTClient` registers screens, renderers, turret models (also from other mods), tooltips and the client packet handlers.
 

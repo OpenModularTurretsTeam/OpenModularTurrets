@@ -212,6 +212,7 @@ New questions that these do not answer go through §7 "Designing APIs".
 
 - Registration approach B: each registry class is registered in the `RegisterEvent` of its own registry on NeoForge (not everything in the first event).
   `OMT.init()` loads the config and registers the packets; `OMT.registrationSteps()` lists `RegistrationStep(registry, call)` records in dependency order; Fabric runs them in order.
+  In OMT, `OMT.init(plugins)` also loads the turret definitions first; the loader entrypoint passes the turret plugins it found (decided by the user).
   NeoForge throws at common setup if a step never ran.
 - Shared handlers called by the loaders' events: `InteractiveBlock.handleUse(player, level, hand, hit)` and `OMTConfig.onPlayerJoin(ServerPlayer)` (config `init()` only loads).
 - Creative tab: `VersionCompat.creativeTabBuilder()` with a loader condition (no service).
@@ -426,7 +427,7 @@ The built-in turrets use the same path, so there is no special casing per turret
   Per-type behaviour is data on the type (`canMountOn`, `usesScattershot`, `skipsSlowedTargets`) or on the weapon, never a `switch`/`==` on a specific type.
   `AmmoType` is a value class too (`AmmoType.of(ns, path)`); compare with `equals`.
 - `OMTPlugin` (entrypoint `openmodularturrets`) registers `TurretDefinition`s (type + `TurretWeapon` + default `TurretStats`) and `AmmoDefinition`s.
-  `TurretRegistry.load()` runs first in `OMT.onInitialize` (built-ins via `BuiltinTurrets`, then plugins), then freezes the types; `ModBlocks`/`ModItems` register a block and item per type with the type's id, all on the shared `TURRET` block entity type.
+  `TurretRegistry.load(plugins)` runs first in `OMT.init` (built-ins via `BuiltinTurrets`, then the plugins the loader entrypoint found), then freezes the types; `ModBlocks`/`ModItems` register a block and item per type with the type's id, all on the shared `TURRET` block entity type.
 - Weapons (`api.weapon`): `ProjectileWeapon`, `RayWeapon` (damage rules = core `RayProfile`), `EffectWeapon`, `AreaWeapon`, `SelfTargetingWeapon` (finds its own targets); projectile and ray weapons take entity hit handlers; `TurretBlockEntity` dispatches on the kind, `RayWeapons` / `EffectWeapons` do the work.
 - Config: built-in turrets keep their typed sections; other mods' turrets live in `turrets.addon_turrets` (a `Map<String, TurretSetting>` keyed by id, defaults from their definition).
   `ConfigWriter`/`ConfigRanges` handle such section maps.
@@ -624,7 +625,9 @@ Update this checklist as work progresses.
 - [x] Energy: `core.energy.EnergyStore` (from OpenModularLighting: + `maxExtract`, `extract`, `drain`) and `EnergyAccess`, exposed by `getEnergyAccess(side)` on the base and the generator (which now uses the core store too); service `Energy` with `pushToBlock` only; adapters `FabricEnergyStorages` / `NeoForgeEnergyHandler` (replace `BaseEnergyStorage`); Fabric lookups in `platform/fabric/FabricBlockLookups`; game test for the generator push
 - [x] Item transfer: turret base ammo slots and generator fuel slots through `ItemAccess` (`getItemAccess(side)`); Fabric lookups via `FabricItemStorages`; hopper game tests (`ItemTransferGameTests`); the NeoForge capabilities come with the registration step
 - [x] Use `LoaderInfo` (config folder in `OMTConfig`) and `Fuel` (generator: `isFuel(stack)`, burn time, stack-aware remainder) instead of `FabricLoader` / `FuelRegistry`; game test for the lava bucket remainder (the plugin entrypoints in `TurretRegistry` / `TurretModels` stay for "Turret API plugin discovery")
-- [ ] Registration: `OMT.init()` + `OMT.registrationSteps()` (also sounds, entity types), NeoForge per `RegisterEvent`; capabilities; block use, config sync, creative tab, recipe conditions, `c:` tags
+- [x] Registration: `OMT.init(plugins)` + `OMT.registrationSteps()` (sounds, blocks, items, block entities, entity types, creative tab, menus), NeoForge per `RegisterEvent` with the common-setup check; capabilities (items, energy); shared handlers `InteractiveBlock.handleUse`, `OMTConfig.onPlayerJoin`, `KillCounter.onDeath` (NeoForge `LivingDeathEvent` at lowest priority); `VersionCompat.creativeTabBuilder()` / `fakePlayer()`; plain `c:` tags; `RayShotCallback` as a plain listener list; Fabric render data behind `CompatBlockEntity.renderData()`; `ModSounds` registers in `init()` (the turret definitions use the sounds earlier).
+  OMT has no recipe conditions.
+  NeoForge now compiles all of `main` except `datagen` and `compat/jade`, and loads up to common setup (checked with `runGameTestServer`, which then stops: no NeoForge game tests yet).
 - [ ] Mixins on NeoForge (`[[mixins]]` in `neoforge.mods.toml`)
 - [ ] Client: screens, block entity/entity renderers, model layers, built-in item renderer, render layers, tooltips; camo models (Fabric Renderer API → NeoForge `ModelData`)
 - [ ] Turret API plugin discovery (`api/`, Fabric entrypoint → NeoForge)

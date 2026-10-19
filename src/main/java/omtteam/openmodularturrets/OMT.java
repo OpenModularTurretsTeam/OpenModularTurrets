@@ -1,10 +1,9 @@
 package omtteam.openmodularturrets;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
-import omtteam.openmodularturrets.entity.projectile.KillCounter;
 import omtteam.openmodularturrets.network.OMTPackets;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.registry.ModBlocks;
@@ -13,16 +12,17 @@ import omtteam.openmodularturrets.registry.ModEntities;
 import omtteam.openmodularturrets.registry.ModItems;
 import omtteam.openmodularturrets.registry.ModMenus;
 import omtteam.openmodularturrets.registry.ModSounds;
+import omtteam.openmodularturrets.registry.RegistrationStep;
 import omtteam.openmodularturrets.registry.TurretRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
- * Shared constants and start-up of Open Modular Turrets. The loader entrypoints ({@code platform/<loader>/}) install
- * the platform services and call {@link #init()}.
- * <p>
- * NeoForge port in progress: {@code init()} still registers everything at once and wires Fabric's block-use callback,
- * as on Fabric only. OpenModularLighting shows the target shape ({@code OML#init} + {@code OML#registrationSteps}).
+ * Shared constants and start-up of Open Modular Turrets.
+ * The loader entrypoints ({@code platform/<loader>/}) install the platform services, call {@link #init}, run the
+ * {@link #registrationSteps()} and wire their loader's events.
  */
 public final class OMT {
     public static final String MOD_ID = "openmodularturrets";
@@ -32,22 +32,32 @@ public final class OMT {
     }
 
     /**
-     * Loads the config and registers all content. Called once by the loader entrypoint.
+     * Loads the turret definitions and the config and registers the packets. Both entrypoints call it first, before
+     * any registration: the config needs the turrets' default stats, blocks need the turret types and their properties
+     * come from the config, and NeoForge accepts packets only until its payload registration event.
+     *
+     * @param plugins other mods' turret plugins, as the loader found them
      */
-    public static void init() {
+    public static void init(List<TurretRegistry.Plugin> plugins) {
         LOGGER.info("Initializing Open Modular Turrets");
-        TurretRegistry.load(); // first: the config needs the turrets' default stats, the blocks their types
+        TurretRegistry.load(plugins);
         OMTPackets.init();
-        OMTConfig.init(); // before blocks: block properties come from the config
-        ModSounds.init();
-        ModBlocks.init();
-        ModItems.init();
-        ModBlockEntities.init();
-        ModEntities.init();
-        KillCounter.init();
-        InteractiveBlock.registerCallback();
-        ModCreativeTabs.init();
-        ModMenus.init();
+        OMTConfig.init();
+    }
+
+    /**
+     * The registration steps in dependency order, each with the registry it fills. Fabric runs them in this order;
+     * NeoForge runs each in the {@code RegisterEvent} of its registry.
+     */
+    public static List<RegistrationStep> registrationSteps() {
+        return List.of(
+                new RegistrationStep(Registries.SOUND_EVENT, ModSounds::init),
+                new RegistrationStep(Registries.BLOCK, ModBlocks::init),
+                new RegistrationStep(Registries.ITEM, ModItems::init),
+                new RegistrationStep(Registries.BLOCK_ENTITY_TYPE, ModBlockEntities::init),
+                new RegistrationStep(Registries.ENTITY_TYPE, ModEntities::init),
+                new RegistrationStep(Registries.CREATIVE_MODE_TAB, ModCreativeTabs::init),
+                new RegistrationStep(Registries.MENU, ModMenus::init));
     }
 
     /**

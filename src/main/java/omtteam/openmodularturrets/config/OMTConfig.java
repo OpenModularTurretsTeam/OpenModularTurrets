@@ -6,7 +6,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.level.ServerPlayer;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.compat.network.NetworkCompat;
@@ -49,17 +48,20 @@ public final class OMTConfig {
     }
 
     /**
-     * Loads the config file (writing defaults if it is missing) and registers the join-time sync.
+     * Loads the config file (writing defaults if it is missing).
      */
     public static void init() {
         load();
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            ServerPlayer player = handler.getPlayer();
-            // The singleplayer host already uses this config
-            if (!server.isSingleplayerOwner(player.getGameProfile()) && NetworkCompat.canSend(player, OMTPackets.CONFIG_SYNC)) {
-                NetworkCompat.sendToPlayer(player, OMTPackets.CONFIG_SYNC, new ConfigSyncPacket(GSON.toJson(local)));
-            }
-        });
+    }
+
+    /**
+     * Sends the server's config to a joining player; called by the loader's player-join event on the server.
+     */
+    public static void onPlayerJoin(ServerPlayer player) {
+        // The singleplayer host already uses this config
+        if (!player.server.isSingleplayerOwner(player.getGameProfile()) && NetworkCompat.canSend(player, OMTPackets.CONFIG_SYNC)) {
+            NetworkCompat.sendToPlayer(player, OMTPackets.CONFIG_SYNC, new ConfigSyncPacket(GSON.toJson(local)));
+        }
     }
 
     public static void load() {

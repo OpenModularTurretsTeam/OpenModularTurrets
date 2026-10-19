@@ -38,6 +38,7 @@ public final class ExampleTurrets implements OMTPlugin {
 ```
 
 OMT calls the entrypoint at the start of its own initializer, before it loads its config and registers blocks, so mod load order does not matter.
+On NeoForge, plugins are not found yet (the NeoForge port is in progress).
 Suppliers (`() -> ExampleItems.SHELL`) are only called later, so they may point to things your own initializer registers.
 
 OMT then registers a `TurretBlock` and a `BlockItem` with the id `example:flak_turret` and adds it to its turret block entity type.

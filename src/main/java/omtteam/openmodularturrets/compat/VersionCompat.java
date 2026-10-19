@@ -4,11 +4,21 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import com.mojang.authlib.GameProfile;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+//? if fabric {
+import net.fabricmc.fabric.api.entity.FakePlayer;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+//?} else {
+/*import net.neoforged.neoforge.common.util.FakePlayerFactory;
+*///?}
 //? if >=1.21 {
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.component.DataComponents;
@@ -127,5 +137,30 @@ public final class VersionCompat {
         CompoundTag tag = getCustomData(stack);
         updater.accept(tag);
         setCustomData(stack, tag);
+    }
+
+    // ---- Loader differences ----
+
+    /**
+     * Builder of a mod creative tab. Fabric places mod tabs on its own tab pages ({@code FabricItemGroup}); NeoForge
+     * sorts mod tabs itself.
+     */
+    public static CreativeModeTab.Builder creativeTabBuilder() {
+        //? if fabric {
+        return FabricItemGroup.builder();
+        //?} else {
+        /*return CreativeModeTab.builder();
+        *///?}
+    }
+
+    /**
+     * The loader's fake player of this level for the profile (one per level and profile, created on first use).
+     */
+    public static ServerPlayer fakePlayer(ServerLevel level, GameProfile profile) {
+        //? if fabric {
+        return FakePlayer.get(level, profile);
+        //?} else {
+        /*return FakePlayerFactory.get(level, profile);
+        *///?}
     }
 }
