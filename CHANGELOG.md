@@ -24,12 +24,12 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 - The Relativistic Turret is now called Slowing Turret in all languages
 - The Slowing Turret's sound event is renamed from `openmodularturrets:relativistic` to `openmodularturrets:slowing` (resource packs replacing it need the new name)
 - The Rail Gun Turret ignores Scatter Shot upgrades (no extra rays, ammo, energy or scatter); with them, it dealt a multiple of its damage, since it barely scatters and every ray hit. Its tooltip and the upgrade's details say so
-- The Melee, Slowing and Teleporter Turrets ignore Scatter Shot upgrades; they act once per shot, so the upgrades only multiplied their energy use. Their tooltips and the upgrade's details say so now.
 - The Generator has 9 fuel slots instead of 1, so it runs much longer without refuelling
 - Generator: energy storage raised from 50,000 to 1,000,000 RF and output limit from 200 to 65,536 RF/t; existing config files still on the old defaults are updated, other values stay
 
 ### Fixed
 
+- The Melee, Slowing and Teleporter Turrets no longer use more energy with Scatter Shot upgrades installed; they act once per shot, so the upgrades only multiplied their energy use. Their tooltips and the upgrade's details say so now.
 - The `turretBreakable` config option did nothing; turrets can now be broken with a pickaxe when it is enabled
 - Turret projectiles that flew into a chunk without entity ticking froze there; they remove themselves now, as in 1.12.2
 - On the very first start (no config file yet), the disposable ammo list and the entity black and force lists were ignored until the next restart
