@@ -18,6 +18,8 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 - Turret tooltips (with shift): what the turret does, the base tier it needs, its ammo and its energy per shot
 - Energy Multiplier Upgrade for the Generator (up to 4 in its new upgrade slot): each doubles energy production and fuel use; the energy per fuel item stays the same
 - Upgrade tooltips show which machine the upgrade fits into (turret base or generator)
+- Native NeoForge version for Minecraft 1.21.1 (no Sinytra Connector needed); the Fabric versions for 1.20.1 and 1.21.1 stay
+- Turret API on NeoForge: mods mark their plugins with `@OMTPlugin.Register` / `@OMTClientPlugin.Register` instead of the Fabric entrypoints, see `docs/turret-api.md`
 
 ### Changed
 
