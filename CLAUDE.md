@@ -201,6 +201,9 @@ Classes implement `FabricGameTest`, are listed under the `fabric-gametest` entry
   The test server does not tick entities in the chunks next to a test, and projectiles remove themselves before flying into such a chunk, so `TurretScene` force-loads the chunks around the scene while a test runs (otherwise a grenade that lands just past the target would vanish instead of exploding).
   Projectile tests fail just before their timeout with their state (shots, followed projectile, target) instead of timing out silently.
 - Turret ranges reach into neighbouring tests, so every turret test gets its own `batch` and ends with `TurretScene.succeedWhen`, which removes the turret, base and entities once it passed (1.20.1 keeps a finished batch's blocks and entities next to the following one).
+- `BaseGuiGameTests` clicks a base through `ServerPlayerGameMode#useItemOn` (the real server path, including Fabric's `UseBlockCallback`) and checks that the menu opens for the owner only.
+  Fabric's `FakePlayer` refuses to open menus, so the test uses a small subclass that opens them without sending a packet.
+  Cast `getBlockEntity` results where 1.20.1 returns a plain `BlockEntity` (IntelliJ only sees 1.21 and calls such casts redundant).
 
 ---
 

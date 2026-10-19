@@ -188,6 +188,7 @@ The output is committed per version.
 | no new package cycles, and the known ones only shrink | `ArchitectureTest.noNewPackageCycles` (list `KNOWN_CYCLES`) |
 | core rules behave as specified | unit tests in `src/test` |
 | every turret hits in a real world | game tests in `src/gametest` |
+| right-clicking a base opens its GUI for players with access only | `BaseGuiGameTests` |
 
 When the cycle test fails it prints the cycle, the class dependencies inside it (fewest first, the cheapest to cut) and the updated list.
 

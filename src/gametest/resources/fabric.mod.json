@@ -13,7 +13,8 @@
       "omtteam.openmodularturrets.gametest.RayTurretGameTests",
       "omtteam.openmodularturrets.gametest.ProjectileTurretGameTests",
       "omtteam.openmodularturrets.gametest.ApiTurretGameTests",
-      "omtteam.openmodularturrets.gametest.GeneratorGameTests"
+      "omtteam.openmodularturrets.gametest.GeneratorGameTests",
+      "omtteam.openmodularturrets.gametest.BaseGuiGameTests"
     ],
     "openmodularturrets": [
       "omtteam.openmodularturrets.gametest.ApiTestTurrets"
