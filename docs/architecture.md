@@ -3,7 +3,8 @@
 A guide to the code of Open Modular Turrets (OMT) for people working on it: how it is layered, what lives where, how the main flows run, and how to add the common things.
 It describes the code as it is; where it falls short of its own rules, the last section says so.
 
-Building, running and the Stonecutter commands are in the README and in `CLAUDE.md` (section 4).
+OMT is built for Fabric (1.20.1 and 1.21.1) and NeoForge (1.21.1) from one source tree.
+Building, running and the Stonecutter commands are in the README, `CONTRIBUTING.md` and `CLAUDE.md` (section 4).
 The turret API for other mods has its own guide: [turret-api.md](turret-api.md).
 
 ## The idea in one paragraph
@@ -20,18 +21,33 @@ flowchart TB
     client["client<br/>screens, renderers, models, tooltips<br/><i>client only</i>"]
     game["game layer (main)<br/>blocks, block entities, items, menus, network,<br/>registry, config, projectiles, api"]
     compat["compat<br/>1.20.1 / 1.21.1 differences"]
+    platform["platform<br/>loader services and adapters<br/><i>platform.fabric / platform.neoforge</i>"]
     core["core<br/>game rules, plain Java"]
     client --> game
     client --> compat
+    client --> platform
     game --> compat
+    game --> platform
+    compat --> platform
     game --> core
 ```
 
 An arrow means "may use".
 The other directions are forbidden and checked by the build (see [Rules the build checks](#rules-the-build-checks)):
 
-- **core** uses only Java and itself: no Minecraft, Fabric or other OMT packages.
+- **core** uses only Java and itself: no Minecraft, Fabric, NeoForge or other OMT packages.
 - **main** code never uses **client** code: client classes do not exist on a dedicated server.
+- Shared code uses only the `platform` interfaces, never `platform.fabric` or `platform.neoforge`: each of those is only compiled for its own loader.
+
+### How the shared code talks to the loader
+
+Two directions, so that gameplay code stays loader-free:
+
+- Where the loader is in charge (registration, events, capabilities, client registrations), the loader entrypoint (`platform/<loader>/OMTFabric`, `OMTNeoForge`, and their client counterparts) calls shared code: `OMT.registrationSteps()`, `InteractiveBlock.handleUse`, `OMTConfig.onPlayerJoin`, `KillCounter.onDeath`, `OMTClient.register…`.
+- Where gameplay code must reach the loader, it calls a small service through `platform.Platform` (`LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`; on the client `ClientPlatform` with `ClientNetwork`).
+  Each entrypoint installs its implementations first thing; the `compat` facades (`NetworkCompat`, `MenuCompat`, `ClientNetworkCompat`) forward to them.
+
+Energy and items other blocks may use are described loader-free (`core.energy.EnergyAccess`, `inventory.ItemAccess`, exposed by `getEnergyAccess(side)` / `getItemAccess(side)`) and wrapped by thin adapters per loader (Team Reborn Energy and Transfer API on Fabric, FE and item handler capabilities on NeoForge).
 
 ### How core talks to the game
 
@@ -50,7 +66,7 @@ The block entities own one core object each and forward to it: `TurretBaseBlockE
 
 ## Where things live
 
-Source sets (Loom split source sets, plus the two test sets):
+Source sets (main and client split as with Loom's split source sets; the NeoForge build has its own client source set too), plus the two test sets:
 
 | Source set | Contents | Shipped |
 | --- | --- | --- |
@@ -63,7 +79,7 @@ Packages below `omtteam.openmodularturrets` (main):
 
 | Package | Responsibility |
 | --- | --- |
-| `OMT` | mod initializer, `MOD_ID`, `OMT.id(path)` |
+| `OMT` | shared start-up (`init`, `registrationSteps`), `MOD_ID`, `OMT.id(path)` |
 | `core.base` | `TurretBaseLogic`: targeting per face, ammo, energy, upgrades, addons, redstone modes |
 | `core.turret` | turret types and ammo types, `TurretState` (cooldown, concealment), aim and damage math (`TurretMath`, `RayMath`, `ProjectileMath`) |
 | `core.target` | `TargetSelector`: who is a valid target and who is the best one |
@@ -80,9 +96,9 @@ Packages below `omtteam.openmodularturrets` (main):
 | `network` | packets: client→server requests (always re-validated) and server→client sync |
 | `config` | the JSON config: fields, comments, ranges, migration, server→client sync |
 | `security`, `camo` | Minecraft side of trust lists (NBT, player lookup) and camouflage |
-| `compat` | every 1.20.1 / 1.21.1 difference (`VersionCompat`, `CompatBlockEntity`, networking, menus) and Jade |
+| `compat` | every 1.20.1 / 1.21.1 difference (`VersionCompat`, `CompatBlockEntity`, networking, menus), small loader differences (`//? if fabric` / `neoforge`), and Jade |
 | `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`); `platform.fabric` / `platform.neoforge` hold the entrypoints, the implementations and the energy/item adapters, and only compile for their loader |
-| `datagen` | recipes, loot tables, tags, damage types (generated per version) |
+| `datagen` | recipes, loot tables, tags, damage types (generated per version; Fabric only, the NeoForge build converts the 1.21.1 output) |
 
 `./gradlew dependencyMap` draws these packages and every import between them as an interactive page.
 
@@ -180,24 +196,38 @@ Block entities extend `compat.CompatBlockEntity`.
 Right-click handling goes through `InteractiveBlock`, not vanilla's `use` methods.
 The table of known differences is in `CLAUDE.md`, section 5.
 
+### Code that differs between Fabric and NeoForge
+
+The source is shared; Stonecutter also has a loader axis (nodes `1.20.1-fabric`, `1.21.1-fabric`, `1.21.1-neoforge`).
+
+- A whole loader-specific class goes into `platform/fabric/` or `platform/neoforge/` (also under `client/` and `gametest/`), which only compile for their loader.
+- Gameplay code that needs the loader calls a service through `Platform`; a new service is a new component of `PlatformServices`, so every entrypoint must supply it.
+- Something the loader drives (an event, a registration) is wired in both entrypoints to one shared handler or to content that shared code lists (`OMTClient` for the client).
+- A small difference inside a shared class uses `//? if fabric {` / `//? if neoforge {`, but only in `compat/` and `platform/`.
+- Fabric API and Team Reborn Energy may only appear in `platform/fabric/` and `datagen`: the NeoForge node does not compile anything else that uses them.
+- Render types: NeoForge reads `"render_type"` from the block model, Fabric registers the blocks `OMTClient.cutoutBlocks()` lists; keep both in sync.
+
 ### Recipes, loot tables, tags
 
 Never handwrite files under `data/`: add them to the providers in `datagen` and run `./gradlew :1.21.1-fabric:runDatagen :1.20.1-fabric:runDatagen`.
 The output is committed per version.
+The NeoForge build has no datagen of its own: it converts the 1.21.1 Fabric output (`convertFabricData`, Fabric load conditions become NeoForge conditions).
 
 ## Rules the build checks
 
-`./gradlew chiseledBuild` (or `check` for one version) fails when one of these is broken:
+`./gradlew chiseledBuild` (or `check` for one node) fails when one of these is broken:
 
 | Rule | Checked by |
 | --- | --- |
-| core uses only Java and core | `ArchitectureTest.coreDependsOnlyOnCoreAndJava` and the `verifyCoreIsolation` task |
+| core uses only Java and core | `ArchitectureTest.coreDependsOnlyOnCoreAndJava` and the `verifyCoreIsolation` task (also forbids NeoForge) |
+| shared code does not use Fabric API or Team Reborn Energy | compiling the `1.21.1-neoforge` node |
 | main code never uses client code | `ArchitectureTest.mainCodeNeverDependsOnClientCode` |
 | no new package cycles, and the known ones only shrink | `ArchitectureTest.noNewPackageCycles` (list `KNOWN_CYCLES`) |
 | core rules behave as specified | unit tests in `src/test` |
-| every turret hits in a real world | game tests in `src/gametest` |
+| every turret hits in a real world, on both loaders | game tests in `src/gametest` (`runGameTest` on Fabric, `runGameTestServer` on NeoForge) |
 | right-clicking a base opens its GUI for players with access only | `BaseGuiGameTests` |
 
+The ArchUnit rules run on the Fabric nodes; they check the shared code, which is the same for NeoForge.
 When the cycle test fails it prints the cycle, the class dependencies inside it (fewest first, the cheapest to cut) and the updated list.
 
 ## Measuring code quality
@@ -210,7 +240,8 @@ When the cycle test fails it prints the cycle, the class dependencies inside it 
 | Dependency map | `./gradlew dependencyMap` | `build/reports/dependency-map/index.html` |
 
 PMD reports only for now; it does not fail the build.
-Once the limits are agreed, switching off `isIgnoreFailures` in `build.gradle.kts` makes new code above them fail.
+Once the limits are agreed, switching off `isIgnoreFailures` in `build.fabric.gradle.kts` makes new code above them fail.
+These tools run on the Fabric nodes only; code in `platform/neoforge` is covered by the NeoForge game tests, not by coverage or mutation testing.
 
 Coverage says which lines the tests run; mutation testing says whether they check the results.
 PIT plants small mistakes in core (a flipped condition, `<` instead of `<=`, a removed call) and runs the unit tests against each one.
@@ -224,7 +255,7 @@ They are known and measured, not hidden:
 
 - **A large package cycle.** 22 game-layer packages (registry, blocks, block entities, items, menus, network, config, api, projectiles, security, camo) depend on each other in a loop, so none of them can be understood or changed in isolation.
   Typical for Minecraft mods (registry ↔ blocks ↔ block entities), but much of it comes from single imports; `noNewPackageCycles` and the dependency map list the cheapest links to cut.
-  Two smaller cycles exist in `core` (six packages around `core.base`) and in `client` (`client.api` ↔ `client.model`).
+  Three smaller cycles exist: in `core` (six packages around `core.base`), in `client` (`client.api` ↔ `client.model`), and between the `compat` facades and `platform` (the facades forward to the services, whose interfaces use the facades' types; accepted for the NeoForge port).
 - **`TurretBaseLogic` is large** (about 700 lines): targeting, ammo, energy, upgrades, addons and warnings in one class.
   Candidates to move out are the ammo drawing and the energy generation.
 - **29 PMD findings** above the complexity limits, mostly long methods with many branches (`RayWeapons.shoot`, `TargetSelector`, `TurretBaseScreen`, `ConfigWriter`).
