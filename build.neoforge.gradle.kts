@@ -14,10 +14,8 @@ val client: SourceSet = sourceSets.create("client") {
     runtimeClasspath += sourceSets.main.get().output
 }
 
-// datagen is Fabric-only by design (NeoForge gets the converted Fabric output, convertFabricData below).
-// PORTING IN PROGRESS: compat/jade still waits for its NeoForge step; once it is ported, only datagen stays excluded.
-val notPorted = listOf("datagen", "compat/jade")
-sourceSets.main { java { notPorted.forEach { exclude("$packagePath/$it/**") } } }
+// Datagen is Fabric-only by design: NeoForge gets the converted Fabric output (convertFabricData below)
+sourceSets.main { java { exclude("$packagePath/datagen/**") } }
 sourceSets.test { java { include("$packagePath/core/**") } }
 
 // GameTests (src/gametest) are not set up for NeoForge yet: the test classes still use FabricGameTest. See the
@@ -48,10 +46,15 @@ neoForge {
 
     runs {
         // Run directory: versions/<v>/run (kept apart from the Fabric runs, whose worlds would not load here)
-        register("client") { client() }
+        // Only the mod itself; the test mod is for the GameTest server (as on Fabric, where only runGameTest loads it)
+        register("client") {
+            client()
+            loadedMods = setOf(mods.getByName(modId))
+        }
         register("server") {
             server()
             programArgument("--nogui")
+            loadedMods = setOf(mods.getByName(modId))
         }
         // Headless in-world tests (no EULA needed); runs the GameTests of this mod's namespace and exits with the
         // number of failed tests, which fails the task
@@ -66,10 +69,13 @@ neoForge {
 // Dev-run-only dependencies, never in the published metadata (Loom's modLocalRuntime; same as the NeoForge MDK)
 val localRuntime: Configuration = configurations.create("localRuntime")
 configurations.runtimeClasspath { extendsFrom(localRuntime) }
+// Not on the GameTest server: Jade there sends its ping to the vanilla mock players of the tests, which NeoForge
+// refuses (no negotiated channels).
 
 dependencies {
-    // Jade plugin (compat/jade): optional, not bundled
+    // Jade plugin (compat/jade): optional, not bundled; present in dev runs to try it
     compileOnly("maven.modrinth:jade:${property("jade_version")}")
+    localRuntime("maven.modrinth:jade:${property("jade_version")}")
 }
 
 // ---- Data (recipes, loot tables, tags, damage types, advancements) ----
