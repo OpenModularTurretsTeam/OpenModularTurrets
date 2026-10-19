@@ -16,14 +16,15 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.client.OMTClient;
+import omtteam.openmodularturrets.client.api.OMTClientPlugin;
 import omtteam.openmodularturrets.client.camo.CamoModels;
+import omtteam.openmodularturrets.client.model.TurretModels;
 import omtteam.openmodularturrets.client.platform.ClientPlatform;
 import omtteam.openmodularturrets.client.platform.ClientPlatformServices;
 import omtteam.openmodularturrets.client.render.effect.RayRenderer;
 import omtteam.openmodularturrets.platform.Platform;
 import omtteam.openmodularturrets.platform.neoforge.NeoForgeNetwork;
-
-import java.util.List;
+import omtteam.openmodularturrets.platform.neoforge.NeoForgePlugins;
 
 /**
  * NeoForge client entrypoint: installs the client platform services, starts the client, registers the content of
@@ -35,8 +36,7 @@ import java.util.List;
 public final class OMTNeoForgeClient {
     public OMTNeoForgeClient(IEventBus modBus) {
         ClientPlatform.install(new ClientPlatformServices(new NeoForgeClientNetwork((NeoForgeNetwork) Platform.network())));
-        // other mods' client turret plugins are not found on NeoForge yet ("Turret API plugin discovery")
-        OMTClient.init(List.of());
+        OMTClient.init(NeoForgePlugins.find(OMTClientPlugin.Register.class, OMTClientPlugin.class, TurretModels.Plugin::new));
         modBus.addListener((RegisterMenuScreensEvent event) -> OMTClient.registerScreens(event::register));
         modBus.addListener((EntityRenderersEvent.RegisterLayerDefinitions event) ->
                 OMTClient.registerModelLayers(event::registerLayerDefinition));

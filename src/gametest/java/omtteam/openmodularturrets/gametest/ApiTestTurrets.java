@@ -38,6 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * </ul>
  * The other turrets use energy only.
  */
+@OMTPlugin.Register
 public final class ApiTestTurrets implements OMTPlugin {
     public static final String NAMESPACE = "openmodularturrets-gametest";
     public static final AmmoType ARROW_AMMO = AmmoType.of(NAMESPACE, "arrow");

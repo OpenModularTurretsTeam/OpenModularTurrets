@@ -17,6 +17,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import omtteam.openmodularturrets.OMT;
+import omtteam.openmodularturrets.api.OMTPlugin;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.energy.EnergyAccess;
@@ -26,6 +27,7 @@ import omtteam.openmodularturrets.platform.Platform;
 import omtteam.openmodularturrets.platform.PlatformServices;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.registry.RegistrationStep;
+import omtteam.openmodularturrets.registry.TurretRegistry;
 
 import java.util.HashSet;
 import java.util.List;
@@ -44,8 +46,7 @@ public final class OMTNeoForge {
     public OMTNeoForge(IEventBus modBus) {
         Platform.install(new PlatformServices(new NeoForgeLoaderInfo(), new NeoForgeFuel(), new NeoForgeNetwork(modBus),
                 new NeoForgeMenus(), new NeoForgeEnergy()));
-        // other mods' turret plugins are not found on NeoForge yet ("Turret API plugin discovery"): built-in turrets only
-        OMT.init(List.of());
+        OMT.init(NeoForgePlugins.find(OMTPlugin.Register.class, OMTPlugin.class, TurretRegistry.Plugin::new));
         modBus.addListener(this::onRegister);
         modBus.addListener(this::onCommonSetup);
         modBus.addListener(OMTNeoForge::onRegisterCapabilities);

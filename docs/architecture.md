@@ -93,7 +93,7 @@ Packages below `omtteam.openmodularturrets` (main):
 The loader entrypoint (`OMTFabric`, `OMTNeoForge`) first installs the platform services, then calls `OMT.init(plugins)` with the turret plugins of other mods it found.
 The order matters:
 
-1. `TurretRegistry.load(plugins)`: built-in turrets (`registry.BuiltinTurrets`), then the plugins (on Fabric the `openmodularturrets` entrypoints; none on NeoForge yet).
+1. `TurretRegistry.load(plugins)`: built-in turrets (`registry.BuiltinTurrets`), then the plugins (on Fabric the `openmodularturrets` entrypoints, on NeoForge the classes marked `@OMTPlugin.Register`, found by `NeoForgePlugins`).
    The turret types are frozen afterwards.
 2. `OMTPackets.init()`: packet types (NeoForge accepts them only until its payload registration event).
 3. `OMTConfig.init()`: needs the turret types for their default stats; blocks need the config for their properties.
