@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.client;
 
-import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -33,11 +32,17 @@ import omtteam.openmodularturrets.registry.ModItems;
 import omtteam.openmodularturrets.registry.ModMenus;
 
 /**
- * Client entrypoint of Open Modular Turrets (renderers, screens, client networking).
+ * Client start-up of Open Modular Turrets (renderers, screens, client networking); the loader client entrypoints
+ * ({@code client/platform/<loader>/}) install the client platform services and call {@link #init()}.
  */
-public class OMTClient implements ClientModInitializer {
-    @Override
-    public void onInitializeClient() {
+public final class OMTClient {
+    private OMTClient() {
+    }
+
+    /**
+     * Called once by the loader's client entrypoint. NeoForge port in progress: everything here still uses Fabric API.
+     */
+    public static void init() {
         ClientPacketHandlers.init();
         MenuScreens.register(ModMenus.TURRET_BASE, TurretBaseScreen::new);
         MenuScreens.register(ModMenus.GENERATOR, GeneratorScreen::new);

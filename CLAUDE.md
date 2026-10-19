@@ -618,8 +618,9 @@ Update this checklist as work progresses.
 ### NeoForge 1.21.1 (branch `neoforge-test`; follow OpenModularLighting's steps)
 
 - [x] Build: Stonecutter nodes `<version>-<loader>`, `buildSrc` (`mod-common`, `bundled_licenses`), `build.neoforge.gradle.kts` (ModDevGradle, porting filter, data converted from the Fabric output), `neoforge.mods.toml` template, publishing disabled for NeoForge
-- [ ] Platform services copied from OpenModularLighting: `LoaderInfo`, `Fuel`, `Network` + `ClientNetwork`, `Menus`; facades forward to them; entrypoints split (`OMT.init()`, `OMTClient.init()`, `platform/<loader>` entrypoints)
-- [ ] Copied, not used yet: `inventory.ItemAccess` + Fabric/NeoForge adapters, `registry.RegistrationStep`, `client.ScreenRegistrar`
+- [x] Platform services copied from OpenModularLighting: `LoaderInfo`, `Fuel`, `Network` + `ClientNetwork`, `Menus`; facades forward to them; entrypoints split (`OMT.init()`, `OMTClient.init()`, `platform/<loader>` entrypoints)
+- [x] Copied, not used yet: `inventory.ItemAccess` + Fabric/NeoForge adapters, `registry.RegistrationStep`, `client.ScreenRegistrar`
+- [x] ArchUnit: the cycle `compat` / `compat.network` ↔ `platform` (facades call the services, the service interfaces use the facades' types) is accepted in `KNOWN_CYCLES` (decided by the user)
 - [ ] Energy: OMT's `core.base.EnergyStore` → OpenModularLighting's `core.energy.EnergyStore` (+ `maxExtract`, `extract`, `drain`) and `EnergyAccess`; service `Energy` (`isBattery`, `dischargeItem`, `pushToBlock` for the generator); Team Reborn / FE adapters (replaces `BaseEnergyStorage`)
 - [ ] Item transfer: turret base ammo slots and generator through `ItemAccess` (`getItemAccess(side)`), lookups/capabilities
 - [ ] Use `LoaderInfo` (config folder) and `Fuel` (generator) instead of `FabricLoader` / `FuelRegistry`

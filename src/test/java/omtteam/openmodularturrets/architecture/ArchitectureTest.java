@@ -43,6 +43,8 @@ class ArchitectureTest {
                     "camo", "config", "entity.projectile", "inventory", "item", "menu", "network", "registry",
                     "security"),
             Set.of("core.base", "core.item", "core.settings", "core.target", "core.turret", "core.world"),
+            // the compat facades forward to the platform services, whose interfaces use the facades' types
+            Set.of("compat", "compat.network", "platform"),
             Set.of("client.api", "client.model"));
 
     private static JavaClasses classes;

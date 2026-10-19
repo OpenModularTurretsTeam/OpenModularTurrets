@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets;
 
-import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.ResourceLocation;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.compat.VersionCompat;
@@ -19,14 +18,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Common entrypoint of Open Modular Turrets.
+ * Shared constants and start-up of Open Modular Turrets. The loader entrypoints ({@code platform/<loader>/}) install
+ * the platform services and call {@link #init()}.
+ * <p>
+ * NeoForge port in progress: {@code init()} still registers everything at once and wires Fabric's block-use callback,
+ * as on Fabric only. OpenModularLighting shows the target shape ({@code OML#init} + {@code OML#registrationSteps}).
  */
-public class OMT implements ModInitializer {
+public final class OMT {
     public static final String MOD_ID = "openmodularturrets";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    @Override
-    public void onInitialize() {
+    private OMT() {
+    }
+
+    /**
+     * Loads the config and registers all content. Called once by the loader entrypoint.
+     */
+    public static void init() {
         LOGGER.info("Initializing Open Modular Turrets");
         TurretRegistry.load(); // first: the config needs the turrets' default stats, the blocks their types
         OMTPackets.init();

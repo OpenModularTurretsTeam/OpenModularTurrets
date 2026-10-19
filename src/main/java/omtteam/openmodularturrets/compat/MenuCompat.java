@@ -1,7 +1,5 @@
 package omtteam.openmodularturrets.compat;
 
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -12,14 +10,11 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import org.jetbrains.annotations.NotNull;
-//? if <1.21 {
-/*import net.minecraft.network.FriendlyByteBuf;
-*///?}
+import omtteam.openmodularturrets.platform.Platform;
 
 /**
- * Menus that receive the block position of their block entity when opened (Fabric extended screen handlers, whose
- * API differs between 1.20.1 and 1.21).
+ * Menus that receive the block position of their block entity when opened; the loader-specific part is
+ * {@link omtteam.openmodularturrets.platform.Menus}.
  */
 public final class MenuCompat {
     private MenuCompat() {
@@ -38,51 +33,11 @@ public final class MenuCompat {
     }
 
     public static <T extends AbstractContainerMenu> MenuType<T> register(ResourceLocation id, ClientFactory<T> factory) {
-        //? if >=1.21 {
-        MenuType<T> type = new ExtendedScreenHandlerType<>(factory::create, BlockPos.STREAM_CODEC);
-        //?} else {
-        /*MenuType<T> type = new ExtendedScreenHandlerType<>(
-                (containerId, inventory, buf) -> factory.create(containerId, inventory, buf.readBlockPos()));
-        *///?}
-        return Registry.register(BuiltInRegistries.MENU, id, type);
+        return Registry.register(BuiltInRegistries.MENU, id, Platform.menus().createBlockMenuType(factory));
     }
 
     /** Opens a menu registered with {@link #register} for the block at {@code pos}. */
     public static void open(ServerPlayer player, Component title, BlockPos pos, ServerFactory factory) {
-        //? if >=1.21 {
-        player.openMenu(new ExtendedScreenHandlerFactory<BlockPos>() {
-            @Override
-            public BlockPos getScreenOpeningData(ServerPlayer opener) {
-                return pos;
-            }
-
-            @Override
-            public @NotNull Component getDisplayName() {
-                return title;
-            }
-
-            @Override
-            public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player menuPlayer) {
-                return factory.create(containerId, inventory, menuPlayer);
-            }
-        });
-        //?} else {
-        /*player.openMenu(new ExtendedScreenHandlerFactory() {
-            @Override
-            public void writeScreenOpeningData(ServerPlayer opener, FriendlyByteBuf buf) {
-                buf.writeBlockPos(pos);
-            }
-
-            @Override
-            public Component getDisplayName() {
-                return title;
-            }
-
-            @Override
-            public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player menuPlayer) {
-                return factory.create(containerId, inventory, menuPlayer);
-            }
-        });
-        *///?}
+        Platform.menus().openBlockMenu(player, title, pos, factory);
     }
 }

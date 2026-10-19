@@ -16,10 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "omtteam.openmodularturrets.OMT"
+      "omtteam.openmodularturrets.platform.fabric.OMTFabric"
     ],
     "client": [
-      "omtteam.openmodularturrets.client.OMTClient"
+      "omtteam.openmodularturrets.client.platform.fabric.OMTFabricClient"
     ],
     "jade": [
       "omtteam.openmodularturrets.compat.jade.OMTJadePlugin"

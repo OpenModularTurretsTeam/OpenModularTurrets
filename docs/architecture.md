@@ -80,6 +80,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `config` | the JSON config: fields, comments, ranges, migration, server→client sync |
 | `security`, `camo` | Minecraft side of trust lists (NBT, player lookup) and camouflage |
 | `compat` | every 1.20.1 / 1.21.1 difference (`VersionCompat`, `CompatBlockEntity`, networking, menus) and Jade |
+| `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`); `platform.fabric` / `platform.neoforge` hold the entrypoints and the implementations, and only compile for their loader |
 | `datagen` | recipes, loot tables, tags, damage types (generated per version) |
 
 `./gradlew dependencyMap` draws these packages and every import between them as an interactive page.
@@ -88,7 +89,7 @@ Packages below `omtteam.openmodularturrets` (main):
 
 ### Startup
 
-`OMT.onInitialize` runs the registrations in a fixed order.
+The loader entrypoint (`OMTFabric`, `OMTNeoForge`) first installs the platform services, then calls `OMT.init()`, which runs the registrations in a fixed order.
 The order matters:
 
 1. `TurretRegistry.load()`: built-in turrets (`registry.BuiltinTurrets`), then other mods' turrets from the `openmodularturrets` entrypoint.
