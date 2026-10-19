@@ -7,18 +7,24 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.misc.GeneratorBlockEntity;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.registry.ModItems;
 
+import java.util.UUID;
+
 /**
- * The generator with energy multiplier upgrades: it burns faster, but a fuel item still yields the same energy. Every
- * test has its own batch and removes its generator when it passed (1.20.1 keeps a finished batch's blocks).
+ * The generator with energy multiplier upgrades: it burns faster, but a fuel item still yields the same energy; and it
+ * pushes its energy into neighbours. Every test has its own batch and removes its blocks when it passed (1.20.1 keeps a
+ * finished batch's blocks).
  */
 public class GeneratorGameTests implements FabricGameTest {
     private static final BlockPos GENERATOR = new BlockPos(1, 1, 1);
+    private static final BlockPos BASE = GENERATOR.east();
     /** Furnace burn time of coal. */
     private static final int COAL_TICKS = 1600;
     private static final int UPGRADES = 2;
@@ -44,6 +50,33 @@ public class GeneratorGameTests implements FabricGameTest {
             helper.assertTrue(generator.getEnergy() == expected,
                     "The coal produced " + generator.getEnergy() + " RF instead of " + expected);
             helper.setBlock(GENERATOR, Blocks.AIR);
+        });
+    }
+
+    /**
+     * The generator pushes into a neighbouring base (through the loader's energy API on both sides) without losing
+     * energy: once the coal is burnt, base and generator together hold what it produced.
+     */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "generator_push", timeoutTicks = TIMEOUT_TICKS)
+    public void pushesEnergyIntoANeighbouringBase(GameTestHelper helper) {
+        helper.setBlock(BASE, ModBlocks.TURRET_BASES.get(0));
+        TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getBlockEntity(BASE);
+        // a base without owner drops itself on its next tick
+        base.getTrustManager().setOwner(new PlayerIdentity(UUID.randomUUID(), "GameTestOwner"));
+        helper.setBlock(GENERATOR, ModBlocks.GENERATOR);
+        GeneratorBlockEntity generator = (GeneratorBlockEntity) helper.getBlockEntity(GENERATOR);
+        generator.getFuelContainer().setItem(0, new ItemStack(Items.COAL));
+        generator.getUpgradeContainer().setItem(0, new ItemStack(ModItems.UPGRADE_ENERGY_MULTIPLIER, 4));
+        long produced = (long) COAL_TICKS * OMTConfig.get().miscellaneous.generatorEnergyPerTick;
+        helper.succeedWhen(() -> {
+            helper.assertTrue(generator.getBurnTime() == 0 && generator.getFuelContainer().getItem(0).isEmpty(),
+                    "The coal is still burning");
+            long inBase = base.getLogic().getEnergy().getAmount();
+            helper.assertTrue(inBase > 0, "The base received no energy");
+            helper.assertTrue(inBase + generator.getEnergy() == produced,
+                    "Base " + inBase + " + generator " + generator.getEnergy() + " RF instead of " + produced);
+            helper.setBlock(GENERATOR, Blocks.AIR);
+            helper.setBlock(BASE, Blocks.AIR);
         });
     }
 

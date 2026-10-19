@@ -18,7 +18,7 @@ public final class OMTNeoForge {
 
     public OMTNeoForge(IEventBus modBus) {
         Platform.install(new PlatformServices(new NeoForgeLoaderInfo(), new NeoForgeFuel(), new NeoForgeNetwork(modBus),
-                new NeoForgeMenus()));
+                new NeoForgeMenus(), new NeoForgeEnergy()));
         LOGGER.info("Open Modular Turrets on NeoForge: port in progress, no content registered yet");
     }
 }

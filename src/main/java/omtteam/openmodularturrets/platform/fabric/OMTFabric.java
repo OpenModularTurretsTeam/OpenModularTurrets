@@ -6,13 +6,14 @@ import omtteam.openmodularturrets.platform.Platform;
 import omtteam.openmodularturrets.platform.PlatformServices;
 
 /**
- * Fabric entrypoint: installs the platform services and starts the mod.
+ * Fabric entrypoint: installs the platform services, starts the mod and registers the Fabric API lookups.
  */
 public final class OMTFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         Platform.install(new PlatformServices(new FabricLoaderInfo(), new FabricFuel(), new FabricNetwork(),
-                new FabricMenus()));
+                new FabricMenus(), new FabricEnergy()));
         OMT.init();
+        FabricBlockLookups.register();
     }
 }

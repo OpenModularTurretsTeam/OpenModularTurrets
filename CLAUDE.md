@@ -153,7 +153,7 @@ The setup and the patterns come from OpenModularLighting (branch `neoforge-test`
 
 - **Whole loader-specific classes** go into a `platform/<loader>/` package (`platform/fabric/`, `platform/neoforge/`, also under `client/`).
   `mod-common` leaves the other loaders' `platform/` packages out of the compilation, so these classes need no Stonecutter comments.
-- **Shared code calls the loader through services:** `platform.Platform` holds the `PlatformServices` record (`LoaderInfo`, `Fuel`, `Network`, `Menus`), `client.platform.ClientPlatform` the `ClientPlatformServices` (`ClientNetwork`).
+- **Shared code calls the loader through services:** `platform.Platform` holds the `PlatformServices` record (`LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`), `client.platform.ClientPlatform` the `ClientPlatformServices` (`ClientNetwork`).
   The entrypoints install them first thing (`OMTFabric`, `OMTNeoForge`, `OMTFabricClient`, `OMTNeoForgeClient`); a getter before that or a second install throws.
   `NetworkCompat`, `ClientNetworkCompat` and `MenuCompat` forward to them.
 - **Small differences** inside a shared class use the loader constants: `//? if fabric {` / `//? if neoforge {` (set in `stonecutter.gradle.kts`).
@@ -195,6 +195,7 @@ New questions that these do not answer go through §7 "Designing APIs".
 - `Network` / `ClientNetwork`: NeoForge registrations are recorded and applied in `RegisterPayloadHandlersEvent` (later registration throws); a server-to-client packet without a client handler is logged and dropped; channels are `optional()`; handlers run on the main thread.
 - `Menus`: `createBlockMenuType(factory)` / `openBlockMenu(player, title, pos, factory)`; opening data is a `BlockPos` only.
 - `Energy`: `isBattery(stack)`, `dischargeItem(container, slot, target, maxAmount)`, `pushToBlock(level, pos, side, source, maxAmount)` (side = face of the target block; the generator needs the push).
+  OMT has no battery slot, so its `Energy` has `pushToBlock` only (decided by the user); copy the other two from OpenModularLighting if one is ever added.
 
 **Energy and items**
 
@@ -374,7 +375,6 @@ omtteam.openmodularturrets
 ├── core/                        # The core logic files for turret base logic (targeting/upgrades/ticking etc.)
 ├── camo/                        # CamoHost (bases + camo trap), CamoRules, CamoData, light block state properties
 ├── security/                    # TrustedPlayer, AccessLevel, PermissionManager
-├── energy/                      # internal energy storage + energy API adapter
 ├── inventory/                   # base inventory, slot filters, Transfer API exposure
 ├── item/                        # ammo, upgrades, addons, additional items
 ├── entity/projectile/           # bullets, grenades, rockets, lasers, slugs, …
@@ -621,7 +621,7 @@ Update this checklist as work progresses.
 - [x] Platform services copied from OpenModularLighting: `LoaderInfo`, `Fuel`, `Network` + `ClientNetwork`, `Menus`; facades forward to them; entrypoints split (`OMT.init()`, `OMTClient.init()`, `platform/<loader>` entrypoints)
 - [x] Copied, not used yet: `inventory.ItemAccess` + Fabric/NeoForge adapters, `registry.RegistrationStep`, `client.ScreenRegistrar`
 - [x] ArchUnit: the cycle `compat` / `compat.network` ↔ `platform` (facades call the services, the service interfaces use the facades' types) is accepted in `KNOWN_CYCLES` (decided by the user)
-- [ ] Energy: OMT's `core.base.EnergyStore` → OpenModularLighting's `core.energy.EnergyStore` (+ `maxExtract`, `extract`, `drain`) and `EnergyAccess`; service `Energy` (`isBattery`, `dischargeItem`, `pushToBlock` for the generator); Team Reborn / FE adapters (replaces `BaseEnergyStorage`)
+- [x] Energy: `core.energy.EnergyStore` (from OpenModularLighting: + `maxExtract`, `extract`, `drain`) and `EnergyAccess`, exposed by `getEnergyAccess(side)` on the base and the generator (which now uses the core store too); service `Energy` with `pushToBlock` only; adapters `FabricEnergyStorages` / `NeoForgeEnergyHandler` (replace `BaseEnergyStorage`); Fabric lookups in `platform/fabric/FabricBlockLookups`; game test for the generator push
 - [ ] Item transfer: turret base ammo slots and generator through `ItemAccess` (`getItemAccess(side)`), lookups/capabilities
 - [ ] Use `LoaderInfo` (config folder) and `Fuel` (generator) instead of `FabricLoader` / `FuelRegistry`
 - [ ] Registration: `OMT.init()` + `OMT.registrationSteps()` (also sounds, entity types), NeoForge per `RegisterEvent`; capabilities; block use, config sync, creative tab, recipe conditions, `c:` tags

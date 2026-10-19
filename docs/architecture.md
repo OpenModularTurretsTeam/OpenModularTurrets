@@ -68,6 +68,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `core.turret` | turret types and ammo types, `TurretState` (cooldown, concealment), aim and damage math (`TurretMath`, `RayMath`, `ProjectileMath`) |
 | `core.target` | `TargetSelector`: who is a valid target and who is the best one |
 | `core.security` | owner, trusted players, access levels, `DamageRules` (who turret damage may hit) |
+| `core.energy` | `EnergyStore` (the energy buffer of bases and the generator) and `EnergyAccess` (what other blocks may do with it) |
 | `core.generator`, `core.camo`, `core.card` | generator burning, camouflage light rules, memory card copy rules |
 | `core.item`, `core.settings`, `core.world` | upgrade/addon types, config value types, the world interfaces above |
 | `api`, `api.weapon` | public turret API for other mods; the built-in turrets use it too |
@@ -80,7 +81,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `config` | the JSON config: fields, comments, ranges, migration, server→client sync |
 | `security`, `camo` | Minecraft side of trust lists (NBT, player lookup) and camouflage |
 | `compat` | every 1.20.1 / 1.21.1 difference (`VersionCompat`, `CompatBlockEntity`, networking, menus) and Jade |
-| `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`); `platform.fabric` / `platform.neoforge` hold the entrypoints and the implementations, and only compile for their loader |
+| `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`); `platform.fabric` / `platform.neoforge` hold the entrypoints, the implementations and the energy/item adapters, and only compile for their loader |
 | `datagen` | recipes, loot tables, tags, damage types (generated per version) |
 
 `./gradlew dependencyMap` draws these packages and every import between them as an interactive page.
@@ -97,6 +98,8 @@ The order matters:
 2. `OMTPackets.init()`: packet types.
 3. `OMTConfig.init()`: needs the turret types for their default stats; blocks need the config for their properties.
 4. Sounds, blocks, items, block entities, entities, creative tab, menus.
+
+Afterwards `OMTFabric` registers the Fabric API lookups (`FabricBlockLookups`: items and energy of the base and the generator).
 
 On the client, `OMTClient` registers screens, renderers, turret models (also from other mods), tooltips and the client packet handlers.
 
@@ -137,7 +140,7 @@ The client is never trusted: every C2S handler re-checks distance and permission
 
 ### The generator
 
-`GeneratorBlockEntity` burns furnace fuel from 9 slots in order (`GeneratorLogic`), multiplied by energy multiplier upgrades, and pushes energy into all six neighbours through Team Reborn Energy.
+`GeneratorBlockEntity` burns furnace fuel from 9 slots in order (`GeneratorLogic`), multiplied by energy multiplier upgrades, and pushes energy into all six neighbours through the `Energy` service (Team Reborn Energy on Fabric, FE on NeoForge).
 It has no owner and no trust list.
 
 ## How to add …

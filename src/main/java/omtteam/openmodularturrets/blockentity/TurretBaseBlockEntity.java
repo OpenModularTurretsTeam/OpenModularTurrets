@@ -27,12 +27,12 @@ import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.camo.CamoPermissions;
+import omtteam.openmodularturrets.core.energy.EnergyAccess;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.TrustManager;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
-import omtteam.openmodularturrets.energy.BaseEnergyStorage;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.security.LevelSecurityEnvironment;
@@ -55,7 +55,6 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
     private final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged,
             player -> Container.stillValidBlockEntity(this, player));
     private final TurretBaseLogic logic;
-    private final BaseEnergyStorage energyStorage;
     @Nullable
     private Storage<ItemVariant> ammoStorage;
     private boolean neighboursScanned;
@@ -66,7 +65,6 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
         int tier = ((TurretBaseBlock) state.getBlock()).getTier();
         this.logic = new TurretBaseLogic(tier, ConfigLogicSettings.INSTANCE, new LevelSecurityEnvironment(this::getLevel),
                 new BlockEntityBaseWorld(this::getLevel, pos, inventory), new Random(), this::onLogicChanged);
-        this.energyStorage = new BaseEnergyStorage(logic.getEnergy());
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TurretBaseBlockEntity base) {
@@ -172,9 +170,9 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
         return ammoStorage;
     }
 
-    /** Energy as exposed to automation on all sides. */
-    public BaseEnergyStorage getEnergyStorage() {
-        return energyStorage;
+    /** Energy as exposed to automation on all sides (insert only). */
+    public EnergyAccess getEnergyAccess(@Nullable Direction side) {
+        return logic.getEnergy();
     }
 
     // ---- Camouflage ----

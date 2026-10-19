@@ -38,6 +38,10 @@ public final class Platform {
         return services().menus();
     }
 
+    public static Energy energy() {
+        return services().energy();
+    }
+
     private static PlatformServices services() {
         if (services == null) {
             throw new IllegalStateException("Platform services not installed yet");

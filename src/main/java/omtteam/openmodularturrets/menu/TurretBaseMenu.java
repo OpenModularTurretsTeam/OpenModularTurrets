@@ -12,7 +12,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
-import omtteam.openmodularturrets.core.base.EnergyStore;
+import omtteam.openmodularturrets.core.energy.EnergyStore;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.TurretBaseUpgradeItem;
