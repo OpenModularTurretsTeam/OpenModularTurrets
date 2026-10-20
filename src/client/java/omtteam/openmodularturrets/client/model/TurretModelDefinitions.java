@@ -12,7 +12,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
  * script (same pivots, rotations, texture offsets and mirror flags). Models are Y-down with the base plate at the
  * bottom; {@link omtteam.openmodularturrets.client.render.blockentity.TurretRenderer} orients them.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "DuplicatedCode"})
 public final class TurretModelDefinitions {
     private TurretModelDefinitions() {
     }

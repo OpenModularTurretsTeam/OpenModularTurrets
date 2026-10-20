@@ -33,6 +33,7 @@ import java.util.UUID;
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
+@SuppressWarnings({"unused", "RedundantCast", "DefaultAnnotationParam"})
 public class ItemTransferGameTests implements OMTGameTests {
     private static final BlockPos MACHINE = new BlockPos(1, 1, 1);
     private static final BlockPos ABOVE = MACHINE.above();

@@ -70,12 +70,14 @@ public class ArrowShapedRenderer<T extends Entity> extends EntityRenderer<T> {
         super.render(entity, yaw, partialTick, poseStack, buffers, light);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, int x, int y, int z, float u, float v,
                                int normalX, int normalZ, int normalY, int light) {
         ClientCompat.entityVertex(consumer, pose, x, y, z, u, v, light, normalX, normalY, normalZ);
     }
 
     @Override
+    @SuppressWarnings("NullableProblems")
     public ResourceLocation getTextureLocation(T entity) {
         return texture;
     }

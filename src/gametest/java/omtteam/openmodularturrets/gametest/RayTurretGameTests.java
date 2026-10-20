@@ -34,6 +34,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
+@SuppressWarnings("unused")
 public class RayTurretGameTests implements OMTGameTests {
     /** The slowest ray turret (railgun) fires every 100 ticks; room for all attempts plus target searches. */
     private static final int TIMEOUT_TICKS = 1500;
@@ -79,6 +80,7 @@ public class RayTurretGameTests implements OMTGameTests {
      * The target has the highest possible health (vanilla caps max health at 1024).
      */
     @GameTest(template = EMPTY_STRUCTURE, batch = "railgun_scattershot", timeoutTicks = TIMEOUT_TICKS)
+    @SuppressWarnings("DataFlowIssue")
     public void railgunIgnoresScattershot(GameTestHelper helper) {
         TurretBaseBlockEntity base = TurretScene.build(helper, TurretType.RAILGUN_TURRET, TIMEOUT_TICKS);
         // tier 5: two upgrade slots with up to four upgrades each

@@ -16,6 +16,7 @@ public final class AmmoTooltip {
     private AmmoTooltip() {
     }
 
+    @SuppressWarnings("unused")
     public static void append(ItemStack stack, TooltipFlag flag, List<Component> lines) {
         if (!(stack.getItem() instanceof AmmoItem ammo)) return;
         if (!Screen.hasShiftDown()) {

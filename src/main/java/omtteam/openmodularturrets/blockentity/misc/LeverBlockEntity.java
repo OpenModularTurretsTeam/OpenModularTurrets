@@ -34,6 +34,7 @@ public class LeverBlockEntity extends CompatBlockEntity {
         turning = true;
     }
 
+    @SuppressWarnings("unused")
     public static void tick(Level level, BlockPos pos, BlockState state, LeverBlockEntity lever) {
         lever.prevRotation = lever.rotation;
         if (!lever.turning) return;

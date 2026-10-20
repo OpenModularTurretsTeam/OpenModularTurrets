@@ -16,5 +16,6 @@ public interface LoaderInfo {
      * Whether a mod with this mod ID is installed, e.g. to enable an optional integration.
      * Safe to call from the entrypoint on.
      */
+    @SuppressWarnings("unused")
     boolean isModLoaded(String modId);
 }

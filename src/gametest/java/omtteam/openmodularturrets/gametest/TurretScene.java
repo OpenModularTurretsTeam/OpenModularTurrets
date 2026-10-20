@@ -33,6 +33,7 @@ import java.util.UUID;
  * test clears it too: {@link #onEachTick} clears it when a check throws, and {@link #build} clears it one tick before
  * the test times out.
  */
+@SuppressWarnings("RedundantCast")
 public final class TurretScene {
     public static final BlockPos BASE = new BlockPos(1, 1, 1);
     public static final BlockPos TURRET = BASE.above();

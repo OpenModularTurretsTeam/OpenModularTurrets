@@ -27,6 +27,7 @@ public interface LogicSettings {
     boolean turretsConcealWithoutAddon();
 
     /** {@code turrets.globalCanTargetPlayers}. */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean globalCanTargetPlayers();
 
     /** {@code turrets.globalCanTargetNeutrals}. */

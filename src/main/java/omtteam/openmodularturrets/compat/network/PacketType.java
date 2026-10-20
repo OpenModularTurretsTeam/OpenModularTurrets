@@ -41,10 +41,12 @@ public final class PacketType<T> {
         return id;
     }
 
+    @SuppressWarnings("unused")
     public void encode(FriendlyByteBuf buf, T packet) {
         encoder.accept(buf, packet);
     }
 
+    @SuppressWarnings("unused")
     public T decode(FriendlyByteBuf buf) {
         return decoder.apply(buf);
     }

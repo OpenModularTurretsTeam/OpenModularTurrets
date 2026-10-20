@@ -13,6 +13,7 @@ import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 
 public final class ModCreativeTabs {
+    @SuppressWarnings("unused")
     public static final CreativeModeTab MAIN = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, OMT.id("main"),
             VersionCompat.creativeTabBuilder()
                     .title(Component.translatable("itemGroup.openmodularturrets"))

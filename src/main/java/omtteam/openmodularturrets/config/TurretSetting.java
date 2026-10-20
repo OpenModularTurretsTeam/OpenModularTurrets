@@ -35,6 +35,7 @@ public class TurretSetting {
     @Comment("Chance that the recycler addon returns extra ammo.") @Range(min = 0, max = 1)
     public double recyclerAddChance;
 
+    @SuppressWarnings("unused")
     public TurretSetting() {
     }
 

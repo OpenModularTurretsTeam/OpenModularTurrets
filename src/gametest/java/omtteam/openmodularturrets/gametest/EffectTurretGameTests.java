@@ -22,6 +22,7 @@ import omtteam.openmodularturrets.core.turret.TurretType;
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
+@SuppressWarnings("unused")
 public class EffectTurretGameTests implements OMTGameTests {
     private static final int TIMEOUT_TICKS = 200;
 

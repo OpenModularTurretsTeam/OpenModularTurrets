@@ -32,6 +32,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
+@SuppressWarnings("unused")
 public class ProjectileTurretGameTests implements OMTGameTests {
     /** The slowest projectile turret (plasma) fires every 60 ticks; room for all attempts plus flight times. */
     static final int TIMEOUT_TICKS = 1500;

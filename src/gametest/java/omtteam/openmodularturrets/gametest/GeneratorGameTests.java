@@ -30,6 +30,7 @@ import java.util.UUID;
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
+@SuppressWarnings({"unused", "RedundantCast"})
 public class GeneratorGameTests implements OMTGameTests {
     private static final BlockPos GENERATOR = new BlockPos(1, 1, 1);
     private static final BlockPos BASE = GENERATOR.east();

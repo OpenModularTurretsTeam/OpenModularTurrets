@@ -50,6 +50,7 @@ import java.util.UUID;
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
+@SuppressWarnings("unused")
 public class BaseGuiGameTests implements OMTGameTests {
     private static final BlockPos BASE = TurretScene.BASE;
 
@@ -112,6 +113,7 @@ public class BaseGuiGameTests implements OMTGameTests {
         }
 
         @Override
+        @SuppressWarnings("NullableProblems")
         public OptionalInt openMenu(@Nullable MenuProvider provider) {
             if (provider == null) return OptionalInt.empty();
             if (containerMenu != inventoryMenu) closeContainer();
@@ -136,6 +138,7 @@ public class BaseGuiGameTests implements OMTGameTests {
     }
 
     /** A tier 1 base owned by {@code owner}; an owner is set right away, as a base without one drops itself. */
+    @SuppressWarnings("DataFlowIssue")
     private static TurretBaseBlockEntity placeBase(GameTestHelper helper, ServerPlayer owner) {
         helper.setBlock(BASE, ModBlocks.TURRET_BASES.get(0));
         TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(BASE));

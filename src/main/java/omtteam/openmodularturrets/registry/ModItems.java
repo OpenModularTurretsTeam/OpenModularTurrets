@@ -67,6 +67,7 @@ public final class ModItems {
     public static final TurretBaseUpgradeItem UPGRADE_FIRE_RATE = registerUpgrade(TurretBaseUpgradeType.FIRE_RATE);
     public static final TurretBaseUpgradeItem UPGRADE_RANGE = registerUpgrade(TurretBaseUpgradeType.RANGE);
     public static final TurretBaseUpgradeItem UPGRADE_SCATTER_SHOT = registerUpgrade(TurretBaseUpgradeType.SCATTERSHOT);
+    @SuppressWarnings("unused")
     public static final TurretBaseUpgradeItem UPGRADE_CREATIVE = registerUpgrade(TurretBaseUpgradeType.CREATIVE);
 
     // Generator upgrades

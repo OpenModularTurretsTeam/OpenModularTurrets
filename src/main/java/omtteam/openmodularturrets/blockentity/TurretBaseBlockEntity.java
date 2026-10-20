@@ -65,6 +65,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
                 new BlockEntityBaseWorld(this::getLevel, pos, inventory), new Random(), this::onLogicChanged);
     }
 
+    @SuppressWarnings("unused")
     public static void serverTick(Level level, BlockPos pos, BlockState state, TurretBaseBlockEntity base) {
         // 1.12.2 TileEntityOwnedBlock: a base without owner (e.g. placed by a machine) drops itself
         if (base.getOwner() == null) {
@@ -160,11 +161,13 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
     }
 
     /** Ammo slots as exposed to automation on all sides (the loader adapters wrap it). */
+    @SuppressWarnings("unused")
     public ItemAccess getItemAccess(@Nullable Direction side) {
         return ammoAccess;
     }
 
     /** Energy as exposed to automation on all sides (insert only). */
+    @SuppressWarnings("unused")
     public EnergyAccess getEnergyAccess(@Nullable Direction side) {
         return logic.getEnergy();
     }

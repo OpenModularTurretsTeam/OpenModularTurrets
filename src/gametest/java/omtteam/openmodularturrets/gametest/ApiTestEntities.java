@@ -18,6 +18,7 @@ public final class ApiTestEntities {
             EntityType.Builder.of(ApiTestProjectile::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).noSave());
 
+    @SuppressWarnings("SameParameterValue")
     private static <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {
         ResourceLocation id = Objects.requireNonNull(ResourceLocation.tryParse(ApiTestTurrets.NAMESPACE + ":" + name));
         return Registry.register(BuiltInRegistries.ENTITY_TYPE, id, builder.build(id.toString()));

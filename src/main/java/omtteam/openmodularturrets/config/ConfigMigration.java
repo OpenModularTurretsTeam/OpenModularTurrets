@@ -22,6 +22,7 @@ final class ConfigMigration {
      *
      * @return whether anything changed
      */
+    @SuppressWarnings("ConstantValue")
     static boolean migrate(JsonObject json) {
         int version = version(json);
         if (version >= CURRENT_VERSION) return false;

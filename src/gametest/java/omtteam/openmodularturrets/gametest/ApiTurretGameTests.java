@@ -66,6 +66,7 @@ public class ApiTurretGameTests implements OMTGameTests {
      * default stats that its stats are read from. The plugin's projectile entity type is registered.
      */
     @GameTest(template = EMPTY_STRUCTURE, batch = "api_registration")
+    @SuppressWarnings("DataFlowIssue")
     public void apiTurretsAreRegisteredWithConfig(GameTestHelper helper) {
         helper.assertTrue(EXPECTED.keySet().containsAll(ApiTestTurrets.ALL), "A test turret has no expectations");
         for (TurretType type : ApiTestTurrets.ALL) {

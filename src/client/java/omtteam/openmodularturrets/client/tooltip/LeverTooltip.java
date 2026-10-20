@@ -16,6 +16,7 @@ public final class LeverTooltip {
     private LeverTooltip() {
     }
 
+    @SuppressWarnings("unused")
     public static void append(ItemStack stack, TooltipFlag flag, List<Component> lines) {
         if (!stack.is(ModItems.LEVER)) return;
         lines.add(Screen.hasShiftDown()

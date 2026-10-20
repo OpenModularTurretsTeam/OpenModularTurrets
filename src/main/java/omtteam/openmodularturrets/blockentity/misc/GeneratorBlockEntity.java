@@ -99,11 +99,13 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
     }
 
     /** Energy as exposed to automation on all sides (extract only). */
+    @SuppressWarnings("unused")
     public EnergyAccess getEnergyAccess(@Nullable Direction side) {
         return energy;
     }
 
     /** The fuel slots as exposed to automation on all sides (the loader adapters wrap it). */
+    @SuppressWarnings("unused")
     public ItemAccess getItemAccess(@Nullable Direction side) {
         return itemAccess;
     }

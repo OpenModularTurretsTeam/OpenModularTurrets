@@ -112,14 +112,14 @@ public class TurretBaseBlock extends CompatEntityBlock implements InteractiveBlo
 
     /** Without adjustable light the base blocks all light (the default opacity), like the solid block it used to be. */
     @Override
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "RedundantSuppression"})
     public int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
         return CamoLightProperties.lightBlock(state);
     }
 
     /** Fully transparent bases let sky light through, like glass. */
     @Override
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "RedundantSuppression"})
     public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
         return CamoLightProperties.lightBlock(state) == 0;
     }

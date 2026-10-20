@@ -19,6 +19,7 @@ public record ItemAccess(Container container, int firstSlot, int slotCount,
     /**
      * All slots; anything the container accepts goes in, nothing comes out.
      */
+    @SuppressWarnings("unused")
     public static ItemAccess insertOnly(Container container) {
         return new ItemAccess(container, 0, container.getContainerSize(), stack -> true, stack -> false);
     }

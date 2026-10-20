@@ -40,6 +40,7 @@ public class BillboardRenderer<T extends Entity> extends EntityRenderer<T> {
     }
 
     @Override
+    @SuppressWarnings("NullableProblems")
     public ResourceLocation getTextureLocation(T entity) {
         return texture;
     }

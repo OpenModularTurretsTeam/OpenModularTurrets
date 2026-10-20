@@ -19,6 +19,7 @@ public final class ClientCompat {
      * Draws the dimmed background of a container screen. Only needed on 1.20.1; on 1.21 {@code Screen.render}
      * already does it.
      */
+    @SuppressWarnings("unused")
     public static void renderContainerBackground(Screen screen, GuiGraphics graphics, int mouseX, int mouseY,
                                                  float partialTick) {
         //? if <1.21 {
