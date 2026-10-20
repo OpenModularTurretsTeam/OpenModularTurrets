@@ -4,6 +4,8 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
+import omtteam.openmodularturrets.blockentity.misc.GeneratorBlockEntity;
 import omtteam.openmodularturrets.core.energy.EnergyAccess;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import team.reborn.energy.api.EnergyStorage;
@@ -22,8 +24,8 @@ public final class FabricBlockLookups {
                 ModBlockEntities.TURRET_BASE);
         ItemStorage.SIDED.registerForBlockEntity((generator, side) -> FabricItemStorages.of(generator.getItemAccess(side)),
                 ModBlockEntities.GENERATOR);
-        registerEnergy(ModBlockEntities.TURRET_BASE, (base, side) -> base.getEnergyAccess(side));
-        registerEnergy(ModBlockEntities.GENERATOR, (generator, side) -> generator.getEnergyAccess(side));
+        registerEnergy(ModBlockEntities.TURRET_BASE, TurretBaseBlockEntity::getEnergyAccess);
+        registerEnergy(ModBlockEntities.GENERATOR, GeneratorBlockEntity::getEnergyAccess);
     }
 
     private static <T extends BlockEntity> void registerEnergy(BlockEntityType<T> type,

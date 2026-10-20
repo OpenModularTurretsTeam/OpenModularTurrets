@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import omtteam.openmodularturrets.client.camo.CamoModels;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -90,7 +91,8 @@ public final class FabricCamoModel extends ForwardingBakedModel {
         private final BlockPos pos;
         private final BlockState camo;
         private final BlockColors colors;
-        private final MaterialFinder finder = RendererAccess.INSTANCE.getRenderer().materialFinder();
+        private final MaterialFinder finder = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer(),
+                "No Fabric Renderer API implementation").materialFinder();
         private final BlendMode blendMode;
 
         private DisguiseTransform(BlockAndTintGetter view, BlockPos pos, BlockState camo, BlockColors colors) {

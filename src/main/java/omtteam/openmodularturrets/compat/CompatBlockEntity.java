@@ -67,7 +67,7 @@ public abstract class CompatBlockEntity extends BlockEntity {
 
     /**
      * What the block's model reads while the chunk is meshed (the camouflage), {@code null} for nothing. Fabric reads
-     * it as block entity render data, NeoForge as {@link #RENDER_DATA} in the model data. Call {@link #remesh} on the
+     * it as block entity render data, NeoForge as {@code RENDER_DATA} in the model data. Call {@link #remesh} on the
      * client when it changed.
      */
     protected @Nullable Object renderData() {
