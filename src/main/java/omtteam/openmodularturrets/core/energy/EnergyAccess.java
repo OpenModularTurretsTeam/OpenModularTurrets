@@ -6,8 +6,10 @@ package omtteam.openmodularturrets.core.energy;
  * energy API. Negative arguments count as 0.
  */
 public interface EnergyAccess {
+    /** Energy stored now. */
     long getAmount();
 
+    /** Most energy that can be stored. */
     long getCapacity();
 
     /** @return the amount accepted (or that would be, if simulated) */

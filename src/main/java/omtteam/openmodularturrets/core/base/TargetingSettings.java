@@ -13,6 +13,9 @@ public class TargetingSettings {
     private int range;
     private int maxRange;
 
+    /**
+     * Negative values count as 0; {@code range} is limited to {@code maxRange}.
+     */
     public TargetingSettings(boolean targetPlayers, boolean targetMobs, boolean targetPassive, int range, int maxRange) {
         this.targetPlayers = targetPlayers;
         this.targetMobs = targetMobs;
@@ -50,6 +53,7 @@ public class TargetingSettings {
         this.targetPassive = targetPassive;
     }
 
+    /** The range the player chose, in blocks; never above {@link #getMaxRange()}. */
     public int getRange() {
         return range;
     }
@@ -61,6 +65,7 @@ public class TargetingSettings {
         }
     }
 
+    /** The longest range the attached turrets and range upgrades allow. */
     public int getMaxRange() {
         return maxRange;
     }

@@ -44,6 +44,7 @@ public final class TurretState {
         ticksSinceShot++;
     }
 
+    /** Ticks since the last shot began; compared with the fire cooldown. */
     public int getTicksSinceShot() {
         return ticksSinceShot;
     }

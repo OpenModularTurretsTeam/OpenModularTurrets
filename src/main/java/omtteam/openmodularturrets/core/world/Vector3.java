@@ -6,6 +6,7 @@ package omtteam.openmodularturrets.core.world;
 public record Vector3(double x, double y, double z) {
     public static final Vector3 ZERO = new Vector3(0, 0, 0);
 
+    /** The unit vector pointing out of {@code face}. */
     public static Vector3 of(Face face) {
         return new Vector3(face.getStepX(), face.getStepY(), face.getStepZ());
     }
@@ -26,6 +27,7 @@ public record Vector3(double x, double y, double z) {
         return x * other.x + y * other.y + z * other.z;
     }
 
+    /** Cross product, right-handed: {@code x × y = z}. */
     public Vector3 cross(Vector3 other) {
         return new Vector3(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x);
     }

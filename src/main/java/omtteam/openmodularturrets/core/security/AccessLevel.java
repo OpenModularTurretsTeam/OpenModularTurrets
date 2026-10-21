@@ -24,10 +24,12 @@ public enum AccessLevel {
         return serializedName;
     }
 
+    /** Whether this level has all the rights of {@code other} (it is the same or higher). */
     public boolean isAtLeast(AccessLevel other) {
         return ordinal() >= other.ordinal();
     }
 
+    /** The level with this serialized name, or {@code fallback} if there is none (unknown or missing saved value). */
     public static AccessLevel bySerializedName(String name, AccessLevel fallback) {
         for (AccessLevel level : values()) {
             if (level.serializedName.equals(name)) return level;

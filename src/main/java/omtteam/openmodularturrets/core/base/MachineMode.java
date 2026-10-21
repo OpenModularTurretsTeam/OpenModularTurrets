@@ -21,10 +21,15 @@ public enum MachineMode {
         return serializedName;
     }
 
+    /** Language key of the mode's name in the GUI. */
     public String getTranslationKey() {
         return "gui.openmodularturrets.mode." + serializedName;
     }
 
+    /**
+     * @param redstone whether the machine receives a redstone signal
+     * @return whether a machine in this mode runs, given the signal
+     */
     public boolean isActive(boolean redstone) {
         return switch (this) {
             case ALWAYS_ON -> true;
@@ -40,6 +45,7 @@ public enum MachineMode {
         return values[(ordinal() + 1) % values.length];
     }
 
+    /** The mode with this serialized name, or {@code fallback} if there is none (unknown or missing saved value). */
     public static MachineMode bySerializedName(String name, MachineMode fallback) {
         for (MachineMode mode : values()) {
             if (mode.serializedName.equals(name)) return mode;

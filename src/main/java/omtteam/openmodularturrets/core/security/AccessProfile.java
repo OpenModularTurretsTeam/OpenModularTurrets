@@ -34,10 +34,12 @@ public record AccessProfile(List<AccessLevel> levels) {
         levels = List.copyOf(allowed);
     }
 
+    /** A profile of these levels, see the constructor for the rules. */
     public static AccessProfile of(AccessLevel... allowed) {
         return new AccessProfile(List.of(allowed));
     }
 
+    /** Whether {@code level} is one of the profile's levels (no clamping). */
     public boolean allows(AccessLevel level) {
         return levels.contains(level);
     }

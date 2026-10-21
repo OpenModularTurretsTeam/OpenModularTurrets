@@ -39,10 +39,12 @@ public final class EnergyStore implements EnergyAccess {
         return Math.max(0, capacity - amount);
     }
 
+    /** Most energy {@link #insert} accepts per call. */
     public long getMaxInsert() {
         return maxInsert;
     }
 
+    /** Most energy {@link #extract} gives per call. */
     public long getMaxExtract() {
         return maxExtract;
     }
@@ -56,10 +58,12 @@ public final class EnergyStore implements EnergyAccess {
         }
     }
 
+    /** Changes the limit of {@link #insert}; negative values count as 0. */
     public void setMaxInsert(long maxInsert) {
         this.maxInsert = Math.max(0, maxInsert);
     }
 
+    /** Changes the limit of {@link #extract}; negative values count as 0. */
     public void setMaxExtract(long maxExtract) {
         this.maxExtract = Math.max(0, maxExtract);
     }

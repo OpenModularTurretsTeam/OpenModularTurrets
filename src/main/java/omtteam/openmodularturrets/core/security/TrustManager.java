@@ -43,6 +43,7 @@ public class TrustManager {
         this.profile = Objects.requireNonNull(profile, "profile");
     }
 
+    /** The access levels this manager uses. */
     public AccessProfile getProfile() {
         return profile;
     }
@@ -61,10 +62,12 @@ public class TrustManager {
         onChange.run();
     }
 
+    /** A read-only live view of the trusted players, without the owner. */
     public List<TrustedPlayer> getTrustedPlayers() {
         return Collections.unmodifiableList(trustedPlayers);
     }
 
+    /** The trusted-list entry of this player; empty for the owner, team members and strangers. */
     public Optional<TrustedPlayer> getTrustedPlayer(UUID uuid) {
         for (TrustedPlayer entry : trustedPlayers) {
             if (entry.getUuid().equals(uuid)) return Optional.of(entry);
@@ -90,6 +93,7 @@ public class TrustManager {
 
     // ---- Queries ----
 
+    /** Whether the UUID belongs to the owner; false while the base has no owner. */
     public boolean isOwner(UUID uuid) {
         return owner != null && owner.is(uuid);
     }
@@ -133,6 +137,7 @@ public class TrustManager {
         return level;
     }
 
+    /** Whether the player's {@link #getAccessLevel effective level} is at least {@code required}. */
     public boolean hasAccess(PlayerInfo player, AccessLevel required) {
         return getAccessLevel(player).map(level -> level.isAtLeast(required)).orElse(false);
     }
@@ -204,6 +209,7 @@ public class TrustManager {
         return TrustResult.SUCCESS;
     }
 
+    /** Removes a player from the trusted list; {@link TrustResult#NOT_FOUND} if not on it. */
     public TrustResult removeTrustedPlayer(PlayerInfo actor, UUID player) {
         if (!isAdmin(actor)) return TrustResult.NO_PERMISSION;
         if (!trustedPlayers.removeIf(entry -> entry.getUuid().equals(player))) return TrustResult.NOT_FOUND;
@@ -226,6 +232,10 @@ public class TrustManager {
         return TrustResult.SUCCESS;
     }
 
+    /**
+     * Sets the level of a trusted player directly (unlike {@link #changeAccessLevel}, which steps);
+     * {@link TrustResult#OUT_OF_RANGE} if the level is not in the profile.
+     */
     public TrustResult setAccessLevel(PlayerInfo actor, UUID player, AccessLevel level) {
         if (!isAdmin(actor)) return TrustResult.NO_PERMISSION;
         if (!profile.allows(level)) return TrustResult.OUT_OF_RANGE;

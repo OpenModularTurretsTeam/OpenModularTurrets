@@ -100,6 +100,7 @@ public record TurretStats(boolean enabled, int baseRange, int baseFireRate, int 
             return this;
         }
 
+        /** Creates the stats; values that were not set keep their defaults. */
         public TurretStats build() {
             return new TurretStats(enabled, baseRange, baseFireRate, baseDamage, powerUsage, baseAccuracyDeviation,
                     maxSimultaneous, damageAmp, fireRateUpgrade, rangeUpgrade, accuracyUpgrade, efficiencyUpgrade,

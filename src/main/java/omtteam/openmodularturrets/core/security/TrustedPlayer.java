@@ -40,6 +40,7 @@ public final class TrustedPlayer {
         this.identity = identity.withName(name);
     }
 
+    /** A copy with the same identity and level. */
     public TrustedPlayer copy() {
         return new TrustedPlayer(identity, accessLevel);
     }

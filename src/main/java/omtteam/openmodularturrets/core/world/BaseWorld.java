@@ -10,6 +10,7 @@ import java.util.Optional;
  * The world around one turret base, as seen by the core logic. Implemented by the Minecraft layer.
  */
 public interface BaseWorld {
+    /** Position of the base block. */
     BlockPosition getPosition();
 
     /** Ammo slots of the base (0–8), followed by the slots of attached inventory expanders. */

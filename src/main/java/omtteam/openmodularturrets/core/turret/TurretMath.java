@@ -24,10 +24,12 @@ public final class TurretMath {
 
     /** Local axes of a mounting face, in world coordinates. */
     public record Frame(Vector3 right, Vector3 up, Vector3 forward) {
+        /** Expresses a world-space vector in this frame: x = right, y = up, z = forward. */
         public Vector3 toLocal(Vector3 world) {
             return new Vector3(world.dot(right), world.dot(up), world.dot(forward));
         }
 
+        /** Inverse of {@link #toLocal}. */
         public Vector3 toWorld(Vector3 local) {
             return right.scale(local.x()).add(up.scale(local.y())).add(forward.scale(local.z()));
         }

@@ -9,6 +9,7 @@ import java.util.Set;
  * so config changes and server-synced values apply immediately.
  */
 public interface LogicSettings {
+    /** Stats of a turret type, including the config values of its section. */
     TurretStats turret(TurretType type);
 
     /** @param tier 1–5 */

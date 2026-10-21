@@ -31,6 +31,10 @@ public final class TargetSelector {
     private final TrustManager trust;
     private final BaseWorld world;
 
+    /**
+     * @param trust the base's trust rules, which protect the owner and trusted players
+     * @param world the world around the base, for entity lookups and line of sight
+     */
     public TargetSelector(LogicSettings settings, TrustManager trust, BaseWorld world) {
         this.settings = settings;
         this.trust = trust;

@@ -19,6 +19,7 @@ public record CamoLight(int value, int opacity) {
         opacity = clamp(opacity);
     }
 
+    /** {@code level} limited to {@code [0, MAX]}. */
     public static int clamp(int level) {
         return Math.max(0, Math.min(MAX, level));
     }
@@ -28,10 +29,12 @@ public record CamoLight(int value, int opacity) {
         return tier >= MIN_BASE_TIER;
     }
 
+    /** A copy with another emitted light level (clamped to {@code [0, MAX]}). */
     public CamoLight withValue(int newValue) {
         return new CamoLight(newValue, opacity);
     }
 
+    /** A copy with another opacity (clamped to {@code [0, MAX]}). */
     public CamoLight withOpacity(int newOpacity) {
         return new CamoLight(value, newOpacity);
     }

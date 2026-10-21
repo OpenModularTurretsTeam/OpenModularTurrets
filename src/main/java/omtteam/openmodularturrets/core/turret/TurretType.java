@@ -171,6 +171,7 @@ public final class TurretType {
     }
 
     @Override
+    /** The id, which is also the registry name. */
     public String toString() {
         return getId();
     }

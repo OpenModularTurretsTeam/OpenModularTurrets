@@ -29,10 +29,12 @@ public final class GeneratorLogic {
     /** Burn time in fuel ticks of the item burning now (for the flame in the GUI). */
     private int burnDuration;
 
+    /** Fuel ticks left of the item burning now, 0 if none is burning. */
     public int getBurnTime() {
         return burnTime;
     }
 
+    /** Total fuel ticks of the item burning now; with {@link #getBurnTime()} it gives the flame's height. */
     public int getBurnDuration() {
         return burnDuration;
     }

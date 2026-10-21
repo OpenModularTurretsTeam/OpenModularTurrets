@@ -18,10 +18,13 @@ public interface ItemSlot {
     /** Damage bonus of the item when fired by the disposable turret (config allow list), 0 otherwise. */
     int getDisposableDamageBonus();
 
+    /** Whether the item is this fuel of the redstone reactor addon. */
     boolean isReactorFuel(ReactorFuel fuel);
 
+    /** The base upgrade the item is, empty if it is none. */
     Optional<TurretBaseUpgradeType> getUpgrade();
 
+    /** The base addon the item is, empty if it is none. */
     Optional<AddonType> getAddon();
 
     /**

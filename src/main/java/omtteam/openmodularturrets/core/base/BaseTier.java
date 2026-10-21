@@ -21,6 +21,9 @@ public final class BaseTier {
         return tier >= 5 ? 2 : tier >= 2 ? 1 : 0;
     }
 
+    /**
+     * @throws IllegalArgumentException if {@code tier} is outside {@code [MIN, MAX]}
+     */
     public static void validate(int tier) {
         if (tier < MIN || tier > MAX) throw new IllegalArgumentException("Invalid base tier: " + tier);
     }

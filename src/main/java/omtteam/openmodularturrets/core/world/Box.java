@@ -13,6 +13,7 @@ public record Box(double minX, double minY, double minZ, double maxX, double max
                 pos.x() + radius, pos.y() + radius, pos.z() + radius);
     }
 
+    /** Whether the point is inside or on the border of the box. */
     public boolean contains(double x, double y, double z) {
         return x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ;
     }

@@ -43,6 +43,7 @@ public final class TurretTypes {
         frozen = true;
     }
 
+    /** Whether {@link #freeze} was called, after which no types can be added. */
     public static boolean isFrozen() {
         return frozen;
     }

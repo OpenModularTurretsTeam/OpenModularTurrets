@@ -22,14 +22,18 @@ public abstract class TargetEntity {
 
     public abstract double getZ();
 
+    /** Height of the eyes above {@link #getY()}, where line of sight ends. */
     public abstract double getEyeHeight();
 
+    /** Current health in half hearts. */
     public abstract float getHealth();
 
     public abstract float getMaxHealth();
 
+    /** Armor points (20 = full armor bar), as used in the ray damage formulas. */
     public abstract int getArmor();
 
+    /** False once the entity is dead or removed. */
     public abstract boolean isAlive();
 
     /** The player behind this entity, if it is a player. */
@@ -47,8 +51,10 @@ public abstract class TargetEntity {
     /** Has the slowness effect (the slowing turret ignores slowed entities). */
     public abstract boolean hasSlowness();
 
+    /** The default class of the entity, before the config lists override it (see {@code TargetSelector#classify}). */
     public abstract EntityCategory getCategory();
 
+    /** Whether this entity is a player. */
     public boolean isPlayer() {
         return getPlayer().isPresent();
     }

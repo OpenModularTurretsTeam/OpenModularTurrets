@@ -80,6 +80,14 @@ public class TurretBaseLogic {
         void onChanged(boolean clientRelevant);
     }
 
+    /**
+     * @param tier     base tier, {@code [BaseTier.MIN, BaseTier.MAX]}
+     * @param security server rules for trust (operators, teams, damage to trusted players)
+     * @param world    the world around the base
+     * @param random   source of randomness for the recycler addon's rolls
+     * @param listener told when saved or synced state changes
+     * @throws IllegalArgumentException if the tier is invalid
+     */
     public TurretBaseLogic(int tier, LogicSettings settings, SecurityEnvironment security, BaseWorld world,
                            RandomGenerator random, ChangeListener listener) {
         BaseTier.validate(tier);
@@ -182,6 +190,7 @@ public class TurretBaseLogic {
 
     // ---- Neighbours / turrets ----
 
+    /** The turrets attached to the base by face, as of the last {@link #updateNeighbours} (a new map each call). */
     public Map<Face, TurretType> getTurrets() {
         Map<Face, TurretType> turrets = new EnumMap<>(Face.class);
         neighbours.forEach((face, neighbour) -> {
@@ -248,6 +257,7 @@ public class TurretBaseLogic {
         return countAmmo(ammo.get());
     }
 
+    /** Total number of items in the ammo slots that can be fired as {@code type}. */
     public int countAmmo(AmmoType type) {
         int count = 0;
         for (ItemSlot slot : world.getAmmoSlots()) {
@@ -347,6 +357,7 @@ public class TurretBaseLogic {
         return count;
     }
 
+    /** Whether at least one addon of this type sits in a slot the tier can use. */
     public boolean hasAddon(AddonType type) {
         return getAddonCount(type) > 0;
     }
@@ -445,6 +456,7 @@ public class TurretBaseLogic {
 
     // ---- Energy ----
 
+    /** The base's energy buffer; its capacity and maximum input come from the tier's config. */
     public EnergyStore getEnergy() {
         return energy;
     }
@@ -484,10 +496,12 @@ public class TurretBaseLogic {
 
     // ---- Redstone mode ----
 
+    /** Whether the redstone mode currently lets the base work. */
     public boolean isActive() {
         return mode.isActive(redstone);
     }
 
+    /** The redstone mode. */
     public MachineMode getMode() {
         return mode;
     }
@@ -497,6 +511,7 @@ public class TurretBaseLogic {
         setMode(mode.next());
     }
 
+    /** Sets the redstone mode and notifies the listener. */
     public void setMode(MachineMode mode) {
         this.mode = mode;
         markSync();
@@ -504,20 +519,24 @@ public class TurretBaseLogic {
 
     // ---- Targeting settings ----
 
+    /** The live targeting settings; change them through the setters here so the listener is notified. */
     public TargetingSettings getTargetingSettings() {
         return targeting;
     }
 
+    /** Whether players that are not trusted may be targeted. Still needs the global config switch. */
     public void setTargetPlayers(boolean value) {
         targeting.setTargetPlayers(value);
         markSync();
     }
 
+    /** Whether hostile mobs may be targeted. Still needs the global config switch. */
     public void setTargetMobs(boolean value) {
         targeting.setTargetMobs(value);
         markSync();
     }
 
+    /** Whether neutral and passive mobs may be targeted. Still needs the global config switch. */
     public void setTargetPassive(boolean value) {
         targeting.setTargetPassive(value);
         markSync();
@@ -530,6 +549,7 @@ public class TurretBaseLogic {
         markSync();
     }
 
+    /** Whether each turret picks its own target instead of all taking the same one. */
     public boolean isMultiTargeting() {
         return multiTargeting;
     }
@@ -609,6 +629,7 @@ public class TurretBaseLogic {
         return Collections.unmodifiableMap(targets);
     }
 
+    /** The selector that applies this base's trust rules and the config lists. */
     public TargetSelector getTargetSelector() {
         return targetSelector;
     }
@@ -640,19 +661,23 @@ public class TurretBaseLogic {
 
     // ---- Statistics ----
 
+    /** Kills counted for this base's turrets. */
     public int getKills() {
         return kills;
     }
 
+    /** Player kills counted for this base's turrets. */
     public int getPlayerKills() {
         return playerKills;
     }
 
+    /** Counts one kill and notifies the listener. */
     public void increaseKillCounter() {
         kills++;
         markSync();
     }
 
+    /** Counts one player kill and notifies the listener. */
     public void increasePlayerKillCounter() {
         playerKills++;
         markSync();
@@ -660,10 +685,12 @@ public class TurretBaseLogic {
 
     // ---- Other state ----
 
+    /** The base tier, 1–5. */
     public int getTier() {
         return tier;
     }
 
+    /** Owner, trusted players and the permission checks of this base. */
     public TrustManager getTrustManager() {
         return trustManager;
     }

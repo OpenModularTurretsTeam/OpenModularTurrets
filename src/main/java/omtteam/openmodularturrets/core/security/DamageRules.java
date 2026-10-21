@@ -16,6 +16,7 @@ public final class DamageRules {
         record Projectile() implements Victim {
         }
 
+        /** A player; hit only if the base's trust rules allow it. */
         record Player(PlayerIdentity identity) implements Victim {
         }
 
