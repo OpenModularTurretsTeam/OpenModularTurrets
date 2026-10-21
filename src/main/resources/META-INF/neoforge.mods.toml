@@ -1,0 +1,36 @@
+modLoader = "javafml"
+loaderVersion = "${neoforge_loader_range}"
+license = "MIT (code), CC-BY-NC-SA-4.0 (art)"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${version}"
+displayName = "${mod_name}"
+authors = "Poenjabiesous, UntouchedWagons, Keridos"
+description = "All a man needs are meat ingots, and big ass turrets. Adds a heap of new turrets and upgrades!"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/openmodularturrets/"
+
+# Same config as on Fabric (NeoForge runs with Mojang names, so no refmap is needed; MixinExtras comes with NeoForge)
+[[mixins]]
+config = "openmodularturrets.mixins.json"
+
+[[dependencies.${mod_id}]]
+modId = "neoforge"
+type = "required"
+versionRange = "[${neoforge_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_dependency}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "jade"
+type = "optional"
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"

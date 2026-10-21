@@ -1,22 +1,24 @@
 package omtteam.openmodularturrets.client;
 
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import omtteam.openmodularturrets.client.compat.ClientCompat;
-import omtteam.openmodularturrets.client.camo.CamoModels;
-import omtteam.openmodularturrets.client.network.ClientPacketHandlers;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.block.Block;
 import omtteam.openmodularturrets.client.model.TurretModels;
+import omtteam.openmodularturrets.client.network.ClientPacketHandlers;
+import omtteam.openmodularturrets.client.render.BlockEntityRendererRegistrar;
+import omtteam.openmodularturrets.client.render.EntityRendererRegistrar;
 import omtteam.openmodularturrets.client.render.blockentity.LeverRenderer;
 import omtteam.openmodularturrets.client.render.blockentity.TurretRenderer;
 import omtteam.openmodularturrets.client.render.effect.RayRenderer;
+import omtteam.openmodularturrets.client.render.entity.PlasmaRenderer;
+import omtteam.openmodularturrets.client.render.entity.ProjectileRenderers;
+import omtteam.openmodularturrets.client.render.item.ItemStackRenderer;
 import omtteam.openmodularturrets.client.render.item.LeverItemRenderer;
 import omtteam.openmodularturrets.client.render.item.TurretItemRenderer;
-import omtteam.openmodularturrets.client.render.entity.ProjectileRenderers;
 import omtteam.openmodularturrets.client.screen.CamoScreen;
 import omtteam.openmodularturrets.client.screen.GeneratorScreen;
 import omtteam.openmodularturrets.client.screen.TurretBaseScreen;
@@ -27,38 +29,102 @@ import omtteam.openmodularturrets.client.tooltip.MemoryCardTooltip;
 import omtteam.openmodularturrets.client.tooltip.ModuleTooltip;
 import omtteam.openmodularturrets.client.tooltip.TurretBaseTooltip;
 import omtteam.openmodularturrets.client.tooltip.TurretTooltip;
+import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.registry.ModItems;
 import omtteam.openmodularturrets.registry.ModMenus;
 
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
+
 /**
- * Client entrypoint of Open Modular Turrets (renderers, screens, client networking).
+ * Shared client start-up, the client counterpart of {@code OMT}. The loader client entrypoints
+ * ({@code client/platform/<loader>/}) install the client platform services, call {@link #init} and register the
+ * content listed here with their loader (screens, model layers, renderers, item renderers, render layers, tooltips).
  */
-public class OMTClient implements ClientModInitializer {
-    @Override
-    public void onInitializeClient() {
+public final class OMTClient {
+    @FunctionalInterface
+    private interface TooltipAppender {
+        void append(ItemStack stack, TooltipFlag flag, List<Component> lines);
+    }
+
+    private static final List<TooltipAppender> TOOLTIPS = List.of(TurretBaseTooltip::append, TurretTooltip::append,
+            AmmoTooltip::append, ModuleTooltip::append, LeverTooltip::append, GeneratorTooltip::append,
+            MemoryCardTooltip::append);
+
+    private OMTClient() {
+    }
+
+    /**
+     * Packet handlers and the turret models; called first thing after the client platform services are installed.
+     *
+     * @param plugins other mods' client turret plugins, as the loader found them
+     */
+    public static void init(List<TurretModels.Plugin> plugins) {
         ClientPacketHandlers.init();
-        MenuScreens.register(ModMenus.TURRET_BASE, TurretBaseScreen::new);
-        MenuScreens.register(ModMenus.GENERATOR, GeneratorScreen::new);
-        MenuScreens.register(ModMenus.CAMO, CamoScreen::new);
-        CamoModels.register();
-        TurretModels.init();
         RayRenderer.init();
-        BlockEntityRenderers.register(ModBlockEntities.TURRET, TurretRenderer::new);
-        EntityModelLayerRegistry.registerModelLayer(LeverRenderer.LAYER, LeverRenderer::createLayer);
-        BlockEntityRenderers.register(ModBlockEntities.LEVER, LeverRenderer::new);
-        BuiltinItemRendererRegistry.INSTANCE.register(ModItems.LEVER, new LeverItemRenderer());
-        // OMPD fences have transparent parts
-        ModBlocks.FENCES.forEach(fence -> BlockRenderLayerMap.INSTANCE.putBlock(fence, RenderType.cutout()));
-        TurretItemRenderer.register(ModItems.TURRETS);
-        ProjectileRenderers.register();
-        ClientCompat.registerTooltip(TurretBaseTooltip::append);
-        ClientCompat.registerTooltip(TurretTooltip::append);
-        ClientCompat.registerTooltip(AmmoTooltip::append);
-        ClientCompat.registerTooltip(ModuleTooltip::append);
-        ClientCompat.registerTooltip(LeverTooltip::append);
-        ClientCompat.registerTooltip(GeneratorTooltip::append);
-        ClientCompat.registerTooltip(MemoryCardTooltip::append);
+        TurretModels.init(plugins);
+    }
+
+    /**
+     * All menu screens of the mod, through the loader's registration.
+     */
+    public static void registerScreens(ScreenRegistrar registrar) {
+        registrar.register(ModMenus.TURRET_BASE, TurretBaseScreen::new);
+        registrar.register(ModMenus.GENERATOR, GeneratorScreen::new);
+        registrar.register(ModMenus.CAMO, CamoScreen::new);
+    }
+
+    /**
+     * All model layers: the turret models (after {@link #init}), the crank and the plasma shot.
+     */
+    public static void registerModelLayers(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> registrar) {
+        TurretModels.registerLayers(registrar);
+        registrar.accept(LeverRenderer.LAYER, LeverRenderer::createLayer);
+        registrar.accept(PlasmaRenderer.LAYER, PlasmaRenderer::createLayer);
+    }
+
+    public static void registerBlockEntityRenderers(BlockEntityRendererRegistrar registrar) {
+        registrar.register(ModBlockEntities.TURRET, TurretRenderer::new);
+        registrar.register(ModBlockEntities.LEVER, LeverRenderer::new);
+    }
+
+    public static void registerEntityRenderers(EntityRendererRegistrar registrar) {
+        ProjectileRenderers.register(registrar);
+    }
+
+    /**
+     * Items drawn by a renderer instead of a baked model (their item models have {@code parent: builtin/entity}).
+     */
+    public static void registerItemRenderers(BiConsumer<Item, ItemStackRenderer> registrar) {
+        registrar.accept(ModItems.LEVER, new LeverItemRenderer());
+        TurretItemRenderer.register(ModItems.TURRETS, registrar);
+    }
+
+    /**
+     * Blocks drawn in the cutout layer (OMPD fences have transparent parts). Fabric registers them; NeoForge reads
+     * {@code "render_type"} in their block models, which must stay in sync with this list.
+     */
+    public static List<? extends Block> cutoutBlocks() {
+        return ModBlocks.FENCES;
+    }
+
+    /**
+     * Lines added to item tooltips (called for every item).
+     */
+    public static void appendTooltip(ItemStack stack, TooltipFlag flag, List<Component> lines) {
+        for (TooltipAppender appender : TOOLTIPS) {
+            appender.append(stack, flag, lines);
+        }
+    }
+
+    /**
+     * After leaving a server: back to the local config, and no rays left over.
+     */
+    public static void onDisconnect() {
+        OMTConfig.useLocalConfig();
+        RayRenderer.clear();
     }
 }

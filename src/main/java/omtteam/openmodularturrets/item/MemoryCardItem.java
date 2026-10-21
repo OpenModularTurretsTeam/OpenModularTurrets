@@ -41,6 +41,7 @@ public class MemoryCardItem extends Item {
 
     /** Sneak-click in the air clears the card. */
     @Override
+    @SuppressWarnings("NullableProblems")
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (player.isShiftKeyDown() && getData(stack).isPresent()) {
@@ -54,6 +55,7 @@ public class MemoryCardItem extends Item {
 
     /** Sneak-click on any other block clears the card (turret bases and traps are handled before this). */
     @Override
+    @SuppressWarnings("NullableProblems")
     public InteractionResult useOn(UseOnContext context) {
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();

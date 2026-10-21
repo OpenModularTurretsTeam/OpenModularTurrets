@@ -124,6 +124,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
 
     // ---- Server ----
 
+    @SuppressWarnings("unused")
     public static void serverTick(Level level, BlockPos pos, BlockState state, TurretBlockEntity turret) {
         BlockPos basePos = turret.getBasePos();
         if (!level.isLoaded(basePos)) return;
@@ -174,6 +175,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
      * then the weapon fires once the cooldown passed. Projectiles are shot at the predicted position (1.12.2
      * {@code ProjectileTurret.doTargetedShot}).
      */
+    @SuppressWarnings("IfCanBeSwitch")
     private void engage(Entity target) {
         TurretWeapon weapon = getWeapon();
         Vec3 centre = Vec3.atCenterOf(worldPosition);
@@ -380,6 +382,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
     // ---- Client ----
 
     /** Turns the rendered model smoothly towards the synced aim and spins it while active. */
+    @SuppressWarnings("unused")
     public static void clientTick(Level level, BlockPos pos, BlockState state, TurretBlockEntity turret) {
         turret.prevRenderYaw = turret.renderYaw;
         turret.prevRenderPitch = turret.renderPitch;

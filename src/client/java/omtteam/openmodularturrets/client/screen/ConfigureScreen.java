@@ -31,6 +31,7 @@ public class ConfigureScreen extends CompatScreen {
     private final BlockPos pos;
     private int left;
     private int top;
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<AccessLevel> shownAccess = Optional.empty();
     private Button mobsButton;
     private Button neutralsButton;
@@ -99,6 +100,7 @@ public class ConfigureScreen extends CompatScreen {
         });
     }
 
+    @SuppressWarnings("DataFlowIssue")
     private void openTrustedPlayers() {
         if (minecraft != null) minecraft.setScreen(new TrustedPlayersScreen(pos, () -> minecraft.setScreen(this)));
     }

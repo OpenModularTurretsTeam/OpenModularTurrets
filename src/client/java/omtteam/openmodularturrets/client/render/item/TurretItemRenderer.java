@@ -1,9 +1,9 @@
 package omtteam.openmodularturrets.client.render.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -13,12 +13,13 @@ import omtteam.openmodularturrets.client.render.blockentity.TurretRenderer;
 import omtteam.openmodularturrets.core.turret.TurretType;
 
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * Turret items show the turret model (1.12.2: turret renderer with {@code turretHead == null}); the display
  * transforms are in the item model JSON ({@code parent: builtin/entity}).
  */
-public class TurretItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
+public class TurretItemRenderer implements ItemStackRenderer {
     private final TurretType type;
     private Map<TurretType, TurretModel> models;
 
@@ -26,11 +27,11 @@ public class TurretItemRenderer implements BuiltinItemRendererRegistry.DynamicIt
         this.type = type;
     }
 
-    /** Registers the item renderer for every turret with a ported model. */
-    public static void register(Map<TurretType, ? extends ItemLike> items) {
+    /** Hands over an item renderer for every turret with a model. */
+    public static void register(Map<TurretType, ? extends ItemLike> items, BiConsumer<Item, ItemStackRenderer> registrar) {
         items.forEach((type, item) -> {
             if (TurretModels.hasModel(type)) {
-                BuiltinItemRendererRegistry.INSTANCE.register(item, new TurretItemRenderer(type));
+                registrar.accept(item.asItem(), new TurretItemRenderer(type));
             }
         });
     }

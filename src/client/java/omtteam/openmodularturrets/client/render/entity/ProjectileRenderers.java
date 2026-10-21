@@ -1,11 +1,10 @@
 package omtteam.openmodularturrets.client.render.entity;
 
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import omtteam.openmodularturrets.OMT;
+import omtteam.openmodularturrets.client.render.EntityRendererRegistrar;
 import omtteam.openmodularturrets.registry.ModEntities;
 
 /**
@@ -23,17 +22,17 @@ public final class ProjectileRenderers {
     private ProjectileRenderers() {
     }
 
-    public static void register() {
-        EntityModelLayerRegistry.registerModelLayer(PlasmaRenderer.LAYER, PlasmaRenderer::createLayer);
-        EntityRendererRegistry.register(ModEntities.BULLET, context -> new BillboardRenderer<>(context, BULLET_TEXTURE, BULLET_SIZE));
+    /** The plasma shot's model layer is registered with the other layers ({@code OMTClient#registerModelLayers}). */
+    public static void register(EntityRendererRegistrar registrar) {
+        registrar.register(ModEntities.BULLET, context -> new BillboardRenderer<>(context, BULLET_TEXTURE, BULLET_SIZE));
         // 1.12.2 RenderSnowball with the ammo item
-        EntityRendererRegistry.register(ModEntities.GRENADE, ThrownItemRenderer::new);
-        EntityRendererRegistry.register(ModEntities.BLAZING_CLAY, ThrownItemRenderer::new);
-        EntityRendererRegistry.register(ModEntities.ARROW, context -> new ArrowShapedRenderer<>(context, BOLT_TEXTURE, 0, BOLT_HALF_LENGTH));
-        EntityRendererRegistry.register(ModEntities.ROCKET, context -> new ArrowShapedRenderer<>(context, ROCKET_TEXTURE, 2));
-        EntityRendererRegistry.register(ModEntities.PLASMA, PlasmaRenderer::new);
+        registrar.register(ModEntities.GRENADE, ThrownItemRenderer::new);
+        registrar.register(ModEntities.BLAZING_CLAY, ThrownItemRenderer::new);
+        registrar.register(ModEntities.ARROW, context -> new ArrowShapedRenderer<>(context, BOLT_TEXTURE, 0, BOLT_HALF_LENGTH));
+        registrar.register(ModEntities.ROCKET, context -> new ArrowShapedRenderer<>(context, ROCKET_TEXTURE, 2));
+        registrar.register(ModEntities.PLASMA, PlasmaRenderer::new);
         // shown by the item entity they carry (1.12.2: the item itself was the visual)
-        EntityRendererRegistry.register(ModEntities.POTATO, NoopRenderer::new);
-        EntityRendererRegistry.register(ModEntities.DISPOSABLE, NoopRenderer::new);
+        registrar.register(ModEntities.POTATO, NoopRenderer::new);
+        registrar.register(ModEntities.DISPOSABLE, NoopRenderer::new);
     }
 }

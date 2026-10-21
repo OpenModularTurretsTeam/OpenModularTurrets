@@ -24,6 +24,7 @@ public final class ModuleTooltip {
     private ModuleTooltip() {
     }
 
+    @SuppressWarnings({"unused", "IfCanBeSwitch"})
     public static void append(ItemStack stack, TooltipFlag flag, List<Component> lines) {
         boolean upgrade = stack.getItem() instanceof UpgradeItem;
         boolean addon = stack.getItem() instanceof AddonItem;
@@ -91,6 +92,7 @@ public final class ModuleTooltip {
         }
     }
 
+    @SuppressWarnings("SwitchStatementWithTooFewBranches")
     private static void appendGeneratorUpgrade(GeneratorUpgradeItem item, List<Component> lines) {
         switch (item.getUpgradeType()) {
             case ENERGY_MULTIPLIER -> {

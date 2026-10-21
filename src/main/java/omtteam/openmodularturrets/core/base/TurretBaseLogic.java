@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.core.base;
 
+import omtteam.openmodularturrets.core.energy.EnergyStore;
 import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.item.ItemSlot;
 import omtteam.openmodularturrets.core.item.ReactorFuel;
@@ -90,7 +91,7 @@ public class TurretBaseLogic {
         this.trustManager = new TrustManager(security, () -> listener.onChanged(true));
         this.targetSelector = new TargetSelector(settings, trustManager, world);
         BaseTierStats stats = settings.baseTier(tier);
-        this.energy = new EnergyStore(stats.maxCharge(), stats.maxIo(), this::markDirty);
+        this.energy = new EnergyStore(stats.maxCharge(), stats.maxIo(), 0, this::markDirty);
     }
 
     /** Persistent state changed that clients do not need (energy, ammo). */

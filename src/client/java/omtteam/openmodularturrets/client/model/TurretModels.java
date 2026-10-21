@@ -1,8 +1,5 @@
 package omtteam.openmodularturrets.client.model;
 
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -18,7 +15,9 @@ import omtteam.openmodularturrets.core.turret.TurretTypes;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -38,22 +37,28 @@ public final class TurretModels {
     private TurretModels() {
     }
 
-    /** Collects the built-in models and those of every {@link OMTClientPlugin}, then registers their layers. */
-    public static void init() {
+    /** Another mod's {@link OMTClientPlugin}, as the loader found it. */
+    public record Plugin(String modId, OMTClientPlugin plugin) {
+    }
+
+    /** Collects the built-in models, then those of the plugins in order. */
+    public static void init(List<Plugin> plugins) {
         registerBuiltIn(TurretModels::put);
-        for (EntrypointContainer<OMTClientPlugin> container : FabricLoader.getInstance()
-                .getEntrypointContainers(OMTClientPlugin.ENTRYPOINT, OMTClientPlugin.class)) {
-            String modId = container.getProvider().getMetadata().getId();
+        for (Plugin plugin : plugins) {
             try {
-                container.getEntrypoint().registerTurretModels(TurretModels::put);
+                plugin.plugin().registerTurretModels(TurretModels::put);
             } catch (RuntimeException e) {
-                throw new IllegalStateException("Mod " + modId + " failed to register its turret models", e);
+                throw new IllegalStateException("Mod " + plugin.modId() + " failed to register its turret models", e);
             }
         }
         for (TurretType type : TurretTypes.all()) {
             if (!ENTRIES.containsKey(type)) OMT.LOGGER.warn("Turret {} has no model and is invisible", type);
         }
-        ENTRIES.values().forEach(entry -> EntityModelLayerRegistry.registerModelLayer(entry.layer(), entry.definition()::get));
+    }
+
+    /** Hands over the model layer of every turret model (after {@link #init}). */
+    public static void registerLayers(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> registrar) {
+        ENTRIES.values().forEach(entry -> registrar.accept(entry.layer(), entry.definition()));
     }
 
     private static void registerBuiltIn(TurretModelRegistrar registrar) {

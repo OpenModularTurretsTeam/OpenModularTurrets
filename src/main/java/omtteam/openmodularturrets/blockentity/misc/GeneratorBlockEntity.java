@@ -1,17 +1,11 @@
 package omtteam.openmodularturrets.blockentity.misc;
 
-import net.fabricmc.fabric.api.registry.FuelRegistry;
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.FilteringStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -21,14 +15,15 @@ import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.config.ConfigData;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.energy.EnergyAccess;
+import omtteam.openmodularturrets.core.energy.EnergyStore;
 import omtteam.openmodularturrets.core.generator.GeneratorLogic;
 import omtteam.openmodularturrets.core.item.GeneratorUpgradeType;
+import omtteam.openmodularturrets.inventory.ItemAccess;
 import omtteam.openmodularturrets.item.GeneratorUpgradeItem;
+import omtteam.openmodularturrets.platform.Platform;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
-import team.reborn.energy.api.EnergyStorage;
-import team.reborn.energy.api.EnergyStorageUtil;
-import team.reborn.energy.api.base.SimpleEnergyStorage;
 
 import java.util.List;
 import java.util.OptionalLong;
@@ -47,7 +42,7 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
     private final SimpleContainer fuel = new SimpleContainer(FUEL_SLOTS) {
         @Override
         public boolean canPlaceItem(int slot, ItemStack stack) {
-            return isFuel(stack.getItem());
+            return isFuel(stack);
         }
     };
     /** One upgrade slot holding up to 4 generator upgrades. */
@@ -62,24 +57,20 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
             return GeneratorUpgradeType.ENERGY_MULTIPLIER.maxPerSlot();
         }
     };
-    private final SimpleEnergyStorage energy;
+    private final EnergyStore energy;
     private final GeneratorLogic logic = new GeneratorLogic();
     /** The fuel slots for {@link GeneratorLogic#burn}, in container order. */
     private final List<GeneratorLogic.FuelSlot> fuelSlots = IntStream.range(0, FUEL_SLOTS)
             .<GeneratorLogic.FuelSlot>mapToObj(slot -> () -> consumeFuel(slot))
             .toList();
-    @Nullable
-    private Storage<ItemVariant> itemStorage;
+    /** Hoppers and pipes may only insert fuel and only extract leftovers (empty buckets). */
+    private final ItemAccess itemAccess = new ItemAccess(fuel, 0, FUEL_SLOTS,
+            GeneratorBlockEntity::isFuel, stack -> !isFuel(stack));
 
     public GeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.GENERATOR, pos, state);
         ConfigData.Miscellaneous config = OMTConfig.get().miscellaneous;
-        energy = new SimpleEnergyStorage(config.generatorCapacity, 0, config.generatorMaxOutput) {
-            @Override
-            protected void onFinalCommit() {
-                setChanged();
-            }
-        };
+        energy = new EnergyStore(config.generatorCapacity, 0, config.generatorMaxOutput, this::setChanged);
         fuel.addListener(container -> setChanged());
         upgrades.addListener(container -> setChanged());
     }
@@ -88,9 +79,8 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
         return stack.getItem() instanceof GeneratorUpgradeItem;
     }
 
-    public static boolean isFuel(Item item) {
-        Integer ticks = FuelRegistry.INSTANCE.get(item);
-        return ticks != null && ticks > 0;
+    public static boolean isFuel(ItemStack stack) {
+        return Platform.fuel().burnTime(stack) > 0;
     }
 
     public SimpleContainer getFuelContainer() {
@@ -108,34 +98,24 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
                 && upgrade.getUpgradeType() == GeneratorUpgradeType.ENERGY_MULTIPLIER ? stack.getCount() : 0;
     }
 
-    public EnergyStorage getEnergyStorage() {
+    /** Energy as exposed to automation on all sides (extract only). */
+    @SuppressWarnings("unused")
+    public EnergyAccess getEnergyAccess(@Nullable Direction side) {
         return energy;
     }
 
-    /** Hoppers and pipes may only insert fuel and only extract leftovers (empty buckets). */
-    public Storage<ItemVariant> getItemStorage() {
-        if (itemStorage == null) {
-            itemStorage = new FilteringStorage<>(InventoryStorage.of(fuel, null)) {
-                @Override
-                protected boolean canInsert(ItemVariant resource) {
-                    return isFuel(resource.getItem());
-                }
-
-                @Override
-                protected boolean canExtract(ItemVariant resource) {
-                    return !isFuel(resource.getItem());
-                }
-            };
-        }
-        return itemStorage;
+    /** The fuel slots as exposed to automation on all sides (the loader adapters wrap it). */
+    @SuppressWarnings("unused")
+    public ItemAccess getItemAccess(@Nullable Direction side) {
+        return itemAccess;
     }
 
     public long getEnergy() {
-        return energy.amount;
+        return energy.getAmount();
     }
 
     public long getCapacity() {
-        return energy.capacity;
+        return energy.getCapacity();
     }
 
     public int getBurnTime() {
@@ -156,12 +136,12 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
 
     /** Burns one tick of fuel ({@link GeneratorLogic#burn}); returns whether it burned. */
     private boolean burn() {
-        OptionalLong produced = logic.burn(energy.capacity - energy.amount,
+        OptionalLong produced = logic.burn(energy.getFreeSpace(),
                 OMTConfig.get().miscellaneous.generatorEnergyPerTick,
                 GeneratorLogic.multiplier(getMultiplierUpgrades()), fuelSlots);
         if (produced.isEmpty()) return false;
-        energy.amount += produced.getAsLong();
-        setChanged();
+        energy.generate(produced.getAsLong());
+        setChanged(); // the burn time changed, even if nothing was produced
         return true;
     }
 
@@ -172,12 +152,12 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
      */
     private int consumeFuel(int slot) {
         ItemStack stack = fuel.getItem(slot);
-        if (stack.isEmpty() || !isFuel(stack.getItem())) return 0;
-        Item remainder = stack.getItem().getCraftingRemainingItem();
-        int ticks = FuelRegistry.INSTANCE.get(stack.getItem());
+        int ticks = Platform.fuel().burnTime(stack);
+        if (ticks <= 0) return 0;
+        ItemStack remainder = Platform.fuel().remainder(stack);
         stack.shrink(1);
-        if (stack.isEmpty() && remainder != null) {
-            fuel.setItem(slot, new ItemStack(remainder));
+        if (stack.isEmpty() && !remainder.isEmpty()) {
+            fuel.setItem(slot, remainder);
         } else {
             fuel.setChanged();
         }
@@ -186,11 +166,10 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
 
     /** Pushes up to {@code generatorMaxOutput} per tick into all neighbours together. */
     private void pushEnergy(Level level, BlockPos pos) {
-        long remaining = energy.maxExtract;
+        long remaining = energy.getMaxExtract();
         for (Direction direction : Direction.values()) {
-            if (remaining <= 0 || energy.amount <= 0) return;
-            EnergyStorage target = EnergyStorage.SIDED.find(level, pos.relative(direction), direction.getOpposite());
-            remaining -= EnergyStorageUtil.move(energy, target, remaining, null);
+            if (remaining <= 0 || energy.getAmount() <= 0) return;
+            remaining -= Platform.energy().pushToBlock(level, pos.relative(direction), direction.getOpposite(), energy, remaining);
         }
     }
 
@@ -205,7 +184,7 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
         NonNullList<ItemStack> upgradeItems = NonNullList.withSize(1, ItemStack.EMPTY);
         VersionCompat.loadItems(tag.getCompound("Upgrades"), upgradeItems, registries);
         upgrades.setItem(0, upgradeItems.get(0));
-        energy.amount = Math.min(energy.capacity, tag.getLong("Energy"));
+        energy.setAmountUnchecked(Math.min(energy.getCapacity(), tag.getLong("Energy")));
         logic.load(tag.getInt("BurnTime"), tag.getInt("BurnDuration"));
     }
 
@@ -219,7 +198,7 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
         CompoundTag upgradeTag = new CompoundTag();
         VersionCompat.saveItems(upgradeTag, NonNullList.of(ItemStack.EMPTY, upgrades.getItem(0)), registries);
         tag.put("Upgrades", upgradeTag);
-        tag.putLong("Energy", energy.amount);
+        tag.putLong("Energy", energy.getAmount());
         tag.putInt("BurnTime", logic.getBurnTime());
         tag.putInt("BurnDuration", logic.getBurnDuration());
     }

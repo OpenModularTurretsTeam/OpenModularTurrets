@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "openmodularturrets-gametest",
+  "id": "openmodularturrets_gametest",
   "version": "1.0.0",
   "name": "Open Modular Turrets Game Tests",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "omtteam.openmodularturrets.gametest.ApiTestEntities"
+      "omtteam.openmodularturrets.gametest.platform.fabric.OMTFabricGameTests"
     ],
     "fabric-gametest": [
       "omtteam.openmodularturrets.gametest.EffectTurretGameTests",
@@ -14,7 +14,8 @@
       "omtteam.openmodularturrets.gametest.ProjectileTurretGameTests",
       "omtteam.openmodularturrets.gametest.ApiTurretGameTests",
       "omtteam.openmodularturrets.gametest.GeneratorGameTests",
-      "omtteam.openmodularturrets.gametest.BaseGuiGameTests"
+      "omtteam.openmodularturrets.gametest.BaseGuiGameTests",
+      "omtteam.openmodularturrets.gametest.ItemTransferGameTests"
     ],
     "openmodularturrets": [
       "omtteam.openmodularturrets.gametest.ApiTestTurrets"

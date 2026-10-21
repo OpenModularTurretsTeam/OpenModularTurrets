@@ -23,6 +23,7 @@ public final class TurretBaseTooltip {
     private TurretBaseTooltip() {
     }
 
+    @SuppressWarnings("unused")
     public static void append(ItemStack stack, TooltipFlag flag, List<Component> lines) {
         if (!(stack.getItem() instanceof BlockItem item) || !(item.getBlock() instanceof TurretBaseBlock base)) return;
         if (!Screen.hasShiftDown()) {

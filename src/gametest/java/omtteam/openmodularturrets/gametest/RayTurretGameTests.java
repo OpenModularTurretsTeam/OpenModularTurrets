@@ -1,6 +1,10 @@
 package omtteam.openmodularturrets.gametest;
 
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+//? if neoforge {
+/*import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+import omtteam.openmodularturrets.OMT;
+*///?}
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -26,7 +30,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * The ray turrets must trace their rays towards a target 5 blocks in front and hit it. They scatter, so a missed
  * shot is repeated with a fresh target, up to {@value TargetAttempts#MAX_ATTEMPTS} times; the test fails if none of them hits.
  */
-public class RayTurretGameTests implements FabricGameTest {
+//? if neoforge {
+/*@GameTestHolder(OMT.MOD_ID)
+@PrefixGameTestTemplate(false)
+*///?}
+@SuppressWarnings("unused")
+public class RayTurretGameTests implements OMTGameTests {
     /** The slowest ray turret (railgun) fires every 100 ticks; room for all attempts plus target searches. */
     private static final int TIMEOUT_TICKS = 1500;
     /** A ray starts 0.8 blocks in front of the turret's centre. */
@@ -44,7 +53,7 @@ public class RayTurretGameTests implements FabricGameTest {
     private static final Map<BlockPos, List<Shot>> SHOTS = new ConcurrentHashMap<>();
 
     static {
-        RayShotCallback.EVENT.register((turret, start, end, hit) -> SHOTS
+        RayShotCallback.register((turret, start, end, hit) -> SHOTS
                 .computeIfAbsent(turret.getBlockPos(), pos -> new CopyOnWriteArrayList<>())
                 .add(new Shot(start, end, hit)));
     }
@@ -71,6 +80,7 @@ public class RayTurretGameTests implements FabricGameTest {
      * The target has the highest possible health (vanilla caps max health at 1024).
      */
     @GameTest(template = EMPTY_STRUCTURE, batch = "railgun_scattershot", timeoutTicks = TIMEOUT_TICKS)
+    @SuppressWarnings("DataFlowIssue")
     public void railgunIgnoresScattershot(GameTestHelper helper) {
         TurretBaseBlockEntity base = TurretScene.build(helper, TurretType.RAILGUN_TURRET, TIMEOUT_TICKS);
         // tier 5: two upgrade slots with up to four upgrades each

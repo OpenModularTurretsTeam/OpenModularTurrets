@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.registry;
 
-import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
@@ -12,13 +11,12 @@ import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
 import omtteam.openmodularturrets.blockentity.misc.GeneratorBlockEntity;
 import omtteam.openmodularturrets.blockentity.misc.LeverBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
-import team.reborn.energy.api.EnergyStorage;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * All block entity types and their API lookups (items via Transfer API, energy via Team Reborn Energy).
+ * All block entity types. Their item and energy access is registered by the loader ({@code platform/<loader>}).
  */
 public final class ModBlockEntities {
     public static final BlockEntityType<TurretBaseBlockEntity> TURRET_BASE = Registry.register(
@@ -48,10 +46,5 @@ public final class ModBlockEntities {
     }
 
     public static void init() {
-        // Exposed on all sides, as in 1.12.2
-        ItemStorage.SIDED.registerForBlockEntity((base, side) -> base.getAmmoStorage(), TURRET_BASE);
-        EnergyStorage.SIDED.registerForBlockEntity((base, side) -> base.getEnergyStorage(), TURRET_BASE);
-        ItemStorage.SIDED.registerForBlockEntity((generator, side) -> generator.getItemStorage(), GENERATOR);
-        EnergyStorage.SIDED.registerForBlockEntity((generator, side) -> generator.getEnergyStorage(), GENERATOR);
     }
 }

@@ -11,6 +11,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+//? if neoforge {
+/*import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
+*///?}
 //? if <1.21 {
 /*import net.minecraft.core.RegistryAccess;
 *///?}
@@ -23,6 +28,11 @@ import org.jetbrains.annotations.NotNull;
  * clients (initial chunk data and {@link #syncToClient()}); override {@link #writeClientData} to send less.
  */
 public abstract class CompatBlockEntity extends BlockEntity {
+    //? if neoforge {
+    /*/^* The {@link #renderData()} in the block entity's model data on NeoForge. ^/
+    public static final ModelProperty<Object> RENDER_DATA = new ModelProperty<>();
+    *///?}
+
     protected CompatBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
@@ -52,6 +62,39 @@ public abstract class CompatBlockEntity extends BlockEntity {
         if (level != null && !level.isClientSide()) {
             BlockState state = getBlockState();
             level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_CLIENTS);
+        }
+    }
+
+    /**
+     * What the block's model reads while the chunk is meshed (the camouflage), {@code null} for nothing. Fabric reads
+     * it as block entity render data, NeoForge as {@code RENDER_DATA} in the model data. Call {@link #remesh} on the
+     * client when it changed.
+     */
+    protected @Nullable Object renderData() {
+        return null;
+    }
+
+    //? if fabric {
+    @Override
+    public @Nullable Object getRenderData() {
+        return renderData();
+    }
+    //?} else {
+    /*@Override
+    public ModelData getModelData() {
+        Object data = renderData();
+        return data == null ? ModelData.EMPTY : ModelData.builder().with(RENDER_DATA, data).build();
+    }
+    *///?}
+
+    /** Makes the client redraw the block, e.g. after its {@link #renderData()} changed (no effect on the server). */
+    public void remesh() {
+        if (level != null && level.isClientSide()) {
+            //? if neoforge {
+            /*requestModelDataUpdate();
+            *///?}
+            BlockState state = getBlockState();
+            level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_IMMEDIATE);
         }
     }
 

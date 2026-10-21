@@ -1,9 +1,5 @@
 package omtteam.openmodularturrets.blockentity;
 
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedSlottedStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -27,12 +23,13 @@ import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.camo.CamoPermissions;
+import omtteam.openmodularturrets.core.energy.EnergyAccess;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.TrustManager;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
-import omtteam.openmodularturrets.energy.BaseEnergyStorage;
+import omtteam.openmodularturrets.inventory.ItemAccess;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.security.LevelSecurityEnvironment;
@@ -54,10 +51,10 @@ import java.util.Random;
 public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost {
     private final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged,
             player -> Container.stillValidBlockEntity(this, player));
+    /** The ammo slots: anything the inventory accepts goes in, everything may come out. */
+    private final ItemAccess ammoAccess = new ItemAccess(inventory, TurretBaseInventory.AMMO_START,
+            TurretBaseInventory.AMMO_COUNT, stack -> true, stack -> true);
     private final TurretBaseLogic logic;
-    private final BaseEnergyStorage energyStorage;
-    @Nullable
-    private Storage<ItemVariant> ammoStorage;
     private boolean neighboursScanned;
     private final CamoData camoData = new CamoData();
 
@@ -66,9 +63,9 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
         int tier = ((TurretBaseBlock) state.getBlock()).getTier();
         this.logic = new TurretBaseLogic(tier, ConfigLogicSettings.INSTANCE, new LevelSecurityEnvironment(this::getLevel),
                 new BlockEntityBaseWorld(this::getLevel, pos, inventory), new Random(), this::onLogicChanged);
-        this.energyStorage = new BaseEnergyStorage(logic.getEnergy());
     }
 
+    @SuppressWarnings("unused")
     public static void serverTick(Level level, BlockPos pos, BlockState state, TurretBaseBlockEntity base) {
         // 1.12.2 TileEntityOwnedBlock: a base without owner (e.g. placed by a machine) drops itself
         if (base.getOwner() == null) {
@@ -163,18 +160,16 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
         return inventory;
     }
 
-    /** Ammo slots as exposed to automation on all sides. */
-    public Storage<ItemVariant> getAmmoStorage() {
-        if (ammoStorage == null) {
-            ammoStorage = new CombinedSlottedStorage<>(InventoryStorage.of(inventory, null).getSlots()
-                    .subList(TurretBaseInventory.AMMO_START, TurretBaseInventory.AMMO_START + TurretBaseInventory.AMMO_COUNT));
-        }
-        return ammoStorage;
+    /** Ammo slots as exposed to automation on all sides (the loader adapters wrap it). */
+    @SuppressWarnings("unused")
+    public ItemAccess getItemAccess(@Nullable Direction side) {
+        return ammoAccess;
     }
 
-    /** Energy as exposed to automation on all sides. */
-    public BaseEnergyStorage getEnergyStorage() {
-        return energyStorage;
+    /** Energy as exposed to automation on all sides (insert only). */
+    @SuppressWarnings("unused")
+    public EnergyAccess getEnergyAccess(@Nullable Direction side) {
+        return logic.getEnergy();
     }
 
     // ---- Camouflage ----
@@ -230,9 +225,9 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
         return CamoPermissions.canChangeLight(getTrustManager(), PlayerAdapter.info(player));
     }
 
-    /** What the model reads while the chunk is meshed (Fabric block entity render data). */
+    /** The camouflage the model shows. */
     @Override
-    public @Nullable Object getRenderData() {
+    protected @Nullable Object renderData() {
         return isCamoEnabled() ? camoData.get() : null;
     }
 

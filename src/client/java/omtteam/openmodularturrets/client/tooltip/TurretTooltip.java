@@ -28,6 +28,7 @@ public final class TurretTooltip {
     private TurretTooltip() {
     }
 
+    @SuppressWarnings("unused")
     public static void append(ItemStack stack, TooltipFlag flag, List<Component> lines) {
         if (!(stack.getItem() instanceof BlockItem item) || !(item.getBlock() instanceof TurretBlock turret)) return;
         TurretType type = turret.getTurretType();

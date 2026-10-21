@@ -29,6 +29,7 @@ final class ConfigWriter {
         return out.append('\n').toString();
     }
 
+    @SuppressWarnings("StringRepeatCanBeUsed")
     private static void writeObject(StringBuilder out, Object config, Object defaults, int depth) {
         String indent = INDENT.repeat(depth + 1);
         out.append("{\n");
@@ -65,6 +66,7 @@ final class ConfigWriter {
      * A map of sections (e.g. stats per turret id): every entry is written like a section, documented with the
      * entry's default if there is one (otherwise the value itself is the default).
      */
+    @SuppressWarnings("StringRepeatCanBeUsed")
     private static void writeSectionMap(StringBuilder out, Map<?, ?> map, Map<?, ?> defaults, int depth) {
         if (map.isEmpty()) {
             out.append("{}");

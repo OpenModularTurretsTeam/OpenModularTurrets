@@ -1,7 +1,5 @@
 package omtteam.openmodularturrets.registry;
 
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.world.item.ItemStack;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.api.AmmoDefinition;
@@ -16,13 +14,14 @@ import omtteam.openmodularturrets.item.AmmoItem;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 /**
  * Turret and ammo definitions: the built-in ones ({@link BuiltinTurrets}) and those of other mods
- * ({@link OMTPlugin} entrypoints). Loaded once, first thing in the mod initializer: the config needs the turrets'
- * default stats and the blocks need the turret types.
+ * ({@link OMTPlugin}s, found by the loader entrypoint). Loaded once, first thing in {@code OMT.init}: the config needs
+ * the turrets' default stats and the blocks need the turret types.
  */
 public final class TurretRegistry {
     private static final Map<TurretType, TurretDefinition> TURRETS = new LinkedHashMap<>();
@@ -32,18 +31,20 @@ public final class TurretRegistry {
     private TurretRegistry() {
     }
 
-    /** Registers the built-in turrets, then calls every {@link OMTPlugin}; ends with the types frozen. */
-    public static synchronized void load() {
+    /** Another mod's {@link OMTPlugin}, as the loader found it. */
+    public record Plugin(String modId, OMTPlugin plugin) {
+    }
+
+    /** Registers the built-in turrets, then calls every plugin in order; ends with the types frozen. */
+    public static synchronized void load(List<Plugin> plugins) {
         if (loaded) return;
         loaded = true;
         BuiltinTurrets.register(new Registrar(OMT.MOD_ID));
-        for (EntrypointContainer<OMTPlugin> container : FabricLoader.getInstance()
-                .getEntrypointContainers(OMTPlugin.ENTRYPOINT, OMTPlugin.class)) {
-            String modId = container.getProvider().getMetadata().getId();
+        for (Plugin plugin : plugins) {
             try {
-                container.getEntrypoint().registerTurrets(new Registrar(modId));
+                plugin.plugin().registerTurrets(new Registrar(plugin.modId()));
             } catch (RuntimeException e) {
-                throw new IllegalStateException("Mod " + modId + " failed to register its turrets", e);
+                throw new IllegalStateException("Mod " + plugin.modId() + " failed to register its turrets", e);
             }
         }
         for (TurretType type : TurretTypes.all()) {

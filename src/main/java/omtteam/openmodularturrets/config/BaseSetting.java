@@ -15,6 +15,7 @@ public class BaseSetting {
     @Comment("Hardness (only used if bases.baseBreakable is true).") @Range(min = 1)
     public int baseHardness;
 
+    @SuppressWarnings("unused")
     public BaseSetting() {
     }
 

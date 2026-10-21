@@ -28,6 +28,7 @@ public final class MemoryCardTooltip {
     private MemoryCardTooltip() {
     }
 
+    @SuppressWarnings("unused")
     public static void append(ItemStack stack, TooltipFlag flag, List<Component> lines) {
         if (!(stack.getItem() instanceof MemoryCardItem)) return;
         if (!Screen.hasShiftDown()) {

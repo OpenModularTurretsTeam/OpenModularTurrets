@@ -14,6 +14,7 @@ import snownee.jade.api.ITooltip;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
+import snownee.jade.api.WailaPlugin;
 //? if >=1.21 {
 import snownee.jade.api.JadeIds;
 //?} else {
@@ -21,9 +22,11 @@ import snownee.jade.api.JadeIds;
 *///?}
 
 /**
- * Jade integration (optional: Jade loads this through the {@code jade} entrypoint, so the classes are only touched
- * when Jade is installed). Replaces the 1.12.2 WAILA/HWYLA handlers.
+ * Jade integration, only loaded if Jade is installed: Fabric Jade finds it through the {@code jade} entrypoint in
+ * fabric.mod.json, NeoForge Jade through {@link WailaPlugin} (Fabric has no annotation scanning, so it is not registered
+ * twice). Replaces the 1.12.2 WAILA/HWYLA handlers.
  */
+@WailaPlugin
 public class OMTJadePlugin implements IWailaPlugin {
     /** Id Jade tags the lines of its universal item storage view with. */
     private static final ResourceLocation ITEM_STORAGE =

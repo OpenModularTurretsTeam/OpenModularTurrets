@@ -58,6 +58,7 @@ public class PlasmaRenderer extends EntityRenderer<PlasmaProjectile> {
     }
 
     @Override
+    @SuppressWarnings("NullableProblems")
     public ResourceLocation getTextureLocation(PlasmaProjectile entity) {
         return TEXTURE;
     }

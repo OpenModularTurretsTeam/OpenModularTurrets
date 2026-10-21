@@ -33,6 +33,7 @@ public final class DamageRules {
      * ({@link TrustManager#canDamagePlayer}, for a pet the rules of its owner). Without a loaded base ({@code trust}
      * empty) players and pets are spared and everything else is hit.
      */
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public static boolean canDamage(Optional<TrustManager> trust, Victim victim) {
         if (victim instanceof Victim.Projectile) return false;
         if (victim instanceof Victim.Player player) {

@@ -1,6 +1,10 @@
 package omtteam.openmodularturrets.gametest;
 
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+//? if neoforge {
+/*import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+import omtteam.openmodularturrets.OMT;
+*///?}
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -20,7 +24,7 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.config.TurretSetting;
-import omtteam.openmodularturrets.core.base.EnergyStore;
+import omtteam.openmodularturrets.core.energy.EnergyStore;
 import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
@@ -34,7 +38,11 @@ import java.util.Map;
  * they are registered with their ids and config entries, and each runs its custom code at the right time, and only
  * then. Every test has its own batch, so no turret reaches the target of another test.
  */
-public class ApiTurretGameTests implements FabricGameTest {
+//? if neoforge {
+/*@GameTestHolder(OMT.MOD_ID)
+@PrefixGameTestTemplate(false)
+*///?}
+public class ApiTurretGameTests implements OMTGameTests {
     private static final int TIMEOUT_TICKS = 400;
     /** Ticks a test waits to see that a turret does nothing (several cooldowns and target scans). */
     private static final int QUIET_TICKS = 100;
@@ -58,6 +66,7 @@ public class ApiTurretGameTests implements FabricGameTest {
      * default stats that its stats are read from. The plugin's projectile entity type is registered.
      */
     @GameTest(template = EMPTY_STRUCTURE, batch = "api_registration")
+    @SuppressWarnings("DataFlowIssue")
     public void apiTurretsAreRegisteredWithConfig(GameTestHelper helper) {
         helper.assertTrue(EXPECTED.keySet().containsAll(ApiTestTurrets.ALL), "A test turret has no expectations");
         for (TurretType type : ApiTestTurrets.ALL) {

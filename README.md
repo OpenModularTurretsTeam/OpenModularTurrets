@@ -42,9 +42,9 @@ Expect bugs, and please report them.
 The project uses Stonecutter to build 1.20.1 and 1.21.1 from one source tree (Gradle must run on Java 25 or newer).
 
 ```bash
-./gradlew chiseledBuild   # build both versions
-./gradlew check           # unit tests, architecture rules, game tests, code quality report
-./gradlew :1.21.1:runClient
+./gradlew chiseledBuild # build both versions
+./gradlew check         # unit tests, architecture rules, game tests, code quality report
+./gradlew :1.21.1-fabric:runClient
 ```
 
 See [docs/architecture.md](docs/architecture.md) for how the code is structured and how to add things, [CLAUDE.md](CLAUDE.md) for the conventions, and [CHANGELOG.md](CHANGELOG.md) for changes.

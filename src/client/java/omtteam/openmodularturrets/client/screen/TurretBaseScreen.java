@@ -38,6 +38,7 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
 
     private final ResourceLocation texture;
     private final Random random = new Random();
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<AccessLevel> shownAccess = Optional.empty();
     private Button targetButton;
 

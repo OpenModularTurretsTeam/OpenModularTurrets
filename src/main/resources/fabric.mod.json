@@ -12,14 +12,17 @@
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/openmodularturrets/"
   },
-  "license": "GPL-3.0-only",
+  "license": [
+    "MIT",
+    "CC-BY-NC-SA-4.0"
+  ],
   "environment": "*",
   "entrypoints": {
     "main": [
-      "omtteam.openmodularturrets.OMT"
+      "omtteam.openmodularturrets.platform.fabric.OMTFabric"
     ],
     "client": [
-      "omtteam.openmodularturrets.client.OMTClient"
+      "omtteam.openmodularturrets.client.platform.fabric.OMTFabricClient"
     ],
     "jade": [
       "omtteam.openmodularturrets.compat.jade.OMTJadePlugin"

@@ -77,14 +77,14 @@ public class CamoTrapBlock extends CompatEntityBlock implements InteractiveBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "RedundantSuppression"})
     public int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
         return CamoLightProperties.lightBlock(state);
     }
 
     /** Fully transparent traps let sky light through, like glass. */
     @Override
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "RedundantSuppression"})
     public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
         return CamoLightProperties.lightBlock(state) == 0;
     }

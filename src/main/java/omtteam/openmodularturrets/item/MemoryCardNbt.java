@@ -22,6 +22,7 @@ public final class MemoryCardNbt {
     private MemoryCardNbt() {
     }
 
+    @SuppressWarnings("ExtractMethodRecommender")
     public static CompoundTag write(MemoryCardData data) {
         CompoundTag tag = new CompoundTag();
         tag.putString(SOURCE, data.source().name().toLowerCase(Locale.ROOT));

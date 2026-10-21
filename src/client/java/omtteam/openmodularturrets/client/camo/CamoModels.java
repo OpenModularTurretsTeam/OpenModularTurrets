@@ -1,38 +1,36 @@
 package omtteam.openmodularturrets.client.camo;
 
-import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.camo.CamoBlock;
-import omtteam.openmodularturrets.client.compat.ClientCompat;
+import omtteam.openmodularturrets.compat.VersionCompat;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
- * Wraps the models of all {@link CamoBlock}s in a {@link CamoBakedModel}.
+ * Which models show a disguise: those of the {@link CamoBlock}s. The loader client entrypoints wrap them in their
+ * camouflage model ({@code FabricCamoModel}, {@code NeoForgeCamoModel}); the block entity hands the disguise to the
+ * model through {@code CompatBlockEntity#renderData}.
  */
 public final class CamoModels {
     private CamoModels() {
     }
 
-    public static void register() {
-        ModelLoadingPlugin.register(plugin -> {
-            Set<String> paths = camoBlockPaths();
-            ClientCompat.modifyModelsAfterBake(plugin, (model, id) ->
-                    id.getNamespace().equals(OMT.MOD_ID) && paths.contains(id.getPath()) ? new CamoBakedModel(model) : model);
-        });
+    /** All camouflage host blocks (after registration). */
+    public static List<Block> camoBlocks() {
+        return BuiltInRegistries.BLOCK.stream().filter(block -> block instanceof CamoBlock).toList();
     }
 
-    /** Registry paths of the camouflage blocks; their block state and item models share these paths. */
-    private static Set<String> camoBlockPaths() {
-        Set<String> paths = new HashSet<>();
-        for (ResourceLocation key : BuiltInRegistries.BLOCK.keySet()) {
-            if (key.getNamespace().equals(OMT.MOD_ID) && BuiltInRegistries.BLOCK.get(key) instanceof CamoBlock) {
-                paths.add(key.getPath());
-            }
-        }
-        return paths;
+    /**
+     * Whether the model with this id belongs to a camouflage host: block state and item models share the block's
+     * registry path (only namespace and path of the id are compared).
+     */
+    public static boolean isCamoModel(ResourceLocation id) {
+        if (!id.getNamespace().equals(OMT.MOD_ID)) return false;
+        // a plain id: on 1.20.1 model ids can be ModelResourceLocations, which never equal a registry key
+        return BuiltInRegistries.BLOCK.getOptional(VersionCompat.id(id.getNamespace(), id.getPath()))
+                .map(block -> block instanceof CamoBlock).orElse(false);
     }
 }

@@ -89,7 +89,7 @@ public final class RayWeapons {
                     ray(level, weapon, start, end.add(end.subtract(start).scale(2D)));
                 }
             }
-            RayShotCallback.EVENT.invoker().onRayShot(turret, start, end, hit);
+            RayShotCallback.fire(turret, start, end, hit);
         }
     }
 

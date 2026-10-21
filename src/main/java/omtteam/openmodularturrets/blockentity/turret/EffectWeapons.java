@@ -54,6 +54,7 @@ public final class EffectWeapons {
     }
 
     /** 1.12.2 {@code RelativisticTurretTileEntity}: slowness and weakness IV; slowed entities are not targeted again. */
+    @SuppressWarnings("unused")
     public static void slow(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base, Entity target) {
         if (target instanceof LivingEntity living) {
             living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, EFFECT_TICKS, EFFECT_AMPLIFIER, false, true));
@@ -66,6 +67,7 @@ public final class EffectWeapons {
      * top of it, which is the same for turrets on top of a base) and shows portal particles (1.12.2
      * {@code BlockTeleporterTurret.randomDisplayTick}).
      */
+    @SuppressWarnings("unused")
     public static void teleport(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base, Entity target) {
         Direction facing = turret.getFacing();
         BlockPos destination = turret.getBlockPos().relative(facing);

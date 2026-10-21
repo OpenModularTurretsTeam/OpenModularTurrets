@@ -16,6 +16,7 @@ public final class GeneratorTooltip {
     private GeneratorTooltip() {
     }
 
+    @SuppressWarnings("unused")
     public static void append(ItemStack stack, TooltipFlag flag, List<Component> lines) {
         if (!stack.is(ModItems.GENERATOR)) return;
         lines.add(Screen.hasShiftDown()
