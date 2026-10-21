@@ -15,7 +15,6 @@ import net.minecraft.world.inventory.MenuType;
 import org.jetbrains.annotations.NotNull;
 //? if <1.21 {
 /*import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.MenuProvider;
 *///?}
 
 /**
@@ -68,32 +67,22 @@ public final class MenuCompat {
             }
         });
         //?} else {
-        /*player.openMenu(new PosMenuProvider(title, pos, factory));
+        /*player.openMenu(new ExtendedScreenHandlerFactory() {
+            @Override
+            public void writeScreenOpeningData(ServerPlayer opener, FriendlyByteBuf buf) {
+                buf.writeBlockPos(pos);
+            }
+
+            @Override
+            public Component getDisplayName() {
+                return title;
+            }
+
+            @Override
+            public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player menuPlayer) {
+                return factory.create(containerId, inventory, menuPlayer);
+            }
+        });
         *///?}
     }
-
-    //? if <1.21 {
-    /*/^*
-     * Also implements {@link MenuProvider} directly: {@code createMenu} keeps its name in intermediary, so Sinytra
-     * Connector (Forge) can only remap it to SRG through a Minecraft supertype it resolves; via Fabric API's
-     * {@link ExtendedScreenHandlerFactory} alone it stays unmapped and Forge crashes with an AbstractMethodError.
-     ^/
-    private record PosMenuProvider(Component title, BlockPos pos, ServerFactory factory)
-            implements ExtendedScreenHandlerFactory, MenuProvider {
-        @Override
-        public void writeScreenOpeningData(ServerPlayer opener, FriendlyByteBuf buf) {
-            buf.writeBlockPos(pos);
-        }
-
-        @Override
-        public Component getDisplayName() {
-            return title;
-        }
-
-        @Override
-        public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player menuPlayer) {
-            return factory.create(containerId, inventory, menuPlayer);
-        }
-    }
-    *///?}
 }

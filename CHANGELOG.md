@@ -36,7 +36,6 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 - Turret projectiles that flew into a chunk without entity ticking froze there; they remove themselves now, as in 1.12.2
 - On the very first start (no config file yet), the disposable ammo list and the entity black and force lists were ignored until the next restart
 - The Redstone Reactor addon now burns a redstone block or dust when its energy fits the free storage exactly; before, it needed more room than that
-- 1.20.1 on Forge (Sinytra Connector): opening a turret base, generator or camo menu no longer crashes with an AbstractMethodError
 
 ## [4.0.0-beta.4] - 2026-10-17
 
