@@ -176,8 +176,9 @@ public class OMTConfig {
         public TurretSetting incendiary_turret = new TurretSetting(true, 12, 25, 2, 250, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
         @Config.Name("Grenade Turret")
         public TurretSetting grenade_turret = new TurretSetting(true, 18, 40, 8, 3000, 30, 3, 0.08D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
-        @Config.Name("Relativistic Turret")
-        public TurretSetting relativistic_turret = new TurretSetting(true, 20, 25, 0, 5000, 0, 4, 0D, 0.1D, 2, 0, 0.08D, 0.1D, 0.05D);
+        /** The 3.x "Relativistic Turret" section is moved here once, see {@code ConfigMigration}. */
+        @Config.Name("Slowing Turret")
+        public TurretSetting slowing_turret = new TurretSetting(true, 20, 25, 0, 5000, 0, 4, 0D, 0.1D, 2, 0, 0.08D, 0.1D, 0.05D);
         @Config.Name("Rocket Turret")
         public TurretSetting rocket_turret = new TurretSetting(true, 30, 30, 10, 5000, 10, 3, 0.08D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
         @Config.Name("Teleporter Turret")
@@ -192,7 +193,7 @@ public class OMTConfig {
         public TurretSetting melee_turret = new TurretSetting(true, 1, 20, 8, 2, 0, 4, 0.1D, 0.2D, 0, 0D, 0.08D, 0.1D, 0.05D);
         @Config.Name("Arc Turret")
         public TurretSetting arc_turret = new TurretSetting(true, 15, 60, 14, 40000, 0, 1, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
-        @Config.Name("Potato Cannon Turret")
+        @Config.Name("Crossbow Turret")
         public TurretSetting crossbow_turret = new TurretSetting(true, 15, 30, 5, 20, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
     }
 

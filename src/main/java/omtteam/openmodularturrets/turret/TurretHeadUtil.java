@@ -10,8 +10,7 @@ import omtteam.omlib.util.world.Pos;
 import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.blocks.BlockBaseAttachment;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;
-import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import omtteam.openmodularturrets.tileentity.turrets.TurretTileEntity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -56,16 +55,16 @@ public class TurretHeadUtil {
         return null;
     }
 
-    public static Map<EnumFacing, TurretHead> getBaseTurrets(World world, BlockPos pos) {
-        Map<EnumFacing, TurretHead> map = new HashMap<>();
+    public static Map<EnumFacing, TurretTileEntity> getBaseTurrets(World world, BlockPos pos) {
+        Map<EnumFacing, TurretTileEntity> map = new HashMap<>();
         if (world == null) {
             return map;
         }
         for (EnumFacing facing : EnumFacing.values()) {
             BlockPos offsetPos = pos.offset(facing);
 
-            if (world.getTileEntity(offsetPos) instanceof TurretHead) {
-                map.put(facing, (TurretHead) world.getTileEntity(offsetPos));
+            if (world.getTileEntity(offsetPos) instanceof TurretTileEntity) {
+                map.put(facing, (TurretTileEntity) world.getTileEntity(offsetPos));
             }
         }
 
@@ -114,98 +113,5 @@ public class TurretHeadUtil {
             }
         }
         return true;
-    }
-
-    public static float getRotationXYFromTurretHead(AbstractDirectedTurret turretHead) {
-        float yaw = turretHead.getYaw();
-        float pitch = turretHead.getPitch();
-        float rotationXY = 0F;
-        if (turretHead != null) {
-            switch (turretHead.baseFacing) {
-                case UP:
-                    rotationXY = ((-pitch) * 0.017453292F);
-                    break;
-                case DOWN:
-                    rotationXY = ((-pitch) * 0.017453292F);
-                    break;
-                case EAST:
-                    if (yaw > 270F) {
-                        rotationXY = ((yaw) * 0.017453292F);
-                    } else {
-                        rotationXY = ((-yaw - 180F) * 0.017453292F);
-                    }
-                    break;
-                case WEST:
-                    if (yaw < 90F) {
-                        rotationXY = ((-yaw) * 0.017453292F);
-                    } else {
-                        rotationXY = ((yaw + 180F) * 0.017453292F);
-                    }
-                    break;
-                case NORTH:
-                    if (yaw > 180F) {
-                        rotationXY = ((-yaw - 90F) * 0.017453292F);
-                    } else {
-                        rotationXY = ((yaw - 90f) * 0.017453292F);
-                    }
-                    break;
-                case SOUTH:
-                    if (yaw < 180F) {
-                        rotationXY = ((-yaw + 90F) * 0.017453292F);
-                    } else {
-                        rotationXY = ((yaw + 90F) * 0.017453292F);
-                    }
-                    break;
-            }
-        }
-        return rotationXY;
-    }
-
-    // Pitch of the Weapon
-    public static float getRotationXZFromTurretHead(AbstractDirectedTurret turretHead) {
-        float yaw = turretHead.getYaw();
-        float pitch = turretHead.getPitch();
-        float rotationXZ = 0F;
-        if (turretHead != null) {
-            switch (turretHead.baseFacing) {
-                case UP:
-                    rotationXZ = ((yaw + 180F) * 0.017453292F);
-                    break;
-                case DOWN:
-                    rotationXZ = (-yaw * 0.017453292F);
-                    break;
-                case EAST:
-                    if (yaw > 270F) {
-                        rotationXZ = ((-pitch - 90F) * 0.017453292F);
-                    } else if (yaw < 90F) {
-                        rotationXZ = ((pitch - 90F) * 0.017453292F);
-                    } else {
-                        rotationXZ = ((pitch + 90F) * 0.017453292F);
-                    }
-                    break;
-                case WEST:
-                    if (yaw < 90F) {
-                        rotationXZ = ((pitch + 90F) * 0.017453292F);
-                    } else {
-                        rotationXZ = ((-pitch - 90F) * 0.017453292F);
-                    }
-                    break;
-                case NORTH:
-                    if (yaw < 180F) {
-                        rotationXZ = ((-pitch - 90F) * 0.017453292F);
-                    } else {
-                        rotationXZ = ((pitch + 90F) * 0.017453292F);
-                    }
-                    break;
-                case SOUTH:
-                    if (yaw > 180F) {
-                        rotationXZ = ((-pitch - 90F) * 0.017453292F);
-                    } else {
-                        rotationXZ = ((pitch + 90F) * 0.017453292F);
-                    }
-                    break;
-            }
-        }
-        return rotationXZ;
     }
 }

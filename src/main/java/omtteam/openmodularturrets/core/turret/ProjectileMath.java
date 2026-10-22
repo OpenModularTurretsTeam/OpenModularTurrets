@@ -34,6 +34,23 @@ public final class ProjectileMath {
         public float armorBypass() {
             return armorBypass;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof Split)) return false;
+            Split other = (Split) o;
+            return Float.compare(normal, other.normal) == 0 && Float.compare(armorBypass, other.armorBypass) == 0;
+        }
+
+        @Override
+        public int hashCode() {
+            return 31 * Float.hashCode(normal) + Float.hashCode(armorBypass);
+        }
+
+        @Override
+        public String toString() {
+            return "Split[normal=" + normal + ", armorBypass=" + armorBypass + "]";
+        }
     }
 
     /**

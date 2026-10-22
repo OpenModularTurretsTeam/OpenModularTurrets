@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog -Pchangelog_version=<tag without v
 
 ## [Unreleased]
 
+### Added
+
+- The Melee Turret has a model: its blades extend and spin while something is in reach
+
 ### Fixed
 
 - The Melee, Relativistic and Teleporter Turrets crashed the game when they were saved (3.2.0 alpha)
@@ -15,6 +19,10 @@ Before a release, `./gradlew releaseChangelog -Pchangelog_version=<tag without v
 - The neutral force list config was read into the mob block list
 - Turrets on auto fire took the ammo of a shot twice
 - Forced shots of Laser, Arc and Railgun Turrets crashed the game without a target and ignored missing energy
+- The Grenade Turret was only available while the Laser Turret was enabled in the config
+- The Crossbow Turret's config section had the name of the Potato Cannon Turret's; it is "Crossbow Turret" now
+- Rays of Laser, Railgun and Arc Turrets could hit entities next to the ray
+- The Plasma Turret tooltip showed tier 3, although the turret needs a tier 5 base
 
 ### Changed
 
@@ -27,8 +35,16 @@ Before a release, `./gradlew releaseChangelog -Pchangelog_version=<tag without v
 - The recycler addon saves ammo with the configured chance (it saved about 1 % of shots whatever the config said)
 - The solar panel addon charges a base once per tick instead of once per tick for every turret on it
 - Pets are protected by the trust list of their owner also while the owner is offline
-- The Railgun Turret ignores scattershot upgrades; Melee, Relativistic and Teleporter Turrets no longer use more energy with them
+- The Railgun Turret ignores scattershot upgrades; Melee, Slowing and Teleporter Turrets no longer use more energy with them
 - Turret bases no longer give their energy to other blocks
+- The Relativistic Turret is now the Slowing Turret; placed turrets, items and its config section are converted
+- Turrets aim relative to the side of the base they sit on, the same way on server and client, and turn smoothly
+- Projectile turrets lead moving targets using the real flight time and drop of their projectiles
+- Projectiles scatter by a fifth of the turret's inaccuracy instead of a twentieth
+- The Melee Turret strikes everything it may hurt around itself and its base (3x2x3 blocks) without waiting for the base to pick a target
+- The Melee Turret only fits on top of or below a base; melee turrets on the sides of a base drop as items
+- The Arc Turret can be placed on every side of a base, not only on top
+- The particles of the Teleporter Turret are shown in multiplayer too
 
 ### Removed
 

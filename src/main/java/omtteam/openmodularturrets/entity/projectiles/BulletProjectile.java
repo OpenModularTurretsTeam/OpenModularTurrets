@@ -11,7 +11,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import omtteam.omlib.util.RandomUtil;
-import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
+import omtteam.openmodularturrets.blocks.turretheads.BlockTurret;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
@@ -36,7 +36,7 @@ public class BulletProjectile extends TurretProjectile {
     @ParametersAreNonnullByDefault
     public void onHitBlock(IBlockState hitBlock, BlockPos pos) {
 
-        if (hitBlock.getBlock() instanceof BlockAbstractTurretHead) {
+        if (hitBlock.getBlock() instanceof BlockTurret) {
             return;
         }
 

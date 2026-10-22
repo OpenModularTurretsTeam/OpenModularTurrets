@@ -46,7 +46,7 @@ import omtteam.omlib.util.RandomUtil;
 import omtteam.omlib.util.TargetingSettings;
 import omtteam.omlib.util.camo.CamoSettings;
 import omtteam.openmodularturrets.api.tileentity.ITurretBase;
-import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
+import omtteam.openmodularturrets.blocks.turretheads.BlockTurret;
 import omtteam.openmodularturrets.core.base.BaseTier;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.item.AddonType;
@@ -59,8 +59,7 @@ import omtteam.openmodularturrets.handler.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.network.messages.MessageTurretBase;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;
-import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import omtteam.openmodularturrets.tileentity.turrets.TurretTileEntity;
 import omtteam.openmodularturrets.util.EnumSlotType;
 import omtteam.openmodularturrets.util.OMTSecurityEnvironment;
 import omtteam.openmodularturrets.util.OMTUtil;
@@ -181,9 +180,9 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
                 continue;
             }
             Block block = world.getBlockState(neighbour).getBlock();
-            if (block instanceof BlockAbstractTurretHead && ((BlockAbstractTurretHead) block).getTurretType() != null) {
+            if (block instanceof BlockTurret) {
                 attached.put(toFace(facing),
-                        new Neighbour.Turret(((BlockAbstractTurretHead) block).getTurretType().getCore()));
+                        new Neighbour.Turret(((BlockTurret) block).getCoreType()));
             }
         }
         logic.updateNeighbours(attached);
@@ -494,7 +493,7 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     @Override
     public void turretResetCaches() {
         logic.onInventoryChanged();
-        for (TurretHead turretHead : getTouchingTileEntitiesByClass(this.getWorld(), this.getPos(), TurretHead.class)) {
+        for (TurretTileEntity turretHead : getTouchingTileEntitiesByClass(this.getWorld(), this.getPos(), TurretTileEntity.class)) {
             turretHead.triggerResetCaches();
         }
     }
@@ -712,9 +711,8 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     public void setAllTurretsYawPitch(float yaw, float pitch) {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         for (TileEntity te : tileEntities) {
-            if (te instanceof AbstractDirectedTurret) {
-                ((AbstractDirectedTurret) te).setPitch(pitch);
-                ((AbstractDirectedTurret) te).setYaw(yaw);
+            if (te instanceof TurretTileEntity) {
+                ((TurretTileEntity) te).setYawPitch(yaw, pitch);
             }
         }
     }
@@ -722,9 +720,8 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     @Override
     public boolean setTurretYawPitch(EnumFacing facing, float yaw, float pitch) {
         TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
-        if (turretHead instanceof AbstractDirectedTurret) {
-            ((AbstractDirectedTurret) turretHead).setPitch(pitch);
-            ((AbstractDirectedTurret) turretHead).setYaw(yaw);
+        if (turretHead instanceof TurretTileEntity) {
+            ((TurretTileEntity) turretHead).setYawPitch(yaw, pitch);
             return true;
         }
         return false;
@@ -734,8 +731,8 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     public void setAllTurretsForceFire(boolean state) {
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         for (TileEntity te : tileEntities) {
-            if (te instanceof TurretHead) {
-                ((TurretHead) te).setAutoFire(state);
+            if (te instanceof TurretTileEntity) {
+                ((TurretTileEntity) te).setAutoFire(state);
             }
         }
     }
@@ -743,8 +740,8 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     @Override
     public boolean setTurretForceFire(EnumFacing facing, boolean state) {
         TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
-        if (turretHead instanceof TurretHead) {
-            ((TurretHead) turretHead).setAutoFire(state);
+        if (turretHead instanceof TurretTileEntity) {
+            ((TurretTileEntity) turretHead).setAutoFire(state);
             return true;
         }
         return false;
@@ -753,7 +750,7 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     @Override
     public boolean forceShootTurret(EnumFacing facing) {
         TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
-        return (turretHead instanceof AbstractDirectedTurret && ((AbstractDirectedTurret) turretHead).forceShot());
+        return (turretHead instanceof TurretTileEntity && ((TurretTileEntity) turretHead).forceShot());
     }
 
     @Override
@@ -761,8 +758,8 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
         List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         int successes = 0;
         for (TileEntity te : tileEntities) {
-            if (te instanceof AbstractDirectedTurret) {
-                successes += ((AbstractDirectedTurret) te).forceShot() ? 1 : 0;
+            if (te instanceof TurretTileEntity) {
+                successes += ((TurretTileEntity) te).forceShot() ? 1 : 0;
             }
         }
         return successes;

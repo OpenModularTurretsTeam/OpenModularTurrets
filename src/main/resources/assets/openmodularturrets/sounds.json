@@ -107,11 +107,11 @@
       }
     ]
   },
-  "relativistic": {
+  "slowing": {
     "category": "block",
     "sounds": [
       {
-        "name": "openmodularturrets:relativistic",
+        "name": "openmodularturrets:slowing",
         "stream": false
       }
     ]

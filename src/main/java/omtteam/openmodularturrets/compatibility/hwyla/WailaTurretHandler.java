@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import omtteam.omlib.compatibility.hwyla.IOMLibWailaDataProvider;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.openmodularturrets.reference.OMTNames;
-import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
+import omtteam.openmodularturrets.tileentity.turrets.TurretTileEntity;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -37,8 +37,8 @@ public class WailaTurretHandler implements IOMLibWailaDataProvider {
     public void callbackRegister(IWailaRegistrar register) {
         WailaTurretHandler instance = new WailaTurretHandler();
 
-        register.registerNBTProvider(instance, TurretHead.class);
-        register.registerBodyProvider(instance, TurretHead.class);
+        register.registerNBTProvider(instance, TurretTileEntity.class);
+        register.registerBodyProvider(instance, TurretTileEntity.class);
     }
 
     /**
@@ -50,8 +50,8 @@ public class WailaTurretHandler implements IOMLibWailaDataProvider {
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         TileEntity te = accessor.getTileEntity();
-        if (te instanceof TurretHead) {
-            TurretHead turret = (TurretHead) te;
+        if (te instanceof TurretTileEntity) {
+            TurretTileEntity turret = (TurretTileEntity) te;
             boolean active = accessor.getNBTData().getBoolean("active");
 
             currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
@@ -74,8 +74,8 @@ public class WailaTurretHandler implements IOMLibWailaDataProvider {
     @Nonnull
     @Override
     public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, BlockPos pos) {
-        if (te instanceof TurretHead) {
-            TurretHead turret = (TurretHead) te;
+        if (te instanceof TurretTileEntity) {
+            TurretTileEntity turret = (TurretTileEntity) te;
             // te.writeToNBT(tag);
             tag.setBoolean("active", turret.getBase().isActive());
             tag.setString("ownerName", turret.getOwner().getName());

@@ -8,15 +8,16 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.render.camo.CamoBlockColor;
 import omtteam.openmodularturrets.blocks.BlockBaseAttachment;
 import omtteam.openmodularturrets.blocks.LeverBlock;
-import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
+import omtteam.openmodularturrets.blocks.turretheads.BlockTurret;
 import omtteam.openmodularturrets.client.render.models.TurretBaseBakedModel;
 import omtteam.openmodularturrets.client.render.renderers.blockitem.TileEntityRenderers;
-import omtteam.openmodularturrets.handler.config.OMTConfig;
+import omtteam.openmodularturrets.client.render.renderers.blockitem.TurretItemRenderer;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModTESRItems;
@@ -61,50 +62,17 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void initModelLoaders() {
         StateMap ignoreRotation = new StateMap.Builder().ignore(LeverBlock.ROTATION).build();
-        StateMap ignoreConcealed = new StateMap.Builder().ignore(BlockAbstractTurretHead.CONCEALED).build();
+        StateMap ignoreConcealed = new StateMap.Builder().ignore(BlockTurret.CONCEALED).build();
         StateMap ignoreFacing = new StateMap.Builder().ignore(BlockBaseAttachment.FACING).build();
         ModelLoader.setCustomStateMapper(ModBlocks.leverBlock, ignoreRotation);
-        if (OMTConfig.TURRETS.disposable_turret.enabled) {
-            ModelLoader.setCustomStateMapper(ModBlocks.disposableItemTurret, ignoreConcealed);
-        }
-        if (OMTConfig.TURRETS.laser_turret.enabled) {
-            ModelLoader.setCustomStateMapper(ModBlocks.grenadeLauncherTurret, ignoreConcealed);
-        }
-        if (OMTConfig.TURRETS.teleporter_turret.enabled) {
-            ModelLoader.setCustomStateMapper(ModBlocks.teleporterTurret, ignoreConcealed);
-        }
-        if (OMTConfig.TURRETS.incendiary_turret.enabled) {
-            ModelLoader.setCustomStateMapper(ModBlocks.incendiaryTurret, ignoreConcealed);
-        }
-        if (OMTConfig.TURRETS.laser_turret.enabled) {
-            ModelLoader.setCustomStateMapper(ModBlocks.laserTurret, ignoreConcealed);
-        }
-        if (OMTConfig.TURRETS.railgun_turret.enabled) {
-            ModelLoader.setCustomStateMapper(ModBlocks.railGunTurret, ignoreConcealed);
-        }
-        if (OMTConfig.TURRETS.relativistic_turret.enabled) {
-            ModelLoader.setCustomStateMapper(ModBlocks.relativisticTurret, ignoreConcealed);
-        }
-        if (OMTConfig.TURRETS.rocket_turret.enabled) {
-            ModelLoader.setCustomStateMapper(ModBlocks.rocketTurret, ignoreConcealed);
-        }
-        if (OMTConfig.TURRETS.machine_gun_turret.enabled) {
-            ModelLoader.setCustomStateMapper(ModBlocks.machineGunTurret, ignoreConcealed);
-        }
-        if (OMTConfig.TURRETS.potato_cannon_turret.enabled) {
-            ModelLoader.setCustomStateMapper(ModBlocks.potatoCannonTurret, ignoreConcealed);
-        }
-        if (OMTConfig.TURRETS.plasma_turret.enabled) {
-            ModelLoader.setCustomStateMapper(ModBlocks.plasmaTurret, ignoreConcealed);
-        }
-        if (OMTConfig.TURRETS.arc_turret.enabled) {
-            ModelLoader.setCustomStateMapper(ModBlocks.arcTurret, ignoreConcealed);
-        }
-        if (OMTConfig.TURRETS.crossbow_turret.enabled) {
-            ModelLoader.setCustomStateMapper(ModBlocks.crossbowTurret, ignoreConcealed);
-        }
-        if (OMTConfig.TURRETS.melee_turret.enabled) {
-            ModelLoader.setCustomStateMapper(ModBlocks.meleeTurret, ignoreConcealed);
+        for (Block block : ForgeRegistries.BLOCKS.getValuesCollection()) {
+            if (block instanceof BlockTurret) {
+                ModelLoader.setCustomStateMapper(block, ignoreConcealed);
+                Item item = Item.getItemFromBlock(block);
+                ModelLoader.setCustomModelResourceLocation(item, 0,
+                        new ModelResourceLocation(block.getRegistryName(), "inventory"));
+                item.setTileEntityItemStackRenderer(new TurretItemRenderer(((BlockTurret) block).getCoreType()));
+            }
         }
         ModelLoaderRegistry.registerLoader(new TurretBaseBakedModel.ModelLoader());
         ModelLoader.setCustomStateMapper(ModBlocks.turretBase, new TurretBaseBakedModel.Statemapper());

@@ -14,7 +14,11 @@ public class OMTNames {
         public static final String laserTurret = "laser_turret";
         public static final String potatoCannonTurret = "potato_cannon_turret";
         public static final String incendiaryTurret = "incendiary_turret";
+        /** 3.x id of the slowing turret; kept for the missing mapping remap. */
         public static final String relativisticTurret = "relativistic_turret";
+        public static final String slowingTurret = "slowing_turret";
+        /** Tile entity id of all turrets (3.x had one per turret block). */
+        public static final String turret = "turret";
         public static final String teleporterTurret = "teleporter_turret";
         public static final String railGunTurret = "rail_gun_turret";
         public static final String plasmaTurret = "plasma_turret";

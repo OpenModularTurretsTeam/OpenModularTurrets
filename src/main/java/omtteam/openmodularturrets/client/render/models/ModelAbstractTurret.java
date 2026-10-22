@@ -4,7 +4,6 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 
 /**
  * Created by Keridos on 04/12/16.
@@ -27,14 +26,20 @@ public abstract class ModelAbstractTurret extends ModelBase {
 
     public abstract void setRotation(ModelRenderer model, float x, float y, float z);
 
-    public void setBaseRotation(TurretHead turretHead) {
-        base.rotateAngleX = turretHead.baseFitRotationX;
-        base.rotateAngleY = turretHead.baseFitRotationZ;
-    }
-
     public abstract void renderAll();
 
-    public abstract void setRotationForTarget(float y, float z);
+    /**
+     * Turns the weapon: {@code pitch} around the model's x axis (the weapon part), {@code yaw} around its y axis (the
+     * holder), both in radians in model space.
+     */
+    public abstract void setRotationForTarget(float pitch, float yaw);
+
+    /**
+     * Whether the turret is active (base active and a target in reach) and its spin angle in degrees; only the melee
+     * turret uses it.
+     */
+    public void setActivity(boolean active, float spinDegrees) {
+    }
 
     //public void setRotationForTargetYawPitch(float yaw, float pitch);
 

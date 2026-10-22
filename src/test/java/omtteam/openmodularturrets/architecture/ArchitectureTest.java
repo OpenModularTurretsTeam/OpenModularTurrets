@@ -51,8 +51,9 @@ class ArchitectureTest {
                     "init", "items", "items.blocks", "network.messages", "proxy", "tileentity", "tileentity.turrets",
                     "turret", "util"),
             // the core types reach each other as in 1.20.1+ (BaseWorld -> ItemSlot -> AmmoType, TurretType -> Face,
-            // Neighbour -> TurretType, LogicSettings -> TurretType, TargetSelector -> LogicSettings)
-            set("core.item", "core.settings", "core.target", "core.turret", "core.world"));
+            // Neighbour -> TurretType, LogicSettings -> TurretType, TargetSelector -> LogicSettings,
+            // TurretState -> TurretBaseLogic)
+            set("core.base", "core.item", "core.settings", "core.target", "core.turret", "core.world"));
 
     private static JavaClasses classes;
 

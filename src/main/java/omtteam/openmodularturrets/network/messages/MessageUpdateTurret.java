@@ -8,19 +8,24 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import omtteam.openmodularturrets.tileentity.turrets.AbstractDirectedTurret;
+import omtteam.openmodularturrets.tileentity.turrets.TurretTileEntity;
 
 import static omtteam.omlib.proxy.ClientProxy.getWorld;
 
 @SuppressWarnings("unused")
+/**
+ * The aim of a turret (yaw and pitch relative to its mounting face, see {@code TurretMath}) and whether it is active,
+ * sent to clients.
+ */
 public class MessageUpdateTurret implements IMessage {
     private int x, y, z;
     private float yaw, pitch;
+    private boolean active;
 
     public MessageUpdateTurret() {
     }
 
-    public MessageUpdateTurret(AbstractDirectedTurret turretHead) {
+    public MessageUpdateTurret(TurretTileEntity turretHead) {
         BlockPos pos = turretHead.getPos();
 
         this.x = pos.getX();
@@ -28,6 +33,7 @@ public class MessageUpdateTurret implements IMessage {
         this.z = pos.getZ();
         this.yaw = turretHead.getYaw();
         this.pitch = turretHead.getPitch();
+        this.active = turretHead.isActive();
     }
 
     @Override
@@ -37,6 +43,7 @@ public class MessageUpdateTurret implements IMessage {
         this.z = buf.readInt();
         this.yaw = buf.readFloat();
         this.pitch = buf.readFloat();
+        this.active = buf.readBoolean();
     }
 
     @Override
@@ -46,6 +53,7 @@ public class MessageUpdateTurret implements IMessage {
         buf.writeInt(this.z);
         buf.writeFloat(this.yaw);
         buf.writeFloat(this.pitch);
+        buf.writeBoolean(this.active);
     }
 
     private int getX() {
@@ -78,13 +86,13 @@ public class MessageUpdateTurret implements IMessage {
                 TileEntity tileEntity = getWorld(FMLClientHandler.instance().getClient()).getTileEntity(
                         new BlockPos(message.x, message.y, message.z));
 
-                AbstractDirectedTurret turret = null;
-                if (tileEntity instanceof AbstractDirectedTurret) {
-                    turret = (AbstractDirectedTurret) tileEntity;
+                TurretTileEntity turret = null;
+                if (tileEntity instanceof TurretTileEntity) {
+                    turret = (TurretTileEntity) tileEntity;
                 }
                 if (turret != null) {
-                    turret.setYaw(message.yaw);
-                    turret.setPitch(message.pitch);
+                    turret.setYawPitch(message.yaw, message.pitch);
+                    turret.setActive(message.active);
                 }
             });
             return null;

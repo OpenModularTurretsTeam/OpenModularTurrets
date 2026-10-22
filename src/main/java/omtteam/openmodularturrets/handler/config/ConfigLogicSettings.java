@@ -30,7 +30,7 @@ public final class ConfigLogicSettings implements LogicSettings {
         TURRETS.put(TurretType.MACHINE_GUN_TURRET.getPath(), () -> OMTConfig.TURRETS.machine_gun_turret);
         TURRETS.put(TurretType.INCENDIARY_TURRET.getPath(), () -> OMTConfig.TURRETS.incendiary_turret);
         TURRETS.put(TurretType.GRENADE_TURRET.getPath(), () -> OMTConfig.TURRETS.grenade_turret);
-        TURRETS.put(TurretType.SLOWING_TURRET.getPath(), () -> OMTConfig.TURRETS.relativistic_turret);
+        TURRETS.put(TurretType.SLOWING_TURRET.getPath(), () -> OMTConfig.TURRETS.slowing_turret);
         TURRETS.put(TurretType.ROCKET_TURRET.getPath(), () -> OMTConfig.TURRETS.rocket_turret);
         TURRETS.put(TurretType.TELEPORTER_TURRET.getPath(), () -> OMTConfig.TURRETS.teleporter_turret);
         TURRETS.put(TurretType.ARC_TURRET.getPath(), () -> OMTConfig.TURRETS.arc_turret);
