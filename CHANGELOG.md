@@ -8,6 +8,8 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+## [4.0.0-alpha.1] - 2026-10-23
+
 ### Added
 
 - The Melee Turret has a model: its blades extend and spin while something is in reach
