@@ -34,7 +34,7 @@ item.barrel_tier_three.name=Barrel (Tier 3)
 item.barrel_tier_four.name=Barrel (Tier 4)
 item.barrel_tier_five.name=Barrel (Tier 5)
 item.io_bus.name=Шина ввода-вывода
-item.memory_card.name=Turret Memory Card
+item.memory_card.name=OM Memory Card
 
 tile.turret_base_tier_one.name=Деревянная основа для турели
 tile.turret_base_tier_two.name=Свинцовая основа для турели
@@ -53,7 +53,6 @@ tile.slowing_turret.name=Slowing Turret
 tile.laser_turret.name=Лазерная турель
 tile.rail_gun_turret.name=Рельсовая турель
 tile.lever_block.name=Базовая турельная ручка
-tile.base_addon_loot_deleter.name=Base Addon - Loot Deleter
 
 # for IGWMod
 tile.turret_base.name=Turret Base
@@ -118,9 +117,6 @@ text.openmodularturrets.extras.upgrade.2=2x слот улучшений
 
 
 
-text.openmodularturrets.base_addon_loot_deleter.inv1=Turret Base Addon - Loot Deleter
-text.openmodularturrets.base_addon_loot_deleter.inv2=Removes all dropped loot from
-text.openmodularturrets.base_addon_loot_deleter.inv3=enemies killed by attached base.
 
 text.openmodularturrets.memory_card.desc1=Shift-RightClick base stores data
 text.openmodularturrets.memory_card.desc2=Shift-RightClick anywhere else to clear
@@ -138,7 +134,6 @@ text.openmodularturrets.base_max_range=Max range at which all mounted turrets wi
 
 tile.plasma_turret.name=Plasma Launcher Turret
 text.openmodularturrets:turret_limit=Turret Limit
-text.openmodularturrets.flavour.base_addon_loot_deleter.inv.1=Just a bit of smoke.
 text.openmodularturrets.flavour.base.1=There are trees, everywhere...
 text.openmodularturrets.flavour.base.2=I'll draw your blood.
 text.openmodularturrets.flavour.base.3=I said good day sir!

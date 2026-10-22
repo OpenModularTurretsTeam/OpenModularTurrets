@@ -13,13 +13,11 @@ import omtteam.omlib.core.security.PlayerIdentity;
 import omtteam.omlib.core.security.TrustManager;
 import omtteam.omlib.util.player.OMLibSecurityEnvironment;
 import omtteam.omlib.util.player.Player;
-import omtteam.openmodularturrets.api.lists.AmmoList;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.registry.TurretRegistry;
 import omtteam.openmodularturrets.core.security.DamageRules;
 import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
-import omtteam.openmodularturrets.item.AmmoMetaItem;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
-import omtteam.openmodularturrets.turret.TurretHeadUtil;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -37,7 +35,7 @@ public class OMTUtil {
                 || itemStack.getItem() == Items.REDSTONE || itemStack.getItem() == Items.ARROW
                 || itemStack.getItem() == Items.TIPPED_ARROW
                 || itemStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK)
-                || AmmoList.getDamage(itemStack) > 0 || itemStack.getItem() instanceof AmmoMetaItem;
+                || TurretRegistry.isAnyAmmo(itemStack);
     }
 
     public static int getFakeDropsLevel(EntityLivingBase entity) {
@@ -94,10 +92,6 @@ public class OMTUtil {
             }
             if (!(entityLivingBase instanceof EntityPlayer) && fakeDrops > -1) {
                 entityLivingBase.addTag("openmodularturrets:fake_drops_" + fakeDrops);
-            }
-            if (!(entityLivingBase instanceof EntityPlayer) && !TurretHeadUtil.baseHasNoLootDeleter(base)
-                    && !entityLivingBase.getTags().contains("openmodularturrets:dont_drop_loot")) {
-                entityLivingBase.addTag("openmodularturrets:dont_drop_loot");
             }
         }
     }

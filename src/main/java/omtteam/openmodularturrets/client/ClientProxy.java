@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -20,11 +21,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.client.render.camo.CamoBlockColor;
 import omtteam.openmodularturrets.CommonProxy;
-import omtteam.openmodularturrets.block.base.BlockBaseAttachment;
 import omtteam.openmodularturrets.block.misc.LeverBlock;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.client.gui.ConfigureGui;
-import omtteam.openmodularturrets.client.gui.PowerGeneratorGui;
+import omtteam.openmodularturrets.client.gui.GeneratorGui;
 import omtteam.openmodularturrets.client.gui.TurretBaseGui;
 import omtteam.openmodularturrets.client.model.TurretBaseBakedModel;
 import omtteam.openmodularturrets.client.network.ClientMessageHandlers;
@@ -32,6 +32,7 @@ import omtteam.openmodularturrets.client.render.ModTESRItems;
 import omtteam.openmodularturrets.client.render.ProjectileRenderers;
 import omtteam.openmodularturrets.client.render.TileEntityRenderers;
 import omtteam.openmodularturrets.client.render.TurretItemRenderer;
+import omtteam.openmodularturrets.client.render.TurretModels;
 import omtteam.openmodularturrets.item.AddonMetaItem;
 import omtteam.openmodularturrets.item.AmmoMetaItem;
 import omtteam.openmodularturrets.item.IntermediateProductRegular;
@@ -42,8 +43,8 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.registry.ModItems;
-import omtteam.openmodularturrets.tileentity.base.PowerGenerator;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
+import omtteam.openmodularturrets.tileentity.misc.GeneratorTileEntity;
 
 import javax.annotation.Nullable;
 
@@ -84,7 +85,6 @@ public class ClientProxy extends CommonProxy {
     public void initModelLoaders() {
         StateMap ignoreRotation = new StateMap.Builder().ignore(LeverBlock.ROTATION).build();
         StateMap ignoreConcealed = new StateMap.Builder().ignore(BlockTurret.CONCEALED).build();
-        StateMap ignoreFacing = new StateMap.Builder().ignore(BlockBaseAttachment.FACING).build();
         ModelLoader.setCustomStateMapper(ModBlocks.leverBlock, ignoreRotation);
         for (Block block : ForgeRegistries.BLOCKS.getValuesCollection()) {
             if (block instanceof BlockTurret) {
@@ -101,9 +101,8 @@ public class ClientProxy extends CommonProxy {
         for (int i = 0; i < 5; i++) {
             registerBlockModelAsItem(ModBlocks.turretBase, i, OMTNames.Blocks.turretBase + "_normal", "tier=" + (i + 1));
         }
-        for (int i = 0; i < 1; i++) {
-            registerBlockModelAsItem(ModBlocks.baseAddon, i, OMTNames.Blocks.baseAddon, "facing=north,meta=" + i);
-        }
+        registerBlockModelAsItem(ModBlocks.generator, 0, OMTNames.Blocks.generator);
+        registerItemModel(ModItems.upgradeEnergyMultiplier, 0);
         for (int i = 0; i < 15; i++) {
             registerItemModel(ModItems.intermediateProductTiered, i, IntermediateProductTiered.subNames[i], true);
         }
@@ -145,6 +144,11 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
+    public void loadClientPlugins(ASMDataTable asmData) {
+        TurretModels.loadPlugins(asmData);
+    }
+
+    @Override
     public <M extends IMessage> IMessageHandler<M, IMessage> clientMessageHandler(Class<M> type) {
         return ClientMessageHandlers.get(type);
     }
@@ -158,7 +162,8 @@ public class ClientProxy extends CommonProxy {
             case 1:
                 return new TurretBaseGui(player.inventory, (TurretBase) tileEntity);
             case 3:
-                return new PowerGeneratorGui(player.inventory, (PowerGenerator) tileEntity);
+                return tileEntity instanceof GeneratorTileEntity
+                        ? new GeneratorGui(player.inventory, (GeneratorTileEntity) tileEntity) : null;
             case 20:
                 return new ConfigureGui(player.inventory, (TurretBase) tileEntity);
             default:

@@ -4,13 +4,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import omtteam.openmodularturrets.api.lists.AmmoList;
+import omtteam.openmodularturrets.registry.TurretRegistry;
+import omtteam.openmodularturrets.config.DisposableAmmo;
 import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.item.ReactorFuel;
 import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.item.AddonMetaItem;
-import omtteam.openmodularturrets.item.AmmoMetaItem;
 import omtteam.openmodularturrets.item.UpgradeMetaItem;
 
 import java.util.Optional;
@@ -19,9 +19,6 @@ import java.util.Optional;
  * What an item stack is for the core logic: ammo, reactor fuel, upgrade or addon (the 3.x item metadata).
  */
 public final class ItemClassifier {
-    /** {@code AmmoMetaItem} meta 0–4; meta 5 is the "fake disposable" item that never sits in a base. */
-    private static final AmmoType[] AMMO_BY_META = {AmmoType.BLAZING_CLAY, AmmoType.BULLET, AmmoType.FERRO_SLUG,
-            AmmoType.GRENADE, AmmoType.ROCKET};
     /** {@code UpgradeMetaItem} meta 0–4. */
     private static final TurretBaseUpgradeType[] UPGRADE_BY_META = {TurretBaseUpgradeType.ACCURACY,
             TurretBaseUpgradeType.EFFICIENCY, TurretBaseUpgradeType.FIRE_RATE, TurretBaseUpgradeType.RANGE,
@@ -30,25 +27,14 @@ public final class ItemClassifier {
     private ItemClassifier() {
     }
 
-    /**
-     * 3.x {@code TurretHeadUtil.deductItemStackFromInventories}: the ammo items by item and metadata, potatoes and
-     * arrows, and for the disposable turret every item on the config's ammo allow list.
-     */
+    /** Whether the stack is ammo of this type, by the type's {@code AmmoDefinition} (built-in or from another mod). */
     public static boolean isAmmo(ItemStack stack, AmmoType type) {
-        if (stack.isEmpty()) return false;
-        if (type.equals(AmmoType.DISPOSABLE)) return AmmoList.getDamage(stack) > 0;
-        if (type.equals(AmmoType.POTATO)) return stack.getItem() == Items.POTATO;
-        if (type.equals(AmmoType.ARROW)) return stack.getItem() == Items.ARROW;
-        if (stack.getItem() instanceof AmmoMetaItem) {
-            int meta = stack.getMetadata();
-            return meta >= 0 && meta < AMMO_BY_META.length && AMMO_BY_META[meta].equals(type);
-        }
-        return false;
+        return !stack.isEmpty() && TurretRegistry.ammo(type).map(ammo -> ammo.matches(stack)).orElse(false);
     }
 
     /** Damage bonus of an item on the config's ammo allow list, 0 for other items. */
     public static int getDisposableDamageBonus(ItemStack stack) {
-        return stack.isEmpty() ? 0 : AmmoList.getDamage(stack);
+        return stack.isEmpty() ? 0 : DisposableAmmo.getDamage(stack);
     }
 
     /** Redstone dust and redstone blocks feed the redstone reactor addon. */

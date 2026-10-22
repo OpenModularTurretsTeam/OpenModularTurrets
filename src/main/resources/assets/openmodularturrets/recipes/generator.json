@@ -1,0 +1,26 @@
+{
+  "type": "forge:ore_shaped",
+  "result": {
+    "item": "openmodularturrets:generator"
+  },
+  "pattern": [
+    "CIC",
+    "IFI",
+    "CBC"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:cobblestone"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    },
+    "B": {
+      "item": "#IOBUS"
+    }
+  }
+}

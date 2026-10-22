@@ -3,6 +3,7 @@ package omtteam.openmodularturrets;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import omtteam.openmodularturrets.config.OMTConfig;
@@ -56,5 +57,9 @@ public class CommonProxy {
     @Nullable
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return null;
+    }
+
+    /** Calls the client plugins of other mods (turret models); only the client proxy has some. */
+    public void loadClientPlugins(ASMDataTable asmData) {
     }
 }

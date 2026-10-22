@@ -52,6 +52,8 @@ import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
 public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasTooltips, ISupportsBackSystem {
     private final TurretBase base;
     private final EntityPlayer player;
+    /** Space between the info panel and the GUI. */
+    private static final int INFO_PANEL_GAP = 4;
     private int mouseX;
     private int mouseY;
     private int accessLevel = 0;
@@ -245,7 +247,13 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         targetInfo.add("\u00A77" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
         targetInfo.add("\u00A77" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
 
-        this.drawHoveringText(targetInfo, -128, 17, fontRenderer);
+        // the info panel sits left of the GUI: Forge draws a tooltip from 12 px right of the given point and adds a
+        // 3 px border, so place it by its width (a fixed x let long lines run over the GUI)
+        int infoWidth = 0;
+        for (String line : targetInfo) {
+            infoWidth = Math.max(infoWidth, fontRenderer.getStringWidth(line));
+        }
+        this.drawHoveringText(targetInfo, -infoWidth - 12 - 3 - INFO_PANEL_GAP, 17, fontRenderer);
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         drawTooltips();
     }

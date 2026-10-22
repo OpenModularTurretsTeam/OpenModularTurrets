@@ -4,32 +4,34 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import omtteam.omlib.reference.OMLibNames;
-import omtteam.omlib.util.EnumMachineMode;
+import omtteam.omlib.core.card.MemoryCardData;
 import omtteam.omlib.util.GeneralUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.registry.ModItems;
-import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.Set;
 
-import static omtteam.omlib.util.GeneralUtil.*;
 
 @MethodsReturnNonnullByDefault
 public class UsableMetaItem extends Item {
@@ -46,35 +48,58 @@ public class UsableMetaItem extends Item {
         this.setUnlocalizedName(OMTNames.Items.usableMetaItem);
     }
 
+    /**
+     * Memory card on a turret base or camouflage trap: sneaking copies its settings, a click with a filled card writes
+     * them (before the block's own right-click, see {@link MemoryCardInteraction}).
+     */
     @Override
+    @Nonnull
     @ParametersAreNonnullByDefault
-    public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
-        return stack.getItemDamage() == 2 && world.getTileEntity(pos) instanceof TurretBase || super.doesSneakBypassUse(stack, world, pos, player);
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX,
+                                           float hitY, float hitZ, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        TileEntity target = world.getTileEntity(pos);
+        if (stack.getItemDamage() != 2 || !MemoryCardInteraction.isTarget(target)
+                || !player.isSneaking() && !hasDataStored(stack)) {
+            return EnumActionResult.PASS;
+        }
+        if (player instanceof EntityPlayerMP) {
+            MemoryCardInteraction.use((EntityPlayerMP) player, this, stack, target, player.isSneaking());
+        }
+        return EnumActionResult.SUCCESS;
     }
 
+    /** Sneak-click on any other block clears the card. */
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
-        if (!stack.isEmpty() && stack.getItemDamage() == 2 && player.isSneaking() && stack.hasTagCompound()) {
-            //noinspection ConstantConditions
-            Set<String> keySet = stack.getTagCompound().getKeySet();
-            keySet.clear();
+        if (stack.getItemDamage() == 2 && player.isSneaking() && hasDataStored(stack)) {
+            clearCard(stack, player, world);
+            return EnumActionResult.SUCCESS;
         }
         return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
     }
 
+    /** Sneak-click in the air clears the card. */
     @Override
     @ParametersAreNonnullByDefault
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
-        ItemStack itemStackIn = playerIn.getHeldItem(hand);
-        if (!itemStackIn.isEmpty() && itemStackIn.getItemDamage() == 2 && playerIn.isSneaking() && itemStackIn.hasTagCompound()) {
-            //noinspection ConstantConditions
-            Set<String> keySet = itemStackIn.getTagCompound().getKeySet();
-            keySet.clear();
+        ItemStack stack = playerIn.getHeldItem(hand);
+        if (stack.getItemDamage() == 2 && playerIn.isSneaking() && hasDataStored(stack)) {
+            clearCard(stack, playerIn, worldIn);
+            return new ActionResult<>(EnumActionResult.SUCCESS, stack);
         }
         return super.onItemRightClick(worldIn, playerIn, hand);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private static void clearCard(ItemStack stack, EntityPlayer player, World world) {
+        if (!world.isRemote) {
+            stack.getTagCompound().removeTag("data");
+            player.sendStatusMessage(new TextComponentTranslation("message.openmodularturrets.card_cleared"), true);
+        }
     }
 
     @Override
@@ -109,6 +134,16 @@ public class UsableMetaItem extends Item {
         return stack.hasTagCompound() ? stack.getTagCompound().getCompoundTag("data") : null;
     }
 
+    /** The card's settings, null if it is empty or holds no valid data. */
+    @Nullable
+    public MemoryCardData getCardData(ItemStack stack) {
+        return hasDataStored(stack) ? MemoryCardNbt.read(getDataStored(stack)) : null;
+    }
+
+    public void setCardData(ItemStack stack, MemoryCardData data) {
+        setDataStored(stack, MemoryCardNbt.write(data));
+    }
+
     @SuppressWarnings("ConstantConditions")
     public void setDataStored(ItemStack stack, NBTTagCompound nbtTagCompound) {
         if (stack.hasTagCompound()) {
@@ -128,23 +163,7 @@ public class UsableMetaItem extends Item {
             tooltip.add(GeneralUtil.getShiftDetail());
         } else {
             if (stack.getItemDamage() == 2) {
-                if (hasDataStored(stack)) {
-                    NBTTagCompound nbtTagCompound = getDataStored(stack);
-                    tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc1"));
-                    tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc2"));
-                    tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc3"));
-                    tooltip.add("\u00A76: \u00A7b" + nbtTagCompound.getInteger("currentMaxRange"));
-                    tooltip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": " + getMachineModeLocalization(EnumMachineMode.values()[nbtTagCompound.getInteger("mode")]));
-                    tooltip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.MULTI_TARGETING) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("multiTargeting")));
-                    tooltip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_MOBS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksMobs")));
-                    tooltip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksNeutrals")));
-                    tooltip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(nbtTagCompound.getBoolean("attacksPlayers")));
-                } else // If the stack does not have valid tag data, a default message
-                {
-                    tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc1"));
-                    tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc2"));
-                    tooltip.add(safeLocalize("tooltip.openmodularturrets.memory_card.desc3"));
-                }
+                MemoryCardTooltip.append(getCardData(stack), tooltip);
             }
         }
     }

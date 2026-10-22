@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import omtteam.omlib.network.MessageRenderLightning;
 import omtteam.omlib.network.MessageRenderRay;
 import omtteam.omlib.network.OMLibNetworkingHandler;
+import omtteam.openmodularturrets.api.weapon.RayWeapon;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
@@ -25,7 +26,6 @@ import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.entity.projectile.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.entity.projectile.NormalDamageSource;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
-import omtteam.openmodularturrets.turret.RayWeapon;
 import omtteam.openmodularturrets.util.OMTUtil;
 
 import java.util.ArrayList;
@@ -177,7 +177,7 @@ public final class RayWeapons {
                 logic.getDamageAmpBonus(type), health);
         ProjectileMath.Split split = RayMath.split(weapon.profile(), damage);
         int fakeDrops = logic.getLootingLevel(3);
-        String name = turret.getTurretType().getInternalName();
+        String name = turret.getDamageTypeName();
         if (!(entity instanceof EntityPlayer)) {
             OMTUtil.setTagsForTurretHit(entity, base);
         }

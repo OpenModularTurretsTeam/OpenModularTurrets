@@ -1,13 +1,8 @@
 package omtteam.openmodularturrets.config;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Config;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.api.lists.AmmoList;
-import omtteam.openmodularturrets.api.lists.MobBlockList;
-import omtteam.openmodularturrets.api.lists.MobForceList;
-import omtteam.openmodularturrets.api.lists.NeutralList;
 import omtteam.openmodularturrets.reference.Reference;
 
 import static omtteam.omlib.util.GeneralUtil.getItem;
@@ -29,21 +24,18 @@ public class OMTConfig {
 
     public static void parseLists() {
         parseDisposableAmmoList();
-        parseModBlockList();
-        parseMobForceList();
-        parseNeutralForceList();
     }
 
     private static void parseDisposableAmmoList() {
         try {
-            AmmoList.clear();
+            DisposableAmmo.clear();
             for (String itemListEntry : GENERAL.stringAmmoAllowList) {
                 int damage = itemListEntry.split(",").length > 1 ? Integer.parseInt(itemListEntry.split(",")[1]) : 1;
                 String[] item = itemListEntry.split(":");
                 if (item.length == 3) {
-                    AmmoList.add(new ItemStack(getItem(item[0], item[1]), 1, Integer.parseInt(item[2])), damage);
+                    DisposableAmmo.add(new ItemStack(getItem(item[0], item[1]), 1, Integer.parseInt(item[2])), damage);
                 } else {
-                    AmmoList.add(new ItemStack(getItem(item[0], item[1]), 2), damage);
+                    DisposableAmmo.add(new ItemStack(getItem(item[0], item[1]), 2), damage);
                 }
             }
         } catch (Exception e) {
@@ -52,55 +44,10 @@ public class OMTConfig {
         }
     }
 
-    private static void parseModBlockList() {
-        try {
-            if (GENERAL.stringMobBlackList.length == 0) return;
-            MobBlockList.getInstance().clear();
-            for (String itemListEntry : GENERAL.stringMobBlackList) {
-                MobBlockList.getInstance().add(new ResourceLocation(itemListEntry));
-            }
-        } catch (Exception e) {
-            OpenModularTurrets.getLogger().error("error while parsing mob block list config!");
-            e.printStackTrace();
-        }
-    }
-
-    private static void parseMobForceList() {
-        try {
-            if (GENERAL.stringMobForceList.length == 0) return;
-            MobForceList.getInstance().clear();
-            for (String itemListEntry : GENERAL.stringMobForceList) {
-                MobForceList.getInstance().add(new ResourceLocation(itemListEntry));
-            }
-        } catch (Exception e) {
-            OpenModularTurrets.getLogger().error("error while parsing mob force list config!");
-            e.printStackTrace();
-        }
-    }
-
-    private static void parseNeutralForceList() {
-        try {
-            if (GENERAL.stringNeutralForceList.length == 0) return;
-            NeutralList.getInstance().clear();
-            for (String itemListEntry : GENERAL.stringNeutralForceList) {
-                NeutralList.getInstance().add(new ResourceLocation(itemListEntry));
-            }
-        } catch (Exception e) {
-            OpenModularTurrets.getLogger().error("error while parsing neutral force list config!");
-            e.printStackTrace();
-        }
-    }
-
     public static class ConfigGeneral {
         @Config.RequiresMcRestart
         @Config.Comment("Which recipes to use. Valid values: auto, enderio, mekanism, vanilla")
         public String recipes = "auto";
-
-        @Config.Comment("If turrets kills drop loot")
-        public boolean doTurretsKillsDropMobLoot = true;
-
-        @Config.Comment("If loot is disabled, do loot addons enable loot anyway?")
-        public boolean doLootAddonsOverrideMobLootSetting = true;
 
         @Config.Comment("Use a whitelist for ammo (which items fit into ammo slots of base)?")
         public boolean useWhitelistForAmmo = true;
@@ -123,6 +70,18 @@ public class OMTConfig {
         public int solarPanelAddonGen = 10;
         @Config.RangeInt(min = 0)
         public int redstoneReactorAddonGen = 1600;
+
+        @Config.Comment("Generator: energy generated per tick while burning fuel, before energy multiplier upgrades.")
+        @Config.RangeInt(min = 1, max = 1000000)
+        public int generatorEnergyPerTick = 40;
+
+        @Config.Comment("Generator: energy buffer. It pauses burning while the buffer is full.")
+        @Config.RangeInt(min = 1, max = 2000000000)
+        public int generatorCapacity = 1000000;
+
+        @Config.Comment("Generator: energy per tick pushed into all neighbours together.")
+        @Config.RangeInt(min = 1, max = 2000000000)
+        public int generatorMaxOutput = 65536;
     }
 
     public static class ConfigTurrets {

@@ -28,7 +28,6 @@ public class TENameFix implements IFixableData {
         builder.put("minecraft:" + OMTNames.Blocks.incendiaryTurret, Reference.MOD_ID + ":" + OMTNames.Blocks.incendiaryTurret);
         builder.put("minecraft:" + OMTNames.Blocks.relativisticTurret, Reference.MOD_ID + ":" + OMTNames.Blocks.relativisticTurret);
         builder.put("minecraft:" + OMTNames.Blocks.teleporterTurret, Reference.MOD_ID + ":" + OMTNames.Blocks.teleporterTurret);
-        builder.put("minecraft:" + OMTNames.Blocks.baseAddon, Reference.MOD_ID + ":" + OMTNames.Blocks.baseAddon);
         NAME_MAP = builder.build();
     }
 

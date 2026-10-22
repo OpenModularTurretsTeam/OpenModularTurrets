@@ -43,7 +43,8 @@ class ArchitectureTest {
      */
     private static final List<Set<String>> KNOWN_CYCLES = Arrays.asList(
             // one large loop through almost every package (blocks, tile entities, items, containers, network, registry)
-            set("(root)", "api", "api.lists", "api.tileentity", "block.base", "block.misc", "block.turret", "compat",
+            // api.weapon holds the weapons that were in turret (phase 5 turret API); api.lists was removed
+            set("(root)", "api", "api.tileentity", "api.weapon", "block.base", "block.misc", "block.turret", "compat",
                     "compat.computercraft", "compat.hwyla", "compat.opencomputers", "config", "container",
                     "entity.projectile", "fixes", "handler", "inventory", "item", "network", "registry", "tileentity.base",
                     "tileentity.misc", "tileentity.turret", "turret", "util"),

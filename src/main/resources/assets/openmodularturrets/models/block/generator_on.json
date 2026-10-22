@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "openmodularturrets:blocks/generator_top",
+    "front": "openmodularturrets:blocks/generator_front_on",
+    "side": "openmodularturrets:blocks/generator_side"
+  }
+}

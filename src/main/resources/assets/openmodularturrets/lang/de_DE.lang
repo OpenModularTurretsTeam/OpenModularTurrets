@@ -34,7 +34,7 @@ item.barrel_tier_three.name=Lauf (Stufe 3)
 item.barrel_tier_four.name=Lauf (Stufe 4)
 item.barrel_tier_five.name=Lauf (Stufe 5)
 item.io_bus.name=IO Bus
-item.memory_card.name=Turmbasis Speicherkarte
+item.memory_card.name=OM-Speicherkarte
 
 tile.turret_base_tier_one.name=Turm Basis (Stufe 1)
 tile.turret_base_tier_two.name=Turm Basis (Stufe 2)
@@ -54,7 +54,6 @@ tile.laser_turret.name=Laser Turm
 tile.rail_gun_turret.name=Rail Gun Turm
 tile.plasma_turret.name=Plasmawerfer Turm
 tile.lever_block.name=Hebel für Tier 1 Turm Basis
-tile.base_addon_loot_deleter.name=Base Addon - Loot Deleter
 tile.turret_base.name=Turm Basis
 
 itemGroup.openmodularturrets=Open Modular Turrets
@@ -116,9 +115,6 @@ text.openmodularturrets.extras.upgrade.2=2x Upgrade Slots
 
 
 
-text.openmodularturrets.base_addon_loot_deleter.inv1=Turret Base Addon - Loot Deleter
-text.openmodularturrets.base_addon_loot_deleter.inv2=Entfernt alles Loot, welches von Gegnern
-text.openmodularturrets.base_addon_loot_deleter.inv3=der angeschlossen Base, gedroppt wurde.
 
 text.openmodularturrets.memory_card.desc1=Shift-RechtsClick um auf Karte zu kopieren.
 text.openmodularturrets.memory_card.desc2=Shift-RechtsClick irgendwo anders um Karte zu leeren.
@@ -137,7 +133,6 @@ text.openmodularturrets:turret_limit=Turm Limit
 
 
 
-text.openmodularturrets.flavour.base_addon_loot_deleter.inv.1=Nur ein bisschen Rauch.
 
 text.openmodularturrets.flavour.base.1=Ich werd mit deinem Blut malen!
 text.openmodularturrets.flavour.base.2=Ich sagte guten Tag, Sir.

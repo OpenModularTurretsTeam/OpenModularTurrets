@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.tileentity.turret;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -9,11 +10,12 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
+import omtteam.openmodularturrets.api.weapon.AreaWeapon;
+import omtteam.openmodularturrets.api.weapon.EffectWeapon;
+import omtteam.openmodularturrets.api.weapon.SelfTargetingWeapon;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.entity.projectile.NormalDamageSource;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
-import omtteam.openmodularturrets.turret.AreaWeapon;
-import omtteam.openmodularturrets.turret.EffectWeapon;
 
 import java.util.List;
 
@@ -46,6 +48,16 @@ public final class EffectWeapons {
         if (turret.getWorld() instanceof WorldServer) {
             WorldServer world = (WorldServer) turret.getWorld();
             weapon.strike().strike(world, turret, base, victims);
+            playSound(world, turret.getPos(), weapon.launchSound());
+        }
+    }
+
+    /** Fires a self-targeting weapon at the targets its picker chose. */
+    static void fireSelfTargeted(TurretTileEntity turret, TurretBase base, SelfTargetingWeapon weapon,
+                                 List<Entity> targets) {
+        if (turret.getWorld() instanceof WorldServer) {
+            WorldServer world = (WorldServer) turret.getWorld();
+            weapon.shot().fire(world, turret, base, targets);
             playSound(world, turret.getPos(), weapon.launchSound());
         }
     }

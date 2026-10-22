@@ -34,7 +34,7 @@ item.barrel_tier_three.name=Cano (Nível 3)
 item.barrel_tier_four.name=Cano (Nível 4)
 item.barrel_tier_five.name=Cano (Nível 5)
 item.io_bus.name=IO Bus
-item.memory_card.name=Cartão de Memória de Torre
+item.memory_card.name=Cartão de Memória OM
 
 tile.turret_base_tier_one.name=Base de Torre (Nível 1)
 tile.turret_base_tier_two.name=Base de Torre (Nível 2)
@@ -54,7 +54,6 @@ tile.laser_turret.name=Torre Laser
 tile.rail_gun_turret.name=Torre Canhão Elétrico
 tile.plasma_turret.name=Plasma Launcher Turret
 tile.lever_block.name=Manivela Básica de Torre Básica
-tile.base_addon_loot_deleter.name=Extensão de Base - Deleta Saque
 tile.turret_base.name=Base de Torre
 
 itemGroup.openmodularturrets=Open Modular Turrets
@@ -116,9 +115,6 @@ text.openmodularturrets.extras.upgrade.2=2x Slots de Aprimoramento
 
 
 
-text.openmodularturrets.base_addon_loot_deleter.inv1=Extensão da base de torre - Deletar Saque
-text.openmodularturrets.base_addon_loot_deleter.inv2=Remove todos os itens Caídos de
-text.openmodularturrets.base_addon_loot_deleter.inv3=Inimigos mortos pela base anexada.
 
 text.openmodularturrets.memory_card.desc1=Shift-Clique Direito para base armazena dados
 text.openmodularturrets.memory_card.desc2=Shift-Clique Direito para limpar qualquer lugar
@@ -138,7 +134,6 @@ text.openmodularturrets:turret_limit=Limite da Torre
 
 
 
-text.openmodularturrets.flavour.base_addon_loot_deleter.inv.1=Só um pouco de fumaça.
 
 text.openmodularturrets.flavour.base.1=existem árvores, por toda parte...
 text.openmodularturrets.flavour.base.2=Vou tirar seu sangue.

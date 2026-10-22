@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.tileentity.turret;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -9,6 +10,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import omtteam.omlib.tileentity.TileEntityBase;
@@ -17,6 +19,12 @@ import omtteam.omlib.util.NetworkUtil;
 import omtteam.omlib.util.TargetingSettings;
 import omtteam.openmodularturrets.api.tileentity.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.api.tileentity.ITurretHead;
+import omtteam.openmodularturrets.api.weapon.AreaWeapon;
+import omtteam.openmodularturrets.api.weapon.EffectWeapon;
+import omtteam.openmodularturrets.api.weapon.ProjectileWeapon;
+import omtteam.openmodularturrets.api.weapon.RayWeapon;
+import omtteam.openmodularturrets.api.weapon.SelfTargetingWeapon;
+import omtteam.openmodularturrets.api.weapon.TurretWeapon;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
@@ -35,12 +43,7 @@ import omtteam.openmodularturrets.registry.ModSounds;
 import omtteam.openmodularturrets.registry.TurretRegistry;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.base.TurretBaseWorld;
-import omtteam.openmodularturrets.turret.AreaWeapon;
-import omtteam.openmodularturrets.turret.EffectWeapon;
-import omtteam.openmodularturrets.turret.ProjectileWeapon;
-import omtteam.openmodularturrets.turret.RayWeapon;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
-import omtteam.openmodularturrets.turret.TurretWeapon;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -90,6 +93,8 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
 
     /** Target tracking for the lead (positions per tick; players have no motion on the server). */
     private int trackedTargetId = -1;
+    /** Ticks until a self-targeting weapon picks again after finding nothing. */
+    private int pickDelay;
     @Nullable
     private Vec3d trackedTargetPos;
 
@@ -114,9 +119,10 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
                 ? ((BlockTurret) world.getBlockState(pos).getBlock()).getCoreType() : null;
     }
 
-    /** The 3.x turret type (block id and config section) of the turret block. */
-    public omtteam.openmodularturrets.turret.TurretType getTurretType() {
-        return ((BlockTurret) world.getBlockState(pos).getBlock()).getTurretType();
+    /** Damage type name of this turret's damage (death messages): the path of its block id, as in 3.x. */
+    public String getDamageTypeName() {
+        ResourceLocation id = world.getBlockState(pos).getBlock().getRegistryName();
+        return id == null ? "turret" : id.getResourcePath();
     }
 
     /** What a shot of this turret does. */
@@ -195,6 +201,8 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         boolean engaging = false;
         if (logic.isActive() && weapon instanceof AreaWeapon) {
             engaging = strikeInReach((WorldServer) world, base, (AreaWeapon) weapon);
+        } else if (logic.isActive() && weapon instanceof SelfTargetingWeapon) {
+            engaging = pickAndShoot((WorldServer) world, base, type, (SelfTargetingWeapon) weapon);
         } else if (logic.isActive()) {
             EntityLivingBase target = base.getTargetEntity(current);
             updateConcealment(logic, target != null);
@@ -264,7 +272,7 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
     }
 
     /** Turns towards the target's eyes, within {@link TurretMath#limit}. */
-    private void aimAt(EntityLivingBase target) {
+    private void aimAt(Entity target) {
         Vec3d centre = centre();
         Vector3 toEyes = new Vector3(target.posX - centre.x, target.posY + target.getEyeHeight() - centre.y,
                 target.posZ - centre.z);
@@ -305,6 +313,35 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         TurretBase shooter = beginShot();
         if (shooter != null) {
             EffectWeapons.fireArea(this, shooter, weapon, victims);
+        }
+        return true;
+    }
+
+    /**
+     * Self-targeting weapons (turret API) ignore the base's target: once the turret could fire, the weapon's picker
+     * chooses the targets and the shot follows; a pick without result is repeated every
+     * {@link SelfTargetingWeapon#RETRY_TICKS} ticks.
+     *
+     * @return whether the turret is engaging something
+     */
+    private boolean pickAndShoot(WorldServer world, TurretBase base, TurretType type, SelfTargetingWeapon weapon) {
+        if (pickDelay > 0) {
+            pickDelay--;
+            return active;
+        }
+        if (!state.isReady(base.getLogic(), type)) return active;
+        List<Entity> targets = weapon.picker().pick(world, this, base);
+        updateConcealment(base.getLogic(), !targets.isEmpty());
+        if (targets.isEmpty()) {
+            pickDelay = SelfTargetingWeapon.RETRY_TICKS;
+            return false;
+        }
+        if (weapon.aims()) {
+            aimAt(targets.get(0));
+        }
+        TurretBase shooter = beginShot();
+        if (shooter != null) {
+            EffectWeapons.fireSelfTargeted(this, shooter, weapon, targets);
         }
         return true;
     }

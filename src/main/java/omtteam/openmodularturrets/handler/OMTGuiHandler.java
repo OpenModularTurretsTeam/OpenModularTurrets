@@ -6,10 +6,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.container.PowerGeneratorContainer;
+import omtteam.openmodularturrets.container.GeneratorContainer;
 import omtteam.openmodularturrets.container.TurretBaseContainer;
-import omtteam.openmodularturrets.tileentity.base.PowerGenerator;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
+import omtteam.openmodularturrets.tileentity.misc.GeneratorTileEntity;
 
 public class OMTGuiHandler implements IGuiHandler {
     private static OMTGuiHandler instance;
@@ -32,7 +32,8 @@ public class OMTGuiHandler implements IGuiHandler {
             case 1:
                 return new TurretBaseContainer(player.inventory, (TurretBase) tileEntity);
             case 3:
-                return new PowerGeneratorContainer(player.inventory, (PowerGenerator) tileEntity);
+                return tileEntity instanceof GeneratorTileEntity
+                        ? new GeneratorContainer(player.inventory, (GeneratorTileEntity) tileEntity) : null;
             default:
                 return null;
         }

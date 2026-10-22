@@ -31,9 +31,10 @@ public class OMTNames {
         public static final String expander = "expander";
 
         public static final String baseAddon = "base_addon";
-        public static final String baseAddonLootDeleter = "base_addon_loot_deleter";
 
+        /** 3.x power generator attachment, remapped to {@link #generator}. */
         public static final String powerGenerator = "power_generator";
+        public static final String generator = "generator";
     }
 
     public static class Items {
@@ -118,8 +119,8 @@ public class OMTNames {
             public static final String CONFIGURE = "text.openmodularturrets.gui.configure";
             public static final String KILLS = "text.openmodularturrets.gui.kills";
             public static final String PLAYER_KILLS = "text.openmodularturrets.gui.player_kills";
-            public static final String LIGHT_VALUE = "text.openmodularturrets.gui.light_value";
-            public static final String LIGHT_OPACITY = "text.openmodularturrets.gui.light_opacity";
+            public static final String CAMOUFLAGE = "text.openmodularturrets.gui.camouflage";
+            public static final String CAMOUFLAGE_TOOLTIP = "tooltip.openmodularturrets.camouflage";
         }
 
         public static class Text {
@@ -144,6 +145,5 @@ public class OMTNames {
         public static final String turretBaseTierFourGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_four.png";
         public static final String turretBaseTierFiveGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_five.png";
         public static final String configureGUI = Reference.MOD_ID + ":textures/gui/configure.png";
-        public static final String powerGeneratorGUI = Reference.MOD_ID + ":textures/gui/power_generator.png";
     }
 }

@@ -3,10 +3,12 @@ package omtteam.openmodularturrets.registry;
 import net.minecraft.item.Item;
 import net.minecraftforge.registries.IForgeRegistry;
 import omtteam.omlib.util.InitHelper;
+import omtteam.openmodularturrets.core.item.GeneratorUpgradeType;
 import omtteam.openmodularturrets.item.AddonMetaItem;
 import omtteam.openmodularturrets.item.AmmoMetaItem;
 import omtteam.openmodularturrets.item.IntermediateProductRegular;
 import omtteam.openmodularturrets.item.IntermediateProductTiered;
+import omtteam.openmodularturrets.item.ItemGeneratorUpgrade;
 import omtteam.openmodularturrets.item.UpgradeMetaItem;
 import omtteam.openmodularturrets.item.UsableMetaItem;
 
@@ -21,6 +23,7 @@ public class ModItems {
     public static Item intermediateProductRegular;
     public static Item ammoMetaItem;
     public static Item usableMetaItem;
+    public static Item upgradeEnergyMultiplier;
 
     public static void init(IForgeRegistry<Item> registry) {
         intermediateProductTiered = InitHelper.registerItem(new IntermediateProductTiered(), registry);
@@ -29,9 +32,12 @@ public class ModItems {
         upgradeMetaItem = InitHelper.registerItem(new UpgradeMetaItem(), registry);
         ammoMetaItem = InitHelper.registerItem(new AmmoMetaItem(), registry);
         usableMetaItem = InitHelper.registerItem(new UsableMetaItem(), registry);
+        upgradeEnergyMultiplier = InitHelper.registerItem(
+                new ItemGeneratorUpgrade(GeneratorUpgradeType.ENERGY_MULTIPLIER), registry);
 
         for (Item item : subblocks) {
-            registry.register(item);
+            // item blocks of other mods' turrets are registered as their mod
+            ModContainerScope.registerAs(item.getRegistryName(), () -> registry.register(item));
         }
     }
 }

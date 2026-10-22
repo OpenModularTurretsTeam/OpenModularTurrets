@@ -11,6 +11,8 @@ Before a release, `./gradlew releaseChangelog -Pchangelog_version=<tag without v
 ### Added
 
 - The Melee Turret has a model: its blades extend and spin while something is in reach
+- Generator: burns furnace fuel into energy for adjacent turret bases, with 9 fuel slots and an upgrade slot for the new Energy Multiplier upgrade (each doubles output and fuel use); placed 3.x power generators become generators and keep their fuel
+- Turret API for other mods (`@OMTPlugin.Register`, `api` and `api.weapon`, client models via `@OMTClientPlugin.Register`); added turrets get their config in `config/openmodularturrets_addon_turrets.cfg`, see `docs/turret-api.md`
 
 ### Fixed
 
@@ -23,6 +25,8 @@ Before a release, `./gradlew releaseChangelog -Pchangelog_version=<tag without v
 - The Crossbow Turret's config section had the name of the Potato Cannon Turret's; it is "Crossbow Turret" now
 - Rays of Laser, Railgun and Arc Turrets could hit entities next to the ray
 - The Plasma Turret tooltip showed tier 3, although the turret needs a tier 5 base
+- The configure GUI no longer draws its buttons below its background
+- The info panel of the turret base GUI no longer covers the GUI when its lines are long (e.g. long player names)
 
 ### Changed
 
@@ -45,13 +49,19 @@ Before a release, `./gradlew releaseChangelog -Pchangelog_version=<tag without v
 - The Melee Turret only fits on top of or below a base; melee turrets on the sides of a base drop as items
 - The Arc Turret can be placed on every side of a base, not only on top
 - The particles of the Teleporter Turret are shown in multiplayer too
+- Mobs killed by turrets drop nothing unless the base has a fake drops addon (each further addon adds a level of Looting); the config options `doTurretsKillsDropMobLoot` and `doLootAddonsOverrideMobLootSetting` are gone
+- Turret tooltips show what the turret does, the base tier it needs, its ammo and its energy per shot; turrets that ignore scattershot upgrades say so without shift
+- The camouflage of a turret base is set in the new camouflage menu (Configure → Camouflage), which also holds the light sliders of tier 4 and 5 bases; right-clicking a base with a block no longer camouflages it
+- The memory card needs the admin access level to copy and to write settings, also stores the camouflage, works on camouflage traps, and its tooltip shows what it holds; sneak-clicking anything else clears it (3.x cards still work)
+- The Turret Memory Card is now called OM Memory Card
 
 ### Removed
 
 - Inventory and power expanders: they disappear from worlds, together with the items in them
-- The base controller API (`IBaseController`, `ILaserController`) of the discontinued OMTControl addon
-
-## [3.2.0]
+- The loot deleter base addon (turret kills drop nothing without a fake drops addon now); placed loot deleters disappear
+- The power generator attachment (it had no function); it is replaced by the generator
+- The base controller API (`IBaseController`, `ILaserController`) of the discontinued OMTControl addon## [3.2.0]
+- The entity and ammo lists of the 3.x API (`api.lists`): they no longer affected targeting; the config lists and the disposable ammo allow list stay
 
 ### Added
 

@@ -32,9 +32,11 @@ public final class MissingIds {
     static {
         Set<ResourceLocation> removed = new HashSet<>();
         removed.add(id(OMTNames.Blocks.expander));
+        removed.add(id(OMTNames.Blocks.baseAddon));
         REMOVED = Collections.unmodifiableSet(removed);
         Map<ResourceLocation, ResourceLocation> renamed = new HashMap<>();
         renamed.put(id(OMTNames.Blocks.relativisticTurret), id(OMTNames.Blocks.slowingTurret));
+        renamed.put(id(OMTNames.Blocks.powerGenerator), id(OMTNames.Blocks.generator));
         RENAMED = Collections.unmodifiableMap(renamed);
         Map<ResourceLocation, ResourceLocation> renamedSounds = new HashMap<>();
         renamedSounds.put(id("relativistic"), id("slowing"));

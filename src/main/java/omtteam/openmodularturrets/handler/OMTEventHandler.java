@@ -1,9 +1,11 @@
 package omtteam.openmodularturrets.handler;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.WorldServer;
@@ -17,7 +19,6 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.entity.projectile.AbstractOMTDamageSource;
 import omtteam.openmodularturrets.fixes.MissingIds;
 import omtteam.openmodularturrets.reference.Reference;
@@ -113,13 +114,28 @@ public class OMTEventHandler {
         ModSounds.init(event.getRegistry());
     }
 
+    /**
+     * Inverted looting (4.0.0, as 1.20.1+): entities killed by turrets drop nothing unless the base has a fake drops
+     * addon. Turret damage decides by itself (its source names the fake player only with the addon); deaths by fire or
+     * falls after a turret hit go by the hit tags; kills by a real player are left alone.
+     */
     @SubscribeEvent
     public void lootEvent(LivingDropsEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
-        int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
-        if (((entity.getTags().contains("openmodularturrets:turret_hit") && !OMTConfig.GENERAL.doTurretsKillsDropMobLoot)
-                && !(fakeDrops >= 0 && OMTConfig.GENERAL.doLootAddonsOverrideMobLootSetting)) ||
-                entity.getTags().contains("openmodularturrets:dont_drop_loot")) {
+        if (entity instanceof EntityPlayer) {
+            return;
+        }
+        DamageSource source = event.getSource();
+        Entity killer = source.getTrueSource();
+        boolean noLoot;
+        if (source instanceof AbstractOMTDamageSource) {
+            noLoot = killer == null;
+        } else if (killer instanceof EntityPlayer && !(killer instanceof FakePlayer)) {
+            noLoot = false;
+        } else {
+            noLoot = entity.getTags().contains("openmodularturrets:turret_hit") && OMTUtil.getFakeDropsLevel(entity) < 0;
+        }
+        if (noLoot) {
             event.setCanceled(true);
         }
     }

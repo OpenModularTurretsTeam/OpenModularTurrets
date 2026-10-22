@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 /**
  * {@link LogicSettings} backed by the Forge config ({@link OMTConfig}), read on every use so config changes apply at
@@ -20,23 +20,23 @@ public final class ConfigLogicSettings implements LogicSettings {
     public static final ConfigLogicSettings INSTANCE = new ConfigLogicSettings();
 
     /** Config section of each built-in turret type, by type path (the slowing turret is the 3.x relativistic one). */
-    private static final Map<String, Supplier<TurretSetting>> TURRETS = new HashMap<>();
+    private static final Map<String, Function<OMTConfig.ConfigTurrets, TurretSetting>> TURRETS = new HashMap<>();
 
     static {
-        TURRETS.put(TurretType.DISPOSABLE_TURRET.getPath(), () -> OMTConfig.TURRETS.disposable_turret);
-        TURRETS.put(TurretType.POTATO_CANNON_TURRET.getPath(), () -> OMTConfig.TURRETS.potato_cannon_turret);
-        TURRETS.put(TurretType.CROSSBOW_TURRET.getPath(), () -> OMTConfig.TURRETS.crossbow_turret);
-        TURRETS.put(TurretType.MELEE_TURRET.getPath(), () -> OMTConfig.TURRETS.melee_turret);
-        TURRETS.put(TurretType.MACHINE_GUN_TURRET.getPath(), () -> OMTConfig.TURRETS.machine_gun_turret);
-        TURRETS.put(TurretType.INCENDIARY_TURRET.getPath(), () -> OMTConfig.TURRETS.incendiary_turret);
-        TURRETS.put(TurretType.GRENADE_TURRET.getPath(), () -> OMTConfig.TURRETS.grenade_turret);
-        TURRETS.put(TurretType.SLOWING_TURRET.getPath(), () -> OMTConfig.TURRETS.slowing_turret);
-        TURRETS.put(TurretType.ROCKET_TURRET.getPath(), () -> OMTConfig.TURRETS.rocket_turret);
-        TURRETS.put(TurretType.TELEPORTER_TURRET.getPath(), () -> OMTConfig.TURRETS.teleporter_turret);
-        TURRETS.put(TurretType.ARC_TURRET.getPath(), () -> OMTConfig.TURRETS.arc_turret);
-        TURRETS.put(TurretType.LASER_TURRET.getPath(), () -> OMTConfig.TURRETS.laser_turret);
-        TURRETS.put(TurretType.RAILGUN_TURRET.getPath(), () -> OMTConfig.TURRETS.railgun_turret);
-        TURRETS.put(TurretType.PLASMA_TURRET.getPath(), () -> OMTConfig.TURRETS.plasma_turret);
+        TURRETS.put(TurretType.DISPOSABLE_TURRET.getPath(), turrets -> turrets.disposable_turret);
+        TURRETS.put(TurretType.POTATO_CANNON_TURRET.getPath(), turrets -> turrets.potato_cannon_turret);
+        TURRETS.put(TurretType.CROSSBOW_TURRET.getPath(), turrets -> turrets.crossbow_turret);
+        TURRETS.put(TurretType.MELEE_TURRET.getPath(), turrets -> turrets.melee_turret);
+        TURRETS.put(TurretType.MACHINE_GUN_TURRET.getPath(), turrets -> turrets.machine_gun_turret);
+        TURRETS.put(TurretType.INCENDIARY_TURRET.getPath(), turrets -> turrets.incendiary_turret);
+        TURRETS.put(TurretType.GRENADE_TURRET.getPath(), turrets -> turrets.grenade_turret);
+        TURRETS.put(TurretType.SLOWING_TURRET.getPath(), turrets -> turrets.slowing_turret);
+        TURRETS.put(TurretType.ROCKET_TURRET.getPath(), turrets -> turrets.rocket_turret);
+        TURRETS.put(TurretType.TELEPORTER_TURRET.getPath(), turrets -> turrets.teleporter_turret);
+        TURRETS.put(TurretType.ARC_TURRET.getPath(), turrets -> turrets.arc_turret);
+        TURRETS.put(TurretType.LASER_TURRET.getPath(), turrets -> turrets.laser_turret);
+        TURRETS.put(TurretType.RAILGUN_TURRET.getPath(), turrets -> turrets.railgun_turret);
+        TURRETS.put(TurretType.PLASMA_TURRET.getPath(), turrets -> turrets.plasma_turret);
     }
 
     /** Entity lists as sets, cached per config array (Forge replaces the arrays when the config changes). */
@@ -50,14 +50,24 @@ public final class ConfigLogicSettings implements LogicSettings {
     private ConfigLogicSettings() {
     }
 
-    /** The config section of a turret type. */
+    /** The config section of a turret type: built-in ones in the main config, the others in the addon config. */
     public static TurretSetting setting(TurretType type) {
-        Supplier<TurretSetting> setting = TURRETS.get(type.getPath());
-        if (setting == null || !type.isBuiltIn()) throw new IllegalArgumentException("No config for turret " + type);
-        return setting.get();
+        if (!type.isBuiltIn()) {
+            return AddonTurretConfig.setting(type);
+        }
+        Function<OMTConfig.ConfigTurrets, TurretSetting> section = TURRETS.get(type.getPath());
+        if (section == null) throw new IllegalArgumentException("No config for turret " + type);
+        return section.apply(OMTConfig.TURRETS);
     }
 
-    private static TurretStats toStats(TurretSetting s) {
+    /** The default values of a built-in turret's config section (the turret API's default stats). */
+    public static TurretStats defaultStats(TurretType type) {
+        Function<OMTConfig.ConfigTurrets, TurretSetting> section = TURRETS.get(type.getPath());
+        if (section == null || !type.isBuiltIn()) throw new IllegalArgumentException("No config for turret " + type);
+        return toStats(section.apply(new OMTConfig.ConfigTurrets()));
+    }
+
+    static TurretStats toStats(TurretSetting s) {
         return new TurretStats(s.enabled, s.baseRange, s.baseFireRate, s.baseDamage, s.powerUsage,
                 s.baseAccuracyDeviation, s.maxSimultaneous, s.damageAmp, s.fireRateUpgrade, s.rangeUpgrade,
                 s.accuracyUpgrade, s.efficiencyUpgrade, s.recyclerNegateChance, s.recyclerAddChance);

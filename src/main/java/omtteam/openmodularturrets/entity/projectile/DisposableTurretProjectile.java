@@ -10,8 +10,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import omtteam.openmodularturrets.api.lists.AmmoList;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
+import omtteam.openmodularturrets.config.DisposableAmmo;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
@@ -70,7 +70,7 @@ public class DisposableTurretProjectile extends TurretProjectile {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile) && !this.isDead) {
             int damage = OMTConfig.TURRETS.disposable_turret.baseDamage;
             if (this.itemBound != null) {
-                damage += AmmoList.getDamage(this.itemBound.getItem());
+                damage += DisposableAmmo.getDamage(this.itemBound.getItem());
             }
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {

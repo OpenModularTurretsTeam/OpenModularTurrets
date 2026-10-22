@@ -1,22 +1,17 @@
 package omtteam.openmodularturrets.turret;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import omtteam.omlib.util.world.Pos;
-import omtteam.omlib.util.world.WorldUtil;
-import omtteam.openmodularturrets.block.base.BlockBaseAttachment;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static omtteam.openmodularturrets.block.base.BlockBaseAttachment.BASE_ADDON_META;
 
 /**
  * World helpers for turrets: finding the base, aiming and the model rotation. The game rules that lived here in 3.x
@@ -101,17 +96,5 @@ public class TurretHeadUtil {
         }
         // Convert it to base rotation dependent values
         return pitch / (float) Math.PI * 180F;
-    }
-
-    public static boolean baseHasNoLootDeleter(TurretBase base) {
-        List<IBlockState> states = WorldUtil.getTouchingBlockStates(base.getWorld(), base.getPos());
-        for (IBlockState state : states) {
-            if (state.getBlock() instanceof BlockBaseAttachment) {
-                if (state.getValue(BASE_ADDON_META) == 0) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 }

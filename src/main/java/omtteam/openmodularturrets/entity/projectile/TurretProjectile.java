@@ -16,7 +16,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
-import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import omtteam.openmodularturrets.util.OMTUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -28,7 +27,6 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
     public boolean isAmped;
     public int amp_level;
     public int fakeDrops;
-    public boolean dropLoot = true;
     protected TurretBase turretBase;
     ItemStack ammo;
     private BlockPos turretBasePos;
@@ -47,7 +45,6 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
             amp_level = turretBase.getLogic().getDamageAmpLevel();
         }
         fakeDrops = turretBase.getLogic().getLootingLevel(3);
-        dropLoot = TurretHeadUtil.baseHasNoLootDeleter(turretBase);
     }
 
     TurretProjectile(World world, ItemStack ammo, TurretBase turretBase) {
@@ -60,7 +57,6 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
             amp_level = turretBase.getLogic().getDamageAmpLevel();
         }
         fakeDrops = turretBase.getLogic().getLootingLevel(3);
-        dropLoot = TurretHeadUtil.baseHasNoLootDeleter(turretBase);
     }
 
     @Override
@@ -180,9 +176,6 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
             }
             if (!(entityLivingBase instanceof EntityPlayer) && this.fakeDrops > -1) {
                 entityLivingBase.addTag("openmodularturrets:fake_drops_" + this.fakeDrops);
-            }
-            if (!(entityLivingBase instanceof EntityPlayer) && !this.dropLoot && !entityLivingBase.getTags().contains("openmodularturrets:dont_drop_loot")) {
-                entityLivingBase.addTag("openmodularturrets:dont_drop_loot");
             }
         }
     }

@@ -1,0 +1,23 @@
+{
+  "type": "forge:ore_shaped",
+  "result": {
+    "item": "openmodularturrets:upgrade_energy_multiplier"
+  },
+  "pattern": [
+    " A ",
+    "ABA",
+    " C "
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "gemQuartz"
+    },
+    "B": {
+      "item": "minecraft:blaze_rod"
+    },
+    "C": {
+      "item": "#IOBUS"
+    }
+  }
+}

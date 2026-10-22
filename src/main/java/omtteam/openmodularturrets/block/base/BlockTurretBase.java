@@ -41,7 +41,6 @@ import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.item.ItemBlockTurretBase;
-import omtteam.openmodularturrets.item.UsableMetaItem;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.registry.ModBlocks;
@@ -184,24 +183,6 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     public boolean onBlockActivated_OM(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote && hand == EnumHand.MAIN_HAND) {
             TurretBase base = (TurretBase) world.getTileEntity(pos);
-            if (OMTConfig.BASES.allowBaseCamo && handleCamoActivation(world, pos, state, player, hand, side, hitX, hitY, hitZ).isSuccess()) {
-                return true;
-            }
-            // Write Memory Card
-            if (player.isSneaking() && base != null && player.getHeldItemMainhand() != ItemStack.EMPTY
-                    && player.getHeldItemMainhand().getItem() instanceof UsableMetaItem && player.getHeldItemMainhand().getItemDamage() == 2) {
-
-                ((UsableMetaItem) player.getHeldItemMainhand().getItem()).setDataStored(player.getHeldItemMainhand(), base.writeMemoryCardNBT());
-                return true;
-            }
-            // Read Memory Card
-            if (!player.isSneaking() && base != null && player.getHeldItemMainhand() != ItemStack.EMPTY
-                    && player.getHeldItemMainhand().getItem() instanceof UsableMetaItem && player.getHeldItemMainhand().getItemDamage() == 2
-                    && ((UsableMetaItem) player.getHeldItemMainhand().getItem()).hasDataStored(player.getHeldItemMainhand())) {
-
-                base.readMemoryCardNBT(((UsableMetaItem) player.getHeldItemMainhand().getItem()).getDataStored(player.getHeldItemMainhand()));
-                return true;
-            }
             // Open GUI
             if (!player.isSneaking() && base != null) {
                 if (PlayerUtil.canPlayerAccessBlock(player, base)) {

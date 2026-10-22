@@ -1,7 +1,9 @@
 package omtteam.openmodularturrets.client.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -12,13 +14,12 @@ import omtteam.omlib.client.gui.GuiParameters;
 import omtteam.omlib.client.gui.IHasTooltips;
 import omtteam.omlib.client.gui.ISupportsBackSystem;
 import omtteam.omlib.network.MessageCloseGUITile;
+import omtteam.omlib.network.MessageOpenCamoMenu;
 import omtteam.omlib.network.MessageOpenGUITile;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.network.MessageAdjustLightOpacity;
-import omtteam.openmodularturrets.network.MessageAdjustLightValue;
 import omtteam.openmodularturrets.network.MessageToggleAttackMobs;
 import omtteam.openmodularturrets.network.MessageToggleAttackNeutralMobs;
 import omtteam.openmodularturrets.network.MessageToggleAttackPlayers;
@@ -27,7 +28,6 @@ import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -37,27 +37,22 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
 import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
 
-public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButtonList.GuiResponder, GuiSlider.FormatHelper, ISupportsBackSystem {
+public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBackSystem {
     protected final int xSize = 176;
-    protected final int ySize = 205;
+    /** Height of the panel in {@code configure.png}. */
+    protected final int ySize = 166;
     private final TurretBase base;
     private final EntityPlayer player;
     protected int guiLeft;
     protected int guiTop;
     private int mouseX;
     private int mouseY;
-    private GuiSlider sliderLightValue;
-    private GuiSlider sliderLightOpacity;
-    private int lightValue;
-    private int lightOpacity;
     private boolean addedToSyncList;
     private int accessLevel = 0;
 
     public ConfigureGui(InventoryPlayer inventoryPlayer, TurretBase tileEntity) {
         super();
         this.base = tileEntity;
-        this.lightValue = this.base.getCamoSettings().getLightValue();
-        this.lightOpacity = this.base.getCamoSettings().getLightOpacity();
         player = inventoryPlayer.player;
     }
 
@@ -79,15 +74,10 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         if (PlayerUtil.isPlayerAdmin(player, base)) {
 
             this.buttonList.add(new GuiButton(3, guiLeft + 10, guiTop + 95, 155, 20, safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS)));
-            this.sliderLightValue = new GuiSlider(this, 4, guiLeft + 10, guiTop + 157,
-                                                  safeLocalize(OMTNames.Localizations.GUI.LIGHT_VALUE), 0, 15, lightValue, this);
-            this.sliderLightOpacity = new GuiSlider(this, 5, guiLeft + 10, guiTop + 179,
-                                                    safeLocalize(OMTNames.Localizations.GUI.LIGHT_OPACITY), 0, 15, lightOpacity, this);
-
-            if (this.base.getTier() > 3) {
-                this.buttonList.add(sliderLightValue);
-                this.buttonList.add(sliderLightOpacity);
-            }
+        }
+        if (base.isCamoEnabled() && (base.canSetCamo(player) || base.canChangeLight(player))) {
+            this.buttonList.add(new GuiButton(4, guiLeft + 10, guiTop + 132, 155, 20,
+                                              safeLocalize(OMTNames.Localizations.GUI.CAMOUFLAGE)));
         }
         this.buttonList.add(new GuiButton(6, guiLeft + 185, guiTop + 20, 80, 20, safeLocalize(OMLibNames.Localizations.GUI.BACK)));
     }
@@ -136,7 +126,9 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         fontRenderer.drawString(safeLocalize(OMLibNames.Localizations.GUI.TARGETING_OPTIONS) + ": ", guiLeft + 10, guiTop + 9, 0);
         if (accessLevel > 2) {
             fontRenderer.drawString(safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS) + ": ", guiLeft + 10, guiTop + 84, 0);
-            fontRenderer.drawString(safeLocalize(OMLibNames.Localizations.GUI.LIGHT_VALUES) + ": ", guiLeft + 10, guiTop + 145, 0);
+        }
+        if (base.isCamoEnabled() && (base.canSetCamo(player) || base.canChangeLight(player))) {
+            fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.CAMOUFLAGE) + ": ", guiLeft + 10, guiTop + 121, 0);
         }
         buttonList.get(0).displayString = safeLocalize(OMLibNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
         buttonList.get(1).displayString = safeLocalize(OMLibNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
@@ -179,40 +171,12 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
                 addChatMessage(player, new TextComponentString(safeLocalize(OMLibNames.Localizations.Text.STATUS_PERMISSION)));
             }
         }
+        if (guibutton.id == 4) { // camouflage menu, opened by the server (it has a container)
+            OMLibNetworkingHandler.INSTANCE.sendToServer(new MessageOpenCamoMenu(base.getPos()));
+        }
         if (guibutton.id == 6) { //back button
             GUIBackSystem.getInstance().openLastGui(player);
         }
-    }
-
-    @Override
-    public void setEntryValue(int id, boolean value) {
-
-    }
-
-    @Override
-    public void setEntryValue(int id, float value) {
-        if (id == 4) {
-            this.lightValue = Math.round(value);
-            this.sliderLightValue.setSliderValue(Math.round(value), false);
-            sendChangeToServerLightValue(lightValue);
-        } else if (id == 5) {
-            this.lightOpacity = Math.round(value);
-            this.sliderLightOpacity.setSliderValue(Math.round(value), false);
-            sendChangeToServerLightOpacity(lightOpacity);
-        }
-    }
-
-    @Override
-    @ParametersAreNonnullByDefault
-    public void setEntryValue(int id, String value) {
-
-    }
-
-    @Override
-    @Nonnull
-    @ParametersAreNonnullByDefault
-    public String getText(int id, String name, float value) {
-        return name + ": " + Math.round(value);
     }
 
     @Override
@@ -236,6 +200,9 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
             case 3:
                 tooltip.add(safeLocalize(OMLibNames.Localizations.Tooltip.TRUSTED_PLAYER_GUI));
                 break;
+            case 4:
+                tooltip.add(safeLocalize(OMTNames.Localizations.GUI.CAMOUFLAGE_TOOLTIP));
+                break;
             default:
         }
         if (!tooltip.isEmpty())
@@ -257,16 +224,6 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, GuiPageButt
         MessageToggleAttackPlayers message = new MessageToggleAttackPlayers(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
                                                                             setTo);
 
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
-    }
-
-    private void sendChangeToServerLightValue(int value) {
-        MessageAdjustLightValue message = new MessageAdjustLightValue(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(), value);
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
-    }
-
-    private void sendChangeToServerLightOpacity(int value) {
-        MessageAdjustLightOpacity message = new MessageAdjustLightOpacity(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(), value);
         OMTNetworkingHandler.INSTANCE.sendToServer(message);
     }
 

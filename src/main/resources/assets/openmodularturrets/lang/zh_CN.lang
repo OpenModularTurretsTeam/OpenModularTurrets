@@ -34,7 +34,7 @@ item.barrel_tier_three.name=炮管(三级)
 item.barrel_tier_four.name=炮管(四级)
 item.barrel_tier_five.name=炮管(五级)
 item.io_bus.name=IO总线
-item.memory_card.name=炮塔记忆卡
+item.memory_card.name=OM记忆卡
 
 tile.turret_base_tier_one.name=炮塔基座(一级)
 tile.turret_base_tier_two.name=炮塔基座(二级)
@@ -53,7 +53,6 @@ tile.slowing_turret.name=相位力场炮塔
 tile.laser_turret.name=激光炮塔
 tile.rail_gun_turret.name=磁轨炮炮塔
 tile.lever_block.name=炮塔基座曲柄
-tile.base_addon_loot_deleter.name=Base Addon - Loot Deleter
 
 # for IGWMod
 tile.turret_base.name=炮塔基座
@@ -115,9 +114,6 @@ text.openmodularturrets.extras.upgrade.2=2x升级组件插槽
 
 
 
-text.openmodularturrets.base_addon_loot_deleter.inv1=Turret Base Addon - Loot Deleter
-text.openmodularturrets.base_addon_loot_deleter.inv2=Removes all dropped loot from
-text.openmodularturrets.base_addon_loot_deleter.inv3=enemies killed by attached base.
 
 text.openmodularturrets.memory_card.desc1=Shift右击炮塔基座储存配置
 text.openmodularturrets.memory_card.desc2=SShift右击其他地方清空
@@ -135,7 +131,6 @@ text.openmodularturrets.toggle_mode=Toggle on/off modes
 
 
 
-text.openmodularturrets.flavour.base_addon_loot_deleter.inv.1=Just a bit of smoke.
 
 text.openmodularturrets.flavour.base.1=There are trees, everywhere...
 text.openmodularturrets.flavour.base.2=I'll draw your blood.

@@ -37,11 +37,7 @@ public class OMTNetworkingHandler {
         INSTANCE.registerMessage(MessageToggleMode.MessageHandlerToggleMode.class, MessageToggleMode.class,
                                  8, Side.SERVER);
 
-        INSTANCE.registerMessage(MessageAdjustLightValue.MessageHandlerAdjustLightValue.class,
-                                 MessageAdjustLightValue.class, 9, Side.SERVER);
-
-        INSTANCE.registerMessage(MessageAdjustLightOpacity.MessageHandlerAdjustLightOpacity.class,
-                                 MessageAdjustLightOpacity.class, 10, Side.SERVER);
+        // 9 and 10 were MessageAdjustLightValue / MessageAdjustLightOpacity (the camouflage menu of OMLib replaced them)
 
         INSTANCE.registerMessage(OpenModularTurrets.proxy.clientMessageHandler(MessageUpdateTurret.class), MessageUpdateTurret.class,
                                  11, Side.CLIENT);

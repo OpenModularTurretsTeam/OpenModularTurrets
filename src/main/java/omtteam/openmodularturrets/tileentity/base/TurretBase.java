@@ -6,6 +6,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,6 +35,8 @@ import omtteam.omlib.api.permission.TrustedPlayersManager;
 import omtteam.omlib.api.render.camo.ICamoSupport;
 import omtteam.omlib.api.tile.IDebugTile;
 import omtteam.omlib.api.tile.IHasTargetingSettings;
+import omtteam.omlib.core.camo.CamoLight;
+import omtteam.omlib.core.camo.CamoPermissions;
 import omtteam.omlib.core.machine.MachineMode;
 import omtteam.omlib.network.MessageCamoSettings;
 import omtteam.omlib.network.OMLibNetworkingHandler;
@@ -45,9 +48,11 @@ import omtteam.omlib.util.NetworkUtil;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.omlib.util.TargetingSettings;
 import omtteam.omlib.util.camo.CamoSettings;
+import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.api.tileentity.ITurretBase;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
+import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.BaseTier;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.item.AddonType;
@@ -461,27 +466,6 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
             ticks = 0;
             this.scrubSyncPlayerList();
         }
-    }
-
-    public NBTTagCompound writeMemoryCardNBT() {
-        NBTTagCompound nbtTagCompound = new NBTTagCompound();
-        this.getTargetingSettings().writeToNBT(nbtTagCompound);
-        nbtTagCompound.setBoolean("multiTargeting", isMultiTargeting());
-        nbtTagCompound.setInteger("mode", logic.getMode().ordinal());
-        NBTTagCompound trustedPlayers = new NBTTagCompound();
-        nbtTagCompound.setTag("trustedPlayers", this.getTrustManager().writeToNBT(trustedPlayers));
-        return nbtTagCompound;
-    }
-
-    public void readMemoryCardNBT(NBTTagCompound nbtTagCompound) {
-        logic.setMultiTargeting(nbtTagCompound.getBoolean("multiTargeting"));
-        logic.setMode(nbtTagCompound.hasKey("mode")
-                ? MachineMode.byOrdinal(nbtTagCompound.getInteger("mode"), MachineMode.INVERTED) : MachineMode.INVERTED);
-        setTargetingSettings(TargetingSettings.readFromNBT(nbtTagCompound));
-        if (nbtTagCompound.hasKey("trustedPlayers")) {
-            this.getTrustManager().readFromNBT((NBTTagCompound) nbtTagCompound.getTag("trustedPlayers"));
-        }
-        this.markDirty();
     }
 
     @Override
@@ -995,5 +979,26 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
         getTrustedPlayers, getTrustedPlayer, addTrustedPlayer, removeTrustedPlayer, changeAccessLevel, getActive,
         getMode, getRedstone, setMode, getType, setAllAutoForceFire, setTurretAutoForceFire, forceShootAllTurrets,
         forceShootTurret, setAllYawPitch, setTurretYawPitch, getMaxEnergyStorage, getCurrentEnergyStorage
+    }
+
+    @Override
+    public boolean isCamoEnabled() {
+        return OMTConfig.BASES.allowBaseCamo;
+    }
+
+    /** Only the tier 4 and 5 bases have adjustable light. */
+    @Override
+    public boolean supportsLight() {
+        return CamoLight.supportedByBaseTier(getTier());
+    }
+
+    @Override
+    public boolean canSetCamo(EntityPlayer player) {
+        return CamoPermissions.canSetDisguise(getTrustManager().core(), PlayerUtil.getPlayerInfo(player));
+    }
+
+    @Override
+    public boolean canChangeLight(EntityPlayer player) {
+        return CamoPermissions.canChangeLight(getTrustManager().core(), PlayerUtil.getPlayerInfo(player));
     }
 }

@@ -19,6 +19,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -31,15 +32,15 @@ import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.MathUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
-import omtteam.openmodularturrets.api.lists.TurretList;
+import omtteam.openmodularturrets.api.TurretDefinition;
 import omtteam.openmodularturrets.item.ItemBlockTurret;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.registry.TurretRegistry;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
-import omtteam.openmodularturrets.turret.TurretDefinition;
-import omtteam.openmodularturrets.turret.TurretType;
+import omtteam.openmodularturrets.config.ConfigLogicSettings;
+import omtteam.openmodularturrets.core.turret.TurretType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -58,30 +59,31 @@ import static omtteam.openmodularturrets.turret.TurretHeadUtil.getTurretBaseFaci
 public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock, TOPInfoProvider {
     public static final PropertyBool CONCEALED = PropertyBool.create("concealed");
 
-    private final String name;
-    private final omtteam.openmodularturrets.core.turret.TurretType coreType;
+    private final TurretType coreType;
 
     /**
-     * @param name     registry name (the 3.x id) and key of the 3.x turret type in {@link TurretList}
+     * @param id       registry name: the 3.x id for built-in turrets, the type's id for turrets of other mods
      * @param coreType the turret's rules
      */
-    public BlockTurret(String name, omtteam.openmodularturrets.core.turret.TurretType coreType) {
+    public BlockTurret(ResourceLocation id, TurretType coreType) {
         super(Material.GLASS);
-        this.name = name;
         this.coreType = coreType;
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setBlockUnbreakable();
         this.setResistance(6000000.0F);
         this.setSoundType(SoundType.STONE);
         this.setDefaultState(this.blockState.getBaseState().withProperty(CONCEALED, false));
-        this.setUnlocalizedName(name);
-        this.setRegistryName(Reference.MOD_ID, name);
+        // built-in turrets keep their 3.x key (tile.<id>.name), other mods' turrets use tile.<namespace>.<path>.name
+        this.setUnlocalizedName(id.getResourceDomain().equals(Reference.MOD_ID) ? id.getResourcePath()
+                : id.getResourceDomain() + "." + id.getResourcePath());
+        this.setRegistryName(id);
     }
 
     /** Ambient particles of the 1.12.2 melee, relativistic and railgun turrets: coloured redstone dust. */
     public static TurretDefinition.AmbientEffect dust(int red, int green, int blue, boolean onlyDeployed) {
-        return (state, world, pos, random) -> {
-            if (onlyDeployed && state.getValue(CONCEALED)) return;
+        return (world, pos, random) -> {
+            IBlockState state = world.getBlockState(pos);
+            if (onlyDeployed && state.getBlock() instanceof BlockTurret && state.getValue(CONCEALED)) return;
             for (int i = 0; i <= 5; i++) {
                 world.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX() + random.nextGaussian() / 10 + 0.5F,
                         pos.getY() + 0.5F, pos.getZ() + random.nextGaussian() / 10 + 0.5F, red, green, blue);
@@ -89,13 +91,8 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         };
     }
 
-    /** The 3.x turret type (block id and config section). */
-    public TurretType getTurretType() {
-        return TurretList.getTurretType(name);
-    }
-
     /** The rules of this turret. */
-    public omtteam.openmodularturrets.core.turret.TurretType getCoreType() {
+    public TurretType getCoreType() {
         return coreType;
     }
 
@@ -219,7 +216,7 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
     public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random random) {
         TurretDefinition.AmbientEffect effect = TurretRegistry.get(coreType).ambientEffect();
         if (effect != null) {
-            effect.display(state, world, pos, random);
+            effect.spawn(world, pos, random);
         }
     }
 
@@ -240,7 +237,7 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.AMMO) + ": §F"
                 + turret.getAmmoLevel(), probeInfo.defaultTextStyle());
         probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE) + ": §F"
-                + getTurretType().getSettings().baseDamage, probeInfo.defaultTextStyle());
+                + ConfigLogicSettings.INSTANCE.turret(coreType).baseDamage(), probeInfo.defaultTextStyle());
         probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": §F"
                 + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * turret.getDamageAmpLevel()) + "%",
                 probeInfo.defaultTextStyle());
