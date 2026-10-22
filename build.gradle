@@ -152,6 +152,9 @@ curseforge {
         id = curse_project_id
         addGameVersion "1.12.2"
         addGameVersion "Forge"
+        // CurseForge requires an environment
+        addGameVersion "Client"
+        addGameVersion "Server"
 
         relations {
             requiredDependency "omlib"
