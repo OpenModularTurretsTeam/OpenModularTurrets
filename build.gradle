@@ -9,17 +9,13 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
-plugins {
-    id "com.matthewprenger.cursegradle" version "1.4.0"
-}
-
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven-publish'
 apply plugin: 'idea'
 apply plugin: 'java'
 // tests, core isolation and changelog tasks, shared with the workspace build
 apply from: "gradle/mod-common.gradle"
-// local releases to CurseForge and Modrinth (./gradlew -b build.gradle release)
+// local releases to CurseForge and Modrinth (./gradlew -b build.gradle release), see gradle/release.gradle
 apply from: "gradle/release.gradle"
 
 repositories {
@@ -113,7 +109,6 @@ dependencies {
     }
 }
 
-
 task deobfJar(type: Jar) {
     from sourceSets.main.output
     classifier = "dev"
@@ -138,51 +133,3 @@ publishing {
     }
 }
 
-//// CURSEFORGE RELEASE \\\\
-// uploaded by `./gradlew -b build.gradle release` (gradle/release.gradle) with curseforge_token from ~/.gradle/gradle.properties
-
-def curseforgeEnabled = releasing && project.hasProperty("curseforge_token")
-tasks.curseforge.enabled = curseforgeEnabled
-curseforge {
-    if (!curseforgeEnabled) {
-        return
-    }
-    apiKey = findProperty("curseforge_token")
-    project {
-        id = curse_project_id
-        addGameVersion "1.12.2"
-        addGameVersion "Forge"
-        // CurseForge requires an environment
-        addGameVersion "Client"
-        addGameVersion "Server"
-
-        relations {
-            requiredDependency "omlib"
-            optionalDependency "ompd"
-            optionalDependency "ender-io"
-            optionalDependency "redstone-flux"
-            optionalDependency "thermal-expansion"
-            optionalDependency "mekanism"
-            optionalDependency "opencomputers"
-            optionalDependency "computercraft"
-        }
-
-        mainArtifact(jar) {
-            releaseType = releaseChannel
-            changelog = releaseNotes
-            changelogType = "markdown"
-        }
-
-        addArtifact(sourceJar) {
-            releaseType = "alpha"
-            changelog = releaseNotes
-            changelogType = "markdown"
-        }
-
-        addArtifact(deobfJar) {
-            releaseType = "alpha"
-            changelog = releaseNotes
-            changelogType = "markdown"
-        }
-    }
-}

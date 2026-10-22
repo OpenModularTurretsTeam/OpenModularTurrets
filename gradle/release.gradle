@@ -7,12 +7,17 @@
 //   ./gradlew -b build.gradle release
 //
 // (`-b build.gradle` keeps Gradle from picking up the settings.gradle of the workspace above the mod.)
-// `release` checks the release commit, builds, uploads to CurseForge (`curseforge`, configured in build.gradle) and
-// Modrinth (`modrinth`) with the version's CHANGELOG.md section and tags the commit as v<version> (push it yourself).
+// `release` checks the release commit, builds, uploads to CurseForge (`curseforge`) and Modrinth (`modrinth`) with
+// the version's CHANGELOG.md section and tags the commit as v<version>.
 //
 // Tokens come from ~/.gradle/gradle.properties: curseforge_token, modrinth_token.
-// Per mod (gradle.properties): curse_project_id, modrinth_project_id (empty or TODO…: no Modrinth upload) and
-// modrinth_dependencies (comma-separated <project id>:<required|optional|incompatible|embedded>).
+// Per mod (gradle.properties):
+//   curse_project_id, curse_relations (comma-separated <project slug>:<requiredDependency|optionalDependency|
+//   embeddedLibrary|incompatible|tool>),
+//   modrinth_project_id (empty or TODO…: no Modrinth upload), modrinth_dependencies (comma-separated
+//   <project id>:<required|optional|incompatible|embedded>).
+// The uploads talk to the APIs directly: CurseGradle 1.4 (the last one for Gradle 4) rejects the Client / Server
+// environments CurseForge requires.
 
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
@@ -20,7 +25,6 @@ import groovy.json.JsonSlurper
 // A build that uploads; only then do OMT and OMPD build against the OMLib release in mavenLocal
 def releaseTasks = ["release", "checkRelease", "curseforge", "modrinth"]
 ext.releasing = gradle.startParameter.taskNames.any { it.tokenize(":").last() in releaseTasks }
-// checkRelease fails if the section is missing; looked up here because CurseGradle wants it at configuration time
 ext.releaseNotes = changelogSection(version.toString())
 
 /** A gradle.properties value, null if it is empty or still a TODO placeholder. */
@@ -30,16 +34,66 @@ def configured = { String name ->
 }
 String modrinthProjectId = configured("modrinth_project_id")
 String modrinthApi = findProperty("modrinth_api_url") ?: "https://api.modrinth.com/v2"
+String curseforgeApi = findProperty("curseforge_api_url") ?: "https://minecraft.curseforge.com/api"
+// CurseForge game versions of every file: Minecraft version, loader and environments
+List<String> curseGameVersions = [minecraft_version.toString(), "Forge", "Client", "Server"]
+String userAgent = "OpenModularTurretsTeam/${mod_id} (https://github.com/OpenModularTurretsTeam)"
 
-def modrinthDependencies = {
-    String list = findProperty("modrinth_dependencies")?.toString()?.trim()
+/** Parses a comma-separated list of <name>:<type> entries from gradle.properties. */
+def typedList = { String property, List<String> types ->
+    String list = findProperty(property)?.toString()?.trim()
     return list ? list.split(",")*.trim().collect { entry ->
-        String[] dependency = entry.split(":")
-        if (dependency.length != 2 || !(dependency[1] in ["required", "optional", "incompatible", "embedded"])) {
-            throw new GradleException("modrinth_dependencies entry '${entry}' is not <project id>:<required|optional|incompatible|embedded>")
+        String[] parts = entry.split(":")
+        if (parts.length != 2 || !(parts[1] in types)) {
+            throw new GradleException("${property} entry '${entry}' is not <name>:<${types.join('|')}>")
         }
-        return [project_id: dependency[0], dependency_type: dependency[1]]
+        return parts
     } : []
+}
+def modrinthDependencies = {
+    typedList("modrinth_dependencies", ["required", "optional", "incompatible", "embedded"]).collect {
+        [project_id: it[0], dependency_type: it[1]]
+    }
+}
+def curseRelations = {
+    typedList("curse_relations", ["requiredDependency", "optionalDependency", "embeddedLibrary", "incompatible", "tool"]).collect {
+        [slug: it[0], type: it[1]]
+    }
+}
+
+/** The JSON answer of an HTTP request; fails with the server's message on an error status. */
+def readResponse = { HttpURLConnection connection, String what ->
+    int status = connection.responseCode
+    String response = (status < 400 ? connection.inputStream : connection.errorStream)?.getText("UTF-8")
+    if (status >= 400) {
+        throw new GradleException("${what} failed (HTTP ${status}): ${response}")
+    }
+    return new JsonSlurper().parseText(response)
+}
+
+def getJson = { String url, Map<String, String> headers, String what ->
+    HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection()
+    headers.each { key, value -> connection.setRequestProperty(key, value) }
+    return readResponse(connection, what)
+}
+
+/** POSTs a JSON part (dataName) and a jar (fileName) as multipart/form-data; returns the JSON answer. */
+def postJar = { String url, Map<String, String> headers, String dataName, Map data, String fileName, File file, String what ->
+    String boundary = "----omtteam" + UUID.randomUUID().toString().replace("-", "")
+    HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection()
+    connection.requestMethod = "POST"
+    connection.doOutput = true
+    headers.each { key, value -> connection.setRequestProperty(key, value) }
+    connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=${boundary}")
+    connection.outputStream.withStream { out ->
+        def write = { String text -> out.write(text.getBytes("UTF-8")) }
+        write("--${boundary}\r\nContent-Disposition: form-data; name=\"${dataName}\"\r\nContent-Type: application/json\r\n\r\n")
+        write(JsonOutput.toJson(data))
+        write("\r\n--${boundary}\r\nContent-Disposition: form-data; name=\"${fileName}\"; filename=\"${file.name}\"\r\nContent-Type: application/java-archive\r\n\r\n")
+        file.withInputStream { out << it }
+        write("\r\n--${boundary}--\r\n")
+    }
+    return readResponse(connection, what)
 }
 
 def git = { String... args ->
@@ -73,6 +127,7 @@ task checkRelease {
         if (!findProperty("curseforge_token")) {
             throw new GradleException("curseforge_token is not set (~/.gradle/gradle.properties)")
         }
+        curseRelations()
         if (modrinthProjectId) {
             if (!findProperty("modrinth_token")) {
                 throw new GradleException("modrinth_token is not set (~/.gradle/gradle.properties)")
@@ -98,16 +153,53 @@ task checkRelease {
     }
 }
 
-// CurseGradle's tasks (the `curseforge` umbrella and one per project) upload the reobfuscated jars
-tasks.matching { it.name.startsWith("curseforge") }.all {
-    it.dependsOn checkRelease, "build"
+task curseforge {
+    group = "release"
+    description = "Uploads the jar (with the sources and dev jars as additional files) to CurseForge"
+    dependsOn checkRelease, "build"
+    doLast {
+        Map<String, String> headers = ["X-Api-Token": findProperty("curseforge_token").toString(), "User-Agent": userAgent]
+        // game version names -> ids, among the types the Minecraft upload API accepts
+        def types = getJson("${curseforgeApi}/game/version-types", headers, "CurseForge version types").findAll {
+            it.slug.startsWith("minecraft") || it.slug in ["modloader", "environment", "java"]
+        }*.id as Set
+        def known = getJson("${curseforgeApi}/game/versions", headers, "CurseForge game versions").findAll {
+            it.gameVersionTypeID in types
+        }
+        List<Integer> gameVersions = curseGameVersions.collect { name ->
+            def matches = known.findAll { it.name == name }
+            if (matches.size() != 1) {
+                throw new GradleException("CurseForge game version '${name}': ${matches.size()} matches (${matches*.id})")
+            }
+            return matches[0].id as Integer
+        }
+        String url = "${curseforgeApi}/projects/${curse_project_id}/upload-file"
+        File main = tasks.jar.archivePath
+        Map metadata = [changelog: releaseNotes, changelogType: "markdown", releaseType: releaseChannel, gameVersions: gameVersions]
+        def relations = curseRelations()
+        if (!relations.isEmpty()) {
+            metadata.relations = [projects: relations]
+        }
+        def fileId = postJar(url, headers, "metadata", metadata, "file", main, "CurseForge upload of ${main.name}").id
+        logger.lifecycle("CurseForge: uploaded ${main.name} as file ${fileId} of project ${curse_project_id}")
+        ["sourceJar", "deobfJar"].collect { tasks.findByName(it) }.findAll { it != null }.each { jarTask ->
+            File extra = jarTask.archivePath
+            Map extraMetadata = [changelog: releaseNotes, changelogType: "markdown", releaseType: "alpha", parentFileID: fileId]
+            try {
+                postJar(url, headers, "metadata", extraMetadata, "file", extra, "CurseForge upload of ${extra.name}")
+            } catch (GradleException e) {
+                throw new GradleException("${e.message}\nThe main file ${fileId} is uploaded already; add ${extra.name} to it by hand or delete it before releasing again")
+            }
+            logger.lifecycle("CurseForge: uploaded ${extra.name} as additional file of ${fileId}")
+        }
+    }
 }
 
 task modrinth {
     group = "release"
     description = "Uploads the jar to Modrinth (skipped while modrinth_project_id is not set)"
     dependsOn checkRelease, "build"
-    mustRunAfter "curseforge"
+    mustRunAfter curseforge
     doLast {
         if (!modrinthProjectId) {
             logger.lifecycle("Modrinth: modrinth_project_id is not set, upload skipped")
@@ -127,27 +219,8 @@ task modrinth {
                 file_parts    : ["file0"],
                 primary_file  : "file0"
         ]
-        String boundary = "----omtteam" + UUID.randomUUID().toString().replace("-", "")
-        HttpURLConnection connection = (HttpURLConnection) new URL("${modrinthApi}/version").openConnection()
-        connection.requestMethod = "POST"
-        connection.doOutput = true
-        connection.setRequestProperty("Authorization", findProperty("modrinth_token").toString())
-        connection.setRequestProperty("User-Agent", "OpenModularTurretsTeam/${mod_id} (https://github.com/OpenModularTurretsTeam)")
-        connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=${boundary}")
-        connection.outputStream.withStream { out ->
-            def write = { String text -> out.write(text.getBytes("UTF-8")) }
-            write("--${boundary}\r\nContent-Disposition: form-data; name=\"data\"\r\nContent-Type: application/json\r\n\r\n")
-            write(JsonOutput.toJson(data))
-            write("\r\n--${boundary}\r\nContent-Disposition: form-data; name=\"file0\"; filename=\"${file.name}\"\r\nContent-Type: application/java-archive\r\n\r\n")
-            file.withInputStream { out << it }
-            write("\r\n--${boundary}--\r\n")
-        }
-        int status = connection.responseCode
-        String response = (status < 400 ? connection.inputStream : connection.errorStream)?.getText("UTF-8")
-        if (status >= 400) {
-            throw new GradleException("Modrinth upload failed (HTTP ${status}): ${response}")
-        }
-        def uploaded = new JsonSlurper().parseText(response)
+        Map<String, String> headers = ["Authorization": findProperty("modrinth_token").toString(), "User-Agent": userAgent]
+        def uploaded = postJar("${modrinthApi}/version", headers, "data", data, "file0", file, "Modrinth upload")
         logger.lifecycle("Modrinth: uploaded ${file.name} as version ${uploaded.version_number} (https://modrinth.com/mod/${modrinthProjectId}/version/${uploaded.id})")
     }
 }
@@ -155,9 +228,9 @@ task modrinth {
 task release {
     group = "release"
     description = "Builds the version in gradle.properties, uploads it to CurseForge and Modrinth and tags it as v<version>"
-    dependsOn checkRelease, "build", "curseforge", modrinth
+    dependsOn checkRelease, "build", curseforge, modrinth
     doLast {
         git("tag", "-a", "v${version}", "-m", "${mod_id_cap} ${version}")
-        logger.lifecycle("Tagged v${version}; push it with: git push origin v${version}")
+        logger.lifecycle("Tagged v${version}")
     }
 }
