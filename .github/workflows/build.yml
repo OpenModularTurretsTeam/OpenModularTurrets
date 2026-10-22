@@ -1,17 +1,11 @@
 name: Build
 
+# Build only; releases are built and uploaded locally (./gradlew release -Prelease_version=…, gradle/release.gradle)
 on:
   push:
     branches: ["1.12", "1.12-dev"]
-    # Release tags: v3.2.1-alpha, v3.2.1-alpha.2, v3.2.1-beta, v3.2.1 (= release)
-    tags: ["v*"]
   pull_request:
   workflow_dispatch:
-
-env:
-  # Offset keeps build numbers above the ones from the old Jenkins builds
-  BUILD_NUMBER: ${{ github.run_number }}
-  BUILD_NUMBER_OFFSET: 1000
 
 jobs:
   build:
@@ -25,35 +19,12 @@ jobs:
           java-version: 8
           cache: gradle
 
-      - name: Read version and release type from tag
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: |
-          tag="${GITHUB_REF_NAME#v}"
-          case "$tag" in
-            *-alpha*) type=alpha;   version="${tag%%-alpha*}" ;;
-            *-beta*)  type=beta;    version="${tag%%-beta*}" ;;
-            *)        type=release; version="$tag" ;;
-          esac
-          if ! [[ "$version" =~ ^[0-9]+(\.[0-9]+)*$ ]]; then
-            echo "::error::Tag $GITHUB_REF_NAME is not v<version>[-alpha|-beta]"; exit 1
-          fi
-          echo "Releasing $version as $type"
-          echo "RELEASE_ARGS=-Pmod_version=$version -Prelease_type=$type -Pchangelog_version=$tag" >> "$GITHUB_ENV"
-
       - name: Build
         run: |
           chmod +x gradlew
-          ./gradlew build -PappendBuildNumber=$((BUILD_NUMBER + BUILD_NUMBER_OFFSET)) $RELEASE_ARGS
+          ./gradlew build
 
       - uses: actions/upload-artifact@v4
         with:
           name: jars
           path: build/libs/*.jar
-
-      - name: Upload to CurseForge
-        if: startsWith(github.ref, 'refs/tags/v')
-        env:
-          CURSEFORGE_KEY: ${{ secrets.CURSEFORGE_KEY }}
-        run: |
-          if [ -z "$CURSEFORGE_KEY" ]; then echo "::error::CURSEFORGE_KEY secret is not set"; exit 1; fi
-          ./gradlew curseforge -PappendBuildNumber=$((BUILD_NUMBER + BUILD_NUMBER_OFFSET)) $RELEASE_ARGS -Pcurseforge_key="$CURSEFORGE_KEY"

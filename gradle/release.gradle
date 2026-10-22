@@ -1,0 +1,163 @@
+// Local releases to CurseForge and Modrinth, used by the standalone build (build.gradle) only.
+// Keep this file identical in OMLib, OMT and OMPD. Apply it after gradle/mod-common.gradle, which sets the version.
+//
+// The version comes from gradle.properties (mod_version, release_type, release_number; see mod-common.gradle).
+// In a release commit, set it there (OMT and OMPD also omlib_version) and run ./gradlew releaseChangelog, then:
+//
+//   ./gradlew -b build.gradle release
+//
+// (`-b build.gradle` keeps Gradle from picking up the settings.gradle of the workspace above the mod.)
+// `release` checks the release commit, builds, uploads to CurseForge (`curseforge`, configured in build.gradle) and
+// Modrinth (`modrinth`) with the version's CHANGELOG.md section and tags the commit as v<version> (push it yourself).
+//
+// Tokens come from ~/.gradle/gradle.properties: curseforge_token, modrinth_token.
+// Per mod (gradle.properties): curse_project_id, modrinth_project_id (empty or TODO…: no Modrinth upload) and
+// modrinth_dependencies (comma-separated <project id>:<required|optional|incompatible|embedded>).
+
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+// A build that uploads; only then do OMT and OMPD build against the OMLib release in mavenLocal
+def releaseTasks = ["release", "checkRelease", "curseforge", "modrinth"]
+ext.releasing = gradle.startParameter.taskNames.any { it.tokenize(":").last() in releaseTasks }
+// checkRelease fails if the section is missing; looked up here because CurseGradle wants it at configuration time
+ext.releaseNotes = changelogSection(version.toString())
+
+/** A gradle.properties value, null if it is empty or still a TODO placeholder. */
+def configured = { String name ->
+    String value = findProperty(name)?.toString()?.trim()
+    return value && !value.startsWith("TODO") ? value : null
+}
+String modrinthProjectId = configured("modrinth_project_id")
+String modrinthApi = findProperty("modrinth_api_url") ?: "https://api.modrinth.com/v2"
+
+def modrinthDependencies = {
+    String list = findProperty("modrinth_dependencies")?.toString()?.trim()
+    return list ? list.split(",")*.trim().collect { entry ->
+        String[] dependency = entry.split(":")
+        if (dependency.length != 2 || !(dependency[1] in ["required", "optional", "incompatible", "embedded"])) {
+            throw new GradleException("modrinth_dependencies entry '${entry}' is not <project id>:<required|optional|incompatible|embedded>")
+        }
+        return [project_id: dependency[0], dependency_type: dependency[1]]
+    } : []
+}
+
+def git = { String... args ->
+    def process = (["git"] + args.toList()).execute(null, projectDir)
+    String out = process.text
+    if (process.waitFor() != 0) {
+        throw new GradleException("git ${args.join(' ')} failed: ${process.err.text}")
+    }
+    return out.trim()
+}
+
+/** The version set in the gradle.properties of the OMLib checkout next to this mod (the workspace), null if there is none. */
+def siblingOmlibVersion = {
+    File file = new File(projectDir.parentFile, "OMLib/gradle.properties")
+    if (!file.isFile() || file.canonicalFile == project.file("gradle.properties").canonicalFile) {
+        return null
+    }
+    Properties properties = new Properties()
+    file.withInputStream { properties.load(it) }
+    return composeVersion(properties.getProperty("mod_version"), properties.getProperty("release_type") ?: "release",
+            properties.getProperty("release_number"))
+}
+
+task checkRelease {
+    group = "release"
+    description = "Checks that the version, its CHANGELOG.md section, the tokens and the git tree are ready for a release"
+    doLast {
+        if (!releaseNotes) {
+            throw new GradleException("CHANGELOG.md has no section for ${version}; run ./gradlew releaseChangelog and commit it first")
+        }
+        if (!findProperty("curseforge_token")) {
+            throw new GradleException("curseforge_token is not set (~/.gradle/gradle.properties)")
+        }
+        if (modrinthProjectId) {
+            if (!findProperty("modrinth_token")) {
+                throw new GradleException("modrinth_token is not set (~/.gradle/gradle.properties)")
+            }
+            def placeholders = modrinthDependencies().findAll { it.project_id.startsWith("TODO") }
+            if (!placeholders.isEmpty()) {
+                throw new GradleException("modrinth_dependencies still has placeholders: ${placeholders*.project_id.join(', ')}")
+            }
+        }
+        if (project.hasProperty("omlib_version")) {
+            String omlib = siblingOmlibVersion()
+            if (omlib != null && omlib != omlib_version) {
+                throw new GradleException("omlib_version is ${omlib_version}, but ../OMLib is set to ${omlib}")
+            }
+        }
+        if (!git("status", "--porcelain").isEmpty()) {
+            throw new GradleException("The git working tree has uncommitted changes; commit them before releasing")
+        }
+        if (!git("tag", "--list", "v${version}").isEmpty()) {
+            throw new GradleException("Tag v${version} already exists")
+        }
+        logger.lifecycle("Releasing ${mod_id} ${version} (${releaseChannel}) to CurseForge" + (modrinthProjectId ? " and Modrinth" : ""))
+    }
+}
+
+// CurseGradle's tasks (the `curseforge` umbrella and one per project) upload the reobfuscated jars
+tasks.matching { it.name.startsWith("curseforge") }.all {
+    it.dependsOn checkRelease, "build"
+}
+
+task modrinth {
+    group = "release"
+    description = "Uploads the jar to Modrinth (skipped while modrinth_project_id is not set)"
+    dependsOn checkRelease, "build"
+    mustRunAfter "curseforge"
+    doLast {
+        if (!modrinthProjectId) {
+            logger.lifecycle("Modrinth: modrinth_project_id is not set, upload skipped")
+            return
+        }
+        File file = tasks.jar.archivePath
+        Map data = [
+                project_id    : modrinthProjectId,
+                name          : "${mod_id_cap} ${version}".toString(),
+                version_number: "${minecraft_version}-${version}".toString(),
+                changelog     : releaseNotes,
+                dependencies  : modrinthDependencies(),
+                game_versions : [minecraft_version],
+                loaders       : ["forge"],
+                version_type  : releaseChannel,
+                featured      : false,
+                file_parts    : ["file0"],
+                primary_file  : "file0"
+        ]
+        String boundary = "----omtteam" + UUID.randomUUID().toString().replace("-", "")
+        HttpURLConnection connection = (HttpURLConnection) new URL("${modrinthApi}/version").openConnection()
+        connection.requestMethod = "POST"
+        connection.doOutput = true
+        connection.setRequestProperty("Authorization", findProperty("modrinth_token").toString())
+        connection.setRequestProperty("User-Agent", "OpenModularTurretsTeam/${mod_id} (https://github.com/OpenModularTurretsTeam)")
+        connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=${boundary}")
+        connection.outputStream.withStream { out ->
+            def write = { String text -> out.write(text.getBytes("UTF-8")) }
+            write("--${boundary}\r\nContent-Disposition: form-data; name=\"data\"\r\nContent-Type: application/json\r\n\r\n")
+            write(JsonOutput.toJson(data))
+            write("\r\n--${boundary}\r\nContent-Disposition: form-data; name=\"file0\"; filename=\"${file.name}\"\r\nContent-Type: application/java-archive\r\n\r\n")
+            file.withInputStream { out << it }
+            write("\r\n--${boundary}--\r\n")
+        }
+        int status = connection.responseCode
+        String response = (status < 400 ? connection.inputStream : connection.errorStream)?.getText("UTF-8")
+        if (status >= 400) {
+            throw new GradleException("Modrinth upload failed (HTTP ${status}): ${response}")
+        }
+        def uploaded = new JsonSlurper().parseText(response)
+        logger.lifecycle("Modrinth: uploaded ${file.name} as version ${uploaded.version_number} (https://modrinth.com/mod/${modrinthProjectId}/version/${uploaded.id})")
+    }
+}
+
+task release {
+    group = "release"
+    description = "Builds the version in gradle.properties, uploads it to CurseForge and Modrinth and tags it as v<version>"
+    dependsOn checkRelease, "build", "curseforge", modrinth
+    doLast {
+        git("tag", "-a", "v${version}", "-m", "${mod_id_cap} ${version}")
+        logger.lifecycle("Tagged v${version}; push it with: git push origin v${version}")
+    }
+}

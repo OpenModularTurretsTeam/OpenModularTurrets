@@ -6,6 +6,29 @@ import java.time.LocalDate
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
+// --- Version -----------------------------------------------------------------------------------
+
+// gradle.properties: mod_version (4.0.0), release_type (alpha, beta or release) and, for alpha and beta,
+// release_number (1, 2, …): 4.0.0-alpha.1, 4.0.0-beta.2; a release is the plain 4.0.0.
+// FML compares these with Maven's ordering (4.0.0-alpha.1 < 4.0.0-alpha.2 < 4.0.0-beta.1 < 4.0.0).
+ext.releaseChannel = (findProperty("release_type") ?: "release").toString()
+ext.composeVersion = { String base, String type, number ->
+    if (!(base ==~ /\d+(\.\d+)*/)) {
+        throw new GradleException("mod_version '${base}' must be plain numbers like 4.0.0; set alpha/beta with release_type")
+    }
+    if (type == "release") {
+        return base
+    }
+    if (!(type in ["alpha", "beta"])) {
+        throw new GradleException("release_type '${type}' must be alpha, beta or release")
+    }
+    if (!(number?.toString() ==~ /[1-9]\d*/)) {
+        throw new GradleException("release_number '${number}' must be a positive number for alpha and beta versions")
+    }
+    return "${base}-${type}.${number}".toString()
+}
+version = composeVersion(mod_version.toString(), releaseChannel, findProperty("release_number"))
+
 // --- Tests: JUnit 5 + ArchUnit -----------------------------------------------------------------
 
 dependencies {
@@ -110,15 +133,12 @@ task changelogEntry {
     }
 }
 
-// ./gradlew releaseChangelog -Pchangelog_version=4.0.0-alpha.1 (the release tag without "v")
+// ./gradlew releaseChangelog: releases the Unreleased entries as the version set in gradle.properties
 task releaseChangelog {
     group = "release"
-    description = "Moves the Unreleased entries of CHANGELOG.md into a section for -Pchangelog_version"
+    description = "Moves the Unreleased entries of CHANGELOG.md into a section for the version in gradle.properties"
     doLast {
-        String version = findProperty("changelog_version")
-        if (!version) {
-            throw new GradleException("-Pchangelog_version is missing (the release tag without 'v', e.g. 4.0.0-alpha.1)")
-        }
+        String version = project.version
         if (changelogSection(version) != null) {
             throw new GradleException("CHANGELOG.md already has a section for ${version}")
         }

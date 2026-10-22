@@ -19,6 +19,8 @@ apply plugin: 'idea'
 apply plugin: 'java'
 // tests, core isolation and changelog tasks, shared with the workspace build
 apply from: "gradle/mod-common.gradle"
+// local releases to CurseForge and Modrinth (./gradlew -b build.gradle release)
+apply from: "gradle/release.gradle"
 
 repositories {
     maven { url = "https://maven.blamejared.com/" }  // JEI, Tesla
@@ -26,7 +28,7 @@ repositories {
     maven { url = "https://maven.cil.li/" }          // OpenComputers
     maven { url = "https://modmaven.dev/" }          // The One Probe
     maven { url = "https://cursemaven.com/" }        // OMLib releases from CurseForge
-    if (project.hasProperty("omlib_local")) {
+    if (project.hasProperty("omlib_local") || releasing) {
         mavenLocal()                                 // OMLib from publishToMavenLocal
     }
     // Hwyla; keep last, it redirects unknown paths to a non-maven site
@@ -35,17 +37,17 @@ repositories {
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8"
 
-version = "${mod_version}"
-if (hasProperty("appendBuildNumber")) {
-    version = version + "-" + appendBuildNumber.toString()
-} else {
-    version = version + "-0"
-}
-
 group = "${group_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${mod_id}-${minecraft_version}"
 
-String omlib_max_version = omlib_version.toString().replaceAll("[0-9]-[0-9]*", "99-9999")
+// omlib_version is an OMLib version as composed by mod-common.gradle (4.0.0-alpha.1, 4.0.0-beta.2, 4.0.0); the jar accepts it
+// and every later OMLib below the next major version (FML orders 4.0.0-alpha.1 < 4.0.0-alpha.2 < 4.0.0-beta.1 < 4.0.0)
+def omlibParts = omlib_version.toString() =~ /^(\d+)(\.\d+)*(-(alpha|beta)\.[1-9]\d*)?$/
+if (!omlibParts.matches()) {
+    throw new GradleException("omlib_version '${omlib_version}' must look like 4.0.0, 4.0.0-alpha.1 or 4.0.0-beta.2")
+}
+// the first pre-release of the next major version is the exclusive upper bound
+String omlib_max_version = "${omlibParts.group(1).toInteger() + 1}.0.0-alpha"
 
 minecraft {
     version = "${forge_version}"
@@ -100,8 +102,9 @@ dependencies {
     testCompile "li.cil.oc:OpenComputers:MC${minecraft_version}-${oc_version}"
     deobfProvided "net.darkhax.tesla:Tesla-${minecraft_version_short}:${tesla_version}"
     testCompile "net.darkhax.tesla:Tesla-${minecraft_version_short}:${tesla_version}"
-    // -Pomlib_local builds against an OMLib from `gradlew publishToMavenLocal` instead of the CurseForge release
-    if (project.hasProperty("omlib_local")) {
+    // -Pomlib_local and releases build against the OMLib omlib_version from `gradlew publishToMavenLocal` (OMLib's
+    // `release` publishes it) instead of the CurseForge release
+    if (project.hasProperty("omlib_local") || releasing) {
         compileOnly "omtteam:omlib:${minecraft_version}-${omlib_version}:dev"
         testCompile "omtteam:omlib:${minecraft_version}-${omlib_version}:dev"
     } else {
@@ -135,32 +138,16 @@ publishing {
     }
 }
 
-//// CURSE RELEASE \\\\
-// release_type (alpha, beta or release) is set by the CI release job from the git tag
+//// CURSEFORGE RELEASE \\\\
+// uploaded by `./gradlew -b build.gradle release` (gradle/release.gradle) with curseforge_token from ~/.gradle/gradle.properties
 
-def curse_release_type = findProperty("release_type") ?: "none"
-if (!(curse_release_type in ["none", "alpha", "beta", "release"])) {
-    throw new GradleException("Unknown release_type '${curse_release_type}', expected alpha, beta or release")
-}
-
-// The CHANGELOG.md section of the release tag (CI passes -Pchangelog_version); a release without one fails
-def releaseNotes = ""
-if (curse_release_type != "none") {
-    def changelogVersion = findProperty("changelog_version")
-    releaseNotes = changelogVersion ? changelogSection(changelogVersion) : null
-    if (!releaseNotes) {
-        throw new GradleException("CHANGELOG.md has no section for '${changelogVersion}'; run ./gradlew releaseChangelog -Pchangelog_version=<tag without v> first")
-    }
-}
-
-tasks.curseforge.enabled = project.hasProperty("curseforge_key") && curse_release_type != "none"
+def curseforgeEnabled = releasing && project.hasProperty("curseforge_token")
+tasks.curseforge.enabled = curseforgeEnabled
 curseforge {
-    if (project.hasProperty("curseforge_key") && curse_release_type != "none") {
-        System.out.println("ATTEMPTING CURSE RELEASE")
-        apiKey = project.properties["curseforge_key"]
-    } else {
+    if (!curseforgeEnabled) {
         return
     }
+    apiKey = findProperty("curseforge_token")
     project {
         id = curse_project_id
         addGameVersion "1.12.2"
@@ -178,7 +165,7 @@ curseforge {
         }
 
         mainArtifact(jar) {
-            releaseType = curse_release_type
+            releaseType = releaseChannel
             changelog = releaseNotes
             changelogType = "markdown"
         }
