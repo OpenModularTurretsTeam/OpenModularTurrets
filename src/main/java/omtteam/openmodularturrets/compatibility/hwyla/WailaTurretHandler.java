@@ -13,15 +13,12 @@ import omtteam.omlib.compatibility.hwyla.IOMLibWailaDataProvider;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
-import omtteam.openmodularturrets.turret.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanLocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.safeLocalize;
-import static omtteam.openmodularturrets.turret.TurretHeadUtil.getAmmoLevel;
-import static omtteam.openmodularturrets.turret.TurretHeadUtil.getAmpLevel;
 
 /**
  * Created by nico on 5/23/15.
@@ -59,7 +56,7 @@ public class WailaTurretHandler implements IOMLibWailaDataProvider {
 
             currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
             currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + accessor.getNBTData().getString("ownerName"));
-            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.AMMO) + ": \u00A7F" + getAmmoLevel(turret, turret.getBase()));
+            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.AMMO) + ": \u00A7F" + turret.getAmmoLevel());
             currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": \u00A7F" + accessor.getNBTData().getString("ampLevel") + "%");
             currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ACCURACY) + ": \u00A7F" + accessor.getNBTData().getString("accuracy") + "%");
             currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": \u00A7F" + accessor.getNBTData().getString("rof") + "s/sec");
@@ -82,11 +79,10 @@ public class WailaTurretHandler implements IOMLibWailaDataProvider {
             // te.writeToNBT(tag);
             tag.setBoolean("active", turret.getBase().isActive());
             tag.setString("ownerName", turret.getOwner().getName());
-            tag.setInteger("ammoLevel", getAmmoLevel(turret, turret.getBase()));
-            tag.setString("ampLevel", String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * getAmpLevel(turret.getBase())));
+            tag.setInteger("ammoLevel", turret.getAmmoLevel());
+            tag.setString("ampLevel", String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * turret.getDamageAmpLevel()));
             tag.setString("accuracy", String.format("%.2f", Math.min(100F, turret.getActualTurretAccuracyDeviation())));
-            tag.setString("rof", String.format("%.2f", 20F / (turret.getTurretBaseFireRate() /
-                    (1 + TurretHeadUtil.getFireRateUpgrades(turret.getBase(), turret)))));
+            tag.setString("rof", String.format("%.2f", 20F / turret.getFireCooldownTicks()));
         }
 
         return tag;

@@ -1,7 +1,5 @@
 package omtteam.openmodularturrets.tileentity.turrets;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
@@ -25,31 +23,6 @@ public class RelativisticTurretTileEntity extends TurretHead {
             this.getWorld().playSound(null, this.getPos(), this.getLaunchSoundEffect(), SoundCategory.BLOCKS, 0.6F, 1.0F);
             target = null;
         }
-    }
-
-    @Override
-    public boolean isEntityValidTarget(EntityLivingBase entity) {
-        return !entity.isPotionActive(Potion.getPotionById(2));
-    }
-
-    @Override
-    public boolean requiresAmmo() {
-        return false;
-    }
-
-    @Override
-    public boolean requiresSpecificAmmo() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getAmmo() {
-        return null;
-    }
-
-    @Override
-    public Integer[] getDefaultPriorities() {
-        return new Integer[]{1, 1, 0, 10};
     }
 
     @Override

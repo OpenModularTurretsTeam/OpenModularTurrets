@@ -3,9 +3,6 @@ package omtteam.openmodularturrets.api.tileentity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.items.IItemHandler;
-import omtteam.openmodularturrets.api.network.IBaseController;
-
-import javax.annotation.Nullable;
 import java.util.List;
 
 public interface ITurretBase { //TODO: javadoc
@@ -54,16 +51,6 @@ public interface ITurretBase { //TODO: javadoc
     int getMaxRange();
 
     void setMaxRange(int range);
-
-    @Nullable
-    IBaseController getController();
-
-    /**
-     * Register the specified IBaseController to let it control the bases settings.
-     *
-     * @param controller the controller that should control the bases settings
-     */
-    boolean registerController(IBaseController controller);
 
     /**
      * List of all entities around the turret base in its range.
@@ -122,7 +109,7 @@ public interface ITurretBase { //TODO: javadoc
     /**
      * This is used for inventory manipulation for ammo etc.
      *
-     * @return the internal inventory of the base and all inventory expanders inventories
+     * @return the ammo slots of the base
      */
     List<IItemHandler> getAmmoInventories();
 }

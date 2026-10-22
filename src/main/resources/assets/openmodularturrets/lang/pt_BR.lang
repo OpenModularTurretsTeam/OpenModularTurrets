@@ -54,16 +54,6 @@ tile.laser_turret.name=Torre Laser
 tile.rail_gun_turret.name=Torre Canhão Elétrico
 tile.plasma_turret.name=Plasma Launcher Turret
 tile.lever_block.name=Manivela Básica de Torre Básica
-tile.expander_power_tier_one.name=Expansor de Poder da Base (Nível 1)
-tile.expander_power_tier_two.name=Expansor de Poder da Base (Nível 2)
-tile.expander_power_tier_three.name=Expansor de Poder da Base (Nível 3)
-tile.expander_power_tier_four.name=Expansor de Poder da Base (Nível 4)
-tile.expander_power_tier_five.name=Expansor de Poder da Base (Nível 5)
-tile.expander_inv_tier_one.name=Expansor de Inventário da Base (Nível 1)
-tile.expander_inv_tier_two.name=Expansor de Inventário da Base (Nível 2)
-tile.expander_inv_tier_three.name=Expansor de Inventário da Base (Nível 3)
-tile.expander_inv_tier_four.name=Expansor de Inventário da Base (Nível 4)
-tile.expander_inv_tier_five.name=Expansor de Inventário da Base (Nível 5)
 tile.base_addon_loot_deleter.name=Extensão de Base - Deleta Saque
 tile.turret_base.name=Base de Torre
 
@@ -124,13 +114,7 @@ text.openmodularturrets.extras.upgrade.0=Nenhum
 text.openmodularturrets.extras.upgrade.1=1x Slots de Aprimoramento
 text.openmodularturrets.extras.upgrade.2=2x Slots de Aprimoramento
 
-text.openmodularturrets.expander.power1=Expansor RF da base de torre
-text.openmodularturrets.expander.power2=Adicionar
-text.openmodularturrets.expander.power3=Capacidade de RF para uma base de torre.
 
-text.openmodularturrets.expander.inv1=Expansor de Inventário da Base de Torre
-text.openmodularturrets.expander.inv2=Adiciona 9 slots de inventário que a base da torre pode usar.
-text.openmodularturrets.expander.inv3=Cada slot só pode aceitar um tamanho máximo de pilha de
 
 text.openmodularturrets.base_addon_loot_deleter.inv1=Extensão da base de torre - Deletar Saque
 text.openmodularturrets.base_addon_loot_deleter.inv2=Remove todos os itens Caídos de
@@ -152,17 +136,7 @@ text.openmodularturrets.base_max_range=Alcance máximo para torres, em blocos.
 text.openmodularturrets.toggle_mode=Ativar/desativar os modos
 text.openmodularturrets:turret_limit=Limite da Torre
 
-text.openmodularturrets.flavour.expander.power.1=Agora com sabor!
-text.openmodularturrets.flavour.expander.power.2=Expansão cinética.
-text.openmodularturrets.flavour.expander.power.3=Lá, eles e eles são.
-text.openmodularturrets.flavour.expander.power.4=Pode ser usado como um dispositivo de afundamento.
-text.openmodularturrets.flavour.expander.power.5=Guerra assimétrica.
 
-text.openmodularturrets.flavour.expander.inv.1=Um pouco vai longe.
-text.openmodularturrets.flavour.expander.inv.2=Suprimentos!
-text.openmodularturrets.flavour.expander.inv.3=Cabelo, herdeiro e lebre.
-text.openmodularturrets.flavour.expander.inv.4=Pode ser usado como um dispositivo de flutuação.
-text.openmodularturrets.flavour.expander.inv.5=Muito espaço, muito estoque.
 
 text.openmodularturrets.flavour.base_addon_loot_deleter.inv.1=Só um pouco de fumaça.
 

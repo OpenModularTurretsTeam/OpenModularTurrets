@@ -1,0 +1,3 @@
+#
+#Thu Oct 22 02:13:40 CEST 2026
+no\ classes\ that\ reside\ outside\ of\ package\ 'omtteam.openmodularturrets.client..'\ and\ have\ simple\ name\ not\ ending\ with\ 'ClientProxy'\ should\ depend\ on\ classes\ that\ reside\ in\ a\ package\ 'omtteam.openmodularturrets.client..',\ because\ client\ classes\ do\ not\ exist\ on\ a\ dedicated\ server=aa2cf5ef-d704-4b1e-9719-fd7825a2826a

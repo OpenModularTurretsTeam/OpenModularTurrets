@@ -1,0 +1,145 @@
+// Build logic shared by the standalone build (build.gradle, ForgeGradle 2.3) and the workspace build
+// (gradle/workspace/<Mod>.gradle, ForgeGradle 3). Keep this file identical in OMLib, OMT and OMPD.
+// Versions come from the mod's gradle.properties (junit_version, junit_platform_version, archunit_version).
+
+import java.time.LocalDate
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
+// --- Tests: JUnit 5 + ArchUnit -----------------------------------------------------------------
+
+dependencies {
+    testCompile "org.junit.jupiter:junit-jupiter-api:${junit_version}"
+    testCompile "com.tngtech.archunit:archunit:${archunit_version}"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine:${junit_version}"
+    testRuntime "org.junit.platform:junit-platform-launcher:${junit_platform_version}"
+}
+
+test {
+    useJUnitPlatform()
+    // ArchUnit's frozen rules (package cycles, client access) live in src/test/resources/archunit_store
+    systemProperty "archunit.freeze.store.default.path", file("src/test/resources/archunit_store").absolutePath
+}
+
+// --- core isolation ----------------------------------------------------------------------------
+
+// core/ holds the game rules as plain Java: only java.*, javax.annotation.* and core packages
+// (the mod's own and OMLib's) may be used there
+task verifyCoreIsolation {
+    group = "verification"
+    description = "Fails if code under core/ uses Minecraft, Forge or non-core packages"
+    def sources = sourceSets.main.java.srcDirs
+    inputs.files(sources)
+    doLast {
+        def allowed = ~/^(java\.|javax\.annotation\.|omtteam\.[a-z]+\.core(\.|$))/
+        def forbidden = ~/\b(net\.minecraft|net\.minecraftforge|com\.mojang|cpw\.mods)\b/
+        def problems = []
+        sources.each { dir ->
+            fileTree(dir).matching { include "**/core/**/*.java" }.each { file ->
+                file.eachLine { line, number ->
+                    def imported = (line =~ /^\s*import\s+(?:static\s+)?([\w.]+)/)
+                    if (imported.find()) {
+                        if (!(imported.group(1) =~ allowed).find()) {
+                            problems << "${file}:${number}: import ${imported.group(1)}"
+                        }
+                    } else if ((line =~ forbidden).find()) {
+                        problems << "${file}:${number}: ${line.trim()}"
+                    }
+                }
+            }
+        }
+        if (!problems.isEmpty()) {
+            throw new GradleException("core/ must stay free of Minecraft, Forge and non-core packages:\n" + problems.join("\n"))
+        }
+    }
+}
+check.dependsOn verifyCoreIsolation
+
+// --- Changelog (CHANGELOG.md, Keep a Changelog) ------------------------------------------------
+
+def changelogFile = file("CHANGELOG.md")
+def versionHeading = Pattern.compile('(?m)^## \\[([^\\]]+)].*$')
+
+/** The CHANGELOG.md section of the given version, without its heading; null if there is none. */
+ext.changelogSection = { String version ->
+    String text = changelogFile.text
+    Matcher m = versionHeading.matcher(text)
+    while (m.find()) {
+        if (m.group(1) == version) {
+            int start = m.end()
+            int end = m.find() ? m.start() : text.length()
+            return text.substring(start, end).trim()
+        }
+    }
+    return null
+}
+
+// ./gradlew changelogEntry -Ptype=fixed -Pentry="Laser turret model"
+task changelogEntry {
+    group = "release"
+    description = "Adds an entry under Unreleased in CHANGELOG.md (-Ptype=added|changed|fixed|removed -Pentry=\"...\")"
+    doLast {
+        String type = findProperty("type") ?: ""
+        String section = type.toLowerCase().capitalize()
+        if (!(section in ["Added", "Changed", "Fixed", "Removed"])) {
+            throw new GradleException("-Ptype must be added, changed, fixed or removed")
+        }
+        String entry = (findProperty("entry") ?: "").toString().trim()
+        if (entry.isEmpty()) {
+            throw new GradleException("-Pentry is missing")
+        }
+        String text = changelogFile.text
+        int start = text.indexOf("## [Unreleased]")
+        if (start < 0) {
+            throw new GradleException("CHANGELOG.md has no '## [Unreleased]' section")
+        }
+        Matcher next = Pattern.compile('(?m)^## \\[').matcher(text)
+        int end = next.find(start + 1) ? next.start() : text.length()
+        String block = text.substring(start, end).trim()
+        String heading = "### " + section
+        if (block.contains(heading)) {
+            int at = block.indexOf(heading) + heading.length()
+            Matcher following = Pattern.compile('(?m)^### ').matcher(block)
+            int insert = following.find(at) ? following.start() : block.length()
+            String before = block.substring(0, insert).trim()
+            block = before + "\n- " + entry + (insert < block.length() ? "\n\n" + block.substring(insert) : "")
+        } else {
+            block = block + "\n\n" + heading + "\n\n- " + entry
+        }
+        changelogFile.text = text.substring(0, start) + block + "\n\n" + text.substring(end).trim() + "\n"
+    }
+}
+
+// ./gradlew releaseChangelog -Pchangelog_version=4.0.0-alpha.1 (the release tag without "v")
+task releaseChangelog {
+    group = "release"
+    description = "Moves the Unreleased entries of CHANGELOG.md into a section for -Pchangelog_version"
+    doLast {
+        String version = findProperty("changelog_version")
+        if (!version) {
+            throw new GradleException("-Pchangelog_version is missing (the release tag without 'v', e.g. 4.0.0-alpha.1)")
+        }
+        if (changelogSection(version) != null) {
+            throw new GradleException("CHANGELOG.md already has a section for ${version}")
+        }
+        String text = changelogFile.text
+        int start = text.indexOf("## [Unreleased]")
+        if (start < 0) {
+            throw new GradleException("CHANGELOG.md has no '## [Unreleased]' section")
+        }
+        int bodyStart = start + "## [Unreleased]".length()
+        Matcher next = Pattern.compile('(?m)^## \\[').matcher(text)
+        int end = next.find(bodyStart) ? next.start() : text.length()
+        // drop subsections without entries
+        def sections = text.substring(bodyStart, end).split('(?m)^(?=### )')*.trim().findAll { section ->
+            section && section.readLines().any { it.startsWith("- ") }
+        }
+        if (sections.isEmpty()) {
+            throw new GradleException("Nothing to release: Unreleased has no entries")
+        }
+        String released = "## [${version}] - ${LocalDate.now()}\n\n" + sections.join("\n\n")
+        String rest = text.substring(end).trim()
+        changelogFile.text = text.substring(0, start) + "## [Unreleased]\n\n" + released + "\n" + (rest ? "\n" + rest + "\n" : "")
+        println "CHANGELOG.md: released ${version}"
+    }
+}

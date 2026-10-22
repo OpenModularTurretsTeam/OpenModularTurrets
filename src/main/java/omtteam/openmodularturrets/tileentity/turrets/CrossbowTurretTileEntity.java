@@ -1,7 +1,6 @@
 package omtteam.openmodularturrets.tileentity.turrets;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -15,7 +14,6 @@ public class CrossbowTurretTileEntity extends ProjectileTurret {
 
     public CrossbowTurretTileEntity() {
         super(1);
-        ammo = new ItemStack(Items.ARROW);
     }
 
     @Override
@@ -24,23 +22,8 @@ public class CrossbowTurretTileEntity extends ProjectileTurret {
     }
 
     @Override
-    public boolean requiresAmmo() {
-        return true;
-    }
-
-    @Override
-    public boolean requiresSpecificAmmo() {
-        return true;
-    }
-
-    @Override
     public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
         return new ArrowProjectile(world, ammo, this.getBaseFromWorld());
-    }
-
-    @Override
-    public Integer[] getDefaultPriorities() {
-        return new Integer[]{-5, -5, -5, 1, 10};
     }
 
     @Nonnull

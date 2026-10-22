@@ -9,7 +9,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.tileentity.TileEntityBase;
@@ -18,28 +17,34 @@ import omtteam.omlib.util.TargetingSettings;
 import omtteam.openmodularturrets.api.tileentity.ITurretBaseAddonTileEntity;
 import omtteam.openmodularturrets.api.tileentity.ITurretHead;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
+import omtteam.openmodularturrets.core.base.AmmoDraw;
+import omtteam.openmodularturrets.core.base.TurretBaseLogic;
+import omtteam.openmodularturrets.core.target.TargetingPriority;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.turret.EnumTargetingPriority;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import omtteam.openmodularturrets.turret.TurretTargetingUtils;
 import omtteam.openmodularturrets.turret.TurretType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import static omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead.CONCEALED;
 
+/**
+ * A turret. The base picks its target and holds its ammo, energy and upgraded stats ({@link TurretBaseLogic}); the
+ * turret aims, keeps its cooldown and fires.
+ */
 public abstract class TurretHead extends TileEntityBase implements ITurretHead, ITickable, ITurretBaseAddonTileEntity {
     public float baseFitRotationX, baseFitRotationZ;
     public EntityLivingBase target = null;
     public float rotationAnimation = 0.00F;
     public boolean shouldConceal = false;
     protected TurretBase base;
-    protected int ticks, targetingTicks, turretTier;
+    protected int ticks, turretTier;
     protected boolean hasSetSide = false;
     protected boolean playedDeploy = false;
     protected boolean autoFire = false;
@@ -50,17 +55,14 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
     protected double targetSpeedX = 0;
     protected double targetSpeedY = 0;
     protected double targetSpeedZ = 0;
-    protected double cachedAccuracy = 0D;
-    protected int cachedScattershot = 0;
-    protected ItemStack ammo;
+    /** The 3.x saved priorities; targeting uses the turret type's priorities. */
     Integer[] priorities = {};
     public EnumFacing baseFacing;
-    private boolean resetCaches;
 
+    /** @param turretTier the minimum base tier; the core turret type has the same value */
     public TurretHead(int turretTier) {
         this.turretTier = turretTier;
-        this.resetCaches = true;
-    }   //TODO: Strategy Pattern für optionale Features wie Ammo oder Movement-Fähigkeit
+    }
 
     @Nullable
     @Override
@@ -84,11 +86,11 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
         nbtTagCompound.setBoolean("shouldConceal", shouldConceal);
         nbtTagCompound.setBoolean("autoFire", autoFire);
         if (this.priorities.length != 0) {
-            nbtTagCompound.setInteger("priorityMaxHP", this.priorities[EnumTargetingPriority.MAX_HP.ordinal()]);
-            nbtTagCompound.setInteger("priorityHPRemaining", this.priorities[EnumTargetingPriority.HP_REMAINING.ordinal()]);
-            nbtTagCompound.setInteger("priorityDistance", this.priorities[EnumTargetingPriority.DISTANCE.ordinal()]);
-            nbtTagCompound.setInteger("priorityArmor", this.priorities[EnumTargetingPriority.ARMOR.ordinal()]);
-            nbtTagCompound.setInteger("priorityPlayer", this.priorities[EnumTargetingPriority.PLAYER.ordinal()]);
+            nbtTagCompound.setInteger("priorityMaxHP", this.priorities[TargetingPriority.MAX_HP.ordinal()]);
+            nbtTagCompound.setInteger("priorityHPRemaining", this.priorities[TargetingPriority.HP_REMAINING.ordinal()]);
+            nbtTagCompound.setInteger("priorityDistance", this.priorities[TargetingPriority.DISTANCE.ordinal()]);
+            nbtTagCompound.setInteger("priorityArmor", this.priorities[TargetingPriority.ARMOR.ordinal()]);
+            nbtTagCompound.setInteger("priorityPlayer", this.priorities[TargetingPriority.PLAYER.ordinal()]);
         }
         return nbtTagCompound;
     }
@@ -107,7 +109,8 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
                     nbtTagCompound.getInteger("priorityArmor"),
                     nbtTagCompound.getInteger("priorityPlayer")};
         } else {
-            this.priorities = this.getDefaultPriorities();
+            // kept only for saving; the world is not ready to look up the turret type while loading
+            this.priorities = new Integer[0];
         }
     }
 
@@ -176,27 +179,39 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
         return false;
     }
 
-    protected EntityLivingBase getTarget() {
-        TurretTargetingUtils selector = new TurretTargetingUtils(this);
-        if (!this.getWorld().isRemote && base != null) {
-            AxisAlignedBB axis = new AxisAlignedBB(pos.getX() - base.getRange() - 1, pos.getY() - base.getRange() - 1,
-                                                   pos.getZ() - base.getRange() - 1, pos.getX() + base.getRange() + 1,
-                                                   pos.getY() + base.getRange() + 1, pos.getZ() + base.getRange() + 1);
-            List<EntityLivingBase> targets = this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
-            return selector.getBestEntity(targets);
-        }
-        return null;
+    /** The base face this turret sits on (from the base towards the turret). */
+    public EnumFacing getMountFace() {
+        return baseFacing.getOpposite();
+    }
+
+    /** The game rules of the base; only call while {@link #base} is set. */
+    protected TurretBaseLogic logic() {
+        return base.getLogic();
+    }
+
+    /** The core turret type of this turret. */
+    public omtteam.openmodularturrets.core.turret.TurretType getCoreType() {
+        return getTurretType().getCore();
+    }
+
+    /** The target the base picked for this turret, or null. */
+    @Nullable
+    protected EntityLivingBase getTargetFromBase() {
+        return base != null && baseFacing != null ? base.getTargetEntity(getMountFace()) : null;
     }
 
     public TargetingSettings getTargetingSettings() {
         return base.getTargetingSettings();
     }
 
+    /** The targeting weights of the turret type (3.x saved them per turret, but they were never changed). */
     public Integer[] getPriorities() {
-        if (priorities.length != 0) {
-            return priorities;
+        int[] weights = getCoreType().getDefaultPriorities();
+        Integer[] result = new Integer[weights.length];
+        for (int i = 0; i < weights.length; i++) {
+            result[i] = weights[i];
         }
-        return this.getDefaultPriorities();
+        return result;
     }
 
     protected TurretBase getBaseFromWorld() {
@@ -207,9 +222,14 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
         return base;
     }
 
+    /** Ticks between shots, with the base's fire rate upgrades. */
+    public double getFireCooldownTicks() {
+        return logic().getFireCooldownTicks(getCoreType());
+    }
+
     // If the turret is still on cooldown (from previous shot/activation)
     public boolean isOnCooldown() {
-        return (ticks < (this.getTurretBaseFireRate() / (1 + TurretHeadUtil.getFireRateUpgrades(base, this))));
+        return ticks < getFireCooldownTicks();
     }
 
     public boolean getAutoFire() {
@@ -236,79 +256,80 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
         return this.getTurretType().getSettings().baseRange;
     }
 
+    /** Range with the base's range upgrades. */
+    public int getTurretRange() {
+        return logic().getRange(getCoreType());
+    }
+
     public double getTurretDamageAmpBonus() {
         return this.getTurretType().getSettings().damageAmp;
     }
 
     public double getActualTurretAccuracyDeviation() {
-        if (this.resetCaches) {
-            cachedAccuracy = (this.getBaseTurretAccuracyDeviation())
-                    / Math.pow(1 + (TurretHeadUtil.getAccuracyUpgrades(this.getBase(), this)), 1.5D)
-                    * (1 + TurretHeadUtil.getScattershotUpgrades(this.getBase()) / 10F);
-        }
-
-        return cachedAccuracy;
+        return logic().getAccuracyDeviation(getCoreType());
     }
 
+    /** Scattershot upgrades that apply to this turret (0 for turrets that ignore them). */
+    public int getScattershotCount() {
+        return logic().getScattershotCount(getCoreType());
+    }
+
+    /** Damage amp addons of the base. */
+    public int getDamageAmpLevel() {
+        return logic().getDamageAmpLevel();
+    }
+
+    /** 3.x fake drops level: -1 without fake drops addon, else the Looting level (0–3). */
+    public int getFakeDropsLevel() {
+        return logic().getLootingLevel(3);
+    }
+
+    /** Shots left in the base: matching ammo items, or the energy for energy turrets. */
+    public int getAmmoLevel() {
+        return logic().getAmmoLevel(getCoreType());
+    }
+
+    /** Nothing is cached any more; the stats are read from the base logic on use. */
     public void triggerResetCaches() {
-        this.resetCaches = true;
     }
-
-    /**
-     * @param entity entity to be checked
-     * @return if the entity is valid for the turret to target currently (useful for special turrets)
-     */
-    public boolean isEntityValidTarget(EntityLivingBase entity) {
-        return true;
-    }
-
-    /**
-     * Priorities determine how much the corresponding priority should prioritise, negative values invert that behaviour.
-     *
-     * @return priority value array with 5 entries, in the order MAX_HP, HP_REMAINING, DISTANCE, ARMOR, PLAYER
-     */
-    protected abstract Integer[] getDefaultPriorities();
-
-    protected abstract boolean requiresAmmo();
-
-    protected abstract boolean requiresSpecificAmmo();
 
     public TurretType getTurretType() {
         BlockAbstractTurretHead block = (BlockAbstractTurretHead) this.getWorld().getBlockState(this.getPos()).getBlock();
         return block.getTurretType();
     }
 
-    @Nullable
-    public ItemStack getAmmo() {
-        return ammo;
-    }
-
     @Nonnull
     protected abstract SoundEvent getLaunchSoundEffect();
 
     protected int getPowerRequiredForNextShot() {
-        return Math.round(this.getTurretBasePowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(
-                base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
+        return logic().getPowerPerShot(getCoreType());
     }
 
+    /** Whether this turret fires without ammo (energy turret, ammo disabled or creative base). */
+    protected boolean firesWithoutAmmo() {
+        return !logic().getRequiredAmmo(getCoreType()).isPresent();
+    }
+
+    /**
+     * Takes the ammo for one shot from the base: the fired item with the count drawn, or {@link ItemStack#EMPTY} if
+     * the turret fires without ammo or the base has not enough.
+     */
     protected ItemStack getAmmoStack() {
-        ItemStack ammo = ItemStack.EMPTY;
-        if (this.requiresAmmo() && OMTConfig.TURRETS.doTurretsNeedAmmo) {
-            if (this.requiresSpecificAmmo()) {
-                ItemStack ammoNeeded = this.getAmmo();
-                if (ammoNeeded != null) {
-                    ammoNeeded.setCount(TurretHeadUtil.getScattershotUpgrades(base) + 1);
-                }
-                ammo = TurretHeadUtil.deductItemStackFromInventories(this.getAmmo(), base, this);
-            } else { // for Disposable
-                ItemStack ammoNeeded = this.getAmmo();
-                if (ammoNeeded != null) {
-                    ammoNeeded.setCount(TurretHeadUtil.getScattershotUpgrades(base) + 1);
-                }
-                ammo = TurretHeadUtil.deductItemStackFromInventories(this.getAmmo(), base, this);
-            }
+        if (firesWithoutAmmo()) {
+            return ItemStack.EMPTY;
         }
+        Optional<AmmoDraw> draw = logic().drawAmmo(getCoreType());
+        if (!draw.isPresent() || !(draw.get().item() instanceof ItemStack)) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack ammo = ((ItemStack) draw.get().item()).copy();
+        ammo.setCount(draw.get().count());
         return ammo;
+    }
+
+    /** Takes the energy of one shot from the base; false if there is not enough. */
+    protected boolean consumeShotEnergy() {
+        return logic().consumeShotEnergy(getCoreType());
     }
 
     public void update() {
@@ -316,82 +337,48 @@ public abstract class TurretHead extends TileEntityBase implements ITurretHead, 
         if (this.base == null) {
             this.base = getBaseFromWorld();
         }
-        if (this.resetCaches) {
-            this.cachedScattershot = TurretHeadUtil.getScattershotUpgrades(this.getBase());
-            this.getActualTurretAccuracyDeviation();
-            this.resetCaches = false;
+        // a base whose turret was not loaded when it scanned its neighbours learns about it now
+        if (!this.getWorld().isRemote && base != null
+                && logic().getTurrets().get(TurretBase.toFace(getMountFace())) != getCoreType()) {
+            base.updateNeighbours();
         }
     }
 
+    /** A turret without base, or on a base of a lower tier, breaks. */
+    protected boolean hasValidBase() {
+        return base != null && !base.isInvalid() && logic().supportsTurret(getCoreType());
+    }
+
+    /**
+     * Checks of the turrets that do not aim (melee, slowing, teleporter): the base is active, picked a target, the
+     * cooldown passed and the energy for the shot was taken.
+     *
+     * @return whether the turret acts this tick
+     */
     protected boolean updateChecks() {
         ticks++;
 
-        // BASE IS OKAY
-        if (base == null || base.getTier() < this.turretTier) {
+        if (!hasValidBase()) {
             this.getWorld().destroyBlock(this.pos, true);
-        } else {
-            this.concealmentChecks();
-            TurretHeadUtil.updateSolarPanelAddon(base);
-
-            //turret tick rate;
-            if (target == null && targetingTicks < OMTConfig.TURRETS.turretTargetSearchTicks) {
-                targetingTicks++;
-                return false;
-            }
-            targetingTicks = 0;
-
-            int power_required = Math.round(this.getTurretBasePowerUsage() * (1 - TurretHeadUtil.getEfficiencyUpgrades(
-                    base, this)) * (1 + TurretHeadUtil.getScattershotUpgrades(base)));
-
-            // power check
-            if ((base.getEnergyStored(EnumFacing.DOWN) < power_required) || (!base.isActive())) {
-                return false;
-            }
-
-            // is there a target, and Has it died in the previous tick?
-            targetingChecks();
-
-            // did we even get a target previously?
-            if (target == null) {
-                return false;
-            }
-
-            // has cooldown passed?
-            if (isOnCooldown()) {
-                return false;
-            }
-
-            // Can the turret still see the target? (It's moving)
-            if (target != null) {
-                if (!TurretTargetingUtils.canSeeTargetFromPos(this, target)) {
-                    target = null;
-                    return false;
-                }
-            }
-
-            if (target != null) {
-                if (TurretTargetingUtils.chebyshevDistance(this, target)) {
-                    target = null;
-                    return false;
-                }
-            }
-
-            // Consume energy
-            base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - power_required, null);
-            return true;
+            return false;
         }
-        return false;
-    }
-
-    protected void targetingChecks() {
-        // if no target or target has died, acquire a new target.
-        if (this.target == null || this.target.isDead || this.getWorld().getEntityByID(this.target.getEntityId()) == null || this.target.getHealth() <= 0.0F || !TurretTargetingUtils.canSeeTargetFromPos(this, target)) {
-            this.target = getTarget();
+        if (this.getWorld().isRemote) {
+            return false;
         }
+        this.concealmentChecks();
+        if (!base.isActive()) {
+            target = null;
+            return false;
+        }
+        target = getTargetFromBase();
+        if (target == null || isOnCooldown()) {
+            return false;
+        }
+        return consumeShotEnergy();
     }
 
     void concealmentChecks() {
-        if (base != null && base.shouldConcealTurrets) {
+        if (base != null && base.shouldConcealTurrets()) {
             if (!shouldConceal && (target == null || !TurretTargetingUtils.canSeeTargetFromPos(this, target)) && ticksWithoutTarget >= 40) {
                 ticksWithoutTarget = 0;
                 shouldConceal = true;

@@ -29,7 +29,6 @@ import omtteam.openmodularturrets.network.messages.*;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
-import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -341,7 +340,7 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         List<TileEntity> tileEntities = WorldUtil.getTouchingTileEntities(base.getWorld(), base.getPos());
         for (TileEntity te : tileEntities) {
             if (te instanceof TurretHead) {
-                maxRange = Math.max(((TurretHead) te).getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(base, (TurretHead) te), maxRange);
+                maxRange = Math.max(((TurretHead) te).getTurretRange(), maxRange);
             }
         }
         return maxRange;

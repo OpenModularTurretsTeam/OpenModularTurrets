@@ -21,28 +21,8 @@ public class PlasmaLauncherTurretTileEntity extends ProjectileTurret {
     }
 
     @Override
-    public boolean requiresAmmo() {
-        return false;
-    }
-
-    @Override
-    public boolean requiresSpecificAmmo() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getAmmo() {
-        return null;
-    }
-
-    @Override
     public TurretProjectile createProjectile(World world, Entity target, ItemStack ammo) {
         return new PlasmaProjectile(world, this.base);
-    }
-
-    @Override
-    public Integer[] getDefaultPriorities() {
-        return new Integer[]{10, 10, 20, 1, 10};
     }
 
     @Nonnull

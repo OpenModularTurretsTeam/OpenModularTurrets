@@ -225,7 +225,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
                 base.setRedstone(false);
             }
             if (base != null) {
-                base.updateExpanders();
+                base.updateNeighbours();
             }
         }
     }

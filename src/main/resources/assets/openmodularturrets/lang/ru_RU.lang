@@ -53,16 +53,6 @@ tile.relativistic_turret.name=Relativistic Turret
 tile.laser_turret.name=Лазерная турель
 tile.rail_gun_turret.name=Рельсовая турель
 tile.lever_block.name=Базовая турельная ручка
-tile.expander_power_tier_one.name=Base Power Expander (Tier 1)
-tile.expander_power_tier_two.name=Base Power Expander (Tier 2)
-tile.expander_power_tier_three.name=Base Power Expander (Tier 3)
-tile.expander_power_tier_four.name=Base Power Expander (Tier 4)
-tile.expander_power_tier_five.name=Base Power Expander (Tier 5)
-tile.expander_inv_tier_one.name=Base Inventory Expander (Tier 1)
-tile.expander_inv_tier_two.name=Base Inventory Expander (Tier 2)
-tile.expander_inv_tier_three.name=Base Inventory Expander (Tier 3)
-tile.expander_inv_tier_four.name=Base Inventory Expander (Tier 4)
-tile.expander_inv_tier_five.name=Base Inventory Expander (Tier 5)
 tile.base_addon_loot_deleter.name=Base Addon - Loot Deleter
 
 # for IGWMod
@@ -126,13 +116,7 @@ text.openmodularturrets.extras.upgrade.0=Ничего
 text.openmodularturrets.extras.upgrade.1=1x слот улучшений
 text.openmodularturrets.extras.upgrade.2=2x слот улучшений
 
-text.openmodularturrets.expander.power1=Turret Base RF Expander
-text.openmodularturrets.expander.power2=Adds
-text.openmodularturrets.expander.power3=RF capacity to a turret base.
 
-text.openmodularturrets.expander.inv1=Turret Base Inventory Expander
-text.openmodularturrets.expander.inv2=Adds 9 slots of inventory space that the turret base can use.
-text.openmodularturrets.expander.inv3=Each slot can only accept a max stack size of
 
 text.openmodularturrets.base_addon_loot_deleter.inv1=Turret Base Addon - Loot Deleter
 text.openmodularturrets.base_addon_loot_deleter.inv2=Removes all dropped loot from
@@ -154,16 +138,6 @@ text.openmodularturrets.base_max_range=Max range at which all mounted turrets wi
 
 tile.plasma_turret.name=Plasma Launcher Turret
 text.openmodularturrets:turret_limit=Turret Limit
-text.openmodularturrets.flavour.expander.power.1=Now with flavour!
-text.openmodularturrets.flavour.expander.power.2=Kinetic expansion.
-text.openmodularturrets.flavour.expander.power.3=There, their and they're.
-text.openmodularturrets.flavour.expander.power.4=Can be used as a sinking device.
-text.openmodularturrets.flavour.expander.power.5=Asymmetrical warfare.
-text.openmodularturrets.flavour.expander.inv.1=A little goes a long way.
-text.openmodularturrets.flavour.expander.inv.2=Supplies!
-text.openmodularturrets.flavour.expander.inv.3=Hair, heir and hare.
-text.openmodularturrets.flavour.expander.inv.4=Can be used as a floatation device.
-text.openmodularturrets.flavour.expander.inv.5=Very space, much inventory.
 text.openmodularturrets.flavour.base_addon_loot_deleter.inv.1=Just a bit of smoke.
 text.openmodularturrets.flavour.base.1=There are trees, everywhere...
 text.openmodularturrets.flavour.base.2=I'll draw your blood.

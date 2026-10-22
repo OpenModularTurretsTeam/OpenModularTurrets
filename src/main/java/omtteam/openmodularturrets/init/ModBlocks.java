@@ -31,12 +31,10 @@ public class ModBlocks {
     public static Block crossbowTurret;
     public static Block leverBlock;
 
-    public static Block expander;
     public static Block baseAddon;
     public static Block powerGenerator;
     public static void initBlocks(IForgeRegistry<Block> registry) {
         turretBase = InitHelper.registerBlock(new BlockTurretBase(), registry, ModItems.subblocks);
-        expander = InitHelper.registerBlock(new BlockExpander(), registry, ModItems.subblocks);
         powerGenerator = InitHelper.registerBlock(new BlockPowerAttachment(), registry, ModItems.subblocks);
         baseAddon = InitHelper.registerBlock(new BlockBaseAttachment(), registry, ModItems.subblocks);
 
@@ -130,7 +128,6 @@ public class ModBlocks {
         InitHelper.registerTileEntity(ArcTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.arcTurret);
         InitHelper.registerTileEntity(MeleeTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.meleeTurret);
         InitHelper.registerTileEntity(CrossbowTurretTileEntity.class, Reference.MOD_ID, OMTNames.Blocks.crossbowTurret);
-        InitHelper.registerTileEntity(Expander.class, Reference.MOD_ID, OMTNames.Blocks.expander);
         InitHelper.registerTileEntity(BaseAddon.class, Reference.MOD_ID, OMTNames.Blocks.baseAddon);
         InitHelper.registerTileEntity(PowerGenerator.class, Reference.MOD_ID, OMTNames.Blocks.powerGenerator);
     }

@@ -9,7 +9,7 @@ import omtteam.openmodularturrets.turret.TurretHeadUtil;
 
 /**
  * Created by Keridos on 17/05/17.
- * This interface is for turret base addon blocks, like expanders, or turret heads.
+ * This interface is for turret base addon blocks, like turret heads.
  */
 public interface ITurretBaseAddonBlock {
 

@@ -20,6 +20,7 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.AbstractOMTDamageSource;
+import omtteam.openmodularturrets.fixes.RemovedIds;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModBlocks;
 import omtteam.openmodularturrets.init.ModItems;
@@ -82,6 +83,16 @@ public class OMTEventHandler {
                 ((AbstractOMTDamageSource) event.getSource()).getBase().increasePlayerKillCounter();
             }
         }
+    }
+
+    @SubscribeEvent
+    public void missingBlockMappings(RegistryEvent.MissingMappings<Block> event) {
+        RemovedIds.ignoreRemoved(event);
+    }
+
+    @SubscribeEvent
+    public void missingItemMappings(RegistryEvent.MissingMappings<Item> event) {
+        RemovedIds.ignoreRemoved(event);
     }
 
     @SubscribeEvent

@@ -7,14 +7,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.util.NetworkUtil;
 import omtteam.omlib.util.world.Pos;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.handler.OMTNetworkingHandler;
-import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.network.messages.MessageUpdateTurret;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
 
@@ -157,7 +155,7 @@ public abstract class AbstractDirectedTurret extends TurretHead {
         }
 
         //Is turret base present and valid?
-        if (this.base == null || this.base.getTier() < this.turretTier) {
+        if (!hasValidBase()) {
             this.getWorld().destroyBlock(this.pos, true);
             return;
         }
@@ -181,18 +179,13 @@ public abstract class AbstractDirectedTurret extends TurretHead {
         }
         this.ticks++;
 
-        //Real time tick updates
-        TurretHeadUtil.updateSolarPanelAddon(base);
+        // the base picks the target (and warns players, runs the solar panel)
+        this.target = getTargetFromBase();
         concealmentChecks();
 
         //Is there enough power to shoot?
-        if ((base.getEnergyStored(EnumFacing.DOWN) < getPowerRequiredForNextShot())) {
+        if (!logic().hasEnergyForShot(getCoreType())) {
             return;
-        }
-
-        //Warn players
-        if (base.isAttacksPlayers() && OMTConfig.TURRETS.globalCanTargetPlayers) {
-            TurretHeadUtil.warnPlayers(base, base.getWorld(), this.pos, getTurretBaseRange());
         }
 
         // Update target tracking (Player entity not setting motion data when moving via movement keys)
@@ -205,42 +198,35 @@ public abstract class AbstractDirectedTurret extends TurretHead {
             targetLastZ = target.posZ;
         }
 
-        //turret tick rate;
-        if (target == null && targetingTicks < OMTConfig.TURRETS.turretTargetSearchTicks) {
-            targetingTicks++;
-        } else {
-            //Validate current target, get a new one if necessary
-            targetingChecks();
-
-            //Aim at target
-            if (target != null && isTargetInYawPitch(target)) {
-                this.yaw = TurretHeadUtil.getAimYaw(this.target, new Pos(this.pos));
-                this.pitch = TurretHeadUtil.getAimPitch(this.target, new Pos(this.pos));
-            }
-
-            targetingTicks = 0;
+        //Aim at target
+        if (target != null && isTargetInYawPitch(target)) {
+            this.yaw = TurretHeadUtil.getAimYaw(this.target, new Pos(this.pos));
+            this.pitch = TurretHeadUtil.getAimPitch(this.target, new Pos(this.pos));
         }
 
-        if (target != null && !target.isDead || this.autoFire) {
+        if (target != null || this.autoFire) {
             // has cooldown passed?
             if (isOnCooldown()) {
-                int baseFireRate = this.getTurretBaseFireRate();
+                return;
+            }
+
+            // auto fire without target: the forced shot takes its own ammo (3.x took it twice)
+            if (target == null) {
+                if (forceShot()) {
+                    this.ticks = 0;
+                }
                 return;
             }
 
             // Is there ammo?
             ItemStack ammo = getAmmoStack();
-            if (ammo == ItemStack.EMPTY && this.requiresAmmo() && OMTConfig.TURRETS.doTurretsNeedAmmo) {
+            if (ammo.isEmpty() && !firesWithoutAmmo()) {
                 //TODO: Play some kind of clicking sound?
                 return;
             }
 
             //Finally, try to shoot if criteria is met.
-            if (target != null) {
-                doTargetedShot(this.target, ammo);
-            } else if (this.autoFire) {
-                forceShot();
-            }
+            doTargetedShot(this.target, ammo);
 
             //If we made it this far, reset ticks to zero
             this.ticks = 0;

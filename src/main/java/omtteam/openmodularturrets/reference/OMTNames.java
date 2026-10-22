@@ -23,18 +23,8 @@ public class OMTNames {
         public static final String crossbowTurret = "crossbow_turret";
         public static final String lever = "lever_block";
 
+        /** Removed in 4.0.0 (block, item and tile entity); kept for the missing mapping handling. */
         public static final String expander = "expander";
-        public static final String expanderPowerTierOne = "expander_power_tier_one";
-        public static final String expanderPowerTierTwo = "expander_power_tier_two";
-        public static final String expanderPowerTierThree = "expander_power_tier_three";
-        public static final String expanderPowerTierFour = "expander_power_tier_four";
-        public static final String expanderPowerTierFive = "expander_power_tier_five";
-
-        public static final String expanderInvTierOne = "expander_inv_tier_one";
-        public static final String expanderInvTierTwo = "expander_inv_tier_two";
-        public static final String expanderInvTierThree = "expander_inv_tier_three";
-        public static final String expanderInvTierFour = "expander_inv_tier_four";
-        public static final String expanderInvTierFive = "expander_inv_tier_five";
 
         public static final String baseAddon = "base_addon";
         public static final String baseAddonLootDeleter = "base_addon_loot_deleter";
@@ -150,7 +140,6 @@ public class OMTNames {
         public static final String turretBaseTierFourGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_four.png";
         public static final String turretBaseTierFiveGUI = Reference.MOD_ID + ":textures/gui/turret_base_tier_five.png";
         public static final String configureGUI = Reference.MOD_ID + ":textures/gui/configure.png";
-        public static final String expanderGUI = Reference.MOD_ID + ":textures/gui/expander_inv.png";
         public static final String powerGeneratorGUI = Reference.MOD_ID + ":textures/gui/power_generator.png";
     }
 }

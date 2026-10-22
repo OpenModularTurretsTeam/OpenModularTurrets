@@ -2,7 +2,6 @@ package omtteam.openmodularturrets.tileentity.turrets;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -13,7 +12,6 @@ import omtteam.omlib.network.messages.render.MessageRenderRay;
 import omtteam.omlib.util.EntityUtil;
 import omtteam.openmodularturrets.blocks.turretheads.BlockAbstractTurretHead;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
-import omtteam.openmodularturrets.init.ModItems;
 import omtteam.openmodularturrets.init.ModSounds;
 
 import javax.annotation.Nonnull;
@@ -23,22 +21,6 @@ public class RailGunTurretTileEntity extends RayTracingTurret {
 
     public RailGunTurretTileEntity() {
         super(5);
-        ammo = new ItemStack(ModItems.ammoMetaItem, 1, 2);
-    }
-
-    @Override
-    public boolean requiresAmmo() {
-        return true;
-    }
-
-    @Override
-    public boolean requiresSpecificAmmo() {
-        return true;
-    }
-
-    @Override
-    public Integer[] getDefaultPriorities() {
-        return new Integer[]{10, 10, 20, 40, 10};
     }
 
     @Nonnull

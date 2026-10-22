@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.tileentity.turrets;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
@@ -24,26 +23,6 @@ public class TeleporterTurretTileEntity extends TurretHead {
             ((BlockTeleporterTurret) this.getWorld().getBlockState(this.pos).getBlock()).shouldAnimate = true;
             target = null;
         }
-    }
-
-    @Override
-    public boolean requiresAmmo() {
-        return false;
-    }
-
-    @Override
-    public boolean requiresSpecificAmmo() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getAmmo() {
-        return null;
-    }
-
-    @Override
-    public Integer[] getDefaultPriorities() {
-        return new Integer[]{1, -10, 0, 10};
     }
 
     @Override

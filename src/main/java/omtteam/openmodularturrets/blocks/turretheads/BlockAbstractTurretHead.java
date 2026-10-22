@@ -31,7 +31,6 @@ import omtteam.openmodularturrets.tileentity.TurretBase;
 import omtteam.openmodularturrets.tileentity.turrets.TurretHead;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import omtteam.openmodularturrets.turret.TurretType;
-import omtteam.openmodularturrets.util.OMTUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -115,7 +114,7 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     @ParametersAreNonnullByDefault
     public boolean canPlaceBlockAt_OM(World worldIn, BlockPos pos) {
         TurretBase base = getBase(worldIn, pos);
-        return base != null && OMTUtil.getRemainingTurretSlots(base, this.getTurretType()) > 0;
+        return base != null && this.getTurretType() != null && base.getRemainingTurretSlots(this.getTurretType().getCore()) > 0;
     }
 
     @Override
@@ -123,9 +122,9 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
     public void onBlockPlacedBy_OM(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy_OM(worldIn, pos, state, placer, stack);
         TurretBase base = getBase(worldIn, pos);
-        if (this.getTurretType().getSettings().baseRange > base.getMaxRange()) {
-            base.updateMaxRange();
-            base.setRange(base.getMaxRange());
+        if (base != null) {
+            // a turret reaching further than the old max range raises the range (TurretBaseLogic.updateNeighbours)
+            base.updateNeighbours();
         }
     }
 
@@ -168,16 +167,15 @@ public abstract class BlockAbstractTurretHead extends BlockAbstractTileEntity im
                                    + ": \u00A7F" + ownerName, probeInfo.defaultTextStyle());
 
             probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.AMMO) + ": \u00A7F"
-                                   + getAmmoLevel(turret, turret.getBase()), probeInfo.defaultTextStyle());
+                                   + turret.getAmmoLevel(), probeInfo.defaultTextStyle());
             probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE) + ": \u00A7F"
                                    + turret.getTurretType().getSettings().baseDamage, probeInfo.defaultTextStyle());
             probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": \u00A7F"
-                                   + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * getAmpLevel(turret.getBase())) + "%", probeInfo.defaultTextStyle());
+                                   + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * turret.getDamageAmpLevel()) + "%", probeInfo.defaultTextStyle());
             probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.ACCURACY) + ": \u00A7F"
                                    + String.format("%.2f", Math.min(100F, 100F - turret.getActualTurretAccuracyDeviation())) + "%", probeInfo.defaultTextStyle());
             probeInfo.text("\u00A76" + getLocalizationString(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": \u00A7F"
-                                   + String.format("%.2f", 20F / (turret.getTurretBaseFireRate()
-                    / (1 + TurretHeadUtil.getFireRateUpgrades(turret.getBase(), turret)))) + "s/sec", probeInfo.defaultTextStyle());
+                                   + String.format("%.2f", 20F / turret.getFireCooldownTicks()) + "s/sec", probeInfo.defaultTextStyle());
         }
     }
 }

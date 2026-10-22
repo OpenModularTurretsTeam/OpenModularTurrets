@@ -1,6 +1,6 @@
 # Created by .gitignore support plugin (hsz.mobi)
 ### Gradle template
-/.gradle2/
+/.gradle/
 /build/
 
 # Ignore Gradle GUI config
@@ -27,3 +27,4 @@ Thumbs.db
 settings.gradle
 local.properties
 *.log
+logs/

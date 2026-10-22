@@ -42,11 +42,11 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
         super(world);
         this.turretBase = turretBase;
         this.turretBasePos = turretBase.getPos();
-        if (TurretHeadUtil.getAmpLevel(turretBase) > 0) {
+        if (turretBase.getLogic().getDamageAmpLevel() > 0) {
             isAmped = true;
-            amp_level = TurretHeadUtil.getAmpLevel(turretBase);
+            amp_level = turretBase.getLogic().getDamageAmpLevel();
         }
-        fakeDrops = TurretHeadUtil.getFakeDropsLevel(turretBase);
+        fakeDrops = turretBase.getLogic().getLootingLevel(3);
         dropLoot = TurretHeadUtil.baseHasNoLootDeleter(turretBase);
     }
 
@@ -55,11 +55,11 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
         this.ammo = ammo;
         this.turretBase = turretBase;
         this.turretBasePos = turretBase.getPos();
-        if (TurretHeadUtil.getAmpLevel(turretBase) > 0) {
+        if (turretBase.getLogic().getDamageAmpLevel() > 0) {
             isAmped = true;
-            amp_level = TurretHeadUtil.getAmpLevel(turretBase);
+            amp_level = turretBase.getLogic().getDamageAmpLevel();
         }
-        fakeDrops = TurretHeadUtil.getFakeDropsLevel(turretBase);
+        fakeDrops = turretBase.getLogic().getLootingLevel(3);
         dropLoot = TurretHeadUtil.baseHasNoLootDeleter(turretBase);
     }
 

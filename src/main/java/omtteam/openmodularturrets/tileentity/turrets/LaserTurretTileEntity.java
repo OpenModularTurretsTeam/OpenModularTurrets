@@ -2,7 +2,6 @@ package omtteam.openmodularturrets.tileentity.turrets;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -20,26 +19,6 @@ public class LaserTurretTileEntity extends RayTracingTurret {
 
     public LaserTurretTileEntity() {
         super(5);
-    }
-
-    @Override
-    public boolean requiresAmmo() {
-        return false;
-    }
-
-    @Override
-    public boolean requiresSpecificAmmo() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getAmmo() {
-        return null;
-    }
-
-    @Override
-    public Integer[] getDefaultPriorities() {
-        return new Integer[]{5, 10, 2, -10, 10};
     }
 
     @Nonnull

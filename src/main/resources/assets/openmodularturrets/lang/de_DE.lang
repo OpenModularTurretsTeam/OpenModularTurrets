@@ -54,16 +54,6 @@ tile.laser_turret.name=Laser Turm
 tile.rail_gun_turret.name=Rail Gun Turm
 tile.plasma_turret.name=Plasmawerfer Turm
 tile.lever_block.name=Hebel für Tier 1 Turm Basis
-tile.expander_power_tier_one.name=Basis Energie Erweiterung (Stufe 1)
-tile.expander_power_tier_two.name=Basis Energie Erweiterung (Stufe 2)
-tile.expander_power_tier_three.name=Basis Energie Erweiterung (Stufe 3)
-tile.expander_power_tier_four.name=Basis Energie Erweiterung (Stufe 4)
-tile.expander_power_tier_five.name=Basis Energie Erweiterung (Stufe 5)
-tile.expander_inv_tier_one.name=Basis Inventar Erweiterung (Stufe 1)
-tile.expander_inv_tier_two.name=Basis Inventar Erweiterung (Stufe 2)
-tile.expander_inv_tier_three.name=Basis Inventar Erweiterung (Stufe 3)
-tile.expander_inv_tier_four.name=Basis Inventar Erweiterung (Stufe 4)
-tile.expander_inv_tier_five.name=Basis Inventar Erweiterung (Stufe 5)
 tile.base_addon_loot_deleter.name=Base Addon - Loot Deleter
 tile.turret_base.name=Turm Basis
 
@@ -124,13 +114,7 @@ text.openmodularturrets.extras.upgrade.0=Nichts
 text.openmodularturrets.extras.upgrade.1=1x Upgrade Slots
 text.openmodularturrets.extras.upgrade.2=2x Upgrade Slots
 
-text.openmodularturrets.expander.power1=Turmbasis Energie Expansion
-text.openmodularturrets.expander.power2=Fügt
-text.openmodularturrets.expander.power3=RF Kapazität zur Basis hinzu.
 
-text.openmodularturrets.expander.inv1=Turmbasis Inventarvergrößerung
-text.openmodularturrets.expander.inv2=Fügt 9 Slots Inventar hinzu, die die Basis nutzen kann.
-text.openmodularturrets.expander.inv3=Jeder Slot kann nur stacken bis
 
 text.openmodularturrets.base_addon_loot_deleter.inv1=Turret Base Addon - Loot Deleter
 text.openmodularturrets.base_addon_loot_deleter.inv2=Entfernt alles Loot, welches von Gegnern
@@ -151,17 +135,7 @@ text.openmodularturrets.base_max_range=Maximale Reichweite, in der Türme nach Z
 text.openmodularturrets.toggle_mode=Wechsle An/Aus-Modus
 text.openmodularturrets:turret_limit=Turm Limit
 
-text.openmodularturrets.flavour.expander.power.1=Jetzt verschiedene Geschmacksrichtungen!
-text.openmodularturrets.flavour.expander.power.2=Kinetische Expansion.
-text.openmodularturrets.flavour.expander.power.3=Veni, vidi, vici.
-text.openmodularturrets.flavour.expander.power.4=Taugt als Briefbeschwerer.
-text.openmodularturrets.flavour.expander.power.5=Asymmetrische Kriegsführung.
 
-text.openmodularturrets.flavour.expander.inv.1=Ein bisschen geht weit weg.
-text.openmodularturrets.flavour.expander.inv.2=Nachschub!
-text.openmodularturrets.flavour.expander.inv.3=Mehrwehrt.
-text.openmodularturrets.flavour.expander.inv.4=Taugt als Ballon.
-text.openmodularturrets.flavour.expander.inv.5=Very space, much inventory.
 
 text.openmodularturrets.flavour.base_addon_loot_deleter.inv.1=Nur ein bisschen Rauch.
 

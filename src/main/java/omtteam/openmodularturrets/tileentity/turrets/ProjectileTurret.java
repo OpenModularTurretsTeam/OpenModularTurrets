@@ -4,7 +4,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -13,7 +12,6 @@ import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
 import omtteam.openmodularturrets.init.ModSounds;
-import omtteam.openmodularturrets.turret.TurretHeadUtil;
 
 import java.util.Random;
 
@@ -65,20 +63,21 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
     @Override
     public boolean forceShot() {
         if (this instanceof RocketTurretTileEntity && OMTConfig.TURRETS.canRocketsHome) return false;
-        if (ticks < (this.getTurretBaseFireRate() * (1 - TurretHeadUtil.getFireRateUpgrades(base, this)))) {
+        if (!hasValidBase() || isOnCooldown() || !logic().hasEnergyForShot(getCoreType())) {
             return false;
         }
         //Finally, try to shoot if criteria is met.
         ItemStack ammo = getAmmoStack();
 
         // Is there ammo?
-        if (ammo == ItemStack.EMPTY && this.requiresAmmo() && OMTConfig.TURRETS.doTurretsNeedAmmo) {
+        if (ammo.isEmpty() && !firesWithoutAmmo()) {
             return false;
         }
 
-        base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot(), null);
+        consumeShotEnergy();
 
-        for (int i = 0; i <= this.cachedScattershot; i++) {
+        int scattershot = getScattershotCount();
+        for (int i = 0; i <= scattershot; i++) {
             double accuracy = this.getActualTurretAccuracyDeviation() / 20D;
             TurretProjectile projectile = this.createProjectile(this.getWorld(), target, ammo);
             projectile.setPosition(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5);
@@ -109,10 +108,11 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
      */
     protected void shootProjectile(double adjustedX, double adjustedY, double adjustedZ, float speedFactor, float inaccuracy, ItemStack ammo) {
         // Consume energy
-        base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot(), null);
+        consumeShotEnergy();
 
         // Create one projectile per scatter-shot upgrade
-        for (int i = 0; i <= this.cachedScattershot; i++) {
+        int scattershot = getScattershotCount();
+        for (int i = 0; i <= scattershot; i++) {
             // Create a projectile, consuming ammo if applicable
             TurretProjectile projectile = this.createProjectile(this.getWorld(), this.target, ammo);
 
@@ -123,7 +123,7 @@ public abstract class ProjectileTurret extends AbstractDirectedTurret {
             projectile.shoot(adjustedX, adjustedY, adjustedZ, speedFactor, inaccuracy);
 
             // Play sounds
-            if ((projectile.amp_level = TurretHeadUtil.getAmpLevel(base)) != 0) {
+            if ((projectile.amp_level = getDamageAmpLevel()) != 0) {
                 this.getWorld().playSound(null, this.pos, ModSounds.amped, SoundCategory.BLOCKS,
                                           (float) OMTConfig.TURRETS.turretSoundVolume, RandomUtil.random.nextFloat() + 0.5F);
                 projectile.isAmped = true;

@@ -7,6 +7,7 @@ import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.api.lists.AmmoList;
 import omtteam.openmodularturrets.api.lists.MobBlockList;
 import omtteam.openmodularturrets.api.lists.MobForceList;
+import omtteam.openmodularturrets.api.lists.NeutralList;
 import omtteam.openmodularturrets.reference.Reference;
 
 import static omtteam.omlib.util.GeneralUtil.getItem;
@@ -80,9 +81,9 @@ public class OMTConfig {
     private static void parseNeutralForceList() {
         try {
             if (GENERAL.stringNeutralForceList.length == 0) return;
-            MobBlockList.getInstance().clear();
+            NeutralList.getInstance().clear();
             for (String itemListEntry : GENERAL.stringNeutralForceList) {
-                MobBlockList.getInstance().add(new ResourceLocation(itemListEntry));
+                NeutralList.getInstance().add(new ResourceLocation(itemListEntry));
             }
         } catch (Exception e) {
             OpenModularTurrets.getLogger().error("error while parsing neutral force list config!");
@@ -118,16 +119,6 @@ public class OMTConfig {
     }
 
     public static class ConfigMisc {
-        @Config.RangeInt(min = 1, max = 2000000000)
-        public int expanderPowerTierOneCapacity = 2500;
-        @Config.RangeInt(min = 1, max = 2000000000)
-        public int expanderPowerTierTwoCapacity = 25000;
-        @Config.RangeInt(min = 1, max = 2000000000)
-        public int expanderPowerTierThreeCapacity = 75000;
-        @Config.RangeInt(min = 1, max = 2000000000)
-        public int expanderPowerTierFourCapacity = 250000;
-        @Config.RangeInt(min = 1, max = 2000000000)
-        public int expanderPowerTierFiveCapacity = 5000000;
         @Config.RangeInt(min = 0)
         public int solarPanelAddonGen = 10;
         @Config.RangeInt(min = 0)

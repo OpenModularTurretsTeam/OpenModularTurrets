@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -19,7 +18,6 @@ import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.entity.projectiles.damagesources.NormalDamageSource;
 import omtteam.openmodularturrets.handler.config.OMTConfig;
-import omtteam.openmodularturrets.turret.TurretHeadUtil;
 import omtteam.openmodularturrets.turret.TurretTargetingUtils;
 import omtteam.openmodularturrets.util.OMTUtil;
 
@@ -51,8 +49,7 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
 
     @Override
     protected void doTargetedShot(EntityLivingBase target, ItemStack ammo) {
-        if (target.isDead || target.getHealth() <= 0.0F || !TurretTargetingUtils.canSeeTargetFromPos(this, target)
-                || !isEntityValidTarget(target)) {
+        if (target.isDead || target.getHealth() <= 0.0F || !TurretTargetingUtils.canSeeTargetFromPos(this, target)) {
             this.target = null;
             return;
         }
@@ -65,6 +62,13 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
 
     @Override
     public boolean forceShot() {
+        if (!hasValidBase() || !logic().hasEnergyForShot(getCoreType())) {
+            return false;
+        }
+        ItemStack ammo = getAmmoStack();
+        if (ammo.isEmpty() && !firesWithoutAmmo()) {
+            return false;
+        }
         Vec3d direction = MathUtil.getVectorFromYawPitch(this.yaw, this.pitch).scale(5D);
         Vec3d baseVector = new Vec3d(this.getPos().getX() + 0.5D,
                                      this.getPos().getY() + 0.6D,
@@ -81,11 +85,14 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
 
     protected void shootRay(double adjustedX, double adjustedY, double adjustedZ, double accuracy) {
         // Consume energy
-        base.setEnergyStored(base.getEnergyStored(EnumFacing.DOWN) - getPowerRequiredForNextShot(), null);
+        if (!consumeShotEnergy()) {
+            return;
+        }
         this.applyLaunchEffects();
 
         // Create one ray per scatter-shot upgrade
-        for (int i = 0; i <= this.cachedScattershot; i++) {
+        int scattershot = getScattershotCount();
+        for (int i = 0; i <= scattershot; i++) {
             double xDev, yDev, zDev;
             boolean hit = false;
             // vector points at the target, baseVector is the origin of the raytrace
@@ -95,9 +102,9 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
                                          this.getPos().getZ() + 0.5D);
 
             // Calculate deviation based on targets height and its distance to the turret
-            double deviationModifier = 10D * (target.height < 0.5 ? 1.5D : 1D)
+            double deviationModifier = 10D * (target != null && target.height < 0.5 ? 1.5D : 1D)
                     * ((vector.distanceTo(baseVector) * 0.2D
-                    / (this.getTurretBaseRange() + TurretHeadUtil.getRangeUpgrades(base, this))) + 0.3D);
+                    / getTurretRange()) + 0.3D);
 
             xDev = RandomUtil.random.nextGaussian() * 0.003D * deviationModifier * accuracy;
             yDev = RandomUtil.random.nextGaussian() * 0.003D * deviationModifier * accuracy;
@@ -176,11 +183,11 @@ public abstract class RayTracingTurret extends AbstractDirectedTurret {
     protected void damageEntity(Entity entity) {
         float damageModifier = this.getDamageModifier(entity); // The damage modifier of the turret based on entity
         float damage = this.getTurretType().getSettings().baseDamage * damageModifier;
-        int fakeDrops = TurretHeadUtil.getFakeDropsLevel(base);
+        int fakeDrops = getFakeDropsLevel();
 
-        if (this.getTurretDamageAmpBonus() * TurretHeadUtil.getAmpLevel(base) > 0 && entity instanceof EntityLivingBase) {
+        if (this.getTurretDamageAmpBonus() * getDamageAmpLevel() > 0 && entity instanceof EntityLivingBase) {
             EntityLivingBase elb = (EntityLivingBase) entity;
-            damage += ((int) elb.getHealth() * this.getTurretDamageAmpBonus() * TurretHeadUtil.getAmpLevel(base));
+            damage += ((int) elb.getHealth() * this.getTurretDamageAmpBonus() * getDamageAmpLevel());
         }
 
         // Attack 2 times, once with normal, once with Bypassing Damage

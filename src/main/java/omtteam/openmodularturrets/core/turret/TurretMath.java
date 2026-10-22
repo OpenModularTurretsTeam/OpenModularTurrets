@@ -1,0 +1,192 @@
+package omtteam.openmodularturrets.core.turret;
+
+import omtteam.openmodularturrets.core.world.Face;
+import omtteam.openmodularturrets.core.world.Vector3;
+
+/**
+ * Aiming maths shared by the server (where to shoot) and the renderer (how to rotate the model), so both agree.
+ * <p>
+ * Every mounting face has a right-handed local frame: {@code up} is the face direction (away from the base),
+ * {@code forward} is where a turret with yaw 0 points, {@code right = up × forward}. Yaw turns around {@code up}
+ * (0° = forward, 90° = right); pitch is the elevation above the mounting plane (90° = straight away from the base).
+ */
+public final class TurretMath {
+    /** The aim point is lowered by 0.1 blocks. */
+    private static final double AIM_DROP = 0.1D;
+    /**
+     * Lowest local pitch a turret can aim at; anything lower would point into its own base (the base block covers
+     * up to about -45° below the mounting plane). New; the 1.12.2 turrets had no effective limits.
+     */
+    public static final float MIN_PITCH = -45.0F;
+
+    private TurretMath() {
+    }
+
+    /** Local axes of a mounting face, in world coordinates (a record in 1.20.1+). */
+    public static final class Frame {
+        private final Vector3 right;
+        private final Vector3 up;
+        private final Vector3 forward;
+
+        public Frame(Vector3 right, Vector3 up, Vector3 forward) {
+            this.right = right;
+            this.up = up;
+            this.forward = forward;
+        }
+
+        public Vector3 right() {
+            return right;
+        }
+
+        public Vector3 up() {
+            return up;
+        }
+
+        public Vector3 forward() {
+            return forward;
+        }
+
+        /** Expresses a world-space vector in this frame: x = right, y = up, z = forward. */
+        public Vector3 toLocal(Vector3 world) {
+            return new Vector3(world.dot(right), world.dot(up), world.dot(forward));
+        }
+
+        /** Inverse of {@link #toLocal}. */
+        public Vector3 toWorld(Vector3 local) {
+            return right.scale(local.x()).add(up.scale(local.y())).add(forward.scale(local.z()));
+        }
+    }
+
+    /** Local yaw and pitch in degrees (a record in 1.20.1+). */
+    public static final class Angles {
+        private final float yaw;
+        private final float pitch;
+
+        public Angles(float yaw, float pitch) {
+            this.yaw = yaw;
+            this.pitch = pitch;
+        }
+
+        public float yaw() {
+            return yaw;
+        }
+
+        public float pitch() {
+            return pitch;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof Angles)) return false;
+            Angles other = (Angles) o;
+            return Float.compare(yaw, other.yaw) == 0 && Float.compare(pitch, other.pitch) == 0;
+        }
+
+        @Override
+        public int hashCode() {
+            return 31 * Float.hashCode(yaw) + Float.hashCode(pitch);
+        }
+
+        @Override
+        public String toString() {
+            return "Angles[yaw=" + yaw + ", pitch=" + pitch + "]";
+        }
+    }
+
+    /**
+     * Turrets on top of a base face +Z (south) at yaw 0, turrets hanging below face -Z, turrets on side faces face
+     * world up at yaw 0 (towards the sky).
+     */
+    public static Frame frame(Face face) {
+        Vector3 up = Vector3.of(face);
+        Vector3 forward;
+        switch (face) {
+            case UP:
+                forward = new Vector3(0, 0, 1);
+                break;
+            case DOWN:
+                forward = new Vector3(0, 0, -1);
+                break;
+            default:
+                forward = new Vector3(0, 1, 0);
+        }
+        return new Frame(up.cross(forward), up, forward);
+    }
+
+    /** Yaw/pitch that point a turret on {@code face} along {@code direction} (world space, any length). */
+    public static Angles anglesFor(Face face, Vector3 direction) {
+        Vector3 local = frame(face).toLocal(direction);
+        double horizontal = Math.sqrt(local.x() * local.x() + local.z() * local.z());
+        float yaw = (float) Math.toDegrees(Math.atan2(local.x(), local.z()));
+        float pitch = (float) Math.toDegrees(Math.atan2(local.y(), horizontal));
+        return new Angles(yaw, pitch);
+    }
+
+    /** Whether a turret on {@code face} can turn towards {@code direction} without pointing into its base. */
+    public static boolean canAim(Face face, Vector3 direction) {
+        return anglesFor(face, direction).pitch() >= MIN_PITCH;
+    }
+
+    /** {@code angles} with the pitch limited to {@link #MIN_PITCH}. */
+    public static Angles limit(Angles angles) {
+        return angles.pitch() >= MIN_PITCH ? angles : new Angles(angles.yaw(), MIN_PITCH);
+    }
+
+    /** World direction (unit length) of a turret on {@code face} with the given angles. */
+    public static Vector3 direction(Face face, Angles angles) {
+        double yaw = Math.toRadians(angles.yaw());
+        double pitch = Math.toRadians(angles.pitch());
+        Vector3 local = new Vector3(Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch));
+        return frame(face).toWorld(local);
+    }
+
+    /** Where to shoot and how fast, see {@link #lead} (a record in 1.20.1+). */
+    public static final class Lead {
+        private final Vector3 direction;
+        private final float speedFactor;
+
+        public Lead(Vector3 direction, float speedFactor) {
+            this.direction = direction;
+            this.speedFactor = speedFactor;
+        }
+
+        public Vector3 direction() {
+            return direction;
+        }
+
+        public float speedFactor() {
+            return speedFactor;
+        }
+    }
+
+    /**
+     * 1.12.2 {@code ProjectileTurret.doTargetedShot}, now with the real flight physics: the flight time follows from
+     * the distance and the speed (with air drag), the aim point moves along the target's velocity for that time and
+     * is raised by how far the projectile drops during it. The aim point is then lowered by 0.1 and the projectile
+     * speed scaled so it arrives in time.
+     *
+     * @param offset   target aim point minus turret centre
+     * @param velocity target movement per tick
+     * @param speed    launch speed in blocks per tick
+     * @param gravity  downward acceleration of the projectile per tick
+     */
+    public static Lead lead(Vector3 offset, Vector3 velocity, double speed, double gravity) {
+        double distance = offset.length();
+        if (distance < 1.0E-6) return new Lead(offset, 1.0F);
+        double time = ProjectileMath.flightTime(distance, speed);
+        Vector3 adjusted = offset.add(velocity.scale(time));
+        float speedFactor = (float) (adjusted.length() / distance);
+        Vector3 aim = adjusted.add(new Vector3(0, ProjectileMath.dropAfter(time, gravity) - AIM_DROP, 0));
+        return new Lead(aim, speedFactor);
+    }
+
+    /**
+     * Shortest signed difference {@code to - from} in degrees, in [-180, 180).
+     */
+    public static float angleDifference(float from, float to) {
+        float difference = (to - from) % 360.0F;
+        if (difference >= 180.0F) difference -= 360.0F;
+        if (difference < -180.0F) difference += 360.0F;
+        return difference;
+    }
+}
