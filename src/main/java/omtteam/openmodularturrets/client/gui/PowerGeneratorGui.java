@@ -3,9 +3,9 @@ package omtteam.openmodularturrets.client.gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import omtteam.openmodularturrets.client.gui.containers.PowerGeneratorContainer;
+import omtteam.openmodularturrets.container.PowerGeneratorContainer;
 import omtteam.openmodularturrets.reference.OMTNames;
-import omtteam.openmodularturrets.tileentity.PowerGenerator;
+import omtteam.openmodularturrets.tileentity.base.PowerGenerator;
 import org.lwjgl.opengl.GL11;
 
 public class PowerGeneratorGui extends GuiContainer {

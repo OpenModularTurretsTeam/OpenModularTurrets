@@ -8,15 +8,15 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import omtteam.omlib.util.world.Pos;
 import omtteam.omlib.util.world.WorldUtil;
-import omtteam.openmodularturrets.blocks.BlockBaseAttachment;
-import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.tileentity.turrets.TurretTileEntity;
+import omtteam.openmodularturrets.block.base.BlockBaseAttachment;
+import omtteam.openmodularturrets.tileentity.base.TurretBase;
+import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static omtteam.openmodularturrets.blocks.BlockBaseAttachment.BASE_ADDON_META;
+import static omtteam.openmodularturrets.block.base.BlockBaseAttachment.BASE_ADDON_META;
 
 /**
  * World helpers for turrets: finding the base, aiming and the model rotation. The game rules that lived here in 3.x

@@ -7,7 +7,6 @@ import net.minecraft.item.Item;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.common.util.FakePlayer;
@@ -18,14 +17,13 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.entity.projectiles.damagesources.AbstractOMTDamageSource;
+import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.entity.projectile.AbstractOMTDamageSource;
 import omtteam.openmodularturrets.fixes.MissingIds;
-import omtteam.openmodularturrets.handler.config.OMTConfig;
-import omtteam.openmodularturrets.init.ModBlocks;
-import omtteam.openmodularturrets.init.ModItems;
-import omtteam.openmodularturrets.init.ModSounds;
 import omtteam.openmodularturrets.reference.Reference;
+import omtteam.openmodularturrets.registry.ModBlocks;
+import omtteam.openmodularturrets.registry.ModItems;
+import omtteam.openmodularturrets.registry.ModSounds;
 import omtteam.openmodularturrets.util.OMTFakePlayer;
 import omtteam.openmodularturrets.util.OMTUtil;
 
@@ -113,11 +111,6 @@ public class OMTEventHandler {
     @SubscribeEvent
     public void soundRegistryEvent(RegistryEvent.Register<SoundEvent> event) {
         ModSounds.init(event.getRegistry());
-    }
-
-    @SubscribeEvent
-    public void renderRegisterEvent(ModelRegistryEvent event) {
-        OpenModularTurrets.proxy.initModelLoaders();
     }
 
     @SubscribeEvent

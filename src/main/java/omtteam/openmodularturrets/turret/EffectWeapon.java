@@ -3,8 +3,8 @@ package omtteam.openmodularturrets.turret;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.WorldServer;
-import omtteam.openmodularturrets.tileentity.TurretBase;
-import omtteam.openmodularturrets.tileentity.turrets.TurretTileEntity;
+import omtteam.openmodularturrets.tileentity.base.TurretBase;
+import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
 
 import java.util.Objects;
 

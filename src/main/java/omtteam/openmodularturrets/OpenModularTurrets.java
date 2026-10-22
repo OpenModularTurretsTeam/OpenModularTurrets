@@ -11,15 +11,14 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import omtteam.openmodularturrets.client.gui.ModularTurretsTab;
-import omtteam.openmodularturrets.compatibility.ModCompatibility;
+import omtteam.openmodularturrets.compat.ModCompatibility;
+import omtteam.openmodularturrets.config.ConfigMigration;
 import omtteam.openmodularturrets.fixes.TENameFix;
 import omtteam.openmodularturrets.fixes.TurretTileEntityFix;
 import omtteam.openmodularturrets.handler.OMTGuiHandler;
-import omtteam.openmodularturrets.handler.config.ConfigMigration;
-import omtteam.openmodularturrets.proxy.CommonProxy;
 import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.turret.TurretRegistry;
+import omtteam.openmodularturrets.registry.ModularTurretsTab;
+import omtteam.openmodularturrets.registry.TurretRegistry;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION, acceptedMinecraftVersions = Reference.ACCEPTED_MINECRAFT_VERSION, dependencies = Reference.DEPENDENCIES)
@@ -31,7 +30,7 @@ public class OpenModularTurrets {
     @Mod.Instance(Reference.MOD_ID)
     public static OpenModularTurrets instance;
     @SuppressWarnings({"CanBeFinal", "unused"})
-    @SidedProxy(clientSide = "omtteam.openmodularturrets.proxy.ClientProxy", serverSide = "omtteam.openmodularturrets.proxy.ServerProxy")
+    @SidedProxy(clientSide = "omtteam.openmodularturrets.client.ClientProxy", serverSide = "omtteam.openmodularturrets.CommonProxy")
     public static CommonProxy proxy;
     private static Logger logger;
 

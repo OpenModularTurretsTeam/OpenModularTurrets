@@ -4,10 +4,10 @@ import net.minecraft.world.World;
 import omtteam.omlib.api.permission.EnumAccessLevel;
 import omtteam.omlib.api.permission.OwnerShareRegister;
 import omtteam.omlib.api.permission.TrustedPlayer;
-import omtteam.omlib.handler.OMConfig;
+import omtteam.omlib.config.OMConfig;
 import omtteam.omlib.util.player.Player;
-import omtteam.openmodularturrets.handler.config.OMTConfig;
-import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.UUID;

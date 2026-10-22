@@ -14,11 +14,11 @@ import omtteam.omlib.core.security.TrustManager;
 import omtteam.omlib.util.player.OMLibSecurityEnvironment;
 import omtteam.omlib.util.player.Player;
 import omtteam.openmodularturrets.api.lists.AmmoList;
+import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.security.DamageRules;
-import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.handler.config.OMTConfig;
-import omtteam.openmodularturrets.items.AmmoMetaItem;
-import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
+import omtteam.openmodularturrets.item.AmmoMetaItem;
+import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
 
 import javax.annotation.Nullable;

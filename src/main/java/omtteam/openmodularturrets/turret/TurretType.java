@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.turret;
 
-import omtteam.openmodularturrets.handler.config.TurretSetting;
+import omtteam.openmodularturrets.config.TurretSetting;
 import omtteam.openmodularturrets.reference.OMTNames;
 
 import java.util.HashMap;

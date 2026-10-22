@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
-import omtteam.omlib.init.OMLibItems;
+import omtteam.omlib.registry.OMLibItems;
 
 import java.util.UUID;
 

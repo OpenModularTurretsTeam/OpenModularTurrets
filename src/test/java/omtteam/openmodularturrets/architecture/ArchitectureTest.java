@@ -42,14 +42,11 @@ class ArchitectureTest {
      * so does a cycle that shrank or disappeared until it is updated here, so the list always shows the real state.
      */
     private static final List<Set<String>> KNOWN_CYCLES = Arrays.asList(
-            // one large loop through almost every package (blocks, tile entities, items, handlers, proxy, client)
-            set("(root)", "api", "api.lists", "api.tileentity", "blocks", "blocks.turretheads", "client.gui",
-                    "client.gui.containers", "client.gui.slot", "client.render.models",
-                    "client.render.renderers.blockitem", "client.render.renderers.projectiles", "compatibility",
-                    "compatibility.computercraft", "compatibility.hwyla", "compatibility.opencomputers",
-                    "entity.projectiles", "entity.projectiles.damagesources", "fixes", "handler", "handler.config",
-                    "init", "items", "items.blocks", "network.messages", "proxy", "tileentity", "tileentity.turrets",
-                    "turret", "util"),
+            // one large loop through almost every package (blocks, tile entities, items, containers, network, registry)
+            set("(root)", "api", "api.lists", "api.tileentity", "block.base", "block.misc", "block.turret", "compat",
+                    "compat.computercraft", "compat.hwyla", "compat.opencomputers", "config", "container",
+                    "entity.projectile", "fixes", "handler", "inventory", "item", "network", "registry", "tileentity.base",
+                    "tileentity.misc", "tileentity.turret", "turret", "util"),
             // the core types reach each other as in 1.20.1+ (BaseWorld -> ItemSlot -> AmmoType, TurretType -> Face,
             // Neighbour -> TurretType, LogicSettings -> TurretType, TargetSelector -> LogicSettings,
             // TurretState -> TurretBaseLogic)

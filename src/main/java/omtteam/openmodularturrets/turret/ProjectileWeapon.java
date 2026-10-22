@@ -4,8 +4,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import omtteam.openmodularturrets.entity.projectiles.TurretProjectile;
-import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
+import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.Nullable;
 import java.util.Objects;

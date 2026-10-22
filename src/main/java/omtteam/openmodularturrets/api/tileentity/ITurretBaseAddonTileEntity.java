@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.api.tileentity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import omtteam.omlib.api.tile.IOwnedBlockAddon;
-import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.turret.TurretHeadUtil;
 
 /**

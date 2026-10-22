@@ -5,13 +5,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-import omtteam.openmodularturrets.client.gui.ConfigureGui;
-import omtteam.openmodularturrets.client.gui.PowerGeneratorGui;
-import omtteam.openmodularturrets.client.gui.TurretBaseGui;
-import omtteam.openmodularturrets.client.gui.containers.PowerGeneratorContainer;
-import omtteam.openmodularturrets.client.gui.containers.TurretBaseContainer;
-import omtteam.openmodularturrets.tileentity.PowerGenerator;
-import omtteam.openmodularturrets.tileentity.TurretBase;
+import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.openmodularturrets.container.PowerGeneratorContainer;
+import omtteam.openmodularturrets.container.TurretBaseContainer;
+import omtteam.openmodularturrets.tileentity.base.PowerGenerator;
+import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 public class OMTGuiHandler implements IGuiHandler {
     private static OMTGuiHandler instance;
@@ -42,17 +40,6 @@ public class OMTGuiHandler implements IGuiHandler {
 
     @Override
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
-
-        switch (id) {
-            case 1:
-                return new TurretBaseGui(player.inventory, (TurretBase) tileEntity);
-            case 3:
-                return new PowerGeneratorGui(player.inventory, (PowerGenerator) tileEntity);
-            case 20:
-                return new ConfigureGui(player.inventory, (TurretBase) tileEntity);
-            default:
-                return null;
-        }
+        return OpenModularTurrets.proxy.getClientGuiElement(id, player, world, x, y, z);
     }
 }
