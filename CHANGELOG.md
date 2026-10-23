@@ -65,6 +65,8 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - The base controller API (`IBaseController`, `ILaserController`) of the discontinued OMTControl addon## [3.2.0]
 - The entity and ammo lists of the 3.x API (`api.lists`): they no longer affected targeting; the config lists and the disposable ammo allow list stay
 
+## 3.2.0
+
 ### Added
 
 - A priority system for turrets and reworked targeting largely
