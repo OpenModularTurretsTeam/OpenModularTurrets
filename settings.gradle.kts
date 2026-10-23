@@ -17,7 +17,10 @@ plugins {
 stonecutter {
     create(rootProject) {
         // Node name = "<minecraft version>-<loader>"; the build script follows the loader
-        versions("1.20.1-fabric" to "1.20.1", "1.21.1-fabric" to "1.21.1", "1.21.1-neoforge" to "1.21.1")
+        versions(
+            "1.20.1-fabric" to "1.20.1", "1.20.1-forge" to "1.20.1",
+            "1.21.1-fabric" to "1.21.1", "1.21.1-neoforge" to "1.21.1",
+        )
         mapBuilds { _, node -> "build.${node.project.substringAfterLast('-')}.gradle.kts" }
         vcsVersion = "1.21.1-fabric" // the version the committed source is written for
     }

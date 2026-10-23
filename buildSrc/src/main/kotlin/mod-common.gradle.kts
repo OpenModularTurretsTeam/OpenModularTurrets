@@ -1,5 +1,5 @@
 // Build logic shared by every Stonecutter node, whatever its loader. The loader build scripts
-// (build.fabric.gradle.kts, build.neoforge.gradle.kts) apply this first, then their loader plugin.
+// (build.fabric.gradle.kts, build.neoforge.gradle.kts, build.forge.gradle.kts) apply this first, then their loader plugin.
 // Mod-independent: all names come from gradle.properties, so other mods can copy buildSrc as it is.
 plugins {
     java
@@ -7,7 +7,7 @@ plugins {
 }
 
 /** The loaders this setup knows; the node name ends with one of them ("1.21.1-neoforge"). */
-val loaders = listOf("fabric", "neoforge")
+val loaders = listOf("fabric", "neoforge", "forge")
 val loader = project.name.substringAfterLast('-')
 require(loader in loaders) { "Stonecutter node '${project.name}' must end with one of $loaders" }
 
@@ -55,7 +55,11 @@ java {
 }
 
 /** Mod metadata file of each loader; the others are left out of this node's jar. */
-val metadataFiles = mapOf("fabric" to "fabric.mod.json", "neoforge" to "META-INF/neoforge.mods.toml")
+val metadataFiles = mapOf(
+    "fabric" to "fabric.mod.json",
+    "neoforge" to "META-INF/neoforge.mods.toml",
+    "forge" to "META-INF/mods.toml",
+)
 
 tasks {
     processResources {
@@ -69,9 +73,15 @@ tasks {
             "loader_version" to findProperty("fabric_loader_version")?.toString().orEmpty(),
             "neoforge_version" to findProperty("neoforge_version")?.toString().orEmpty(),
             "neoforge_loader_range" to findProperty("neoforge_loader_range")?.toString().orEmpty(),
+            "forge_dependency" to findProperty("forge_dependency")?.toString().orEmpty(),
+            "forge_loader_range" to findProperty("forge_loader_range")?.toString().orEmpty(),
         )
         inputs.properties(props)
         filesMatching(metadataFiles.getValue(loader)) { expand(props) }
+    }
+
+    // Every source set (main, test mods) may carry the metadata of all loaders; each jar keeps only its own
+    withType<ProcessResources>().configureEach {
         (metadataFiles - loader).values.forEach { exclude(it) }
     }
 
@@ -93,7 +103,7 @@ tasks {
         inputs.dir(coreDir)
         doLast {
             val ownPackage = Regex.escape(basePackage)
-            val forbidden = Regex("""^\s*import\s+(static\s+)?(net\.minecraft|net\.fabricmc|net\.neoforged|com\.mojang|team\.reborn|$ownPackage\.(?!core\b))""")
+            val forbidden = Regex("""^\s*import\s+(static\s+)?(net\.minecraft|net\.fabricmc|net\.neoforged|net\.minecraftforge|com\.mojang|team\.reborn|$ownPackage\.(?!core\b))""")
             val violations = coreDir.walkTopDown().filter { it.extension == "java" }.flatMap { file ->
                 file.readLines().withIndex().filter { forbidden.containsMatchIn(it.value) }
                     .map { "${file.relativeTo(root)}:${it.index + 1}: ${it.value.trim()}" }
@@ -120,7 +130,7 @@ tasks {
 }
 
 // ---- Publishing to CurseForge / Modrinth ----
-// The loader script sets `file` and `additionalFiles` (Loom: remapJar, ModDevGradle: jar).
+// The loader script sets `file` and `additionalFiles` (Loom: remapJar, ModDevGradle: jar, legacy ModDevGradle: reobfJar).
 
 /** A token from the environment (CI) or ~/.gradle/gradle.properties (local); never from the repository. */
 fun token(environmentVariable: String, gradleProperty: String): Provider<String> =
