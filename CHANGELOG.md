@@ -10,6 +10,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ### Changed
 
+- License: the source code is now MIT (was GPLv3) and the art CC-BY-NC-SA 4.0 (see `LICENSE`, `LICENSE-ART`, `LICENSE-DUAL`)
 - The `turretBreakable` config option makes turrets mineable (hardness 3, pickaxe, as on 1.20.1+; needs a restart); it had no effect before
 
 ### Fixed
