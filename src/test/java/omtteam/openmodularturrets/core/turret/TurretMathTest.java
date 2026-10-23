@@ -107,6 +107,13 @@ class TurretMathTest {
     }
 
     @Test
+    void aTargetAtTheTurretCentreNeedsNoLead() {
+        TurretMath.Lead lead = TurretMath.lead(Vector3.ZERO, new Vector3(0.5, 0, 0), 3.0, 0.03);
+        assertEquals(Vector3.ZERO, lead.direction());
+        assertEquals(1.0F, lead.speedFactor());
+    }
+
+    @Test
     void angleDifferenceTakesTheShortWay() {
         assertEquals(20, TurretMath.angleDifference(350, 10), EPS);
         assertEquals(-20, TurretMath.angleDifference(10, 350), EPS);

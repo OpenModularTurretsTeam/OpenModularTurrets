@@ -128,9 +128,11 @@ class TurretTypeTest {
 
     @Test
     void registeredTypesFollowTheBuiltInOnes() {
+        assertFalse(TurretTypes.isFrozen(), "the registry is only frozen while the game starts");
         TurretType added = TurretTypes.register(TurretType.builder("othermod", "registered_turret").build());
         assertEquals(TurretType.BUILT_IN, TurretTypes.all().subList(0, TurretType.BUILT_IN.size()));
         assertTrue(TurretTypes.all().contains(added));
+        assertEquals(TurretTypes.all(), TurretType.values());
         assertEquals(Optional.of(added), TurretTypes.byId("othermod:registered_turret"));
         assertEquals(Optional.empty(), TurretTypes.byId("registered_turret"), "bare paths are built-in ids");
         assertThrows(IllegalArgumentException.class,

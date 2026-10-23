@@ -541,6 +541,18 @@ class TurretBaseLogicTest {
         }
 
         @Test
+        void redstoneReactorNeedsFuelItCanTakeOut() {
+            TurretBaseLogic logic = base(2);
+            addon(0, AddonType.REDSTONE_REACTOR, 1);
+            FakeSlot blocks = FakeSlot.fuel(ReactorFuel.REDSTONE_BLOCK, 1);
+            blocks.locked = true;
+            ammoSlot(0, blocks);
+            tick(logic, 20);
+            assertEquals(0, logic.getEnergy().getAmount());
+            assertEquals(1, blocks.count);
+        }
+
+        @Test
         void redstoneReactorBurnsABlockOnlyIfItFits() {
             TurretBaseLogic logic = base(2); // capacity 50000
             addon(0, AddonType.REDSTONE_REACTOR, 1);

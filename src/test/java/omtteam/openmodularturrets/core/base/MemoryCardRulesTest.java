@@ -152,6 +152,19 @@ class MemoryCardRulesTest {
         assertEquals(18, target.getTargetingSettings().getRange());
     }
 
+    /** A paste right after a config change clamps to the new maximum, not to the one of the last update. */
+    @Test
+    void rangeIsClampedToTheCurrentConfig() {
+        TurretBaseLogic target = base(OWNER);
+        target.updateNeighbours(Map.of(Face.UP, new Neighbour.Turret(TurretType.MACHINE_GUN_TURRET))); // max 18
+        settings.turrets.put(TurretType.MACHINE_GUN_TURRET,
+                FakeSettings.stats(10, 8, 2, 100, 30, 4, 0.06D, 0.1D, 2, 0.2D, 0.08D, 0.1D));
+
+        MemoryCardRules.apply(new MemoryCardData.BaseSettings(MachineMode.INVERTED, false, false, true, false, 99), target);
+        assertEquals(10, target.getTargetingSettings().getMaxRange());
+        assertEquals(10, target.getTargetingSettings().getRange());
+    }
+
     @Test
     void onlyAdminsCopyAndPaste() {
         TurretBaseLogic logic = base(OWNER);

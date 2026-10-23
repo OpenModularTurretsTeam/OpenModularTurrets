@@ -124,11 +124,13 @@ class EnergyStoreTest {
     @Test
     void limitsCanChange() {
         store.setMaxInsert(10);
+        assertEquals(10, store.getMaxInsert());
         assertEquals(10, store.insert(100, false));
         store.setMaxInsert(-1);
         assertEquals(0, store.getMaxInsert());
         assertEquals(0, store.insert(100, false));
         store.setMaxExtract(5);
+        assertEquals(5, store.getMaxExtract());
         assertEquals(5, store.extract(100, false));
         store.setMaxExtract(-1);
         assertEquals(0, store.getMaxExtract());

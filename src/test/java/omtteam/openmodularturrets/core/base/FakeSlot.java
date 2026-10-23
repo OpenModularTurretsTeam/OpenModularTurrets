@@ -16,6 +16,8 @@ final class FakeSlot implements ItemSlot {
     TurretBaseUpgradeType upgrade;
     AddonType addon;
     int count;
+    /** A slot whose items cannot be taken out (extract removes nothing). */
+    boolean locked;
 
     static FakeSlot empty() {
         return new FakeSlot();
@@ -92,6 +94,7 @@ final class FakeSlot implements ItemSlot {
 
     @Override
     public int extract(int amount) {
+        if (locked) return 0;
         int removed = Math.min(amount, count);
         count -= removed;
         return removed;

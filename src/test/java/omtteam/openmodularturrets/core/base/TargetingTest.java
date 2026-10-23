@@ -223,11 +223,12 @@ class TargetingTest {
         @Test
         void targetsLeavingTheRangeAreDropped() {
             logic.setRange(5);
-            zombie(104, 65, 100);
+            FakeTarget zombie = zombie(104, 65, 100);
             search();
-            assertTrue(targetId().isPresent());
-            world.entities.clear();
-            zombie(110, 65, 100);
+            assertEquals(Optional.of(zombie.getId()), targetId());
+            // the target stays loaded, only the range shrinks below its distance of 4
+            logic.setRange(3);
+            assertEquals(Optional.empty(), targetId());
             logic.tick(++time);
             assertEquals(Optional.empty(), targetId());
         }
@@ -486,6 +487,7 @@ class TargetingTest {
 
         @Test
         void everyTurretHasFiveWeights() {
+            assertTrue(TurretType.values().contains(TurretType.MELEE_TURRET), "the loop checks the built-in turrets");
             for (TurretType type : TurretType.values()) {
                 assertEquals(TargetingPriority.values().length, type.getDefaultPriorities().length, type.getId());
             }
