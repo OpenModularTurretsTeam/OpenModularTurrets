@@ -3,7 +3,13 @@ package omtteam.openmodularturrets.gametest;
 //? if neoforge {
 /*import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-import omtteam.openmodularturrets.OMT;
+*///?}
+//? if forge {
+/*import net.minecraftforge.gametest.GameTestHolder;
+import net.minecraftforge.gametest.PrefixGameTestTemplate;
+*///?}
+//? if neoforge || forge {
+/*import omtteam.openmodularturrets.OMT;
 *///?}
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -18,7 +24,7 @@ import omtteam.openmodularturrets.core.turret.TurretType;
  * so a single attempt is enough. Every test has its own batch: batches run one after another, so a turret never
  * reaches the target of a test running next to it.
  */
-//? if neoforge {
+//? if neoforge || forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}

@@ -1,12 +1,13 @@
 # Turret API
 
-Other mods (Fabric and NeoForge) can add turrets to Open Modular Turrets (OMT).
+Other mods (Fabric, NeoForge and Forge) can add turrets to Open Modular Turrets (OMT).
 An added turret is a full turret: it mounts on a base, uses the base's targeting, energy, ammo, upgrades, addons and trusted players, has a config entry and shows in the OMT creative tab, in tooltips and in Jade.
 The 14 built-in turrets are registered through the same API (`registry/BuiltinTurrets.java`), so they are the reference examples.
 
-Works the same on 1.20.1 and 1.21.1 (Fabric) and on 1.21.1 (NeoForge); only the way OMT finds your classes differs.
+Works the same on 1.20.1 and 1.21.1 (Fabric), on 1.21.1 (NeoForge) and on 1.20.1 (Forge); only the way OMT finds your classes differs.
 On Fabric, add OMT as a `modCompileOnly`/`modImplementation` dependency and to `depends` in your `fabric.mod.json`.
 On NeoForge, add it as a `compileOnly`/`implementation` dependency and as a `[[dependencies.<your mod id>]]` entry in your `neoforge.mods.toml`.
+On Forge, add it as a `modCompileOnly`/`modImplementation` dependency (OMT's Forge jar uses SRG names) and as a `[[dependencies.<your mod id>]]` entry in your `mods.toml`.
 
 ## 1. Register the turret (common)
 
@@ -20,7 +21,7 @@ On Fabric, declare an `openmodularturrets` entrypoint (and `openmodularturrets_c
 ```
 
 ```java
-@OMTPlugin.Register // NeoForge; Fabric ignores it
+@OMTPlugin.Register // NeoForge and Forge; Fabric ignores it
 public final class ExampleTurrets implements OMTPlugin {
     public static final AmmoType SHELL = AmmoType.of("example", "shell");
     public static final TurretType FLAK_TURRET = TurretType.builder("example", "flak_turret")
@@ -39,12 +40,12 @@ public final class ExampleTurrets implements OMTPlugin {
 }
 ```
 
-On NeoForge, annotate the class with `@OMTPlugin.Register` instead; OMT finds it in the mod scan data (the class needs a public no-argument constructor).
-A mod for both loaders does both.
+On NeoForge and Forge, annotate the class with `@OMTPlugin.Register` instead; OMT finds it in the mod scan data (the class needs a public no-argument constructor).
+A mod for several loaders does both.
 OMT calls the plugin at the start of its own initialisation, before it loads its config and registers blocks, so mod load order does not matter.
-Several plugins are called in the order Fabric lists the entrypoints, or on NeoForge sorted by mod id and class name.
+Several plugins are called in the order Fabric lists the entrypoints, or on NeoForge and Forge sorted by mod id and class name.
 Suppliers (`() -> ExampleItems.SHELL`) are only called later, so they may point to things your own initializer registers.
-Everything passed directly must already exist when OMT calls the plugin, which on NeoForge is during mod construction, before any registry opens.
+Everything passed directly must already exist when OMT calls the plugin, which on NeoForge and Forge is during mod construction, before any registry opens.
 That matters for the weapon's sound: create the `SoundEvent` in a static field (`SoundEvent.createVariableRangeEvent(id)`) and register that same instance in your sound registration, as OMT's own `ModSounds` does; a `DeferredHolder` from a `DeferredRegister` has no value yet at that point.
 
 OMT then registers a `TurretBlock` and a `BlockItem` with the id `example:flak_turret` and adds it to its turret block entity type.
@@ -136,10 +137,10 @@ An `AmmoItem` created with your ammo type counts as that type even without a def
 
 ## 2. Model (client)
 
-On Fabric this is the `openmodularturrets_client` entrypoint; on NeoForge, annotate it with `@OMTClientPlugin.Register` (found on the client only).
+On Fabric this is the `openmodularturrets_client` entrypoint; on NeoForge and Forge, annotate it with `@OMTClientPlugin.Register` (found on the client only).
 
 ```java
-@OMTClientPlugin.Register // NeoForge; Fabric ignores it
+@OMTClientPlugin.Register // NeoForge and Forge; Fabric ignores it
 public final class ExampleTurretModels implements OMTClientPlugin {
     @Override
     public void registerTurretModels(TurretModelRegistrar registrar) {

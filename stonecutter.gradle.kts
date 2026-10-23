@@ -1,9 +1,11 @@
 plugins {
     id("dev.kikugie.stonecutter")
-    // Loader plugins, applied by build.fabric.gradle.kts / build.neoforge.gradle.kts
+    // Loader plugins, applied by build.fabric.gradle.kts / build.neoforge.gradle.kts / build.forge.gradle.kts
     // (the publish plugin comes from buildSrc, see buildSrc/build.gradle.kts)
     id("net.fabricmc.fabric-loom-remap") version "1.18.4" apply false
     id("net.neoforged.moddev") version "2.0.148" apply false
+    // Forge 1.20.1: the legacy variant of ModDevGradle (same artifact; reobfuscates to SRG names)
+    id("net.neoforged.moddev.legacyforge") version "2.0.148" apply false
     // Formatting checks (./gradlew spotlessCheck / spotlessApply)
     id("com.diffplug.spotless") version "8.10.4"
 }
@@ -30,10 +32,10 @@ spotless {
 
 stonecutter active "1.21.1-fabric"
 
-// Loader constants for conditions: //? if fabric { ... //? if neoforge {
+// Loader constants for conditions: //? if fabric { ... //? if neoforge { ... //? if forge {
 // Prefer whole classes in platform/<loader>/ packages (left out of the other loaders' builds) over conditions.
 stonecutter parameters {
-    constants.match(current.project.substringAfterLast('-'), "fabric", "neoforge")
+    constants.match(current.project.substringAfterLast('-'), "fabric", "neoforge", "forge")
 }
 
 // Builds every version in one go: ./gradlew chiseledBuild

@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Open Modular Turrets (Fabric).
+All notable changes to Open Modular Turrets (Fabric, NeoForge and Forge).
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 Add every user-visible change as a one-line entry under **Unreleased** (sections: Added, Changed, Fixed, Removed), by hand or with `./gradlew changelogEntry --type=added --entry="…"`.
@@ -11,6 +11,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 ### Added
 
 - NeoForge build for Minecraft 1.21.1 added alongside the Fabric builds
+- Forge build for Minecraft 1.20.1 (not uploaded yet)
 
 ## [4.0.0-beta.5] - 2026-10-21
 

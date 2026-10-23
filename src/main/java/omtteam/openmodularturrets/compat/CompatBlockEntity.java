@@ -16,6 +16,10 @@ import org.jetbrains.annotations.Nullable;
 /*import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 *///?}
+//? if forge {
+/*import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.data.ModelProperty;
+*///?}
 //? if <1.21 {
 /*import net.minecraft.core.RegistryAccess;
 *///?}
@@ -28,8 +32,8 @@ import net.neoforged.neoforge.client.model.data.ModelProperty;
  * clients (initial chunk data and {@link #syncToClient()}); override {@link #writeClientData} to send less.
  */
 public abstract class CompatBlockEntity extends BlockEntity {
-    //? if neoforge {
-    /*/^* The {@link #renderData()} in the block entity's model data on NeoForge. ^/
+    //? if neoforge || forge {
+    /*/^* The {@link #renderData()} in the block entity's model data on NeoForge and Forge. ^/
     public static final ModelProperty<Object> RENDER_DATA = new ModelProperty<>();
     *///?}
 
@@ -90,7 +94,7 @@ public abstract class CompatBlockEntity extends BlockEntity {
     /** Makes the client redraw the block, e.g. after its {@link #renderData()} changed (no effect on the server). */
     public void remesh() {
         if (level != null && level.isClientSide()) {
-            //? if neoforge {
+            //? if neoforge || forge {
             /*requestModelDataUpdate();
             *///?}
             BlockState state = getBlockState();

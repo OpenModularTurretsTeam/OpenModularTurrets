@@ -3,7 +3,13 @@ package omtteam.openmodularturrets.gametest;
 //? if neoforge {
 /*import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-import omtteam.openmodularturrets.OMT;
+*///?}
+//? if forge {
+/*import net.minecraftforge.gametest.GameTestHolder;
+import net.minecraftforge.gametest.PrefixGameTestTemplate;
+*///?}
+//? if neoforge || forge {
+/*import omtteam.openmodularturrets.OMT;
 *///?}
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
@@ -38,7 +44,7 @@ import java.util.Map;
  * they are registered with their ids and config entries, and each runs its custom code at the right time, and only
  * then. Every test has its own batch, so no turret reaches the target of another test.
  */
-//? if neoforge {
+//? if neoforge || forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}

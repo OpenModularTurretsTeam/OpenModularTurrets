@@ -18,9 +18,6 @@ val client: SourceSet = sourceSets.create("client") {
 sourceSets.main { java { exclude("$packagePath/datagen/**") } }
 sourceSets.test { java { include("$packagePath/core/**") } }
 
-// GameTests (src/gametest) are not set up for NeoForge yet: the test classes still use FabricGameTest. See the
-// shared-test setup in OpenModularLighting (OMLGameTests, TestTransfer, gametest source set as a second mod).
-
 // In-world tests (src/gametest): a separate test mod (openmodularturrets_gametest) that is never shipped, sharing
 // its test classes with Fabric. `check` runs them on a headless GameTest server.
 val gametest: SourceSet = sourceSets.create("gametest") {
@@ -79,10 +76,8 @@ dependencies {
 }
 
 // ---- Data (recipes, loot tables, tags, damage types, advancements) ----
-// Not generated here: copied from the Fabric datagen output of the same Minecraft version (datagen_from), which only
-// differs in its load conditions. "fabric:load_conditions" becomes "neoforge:conditions" ("condition" -> "type").
-// Only conditions in this mod's namespace convert: they are registered under the same id on both loaders. Any other
-// condition (e.g. fabric:all_mods_loaded) fails the build instead of producing wrong data.
+// Not generated here: copied from the Fabric datagen output of the same Minecraft version (datagen_from) with NeoForge
+// load conditions ("neoforge:conditions"; see convertFabricData in buildSrc).
 
 val fabricData: File = rootProject.file("versions/${property("datagen_from")}/src/main/generated")
 val neoForgeData: Provider<Directory> = layout.buildDirectory.dir("generated/neoforgeData")
@@ -93,40 +88,7 @@ val convertFabricData = tasks.register("convertFabricData") {
     inputs.dir(fabricData)
     outputs.dir(neoForgeData)
     val namespace = modId
-    doLast {
-        val output = neoForgeData.get().asFile
-        output.deleteRecursively()
-        fabricData.walkTopDown().onEnter { it.name != ".cache" }.filter { it.isFile }.forEach { file ->
-            val target = output.resolve(file.relativeTo(fabricData))
-            target.parentFile.mkdirs()
-            if (file.extension != "json" || !file.readText().contains("\"fabric:")) {
-                file.copyTo(target)
-                return@forEach
-            }
-            @Suppress("UNCHECKED_CAST")
-            val json = groovy.json.JsonSlurper().parse(file) as Map<String, Any?>
-            val converted = LinkedHashMap<String, Any?>()
-            json.forEach { (key, value) ->
-                if (key == "fabric:load_conditions") {
-                    @Suppress("UNCHECKED_CAST")
-                    converted["neoforge:conditions"] = (value as List<Map<String, Any?>>).map { condition ->
-                        val id = condition["condition"] as String
-                        if (!id.startsWith("$namespace:")) {
-                            throw GradleException("${file.relativeTo(fabricData)}: no NeoForge counterpart for condition $id")
-                        }
-                        linkedMapOf<String, Any?>("type" to id) + condition.filterKeys { it != "condition" }
-                    }
-                } else {
-                    converted[key] = value
-                }
-            }
-            val text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(converted)) + "\n"
-            if (text.contains("\"fabric:")) {
-                throw GradleException("${file.relativeTo(fabricData)}: Fabric-specific data left after the conversion")
-            }
-            target.writeText(text)
-        }
-    }
+    doLast { convertFabricData(fabricData, neoForgeData.get().asFile, namespace, "neoforge:conditions") }
 }
 sourceSets.main { resources.srcDir(convertFabricData) }
 

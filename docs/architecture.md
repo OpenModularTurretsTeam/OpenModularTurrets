@@ -3,7 +3,7 @@
 A guide to the code of Open Modular Turrets (OMT) for people working on it: how it is layered, what lives where, how the main flows run, and how to add the common things.
 It describes the code as it is; where it falls short of its own rules, the last section says so.
 
-OMT is built for Fabric (1.20.1 and 1.21.1) and NeoForge (1.21.1) from one source tree.
+OMT is built for Fabric (1.20.1 and 1.21.1), NeoForge (1.21.1) and Forge (1.20.1) from one source tree.
 Building, running and the Stonecutter commands are in the README, `CONTRIBUTING.md` and `CLAUDE.md` (section 4).
 The turret API for other mods has its own guide: [turret-api.md](turret-api.md).
 
@@ -21,7 +21,7 @@ flowchart TB
     client["client<br/>screens, renderers, models, tooltips<br/><i>client only</i>"]
     game["game layer (main)<br/>blocks, block entities, items, menus, network,<br/>registry, config, projectiles, api"]
     compat["compat<br/>1.20.1 / 1.21.1 differences"]
-    platform["platform<br/>loader services and adapters<br/><i>platform.fabric / platform.neoforge</i>"]
+    platform["platform<br/>loader services and adapters<br/><i>platform.fabric / platform.neoforge / platform.forge</i>"]
     core["core<br/>game rules, plain Java"]
     client --> game
     client --> compat
@@ -35,19 +35,19 @@ flowchart TB
 An arrow means "may use".
 The other directions are forbidden and checked by the build (see [Rules the build checks](#rules-the-build-checks)):
 
-- **core** uses only Java and itself: no Minecraft, Fabric, NeoForge or other OMT packages.
+- **core** uses only Java and itself: no Minecraft, Fabric, NeoForge, Forge or other OMT packages.
 - **main** code never uses **client** code: client classes do not exist on a dedicated server.
-- Shared code uses only the `platform` interfaces, never `platform.fabric` or `platform.neoforge`: each of those is only compiled for its own loader.
+- Shared code uses only the `platform` interfaces, never `platform.fabric`, `platform.neoforge` or `platform.forge`: each of those is only compiled for its own loader.
 
 ### How the shared code talks to the loader
 
 Two directions, so that gameplay code stays loader-free:
 
-- Where the loader is in charge (registration, events, capabilities, client registrations), the loader entrypoint (`platform/<loader>/OMTFabric`, `OMTNeoForge`, and their client counterparts) calls shared code: `OMT.registrationSteps()`, `InteractiveBlock.handleUse`, `OMTConfig.onPlayerJoin`, `KillCounter.onDeath`, `OMTClient.register…`.
+- Where the loader is in charge (registration, events, capabilities, client registrations), the loader entrypoint (`platform/<loader>/OMTFabric`, `OMTNeoForge`, `OMTForge`, and their client counterparts) calls shared code: `OMT.registrationSteps()`, `InteractiveBlock.handleUse`, `OMTConfig.onPlayerJoin`, `KillCounter.onDeath`, `OMTClient.register…`.
 - Where gameplay code must reach the loader, it calls a small service through `platform.Platform` (`LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`; on the client `ClientPlatform` with `ClientNetwork`).
   Each entrypoint installs its implementations first thing; the `compat` facades (`NetworkCompat`, `MenuCompat`, `ClientNetworkCompat`) forward to them.
 
-Energy and items other blocks may use are described loader-free (`core.energy.EnergyAccess`, `inventory.ItemAccess`, exposed by `getEnergyAccess(side)` / `getItemAccess(side)`) and wrapped by thin adapters per loader (Team Reborn Energy and Transfer API on Fabric, FE and item handler capabilities on NeoForge).
+Energy and items other blocks may use are described loader-free (`core.energy.EnergyAccess`, `inventory.ItemAccess`, exposed by `getEnergyAccess(side)` / `getItemAccess(side)`) and wrapped by thin adapters per loader (Team Reborn Energy and Transfer API on Fabric, FE and item handler capabilities on NeoForge and Forge).
 
 ### How core talks to the game
 
@@ -66,14 +66,14 @@ The block entities own one core object each and forward to it: `TurretBaseBlockE
 
 ## Where things live
 
-Source sets (main and client split as with Loom's split source sets; the NeoForge build has its own client source set too), plus the two test sets:
+Source sets (main and client split as with Loom's split source sets; the NeoForge and Forge builds have their own client source set too), plus the two test sets:
 
 | Source set | Contents | Shipped |
 | --- | --- | --- |
 | `src/main` | everything that runs on both sides | yes |
 | `src/client` | rendering, screens, client networking | yes, client only |
 | `src/test` | JUnit tests of the core, config tests, architecture rules | no |
-| `src/gametest` | game tests in a real server world, shared by Fabric and NeoForge (own test mod `openmodularturrets_gametest`) | no |
+| `src/gametest` | game tests in a real server world, shared by Fabric, NeoForge and Forge (own test mod `openmodularturrets_gametest`) | no |
 
 Packages below `omtteam.openmodularturrets` (main):
 
@@ -96,9 +96,9 @@ Packages below `omtteam.openmodularturrets` (main):
 | `network` | packets: client→server requests (always re-validated) and server→client sync |
 | `config` | the JSON config: fields, comments, ranges, migration, server→client sync |
 | `security`, `camo` | Minecraft side of trust lists (NBT, player lookup) and camouflage |
-| `compat` | every 1.20.1 / 1.21.1 difference (`VersionCompat`, `CompatBlockEntity`, networking, menus), small loader differences (`//? if fabric` / `neoforge`), and Jade |
-| `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`); `platform.fabric` / `platform.neoforge` hold the entrypoints, the implementations and the energy/item adapters, and only compile for their loader |
-| `datagen` | recipes, loot tables, tags, damage types (generated per version; Fabric only, the NeoForge build converts the 1.21.1 output) |
+| `compat` | every 1.20.1 / 1.21.1 difference (`VersionCompat`, `CompatBlockEntity`, networking, menus), small loader differences (`//? if fabric` / `neoforge` / `forge`), and Jade |
+| `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`); `platform.fabric` / `platform.neoforge` / `platform.forge` hold the entrypoints, the implementations and the energy/item adapters, and only compile for their loader |
+| `datagen` | recipes, loot tables, tags, damage types (generated per version; Fabric only, the NeoForge build converts the 1.21.1 output and the Forge build the 1.20.1 output) |
 
 `./gradlew dependencyMap` draws these packages and every import between them as an interactive page.
 
@@ -106,22 +106,22 @@ Packages below `omtteam.openmodularturrets` (main):
 
 ### Startup
 
-The loader entrypoint (`OMTFabric`, `OMTNeoForge`) first installs the platform services, then calls `OMT.init(plugins)` with the turret plugins of other mods it found.
+The loader entrypoint (`OMTFabric`, `OMTNeoForge`, `OMTForge`) first installs the platform services, then calls `OMT.init(plugins)` with the turret plugins of other mods it found.
 The order matters:
 
-1. `TurretRegistry.load(plugins)`: built-in turrets (`registry.BuiltinTurrets`), then the plugins (on Fabric the `openmodularturrets` entrypoints, on NeoForge the classes marked `@OMTPlugin.Register`, found by `NeoForgePlugins`).
+1. `TurretRegistry.load(plugins)`: built-in turrets (`registry.BuiltinTurrets`), then the plugins (on Fabric the `openmodularturrets` entrypoints, on NeoForge and Forge the classes marked `@OMTPlugin.Register`, found by `NeoForgePlugins` / `ForgePlugins`).
    The turret types are frozen afterwards.
 2. `OMTPackets.init()`: packet types (NeoForge accepts them only until its payload registration event).
 3. `OMTConfig.init()`: needs the turret types for their default stats; blocks need the config for their properties.
 
 Then the registrations of `OMT.registrationSteps()`: sounds, blocks, items, block entities, entities, creative tab, menus.
-Fabric runs them in this order; NeoForge runs each in the `RegisterEvent` of its registry (and fails at common setup if one never ran).
+Fabric runs them in this order; NeoForge and Forge run each in the `RegisterEvent` of its registry (and fail at common setup if one never ran).
 A registry class registers its content when it is loaded, so it must not be touched before its step; `ModSounds` is the exception (loading it only creates the sounds, which the turret definitions use in step 1).
 
-Last, the entrypoint wires its loader to the shared code: the item and energy access of the base and the generator (`FabricBlockLookups`, NeoForge capabilities), block use (`InteractiveBlock.handleUse`), the config sync on join (`OMTConfig.onPlayerJoin`) and the kill counter (`KillCounter.onDeath`).
+Last, the entrypoint wires its loader to the shared code: the item and energy access of the base and the generator (`FabricBlockLookups`, NeoForge capabilities, Forge capabilities attached in `AttachCapabilitiesEvent` by `ForgeBlockCapabilities`), block use (`InteractiveBlock.handleUse`), the config sync on join (`OMTConfig.onPlayerJoin`) and the kill counter (`KillCounter.onDeath`).
 
-On the client, the loader client entrypoint (`OMTFabricClient`, `OMTNeoForgeClient`) installs the client platform services and calls `OMTClient.init(plugins)` (client packet handlers, ray packets, turret models, also from other mods).
-It then registers what `OMTClient` lists with its loader: screens, model layers, block entity and entity renderers, item renderers, cutout blocks and tooltips, plus the camouflage models (`FabricCamoModel`, `NeoForgeCamoModel`) and the ray rendering.
+On the client, the loader client entrypoint (`OMTFabricClient`, `OMTNeoForgeClient`, `OMTForgeClient`; Forge 1.20.1 has no client-only `@Mod` classes, so `OMTForge` constructs it by name) installs the client platform services and calls `OMTClient.init(plugins)` (client packet handlers, ray packets, turret models, also from other mods).
+It then registers what `OMTClient` lists with its loader: screens, model layers, block entity and entity renderers, item renderers, cutout blocks and tooltips, plus the camouflage models (`FabricCamoModel`, `NeoForgeCamoModel`, `ForgeCamoModel`) and the ray rendering.
 
 ### A turret base tick (server)
 
@@ -160,7 +160,7 @@ The client is never trusted: every C2S handler re-checks distance and permission
 
 ### The generator
 
-`GeneratorBlockEntity` burns furnace fuel from 9 slots in order (`GeneratorLogic`), multiplied by energy multiplier upgrades, and pushes energy into all six neighbours through the `Energy` service (Team Reborn Energy on Fabric, FE on NeoForge).
+`GeneratorBlockEntity` burns furnace fuel from 9 slots in order (`GeneratorLogic`), multiplied by energy multiplier upgrades, and pushes energy into all six neighbours through the `Energy` service (Team Reborn Energy on Fabric, FE on NeoForge and Forge).
 It has no owner and no trust list.
 
 ## How to add …
@@ -196,22 +196,22 @@ Block entities extend `compat.CompatBlockEntity`.
 Right-click handling goes through `InteractiveBlock`, not vanilla's `use` methods.
 The table of known differences is in `CLAUDE.md`, section 5.
 
-### Code that differs between Fabric and NeoForge
+### Code that differs between the loaders
 
-The source is shared; Stonecutter also has a loader axis (nodes `1.20.1-fabric`, `1.21.1-fabric`, `1.21.1-neoforge`).
+The source is shared; Stonecutter also has a loader axis (nodes `1.20.1-fabric`, `1.20.1-forge`, `1.21.1-fabric`, `1.21.1-neoforge`).
 
-- A whole loader-specific class goes into `platform/fabric/` or `platform/neoforge/` (also under `client/` and `gametest/`), which only compile for their loader.
+- A whole loader-specific class goes into `platform/fabric/`, `platform/neoforge/` or `platform/forge/` (also under `client/` and `gametest/`), which only compile for their loader.
 - Gameplay code that needs the loader calls a service through `Platform`; a new service is a new component of `PlatformServices`, so every entrypoint must supply it.
 - Something the loader drives (an event, a registration) is wired in both entrypoints to one shared handler or to content that shared code lists (`OMTClient` for the client).
-- A small difference inside a shared class uses `//? if fabric {` / `//? if neoforge {`, but only in `compat/` and `platform/`.
-- Fabric API and Team Reborn Energy may only appear in `platform/fabric/` and `datagen`: the NeoForge node does not compile anything else that uses them.
-- Render types: NeoForge reads `"render_type"` from the block model, Fabric registers the blocks `OMTClient.cutoutBlocks()` lists; keep both in sync.
+- A small difference inside a shared class uses `//? if fabric {` / `//? if neoforge {` / `//? if forge {` (or `neoforge || forge` where both share an API, with imports per loader), but only in `compat/` and `platform/`.
+- Fabric API and Team Reborn Energy may only appear in `platform/fabric/` and `datagen`: the NeoForge and Forge nodes do not compile anything else that uses them.
+- Render types: NeoForge and Forge read `"render_type"` from the block model, Fabric registers the blocks `OMTClient.cutoutBlocks()` lists; keep both in sync.
 
 ### Recipes, loot tables, tags
 
 Never handwrite files under `data/`: add them to the providers in `datagen` and run `./gradlew :1.21.1-fabric:runDatagen :1.20.1-fabric:runDatagen`.
 The output is committed per version.
-The NeoForge build has no datagen of its own: it converts the 1.21.1 Fabric output (`convertFabricData`, Fabric load conditions become NeoForge conditions).
+The NeoForge and Forge builds have no datagen of their own: they convert the Fabric output of the same Minecraft version (`convertFabricData` in `buildSrc`, Fabric load conditions become the loader's conditions).
 
 ## Rules the build checks
 
@@ -219,15 +219,15 @@ The NeoForge build has no datagen of its own: it converts the 1.21.1 Fabric outp
 
 | Rule | Checked by |
 | --- | --- |
-| core uses only Java and core | `ArchitectureTest.coreDependsOnlyOnCoreAndJava` and the `verifyCoreIsolation` task (also forbids NeoForge) |
-| shared code does not use Fabric API or Team Reborn Energy | compiling the `1.21.1-neoforge` node |
+| core uses only Java and core | `ArchitectureTest.coreDependsOnlyOnCoreAndJava` and the `verifyCoreIsolation` task (also forbids NeoForge and Forge) |
+| shared code does not use Fabric API or Team Reborn Energy | compiling the `1.21.1-neoforge` and `1.20.1-forge` nodes |
 | main code never uses client code | `ArchitectureTest.mainCodeNeverDependsOnClientCode` |
 | no new package cycles, and the known ones only shrink | `ArchitectureTest.noNewPackageCycles` (list `KNOWN_CYCLES`) |
 | core rules behave as specified | unit tests in `src/test` |
-| every turret hits in a real world, on both loaders | game tests in `src/gametest` (`runGameTest` on Fabric, `runGameTestServer` on NeoForge) |
+| every turret hits in a real world, on every loader | game tests in `src/gametest` (`runGameTest` on Fabric, `runGameTestServer` on NeoForge and Forge) |
 | right-clicking a base opens its GUI for players with access only | `BaseGuiGameTests` |
 
-The ArchUnit rules run on the Fabric nodes; they check the shared code, which is the same for NeoForge.
+The ArchUnit rules run on the Fabric nodes; they check the shared code, which is the same for NeoForge and Forge.
 When the cycle test fails it prints the cycle, the class dependencies inside it (fewest first, the cheapest to cut) and the updated list.
 
 ## Measuring code quality
@@ -241,7 +241,7 @@ When the cycle test fails it prints the cycle, the class dependencies inside it 
 
 PMD reports only for now; it does not fail the build.
 Once the limits are agreed, switching off `isIgnoreFailures` in `build.fabric.gradle.kts` makes new code above them fail.
-These tools run on the Fabric nodes only; code in `platform/neoforge` is covered by the NeoForge game tests, not by coverage or mutation testing.
+These tools run on the Fabric nodes only; code in `platform/neoforge` and `platform/forge` is covered by their game tests, not by coverage or mutation testing.
 
 Coverage says which lines the tests run; mutation testing says whether they check the results.
 PIT plants small mistakes in core (a flipped condition, `<` instead of `<=`, a removed call) and runs the unit tests against each one.

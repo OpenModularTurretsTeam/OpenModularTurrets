@@ -1,0 +1,16 @@
+# Test mod (src/gametest), never shipped: Forge counterpart of fabric.mod.json next to it
+modLoader = "javafml"
+loaderVersion = "[47,)"
+license = "MIT"
+
+[[mods]]
+modId = "openmodularturrets_gametest"
+version = "1.0.0"
+displayName = "Open Modular Turrets Game Tests"
+
+[[dependencies.openmodularturrets_gametest]]
+modId = "openmodularturrets"
+mandatory = true
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"

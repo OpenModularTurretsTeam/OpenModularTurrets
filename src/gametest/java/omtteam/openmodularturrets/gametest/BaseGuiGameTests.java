@@ -3,13 +3,23 @@ package omtteam.openmodularturrets.gametest;
 import com.mojang.authlib.GameProfile;
 //? if fabric {
 import net.fabricmc.fabric.api.entity.FakePlayer;
-//?} else {
+//?}
+//? if neoforge {
 /*import net.neoforged.neoforge.common.util.FakePlayer;
+*///?}
+//? if forge {
+/*import net.minecraftforge.common.util.FakePlayer;
 *///?}
 //? if neoforge {
 /*import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-import omtteam.openmodularturrets.OMT;
+*///?}
+//? if forge {
+/*import net.minecraftforge.gametest.GameTestHolder;
+import net.minecraftforge.gametest.PrefixGameTestTemplate;
+*///?}
+//? if neoforge || forge {
+/*import omtteam.openmodularturrets.OMT;
 *///?}
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,9 +54,11 @@ import java.util.UUID;
  * The click goes through {@code ServerPlayerGameMode#useItemOn}, the vanilla entry point that the loader's block-use
  * event hooks into (Fabric {@code UseBlockCallback}, NeoForge {@code RightClickBlock}), so the whole path is covered:
  * the event, the base's {@code InteractiveBlock#onUse}, the permission check and the menu. Players are the loader's
- * fake players (the same class name and constructor on both), one per test, so no state is shared between tests.
+ * fake players (the same class name and constructor on all loaders), one per test, so no state is shared between
+ * tests. Forge opens block menus through {@code NetworkHooks.openScreen}, which builds the menu itself (no
+ * {@code openMenu}).
  */
-//? if neoforge {
+//? if neoforge || forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}

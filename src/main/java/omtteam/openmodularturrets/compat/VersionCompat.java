@@ -16,8 +16,12 @@ import net.minecraft.world.level.Level;
 //? if fabric {
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-//?} else {
+//?}
+//? if neoforge {
 /*import net.neoforged.neoforge.common.util.FakePlayerFactory;
+*///?}
+//? if forge {
+/*import net.minecraftforge.common.util.FakePlayerFactory;
 *///?}
 //? if >=1.21 {
 import net.minecraft.core.registries.Registries;
