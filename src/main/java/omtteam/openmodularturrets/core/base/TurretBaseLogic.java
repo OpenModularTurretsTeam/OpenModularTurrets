@@ -122,8 +122,9 @@ public class TurretBaseLogic {
 
     /**
      * Server tick (1.12.2 {@code TurretBase.update}). Every tick: solar panel, player warnings (throttled); every 5
-     * ticks: concealment, energy capacity and max range; every 20 ticks: redstone reactor and range clamp. The
-     * creative upgrade fills the energy storage every tick, right before the targeting.
+     * ticks: concealment, energy capacity and max range; every 20 ticks: redstone reactor. The creative upgrade fills
+     * the energy storage every tick, right before the targeting. The range needs no clamp here: {@link
+     * TargetingSettings} keeps it within the max range.
      */
     public void tick(long gameTime) {
         ticks++;
@@ -142,7 +143,6 @@ public class TurretBaseLogic {
             if (ticks % 20 == 0) {
                 ticks = 0;
                 updateRedstoneReactor();
-                targeting.setMaxRange(targeting.getMaxRange()); // clamps the range
             }
         }
     }
@@ -311,24 +311,15 @@ public class TurretBaseLogic {
         return Optional.of(new AmmoDraw(ammo, needed, damageBonus, false, item));
     }
 
-    /** Removes {@code amount} items of a reactor fuel from the ammo slots, all or nothing. */
+    /** Removes one item of a reactor fuel from the first ammo slot holding it; false if there is none. */
     private boolean extractFuel(ReactorFuel fuel) {
-        List<ItemSlot> matching = new ArrayList<>();
-        int available = 0;
         for (ItemSlot slot : world.getAmmoSlots()) {
             if (slot.getCount() > 0 && slot.isReactorFuel(fuel)) {
-                matching.add(slot);
-                available += slot.getCount();
-                if (available >= 1) break;
+                slot.extract(1);
+                return true;
             }
         }
-        if (available < 1) return false;
-        int remaining = 1;
-        for (ItemSlot slot : matching) {
-            remaining -= slot.extract(Math.min(remaining, slot.getCount()));
-            if (remaining <= 0) break;
-        }
-        return true;
+        return false;
     }
 
     // ---- Upgrades and addons ----

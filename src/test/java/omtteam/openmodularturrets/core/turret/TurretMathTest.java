@@ -51,6 +51,7 @@ class TurretMathTest {
     void turretsCannotAimIntoTheirBase() {
         assertTrue(TurretMath.canAim(Face.UP, new Vector3(5, -1, 0)), "slightly below the mounting plane");
         assertFalse(TurretMath.canAim(Face.UP, new Vector3(1, -5, 0)));
+        assertTrue(TurretMath.canAim(Face.UP, new Vector3(1, -1, 0)), "exactly the limit");
         assertFalse(TurretMath.canAim(Face.EAST, new Vector3(-5, 0, 0)), "straight through the base");
         assertEquals(TurretMath.MIN_PITCH, TurretMath.limit(new TurretMath.Angles(30, -80)).pitch(), EPS);
         assertEquals(30, TurretMath.limit(new TurretMath.Angles(30, -80)).yaw(), EPS);

@@ -438,6 +438,20 @@ class TurretBaseLogicTest {
             assertEquals(5, logic.getTargetingSettings().getRange());
         }
 
+        /** {@code TargetingSettings} clamps a saved range above the saved maximum, so tick needs no clamp. */
+        @Test
+        void loadedRangeAboveTheMaximumIsClamped() {
+            TurretBaseLogic logic = new TurretBaseLogic(5, settings, trust(), world, random, clientRelevant -> {
+            });
+            logic.loadState(new TurretBaseLogic.State(0, MachineMode.INVERTED, false, false, true, false, 40, 30,
+                    false, 0, 0));
+            assertEquals(30, logic.getTargetingSettings().getRange());
+            logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET));
+            assertEquals(18, logic.getTargetingSettings().getRange());
+            tick(logic, 20);
+            assertEquals(18, logic.getTargetingSettings().getRange());
+        }
+
         @Test
         void remainingTurretSlots() {
             TurretBaseLogic logic = base(3); // max 2 turrets
@@ -708,8 +722,26 @@ class TurretBaseLogicTest {
             assertEquals(1, copy.getPlayerKills());
         }
 
+        /** Each flag on and off, so a getter that ignores its field is noticed. */
+        @Test
+        void stateKeepsEveryFlag() {
+            for (boolean on : new boolean[]{true, false}) {
+                TurretBaseLogic copy = base(5);
+                copy.loadState(new TurretBaseLogic.State(0, MachineMode.INVERTED, on, on, on, on, 0, 0, on, 0, 0));
+                TurretBaseLogic.State state = copy.getState();
+                assertEquals(on, state.redstone());
+                assertEquals(on, state.targetPlayers());
+                assertEquals(on, state.targetMobs());
+                assertEquals(on, state.targetPassive());
+                assertEquals(on, state.multiTargeting());
+                assertEquals(on, copy.isMultiTargeting());
+                assertEquals(on, copy.getTargetingSettings().isTargetMobs());
+            }
+        }
+
         @Test
         void newBaseHasTheDefaultState() {
+            assertEquals(3, base(3).getTier());
             assertEquals(TurretBaseLogic.State.defaults(), base(1).getState());
             assertThrows(IllegalArgumentException.class, () -> base(0));
             assertThrows(IllegalArgumentException.class, () -> base(6));

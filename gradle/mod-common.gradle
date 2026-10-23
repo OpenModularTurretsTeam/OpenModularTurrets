@@ -183,6 +183,8 @@ task pitest(type: JavaExec) {
                 "--targetTests", "${corePackage}.*",
                 // the tests and their fakes share the core packages
                 "--excludedClasses", '*Test,*Test$*,*.Fake*',
+                // boilerplate of the classes that stand in for records (Java 8); equals stays mutated
+                "--excludedMethods", "toString,hashCode",
                 "--sourceDirs", sourceSets.main.java.srcDirs.join(","),
                 "--threads", Runtime.getRuntime().availableProcessors().toString(),
                 "--outputFormats", "HTML,XML",

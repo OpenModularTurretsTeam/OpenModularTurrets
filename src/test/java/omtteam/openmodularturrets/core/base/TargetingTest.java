@@ -169,6 +169,8 @@ class TargetingTest {
                     selector.classify(FakeTarget.mob(0, 0, 0, "minecraft:cow", EntityCategory.MONSTER)));
             assertEquals(TargetSelector.Classification.HOSTILE,
                     selector.classify(FakeTarget.mob(0, 0, 0, "minecraft:creeper", EntityCategory.OTHER)));
+            assertEquals(TargetSelector.Classification.NONE,
+                    selector.classify(FakeTarget.mob(0, 0, 0, "minecraft:villager", EntityCategory.OTHER)));
         }
 
         @Test
@@ -243,6 +245,15 @@ class TargetingTest {
             FakeTarget atTheEdge = zombie(105, 65, 100);
             search();
             assertEquals(Optional.of(atTheEdge.getId()), targetId());
+        }
+
+        /** The entity query reaches one block further than the range; the range check filters that margin. */
+        @Test
+        void entitiesInTheSearchMarginAreNotTargeted() {
+            logic.setRange(5);
+            zombie(105.5, 65, 100);
+            search();
+            assertEquals(Optional.empty(), targetId());
         }
 
         @Test

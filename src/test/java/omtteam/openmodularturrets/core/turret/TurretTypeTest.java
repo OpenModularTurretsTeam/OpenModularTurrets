@@ -28,6 +28,11 @@ class TurretTypeTest {
     }
 
     @Test
+    void valuesListsTheBuiltInTurrets() {
+        assertTrue(TurretType.values().containsAll(TurretType.BUILT_IN));
+    }
+
+    @Test
     void energyTurretsNeedNoAmmo() {
         Set<TurretType> energyOnly = new HashSet<>(Arrays.asList(TurretType.MELEE_TURRET, TurretType.SLOWING_TURRET,
                 TurretType.TELEPORTER_TURRET, TurretType.ARC_TURRET, TurretType.LASER_TURRET, TurretType.PLASMA_TURRET));
