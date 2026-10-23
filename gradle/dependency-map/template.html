@@ -1,0 +1,560 @@
+<title>/*MOD_NAME*/ Dependency Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a schematic sheet. Header with view controls, the graph as the working surface, a details panel on the right (below on phones). */
+:root {
+  --bg: #eef1ef;
+  --sheet: #f8faf9;
+  --fg: #1d2421;
+  --muted: #5d6863;
+  --line: #c9d1cd;
+  --edge: #8c9893;
+  --core: #2d7a55;
+  --main: #2f5ea6;
+  --client: #8a4cb0;
+  --tests: #7f878d;
+  --cycle: #c8510d;
+  --ok: #2d7a55;
+  --bad: #c42b2b;
+  --focus: #2f5ea6;
+  --font-display: "Chivo", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151a18; --sheet: #1b211f; --fg: #e3e9e6; --muted: #9aa6a0; --line: #303a36; --edge: #6d7a74;
+    --core: #5cc08d; --main: #6e9ae0; --client: #be8ae0; --tests: #9aa2a8; --cycle: #f08a4b;
+    --ok: #5cc08d; --bad: #f07272; --focus: #6e9ae0; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151a18; --sheet: #1b211f; --fg: #e3e9e6; --muted: #9aa6a0; --line: #303a36; --edge: #6d7a74;
+  --core: #5cc08d; --main: #6e9ae0; --client: #be8ae0; --tests: #9aa2a8; --cycle: #f08a4b;
+  --ok: #5cc08d; --bad: #f07272; --focus: #6e9ae0; color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 14px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 16px;
+  display: flex; flex-direction: column; gap: 12px; box-sizing: border-box; margin: 0;
+}
+header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: 22px; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.sub { color: var(--muted); margin: 2px 0 0; font-size: 13px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+.group { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+.label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-right: 4px; }
+.seg button, .chip {
+  font: 500 13px var(--font-body); color: var(--fg); background: var(--sheet); border: 1px solid var(--line);
+  padding: 5px 10px; border-radius: 6px; cursor: pointer;
+}
+.seg { display: inline-flex; }
+.seg button { border-radius: 0; margin-left: -1px; }
+.seg button:first-child { border-radius: 6px 0 0 6px; margin-left: 0; }
+.seg button:last-child { border-radius: 0 6px 6px 0; }
+.seg button[aria-pressed="true"], .chip[aria-pressed="true"] { background: var(--fg); color: var(--sheet); border-color: var(--fg); }
+.chip .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+button:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+input[type="search"] {
+  font: 400 13px var(--font-mono); color: var(--fg); background: var(--sheet); border: 1px solid var(--line);
+  border-radius: 6px; padding: 5px 10px; width: 180px; max-width: 100%;
+}
+main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 12px; }
+.stage { position: relative; background: var(--sheet); border: 1px solid var(--line); border-radius: 8px; min-height: 420px; overflow: hidden; }
+.stage svg { width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
+.stage svg:active { cursor: grabbing; }
+.stage .tools { position: absolute; right: 10px; top: 10px; display: flex; gap: 6px; }
+.legend { position: absolute; left: 12px; bottom: 10px; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--muted); pointer-events: none; max-width: calc(100% - 24px); }
+.legend span { white-space: nowrap; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.legend i.ring { background: transparent; border: 2px dashed var(--cycle); width: 8px; height: 8px; }
+aside { background: var(--sheet); border: 1px solid var(--line); border-radius: 8px; padding: 16px; overflow: auto; min-width: 0; }
+aside h2 { font-family: var(--font-display); font-weight: 700; font-size: 17px; margin: 0 0 2px; word-break: break-word; }
+aside h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 18px 0 6px; font-weight: 600; }
+aside p { margin: 6px 0; line-height: 1.45; }
+.mono { font-family: var(--font-mono); font-size: 12.5px; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+.stat b { display: block; font: 600 20px var(--font-display); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12px; color: var(--muted); }
+ul.list { list-style: none; margin: 0; padding: 0; }
+ul.list li { display: flex; justify-content: space-between; gap: 8px; padding: 4px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+ul.list li:last-child { border-bottom: 0; }
+ul.list .n { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 12px; white-space: nowrap; }
+.link { background: none; border: 0; padding: 0; color: var(--main); cursor: pointer; font: inherit; text-align: left; word-break: break-word; }
+.link:hover { text-decoration: underline; }
+.check { display: flex; gap: 8px; align-items: baseline; padding: 3px 0; }
+.check .mark { font-weight: 700; }
+.check.ok .mark { color: var(--ok); }
+.check.bad .mark { color: var(--bad); }
+.pill { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; margin-right: 4px; }
+.pill.cycle { color: var(--cycle); }
+.pill.set-main { color: var(--main); } .pill.set-client { color: var(--client); } .pill.set-core { color: var(--core); } .pill.set-tests { color: var(--tests); }
+details { border-bottom: 1px solid var(--line); padding: 4px 0; }
+details summary { cursor: pointer; display: flex; justify-content: space-between; gap: 8px; list-style: none; }
+details summary::-webkit-details-marker { display: none; }
+details summary::before { content: "▸"; color: var(--muted); margin-right: 6px; }
+details[open] summary::before { content: "▾"; }
+details summary .name { flex: 1; min-width: 0; word-break: break-word; }
+.pairs { margin: 4px 0 6px 16px; color: var(--muted); }
+.pairs div { padding: 1px 0; word-break: break-word; }
+.note { font-size: 12px; color: var(--muted); line-height: 1.45; }
+/* graph */
+.edge line.vis { stroke: var(--edge); stroke-opacity: 0.55; }
+.edge.cyc line.vis { stroke: var(--cycle); stroke-opacity: 0.75; }
+.edge line.hit { stroke: transparent; stroke-width: 12; cursor: pointer; }
+.node circle { stroke: var(--sheet); stroke-width: 2; cursor: pointer; }
+.node.cyc circle.ring { fill: none; stroke: var(--cycle); stroke-width: 1.5; stroke-dasharray: 3 3; pointer-events: none; }
+.node text { font: 500 11.5px var(--font-mono); fill: var(--fg); paint-order: stroke; stroke: var(--sheet); stroke-width: 3px; pointer-events: none; }
+.node.sel circle.body { stroke: var(--fg); stroke-width: 3; }
+.node circle.pin { fill: var(--fg); stroke: var(--sheet); stroke-width: 1.5; pointer-events: none; display: none; }
+.node.pinned circle.pin { display: block; }
+.node.match circle.body { stroke: var(--focus); stroke-width: 3; }
+.dim { opacity: 0.12; }
+.edge.hl line.vis { stroke-opacity: 1; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (max-width: 860px) {
+  html, body { height: auto; }
+  main { grid-template-columns: minmax(0, 1fr); }
+  .stage { height: 62vh; }
+  aside { max-height: none; }
+}
+</style>
+
+<header>
+  <div>
+    <h1>/*MOD_NAME*/ Dependency Map</h1>
+    <p class="sub">/*MOD_NAME*/ for Minecraft 1.12.2, <span id="count"></span>: who imports whom.</p>
+  </div>
+  <div class="controls">
+    <div class="group"><span class="label">View</span>
+      <div class="seg" role="group" aria-label="View">
+        <button id="view-package" aria-pressed="true">Packages</button>
+        <button id="view-area" aria-pressed="false">Areas</button>
+      </div>
+    </div>
+    <div class="group" id="sets"><span class="label">Source</span></div>
+    <div class="group"><span class="label">Show</span>
+      <button class="chip" id="toggle-cycles" aria-pressed="true">Cycles</button>
+    </div>
+    <input type="search" id="search" placeholder="Find package…" aria-label="Find package">
+  </div>
+</header>
+
+<main>
+  <div class="stage">
+    <svg id="graph" role="img" aria-label="Package dependency graph"></svg>
+    <div class="tools"><button class="chip" id="unpin" hidden>Unpin all</button><button class="chip" id="fit">Fit</button></div>
+    <div class="legend" id="legend"></div>
+  </div>
+  <aside id="panel" aria-live="polite"></aside>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+// filled in by ./gradlew dependencyMap (gradle/mod-common.gradle)
+const DATA = /*DATA*/null;
+
+const SETS = [
+  { key: 'main', label: 'Main', on: true },
+  { key: 'client', label: 'Client', on: true },
+  { key: 'test', label: 'Unit tests', on: false },
+];
+const state = { view: 'package', sets: Object.fromEntries(SETS.map(s => [s.key, s.on])), cycles: true, selected: null, query: '' };
+/** Nodes the viewer dragged somewhere, by view and id: they stay there until released (double-click). */
+let pins = {};
+try {
+  const saved = JSON.parse(localStorage.getItem('/*MOD_ID*/-depmap') || 'null');
+  if (saved) { Object.assign(state, saved, { selected: null, query: '' }); pins = saved.pins || {}; delete state.pins; }
+} catch (e) {}
+function save() { try { localStorage.setItem('/*MOD_ID*/-depmap', JSON.stringify({ view: state.view, sets: state.sets, cycles: state.cycles, pins })); } catch (e) {} }
+const pinKey = d => state.view + ':' + d.id;
+
+/** Colour role of a node: core, client, tests or main. */
+function role(n) {
+  if (n.set === 'test') return 'tests';
+  if (n.set === 'client') return 'client';
+  return n.id.startsWith('core') ? 'core' : 'main';
+}
+const ROLE_LABEL = { core: 'Core logic (no Minecraft)', main: 'Main code', client: 'Client only', tests: 'Tests' };
+const areaOf = id => id.startsWith('test: ') ? 'test: ' + areaOf(id.slice(6)) : id.split('.')[0];
+
+/** The graph for the current view and filters, with cycles (strongly connected components) and layers. */
+function build() {
+  const pkgs = DATA.nodes.filter(n => state.sets[n.set]);
+  const keep = new Set(pkgs.map(n => n.id));
+  let nodes, links;
+  if (state.view === 'package') {
+    nodes = pkgs.map(n => ({ ...n, members: [n.id] }));
+    links = DATA.edges.filter(e => keep.has(e.source) && keep.has(e.target))
+      .map(e => ({ source: e.source, target: e.target, imports: e.imports.map(([a, b]) => [`${a}`, `${b}`]), violations: e.violations }));
+  } else {
+    const byArea = new Map();
+    for (const p of pkgs) {
+      const id = areaOf(p.id);
+      const a = byArea.get(id) || { id, set: p.set, members: [], classes: [], lines: 0, external: {}, violations: [] };
+      a.members.push(p.id); a.lines += p.lines; a.violations.push(...p.violations);
+      p.classes.forEach(c => a.classes.push({ ...c, pkg: p.id }));
+      for (const [g, cs] of Object.entries(p.external)) a.external[g] = [...new Set([...(a.external[g] || []), ...cs])];
+      byArea.set(id, a);
+    }
+    nodes = [...byArea.values()];
+    const agg = new Map();
+    for (const e of DATA.edges) {
+      if (!keep.has(e.source) || !keep.has(e.target)) continue;
+      const s = areaOf(e.source), t = areaOf(e.target);
+      if (s === t) continue;
+      const k = s + '→' + t;
+      const l = agg.get(k) || { source: s, target: t, imports: [], violations: [] };
+      e.imports.forEach(([a, b]) => l.imports.push([`${e.source}.${a}`, `${e.target}.${b}`]));
+      l.violations.push(...e.violations);
+      agg.set(k, l);
+    }
+    links = [...agg.values()];
+  }
+  // Tarjan: packages in one strongly connected component depend on each other in a cycle
+  const adj = new Map(nodes.map(n => [n.id, []]));
+  links.forEach(l => adj.get(l.source).push(l.target));
+  let i = 0; const idx = new Map(), low = new Map(), on = new Set(), stack = [], comps = [];
+  function strong(v) {
+    idx.set(v, i); low.set(v, i); i++; stack.push(v); on.add(v);
+    for (const w of adj.get(v)) {
+      if (!idx.has(w)) { strong(w); low.set(v, Math.min(low.get(v), low.get(w))); }
+      else if (on.has(w)) low.set(v, Math.min(low.get(v), idx.get(w)));
+    }
+    if (low.get(v) === idx.get(v)) { const c = []; let w; do { w = stack.pop(); on.delete(w); c.push(w); } while (w !== v); comps.push(c); }
+  }
+  nodes.forEach(n => { if (!idx.has(n.id)) strong(n.id); });
+  const compOf = new Map(); comps.forEach((c, k) => c.forEach(v => compOf.set(v, k)));
+  const cycles = comps.filter(c => c.length > 1).map(c => c.sort());
+  // layer = longest path to a package that depends on nothing (core ends up at the bottom)
+  const cadj = comps.map(() => new Set());
+  links.forEach(l => { const a = compOf.get(l.source), b = compOf.get(l.target); if (a !== b) cadj[a].add(b); });
+  const height = new Map();
+  const h = c => { if (!height.has(c)) { height.set(c, 0); height.set(c, 1 + Math.max(-1, ...[...cadj[c]].map(h))); } return height.get(c); };
+  nodes.forEach(n => { n.layer = h(compOf.get(n.id)); n.cycle = cycles.findIndex(c => c.includes(n.id)); n.role = role(n); });
+  links.forEach(l => { l.cyc = compOf.get(l.source) === compOf.get(l.target); l.weight = l.imports.length; });
+  return { nodes, links, cycles };
+}
+
+/* ---------- drawing ---------- */
+const svg = d3.select('#graph');
+const zoomLayer = svg.append('g');
+const defs = svg.append('defs');
+['edge', 'cycle'].forEach(k => defs.append('marker').attr('id', 'arrow-' + k).attr('viewBox', '0 -4 8 8')
+  .attr('refX', 8).attr('refY', 0).attr('markerWidth', 7).attr('markerHeight', 7).attr('orient', 'auto')
+  .append('path').attr('d', 'M0,-4L8,0L0,4').style('fill', `var(--${k === 'edge' ? 'edge' : 'cycle'})`));
+const linkLayer = zoomLayer.append('g');
+const nodeLayer = zoomLayer.append('g');
+const zoom = d3.zoom().scaleExtent([0.2, 4]).on('zoom', ev => zoomLayer.attr('transform', ev.transform));
+svg.call(zoom).on('dblclick.zoom', null);
+svg.on('click', ev => { if (ev.target === svg.node()) select(null); });
+
+let graph, sim, positions = new Map();
+const radius = n => (state.view === 'area' ? 8 : 6) + Math.sqrt(n.lines) / (state.view === 'area' ? 4.2 : 3.2);
+const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+function render() {
+  graph = build();
+  document.getElementById('count').textContent = `${DATA.classCount} classes in ${DATA.nodes.length} packages`;
+  const box = svg.node().getBoundingClientRect();
+  const maxLayer = d3.max(graph.nodes, n => n.layer) || 0;
+  const rowGap = Math.max(90, (box.height - 80) / (maxLayer + 1));
+  graph.nodes.forEach(n => {
+    const pin = pins[pinKey(n)];
+    const p = pin || positions.get(state.view + n.id);
+    n.x = p ? p.x : (Math.random() - 0.5) * box.width * 0.6;
+    n.y = p ? p.y : (maxLayer / 2 - n.layer) * rowGap;
+    if (pin) { n.fx = pin.x; n.fy = pin.y; }
+  });
+  if (sim) sim.stop();
+  sim = d3.forceSimulation(graph.nodes)
+    .force('link', d3.forceLink(graph.links).id(d => d.id).distance(l => l.cyc ? 90 : 110).strength(0.12))
+    .force('charge', d3.forceManyBody().strength(state.view === 'area' ? -900 : -420))
+    .force('collide', d3.forceCollide(d => radius(d) + 22))
+    .force('y', d3.forceY(d => (maxLayer / 2 - d.layer) * rowGap).strength(0.35))
+    .force('x', d3.forceX(0).strength(0.04))
+    .stop();
+  // settle before the first paint, so the page opens on a finished layout
+  for (let k = 0; k < 320; k++) sim.tick();
+  sim.alpha(0).on('tick', ticked);
+
+  const link = linkLayer.selectAll('g.edge').data(graph.links, d => d.source.id + '→' + d.target.id);
+  link.exit().remove();
+  const linkIn = link.enter().append('g').attr('class', 'edge');
+  linkIn.append('line').attr('class', 'vis');
+  linkIn.append('line').attr('class', 'hit').on('click', (ev, d) => { ev.stopPropagation(); select({ edge: d }); })
+    .append('title');
+  const links = linkIn.merge(link);
+  links.classed('cyc', d => state.cycles && d.cyc);
+  links.select('line.vis')
+    .attr('stroke-width', d => 0.8 + Math.log2(1 + d.weight) * 0.9)
+    .attr('marker-end', d => `url(#arrow-${state.cycles && d.cyc ? 'cycle' : 'edge'})`);
+  links.select('line.hit title').text(d => `${d.source.id} → ${d.target.id}: ${d.weight} import${d.weight === 1 ? '' : 's'}`);
+
+  const node = nodeLayer.selectAll('g.node').data(graph.nodes, d => d.id);
+  node.exit().remove();
+  const nodeIn = node.enter().append('g').attr('class', 'node').attr('tabindex', 0).attr('role', 'button');
+  nodeIn.append('circle').attr('class', 'ring');
+  nodeIn.append('circle').attr('class', 'body');
+  nodeIn.append('circle').attr('class', 'pin').attr('r', 3.5);
+  nodeIn.append('text').attr('text-anchor', 'middle');
+  const nodes = nodeIn.merge(node);
+  nodes.attr('aria-label', d => d.id)
+    .classed('cyc', d => state.cycles && d.cycle >= 0)
+    .on('click', (ev, d) => { ev.stopPropagation(); select({ node: d.id }); })
+    .on('keydown', (ev, d) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); select({ node: d.id }); } })
+    .on('mouseenter', (ev, d) => highlight(d.id)).on('mouseleave', () => highlight(null))
+    .call(d3.drag()
+      .on('start', (ev, d) => { d.moved = false; d.wasPinned = d.fx != null; d.fx = d.x; d.fy = d.y; })
+      .on('drag', (ev, d) => {
+        if (!d.moved) { d.moved = true; sim.alphaTarget(0.2).restart(); }
+        d.fx = ev.x; d.fy = ev.y;
+      })
+      // dropping a moved node pins it where it was dropped; a plain click changes nothing
+      .on('end', (ev, d) => {
+        if (!ev.active) sim.alphaTarget(0);
+        if (d.moved) pin(d, ev.x, ev.y);
+        else if (!d.wasPinned) { d.fx = null; d.fy = null; }
+      }))
+    .on('dblclick', (ev, d) => { ev.stopPropagation(); unpin(d); });
+  nodes.select('circle.body').attr('r', radius).style('fill', d => `var(--${d.role})`);
+  nodes.select('circle.ring').attr('r', d => radius(d) + 5);
+  nodes.select('circle.pin').attr('cx', d => radius(d) * 0.75).attr('cy', d => -radius(d) * 0.75);
+  showPins();
+  nodes.select('text').attr('dy', d => radius(d) + 14).text(d => d.id);
+  ticked();
+  renderLegend();
+  applySelection();
+}
+
+function ticked() {
+  linkLayer.selectAll('g.edge').each(function (d) {
+    const dx = d.target.x - d.source.x, dy = d.target.y - d.source.y, len = Math.hypot(dx, dy) || 1;
+    const rs = radius(d.source), rt = radius(d.target) + 3;
+    const x1 = d.source.x + dx / len * rs, y1 = d.source.y + dy / len * rs;
+    const x2 = d.target.x - dx / len * rt, y2 = d.target.y - dy / len * rt;
+    d3.select(this).selectAll('line').attr('x1', x1).attr('y1', y1).attr('x2', x2).attr('y2', y2);
+  });
+  nodeLayer.selectAll('g.node').attr('transform', d => `translate(${d.x},${d.y})`);
+  graph.nodes.forEach(n => positions.set(state.view + n.id, { x: n.x, y: n.y }));
+}
+
+function pin(d, x, y) {
+  d.fx = x; d.fy = y;
+  pins[pinKey(d)] = { x: Math.round(x), y: Math.round(y) };
+  save(); showPins();
+}
+function unpin(d) {
+  d.fx = null; d.fy = null;
+  delete pins[pinKey(d)];
+  save(); showPins();
+  sim.alpha(0.3).restart();
+}
+function showPins() {
+  nodeLayer.selectAll('g.node').classed('pinned', d => d.fx != null);
+  document.getElementById('unpin').hidden = !graph.nodes.some(n => n.fx != null);
+}
+
+function fit(animate) {
+  const box = svg.node().getBoundingClientRect();
+  if (!graph.nodes.length || !box.width) return;
+  const [x0, x1] = d3.extent(graph.nodes, n => n.x), [y0, y1] = d3.extent(graph.nodes, n => n.y);
+  const w = x1 - x0 + 160, h = y1 - y0 + 140;
+  const k = Math.min(2, box.width / w, box.height / h);
+  const t = d3.zoomIdentity.translate(box.width / 2 - k * (x0 + x1) / 2, box.height / 2 - k * (y0 + y1) / 2 - 10).scale(k);
+  (animate ? svg.transition().duration(400) : svg).call(zoom.transform, t);
+}
+
+function neighbours(id) {
+  const s = new Set([id]);
+  graph.links.forEach(l => { if (l.source.id === id) s.add(l.target.id); if (l.target.id === id) s.add(l.source.id); });
+  return s;
+}
+function highlight(id) {
+  const focus = id ?? (state.selected?.node ?? null);
+  const edgeSel = state.selected?.edge;
+  const keepNodes = focus ? neighbours(focus) : edgeSel ? new Set([edgeSel.source.id, edgeSel.target.id]) : null;
+  nodeLayer.selectAll('g.node').classed('dim', d => keepNodes ? !keepNodes.has(d.id) : false);
+  linkLayer.selectAll('g.edge')
+    .classed('dim', d => focus ? !(d.source.id === focus || d.target.id === focus) : edgeSel ? d !== edgeSel : false)
+    .classed('hl', d => focus ? (d.source.id === focus || d.target.id === focus) : d === edgeSel);
+}
+function applySelection() {
+  nodeLayer.selectAll('g.node').classed('sel', d => state.selected?.node === d.id)
+    .classed('match', d => state.query && d.id.toLowerCase().includes(state.query));
+  if (state.selected?.edge) {
+    const e = state.selected.edge;
+    state.selected.edge = graph.links.find(l => l.source.id === e.source.id && l.target.id === e.target.id) || null;
+    if (!state.selected.edge) state.selected = null;
+  }
+  if (state.selected?.node && !graph.nodes.some(n => n.id === state.selected.node)) state.selected = null;
+  highlight(null);
+  renderPanel();
+}
+function select(sel) { state.selected = sel; applySelection(); }
+
+/* ---------- panel ---------- */
+const panel = document.getElementById('panel');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+const nodeLink = id => `<button class="link mono" data-node="${esc(id)}">${esc(id)}</button>`;
+
+function renderPanel() {
+  if (state.selected?.node) return renderNode(graph.nodes.find(n => n.id === state.selected.node));
+  if (state.selected?.edge) return renderEdge(state.selected.edge);
+  renderOverview();
+}
+
+function rulesHtml() {
+  const coreEdges = DATA.edges.filter(e => e.violations.length);
+  const coreLibs = DATA.nodes.filter(n => n.violations.length);
+  const c1 = !coreEdges.some(e => e.violations.some(v => v.startsWith('core'))) && !coreLibs.length;
+  const c2 = !coreEdges.some(e => e.violations.some(v => v.startsWith('main')));
+  const row = (ok, text) => `<div class="check ${ok ? 'ok' : 'bad'}"><span class="mark">${ok ? '✓' : '✗'}</span><span>${text}</span></div>`;
+  return row(c1, 'Core uses no Minecraft, Forge or other mod packages, only OMLib\'s core (<span class="mono">verifyCoreIsolation</span>)')
+    + row(c2, 'Common code never imports client code (the <span class="mono">client</span> package, reached through the proxy)');
+}
+
+function cutCandidates(cycle) {
+  const set = new Set(cycle);
+  return graph.links.filter(l => set.has(l.source.id) && set.has(l.target.id))
+    .sort((a, b) => a.weight - b.weight).slice(0, 6);
+}
+
+function renderOverview() {
+  const { nodes, links, cycles } = graph;
+  let html = `<h2>${state.view === 'area' ? 'Areas' : 'Packages'} at a glance</h2>
+    <p class="note">Click a ${state.view === 'area' ? 'area' : 'package'} or an arrow for details. Drag a node to pin it there, double-click it to release it. Scroll or pinch to zoom.</p>
+    <div class="stats">
+      <div class="stat"><b>${nodes.length}</b><span>${state.view === 'area' ? 'areas' : 'packages'} shown</span></div>
+      <div class="stat"><b>${links.length}</b><span>dependencies</span></div>
+      <div class="stat"><b>${cycles.length}</b><span>${cycles.length === 1 ? 'cycle' : 'cycles'}</span></div>
+    </div>
+    <h3>Rules</h3>${rulesHtml()}`;
+  html += `<h3>Cycles</h3>`;
+  if (!cycles.length) html += `<p class="note">No cycles in this view.</p>`;
+  cycles.forEach((c, k) => {
+    const cuts = cutCandidates(c);
+    html += `<details${k === 0 ? ' open' : ''}><summary><span class="name"><span class="pill cycle">cycle</span>${plural(c.length, state.view === 'area' ? 'area' : 'package')}</span></summary>
+      <p>${c.map(nodeLink).join(', ')}</p>
+      <p class="note">These depend on each other in a loop. The thinnest links inside it are the cheapest to cut:</p>
+      <ul class="list">${cuts.map(l => `<li><span class="mono">${esc(l.source.id)} → ${esc(l.target.id)}</span><span class="n">${plural(l.weight, 'import')}</span></li>`).join('')}</ul></details>`;
+  });
+  html += `<h3>Most depended on</h3><ul class="list">`;
+  const inDeg = new Map(nodes.map(n => [n.id, 0]));
+  links.forEach(l => inDeg.set(l.target.id, inDeg.get(l.target.id) + 1));
+  [...inDeg].sort((a, b) => b[1] - a[1]).slice(0, 6)
+    .forEach(([id, d]) => { html += `<li>${nodeLink(id)}<span class="n">used by ${d}</span></li>`; });
+  html += `</ul><h3>About this map</h3><p class="note">Built from the <span class="mono">import</span> lines of every class in <span class="mono">src/main</span> and <span class="mono">src/test</span>; imports in comments are not counted. Client code is the <span class="mono">client</span> package of <span class="mono">src/main</span>. Classes in the same package need no import, so dependencies inside a package do not appear. Node size follows the lines of code.</p>`;
+  panel.innerHTML = html;
+}
+
+function renderNode(n) {
+  const out = graph.links.filter(l => l.source.id === n.id).sort((a, b) => b.weight - a.weight);
+  const inc = graph.links.filter(l => l.target.id === n.id).sort((a, b) => b.weight - a.weight);
+  const setLabel = { main: 'main', client: 'main, client package', test: 'test' }[n.set] || n.set;
+  let html = `<h2 class="mono">${esc(n.id)}</h2>
+    <p><span class="pill set-${n.role}">${ROLE_LABEL[n.role]}</span><span class="pill">src/${setLabel}</span>${n.cycle >= 0 ? '<span class="pill cycle">in a cycle</span>' : ''}</p>
+    <div class="stats">
+      <div class="stat"><b>${n.classes.length}</b><span>classes</span></div>
+      <div class="stat"><b>${n.lines.toLocaleString('en')}</b><span>lines</span></div>
+      <div class="stat"><b>${out.length}/${inc.length}</b><span>uses / used by</span></div>
+    </div>`;
+  if (n.violations.length) html += `<h3>Rule problems</h3>${n.violations.map(v => `<div class="check bad"><span class="mark">✗</span>${esc(v)}</div>`).join('')}`;
+  const edgeList = (list, other, verb) => list.length ? list.map(l => `<details><summary><span class="name">${nodeLink(other(l))}</span><span class="n">${plural(l.weight, 'import')}</span></summary>
+      <div class="pairs mono">${l.imports.map(([a, b]) => `<div>${esc(a)} ${verb} ${esc(b)}</div>`).join('')}</div></details>`).join('') : '<p class="note">None.</p>';
+  html += `<h3>Depends on</h3>${edgeList(out, l => l.target.id, '→')}`;
+  html += `<h3>Used by</h3>${edgeList(inc, l => l.source.id, '→')}`;
+  const ext = Object.entries(n.external);
+  html += `<h3>Libraries</h3>` + (ext.length ? `<ul class="list">${ext.map(([g, cs]) => `<li><span>${esc(g)}</span><span class="n">${plural(cs.length, 'class')}</span></li>`).join('')}</ul>` : '<p class="note">None: plain Java.</p>');
+  if (state.view === 'area') html += `<h3>Packages</h3><p>${n.members.map(m => `<span class="mono">${esc(m)}</span>`).join(', ')}</p>`;
+  html += `<h3>Classes</h3><ul class="list">${n.classes.slice().sort((a, b) => b.lines - a.lines)
+    .map(c => `<li><span class="mono" title="${esc(c.path)}">${esc(c.pkg && state.view === 'area' ? c.pkg + '.' : '')}${esc(c.name)}</span><span class="n">${c.lines}</span></li>`).join('')}</ul>`;
+  panel.innerHTML = html;
+}
+
+function renderEdge(l) {
+  const back = graph.links.find(o => o.source.id === l.target.id && o.target.id === l.source.id);
+  let html = `<h2 class="mono">${esc(l.source.id)} → ${esc(l.target.id)}</h2>
+    <p>${plural(l.weight, 'import')}${l.cyc ? ' <span class="pill cycle">part of a cycle</span>' : ''}</p>`;
+  if (back) html += `<p class="note">The other direction exists too: ${nodeLink(l.target.id)} imports from ${nodeLink(l.source.id)} (${plural(back.weight, 'import')}).</p>`;
+  if (l.violations.length) html += l.violations.map(v => `<div class="check bad"><span class="mark">✗</span>${esc(v)}</div>`).join('');
+  html += `<h3>Imports</h3><div class="pairs mono" style="margin-left:0">${l.imports.map(([a, b]) => `<div>${esc(a)} → ${esc(b)}</div>`).join('')}</div>
+    <p>${nodeLink(l.source.id)} · ${nodeLink(l.target.id)}</p>`;
+  panel.innerHTML = html;
+}
+
+panel.addEventListener('click', ev => {
+  const b = ev.target.closest('[data-node]');
+  if (!b) return;
+  ev.preventDefault();
+  const n = graph.nodes.find(x => x.id === b.dataset.node);
+  if (!n) return;
+  select({ node: n.id });
+  const box = svg.node().getBoundingClientRect(), k = d3.zoomTransform(svg.node()).k;
+  svg.transition().duration(400).call(zoom.transform, d3.zoomIdentity.translate(box.width / 2 - k * n.x, box.height / 2 - k * n.y).scale(k));
+});
+
+function renderLegend() {
+  const roles = [...new Set(graph.nodes.map(n => n.role))];
+  document.getElementById('legend').innerHTML = ['core', 'main', 'client', 'tests'].filter(r => roles.includes(r))
+    .map(r => `<span><i style="background:var(--${r})"></i>${ROLE_LABEL[r]}</span>`).join('')
+    + (state.cycles ? '<span><i class="ring"></i>In a cycle</span>' : '') + '<span>Arrow: imports from</span>';
+}
+
+/* ---------- controls ---------- */
+const setsBox = document.getElementById('sets');
+SETS.forEach(s => {
+  const b = document.createElement('button');
+  b.className = 'chip'; b.id = 'set-' + s.key; b.textContent = s.label;
+  b.setAttribute('aria-pressed', state.sets[s.key]);
+  b.addEventListener('click', () => {
+    state.sets[s.key] = !state.sets[s.key];
+    if (!Object.values(state.sets).some(Boolean)) state.sets[s.key] = true;
+    b.setAttribute('aria-pressed', state.sets[s.key]);
+    save(); render(); fit(true);
+  });
+  setsBox.appendChild(b);
+});
+function setView(v) {
+  state.view = v; state.selected = null;
+  document.getElementById('view-package').setAttribute('aria-pressed', v === 'package');
+  document.getElementById('view-area').setAttribute('aria-pressed', v === 'area');
+  save(); render(); fit(true);
+}
+document.getElementById('view-package').addEventListener('click', () => setView('package'));
+document.getElementById('view-area').addEventListener('click', () => setView('area'));
+document.getElementById('toggle-cycles').addEventListener('click', ev => {
+  state.cycles = !state.cycles; ev.currentTarget.setAttribute('aria-pressed', state.cycles); save(); render();
+});
+document.getElementById('fit').addEventListener('click', () => fit(true));
+document.getElementById('unpin').addEventListener('click', () => {
+  graph.nodes.forEach(n => { n.fx = null; n.fy = null; delete pins[pinKey(n)]; });
+  save(); showPins(); sim.alpha(0.5).restart();
+});
+document.getElementById('search').addEventListener('input', ev => {
+  state.query = ev.target.value.trim().toLowerCase();
+  applySelection();
+  const hits = graph.nodes.filter(n => state.query && n.id.toLowerCase().includes(state.query));
+  if (hits.length === 1) select({ node: hits[0].id });
+});
+// refit whenever the graph area changes size (window maximised, panel layout, embedding frame), not only on window resize
+let lastSize = '';
+new ResizeObserver(entries => {
+  const { width, height } = entries[0].contentRect;
+  const size = Math.round(width) + 'x' + Math.round(height);
+  if (size !== lastSize && width > 0 && height > 0) { lastSize = size; fit(false); }
+}).observe(document.querySelector('.stage'));
+
+document.getElementById('view-package').setAttribute('aria-pressed', state.view === 'package');
+document.getElementById('view-area').setAttribute('aria-pressed', state.view === 'area');
+document.getElementById('toggle-cycles').setAttribute('aria-pressed', state.cycles);
+render();
+fit(false);
+</script>

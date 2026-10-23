@@ -1,6 +1,7 @@
 // Build logic shared by the standalone build (build.gradle, ForgeGradle 2.3) and the workspace build
 // (gradle/workspace/<Mod>.gradle, ForgeGradle 3). Keep this file identical in OMLib, OMT and OMPD.
-// Versions come from the mod's gradle.properties (junit_version, junit_platform_version, archunit_version).
+// Versions come from the mod's gradle.properties (junit_version, junit_platform_version, archunit_version,
+// jacoco_version, pitest_version, pitest_junit5_version).
 
 import java.time.LocalDate
 import java.util.regex.Matcher
@@ -77,6 +78,312 @@ task verifyCoreIsolation {
     }
 }
 check.dependsOn verifyCoreIsolation
+
+// The mod's base package (omtteam.omlib, omtteam.openmodularturrets, omtteam.ompd) and its core
+def basePackage = group_id.toString()
+def corePackage = "${basePackage}.core".toString()
+def corePath = corePackage.replace('.', '/')
+
+// --- Test coverage (JaCoCo): check prints the line coverage of core ----------------------------
+
+// The unit tests record coverage; only core is reported, the rest has no unit tests (1.12 has no game tests).
+// Report: <build dir>/reports/jacoco/test/html/index.html
+apply plugin: "jacoco"
+
+jacoco {
+    toolVersion = jacoco_version
+}
+
+// after evaluation: Gradle 4's JaCoCo plugin adds the whole main output to the class directories set here
+afterEvaluate {
+    jacocoTestReport {
+        sourceDirectories = files(sourceSets.main.java.srcDirs)
+        classDirectories = sourceSets.main.output.classesDirs.asFileTree.matching { include "${corePath}/**" }
+    }
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        csv.enabled = true
+        xml.enabled = true
+        html.enabled = true
+    }
+    doLast {
+        File csv = reports.csv.destination
+        // line coverage per package, summed for core
+        def byPackage = new TreeMap<String, int[]>()
+        if (csv.isFile()) {
+            csv.readLines().drop(1).each { line ->
+                def row = line.split(',')
+                def lines = byPackage.get(row[1])
+                if (lines == null) {
+                    lines = new int[2]
+                    byPackage.put(row[1], lines)
+                }
+                lines[0] += row[7].toInteger() // LINE_MISSED
+                lines[1] += row[8].toInteger() // LINE_COVERED
+            }
+        }
+        if (byPackage.isEmpty()) {
+            println "Test coverage: no core classes"
+            return
+        }
+        def percent = { int[] l ->
+            String.format("%5.1f%%  (%d/%d lines)", 100.0d * l[1] / Math.max(1, l[0] + l[1]), l[1], l[0] + l[1])
+        }
+        int[] total = new int[2]
+        byPackage.values().each { total[0] += it[0]; total[1] += it[1] }
+        println "Test coverage (unit tests):"
+        println String.format("  %-24s %s", "core", percent(total))
+        byPackage.each { name, lines ->
+            println String.format("    %-22s %s", name - "${basePackage}.", percent(lines))
+        }
+        println "  Report: ${reports.html.destination.toURI()}index.html"
+    }
+}
+check.dependsOn jacocoTestReport
+
+// --- Mutation testing (PIT): ./gradlew pitest, on demand --------------------------------------
+
+// Plants small mistakes in core (flipped conditions, changed boundaries, removed calls) and checks whether a unit test
+// fails. Surviving mistakes show behaviour the tests do not pin down. Report only, not part of check.
+// PIT 1.17 is the last release that runs on Java 8. Report: <build dir>/reports/pitest/index.html
+configurations {
+    pitest
+}
+
+dependencies {
+    pitest "org.pitest:pitest-command-line:${pitest_version}"
+    // without its JUnit Platform: the tests' own (testRuntime) is used, an older one breaks test discovery
+    pitest("org.pitest:pitest-junit5-plugin:${pitest_junit5_version}") {
+        transitive = false
+    }
+}
+
+task pitest(type: JavaExec) {
+    group = "verification"
+    description = "Mutation testing of the core logic (report in build/reports/pitest)"
+    dependsOn testClasses
+    def reportDir = { file("${buildDir}/reports/pitest") }
+    outputs.dir reportDir
+    onlyIf {
+        boolean hasCore = sourceSets.main.java.srcDirs.any { new File(it, corePath).isDirectory() }
+        if (!hasCore) {
+            logger.lifecycle("pitest: ${project.name} has no core package, nothing to mutate")
+        }
+        return hasCore
+    }
+    classpath = configurations.pitest + sourceSets.test.runtimeClasspath
+    main = "org.pitest.mutationtest.commandline.MutationCoverageReport"
+    doFirst {
+        args = [
+                "--reportDir", reportDir().path,
+                "--targetClasses", "${corePackage}.*",
+                "--targetTests", "${corePackage}.*",
+                // the tests and their fakes share the core packages
+                "--excludedClasses", '*Test,*Test$*,*.Fake*',
+                "--sourceDirs", sourceSets.main.java.srcDirs.join(","),
+                "--threads", Runtime.getRuntime().availableProcessors().toString(),
+                "--outputFormats", "HTML,XML",
+                "--timestampedReports=false",
+        ]
+    }
+    doLast {
+        println "PIT report: ${new File(reportDir(), "index.html").toURI()}"
+    }
+}
+
+// --- Dependency map (./gradlew dependencyMap) --------------------------------------------------
+
+// Writes an interactive map of the package dependencies to <build dir>/reports/dependency-map/index.html: one node per
+// package (tests as their own nodes), one arrow per package pair with the class imports behind it, the libraries each
+// package uses and the architecture rules (core isolation, no client code in common code). Built from the import lines
+// of the main and test sources; imports in comments do not count. Client code is the client package of main.
+// Cycles and layers are worked out by the page (gradle/dependency-map/template.html, as in 1.20.1+).
+task dependencyMap {
+    group = "documentation"
+    description = "Writes an interactive package dependency map to build/reports/dependency-map/index.html"
+    def template = file("gradle/dependency-map/template.html")
+    def output = { file("${buildDir}/reports/dependency-map/index.html") }
+    inputs.files({ sourceSets.main.java.srcDirs + sourceSets.test.java.srcDirs })
+    inputs.file template
+    outputs.file output
+    doLast {
+        def libraries = [
+                ["net.minecraft.", "Minecraft"], ["com.mojang.", "Minecraft"],
+                ["net.minecraftforge.", "Forge"], ["cpw.mods.", "Forge"],
+                ["omtteam.omlib.core.", "OMLib core"], ["omtteam.omlib.", "OMLib"],
+                ["mezz.jei.", "JEI"], ["mcjty.theoneprobe.", "The One Probe"], ["mcp.mobius.waila.", "Hwyla"],
+                ["li.cil.oc.", "OpenComputers"], ["dan200.computercraft.", "ComputerCraft"],
+                ["cofh.redstoneflux.", "Redstone Flux"], ["net.darkhax.tesla.", "Tesla"], ["ic2.", "IndustrialCraft 2"],
+                ["thaumcraft.", "Thaumcraft"], ["io.netty.", "Netty"], ["org.lwjgl.", "LWJGL"],
+                ["com.google.", "Guava / Gson"], ["org.apache.", "Apache Commons"],
+                ["org.junit.", "JUnit"], ["com.tngtech.archunit.", "ArchUnit"],
+        ]
+        // core may use these besides itself (verifyCoreIsolation)
+        def coreLibraries = ["OMLib core", "JUnit"]
+        def importLine = ~/^import\s+(static\s+)?([\w.]+?)(\.\*)?;/
+        def clientPackage = "${basePackage}.client".toString()
+
+        // fqcn -> [fqcn, set, imports, lines, path]
+        def classes = new LinkedHashMap<String, Map>()
+        [main: sourceSets.main.java.srcDirs, test: sourceSets.test.java.srcDirs].each { String sourceSet, Set<File> dirs ->
+            dirs.findAll { it.isDirectory() }.each { File dir ->
+                def files = []
+                dir.eachFileRecurse(groovy.io.FileType.FILES) { file ->
+                    if (file.name.endsWith(".java") && file.name != "package-info.java") {
+                        files << file
+                    }
+                }
+                files.sort { it.path }.each { File file ->
+                    String relative = dir.toPath().relativize(file.toPath()).toString()
+                    String fqcn = (relative - ~/\.java$/).replace(File.separatorChar, '.' as char)
+                    String text = file.getText("UTF-8")
+                    def imports = []
+                    boolean inComment = false
+                    text.readLines().each { String line ->
+                        String trimmed = line.trim()
+                        if (inComment) {
+                            if (line.contains("*/")) {
+                                inComment = false
+                            }
+                            return
+                        }
+                        if (trimmed.startsWith("/*")) {
+                            inComment = !trimmed.substring(2).contains("*/")
+                            return
+                        }
+                        def match = importLine.matcher(line)
+                        if (match.find()) {
+                            String target = match.group(2)
+                            imports << (match.group(1) ? target.substring(0, target.lastIndexOf('.')) : target)
+                        }
+                    }
+                    String pkg = fqcn.contains(".") ? fqcn.substring(0, fqcn.lastIndexOf('.')) : ""
+                    String set = sourceSet
+                    if (set == "main" && (pkg == clientPackage || pkg.startsWith(clientPackage + "."))) {
+                        set = "client"
+                    }
+                    classes.put(fqcn, [fqcn   : fqcn, set: set, imports: imports, lines: text.count("\n") + 1,
+                                       path   : project.projectDir.toPath().relativize(file.toPath()).toString()])
+                }
+            }
+        }
+
+        // tests share packages with the main code, so they are keyed apart
+        def packageOf = { Map c ->
+            String pkg = c.fqcn.substring(0, c.fqcn.lastIndexOf('.'))
+            c.set == "test" ? "test:" + pkg : pkg
+        }
+        def shortName
+        shortName = { String pkg ->
+            if (pkg.startsWith("test:")) {
+                return "test: " + shortName(pkg.substring(5))
+            }
+            if (pkg == basePackage) {
+                return "(root)"
+            }
+            return pkg.startsWith(basePackage + ".") ? pkg.substring(basePackage.length() + 1) : pkg
+        }
+        def simpleName = { String fqcn -> fqcn.substring(fqcn.lastIndexOf('.') + 1) }
+        // an imported name -> the class file of this mod it refers to (nested classes map to their file)
+        def resolve = { String target ->
+            String candidate = target
+            while (true) {
+                if (classes.containsKey(candidate)) {
+                    return candidate
+                }
+                int dot = candidate.lastIndexOf('.')
+                if (dot < 0) {
+                    return null
+                }
+                candidate = candidate.substring(0, dot)
+            }
+        }
+        def isCore = { String id -> id == "core" || id.startsWith("core.") }
+
+        def nodes = new TreeMap<String, Map>()
+        def edges = new TreeMap<String, Map>()
+        classes.values().each { Map c ->
+            String pkg = packageOf(c)
+            Map node = nodes.get(pkg)
+            if (node == null) {
+                node = [id: shortName(pkg), set: c.set, classes: [], lines: 0, external: new TreeMap<String, TreeSet<String>>()]
+                nodes.put(pkg, node)
+            }
+            if (node.set != c.set) {
+                node.set = "mixed"
+            }
+            node.classes << [name: simpleName(c.fqcn), lines: c.lines, path: c.path]
+            node.lines += c.lines
+            c.imports.each { String target ->
+                if (target == basePackage || target.startsWith(basePackage + ".")) {
+                    String to = resolve(target)
+                    if (to == null) {
+                        return
+                    }
+                    String toPkg = packageOf(classes.get(to))
+                    if (toPkg == pkg) {
+                        return
+                    }
+                    String key = pkg + "→" + toPkg
+                    Map edge = edges.get(key)
+                    if (edge == null) {
+                        edge = [source: shortName(pkg), target: shortName(toPkg), imports: new TreeSet<String>()]
+                        edges.put(key, edge)
+                    }
+                    edge.imports << simpleName(c.fqcn) + "\u0000" + simpleName(to)
+                } else {
+                    def library = libraries.find { target.startsWith(it[0]) }
+                    if (library != null) {
+                        def users = node.external.get(library[1])
+                        if (users == null) {
+                            users = new TreeSet<String>()
+                            node.external.put(library[1], users)
+                        }
+                        users << simpleName(c.fqcn)
+                    }
+                }
+            }
+        }
+        def setOf = [:]
+        nodes.values().each { setOf[it.id] = it.set }
+        def data = [
+                classCount: classes.size(),
+                nodes     : nodes.values().collect { n ->
+                    [
+                            id        : n.id, set: n.set, lines: n.lines,
+                            classes   : n.classes.sort { it.name },
+                            external  : n.external.collectEntries { k, v -> [k, v as List] },
+                            violations: isCore(n.id) ? n.external.keySet().findAll { !(it in coreLibraries) }.collect { "core uses ${it}".toString() } : [],
+                    ]
+                },
+                edges     : edges.values().collect { e ->
+                    def violations = []
+                    if (isCore(e.source) && !isCore(e.target)) {
+                        violations << "core depends on non-core code"
+                    }
+                    if (setOf[e.source] == "main" && setOf[e.target] == "client") {
+                        violations << "main code depends on client code"
+                    }
+                    [source: e.source, target: e.target, imports: e.imports.collect { it.split("\u0000") as List }, violations: violations]
+                },
+        ]
+        String json = groovy.json.JsonOutput.toJson(data).replace("</", "<\\/")
+        String page = template.getText("UTF-8")
+        if (!page.contains("/*DATA*/null")) {
+            throw new GradleException("The template has no /*DATA*/null placeholder")
+        }
+        page = page.replace("/*DATA*/null", json).replace("/*MOD_NAME*/", mod_id_cap.toString()).replace("/*MOD_ID*/", mod_id.toString())
+        File file = output()
+        file.parentFile.mkdirs()
+        file.setText("<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n" +
+                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n" +
+                page + "\n</html>\n", "UTF-8")
+        println "Dependency map: ${nodes.size()} packages, ${edges.size()} dependencies, ${classes.size()} classes -> ${file.toURI()}"
+    }
+}
 
 // --- Changelog (CHANGELOG.md, Keep a Changelog) ------------------------------------------------
 
