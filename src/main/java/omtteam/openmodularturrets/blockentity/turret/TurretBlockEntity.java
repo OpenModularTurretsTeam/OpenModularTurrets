@@ -68,6 +68,8 @@ public class TurretBlockEntity extends CompatBlockEntity {
     private float syncedPitch;
     private int ticksSinceSync;
     private boolean active;
+    /** Whether the base has a damage amp addon; synced to clients (the turret shows its damage amp LEDs). */
+    private boolean damageAmp;
 
     /** Ammo taken by the last {@link #beginShot()}, if the turret uses ammo. */
     @Nullable
@@ -153,8 +155,10 @@ public class TurretBlockEntity extends CompatBlockEntity {
         } else {
             turret.forgetTarget();
         }
-        if (engaging != turret.active) {
+        boolean amped = logic.getDamageAmpLevel() > 0;
+        if (engaging != turret.active || amped != turret.damageAmp) {
             turret.active = engaging;
+            turret.damageAmp = amped;
             turret.syncToClient();
         }
         turret.syncAimIfChanged();
@@ -166,6 +170,11 @@ public class TurretBlockEntity extends CompatBlockEntity {
      */
     public boolean isActive() {
         return active;
+    }
+
+    /** Whether the base has a damage amp addon (synced to clients). */
+    public boolean hasDamageAmp() {
+        return damageAmp;
     }
 
     /**
@@ -421,6 +430,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
         yaw = tag.getFloat("Yaw");
         pitch = tag.getFloat("Pitch");
         active = tag.getBoolean("Active");
+        damageAmp = tag.getBoolean("DamageAmp");
         if (!renderInitialised) {
             renderYaw = prevRenderYaw = yaw;
             renderPitch = prevRenderPitch = pitch;
@@ -434,11 +444,12 @@ public class TurretBlockEntity extends CompatBlockEntity {
         tag.putInt("TicksSinceShot", state.getTicksSinceShot());
     }
 
-    /** Clients only need the aim and whether the turret is active. */
+    /** Clients only need the aim, whether the turret is active and whether it shows the damage amp LEDs. */
     @Override
     protected void writeClientData(CompoundTag tag, HolderLookup.Provider registries) {
         tag.putFloat("Yaw", yaw);
         tag.putFloat("Pitch", pitch);
         tag.putBoolean("Active", active);
+        tag.putBoolean("DamageAmp", damageAmp);
     }
 }
