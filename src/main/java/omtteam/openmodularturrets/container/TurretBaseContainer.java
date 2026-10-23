@@ -63,7 +63,7 @@ public class TurretBaseContainer extends Container {
 
         // Determine the slot range for each type( According to the class constructor )
         for (int i = slotStart; i < this.inventorySlots.size(); i++) {
-            Class slotClass = this.getSlot(i).getClass();
+            Class<?> slotClass = this.getSlot(i).getClass();
             if (slotClass == AmmoSlot.class) {
                 ammoSlotStart = Math.min(i, ammoSlotStart);
                 ammoSlotEnd = Math.max(i + 1, ammoSlotEnd);

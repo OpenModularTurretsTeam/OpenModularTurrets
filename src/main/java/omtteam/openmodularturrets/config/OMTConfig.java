@@ -39,8 +39,7 @@ public class OMTConfig {
                 }
             }
         } catch (Exception e) {
-            OpenModularTurrets.getLogger().error("error while parsing disp. ammo list config!");
-            e.printStackTrace();
+            OpenModularTurrets.getLogger().error("error while parsing disp. ammo list config!", e);
         }
     }
 
@@ -105,6 +104,7 @@ public class OMTConfig {
         @Config.Comment("If turrets should warn players with audible alarm if entering their warning range")
         public boolean turretAlarmSound = true;
 
+        @Config.RequiresMcRestart
         @Config.Comment("If turrets should be breakable with tools")
         public boolean turretBreakable = false;
 

@@ -40,9 +40,9 @@ public class ModelRocketTurret extends ModelAbstractTurret {
         weapon.cubeList.add(new ModelBox(weapon, 0, 6, -1.0F, -4.0F, -4.0F, 2, 2, 2, 0.0F, true));
     }
 
-    public void setRotationForTarget(float y, float z) {
-        weapon.rotateAngleX = y;
-        holder.rotateAngleY = z;
+    public void setRotationForTarget(float pitch, float yaw) {
+        weapon.rotateAngleX = pitch;
+        holder.rotateAngleY = yaw;
     }
 
     public void setRotation(ModelRenderer model, float x, float y, float z) {

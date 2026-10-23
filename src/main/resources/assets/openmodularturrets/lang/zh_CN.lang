@@ -59,7 +59,6 @@ tile.turret_base.name=炮塔基座
 
 itemGroup.openmodularturrets=模块化炮塔
 
-text.openmodularturrets.gui.base=基座
 text.openmodularturrets.gui.multi_targeting=多目标射击
 text.openmodularturrets.gui.addons=附件
 text.openmodularturrets.gui.upgrades=升级
@@ -69,16 +68,8 @@ text.openmodularturrets.gui.inventory=物品栏
 text.openmodularturrets.gui.target=目标
 text.openmodularturrets.gui.multi=多个
 text.openmodularturrets.gui.single=单个
-text.openmodularturrets.gui.yaw=幅度
-text.openmodularturrets.gui.pitch=仰角
-text.openmodularturrets.gui.toggle=开关
-text.openmodularturrets.gui.auto_fire=自动射击
-text.openmodularturrets.gui.turret=炮塔
 text.openmodularturrets.gui.turret_base_description=模块化炮塔的核心。
-text.openmodularturrets.gui.turret_head_description=炮塔的头部，放置在炮塔基座上。
 text.openmodularturrets.gui.turret_lever_description=用以产生能量的曲柄，放置在等级1的炮塔基座上。
-text.openmodularturrets.gui.no_turret=基座上没有炮塔.
-text.openmodularturrets.gui.type=类型
 text.openmodularturrets.gui.range=范围
 text.openmodularturrets.gui.rof=射击速率
 text.openmodularturrets.gui.accuracy=精确度

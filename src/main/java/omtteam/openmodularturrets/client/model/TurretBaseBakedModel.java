@@ -18,6 +18,7 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.client.render.camo.CamoBakedModel;
+import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.reference.Reference;
 
 import javax.annotation.Nonnull;
@@ -102,7 +103,7 @@ public class TurretBaseBakedModel extends CamoBakedModel {
                     //noinspection ConstantConditions
                     list.add(ModelLoaderRegistry.getModel(new ModelResourceLocation("openmodularturrets:turret_base_normal", "tier=" + i)).bake(state, format, bakedTextureGetter));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    OpenModularTurrets.getLogger().error("Failed to bake the turret base model for tier {}", i, e);
                 }
             }
             TextureAtlasSprite part = bakedTextureGetter.apply(new ResourceLocation("openmodularturrets", "blocks/turret_base_tier_two"));

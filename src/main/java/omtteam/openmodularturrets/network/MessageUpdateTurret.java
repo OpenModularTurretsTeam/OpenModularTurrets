@@ -5,11 +5,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
 
-@SuppressWarnings("unused")
 /**
  * The aim of a turret (yaw and pitch relative to its mounting face, see {@code TurretMath}) and whether it is active,
  * sent to clients.
  */
+@SuppressWarnings("unused")
 public class MessageUpdateTurret implements IMessage {
     private int x, y, z;
     private float yaw, pitch;

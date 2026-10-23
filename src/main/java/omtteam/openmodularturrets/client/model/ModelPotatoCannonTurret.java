@@ -41,9 +41,9 @@ public class ModelPotatoCannonTurret extends ModelAbstractTurret {
         weapon.cubeList.add(new ModelBox(weapon, 36, 0, -1.0F, -2.0F, -11.0F, 2, 3, 12, 0.0F, true));
     }
 
-    public void setRotationForTarget(float y, float z) {
-        weapon.rotateAngleX = y;
-        holder.rotateAngleY = z;
+    public void setRotationForTarget(float pitch, float yaw) {
+        weapon.rotateAngleX = pitch;
+        holder.rotateAngleY = yaw;
     }
 
     public void setRotation(ModelRenderer model, float x, float y, float z) {

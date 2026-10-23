@@ -3,11 +3,11 @@ package omtteam.openmodularturrets.client.render;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.openmodularturrets.client.model.ModelPlasmaProjectile;
+import omtteam.openmodularturrets.entity.projectile.PlasmaProjectile;
 import omtteam.openmodularturrets.reference.Reference;
 import org.lwjgl.opengl.GL11;
 
@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @SideOnly(Side.CLIENT)
-public class PlasmaRenderer extends Render {
+public class PlasmaRenderer extends Render<PlasmaProjectile> {
     final ModelPlasmaProjectile model = new ModelPlasmaProjectile();
 
     private final ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/projectiles/plasma.png"));
@@ -26,7 +26,7 @@ public class PlasmaRenderer extends Render {
 
     @Override
     @ParametersAreNonnullByDefault
-    public void doRender(Entity projectile, double x, double y, double z, float f3, float partialTicks) {
+    public void doRender(PlasmaProjectile projectile, double x, double y, double z, float f3, float partialTicks) {
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glPushMatrix();
@@ -41,7 +41,7 @@ public class PlasmaRenderer extends Render {
     @Override
     @ParametersAreNonnullByDefault
     @Nonnull
-    protected ResourceLocation getEntityTexture(Entity entity) {
+    protected ResourceLocation getEntityTexture(PlasmaProjectile entity) {
         return texture;
     }
 }

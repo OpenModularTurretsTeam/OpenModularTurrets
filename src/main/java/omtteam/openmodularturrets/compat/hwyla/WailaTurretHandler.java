@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import omtteam.omlib.compat.hwyla.IOMLibWailaDataProvider;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.openmodularturrets.reference.OMTNames;
+import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
 
 import javax.annotation.Nonnull;
@@ -51,15 +52,19 @@ public class WailaTurretHandler implements IOMLibWailaDataProvider {
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         TileEntity te = accessor.getTileEntity();
         if (te instanceof TurretTileEntity) {
-            TurretTileEntity turret = (TurretTileEntity) te;
-            boolean active = accessor.getNBTData().getBoolean("active");
+            NBTTagCompound data = accessor.getNBTData();
+            boolean active = data.getBoolean("active");
 
             currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
-            currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + accessor.getNBTData().getString("ownerName"));
-            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.AMMO) + ": \u00A7F" + turret.getAmmoLevel());
-            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": \u00A7F" + accessor.getNBTData().getString("ampLevel") + "%");
-            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ACCURACY) + ": \u00A7F" + accessor.getNBTData().getString("accuracy") + "%");
-            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": \u00A7F" + accessor.getNBTData().getString("rof") + "s/sec");
+            currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + data.getString("ownerName"));
+            if (!data.hasKey("ammoLevel")) {
+                // no base: the stats come from the base
+                return currenttip;
+            }
+            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.AMMO) + ": \u00A7F" + data.getInteger("ammoLevel"));
+            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": \u00A7F" + data.getString("ampLevel") + "%");
+            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ACCURACY) + ": \u00A7F" + data.getString("accuracy") + "%");
+            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": \u00A7F" + data.getString("rof") + "s/sec");
         }
         return currenttip;
     }
@@ -77,11 +82,16 @@ public class WailaTurretHandler implements IOMLibWailaDataProvider {
         if (te instanceof TurretTileEntity) {
             TurretTileEntity turret = (TurretTileEntity) te;
             // te.writeToNBT(tag);
-            tag.setBoolean("active", turret.getBase().isActive());
+            TurretBase base = turret.getBase();
+            tag.setBoolean("active", base != null && base.isActive());
             tag.setString("ownerName", turret.getOwner().getName());
+            if (base == null) {
+                // the base's chunk is not loaded or the base was just removed; the stats below need it
+                return tag;
+            }
             tag.setInteger("ammoLevel", turret.getAmmoLevel());
             tag.setString("ampLevel", String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * turret.getDamageAmpLevel()));
-            tag.setString("accuracy", String.format("%.2f", Math.min(100F, turret.getActualTurretAccuracyDeviation())));
+            tag.setString("accuracy", String.format("%.2f", 100F - turret.getActualTurretAccuracyDeviation()));
             tag.setString("rof", String.format("%.2f", 20F / turret.getFireCooldownTicks()));
         }
 

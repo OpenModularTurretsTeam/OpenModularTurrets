@@ -40,6 +40,7 @@ import omtteam.omlib.util.player.Player;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.base.BaseTier;
 import omtteam.openmodularturrets.item.ItemBlockTurretBase;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -83,32 +84,8 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @Nonnull
     @ParametersAreNonnullByDefault
     public TileEntity createTileEntity_OM(World world, IBlockState state) {
-        int MaxCharge;
-        int MaxIO;
-        switch (state.getValue(TIER) - 1) {
-            case 0:
-                MaxCharge = OMTConfig.BASES.baseTierOne.baseMaxCharge;
-                MaxIO = OMTConfig.BASES.baseTierOne.baseMaxIo;
-                return new TurretBase(MaxCharge, MaxIO, 1, state);
-            case 1:
-                MaxCharge = OMTConfig.BASES.baseTierTwo.baseMaxCharge;
-                MaxIO = OMTConfig.BASES.baseTierTwo.baseMaxIo;
-                return new TurretBase(MaxCharge, MaxIO, 2, state);
-            case 2:
-                MaxCharge = OMTConfig.BASES.baseTierThree.baseMaxCharge;
-                MaxIO = OMTConfig.BASES.baseTierThree.baseMaxIo;
-                return new TurretBase(MaxCharge, MaxIO, 3, state);
-            case 3:
-                MaxCharge = OMTConfig.BASES.baseTierFour.baseMaxCharge;
-                MaxIO = OMTConfig.BASES.baseTierFour.baseMaxIo;
-                return new TurretBase(MaxCharge, MaxIO, 4, state);
-            case 4:
-                MaxCharge = OMTConfig.BASES.baseTierFive.baseMaxCharge;
-                MaxIO = OMTConfig.BASES.baseTierFive.baseMaxIo;
-                return new TurretBase(MaxCharge, MaxIO, 5, state);
-            default:
-                return new TurretBase(1, 1, 1, state);
-        }
+        int tier = state.getValue(TIER);
+        return new TurretBase(tier >= BaseTier.MIN && tier <= BaseTier.MAX ? tier : BaseTier.MIN, state);
     }
 
     @Override

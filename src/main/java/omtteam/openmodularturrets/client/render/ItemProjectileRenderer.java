@@ -6,14 +6,13 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import omtteam.openmodularturrets.entity.projectile.DisposableTurretProjectile;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-public class ItemProjectileRenderer extends Render {
+public class ItemProjectileRenderer extends Render<DisposableTurretProjectile> {
 
     private final RenderItem itemRenderer;
 
@@ -26,7 +25,8 @@ public class ItemProjectileRenderer extends Render {
      * Renders the desired {@code T} type Entity.
      */
 
-    @SuppressWarnings({"unchecked", "unused"})
+    @Override
+    @ParametersAreNonnullByDefault
     public void doRender(DisposableTurretProjectile entity, double x, double y, double z, float entityYaw, float partialTicks) {
 
         if (entity.getFramesRendered() <= 1) {
@@ -61,7 +61,7 @@ public class ItemProjectileRenderer extends Render {
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
-    protected ResourceLocation getEntityTexture(Entity entity) {
+    protected ResourceLocation getEntityTexture(DisposableTurretProjectile entity) {
         return new ResourceLocation("");
     }
 }

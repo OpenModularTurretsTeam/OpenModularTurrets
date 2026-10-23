@@ -37,8 +37,6 @@ public class OMTFakePlayer {
 
     public static ItemStack getSword(int fakeDrops) {
         switch (fakeDrops) {
-            case 0:
-                return swordLooting0;
             case 1:
                 return swordLooting1;
             case 2:

@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.util;
 
-import net.minecraft.world.World;
 import omtteam.omlib.api.permission.EnumAccessLevel;
 import omtteam.omlib.api.permission.OwnerShareRegister;
 import omtteam.omlib.api.permission.TrustedPlayer;
@@ -8,6 +7,7 @@ import omtteam.omlib.config.OMConfig;
 import omtteam.omlib.util.player.Player;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.UUID;
@@ -22,16 +22,20 @@ class OMTUtilTest {
     private static Player playerShareOwner;
     private static TurretBase base;
     private static TrustedPlayer trustedPlayerNone;
-    private static World world;
+    /** The global config values the test changes, restored afterwards so other tests see the defaults. */
+    private static boolean savedOfflineModeSupport;
+    private static boolean savedTurretDamageTrustedPlayers;
 
     @BeforeAll
     static void setUp() {
+        savedOfflineModeSupport = OMConfig.GENERAL.offlineModeSupport;
+        savedTurretDamageTrustedPlayers = OMTConfig.TURRETS.turretDamageTrustedPlayers;
         OMConfig.GENERAL.offlineModeSupport = false;
         playerTrustedNone = new Player(UUID.randomUUID(), "playerNone", "abc");
         playerUntrusted = new Player(UUID.randomUUID(), "playerUntrusted", "cde");
         playerShareOwner = new Player(UUID.randomUUID(), "playerShareOwner", "def");
         playerOwner = new Player(UUID.randomUUID(), "owner", "test");
-        base = new TurretBase(50000, 5000, 5, null);
+        base = new TurretBase(5, null);
         base.setOwner(playerOwner);
         trustedPlayerNone = new TrustedPlayer(playerTrustedNone);
         trustedPlayerNone.setAccessLevel(EnumAccessLevel.NONE);
@@ -39,15 +43,18 @@ class OMTUtilTest {
         OwnerShareRegister.instance.addSharePlayer(playerOwner, playerShareOwner, null);
     }
 
-    void setupWorld() {
-
+    @AfterAll
+    static void tearDown() {
+        OwnerShareRegister.instance.removeSharePlayer(playerOwner, playerShareOwner, null);
+        OMConfig.GENERAL.offlineModeSupport = savedOfflineModeSupport;
+        OMTConfig.TURRETS.turretDamageTrustedPlayers = savedTurretDamageTrustedPlayers;
     }
 
     void setOfflineMode() {
         OMConfig.GENERAL.offlineModeSupport = true;
         playerTrustedNone = new Player(UUID.randomUUID(), "playerNone", "abc");
         playerUntrusted = new Player(UUID.randomUUID(), "playerUntrusted", "cdf");
-        base = new TurretBase(50000, 5000, 5, null);
+        base = new TurretBase(5, null);
         base.setOwner(playerOwner);
         trustedPlayerNone = new TrustedPlayer(playerTrustedNone);
         trustedPlayerNone.setAccessLevel(EnumAccessLevel.NONE);
@@ -76,25 +83,5 @@ class OMTUtilTest {
         OMTConfig.TURRETS.turretDamageTrustedPlayers = false;
         assertFalse(OMTUtil.canDamagePlayer(playerTrustedNone, base));
         assertTrue(OMTUtil.canDamagePlayer(playerUntrusted, base));
-    }
-
-    @org.junit.jupiter.api.Test
-    void canDamageEntity() {
-        /*EntityCreeper creeper = new EntityCreeper(world);
-        EntityZombie zombie = new EntityZombie(world);
-        EntityWolf wolf = new EntityWolf(world);
-        EntityCow cow = new EntityCow(world);
-        base.setAttacksMobs(true);
-        base.setAttacksNeutrals(false);
-        assertTrue(OMTUtil.canDamageEntity(creeper, base));
-        assertTrue(OMTUtil.canDamageEntity(zombie, base));
-        assertFalse(OMTUtil.canDamageEntity(wolf, base));
-        assertFalse(OMTUtil.canDamageEntity(cow, base));
-        base.setAttacksMobs(false);
-        base.setAttacksNeutrals(true);
-        assertFalse(OMTUtil.canDamageEntity(creeper, base));
-        assertFalse(OMTUtil.canDamageEntity(zombie, base));
-        assertTrue(OMTUtil.canDamageEntity(wolf, base));
-        assertTrue(OMTUtil.canDamageEntity(cow, base));*/ //TODO: add world simulation
     }
 }

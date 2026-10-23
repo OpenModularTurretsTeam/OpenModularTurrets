@@ -176,10 +176,10 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
 
         if (guibutton.id == 6) {
             sendSetBaseTargetingToServer();
-            for (Object button : buttonList) {
-                if (((GuiButton) button).id == 6) {
+            for (GuiButton button : buttonList) {
+                if (button.id == 6) {
                     this.base.setMultiTargeting(!this.base.isMultiTargeting());
-                    ((GuiButton) button).displayString = base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": " + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE);
+                    button.displayString = base.isMultiTargeting() ? safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": " + safeLocalize(OMTNames.Localizations.GUI.MULTI) : safeLocalize(OMTNames.Localizations.GUI.TARGET) + ": " + safeLocalize(OMTNames.Localizations.GUI.SINGLE);
                 }
             }
         }
@@ -233,7 +233,7 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.KILLS) + ": " + base.getKills());
         targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.PLAYER_KILLS) + ": " + base.getPlayerKills());
         targetInfo.add("");
-        if (base.getTrustManager().getTrustedPlayers().size() != 0) {
+        if (!base.getTrustManager().getTrustedPlayers().isEmpty()) {
             targetInfo.add("\u00A75" + safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS) + ":");
             for (TrustedPlayer trusted_player : base.getTrustManager().getTrustedPlayers()) {
                 targetInfo.add("\u00A7b" + trusted_player.getName());

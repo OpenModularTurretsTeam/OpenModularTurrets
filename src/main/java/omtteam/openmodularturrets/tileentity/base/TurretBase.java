@@ -17,7 +17,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -26,9 +25,6 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
-import omtteam.omlib.api.network.INetworkTile;
-import omtteam.omlib.api.network.IPowerExchangeTile;
-import omtteam.omlib.api.network.OMLibNetwork;
 import omtteam.omlib.api.permission.EnumAccessLevel;
 import omtteam.omlib.api.permission.TrustedPlayer;
 import omtteam.omlib.api.permission.TrustedPlayersManager;
@@ -92,7 +88,7 @@ import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntitiesByClass;
 @Optional.InterfaceList({
         @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "computercraft")}
 )
-public class TurretBase extends TileEntityTrustedMachine implements ITurretBase, IPeripheral, ICamoSupport, IDebugTile, IPowerExchangeTile, INetworkTile, ITickable, IHasTargetingSettings {
+public class TurretBase extends TileEntityTrustedMachine implements ITurretBase, IPeripheral, ICamoSupport, IDebugTile, ITickable, IHasTargetingSettings {
     private final List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
     private final HashMap<EnumSlotType, List<Integer>> slotMap = new HashMap<>();
     private final TurretBaseWorld baseWorld = new TurretBaseWorld(this);
@@ -108,13 +104,9 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     private IBlockState camoBlockStateTemp;
     private int ticks;
     private boolean forceFire = false;
-    private OMLibNetwork network;
 
-    /**
-     * @param MaxEnergyStorage unused, the logic takes the capacity of the tier from the config
-     * @param MaxIO            unused, the logic takes the maximum input of the tier from the config
-     */
-    public TurretBase(int MaxEnergyStorage, int MaxIO, int tier, IBlockState camoState) {
+    /** The energy capacity and maximum input come from the tier's config through the logic. */
+    public TurretBase(int tier, IBlockState camoState) {
         super();
         this.trustManager = new TrustedPlayersManager(this.getOwner(), this, OMTSecurityEnvironment.INSTANCE);
         this.tier = tier;
@@ -268,20 +260,6 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
         slotMap.put(EnumSlotType.UpgradeSlot, upgradeList);
     }
 
-    protected void setupTank() {
-        tank = new FluidTank(4000) {
-            @Override
-            public boolean canFillFluidType(FluidStack fluid) {
-                return super.canFillFluidType(fluid); //TODO: add supported fluid tanks
-            }
-
-            @Override
-            public boolean canDrain() {
-                return false;
-            }
-        };
-    }
-
     @Override
     @Nonnull
     public CamoSettings getCamoSettings() {
@@ -430,12 +408,6 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     @Nonnull
     public TileEntityOwnedBlock getOwnedBlock() {
         return this;
-    }
-
-    @Nonnull
-    @Override
-    public BlockPos getPosition() {
-        return this.getPos();
     }
 
     @Override
@@ -666,14 +638,6 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
         return TargetingSettings.of(logic.getTargetingSettings());
     }
 
-    /** Applies all values; the range is limited to the current maximum range. */
-    public void setTargetingSettings(TargetingSettings targetingSettings) {
-        logic.setTargetPlayers(targetingSettings.isTargetPlayers());
-        logic.setTargetMobs(targetingSettings.isTargetMobs());
-        logic.setTargetPassive(targetingSettings.isTargetPassive());
-        logic.setRange(targetingSettings.getRange());
-    }
-
     // API Functions. TODO: Add more?
 
     /**
@@ -750,38 +714,6 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
 
     // Mod Compatibility  functions:
 
-    @Override
-    public boolean requiresEnergy() {
-        return true;
-    }
-
-    @Override
-    public boolean deliversEnergy() {
-        return false;
-    }
-
-    @Override
-    public OMEnergyStorage getEnergyStorage() {
-        return storage;
-    }
-
-    @Nullable
-    @Override
-    public OMLibNetwork getNetwork() {
-        return network;
-    }
-
-    @Override
-    public void setNetwork(OMLibNetwork network) {
-        this.network = network;
-    }
-
-    @Nonnull
-    @Override
-    public String getDeviceName() {
-        return "TurretBase";
-    }
-
     @Optional.Method(modid = "computercraft")
     @Override
     @Nonnull
@@ -812,12 +744,24 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     @ParametersAreNonnullByDefault
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) {
         // method is command
-        boolean b;
-        int i;
         if (!isComputerAccessible()) {
             return new Object[]{"Computer access deactivated!"};
         }
-        switch (commands.values()[method]) {
+        try {
+            return callCommand(commands.values()[method], arguments);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return new Object[]{"Wrong parameters!"};
+        }
+    }
+
+    /**
+     * Runs one computer command. Lua numbers arrive as {@code Double}, so number arguments go through {@link #intArgument}.
+     */
+    private Object[] callCommand(commands command, Object[] arguments) {
+        boolean b;
+        TrustedPlayer trustedPlayer;
+        Integer number;
+        switch (command) {
             case getOwner:
                 return new Object[]{this.getOwner().getName()};
             case isAttacksPlayers:
@@ -850,40 +794,49 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
             case getTrustedPlayers:
                 return new Object[]{this.getTrustManager().getTrustedPlayersAsListMap()};
             case getTrustedPlayer:
-                if (this.getTrustManager().getTrustedPlayer(arguments[0].toString()) != null) {
-                    return new Object[]{this.getTrustManager().getTrustedPlayer(arguments[0].toString()).asMap()};
+                trustedPlayer = this.getTrustManager().getTrustedPlayer(arguments[0].toString());
+                if (trustedPlayer == null) {
+                    return new Object[]{"Not found!"};
                 }
+                return new Object[]{trustedPlayer.asMap()};
             case addTrustedPlayer:
-                if (arguments[0].toString().equals("")) {
+                if (arguments[0].toString().isEmpty()) {
                     return new Object[]{"Wrong parameters!"};
+                }
+                number = null;
+                if (arguments.length > 1 && !arguments[1].toString().isEmpty()) {
+                    number = intArgument(arguments[1]);
+                    if (number == null || number < 0 || number >= EnumAccessLevel.values().length) {
+                        return new Object[]{"Wrong parameters!"};
+                    }
                 }
                 if (!this.getTrustManager().addTrustedPlayer(arguments[0].toString())) {
                     return new Object[]{"Name not valid!"};
                 }
-                if (arguments[1].toString().equals("")) {
+                if (number == null) {
                     return new Object[]{"successfully added"};
-                } else if (!(arguments[1] instanceof Integer)) {
-                    return new Object[]{"Wrong parameters!"};
                 }
-                TrustedPlayer trustedPlayer = this.getTrustManager().getTrustedPlayer(arguments[0].toString());
-                trustedPlayer.setAccessLevel(EnumAccessLevel.values()[(Integer) arguments[1]]);
+                trustedPlayer = this.getTrustManager().getTrustedPlayer(arguments[0].toString());
+                trustedPlayer.setAccessLevel(EnumAccessLevel.values()[number]);
                 trustedPlayer.setUuid(getPlayerUUID(arguments[0].toString()));
 
                 return new Object[]{true};
             case removeTrustedPlayer:
-                if (arguments[0].toString().equals("")) {
+                if (arguments[0].toString().isEmpty()) {
                     return new Object[]{"Wrong parameters!"};
                 }
                 this.getTrustManager().removeTrustedPlayer(arguments[0].toString());
                 return new Object[]{true};
             case changeAccessLevel:
-                if (this.getTrustManager().getTrustedPlayer(arguments[0].toString()) == null) {
+                trustedPlayer = this.getTrustManager().getTrustedPlayer(arguments[0].toString());
+                if (trustedPlayer == null) {
                     return new Object[]{"Not found!"};
-                } else if (!(arguments[1] instanceof Integer) || (Integer) arguments[1] < 0 || (Integer) arguments[1] > 3) {
+                }
+                number = intArgument(arguments[1]);
+                if (number == null || number < 0 || number >= EnumAccessLevel.values().length) {
                     return new Object[]{"Invalid Access Level!"};
                 }
-                trustedPlayer = this.getTrustManager().getTrustedPlayer(arguments[0].toString());
-                trustedPlayer.setAccessLevel(EnumAccessLevel.values()[(Integer) arguments[1]]);
+                trustedPlayer.setAccessLevel(EnumAccessLevel.values()[number]);
                 return new Object[]{true};
             case getActive:
                 return new Object[]{this.isActive()};
@@ -892,12 +845,11 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
             case getRedstone:
                 return new Object[]{this.getRedstone()};
             case setMode:
-                String arg = arguments[0].toString();
-                if (!(arg.equals("0") || arg.equals("1") || arg.equals("2") || arg.equals("3"))) {
+                number = intArgument(arguments[0]);
+                if (number == null || number < 0 || number >= EnumMachineMode.values().length) {
                     return new Object[]{"Wrong parameters! expects number between 0 and 3"};
                 }
-                int mode = (Integer.parseInt(arguments[0].toString()));
-                this.setMode(EnumMachineMode.values()[mode]);
+                this.setMode(EnumMachineMode.values()[number]);
                 return new Object[]{true};
             case getType:
                 return new Object[]{this.getType()};
@@ -909,25 +861,19 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
                 this.setAllTurretsForceFire(b);
                 return new Object[]{true};
             case setTurretAutoForceFire:
-                try {
-                    int t = Integer.parseInt(arguments[0].toString());
-                    if (!(t < 0 || t > 6) || !(arguments[1].toString().equals("true") || arguments[1].toString().equals("false")))
-                        return new Object[]{"Wrong parameters!"};
-                    return new Object[]{this.setTurretForceFire(EnumFacing.getFront(t), Boolean.parseBoolean(arguments[1].toString()))};
-                } catch (Exception e) {
+                number = intArgument(arguments[0]);
+                if (!isFaceIndex(number) || !(arguments[1].toString().equals("true") || arguments[1].toString().equals("false"))) {
                     return new Object[]{"Wrong parameters!"};
                 }
+                return new Object[]{this.setTurretForceFire(EnumFacing.getFront(number), Boolean.parseBoolean(arguments[1].toString()))};
             case forceShootAllTurrets:
                 return new Object[]{this.forceShootAllTurrets()};
             case forceShootTurret:
-                try {
-                    int t = Integer.parseInt(arguments[0].toString());
-                    if (!(t < 0 || t > 6))
-                        return new Object[]{"Wrong parameters!"};
-                    return new Object[]{this.forceShootTurret(EnumFacing.getFront(t))};
-                } catch (Exception e) {
+                number = intArgument(arguments[0]);
+                if (!isFaceIndex(number)) {
                     return new Object[]{"Wrong parameters!"};
                 }
+                return new Object[]{this.forceShootTurret(EnumFacing.getFront(number))};
             case setAllYawPitch:
                 try {
                     this.setAllTurretsYawPitch(Float.parseFloat(arguments[0].toString()),
@@ -937,8 +883,12 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
                     return new Object[]{"Wrong parameters!"};
                 }
             case setTurretYawPitch:
+                number = intArgument(arguments[0]);
+                if (!isFaceIndex(number)) {
+                    return new Object[]{"Wrong parameters!"};
+                }
                 try {
-                    this.setTurretYawPitch(EnumFacing.getFront(Integer.parseInt(arguments[0].toString())),
+                    this.setTurretYawPitch(EnumFacing.getFront(number),
                                            Float.parseFloat(arguments[1].toString()),
                                            Float.parseFloat(arguments[2].toString()));
                     return new Object[]{"setting successful"};
@@ -954,6 +904,26 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
                 break;
         }
         return new Object[]{"Nonexisting command"};
+    }
+
+    /** A whole number argument from a computer (Lua numbers arrive as {@code Double}, strings are parsed), or null. */
+    @Nullable
+    private static Integer intArgument(Object argument) {
+        double value;
+        if (argument instanceof Number) {
+            value = ((Number) argument).doubleValue();
+        } else {
+            try {
+                value = Double.parseDouble(argument.toString());
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+        return value == Math.rint(value) && Math.abs(value) <= Integer.MAX_VALUE ? (int) value : null;
+    }
+
+    private static boolean isFaceIndex(@Nullable Integer index) {
+        return index != null && index >= 0 && index < EnumFacing.values().length;
     }
 
     @Optional.Method(modid = "computercraft")

@@ -36,9 +36,9 @@ public class ModelPlasmaLauncherTurret extends ModelAbstractTurret {
         weapon.cubeList.add(new ModelBox(weapon, 24, 44, -2.5F, 0.0F, -12.0F, 5, 0, 10, 0.0F, false));
     }
 
-    public void setRotationForTarget(float y, float z) {
-        weapon.rotateAngleX = y;
-        holder.rotateAngleY = z;
+    public void setRotationForTarget(float pitch, float yaw) {
+        weapon.rotateAngleX = pitch;
+        holder.rotateAngleY = yaw;
     }
 
     public void setRotation(ModelRenderer model, float x, float y, float z) {

@@ -90,7 +90,6 @@ public class OMTNames {
 
     public static class Localizations {
         public static class GUI {
-            public static final String BASE = "text.openmodularturrets.gui.base";
             public static final String RANGE = "text.openmodularturrets.gui.range";
             public static final String MULTI_TARGETING = "text.openmodularturrets.gui.multi_targeting";
             public static final String ADDONS = "text.openmodularturrets.gui.addons";
@@ -102,16 +101,8 @@ public class OMTNames {
             public static final String TARGET = "text.openmodularturrets.gui.target";
             public static final String MULTI = "text.openmodularturrets.gui.multi";
             public static final String SINGLE = "text.openmodularturrets.gui.single";
-            public static final String YAW = "text.openmodularturrets.gui.yaw";
-            public static final String PITCH = "text.openmodularturrets.gui.pitch";
-            public static final String AUTO_FIRE = "text.openmodularturrets.gui.auto_fire";
-            public static final String TOGGLE = "text.openmodularturrets.gui.toggle";
-            public static final String TURRET = "text.openmodularturrets.gui.turret";
             public static final String TURRET_BASE_DESCRIPTION = "text.openmodularturrets.gui.turret_base_description";
-            public static final String TURRET_HEAD_DESCRIPTION = "text.openmodularturrets.gui.turret_head_description";
             public static final String TURRET_LEVER_DESCRIPTION = "text.openmodularturrets.gui.turret_lever_description";
-            public static final String NO_TURRET = "text.openmodularturrets.gui.no_turret";
-            public static final String TYPE = "text.openmodularturrets.gui.type";
             public static final String ACCURACY = "text.openmodularturrets.gui.accuracy";
             public static final String RATE_OF_FIRE = "text.openmodularturrets.gui.rof";
             public static final String DROP_TURRETS = "text.openmodularturrets.gui.drop_turrets";

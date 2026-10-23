@@ -9,7 +9,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -40,6 +39,7 @@ import omtteam.openmodularturrets.registry.TurretRegistry;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
+import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.turret.TurretType;
 
 import javax.annotation.Nonnull;
@@ -59,6 +59,9 @@ import static omtteam.openmodularturrets.turret.TurretHeadUtil.getTurretBaseFaci
 public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock, TOPInfoProvider {
     public static final PropertyBool CONCEALED = PropertyBool.create("concealed");
 
+    /** Hardness when {@code turretBreakable} (as on 1.20.1+). */
+    private static final float BREAKABLE_HARDNESS = 3.0F;
+
     private final TurretType coreType;
 
     /**
@@ -69,7 +72,12 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         super(Material.GLASS);
         this.coreType = coreType;
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
-        this.setBlockUnbreakable();
+        if (OMTConfig.TURRETS.turretBreakable) {
+            this.setHardness(BREAKABLE_HARDNESS);
+            this.setHarvestLevel("pickaxe", 0);
+        } else {
+            this.setBlockUnbreakable();
+        }
         this.setResistance(6000000.0F);
         this.setSoundType(SoundType.STONE);
         this.setDefaultState(this.blockState.getBaseState().withProperty(CONCEALED, false));
@@ -191,12 +199,6 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
-        return false;
-    }
-
-    @Override
-    @ParametersAreNonnullByDefault
     public boolean causesSuffocation_OM(IBlockState state) {
         return false;
     }
@@ -205,8 +207,8 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
     @ParametersAreNonnullByDefault
     public void onNeighborChange_OM(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
         TileEntity turret = world.getTileEntity(pos);
-        if (turret instanceof TurretTileEntity && ((TurretTileEntity) turret).getBase() == null
-                && turret.getWorld() != null) {
+        // getBase() is null without a world too, so getWorld() is set when this destroys the block
+        if (turret instanceof TurretTileEntity && ((TurretTileEntity) turret).getBase() == null) {
             turret.getWorld().destroyBlock(pos, true);
         }
     }

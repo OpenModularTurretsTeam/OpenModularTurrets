@@ -23,9 +23,7 @@ import java.util.Collection;
 import java.util.Set;
 
 public class ArrowProjectile extends TurretProjectile {
-    private final boolean spawned = false;
     private final Set<PotionEffect> customPotionEffects = Sets.newHashSet();
-    private double damageBonus;
     private PotionType potion = PotionTypes.EMPTY;
 
     @SuppressWarnings("unused")

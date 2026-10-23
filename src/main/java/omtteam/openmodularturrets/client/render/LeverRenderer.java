@@ -2,14 +2,13 @@ package omtteam.openmodularturrets.client.render;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import omtteam.openmodularturrets.client.model.ModelLever;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.misc.LeverTileEntity;
 import org.lwjgl.opengl.GL11;
 
-class LeverRenderer extends TileEntitySpecialRenderer {
+class LeverRenderer extends TileEntitySpecialRenderer<LeverTileEntity> {
     private final ModelLever model;
 
     public LeverRenderer() {
@@ -18,8 +17,7 @@ class LeverRenderer extends TileEntitySpecialRenderer {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        LeverTileEntity lever = (LeverTileEntity) te;
+    public void render(LeverTileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         int rotation;
         ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID + ":textures/blocks/lever_block.png"));
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
@@ -40,8 +38,8 @@ class LeverRenderer extends TileEntitySpecialRenderer {
             rotation = te.getBlockMetadata();
             GL11.glRotatef(rotation * -90F, 0.0F, 1.0F, 0.0F);
             GL11.glScalef(1.0F, -1F, -1F);
-            model.Shape1.rotateAngleZ = (lever.rotation / 55);
-            model.Shape2.rotateAngleZ = (lever.rotation / 55);
+            model.Shape1.rotateAngleZ = (te.rotation / 55);
+            model.Shape2.rotateAngleZ = (te.rotation / 55);
             model.renderAll();
         }
 

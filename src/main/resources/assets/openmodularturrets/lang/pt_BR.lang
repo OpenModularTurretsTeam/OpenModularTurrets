@@ -58,7 +58,6 @@ tile.turret_base.name=Base de Torre
 
 itemGroup.openmodularturrets=Open Modular Turrets
 
-text.openmodularturrets.gui.base=Base
 text.openmodularturrets.gui.multi_targeting=Multi Alvos
 text.openmodularturrets.gui.addons=Extensões
 text.openmodularturrets.gui.upgrades=Aprimo.
@@ -68,16 +67,8 @@ text.openmodularturrets.gui.inventory=Inventário
 text.openmodularturrets.gui.target=Alvo
 text.openmodularturrets.gui.multi=Multi
 text.openmodularturrets.gui.single=Único
-text.openmodularturrets.gui.yaw=Guinada
-text.openmodularturrets.gui.pitch=lançar
-text.openmodularturrets.gui.toggle=Alternar
-text.openmodularturrets.gui.auto_fire=Auto-Fogo
-text.openmodularturrets.gui.turret=Torre
 text.openmodularturrets.gui.turret_base_description=O núcleo de uma Torre Modular.
-text.openmodularturrets.gui.turret_head_description=Uma cabeça de torre, coloque em uma base de torre.
 text.openmodularturrets.gui.turret_lever_description=Uma alavanca para gerar energia, colocada na base de nível 1.
-text.openmodularturrets.gui.no_turret=Sem Torre na base.
-text.openmodularturrets.gui.type=Tipo
 text.openmodularturrets.gui.range=Alcance
 text.openmodularturrets.gui.rof=Taxa de Fogo
 text.openmodularturrets.gui.accuracy=Precisão

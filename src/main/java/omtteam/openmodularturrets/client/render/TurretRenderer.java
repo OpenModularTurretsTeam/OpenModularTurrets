@@ -67,9 +67,4 @@ public class TurretRenderer extends TileEntitySpecialRenderer<TurretTileEntity> 
     private void put(Vector3 axis) {
         matrix.put((float) axis.x()).put((float) axis.y()).put((float) axis.z());
     }
-
-    @Override
-    public boolean isGlobalRenderer(TurretTileEntity turret) {
-        return false;
-    }
 }

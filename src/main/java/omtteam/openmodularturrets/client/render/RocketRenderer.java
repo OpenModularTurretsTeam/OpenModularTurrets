@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -18,7 +17,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @SideOnly(Side.CLIENT)
-public class RocketRenderer extends Render {
+public class RocketRenderer extends Render<RocketProjectile> {
 
     private final ResourceLocation texture = (new ResourceLocation(Reference.MOD_ID + ":textures/projectiles/rocket.png"));
 
@@ -89,14 +88,14 @@ public class RocketRenderer extends Render {
 
     @Override
     @ParametersAreNonnullByDefault
-    public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9) {
-        this.renderRocket((RocketProjectile) par1Entity, par2, par4, par6, par8, par9);
+    public void doRender(RocketProjectile par1Entity, double par2, double par4, double par6, float par8, float par9) {
+        this.renderRocket(par1Entity, par2, par4, par6, par8, par9);
     }
 
     @Override
     @ParametersAreNonnullByDefault
     @Nonnull
-    protected ResourceLocation getEntityTexture(Entity entity) {
+    protected ResourceLocation getEntityTexture(RocketProjectile entity) {
         return texture;
     }
 }

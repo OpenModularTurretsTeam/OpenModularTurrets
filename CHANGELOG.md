@@ -8,6 +8,18 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+### Changed
+
+- The `turretBreakable` config option makes turrets mineable (hardness 3, pickaxe, as on 1.20.1+; needs a restart); it had no effect before
+
+### Fixed
+
+- ComputerCraft: `getTrustedPlayer` added the queried player to the trust list when they were not on it
+- ComputerCraft: `setTurretAutoForceFire` and `forceShootTurret` rejected every valid side
+- ComputerCraft: number arguments (access levels, modes, sides) were rejected because Lua numbers arrive as decimals; missing arguments now answer "Wrong parameters!"
+- WAILA/HWYLA crashed the server on a turret whose base was not loaded, and showed the accuracy deviation instead of the accuracy
+- Disposable ammo projectiles were invisible
+
 ## [4.0.0-alpha.1] - 2026-10-23
 
 ### Added

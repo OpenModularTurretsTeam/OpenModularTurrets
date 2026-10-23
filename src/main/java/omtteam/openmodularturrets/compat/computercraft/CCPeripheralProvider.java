@@ -29,10 +29,10 @@ public class CCPeripheralProvider {
     }
 
     public void registerWrapper() {
-        ComputerCraftAPI.registerPeripheralProvider(new CCDriverTurrretBase());
+        ComputerCraftAPI.registerPeripheralProvider(new CCDriverTurretBase());
     }
 
-    private class CCDriverTurrretBase implements IPeripheralProvider {
+    private static class CCDriverTurretBase implements IPeripheralProvider {
         @Override
         @ParametersAreNonnullByDefault
         public IPeripheral getPeripheral(World world, BlockPos pos, EnumFacing side) {

@@ -31,9 +31,9 @@ public class ModelRailgun extends ModelAbstractTurret {
         weapon.cubeList.add(new ModelBox(weapon, 0, 47, -6.1F, -5.0F, -3.0F, 1, 8, 8, 0.0F, true));
     }
 
-    public void setRotationForTarget(float y, float z) {
-        weapon.rotateAngleX = y;
-        weapon.rotateAngleY = z;
+    public void setRotationForTarget(float pitch, float yaw) {
+        weapon.rotateAngleX = pitch;
+        weapon.rotateAngleY = yaw;
     }
 
     public void setRotation(ModelRenderer model, float x, float y, float z) {

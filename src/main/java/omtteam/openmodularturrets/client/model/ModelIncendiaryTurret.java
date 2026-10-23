@@ -39,9 +39,9 @@ public class ModelIncendiaryTurret extends ModelAbstractTurret {
         weapon.cubeList.add(new ModelBox(weapon, 29, 0, -3.0F, -2.0F, -6.0F, 6, 4, 10, 0.0F, true));
     }
 
-    public void setRotationForTarget(float y, float z) {
-        weapon.rotateAngleX = y;
-        holder.rotateAngleY = z;
+    public void setRotationForTarget(float pitch, float yaw) {
+        weapon.rotateAngleX = pitch;
+        holder.rotateAngleY = yaw;
     }
 
     public void setRotation(ModelRenderer model, float x, float y, float z) {

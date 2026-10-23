@@ -59,7 +59,6 @@ tile.turret_base.name=Turret Base
 
 itemGroup.openmodularturrets=Open Modular Turrets
 
-text.openmodularturrets.gui.base=Base
 
 text.openmodularturrets.gui.multi_targeting=Multi Targeting
 text.openmodularturrets.gui.addons=Addons
@@ -70,16 +69,8 @@ text.openmodularturrets.gui.inventory=Inventory
 text.openmodularturrets.gui.target=Target
 text.openmodularturrets.gui.multi=Multi
 text.openmodularturrets.gui.single=Single
-text.openmodularturrets.gui.yaw=Yaw
-text.openmodularturrets.gui.pitch=Pitch
-text.openmodularturrets.gui.toggle=Toggle
-text.openmodularturrets.gui.auto_fire=Auto-Fire
-text.openmodularturrets.gui.turret=Turret
 text.openmodularturrets.gui.turret_base_description=The core of a modular turret.
-text.openmodularturrets.gui.turret_head_description=A turret head, place on a turret base.
 text.openmodularturrets.gui.turret_lever_description=A lever to generate energy, place on tier 1 base.
-text.openmodularturrets.gui.no_turret=No turret on base.
-text.openmodularturrets.gui.type=Type
 text.openmodularturrets.gui.range=Range
 text.openmodularturrets.gui.rof=Rate of fire
 text.openmodularturrets.gui.accuracy=Accuracy
