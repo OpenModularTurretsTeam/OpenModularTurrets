@@ -8,6 +8,12 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+### Fixed
+
+- Turrets added by other mods could not fire slower than every 20 ticks (their config clamped `baseFireRate` to 20)
+- Decimal settings of turrets added by other mods (damage amp, upgrades, recycler chances, accuracy deviation) were not limited to their range
+- The config ranges of `baseFireRate` (now 1–200 ticks) and `baseAccuracyDeviation` (0–100 %) did not include the turrets' default values
+
 ## [4.0.0-beta.1] - 2026-10-24
 
 ### Changed

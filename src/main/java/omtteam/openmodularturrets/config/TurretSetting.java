@@ -7,13 +7,15 @@ public class TurretSetting {
     public boolean enabled;
     @Config.RangeInt(min = 1, max = 100)
     public int baseRange;
-    @Config.RangeInt(min = 1, max = 20)
+    /** Ticks between shots. */
+    @Config.RangeInt(min = 1, max = 200)
     public int baseFireRate;
     @Config.RangeInt(min = 0)
     public int baseDamage;
     @Config.RangeInt(min = 0)
     public int powerUsage;
-    @Config.RangeDouble(min = 0D, max = 1D)
+    /** In percent, like the addon turrets' {@code baseAccuracyDeviation}. */
+    @Config.RangeDouble(min = 0D, max = 100D)
     public double baseAccuracyDeviation;
     @Config.RangeInt(min = 1, max = 6)
     public int maxSimultaneous;

@@ -22,7 +22,10 @@ public final class ConfigMigration {
     }
 
     public static void migrate() {
-        File file = new File(Loader.instance().getConfigDir(), Reference.MOD_ID + ".cfg");
+        migrate(new File(Loader.instance().getConfigDir(), Reference.MOD_ID + ".cfg"));
+    }
+
+    static void migrate(File file) {
         if (!file.exists()) return;
         Configuration config = new Configuration(file);
         if (!config.hasCategory(OLD_SLOWING)) return;

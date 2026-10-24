@@ -5,6 +5,7 @@ import omtteam.openmodularturrets.api.TurretDefinition;
 import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.TurretType;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,11 +45,10 @@ public final class AddonTurretConfig {
         return new TurretSetting(
                 config.getBoolean("enabled", category, d.enabled(), "Whether the turret exists (needs a restart)"),
                 config.getInt("baseRange", category, d.baseRange(), 1, 100, ""),
-                config.getInt("baseFireRate", category, d.baseFireRate(), 1, 20, "Ticks between shots"),
+                config.getInt("baseFireRate", category, d.baseFireRate(), 1, 200, "Ticks between shots"),
                 config.getInt("baseDamage", category, d.baseDamage(), 0, Integer.MAX_VALUE, "In half hearts"),
                 config.getInt("powerUsage", category, d.powerUsage(), 0, Integer.MAX_VALUE, "RF per shot"),
-                config.get(category, "baseAccuracyDeviation", d.baseAccuracyDeviation(), "In percent", 0D, 100D)
-                        .getDouble(d.baseAccuracyDeviation()),
+                number(config, "baseAccuracyDeviation", category, d.baseAccuracyDeviation(), "In percent", 100D),
                 config.getInt("maxSimultaneous", category, d.maxSimultaneous(), 1, 6, "Turrets of this kind per base"),
                 number(config, "damageAmp", category, d.damageAmp()),
                 number(config, "fireRateUpgrade", category, d.fireRateUpgrade()),
@@ -60,7 +60,14 @@ public final class AddonTurretConfig {
     }
 
     private static double number(Configuration config, String key, String category, double defaultValue) {
-        return config.get(category, key, defaultValue, null, 0D, 1D).getDouble(defaultValue);
+        return number(config, key, category, defaultValue, null, 1D);
+    }
+
+    /** A value from 0 to {@code max}; unlike {@code getInt}, Forge does not clamp doubles itself. */
+    private static double number(Configuration config, String key, String category, double defaultValue,
+                                 @Nullable String comment, double max) {
+        double value = config.get(category, key, defaultValue, comment, 0D, max).getDouble(defaultValue);
+        return Math.max(0D, Math.min(max, value));
     }
 
     /** @throws IllegalArgumentException if the type is no turret of another mod */

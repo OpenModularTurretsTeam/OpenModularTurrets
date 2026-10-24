@@ -2,9 +2,7 @@ package omtteam.openmodularturrets.tileentity.misc;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
@@ -29,6 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.OptionalLong;
 
 /**
@@ -270,25 +269,10 @@ public class GeneratorTileEntity extends TileEntityBase implements ITickable {
         logic.load(tag.getInteger("BurnTime"), tag.getInteger("BurnDuration"));
     }
 
-    /**
-     * The inventory of a 3.x power generator, in any of the formats of OMLib's {@code TileEntityContainer}: slot lists
-     * under {@code Slots}, {@code Items} or {@code Inventory.Items}.
-     */
+    /** The inventory of a 3.x power generator ({@link PowerGeneratorNbt}). */
     private void loadPowerGeneratorSlots(NBTTagCompound tag) {
-        NBTTagList list;
-        if (tag.hasKey("Slots", Constants.NBT.TAG_LIST)) {
-            list = tag.getTagList("Slots", Constants.NBT.TAG_COMPOUND);
-        } else if (tag.hasKey("Items", Constants.NBT.TAG_LIST)) {
-            list = tag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-        } else {
-            list = tag.getCompoundTag("Inventory").getTagList("Items", Constants.NBT.TAG_COMPOUND);
-        }
-        for (NBTBase entry : list) {
-            NBTTagCompound item = (NBTTagCompound) entry;
-            int slot = item.getByte("Slot") & 255;
-            if (slot < FUEL_SLOTS) {
-                fuel.setStackInSlot(slot, new ItemStack(item));
-            }
+        for (Map.Entry<Integer, NBTTagCompound> slot : PowerGeneratorNbt.readSlots(tag, FUEL_SLOTS).entrySet()) {
+            fuel.setStackInSlot(slot.getKey(), new ItemStack(slot.getValue()));
         }
     }
 }
