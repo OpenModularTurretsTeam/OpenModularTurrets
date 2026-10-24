@@ -251,7 +251,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
         if (!(args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0 && !args.isDouble(1)) || !args.isDouble(2))
             return new Object[]{"Wrong parameters!"};
 
-        return new Object[]{base.setTurretYawPitch(EnumFacing.getFront(args.checkInteger(0)), (float) args.checkDouble(0), (float) args.checkDouble(1))};
+        return new Object[]{base.setTurretYawPitch(EnumFacing.byIndex(args.checkInteger(0)), (float) args.checkDouble(0), (float) args.checkDouble(1))};
     }
 
     @SuppressWarnings("unused")
@@ -273,7 +273,7 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
         }
         if (!(args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0) || (!args.isBoolean(1)))
             return new Object[]{"Wrong parameters!"};
-        return new Object[]{base.setTurretForceFire(EnumFacing.getFront(args.checkInteger(0)), args.checkBoolean(1))};
+        return new Object[]{base.setTurretForceFire(EnumFacing.byIndex(args.checkInteger(0)), args.checkBoolean(1))};
     }
 
     @SuppressWarnings("unused")
@@ -294,6 +294,6 @@ public class ManagedEnvironmentTurretBase extends AbstractOMTileEntityEnvironmen
         }
         if (!args.isInteger(0) && args.checkInteger(0) <= 6 && args.checkInteger(0) >= 0)
             return new Object[]{"Wrong parameters!"};
-        return new Object[]{base.forceShootTurret(EnumFacing.getFront(args.checkInteger(0)))};
+        return new Object[]{base.forceShootTurret(EnumFacing.byIndex(args.checkInteger(0)))};
     }
 }

@@ -122,7 +122,7 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
     /** Damage type name of this turret's damage (death messages): the path of its block id, as in 3.x. */
     public String getDamageTypeName() {
         ResourceLocation id = world.getBlockState(pos).getBlock().getRegistryName();
-        return id == null ? "turret" : id.getResourcePath();
+        return id == null ? "turret" : id.getPath();
     }
 
     /** What a shot of this turret does. */
@@ -470,7 +470,7 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
             TurretBase base = beginShot();
             if (base == null) return false;
             Vec3d origin = rayOrigin();
-            Vec3d end = origin.addVector(direction.x() * FORCED_RAY_LENGTH, direction.y() * FORCED_RAY_LENGTH,
+            Vec3d end = origin.add(direction.x() * FORCED_RAY_LENGTH, direction.y() * FORCED_RAY_LENGTH,
                     direction.z() * FORCED_RAY_LENGTH);
             RayWeapons.shoot(this, base, (RayWeapon) weapon, end, 1.0F, origin, rayTip());
             return true;
@@ -485,13 +485,13 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
     /** Rays start 0.1 blocks above the turret centre (1.12.2 for turrets on top of a base). */
     private Vec3d rayOrigin() {
         Vector3 up = Vector3.of(getFace());
-        return centre().addVector(up.x() * 0.1D, up.y() * 0.1D, up.z() * 0.1D);
+        return centre().add(up.x() * 0.1D, up.y() * 0.1D, up.z() * 0.1D);
     }
 
     /** The tip of the turret, where the arc is drawn from. */
     private Vec3d rayTip() {
         Vector3 up = Vector3.of(getFace());
-        return centre().addVector(up.x() * 0.5D, up.y() * 0.5D, up.z() * 0.5D);
+        return centre().add(up.x() * 0.5D, up.y() * 0.5D, up.z() * 0.5D);
     }
 
     void playSound(SoundEvent sound) {

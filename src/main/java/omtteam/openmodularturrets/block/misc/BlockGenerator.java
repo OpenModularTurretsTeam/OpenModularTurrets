@@ -57,7 +57,7 @@ public class BlockGenerator extends Block {
         this.setHarvestLevel("pickaxe", 0);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH)
                 .withProperty(LIT, false));
-        this.setUnlocalizedName(OMTNames.Blocks.generator);
+        this.setTranslationKey(OMTNames.Blocks.generator);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.generator);
     }
 
@@ -71,7 +71,7 @@ public class BlockGenerator extends Block {
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta & 3))
+        return getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta & 3))
                 .withProperty(LIT, (meta & 4) != 0);
     }
 
@@ -166,8 +166,8 @@ public class BlockGenerator extends Block {
         }
         EnumFacing facing = state.getValue(FACING);
         double side = random.nextDouble() * 0.6D - 0.3D;
-        double dx = facing.getAxis() == EnumFacing.Axis.X ? facing.getFrontOffsetX() * 0.52D : side;
-        double dz = facing.getAxis() == EnumFacing.Axis.Z ? facing.getFrontOffsetZ() * 0.52D : side;
+        double dx = facing.getAxis() == EnumFacing.Axis.X ? facing.getXOffset() * 0.52D : side;
+        double dz = facing.getAxis() == EnumFacing.Axis.Z ? facing.getZOffset() * 0.52D : side;
         world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x + dx, y, z + dz, 0.0D, 0.0D, 0.0D);
         world.spawnParticle(EnumParticleTypes.FLAME, x + dx, y, z + dz, 0.0D, 0.0D, 0.0D);
     }

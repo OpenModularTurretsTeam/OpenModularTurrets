@@ -35,7 +35,7 @@ public class AmmoMetaItem extends Item {
         this.setHasSubtypes(true);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Items.ammoMetaItem);
-        this.setUnlocalizedName(OMTNames.Items.ammoMetaItem);
+        this.setTranslationKey(OMTNames.Items.ammoMetaItem);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class AmmoMetaItem extends Item {
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
-    public String getUnlocalizedName(ItemStack itemStack) {
+    public String getTranslationKey(ItemStack itemStack) {
         return "item." + subNames[itemStack.getItemDamage()];
     }
 

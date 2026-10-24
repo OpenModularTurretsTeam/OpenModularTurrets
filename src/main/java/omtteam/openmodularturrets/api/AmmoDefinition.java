@@ -48,7 +48,7 @@ public final class AmmoDefinition {
         Objects.requireNonNull(item, "item");
         Supplier<ItemStack> sample = () -> new ItemStack(item.get(), 1, meta);
         return new AmmoDefinition(type, stack -> stack.getItem() == item.get() && stack.getMetadata() == meta,
-                () -> sample.get().getUnlocalizedName() + ".name", sample);
+                () -> sample.get().getTranslationKey() + ".name", sample);
     }
 
     public AmmoType type() {

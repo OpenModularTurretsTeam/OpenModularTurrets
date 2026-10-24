@@ -64,7 +64,7 @@ public final class RayWeapons {
         double accuracy = logic.getAccuracyDeviation(type);
         for (int i = 0; i <= logic.getScattershotCount(type); i++) {
             double scale = ProjectileMath.raySpread(accuracy, targetHeight, aim.distanceTo(origin), logic.getRange(type));
-            Vec3d end = aim.addVector(world.rand.nextGaussian() * scale, world.rand.nextGaussian() * scale,
+            Vec3d end = aim.add(world.rand.nextGaussian() * scale, world.rand.nextGaussian() * scale,
                     world.rand.nextGaussian() * scale);
             Vec3d start = origin.add(end.subtract(origin).normalize().scale(0.8D));
             turret.playSound(weapon.launchSound());
@@ -157,8 +157,8 @@ public final class RayWeapons {
                 shootArcChain(world, base, turret, weapon, next, remaining, hitIds);
                 damage(world, turret, base, weapon, next, RayMath.ARC_JUMP_FACTOR);
                 double eye = from.getEyeHeight();
-                ray(world, weapon, from.getPositionVector().addVector(0, eye, 0),
-                        next.getPositionVector().addVector(0, eye, 0));
+                ray(world, weapon, from.getPositionVector().add(0, eye, 0),
+                        next.getPositionVector().add(0, eye, 0));
                 break;
             }
         }

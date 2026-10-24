@@ -14,7 +14,7 @@ final class ModContainerScope {
 
     /** Runs the registration with the mod of the id's namespace as the active mod (if it is a loaded mod). */
     static void registerAs(ResourceLocation id, Runnable registration) {
-        ModContainer owner = Loader.instance().getIndexedModList().get(id.getResourceDomain());
+        ModContainer owner = Loader.instance().getIndexedModList().get(id.getNamespace());
         ModContainer previous = Loader.instance().activeModContainer();
         if (owner == null || owner == previous) {
             registration.run();

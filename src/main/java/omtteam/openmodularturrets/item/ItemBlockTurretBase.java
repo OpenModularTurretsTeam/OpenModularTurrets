@@ -46,7 +46,7 @@ public class ItemBlockTurretBase extends ItemBlock {
 
     @Override
     @Nonnull
-    public String getUnlocalizedName(ItemStack itemStack) {
+    public String getTranslationKey(ItemStack itemStack) {
         return "tile." + OMTNames.Blocks.turretBase + subNames[itemStack.getItemDamage()];
     }
 

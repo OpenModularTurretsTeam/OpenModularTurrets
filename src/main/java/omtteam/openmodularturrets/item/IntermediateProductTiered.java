@@ -27,7 +27,7 @@ public class IntermediateProductTiered extends Item {
         this.setHasSubtypes(true);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Items.intermediateTieredItem);
-        this.setUnlocalizedName(OMTNames.Items.intermediateTieredItem);
+        this.setTranslationKey(OMTNames.Items.intermediateTieredItem);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class IntermediateProductTiered extends Item {
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
-    public String getUnlocalizedName(ItemStack itemStack) {
+    public String getTranslationKey(ItemStack itemStack) {
         return "item." + subNames[itemStack.getItemDamage()];
     }
 

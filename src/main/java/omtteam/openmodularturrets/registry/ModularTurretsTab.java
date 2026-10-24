@@ -23,7 +23,7 @@ public final class ModularTurretsTab extends CreativeTabs {
     }
 
     @Override
-    public ItemStack getTabIconItem() {
+    public ItemStack createIcon() {
         return new ItemStack(getItem(), 1, 4);
     }
 

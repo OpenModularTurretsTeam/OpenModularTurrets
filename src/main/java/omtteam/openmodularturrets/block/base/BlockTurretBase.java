@@ -71,7 +71,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
         }
         setDefaultState(this.blockState.getBaseState().withProperty(TIER, 1).withProperty(LIGHT_VALUE, 0).withProperty(LIGHT_OPACITY, 0));
         this.setSoundType(SoundType.STONE);
-        this.setUnlocalizedName(OMTNames.Blocks.turretBase);
+        this.setTranslationKey(OMTNames.Blocks.turretBase);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Blocks.turretBase);
     }
 
@@ -177,9 +177,9 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos neighbor) {
         if (!worldIn.isRemote) {
             TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
-            if (base != null && worldIn.isBlockIndirectlyGettingPowered(pos) > 0) {
+            if (base != null && worldIn.getRedstonePowerFromNeighbors(pos) > 0) {
                 base.setRedstone(true);
-            } else if (base != null && worldIn.isBlockIndirectlyGettingPowered(pos) == 0) {
+            } else if (base != null && worldIn.getRedstonePowerFromNeighbors(pos) == 0) {
                 base.setRedstone(false);
             }
             if (base != null) {
@@ -201,9 +201,9 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             }
             base.setCamoState(state);
             base.setOwner(new Player(player));
-            if (worldIn.isBlockIndirectlyGettingPowered(pos) > 0) {
+            if (worldIn.getRedstonePowerFromNeighbors(pos) > 0) {
                 base.setRedstone(true);
-            } else if (worldIn.isBlockIndirectlyGettingPowered(pos) == 0) {
+            } else if (worldIn.getRedstonePowerFromNeighbors(pos) == 0) {
                 base.setRedstone(false);
             }
             base.markDirty();

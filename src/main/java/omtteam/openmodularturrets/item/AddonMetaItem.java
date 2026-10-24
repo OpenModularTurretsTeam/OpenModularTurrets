@@ -38,7 +38,7 @@ public class AddonMetaItem extends Item {
         this.setHasSubtypes(true);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Items.addonMetaItem);
-        this.setUnlocalizedName(OMTNames.Items.addonMetaItem);
+        this.setTranslationKey(OMTNames.Items.addonMetaItem);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class AddonMetaItem extends Item {
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
-    public String getUnlocalizedName(ItemStack itemStack) {
+    public String getTranslationKey(ItemStack itemStack) {
         return "item." + subNames[itemStack.getItemDamage()];
     }
 

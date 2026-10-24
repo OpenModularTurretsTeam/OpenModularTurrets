@@ -30,7 +30,7 @@ public class ItemGeneratorUpgrade extends Item {
         this.upgradeType = upgradeType;
         String name = "upgrade_" + upgradeType.getSerializedName();
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
-        this.setUnlocalizedName(name);
+        this.setTranslationKey(name);
         this.setRegistryName(Reference.MOD_ID, name);
     }
 

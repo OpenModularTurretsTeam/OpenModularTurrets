@@ -45,7 +45,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
 
     public LeverBlock() {
         super(Material.GLASS);
-        this.setUnlocalizedName(lever);
+        this.setTranslationKey(lever);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setHardness(2F);
         this.setResistance(15F);
@@ -204,9 +204,9 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
                 AxisAlignedBB axisAlignedBB = new AxisAlignedBB(-0.3F, -0.3F, -0.4F, 0.3F, 0.3F, 0.4F);
                 axisAlignedBB = MathUtil.rotateAABB(axisAlignedBB, facing.getOpposite());
                 double[] offset = new double[3];
-                offset[0] = 0.5D + facing.getFrontOffsetX() * 0.1D;
-                offset[1] = 0.5D + facing.getFrontOffsetY() * 0.1D;
-                offset[2] = 0.5D + facing.getFrontOffsetZ() * 0.1D;
+                offset[0] = 0.5D + facing.getXOffset() * 0.1D;
+                offset[1] = 0.5D + facing.getYOffset() * 0.1D;
+                offset[2] = 0.5D + facing.getZOffset() * 0.1D;
                 return axisAlignedBB.offset(pos).offset(offset[0], offset[1], offset[2]);
             }
         }

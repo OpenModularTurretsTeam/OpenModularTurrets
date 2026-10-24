@@ -68,8 +68,8 @@ public class ItemBlockTurret extends AbstractItemBlockBaseAddon {
         }
         // tooltip.<namespace>.turret.<block path>.description, as on 1.20.1+
         ResourceLocation id = getRegistryName();
-        tooltip.add(TextFormatting.GRAY + safeLocalize("tooltip." + id.getResourceDomain() + ".turret."
-                + id.getResourcePath() + ".description"));
+        tooltip.add(TextFormatting.GRAY + safeLocalize("tooltip." + id.getNamespace() + ".turret."
+                + id.getPath() + ".description"));
         tooltip.add("");
         tooltip.add(value("tier", String.valueOf(type.getRequiredBaseTier())));
         tooltip.add(value("ammo", safeLocalize(ammo)));

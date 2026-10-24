@@ -864,7 +864,7 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
                 if (!isFaceIndex(number) || !(arguments[1].toString().equals("true") || arguments[1].toString().equals("false"))) {
                     return new Object[]{"Wrong parameters!"};
                 }
-                return new Object[]{this.setTurretForceFire(EnumFacing.getFront(number), Boolean.parseBoolean(arguments[1].toString()))};
+                return new Object[]{this.setTurretForceFire(EnumFacing.byIndex(number), Boolean.parseBoolean(arguments[1].toString()))};
             case forceShootAllTurrets:
                 return new Object[]{this.forceShootAllTurrets()};
             case forceShootTurret:
@@ -872,7 +872,7 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
                 if (!isFaceIndex(number)) {
                     return new Object[]{"Wrong parameters!"};
                 }
-                return new Object[]{this.forceShootTurret(EnumFacing.getFront(number))};
+                return new Object[]{this.forceShootTurret(EnumFacing.byIndex(number))};
             case setAllYawPitch:
                 try {
                     this.setAllTurretsYawPitch(Float.parseFloat(arguments[0].toString()),
@@ -887,7 +887,7 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
                     return new Object[]{"Wrong parameters!"};
                 }
                 try {
-                    this.setTurretYawPitch(EnumFacing.getFront(number),
+                    this.setTurretYawPitch(EnumFacing.byIndex(number),
                                            Float.parseFloat(arguments[1].toString()),
                                            Float.parseFloat(arguments[2].toString()));
                     return new Object[]{"setting successful"};

@@ -82,8 +82,8 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         this.setSoundType(SoundType.STONE);
         this.setDefaultState(this.blockState.getBaseState().withProperty(CONCEALED, false));
         // built-in turrets keep their 3.x key (tile.<id>.name), other mods' turrets use tile.<namespace>.<path>.name
-        this.setUnlocalizedName(id.getResourceDomain().equals(Reference.MOD_ID) ? id.getResourcePath()
-                : id.getResourceDomain() + "." + id.getResourcePath());
+        this.setTranslationKey(id.getNamespace().equals(Reference.MOD_ID) ? id.getPath()
+                : id.getNamespace() + "." + id.getPath());
         this.setRegistryName(id);
     }
 

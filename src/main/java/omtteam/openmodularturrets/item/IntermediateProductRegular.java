@@ -23,7 +23,7 @@ public class IntermediateProductRegular extends Item {
         this.setHasSubtypes(true);
         this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Items.intermediateRegularItem);
-        this.setUnlocalizedName(OMTNames.Items.intermediateRegularItem);
+        this.setTranslationKey(OMTNames.Items.intermediateRegularItem);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class IntermediateProductRegular extends Item {
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
-    public String getUnlocalizedName(ItemStack itemStack) {
+    public String getTranslationKey(ItemStack itemStack) {
         return "item." + subNames[itemStack.getItemDamage()];
     }
 
