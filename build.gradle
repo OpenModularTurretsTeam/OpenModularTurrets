@@ -55,18 +55,13 @@ repositories {
     maven { url = "https://maven.cil.li/" }          // OpenComputers
     maven { url = "https://modmaven.dev/" }          // The One Probe
     maven {
-        url = "https://cursemaven.com/"              // OMLib releases from CurseForge
+        url = "https://cursemaven.com/"              // OMLib releases and Hwyla from CurseForge
         content { includeGroup "curse.maven" }
     }
     if (omlibProject == null && (project.hasProperty("omlib_local") || releasing)) {
         mavenLocal {                                 // OMLib from publishToMavenLocal
             content { includeGroup group_prefix }
         }
-    }
-    maven {
-        url = "https://maven.tehnut.info/"            // Hwyla
-        // only Hwyla: the site answers unknown paths (e.g. Forge's Scala libraries) with an HTML page
-        content { includeGroup "mcp.mobius.waila" }
     }
 }
 
@@ -88,7 +83,9 @@ dependencies {
         compileOnly rfg.deobf(notation)
         testImplementation rfg.deobf(notation)
     }
-    implementation rfg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version}:api")
+    // Hwyla (the full mod, deobfuscated); optional at runtime, the plugin is only loaded by Hwyla
+    compileOnly rfg.deobf("curse.maven:hwyla-253449:${hwyla_curse_file_id}")
+    testImplementation rfg.deobf("curse.maven:hwyla-253449:${hwyla_curse_file_id}")
 
     if (omlibProject != null) {
         implementation omlibProject
