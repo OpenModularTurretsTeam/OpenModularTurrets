@@ -24,7 +24,17 @@ java {
     }
 }
 
-sourceSets.main.java.srcDir "src/api/java"
+// The bundled ComputerCraft API (src/api/java): compiled against, but not part of the jar (as FG2's api source set);
+// ComputerCraft itself provides it at runtime
+sourceSets {
+    api {
+        java.srcDirs = ["src/api/java"]
+        compileClasspath += configurations.compileClasspath
+    }
+    main.compileClasspath += api.output
+    test.compileClasspath += api.output
+    test.runtimeClasspath += api.output
+}
 
 minecraft {
     mcVersion = minecraft_version
