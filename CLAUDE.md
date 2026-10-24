@@ -89,12 +89,12 @@ Do not hard-code guesses into the build without verifying.
 │   │   ├── gradle.properties   # minecraft_version, fabric_api, java_version=17 …
 │   │   └── src/main/generated/ # datagen output for 1.20.1 (committed; Forge converts it, datagen_from)
 │   ├── 1.20.1-forge/
-│   │   └── gradle.properties   # forge_version, forge_dependency, mixinextras_version, publish_enabled=false …
+│   │   └── gradle.properties   # forge_version, forge_dependency, mixinextras_version …
 │   ├── 1.21.1-fabric/
 │   │   ├── gradle.properties   # minecraft_version, fabric_api, java_version=21 …
 │   │   └── src/main/generated/ # datagen output for 1.21.1 (committed; NeoForge converts it, datagen_from)
 │   └── 1.21.1-neoforge/
-│       └── gradle.properties   # neoforge_version, minecraft_dependency (Maven range), publish_enabled=false …
+│       └── gradle.properties   # neoforge_version, minecraft_dependency (Maven range) …
 ├── src/
     ├── main/java/omtteam/openmodularturrets/...
     ├── main/resources/         # SHARED assets + fabric.mod.json, META-INF/neoforge.mods.toml and META-INF/mods.toml (templated)
@@ -171,7 +171,7 @@ The setup and the patterns come from OpenModularLighting (branch `neoforge-test`
 - `core/` stays loader-free (`verifyCoreIsolation` also forbids `net.neoforged` and `net.minecraftforge`).
 - `build.neoforge.gradle.kts` and `build.forge.gradle.kts` compile everything except `datagen` (Fabric-only by design: NeoForge gets the converted Fabric data, `convertFabricData`).
   New code must not use Fabric API or Team Reborn Energy outside `platform/fabric` (and `datagen`), or the NeoForge and Forge nodes stop compiling.
-- `publish_enabled=false` in `versions/1.21.1-neoforge/gradle.properties` and `versions/1.20.1-forge/gradle.properties` keeps those nodes a dry run even with tokens; remove it only when the user wants NeoForge / Forge releases.
+- NeoForge and Forge publishing is active (enabled by the user on 2026-10-24); `publish_enabled=false` in a node's `gradle.properties` would turn that node back into a dry run even with tokens.
 - The mod version is `<mod_version>+<minecraft version>-<loader>`, so the jars of both loaders can be told apart.
 
 ### NeoForge port: design decisions (made by the user)
@@ -186,7 +186,7 @@ New questions that these do not answer go through §7 "Designing APIs".
 - Stonecutter loader axis: one source set, nodes `<minecraft version>-<loader>`, one build script per loader; NeoForge only for 1.21.1 (1.20.1 stays Fabric-only).
 - ModDevGradle for the NeoForge node (build-time only).
 - Whole loader-specific classes in `platform/<loader>/` (left out of the other loaders' builds); `//? if fabric` / `//? if neoforge` only for small differences inside `compat/` and `platform/`.
-- Mod-independent build logic in `buildSrc` (`mod-common`), copied between the mods; publishing stays disabled for NeoForge (`publish_enabled=false`) until the user says otherwise.
+- Mod-independent build logic in `buildSrc` (`mod-common`), copied between the mods; publishing for NeoForge and Forge was enabled by the user on 2026-10-24.
 
 **Platform layer**
 
@@ -652,7 +652,7 @@ Update this checklist as work progresses.
 
 ### NeoForge 1.21.1 (branch `neoforge-test`; follow OpenModularLighting's steps)
 
-- [x] Build: Stonecutter nodes `<version>-<loader>`, `buildSrc` (`mod-common`, `bundled_licenses`), `build.neoforge.gradle.kts` (ModDevGradle, porting filter, data converted from the Fabric output), `neoforge.mods.toml` template, publishing disabled for NeoForge
+- [x] Build: Stonecutter nodes `<version>-<loader>`, `buildSrc` (`mod-common`, `bundled_licenses`), `build.neoforge.gradle.kts` (ModDevGradle, porting filter, data converted from the Fabric output), `neoforge.mods.toml` template, publishing for NeoForge (disabled at first, enabled by the user on 2026-10-24)
 - [x] Platform services copied from OpenModularLighting: `LoaderInfo`, `Fuel`, `Network` + `ClientNetwork`, `Menus`; facades forward to them; entrypoints split (`OMT.init()`, `OMTClient.init()`, `platform/<loader>` entrypoints)
 - [x] Copied from OpenModularLighting: `inventory.ItemAccess` + Fabric/NeoForge adapters (in use since the item transfer step), `registry.RegistrationStep`, `client.ScreenRegistrar` (not used yet)
 - [x] ArchUnit: the cycle `compat` / `compat.network` ↔ `platform` (facades call the services, the service interfaces use the facades' types) is accepted in `KNOWN_CYCLES` (decided by the user)
@@ -664,14 +664,14 @@ Update this checklist as work progresses.
   NeoForge now compiles all of `main` except `datagen` (Fabric-only by design).
 - [x] Mixins on NeoForge: the same `openmodularturrets.mixins.json` under `[[mixins]]` in `neoforge.mods.toml`; both `LivingEntityMixin` injection points exist in NeoForge's patched `LivingEntity` (checked once with `mixin.debug.export` on the NeoForge game test server)
 - [x] Client: `OMTClient` lists the content (screens, model layers, block entity and entity renderers, item renderers via `ItemStackRenderer`, cutout blocks, tooltips, disconnect); `OMTFabricClient` / `OMTNeoForgeClient` register it and wire ticks, disconnect and the ray rendering; fence models carry `"render_type": "minecraft:cutout"`; camo models `FabricCamoModel` (Renderer API) / `NeoForgeCamoModel` (`ModelData` + forwarding colour provider), `CompatBlockEntity.remesh()` refreshes the model data.
-  Both clients start to the title screen without errors; in-world rendering on NeoForge (turrets, projectiles, rays, item renderers, camouflage) still needs a playtest.
+  Both clients start to the title screen without errors; in-world rendering on NeoForge (turrets, projectiles, rays, item renderers, camouflage) was checked by hand by the user (2026-10-24).
 - [x] Turret API plugin discovery on NeoForge: `@OMTPlugin.Register` / `@OMTClientPlugin.Register`, found in the mod scan data by `NeoForgePlugins`; `ApiTestTurrets` carries the annotation, so the NeoForge game tests will cover it; `docs/turret-api.md` explains both loaders and the sound timing on NeoForge
 - [x] GameTests shared with NeoForge: `OMTGameTests` with the own empty structure, NeoForge annotations behind a condition, test mod `openmodularturrets_gametest` on both loaders (`OMTGameTestMod` + `gametest/platform/<loader>` entrypoints), `runGameTestServer` part of `check`; all 35 tests pass on NeoForge too (covers the capabilities, the FE adapter, plugin discovery and the GUI path); no `TestTransfer` needed yet
 - [x] Jade on NeoForge: `@WailaPlugin` on `OMTJadePlugin` (Jade on NeoForge loads it, checked in a dev client), `compat/jade` compiles on NeoForge; Jade in the NeoForge dev runs; the dev client/server runs no longer load the test mod
 
 ### Forge 1.20.1 (branch `forge-test`; ported from OpenModularLighting's `forge-test`)
 
-- [x] Build: node `1.20.1-forge`, `build.forge.gradle.kts` (legacy ModDevGradle, `reobfJar`, remapped Jade, mixin refmap + `MixinConfigs`, MixinExtras jar-in-jar), `forge` constant, `mods.toml` template (+ test mod), `buildSrc` taken over from OpenModularLighting (`mod-common` knows `forge`, `convertFabricData` shared by NeoForge and Forge), generated `pack.mcmeta`, publishing disabled
+- [x] Build: node `1.20.1-forge`, `build.forge.gradle.kts` (legacy ModDevGradle, `reobfJar`, remapped Jade, mixin refmap + `MixinConfigs`, MixinExtras jar-in-jar), `forge` constant, `mods.toml` template (+ test mod), `buildSrc` taken over from OpenModularLighting (`mod-common` knows `forge`, `convertFabricData` shared by NeoForge and Forge), generated `pack.mcmeta`, publishing (disabled at first, enabled by the user on 2026-10-24)
 - [x] `platform/forge`: `OMTForge`, all services, `ForgeBlockCapabilities` (items, energy of base and generator), `ForgePlugins`; client `OMTForgeClient`, `ForgeClientNetwork`, `ForgeCamoModel`, `ForgeItemRenderer`
 - [x] GameTests on Forge: `OMTForgeGameTests`; all 35 pass (capabilities, FE adapter, plugin discovery, GUI path, mixin loaded)
-- [ ] Checked by hand in a Forge client (`:1.20.1-forge:runClient`) and with the release jar in a real Forge install: turret, projectile, ray and item rendering, camouflage, screens, Jade, joining a dedicated server
+- [x] Checked by hand (by the user, 2026-10-24) in a Forge client (`:1.20.1-forge:runClient`) and with the release jar in a real Forge install: turret, projectile, ray and item rendering, camouflage, screens, Jade, joining a dedicated server
