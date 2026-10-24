@@ -30,6 +30,7 @@ import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.AmmoDraw;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
+import omtteam.openmodularturrets.core.base.TurretPlacement;
 import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.core.turret.TurretMath;
 import omtteam.openmodularturrets.core.turret.TurretState;
@@ -184,8 +185,8 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         TurretBase base = getBase();
         TurretType type = getCoreType();
         if (type == null) return;
-        // a turret without base, on a base of a lower tier or on a face it cannot mount on drops itself
-        if (base == null || base.isInvalid() || !base.getLogic().supportsTurret(type) || !type.canMountOn(getFace())) {
+        // a turret without base, or one that may not stay there (TurretPlacement.canStay: tier, face), drops itself
+        if (base == null || base.isInvalid() || !TurretPlacement.canStay(type, getFace(), base.getTier()).allowed()) {
             facing = null;
             world.destroyBlock(pos, true);
             return;

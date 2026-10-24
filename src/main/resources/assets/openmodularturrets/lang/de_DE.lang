@@ -238,3 +238,10 @@ text.openmodularturrets.death.attack.laser=%s wurde verdampft.
 text.openmodularturrets.death.attack.ferroslug=%s wurde von einer Railgun gelöchert..
 
 text.openmodularturrets.flavour.turret.plasma=Hot air -> stuff's on fire.
+
+message.openmodularturrets.placement.blocked=Etwas ist im Weg
+message.openmodularturrets.placement.disabled=Dieser Turm ist in der Konfiguration deaktiviert
+message.openmodularturrets.placement.wrong_face=Dieser Turm kann nicht an dieser Seite angebracht werden
+message.openmodularturrets.placement.tier_too_low=Benötigt eine Turmbasis der Stufe %s oder höher
+message.openmodularturrets.placement.base_full=Diese Turmbasis trägt höchstens %s Türme
+message.openmodularturrets.placement.type_limit=Eine Turmbasis trägt höchstens %s dieser Türme

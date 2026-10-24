@@ -162,7 +162,7 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
 
     /**
      * Scans the six neighbours for turrets and tells the logic (1.20.1+ {@code updateNeighbours}). Called on the
-     * first server tick, when a neighbour changes and before turret slots are counted.
+     * first server tick and when a neighbour changes.
      */
     public void updateNeighbours() {
         if (world == null) {
@@ -182,12 +182,6 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
         }
         logic.updateNeighbours(attached);
         neighboursScanned = true;
-    }
-
-    /** How many more turrets of this type may be attached, with the neighbours scanned first. */
-    public int getRemainingTurretSlots(TurretType type) {
-        updateNeighbours();
-        return logic.getRemainingTurretSlots(type);
     }
 
     /**

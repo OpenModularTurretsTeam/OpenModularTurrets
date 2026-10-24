@@ -40,10 +40,15 @@ import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.base.TurretPlacement;
 import omtteam.openmodularturrets.core.turret.TurretType;
+import omtteam.openmodularturrets.core.world.Face;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Random;
 
 import static omtteam.omlib.compat.theoneprobe.TOPCompatibility.getLocalizationString;
@@ -173,17 +178,47 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
     }
 
     /**
-     * A turret needs a base of a high enough tier with a free turret slot, and must be allowed on that side of the
-     * base ({@code TurretType.canMountOn}: the melee turret only on top or below).
+     * A turret needs a base next to it that takes this type on that side ({@link TurretPlacement#canAttach}: tier,
+     * side, free turret slot); the first neighbouring base in {@link EnumFacing} order is used.
      */
     @Override
     @ParametersAreNonnullByDefault
     public boolean canPlaceBlockAt_OM(World worldIn, BlockPos pos) {
-        TurretBase base = getBase(worldIn, pos);
-        EnumFacing towardsBase = getTurretBaseFacing(worldIn, pos);
-        return base != null && towardsBase != null && base.getLogic().supportsTurret(coreType)
-                && coreType.canMountOn(TurretBase.toFace(towardsBase.getOpposite()))
-                && base.getRemainingTurretSlots(coreType) > 0;
+        TurretPlacement.Result result = attachResult(worldIn, pos);
+        return result != null && result.allowed();
+    }
+
+    /**
+     * Whether this turret may be attached at {@code pos} to the base next to it ({@link TurretPlacement#canAttach});
+     * also asked on the client, for the reason the placement outline shows.
+     *
+     * @return {@code null} if there is no base next to {@code pos}
+     */
+    @Nullable
+    public TurretPlacement.Result attachResult(World world, BlockPos pos) {
+        EnumFacing towardsBase = getTurretBaseFacing(world, pos);
+        if (towardsBase == null) return null;
+        BlockPos basePos = pos.offset(towardsBase);
+        TurretBase base = (TurretBase) world.getTileEntity(basePos);
+        return TurretPlacement.canAttach(coreType, TurretBase.toFace(towardsBase.getOpposite()), base.getTier(),
+                attachedTurrets(world, basePos), ConfigLogicSettings.INSTANCE);
+    }
+
+    /**
+     * The turrets facing away from the base at {@code basePos}, read from the world: the base's logic only learns
+     * them on the server, but the placement outline asks on the client. Unloaded neighbours count as empty.
+     */
+    private static Map<Face, TurretType> attachedTurrets(World world, BlockPos basePos) {
+        Map<Face, TurretType> turrets = new EnumMap<>(Face.class);
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            BlockPos neighbour = basePos.offset(facing);
+            if (!world.isBlockLoaded(neighbour)) continue;
+            Block block = world.getBlockState(neighbour).getBlock();
+            if (block instanceof BlockTurret) {
+                turrets.put(TurretBase.toFace(facing), ((BlockTurret) block).getCoreType());
+            }
+        }
+        return turrets;
     }
 
     @Override
