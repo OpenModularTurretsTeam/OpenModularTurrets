@@ -85,4 +85,25 @@ class MemoryCardNbtTest {
         assertEquals(12, read.base().range());
         assertNull(read.camo());
     }
+
+    private static void assertBaseRoundTrip(MemoryCardData.BaseSettings base) {
+        MemoryCardData read = MemoryCardNbt.read(MemoryCardNbt.write(new MemoryCardData(
+                MemoryCardData.Source.TURRET_BASE, base,
+                new MemoryCardData.TrustSettings(Collections.<TrustedPlayer>emptyList()), null)));
+        assertNotNull(read);
+        MemoryCardData.BaseSettings readBase = read.base();
+        assertNotNull(readBase);
+        assertEquals(base.mode(), readBase.mode());
+        assertEquals(base.multiTargeting(), readBase.multiTargeting(), "multi targeting");
+        assertEquals(base.targetPlayers(), readBase.targetPlayers(), "players");
+        assertEquals(base.targetMobs(), readBase.targetMobs(), "mobs");
+        assertEquals(base.targetPassive(), readBase.targetPassive(), "passive mobs");
+        assertEquals(base.range(), readBase.range());
+    }
+
+    @Test
+    void everyBaseSettingSurvivesTheRoundTrip() {
+        assertBaseRoundTrip(new MemoryCardData.BaseSettings(MachineMode.NONINVERTED, false, true, true, false, 12));
+        assertBaseRoundTrip(new MemoryCardData.BaseSettings(MachineMode.INVERTED, true, false, false, true, 3));
+    }
 }

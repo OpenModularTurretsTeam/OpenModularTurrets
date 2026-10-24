@@ -63,8 +63,10 @@ public final class Box {
         if (this == o) return true;
         if (!(o instanceof Box)) return false;
         Box other = (Box) o;
-        return minX == other.minX && minY == other.minY && minZ == other.minZ
-                && maxX == other.maxX && maxY == other.maxY && maxZ == other.maxZ;
+        // Double.compare, like Double.hashCode: 0.0 and -0.0 differ
+        return Double.compare(minX, other.minX) == 0 && Double.compare(minY, other.minY) == 0
+                && Double.compare(minZ, other.minZ) == 0 && Double.compare(maxX, other.maxX) == 0
+                && Double.compare(maxY, other.maxY) == 0 && Double.compare(maxZ, other.maxZ) == 0;
     }
 
     @Override

@@ -29,8 +29,8 @@ public final class AddonTurretConfig {
     public static synchronized void load(File configDirectory, Collection<TurretDefinition> addonTurrets) {
         Map<String, TurretSetting> loaded = new HashMap<>();
         if (!addonTurrets.isEmpty()) {
+            // the constructor reads the file
             Configuration config = new Configuration(new File(configDirectory, FILE_NAME));
-            config.load();
             for (TurretDefinition turret : addonTurrets) {
                 loaded.put(turret.type().getId(), read(config, turret.type().getId(), turret.defaultStats()));
             }

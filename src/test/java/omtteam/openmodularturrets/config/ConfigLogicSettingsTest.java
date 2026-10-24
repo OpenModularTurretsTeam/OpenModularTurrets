@@ -25,17 +25,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ConfigLogicSettingsTest {
     private String[] blocked;
     private String[] hostile;
+    private String[] neutral;
 
     @BeforeEach
     void saveLists() {
         blocked = OMTConfig.GENERAL.stringMobBlackList;
         hostile = OMTConfig.GENERAL.stringMobForceList;
+        neutral = OMTConfig.GENERAL.stringNeutralForceList;
     }
 
     @AfterEach
     void restoreLists() {
         OMTConfig.GENERAL.stringMobBlackList = blocked;
         OMTConfig.GENERAL.stringMobForceList = hostile;
+        OMTConfig.GENERAL.stringNeutralForceList = neutral;
     }
 
     @Test
@@ -76,11 +79,20 @@ class ConfigLogicSettingsTest {
 
     @Test
     void entityListsFollowConfigChanges() {
-        OMTConfig.GENERAL.stringMobForceList = new String[]{"minecraft:creeper"};
-        assertEquals(Collections.singleton("minecraft:creeper"), ConfigLogicSettings.INSTANCE.forcedHostileEntities());
-        // Forge replaces the array when the config changes
-        OMTConfig.GENERAL.stringMobForceList = new String[]{"minecraft:spider"};
-        assertEquals(Collections.singleton("minecraft:spider"), ConfigLogicSettings.INSTANCE.forcedHostileEntities());
+        ConfigLogicSettings settings = ConfigLogicSettings.INSTANCE;
+        // Forge replaces the arrays when the config changes; each list is read on its own
+        for (String id : new String[]{"minecraft:creeper", "minecraft:spider"}) {
+            OMTConfig.GENERAL.stringMobBlackList = new String[]{id};
+            assertEquals(Collections.singleton(id), settings.blockedEntities(), "blocked");
+        }
+        for (String id : new String[]{"minecraft:creeper", "minecraft:spider"}) {
+            OMTConfig.GENERAL.stringMobForceList = new String[]{id};
+            assertEquals(Collections.singleton(id), settings.forcedHostileEntities(), "hostile");
+        }
+        for (String id : new String[]{"minecraft:creeper", "minecraft:spider"}) {
+            OMTConfig.GENERAL.stringNeutralForceList = new String[]{id};
+            assertEquals(Collections.singleton(id), settings.forcedNeutralEntities(), "neutral");
+        }
     }
 
     @Test
