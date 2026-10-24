@@ -8,6 +8,12 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+## [4.0.0-beta.1] - 2026-10-24
+
+### Changed
+
+- Requires OMLib 4.0.0-beta.1 or newer
+
 ### Fixed
 
 - The melee and crossbow turrets had no name (and the arc turret none in German, Portuguese, Russian and Chinese)
