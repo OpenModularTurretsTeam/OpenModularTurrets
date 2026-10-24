@@ -124,6 +124,9 @@ text.openmodularturrets.upgrade_slot=Upgrades for the modular turret.
 text.openmodularturrets.base_max_range=Max range at which all mounted turrets will search for targets, in blocks.
 
 tile.plasma_turret.name=Plasma Launcher Turret
+tile.arc_turret.name=Arc Turret
+tile.melee_turret.name=Melee Turret
+tile.crossbow_turret.name=Crossbow Turret
 text.openmodularturrets:turret_limit=Turret Limit
 text.openmodularturrets.flavour.base.1=There are trees, everywhere...
 text.openmodularturrets.flavour.base.2=I'll draw your blood.

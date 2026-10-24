@@ -235,6 +235,8 @@ text.openmodularturrets.death.attack.laser=%s got disintegrated.
 
 text.openmodularturrets.death.attack.ferroslug=%s found atomized minerva.
 tile.plasma_turret.name=Plasma Launcher Turret
+tile.melee_turret.name=Melee Turret
+tile.crossbow_turret.name=Crossbow Turret
 text.openmodularturrets.flavour.turret.plasma=Hot air -> stuff's on fire.
 text.openmodularturrets:turret_limit=Turret Limittext.openmodularturrets.gui.damage=Damage
 

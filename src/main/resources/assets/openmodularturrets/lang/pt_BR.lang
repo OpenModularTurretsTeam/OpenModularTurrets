@@ -53,6 +53,9 @@ tile.slowing_turret.name=Torre Relativística
 tile.laser_turret.name=Torre Laser
 tile.rail_gun_turret.name=Torre Canhão Elétrico
 tile.plasma_turret.name=Plasma Launcher Turret
+tile.arc_turret.name=Arc Turret
+tile.melee_turret.name=Melee Turret
+tile.crossbow_turret.name=Crossbow Turret
 tile.lever_block.name=Manivela Básica de Torre Básica
 tile.turret_base.name=Base de Torre
 

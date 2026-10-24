@@ -53,6 +53,9 @@ tile.slowing_turret.name=Verlangsamungsturm
 tile.laser_turret.name=Laser Turm
 tile.rail_gun_turret.name=Rail Gun Turm
 tile.plasma_turret.name=Plasmawerfer Turm
+tile.arc_turret.name=Lichtbogen Turm
+tile.melee_turret.name=Nahkampf Turm
+tile.crossbow_turret.name=Armbrust Turm
 tile.lever_block.name=Hebel für Tier 1 Turm Basis
 tile.turret_base.name=Turm Basis
 

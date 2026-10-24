@@ -54,6 +54,8 @@ tile.laser_turret.name=Laser Turret
 tile.rail_gun_turret.name=Rail Gun Turret
 tile.plasma_turret.name=Plasma Launcher Turret
 tile.arc_turret.name=Arc Turret
+tile.melee_turret.name=Melee Turret
+tile.crossbow_turret.name=Crossbow Turret
 tile.lever_block.name=Basic Turret Base Crank
 tile.turret_base.name=Turret Base
 
