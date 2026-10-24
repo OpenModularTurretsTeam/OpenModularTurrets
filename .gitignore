@@ -28,3 +28,6 @@ settings.gradle
 local.properties
 *.log
 logs/
+
+# Claude Code (local settings, worktrees)
+/.claude/
