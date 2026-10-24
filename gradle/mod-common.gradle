@@ -1,5 +1,5 @@
-// Build logic shared by the standalone build (build.gradle, ForgeGradle 2.3) and the workspace build
-// (gradle/workspace/<Mod>.gradle, ForgeGradle 3). Keep this file identical in OMLib, OMT and OMPD.
+// Build logic of the mods' build.gradle (RetroFuturaGradle), which the OMTTeam 1.12 workspace builds as well.
+// Keep this file identical in OMLib, OMT and OMPD.
 // Versions come from the mod's gradle.properties (junit_version, junit_platform_version, archunit_version,
 // jacoco_version, pitest_version, pitest_junit5_version).
 
@@ -30,16 +30,34 @@ ext.composeVersion = { String base, String type, number ->
 }
 version = composeVersion(mod_version.toString(), releaseChannel, findProperty("release_number"))
 
+// --- Source tokens --------------------------------------------------------------------------------
+
+// What FG2's `replace` did: the build file sets ext.sourceTokens (token -> text, e.g. "@VERSION@" -> the version) and
+// compileJava compiles a copy of the main sources with the tokens replaced. The sources themselves keep the tokens.
+ext.sourceTokens = [:]
+def tokenSources = tasks.register("replaceSourceTokens", Sync) {
+    description = "Copies the main sources with the tokens of ext.sourceTokens replaced"
+    from(sourceSets.main.java.srcDirs)
+    into(layout.buildDirectory.dir("generated/sources/tokens"))
+    inputs.property("tokens", { sourceTokens.collectEntries { k, v -> [k.toString(), v.toString()] } })
+    filter { String line ->
+        sourceTokens.inject(line) { String text, token, value -> text.replace(token.toString(), value.toString()) }
+    }
+}
+tasks.named("compileJava", JavaCompile) {
+    source = tokenSources
+}
+
 // --- Tests: JUnit 5 + ArchUnit -----------------------------------------------------------------
 
 dependencies {
-    testCompile "org.junit.jupiter:junit-jupiter-api:${junit_version}"
-    testCompile "com.tngtech.archunit:archunit:${archunit_version}"
-    testRuntime "org.junit.jupiter:junit-jupiter-engine:${junit_version}"
-    testRuntime "org.junit.platform:junit-platform-launcher:${junit_platform_version}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_version}"
+    testImplementation "com.tngtech.archunit:archunit:${archunit_version}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit_version}"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:${junit_platform_version}"
 }
 
-test {
+tasks.named("test") {
     useJUnitPlatform()
     // ArchUnit's frozen rules (package cycles, client access) live in src/test/resources/archunit_store
     systemProperty "archunit.freeze.store.default.path", file("src/test/resources/archunit_store").absolutePath
@@ -49,7 +67,7 @@ test {
 
 // core/ holds the game rules as plain Java: only java.*, javax.annotation.* and core packages
 // (the mod's own and OMLib's) may be used there
-task verifyCoreIsolation {
+tasks.register("verifyCoreIsolation") {
     group = "verification"
     description = "Fails if code under core/ uses Minecraft, Forge or non-core packages"
     def sources = sourceSets.main.java.srcDirs
@@ -77,7 +95,7 @@ task verifyCoreIsolation {
         }
     }
 }
-check.dependsOn verifyCoreIsolation
+tasks.named("check") { dependsOn "verifyCoreIsolation" }
 
 // The mod's base package (omtteam.omlib, omtteam.openmodularturrets, omtteam.ompd) and its core
 def basePackage = group_id.toString()
@@ -94,23 +112,17 @@ jacoco {
     toolVersion = jacoco_version
 }
 
-// after evaluation: Gradle 4's JaCoCo plugin adds the whole main output to the class directories set here
-afterEvaluate {
-    jacocoTestReport {
-        sourceDirectories = files(sourceSets.main.java.srcDirs)
-        classDirectories = sourceSets.main.output.classesDirs.asFileTree.matching { include "${corePath}/**" }
-    }
-}
-
-jacocoTestReport {
-    dependsOn test
+tasks.named("jacocoTestReport") {
+    dependsOn "test"
+    sourceDirectories.setFrom(sourceSets.main.java.srcDirs)
+    classDirectories.setFrom(sourceSets.main.output.classesDirs.asFileTree.matching { include "${corePath}/**" })
     reports {
-        csv.enabled = true
-        xml.enabled = true
-        html.enabled = true
+        csv.required = true
+        xml.required = true
+        html.required = true
     }
     doLast {
-        File csv = reports.csv.destination
+        File csv = reports.csv.outputLocation.get().asFile
         // line coverage per package, summed for core
         def byPackage = new TreeMap<String, int[]>()
         if (csv.isFile()) {
@@ -139,10 +151,10 @@ jacocoTestReport {
         byPackage.each { name, lines ->
             println String.format("    %-22s %s", name - "${basePackage}.", percent(lines))
         }
-        println "  Report: ${reports.html.destination.toURI()}index.html"
+        println "  Report: ${reports.html.outputLocation.get().asFile.toURI()}index.html"
     }
 }
-check.dependsOn jacocoTestReport
+tasks.named("check") { dependsOn "jacocoTestReport" }
 
 // --- Mutation testing (PIT): ./gradlew pitest, on demand --------------------------------------
 
@@ -161,11 +173,11 @@ dependencies {
     }
 }
 
-task pitest(type: JavaExec) {
+tasks.register("pitest", JavaExec) {
     group = "verification"
     description = "Mutation testing of the core logic (report in build/reports/pitest)"
-    dependsOn testClasses
-    def reportDir = { file("${buildDir}/reports/pitest") }
+    dependsOn "testClasses"
+    def reportDir = { layout.buildDirectory.dir("reports/pitest").get().asFile }
     outputs.dir reportDir
     onlyIf {
         boolean hasCore = sourceSets.main.java.srcDirs.any { new File(it, corePath).isDirectory() }
@@ -175,7 +187,9 @@ task pitest(type: JavaExec) {
         return hasCore
     }
     classpath = configurations.pitest + sourceSets.test.runtimeClasspath
-    main = "org.pitest.mutationtest.commandline.MutationCoverageReport"
+    mainClass = "org.pitest.mutationtest.commandline.MutationCoverageReport"
+    // PIT 1.17 and the tests run on the Java 8 toolchain
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(8) }
     doFirst {
         args = [
                 "--reportDir", reportDir().path,
@@ -203,11 +217,11 @@ task pitest(type: JavaExec) {
 // package uses and the architecture rules (core isolation, no client code in common code). Built from the import lines
 // of the main and test sources; imports in comments do not count. Client code is the client package of main.
 // Cycles and layers are worked out by the page (gradle/dependency-map/template.html, as in 1.20.1+).
-task dependencyMap {
+tasks.register("dependencyMap") {
     group = "documentation"
     description = "Writes an interactive package dependency map to build/reports/dependency-map/index.html"
     def template = file("gradle/dependency-map/template.html")
-    def output = { file("${buildDir}/reports/dependency-map/index.html") }
+    def output = { layout.buildDirectory.file("reports/dependency-map/index.html").get().asFile }
     inputs.files({ sourceSets.main.java.srcDirs + sourceSets.test.java.srcDirs })
     inputs.file template
     outputs.file output
@@ -407,7 +421,7 @@ ext.changelogSection = { String version ->
 }
 
 // ./gradlew changelogEntry -Ptype=fixed -Pentry="Laser turret model"
-task changelogEntry {
+tasks.register("changelogEntry") {
     group = "release"
     description = "Adds an entry under Unreleased in CHANGELOG.md (-Ptype=added|changed|fixed|removed -Pentry=\"...\")"
     doLast {
@@ -443,7 +457,7 @@ task changelogEntry {
 }
 
 // ./gradlew releaseChangelog: releases the Unreleased entries as the version set in gradle.properties
-task releaseChangelog {
+tasks.register("releaseChangelog") {
     group = "release"
     description = "Moves the Unreleased entries of CHANGELOG.md into a section for the version in gradle.properties"
     doLast {

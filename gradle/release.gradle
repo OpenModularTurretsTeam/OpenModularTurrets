@@ -1,12 +1,12 @@
-// Local releases to CurseForge and Modrinth, used by the standalone build (build.gradle) only.
+// Local releases to CurseForge and Modrinth, used by the mod's own build (build.gradle), not by the workspace.
 // Keep this file identical in OMLib, OMT and OMPD. Apply it after gradle/mod-common.gradle, which sets the version.
 //
 // The version comes from gradle.properties (mod_version, release_type, release_number; see mod-common.gradle).
 // In a release commit, set it there (OMT and OMPD also omlib_version) and run ./gradlew releaseChangelog, then:
 //
-//   ./gradlew -b build.gradle release
+//   ./gradlew release
 //
-// (`-b build.gradle` keeps Gradle from picking up the settings.gradle of the workspace above the mod.)
+// (in the mod folder: the mod's own settings.gradle keeps Gradle from using the workspace above it)
 // `release` checks the release commit, builds, uploads to CurseForge (`curseforge`) and Modrinth (`modrinth`) with
 // the version's CHANGELOG.md section and tags the commit as v<version>.
 //
@@ -16,8 +16,9 @@
 //   embeddedLibrary|incompatible|tool>),
 //   modrinth_project_id (empty or TODO…: no Modrinth upload), modrinth_dependencies (comma-separated
 //   <project id>:<required|optional|incompatible|embedded>).
-// The uploads talk to the APIs directly: CurseGradle 1.4 (the last one for Gradle 4) rejects the Client / Server
-// environments CurseForge requires.
+// The uploads talk to the APIs directly (written when the build was on Gradle 4, where CurseGradle 1.4 rejected the
+// Client / Server environments CurseForge requires).
+// The uploaded jar is reobfJar (SRG names); the dev jar (MCP names) and the sources jar go up as additional files.
 
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
@@ -117,7 +118,7 @@ def siblingOmlibVersion = {
             properties.getProperty("release_number"))
 }
 
-task checkRelease {
+tasks.register("checkRelease") {
     group = "release"
     description = "Checks that the version, its CHANGELOG.md section, the tokens and the git tree are ready for a release"
     doLast {
@@ -153,10 +154,10 @@ task checkRelease {
     }
 }
 
-task curseforge {
+tasks.register("curseforge") {
     group = "release"
     description = "Uploads the jar (with the sources and dev jars as additional files) to CurseForge"
-    dependsOn checkRelease, "build"
+    dependsOn "checkRelease", "build"
     doLast {
         Map<String, String> headers = ["X-Api-Token": findProperty("curseforge_token").toString(), "User-Agent": userAgent]
         // game version names -> ids, among the types the Minecraft upload API accepts
@@ -174,7 +175,7 @@ task curseforge {
             return matches[0].id as Integer
         }
         String url = "${curseforgeApi}/projects/${curse_project_id}/upload-file"
-        File main = tasks.jar.archivePath
+        File main = tasks.reobfJar.archiveFile.get().asFile
         Map metadata = [changelog: releaseNotes, changelogType: "markdown", releaseType: releaseChannel, gameVersions: gameVersions]
         def relations = curseRelations()
         if (!relations.isEmpty()) {
@@ -182,8 +183,8 @@ task curseforge {
         }
         def fileId = postJar(url, headers, "metadata", metadata, "file", main, "CurseForge upload of ${main.name}").id
         logger.lifecycle("CurseForge: uploaded ${main.name} as file ${fileId} of project ${curse_project_id}")
-        ["sourceJar", "deobfJar"].collect { tasks.findByName(it) }.findAll { it != null }.each { jarTask ->
-            File extra = jarTask.archivePath
+        ["sourcesJar", "jar"].collect { tasks.findByName(it) }.findAll { it != null }.each { jarTask ->
+            File extra = jarTask.archiveFile.get().asFile
             Map extraMetadata = [changelog: releaseNotes, changelogType: "markdown", releaseType: "alpha", parentFileID: fileId]
             try {
                 postJar(url, headers, "metadata", extraMetadata, "file", extra, "CurseForge upload of ${extra.name}")
@@ -195,17 +196,17 @@ task curseforge {
     }
 }
 
-task modrinth {
+tasks.register("modrinth") {
     group = "release"
     description = "Uploads the jar to Modrinth (skipped while modrinth_project_id is not set)"
-    dependsOn checkRelease, "build"
-    mustRunAfter curseforge
+    dependsOn "checkRelease", "build"
+    mustRunAfter "curseforge"
     doLast {
         if (!modrinthProjectId) {
             logger.lifecycle("Modrinth: modrinth_project_id is not set, upload skipped")
             return
         }
-        File file = tasks.jar.archivePath
+        File file = tasks.reobfJar.archiveFile.get().asFile
         Map data = [
                 project_id    : modrinthProjectId,
                 name          : "${mod_id_cap} ${version}".toString(),
@@ -225,10 +226,10 @@ task modrinth {
     }
 }
 
-task release {
+tasks.register("release") {
     group = "release"
     description = "Builds the version in gradle.properties, uploads it to CurseForge and Modrinth and tags it as v<version>"
-    dependsOn checkRelease, "build", curseforge, modrinth
+    dependsOn "checkRelease", "build", "curseforge", "modrinth"
     doLast {
         git("tag", "-a", "v${version}", "-m", "${mod_id_cap} ${version}")
         logger.lifecycle("Tagged v${version}")

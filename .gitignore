@@ -24,7 +24,6 @@ bin
 # Other Stuff
 Thumbs.db
 *.hprof
-settings.gradle
 local.properties
 *.log
 logs/
