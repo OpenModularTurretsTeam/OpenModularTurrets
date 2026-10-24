@@ -10,8 +10,8 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ### Added
 
-- NeoForge build for Minecraft 1.21.1 added alongside the Fabric builds
-- Forge build for Minecraft 1.20.1 (not uploaded yet)
+- NeoForge build for Minecraft 1.21.1
+- Forge build for Minecraft 1.20.1
 
 ### Changed
 
