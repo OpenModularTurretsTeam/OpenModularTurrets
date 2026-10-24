@@ -13,7 +13,11 @@ apply from: file("gradle/mod-common.gradle")
 apply from: file("gradle/release.gradle")
 
 group = group_id
-base.archivesName = "${mod_id}-${minecraft_version}"
+// jars: <mod_id>-<version>-<minecraft_version>-forge[-dev|-sources].jar (as OML: name, version, Minecraft, loader)
+base.archivesName = mod_id
+tasks.withType(Jar).configureEach {
+    archiveVersion = "${project.version}-${minecraft_version}-forge"
+}
 
 java {
     withSourcesJar()
