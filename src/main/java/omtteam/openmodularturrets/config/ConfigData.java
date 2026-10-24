@@ -176,6 +176,8 @@ public class ConfigData {
         public boolean canTurretsConcealWithoutAddon = false;
         @Comment("Turrets need ammo to fire.")
         public boolean doTurretsNeedAmmo = true;
+        @Comment("Attached turrets over their type's maxSimultaneous drop, e.g. after the limit was lowered. If false, the limit only applies to placing new turrets.")
+        public boolean dropTurretsOverMaxSimultaneous = false;
         @Comment("If turrets can target players.")
         public boolean globalCanTargetPlayers = true;
         @Comment("If turrets can target neutral mobs (cow, sheep, ...).")

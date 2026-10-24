@@ -420,33 +420,6 @@ class TurretBaseLogicTest {
         }
 
         @Test
-        void remainingTurretSlots() {
-            TurretBaseLogic logic = base(3); // max 2 turrets
-            assertEquals(2, logic.getRemainingTurretSlots(TurretType.ROCKET_TURRET));
-            logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET));
-            assertEquals(1, logic.getRemainingTurretSlots(TurretType.MACHINE_GUN_TURRET));
-            logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET, TurretType.ROCKET_TURRET));
-            assertEquals(0, logic.getRemainingTurretSlots(TurretType.MACHINE_GUN_TURRET));
-        }
-
-        @Test
-        void perTypeLimit() {
-            settings.turrets.put(TurretType.ROCKET_TURRET,
-                    FakeSettings.stats(30, 30, 10, 5000, 10, 1, 0.08D, 0.1D, 2, 0.2D, 0.08D, 0.1D));
-            TurretBaseLogic logic = base(5);
-            logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET));
-            assertEquals(0, logic.getRemainingTurretSlots(TurretType.ROCKET_TURRET));
-            assertEquals(3, logic.getRemainingTurretSlots(TurretType.LASER_TURRET));
-        }
-
-        @Test
-        void turretsNeedASufficientTier() {
-            TurretBaseLogic logic = base(3);
-            assertTrue(logic.supportsTurret(TurretType.GRENADE_TURRET));
-            assertFalse(logic.supportsTurret(TurretType.ROCKET_TURRET));
-        }
-
-        @Test
         void maxRangeIsTheBestTurret() {
             TurretBaseLogic logic = base(5);
             logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET, TurretType.ROCKET_TURRET));

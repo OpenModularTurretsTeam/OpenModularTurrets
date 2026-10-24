@@ -19,6 +19,7 @@ import omtteam.openmodularturrets.client.model.TurretModels;
 import omtteam.openmodularturrets.client.platform.ClientPlatform;
 import omtteam.openmodularturrets.client.platform.ClientPlatformServices;
 import omtteam.openmodularturrets.client.render.effect.RayRenderer;
+import omtteam.openmodularturrets.client.render.outline.TurretPlacementOutline;
 import omtteam.openmodularturrets.platform.Platform;
 import omtteam.openmodularturrets.platform.forge.ForgeNetwork;
 import omtteam.openmodularturrets.platform.forge.ForgePlugins;
@@ -61,6 +62,11 @@ public final class OMTForgeClient {
     private static void onRenderLevelStage(RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
             RayRenderer.render(event.getPoseStack(), event.getCamera().getPosition());
+            TurretPlacementOutline.render(event.getPoseStack(), event.getCamera().getPosition());
+        } else if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            // the last stage with the level's pose and model-view: AFTER_WEATHER runs with the level pose already on
+            // the model-view stack (rotated twice), AFTER_LEVEL with GameRenderer's own pose stack (not rotated)
+            TurretPlacementOutline.renderLabel(event.getPoseStack(), event.getCamera().getPosition());
         }
     }
 }

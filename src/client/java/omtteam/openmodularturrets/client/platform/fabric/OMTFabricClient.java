@@ -19,6 +19,7 @@ import omtteam.openmodularturrets.client.model.TurretModels;
 import omtteam.openmodularturrets.client.platform.ClientPlatform;
 import omtteam.openmodularturrets.client.platform.ClientPlatformServices;
 import omtteam.openmodularturrets.client.render.effect.RayRenderer;
+import omtteam.openmodularturrets.client.render.outline.TurretPlacementOutline;
 
 import java.util.List;
 
@@ -46,8 +47,12 @@ public final class OMTFabricClient implements ClientModInitializer {
         *///?}
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> OMTClient.onDisconnect());
         ClientTickEvents.END_CLIENT_TICK.register(client -> RayRenderer.tick());
-        WorldRenderEvents.AFTER_TRANSLUCENT.register(context ->
-                RayRenderer.render(context.matrixStack(), context.camera().getPosition()));
+        WorldRenderEvents.AFTER_TRANSLUCENT.register(context -> {
+            RayRenderer.render(context.matrixStack(), context.camera().getPosition());
+            TurretPlacementOutline.render(context.matrixStack(), context.camera().getPosition());
+        });
+        WorldRenderEvents.LAST.register(context ->
+                TurretPlacementOutline.renderLabel(context.matrixStack(), context.camera().getPosition()));
     }
 
     /** Other mods' client turret plugins: the {@value OMTClientPlugin#ENTRYPOINT} entrypoints in their {@code fabric.mod.json}. */

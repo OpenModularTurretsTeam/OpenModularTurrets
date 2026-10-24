@@ -26,13 +26,17 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import omtteam.openmodularturrets.compat.BlockCodec;
 import omtteam.openmodularturrets.compat.CompatEntityBlock;
+import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
-import omtteam.openmodularturrets.core.base.TurretBaseLogic;
+import omtteam.openmodularturrets.core.base.TurretPlacement;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 /**
  * A turret, one block per {@link TurretType}. Ported from 1.12.2 {@code BlockAbstractTurretHead}.
@@ -112,15 +116,13 @@ public class TurretBlock extends CompatEntityBlock {
     }
 
     /**
-     * 1.12.2 {@code canPlaceBlockAt}: there must be a base next to the turret with a free turret slot for this type.
-     * The clicked base is preferred; otherwise the first neighbouring base in {@link Direction} order is used.
-     * Disabled turrets, turrets whose tier the base cannot hold and turrets on a face they cannot mount on
-     * ({@link TurretType#canMountOn}) cannot be placed.
+     * 1.12.2 {@code canPlaceBlockAt}: there must be a base next to the turret that takes this type on that face
+     * ({@link TurretPlacement#canAttach}). The clicked base is preferred; otherwise the first neighbouring base in
+     * {@link Direction} order is used. Also asked on the client, by the placement outline.
      */
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        if (!OMTConfig.get().turrets.get(turretType).enabled) return null;
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         Direction clicked = context.getClickedFace();
@@ -137,10 +139,40 @@ public class TurretBlock extends CompatEntityBlock {
 
     /** @param facing direction from the base to the turret */
     private boolean canAttachTo(Level level, BlockPos pos, Direction facing) {
-        if (!turretType.canMountOn(Face.valueOf(facing.name()))) return false;
-        if (!(level.getBlockEntity(pos.relative(facing.getOpposite())) instanceof TurretBaseBlockEntity base)) return false;
-        TurretBaseLogic logic = base.getLogic();
-        return logic.supportsTurret(turretType) && logic.getRemainingTurretSlots(turretType) > 0;
+        TurretPlacement.Result result = attachResult(level, pos, facing);
+        return result != null && result.allowed();
+    }
+
+    /**
+     * Whether this turret may be attached at {@code pos} to the base behind it ({@link TurretPlacement#canAttach}); also
+     * asked on the client, for the reason the placement outline shows.
+     *
+     * @param facing direction from the base to the turret
+     * @return {@code null} if there is no base at {@code pos.relative(facing.getOpposite())}
+     */
+    @Nullable
+    public TurretPlacement.Result attachResult(Level level, BlockPos pos, Direction facing) {
+        BlockPos basePos = pos.relative(facing.getOpposite());
+        if (!(level.getBlockEntity(basePos) instanceof TurretBaseBlockEntity base)) return null;
+        return TurretPlacement.canAttach(turretType, Face.valueOf(facing.name()), base.getLogic().getTier(),
+                attachedTurrets(level, basePos), ConfigLogicSettings.INSTANCE);
+    }
+
+    /**
+     * The turrets facing away from the base at {@code basePos}, read from the world: the base's logic only knows them
+     * on the server, but the placement outline asks on the client. Unloaded neighbours count as empty.
+     */
+    private static Map<Face, TurretType> attachedTurrets(Level level, BlockPos basePos) {
+        Map<Face, TurretType> turrets = new EnumMap<>(Face.class);
+        for (Direction direction : Direction.values()) {
+            BlockPos neighbourPos = basePos.relative(direction);
+            if (!level.isLoaded(neighbourPos)) continue;
+            BlockState state = level.getBlockState(neighbourPos);
+            if (state.getBlock() instanceof TurretBlock turret && state.getValue(FACING) == direction) {
+                turrets.put(Face.valueOf(direction.name()), turret.getTurretType());
+            }
+        }
+        return turrets;
     }
 
     /** 1.12.2 {@code onNeighborChange}: a turret whose base is gone drops itself. */

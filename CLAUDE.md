@@ -436,6 +436,8 @@ omtteam.openmodularturrets.client
   The base is at `pos.relative(facing.getOpposite())`.
 - Turrets can only be placed against a base face.
   A turret without a base does nothing and should break or drop if its base is removed.
+- Whether a turret may be attached or stay is decided in one place, `core.base.TurretPlacement` (`canAttach` / `canStay`, returning a `Result` with the reason); the client asks it too (placement outline), with the turrets read from the world.
+  `maxSimultaneous` only limits placing, unless `turrets.dropTurretsOverMaxSimultaneous` (default false) is set.
 - The **base** finds its turrets by checking its 6 neighbours.
 - The **base** owns all state:
   - targeting settings

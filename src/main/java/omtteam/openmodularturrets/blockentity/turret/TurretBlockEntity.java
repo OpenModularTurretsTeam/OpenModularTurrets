@@ -23,9 +23,11 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.base.BlockEntityBaseWorld;
 import omtteam.openmodularturrets.blockentity.base.LivingTargetEntity;
 import omtteam.openmodularturrets.compat.CompatBlockEntity;
+import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.AmmoDraw;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
+import omtteam.openmodularturrets.core.base.TurretPlacement;
 import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.core.turret.TurretMath;
 import omtteam.openmodularturrets.core.turret.TurretState;
@@ -130,8 +132,9 @@ public class TurretBlockEntity extends CompatBlockEntity {
         if (!level.isLoaded(basePos)) return;
         Optional<TurretBaseBlockEntity> base = turret.getBase();
         TurretType type = turret.getTurretType();
-        // a turret without base, on a base of a lower tier or on a face it cannot mount on drops itself
-        if (base.isEmpty() || !base.get().getLogic().supportsTurret(type) || !type.canMountOn(turret.getFace())) {
+        // a turret without base or one that may not stay there (TurretPlacement.canStay) drops itself
+        if (base.isEmpty() || !TurretPlacement.canStay(type, turret.getFace(), base.get().getLogic().getTier(),
+                base.get().getLogic().getTurrets(), ConfigLogicSettings.INSTANCE).allowed()) {
             level.destroyBlock(pos, true);
             return;
         }

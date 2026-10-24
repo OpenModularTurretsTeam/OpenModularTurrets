@@ -8,6 +8,11 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Added
+
+- Holding a turret while looking at a block next to a turret base outlines where it would go: cyan if it can be placed there, red with a short reason if not (as in 1.12.2)
+- Config option `turrets.dropTurretsOverMaxSimultaneous` (default false): attached turrets over their type's `maxSimultaneous` drop, e.g. after the limit was lowered
+
 ## [4.0.0-beta.6] - 2026-10-24
 
 ### Added

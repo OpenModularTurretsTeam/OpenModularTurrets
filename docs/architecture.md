@@ -135,11 +135,18 @@ It then registers what `OMTClient` lists with its loader: screens, model layers,
 
 Neighbour changes (a turret placed or broken) reach the logic through `TurretBaseLogic.updateNeighbours`.
 
+### Placing a turret (client and server)
+
+`core.base.TurretPlacement` holds the rules: `canAttach` (placing: enabled, face, base tier, the tier's `maxTurrets`, the type's `maxSimultaneous`) and `canStay` (an attached turret: face and tier; `maxSimultaneous` only with `turrets.dropTurretsOverMaxSimultaneous`).
+Both return a `Result` with the reason.
+`TurretBlock.getStateForPlacement` calls `canAttach` with the turrets it reads from the blocks around the base, so the client gets the same answer without the base's neighbour list (which only the server keeps).
+The client's `TurretPlacementOutline` uses that to draw the cyan or red outline while a turret is held; when red, `TurretBlock.attachResult` gives the `Result`, shown as a small label (`message.openmodularturrets.placement.*`).
+
 ### A turret shot (server)
 
 `TurretBlockEntity.serverTick`:
 
-1. A turret without a base, on a base of a lower tier or on a face it may not use drops itself.
+1. A turret without a base, or one that `TurretPlacement.canStay` rejects (lower tier, a face it may not use, optionally over `maxSimultaneous`), drops itself.
 2. It asks its base for the target of its face and turns towards it (`TurretMath`, yaw and pitch relative to the mounting face).
 3. `TurretState.beginShot` checks the cooldown, the base's energy and ammo, and takes them.
 4. The weapon of the turret's definition does the rest: `ProjectileWeapon` spawns projectiles, `RayWeapon` traces rays (`RayWeapons`), `EffectWeapon` and `AreaWeapon` act directly (`EffectWeapons`), `SelfTargetingWeapon` picks its own targets.

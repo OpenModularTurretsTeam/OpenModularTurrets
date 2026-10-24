@@ -5,7 +5,8 @@ package omtteam.openmodularturrets.core.settings;
  *
  * @param baseFireRate          ticks between shots
  * @param baseAccuracyDeviation inaccuracy in percent
- * @param maxSimultaneous       maximum number of turrets of this type per base
+ * @param maxSimultaneous       maximum number of turrets of this type per base; only checked when placing, unless
+ *                              {@link LogicSettings#dropTurretsOverMaxSimultaneous} drops attached turrets over it
  * @param rangeUpgrade          range added per range upgrade
  */
 public record TurretStats(boolean enabled, int baseRange, int baseFireRate, int baseDamage, int powerUsage,

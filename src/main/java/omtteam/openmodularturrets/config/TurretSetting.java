@@ -18,7 +18,7 @@ public class TurretSetting {
     public int powerUsage;
     @Comment("Inaccuracy in percent (accuracy = 100 - value). 0 is perfectly accurate.") @Range(min = 0, max = 100)
     public double baseAccuracyDeviation;
-    @Comment("Maximum number of turrets of this type per base.") @Range(min = 1, max = 6)
+    @Comment("Maximum number of turrets of this type per base. Only checked when placing, unless turrets.dropTurretsOverMaxSimultaneous is true.") @Range(min = 1, max = 6)
     public int maxSimultaneous;
     @Comment("Share of the target's health added as damage per damage amp addon level.") @Range(min = 0, max = 1)
     public double damageAmp;

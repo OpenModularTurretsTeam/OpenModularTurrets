@@ -199,23 +199,6 @@ public class TurretBaseLogic {
     }
 
     /**
-     * How many more turrets of this type may be attached (1.12.2 {@code OMTUtil.getRemainingTurretSlots}): limited by
-     * the tier's {@code baseMaxTurrets} and the type's {@code maxSimultaneous}.
-     */
-    public int getRemainingTurretSlots(TurretType type) {
-        Map<Face, TurretType> turrets = getTurrets();
-        long sameType = turrets.values().stream().filter(type::equals).count();
-        int byTier = settings.baseTier(tier).maxTurrets() - turrets.size();
-        int byType = settings.turret(type).maxSimultaneous() - (int) sameType;
-        return Math.max(0, Math.min(byTier, byType));
-    }
-
-    /** A turret on a base of a lower tier breaks (1.12.2 {@code AbstractDirectedTurret.update}). */
-    public boolean supportsTurret(TurretType type) {
-        return tier >= type.getRequiredBaseTier();
-    }
-
-    /**
      * Max range = best {@code baseRange + range upgrades} of the attached turrets (1.12.2 {@code updateMaxRange}).
      * Skipped until the neighbours are known, so the player's range is not reset while loading.
      */

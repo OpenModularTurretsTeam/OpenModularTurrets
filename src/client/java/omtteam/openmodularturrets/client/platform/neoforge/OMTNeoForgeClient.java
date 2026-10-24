@@ -22,6 +22,7 @@ import omtteam.openmodularturrets.client.model.TurretModels;
 import omtteam.openmodularturrets.client.platform.ClientPlatform;
 import omtteam.openmodularturrets.client.platform.ClientPlatformServices;
 import omtteam.openmodularturrets.client.render.effect.RayRenderer;
+import omtteam.openmodularturrets.client.render.outline.TurretPlacementOutline;
 import omtteam.openmodularturrets.platform.Platform;
 import omtteam.openmodularturrets.platform.neoforge.NeoForgeNetwork;
 import omtteam.openmodularturrets.platform.neoforge.NeoForgePlugins;
@@ -60,6 +61,10 @@ public final class OMTNeoForgeClient {
     private static void onRenderLevelStage(RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
             RayRenderer.render(event.getPoseStack(), event.getCamera().getPosition());
+            TurretPlacementOutline.render(event.getPoseStack(), event.getCamera().getPosition());
+        } else if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            // AFTER_LEVEL comes from GameRenderer after the level, without a pose stack
+            TurretPlacementOutline.renderLabel(event.getPoseStack(), event.getCamera().getPosition());
         }
     }
 }

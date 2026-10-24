@@ -66,6 +66,11 @@ public final class ConfigLogicSettings implements LogicSettings {
     }
 
     @Override
+    public boolean dropTurretsOverMaxSimultaneous() {
+        return OMTConfig.get().turrets.dropTurretsOverMaxSimultaneous;
+    }
+
+    @Override
     public TurretStats turret(TurretType type) {
         return OMTConfig.get().turrets.get(type).toStats();
     }
