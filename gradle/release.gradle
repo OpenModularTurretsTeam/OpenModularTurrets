@@ -11,6 +11,8 @@
 // the version's CHANGELOG.md section and tags the commit as v<version>.
 //
 // Tokens come from ~/.gradle/gradle.properties: curseforge_token, modrinth_token.
+// OMT and OMPD: if omlib_version changed since the previous release tag, the version's CHANGELOG.md section has to
+// mention "OMLib <omlib_version>" (checkOmlibChangelog, which checkRelease and every upload depend on).
 // Per mod (gradle.properties):
 //   curse_project_id, curse_relations (comma-separated <project slug>:<requiredDependency|optionalDependency|
 //   embeddedLibrary|incompatible|tool>),
@@ -97,13 +99,44 @@ def postJar = { String url, Map<String, String> headers, String dataName, Map da
     return readResponse(connection, what)
 }
 
-def git = { String... args ->
+/** Runs git in the mod folder: [exit code, output, error output]. */
+def runGit = { String... args ->
     def process = (["git"] + args.toList()).execute(null, projectDir)
-    String out = process.text
-    if (process.waitFor() != 0) {
-        throw new GradleException("git ${args.join(' ')} failed: ${process.err.text}")
+    def out = new StringBuilder()
+    def err = new StringBuilder()
+    process.waitForProcessOutput(out, err)
+    return [process.exitValue(), out.toString().trim(), err.toString().trim()]
+}
+
+def git = { String... args ->
+    def (code, out, err) = runGit(args)
+    if (code != 0) {
+        throw new GradleException("git ${args.join(' ')} failed: ${err}")
     }
-    return out.trim()
+    return out
+}
+
+/** Like git, but null instead of a failure (e.g. no tag yet). */
+def gitOrNull = { String... args ->
+    def (code, out, err) = runGit(args)
+    return code == 0 ? out : null
+}
+
+/**
+ * The previous release tag (v…) and the omlib_version in its gradle.properties ([tag, version], the version null if
+ * that release had none); null if there is no earlier release tag.
+ */
+def previousOmlibVersion = {
+    String tag = gitOrNull("describe", "--tags", "--abbrev=0", "--match", "v*")
+    if (!tag) {
+        return null
+    }
+    String text = gitOrNull("show", "${tag}:gradle.properties")
+    Properties properties = new Properties()
+    if (text != null) {
+        properties.load(new StringReader(text))
+    }
+    return [tag, properties.getProperty("omlib_version")]
 }
 
 /** The version set in the gradle.properties of the OMLib checkout next to this mod (the workspace), null if there is none. */
@@ -118,9 +151,27 @@ def siblingOmlibVersion = {
             properties.getProperty("release_number"))
 }
 
+// Players have to update OMLib too, so a new OMLib requirement belongs into the release notes. Its own task, so every
+// upload depends on it directly (also when checkRelease is skipped with -x).
+tasks.register("checkOmlibChangelog") {
+    group = "release"
+    description = "Fails if omlib_version changed since the previous release tag and the version's CHANGELOG.md section does not mention it"
+    onlyIf { project.hasProperty("omlib_version") }
+    doLast {
+        def previous = previousOmlibVersion()
+        if (previous != null && previous[1] != omlib_version
+                && !(releaseNotes ?: "").contains("OMLib ${omlib_version}")) {
+            throw new GradleException("omlib_version changed since ${previous[0]} (${previous[1]} -> ${omlib_version}), "
+                    + "but the CHANGELOG.md section of ${version} does not say so; add "
+                    + "\"Requires OMLib ${omlib_version} or newer\" under ### Changed")
+        }
+    }
+}
+
 tasks.register("checkRelease") {
     group = "release"
     description = "Checks that the version, its CHANGELOG.md section, the tokens and the git tree are ready for a release"
+    dependsOn "checkOmlibChangelog"
     doLast {
         if (!releaseNotes) {
             throw new GradleException("CHANGELOG.md has no section for ${version}; run ./gradlew releaseChangelog and commit it first")
@@ -157,7 +208,7 @@ tasks.register("checkRelease") {
 tasks.register("curseforge") {
     group = "release"
     description = "Uploads the jar (with the sources and dev jars as additional files) to CurseForge"
-    dependsOn "checkRelease", "build"
+    dependsOn "checkOmlibChangelog", "checkRelease", "build"
     doLast {
         Map<String, String> headers = ["X-Api-Token": findProperty("curseforge_token").toString(), "User-Agent": userAgent]
         // game version names -> ids, among the types the Minecraft upload API accepts
@@ -199,7 +250,7 @@ tasks.register("curseforge") {
 tasks.register("modrinth") {
     group = "release"
     description = "Uploads the jar to Modrinth (skipped while modrinth_project_id is not set)"
-    dependsOn "checkRelease", "build"
+    dependsOn "checkOmlibChangelog", "checkRelease", "build"
     mustRunAfter "curseforge"
     doLast {
         if (!modrinthProjectId) {
