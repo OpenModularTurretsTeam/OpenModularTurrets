@@ -8,6 +8,8 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+## [4.0.0-beta.6] - 2026-10-24
+
 ### Added
 
 - NeoForge build for Minecraft 1.21.1
