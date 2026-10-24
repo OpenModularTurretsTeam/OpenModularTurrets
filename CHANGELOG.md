@@ -13,6 +13,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 - NeoForge build for Minecraft 1.21.1 added alongside the Fabric builds
 - Forge build for Minecraft 1.20.1 (not uploaded yet)
 
+### Changed
+
+- Hardened blocks can be used as camouflage now (other blocks with a block entity still cannot)
+
 ## [4.0.0-beta.5] - 2026-10-21
 
 ### Added

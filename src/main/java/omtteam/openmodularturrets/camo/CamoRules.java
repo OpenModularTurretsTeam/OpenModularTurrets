@@ -23,13 +23,14 @@ public final class CamoRules {
     }
 
     /**
-     * A full block that is drawn from a normal model, has no block entity of its own and is not itself camouflaged
-     * (OMLib: a full, simple block).
+     * A full block that is drawn from a normal model, has no block entity of its own (unless it is a
+     * {@link PlainLookingBlock}) and is not itself camouflaged (OMLib: a full, simple block).
      */
     public static boolean isValidDisguise(BlockState state) {
         if (state.isAir()) return false;
         Block block = state.getBlock();
-        if (block instanceof EntityBlock || block instanceof CamoBlock) return false;
+        if (block instanceof CamoBlock) return false;
+        if (block instanceof EntityBlock && !(block instanceof PlainLookingBlock)) return false;
         if (state.getRenderShape() != RenderShape.MODEL) return false;
         return state.isCollisionShapeFullBlock(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
     }

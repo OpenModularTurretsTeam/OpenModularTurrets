@@ -13,15 +13,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
+import omtteam.openmodularturrets.camo.PlainLookingBlock;
 import omtteam.openmodularturrets.compat.BlockCodec;
 import omtteam.openmodularturrets.compat.CompatEntityBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Hardened block (OMPD {@code BlockHardened}), one block per tier.
+ * Hardened block (OMPD {@code BlockHardened}), one block per tier. Its block entity only holds the owner, so it can be
+ * used as a disguise.
  */
-public class HardenedBlock extends CompatEntityBlock implements InteractiveBlock {
+public class HardenedBlock extends CompatEntityBlock implements InteractiveBlock, PlainLookingBlock {
     private static final BlockCodec<HardenedBlock> CODEC =
             codecOf(properties -> new HardenedBlock(DefenseTier.ONE, properties));
 
