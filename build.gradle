@@ -1,40 +1,47 @@
-
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url = "https://maven.minecraftforge.net/" }
-        maven { url = "https://plugins.gradle.org/m2/" }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-    }
-}
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'maven-publish'
-apply plugin: 'idea'
-apply plugin: 'java'
-// tests, core isolation and changelog tasks, shared with the workspace build
-apply from: "gradle/mod-common.gradle"
-// local releases to CurseForge and Modrinth (./gradlew -b build.gradle release), see gradle/release.gradle
-apply from: "gradle/release.gradle"
-
-repositories {
-    maven { url = "https://maven.blamejared.com/" }  // JEI, Tesla
-    maven { url = "https://maven.covers1624.net/" }  // RedstoneFlux
-    maven { url = "https://maven.cil.li/" }          // OpenComputers
-    maven { url = "https://modmaven.dev/" }          // The One Probe
-    maven { url = "https://cursemaven.com/" }        // OMLib releases from CurseForge
-    if (project.hasProperty("omlib_local") || releasing) {
-        mavenLocal()                                 // OMLib from publishToMavenLocal
-    }
-    // Hwyla; keep last, it redirects unknown paths to a non-maven site
-    maven { url = "https://maven.tehnut.info/" }
+// Forge 1.12.2 build: RetroFuturaGradle (the maintained 1.12.2 toolchain) on current Gradle. Gradle runs on Java 25
+// (RetroFuturaGradle needs it), the mod is compiled and tested with the Java 8 toolchain. The OMTTeam 1.12 workspace
+// builds this file too.
+plugins {
+    id "java"
+    id "maven-publish"
+    id "com.gtnewhorizons.retrofuturagradle"
 }
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8"
+// version, tests, core isolation, coverage, PIT, dependency map, changelog tasks, source tokens
+apply from: file("gradle/mod-common.gradle")
+// local releases to CurseForge and Modrinth (./gradlew release), see gradle/release.gradle
+apply from: file("gradle/release.gradle")
 
-group = "${group_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "${mod_id}-${minecraft_version}"
+group = group_id
+base.archivesName = "${mod_id}-${minecraft_version}"
+
+java {
+    withSourcesJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+        // Azul covers the most platforms for Java 8 toolchains
+        vendor = JvmVendorSpec.AZUL
+    }
+}
+
+// The bundled ComputerCraft API (src/api/java): compiled against, but not part of the jar (as FG2's api source set);
+// ComputerCraft itself provides it at runtime
+sourceSets {
+    api {
+        java.srcDirs = ["src/api/java"]
+        compileClasspath += configurations.compileClasspath
+    }
+    main.compileClasspath += api.output
+    test.compileClasspath += api.output
+    test.runtimeClasspath += api.output
+}
+
+minecraft {
+    mcVersion = minecraft_version
+    mcpMappingChannel = mcp_mapping_channel
+    mcpMappingVersion = mcp_mapping_version
+    username = "Developer"
+}
 
 // omlib_version is an OMLib version as composed by mod-common.gradle (4.0.0-alpha.1, 4.0.0-beta.2, 4.0.0); the jar accepts it
 // and every later OMLib below the next major version (FML orders 4.0.0-alpha.1 < 4.0.0-alpha.2 < 4.0.0-beta.1 < 4.0.0)
@@ -43,93 +50,91 @@ if (!omlibParts.matches()) {
     throw new GradleException("omlib_version '${omlib_version}' must look like 4.0.0, 4.0.0-alpha.1 or 4.0.0-beta.2")
 }
 // the first pre-release of the next major version is the exclusive upper bound
-String omlib_max_version = "${omlibParts.group(1).toInteger() + 1}.0.0-alpha"
+String omlibMaxVersion = "${omlibParts.group(1).toInteger() + 1}.0.0-alpha"
 
-minecraft {
-    version = "${forge_version}"
-    runDir = "run"
+// the tokens FG2's `replace` filled in (gradle/mod-common.gradle)
+sourceTokens["@VERSION@"] = version.toString()
+sourceTokens["omlib@[0.0.0,)"] = "omlib@[${omlib_version},${omlibMaxVersion})".toString()
 
-    replace "@VERSION@", project.version
-    replace "omlib@[0.0.0,)", "omlib@[" + omlib_version + "," + omlib_max_version + ")"
+/** In the OMTTeam 1.12 workspace OMLib is a project of the same build. */
+def omlibProject = findProject(":OMLib")
 
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20171212"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    useDepAts = true
-}
-
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include "mcmod.info"
-
-        // replace version and mcversion
-        expand 'version': project.version, 'mcversion': project.minecraft.version
+repositories {
+    maven { url = "https://maven.blamejared.com/" }  // JEI, Tesla
+    maven { url = "https://maven.covers1624.net/" }  // RedstoneFlux
+    maven { url = "https://maven.cil.li/" }          // OpenComputers
+    maven { url = "https://modmaven.dev/" }          // The One Probe
+    maven {
+        url = "https://cursemaven.com/"              // OMLib releases and Hwyla from CurseForge
+        content { includeGroup "curse.maven" }
     }
-
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "mcmod.info"
+    if (omlibProject == null && (project.hasProperty("omlib_local") || releasing)) {
+        mavenLocal {                                 // OMLib from publishToMavenLocal
+            content { includeGroup group_prefix }
+        }
     }
 }
 
-configurations {
-    runtime.exclude group: "ValkyrienWarfareRevamped", module: "valkyrienwarfare"
+configurations.named("runtimeClasspath") {
+    exclude group: "ValkyrienWarfareRevamped", module: "valkyrienwarfare"
 }
 
 dependencies {
-    deobfProvided "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
-    testCompile "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
-    compile "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version}:api"
-    testCompile "mcp.mobius.waila:Hwyla:${hwyla_version}_${minecraft_version}:api"
-    deobfProvided "cofh:RedstoneFlux:${minecraft_version_short}-${redstoneflux_version}:universal"
-    testCompile "cofh:RedstoneFlux:${minecraft_version_short}-${redstoneflux_version}:universal"
-    deobfProvided "mcjty.theoneprobe:TheOneProbe-${minecraft_version_short}:${minecraft_version_short}-${top_version}"
-    testCompile "mcjty.theoneprobe:TheOneProbe-${minecraft_version_short}:${minecraft_version_short}-${top_version}"
-    deobfProvided "li.cil.oc:OpenComputers:MC${minecraft_version}-${oc_version}"
-    testCompile "li.cil.oc:OpenComputers:MC${minecraft_version}-${oc_version}"
-    deobfProvided "net.darkhax.tesla:Tesla-${minecraft_version_short}:${tesla_version}"
-    testCompile "net.darkhax.tesla:Tesla-${minecraft_version_short}:${tesla_version}"
-    // -Pomlib_local and releases build against the OMLib omlib_version from `gradlew publishToMavenLocal` (OMLib's
-    // `release` publishes it) instead of the CurseForge release
-    if (project.hasProperty("omlib_local") || releasing) {
-        compileOnly "omtteam:omlib:${minecraft_version}-${omlib_version}:dev"
-        testCompile "omtteam:omlib:${minecraft_version}-${omlib_version}:dev"
+    // @ParametersAreNullableByDefault (the JSR-305 of Minecraft's libraries is older than FG2's)
+    compileOnly "com.google.code.findbugs:jsr305:3.0.2"
+    // provided by other mods at runtime; the tests see them too
+    [
+            "mezz.jei:jei_${minecraft_version}:${jei_version}:api",
+            "cofh:RedstoneFlux:${minecraft_version_short}-${redstoneflux_version}:universal",
+            "mcjty.theoneprobe:TheOneProbe-${minecraft_version_short}:${minecraft_version_short}-${top_version}",
+            "li.cil.oc:OpenComputers:MC${minecraft_version}-${oc_version}",
+            "net.darkhax.tesla:Tesla-${minecraft_version_short}:${tesla_version}",
+    ].each { String notation ->
+        compileOnly rfg.deobf(notation)
+        testImplementation rfg.deobf(notation)
+    }
+    // Hwyla (the full mod, deobfuscated); optional at runtime, the plugin is only loaded by Hwyla
+    compileOnly rfg.deobf("curse.maven:hwyla-253449:${hwyla_curse_file_id}")
+    testImplementation rfg.deobf("curse.maven:hwyla-253449:${hwyla_curse_file_id}")
+
+    if (omlibProject != null) {
+        // RetroFuturaGradle marks all of OMLib's configurations, so name the one to use
+        implementation project(path: omlibProject.path, configuration: "runtimeElements")
+    } else if (project.hasProperty("omlib_local") || releasing) {
+        // -Pomlib_local and releases: the OMLib omlib_version from `gradlew publishToMavenLocal` (OMLib's `release`
+        // publishes it) instead of the CurseForge release; its dev jar has the same MCP names (deobfuscating the SRG
+        // jar misses the abstract Minecraft methods OMLib declares, e.g. CamoBakedModel.getParticleTexture)
+        compileOnly "${group_prefix}:omlib:${minecraft_version}-${omlib_version}:dev"
+        testImplementation "${group_prefix}:omlib:${minecraft_version}-${omlib_version}:dev"
     } else {
-        deobfProvided "curse.maven:omlib-254334:${omlib_curse_file_id}"
-        testCompile "curse.maven:omlib-254334:${omlib_curse_file_id}"
+        compileOnly rfg.deobf("curse.maven:omlib-254334:${omlib_curse_file_id}")
+        testImplementation rfg.deobf("curse.maven:omlib-254334:${omlib_curse_file_id}")
     }
 }
 
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = "dev"
+processResources {
+    def props = [version: version.toString(), mcversion: minecraft_version]
+    inputs.properties(props)
+    filesMatching("mcmod.info") { expand(props) }
 }
 
-tasks.build.dependsOn deobfJar, sourceJar
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
 
+// reobfJar (SRG names) is the jar players install; jar is the dev jar (MCP names)
 publishing {
-    tasks.publish.dependsOn "build"
     publications {
         mavenJava(MavenPublication) {
-            groupId group_prefix
-            version minecraft_version + "-" + project.version
-            artifactId mod_id
-            artifact jar
-            artifact sourceJar
-            artifact deobfJar
+            groupId = group_prefix
+            artifactId = mod_id
+            version = "${minecraft_version}-${project.version}"
+            artifact tasks.reobfJar
+            artifact(tasks.jar) { classifier = "dev" }
+            artifact tasks.sourcesJar
         }
     }
     repositories {
         mavenLocal()
     }
 }
-
