@@ -162,7 +162,10 @@ tasks.named("check") { dependsOn "jacocoTestReport" }
 // fails. Surviving mistakes show behaviour the tests do not pin down. Report only, not part of check.
 // PIT 1.17 is the last release that runs on Java 8. Report: <build dir>/reports/pitest/index.html
 configurations {
-    pitest
+    // resolved by the pitest task only; not offered to other projects
+    pitest {
+        canBeConsumed = false
+    }
 }
 
 dependencies {

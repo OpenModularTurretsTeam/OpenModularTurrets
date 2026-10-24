@@ -88,7 +88,8 @@ dependencies {
     testImplementation rfg.deobf("curse.maven:hwyla-253449:${hwyla_curse_file_id}")
 
     if (omlibProject != null) {
-        implementation omlibProject
+        // RetroFuturaGradle marks all of OMLib's configurations, so name the one to use
+        implementation project(path: omlibProject.path, configuration: "runtimeElements")
     } else if (project.hasProperty("omlib_local") || releasing) {
         // -Pomlib_local and releases: the OMLib omlib_version from `gradlew publishToMavenLocal` (OMLib's `release`
         // publishes it) instead of the CurseForge release; its dev jar has the same MCP names (deobfuscating the SRG
