@@ -21,6 +21,9 @@ val basePackage = property("maven_group") as String
 version = "${property("mod_version")}+$minecraftVersion-$loader"
 group = basePackage
 base.archivesName = property("archives_base_name") as String
+// Jar names are <archives_base_name>-<mod_version>-mc<minecraft version>-<loader>; the mod metadata keeps the "+" version
+val archiveVersionName = "${property("mod_version")}-mc$minecraftVersion-$loader"
+tasks.withType<AbstractArchiveTask>().configureEach { archiveVersion = archiveVersionName }
 
 repositories {
     // Optional integrations such as Jade, only from Modrinth's maven

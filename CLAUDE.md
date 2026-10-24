@@ -173,6 +173,7 @@ The setup and the patterns come from OpenModularLighting (branch `neoforge-test`
   New code must not use Fabric API or Team Reborn Energy outside `platform/fabric` (and `datagen`), or the NeoForge and Forge nodes stop compiling.
 - NeoForge and Forge publishing is active (enabled by the user on 2026-10-24); `publish_enabled=false` in a node's `gradle.properties` would turn that node back into a dry run even with tokens.
 - The mod version is `<mod_version>+<minecraft version>-<loader>`, so the jars of both loaders can be told apart.
+  The jar files are named `<mod_id>-<mod_version>-mc<minecraft version>-<loader>.jar` (`archiveVersion` in `mod-common`; the mod metadata and publishing keep the `+` version).
 
 ### NeoForge port: design decisions (made by the user)
 
