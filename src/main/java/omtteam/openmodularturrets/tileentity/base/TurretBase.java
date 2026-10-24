@@ -37,7 +37,6 @@ import omtteam.omlib.core.machine.MachineMode;
 import omtteam.omlib.network.MessageCamoSettings;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.power.OMEnergyStorage;
-import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.tileentity.TileEntityTrustedMachine;
 import omtteam.omlib.util.EnumMachineMode;
 import omtteam.omlib.util.NetworkUtil;
@@ -406,7 +405,7 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
 
     @Override
     @Nonnull
-    public TileEntityOwnedBlock getOwnedBlock() {
+    public TileEntity getCamoTileEntity() {
         return this;
     }
 

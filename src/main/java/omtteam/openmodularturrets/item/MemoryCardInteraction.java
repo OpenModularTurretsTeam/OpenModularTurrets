@@ -176,13 +176,13 @@ public final class MemoryCardInteraction {
                 settings.setLightValue(light.value());
                 settings.setLightOpacity(light.opacity());
                 host.updateCamoSettingsToPlayers();
-                host.getOwnedBlock().getWorld().checkLight(host.getOwnedBlock().getPos());
+                host.getCamoTileEntity().getWorld().checkLight(host.getCamoTileEntity().getPos());
                 applied = true;
             } else {
                 skipped.add("light");
             }
         }
-        host.getOwnedBlock().markDirty();
+        host.getCamoTileEntity().markDirty();
         return applied;
     }
 
