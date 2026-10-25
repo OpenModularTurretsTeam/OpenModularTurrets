@@ -19,15 +19,16 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.api.OMTPlugin;
 import omtteam.openmodularturrets.block.InteractiveBlock;
-import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.energy.EnergyAccess;
 import omtteam.openmodularturrets.entity.projectile.KillCounter;
 import omtteam.openmodularturrets.inventory.ItemAccess;
+import omtteam.openmodularturrets.network.ConfigSync;
 import omtteam.openmodularturrets.platform.Platform;
 import omtteam.openmodularturrets.platform.PlatformServices;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.registry.RegistrationStep;
 import omtteam.openmodularturrets.registry.TurretRegistry;
+import omtteam.openmodularturrets.startup.OMTStartup;
 
 import java.util.HashSet;
 import java.util.List;
@@ -40,13 +41,13 @@ import java.util.function.BiFunction;
  */
 @Mod(OMT.MOD_ID)
 public final class OMTNeoForge {
-    private final List<RegistrationStep> steps = OMT.registrationSteps();
+    private final List<RegistrationStep> steps = OMTStartup.registrationSteps();
     private final Set<RegistrationStep> done = new HashSet<>();
 
     public OMTNeoForge(IEventBus modBus) {
         Platform.install(new PlatformServices(new NeoForgeLoaderInfo(), new NeoForgeFuel(), new NeoForgeNetwork(modBus),
                 new NeoForgeMenus(), new NeoForgeEnergy()));
-        OMT.init(NeoForgePlugins.find(OMTPlugin.Register.class, OMTPlugin.class, TurretRegistry.Plugin::new));
+        OMTStartup.init(NeoForgePlugins.find(OMTPlugin.Register.class, OMTPlugin.class, TurretRegistry.Plugin::new));
         modBus.addListener(this::onRegister);
         modBus.addListener(this::onCommonSetup);
         modBus.addListener(OMTNeoForge::onRegisterCapabilities);
@@ -112,7 +113,7 @@ public final class OMTNeoForge {
 
     private static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            OMTConfig.onPlayerJoin(player);
+            ConfigSync.onPlayerJoin(player);
         }
     }
 

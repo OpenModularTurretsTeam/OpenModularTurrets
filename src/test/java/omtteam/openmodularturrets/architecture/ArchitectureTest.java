@@ -37,11 +37,13 @@ class ArchitectureTest {
      * so does a cycle that shrank or disappeared until it is updated here, so the list always shows the real state.
      */
     private static final List<Set<String>> KNOWN_CYCLES = List.of(
-            // registry, blocks, block entities, items, menus and network all reach each other
-            Set.of("(root)", "api", "api.weapon", "block", "block.base", "block.defense", "block.misc", "block.turret",
+            // registry, blocks, block entities, menus and network all reach each other; the turret API's weapons take
+            // the block entities. Out of it since 2026-10-25: (root) (start-up in startup.OMTStartup), config (addon
+            // turret defaults handed to OMTConfig.init, join sync in network.ConfigSync), security, item
+            // (MemoryCardInteraction in block), camo (CamoMenus in menu)
+            Set.of("api", "api.weapon", "block", "block.base", "block.defense", "block.misc", "block.turret",
                     "blockentity", "blockentity.base", "blockentity.defense", "blockentity.misc", "blockentity.turret",
-                    "camo", "config", "entity.projectile", "inventory", "item", "menu", "network", "registry",
-                    "security"),
+                    "entity.projectile", "inventory", "menu", "network", "registry"),
             Set.of("core.base", "core.item", "core.settings", "core.target", "core.turret", "core.world"),
             // the compat facades forward to the platform services, whose interfaces use the facades' types
             Set.of("compat", "compat.network", "platform"),

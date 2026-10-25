@@ -43,7 +43,7 @@ The other directions are forbidden and checked by the build (see [Rules the buil
 
 Two directions, so that gameplay code stays loader-free:
 
-- Where the loader is in charge (registration, events, capabilities, client registrations), the loader entrypoint (`platform/<loader>/OMTFabric`, `OMTNeoForge`, `OMTForge`, and their client counterparts) calls shared code: `OMT.registrationSteps()`, `InteractiveBlock.handleUse`, `OMTConfig.onPlayerJoin`, `KillCounter.onDeath`, `OMTClient.register…`.
+- Where the loader is in charge (registration, events, capabilities, client registrations), the loader entrypoint (`platform/<loader>/OMTFabric`, `OMTNeoForge`, `OMTForge`, and their client counterparts) calls shared code: `OMTStartup.registrationSteps()`, `InteractiveBlock.handleUse`, `ConfigSync.onPlayerJoin`, `KillCounter.onDeath`, `OMTClient.register…`.
 - Where gameplay code must reach the loader, it calls a small service through `platform.Platform` (`LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`; on the client `ClientPlatform` with `ClientNetwork`).
   Each entrypoint installs its implementations first thing; the `compat` facades (`NetworkCompat`, `MenuCompat`, `ClientNetworkCompat`) forward to them.
 
@@ -83,7 +83,8 @@ Packages below `omtteam.openmodularturrets` (main):
 
 | Package | Responsibility |
 | --- | --- |
-| `OMT` | shared start-up (`init`, `registrationSteps`), `MOD_ID`, `OMT.id(path)` |
+| `OMT` | shared constants: `MOD_ID`, `LOGGER`, `OMT.id(path)` (depends on nothing of the mod but `VersionCompat`) |
+| `startup` | shared start-up (`OMTStartup`: `init`, `registrationSteps`), called by the loader entrypoints |
 | `core.base` | `TurretBaseLogic`: targeting per face, ammo, energy, upgrades, addons, redstone modes |
 | `core.turret` | turret types and ammo types, `TurretState` (cooldown, concealment), aim and damage math (`TurretMath`, `RayMath`, `ProjectileMath`) |
 | `core.target` | `TargetSelector`: who is a valid target and who is the best one |
@@ -96,9 +97,9 @@ Packages below `omtteam.openmodularturrets` (main):
 | `block.*` | blocks: bases, turrets, defenses (hardened blocks, walls, fences, camo trap), lever, generator |
 | `blockentity.*` | block entities; `blockentity.base` holds the adapters to core |
 | `entity.projectile` | turret projectiles and turret damage (`TurretDamage`) |
-| `item`, `inventory`, `menu` | items (ammo, upgrades, addons, memory card), base inventory rules and `ItemAccess` (the slots other blocks may use, wrapped by the loader adapters), container menus |
-| `network` | packets: client→server requests (always re-validated) and server→client sync |
-| `config` | the JSON config: fields, comments, ranges, migration, server→client sync |
+| `item`, `inventory`, `menu` | items (ammo, upgrades, addons, memory card; using the card on a block is `block.MemoryCardInteraction`), base inventory rules and `ItemAccess` (the slots other blocks may use, wrapped by the loader adapters), container menus |
+| `network` | packets: client→server requests (always re-validated) and server→client sync (`ConfigSync` sends the config on join) |
+| `config` | the JSON config: fields, comments, ranges, migration, the server's config on clients |
 | `security`, `camo` | Minecraft side of trust lists (NBT, player lookup) and camouflage |
 | `compat` | every 1.20.1 / 1.21.1 difference (`VersionCompat`, `CompatBlockEntity`, networking, menus), small loader differences (`//? if fabric` / `neoforge` / `forge`), Jade, and Sable contraptions (`SubLevelCompat`: poses and velocities through Sable Companion, 1.21.1 only; `client.compat.ClientSubLevelCompat` for the drawn pose) |
 | `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`); `platform.fabric` / `platform.neoforge` / `platform.forge` hold the entrypoints, the implementations and the energy/item adapters, and only compile for their loader |
@@ -110,19 +111,19 @@ Packages below `omtteam.openmodularturrets` (main):
 
 ### Startup
 
-The loader entrypoint (`OMTFabric`, `OMTNeoForge`, `OMTForge`) first installs the platform services, then calls `OMT.init(plugins)` with the turret plugins of other mods it found.
+The loader entrypoint (`OMTFabric`, `OMTNeoForge`, `OMTForge`) first installs the platform services, then calls `OMTStartup.init(plugins)` with the turret plugins of other mods it found.
 The order matters:
 
 1. `TurretRegistry.load(plugins)`: built-in turrets (`registry.BuiltinTurrets`), then the plugins (on Fabric the `openmodularturrets` entrypoints, on NeoForge and Forge the classes marked `@OMTPlugin.Register`, found by `NeoForgePlugins` / `ForgePlugins`).
    The turret types are frozen afterwards.
 2. `OMTPackets.init()`: packet types (NeoForge accepts them only until its payload registration event).
-3. `OMTConfig.init()`: needs the turret types for their default stats; blocks need the config for their properties.
+3. `OMTConfig.init(addonTurretDefaults)`: needs the default stats of other mods' turrets (`TurretRegistry.addonDefaultStats()`); blocks need the config for their properties.
 
-Then the registrations of `OMT.registrationSteps()`: sounds, blocks, items, block entities, entities, creative tab, menus.
+Then the registrations of `OMTStartup.registrationSteps()`: sounds, blocks, items, block entities, entities, creative tab, menus.
 Fabric runs them in this order; NeoForge and Forge run each in the `RegisterEvent` of its registry (and fail at common setup if one never ran).
 A registry class registers its content when it is loaded, so it must not be touched before its step; `ModSounds` is the exception (loading it only creates the sounds, which the turret definitions use in step 1).
 
-Last, the entrypoint wires its loader to the shared code: the item and energy access of the base and the generator (`FabricBlockLookups`, NeoForge capabilities, Forge capabilities attached in `AttachCapabilitiesEvent` by `ForgeBlockCapabilities`), block use (`InteractiveBlock.handleUse`), the config sync on join (`OMTConfig.onPlayerJoin`) and the kill counter (`KillCounter.onDeath`).
+Last, the entrypoint wires its loader to the shared code: the item and energy access of the base and the generator (`FabricBlockLookups`, NeoForge capabilities, Forge capabilities attached in `AttachCapabilitiesEvent` by `ForgeBlockCapabilities`), block use (`InteractiveBlock.handleUse`), the config sync on join (`ConfigSync.onPlayerJoin`) and the kill counter (`KillCounter.onDeath`).
 
 On the client, the loader client entrypoint (`OMTFabricClient`, `OMTNeoForgeClient`, `OMTForgeClient`; Forge 1.20.1 has no client-only `@Mod` classes, so `OMTForge` constructs it by name) installs the client platform services and calls `OMTClient.init(plugins)` (client packet handlers, ray packets, turret models, also from other mods).
 It then registers what `OMTClient` lists with its loader: screens, model layers, block entity and entity renderers, item renderers, cutout blocks and tooltips, plus the camouflage models (`FabricCamoModel`, `NeoForgeCamoModel`, `ForgeCamoModel`) and the ray rendering.
@@ -264,8 +265,9 @@ Not every survivor is a gap: where `>` and `>=` behave the same for every possib
 Things that make the code harder to work with than it should be.
 They are known and measured, not hidden:
 
-- **A large package cycle.** 22 game-layer packages (registry, blocks, block entities, items, menus, network, config, api, projectiles, security, camo) depend on each other in a loop, so none of them can be understood or changed in isolation.
-  Typical for Minecraft mods (registry ↔ blocks ↔ block entities), but much of it comes from single imports; `noNewPackageCycles` and the dependency map list the cheapest links to cut.
+- **A large package cycle.** 17 game-layer packages (registry, blocks, block entities, menus, network, inventory, api, projectiles) depend on each other in a loop, so none of them can be understood or changed in isolation.
+  Typical for Minecraft mods (registry ↔ blocks ↔ block entities, and the turret API's weapons take the block entities); `noNewPackageCycles` and the dependency map list the cheapest links to cut.
+  `OMT`, `config`, `security`, `item` and `camo` were taken out of it (start-up in `startup`, config sync in `network`, card use in `block`, camo menu opening in `menu`); `inventory` hangs on one link (`AmmoRules` → `TurretRegistry`).
   Three smaller cycles exist: in `core` (six packages around `core.base`), in `client` (`client.api` ↔ `client.model`), and between the `compat` facades and `platform` (the facades forward to the services, whose interfaces use the facades' types; accepted for the NeoForge port).
 - **`TurretBaseLogic` is large** (about 700 lines): targeting, ammo, energy, upgrades, addons and warnings in one class.
   Candidates to move out are the ammo drawing and the energy generation.

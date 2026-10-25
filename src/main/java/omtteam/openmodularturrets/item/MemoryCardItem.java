@@ -16,7 +16,7 @@ import java.util.Optional;
 
 /**
  * Turret memory card (1.12.2 {@code UsableMetaItem} meta 2): sneak-click a turret base or camouflage trap to copy its
- * settings onto the card, click another one to write them (see {@link MemoryCardInteraction}, which checks the
+ * settings onto the card, click another one to write them (see {@link omtteam.openmodularturrets.block.MemoryCardInteraction}, which checks the
  * permissions). Sneak-clicking anything else clears the card.
  */
 public class MemoryCardItem extends Item {

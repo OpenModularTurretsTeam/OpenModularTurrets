@@ -21,12 +21,13 @@ import omtteam.openmodularturrets.api.OMTPlugin;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.misc.GeneratorBlockEntity;
-import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.entity.projectile.KillCounter;
+import omtteam.openmodularturrets.network.ConfigSync;
 import omtteam.openmodularturrets.platform.Platform;
 import omtteam.openmodularturrets.platform.PlatformServices;
 import omtteam.openmodularturrets.registry.RegistrationStep;
 import omtteam.openmodularturrets.registry.TurretRegistry;
+import omtteam.openmodularturrets.startup.OMTStartup;
 
 import java.util.HashSet;
 import java.util.List;
@@ -42,14 +43,14 @@ public final class OMTForge {
     /** Started by name: main cannot see the client source set. */
     private static final String CLIENT_ENTRYPOINT = "omtteam.openmodularturrets.client.platform.forge.OMTForgeClient";
 
-    private final List<RegistrationStep> steps = OMT.registrationSteps();
+    private final List<RegistrationStep> steps = OMTStartup.registrationSteps();
     private final Set<RegistrationStep> done = new HashSet<>();
 
     public OMTForge() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         Platform.install(new PlatformServices(new ForgeLoaderInfo(), new ForgeFuel(), new ForgeNetwork(),
                 new ForgeMenus(), new ForgeEnergy()));
-        OMT.init(ForgePlugins.find(OMTPlugin.Register.class, OMTPlugin.class, TurretRegistry.Plugin::new));
+        OMTStartup.init(ForgePlugins.find(OMTPlugin.Register.class, OMTPlugin.class, TurretRegistry.Plugin::new));
         modBus.addListener(this::onRegister);
         modBus.addListener(this::onCommonSetup);
         MinecraftForge.EVENT_BUS.addGenericListener(BlockEntity.class, OMTForge::onAttachCapabilities);
@@ -112,7 +113,7 @@ public final class OMTForge {
 
     private static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            OMTConfig.onPlayerJoin(player);
+            ConfigSync.onPlayerJoin(player);
         }
     }
 

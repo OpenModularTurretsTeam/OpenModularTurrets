@@ -18,7 +18,7 @@ public final class OMTGameTestMod {
     private OMTGameTestMod() {
     }
 
-    /** Registration steps of the test content, like {@code OMT#registrationSteps}. */
+    /** Registration steps of the test content, like {@code OMTStartup#registrationSteps}. */
     public static List<RegistrationStep> registrationSteps() {
         return List.of(new RegistrationStep(Registries.ENTITY_TYPE, ApiTestEntities::init));
     }

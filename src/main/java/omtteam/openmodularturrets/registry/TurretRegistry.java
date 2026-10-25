@@ -6,6 +6,7 @@ import omtteam.openmodularturrets.api.AmmoDefinition;
 import omtteam.openmodularturrets.api.OMTPlugin;
 import omtteam.openmodularturrets.api.TurretDefinition;
 import omtteam.openmodularturrets.api.TurretRegistrar;
+import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.turret.TurretTypes;
@@ -20,7 +21,7 @@ import java.util.Optional;
 
 /**
  * Turret and ammo definitions: the built-in ones ({@link BuiltinTurrets}) and those of other mods
- * ({@link OMTPlugin}s, found by the loader entrypoint). Loaded once, first thing in {@code OMT.init}: the config needs
+ * ({@link OMTPlugin}s, found by the loader entrypoint). Loaded once, first thing in {@code OMTStartup.init}: the config needs
  * the turrets' default stats and the blocks need the turret types.
  */
 public final class TurretRegistry {
@@ -71,6 +72,15 @@ public final class TurretRegistry {
     /** All turret definitions, built-in first, in registration order. */
     public static Collection<TurretDefinition> turrets() {
         return Collections.unmodifiableCollection(TURRETS.values());
+    }
+
+    /** The default stats of the turrets added by other mods, in registration order (for their config entries). */
+    public static Map<TurretType, TurretStats> addonDefaultStats() {
+        Map<TurretType, TurretStats> stats = new LinkedHashMap<>();
+        for (TurretDefinition turret : TURRETS.values()) {
+            if (!turret.type().isBuiltIn()) stats.put(turret.type(), turret.defaultStats());
+        }
+        return stats;
     }
 
     public static Optional<AmmoDefinition> ammo(AmmoType type) {

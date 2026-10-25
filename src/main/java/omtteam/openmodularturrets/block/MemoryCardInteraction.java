@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.item;
+package omtteam.openmodularturrets.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -16,6 +16,7 @@ import omtteam.openmodularturrets.camo.CamoHost;
 import omtteam.openmodularturrets.camo.CamoRules;
 import omtteam.openmodularturrets.core.card.MemoryCardData;
 import omtteam.openmodularturrets.core.card.MemoryCardRules;
+import omtteam.openmodularturrets.item.MemoryCardItem;
 import omtteam.openmodularturrets.network.PacketValidation;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 

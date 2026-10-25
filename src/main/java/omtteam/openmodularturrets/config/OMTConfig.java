@@ -6,21 +6,22 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import net.minecraft.server.level.ServerPlayer;
 import omtteam.openmodularturrets.OMT;
-import omtteam.openmodularturrets.compat.network.NetworkCompat;
-import omtteam.openmodularturrets.network.ConfigSyncPacket;
-import omtteam.openmodularturrets.network.OMTPackets;
+import omtteam.openmodularturrets.core.settings.TurretStats;
+import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.platform.Platform;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Loads, validates and saves {@code config/openmodularturrets.json}, and syncs it from the server to clients.
+ * Loads, validates and saves {@code config/openmodularturrets.json}, and holds the server's config on clients
+ * ({@code network.ConfigSync} sends it).
  * <p>
  * Missing keys are filled in with defaults, unknown keys are dropped and out-of-range values are clamped; the file
  * is rewritten whenever that happens. The file is JSON with {@code //} comments (read leniently): every key is
@@ -32,6 +33,8 @@ public final class OMTConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private static final String FILE_NAME = OMT.MOD_ID + ".json";
 
+    /** Default stats of the turrets added by other mods, in registration order; set by {@link #init}. */
+    private static Map<TurretType, TurretStats> addonTurretDefaults = Map.of();
     /** Config loaded from this instance's own file. */
     private static ConfigData local = new ConfigData();
     /** Config in effect: the server's while connected to a remote server, otherwise {@link #local}. */
@@ -49,19 +52,26 @@ public final class OMTConfig {
 
     /**
      * Loads the config file (writing defaults if it is missing).
+     *
+     * @param addonTurretDefaults the default stats of the turrets added by other mods, for their
+     *                            {@code turrets.addon_turrets} entries
      */
-    public static void init() {
+    public static void init(Map<TurretType, TurretStats> addonTurretDefaults) {
+        OMTConfig.addonTurretDefaults = Collections.unmodifiableMap(new LinkedHashMap<>(addonTurretDefaults));
         load();
     }
 
+    /** The default stats of the turrets added by other mods, as passed to {@link #init}. */
+    static Map<TurretType, TurretStats> addonTurretDefaults() {
+        return addonTurretDefaults;
+    }
+
     /**
-     * Sends the server's config to a joining player; called by the loader's player-join event on the server.
+     * The config loaded from this instance's own file as JSON, which the server sends to joining clients
+     * ({@code network.ConfigSync}).
      */
-    public static void onPlayerJoin(ServerPlayer player) {
-        // The singleplayer host already uses this config
-        if (!player.server.isSingleplayerOwner(player.getGameProfile()) && NetworkCompat.canSend(player, OMTPackets.CONFIG_SYNC)) {
-            NetworkCompat.sendToPlayer(player, OMTPackets.CONFIG_SYNC, new ConfigSyncPacket(GSON.toJson(local)));
-        }
+    public static String localJson() {
+        return GSON.toJson(local);
     }
 
     public static void load() {

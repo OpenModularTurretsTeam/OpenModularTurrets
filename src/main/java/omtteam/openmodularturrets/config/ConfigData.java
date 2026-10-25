@@ -6,9 +6,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import omtteam.openmodularturrets.OMT;
-import omtteam.openmodularturrets.api.TurretDefinition;
+import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.registry.TurretRegistry;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -246,14 +245,10 @@ public class ConfigData {
         @SerializedName("addon_turrets")
         public Map<String, TurretSetting> addonTurrets = addonDefaults();
 
-        /** The default stats of every turret added by another mod (they must be registered before). */
+        /** The default stats of every turret added by another mod (handed to {@link OMTConfig#init}). */
         private static Map<String, TurretSetting> addonDefaults() {
             Map<String, TurretSetting> defaults = new LinkedHashMap<>();
-            for (TurretDefinition turret : TurretRegistry.turrets()) {
-                if (!turret.type().isBuiltIn()) {
-                    defaults.put(turret.type().getId(), TurretSetting.of(turret.defaultStats()));
-                }
-            }
+            OMTConfig.addonTurretDefaults().forEach((type, stats) -> defaults.put(type.getId(), TurretSetting.of(stats)));
             return defaults;
         }
 
@@ -261,8 +256,11 @@ public class ConfigData {
         public TurretSetting get(TurretType type) {
             if (!type.isBuiltIn()) {
                 TurretSetting setting = addonTurrets.get(type.getId());
+                if (setting != null) return setting;
                 // only missing in configs created before the turret was registered
-                return setting != null ? setting : TurretSetting.of(TurretRegistry.get(type).defaultStats());
+                TurretStats stats = OMTConfig.addonTurretDefaults().get(type);
+                if (stats == null) throw new IllegalStateException("Unknown turret type " + type);
+                return TurretSetting.of(stats);
             }
             return switch (type.getPath()) {
                 case "disposable_turret" -> disposableTurret;

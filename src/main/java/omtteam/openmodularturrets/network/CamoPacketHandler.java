@@ -3,8 +3,8 @@ package omtteam.openmodularturrets.network;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.camo.CamoHost;
-import omtteam.openmodularturrets.camo.CamoMenus;
 import omtteam.openmodularturrets.core.camo.CamoLight;
+import omtteam.openmodularturrets.menu.CamoMenus;
 
 /**
  * Server handlers for {@link CamoPackets}. The player must be close, the host must have adjustable light and the

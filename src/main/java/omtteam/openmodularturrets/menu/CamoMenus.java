@@ -1,8 +1,8 @@
-package omtteam.openmodularturrets.camo;
+package omtteam.openmodularturrets.menu;
 
 import net.minecraft.server.level.ServerPlayer;
+import omtteam.openmodularturrets.camo.CamoHost;
 import omtteam.openmodularturrets.compat.MenuCompat;
-import omtteam.openmodularturrets.menu.CamoMenu;
 
 /**
  * Opens the camouflage menu of a {@link CamoHost}.
