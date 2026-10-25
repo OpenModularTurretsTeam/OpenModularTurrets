@@ -8,6 +8,8 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+## [4.0.0-beta.2] - 2026-10-26
+
 ### Added
 
 - Holding a turret next to a turret base where it cannot be placed shows a short reason next to the red outline (block in the way, wrong side, base tier too low, base full, too many of this turret), as on 1.20.1+
@@ -25,6 +27,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - The server sends its config values (`openmodularturrets.cfg` and `openmodularturrets_addon_turrets.cfg`) to clients when they join, so tooltips, the ammo slots and the turret placement outline follow the server's rules; after leaving, the client uses its own config again
 - Turret bases without an owner (e.g. placed by a machine or a structure) no longer drop themselves; they stay inert until claimed, unless `bases.unownedBasesActive` is set (as on 1.20.1+)
 - Turrets can be attached to a turret base without an owner only by players who may use command blocks (operators in creative mode, mapmakers)
+- Requires OMLib 4.0.0-beta.2 or newer
 
 ### Fixed
 
