@@ -13,7 +13,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - Holding a turret next to a turret base where it cannot be placed shows a short reason next to the red outline (block in the way, wrong side, base tier too low, base full, too many of this turret), as on 1.20.1+
 - Config option `turrets.dropTurretsOverMaxSimultaneous` (default false): attached turrets over their type's `maxSimultaneous` drop, e.g. after the limit was lowered (as on 1.20.1+)
 - Turret bases, their turrets and OMPD's hardened blocks/walls/fences without an owner sparkle green, and WAILA/HWYLA and The One Probe show "Owner: nobody (right-click to claim)"; right-click claims them (OMLib), as on 1.20.1+
-- The owner of a turret base can disown it ("Disown" in the base GUI, after a confirmation); the trust list is cleared and anyone can claim it
+- The owner of a turret base can disown it ("Disown" in its configure screen, after a confirmation, as on 1.20.1+); the trust list is cleared and anyone can claim it
 - While you hold OMLib's Ownership Wand, turrets still target and fire at you, but their shots, explosions and effects do not affect you (as on 1.20.1+)
 
 ### Changed
