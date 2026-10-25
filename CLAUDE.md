@@ -310,7 +310,7 @@ The node `1.20.1-forge` follows the NeoForge setup and was worked out in OpenMod
   Without a token the upload is a dry run (output in `versions/<v>/build/publishMods/`).
 - **Changelog** (`CHANGELOG.md`, Keep a Changelog format): every user-visible change gets a one-line entry under `## [Unreleased]` (Added / Changed / Fixed / Removed), by hand or via `./gradlew changelogEntry --type=fixed --entry="…"`.
   Add the entry together with the change.
-- **Release steps:** set `mod_version` (e.g. `4.0.0-alpha.2`) and `release_type` → `./gradlew releaseChangelog` (moves Unreleased into `## [<mod_version>] - <date>`) → `./gradlew chiseledPublish`.
+- **Release steps:** set `mod_version` (e.g. `4.0.0-alpha.2`) and `release_type` → `./gradlew releaseChangelog` (moves Unreleased into `## [<mod_version>] - <date>`) → `./gradlew chiseledBuild` → commit `gradle.properties` and `CHANGELOG.md` as `feat: version <mod_version>` → tag that commit with a lightweight tag named exactly `<mod_version>` (`git tag 4.0.0-beta.8`, no `v` prefix, like the existing tags) → `./gradlew chiseledPublish` → push the branch and the tag (`git push origin <branch> <mod_version>`).
   Publishing uploads only that version's section and fails if it is missing.
   (Task names may differ slightly depending on Stonecutter's version.
   Use `./gradlew tasks` if unsure.)
