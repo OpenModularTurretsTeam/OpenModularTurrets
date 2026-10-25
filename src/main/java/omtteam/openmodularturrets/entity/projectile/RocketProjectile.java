@@ -70,7 +70,8 @@ public class RocketProjectile extends TurretProjectile {
     private void explode() {
         if (!getEntityWorld().isRemote) {
             float strength = OMTConfig.TURRETS.canRocketsDestroyBlocks ? 2.3F : 0.1F;
-            getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
+            // the projectile as exploder: OMTEventHandler spares wand holders from turret explosions
+            getEntityWorld().createExplosion(this, posX, posY, posZ, strength, true);
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
                                                    this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);

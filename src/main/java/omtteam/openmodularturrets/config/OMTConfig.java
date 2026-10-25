@@ -172,5 +172,7 @@ public class OMTConfig {
         @Config.RequiresMcRestart
         public boolean allowBaseCamo = true;
         public boolean baseBreakable = false;
+        @Config.Comment("Turret bases without an owner keep targeting and firing (at everyone, as nobody is trusted). If false, they stay inert until someone claims them.")
+        public boolean unownedBasesActive = false;
     }
 }

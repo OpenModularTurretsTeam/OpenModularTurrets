@@ -12,6 +12,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import omtteam.omlib.api.permission.TrustedPlayer;
 import omtteam.omlib.client.gui.BlockingAbstractGuiContainer;
+import omtteam.omlib.client.gui.DisownConfirm;
 import omtteam.omlib.client.gui.GuiParameters;
 import omtteam.omlib.client.gui.IHasTooltips;
 import omtteam.omlib.client.gui.ISupportsBackSystem;
@@ -103,6 +104,9 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
             this.buttonList.add(new GuiButton(7, x + 180, y, 80, 20, safeLocalize(OMLibNames.Localizations.GUI.MODE)));
             this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "+"));
             this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "-"));
+            if (DisownConfirm.isOwner(player, base)) {
+                this.buttonList.add(DisownConfirm.button(8, x + 180, y + 125, 80));
+            }
         } else if (PlayerUtil.canPlayerChangeSetting(player, base)) {
             this.buttonList.add(new GuiButton(5, x + 180, y + 25, 80, 20, safeLocalize(OMTNames.Localizations.GUI.CONFIGURE)));
             this.buttonList.add(new GuiButton(6, x + 180, y + 50, 80, 20,
@@ -182,6 +186,9 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         if (guibutton.id == 7) {
             sendToggleModeToServer();
         }
+        if (guibutton.id == 8) {
+            DisownConfirm.ask(base.getPos(), () -> mc.displayGuiScreen(this));
+        }
     }
 
     @Override
@@ -221,7 +228,8 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
 
         ArrayList<String> targetInfo = new ArrayList<>();
 
-        targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7f" + base.getOwner().getName());
+        targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7f"
+                + (base.getOwnerOrNull() == null ? safeLocalize("text.omlib.unowned") : base.getOwner().getName()));
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7f" + getMachineModeLocalization(base.getMode()));
         boolean isCurrentlyOn = base.isActive();
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(isCurrentlyOn));
@@ -275,6 +283,9 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
                 break;
             case 7:
                 tooltip.add(safeLocalize(OMTNames.Localizations.Text.TOGGLE_MODE));
+                break;
+            case 8:
+                tooltip.add(safeLocalize("tooltip.omlib.disown"));
                 break;
         }
 

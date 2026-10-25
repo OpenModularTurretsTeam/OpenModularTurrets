@@ -26,6 +26,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.block.IHasItemBlock;
 import omtteam.omlib.block.BlockAbstractTileEntity;
+import omtteam.omlib.block.UnownedMarker;
 import omtteam.omlib.compat.theoneprobe.TOPInfoProvider;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.MathUtil;
@@ -207,7 +208,8 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
 
     /**
      * Whether {@code player} may attach this turret at {@code pos}: only the admins of the base next to it may (like
-     * dropping turrets), and placing without a player is refused; then {@link TurretPlacement#canAttach}. Also asked
+     * dropping turrets), on a base without owner only players who may use command blocks (map makers; everyone else
+     * claims it first), and placing without a player is refused; then {@link TurretPlacement#canAttach}. Also asked
      * on the client, which knows the trust list, for the reason the placement label shows.
      *
      * @return {@code null} if there is no base next to {@code pos}
@@ -219,10 +221,15 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         TileEntity tile = world.getTileEntity(pos.offset(towardsBase));
         if (!(tile instanceof TurretBase)) return null;
         TurretBase base = (TurretBase) tile;
-        if (player == null || !PlayerUtil.isPlayerAdmin(player, base)) {
+        if (player == null || !mayAttach(base, player)) {
             return TurretPlacement.Result.NO_PERMISSION;
         }
         return attachResult(world, towardsBase, base);
+    }
+
+    private static boolean mayAttach(TurretBase base, EntityPlayer player) {
+        if (base.getOwnerOrNull() == null) return player.canUseCommandBlock();
+        return PlayerUtil.isPlayerAdmin(player, base);
     }
 
     private TurretPlacement.Result attachResult(World world, EnumFacing towardsBase, TurretBase base) {
@@ -283,6 +290,7 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         if (effect != null) {
             effect.spawn(world, pos, random);
         }
+        UnownedMarker.randomDisplayTick(world, pos, random);
     }
 
     @Override
@@ -298,7 +306,8 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
                 + ": " + getColoredBooleanColor(active)
                 + getLocalizationString(getBooleanUnlocalizationYesNo(active)), probeInfo.defaultTextStyle());
         probeInfo.text("§6" + getLocalizationString(OMLibNames.Localizations.GUI.OWNER)
-                + ": §F" + base.getOwner().getName(), probeInfo.defaultTextStyle());
+                + ": §F" + (base.getOwnerOrNull() == null ? getLocalizationString("text.omlib.unowned")
+                : base.getOwner().getName()), probeInfo.defaultTextStyle());
         probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.AMMO) + ": §F"
                 + turret.getAmmoLevel(), probeInfo.defaultTextStyle());
         probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE) + ": §F"

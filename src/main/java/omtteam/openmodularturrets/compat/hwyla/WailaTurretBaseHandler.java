@@ -53,7 +53,9 @@ public class WailaTurretBaseHandler implements IOMLibWailaDataProvider {
         boolean active = accessor.getNBTData().getBoolean("active");
         currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7A" + getMachineModeLocalization(machineMode));
         currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
-        String ownerName = accessor.getNBTData().getString("ownerName");
+        // no owner name: the base has no owner
+        String ownerName = accessor.getNBTData().hasKey("ownerName") ? accessor.getNBTData().getString("ownerName")
+                : safeLocalize("text.omlib.unowned");
         currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + ownerName);
         return currenttip;
     }
@@ -73,7 +75,7 @@ public class WailaTurretBaseHandler implements IOMLibWailaDataProvider {
             // te.writeToNBT(tag);
             tag.setBoolean("active", base.isActive());
             tag.setInteger("mode", base.getMode().ordinal());
-            tag.setString("ownerName", base.getOwner().getName());
+            if (base.getOwnerOrNull() != null) tag.setString("ownerName", base.getOwner().getName());
         }
 
         return tag;

@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.RegistryEvent;
@@ -15,17 +16,24 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import omtteam.omlib.config.ConfigSync;
 import omtteam.openmodularturrets.entity.projectile.AbstractOMTDamageSource;
 import omtteam.openmodularturrets.entity.projectile.OMTFakePlayer;
 import omtteam.openmodularturrets.entity.projectile.TurretDamage;
+import omtteam.openmodularturrets.entity.projectile.TurretImmunity;
+import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
 import omtteam.openmodularturrets.fixes.MissingIds;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.registry.ModItems;
 import omtteam.openmodularturrets.sound.ModSounds;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by Keridos on 02/05/17.
@@ -51,7 +59,31 @@ public class OMTEventHandler {
 
     @SubscribeEvent
     public void entityAttackedEvent(LivingAttackEvent event) {
+        // turret damage never hurts a player holding the ownership wand (the shot itself may still hit them)
+        if (event.getSource() instanceof AbstractOMTDamageSource && TurretImmunity.isImmune(event.getEntityLiving())) {
+            event.setCanceled(true);
+            return;
+        }
         attributeToFakePlayer(event.getEntityLiving());
+    }
+
+    /** Explosions of turret projectiles spare players holding the ownership wand (no damage, no knockback). */
+    @SubscribeEvent
+    public void explosionEvent(ExplosionEvent.Detonate event) {
+        if (event.getExplosion().getExplosivePlacedBy() == null
+                && exploder(event.getExplosion()) instanceof TurretProjectile) {
+            event.getAffectedEntities().removeIf(TurretImmunity::isImmune);
+        }
+    }
+
+    /** The entity that caused the explosion; 1.12 has no getter for it ({@code exploder}, SRG {@code field_77283_e}). */
+    @Nullable
+    private static Entity exploder(Explosion explosion) {
+        try {
+            return ObfuscationReflectionHelper.getPrivateValue(Explosion.class, explosion, "exploder", "field_77283_e");
+        } catch (ReflectionHelper.UnableToAccessFieldException e) {
+            return null;
+        }
     }
 
     /**

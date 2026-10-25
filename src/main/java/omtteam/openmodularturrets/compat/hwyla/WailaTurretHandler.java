@@ -56,7 +56,8 @@ public class WailaTurretHandler implements IOMLibWailaDataProvider {
             boolean active = data.getBoolean("active");
 
             currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(active));
-            currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + data.getString("ownerName"));
+            currenttip.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7F" + (data.hasKey("ownerName")
+                    ? data.getString("ownerName") : safeLocalize("text.omlib.unowned")));
             if (!data.hasKey("ammoLevel")) {
                 // no base: the stats come from the base
                 return currenttip;
@@ -84,7 +85,8 @@ public class WailaTurretHandler implements IOMLibWailaDataProvider {
             // te.writeToNBT(tag);
             TurretBase base = turret.getBase();
             tag.setBoolean("active", base != null && base.isActive());
-            tag.setString("ownerName", turret.getOwner().getName());
+            // no owner name: the base has no owner (shown as unowned)
+            if (base == null || base.getOwnerOrNull() != null) tag.setString("ownerName", turret.getOwner().getName());
             if (base == null) {
                 // the base's chunk is not loaded or the base was just removed; the stats below need it
                 return tag;

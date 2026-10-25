@@ -101,7 +101,7 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
     /** The energy capacity and maximum input come from the tier's config through the logic. */
     public TurretBase(int tier, IBlockState camoState) {
         super();
-        this.trustManager = new TrustedPlayersManager(this.getOwner(), this, OMTSecurityEnvironment.INSTANCE);
+        this.trustManager = new TrustedPlayersManager(this.getOwnerOrNull(), this, OMTSecurityEnvironment.INSTANCE);
         this.tier = tier;
         this.camoBlockStateTemp = camoState;
         this.camoSettings = new CamoSettings();
@@ -111,7 +111,7 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
 
     public TurretBase() {
         super();
-        this.trustManager = new TrustedPlayersManager(this.getOwner(), this, OMTSecurityEnvironment.INSTANCE);
+        this.trustManager = new TrustedPlayersManager(this.getOwnerOrNull(), this, OMTSecurityEnvironment.INSTANCE);
         setupSlotMap();
         createLogic();
     }
@@ -289,7 +289,7 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
             energy.readFromNBT(tag);
             InventoryNbt.read(inventory, tag);
             trustManager.readFromNBT(tag);
-            trustManager.setOwner(this.getOwner());
+            trustManager.setOwner(this.getOwnerOrNull());
             logic.loadState(TurretBaseNbt.load(tag, logic.getEnergy().getAmount()));
             logic.onInventoryChanged();
             this.forceFire = tag.getBoolean("forceFire");
@@ -308,6 +308,14 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
     public void setOwner(Player owner) {
         this.trustManager.setOwner(owner);
         super.setOwner(owner);
+    }
+
+    /** Disowning: the trust list goes too; the base stays inert until claimed (unless {@code unownedBasesActive}). */
+    @Override
+    public void clearOwner() {
+        this.trustManager.clearOwner();
+        super.clearOwner();
+        informUpdate();
     }
 
     @Override
@@ -392,10 +400,6 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
     @Override
     public void update() {
         if (this.getWorld().isRemote) {
-            return;
-        }
-        if (dropBlock) {
-            this.getWorld().destroyBlock(this.pos, true);
             return;
         }
         if (this.updateNBT) {

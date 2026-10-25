@@ -36,8 +36,7 @@ import static omtteam.openmodularturrets.tileentity.turret.TurretMount.getTurret
  * While the player holds a turret and OMLib draws a red placement outline next to a base, says why the turret cannot
  * go there ({@link TurretPlacement.Result}) in a small label facing the camera, drawn without depth test so blocks do
  * not hide it (1.20.1+ {@code TurretPlacementOutline.renderLabel}). Called by the client event handler after the
- * world was rendered. {@link TurretPlacement.Result#NO_PERMISSION} is shown too, although OMLib's outline (which knows
- * no player) may be cyan then.
+ * world was rendered.
  */
 @SideOnly(Side.CLIENT)
 public final class TurretPlacementLabel {

@@ -63,6 +63,8 @@ class TurretStateTest {
         logic = new TurretBaseLogic(5, new FakeSettings(), new TrustManager(NO_TEAMS, () -> {
         }), world, random, clientRelevant -> {
         });
+        // a base without owner is inert
+        logic.getTrustManager().setOwner(new PlayerIdentity(UUID.randomUUID(), "Owner"));
         logic.updateNeighbours(new EnumMap<>(Face.class));
         logic.setMode(MachineMode.ALWAYS_ON);
         state = new TurretState();

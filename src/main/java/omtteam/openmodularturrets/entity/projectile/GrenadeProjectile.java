@@ -37,7 +37,8 @@ public class GrenadeProjectile extends TurretProjectile {
         if (ticksExisted >= 39) {
             if (!getEntityWorld().isRemote) {
                 float strength = OMTConfig.TURRETS.canGrenadesDestroyBlocks ? 1.4F : 0.1F;
-                getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
+                // the projectile as exploder: OMTEventHandler spares wand holders from turret explosions
+                getEntityWorld().createExplosion(this, posX, posY, posZ, strength, true);
                 AxisAlignedBB axis = new AxisAlignedBB(this.posX - 3, this.posY - 3, this.posZ - 3,
                                                        this.posX + 3, this.posY + 3, this.posZ + 3);
                 List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);

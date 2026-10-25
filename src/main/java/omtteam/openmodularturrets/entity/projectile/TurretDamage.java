@@ -34,6 +34,7 @@ public class TurretDamage {
     }
 
     public static boolean canDamagePlayer(EntityPlayer entityPlayer, @Nullable TurretBase base) {
+        if (TurretImmunity.isImmune(entityPlayer)) return false;
         return DamageRules.canDamage(trust(base), new DamageRules.Victim.Player(
                 new PlayerIdentity(entityPlayer.getUniqueID(), entityPlayer.getName())));
     }
@@ -45,9 +46,11 @@ public class TurretDamage {
 
     /**
      * Who turret damage may hit ({@link DamageRules}): never turret projectiles; players and pets of players only
-     * if the base's trust rules allow it; everything else.
+     * if the base's trust rules allow it; everything else; never an {@linkplain TurretImmunity immune} player (one
+     * holding the ownership wand).
      */
     public static boolean canDamageEntity(Entity entity, @Nullable TurretBase base) {
+        if (entity != null && TurretImmunity.isImmune(entity)) return false;
         return entity == null || DamageRules.canDamage(trust(base), victim(entity));
     }
 
