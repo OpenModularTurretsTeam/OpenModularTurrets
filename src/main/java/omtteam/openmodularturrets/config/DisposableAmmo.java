@@ -1,10 +1,10 @@
 package omtteam.openmodularturrets.config;
 
 import net.minecraft.item.ItemStack;
-import omtteam.openmodularturrets.OpenModularTurrets;
 
 import java.util.HashMap;
 import java.util.Map;
+import omtteam.openmodularturrets.reference.Reference;
 
 /**
  * Created by Keridos on 16/11/17.
@@ -28,7 +28,7 @@ public final class DisposableAmmo {
 
     public static void add(ItemStack itemStack, int damage) {
         if (getDamage(itemStack) > 0) {
-            OpenModularTurrets.getLogger().warn("Tried to add duplicate item to ammo list: " + itemStack.getDisplayName());
+            Reference.LOGGER.warn("Tried to add duplicate item to ammo list: " + itemStack.getDisplayName());
         } else {
             map.put(itemStack, damage);
         }

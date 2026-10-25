@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.util;
+package omtteam.openmodularturrets.entity.projectile;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.init.Enchantments;

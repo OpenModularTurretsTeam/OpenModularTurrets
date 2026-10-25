@@ -8,7 +8,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.util.GeneralUtil;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.core.item.GeneratorUpgradeType;
 import omtteam.openmodularturrets.reference.Reference;
 import org.lwjgl.input.Keyboard;
@@ -29,7 +28,6 @@ public class ItemGeneratorUpgrade extends Item {
     public ItemGeneratorUpgrade(GeneratorUpgradeType upgradeType) {
         this.upgradeType = upgradeType;
         String name = "upgrade_" + upgradeType.getSerializedName();
-        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setTranslationKey(name);
         this.setRegistryName(Reference.MOD_ID, name);
     }

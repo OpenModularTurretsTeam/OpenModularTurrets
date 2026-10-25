@@ -1,11 +1,11 @@
-package omtteam.openmodularturrets.compat;
+package omtteam.openmodularturrets.compat.computer;
 
 import net.minecraft.util.EnumFacing;
 import omtteam.omlib.api.permission.EnumAccessLevel;
 import omtteam.omlib.api.permission.TrustedPlayer;
 import omtteam.omlib.compat.OMLibModCompatibility;
 import omtteam.omlib.util.player.Player;
-import omtteam.openmodularturrets.compat.BaseComputerCommands.Command;
+import omtteam.openmodularturrets.compat.computer.BaseComputerCommands.Command;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

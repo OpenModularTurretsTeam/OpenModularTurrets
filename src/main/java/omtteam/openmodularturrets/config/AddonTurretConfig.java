@@ -2,7 +2,6 @@ package omtteam.openmodularturrets.config;
 
 import com.google.gson.reflect.TypeToken;
 import net.minecraftforge.common.config.Configuration;
-import omtteam.openmodularturrets.api.TurretDefinition;
 import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.TurretType;
 
@@ -30,14 +29,19 @@ public final class AddonTurretConfig {
     private AddonTurretConfig() {
     }
 
-    /** Reads (and completes) the file for the given turrets of other mods. */
-    public static synchronized void load(File configDirectory, Collection<TurretDefinition> addonTurrets) {
+    /**
+     * Reads (and completes) the file for the given turrets of other mods.
+     *
+     * @param addonTurrets the turret types of other mods with the default stats of their definitions
+     */
+    public static synchronized void load(File configDirectory, Map<TurretType, TurretStats> addonTurrets) {
         Map<String, TurretSetting> loaded = new HashMap<>();
         if (!addonTurrets.isEmpty()) {
             // the constructor reads the file
             Configuration config = new Configuration(new File(configDirectory, FILE_NAME));
-            for (TurretDefinition turret : addonTurrets) {
-                loaded.put(turret.type().getId(), read(config, turret.type().getId(), turret.defaultStats()));
+            for (Map.Entry<TurretType, TurretStats> turret : addonTurrets.entrySet()) {
+                String id = turret.getKey().getId();
+                loaded.put(id, read(config, id, turret.getValue()));
             }
             if (config.hasChanged()) {
                 config.save();

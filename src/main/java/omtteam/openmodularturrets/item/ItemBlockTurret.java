@@ -12,12 +12,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.util.GeneralUtil;
+import omtteam.openmodularturrets.api.AmmoDefinition;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
-import omtteam.openmodularturrets.api.AmmoDefinition;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.registry.TurretRegistry;
+import omtteam.openmodularturrets.turret.TurretRegistry;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;

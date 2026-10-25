@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.compat.computercraft;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import omtteam.openmodularturrets.compat.BaseComputerCommands;
+import omtteam.openmodularturrets.compat.computer.BaseComputerCommands;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.Nonnull;

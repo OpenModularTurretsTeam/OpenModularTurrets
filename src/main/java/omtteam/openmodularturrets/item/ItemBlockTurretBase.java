@@ -12,7 +12,6 @@ import omtteam.omlib.util.GeneralUtil;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.registry.ModBlocks;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
@@ -39,7 +38,7 @@ public class ItemBlockTurretBase extends ItemBlock {
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         if (isInCreativeTab(itemIn)) {
             for (int i = 0; i < 5; i++) {
-                subItems.add(new ItemStack(ModBlocks.turretBase, 1, i));
+                subItems.add(new ItemStack(this, 1, i));
             }
         }
     }

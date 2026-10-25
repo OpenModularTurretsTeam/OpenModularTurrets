@@ -24,7 +24,6 @@ import omtteam.omlib.api.block.IHasItemBlock;
 import omtteam.omlib.block.BlockAbstractTileEntity;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.MathUtil;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.item.ItemBlockLever;
 import omtteam.openmodularturrets.reference.Reference;
@@ -46,7 +45,6 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     public LeverBlock() {
         super(Material.GLASS);
         this.setTranslationKey(lever);
-        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setHardness(2F);
         this.setResistance(15F);
         this.setSoundType(SoundType.STONE);

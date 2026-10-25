@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraftforge.common.util.CompoundDataFixer;
 import net.minecraftforge.common.util.ModFixs;
@@ -19,12 +18,10 @@ import omtteam.openmodularturrets.fixes.TurretTileEntityFix;
 import omtteam.openmodularturrets.handler.OMTGuiHandler;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.registry.ModularTurretsTab;
-import omtteam.openmodularturrets.registry.TurretRegistry;
-import org.apache.logging.log4j.Logger;
+import omtteam.openmodularturrets.registry.TurretLoader;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION, acceptedMinecraftVersions = Reference.ACCEPTED_MINECRAFT_VERSION, dependencies = Reference.DEPENDENCIES)
 public class OpenModularTurrets {
-    public static final CreativeTabs modularTurretsTab = ModularTurretsTab.getInstance();
     /**
      * 1: 3.x tile entity ids; 2: one turret tile entity ({@code TurretTileEntityFix}); 3: power generator to generator
      * ({@code GeneratorTileEntityFix}).
@@ -36,28 +33,24 @@ public class OpenModularTurrets {
     @SuppressWarnings({"CanBeFinal", "unused"})
     @SidedProxy(clientSide = "omtteam.openmodularturrets.client.ClientProxy", serverSide = "omtteam.openmodularturrets.CommonProxy")
     public static CommonProxy proxy;
-    private static Logger logger;
 
     public OpenModularTurrets() {
         // before Forge loads the config into OMTConfig
         ConfigMigration.migrate();
-    }
-
-    public static Logger getLogger() {
-        return logger;
+        // created with the mod, so its place among the creative tabs stays as before
+        ModularTurretsTab.getInstance();
     }
 
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        logger = event.getModLog();
         // turret definitions of OMT and other mods, before the blocks of the turrets are registered
-        TurretRegistry.load(event.getAsmData(), event.getModConfigurationDirectory());
+        TurretLoader.load(event.getAsmData(), event.getModConfigurationDirectory());
         proxy.loadClientPlugins(event.getAsmData());
         proxy.preInit();
         ModCompatibility.checkForMods();
         ModCompatibility.preinit();
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, OMTGuiHandler.getInstance());
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new OMTGuiHandler(proxy::getClientGuiElement));
     }
 
     @Mod.EventHandler

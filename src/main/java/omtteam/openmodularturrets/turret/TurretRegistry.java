@@ -1,8 +1,7 @@
-package omtteam.openmodularturrets.registry;
+package omtteam.openmodularturrets.turret;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.discovery.ASMDataTable;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.api.AmmoDefinition;
 import omtteam.openmodularturrets.api.OMTPlugin;
 import omtteam.openmodularturrets.api.TurretDefinition;
@@ -13,83 +12,68 @@ import omtteam.openmodularturrets.api.weapon.ProjectileWeapon;
 import omtteam.openmodularturrets.api.weapon.RayWeapon;
 import omtteam.openmodularturrets.api.weapon.SelfTargetingWeapon;
 import omtteam.openmodularturrets.api.weapon.TurretWeapon;
-import omtteam.openmodularturrets.config.AddonTurretConfig;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.turret.TurretTypes;
 
-import java.io.File;
-import java.util.ArrayList;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.TreeSet;
+import java.util.function.Consumer;
 
 /**
  * The turret and ammo definitions (1.20.1+ {@code registry.TurretRegistry}): the built-in ones, then those of the
- * {@link OMTPlugin}s of other mods. Loaded once in OMT's preInit, before the blocks are registered; the turret types
- * are frozen afterwards.
+ * {@link OMTPlugin}s of other mods, registered by {@code registry.TurretLoader} in OMT's preInit, before the blocks
+ * are registered; the turret types are frozen afterwards.
+ * Kept out of {@code registry}, which depends on all of the mod, so the code that only looks definitions up does not.
  */
 public final class TurretRegistry {
     private static final List<Class<? extends TurretWeapon>> WEAPON_KINDS = Arrays.asList(ProjectileWeapon.class,
             RayWeapon.class, EffectWeapon.class, AreaWeapon.class, SelfTargetingWeapon.class);
     private static final Map<TurretType, TurretDefinition> TURRETS = new LinkedHashMap<>();
     private static final Map<AmmoType, AmmoDefinition> AMMO = new LinkedHashMap<>();
+    private static final Map<TurretType, Block> BLOCKS = new HashMap<>();
     private static boolean loaded;
 
     private TurretRegistry() {
     }
 
     /**
-     * Registers the built-in turrets and ammo and those of all plugins, freezes the turret types and loads the config
-     * of the turrets of other mods.
+     * Runs one registration (the built-in turrets, or one plugin) with a registrar that refuses calls once it
+     * returned.
      *
-     * @param asmData         the mod scan data, where the plugins are found by {@link OMTPlugin.Register}
-     * @param configDirectory where the addon turret config is
+     * @param owner        who registers, for the error messages
+     * @param registration registers turrets and ammo
      */
-    public static synchronized void load(ASMDataTable asmData, File configDirectory) {
-        if (loaded) return;
-        Registrar builtIn = new Registrar("openmodularturrets");
-        BuiltinTurrets.ammo().forEach(builtIn::registerAmmo);
-        BuiltinTurrets.definitions().forEach(builtIn::registerTurret);
-        builtIn.close();
-        for (String className : pluginClasses(asmData)) {
-            Registrar registrar = new Registrar(className);
-            try {
-                OMTPlugin plugin = Class.forName(className).asSubclass(OMTPlugin.class).newInstance();
-                plugin.registerTurrets(registrar);
-            } catch (ReflectiveOperationException | ClassCastException e) {
-                throw new IllegalStateException("Turret plugin " + className + " could not be loaded", e);
-            } finally {
-                registrar.close();
-            }
-            OpenModularTurrets.getLogger().info("Loaded turret plugin {}", className);
+    public static synchronized void register(String owner, Consumer<TurretRegistrar> registration) {
+        if (loaded) throw new IllegalStateException(owner + ": the turret types are frozen already");
+        Registrar registrar = new Registrar(owner);
+        try {
+            registration.accept(registrar);
+        } finally {
+            registrar.close();
         }
+    }
+
+    /**
+     * Freezes the turret types after the last registration.
+     *
+     * @throws IllegalStateException if a turret type has no definition
+     */
+    public static synchronized void freeze() {
         TurretTypes.freeze();
         for (TurretType type : TurretTypes.all()) {
             if (!TURRETS.containsKey(type)) {
                 throw new IllegalStateException("Turret type " + type + " has no turret definition");
             }
         }
-        List<TurretDefinition> addonTurrets = new ArrayList<>();
-        for (TurretDefinition definition : TURRETS.values()) {
-            if (!definition.type().isBuiltIn()) addonTurrets.add(definition);
-        }
-        AddonTurretConfig.load(configDirectory, addonTurrets);
         loaded = true;
-    }
-
-    /** Plugin classes sorted by name, so the order does not depend on the scan. */
-    private static Collection<String> pluginClasses(ASMDataTable asmData) {
-        TreeSet<String> classes = new TreeSet<>();
-        for (ASMDataTable.ASMData data : asmData.getAll(OMTPlugin.Register.class.getName())) {
-            classes.add(data.getClassName());
-        }
-        return classes;
     }
 
     /** @throws IllegalStateException if the type has no definition (or the registry is not loaded yet) */
@@ -118,6 +102,17 @@ public final class TurretRegistry {
             if (ammo.matches(stack)) return true;
         }
         return false;
+    }
+
+    /** Records the block {@code registry.ModBlocks} registered for an enabled turret type. */
+    public static synchronized void registerBlock(TurretType type, Block block) {
+        BLOCKS.put(type, block);
+    }
+
+    /** The block of a turret type, null if the turret is disabled (or the blocks are not registered yet). */
+    @Nullable
+    public static Block block(TurretType type) {
+        return BLOCKS.get(type);
     }
 
     /** Whether the registry is loaded (all plugins ran). */

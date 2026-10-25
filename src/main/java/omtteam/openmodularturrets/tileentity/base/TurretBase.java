@@ -5,7 +5,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -20,8 +19,6 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RangedWrapper;
 import omtteam.omlib.api.network.ISyncableTE;
 import omtteam.omlib.api.permission.TrustedPlayersManager;
 import omtteam.omlib.api.render.camo.ICamoSupport;
@@ -54,12 +51,13 @@ import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
 import omtteam.openmodularturrets.inventory.EnumSlotType;
+import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.network.MessageTurretBase;
 import omtteam.openmodularturrets.network.OMTNetworkingHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
+import omtteam.openmodularturrets.tileentity.turret.TurretMount;
 import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
-import omtteam.openmodularturrets.util.OMTUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -73,23 +71,21 @@ import java.util.Map;
 
 import static omtteam.omlib.compat.OMLibModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compat.OMLibModCompatibility.OpenComputersLoaded;
-import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntities;
-import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntitiesByClass;
 
 /**
  * The turret base tile entity. The game rules (targeting, ammo, energy, upgrades, addons, redstone mode) live in the
  * core {@link TurretBaseLogic} it owns; this class connects the logic to the world (inventory, neighbours, ticking,
  * syncing), keeps the 3.x NBT format and the 3.x API ({@link ITurretBase}; ComputerCraft and OpenComputers through
- * {@code compat.BaseComputerCommands}).
+ * {@code compat.computer.BaseComputerCommands}). The slots are a {@link TurretBaseInventory}.
  */
 public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHasTrustManager, ISyncableTE, ICamoSupport,
         IDebugTile, ITickable, IHasTargetingSettings {
     private final List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
-    private final HashMap<EnumSlotType, List<Integer>> slotMap = new HashMap<>();
+    private HashMap<EnumSlotType, List<Integer>> slotMap;
     private final TurretBaseWorld baseWorld = new TurretBaseWorld(this);
     protected CamoSettings camoSettings;
     protected int tier = BaseTier.MIN;
-    protected IItemHandlerModifiable inventory;
+    protected final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged);
     protected final TrustedPlayersManager trustManager;
     private TurretBaseLogic logic;
     /** Forge Energy / RF / Tesla access to the logic's energy store (recreated with the logic). */
@@ -109,7 +105,6 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
         this.tier = tier;
         this.camoBlockStateTemp = camoState;
         this.camoSettings = new CamoSettings();
-        setupInventory();
         setupSlotMap();
         createLogic();
     }
@@ -117,7 +112,6 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
     public TurretBase() {
         super();
         this.trustManager = new TrustedPlayersManager(this.getOwner(), this, OMTSecurityEnvironment.INSTANCE);
-        setupInventory();
         setupSlotMap();
         createLogic();
     }
@@ -196,7 +190,7 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
 
     /** The ammo slots, the part of the inventory other blocks may use. */
     public IItemHandler getCapabilityInventory(@Nullable EnumFacing facing) {
-        return new RangedWrapper(inventory, 0, 9);
+        return inventory.getAmmoSlots();
     }
 
     @Override
@@ -204,51 +198,14 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
         return Collections.singletonList(this.getCapabilityInventory(EnumFacing.DOWN));
     }
 
-    protected void setupInventory() {
-        slotMap.clear();
-        inventory = new ItemStackHandler(13) {
-            @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-            public boolean isItemValidForSlot(int index, ItemStack stack) {
-                if (index < 9) {
-                    return OMTUtil.isItemStackValidAmmo(stack);
-                }
-                return false;
-            }
-
-            @Nonnull
-            @Override
-            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-                if (!isItemValidForSlot(slot, stack))
-                    return stack;
-                return super.insertItem(slot, stack, simulate);
-            }
-
-            @Override
-            protected void onContentsChanged(int slot) {
-                if (logic != null && !loading) {
-                    logic.onInventoryChanged();
-                }
-            }
-        };
+    private void onInventoryChanged() {
+        if (logic != null && !loading) {
+            logic.onInventoryChanged();
+        }
     }
 
     private void setupSlotMap() {
-        slotMap.clear();
-        List<Integer> ammoList = new ArrayList<>();
-        List<Integer> addonList = new ArrayList<>();
-        List<Integer> upgradeList = new ArrayList<>();
-        for (int i = 0; i < TurretBaseWorld.AMMO_SLOTS; i++) {
-            ammoList.add(i);
-        }
-        for (int i = 0; i < BaseTier.addonSlots(tier); i++) {
-            addonList.add(TurretBaseWorld.ADDON_START + i);
-        }
-        for (int i = 0; i < BaseTier.upgradeSlots(tier); i++) {
-            upgradeList.add(TurretBaseWorld.UPGRADE_START + i);
-        }
-        slotMap.put(EnumSlotType.AmmoSlot, ammoList);
-        slotMap.put(EnumSlotType.AddonSlot, addonList);
-        slotMap.put(EnumSlotType.UpgradeSlot, upgradeList);
+        slotMap = TurretBaseInventory.slotMap(tier);
     }
 
     @Override
@@ -469,7 +426,7 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
     @Override
     public void turretResetCaches() {
         logic.onInventoryChanged();
-        for (TurretTileEntity turretHead : getTouchingTileEntitiesByClass(this.getWorld(), this.getPos(), TurretTileEntity.class)) {
+        for (TurretTileEntity turretHead : TurretMount.getTurrets(this)) {
             turretHead.triggerResetCaches();
         }
     }
@@ -657,60 +614,49 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
         return this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
     }
 
+    // ---- turret control of the 3.x API (ComputerCraft and OpenComputers) ----
+
     @Override
     public void setAllTurretsYawPitch(float yaw, float pitch) {
-        List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
-        for (TileEntity te : tileEntities) {
-            if (te instanceof TurretTileEntity) {
-                ((TurretTileEntity) te).setYawPitch(yaw, pitch);
-            }
+        for (TurretTileEntity turret : TurretMount.getTurrets(this)) {
+            turret.setYawPitch(yaw, pitch);
         }
     }
 
     @Override
     public boolean setTurretYawPitch(EnumFacing facing, float yaw, float pitch) {
-        TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
-        if (turretHead instanceof TurretTileEntity) {
-            ((TurretTileEntity) turretHead).setYawPitch(yaw, pitch);
-            return true;
-        }
-        return false;
+        TurretTileEntity turret = TurretMount.getTurret(this, facing);
+        if (turret == null) return false;
+        turret.setYawPitch(yaw, pitch);
+        return true;
     }
 
     @Override
     public void setAllTurretsForceFire(boolean state) {
-        List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
-        for (TileEntity te : tileEntities) {
-            if (te instanceof TurretTileEntity) {
-                ((TurretTileEntity) te).setAutoFire(state);
-            }
+        for (TurretTileEntity turret : TurretMount.getTurrets(this)) {
+            turret.setAutoFire(state);
         }
     }
 
     @Override
     public boolean setTurretForceFire(EnumFacing facing, boolean state) {
-        TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
-        if (turretHead instanceof TurretTileEntity) {
-            ((TurretTileEntity) turretHead).setAutoFire(state);
-            return true;
-        }
-        return false;
+        TurretTileEntity turret = TurretMount.getTurret(this, facing);
+        if (turret == null) return false;
+        turret.setAutoFire(state);
+        return true;
     }
 
     @Override
     public boolean forceShootTurret(EnumFacing facing) {
-        TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
-        return (turretHead instanceof TurretTileEntity && ((TurretTileEntity) turretHead).forceShot());
+        TurretTileEntity turret = TurretMount.getTurret(this, facing);
+        return turret != null && turret.forceShot();
     }
 
     @Override
     public int forceShootAllTurrets() {
-        List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         int successes = 0;
-        for (TileEntity te : tileEntities) {
-            if (te instanceof TurretTileEntity) {
-                successes += ((TurretTileEntity) te).forceShot() ? 1 : 0;
-            }
+        for (TurretTileEntity turret : TurretMount.getTurrets(this)) {
+            successes += turret.forceShot() ? 1 : 0;
         }
         return successes;
     }

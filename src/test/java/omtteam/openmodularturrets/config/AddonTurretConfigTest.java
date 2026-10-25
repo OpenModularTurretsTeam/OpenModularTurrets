@@ -1,9 +1,6 @@
 package omtteam.openmodularturrets.config;
 
-import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.config.Configuration;
-import omtteam.openmodularturrets.api.TurretDefinition;
-import omtteam.openmodularturrets.api.weapon.TurretWeapon;
 import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import org.junit.jupiter.api.AfterEach;
@@ -24,18 +21,6 @@ class AddonTurretConfigTest {
     private static final TurretType TYPE = TurretType.builder("othermod", "config_turret").build();
     private static final TurretStats DEFAULTS = TurretStats.builder(12, 60, 4, 300).accuracyDeviation(25)
             .maxSimultaneous(2).damageAmp(0.3D).build();
-    /** Only registration checks the weapon class; the config never touches it. */
-    private static final TurretWeapon WEAPON = new TurretWeapon() {
-        @Override
-        public SoundEvent launchSound() {
-            return null;
-        }
-
-        @Override
-        public boolean aims() {
-            return true;
-        }
-    };
 
     @TempDir
     Path directory;
@@ -47,7 +32,7 @@ class AddonTurretConfigTest {
 
     @AfterEach
     void tearDown() {
-        AddonTurretConfig.load(directory.toFile(), Collections.emptyList());
+        AddonTurretConfig.load(directory.toFile(), Collections.emptyMap());
     }
 
     private File file() {
@@ -56,7 +41,7 @@ class AddonTurretConfigTest {
 
     private TurretSetting load() {
         AddonTurretConfig.load(directory.toFile(),
-                Collections.singletonList(new TurretDefinition(TYPE, WEAPON, DEFAULTS)));
+                Collections.singletonMap(TYPE, DEFAULTS));
         return AddonTurretConfig.setting(TYPE);
     }
 
@@ -106,7 +91,7 @@ class AddonTurretConfigTest {
 
     @Test
     void noAddonTurretsWriteNoFile() {
-        AddonTurretConfig.load(directory.toFile(), Collections.emptyList());
+        AddonTurretConfig.load(directory.toFile(), Collections.emptyMap());
         assertFalse(file().exists());
     }
 

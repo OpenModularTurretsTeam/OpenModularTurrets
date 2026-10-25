@@ -17,8 +17,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -29,20 +29,19 @@ import omtteam.omlib.block.BlockAbstractTileEntity;
 import omtteam.omlib.compat.theoneprobe.TOPInfoProvider;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.MathUtil;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.api.TurretDefinition;
-import omtteam.openmodularturrets.item.ItemBlockTurret;
-import omtteam.openmodularturrets.reference.OMTNames;
-import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.registry.TurretRegistry;
-import omtteam.openmodularturrets.tileentity.base.TurretBase;
-import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.TurretPlacement;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
+import omtteam.openmodularturrets.item.ItemBlockTurret;
+import omtteam.openmodularturrets.reference.OMTNames;
+import omtteam.openmodularturrets.reference.Reference;
+import omtteam.openmodularturrets.tileentity.base.TurretBase;
+import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
+import omtteam.openmodularturrets.turret.TurretRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -76,7 +75,6 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
     public BlockTurret(ResourceLocation id, TurretType coreType) {
         super(Material.GLASS);
         this.coreType = coreType;
-        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         if (OMTConfig.TURRETS.turretBreakable) {
             this.setHardness(BREAKABLE_HARDNESS);
             this.setHarvestLevel("pickaxe", 0);

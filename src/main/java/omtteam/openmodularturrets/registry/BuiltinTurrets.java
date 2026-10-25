@@ -25,6 +25,7 @@ import omtteam.openmodularturrets.entity.projectile.GrenadeProjectile;
 import omtteam.openmodularturrets.entity.projectile.PlasmaProjectile;
 import omtteam.openmodularturrets.entity.projectile.PotatoProjectile;
 import omtteam.openmodularturrets.entity.projectile.RocketProjectile;
+import omtteam.openmodularturrets.sound.ModSounds;
 import omtteam.openmodularturrets.tileentity.turret.EffectWeapons;
 import omtteam.openmodularturrets.tileentity.turret.RayWeapons;
 

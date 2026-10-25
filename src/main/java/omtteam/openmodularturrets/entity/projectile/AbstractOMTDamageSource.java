@@ -6,7 +6,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
-import omtteam.openmodularturrets.util.OMTFakePlayer;
 
 import javax.annotation.Nullable;
 

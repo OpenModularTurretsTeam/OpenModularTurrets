@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.compat;
+package omtteam.openmodularturrets.compat.computer;
 
 import net.minecraft.util.EnumFacing;
 import omtteam.omlib.api.permission.EnumAccessLevel;

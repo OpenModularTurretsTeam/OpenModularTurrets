@@ -10,10 +10,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.util.GeneralUtil;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.registry.ModItems;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
@@ -34,7 +32,6 @@ public class UpgradeMetaItem extends Item {
         super();
 
         this.setHasSubtypes(true);
-        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Items.upgradeMetaItem);
         this.setTranslationKey(OMTNames.Items.upgradeMetaItem);
     }
@@ -44,7 +41,7 @@ public class UpgradeMetaItem extends Item {
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         if (isInCreativeTab(itemIn)) {
             for (int i = 0; i < 5; i++) {
-                subItems.add(new ItemStack(ModItems.upgradeMetaItem, 1, i));
+                subItems.add(new ItemStack(this, 1, i));
             }
         }
     }

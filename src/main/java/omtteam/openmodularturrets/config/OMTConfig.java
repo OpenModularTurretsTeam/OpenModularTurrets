@@ -2,7 +2,6 @@ package omtteam.openmodularturrets.config;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Config;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.reference.Reference;
 
 import static omtteam.omlib.util.GeneralUtil.getItem;
@@ -39,7 +38,7 @@ public class OMTConfig {
                 }
             }
         } catch (Exception e) {
-            OpenModularTurrets.getLogger().error("error while parsing disp. ammo list config!", e);
+            Reference.LOGGER.error("error while parsing disp. ammo list config!", e);
         }
     }
 

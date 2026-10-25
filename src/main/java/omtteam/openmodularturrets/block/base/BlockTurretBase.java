@@ -39,13 +39,11 @@ import omtteam.omlib.util.EnumMachineMode;
 import omtteam.omlib.util.player.Player;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.omlib.util.world.WorldUtil;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.BaseTier;
 import omtteam.openmodularturrets.item.ItemBlockTurretBase;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.Nonnull;
@@ -66,7 +64,6 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
 
     public BlockTurretBase() {
         super(Material.ROCK);
-        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         if (!OMTConfig.BASES.baseBreakable) {
             this.setBlockUnbreakable();
         }
@@ -162,7 +159,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             // Open GUI
             if (!player.isSneaking() && base != null) {
                 if (PlayerUtil.canPlayerAccessBlock(player, base)) {
-                    player.openGui(OpenModularTurrets.instance, 1, world, pos.getX(), pos.getY(), pos.getZ());
+                    player.openGui(Reference.MOD_ID, 1, world, pos.getX(), pos.getY(), pos.getZ());
                 } else {
                     addChatMessage(player, new TextComponentTranslation(OMLibNames.Localizations.Text.STATUS_PERMISSION));
                 }
@@ -303,7 +300,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @ParametersAreNonnullByDefault
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> drops = new ArrayList<>();
-        drops.add(0, new ItemStack(ModBlocks.turretBase, 1, this.getMetaFromState(state)));
+        drops.add(0, new ItemStack(this, 1, this.getMetaFromState(state)));
         return drops;
     }
 
@@ -318,7 +315,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @ParametersAreNonnullByDefault
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer
             player) {
-        return new ItemStack(ModBlocks.turretBase, 1, state.getValue(TIER) - 1);
+        return new ItemStack(this, 1, state.getValue(TIER) - 1);
     }
 
     @Override
@@ -326,7 +323,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @ParametersAreNonnullByDefault
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         for (int i = 0; i < 5; i++) {
-            subItems.add(new ItemStack(ModBlocks.turretBase, 1, i));
+            subItems.add(new ItemStack(this, 1, i));
         }
     }
 

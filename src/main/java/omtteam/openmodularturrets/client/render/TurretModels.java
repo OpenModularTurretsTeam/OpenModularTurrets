@@ -23,7 +23,7 @@ import omtteam.openmodularturrets.client.model.ModelSlowingTurret;
 import omtteam.openmodularturrets.client.model.ModelTeleporterTurret;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.registry.TurretRegistry;
+import omtteam.openmodularturrets.turret.TurretRegistry;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -7,10 +7,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import omtteam.omlib.tileentity.TileEntityBase;
@@ -37,13 +37,14 @@ import omtteam.openmodularturrets.core.turret.TurretState;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Vector3;
+import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
 import omtteam.openmodularturrets.network.MessageUpdateTurret;
 import omtteam.openmodularturrets.network.OMTNetworkingHandler;
-import omtteam.openmodularturrets.registry.ModSounds;
-import omtteam.openmodularturrets.registry.TurretRegistry;
+import omtteam.openmodularturrets.sound.ModSounds;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.base.TurretBaseWorld;
+import omtteam.openmodularturrets.turret.TurretRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -304,7 +305,7 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         List<EntityLivingBase> victims = new ArrayList<>();
         for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, weapon.area().apply(this))) {
             if (entity.isEntityAlive() && !(entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator())
-                    && omtteam.openmodularturrets.util.OMTUtil.canDamageEntity(entity, base)) {
+                    && TurretDamage.canDamageEntity(entity, base)) {
                 victims.add(entity);
             }
         }

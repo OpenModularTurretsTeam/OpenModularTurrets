@@ -42,13 +42,14 @@ class ArchitectureTest {
      * so does a cycle that shrank or disappeared until it is updated here, so the list always shows the real state.
      */
     private static final List<Set<String>> KNOWN_CYCLES = Arrays.asList(
-            // one large loop through almost every package (blocks, tile entities, items, containers, network, registry)
-            // api.weapon holds the weapons that were in turret (phase 5 turret API); api.lists was removed;
-            // turret is gone (TurretHeadUtil became tileentity.turret.TurretMount, 2026-10-25)
-            set("(root)", "api", "api.tileentity", "api.weapon", "block.base", "block.misc", "block.turret", "compat",
-                    "compat.computercraft", "compat.hwyla", "compat.opencomputers", "config", "container",
-                    "entity.projectile", "fixes", "handler", "inventory", "item", "network", "registry", "tileentity.base",
-                    "tileentity.misc", "tileentity.turret", "util"),
+            // the loop around the turret API: its weapons and OMTApi take TurretBase / TurretTileEntity, which use the
+            // weapons, projectiles, items and the turret definitions (turret.TurretRegistry, accepted by the user,
+            // 2026-10-25). Out of it since 2026-10-25: (root), registry, config, block.base, container, handler,
+            // fixes, compat (nothing reaches back into the mod class, registry or config any more), util (removed)
+            set("api", "api.tileentity", "api.weapon", "block.turret", "entity.projectile", "inventory", "item",
+                    "network", "tileentity.base", "tileentity.turret", "turret"),
+            // the generator and lever blocks and their tile entities
+            set("block.misc", "tileentity.misc"),
             // the core types reach each other as in 1.20.1+ (BaseWorld -> ItemSlot -> AmmoType, TurretType -> Face,
             // Neighbour -> TurretType, LogicSettings -> TurretType, TargetSelector -> LogicSettings,
             // TurretState -> TurretBaseLogic)

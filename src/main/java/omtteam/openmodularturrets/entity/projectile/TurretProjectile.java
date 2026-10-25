@@ -16,7 +16,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
-import omtteam.openmodularturrets.util.OMTUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -77,11 +76,11 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
     }
 
     protected boolean canDamagePlayer(EntityPlayer entityPlayer) {
-        return OMTUtil.canDamagePlayer(entityPlayer, turretBase);
+        return TurretDamage.canDamagePlayer(entityPlayer, turretBase);
     }
 
     protected boolean canDamageEntity(Entity entity) {
-        return OMTUtil.canDamageEntity(entity, turretBase);
+        return TurretDamage.canDamageEntity(entity, turretBase);
     }
 
     public abstract void onHitBlock(IBlockState block, BlockPos pos);

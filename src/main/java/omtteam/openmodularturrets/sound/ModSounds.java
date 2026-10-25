@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.registry;
+package omtteam.openmodularturrets.sound;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;

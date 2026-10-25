@@ -26,18 +26,24 @@ public class ModItems {
     public static Item upgradeEnergyMultiplier;
 
     public static void init(IForgeRegistry<Item> registry) {
-        intermediateProductTiered = InitHelper.registerItem(new IntermediateProductTiered(), registry);
-        intermediateProductRegular = InitHelper.registerItem(new IntermediateProductRegular(), registry);
-        addonMetaItem = InitHelper.registerItem(new AddonMetaItem(), registry);
-        upgradeMetaItem = InitHelper.registerItem(new UpgradeMetaItem(), registry);
-        ammoMetaItem = InitHelper.registerItem(new AmmoMetaItem(), registry);
-        usableMetaItem = InitHelper.registerItem(new UsableMetaItem(), registry);
+        intermediateProductTiered = InitHelper.registerItem(inTab(new IntermediateProductTiered()), registry);
+        intermediateProductRegular = InitHelper.registerItem(inTab(new IntermediateProductRegular()), registry);
+        addonMetaItem = InitHelper.registerItem(inTab(new AddonMetaItem()), registry);
+        upgradeMetaItem = InitHelper.registerItem(inTab(new UpgradeMetaItem()), registry);
+        ammoMetaItem = InitHelper.registerItem(inTab(new AmmoMetaItem()), registry);
+        usableMetaItem = InitHelper.registerItem(inTab(new UsableMetaItem()), registry);
         upgradeEnergyMultiplier = InitHelper.registerItem(
-                new ItemGeneratorUpgrade(GeneratorUpgradeType.ENERGY_MULTIPLIER), registry);
+                inTab(new ItemGeneratorUpgrade(GeneratorUpgradeType.ENERGY_MULTIPLIER)), registry);
 
         for (Item item : subblocks) {
             // item blocks of other mods' turrets are registered as their mod
             ModContainerScope.registerAs(item.getRegistryName(), () -> registry.register(item));
         }
+    }
+
+    /** Puts an item into the mod's creative tab. */
+    private static <T extends Item> T inTab(T item) {
+        item.setCreativeTab(ModularTurretsTab.getInstance());
+        return item;
     }
 }

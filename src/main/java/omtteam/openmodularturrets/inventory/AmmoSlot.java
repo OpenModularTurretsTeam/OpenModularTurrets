@@ -6,7 +6,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-import static omtteam.openmodularturrets.util.OMTUtil.isItemStackValidAmmo;
+import static omtteam.openmodularturrets.inventory.AmmoRules.isItemStackValidAmmo;
 
 public class AmmoSlot extends SlotItemHandler {
     @SuppressWarnings("SameParameterValue")

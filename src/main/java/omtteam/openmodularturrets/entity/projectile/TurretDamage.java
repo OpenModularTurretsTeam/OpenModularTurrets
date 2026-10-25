@@ -1,22 +1,15 @@
-package omtteam.openmodularturrets.util;
+package omtteam.openmodularturrets.entity.projectile;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.UsernameCache;
 import omtteam.omlib.core.security.PlayerIdentity;
 import omtteam.omlib.core.security.TrustManager;
 import omtteam.omlib.util.player.OMLibSecurityEnvironment;
 import omtteam.omlib.util.player.Player;
-import omtteam.openmodularturrets.config.OMTConfig;
-import omtteam.openmodularturrets.registry.TurretRegistry;
 import omtteam.openmodularturrets.core.security.DamageRules;
-import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.Nullable;
@@ -25,19 +18,10 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Created by Keridos on 06/02/17.
- * This Class provides some utility functions for OMT related stuff.
+ * Turret damage in the world: who it may hit ({@link DamageRules}) and the tags a hit leaves for the loot rules
+ * (turret hit, fake drops level).
  */
-public class OMTUtil {
-    public static boolean isItemStackValidAmmo(ItemStack itemStack) {
-        if (itemStack == ItemStack.EMPTY) return false;
-        return !OMTConfig.GENERAL.useWhitelistForAmmo || itemStack.getItem() == Items.POTATO
-                || itemStack.getItem() == Items.REDSTONE || itemStack.getItem() == Items.ARROW
-                || itemStack.getItem() == Items.TIPPED_ARROW
-                || itemStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK)
-                || TurretRegistry.isAnyAmmo(itemStack);
-    }
-
+public class TurretDamage {
     public static int getFakeDropsLevel(EntityLivingBase entity) {
         Set<String> tags = entity.getTags();
         return (tags.contains("openmodularturrets:fake_drops_0") ? 0 : tags.contains("openmodularturrets:fake_drops_1") ? 1 :

@@ -6,7 +6,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
@@ -55,7 +54,7 @@ public final class MissingIds {
             ResourceLocation renamed = RENAMED.get(mapping.key);
             Block block = renamed == null ? null : ForgeRegistries.BLOCKS.getValue(renamed);
             if (block != null && renamed.equals(block.getRegistryName())) {
-                OpenModularTurrets.getLogger().info("Renaming {} to {}", mapping.key, renamed);
+                Reference.LOGGER.info("Renaming {} to {}", mapping.key, renamed);
                 mapping.remap(block);
             } else {
                 ignoreIfRemoved(mapping);
@@ -68,7 +67,7 @@ public final class MissingIds {
             ResourceLocation renamed = RENAMED.get(mapping.key);
             Item item = renamed == null ? null : ForgeRegistries.ITEMS.getValue(renamed);
             if (item != null && renamed.equals(item.getRegistryName())) {
-                OpenModularTurrets.getLogger().info("Renaming {} to {}", mapping.key, renamed);
+                Reference.LOGGER.info("Renaming {} to {}", mapping.key, renamed);
                 mapping.remap(item);
             } else {
                 ignoreIfRemoved(mapping);
@@ -81,7 +80,7 @@ public final class MissingIds {
             ResourceLocation renamed = RENAMED_SOUNDS.get(mapping.key);
             SoundEvent sound = renamed == null ? null : ForgeRegistries.SOUND_EVENTS.getValue(renamed);
             if (sound != null && renamed.equals(sound.getRegistryName())) {
-                OpenModularTurrets.getLogger().info("Renaming sound {} to {}", mapping.key, renamed);
+                Reference.LOGGER.info("Renaming sound {} to {}", mapping.key, renamed);
                 mapping.remap(sound);
             }
         }
@@ -89,7 +88,7 @@ public final class MissingIds {
 
     private static void ignoreIfRemoved(RegistryEvent.MissingMappings.Mapping<?> mapping) {
         if (REMOVED.contains(mapping.key)) {
-            OpenModularTurrets.getLogger().info("Removing {} (no longer part of the mod)", mapping.key);
+            Reference.LOGGER.info("Removing {} (no longer part of the mod)", mapping.key);
             mapping.ignore();
         }
     }

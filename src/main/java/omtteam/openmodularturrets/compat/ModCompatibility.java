@@ -4,7 +4,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import omtteam.omlib.compat.OMLibModCompatibility;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.compat.computercraft.CCPeripheralProvider;
 import omtteam.openmodularturrets.compat.hwyla.OMTWailaWrapper;
 import omtteam.openmodularturrets.compat.opencomputers.DriverTurretBase;
@@ -18,21 +17,21 @@ public class ModCompatibility {
 
     public static void checkForMods() {
         if (OMLibModCompatibility.ThermalExpansionLoaded) {
-            OpenModularTurrets.getLogger().info("Hi there, dV=V0B(t1-t0)! (Found ThermalExpansion)");
+            Reference.LOGGER.info("Hi there, dV=V0B(t1-t0)! (Found ThermalExpansion)");
         }
         if (OMLibModCompatibility.EnderIOLoaded) {
-            OpenModularTurrets.getLogger().info("Not sure if iron ingot, or electrical steel ingot... (Found EnderIO)");
+            Reference.LOGGER.info("Not sure if iron ingot, or electrical steel ingot... (Found EnderIO)");
         }
         if (OMLibModCompatibility.MekanismLoaded) {
-            OpenModularTurrets.getLogger().info("Mur omsimu, plz. (Found Mekanism)");
+            Reference.LOGGER.info("Mur omsimu, plz. (Found Mekanism)");
         }
         if (OMLibModCompatibility.OpenComputersLoaded || OMLibModCompatibility.ComputerCraftLoaded) {
-            OpenModularTurrets.getLogger().info("Enabling LUA integration. (Found OpenComputers/ComputerCraft)");
+            Reference.LOGGER.info("Enabling LUA integration. (Found OpenComputers/ComputerCraft)");
         }
 
         ValkyrienWarfareLoaded = Loader.isModLoaded("valkyrienskies");
         if (ValkyrienWarfareLoaded) {
-            OpenModularTurrets.getLogger().info("ValkyrienSkies Found! You have a good taste in mods");
+            Reference.LOGGER.info("ValkyrienSkies Found! You have a good taste in mods");
         }
     }
 

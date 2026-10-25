@@ -25,7 +25,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.util.GeneralUtil;
 import omtteam.omlib.util.inventory.InvUtil;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.misc.GeneratorTileEntity;
@@ -49,7 +48,6 @@ public class BlockGenerator extends Block {
 
     public BlockGenerator() {
         super(Material.IRON);
-        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setHardness(3.5F);
         this.setResistance(3.5F);
         this.setSoundType(SoundType.METAL);
@@ -115,7 +113,7 @@ public class BlockGenerator extends Block {
             return false;
         }
         if (!world.isRemote && world.getTileEntity(pos) instanceof GeneratorTileEntity) {
-            player.openGui(OpenModularTurrets.instance, GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
+            player.openGui(Reference.MOD_ID, GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
     }

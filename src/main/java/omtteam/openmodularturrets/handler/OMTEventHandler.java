@@ -19,13 +19,13 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import omtteam.omlib.config.ConfigSync;
 import omtteam.openmodularturrets.entity.projectile.AbstractOMTDamageSource;
+import omtteam.openmodularturrets.entity.projectile.OMTFakePlayer;
+import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.fixes.MissingIds;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.registry.ModItems;
-import omtteam.openmodularturrets.registry.ModSounds;
-import omtteam.openmodularturrets.util.OMTFakePlayer;
-import omtteam.openmodularturrets.util.OMTUtil;
+import omtteam.openmodularturrets.sound.ModSounds;
 
 /**
  * Created by Keridos on 02/05/17.
@@ -59,7 +59,7 @@ public class OMTEventHandler {
      * the addons' looting level, so its drops are player drops.
      */
     private static void attributeToFakePlayer(EntityLivingBase entity) {
-        int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
+        int fakeDrops = TurretDamage.getFakeDropsLevel(entity);
         if (fakeDrops >= 0) {
             FakePlayer player = OMTFakePlayer.getFakePlayer((WorldServer) entity.getEntityWorld());
             player.setHeldItem(EnumHand.MAIN_HAND, OMTFakePlayer.getSword(fakeDrops));
@@ -126,7 +126,7 @@ public class OMTEventHandler {
         } else if (killer instanceof EntityPlayer && !(killer instanceof FakePlayer)) {
             noLoot = false;
         } else {
-            noLoot = entity.getTags().contains("openmodularturrets:turret_hit") && OMTUtil.getFakeDropsLevel(entity) < 0;
+            noLoot = entity.getTags().contains("openmodularturrets:turret_hit") && TurretDamage.getFakeDropsLevel(entity) < 0;
         }
         if (noLoot) {
             event.setCanceled(true);

@@ -5,8 +5,8 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import omtteam.omlib.compat.opencomputers.AbstractOMTileEntityEnvironment;
-import omtteam.openmodularturrets.compat.BaseComputerCommands;
-import omtteam.openmodularturrets.compat.BaseComputerCommands.Command;
+import omtteam.openmodularturrets.compat.computer.BaseComputerCommands;
+import omtteam.openmodularturrets.compat.computer.BaseComputerCommands.Command;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 /**

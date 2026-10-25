@@ -10,10 +10,9 @@ import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.entity.projectile.AbstractOMTDamageSource;
 import omtteam.openmodularturrets.entity.projectile.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.entity.projectile.NormalDamageSource;
-import omtteam.openmodularturrets.registry.ModBlocks;
-import omtteam.openmodularturrets.registry.TurretRegistry;
+import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
-import omtteam.openmodularturrets.util.OMTUtil;
+import omtteam.openmodularturrets.turret.TurretRegistry;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -51,7 +50,7 @@ public final class OMTApi {
      */
     public static Block block(TurretType type) {
         requireRegistered();
-        Block block = ModBlocks.turret(type);
+        Block block = TurretRegistry.block(type);
         if (block == null) throw new IllegalStateException("Turret " + type + " has no block (disabled or too early)");
         return block;
     }
@@ -66,7 +65,7 @@ public final class OMTApi {
      * members, nor their pets, nor turret projectiles. The same rule built-in turrets apply.
      */
     public static boolean canDamage(TurretBase base, Entity entity) {
-        return OMTUtil.canDamageEntity(entity, Objects.requireNonNull(base, "base"));
+        return TurretDamage.canDamageEntity(entity, Objects.requireNonNull(base, "base"));
     }
 
     /**
@@ -87,7 +86,7 @@ public final class OMTApi {
                 ? new ArmorBypassDamageSource(damageType, looting, base, world, direct != null)
                 : new NormalDamageSource(damageType, looting, base, world, direct != null);
         if (!(target instanceof EntityPlayer)) {
-            OMTUtil.setTagsForTurretHit(target, base);
+            TurretDamage.setTagsForTurretHit(target, base);
         }
         target.attackEntityFrom(source, amount);
         target.hurtResistantTime = 0;

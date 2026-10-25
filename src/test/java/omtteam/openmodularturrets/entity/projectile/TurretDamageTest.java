@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.util;
+package omtteam.openmodularturrets.entity.projectile;
 
 import omtteam.omlib.api.permission.EnumAccessLevel;
 import omtteam.omlib.api.permission.OwnerShareRegister;
@@ -15,7 +15,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class OMTUtilTest {
+class TurretDamageTest {
     private static Player playerTrustedNone;
     private static Player playerUntrusted;
     private static Player playerOwner;
@@ -67,21 +67,21 @@ class OMTUtilTest {
      */
     @org.junit.jupiter.api.Test
     void canDamagePlayer() {
-        assertFalse(OMTUtil.canDamagePlayer(playerOwner, base));
-        assertFalse(OMTUtil.canDamagePlayer(playerShareOwner, base));
+        assertFalse(TurretDamage.canDamagePlayer(playerOwner, base));
+        assertFalse(TurretDamage.canDamagePlayer(playerShareOwner, base));
         OMTConfig.TURRETS.turretDamageTrustedPlayers = false;
-        assertFalse(OMTUtil.canDamagePlayer(playerTrustedNone, base));
-        assertTrue(OMTUtil.canDamagePlayer(playerUntrusted, base));
+        assertFalse(TurretDamage.canDamagePlayer(playerTrustedNone, base));
+        assertTrue(TurretDamage.canDamagePlayer(playerUntrusted, base));
         OMTConfig.TURRETS.turretDamageTrustedPlayers = true;
-        assertTrue(OMTUtil.canDamagePlayer(playerTrustedNone, base));
-        assertTrue(OMTUtil.canDamagePlayer(playerUntrusted, base));
+        assertTrue(TurretDamage.canDamagePlayer(playerTrustedNone, base));
+        assertTrue(TurretDamage.canDamagePlayer(playerUntrusted, base));
         setOfflineMode();
-        assertFalse(OMTUtil.canDamagePlayer(playerOwner, base));
-        assertFalse(OMTUtil.canDamagePlayer(playerShareOwner, base));
-        assertTrue(OMTUtil.canDamagePlayer(playerTrustedNone, base));
-        assertTrue(OMTUtil.canDamagePlayer(playerUntrusted, base));
+        assertFalse(TurretDamage.canDamagePlayer(playerOwner, base));
+        assertFalse(TurretDamage.canDamagePlayer(playerShareOwner, base));
+        assertTrue(TurretDamage.canDamagePlayer(playerTrustedNone, base));
+        assertTrue(TurretDamage.canDamagePlayer(playerUntrusted, base));
         OMTConfig.TURRETS.turretDamageTrustedPlayers = false;
-        assertFalse(OMTUtil.canDamagePlayer(playerTrustedNone, base));
-        assertTrue(OMTUtil.canDamagePlayer(playerUntrusted, base));
+        assertFalse(TurretDamage.canDamagePlayer(playerTrustedNone, base));
+        assertTrue(TurretDamage.canDamagePlayer(playerUntrusted, base));
     }
 }

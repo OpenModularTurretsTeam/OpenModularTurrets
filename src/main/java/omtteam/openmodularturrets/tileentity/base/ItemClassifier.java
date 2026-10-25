@@ -4,7 +4,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import omtteam.openmodularturrets.registry.TurretRegistry;
 import omtteam.openmodularturrets.config.DisposableAmmo;
 import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.item.ReactorFuel;
@@ -12,6 +11,7 @@ import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.item.AddonMetaItem;
 import omtteam.openmodularturrets.item.UpgradeMetaItem;
+import omtteam.openmodularturrets.turret.TurretRegistry;
 
 import java.util.Optional;
 

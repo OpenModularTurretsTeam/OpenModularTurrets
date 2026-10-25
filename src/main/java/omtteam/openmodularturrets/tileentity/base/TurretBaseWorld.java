@@ -19,8 +19,9 @@ import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.world.BaseWorld;
 import omtteam.openmodularturrets.core.world.BlockPosition;
 import omtteam.openmodularturrets.core.world.Box;
+import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.reference.OMTNames;
-import omtteam.openmodularturrets.registry.ModSounds;
+import omtteam.openmodularturrets.sound.ModSounds;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,12 +32,12 @@ import java.util.Optional;
 import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
 
 /**
- * {@link BaseWorld} for a turret base tile entity. Slots: ammo 0–8, addons 9–10, upgrades 11–12 (3.x layout).
+ * {@link BaseWorld} for a turret base tile entity; the slot layout is {@link TurretBaseInventory}'s.
  */
 public class TurretBaseWorld implements BaseWorld {
-    public static final int AMMO_SLOTS = 9;
-    public static final int ADDON_START = 9;
-    public static final int UPGRADE_START = 11;
+    private static final int AMMO_SLOTS = TurretBaseInventory.AMMO_COUNT;
+    private static final int ADDON_START = TurretBaseInventory.ADDON_START;
+    private static final int UPGRADE_START = TurretBaseInventory.UPGRADE_START;
 
     private final TurretBase base;
 

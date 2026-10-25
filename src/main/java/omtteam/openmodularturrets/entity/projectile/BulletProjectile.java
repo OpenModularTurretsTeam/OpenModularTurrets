@@ -13,7 +13,7 @@ import net.minecraft.world.WorldServer;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.OMTConfig;
-import omtteam.openmodularturrets.registry.ModSounds;
+import omtteam.openmodularturrets.sound.ModSounds;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;

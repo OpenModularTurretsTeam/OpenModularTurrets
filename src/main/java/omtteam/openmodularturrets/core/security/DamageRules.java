@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * Who turret damage may hit (1.12.2 {@code OMTUtil.canDamageEntity}), for projectiles, rays and the melee turret
+ * Who turret damage may hit (1.12.2 {@code TurretDamage.canDamageEntity}), for projectiles, rays and the melee turret
  * alike. The game side says what kind of {@link Victim} an entity is and looks up the base's trust list.
  */
 public final class DamageRules {
