@@ -70,11 +70,11 @@ public class TargetingSettings {
         return maxRange;
     }
 
-    /** Also lowers the range if it exceeds the new maximum. */
+    /** Negative values count as 0; also lowers the range if it exceeds the new maximum. */
     public void setMaxRange(int maxRange) {
-        this.maxRange = maxRange;
-        if (range > maxRange) {
-            range = maxRange;
+        this.maxRange = Math.max(0, maxRange);
+        if (range > this.maxRange) {
+            range = this.maxRange;
         }
     }
 }
