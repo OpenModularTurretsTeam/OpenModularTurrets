@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Changed
+
+- Releases on CurseForge and Modrinth are titled like the jar file (`openmodularturrets-<version>-mc<minecraft version>-<loader>`)
+
 ## [4.0.0-beta.8] - 2026-10-25
 
 ### Added

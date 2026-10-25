@@ -167,7 +167,8 @@ val releaseNotes: Provider<String> = providers.fileContents(rootProject.layout.p
     }
 
 publishMods {
-    displayName = "$modName ${project.version}"
+    // Shown like the jar file name (<archives_base_name>-<mod_version>-mc<minecraft version>-<loader>)
+    displayName = "${base.archivesName.get()}-$archiveVersionName"
     version = project.version.toString()
     changelog = releaseNotes
     type = when (property("release_type")) {
