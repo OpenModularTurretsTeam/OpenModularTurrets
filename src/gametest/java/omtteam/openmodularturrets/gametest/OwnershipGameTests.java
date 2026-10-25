@@ -28,11 +28,15 @@ import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.config.ConfigData;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.TurretPlacement;
+import omtteam.openmodularturrets.core.security.AccessLevel;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.turret.TurretType;
+import omtteam.openmodularturrets.network.TrustPacketHandler;
+import omtteam.openmodularturrets.network.TrustPackets;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.security.OwnedHost;
 import omtteam.openmodularturrets.security.PlayerAdapter;
+import omtteam.openmodularturrets.security.TrustHost;
 
 import java.util.List;
 import java.util.UUID;
@@ -159,6 +163,65 @@ public class OwnershipGameTests implements OMTGameTests {
 
         assertOwner(helper, base, null);
         helper.succeed();
+    }
+
+    /** The owner's disown request clears owner and trust list; the base stays where it is. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "ownership_disown_base", timeoutTicks = TIMEOUT_TICKS)
+    public void ownerDisownsTheBase(GameTestHelper helper) {
+        BlockPos pos = new BlockPos(1, 1, 1);
+        helper.setBlock(pos, ModBlocks.TURRET_BASES.get(0));
+        ServerPlayer owner = playerAt(helper, "Owner", pos);
+        TrustHost base = (TrustHost) helper.getBlockEntity(pos);
+        base.setOwner(PlayerAdapter.identity(owner));
+        base.getTrustManager().addTrustedPlayer(PlayerAdapter.info(owner), new PlayerIdentity(UUID.randomUUID(), "Friend"));
+        helper.assertTrue(base.getTrustManager().getTrustedPlayers().size() == 1, "The friend was not trusted");
+
+        TrustPacketHandler.handleDisown(new TrustPackets.Disown(helper.absolutePos(pos)), owner);
+
+        assertOwner(helper, pos, null);
+        helper.assertTrue(base.getTrustManager().getTrustedPlayers().isEmpty(), "The trust list was not cleared");
+        helper.assertBlockPresent(ModBlocks.TURRET_BASES.get(0), pos);
+        helper.succeed();
+    }
+
+    /** Only the owner disowns: an admin on the trust list cannot. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "ownership_disown_admin", timeoutTicks = TIMEOUT_TICKS)
+    public void adminsCannotDisown(GameTestHelper helper) {
+        BlockPos pos = new BlockPos(1, 1, 1);
+        helper.setBlock(pos, ModBlocks.TURRET_BASES.get(0));
+        ServerPlayer owner = playerAt(helper, "Owner", pos);
+        ServerPlayer admin = playerAt(helper, "Admin", pos);
+        TrustHost base = (TrustHost) helper.getBlockEntity(pos);
+        base.setOwner(PlayerAdapter.identity(owner));
+        base.getTrustManager().addTrustedPlayer(PlayerAdapter.info(owner), PlayerAdapter.identity(admin));
+        base.getTrustManager().setAccessLevel(PlayerAdapter.info(owner), admin.getUUID(), AccessLevel.ADMIN);
+
+        TrustPacketHandler.handleDisown(new TrustPackets.Disown(helper.absolutePos(pos)), admin);
+
+        assertOwner(helper, pos, PlayerAdapter.identity(owner));
+        helper.succeed();
+    }
+
+    /** The camouflage trap is disowned the same way. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "ownership_disown_trap", timeoutTicks = TIMEOUT_TICKS)
+    public void ownerDisownsTheTrap(GameTestHelper helper) {
+        BlockPos pos = new BlockPos(1, 1, 1);
+        helper.setBlock(pos, ModBlocks.CAMO_TRAP);
+        ServerPlayer owner = playerAt(helper, "Owner", pos);
+        owned(helper, pos).setOwner(PlayerAdapter.identity(owner));
+
+        TrustPacketHandler.handleDisown(new TrustPackets.Disown(helper.absolutePos(pos)), owner);
+
+        assertOwner(helper, pos, null);
+        helper.succeed();
+    }
+
+    /** A fake player standing on top of the block at {@code relative}, within reach for packets. */
+    private static ServerPlayer playerAt(GameTestHelper helper, String name, BlockPos relative) {
+        ServerPlayer player = player(helper, name);
+        BlockPos pos = helper.absolutePos(relative);
+        player.moveTo(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
+        return player;
     }
 
     /** Runs {@code click} with fake players allowed to claim and the given spread limit, then restores both. */

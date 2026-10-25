@@ -25,6 +25,9 @@ public final class OMTPackets {
     public static final PacketType<TrustPackets.ChangeAccess> CHANGE_ACCESS_LEVEL = NetworkCompat.registerC2S(
             OMT.id("change_access_level"), TrustPackets.ChangeAccess::write, TrustPackets.ChangeAccess::read,
             TrustPacketHandler::handleChangeAccess);
+    public static final PacketType<TrustPackets.Disown> DISOWN = NetworkCompat.registerC2S(
+            OMT.id("disown"), TrustPackets.Disown::write, TrustPackets.Disown::read,
+            TrustPacketHandler::handleDisown);
 
     // Base and configure screens
     public static final PacketType<BasePackets.SimpleAction> BASE_ACTION = NetworkCompat.registerC2S(

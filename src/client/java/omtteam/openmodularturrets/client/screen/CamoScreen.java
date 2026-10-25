@@ -76,6 +76,13 @@ public class CamoScreen extends AbstractContainerScreen<CamoMenu> {
                     .build());
             trusted.active = minecraft != null && minecraft.player != null
                     && trap.getTrustManager().isAdmin(PlayerAdapter.info(minecraft.player));
+            if (minecraft != null && minecraft.player != null
+                    && trap.getTrustManager().isOwner(PlayerAdapter.info(minecraft.player))) {
+                // outside the panel, whose row is full; "No" asks the server for the camouflage menu again
+                BlockPos pos = menu.getPos();
+                addRenderableWidget(DisownConfirm.button(leftPos + WIDTH + 4, topPos + CamoMenu.PHANTOM_Y - 1, 80, pos,
+                        () -> ClientNetworkCompat.sendToServer(OMTPackets.OPEN_CAMO_MENU, new CamoPackets.OpenMenu(pos))));
+            }
         }
     }
 

@@ -83,4 +83,19 @@ public final class TrustPacketHandler {
             if (result == TrustResult.NO_PERMISSION) PacketValidation.sendNoPermission(player);
         });
     }
+
+    /**
+     * Only the owner may disown a block; afterwards it has neither owner nor trust list, and open menus of it close
+     * themselves (their {@code stillValid} checks fail).
+     */
+    public static void handleDisown(TrustPackets.Disown packet, ServerPlayer player) {
+        PacketValidation.findTrustHost(player, packet.pos()).ifPresent(host -> {
+            if (!host.getTrustManager().canPerformOwnerAction(PlayerAdapter.info(player))) {
+                PacketValidation.sendNoPermission(player);
+                return;
+            }
+            host.clearOwner();
+            player.displayClientMessage(Component.translatable("message.openmodularturrets.disowned"), true);
+        });
+    }
 }

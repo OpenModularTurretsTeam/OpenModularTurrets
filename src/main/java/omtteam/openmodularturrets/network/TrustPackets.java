@@ -41,6 +41,17 @@ public final class TrustPackets {
         }
     }
 
+    /** C2S: the owner gives up the block (owner and trust list cleared). */
+    public record Disown(BlockPos pos) {
+        public static void write(FriendlyByteBuf buf, Disown packet) {
+            buf.writeBlockPos(packet.pos);
+        }
+
+        public static Disown read(FriendlyByteBuf buf) {
+            return new Disown(buf.readBlockPos());
+        }
+    }
+
     /** C2S: raise ({@code +1}) or lower ({@code -1}) the access level of a trusted player. */
     public record ChangeAccess(BlockPos pos, UUID player, int delta) {
         public static void write(FriendlyByteBuf buf, ChangeAccess packet) {

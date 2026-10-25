@@ -57,6 +57,12 @@ public class ConfigureScreen extends CompatScreen {
         return shownAccess.map(level -> level.isAtLeast(AccessLevel.ADMIN)).orElse(false);
     }
 
+    private boolean isOwner() {
+        return minecraft != null && minecraft.player != null
+                && base().map(base -> base.getTrustManager().isOwner(PlayerAdapter.info(minecraft.player))).orElse(false);
+    }
+
+    @SuppressWarnings("DataFlowIssue")
     @Override
     protected void init() {
         left = (width - WIDTH) / 2;
@@ -78,6 +84,10 @@ public class ConfigureScreen extends CompatScreen {
                     .build());
         }
         addRenderableWidget(Button.builder(ScreenTexts.gui("back"), b -> back()).bounds(left + 185, top + 20, 80, 20).build());
+        if (isOwner()) {
+            addRenderableWidget(DisownConfirm.button(left + 185, top + 45, 80, pos,
+                    () -> minecraft.setScreen(this)));
+        }
         updateLabels();
     }
 
