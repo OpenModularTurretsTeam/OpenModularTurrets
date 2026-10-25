@@ -8,6 +8,8 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+## [4.0.0-beta.9] - 2026-10-25
+
 ### Added
 
 - Right-clicking a turret base, turret, camouflage trap or hardened block/wall/fence without an owner claims it and the unowned blocks connected to it (up to `bases.claimSpreadLimit`, default 1024); machines' fake players only claim if `general.fakePlayersCanClaim` is set
