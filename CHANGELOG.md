@@ -16,6 +16,8 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - The turret item tooltip (with shift) and the Hwyla and The One Probe overlays of a turret show its optimal range and its turn rate
 - Turret API: `TurretStats.Builder.falloff(optimalShare, damageAtMaxRange)` and `turnRate(degreesPerTick)`; `TurretProjectile` has `setLaunch(…)`, `damage(Entity)`, `damage(float, Entity)`, `damageFactor(…)`, `ampDamage(…)`, `hitPoint(…)`, `baseDamage()` and `getTurretType()` for projectiles with the range falloff
 - Config: `turrets.aimTolerance` and, in every turret section (also in `openmodularturrets_addon_turrets.cfg`), `optimalRange`, `falloffDamage` and `turnRate`
+- Turrets work on Rifted Valkyrium ships (Cleanroom; probably also Valkyrien Skies 1): they aim, lead and fire relative to the ship as it moves and turns, the ship's own hull blocks their line of sight, and the teleporter turret pulls targets to where the ship is
+- Holding a turret next to a turret base where it cannot be placed shows a short reason next to the red outline (block in the way, wrong side, base tier too low, base full, too many of this turret), as on 1.20.1+
 
 ### Changed
 
