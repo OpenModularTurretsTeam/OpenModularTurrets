@@ -11,23 +11,36 @@ import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.PlayerInfo;
 import omtteam.openmodularturrets.core.target.EntityCategory;
 import omtteam.openmodularturrets.core.target.TargetEntity;
+import omtteam.openmodularturrets.core.world.Pose;
+import omtteam.openmodularturrets.core.world.Vector3;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 
 import java.util.Optional;
 import java.util.UUID;
 
 /**
- * A Minecraft {@link LivingEntity} as a core {@link TargetEntity}.
+ * A Minecraft {@link LivingEntity} as a core {@link TargetEntity}, with its position and eyes in a base's coordinates
+ * (converted with the base's {@link Pose} when the wrapper is created).
  */
 public class LivingTargetEntity extends TargetEntity {
     private final LivingEntity entity;
+    private final Vector3 position;
+    private final Vector3 eyes;
 
-    public LivingTargetEntity(LivingEntity entity) {
+    /** @param pose the pose of the base the entity is seen from ({@link Pose#IDENTITY} outside contraptions) */
+    public LivingTargetEntity(LivingEntity entity, Pose pose) {
         this.entity = entity;
+        this.position = pose.toLocal(toVector(entity.position()));
+        this.eyes = pose.toLocal(toVector(entity.getEyePosition()));
+    }
+
+    private static Vector3 toVector(Vec3 vec) {
+        return new Vector3(vec.x, vec.y, vec.z);
     }
 
     public LivingEntity getEntity() {
@@ -46,22 +59,32 @@ public class LivingTargetEntity extends TargetEntity {
 
     @Override
     public double getX() {
-        return entity.getX();
+        return position.x();
     }
 
     @Override
     public double getY() {
-        return entity.getY();
+        return position.y();
     }
 
     @Override
     public double getZ() {
-        return entity.getZ();
+        return position.z();
     }
 
     @Override
-    public double getEyeHeight() {
-        return entity.getEyeHeight();
+    public double getEyeX() {
+        return eyes.x();
+    }
+
+    @Override
+    public double getEyeY() {
+        return eyes.y();
+    }
+
+    @Override
+    public double getEyeZ() {
+        return eyes.z();
     }
 
     @Override

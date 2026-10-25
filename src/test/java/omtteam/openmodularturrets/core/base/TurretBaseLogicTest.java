@@ -290,6 +290,13 @@ class TurretBaseLogicTest {
         }
 
         @Test
+        void keepsItsTier() {
+            for (int tier = 1; tier <= 5; tier++) {
+                assertEquals(tier, base(tier).getTier());
+            }
+        }
+
+        @Test
         void upgradeSlotsDependOnTier() {
             upgrade(0, TurretBaseUpgradeType.RANGE, 1);
             upgrade(1, TurretBaseUpgradeType.RANGE, 1);

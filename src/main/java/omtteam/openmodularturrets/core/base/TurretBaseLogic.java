@@ -243,7 +243,7 @@ public class TurretBaseLogic {
     public int countAmmo(AmmoType type) {
         int count = 0;
         for (ItemSlot slot : world.getAmmoSlots()) {
-            if (slot.getCount() > 0 && slot.isAmmo(type)) count += slot.getCount();
+            if (slot.isAmmo(type)) count += slot.getCount();
         }
         return count;
     }
@@ -265,7 +265,7 @@ public class TurretBaseLogic {
         List<ItemSlot> matching = new ArrayList<>();
         int available = 0;
         for (ItemSlot slot : world.getAmmoSlots()) {
-            if (slot.getCount() > 0 && slot.isAmmo(ammo)) {
+            if (slot.isAmmo(ammo)) {
                 matching.add(slot);
                 available += slot.getCount();
                 if (available >= needed) break;
@@ -290,7 +290,7 @@ public class TurretBaseLogic {
     /** Removes one item of a reactor fuel from the first ammo slot that holds it. */
     private boolean extractFuel(ReactorFuel fuel) {
         for (ItemSlot slot : world.getAmmoSlots()) {
-            if (slot.getCount() > 0 && slot.isReactorFuel(fuel)) {
+            if (slot.isReactorFuel(fuel)) {
                 return slot.extract(1) == 1;
             }
         }
@@ -315,7 +315,7 @@ public class TurretBaseLogic {
     public int getUpgradeCount(TurretBaseUpgradeType type) {
         int count = 0;
         for (ItemSlot slot : usableUpgradeSlots()) {
-            if (slot.getCount() > 0 && slot.getUpgrade().filter(type::equals).isPresent()) count += slot.getCount();
+            if (slot.getUpgrade().filter(type::equals).isPresent()) count += slot.getCount();
         }
         return count;
     }
@@ -324,7 +324,7 @@ public class TurretBaseLogic {
     public int getAddonCount(AddonType type) {
         int count = 0;
         for (ItemSlot slot : usableAddonSlots()) {
-            if (slot.getCount() > 0 && slot.getAddon().filter(type::equals).isPresent()) count += slot.getCount();
+            if (slot.getAddon().filter(type::equals).isPresent()) count += slot.getCount();
         }
         return count;
     }

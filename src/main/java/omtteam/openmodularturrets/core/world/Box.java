@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.core.world;
 
 /**
- * Axis-aligned box in world coordinates.
+ * Axis-aligned box (in world coordinates, or a contraption's plot coordinates, see {@link Pose}).
  */
 public record Box(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
     /**

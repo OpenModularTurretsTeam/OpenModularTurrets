@@ -15,6 +15,7 @@ import omtteam.openmodularturrets.core.security.DamageRules;
 import omtteam.openmodularturrets.core.security.DamageRules.Victim;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.TrustManager;
+import omtteam.openmodularturrets.core.world.Pose;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,7 +58,7 @@ public final class TurretDamage {
         if (entity instanceof TurretProjectile) return new Victim.Projectile();
         if (entity instanceof Player player) return new Victim.Player(PlayerAdapter.identity(player));
         if (entity instanceof LivingEntity living) {
-            Optional<PlayerIdentity> owner = new LivingTargetEntity(living).getOwner();
+            Optional<PlayerIdentity> owner = new LivingTargetEntity(living, Pose.IDENTITY).getOwner();
             if (owner.isPresent()) return new Victim.Pet(owner.get());
         }
         return new Victim.Other();

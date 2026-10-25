@@ -13,12 +13,15 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import omtteam.openmodularturrets.compat.SubLevelCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.item.ItemSlot;
 import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.world.BaseWorld;
 import omtteam.openmodularturrets.core.world.BlockPosition;
 import omtteam.openmodularturrets.core.world.Box;
+import omtteam.openmodularturrets.core.world.Pose;
+import omtteam.openmodularturrets.core.world.Vector3;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.registry.ModSounds;
 
@@ -28,7 +31,9 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- * {@link BaseWorld} for a turret base block entity.
+ * {@link BaseWorld} for a turret base block entity. On a Sable contraption the base's coordinates are those of the
+ * plot, so entity positions are converted into them with the base's current {@link Pose}, and line of sight starts at
+ * the point the plot position is shown at.
  */
 public class BlockEntityBaseWorld implements BaseWorld {
     private final Supplier<Level> level;
@@ -73,14 +78,23 @@ public class BlockEntityBaseWorld implements BaseWorld {
         return current != null && current.isDay() && !current.isRaining() && current.canSeeSky(pos.above(2));
     }
 
+    /**
+     * Entities whose bounding box touches the box (as vanilla searches). On a contraption, Sable widens a search
+     * inside the plot to the world area around the turned box, so there the entities found are filtered by their
+     * position in the base's coordinates.
+     */
     @Override
     public List<TargetEntity> getLivingEntities(Box box) {
         Level current = level.get();
         if (current == null) return List.of();
+        Pose pose = SubLevelCompat.poseAt(current, pos);
         AABB aabb = new AABB(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
         List<TargetEntity> result = new ArrayList<>();
         for (LivingEntity entity : current.getEntitiesOfClass(LivingEntity.class, aabb, e -> !e.isSpectator())) {
-            result.add(new LivingTargetEntity(entity));
+            LivingTargetEntity target = new LivingTargetEntity(entity, pose);
+            if (pose.isIdentity() || box.contains(target.getX(), target.getY(), target.getZ())) {
+                result.add(target);
+            }
         }
         return result;
     }
@@ -91,7 +105,7 @@ public class BlockEntityBaseWorld implements BaseWorld {
         if (current == null) return Optional.empty();
         Entity entity = current.getEntity(id);
         return entity instanceof LivingEntity living && !living.isSpectator()
-                ? Optional.of(new LivingTargetEntity(living)) : Optional.empty();
+                ? Optional.of(new LivingTargetEntity(living, SubLevelCompat.poseAt(current, pos))) : Optional.empty();
     }
 
     /**
@@ -105,22 +119,28 @@ public class BlockEntityBaseWorld implements BaseWorld {
     public boolean hasLineOfSight(double fromX, double fromY, double fromZ, TargetEntity target) {
         Level current = level.get();
         if (current == null || !(target instanceof LivingTargetEntity living)) return false;
-        Vec3 end = new Vec3(target.getX(), target.getY() + target.getEyeHeight(), target.getZ());
-        return isClear(current, new Vec3(fromX, fromY, fromZ), end, living.getEntity());
+        return isClear(current, SubLevelCompat.poseAt(current, pos), new Vec3(fromX, fromY, fromZ),
+                living.getEntity().getEyePosition(), living.getEntity());
     }
 
     /**
-     * Whether nothing solid lies between a turret's centre {@code from} and {@code to}, see {@link #hasLineOfSight}.
+     * Whether nothing solid lies between a turret's centre {@code plotFrom} and {@code worldTo}, see
+     * {@link #hasLineOfSight}. The point where the trace leaves the turret's block is found in the plot, where the
+     * block is axis-aligned, so a turned turret on a contraption does not see its own block.
      *
-     * @param context the entity passed to {@link ClipContext} as collision context (must not be null)
+     * @param pose     the pose of the turret's contraption ({@link Pose#IDENTITY} outside contraptions)
+     * @param plotFrom the turret's centre in its own (plot) coordinates
+     * @param worldTo  the end point in the world
+     * @param context  the entity passed to {@link ClipContext} as collision context (must not be null)
      */
-    public static boolean isClear(Level level, Vec3 from, Vec3 to, Entity context) {
-        Vec3 delta = to.subtract(from);
-        double largestAxis = Math.max(Math.max(Math.abs(delta.x), Math.abs(delta.y)), Math.abs(delta.z));
+    public static boolean isClear(Level level, Pose pose, Vec3 plotFrom, Vec3 worldTo, Entity context) {
+        Vector3 from = new Vector3(plotFrom.x, plotFrom.y, plotFrom.z);
+        Vector3 delta = pose.toLocal(new Vector3(worldTo.x, worldTo.y, worldTo.z)).subtract(from);
+        double largestAxis = Math.max(Math.max(Math.abs(delta.x()), Math.abs(delta.y())), Math.abs(delta.z()));
         if (largestAxis <= 0.5D) return true;
-        Vec3 start = from.add(delta.scale(0.5D / largestAxis)).add(delta.normalize().scale(1.0E-3D));
-        BlockHitResult hit = level.clip(new ClipContext(start, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
-                context));
+        Vector3 start = pose.toWorld(from.add(delta.scale(0.5D / largestAxis)).add(delta.scale(1.0E-3D / delta.length())));
+        BlockHitResult hit = level.clip(new ClipContext(new Vec3(start.x(), start.y(), start.z()), worldTo,
+                ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, context));
         return hit.getType() == HitResult.Type.MISS;
     }
 

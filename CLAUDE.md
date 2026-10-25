@@ -40,6 +40,14 @@ Core gameplay:
 - **Forge** 47.x (1.20.1 only), built with the legacy variant of ModDevGradle (`net.neoforged.moddev.legacyforge`, same artifact and version as `moddev`; build-time only), requested by the user.
   On Forge, the Fabric-only APIs are replaced by Forge's own (capabilities, events, event network channels); see §4 "Forge 1.20.1".
 - **MixinExtras** (`io.github.llamalad7:mixinextras-forge`), jar-in-jar in the **Forge jar only** (approved by the user on 2026-10-24): Fabric Loader and NeoForge ship it, Forge 1.20.1 does not, and `LivingEntityMixin` needs it.
+- **Sable Companion** (`dev.ryanhcode.sable-companion`, MIT, from `maven.ryanhcode.dev`), jar-in-jar on the **1.21.1 nodes only** (approved by the user on 2026-10-25), for Sable contraptions.
+  It has a do-nothing fallback, so it needs no `isModLoaded` guard.
+  There is no Companion (and no Sable) for 1.20.1.
+- **Sable** (Modrinth, pinned by version id in `sable_version`), dev and game test runtime only, never bundled (approved by the user on 2026-10-25).
+  On Fabric only in the dev client: Sable 2.0.6's bundled Veil requires client-only Fabric API modules, so it cannot load in a server environment (the Fabric game test server excludes it); the NeoForge game test server runs with Sable.
+  The NeoForge test mod also compiles against Sable (and Companion) for the contraption game tests (approved by the user on 2026-10-25).
+- **Create Aeronautics** and **Create** (Modrinth, pinned by version id), in the NeoForge dev runs only (`localRuntime`), never bundled (requested by the user on 2026-10-25), to try turrets on airships by hand.
+  Create is also compile-only on NeoForge (approved by the user on 2026-10-25) for `platform/neoforge/NeoForgeCreateMovement`, a `BlockMovementChecks` check registered only when Create is loaded; Create and Create Aeronautics are on the NeoForge game test server for the movement tests.
 - Nothing else without asking the user first.
   No Architectury, no Cloth Config, no OMLib, no Kotlin.
 
@@ -678,3 +686,21 @@ Update this checklist as work progresses.
 - [x] `platform/forge`: `OMTForge`, all services, `ForgeBlockCapabilities` (items, energy of base and generator), `ForgePlugins`; client `OMTForgeClient`, `ForgeClientNetwork`, `ForgeCamoModel`, `ForgeItemRenderer`
 - [x] GameTests on Forge: `OMTForgeGameTests`; all 35 pass (capabilities, FE adapter, plugin discovery, GUI path, mixin loaded)
 - [x] Checked by hand (by the user, 2026-10-24) in a Forge client (`:1.20.1-forge:runClient`) and with the release jar in a real Forge install: turret, projectile, ray and item rendering, camouflage, screens, Jade, joining a dedicated server
+
+### Sable contraptions (1.21.1 only; approach B decided by the user on 2026-10-25)
+
+Turret bases and turrets on Sable contraptions (sub-levels: blocks stored in a far-away plot, placed in the world by a pose) must interact with the world where they are rendered.
+Approach B: the core keeps working in the plot frame (`BlockEntityBaseWorld` hands it entity positions converted into the base's frame), firing works in the world frame (turret centre, muzzle and face converted out of the plot; aim directions converted back into the plot for yaw/pitch).
+Projectiles inherit the contraption's velocity (decided by the user).
+Sable already handles `Level.clip`, entity box searches, entities added inside a plot (moved out), `Entity#distanceToSqr`, block interaction range, sound and particle range and explosions.
+
+- [x] Sable-independent fixes: `Clearable` on turret base and generator (Sable assembly, like `/setblock`, would otherwise duplicate their items), `rotate` / `mirror` on turret, crank and generator (`BlockMoveGameTests`)
+- [x] Build: Sable Companion jar-in-jar on `1.21.1-fabric` / `1.21.1-neoforge`; Sable in the dev runs and the NeoForge game test server
+- [x] `core.world.Pose` + `Quaternion` (plot ↔ world, with scale; `PoseTest`), `compat.SubLevelCompat` (`poseAt`, `velocityAt` in blocks per tick; identity on 1.20.1) and `client.compat.ClientSubLevelCompat` (`renderPoseAt`), signatures decided by the user
+- [x] Targeting in the plot frame: `TargetEntity` has `getEyeX/Y/Z` instead of `getEyeHeight`, `LivingTargetEntity(entity, pose)` converts into the base's coordinates, `BlockEntityBaseWorld` filters a contraption's widened entity search by position and starts line of sight from the converted point
+- [x] Turret side through `blockentity.turret.TurretMount` (`TurretBlockEntity#getMount()`, made once per tick: pose, face, world centre, world up, contraption velocity at the centre; `toWorld`, `toLocal`, `toLocalDirection`), shape and methods decided by the user: aiming (world direction → plot frame → `TurretMath`), projectiles (world centre, lead with the target's velocity relative to the contraption, contraption velocity added), rays (world origin and tip), line of sight (`BlockEntityBaseWorld.isClear(level, pose, plotFrom, worldTo, context)` leaves the turret's block in the plot frame), teleporter destination, melee victims filtered by their plot position (`AreaWeapon.area()` stays in plot coordinates); API notes in `docs/turret-api.md`
+- [x] Client placement outline on contraptions (outline and label drawn with `ClientSubLevelCompat.renderPoseAt`; `ClientCompat.partialTick()`)
+- [x] Game tests on a contraption (NeoForge only, `gametest/platform/neoforge/SableContraptionGameTests`): base and turret assembled with `SubLevelAssemblyHelper.assembleBlocks` and turned by 90°, resting on the world floor; a projectile and a ray turret aim at (synced aim turned into the world) and hit a world target, the teleporter pulls to the shown position, assembly keeps the base items without drops; checked to fail when the aim or teleport conversion is removed
+- [x] Create contraptions may move bases and turrets (`NeoForgeCreateMovement`; Create refuses unbreakable blocks and `PushReaction.BLOCK`, and its tags can only deny), config `bases.allowContraptionMovement` (default true; Create's check gets no player, so anyone with a contraption can move a base), decided by the user; `CreateMovementGameTests`
+- [x] Simulated's Physics Assembler (Create Aeronautics) ignores Create's checks and only refuses unbreakable blocks (`SimAssemblyContraption.movementAllowed`, no API): `platform/neoforge/mixin/SimAssemblyContraptionMixin`, a `@Pseudo` mixin in its own optional config `openmodularturrets.neoforge.mixins.json` (NeoForge only), for testing until Simulated offers a hook (the user asks upstream); `SimulatedAssemblyGameTests` calls the method by reflection and fails if Simulated renames it (Create Aeronautics on the NeoForge game test server)
+- [ ] Checked by hand in the NeoForge dev client with Create Aeronautics (moving airship, inherited projectile velocity, placement outline)

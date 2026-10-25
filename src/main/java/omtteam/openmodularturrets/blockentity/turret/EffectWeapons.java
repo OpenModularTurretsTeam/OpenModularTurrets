@@ -11,6 +11,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.api.weapon.AreaWeapon;
 import omtteam.openmodularturrets.api.weapon.EffectWeapon;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
@@ -65,16 +66,18 @@ public final class EffectWeapons {
     /**
      * 1.12.2 {@code TeleporterTurretTileEntity}: pulls the target onto the block in front of the turret (1.12.2: on
      * top of it, which is the same for turrets on top of a base) and shows portal particles (1.12.2
-     * {@code BlockTeleporterTurret.randomDisplayTick}).
+     * {@code BlockTeleporterTurret.randomDisplayTick}). On a Sable contraption the destination is where that block is
+     * shown ({@link TurretMount#toWorld}).
      */
     @SuppressWarnings("unused")
     public static void teleport(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base, Entity target) {
         Direction facing = turret.getFacing();
         BlockPos destination = turret.getBlockPos().relative(facing);
-        target.teleportTo(destination.getX() + 0.5D, destination.getY(), destination.getZ() + 0.5D);
-        BlockPos pos = turret.getBlockPos();
-        level.sendParticles(ParticleTypes.PORTAL, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
-                26, 1.0D, 1.0D, 1.0D, 0.1D);
+        TurretMount mount = turret.getMount();
+        Vec3 to = mount.toWorld(new Vec3(destination.getX() + 0.5D, destination.getY(), destination.getZ() + 0.5D));
+        target.teleportTo(to.x, to.y, to.z);
+        Vec3 centre = mount.centre();
+        level.sendParticles(ParticleTypes.PORTAL, centre.x, centre.y, centre.z, 26, 1.0D, 1.0D, 1.0D, 0.1D);
     }
 
     /**

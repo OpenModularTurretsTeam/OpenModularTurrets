@@ -7,7 +7,7 @@ import java.util.Optional;
 
 /**
  * A living entity a turret could target, as seen by the core logic. The Minecraft layer wraps real entities; tests
- * use simple fakes.
+ * use simple fakes. Positions are in the base's coordinates (see {@link omtteam.openmodularturrets.core.world.BaseWorld}).
  */
 public abstract class TargetEntity {
     /** Entity id, unique while the entity is loaded. */
@@ -22,8 +22,15 @@ public abstract class TargetEntity {
 
     public abstract double getZ();
 
-    /** Height of the eyes above {@link #getY()}, where line of sight ends. */
-    public abstract double getEyeHeight();
+    /**
+     * Position of the eyes, where line of sight ends. Not always straight above {@link #getY()}: on a tilted
+     * contraption the base's "up" is not the world's.
+     */
+    public abstract double getEyeX();
+
+    public abstract double getEyeY();
+
+    public abstract double getEyeZ();
 
     /** Current health in half hearts. */
     public abstract float getHealth();

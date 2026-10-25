@@ -84,6 +84,7 @@ class TurretTypeTest {
     void builderDefaults() {
         TurretType type = TurretType.builder("othermod", "test_turret").build();
         assertEquals("othermod:test_turret", type.getId());
+        assertEquals("othermod", type.getNamespace());
         assertFalse(type.isBuiltIn());
         assertEquals(1, type.getRequiredBaseTier());
         assertTrue(type.getAmmo().isEmpty());

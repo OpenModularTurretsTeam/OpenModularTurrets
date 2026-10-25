@@ -18,6 +18,10 @@ import java.util.Objects;
  * <p>
  * Trust is up to the weapon: use {@code OMTApi.canDamage(base, entity)} to skip the owner, trusted players and their
  * pets, and {@code OMTApi.hurt(...)} to deal damage the way built-in turrets do.
+ * <p>
+ * On a Sable contraption the turret's block position is in the contraption's plot, while entities are in the world:
+ * measure from {@code turret.getMount().centre()} (see
+ * {@link omtteam.openmodularturrets.blockentity.turret.TurretMount}).
  *
  * @param aims whether the turret turns towards the first picked entity
  */

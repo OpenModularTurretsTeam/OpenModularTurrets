@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.core.world;
 
 /**
- * Block coordinates in the world.
+ * Block coordinates (in the world, or in a contraption's plot, see {@link Pose}).
  */
 public record BlockPosition(int x, int y, int z) {
     /** The neighbouring position on {@code face}. */

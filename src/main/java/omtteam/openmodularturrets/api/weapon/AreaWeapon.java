@@ -14,6 +14,9 @@ import java.util.function.Function;
 /**
  * Ignores the base's target (melee turret): the turret is active while any living entity its base may damage is in
  * {@link #area} and strikes all of them once the cooldown passed.
+ * <p>
+ * The area is in the turret's block coordinates (around {@code turret.getBlockPos()}); on a Sable contraption these
+ * are plot coordinates, and only entities whose bounding box, seen from the plot, touches the area are struck.
  */
 public record AreaWeapon(SoundEvent launchSound, Function<TurretBlockEntity, AABB> area, AreaStrike strike)
         implements TurretWeapon {

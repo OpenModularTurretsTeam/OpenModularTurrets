@@ -1,0 +1,12 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "omtteam.openmodularturrets.platform.neoforge.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "SimAssemblyContraptionMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

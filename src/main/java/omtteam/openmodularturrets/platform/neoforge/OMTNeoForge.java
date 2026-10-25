@@ -65,11 +65,17 @@ public final class OMTNeoForge {
         }
     }
 
-    /** A step whose registry fired no event would leave its content unregistered: fail loudly instead. */
+    /**
+     * A step whose registry fired no event would leave its content unregistered: fail loudly instead. With Create
+     * installed, its contraptions may move bases and turrets ({@link NeoForgeCreateMovement}).
+     */
     private void onCommonSetup(FMLCommonSetupEvent event) {
         if (done.size() != steps.size()) {
             List<RegistrationStep> missing = steps.stream().filter(step -> !done.contains(step)).toList();
             throw new IllegalStateException("Registration steps never ran: " + missing);
+        }
+        if (Platform.loaderInfo().isModLoaded(NeoForgeCreateMovement.CREATE_MOD_ID)) {
+            event.enqueueWork(NeoForgeCreateMovement::register);
         }
     }
 

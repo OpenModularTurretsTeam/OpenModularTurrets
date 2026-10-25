@@ -6,6 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -48,7 +49,7 @@ import java.util.Random;
  * connects it to the world: it forwards redstone, inventory and neighbour changes, ticks it, exposes the inventory
  * and energy to automation, and saves/syncs its state.
  */
-public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost {
+public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost, Clearable {
     private final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged,
             player -> Container.stillValidBlockEntity(this, player));
     /** The ammo slots: anything the inventory accepts goes in, everything may come out. */
@@ -158,6 +159,15 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
     /** Internal inventory without restrictions (see {@link TurretBaseInventory} for the slot layout). */
     public TurretBaseInventory getInventory() {
         return inventory;
+    }
+
+    /**
+     * Empties the inventory. Whoever moves or replaces the block after saving its data ({@code /setblock}, Sable
+     * contraptions) calls this first, so {@link TurretBaseBlock#onRemove} does not drop a second copy of the items.
+     */
+    @Override
+    public void clearContent() {
+        inventory.clearContent();
     }
 
     /** Ammo slots as exposed to automation on all sides (the loader adapters wrap it). */

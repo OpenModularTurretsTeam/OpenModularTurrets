@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -36,7 +37,7 @@ import java.util.stream.IntStream;
  * where there is no other power. Energy multiplier upgrades in its upgrade slot make it burn faster
  * ({@link GeneratorLogic#multiplier}).
  */
-public class GeneratorBlockEntity extends CompatBlockEntity {
+public class GeneratorBlockEntity extends CompatBlockEntity implements Clearable {
     public static final int FUEL_SLOTS = 9;
 
     private final SimpleContainer fuel = new SimpleContainer(FUEL_SLOTS) {
@@ -89,6 +90,16 @@ public class GeneratorBlockEntity extends CompatBlockEntity {
 
     public SimpleContainer getUpgradeContainer() {
         return upgrades;
+    }
+
+    /**
+     * Empties fuel and upgrade slots. Whoever moves or replaces the block after saving its data ({@code /setblock},
+     * Sable contraptions) calls this first, so {@link GeneratorBlock#onRemove} does not drop a second copy of the items.
+     */
+    @Override
+    public void clearContent() {
+        fuel.clearContent();
+        upgrades.clearContent();
     }
 
     /** Number of energy multiplier upgrades in the upgrade slot. */

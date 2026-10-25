@@ -8,9 +8,19 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Added
+
+- Sable contraptions (1.21.1): turret bases and turrets on a contraption find, aim at and shoot targets in the world around it; projectiles take the contraption's speed with them
+- Create contraptions and Create Aeronautics' Physics Assembler (NeoForge 1.21.1) can move turret bases and turrets; config option `bases.allowContraptionMovement` (default true)
+
 ### Changed
 
 - Jar files are named `openmodularturrets-<version>-mc<minecraft version>-<loader>.jar` (`-mc` instead of the `+` before the Minecraft version)
+
+### Fixed
+
+- Turret bases and generators no longer drop a second copy of their items when they are moved or replaced without breaking (`/setblock`, mods that move blocks)
+- Turrets, cranks and generators turn with rotated or mirrored structures and moved blocks, so turrets and cranks stay attached to their base
 
 ## [4.0.0-beta.7] - 2026-10-24
 

@@ -350,6 +350,12 @@ class TrustManagerTest {
         }
 
         @Test
+        void keepsItsProfile() {
+            assertEquals(AccessProfile.TRUSTED_AND_ADMIN, trap.getProfile());
+            assertEquals(AccessProfile.ALL, manager.getProfile(), "bases use every level");
+        }
+
+        @Test
         void levelsStepBetweenTrustedAndAdminOnly() {
             assertEquals(TrustResult.SUCCESS, trap.addTrustedPlayer(OWNER, ALICE.identity()));
             assertEquals(AccessLevel.NONE, trap.getTrustedPlayer(ALICE.uuid()).orElseThrow().getAccessLevel());

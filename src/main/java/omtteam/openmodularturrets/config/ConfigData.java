@@ -304,6 +304,10 @@ public class ConfigData {
         public boolean allowBaseCamo = true;
         @Comment("Turret bases are breakable with tools (using the hardness and blast resistance below).")
         public boolean baseBreakable = false;
+        @Comment("Contraptions (Create, Create Aeronautics) may move turret bases and their turrets, although they are "
+                + "unbreakable; owner, trusted players and settings move along. Anyone who can reach a base with a "
+                + "contraption can move it.")
+        public boolean allowContraptionMovement = true;
 
         /** @param tier 1–5 */
         public BaseSetting tier(int tier) {

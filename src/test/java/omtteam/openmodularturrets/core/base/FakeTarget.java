@@ -9,6 +9,8 @@ import java.util.Optional;
 
 /** Test entity at a fixed position. */
 final class FakeTarget extends TargetEntity {
+    /** A player's eye height. */
+    private static final double EYE_HEIGHT = 1.62;
     private static int nextId;
     private final int id = nextId++;
     private final double x;
@@ -67,8 +69,18 @@ final class FakeTarget extends TargetEntity {
     }
 
     @Override
-    public double getEyeHeight() {
-        return 1.62;
+    public double getEyeX() {
+        return x;
+    }
+
+    @Override
+    public double getEyeY() {
+        return y + EYE_HEIGHT;
+    }
+
+    @Override
+    public double getEyeZ() {
+        return z;
     }
 
     @Override

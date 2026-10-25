@@ -24,10 +24,15 @@ import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.client.compat.ClientCompat;
+import omtteam.openmodularturrets.client.compat.ClientSubLevelCompat;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.core.base.TurretPlacement;
 import omtteam.openmodularturrets.core.turret.TurretType;
+import omtteam.openmodularturrets.core.world.Pose;
+import omtteam.openmodularturrets.core.world.Quaternion;
+import omtteam.openmodularturrets.core.world.Vector3;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
 
 import java.util.Locale;
 
@@ -36,7 +41,7 @@ import java.util.Locale;
  * cyan if it can be placed there, red if not (1.12.2 OMLib {@code ClientEventHandler.drawBlockOutline}), with a small
  * label saying why ({@link TurretPlacement.Result}). The loader client entrypoints call {@link #render} after the
  * translucent blocks and {@link #renderLabel} as late as their loader allows (Fabric: last, NeoForge and Forge: after
- * the particles).
+ * the particles). On a Sable contraption both are drawn where the plot block is shown (its render pose).
  */
 public final class TurretPlacementOutline {
     /** Half the width of the outline across the mount axis (1.12.2: 0.6 wide, a full block long). */
@@ -83,10 +88,10 @@ public final class TurretPlacementOutline {
 
         MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
         poseStack.pushPose();
-        poseStack.translate(-camera.x, -camera.y, -camera.z);
+        toBlockCorner(poseStack, camera, pos, ClientSubLevelCompat.renderPoseAt(pos, ClientCompat.partialTick()));
         float red = state != null ? 0F : 1F;
         float greenBlue = state != null ? 1F : 0F;
-        LevelRenderer.renderLineBox(poseStack, buffers.getBuffer(RenderType.lines()), outline(pos, facing.getAxis()),
+        LevelRenderer.renderLineBox(poseStack, buffers.getBuffer(RenderType.lines()), outline(facing.getAxis()),
                 red, greenBlue, greenBlue, ALPHA);
         poseStack.popPose();
         buffers.endBatch(RenderType.lines());
@@ -107,7 +112,9 @@ public final class TurretPlacementOutline {
         if (label == null || poseStack == null) return;
         Minecraft minecraft = Minecraft.getInstance();
         MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
-        Vec3 centre = Vec3.atCenterOf(label.pos());
+        Vector3 plotCentre = new Vector3(label.pos().getX() + 0.5D, label.pos().getY() + 0.5D, label.pos().getZ() + 0.5D);
+        Vector3 shown = ClientSubLevelCompat.renderPoseAt(label.pos(), ClientCompat.partialTick()).toWorld(plotCentre);
+        Vec3 centre = new Vec3(shown.x(), shown.y(), shown.z());
         Vec3 at = centre.add(camera.subtract(centre).normalize().scale(LABEL_OFFSET));
         Font font = minecraft.font;
         poseStack.pushPose();
@@ -153,13 +160,29 @@ public final class TurretPlacementOutline {
         return null;
     }
 
-    /** A box through the middle of {@code pos}, a full block long along {@code axis}. */
-    private static AABB outline(BlockPos pos, Direction.Axis axis) {
+    /**
+     * Moves the pose stack (at the camera) to the corner of {@code pos} as it is drawn: {@code pose} turns and scales
+     * a contraption's plot around its rotation point. The offset from the rotation point is worked out in doubles, so
+     * the plot's huge coordinates never reach the float matrix.
+     */
+    private static void toBlockCorner(PoseStack poseStack, Vec3 camera, BlockPos pos, Pose pose) {
+        Vector3 position = pose.position();
+        Quaternion orientation = pose.orientation();
+        Vector3 scale = pose.scale();
+        Vector3 rotationPoint = pose.rotationPoint();
+        poseStack.translate(position.x() - camera.x, position.y() - camera.y, position.z() - camera.z);
+        poseStack.mulPose(new Quaternionf((float) orientation.x(), (float) orientation.y(), (float) orientation.z(),
+                (float) orientation.w()));
+        poseStack.scale((float) scale.x(), (float) scale.y(), (float) scale.z());
+        poseStack.translate(pos.getX() - rotationPoint.x(), pos.getY() - rotationPoint.y(), pos.getZ() - rotationPoint.z());
+    }
+
+    /** A box through the middle of a block (corner at 0, 0, 0), a full block long along {@code axis}. */
+    private static AABB outline(Direction.Axis axis) {
         double min = 0.5D - HALF_WIDTH;
         double max = 0.5D + HALF_WIDTH;
         return new AABB(
                 axis == Direction.Axis.X ? 0 : min, axis == Direction.Axis.Y ? 0 : min, axis == Direction.Axis.Z ? 0 : min,
-                axis == Direction.Axis.X ? 1 : max, axis == Direction.Axis.Y ? 1 : max, axis == Direction.Axis.Z ? 1 : max)
-                .move(pos);
+                axis == Direction.Axis.X ? 1 : max, axis == Direction.Axis.Y ? 1 : max, axis == Direction.Axis.Z ? 1 : max);
     }
 }

@@ -136,7 +136,7 @@ public final class TargetSelector {
         double x = turret.x() + 0.5;
         double y = turret.y() + 0.5;
         double z = turret.z() + 0.5;
-        Vector3 toEyes = new Vector3(entity.getX() - x, entity.getY() + entity.getEyeHeight() - y, entity.getZ() - z);
+        Vector3 toEyes = new Vector3(entity.getEyeX() - x, entity.getEyeY() - y, entity.getEyeZ() - z);
         return TurretMath.canAim(face, toEyes) && world.hasLineOfSight(x, y, z, entity);
     }
 }

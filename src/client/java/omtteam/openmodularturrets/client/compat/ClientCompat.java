@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.client.compat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -57,6 +58,15 @@ public final class ClientCompat {
      * Turns the pose towards the camera and scales it for text, like a name tag: x right, y down. The camera rotation
      * changed in 1.20.5, so 1.20.1 mirrors x and 1.21 does not (a mirrored label faces away and is culled).
      */
+    /** Partial tick of the frame being drawn (stands still while the game is paused). */
+    public static float partialTick() {
+        //? if >=1.21 {
+        return Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
+        //?} else {
+        /*return Minecraft.getInstance().getFrameTime();
+        *///?}
+    }
+
     public static void faceCamera(PoseStack poseStack, Camera camera, float scale) {
         poseStack.mulPose(camera.rotation());
         //? if >=1.21 {

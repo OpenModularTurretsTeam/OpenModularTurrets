@@ -69,10 +69,47 @@ configurations.runtimeClasspath { extendsFrom(localRuntime) }
 // Not on the GameTest server: Jade there sends its ping to the vanilla mock players of the tests, which NeoForge
 // refuses (no negotiated channels).
 
+// Sable Companion (Sable contraptions) comes from the Sable maven
+repositories {
+    exclusiveContent {
+        forRepository { maven("https://maven.ryanhcode.dev/releases") { name = "Sable" } }
+        filter { includeGroup("dev.ryanhcode.sable-companion") }
+    }
+}
+
 dependencies {
     // Jade plugin (compat/jade): optional, not bundled; present in dev runs to try it
     compileOnly("maven.modrinth:jade:${property("jade_version")}")
     localRuntime("maven.modrinth:jade:${property("jade_version")}")
+
+    // Sable contraptions: Sable Companion is jar-in-jar and does nothing without Sable; Sable itself is only in the
+    // dev runs and on the GameTest server
+    val companion = property("sable_companion_version") as String
+    val companionArtifact = "dev.ryanhcode.sable-companion:sable-companion-common-${property("minecraft_version")}"
+    implementation("$companionArtifact:$companion")
+    // the client source set only sees main's classes, not its dependencies
+    "clientCompileOnly"("$companionArtifact:$companion")
+    jarJar(companionArtifact) {
+        version {
+            strictly("[$companion,)")
+            prefer(companion)
+        }
+    }
+    localRuntime("maven.modrinth:sable:${property("sable_version")}")
+    // the contraption game tests (gametest/platform/neoforge) build sub-levels with Sable's own API
+    "gametestCompileOnly"("maven.modrinth:sable:${property("sable_version")}")
+    "gametestCompileOnly"("$companionArtifact:$companion")
+    "gametestRuntimeOnly"("maven.modrinth:sable:${property("sable_version")}")
+    // Create Aeronautics in the dev runs, to try turrets on airships by hand (not on the GameTest server)
+    localRuntime("maven.modrinth:create-aeronautics:${property("create_aeronautics_version")}")
+    localRuntime("maven.modrinth:create:${property("create_version")}")
+    // Create's movement check for contraptions (platform/neoforge/NeoForgeCreateMovement): compile-only, never
+    // bundled, only used when Create is installed; on the GameTest server for its test
+    compileOnly("maven.modrinth:create:${property("create_version")}")
+    "gametestCompileOnly"("maven.modrinth:create:${property("create_version")}")
+    "gametestRuntimeOnly"("maven.modrinth:create:${property("create_version")}")
+    // Simulated (bundled in Create Aeronautics) on the GameTest server, for the test of the Physics Assembler mixin
+    "gametestRuntimeOnly"("maven.modrinth:create-aeronautics:${property("create_aeronautics_version")}")
 }
 
 // ---- Data (recipes, loot tables, tags, damage types, advancements) ----

@@ -14,6 +14,10 @@ displayURL = "https://www.curseforge.com/minecraft/mc-mods/openmodularturrets/"
 [[mixins]]
 config = "openmodularturrets.mixins.json"
 
+# NeoForge only: hooks into other mods (Simulated's Physics Assembler), skipped when they are not installed
+[[mixins]]
+config = "openmodularturrets.neoforge.mixins.json"
+
 [[dependencies.${mod_id}]]
 modId = "neoforge"
 type = "required"

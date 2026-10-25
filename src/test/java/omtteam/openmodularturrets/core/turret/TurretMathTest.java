@@ -51,6 +51,8 @@ class TurretMathTest {
         assertTrue(TurretMath.canAim(Face.UP, new Vector3(5, -1, 0)), "slightly below the mounting plane");
         assertFalse(TurretMath.canAim(Face.UP, new Vector3(1, -5, 0)));
         assertFalse(TurretMath.canAim(Face.EAST, new Vector3(-5, 0, 0)), "straight through the base");
+        assertEquals(TurretMath.MIN_PITCH, TurretMath.anglesFor(Face.UP, new Vector3(5, -5, 0)).pitch());
+        assertTrue(TurretMath.canAim(Face.UP, new Vector3(5, -5, 0)), "exactly at the lowest pitch");
         assertEquals(TurretMath.MIN_PITCH, TurretMath.limit(new TurretMath.Angles(30, -80)).pitch(), EPS);
         assertEquals(30, TurretMath.limit(new TurretMath.Angles(30, -80)).yaw(), EPS);
     }
@@ -104,6 +106,13 @@ class TurretMathTest {
     void stationaryTargetsNeedNoCorrection() {
         TurretMath.Lead lead = TurretMath.lead(new Vector3(2, 3, 6), Vector3.ZERO, 3.0, 0);
         assertEquals(1.0F, lead.speedFactor(), 1e-6);
+    }
+
+    @Test
+    void anyOffsetFromTheCentreIsLed() {
+        // 1e-6 blocks is the smallest offset that still gets the lead (and its 0.1 lower aim point)
+        TurretMath.Lead lead = TurretMath.lead(new Vector3(1.0E-6, 0, 0), Vector3.ZERO, 3.0, 0);
+        assertEquals(-0.1, lead.direction().y(), EPS);
     }
 
     @Test

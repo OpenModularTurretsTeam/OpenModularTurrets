@@ -8,6 +8,9 @@ import java.util.Optional;
 
 /**
  * The world around one turret base, as seen by the core logic. Implemented by the Minecraft layer.
+ * <p>
+ * All positions are in the base's coordinates: the world's, or the plot's if the base is on a Sable contraption
+ * (see {@link Pose}); the Minecraft layer converts entity positions into them.
  */
 public interface BaseWorld {
     /** Position of the base block. */

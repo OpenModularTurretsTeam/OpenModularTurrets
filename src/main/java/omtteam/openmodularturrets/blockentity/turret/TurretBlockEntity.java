@@ -11,6 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.api.weapon.AreaWeapon;
 import omtteam.openmodularturrets.api.weapon.EffectWeapon;
@@ -23,6 +24,7 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.base.BlockEntityBaseWorld;
 import omtteam.openmodularturrets.blockentity.base.LivingTargetEntity;
 import omtteam.openmodularturrets.compat.CompatBlockEntity;
+import omtteam.openmodularturrets.compat.SubLevelCompat;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.AmmoDraw;
@@ -33,6 +35,7 @@ import omtteam.openmodularturrets.core.turret.TurretMath;
 import omtteam.openmodularturrets.core.turret.TurretState;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
+import omtteam.openmodularturrets.core.world.Pose;
 import omtteam.openmodularturrets.core.world.Vector3;
 import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
@@ -80,6 +83,11 @@ public class TurretBlockEntity extends CompatBlockEntity {
     @Nullable
     private Vec3 trackedTargetPos;
 
+    /** {@link #getMount()} of the current tick, and the game time it was made at. */
+    @Nullable
+    private TurretMount mount;
+    private long mountTime;
+
     /** {@link SelfTargetingWeapon}: ticks until the picker is asked again, and whether it last picked anything. */
     private int ticksUntilPick;
     private boolean picked;
@@ -122,6 +130,28 @@ public class TurretBlockEntity extends CompatBlockEntity {
     public Optional<TurretBaseBlockEntity> getBase() {
         if (level == null || !level.isLoaded(getBasePos())) return Optional.empty();
         return level.getBlockEntity(getBasePos()) instanceof TurretBaseBlockEntity base ? Optional.of(base) : Optional.empty();
+    }
+
+    /**
+     * Where the turret is in the world this tick (on a Sable contraption: where its plot position is shown). Made once
+     * per game tick, so everything in a tick uses the same pose of the contraption.
+     */
+    public TurretMount getMount() {
+        long time = level != null ? level.getGameTime() : 0L;
+        if (mount == null || mountTime != time) {
+            mount = createMount();
+            mountTime = time;
+        }
+        return mount;
+    }
+
+    private TurretMount createMount() {
+        Vec3 plotCentre = Vec3.atCenterOf(worldPosition);
+        Pose pose = level != null ? SubLevelCompat.poseAt(level, worldPosition) : Pose.IDENTITY;
+        Vector3 up = pose.directionToWorld(Vector3.of(getFace()));
+        Vec3 velocity = pose.isIdentity() ? Vec3.ZERO : SubLevelCompat.velocityAt(level, plotCentre);
+        return new TurretMount(pose, getFace(), TurretMount.toVec3(pose.toWorld(TurretMount.toVector(plotCentre))),
+                TurretMount.toVec3(up.scale(1.0D / up.length())), velocity);
     }
 
     // ---- Server ----
@@ -181,29 +211,32 @@ public class TurretBlockEntity extends CompatBlockEntity {
     @SuppressWarnings("IfCanBeSwitch")
     private void engage(Entity target) {
         TurretWeapon weapon = getWeapon();
-        Vec3 centre = Vec3.atCenterOf(worldPosition);
+        TurretMount mount = getMount();
+        Vec3 centre = mount.centre();
         if (weapon.aims()) {
             aimAt(target);
         }
 
+        // the target's movement relative to the turret's contraption (a target not tracked yet counts as standing
+        // still); the projectiles get the contraption's velocity on top (fire)
         Vec3 position = target.position();
-        Vector3 velocity = trackedTargetId == target.getId() && trackedTargetPos != null
-                ? new Vector3(position.x - trackedTargetPos.x, position.y - trackedTargetPos.y, position.z - trackedTargetPos.z)
-                : Vector3.ZERO;
+        Vec3 moved = trackedTargetId == target.getId() && trackedTargetPos != null
+                ? position.subtract(trackedTargetPos) : Vec3.ZERO;
+        Vec3 relative = moved.subtract(mount.velocity());
+        Vector3 velocity = new Vector3(relative.x, relative.y, relative.z);
         trackedTargetId = target.getId();
         trackedTargetPos = position;
 
         if (weapon instanceof ProjectileWeapon) {
-            Vector3 toBody = new Vector3(target.getX() - centre.x, aimHeight(target, centre) - centre.y,
+            Vector3 toBody = new Vector3(target.getX() - centre.x, aimHeight(target, mount) - centre.y,
                     target.getZ() - centre.z);
             fire(toBody, velocity, target);
         } else if (weapon instanceof RayWeapon ray) {
             Optional<TurretBaseBlockEntity> base = beginShot();
             if (base.isPresent()) {
                 // rays start 0.1 blocks above the turret centre, the arc is drawn from its tip
-                Vector3 up = Vector3.of(getFace());
-                Vec3 origin = centre.add(up.x() * 0.1D, up.y() * 0.1D, up.z() * 0.1D);
-                Vec3 tip = centre.add(up.x() * 0.5D, up.y() * 0.5D, up.z() * 0.5D);
+                Vec3 origin = centre.add(mount.up().scale(0.1D));
+                Vec3 tip = centre.add(mount.up().scale(0.5D));
                 RayWeapons.shoot(this, base.get(), ray, target, origin, tip);
             }
         } else if (weapon instanceof EffectWeapon effect) {
@@ -211,11 +244,11 @@ public class TurretBlockEntity extends CompatBlockEntity {
         }
     }
 
-    /** Turns towards the target's eyes, within {@link TurretMath#limit}. */
+    /** Turns towards the target's eyes, within {@link TurretMath#limit} (angles relative to the face, in the plot). */
     private void aimAt(Entity target) {
-        Vec3 centre = Vec3.atCenterOf(worldPosition);
-        Vector3 toEyes = new Vector3(target.getX() - centre.x, target.getEyeY() - centre.y, target.getZ() - centre.z);
-        TurretMath.Angles angles = TurretMath.limit(TurretMath.anglesFor(getFace(), toEyes));
+        TurretMount mount = getMount();
+        Vec3 toEyes = mount.toLocalDirection(target.getEyePosition().subtract(mount.centre()));
+        TurretMath.Angles angles = TurretMath.limit(TurretMath.anglesFor(getFace(), TurretMount.toVector(toEyes)));
         yaw = angles.yaw();
         pitch = angles.pitch();
     }
@@ -224,11 +257,11 @@ public class TurretBlockEntity extends CompatBlockEntity {
      * Height to shoot at: the body centre, or the eyes when a ledge or the like hides the centre (the base only
      * picks targets whose eyes are visible, so the shot would otherwise hit the block in front of the target).
      */
-    private double aimHeight(Entity target, Vec3 centre) {
+    private double aimHeight(Entity target, TurretMount mount) {
         double body = target.getY() + target.getBbHeight() * 0.5D;
         double eyes = target.getEyeY();
-        if (level == null || eyes <= body
-                || BlockEntityBaseWorld.isClear(level, centre, new Vec3(target.getX(), body, target.getZ()), target)) {
+        if (level == null || eyes <= body || BlockEntityBaseWorld.isClear(level, mount.pose(),
+                Vec3.atCenterOf(worldPosition), new Vec3(target.getX(), body, target.getZ()), target)) {
             return body;
         }
         return eyes;
@@ -243,8 +276,11 @@ public class TurretBlockEntity extends CompatBlockEntity {
     private boolean strikeInReach(ServerLevel level, TurretBaseBlockEntity base, AreaWeapon weapon) {
         // only entities the base may damage count (never the owner, nor trusted players by default)
         List<LivingEntity> victims = new ArrayList<>();
-        for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, weapon.area().apply(this))) {
-            if (entity.isAlive() && !entity.isSpectator() && TurretDamage.canDamage(level, base.getBlockPos(), entity)) {
+        AABB area = weapon.area().apply(this);
+        TurretMount mount = getMount();
+        for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, area)) {
+            if (entity.isAlive() && !entity.isSpectator() && (!mount.isOnContraption() || inPlotArea(entity, area, mount))
+                    && TurretDamage.canDamage(level, base.getBlockPos(), entity)) {
                 victims.add(entity);
             }
         }
@@ -252,6 +288,17 @@ public class TurretBlockEntity extends CompatBlockEntity {
         if (victims.isEmpty()) return false;
         beginShot().ifPresent(shooter -> EffectWeapons.fireArea(this, shooter, weapon, victims));
         return true;
+    }
+
+    /**
+     * Whether an entity found for a weapon area (in the plot) really touches it: on a contraption, Sable widens the
+     * search to the world area around the turned box. Like vanilla's search, it counts when the entity's bounding box
+     * (taken around its centre in the plot) touches the area.
+     */
+    private static boolean inPlotArea(LivingEntity entity, AABB area, TurretMount mount) {
+        Vec3 centre = mount.toLocal(entity.getBoundingBox().getCenter());
+        return area.inflate(entity.getBbWidth() * 0.5D, entity.getBbHeight() * 0.5D, entity.getBbWidth() * 0.5D)
+                .contains(centre);
     }
 
     /**
@@ -343,8 +390,9 @@ public class TurretBlockEntity extends CompatBlockEntity {
      * Fires projectiles in {@code direction} (1.12.2 {@code ProjectileTurret.shootProjectile}): one per scattershot
      * level, with the turret's inaccuracy.
      *
-     * @param toAim    aim point minus turret centre
-     * @param velocity target movement per tick
+     * @param toAim    aim point minus turret centre ({@link TurretMount#centre()}), in the world
+     * @param velocity target movement per tick relative to the turret's contraption (the projectiles get the
+     *                 contraption's velocity on top)
      * @return whether a shot was fired
      */
     public boolean fire(Vector3 toAim, Vector3 velocity, @Nullable Entity target) {
@@ -355,7 +403,8 @@ public class TurretBlockEntity extends CompatBlockEntity {
         TurretBaseLogic logic = base.get().getLogic();
         TurretType type = getTurretType();
         float inaccuracy = ProjectileMath.inaccuracy(logic.getAccuracyDeviation(type));
-        Vec3 origin = Vec3.atCenterOf(worldPosition);
+        TurretMount mount = getMount();
+        Vec3 origin = mount.centre();
         for (int i = 0; i <= logic.getScattershotCount(type); i++) {
             TurretProjectile projectile = weapon.factory().create(serverLevel, lastAmmo, target);
             if (projectile == null) continue;
@@ -366,6 +415,9 @@ public class TurretBlockEntity extends CompatBlockEntity {
             TurretMath.Lead lead = TurretMath.lead(toAim, velocity, weapon.speed(), projectile.getGravityEffect());
             Vector3 direction = lead.direction();
             projectile.shoot(direction.x(), direction.y(), direction.z(), weapon.speed() * lead.speedFactor(), inaccuracy);
+            if (mount.isOnContraption()) {
+                projectile.setDeltaMovement(projectile.getDeltaMovement().add(mount.velocity()));
+            }
             if (logic.getDamageAmpLevel() > 0) {
                 playSound(ModSounds.AMPED);
             }
