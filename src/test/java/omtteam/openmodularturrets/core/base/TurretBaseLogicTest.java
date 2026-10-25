@@ -438,6 +438,25 @@ class TurretBaseLogicTest {
             assertEquals(5, logic.getTargetingSettings().getRange());
         }
 
+        @Test
+        void firstScanWithoutSavedRangeUsesTheShortestTurret() {
+            TurretBaseLogic logic = new TurretBaseLogic(4, settings, trust(), world, random, clientRelevant -> {
+            });
+            logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET, TurretType.MACHINE_GUN_TURRET));
+            assertEquals(30, logic.getTargetingSettings().getMaxRange());
+            assertEquals(18, logic.getTargetingSettings().getRange());
+        }
+
+        @Test
+        void firstScanKeepsASavedRangeOfZero() {
+            TurretBaseLogic logic = new TurretBaseLogic(4, settings, trust(), world, random, clientRelevant -> {
+            });
+            logic.loadState(new TurretBaseLogic.State(0, MachineMode.INVERTED, false, false, true, false, 0, 30,
+                    false, 0, 0));
+            logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET));
+            assertEquals(0, logic.getTargetingSettings().getRange());
+        }
+
         /** {@code TargetingSettings} clamps a saved range above the saved maximum, so tick needs no clamp. */
         @Test
         void loadedRangeAboveTheMaximumIsClamped() {
