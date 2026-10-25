@@ -8,7 +8,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.security.OwnedHost;
@@ -24,12 +23,14 @@ public interface InteractiveBlock {
     InteractionResult onUse(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit);
 
     /**
-     * Handles a right-click on any block: claiming a block without owner first, then a memory card in hand, then
-     * {@link #onUse} if the block is an {@code InteractiveBlock}. Called by the loader's block-use event on both sides;
-     * {@link InteractionResult#PASS} if not handled.
+     * Handles a right-click on any block: the ownership wand in hand first, then claiming a block without owner, then
+     * a memory card in hand, then {@link #onUse} if the block is an {@code InteractiveBlock}. Called by the loader's
+     * block-use event on both sides; {@link InteractionResult#PASS} if not handled.
      */
     static InteractionResult handleUse(Player player, Level level, InteractionHand hand, BlockHitResult hit) {
         if (player.isSpectator()) return InteractionResult.PASS;
+        InteractionResult wand = WandInteraction.use(player, level, hand, hit.getBlockPos());
+        if (wand != InteractionResult.PASS) return wand;
         InteractionResult claim = claim(player, level, hand, hit.getBlockPos());
         if (claim != InteractionResult.PASS) return claim;
         // a memory card in hand takes priority over what the block does on right-click
@@ -49,8 +50,7 @@ public interface InteractiveBlock {
      */
     private static InteractionResult claim(Player player, Level level, InteractionHand hand, BlockPos pos) {
         if (hand != InteractionHand.MAIN_HAND || player.isShiftKeyDown()) return InteractionResult.PASS;
-        BlockState state = level.getBlockState(pos);
-        BlockPos target = state.getBlock() instanceof TurretBlock ? pos.relative(state.getValue(TurretBlock.FACING).getOpposite()) : pos;
+        BlockPos target = ClaimSpread.ownerPos(level, pos);
         if (!(level.getBlockEntity(target) instanceof OwnedHost host) || host.getOwner() != null) return InteractionResult.PASS;
         if (VersionCompat.isFakePlayer(player) && !OMTConfig.get().general.fakePlayersCanClaim) return InteractionResult.PASS;
         if (!level.isClientSide()) {

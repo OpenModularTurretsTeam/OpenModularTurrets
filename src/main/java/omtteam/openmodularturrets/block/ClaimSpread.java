@@ -2,6 +2,7 @@ package omtteam.openmodularturrets.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
@@ -48,6 +49,12 @@ public final class ClaimSpread {
             if (host.claim(player)) claimed++;
         }
         return new Result(claimed, limitReached);
+    }
+
+    /** The block whose owner counts for a click at {@code pos}: a turret's base, otherwise the block itself. */
+    static BlockPos ownerPos(Level level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        return state.getBlock() instanceof TurretBlock ? pos.relative(state.getValue(TurretBlock.FACING).getOpposite()) : pos;
     }
 
     private static List<BlockPosition> walk(Level level, BlockPos start, int limit, Predicate<OwnedHost> joins) {

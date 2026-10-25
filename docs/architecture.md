@@ -177,6 +177,7 @@ A block placed without a player (machines, structures, `setblock`) or disowned h
 A main-hand right-click without sneaking on an unowned block (on a turret: its base) claims it, checked first in `InteractiveBlock.handleUse`.
 `block.ClaimSpread` then claims the unowned blocks connected to it through their faces (`core.world.FloodFill`, turrets connect too, at most `bases.claimSpreadLimit` blocks); blocks with an owner are never taken or walked through.
 The loaders' fake players claim only if `general.fakePlayersCanClaim` is set.
+Game masters set or remove owners with the `OwnershipWandItem` (`block.WandInteraction`, checked before claiming), spreading to the connected blocks of the same owner unless switched off.
 The owner of a base or trap can give it up with the "Disown" button (configure screen, trap screen, `TrustPackets.Disown`), which clears owner and trust list; open menus of it close themselves through their `stillValid` checks.
 
 ### The generator

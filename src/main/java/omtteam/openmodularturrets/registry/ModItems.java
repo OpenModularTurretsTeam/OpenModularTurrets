@@ -4,6 +4,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.core.item.AddonType;
@@ -14,6 +15,7 @@ import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.AmmoItem;
 import omtteam.openmodularturrets.item.MemoryCardItem;
+import omtteam.openmodularturrets.item.OwnershipWandItem;
 import omtteam.openmodularturrets.item.GeneratorUpgradeItem;
 import omtteam.openmodularturrets.item.TurretBaseUpgradeItem;
 
@@ -55,6 +57,10 @@ public final class ModItems {
     // Memory card (1.12.2 UsableMetaItem meta 2)
     public static final MemoryCardItem MEMORY_CARD = register("memory_card",
             new MemoryCardItem(new Item.Properties().stacksTo(1)));
+
+    // Map maker's ownership wand (creative only)
+    public static final OwnershipWandItem OWNERSHIP_WAND = register("ownership_wand",
+            new OwnershipWandItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 
     // Tiered intermediate products (1.12.2 IntermediateProductTiered meta 0–14), index = tier - 1
     public static final List<Item> SENSORS = registerTiered("sensor");
