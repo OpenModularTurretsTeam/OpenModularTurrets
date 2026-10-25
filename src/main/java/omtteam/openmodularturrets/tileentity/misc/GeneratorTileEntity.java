@@ -15,6 +15,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import omtteam.omlib.core.energy.EnergyStore;
+import omtteam.omlib.inventory.AutomationItemHandler;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.openmodularturrets.block.misc.BlockGenerator;
@@ -71,35 +72,7 @@ public class GeneratorTileEntity extends TileEntityBase implements ITickable {
         }
     };
     /** Hoppers and pipes may only insert fuel and only extract leftovers (empty buckets). */
-    private final IItemHandler automation = new IItemHandler() {
-        @Override
-        public int getSlots() {
-            return FUEL_SLOTS;
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack getStackInSlot(int slot) {
-            return fuel.getStackInSlot(slot);
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-            return isFuel(stack) ? fuel.insertItem(slot, stack, simulate) : stack;
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return isFuel(fuel.getStackInSlot(slot)) ? ItemStack.EMPTY : fuel.extractItem(slot, amount, simulate);
-        }
-
-        @Override
-        public int getSlotLimit(int slot) {
-            return fuel.getSlotLimit(slot);
-        }
-    };
+    private final IItemHandler automation = new AutomationItemHandler(fuel, stack -> !isFuel(stack));
     private final EnergyStore energy;
     private final OMEnergyStorage energyStorage;
     private final GeneratorLogic logic = new GeneratorLogic();

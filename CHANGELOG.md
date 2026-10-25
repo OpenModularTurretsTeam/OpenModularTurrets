@@ -14,6 +14,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ### Changed
 
+- A broken turret base scatters its items like a chest
 - The jar files are named `openmodularturrets-<version>-mc1.12.2-forge.jar` (Minecraft version with `mc`, as on 1.20.1+)
 - The server sends its config values (`openmodularturrets.cfg` and `openmodularturrets_addon_turrets.cfg`) to clients when they join, so tooltips, the ammo slots and the turret placement outline follow the server's rules; after leaving, the client uses its own config again
 

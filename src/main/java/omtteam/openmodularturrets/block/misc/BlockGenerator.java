@@ -11,7 +11,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -24,8 +23,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.IItemHandler;
 import omtteam.omlib.util.GeneralUtil;
+import omtteam.omlib.util.inventory.InvUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
@@ -127,19 +126,10 @@ public class BlockGenerator extends Block {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof GeneratorTileEntity) {
             GeneratorTileEntity generator = (GeneratorTileEntity) tileEntity;
-            dropAll(world, pos, generator.getFuel());
-            dropAll(world, pos, generator.getUpgrades());
+            InvUtil.dropItems(world, pos, generator.getFuel());
+            InvUtil.dropItems(world, pos, generator.getUpgrades());
         }
         super.breakBlock(world, pos, state);
-    }
-
-    private static void dropAll(World world, BlockPos pos, IItemHandler items) {
-        for (int slot = 0; slot < items.getSlots(); slot++) {
-            ItemStack stack = items.getStackInSlot(slot);
-            if (!stack.isEmpty()) {
-                InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack.copy());
-            }
-        }
     }
 
     @Override
