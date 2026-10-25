@@ -64,7 +64,7 @@ public final class TurretScene {
         helper.setBlock(BASE, ModBlocks.TURRET_BASES.get(type.getRequiredBaseTier() - 1));
         helper.setBlock(TURRET, ModBlocks.TURRETS.get(type));
         TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getBlockEntity(BASE);
-        // a base without owner drops itself on its next tick
+        // a base without owner does not fire
         base.getTrustManager().setOwner(OWNER);
         base.onNeighbourChanged();
         TurretBaseLogic logic = base.getLogic();

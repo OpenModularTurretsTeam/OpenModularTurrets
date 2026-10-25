@@ -306,6 +306,9 @@ public class ConfigData {
                 + "unbreakable; owner, trusted players and settings move along. Anyone who can reach a base with a "
                 + "contraption can move it.")
         public boolean allowContraptionMovement = true;
+        @Comment("Turret bases without an owner keep targeting and firing (at everyone, as nobody is trusted). If false, "
+                + "they stay inert until someone claims them.")
+        public boolean unownedBasesActive = false;
 
         /** @param tier 1–5 */
         public BaseSetting tier(int tier) {

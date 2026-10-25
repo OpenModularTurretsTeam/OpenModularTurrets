@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.core.base;
 
+import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.SecurityEnvironment;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretState;
@@ -48,6 +49,8 @@ class TurretStateTest {
         for (int i = 0; i < BaseTier.AMMO_SLOTS; i++) world.ammoSlots.add(FakeSlot.empty());
         logic = new TurretBaseLogic(5, new FakeSettings(), NO_TEAMS, world, random, clientRelevant -> {
         });
+        // a base without owner is inert
+        logic.getTrustManager().setOwner(new PlayerIdentity(UUID.randomUUID(), "Owner"));
         logic.updateNeighbours(Map.of());
         logic.setMode(MachineMode.ALWAYS_ON);
         state = new TurretState();

@@ -20,12 +20,10 @@ import net.minecraft.world.level.block.Blocks;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.misc.GeneratorBlockEntity;
 import omtteam.openmodularturrets.config.OMTConfig;
-import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.registry.ModItems;
 
-import java.util.UUID;
 
 /**
  * The generator with energy multiplier upgrades: it burns faster, but a fuel item still yields the same energy; and it
@@ -76,8 +74,6 @@ public class GeneratorGameTests implements OMTGameTests {
     public void pushesEnergyIntoANeighbouringBase(GameTestHelper helper) {
         helper.setBlock(BASE, ModBlocks.TURRET_BASES.get(0));
         TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getBlockEntity(BASE);
-        // a base without owner drops itself on its next tick
-        base.getTrustManager().setOwner(new PlayerIdentity(UUID.randomUUID(), "GameTestOwner"));
         helper.setBlock(GENERATOR, ModBlocks.GENERATOR);
         GeneratorBlockEntity generator = (GeneratorBlockEntity) helper.getBlockEntity(GENERATOR);
         generator.getFuelContainer().setItem(0, new ItemStack(Items.COAL));

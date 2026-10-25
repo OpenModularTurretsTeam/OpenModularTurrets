@@ -165,7 +165,8 @@ public class TurretBlock extends CompatEntityBlock {
 
     /**
      * Whether {@code player} may attach this turret at {@code pos} to the base behind it: only the base's admins may
-     * (like dropping turrets), and placing without a player is refused; then {@link TurretPlacement#canAttach}. Also
+     * (like dropping turrets), on a base without owner only players who may use game master blocks (map makers;
+     * everyone else claims it first), and placing without a player is refused; then {@link TurretPlacement#canAttach}. Also
      * asked on the client, which knows the trust list, for the reason the placement outline shows.
      *
      * @param facing direction from the base to the turret
@@ -175,11 +176,16 @@ public class TurretBlock extends CompatEntityBlock {
     public TurretPlacement.Result attachResult(Level level, BlockPos pos, Direction facing, @Nullable Player player) {
         BlockPos basePos = pos.relative(facing.getOpposite());
         if (!(level.getBlockEntity(basePos) instanceof TurretBaseBlockEntity base)) return null;
-        if (player == null || !base.getTrustManager().isAdmin(PlayerAdapter.info(player))) {
+        if (player == null || !mayAttach(base, player)) {
             return TurretPlacement.Result.NO_PERMISSION;
         }
         return TurretPlacement.canAttach(turretType, Face.valueOf(facing.name()), base.getLogic().getTier(),
                 attachedTurrets(level, basePos), ConfigLogicSettings.INSTANCE);
+    }
+
+    private static boolean mayAttach(TurretBaseBlockEntity base, Player player) {
+        if (base.getOwner() == null) return player.canUseGameMasterBlocks();
+        return base.getTrustManager().isAdmin(PlayerAdapter.info(player));
     }
 
     /**
@@ -210,4 +216,5 @@ public class TurretBlock extends CompatEntityBlock {
             level.destroyBlock(pos, true);
         }
     }
+
 }

@@ -51,7 +51,7 @@ public final class TrustManager {
 
     // ---- State ----
 
-    /** The owner, or {@code null} if the base has none yet (it then drops itself). */
+    /** The owner, or {@code null} if the block has none (placed without a player, or disowned); anyone may claim it. */
     public PlayerIdentity getOwner() {
         return owner;
     }

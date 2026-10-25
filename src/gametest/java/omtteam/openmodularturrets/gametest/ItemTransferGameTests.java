@@ -22,11 +22,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.misc.GeneratorBlockEntity;
-import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.registry.ModItems;
 
-import java.util.UUID;
 
 /**
  * What hoppers may move in and out of the base and the generator. A vanilla hopper goes through the loader's item API
@@ -52,8 +50,6 @@ public class ItemTransferGameTests implements OMTGameTests {
     public void hopperFillsTheBaseWithAmmoOnly(GameTestHelper helper) {
         helper.setBlock(MACHINE, ModBlocks.TURRET_BASES.get(0));
         TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getBlockEntity(MACHINE);
-        // a base without owner drops itself on its next tick
-        base.getTrustManager().setOwner(new PlayerIdentity(UUID.randomUUID(), "GameTestOwner"));
         HopperBlockEntity hopper = hopper(helper, ABOVE);
         hopper.setItem(0, new ItemStack(Items.DIRT));
         hopper.setItem(1, new ItemStack(ModItems.AMMO_BULLET, 2));
@@ -72,7 +68,6 @@ public class ItemTransferGameTests implements OMTGameTests {
     public void hopperTakesNoAmmoFromTheBase(GameTestHelper helper) {
         helper.setBlock(MACHINE, ModBlocks.TURRET_BASES.get(0));
         TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getBlockEntity(MACHINE);
-        base.getTrustManager().setOwner(new PlayerIdentity(UUID.randomUUID(), "GameTestOwner"));
         base.getInventory().setItem(0, new ItemStack(ModItems.AMMO_BULLET, 2));
         HopperBlockEntity hopper = hopper(helper, BELOW);
         helper.runAfterDelay(EXTRACT_WAIT_TICKS, () -> {

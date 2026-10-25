@@ -113,7 +113,7 @@ public class BlockMoveGameTests implements OMTGameTests {
                 name + " facing north does not face south when mirrored left to right");
     }
 
-    /** A tier 1 base with a stack of ammo and an upgrade (no owner: it is removed before its first tick). */
+    /** A tier 1 base with a stack of ammo and an upgrade (no owner). */
     private static TurretBaseBlockEntity placeFilledBase(GameTestHelper helper) {
         helper.setBlock(POS, ModBlocks.TURRET_BASES.get(0));
         TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getBlockEntity(POS);

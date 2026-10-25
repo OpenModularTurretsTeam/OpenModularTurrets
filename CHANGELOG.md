@@ -13,6 +13,8 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 - Releases on CurseForge and Modrinth are titled like the jar file (`openmodularturrets-<version>-mc<minecraft version>-<loader>`)
 - Only admins of a turret base can attach turrets to it (the placement outline says why otherwise)
 - Hoppers and pipes can no longer take ammo out of a turret base, so nobody can disarm someone else's base with them
+- Turret bases without an owner (e.g. placed by a machine or a structure) no longer drop themselves; they stay inert, unless `bases.unownedBasesActive` is set
+- Turrets can be attached to a turret base without an owner only by players who may use game master blocks (operators, mapmakers)
 
 ### Fixed
 

@@ -178,7 +178,7 @@ public class BaseGuiGameTests implements OMTGameTests {
         return new GuiTestPlayer(helper.getLevel(), new GameProfile(UUID.randomUUID(), name));
     }
 
-    /** A tier 1 base owned by {@code owner}; an owner is set right away, as a base without one drops itself. */
+    /** A tier 1 base owned by {@code owner}. */
     @SuppressWarnings("DataFlowIssue")
     private static TurretBaseBlockEntity placeBase(GameTestHelper helper, ServerPlayer owner) {
         helper.setBlock(BASE, ModBlocks.TURRET_BASES.get(0));

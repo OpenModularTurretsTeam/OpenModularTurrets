@@ -66,6 +66,11 @@ public final class ConfigLogicSettings implements LogicSettings {
     }
 
     @Override
+    public boolean unownedBasesActive() {
+        return OMTConfig.get().bases.unownedBasesActive;
+    }
+
+    @Override
     public boolean dropTurretsOverMaxSimultaneous() {
         return OMTConfig.get().turrets.dropTurretsOverMaxSimultaneous;
     }

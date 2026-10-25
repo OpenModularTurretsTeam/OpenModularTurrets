@@ -30,6 +30,9 @@ public interface LogicSettings {
      */
     boolean dropTurretsOverMaxSimultaneous();
 
+    /** {@code bases.unownedBasesActive}: bases without an owner target and fire; otherwise they are inert. */
+    boolean unownedBasesActive();
+
     /** {@code turrets.canTurretsConcealWithoutAddon}. */
     boolean turretsConcealWithoutAddon();
 

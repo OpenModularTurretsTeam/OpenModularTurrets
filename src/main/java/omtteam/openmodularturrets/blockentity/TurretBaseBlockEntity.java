@@ -69,11 +69,6 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
 
     @SuppressWarnings("unused")
     public static void serverTick(Level level, BlockPos pos, BlockState state, TurretBaseBlockEntity base) {
-        // 1.12.2 TileEntityOwnedBlock: a base without owner (e.g. placed by a machine) drops itself
-        if (base.getOwner() == null) {
-            level.destroyBlock(pos, true);
-            return;
-        }
         if (!base.neighboursScanned) {
             base.refreshNeighbours();
         }

@@ -23,6 +23,7 @@ final class FakeSettings implements LogicSettings {
     boolean needAmmo = true;
     boolean concealWithoutAddon;
     boolean dropOverMaxSimultaneous;
+    boolean unownedActive;
     boolean globalPlayers = true;
     int warningDistance = 5;
     int searchTicks = 10;
@@ -80,6 +81,11 @@ final class FakeSettings implements LogicSettings {
     @Override
     public boolean dropTurretsOverMaxSimultaneous() {
         return dropOverMaxSimultaneous;
+    }
+
+    @Override
+    public boolean unownedBasesActive() {
+        return unownedActive;
     }
 
     @Override

@@ -346,7 +346,7 @@ The test mod's loader entrypoints (`gametest/platform/<loader>`) run its registr
 `check` (and so `build` / `chiseledBuild`) runs them on a dedicated test server: `runGameTest` on Fabric (`versions/<v>/build/run/gameTest`, the world is deleted before every run), `runGameTestServer` on NeoForge and Forge.
 
 - `TurretScene` builds a ready-to-fire base + turret (owner, always on, full energy, max range) and spawns targets (husks without AI).
-  A base placed with `setBlock` has no owner: set one right away or it drops itself.
+  A base placed with `setBlock` has no owner: it stays, but does not fire until it has one (`bases.unownedBasesActive`).
 - `TurretScene` also loads the turret's ammo into the base (energy alone is not enough for the railgun and the projectile turrets).
 - Turrets that scatter get up to 10 attempts, each with a fresh target (`TargetAttempts`); a miss replaces the target, a hit passes.
   A ray attempt ends with its ray, a projectile attempt when its first projectile is gone.

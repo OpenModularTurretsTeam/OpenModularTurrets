@@ -17,7 +17,8 @@
       "omtteam.openmodularturrets.gametest.BaseGuiGameTests",
       "omtteam.openmodularturrets.gametest.ItemTransferGameTests",
       "omtteam.openmodularturrets.gametest.CamoGameTests",
-      "omtteam.openmodularturrets.gametest.BlockMoveGameTests"
+      "omtteam.openmodularturrets.gametest.BlockMoveGameTests",
+      "omtteam.openmodularturrets.gametest.OwnershipGameTests"
     ],
     "openmodularturrets": [
       "omtteam.openmodularturrets.gametest.ApiTestTurrets"
