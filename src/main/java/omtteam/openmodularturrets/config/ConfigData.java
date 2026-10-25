@@ -47,6 +47,8 @@ public class ConfigData {
     public static class General {
         @Comment("Operators may open every base and are never targeted.")
         public boolean canOPAccessOwnedBlocks = false;
+        @Comment("Fake players of machines (e.g. Create deployers) may claim blocks without an owner by right-clicking them.")
+        public boolean fakePlayersCanClaim = false;
         @Comment("Use an allow list for ammo (which items fit into the ammo slots of a base).")
         public boolean useWhitelistForAmmo = true;
         @Comment("Items usable as disposable ammo, as \"namespace:item[,damageBonus]\" or \"#namespace:tag[,damageBonus]\".\nThe damage bonus defaults to 1.")
@@ -309,6 +311,10 @@ public class ConfigData {
         @Comment("Turret bases without an owner keep targeting and firing (at everyone, as nobody is trusted). If false, "
                 + "they stay inert until someone claims them.")
         public boolean unownedBasesActive = false;
+        @Comment("Claiming a block without an owner also claims the unowned turret bases, camouflage traps and passive "
+                + "defense blocks connected to it (turrets connect too). At most this many blocks are walked per claim, "
+                + "nearest first.") @Range(min = 1, max = 65536)
+        public int claimSpreadLimit = 1024;
 
         /** @param tier 1–5 */
         public BaseSetting tier(int tier) {

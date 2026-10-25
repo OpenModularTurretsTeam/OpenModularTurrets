@@ -142,6 +142,8 @@
   "message.openmodularturrets.placement.base_full": "This base holds at most %s turrets",
   "message.openmodularturrets.placement.type_limit": "A base holds at most %s of this turret",
   "message.openmodularturrets.card_cleared": "Memory card cleared.",
+  "message.openmodularturrets.claimed": "Присвоено блоков: %s",
+  "message.openmodularturrets.claimed_limit": "Присвоено блоков: %s (достигнут предел, нажмите ещё раз, чтобы присвоить больше)",
   "message.openmodularturrets.card_copied": "Settings stored on the memory card.",
   "message.openmodularturrets.card_pasted": "Settings written from the memory card.",
   "message.openmodularturrets.card_skipped.disguise": "Skipped the disguise: only the owner can change it.",

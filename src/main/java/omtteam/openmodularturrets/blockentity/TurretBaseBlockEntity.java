@@ -26,7 +26,6 @@ import omtteam.openmodularturrets.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.camo.CamoPermissions;
 import omtteam.openmodularturrets.core.energy.EnergyAccess;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
-import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.TrustManager;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
@@ -145,11 +144,6 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
     @Override
     public TrustManager getTrustManager() {
         return logic.getTrustManager();
-    }
-
-    @Nullable
-    public PlayerIdentity getOwner() {
-        return getTrustManager().getOwner();
     }
 
     /** Internal inventory without restrictions (see {@link TurretBaseInventory} for the slot layout). */

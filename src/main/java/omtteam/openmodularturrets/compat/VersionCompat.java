@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -18,10 +19,12 @@ import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 //?}
 //? if neoforge {
-/*import net.neoforged.neoforge.common.util.FakePlayerFactory;
+/*import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
 *///?}
 //? if forge {
-/*import net.minecraftforge.common.util.FakePlayerFactory;
+/*import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.common.util.FakePlayerFactory;
 *///?}
 //? if >=1.21 {
 import net.minecraft.core.registries.Registries;
@@ -166,5 +169,10 @@ public final class VersionCompat {
         //?} else {
         /*return FakePlayerFactory.get(level, profile);
         *///?}
+    }
+
+    /** Whether the player is one of the loader's fake players (machines such as Create's deployer). */
+    public static boolean isFakePlayer(Player player) {
+        return player instanceof FakePlayer;
     }
 }

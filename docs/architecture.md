@@ -170,6 +170,14 @@ Example: the player changes the range in the base screen.
 
 The client is never trusted: every C2S handler re-checks distance and permission.
 
+### Owners and claiming
+
+Every block with an owner is a `security.OwnedHost`: the turret bases and the camouflage trap through `TrustHost` (which forwards to its `TrustManager`), the passive defense blocks through `OwnedBlockEntity`.
+A block placed without a player (machines, structures, `setblock`) or disowned has no owner; an unowned base does not fire unless `bases.unownedBasesActive` is set.
+A main-hand right-click without sneaking on an unowned block (on a turret: its base) claims it, checked first in `InteractiveBlock.handleUse`.
+`block.ClaimSpread` then claims the unowned blocks connected to it through their faces (`core.world.FloodFill`, turrets connect too, at most `bases.claimSpreadLimit` blocks); blocks with an owner are never taken or walked through.
+The loaders' fake players claim only if `general.fakePlayersCanClaim` is set.
+
 ### The generator
 
 `GeneratorBlockEntity` burns furnace fuel from 9 slots in order (`GeneratorLogic`), multiplied by energy multiplier upgrades, and pushes energy into all six neighbours through the `Energy` service (Team Reborn Energy on Fabric, FE on NeoForge and Forge).

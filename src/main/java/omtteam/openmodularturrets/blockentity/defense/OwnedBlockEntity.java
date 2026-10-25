@@ -11,14 +11,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
+import omtteam.openmodularturrets.security.OwnedHost;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 /**
  * A passive defense block with an owner (OMPD {@code TileEntityPassiveTiered} / OMLib {@code TileEntityOwnedBlock}).
  * The tier is the block itself now. OMPD only ever checked the owner (not trusted players), so no trust list is kept.
  */
-public class OwnedBlockEntity extends CompatBlockEntity {
+public class OwnedBlockEntity extends CompatBlockEntity implements OwnedHost {
     @Nullable
     private PlayerIdentity owner;
 
@@ -31,16 +34,32 @@ public class OwnedBlockEntity extends CompatBlockEntity {
     }
 
     @Nullable
+    @Override
     public PlayerIdentity getOwner() {
         return owner;
     }
 
+    @Override
     public void setOwner(PlayerIdentity owner) {
-        this.owner = owner;
+        this.owner = Objects.requireNonNull(owner, "owner");
         syncToClient();
     }
 
-    /** OMLib {@code isPlayerOwner}. Blocks without owner (placed by machines) belong to nobody. */
+    @Override
+    public boolean claim(PlayerIdentity player) {
+        Objects.requireNonNull(player, "player");
+        if (owner != null) return false;
+        setOwner(player);
+        return true;
+    }
+
+    @Override
+    public void clearOwner() {
+        owner = null;
+        syncToClient();
+    }
+
+    /** OMLib {@code isPlayerOwner}. Blocks without owner (placed by machines, or disowned) belong to nobody. */
     public boolean isOwner(Player player) {
         return owner != null && owner.is(player.getUUID());
     }

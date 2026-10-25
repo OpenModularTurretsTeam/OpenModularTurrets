@@ -142,6 +142,8 @@
   "message.openmodularturrets.placement.type_limit": "Eine Turmbasis trägt höchstens %s dieser Türme",
   "message.openmodularturrets.already_trusted": "%s steht schon auf der Vertrauensliste.",
   "message.openmodularturrets.card_cleared": "Speicherkarte geleert.",
+  "message.openmodularturrets.claimed": "%s Blöcke in Besitz genommen",
+  "message.openmodularturrets.claimed_limit": "%s Blöcke in Besitz genommen (Limit erreicht, erneut klicken für mehr)",
   "message.openmodularturrets.card_copied": "Einstellungen auf der Speicherkarte gespeichert.",
   "message.openmodularturrets.card_pasted": "Einstellungen von der Speicherkarte übertragen.",
   "message.openmodularturrets.card_skipped.disguise": "Tarnblock übersprungen: Nur der Besitzer kann ihn ändern.",

@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Added
+
+- Right-clicking a turret base, turret, camouflage trap or hardened block/wall/fence without an owner claims it and the unowned blocks connected to it (up to `bases.claimSpreadLimit`, default 1024); machines' fake players only claim if `general.fakePlayersCanClaim` is set
+
 ### Changed
 
 - Releases on CurseForge and Modrinth are titled like the jar file (`openmodularturrets-<version>-mc<minecraft version>-<loader>`)
