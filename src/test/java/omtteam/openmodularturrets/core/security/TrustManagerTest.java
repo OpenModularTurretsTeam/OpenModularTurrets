@@ -305,6 +305,38 @@ class TrustManagerTest {
         }
 
         @Test
+        void clearOwnerRemovesOwnerAndTrustList() {
+            trust(ALICE, AccessLevel.ADMIN);
+            changes = 0;
+            manager.clearOwner();
+            assertNull(manager.getOwner());
+            assertEquals(List.of(), manager.getTrustedPlayers());
+            assertFalse(manager.canOpenGui(OWNER));
+            assertFalse(manager.isAdmin(ALICE));
+            assertEquals(1, changes);
+        }
+
+        @Test
+        void claimTakesAnUnownedBlock() {
+            manager.clearOwner();
+            changes = 0;
+            assertTrue(manager.claim(ALICE.identity()));
+            assertTrue(manager.isOwner(ALICE));
+            assertEquals(1, changes);
+        }
+
+        @Test
+        void claimNeverTakesAnOwnedBlock() {
+            trust(ALICE, AccessLevel.ADMIN);
+            changes = 0;
+            assertFalse(manager.claim(ALICE.identity()));
+            assertFalse(manager.claim(OWNER.identity()), "not even by its owner");
+            assertTrue(manager.isOwner(OWNER));
+            assertEquals(AccessLevel.ADMIN, manager.getTrustedPlayer(ALICE.uuid()).orElseThrow().getAccessLevel());
+            assertEquals(0, changes);
+        }
+
+        @Test
         void loadSkipsOwnerAndDuplicates() {
             changes = 0;
             manager.load(OWNER.identity(), List.of(

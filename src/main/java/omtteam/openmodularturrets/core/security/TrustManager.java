@@ -14,8 +14,9 @@ import java.util.UUID;
  * <p>
  * Rules:
  * <ul>
- *     <li>The owner always has {@link AccessLevel#ADMIN} rights. Nobody can change the owner through this class
- *     except the placement logic ({@link #setOwner}).</li>
+ *     <li>The owner always has {@link AccessLevel#ADMIN} rights. The owner is set by placing ({@link #setOwner}),
+ *     removed by disowning ({@link #clearOwner}), and taken by the first player who claims an unowned block
+ *     ({@link #claim}); the permission checks for these live with the callers.</li>
  *     <li>Trusted players have the rights of their {@link AccessLevel} and the levels below it.</li>
  *     <li>Members of the owner's scoreboard team count as trusted at {@link AccessLevel#NONE} unless they are on
  *     the list with a higher level, so turrets do not shoot them.</li>
@@ -60,6 +61,25 @@ public final class TrustManager {
         this.owner = Objects.requireNonNull(owner, "owner");
         trustedPlayers.removeIf(entry -> owner.is(entry.getUuid()));
         onChange.run();
+    }
+
+    /** Removes the owner and clears the trust list (disowning, the wand's reset). */
+    public void clearOwner() {
+        owner = null;
+        trustedPlayers.clear();
+        onChange.run();
+    }
+
+    /**
+     * Sets the owner only if there is none (claiming by right-click).
+     *
+     * @return true if the player is now the owner
+     */
+    public boolean claim(PlayerIdentity player) {
+        Objects.requireNonNull(player, "player");
+        if (owner != null) return false;
+        setOwner(player);
+        return true;
     }
 
     /** A read-only live view of the trusted players, without the owner. */
