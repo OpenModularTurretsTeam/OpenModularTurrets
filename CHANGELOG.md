@@ -11,12 +11,20 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 ### Added
 
 - Holding a turret next to a turret base where it cannot be placed shows a short reason next to the red outline (block in the way, wrong side, base tier too low, base full, too many of this turret), as on 1.20.1+
+- Config option `turrets.dropTurretsOverMaxSimultaneous` (default false): attached turrets over their type's `maxSimultaneous` drop, e.g. after the limit was lowered (as on 1.20.1+)
+- Turret bases, their turrets and OMPD's hardened blocks/walls/fences without an owner sparkle green, and WAILA/HWYLA and The One Probe show "Owner: nobody (right-click to claim)"; right-click claims them (OMLib), as on 1.20.1+
+- The owner of a turret base can disown it ("Disown" in its configure screen, after a confirmation, as on 1.20.1+); the trust list is cleared and anyone can claim it
+- While you hold OMLib's Ownership Wand, turrets still target and fire at you, but their shots, explosions and effects do not affect you (as on 1.20.1+)
 
 ### Changed
 
 - A broken turret base scatters its items like a chest
+- Only admins of a turret base can attach turrets to it (the placement label says why otherwise), as on 1.20.1+
+- Hoppers and pipes can no longer take ammo out of a turret base, so nobody can disarm someone else's base with them (as on 1.20.1+)
 - The jar files are named `openmodularturrets-<version>-mc1.12.2-forge.jar` (Minecraft version with `mc`, as on 1.20.1+)
 - The server sends its config values (`openmodularturrets.cfg` and `openmodularturrets_addon_turrets.cfg`) to clients when they join, so tooltips, the ammo slots and the turret placement outline follow the server's rules; after leaving, the client uses its own config again
+- Turret bases without an owner (e.g. placed by a machine or a structure) no longer drop themselves; they stay inert until claimed, unless `bases.unownedBasesActive` is set (as on 1.20.1+)
+- Turrets can be attached to a turret base without an owner only by players who may use command blocks (operators in creative mode, mapmakers)
 
 ### Fixed
 
@@ -31,6 +39,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - Other mods asking a turret without base (or with its base in an unloaded chunk) for its stats crashed; such a turret now reports its configured values and targets nothing
 - The maximum range shown in the turret base GUI also counted turrets mounted on a neighbouring base
 - Turret bases could create their tile entity on the chunk render thread (camouflage light settings), which can crash or corrupt the world
+- Cranks and generators did not turn with rotated or mirrored structures
 
 ## [4.0.0-beta.1] - 2026-10-24
 

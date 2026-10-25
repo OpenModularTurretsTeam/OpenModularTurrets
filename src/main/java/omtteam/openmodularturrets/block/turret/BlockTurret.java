@@ -26,9 +26,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.block.IHasItemBlock;
 import omtteam.omlib.block.BlockAbstractTileEntity;
+import omtteam.omlib.block.UnownedMarker;
 import omtteam.omlib.compat.theoneprobe.TOPInfoProvider;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.MathUtil;
+import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.api.TurretDefinition;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
@@ -201,6 +203,37 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         TileEntity tile = world.getTileEntity(basePos);
         if (!(tile instanceof TurretBase)) return null;
         TurretBase base = (TurretBase) tile;
+        return attachResult(world, towardsBase, base);
+    }
+
+    /**
+     * Whether {@code player} may attach this turret at {@code pos}: only the admins of the base next to it may (like
+     * dropping turrets), on a base without owner only players who may use command blocks (map makers; everyone else
+     * claims it first), and placing without a player is refused; then {@link TurretPlacement#canAttach}. Also asked
+     * on the client, which knows the trust list, for the reason the placement label shows.
+     *
+     * @return {@code null} if there is no base next to {@code pos}
+     */
+    @Nullable
+    public TurretPlacement.Result attachResult(World world, BlockPos pos, @Nullable EntityPlayer player) {
+        EnumFacing towardsBase = getTurretBaseFacing(world, pos);
+        if (towardsBase == null) return null;
+        TileEntity tile = world.getTileEntity(pos.offset(towardsBase));
+        if (!(tile instanceof TurretBase)) return null;
+        TurretBase base = (TurretBase) tile;
+        if (player == null || !mayAttach(base, player)) {
+            return TurretPlacement.Result.NO_PERMISSION;
+        }
+        return attachResult(world, towardsBase, base);
+    }
+
+    private static boolean mayAttach(TurretBase base, EntityPlayer player) {
+        if (base.getOwnerOrNull() == null) return player.canUseCommandBlock();
+        return PlayerUtil.isPlayerAdmin(player, base);
+    }
+
+    private TurretPlacement.Result attachResult(World world, EnumFacing towardsBase, TurretBase base) {
+        BlockPos basePos = base.getPos();
         return TurretPlacement.canAttach(coreType, TurretBase.toFace(towardsBase.getOpposite()), base.getTier(),
                 attachedTurrets(world, basePos), ConfigLogicSettings.INSTANCE);
     }
@@ -257,6 +290,7 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         if (effect != null) {
             effect.spawn(world, pos, random);
         }
+        UnownedMarker.randomDisplayTick(world, pos, random);
     }
 
     @Override
@@ -272,7 +306,8 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
                 + ": " + getColoredBooleanColor(active)
                 + getLocalizationString(getBooleanUnlocalizationYesNo(active)), probeInfo.defaultTextStyle());
         probeInfo.text("§6" + getLocalizationString(OMLibNames.Localizations.GUI.OWNER)
-                + ": §F" + base.getOwner().getName(), probeInfo.defaultTextStyle());
+                + ": §F" + (base.getOwnerOrNull() == null ? getLocalizationString("text.omlib.unowned")
+                : base.getOwner().getName()), probeInfo.defaultTextStyle());
         probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.AMMO) + ": §F"
                 + turret.getAmmoLevel(), probeInfo.defaultTextStyle());
         probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE) + ": §F"

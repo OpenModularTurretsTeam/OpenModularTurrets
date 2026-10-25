@@ -63,7 +63,7 @@ public final class TurretPlacementLabel {
         if (!(stack.getItem() instanceof ItemBlockTurret)) return;
         BlockTurret turret = (BlockTurret) ((ItemBlockTurret) stack.getItem()).getBlock();
         BlockPos pos = hit.getBlockPos().offset(hit.sideHit);
-        String reason = reason(minecraft.world, pos, turret);
+        String reason = reason(minecraft.world, pos, turret, (EntityPlayer) viewer);
         if (reason != null) {
             draw(minecraft, viewer, partialTicks, pos, reason);
         }
@@ -74,12 +74,12 @@ public final class TurretPlacementLabel {
      * next to {@code pos} (then OMLib draws no outline either).
      */
     @Nullable
-    private static String reason(World world, BlockPos pos, BlockTurret turret) {
+    private static String reason(World world, BlockPos pos, BlockTurret turret, EntityPlayer player) {
         EnumFacing towardsBase = getTurretBaseFacing(world, pos);
         if (towardsBase == null) return null;
         // ItemBlockTurret.canPlace: the outline is red for any block in the way
         if (!world.isAirBlock(pos)) return I18n.format(KEY + "blocked");
-        TurretPlacement.Result result = turret.attachResult(world, pos);
+        TurretPlacement.Result result = turret.attachResult(world, pos, player);
         if (result == null || result.allowed()) return null;
         TileEntity tile = world.getTileEntity(pos.offset(towardsBase));
         if (!(tile instanceof TurretBase)) return null;

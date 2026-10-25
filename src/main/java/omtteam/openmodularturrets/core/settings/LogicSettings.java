@@ -24,6 +24,15 @@ public interface LogicSettings {
     /** {@code turrets.doTurretsNeedAmmo}. */
     boolean turretsNeedAmmo();
 
+    /**
+     * {@code turrets.dropTurretsOverMaxSimultaneous}: attached turrets over their type's {@code maxSimultaneous} drop
+     * (otherwise the limit only applies to placing).
+     */
+    boolean dropTurretsOverMaxSimultaneous();
+
+    /** {@code bases.unownedBasesActive}: bases without an owner target and fire; otherwise they are inert. */
+    boolean unownedBasesActive();
+
     /** {@code turrets.canTurretsConcealWithoutAddon}. */
     boolean turretsConcealWithoutAddon();
 

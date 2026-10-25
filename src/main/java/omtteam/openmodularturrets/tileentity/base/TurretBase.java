@@ -101,7 +101,7 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
     /** The energy capacity and maximum input come from the tier's config through the logic. */
     public TurretBase(int tier, IBlockState camoState) {
         super();
-        this.trustManager = new TrustedPlayersManager(this.getOwner(), this, OMTSecurityEnvironment.INSTANCE);
+        this.trustManager = new TrustedPlayersManager(this.getOwnerOrNull(), this, OMTSecurityEnvironment.INSTANCE);
         this.tier = tier;
         this.camoBlockStateTemp = camoState;
         this.camoSettings = new CamoSettings();
@@ -111,7 +111,7 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
 
     public TurretBase() {
         super();
-        this.trustManager = new TrustedPlayersManager(this.getOwner(), this, OMTSecurityEnvironment.INSTANCE);
+        this.trustManager = new TrustedPlayersManager(this.getOwnerOrNull(), this, OMTSecurityEnvironment.INSTANCE);
         setupSlotMap();
         createLogic();
     }
@@ -188,14 +188,15 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
                 ? ((LivingTargetEntity) target.get()).getEntity() : null;
     }
 
-    /** The ammo slots, the part of the inventory other blocks may use. */
+    /** The ammo slots as other blocks see them: insert only. */
     public IItemHandler getCapabilityInventory(@Nullable EnumFacing facing) {
-        return inventory.getAmmoSlots();
+        return inventory.getAutomationSlots();
     }
 
+    /** The ammo slots for code of other mods (3.x API), which may also take ammo out. */
     @Override
     public List<IItemHandler> getAmmoInventories() {
-        return Collections.singletonList(this.getCapabilityInventory(EnumFacing.DOWN));
+        return Collections.singletonList(inventory.getAmmoSlots());
     }
 
     private void onInventoryChanged() {
@@ -288,7 +289,7 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
             energy.readFromNBT(tag);
             InventoryNbt.read(inventory, tag);
             trustManager.readFromNBT(tag);
-            trustManager.setOwner(this.getOwner());
+            trustManager.setOwner(this.getOwnerOrNull());
             logic.loadState(TurretBaseNbt.load(tag, logic.getEnergy().getAmount()));
             logic.onInventoryChanged();
             this.forceFire = tag.getBoolean("forceFire");
@@ -307,6 +308,14 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
     public void setOwner(Player owner) {
         this.trustManager.setOwner(owner);
         super.setOwner(owner);
+    }
+
+    /** Disowning: the trust list goes too; the base stays inert until claimed (unless {@code unownedBasesActive}). */
+    @Override
+    public void clearOwner() {
+        this.trustManager.clearOwner();
+        super.clearOwner();
+        informUpdate();
     }
 
     @Override
@@ -391,10 +400,6 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
     @Override
     public void update() {
         if (this.getWorld().isRemote) {
-            return;
-        }
-        if (dropBlock) {
-            this.getWorld().destroyBlock(this.pos, true);
             return;
         }
         if (this.updateNBT) {

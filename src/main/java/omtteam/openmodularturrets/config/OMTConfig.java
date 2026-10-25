@@ -91,6 +91,9 @@ public class OMTConfig {
         public boolean canTurretsConcealWithoutAddon = false;
         public boolean doTurretsNeedAmmo = true;
 
+        @Config.Comment("Attached turrets over their type's maxSimultaneous drop, e.g. after the limit was lowered. If false, the limit only applies to placing new turrets.")
+        public boolean dropTurretsOverMaxSimultaneous = false;
+
         @Config.Comment("If turrets can target players")
         public boolean globalCanTargetPlayers = true;
 
@@ -169,5 +172,7 @@ public class OMTConfig {
         @Config.RequiresMcRestart
         public boolean allowBaseCamo = true;
         public boolean baseBreakable = false;
+        @Config.Comment("Turret bases without an owner keep targeting and firing (at everyone, as nobody is trusted). If false, they stay inert until someone claims them.")
+        public boolean unownedBasesActive = false;
     }
 }

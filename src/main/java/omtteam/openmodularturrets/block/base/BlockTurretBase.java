@@ -33,6 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.block.IHasItemBlock;
 import omtteam.omlib.block.BlockAbstractCamoTileEntity;
+import omtteam.omlib.block.UnownedMarker;
 import omtteam.omlib.compat.theoneprobe.TOPInfoProvider;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.EnumMachineMode;
@@ -51,6 +52,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static omtteam.omlib.compat.theoneprobe.TOPCompatibility.getLocalizationString;
 import static omtteam.omlib.util.GeneralUtil.*;
@@ -327,6 +329,14 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
         }
     }
 
+    /** Bases without an owner sparkle green, so players see they can claim them. */
+    @Override
+    @SideOnly(Side.CLIENT)
+    @ParametersAreNonnullByDefault
+    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random random) {
+        UnownedMarker.randomDisplayTick(world, pos, random);
+    }
+
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         TileEntity te = world.getTileEntity(data.getPos());
@@ -340,7 +350,8 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.ACTIVE)
                                    + ": " + getColoredBooleanColor(active) + getLocalizationString(getBooleanUnlocalizationYesNo(active)), probeInfo.defaultTextStyle());
 
-            String ownerName = base.getOwner().getName();
+            String ownerName = base.getOwnerOrNull() == null ? getLocalizationString("text.omlib.unowned")
+                    : base.getOwner().getName();
             probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.OWNER)
                                    + ": \u00A7F" + ownerName, probeInfo.defaultTextStyle());
         }

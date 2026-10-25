@@ -240,6 +240,7 @@ text.openmodularturrets.death.attack.ferroslug=%s wurde von einer Railgun gelöc
 text.openmodularturrets.flavour.turret.plasma=Hot air -> stuff's on fire.
 
 message.openmodularturrets.placement.blocked=Etwas ist im Weg
+message.openmodularturrets.placement.no_permission=Nur Admins dieser Turmbasis dürfen Türme anbringen
 message.openmodularturrets.placement.disabled=Dieser Turm ist in der Konfiguration deaktiviert
 message.openmodularturrets.placement.wrong_face=Dieser Turm kann nicht an dieser Seite angebracht werden
 message.openmodularturrets.placement.tier_too_low=Benötigt eine Turmbasis der Stufe %s oder höher

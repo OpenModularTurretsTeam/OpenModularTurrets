@@ -633,6 +633,27 @@ class TurretBaseLogicTest {
         }
 
         @Test
+        void unownedBaseIsInert() {
+            TurretBaseLogic logic = base(1);
+            logic.setMode(MachineMode.ALWAYS_ON);
+            logic.getTrustManager().clearOwner();
+            assertFalse(logic.isActive());
+            settings.unownedActive = true;
+            assertTrue(logic.isActive(), "active without owner if the config allows it");
+            logic.setMode(MachineMode.ALWAYS_OFF);
+            assertFalse(logic.isActive(), "the redstone mode still applies");
+        }
+
+        @Test
+        void claimedBaseIsActiveAgain() {
+            TurretBaseLogic logic = base(1);
+            logic.setMode(MachineMode.ALWAYS_ON);
+            logic.getTrustManager().clearOwner();
+            logic.getTrustManager().claim(OWNER.identity());
+            assertTrue(logic.isActive());
+        }
+
+        @Test
         void modesCycle() {
             assertEquals(MachineMode.ALWAYS_OFF, MachineMode.ALWAYS_ON.next());
             assertEquals(MachineMode.ALWAYS_ON, MachineMode.NONINVERTED.next());

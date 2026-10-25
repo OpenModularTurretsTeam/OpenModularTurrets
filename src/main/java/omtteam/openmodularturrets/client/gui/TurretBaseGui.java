@@ -182,6 +182,7 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         if (guibutton.id == 7) {
             sendToggleModeToServer();
         }
+
     }
 
     @Override
@@ -221,7 +222,8 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
 
         ArrayList<String> targetInfo = new ArrayList<>();
 
-        targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7f" + base.getOwner().getName());
+        targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7f"
+                + (base.getOwnerOrNull() == null ? safeLocalize("text.omlib.unowned") : base.getOwner().getName()));
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7f" + getMachineModeLocalization(base.getMode()));
         boolean isCurrentlyOn = base.isActive();
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(isCurrentlyOn));
@@ -276,6 +278,7 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
             case 7:
                 tooltip.add(safeLocalize(OMTNames.Localizations.Text.TOGGLE_MODE));
                 break;
+
         }
 
         if (mouseX > k + 153 && mouseX < k + 153 + 14 && mouseY > l + 17 && mouseY < l + 17 + 51) {

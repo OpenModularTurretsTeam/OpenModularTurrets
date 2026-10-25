@@ -9,6 +9,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import omtteam.omlib.OMLib;
+import omtteam.omlib.client.gui.DisownConfirm;
 import omtteam.omlib.client.gui.GUIBackSystem;
 import omtteam.omlib.client.gui.GuiParameters;
 import omtteam.omlib.client.gui.IHasTooltips;
@@ -78,6 +79,9 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
                                               safeLocalize(OMTNames.Localizations.GUI.CAMOUFLAGE)));
         }
         this.buttonList.add(new GuiButton(6, guiLeft + 185, guiTop + 20, 80, 20, safeLocalize(OMLibNames.Localizations.GUI.BACK)));
+        if (DisownConfirm.isOwner(player, base)) {
+            this.buttonList.add(DisownConfirm.button(7, guiLeft + 185, guiTop + 45, 80));
+        }
     }
 
     @Override
@@ -175,6 +179,13 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
         if (guibutton.id == 6) { //back button
             GUIBackSystem.getInstance().openLastGui(player);
         }
+        if (guibutton.id == 7) { // disown, after a confirmation
+            DisownConfirm.ask(base.getPos(), () -> {
+                // the confirmation closed this screen, which took the player off the base's sync list
+                addedToSyncList = false;
+                mc.displayGuiScreen(this);
+            });
+        }
     }
 
     @Override
@@ -200,6 +211,9 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
                 break;
             case 4:
                 tooltip.add(safeLocalize(OMTNames.Localizations.GUI.CAMOUFLAGE_TOOLTIP));
+                break;
+            case 7:
+                tooltip.add(safeLocalize("tooltip.omlib.disown"));
                 break;
             default:
         }

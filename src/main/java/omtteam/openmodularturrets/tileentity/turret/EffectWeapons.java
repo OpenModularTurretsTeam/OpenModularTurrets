@@ -15,6 +15,7 @@ import omtteam.openmodularturrets.api.weapon.EffectWeapon;
 import omtteam.openmodularturrets.api.weapon.SelfTargetingWeapon;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.entity.projectile.NormalDamageSource;
+import omtteam.openmodularturrets.entity.projectile.TurretImmunity;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import java.util.List;
@@ -38,7 +39,8 @@ public final class EffectWeapons {
     static void fireEffect(TurretTileEntity turret, TurretBase base, EffectWeapon weapon, EntityLivingBase target) {
         if (turret.getWorld() instanceof WorldServer) {
             WorldServer world = (WorldServer) turret.getWorld();
-            weapon.effect().apply(world, turret, base, target);
+            // a wand holder is still fired at, but not affected
+            if (!TurretImmunity.isImmune(target)) weapon.effect().apply(world, turret, base, target);
             playSound(world, turret.getPos(), weapon.launchSound());
         }
     }

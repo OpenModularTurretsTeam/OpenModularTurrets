@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
+import omtteam.omlib.inventory.AutomationItemHandler;
 import omtteam.openmodularturrets.core.base.BaseTier;
 
 import javax.annotation.Nonnull;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * The 13 slots of a turret base (1.20.1+ {@code inventory.TurretBaseInventory}, 3.x layout):
  * <ul>
- *     <li>0–8: ammo (the only slots other blocks may use)</li>
+ *     <li>0–8: ammo (the only slots other blocks may use; hoppers and pipes only insert)</li>
  *     <li>9–10: addons (tier 2+)</li>
  *     <li>11–12: upgrades (slot 11 from tier 2, slot 12 on tier 5)</li>
  * </ul>
@@ -60,6 +61,14 @@ public class TurretBaseInventory extends ItemStackHandler {
     /** The ammo slots, the part of the inventory other blocks may use. */
     public IItemHandler getAmmoSlots() {
         return new RangedWrapper(this, AMMO_START, AMMO_START + AMMO_COUNT);
+    }
+
+    /**
+     * The ammo slots as hoppers and pipes see them (the item handler capability): insert only, so nobody can disarm a
+     * base with a hopper (as on 1.20.1+).
+     */
+    public IItemHandler getAutomationSlots() {
+        return new AutomationItemHandler(new RangedWrapper(this, AMMO_START, AMMO_START + AMMO_COUNT), stack -> false);
     }
 
     /** The slots a base tier may use, by kind (the GUI only shows these). */

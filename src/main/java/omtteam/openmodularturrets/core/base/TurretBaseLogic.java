@@ -478,6 +478,7 @@ public class TurretBaseLogic {
 
     /** Whether the redstone mode currently lets the base work. */
     public boolean isActive() {
+        if (trustManager.getOwner() == null && !settings.unownedBasesActive()) return false;
         return mode.isActive(redstone);
     }
 

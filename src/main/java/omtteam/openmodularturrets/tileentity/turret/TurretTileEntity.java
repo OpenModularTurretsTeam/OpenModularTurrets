@@ -185,8 +185,9 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         TurretBase base = getBase();
         TurretType type = getCoreType();
         if (type == null) return;
-        // a turret without base, or one that may not stay there (TurretPlacement.canStay: tier, face), drops itself
-        if (base == null || base.isInvalid() || !TurretPlacement.canStay(type, getFace(), base.getTier()).allowed()) {
+        // a turret without base, or one that may not stay there (TurretPlacement.canStay: tier, face, limit), drops itself
+        if (base == null || base.isInvalid() || !TurretPlacement.canStay(type, getFace(), base.getTier(),
+                base.getLogic().getTurrets(), ConfigLogicSettings.INSTANCE).allowed()) {
             facing = null;
             world.destroyBlock(pos, true);
             return;
