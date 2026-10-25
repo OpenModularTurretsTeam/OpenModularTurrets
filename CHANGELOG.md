@@ -29,6 +29,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - Tooltips and the turret placement outline used the client's own config instead of the server's
 - Other mods asking a turret without base (or with its base in an unloaded chunk) for its stats crashed; such a turret now reports its configured values and targets nothing
 - The maximum range shown in the turret base GUI also counted turrets mounted on a neighbouring base
+- Turret bases could create their tile entity on the chunk render thread (camouflage light settings), which can crash or corrupt the world
 
 ## [4.0.0-beta.1] - 2026-10-24
 

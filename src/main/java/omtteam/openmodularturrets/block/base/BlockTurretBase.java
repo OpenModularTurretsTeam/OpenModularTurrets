@@ -38,6 +38,7 @@ import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.EnumMachineMode;
 import omtteam.omlib.util.player.Player;
 import omtteam.omlib.util.player.PlayerUtil;
+import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.BaseTier;
@@ -143,14 +144,12 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @Nonnull
     @ParametersAreNonnullByDefault
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        if (state.getBlock() instanceof BlockTurretBase && worldIn.getTileEntity(pos) instanceof TurretBase) {
-            TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
-            if (base != null) {
-                int lightValue, lightOpacity;
-                lightValue = base.getCamoSettings().getLightValue();
-                lightOpacity = base.getCamoSettings().getLightOpacity();
-                return state.withProperty(LIGHT_VALUE, lightValue).withProperty(LIGHT_OPACITY, lightOpacity);
-            }
+        TileEntity tileEntity = WorldUtil.getTileEntity(worldIn, pos);
+        if (state.getBlock() instanceof BlockTurretBase && tileEntity instanceof TurretBase) {
+            TurretBase base = (TurretBase) tileEntity;
+            int lightValue = base.getCamoSettings().getLightValue();
+            int lightOpacity = base.getCamoSettings().getLightOpacity();
+            return state.withProperty(LIGHT_VALUE, lightValue).withProperty(LIGHT_OPACITY, lightOpacity);
         }
         return super.getActualState(state, worldIn, pos);
     }
