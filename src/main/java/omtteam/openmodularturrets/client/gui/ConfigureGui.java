@@ -20,9 +20,7 @@ import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.network.MessageToggleAttackMobs;
-import omtteam.openmodularturrets.network.MessageToggleAttackNeutralMobs;
-import omtteam.openmodularturrets.network.MessageToggleAttackPlayers;
+import omtteam.openmodularturrets.network.BasePackets;
 import omtteam.openmodularturrets.network.OMTNetworkingHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
@@ -143,7 +141,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 0) { //change Attack Mobs
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
-                sendChangeToServerMobs(!base.isAttacksMobs());
+                sendTargeting(BasePackets.TargetCategory.MOBS, !base.isAttacksMobs());
             } else {
                 addChatMessage(player, new TextComponentString(safeLocalize(OMLibNames.Localizations.Text.STATUS_PERMISSION)));
             }
@@ -151,7 +149,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
 
         if (guibutton.id == 1) { //change Attack Neutrals
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
-                sendChangeToServerNeutrals(!base.isAttacksNeutrals());
+                sendTargeting(BasePackets.TargetCategory.NEUTRALS, !base.isAttacksNeutrals());
             } else {
                 addChatMessage(player, new TextComponentString(safeLocalize(OMLibNames.Localizations.Text.STATUS_PERMISSION)));
             }
@@ -159,7 +157,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
 
         if (guibutton.id == 2) { // change Attack Players
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
-                sendChangeToServerPlayers(!base.isAttacksPlayers());
+                sendTargeting(BasePackets.TargetCategory.PLAYERS, !base.isAttacksPlayers());
             } else {
                 addChatMessage(player, new TextComponentString(safeLocalize(OMLibNames.Localizations.Text.STATUS_PERMISSION)));
             }
@@ -209,22 +207,8 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
             this.drawHoveringText(tooltip, guiLeft + mouseX - k, guiTop + mouseY - l, Minecraft.getMinecraft().fontRenderer);
     }
 
-    private void sendChangeToServerMobs(boolean setTo) {
-        MessageToggleAttackMobs message = new MessageToggleAttackMobs(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(), setTo);
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
-    }
-
-    private void sendChangeToServerNeutrals(boolean setTo) {
-        MessageToggleAttackNeutralMobs message = new MessageToggleAttackNeutralMobs(base.getPos().getX(), base.getPos().getY(),
-                                                                                    base.getPos().getZ(), setTo);
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
-    }
-
-    private void sendChangeToServerPlayers(boolean setTo) {
-        MessageToggleAttackPlayers message = new MessageToggleAttackPlayers(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
-                                                                            setTo);
-
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
+    private void sendTargeting(BasePackets.TargetCategory category, boolean enabled) {
+        OMTNetworkingHandler.INSTANCE.sendToServer(new BasePackets.SetTargeting(base.getPos(), category, enabled));
     }
 
     @Override

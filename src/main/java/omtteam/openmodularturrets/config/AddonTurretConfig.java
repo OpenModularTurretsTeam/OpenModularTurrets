@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.config;
 
+import com.google.gson.reflect.TypeToken;
 import net.minecraftforge.common.config.Configuration;
 import omtteam.openmodularturrets.api.TurretDefinition;
 import omtteam.openmodularturrets.core.settings.TurretStats;
@@ -7,6 +8,7 @@ import omtteam.openmodularturrets.core.turret.TurretType;
 
 import javax.annotation.Nullable;
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,6 +21,9 @@ import java.util.Map;
  */
 public final class AddonTurretConfig {
     public static final String FILE_NAME = "openmodularturrets_addon_turrets.cfg";
+    /** The type of {@link #getSettings()} for the config sync ({@code ConfigSync.registerValue}). */
+    public static final Type SETTINGS_TYPE = new TypeToken<Map<String, TurretSetting>>() {
+    }.getType();
 
     private static Map<String, TurretSetting> settings = Collections.emptyMap();
 
@@ -68,6 +73,16 @@ public final class AddonTurretConfig {
                                  @Nullable String comment, double max) {
         double value = config.get(category, key, defaultValue, comment, 0D, max).getDouble(defaultValue);
         return Math.max(0D, Math.min(max, value));
+    }
+
+    /** The settings by turret id, as loaded (or as synced from the server). */
+    public static synchronized Map<String, TurretSetting> getSettings() {
+        return settings;
+    }
+
+    /** Replaces the settings (client: the server's while connected, the local ones after). */
+    public static synchronized void setSettings(Map<String, TurretSetting> newSettings) {
+        settings = Collections.unmodifiableMap(new HashMap<>(newSettings));
     }
 
     /** @throws IllegalArgumentException if the type is no turret of another mod */

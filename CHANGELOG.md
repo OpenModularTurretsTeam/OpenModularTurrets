@@ -15,6 +15,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 ### Changed
 
 - The jar files are named `openmodularturrets-<version>-mc1.12.2-forge.jar` (Minecraft version with `mc`, as on 1.20.1+)
+- The server sends its config values (`openmodularturrets.cfg` and `openmodularturrets_addon_turrets.cfg`) to clients when they join, so tooltips, the ammo slots and the turret placement outline follow the server's rules; after leaving, the client uses its own config again
 
 ### Fixed
 
@@ -22,6 +23,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - Decimal settings of turrets added by other mods (damage amp, upgrades, recycler chances, accuracy deviation) were not limited to their range
 - The config ranges of `baseFireRate` (now 1–200 ticks) and `baseAccuracyDeviation` (0–100 %) did not include the turrets' default values
 - Boxes in the turret logic compared `0.0` and `-0.0` as equal while hashing them differently
+- Computers (ComputerCraft, OpenComputers) could not change access levels: `changeAccessLevel` / `changeTrustedPlayerAccess` and `addTrustedPlayer` with a level reported success but changed nothing
+- OpenComputers: `setTurretYawPitch` rejected valid angles and used the side as yaw, `forceShootTurret` did not check the side, side 6 counted as the bottom, `addTrustedPlayer` without an access level failed, `getTrustedPlayer` returned nothing for unknown players
+- Turret base GUI actions (range, mode, targeting, dropping) were handled for unloaded or far-away bases, which could load chunks; they now need the base loaded and the player within reach
+- Tooltips and the turret placement outline used the client's own config instead of the server's
 
 ## [4.0.0-beta.1] - 2026-10-24
 

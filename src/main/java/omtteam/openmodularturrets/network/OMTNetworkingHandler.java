@@ -10,32 +10,16 @@ public class OMTNetworkingHandler {
     public final static SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
 
     public static void initNetworking() {
-        INSTANCE.registerMessage(MessageToggleAttackMobs.MessageHandlerToggleAttackMobs.class,
-                                 MessageToggleAttackMobs.class, 0, Side.SERVER);
-
-        INSTANCE.registerMessage(MessageToggleAttackNeutralMobs.MessageHandlerToggleAttackNeutralMobs.class,
-                                 MessageToggleAttackNeutralMobs.class, 1, Side.SERVER);
-
-        INSTANCE.registerMessage(MessageToggleAttackPlayers.MessageHandlerToggleAttackPlayers.class,
-                                 MessageToggleAttackPlayers.class, 2, Side.SERVER);
-
-        INSTANCE.registerMessage(MessageAdjustRange.MessageHandlerAdjustYAxisDetect.class,
-                                 MessageAdjustRange.class, 3, Side.SERVER);
-
-        INSTANCE.registerMessage(MessageDropTurrets.MessageHandlerDropTurrets.class, MessageDropTurrets.class,
-                                 4, Side.SERVER);
-
-        INSTANCE.registerMessage(MessageDropBase.MessageHandlerDropBase.class, MessageDropBase.class,
-                                 5, Side.SERVER);
-
-        INSTANCE.registerMessage(MessageSetBaseTargetingType.MessageHandlerSetBaseTargetingType.class,
-                                 MessageSetBaseTargetingType.class, 6, Side.SERVER);
+        // BasePackets replace the 3.x base messages (MessageToggleAttack*, MessageAdjustRange, MessageDropTurrets,
+        // MessageDropBase, MessageSetBaseTargetingType, MessageToggleMode on 0-6 and 8)
+        INSTANCE.registerMessage(BasePacketHandler.SimpleActionHandler.class, BasePackets.SimpleAction.class, 0,
+                                 Side.SERVER);
+        INSTANCE.registerMessage(BasePacketHandler.SetRangeHandler.class, BasePackets.SetRange.class, 1, Side.SERVER);
+        INSTANCE.registerMessage(BasePacketHandler.SetTargetingHandler.class, BasePackets.SetTargeting.class, 2,
+                                 Side.SERVER);
 
         INSTANCE.registerMessage(OpenModularTurrets.proxy.clientMessageHandler(MessageTurretBase.class), MessageTurretBase.class,
                                  7, Side.CLIENT);
-
-        INSTANCE.registerMessage(MessageToggleMode.MessageHandlerToggleMode.class, MessageToggleMode.class,
-                                 8, Side.SERVER);
 
         // 9 and 10 were MessageAdjustLightValue / MessageAdjustLightOpacity (the camouflage menu of OMLib replaced them)
 

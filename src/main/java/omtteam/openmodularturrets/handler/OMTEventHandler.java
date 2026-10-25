@@ -9,8 +9,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -19,6 +17,7 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import omtteam.omlib.config.ConfigSync;
 import omtteam.openmodularturrets.entity.projectile.AbstractOMTDamageSource;
 import omtteam.openmodularturrets.fixes.MissingIds;
 import omtteam.openmodularturrets.reference.Reference;
@@ -43,13 +42,6 @@ public class OMTEventHandler {
             instance = new OMTEventHandler();
         }
         return instance;
-    }
-
-    @SubscribeEvent
-    public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equals(Reference.MOD_ID)) {
-            ConfigManager.sync(Reference.MOD_ID, Config.Type.INSTANCE);
-        }
     }
 
     @SubscribeEvent
@@ -143,7 +135,7 @@ public class OMTEventHandler {
     @SubscribeEvent
     public void configReloadEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.getModID().equalsIgnoreCase(Reference.MOD_ID)) {
-            ConfigManager.sync(Reference.MOD_ID, Config.Type.INSTANCE);
+            ConfigSync.syncLocal(Reference.MOD_ID);
         }
     }
 }

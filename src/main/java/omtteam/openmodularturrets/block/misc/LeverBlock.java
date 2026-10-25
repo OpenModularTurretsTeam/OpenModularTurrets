@@ -30,14 +30,14 @@ import omtteam.openmodularturrets.item.ItemBlockLever;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.misc.LeverTileEntity;
-import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import omtteam.openmodularturrets.tileentity.turret.TurretMount;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.openmodularturrets.reference.OMTNames.Blocks.lever;
-import static omtteam.openmodularturrets.turret.TurretHeadUtil.getTurretBase;
-import static omtteam.openmodularturrets.turret.TurretHeadUtil.getTurretBaseFacing;
+import static omtteam.openmodularturrets.tileentity.turret.TurretMount.getTurretBase;
+import static omtteam.openmodularturrets.tileentity.turret.TurretMount.getTurretBaseFacing;
 
 @SuppressWarnings("deprecation")
 public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock {
@@ -119,7 +119,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     @Override
     @ParametersAreNonnullByDefault
     public boolean onBlockActivated_OM(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.DOWN || TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.UP) {
+        if (TurretMount.getTurretBaseFacing(worldIn, pos) == EnumFacing.DOWN || TurretMount.getTurretBaseFacing(worldIn, pos) == EnumFacing.UP) {
             return true;
         }
         TurretBase base = getTurretBase(worldIn, pos);

@@ -131,7 +131,7 @@ public class TurretBaseWorld implements BaseWorld {
         return hit == null || hit.typeOfHit == RayTraceResult.Type.MISS;
     }
 
-    /** 3.x {@code TurretHeadUtil.dispatchWarnMessage}. */
+    /** 3.x {@code TurretMount.dispatchWarnMessage}. */
     @Override
     public void warnPlayer(TargetEntity player) {
         if (!(player instanceof LivingTargetEntity)) return;

@@ -24,11 +24,7 @@ import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.container.TurretBaseContainer;
-import omtteam.openmodularturrets.network.MessageAdjustRange;
-import omtteam.openmodularturrets.network.MessageDropBase;
-import omtteam.openmodularturrets.network.MessageDropTurrets;
-import omtteam.openmodularturrets.network.MessageSetBaseTargetingType;
-import omtteam.openmodularturrets.network.MessageToggleMode;
+import omtteam.openmodularturrets.network.BasePackets;
 import omtteam.openmodularturrets.network.OMTNetworkingHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
@@ -307,31 +303,28 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
     }
 
     private void sendChangeToServer() {
-        MessageAdjustRange message = new MessageAdjustRange(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
-                                                            base.getRange());
-
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
+        OMTNetworkingHandler.INSTANCE.sendToServer(new BasePackets.SetRange(base.getPos(), base.getRange()));
     }
 
     private void sendDropTurretsToServer() {
-        MessageDropTurrets message = new MessageDropTurrets(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
+        sendAction(BasePackets.Action.DROP_TURRETS);
     }
 
     private void sendDropBaseToServer() {
         player.closeScreen();
-        MessageDropBase message = new MessageDropBase(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
+        sendAction(BasePackets.Action.DROP_BASE);
     }
 
     private void sendSetBaseTargetingToServer() {
-        MessageSetBaseTargetingType message = new MessageSetBaseTargetingType(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
+        sendAction(BasePackets.Action.TOGGLE_MULTI_TARGETING);
     }
 
     private void sendToggleModeToServer() {
-        MessageToggleMode message = new MessageToggleMode(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
+        sendAction(BasePackets.Action.TOGGLE_MODE);
+    }
+
+    private void sendAction(BasePackets.Action action) {
+        OMTNetworkingHandler.INSTANCE.sendToServer(new BasePackets.SimpleAction(base.getPos(), action));
     }
 
     @Override

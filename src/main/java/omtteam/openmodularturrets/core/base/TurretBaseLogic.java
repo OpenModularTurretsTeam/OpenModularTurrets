@@ -34,7 +34,7 @@ import java.util.UUID;
 
 /**
  * Game logic of one turret base, independent of Minecraft. Ported from 1.12.2 {@code TurretBase} and the base-related
- * parts of {@code TurretHeadUtil}, {@code OMTUtil} and OMLib's machine classes (via the 1.20.1+ port).
+ * parts of {@code TurretMount}, {@code OMTUtil} and OMLib's machine classes (via the 1.20.1+ port).
  * <p>
  * The tile entity owns one instance, forwards world events to it ({@link #setRedstone}, {@link #onInventoryChanged},
  * {@link #updateNeighbours}, {@link #tick}) and persists its state. Turrets ask it for ammo, energy, their target and
@@ -44,7 +44,7 @@ import java.util.UUID;
  * and writes the 3.x format), so the logic is given its {@link TrustManager} instead of creating one.
  */
 public class TurretBaseLogic {
-    /** 1.12.2 {@code TurretHeadUtil.warnPlayers}: a warned player is warned again after this many ticks. */
+    /** 1.12.2 {@code TurretMount.warnPlayers}: a warned player is warned again after this many ticks. */
     static final long WARNING_COOLDOWN_TICKS = 12000;
 
     private final int tier;
@@ -232,7 +232,7 @@ public class TurretBaseLogic {
     }
 
     /**
-     * Shots available to a turret (1.12.2 {@code TurretHeadUtil.getAmmoLevel}): matching items in the base; for
+     * Shots available to a turret (1.12.2 {@code TurretMount.getAmmoLevel}): matching items in the base; for
      * energy turrets the stored energy divided by the power usage; unlimited if ammo is
      * disabled or the base has a creative upgrade.
      */
@@ -355,14 +355,14 @@ public class TurretBaseLogic {
     }
 
     /**
-     * Scattershot upgrades that apply to a turret (1.12.2 {@code TurretHeadUtil.getScattershotUpgrades}); always 0
+     * Scattershot upgrades that apply to a turret (1.12.2 {@code TurretMount.getScattershotUpgrades}); always 0
      * for turrets that {@linkplain TurretType#usesScattershot() ignore them}.
      */
     public int getScattershotCount(TurretType type) {
         return type.usesScattershot() ? getUpgradeCount(TurretBaseUpgradeType.SCATTERSHOT) : 0;
     }
 
-    /** 1.12.2 {@code TurretHeadUtil.getAmpLevel}. */
+    /** 1.12.2 {@code TurretMount.getAmpLevel}. */
     public int getDamageAmpLevel() {
         return getAddonCount(AddonType.DAMAGE_AMP);
     }
@@ -382,7 +382,7 @@ public class TurretBaseLogic {
         return addons == 0 ? NO_LOOT : Math.min(addons - 1, Math.max(0, maxLooting));
     }
 
-    /** 1.12.2 {@code TurretHeadUtil.hasConcealmentAddon}. */
+    /** 1.12.2 {@code TurretMount.hasConcealmentAddon}. */
     public boolean shouldConcealTurrets() {
         return tier > 1 && (hasAddon(AddonType.CONCEALER) || settings.turretsConcealWithoutAddon());
     }
@@ -467,7 +467,7 @@ public class TurretBaseLogic {
         }
     }
 
-    /** 1.12.2 {@code TurretHeadUtil.updateSolarPanelAddon}; inserted like external energy (limited by max IO). */
+    /** 1.12.2 {@code TurretMount.updateSolarPanelAddon}; inserted like external energy (limited by max IO). */
     private void updateSolarPanel() {
         if (hasAddon(AddonType.SOLAR_PANEL) && world.canGenerateSolarPower()) {
             energy.insert(settings.solarPanelGeneration(), false);
@@ -617,7 +617,7 @@ public class TurretBaseLogic {
     // ---- Player warnings ----
 
     /**
-     * 1.12.2 {@code TurretHeadUtil.warnPlayers}, called per turret while the base is active and has enough energy for
+     * 1.12.2 {@code TurretMount.warnPlayers}, called per turret while the base is active and has enough energy for
      * a shot: players in the cube {@code turret ± (baseRange + warning distance)} who are not owner, trusted or in
      * creative mode are warned once every {@value #WARNING_COOLDOWN_TICKS} ticks.
      */

@@ -54,7 +54,7 @@ import java.util.Random;
 import static omtteam.omlib.compat.theoneprobe.TOPCompatibility.getLocalizationString;
 import static omtteam.omlib.util.GeneralUtil.getBooleanUnlocalizationYesNo;
 import static omtteam.omlib.util.GeneralUtil.getColoredBooleanColor;
-import static omtteam.openmodularturrets.turret.TurretHeadUtil.getTurretBaseFacing;
+import static omtteam.openmodularturrets.tileentity.turret.TurretMount.getTurretBaseFacing;
 
 /**
  * A turret block (1.12.2 {@code BlockAbstractTurretHead} and its 14 subclasses; 1.20.1+ {@code TurretBlock}): one

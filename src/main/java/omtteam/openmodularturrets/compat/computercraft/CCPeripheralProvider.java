@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.compat.computercraft;
 import dan200.computercraft.api.ComputerCraftAPI;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -36,10 +37,8 @@ public class CCPeripheralProvider {
         @Override
         @ParametersAreNonnullByDefault
         public IPeripheral getPeripheral(World world, BlockPos pos, EnumFacing side) {
-            if (world.getTileEntity(pos) instanceof TurretBase) {
-                return (IPeripheral) world.getTileEntity(pos);
-            }
-            return null;
+            TileEntity tileEntity = world.getTileEntity(pos);
+            return tileEntity instanceof TurretBase ? new TurretBasePeripheral((TurretBase) tileEntity) : null;
         }
     }
 }

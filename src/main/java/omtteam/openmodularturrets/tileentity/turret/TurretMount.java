@@ -1,4 +1,4 @@
-package omtteam.openmodularturrets.turret;
+package omtteam.openmodularturrets.tileentity.turret;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -6,10 +6,11 @@ import net.minecraft.world.World;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 /**
- * World helpers for turrets: finding the base. The game rules that lived here in 3.x
- * (ammo, upgrades, addons, warnings) are in the core {@code TurretBaseLogic}.
+ * World helpers for turrets: finding the base (1.20.1+ {@code TurretMount}; {@code turret.TurretHeadUtil} until
+ * 4.0.0). The game rules that lived here in 3.x (ammo, upgrades, addons, warnings) are in the core
+ * {@code TurretBaseLogic}.
  */
-public class TurretHeadUtil {
+public class TurretMount {
     public static TurretBase getTurretBase(World world, BlockPos pos) {
         if (world == null) {
             return null;

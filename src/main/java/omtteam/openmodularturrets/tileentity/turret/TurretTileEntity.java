@@ -44,7 +44,6 @@ import omtteam.openmodularturrets.registry.ModSounds;
 import omtteam.openmodularturrets.registry.TurretRegistry;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.base.TurretBaseWorld;
-import omtteam.openmodularturrets.turret.TurretHeadUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -135,7 +134,7 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
     @Nullable
     public EnumFacing getFacing() {
         if (facing == null && world != null) {
-            EnumFacing towardsBase = TurretHeadUtil.getTurretBaseFacing(world, pos);
+            EnumFacing towardsBase = TurretMount.getTurretBaseFacing(world, pos);
             facing = towardsBase == null ? null : towardsBase.getOpposite();
         }
         return facing;

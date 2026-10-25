@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.item.IDrawOutlineBase;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
-import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import omtteam.openmodularturrets.tileentity.turret.TurretMount;
 
 import javax.annotation.Nullable;
 
@@ -38,6 +38,6 @@ public abstract class AbstractItemBlockBaseAddon extends ItemBlock implements ID
     @Nullable
     @Override
     public EnumFacing getBaseFacing(World world, BlockPos pos) {
-        return TurretHeadUtil.getTurretBaseFacing(world, pos);
+        return TurretMount.getTurretBaseFacing(world, pos);
     }
 }

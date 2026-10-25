@@ -29,7 +29,7 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
-import static omtteam.openmodularturrets.turret.TurretHeadUtil.getTurretBaseFacing;
+import static omtteam.openmodularturrets.tileentity.turret.TurretMount.getTurretBaseFacing;
 
 /**
  * While the player holds a turret and OMLib draws a red placement outline next to a base, says why the turret cannot
