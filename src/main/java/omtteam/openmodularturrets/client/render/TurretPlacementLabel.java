@@ -36,7 +36,8 @@ import static omtteam.openmodularturrets.tileentity.turret.TurretMount.getTurret
  * While the player holds a turret and OMLib draws a red placement outline next to a base, says why the turret cannot
  * go there ({@link TurretPlacement.Result}) in a small label facing the camera, drawn without depth test so blocks do
  * not hide it (1.20.1+ {@code TurretPlacementOutline.renderLabel}). Called by the client event handler after the
- * world was rendered.
+ * world was rendered. {@link TurretPlacement.Result#NO_PERMISSION} is shown too, although OMLib's outline (which knows
+ * no player) may be cyan then.
  */
 @SideOnly(Side.CLIENT)
 public final class TurretPlacementLabel {
@@ -63,7 +64,7 @@ public final class TurretPlacementLabel {
         if (!(stack.getItem() instanceof ItemBlockTurret)) return;
         BlockTurret turret = (BlockTurret) ((ItemBlockTurret) stack.getItem()).getBlock();
         BlockPos pos = hit.getBlockPos().offset(hit.sideHit);
-        String reason = reason(minecraft.world, pos, turret);
+        String reason = reason(minecraft.world, pos, turret, (EntityPlayer) viewer);
         if (reason != null) {
             draw(minecraft, viewer, partialTicks, pos, reason);
         }
@@ -74,12 +75,12 @@ public final class TurretPlacementLabel {
      * next to {@code pos} (then OMLib draws no outline either).
      */
     @Nullable
-    private static String reason(World world, BlockPos pos, BlockTurret turret) {
+    private static String reason(World world, BlockPos pos, BlockTurret turret, EntityPlayer player) {
         EnumFacing towardsBase = getTurretBaseFacing(world, pos);
         if (towardsBase == null) return null;
         // ItemBlockTurret.canPlace: the outline is red for any block in the way
         if (!world.isAirBlock(pos)) return I18n.format(KEY + "blocked");
-        TurretPlacement.Result result = turret.attachResult(world, pos);
+        TurretPlacement.Result result = turret.attachResult(world, pos, player);
         if (result == null || result.allowed()) return null;
         TileEntity tile = world.getTileEntity(pos.offset(towardsBase));
         if (!(tile instanceof TurretBase)) return null;

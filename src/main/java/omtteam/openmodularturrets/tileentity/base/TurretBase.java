@@ -188,14 +188,15 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
                 ? ((LivingTargetEntity) target.get()).getEntity() : null;
     }
 
-    /** The ammo slots, the part of the inventory other blocks may use. */
+    /** The ammo slots as other blocks see them: insert only. */
     public IItemHandler getCapabilityInventory(@Nullable EnumFacing facing) {
-        return inventory.getAmmoSlots();
+        return inventory.getAutomationSlots();
     }
 
+    /** The ammo slots for code of other mods (3.x API), which may also take ammo out. */
     @Override
     public List<IItemHandler> getAmmoInventories() {
-        return Collections.singletonList(this.getCapabilityInventory(EnumFacing.DOWN));
+        return Collections.singletonList(inventory.getAmmoSlots());
     }
 
     private void onInventoryChanged() {

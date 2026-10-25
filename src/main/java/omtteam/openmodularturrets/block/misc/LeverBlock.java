@@ -14,6 +14,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -92,6 +94,25 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
                 isBaseValid(worldIn.getTileEntity(pos.east())) ||
                 isBaseValid(worldIn.getTileEntity(pos.south())) ||
                 isBaseValid(worldIn.getTileEntity(pos.west())));
+    }
+
+    /** {@link #ROTATION} 0–3 is the horizontal index of the direction towards the base; structures turn it along. */
+    @Override
+    @Nonnull
+    @SuppressWarnings("deprecation")
+    public IBlockState withRotation(IBlockState state, Rotation rotation) {
+        int value = state.getValue(ROTATION);
+        if (value > 3) return state;
+        return state.withProperty(ROTATION, rotation.rotate(EnumFacing.byHorizontalIndex(value)).getHorizontalIndex());
+    }
+
+    @Override
+    @Nonnull
+    @SuppressWarnings("deprecation")
+    public IBlockState withMirror(IBlockState state, Mirror mirror) {
+        int value = state.getValue(ROTATION);
+        if (value > 3) return state;
+        return state.withProperty(ROTATION, mirror.mirror(EnumFacing.byHorizontalIndex(value)).getHorizontalIndex());
     }
 
     @Override

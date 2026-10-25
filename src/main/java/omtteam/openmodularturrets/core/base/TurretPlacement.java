@@ -16,6 +16,11 @@ public final class TurretPlacement {
     /** Why a turret may or may not be attached; the checks run in this order and the first failing one wins. */
     public enum Result {
         OK,
+        /**
+         * The placing player is not an admin of the base. Checked by the game layer before {@link #canAttach}, which
+         * knows no players.
+         */
+        NO_PERMISSION,
         /** The turret type is disabled in the config. */
         DISABLED,
         /** The type cannot mount on this face of the base ({@link TurretType#canMountOn}). */
@@ -43,7 +48,7 @@ public final class TurretPlacement {
     public static Result canAttach(TurretType type, Face face, int baseTier, Map<Face, TurretType> attached,
                                    LogicSettings settings) {
         if (!settings.turret(type).enabled()) return Result.DISABLED;
-        Result mount = canStay(type, face, baseTier);
+        Result mount = checkMount(type, face, baseTier);
         if (!mount.allowed()) return mount;
         long others = attached.keySet().stream().filter(other -> other != face).count();
         if (others >= settings.baseTier(baseTier).maxTurrets()) return Result.BASE_FULL;
@@ -53,9 +58,23 @@ public final class TurretPlacement {
 
     /**
      * May an attached turret stay? Checks the face and the tier; disabling a type or lowering the base's
-     * {@code maxTurrets} or the type's {@code maxSimultaneous} never removes turrets.
+     * {@code maxTurrets} never removes turrets. Lowering {@code maxSimultaneous} does only if
+     * {@link LogicSettings#dropTurretsOverMaxSimultaneous}: then the turrets on the first faces in {@link Face} order
+     * stay and the rest return {@link Result#TYPE_LIMIT}.
+     *
+     * @param attached the turrets on the base by face, including this one
      */
-    public static Result canStay(TurretType type, Face face, int baseTier) {
+    public static Result canStay(TurretType type, Face face, int baseTier, Map<Face, TurretType> attached,
+                                 LogicSettings settings) {
+        Result mount = checkMount(type, face, baseTier);
+        if (!mount.allowed() || !settings.dropTurretsOverMaxSimultaneous()) return mount;
+        long before = attached.entrySet().stream()
+                .filter(entry -> entry.getKey().ordinal() < face.ordinal() && type.equals(entry.getValue()))
+                .count();
+        return before >= settings.turret(type).maxSimultaneous() ? Result.TYPE_LIMIT : Result.OK;
+    }
+
+    private static Result checkMount(TurretType type, Face face, int baseTier) {
         if (!type.canMountOn(face)) return Result.WRONG_FACE;
         if (baseTier < type.getRequiredBaseTier()) return Result.TIER_TOO_LOW;
         return Result.OK;

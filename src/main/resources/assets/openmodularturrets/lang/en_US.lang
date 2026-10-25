@@ -287,6 +287,7 @@ message.openmodularturrets.card_skipped.disguise_unavailable=Skipped the disguis
 message.openmodularturrets.card_skipped.light=Skipped the light settings: you need the admin access level.
 message.openmodularturrets.card_skipped.settings=Skipped the base settings: you need the admin access level.
 message.openmodularturrets.placement.blocked=Something is in the way
+message.openmodularturrets.placement.no_permission=Only admins of this base may attach turrets
 message.openmodularturrets.placement.disabled=This turret is disabled in the config
 message.openmodularturrets.placement.wrong_face=This turret cannot be mounted on this side
 message.openmodularturrets.placement.tier_too_low=Needs a tier %s base or higher
