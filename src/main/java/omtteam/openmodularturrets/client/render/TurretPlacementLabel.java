@@ -11,6 +11,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -80,7 +81,9 @@ public final class TurretPlacementLabel {
         if (!world.isAirBlock(pos)) return I18n.format(KEY + "blocked");
         TurretPlacement.Result result = turret.attachResult(world, pos);
         if (result == null || result.allowed()) return null;
-        TurretBase base = (TurretBase) world.getTileEntity(pos.offset(towardsBase));
+        TileEntity tile = world.getTileEntity(pos.offset(towardsBase));
+        if (!(tile instanceof TurretBase)) return null;
+        TurretBase base = (TurretBase) tile;
         TurretType type = turret.getCoreType();
         String key = KEY + result.name().toLowerCase(Locale.ROOT);
         switch (result) {

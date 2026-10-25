@@ -559,11 +559,13 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         }
     }
 
-    // ---- ITurretHead (3.x API) ----
+    // ---- ITurretHead (3.x API); without a base (none, or its chunk unloaded) the stats come from the config ----
 
+    /** The base's settings; without a base, settings that target nothing. */
     @Override
     public TargetingSettings getTargetingSettings() {
-        return getBase().getTargetingSettings();
+        TurretBase base = getBase();
+        return base != null ? base.getTargetingSettings() : new TargetingSettings(false, false, false, 0, 0);
     }
 
     /** The targeting weights of the turret type (3.x saved them per turret, but they were never changed). */
@@ -620,7 +622,8 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
 
     @Override
     public double getActualTurretAccuracyDeviation() {
-        return getBase().getLogic().getAccuracyDeviation(getCoreType());
+        TurretBase base = getBase();
+        return base != null ? base.getLogic().getAccuracyDeviation(getCoreType()) : getBaseTurretAccuracyDeviation();
     }
 
     /** Nothing is cached; the stats are read from the base logic on use. */
@@ -628,30 +631,35 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
     public void triggerResetCaches() {
     }
 
-    /** Ticks between shots, with the base's fire rate upgrades. */
+    /** Ticks between shots, with the base's fire rate upgrades (without a base: the configured fire rate). */
     public double getFireCooldownTicks() {
-        return getBase().getLogic().getFireCooldownTicks(getCoreType());
+        TurretBase base = getBase();
+        return base != null ? base.getLogic().getFireCooldownTicks(getCoreType()) : getTurretBaseFireRate();
     }
 
-    /** Range with the base's range upgrades. */
+    /** Range with the base's range upgrades (without a base: the configured range). */
     public int getTurretRange() {
-        return getBase().getLogic().getRange(getCoreType());
+        TurretBase base = getBase();
+        return base != null ? base.getLogic().getRange(getCoreType()) : getTurretBaseRange();
     }
 
-    /** Shots left in the base: matching ammo items, or the energy for energy turrets. */
+    /** Shots left in the base: matching ammo items, or the energy for energy turrets; 0 without a base. */
     public int getAmmoLevel() {
-        return getBase().getLogic().getAmmoLevel(getCoreType());
+        TurretBase base = getBase();
+        return base != null ? base.getLogic().getAmmoLevel(getCoreType()) : 0;
     }
 
-    /** Damage amp addons of the base. */
+    /** Damage amp addons of the base; 0 without a base. */
     public int getDamageAmpLevel() {
-        return getBase().getLogic().getDamageAmpLevel();
+        TurretBase base = getBase();
+        return base != null ? base.getLogic().getDamageAmpLevel() : 0;
     }
 
     // ---- NBT (3.x keys) ----
 
     @Override
-    public NBTTagCompound saveToNBT(NBTTagCompound tag) {
+    @Nonnull
+    public NBTTagCompound saveToNBT(@Nonnull NBTTagCompound tag) {
         super.saveToNBT(tag);
         tag.setInteger("ticksBeforeFire", state.getTicksSinceShot());
         tag.setBoolean("autoFire", autoFire);
@@ -663,7 +671,7 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
 
     /** Reads the 3.x keys; 3.x yaw and pitch were world angles, they are replaced at the first aim. */
     @Override
-    public void loadFromNBT(NBTTagCompound tag) {
+    public void loadFromNBT(@Nonnull NBTTagCompound tag) {
         super.loadFromNBT(tag);
         state.setTicksSinceShot(tag.getInteger("ticksBeforeFire"));
         autoFire = tag.getBoolean("autoFire");

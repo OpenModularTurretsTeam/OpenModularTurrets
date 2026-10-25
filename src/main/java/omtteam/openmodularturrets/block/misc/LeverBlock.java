@@ -181,11 +181,13 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isOpaqueCube_OM(IBlockState state) {
         return false;
     }

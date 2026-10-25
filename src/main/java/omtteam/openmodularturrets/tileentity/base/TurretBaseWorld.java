@@ -100,7 +100,7 @@ public class TurretBaseWorld implements BaseWorld {
         if (world == null) return Optional.empty();
         Entity entity = world.getEntityByID(id);
         return entity instanceof EntityLivingBase && !isSpectator(entity)
-                ? Optional.<TargetEntity>of(new LivingTargetEntity((EntityLivingBase) entity)) : Optional.<TargetEntity>empty();
+                ? Optional.of(new LivingTargetEntity((EntityLivingBase) entity)) : Optional.empty();
     }
 
     private static boolean isSpectator(Entity entity) {

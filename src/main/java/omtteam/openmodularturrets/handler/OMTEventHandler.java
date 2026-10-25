@@ -46,21 +46,22 @@ public class OMTEventHandler {
 
     @SubscribeEvent
     public void entityHurtEvent(LivingHurtEvent event) {
-        EntityLivingBase entity = event.getEntityLiving();
-        int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
-        if (fakeDrops >= 0) {
-            FakePlayer player = OMTFakePlayer.getFakePlayer((WorldServer) event.getEntityLiving().getEntityWorld());
-            player.setHeldItem(EnumHand.MAIN_HAND, OMTFakePlayer.getSword(fakeDrops));
-            entity.setLastAttackedEntity(player);
-        }
+        attributeToFakePlayer(event.getEntityLiving());
     }
 
     @SubscribeEvent
     public void entityAttackedEvent(LivingAttackEvent event) {
-        EntityLivingBase entity = event.getEntityLiving();
+        attributeToFakePlayer(event.getEntityLiving());
+    }
+
+    /**
+     * An entity hit by a base with the fake drops addon was last attacked by the fake player, holding a sword with
+     * the addons' looting level, so its drops are player drops.
+     */
+    private static void attributeToFakePlayer(EntityLivingBase entity) {
         int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
         if (fakeDrops >= 0) {
-            FakePlayer player = OMTFakePlayer.getFakePlayer((WorldServer) event.getEntityLiving().getEntityWorld());
+            FakePlayer player = OMTFakePlayer.getFakePlayer((WorldServer) entity.getEntityWorld());
             player.setHeldItem(EnumHand.MAIN_HAND, OMTFakePlayer.getSword(fakeDrops));
             entity.setLastAttackedEntity(player);
         }

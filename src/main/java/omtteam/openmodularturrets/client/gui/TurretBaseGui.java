@@ -344,7 +344,7 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         int maxRange = 0;
         List<TileEntity> tileEntities = WorldUtil.getTouchingTileEntities(base.getWorld(), base.getPos());
         for (TileEntity te : tileEntities) {
-            if (te instanceof TurretTileEntity) {
+            if (te instanceof TurretTileEntity && ((TurretTileEntity) te).getBase() == base) {
                 maxRange = Math.max(((TurretTileEntity) te).getTurretRange(), maxRange);
             }
         }

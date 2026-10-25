@@ -123,6 +123,7 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }
@@ -199,7 +200,9 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         EnumFacing towardsBase = getTurretBaseFacing(world, pos);
         if (towardsBase == null) return null;
         BlockPos basePos = pos.offset(towardsBase);
-        TurretBase base = (TurretBase) world.getTileEntity(basePos);
+        TileEntity tile = world.getTileEntity(basePos);
+        if (!(tile instanceof TurretBase)) return null;
+        TurretBase base = (TurretBase) tile;
         return TurretPlacement.canAttach(coreType, TurretBase.toFace(towardsBase.getOpposite()), base.getTier(),
                 attachedTurrets(world, basePos), ConfigLogicSettings.INSTANCE);
     }
@@ -250,6 +253,7 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
 
     @Override
     @SideOnly(Side.CLIENT)
+    @ParametersAreNonnullByDefault
     public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random random) {
         TurretDefinition.AmbientEffect effect = TurretRegistry.get(coreType).ambientEffect();
         if (effect != null) {

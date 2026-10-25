@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BaseComputerCommandsTest {
     private boolean savedComputerCraftLoaded;
@@ -80,7 +81,7 @@ class BaseComputerCommandsTest {
         commands.call(Command.setAttacksMobs, new Object[]{false});
         assertFalse(base.isAttacksMobs());
         commands.call(Command.setAttacksMobs, new Object[]{"true"});
-        assertEquals(true, base.isAttacksMobs());
+        assertTrue(base.isAttacksMobs());
     }
 
     @Test

@@ -304,6 +304,7 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public NBTTagCompound saveToNBT(NBTTagCompound tag) {
         super.saveToNBT(tag); // owner
         energy.writeToNBT(tag);

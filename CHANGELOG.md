@@ -27,6 +27,8 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - OpenComputers: `setTurretYawPitch` rejected valid angles and used the side as yaw, `forceShootTurret` did not check the side, side 6 counted as the bottom, `addTrustedPlayer` without an access level failed, `getTrustedPlayer` returned nothing for unknown players
 - Turret base GUI actions (range, mode, targeting, dropping) were handled for unloaded or far-away bases, which could load chunks; they now need the base loaded and the player within reach
 - Tooltips and the turret placement outline used the client's own config instead of the server's
+- Other mods asking a turret without base (or with its base in an unloaded chunk) for its stats crashed; such a turret now reports its configured values and targets nothing
+- The maximum range shown in the turret base GUI also counted turrets mounted on a neighbouring base
 
 ## [4.0.0-beta.1] - 2026-10-24
 
