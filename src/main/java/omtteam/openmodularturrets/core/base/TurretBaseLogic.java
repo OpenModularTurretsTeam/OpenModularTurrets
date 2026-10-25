@@ -169,6 +169,15 @@ public class TurretBaseLogic {
                     break;
                 }
             }
+        } else if (previousMaxRange == 0 && !turrets.isEmpty()) {
+            // first scan of a base without a saved max range (no NBT, e.g. /setblock or a structure) that already
+            // has turrets: start at the range of the shortest reaching turret instead of 0
+            int shortest = Integer.MAX_VALUE;
+            for (TurretType type : turrets.values()) {
+                shortest = Math.min(shortest, getRange(type));
+            }
+            targeting.setRange(shortest);
+            markSync();
         }
     }
 

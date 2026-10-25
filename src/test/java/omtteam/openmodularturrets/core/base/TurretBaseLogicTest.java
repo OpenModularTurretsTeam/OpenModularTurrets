@@ -427,6 +427,25 @@ class TurretBaseLogicTest {
         }
 
         @Test
+        void firstScanWithoutSavedRangeUsesTheShortestTurret() {
+            TurretBaseLogic logic = new TurretBaseLogic(4, settings, NO_TEAMS, world, random, clientRelevant -> {
+            });
+            logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET, TurretType.MACHINE_GUN_TURRET));
+            assertEquals(30, logic.getTargetingSettings().getMaxRange());
+            assertEquals(18, logic.getTargetingSettings().getRange());
+        }
+
+        @Test
+        void firstScanKeepsASavedRangeOfZero() {
+            TurretBaseLogic logic = new TurretBaseLogic(4, settings, NO_TEAMS, world, random, clientRelevant -> {
+            });
+            logic.loadState(new TurretBaseLogic.State(0, MachineMode.INVERTED, false, false, true, false, 0, 30,
+                    false, 0, 0));
+            logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET));
+            assertEquals(0, logic.getTargetingSettings().getRange());
+        }
+
+        @Test
         void maxRangeIsTheBestTurret() {
             TurretBaseLogic logic = base(5);
             logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET, TurretType.ROCKET_TURRET));
