@@ -56,8 +56,7 @@ public class GrenadeProjectile extends TurretProjectile implements ItemSupplier 
 
     private void explode() {
         boolean destroyBlocks = OMTConfig.get().turrets.canGrenadesDestroyBlocks;
-        level().explode(null, getX(), getY(), getZ(), destroyBlocks ? 1.4F : 0.1F,
-                destroyBlocks ? Level.ExplosionInteraction.TNT : Level.ExplosionInteraction.NONE);
+        explodeHere(destroyBlocks ? 1.4F : 0.1F, destroyBlocks ? Level.ExplosionInteraction.TNT : Level.ExplosionInteraction.NONE);
         for (LivingEntity target : level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(RADIUS))) {
             if (canDamage(target)) {
                 int damage = damageWithAmp(baseDamage(), target);

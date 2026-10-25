@@ -298,6 +298,7 @@
   "tooltip.openmodularturrets.ownership_wand.desc1": "Right-click an owned block: make yourself its owner",
   "tooltip.openmodularturrets.ownership_wand.desc2": "Sneak + right-click: remove its owner",
   "tooltip.openmodularturrets.ownership_wand.desc3": "Sneak + right-click into the air: switch spreading",
+  "tooltip.openmodularturrets.ownership_wand.desc4": "While held: turret shots do not affect you",
   "tooltip.openmodularturrets.ownership_wand.spread_off": "Changes only the clicked block",
   "tooltip.openmodularturrets.ownership_wand.spread_on": "Spreads to connected blocks of the same owner",
   "tooltip.openmodularturrets.upgrade.machine.turret_base": "Fits into: Turret Base",

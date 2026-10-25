@@ -18,7 +18,7 @@ public final class OwnershipWandTooltip {
     @SuppressWarnings("unused")
     public static void append(ItemStack stack, TooltipFlag flag, List<Component> lines) {
         if (!(stack.getItem() instanceof OwnershipWandItem)) return;
-        for (String usage : List.of("desc1", "desc2", "desc3")) {
+        for (String usage : List.of("desc1", "desc2", "desc3", "desc4")) {
             lines.add(Component.translatable(TOOLTIP + usage).withStyle(ChatFormatting.GRAY));
         }
         lines.add(Component.translatable(TOOLTIP + (OwnershipWandItem.isSpreading(stack) ? "spread_on" : "spread_off"))

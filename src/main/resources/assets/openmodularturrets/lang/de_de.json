@@ -298,6 +298,7 @@
   "tooltip.openmodularturrets.ownership_wand.desc1": "Rechtsklick auf einen Block mit Besitzer: selbst Besitzer werden",
   "tooltip.openmodularturrets.ownership_wand.desc2": "Schleichen + Rechtsklick: Besitzer entfernen",
   "tooltip.openmodularturrets.ownership_wand.desc3": "Schleichen + Rechtsklick in die Luft: Ausbreitung umschalten",
+  "tooltip.openmodularturrets.ownership_wand.desc4": "Solange gehalten: Geschützschüsse wirken nicht auf dich",
   "tooltip.openmodularturrets.ownership_wand.spread_off": "Ändert nur den angeklickten Block",
   "tooltip.openmodularturrets.ownership_wand.spread_on": "Breitet sich auf verbundene Blöcke desselben Besitzers aus",
   "tooltip.openmodularturrets.upgrade.machine.turret_base": "Passt in: Turmbasis",

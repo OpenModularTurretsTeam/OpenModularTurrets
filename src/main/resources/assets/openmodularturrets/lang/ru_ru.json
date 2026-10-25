@@ -298,6 +298,7 @@
   "tooltip.openmodularturrets.ownership_wand.desc1": "ПКМ по блоку с владельцем: стать его владельцем",
   "tooltip.openmodularturrets.ownership_wand.desc2": "Присесть + ПКМ: убрать владельца",
   "tooltip.openmodularturrets.ownership_wand.desc3": "Присесть + ПКМ в воздух: переключить распространение",
+  "tooltip.openmodularturrets.ownership_wand.desc4": "Пока в руке: выстрелы турелей на вас не действуют",
   "tooltip.openmodularturrets.ownership_wand.spread_off": "Меняет только выбранный блок",
   "tooltip.openmodularturrets.ownership_wand.spread_on": "Распространяется на соединённые блоки того же владельца",
   "tooltip.openmodularturrets.upgrade.machine.turret_base": "Fits into: Turret Base",

@@ -69,8 +69,7 @@ public class RocketProjectile extends TurretProjectile {
 
     private void explode() {
         boolean destroyBlocks = OMTConfig.get().turrets.canRocketsDestroyBlocks;
-        level().explode(null, getX(), getY(), getZ(), destroyBlocks ? 2.3F : 0.1F,
-                destroyBlocks ? Level.ExplosionInteraction.TNT : Level.ExplosionInteraction.NONE);
+        explodeHere(destroyBlocks ? 2.3F : 0.1F, destroyBlocks ? Level.ExplosionInteraction.TNT : Level.ExplosionInteraction.NONE);
         for (LivingEntity entity : level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(RADIUS))) {
             int damage = damageWithAmp(baseDamage(), entity);
             if (OMTConfig.get().turrets.canRocketsHurtEnderDragon && entity instanceof EnderDragon) {

@@ -689,6 +689,19 @@ Update this checklist as work progresses.
 - [x] GameTests on Forge: `OMTForgeGameTests`; all 35 pass (capabilities, FE adapter, plugin discovery, GUI path, mixin loaded)
 - [x] Checked by hand (by the user, 2026-10-24) in a Forge client (`:1.20.1-forge:runClient`) and with the release jar in a real Forge install: turret, projectile, ray and item rendering, camouflage, screens, Jade, joining a dedicated server
 
+### Ownership for adventure maps (requested by the user on 2026-10-25; designed step by step with the user)
+
+Unowned blocks no longer drop; anyone can claim them, and map makers get a creative wand.
+
+- [x] Core: `TrustManager.clearOwner()` / `claim(player)`, `core.world.FloodFill` (breadth-first over faces, limit)
+- [x] Unowned bases stay and are inert (`bases.unownedBasesActive`, default false); turrets attach to an unowned base only for game masters (`canUseGameMasterBlocks`)
+- [x] Claiming: `security.OwnedHost` (bases and camo trap through `TrustHost` defaults, passive blocks through `OwnedBlockEntity`); a main-hand right-click without sneaking on an unowned block (on a turret: its base) claims it and the connected unowned blocks (`block.ClaimSpread`, in `block` to keep `security` out of the package cycle; turrets connect; `bases.claimSpreadLimit`, default 1024, nearest first); fake players only with `general.fakePlayersCanClaim`
+- [x] Visibility: green sparkle (`block.UnownedMarker`, `animateTick`) on unowned bases, their turrets, hardened blocks, walls and fences (not the camo trap); Jade owner line "nobody (right-click to claim)" and a new provider for the passive blocks
+- [x] Disown: owner-only "Disown" button with `ConfirmScreen` on the configure screen and the camo trap screen (`TrustPackets.Disown`); clears owner and trust list, open menus close through `stillValid`
+- [x] Ownership wand (`ownership_wand`, game masters only): right-click claims (trust list cleared), sneak-right-click resets, spreading to connected blocks of the same owner (sneak-right-click into the air toggles, default on); placeholder texture (copy of the memory card)
+- [x] Wand immunity: players holding it are still targeted and fired at, but `TurretImmunity` keeps everything off them (`TurretDamage.canDamage`, so also `OMTApi.canDamage`; the effect weapon dispatch; turret explosions deal a `TurretDamageSource` that `LivingEntityMixin` cancels)
+- [ ] Real texture for the ownership wand
+
 ### Sable contraptions (1.21.1 only; approach B decided by the user on 2026-10-25)
 
 Turret bases and turrets on Sable contraptions (sub-levels: blocks stored in a far-away plot, placed in the world by a pose) must interact with the world where they are rendered.

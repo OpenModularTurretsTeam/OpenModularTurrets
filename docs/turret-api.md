@@ -78,6 +78,7 @@ Every weapon kind takes your code.
 Energy and ammo are taken by OMT before your code runs, once per shot, and the shot follows the turret's cooldown (fire rate and its upgrades).
 
 **On the base's target** (the base does targeting, trust, line of sight and priorities): an `EffectWeapon` gets the world, the turret, the base and the target once per shot.
+A player holding the ownership wand (map makers) is still targeted and fired at, but OMT does not call the effect for them.
 
 ```java
 new EffectWeapon(ExampleSounds.ZAP, (level, turret, base, target) -> {
@@ -92,7 +93,7 @@ Once the turret is ready to fire (cooldown passed, base active, enough energy), 
 `base.getLogic().getRange(turret.getTurretType())` is the turret's range (base tier and range upgrades).
 If it returns any, OMT takes energy and ammo and calls the shot with them; if not, nothing is consumed and the picker is asked again 5 ticks later.
 With `aims = true` the turret turns towards the first picked entity.
-Filter with `OMTApi.canDamage(base, entity)` to spare the owner, trusted players and their pets, and damage with `OMTApi.hurt(base, entity, damageType, amount, direct)` so kills count for the base and the fake drops addon applies.
+Filter with `OMTApi.canDamage(base, entity)` to spare the owner, trusted players, their pets and players holding the ownership wand, and damage with `OMTApi.hurt(base, entity, damageType, amount, direct)` so kills count for the base and the fake drops addon applies.
 
 ```java
 new SelfTargetingWeapon(ExampleSounds.ZAP, true,

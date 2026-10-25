@@ -59,7 +59,8 @@ public final class OMTApi {
 
     /**
      * Whether a turret on this base may damage the entity: never the owner, nor (by default) trusted players and
-     * team members, nor their pets. The same rule built-in turrets apply.
+     * team members, nor their pets, nor a player holding the ownership wand (map makers; turrets may still fire at
+     * them). The same rule built-in turrets apply; check it before any effect, not only before damage.
      */
     public static boolean canDamage(TurretBaseBlockEntity base, Entity entity) {
         return TurretDamage.canDamage(Objects.requireNonNull(base.getLevel(), "level"), base.getBlockPos(), entity);
@@ -67,7 +68,7 @@ public final class OMTApi {
 
     /**
      * Damages an entity the way built-in turrets do: kills count for the base and the fake drops addon's looting
-     * applies. Does not check {@link #canDamage}.
+     * applies. Does not check {@link #canDamage}, but never hurts a player holding the ownership wand.
      *
      * @param direct the entity that deals the damage (e.g. a projectile), or null
      */

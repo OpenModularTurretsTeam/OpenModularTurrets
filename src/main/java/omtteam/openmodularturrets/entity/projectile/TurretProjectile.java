@@ -5,6 +5,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -180,6 +181,15 @@ public abstract class TurretProjectile extends Projectile {
         TurretBaseBlockEntity base = basePos != null && serverLevel.isLoaded(basePos)
                 && serverLevel.getBlockEntity(basePos) instanceof TurretBaseBlockEntity b ? b : null;
         hitHandler.onHit(serverLevel, this, base, target);
+    }
+
+    /**
+     * A vanilla explosion at this projectile (block damage, particles, sound) that deals turret damage, so turret
+     * rules apply to it (no knockback, loot, and a wand holder is spared, see {@code LivingEntityMixin}).
+     */
+    protected void explodeHere(float radius, Level.ExplosionInteraction interaction) {
+        level().explode(null, TurretDamageSource.of(level(), DamageTypes.EXPLOSION, this, null, basePos, lootingLevel),
+                null, getX(), getY(), getZ(), radius, false, interaction);
     }
 
     /** {@link TurretDamage#canDamage} for this projectile's base. */

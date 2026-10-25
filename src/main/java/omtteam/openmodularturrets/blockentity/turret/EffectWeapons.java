@@ -18,6 +18,7 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.entity.projectile.TurretDamage;
+import omtteam.openmodularturrets.entity.projectile.TurretImmunity;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 
 import java.util.List;
@@ -40,7 +41,8 @@ public final class EffectWeapons {
     /** Fires an {@link EffectWeapon} at the base's target. Energy and ammo are already consumed. */
     static void fireEffect(TurretBlockEntity turret, TurretBaseBlockEntity base, EffectWeapon weapon, Entity target) {
         if (turret.getLevel() instanceof ServerLevel level) {
-            weapon.effect().apply(level, turret, base, target);
+            // a wand holder is still fired at, but not affected
+            if (!TurretImmunity.isImmune(target)) weapon.effect().apply(level, turret, base, target);
             playSound(level, turret.getBlockPos(), weapon.launchSound());
         }
     }

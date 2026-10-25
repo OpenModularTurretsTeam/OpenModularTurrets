@@ -49,8 +49,12 @@ public final class TurretDamage {
         target.invulnerableTime = 0;
     }
 
-    /** {@link DamageRules#canDamage} with the trust list of the base at {@code basePos}. */
+    /**
+     * {@link DamageRules#canDamage} with the trust list of the base at {@code basePos}; never for an
+     * {@linkplain TurretImmunity immune} entity (a player holding the ownership wand).
+     */
     public static boolean canDamage(Level level, @Nullable BlockPos basePos, Entity entity) {
+        if (TurretImmunity.isImmune(entity)) return false;
         return DamageRules.canDamage(trustManager(level, basePos), victim(entity));
     }
 
