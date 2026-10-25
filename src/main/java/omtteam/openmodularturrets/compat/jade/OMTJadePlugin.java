@@ -1,9 +1,13 @@
 package omtteam.openmodularturrets.compat.jade;
 
 import omtteam.openmodularturrets.block.base.TurretBaseBlock;
+import omtteam.openmodularturrets.block.defense.DefenseFenceBlock;
+import omtteam.openmodularturrets.block.defense.DefenseWallBlock;
+import omtteam.openmodularturrets.block.defense.HardenedBlock;
 import omtteam.openmodularturrets.camo.CamoHost;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
+import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -40,12 +44,16 @@ public class OMTJadePlugin implements IWailaPlugin {
     public void register(IWailaCommonRegistration registration) {
         registration.registerBlockDataProvider(TurretBaseJadeProvider.INSTANCE, TurretBaseBlockEntity.class);
         registration.registerBlockDataProvider(TurretJadeProvider.INSTANCE, TurretBlockEntity.class);
+        registration.registerBlockDataProvider(OwnedBlockJadeProvider.INSTANCE, OwnedBlockEntity.class);
     }
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
         registration.registerBlockComponent(TurretBaseJadeProvider.INSTANCE, TurretBaseBlock.class);
         registration.registerBlockComponent(TurretJadeProvider.INSTANCE, TurretBlock.class);
+        registration.registerBlockComponent(OwnedBlockJadeProvider.INSTANCE, HardenedBlock.class);
+        registration.registerBlockComponent(OwnedBlockJadeProvider.INSTANCE, DefenseWallBlock.class);
+        registration.registerBlockComponent(OwnedBlockJadeProvider.INSTANCE, DefenseFenceBlock.class);
         // players who may not see through the camouflage get the disguise instead of the real block
         registration.addRayTraceCallback((hit, accessor, original) -> disguised(registration, accessor));
         // Jade's item view would list the ammo slots of the base; it stalls on "Collecting items..." there

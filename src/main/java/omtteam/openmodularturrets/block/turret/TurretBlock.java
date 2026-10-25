@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.block.turret;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import omtteam.openmodularturrets.block.UnownedMarker;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import omtteam.openmodularturrets.compat.BlockCodec;
@@ -217,4 +219,11 @@ public class TurretBlock extends CompatEntityBlock {
         }
     }
 
+    /** Sparkles while its base has no owner ({@link UnownedMarker}); not while concealed. */
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        super.animateTick(state, level, pos, random);
+        if (state.getValue(CONCEALED)) return;
+        UnownedMarker.animateTick(level, pos, pos.relative(state.getValue(FACING).getOpposite()), random);
+    }
 }

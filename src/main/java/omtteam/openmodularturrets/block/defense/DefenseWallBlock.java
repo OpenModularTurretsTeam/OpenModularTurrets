@@ -1,6 +1,7 @@
 package omtteam.openmodularturrets.block.defense;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import omtteam.openmodularturrets.block.InteractiveBlock;
+import omtteam.openmodularturrets.block.UnownedMarker;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,5 +50,12 @@ public class DefenseWallBlock extends WallBlock implements EntityBlock, Interact
     @Override
     public InteractionResult onUse(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return PassiveDefense.tryPickUp(level, pos, player, hand);
+    }
+
+    /** Sparkles while the block has no owner ({@link UnownedMarker}). */
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        super.animateTick(state, level, pos, random);
+        UnownedMarker.animateTick(level, pos, random);
     }
 }

@@ -177,7 +177,7 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
         PlayerIdentity owner = found.get().getOwner();
         List<Component> lines = new ArrayList<>();
         lines.add(ScreenTexts.gui("owner").append(": ").withStyle(ChatFormatting.GOLD)
-                .append(Component.literal(owner == null ? "?" : owner.name()).withStyle(ChatFormatting.WHITE)));
+                .append((owner == null ? ScreenTexts.gui("none") : Component.literal(owner.name())).withStyle(ChatFormatting.WHITE)));
         lines.add(ScreenTexts.gui("mode").append(": ").withStyle(ChatFormatting.GOLD)
                 .append(Component.translatable(logic.getMode().getTranslationKey()).withStyle(ChatFormatting.WHITE)));
         lines.add(ScreenTexts.gui("active").append(": ").withStyle(ChatFormatting.GOLD).append(ScreenTexts.yesNo(logic.isActive())));

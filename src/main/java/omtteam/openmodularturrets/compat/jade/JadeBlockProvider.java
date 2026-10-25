@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.compat.jade;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import org.jetbrains.annotations.Nullable;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IServerDataProvider;
 //? if >=1.21 {
@@ -32,6 +33,12 @@ abstract class JadeBlockProvider implements IServerDataProvider<BlockAccessor>,
 
     static Component line(String labelKey, String value) {
         return line(labelKey, Component.literal(value).withStyle(ChatFormatting.WHITE));
+    }
+
+    /** The owner line: the owner's name, or "nobody" with a hint to claim the block (green, it is up for grabs). */
+    static Component ownerLine(@Nullable String owner) {
+        return owner != null ? line("owner", owner)
+                : line("owner", Component.translatable(GUI + "unowned").withStyle(ChatFormatting.GREEN));
     }
 
     /** Green "yes" or red "no". */

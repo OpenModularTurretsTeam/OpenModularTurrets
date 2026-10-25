@@ -69,7 +69,7 @@ final class TurretJadeProvider extends JadeBlockProvider {
         CompoundTag data = accessor.getServerData();
         if (!data.contains(ACTIVE)) return;
         tooltip.add(line("active", yesNo(data.getBoolean(ACTIVE))));
-        if (data.contains(OWNER)) tooltip.add(line("owner", data.getString(OWNER)));
+        tooltip.add(ownerLine(data.contains(OWNER) ? data.getString(OWNER) : null));
         if (!data.contains(AMMO)) return;
         int ammo = data.getInt(AMMO);
         tooltip.add(line("ammo", ammo < 0 ? Component.translatable("gui.openmodularturrets.unlimited")

@@ -15,7 +15,7 @@ import snownee.jade.api.config.IPluginConfig;
 
 /**
  * Jade tooltip of the turret base (ported from the 1.12.2 {@code WailaTurretBaseHandler}): machine mode, whether the
- * base is active and its owner.
+ * base is active and its owner (or that it has none and can be claimed).
  */
 final class TurretBaseJadeProvider extends JadeBlockProvider {
     static final TurretBaseJadeProvider INSTANCE = new TurretBaseJadeProvider();
@@ -49,6 +49,6 @@ final class TurretBaseJadeProvider extends JadeBlockProvider {
         MachineMode mode = MachineMode.bySerializedName(data.getString(MODE), MachineMode.INVERTED);
         tooltip.add(line("mode", Component.translatable(mode.getTranslationKey()).withStyle(ChatFormatting.GREEN)));
         tooltip.add(line("active", yesNo(data.getBoolean(ACTIVE))));
-        if (data.contains(OWNER)) tooltip.add(line("owner", data.getString(OWNER)));
+        tooltip.add(ownerLine(data.contains(OWNER) ? data.getString(OWNER) : null));
     }
 }

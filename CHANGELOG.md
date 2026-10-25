@@ -11,6 +11,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 ### Added
 
 - Right-clicking a turret base, turret, camouflage trap or hardened block/wall/fence without an owner claims it and the unowned blocks connected to it (up to `bases.claimSpreadLimit`, default 1024); machines' fake players only claim if `general.fakePlayersCanClaim` is set
+- Turret bases, their turrets and hardened blocks/walls/fences without an owner sparkle green, and Jade shows "Owner: nobody (right-click to claim)" (also for hardened blocks, walls and fences, which now show their owner in Jade)
 
 ### Changed
 

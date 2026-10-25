@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import omtteam.openmodularturrets.block.InteractiveBlock;
+import omtteam.openmodularturrets.block.UnownedMarker;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.camo.CamoBlock;
 import omtteam.openmodularturrets.camo.CamoLightProperties;
@@ -217,5 +219,12 @@ public class TurretBaseBlock extends CompatEntityBlock implements InteractiveBlo
             Containers.dropContents(level, pos, base.getInventory());
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
+    }
+
+    /** Sparkles while the block has no owner ({@link UnownedMarker}). */
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        super.animateTick(state, level, pos, random);
+        UnownedMarker.animateTick(level, pos, random);
     }
 }
