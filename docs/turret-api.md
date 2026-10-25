@@ -68,6 +68,10 @@ Filter with `OMTApi.canDamage(base, entity)` to spare the owner, trusted players
 
 Projectiles extend `omtteam.openmodularturrets.entity.projectile.TurretProjectile`; register the entity and its renderer yourself.
 
+**Ships**: on a Rifted Valkyrium (or Valkyrien Skies 1) ship, the turret's block position is in ship space while the entities are in the world.
+OMT converts for its own weapons; code of yours that compares the turret's position with entities or places things in the world converts through OMLib's `ShipFrames.at(world, turret.getPos())` (`omtteam.omlib.compat.valkyrien.ShipFrame`: `toLocal`, `toWorld`, `rotateToLocal`, `rotateToWorld`; without a ship mod it converts nothing).
+Entity searches with a box in ship space, projectiles spawned in ship space, sounds and particles are converted by the ship mod.
+
 ### Stats and config
 
 `TurretStats` are the defaults of the turret's config entry.

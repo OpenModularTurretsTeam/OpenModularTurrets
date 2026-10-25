@@ -13,6 +13,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
+import omtteam.omlib.compat.valkyrien.ShipFrame;
+import omtteam.omlib.compat.valkyrien.ShipFrames;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.item.ItemSlot;
 import omtteam.openmodularturrets.core.target.TargetEntity;
@@ -85,11 +87,13 @@ public class TurretBaseWorld implements BaseWorld {
     public List<TargetEntity> getLivingEntities(Box box) {
         World world = base.getWorld();
         if (world == null) return Collections.emptyList();
+        // a box in ship space also finds the entities around the ship (the ship mod transforms the search)
         AxisAlignedBB aabb = new AxisAlignedBB(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ());
+        ShipFrame frame = ShipFrames.at(world, base.getPos());
         List<TargetEntity> result = new ArrayList<>();
         for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, aabb,
                 entity -> entity != null && !isSpectator(entity))) {
-            result.add(new LivingTargetEntity(entity));
+            result.add(new LivingTargetEntity(entity, frame));
         }
         return result;
     }
@@ -100,7 +104,8 @@ public class TurretBaseWorld implements BaseWorld {
         if (world == null) return Optional.empty();
         Entity entity = world.getEntityByID(id);
         return entity instanceof EntityLivingBase && !isSpectator(entity)
-                ? Optional.<TargetEntity>of(new LivingTargetEntity((EntityLivingBase) entity)) : Optional.<TargetEntity>empty();
+                ? Optional.<TargetEntity>of(new LivingTargetEntity((EntityLivingBase) entity,
+                ShipFrames.at(world, base.getPos()))) : Optional.<TargetEntity>empty();
     }
 
     private static boolean isSpectator(Entity entity) {
@@ -112,7 +117,7 @@ public class TurretBaseWorld implements BaseWorld {
         World world = base.getWorld();
         if (world == null) return false;
         Vec3d end = new Vec3d(target.getX(), target.getY() + target.getEyeHeight(), target.getZ());
-        return isClear(world, new Vec3d(fromX, fromY, fromZ), end);
+        return isClear(world, ShipFrames.at(world, base.getPos()), new Vec3d(fromX, fromY, fromZ), end);
     }
 
     /**
@@ -121,13 +126,16 @@ public class TurretBaseWorld implements BaseWorld {
      * see itself, and only blocks with a collision box stop it (grass, flowers and fluids do not). The base counts
      * as an obstacle, so turrets cannot see through it. (3.x skipped a whole block from the centre, which could jump
      * over the base and the blocks behind it.)
+     * <p>
+     * {@code from} and {@code to} are in the turret's {@code frame}. On a ship the trace runs in the world from where
+     * it leaves the turret's block; the ship mod includes the ships it crosses, the turret's own hull too.
      */
-    public static boolean isClear(World world, Vec3d from, Vec3d to) {
+    public static boolean isClear(World world, ShipFrame frame, Vec3d from, Vec3d to) {
         Vec3d delta = to.subtract(from);
         double largestAxis = Math.max(Math.max(Math.abs(delta.x), Math.abs(delta.y)), Math.abs(delta.z));
         if (largestAxis <= 0.5D) return true;
         Vec3d start = from.add(delta.scale(0.5D / largestAxis)).add(delta.normalize().scale(1.0E-3D));
-        RayTraceResult hit = world.rayTraceBlocks(start, to, false, true, false);
+        RayTraceResult hit = world.rayTraceBlocks(frame.toWorld(start), frame.toWorld(to), false, true, false);
         return hit == null || hit.typeOfHit == RayTraceResult.Type.MISS;
     }
 

@@ -49,7 +49,8 @@ public final class RayWeapons {
     /**
      * 1.12.2 {@code doTargetedShot} + {@code shootRay}: one ray per scattershot level towards {@code aim}, scattered
      * by the turret's accuracy (more for small or far targets). The first damageable entity on the ray before the
-     * first solid block is hit. Energy and ammo are already consumed.
+     * first solid block is hit. Energy and ammo are already consumed. All positions are in the world (for a turret
+     * on a ship: converted from its frame), so the rays are traced and drawn where the ship is.
      *
      * @param targetHeight height of the target, for the scatter of small targets
      * @param renderOrigin where a hit is drawn from if the weapon {@linkplain RayWeapon#drawFromTip() draws from the

@@ -10,7 +10,9 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.UsernameCache;
+import omtteam.omlib.compat.valkyrien.ShipFrame;
 import omtteam.omlib.core.security.PlayerIdentity;
 import omtteam.omlib.core.security.PlayerInfo;
 import omtteam.omlib.util.player.PlayerUtil;
@@ -21,13 +23,20 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * A Minecraft {@link EntityLivingBase} as a core {@link TargetEntity}.
+ * A Minecraft {@link EntityLivingBase} as a core {@link TargetEntity}. Its position is given in the base's
+ * {@link ShipFrame} (ship space for a base on a ship), so the core compares it with the base's block positions.
  */
 public class LivingTargetEntity extends TargetEntity {
     private final EntityLivingBase entity;
+    private final Vec3d position;
 
-    public LivingTargetEntity(EntityLivingBase entity) {
+    /**
+     * @param frame the base's frame in this tick; the core asks for its targets again each time, so the position
+     *              does not go stale while a ship moves
+     */
+    public LivingTargetEntity(EntityLivingBase entity, ShipFrame frame) {
         this.entity = entity;
+        this.position = frame.toLocal(entity.getPositionVector());
     }
 
     public EntityLivingBase getEntity() {
@@ -49,17 +58,17 @@ public class LivingTargetEntity extends TargetEntity {
 
     @Override
     public double getX() {
-        return entity.posX;
+        return position.x;
     }
 
     @Override
     public double getY() {
-        return entity.posY;
+        return position.y;
     }
 
     @Override
     public double getZ() {
-        return entity.posZ;
+        return position.z;
     }
 
     @Override

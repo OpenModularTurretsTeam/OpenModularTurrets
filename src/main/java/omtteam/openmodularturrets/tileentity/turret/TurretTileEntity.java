@@ -13,6 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
+import omtteam.omlib.compat.valkyrien.ShipFrame;
+import omtteam.omlib.compat.valkyrien.ShipFrames;
 import omtteam.omlib.tileentity.TileEntityBase;
 import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.util.NetworkUtil;
@@ -92,7 +94,10 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
     @Nullable
     private AmmoDraw lastAmmo;
 
-    /** Target tracking for the lead (positions per tick; players have no motion on the server). */
+    /**
+     * Target tracking for the lead (positions per tick in the turret's frame; players have no motion on the
+     * server).
+     */
     private int trackedTargetId = -1;
     /** Ticks until a self-targeting weapon picks again after finding nothing. */
     private int pickDelay;
@@ -241,12 +246,14 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
      */
     private void engage(EntityLivingBase target) {
         TurretWeapon weapon = getWeapon();
+        ShipFrame frame = ShipFrames.at(world, pos);
         Vec3d centre = centre();
         if (weapon.aims()) {
-            aimAt(target);
+            aimAt(target, frame);
         }
 
-        Vec3d position = target.getPositionVector();
+        // in the turret's frame: on a ship the lead uses the target's movement relative to the ship
+        Vec3d position = frame.toLocal(target.getPositionVector());
         Vector3 velocity = trackedTargetId == target.getEntityId() && trackedTargetPos != null
                 ? new Vector3(position.x - trackedTargetPos.x, position.y - trackedTargetPos.y,
                 position.z - trackedTargetPos.z)
@@ -255,14 +262,15 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         trackedTargetPos = position;
 
         if (weapon instanceof ProjectileWeapon) {
-            Vector3 toBody = new Vector3(target.posX - centre.x, aimHeight(target, centre) - centre.y,
-                    target.posZ - centre.z);
+            Vector3 toBody = new Vector3(position.x - centre.x, aimHeight(target, position, centre, frame) - centre.y,
+                    position.z - centre.z);
             fire(toBody, velocity, target);
         } else if (weapon instanceof RayWeapon) {
             TurretBase base = beginShot();
             if (base != null) {
                 Vec3d end = new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ);
-                RayWeapons.shoot(this, base, (RayWeapon) weapon, end, target.height, rayOrigin(), rayTip());
+                RayWeapons.shoot(this, base, (RayWeapon) weapon, end, target.height, frame.toWorld(rayOrigin()),
+                        frame.toWorld(rayTip()));
             }
         } else if (weapon instanceof EffectWeapon) {
             TurretBase base = beginShot();
@@ -272,11 +280,15 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         }
     }
 
-    /** Turns towards the target's eyes, within {@link TurretMath#limit}. */
-    private void aimAt(Entity target) {
+    /**
+     * Turns towards the target's eyes, within {@link TurretMath#limit}. The aim is relative to the mounting face in
+     * the turret's {@code frame}, so it follows a ship that turns.
+     */
+    private void aimAt(Entity target, ShipFrame frame) {
         Vec3d centre = centre();
-        Vector3 toEyes = new Vector3(target.posX - centre.x, target.posY + target.getEyeHeight() - centre.y,
-                target.posZ - centre.z);
+        Vec3d position = frame.toLocal(target.getPositionVector());
+        Vector3 toEyes = new Vector3(position.x - centre.x, position.y + target.getEyeHeight() - centre.y,
+                position.z - centre.z);
         TurretMath.Angles angles = TurretMath.limit(TurretMath.anglesFor(getFace(), toEyes));
         yaw = angles.yaw();
         pitch = angles.pitch();
@@ -285,11 +297,13 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
     /**
      * Height to shoot at: the body centre, or the eyes when a ledge or the like hides the centre (the base only
      * picks targets whose eyes are visible, so the shot would otherwise hit the block in front of the target).
+     *
+     * @param position the target's position in the turret's {@code frame}
      */
-    private double aimHeight(EntityLivingBase target, Vec3d centre) {
-        double body = target.posY + target.height * 0.5D;
-        double eyes = target.posY + target.getEyeHeight();
-        if (eyes <= body || TurretBaseWorld.isClear(world, centre, new Vec3d(target.posX, body, target.posZ))) {
+    private double aimHeight(EntityLivingBase target, Vec3d position, Vec3d centre, ShipFrame frame) {
+        double body = position.y + target.height * 0.5D;
+        double eyes = position.y + target.getEyeHeight();
+        if (eyes <= body || TurretBaseWorld.isClear(world, frame, centre, new Vec3d(position.x, body, position.z))) {
             return body;
         }
         return eyes;
@@ -338,7 +352,7 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
             return false;
         }
         if (weapon.aims()) {
-            aimAt(targets.get(0));
+            aimAt(targets.get(0), ShipFrames.at(world, pos));
         }
         TurretBase shooter = beginShot();
         if (shooter != null) {
@@ -470,10 +484,12 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         if (weapon instanceof RayWeapon) {
             TurretBase base = beginShot();
             if (base == null) return false;
+            ShipFrame frame = ShipFrames.at(world, pos);
             Vec3d origin = rayOrigin();
             Vec3d end = origin.add(direction.x() * FORCED_RAY_LENGTH, direction.y() * FORCED_RAY_LENGTH,
                     direction.z() * FORCED_RAY_LENGTH);
-            RayWeapons.shoot(this, base, (RayWeapon) weapon, end, 1.0F, origin, rayTip());
+            RayWeapons.shoot(this, base, (RayWeapon) weapon, frame.toWorld(end), 1.0F, frame.toWorld(origin),
+                    frame.toWorld(rayTip()));
             return true;
         }
         return false;

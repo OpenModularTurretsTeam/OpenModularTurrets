@@ -10,6 +10,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ### Added
 
+- Turrets work on Rifted Valkyrium ships (Cleanroom; probably also Valkyrien Skies 1): they aim, lead and fire relative to the ship as it moves and turns, the ship's own hull blocks their line of sight, and the teleporter turret pulls targets to where the ship is
 - Holding a turret next to a turret base where it cannot be placed shows a short reason next to the red outline (block in the way, wrong side, base tier too low, base full, too many of this turret), as on 1.20.1+
 
 ### Changed

@@ -9,7 +9,9 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
+import omtteam.omlib.compat.valkyrien.ShipFrames;
 import omtteam.openmodularturrets.api.weapon.AreaWeapon;
 import omtteam.openmodularturrets.api.weapon.EffectWeapon;
 import omtteam.openmodularturrets.api.weapon.SelfTargetingWeapon;
@@ -72,13 +74,16 @@ public final class EffectWeapons {
     /**
      * 1.12.2 {@code TeleporterTurretTileEntity}: pulls the target onto the block in front of the turret (1.12.2: on
      * top of it, which is the same for turrets on top of a base) and shows portal particles (1.12.2
-     * {@code BlockTeleporterTurret.randomDisplayTick}, which only worked in single player).
+     * {@code BlockTeleporterTurret.randomDisplayTick}, which only worked in single player). On a ship the target lands
+     * in front of the turret where the ship is, not in ship space.
      */
     @SuppressWarnings("unused")
     public static void teleport(WorldServer world, TurretTileEntity turret, TurretBase base, EntityLivingBase target) {
         BlockPos pos = turret.getPos();
         BlockPos destination = pos.offset(turret.getFacing());
-        target.setPositionAndUpdate(destination.getX() + 0.5D, destination.getY(), destination.getZ() + 0.5D);
+        Vec3d to = ShipFrames.at(world, pos).toWorld(new Vec3d(destination.getX() + 0.5D, destination.getY(),
+                destination.getZ() + 0.5D));
+        target.setPositionAndUpdate(to.x, to.y, to.z);
         world.spawnParticle(EnumParticleTypes.PORTAL, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
                 26, 1.0D, 1.0D, 1.0D, 0.1D);
     }
