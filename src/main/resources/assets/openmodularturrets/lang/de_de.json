@@ -134,6 +134,7 @@
   "gui.openmodularturrets.yes": "ja",
   "message.openmodularturrets.camo_invalid": "Dieser Block kann nicht als Tarnung genutzt werden. Nimm einen vollen Block ohne Blockentität.",
   "message.openmodularturrets.placement.blocked": "Etwas ist im Weg",
+  "message.openmodularturrets.placement.no_permission": "Nur Admins dieser Turmbasis dürfen Türme anbringen",
   "message.openmodularturrets.placement.disabled": "Dieser Turm ist in der Konfiguration deaktiviert",
   "message.openmodularturrets.placement.wrong_face": "Dieser Turm kann nicht an dieser Seite angebracht werden",
   "message.openmodularturrets.placement.tier_too_low": "Benötigt eine Turmbasis der Stufe %s oder höher",

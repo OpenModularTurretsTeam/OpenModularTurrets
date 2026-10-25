@@ -143,7 +143,7 @@ Neighbour changes (a turret placed or broken) reach the logic through `TurretBas
 
 `core.base.TurretPlacement` holds the rules: `canAttach` (placing: enabled, face, base tier, the tier's `maxTurrets`, the type's `maxSimultaneous`) and `canStay` (an attached turret: face and tier; `maxSimultaneous` only with `turrets.dropTurretsOverMaxSimultaneous`).
 Both return a `Result` with the reason.
-`TurretBlock.getStateForPlacement` calls `canAttach` with the turrets it reads from the blocks around the base, so the client gets the same answer without the base's neighbour list (which only the server keeps).
+`TurretBlock.getStateForPlacement` first requires the placing player to be an admin of the base (`Result.NO_PERMISSION` otherwise; the client knows the trust list from the base's sync), then calls `canAttach` with the turrets it reads from the blocks around the base, so the client gets the same answer without the base's neighbour list (which only the server keeps).
 The client's `TurretPlacementOutline` uses that to draw the cyan or red outline while a turret is held; when red, `TurretBlock.attachResult` gives the `Result`, shown as a small label (`message.openmodularturrets.placement.*`).
 
 ### A turret shot (server)

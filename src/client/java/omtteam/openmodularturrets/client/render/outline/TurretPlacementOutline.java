@@ -96,7 +96,7 @@ public final class TurretPlacementOutline {
         poseStack.popPose();
         buffers.endBatch(RenderType.lines());
         if (state == null) {
-            Component reason = context.canPlace() ? reason(level, pos, facing, turret) : BLOCKED;
+            Component reason = context.canPlace() ? reason(level, pos, facing, turret, player) : BLOCKED;
             if (reason != null) pending = new Label(pos, reason);
         }
     }
@@ -128,8 +128,9 @@ public final class TurretPlacementOutline {
 
     /** Why the turret cannot go onto the base behind {@code pos}, with the limit that stops it. */
     @Nullable
-    private static Component reason(ClientLevel level, BlockPos pos, Direction facing, TurretBlock turret) {
-        TurretPlacement.Result result = turret.attachResult(level, pos, facing);
+    private static Component reason(ClientLevel level, BlockPos pos, Direction facing, TurretBlock turret,
+                                    LocalPlayer player) {
+        TurretPlacement.Result result = turret.attachResult(level, pos, facing, player);
         if (result == null || result.allowed()
                 || !(level.getBlockEntity(pos.relative(facing.getOpposite())) instanceof TurretBaseBlockEntity base)) {
             return null;

@@ -45,6 +45,7 @@ public class ItemTransferGameTests implements OMTGameTests {
     private static final BlockPos ABOVE = MACHINE.above();
     private static final BlockPos BELOW = MACHINE.below();
     private static final int TIMEOUT_TICKS = 100;
+    private static final int EXTRACT_WAIT_TICKS = 24;
 
     /** A hopper on top fills the ammo slots with ammo and leaves anything else in the hopper. */
     @GameTest(template = EMPTY_STRUCTURE, batch = "items_base_ammo", timeoutTicks = TIMEOUT_TICKS)
@@ -60,6 +61,25 @@ public class ItemTransferGameTests implements OMTGameTests {
             helper.assertTrue(count(base.getInventory(), ModItems.AMMO_BULLET) == 2, "The ammo did not arrive in the base");
             helper.assertTrue(count(hopper, Items.DIRT) == 1, "The dirt left the hopper");
             clear(helper, hopper, base.getInventory());
+        });
+    }
+
+    /**
+     * A hopper below never takes ammo out of the base (a stranger's hopper must not disarm it). A hopper pulls every 8
+     * ticks, so 3 pulls are waited for.
+     */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "items_base_no_extract", timeoutTicks = TIMEOUT_TICKS)
+    public void hopperTakesNoAmmoFromTheBase(GameTestHelper helper) {
+        helper.setBlock(MACHINE, ModBlocks.TURRET_BASES.get(0));
+        TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getBlockEntity(MACHINE);
+        base.getTrustManager().setOwner(new PlayerIdentity(UUID.randomUUID(), "GameTestOwner"));
+        base.getInventory().setItem(0, new ItemStack(ModItems.AMMO_BULLET, 2));
+        HopperBlockEntity hopper = hopper(helper, BELOW);
+        helper.runAfterDelay(EXTRACT_WAIT_TICKS, () -> {
+            helper.assertTrue(count(hopper, ModItems.AMMO_BULLET) == 0, "The hopper took ammo out of the base");
+            helper.assertTrue(count(base.getInventory(), ModItems.AMMO_BULLET) == 2, "The ammo left the base");
+            clear(helper, hopper, base.getInventory());
+            helper.succeed();
         });
     }
 

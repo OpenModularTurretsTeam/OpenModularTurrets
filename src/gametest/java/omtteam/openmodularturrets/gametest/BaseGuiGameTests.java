@@ -33,9 +33,11 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
+import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.menu.TurretBaseMenu;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.security.PlayerAdapter;
@@ -49,7 +51,8 @@ import java.util.OptionalInt;
 import java.util.UUID;
 
 /**
- * Right-clicking a turret base opens its GUI for players with access, and only for them.
+ * Right-clicking a turret base opens its GUI for players with access, and only for them; only its admins attach
+ * turrets to it.
  * <p>
  * The click goes through {@code ServerPlayerGameMode#useItemOn}, the vanilla entry point that the loader's block-use
  * event hooks into (Fabric {@code UseBlockCallback}, NeoForge {@code RightClickBlock}), so the whole path is covered:
@@ -106,6 +109,32 @@ public class BaseGuiGameTests implements OMTGameTests {
             InteractionResult offHand = rightClick(helper, owner, InteractionHand.OFF_HAND);
             helper.assertTrue(owner.containerMenu == owner.inventoryMenu && !offHand.consumesAction(),
                     "The off hand opened the GUI or used the click");
+        } finally {
+            TurretScene.clear(helper);
+        }
+        helper.succeed();
+    }
+
+    /**
+     * Only admins of a base attach turrets to it: a sneaking stranger's click with a turret places nothing, the
+     * owner's places the turret on top (sneaking, so the click does not open the GUI).
+     */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "base_turret_permission")
+    public void onlyAdminsAttachTurrets(GameTestHelper helper) {
+        ServerPlayer owner = player(helper, "TurretTestOwner");
+        ServerPlayer stranger = player(helper, "TurretTestStranger");
+        placeBase(helper, owner);
+        Block turret = ModBlocks.TURRETS.get(TurretType.DISPOSABLE_TURRET);
+        try {
+            stranger.setShiftKeyDown(true);
+            stranger.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(turret));
+            rightClick(helper, stranger, InteractionHand.MAIN_HAND);
+            helper.assertBlockNotPresent(turret, TurretScene.TURRET);
+
+            owner.setShiftKeyDown(true);
+            owner.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(turret));
+            rightClick(helper, owner, InteractionHand.MAIN_HAND);
+            helper.assertBlockPresent(turret, TurretScene.TURRET);
         } finally {
             TurretScene.clear(helper);
         }

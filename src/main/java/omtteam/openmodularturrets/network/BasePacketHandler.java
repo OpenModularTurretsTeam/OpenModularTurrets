@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.network;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.compat.MenuCompat;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
@@ -66,10 +67,16 @@ public final class BasePacketHandler {
         });
     }
 
-    /** 1.12.2 {@code MessageDropTurrets}: destroys (and drops) every turret on the base's faces. */
+    /**
+     * 1.12.2 {@code MessageDropTurrets}: destroys (and drops) every turret on the base's faces. Only blocks that are
+     * still turrets are destroyed, in case the base's list is out of date (a block swapped without a neighbour update).
+     */
     private static void dropTurrets(ServerLevel level, BlockPos pos, TurretBaseLogic logic) {
         for (Face face : logic.getTurrets().keySet()) {
-            level.destroyBlock(pos.offset(face.getStepX(), face.getStepY(), face.getStepZ()), true);
+            BlockPos turretPos = pos.offset(face.getStepX(), face.getStepY(), face.getStepZ());
+            if (level.getBlockState(turretPos).getBlock() instanceof TurretBlock) {
+                level.destroyBlock(turretPos, true);
+            }
         }
     }
 

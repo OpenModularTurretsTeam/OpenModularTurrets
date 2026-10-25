@@ -135,6 +135,7 @@
   "message.openmodularturrets.already_trusted": "%s is already on the trust list.",
   "message.openmodularturrets.camo_invalid": "That block cannot be used as camouflage. Use a full block without a block entity.",
   "message.openmodularturrets.placement.blocked": "Something is in the way",
+  "message.openmodularturrets.placement.no_permission": "Только администраторы этой базы могут устанавливать турели",
   "message.openmodularturrets.placement.disabled": "This turret is disabled in the config",
   "message.openmodularturrets.placement.wrong_face": "This turret cannot be mounted on this side",
   "message.openmodularturrets.placement.tier_too_low": "Needs a tier %s base or higher",

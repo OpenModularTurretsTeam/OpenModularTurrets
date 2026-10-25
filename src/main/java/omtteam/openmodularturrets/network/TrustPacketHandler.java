@@ -20,25 +20,42 @@ public final class TrustPacketHandler {
     private TrustPacketHandler() {
     }
 
+    /**
+     * Checks the permission, resolves the name (possibly on a background thread, see {@link PlayerLookup}) and then
+     * checks everything again, as the player may have walked away or lost the rights in the meantime. A request sent
+     * while the player's previous lookup is still running is ignored.
+     */
     public static void handleAdd(TrustPackets.Add packet, ServerPlayer player) {
-        Optional<TrustHost> host = PacketValidation.findTrustHost(player, packet.pos());
-        if (host.isEmpty()) return;
-        PlayerInfo actor = PlayerAdapter.info(player);
-        TrustManager trust = host.get().getTrustManager();
-        if (!trust.isAdmin(actor)) {
-            PacketValidation.sendNoPermission(player);
-            return;
-        }
-        if (player.getServer() == null) {
-            return;
-        }
         String name = packet.name().trim();
-        Optional<PlayerIdentity> target = name.isEmpty() ? Optional.empty()
-                : PlayerLookup.findByName(player.getServer(), name);
+        if (player.getServer() == null || authorizeAdd(packet, player).isEmpty()) return;
+        if (name.isEmpty()) {
+            player.sendSystemMessage(Component.translatable("message.openmodularturrets.player_not_found", name));
+            return;
+        }
+        PlayerLookup.findByName(player.getServer(), player, name, target -> {
+            if (player.hasDisconnected()) return;
+            authorizeAdd(packet, player).ifPresent(trust -> addTrusted(player, trust, name, target));
+        });
+    }
+
+    /** The trust list at the packet's position, if the player is close enough and an admin of it. */
+    private static Optional<TrustManager> authorizeAdd(TrustPackets.Add packet, ServerPlayer player) {
+        Optional<TrustHost> host = PacketValidation.findTrustHost(player, packet.pos());
+        if (host.isEmpty()) return Optional.empty();
+        TrustManager trust = host.get().getTrustManager();
+        if (!trust.isAdmin(PlayerAdapter.info(player))) {
+            PacketValidation.sendNoPermission(player);
+            return Optional.empty();
+        }
+        return Optional.of(trust);
+    }
+
+    private static void addTrusted(ServerPlayer player, TrustManager trust, String name, Optional<PlayerIdentity> target) {
         if (target.isEmpty()) {
             player.sendSystemMessage(Component.translatable("message.openmodularturrets.player_not_found", name));
             return;
         }
+        PlayerInfo actor = PlayerAdapter.info(player);
         TrustResult result = trust.addTrustedPlayer(actor, target.get());
         switch (result) {
             case ALREADY_TRUSTED -> player.sendSystemMessage(

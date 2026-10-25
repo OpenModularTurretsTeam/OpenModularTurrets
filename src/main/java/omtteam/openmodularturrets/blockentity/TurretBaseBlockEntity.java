@@ -53,8 +53,9 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
     private final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged,
             player -> Container.stillValidBlockEntity(this, player));
     /** The ammo slots: anything the inventory accepts goes in, everything may come out. */
+    /** Insert only: other blocks never take ammo out, so a stranger's hopper cannot disarm the base. */
     private final ItemAccess ammoAccess = new ItemAccess(inventory, TurretBaseInventory.AMMO_START,
-            TurretBaseInventory.AMMO_COUNT, stack -> true, stack -> true);
+            TurretBaseInventory.AMMO_COUNT, stack -> true, stack -> false);
     private final TurretBaseLogic logic;
     private boolean neighboursScanned;
     private final CamoData camoData = new CamoData();
@@ -170,7 +171,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
         inventory.clearContent();
     }
 
-    /** Ammo slots as exposed to automation on all sides (the loader adapters wrap it). */
+    /** Ammo slots as exposed to automation on all sides, insert only (the loader adapters wrap it). */
     @SuppressWarnings("unused")
     public ItemAccess getItemAccess(@Nullable Direction side) {
         return ammoAccess;

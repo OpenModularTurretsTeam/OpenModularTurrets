@@ -16,6 +16,11 @@ public final class TurretPlacement {
     /** Why a turret may or may not be attached; the checks run in this order and the first failing one wins. */
     public enum Result {
         OK,
+        /**
+         * The placing player is not an admin of the base. Checked by the game layer before {@link #canAttach}, which
+         * knows no players.
+         */
+        NO_PERMISSION,
         /** The turret type is disabled in the config. */
         DISABLED,
         /** The type cannot mount on this face of the base ({@link TurretType#canMountOn}). */

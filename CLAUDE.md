@@ -443,7 +443,7 @@ omtteam.openmodularturrets.client
 - A turret block has a `FACING` property (all 6 `Direction`s).
   `FACING` is the direction **away from the base**.
   The base is at `pos.relative(facing.getOpposite())`.
-- Turrets can only be placed against a base face.
+- Turrets can only be placed against a base face, and only by an admin of that base (`TurretBlock.attachResult`, `TurretPlacement.Result.NO_PERMISSION`; placing without a player is refused).
   A turret without a base does nothing and should break or drop if its base is removed.
 - Whether a turret may be attached or stay is decided in one place, `core.base.TurretPlacement` (`canAttach` / `canStay`, returning a `Result` with the reason); the client asks it too (placement outline), with the turrets read from the world.
   `maxSimultaneous` only limits placing, unless `turrets.dropTurretsOverMaxSimultaneous` (default false) is set.
@@ -518,11 +518,12 @@ The built-in turrets use the same path, so there is no special casing per turret
 - **Teams:** members of the owner's vanilla scoreboard team count as trusted, but only at the lowest rank, so turrets do not shoot them.
 - Use UUIDs for identity; names are display-only.
   Resolve names to UUIDs server-side via the server's profile cache when adding a player.
+  A cache miss is a blocking request to Mojang, so `PlayerLookup` runs it on a background thread (one lookup per player at a time) and the handler re-checks distance and permission when the result arrives.
 
 ### Power & items
 
 - Bases store energy internally.
-  Expose it through the energy API on all sides (`getEnergyAccess(side)`); expose the ammo slots through `getItemAccess(side)` (Fabric `ItemStorage.SIDED` via `FabricBlockLookups`, NeoForge item handler capability).
+  Expose it through the energy API on all sides (`getEnergyAccess(side)`); expose the ammo slots, insert only (a stranger's hopper must not disarm a base), through `getItemAccess(side)` (Fabric `ItemStorage.SIDED` via `FabricBlockLookups`, NeoForge item handler capability).
 - Ammo is consumed from the base inventory.
   Costs and capacities are configurable in `config/`.
 - Power generation addons (solar, redstone reactor) are ticked by the base.

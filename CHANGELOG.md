@@ -11,6 +11,13 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 ### Changed
 
 - Releases on CurseForge and Modrinth are titled like the jar file (`openmodularturrets-<version>-mc<minecraft version>-<loader>`)
+- Only admins of a turret base can attach turrets to it (the placement outline says why otherwise)
+- Hoppers and pipes can no longer take ammo out of a turret base, so nobody can disarm someone else's base with them
+
+### Fixed
+
+- Adding a trusted player by a name the server does not know no longer freezes the server while the name is looked up at Mojang
+- "Drop turrets" only breaks blocks that are still turrets
 
 ## [4.0.0-beta.8] - 2026-10-25
 

@@ -24,7 +24,7 @@ import java.util.UUID;
  *     <li>Only admins (owner or {@link AccessLevel#ADMIN}) may change the trust list.</li>
  * </ul>
  */
-public class TrustManager {
+public final class TrustManager {
     private final SecurityEnvironment environment;
     private final Runnable onChange;
     private final AccessProfile profile;

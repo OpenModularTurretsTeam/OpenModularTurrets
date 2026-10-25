@@ -3,6 +3,7 @@ package omtteam.openmodularturrets.block.turret;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -34,6 +35,7 @@ import omtteam.openmodularturrets.core.base.TurretPlacement;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
+import omtteam.openmodularturrets.security.PlayerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -133,8 +135,9 @@ public class TurretBlock extends CompatEntityBlock {
 
     /**
      * 1.12.2 {@code canPlaceBlockAt}: there must be a base next to the turret that takes this type on that face
-     * ({@link TurretPlacement#canAttach}). The clicked base is preferred; otherwise the first neighbouring base in
-     * {@link Direction} order is used. Also asked on the client, by the placement outline.
+     * ({@link TurretPlacement#canAttach}) and whose admins include the placing player. The clicked base is preferred;
+     * otherwise the first neighbouring base in {@link Direction} order is used. Also asked on the client, by the
+     * placement outline.
      */
     @Nullable
     @Override
@@ -142,11 +145,12 @@ public class TurretBlock extends CompatEntityBlock {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         Direction clicked = context.getClickedFace();
-        if (canAttachTo(level, pos, clicked)) {
+        Player player = context.getPlayer();
+        if (canAttachTo(level, pos, clicked, player)) {
             return defaultBlockState().setValue(FACING, clicked);
         }
         for (Direction direction : Direction.values()) {
-            if (canAttachTo(level, pos, direction.getOpposite())) {
+            if (canAttachTo(level, pos, direction.getOpposite(), player)) {
                 return defaultBlockState().setValue(FACING, direction.getOpposite());
             }
         }
@@ -154,22 +158,26 @@ public class TurretBlock extends CompatEntityBlock {
     }
 
     /** @param facing direction from the base to the turret */
-    private boolean canAttachTo(Level level, BlockPos pos, Direction facing) {
-        TurretPlacement.Result result = attachResult(level, pos, facing);
+    private boolean canAttachTo(Level level, BlockPos pos, Direction facing, @Nullable Player player) {
+        TurretPlacement.Result result = attachResult(level, pos, facing, player);
         return result != null && result.allowed();
     }
 
     /**
-     * Whether this turret may be attached at {@code pos} to the base behind it ({@link TurretPlacement#canAttach}); also
-     * asked on the client, for the reason the placement outline shows.
+     * Whether {@code player} may attach this turret at {@code pos} to the base behind it: only the base's admins may
+     * (like dropping turrets), and placing without a player is refused; then {@link TurretPlacement#canAttach}. Also
+     * asked on the client, which knows the trust list, for the reason the placement outline shows.
      *
      * @param facing direction from the base to the turret
      * @return {@code null} if there is no base at {@code pos.relative(facing.getOpposite())}
      */
     @Nullable
-    public TurretPlacement.Result attachResult(Level level, BlockPos pos, Direction facing) {
+    public TurretPlacement.Result attachResult(Level level, BlockPos pos, Direction facing, @Nullable Player player) {
         BlockPos basePos = pos.relative(facing.getOpposite());
         if (!(level.getBlockEntity(basePos) instanceof TurretBaseBlockEntity base)) return null;
+        if (player == null || !base.getTrustManager().isAdmin(PlayerAdapter.info(player))) {
+            return TurretPlacement.Result.NO_PERMISSION;
+        }
         return TurretPlacement.canAttach(turretType, Face.valueOf(facing.name()), base.getLogic().getTier(),
                 attachedTurrets(level, basePos), ConfigLogicSettings.INSTANCE);
     }
