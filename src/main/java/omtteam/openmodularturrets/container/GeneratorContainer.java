@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.SlotItemHandler;
+import omtteam.omlib.container.WindowValues;
 import omtteam.openmodularturrets.tileentity.misc.GeneratorTileEntity;
 
 import javax.annotation.Nonnull;
@@ -16,15 +17,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Generator container (1.20.1+ {@code GeneratorMenu}): the player inventory, a 3×3 grid of fuel slots and the upgrade
- * slot. Energy, capacity and burn progress are synced as window properties; those are 16 bit on 1.12, so every value
- * is sent as two halves.
+ * slot. Energy, capacity and burn progress are synced as window properties (OMLib's {@link WindowValues}).
  */
 public class GeneratorContainer extends Container {
     private static final int DATA_ENERGY = 0;
     private static final int DATA_CAPACITY = 1;
     private static final int DATA_BURN_TIME = 2;
     private static final int DATA_BURN_DURATION = 3;
-    private static final int DATA_VALUES = 4;
     /** Index of the first fuel slot (after the 36 player inventory slots). */
     private static final int FUEL_START = 36;
     private static final int FUEL_END = FUEL_START + GeneratorTileEntity.FUEL_SLOTS;
@@ -38,11 +37,13 @@ public class GeneratorContainer extends Container {
     public static final int UPGRADE_Y = 35;
 
     private final GeneratorTileEntity generator;
-    /** Server: the values last sent; client: the values received. */
-    private final int[] values = new int[DATA_VALUES];
+    private final WindowValues values;
 
     public GeneratorContainer(InventoryPlayer inventoryPlayer, GeneratorTileEntity generator) {
         this.generator = generator;
+        this.values = new WindowValues(() -> (int) Math.min(Integer.MAX_VALUE, generator.getEnergy()),
+                () -> (int) Math.min(Integer.MAX_VALUE, generator.getCapacity()), generator::getBurnTime,
+                generator::getBurnDuration);
         for (int x = 0; x < 9; x++) {
             addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 142));
         }
@@ -59,63 +60,35 @@ public class GeneratorContainer extends Container {
     }
 
     public long getEnergy() {
-        return values[DATA_ENERGY];
+        return values.get(DATA_ENERGY);
     }
 
     public long getCapacity() {
-        return values[DATA_CAPACITY];
+        return values.get(DATA_CAPACITY);
     }
 
     /** Remaining burn time of the current fuel as a fraction (0 = not burning). */
     public float getBurnProgress() {
-        int duration = values[DATA_BURN_DURATION];
-        return duration <= 0 ? 0F : Math.min(1F, (float) values[DATA_BURN_TIME] / duration);
-    }
-
-    private int[] currentValues() {
-        return new int[]{(int) Math.min(Integer.MAX_VALUE, generator.getEnergy()),
-                (int) Math.min(Integer.MAX_VALUE, generator.getCapacity()), generator.getBurnTime(),
-                generator.getBurnDuration()};
+        int duration = values.get(DATA_BURN_DURATION);
+        return duration <= 0 ? 0F : Math.min(1F, (float) values.get(DATA_BURN_TIME) / duration);
     }
 
     @Override
     public void addListener(@Nonnull IContainerListener listener) {
         super.addListener(listener);
-        int[] current = currentValues();
-        for (int i = 0; i < DATA_VALUES; i++) {
-            send(listener, i, current[i]);
-        }
+        values.addListener(this, listener);
     }
 
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
-        int[] current = currentValues();
-        for (int i = 0; i < DATA_VALUES; i++) {
-            if (current[i] != values[i]) {
-                for (IContainerListener listener : listeners) {
-                    send(listener, i, current[i]);
-                }
-                values[i] = current[i];
-            }
-        }
-    }
-
-    /** Property {@code 2 * index} carries the low, {@code 2 * index + 1} the high 16 bits. */
-    private void send(IContainerListener listener, int index, int value) {
-        listener.sendWindowProperty(this, 2 * index, value & 0xFFFF);
-        listener.sendWindowProperty(this, 2 * index + 1, value >>> 16);
+        values.detectAndSendChanges(this, listeners);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int data) {
-        int index = id / 2;
-        if (index >= DATA_VALUES) {
-            return;
-        }
-        int part = data & 0xFFFF;
-        values[index] = id % 2 == 0 ? (values[index] & 0xFFFF0000) | part : (values[index] & 0xFFFF) | (part << 16);
+        values.updateProgressBar(id, data);
     }
 
     @Override
