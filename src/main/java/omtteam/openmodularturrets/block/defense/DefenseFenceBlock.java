@@ -16,8 +16,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import omtteam.omlib.block.InteractiveBlock;
-import omtteam.openmodularturrets.block.UnownedMarker;
-import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
+import omtteam.omlib.block.UnownedMarker;
+import omtteam.omlib.blockentity.OwnedBlockEntity;
+import omtteam.openmodularturrets.blockentity.defense.PassiveDefenseBlockEntity;
 import omtteam.omlib.compat.VersionCompat;
 //? if >=1.21.11 {
 /*import net.minecraft.world.entity.InsideBlockEffectApplier;
@@ -45,7 +46,7 @@ public class DefenseFenceBlock extends IronBarsBlock implements EntityBlock, Int
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new OwnedBlockEntity(pos, state);
+        return new PassiveDefenseBlockEntity(pos, state);
     }
 
     @Override

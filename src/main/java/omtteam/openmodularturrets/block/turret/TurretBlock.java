@@ -26,7 +26,8 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import omtteam.openmodularturrets.block.UnownedMarker;
+import omtteam.omlib.block.ClaimLink;
+import omtteam.omlib.block.UnownedMarker;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import omtteam.omlib.compat.BlockCodec;
@@ -36,9 +37,9 @@ import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.TurretPlacement;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.world.Face;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
-import omtteam.openmodularturrets.security.PlayerAdapter;
+import omtteam.omlib.security.PlayerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,7 +53,7 @@ import java.util.Map;
  * unbreakable (1.12.2 {@code setBlockUnbreakable}) unless {@code turrets.turretBreakable}; they are removed
  * with the base GUI's "Drop turrets" button or drop when their base disappears.
  */
-public class TurretBlock extends CompatEntityBlock {
+public class TurretBlock extends CompatEntityBlock implements ClaimLink {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
     /** 1.12.2 {@code CONCEALED}: retracted into the base by the concealer addon (no shape). */
     public static final BooleanProperty CONCEALED = BooleanProperty.create("concealed");
@@ -217,6 +218,18 @@ public class TurretBlock extends CompatEntityBlock {
                 && !(level.getBlockEntity(basePos) instanceof TurretBaseBlockEntity)) {
             level.destroyBlock(pos, true);
         }
+    }
+
+    /** A turret belongs to its base: clicks and claims count the base's owner. */
+    @Override
+    public BlockPos ownerPos(BlockState state, BlockPos pos) {
+        return pos.relative(state.getValue(FACING).getOpposite());
+    }
+
+    /** A turret joins the owned blocks around it into one claim without having an owner itself. */
+    @Override
+    public boolean connectsClaims() {
+        return true;
     }
 
     /** Sparkles while its base has no owner ({@link UnownedMarker}); not while concealed. */

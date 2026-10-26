@@ -14,8 +14,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import omtteam.omlib.block.InteractiveBlock;
-import omtteam.openmodularturrets.block.UnownedMarker;
-import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
+import omtteam.omlib.block.UnownedMarker;
+import omtteam.omlib.blockentity.OwnedBlockEntity;
+import omtteam.openmodularturrets.blockentity.defense.PassiveDefenseBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -36,7 +37,7 @@ public class DefenseWallBlock extends WallBlock implements EntityBlock, Interact
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new OwnedBlockEntity(pos, state);
+        return new PassiveDefenseBlockEntity(pos, state);
     }
 
     @Override

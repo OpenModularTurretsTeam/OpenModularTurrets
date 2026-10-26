@@ -1,5 +1,7 @@
 package omtteam.openmodularturrets.core.world;
 
+import omtteam.omlib.core.world.BlockPosition;
+
 /**
  * Axis-aligned box (in world coordinates, or a contraption's plot coordinates, see {@link Pose}).
  */

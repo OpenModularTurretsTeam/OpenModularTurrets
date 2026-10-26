@@ -17,7 +17,7 @@ import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.AmmoItem;
 import omtteam.openmodularturrets.item.MemoryCardItem;
-import omtteam.openmodularturrets.item.OwnershipWandItem;
+import omtteam.omlib.item.OwnershipWandItem;
 import omtteam.openmodularturrets.item.GeneratorUpgradeItem;
 import omtteam.openmodularturrets.item.TurretBaseUpgradeItem;
 

@@ -8,7 +8,7 @@ import omtteam.openmodularturrets.OMT;
 import omtteam.omlib.blockentity.TransferHost;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.defense.CamoTrapBlockEntity;
-import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
+import omtteam.openmodularturrets.blockentity.defense.PassiveDefenseBlockEntity;
 import omtteam.openmodularturrets.blockentity.misc.GeneratorBlockEntity;
 import omtteam.openmodularturrets.blockentity.misc.LeverBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
@@ -30,9 +30,9 @@ public final class ModBlockEntities {
             VersionCompat.blockEntityType(TurretBlockEntity::new, ModBlocks.TURRETS.values().toArray(Block[]::new)));
 
     /** OMPD hardened blocks, walls and fences (owner only). */
-    public static final BlockEntityType<OwnedBlockEntity> OWNED = Registry.register(
+    public static final BlockEntityType<PassiveDefenseBlockEntity> OWNED = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE, OMT.id("owned_block"),
-            VersionCompat.blockEntityType(OwnedBlockEntity::new, Stream.of(ModBlocks.HARDENED, ModBlocks.WALLS, ModBlocks.FENCES)
+            VersionCompat.blockEntityType(PassiveDefenseBlockEntity::new, Stream.of(ModBlocks.HARDENED, ModBlocks.WALLS, ModBlocks.FENCES)
                     .flatMap(List::stream).toArray(Block[]::new)));
     public static final BlockEntityType<CamoTrapBlockEntity> CAMO_TRAP = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE, OMT.id("camo_trap"),

@@ -63,7 +63,7 @@ This is the only place where the two meet, and the reason the core can be tested
 | `item.ItemSlot` | `blockentity.base.ContainerItemSlot` | one inventory slot: count, what the item is (ammo, upgrade, addon, fuel), extract |
 | `target.TargetEntity` | `blockentity.base.LivingTargetEntity` | one living entity: position and eyes (in the base's coordinates), health, armor, category, owner (pets) |
 | `settings.LogicSettings` | `config.ConfigLogicSettings` | config values (turret stats, base tiers, entity lists) |
-| `security.SecurityEnvironment` | `security.LevelSecurityEnvironment` | scoreboard teams, operator rights |
+| `security.SecurityEnvironment` (OMLib) | `security.LevelSecurityEnvironment` (OMLib, with `OMTOwnershipSettings`) | scoreboard teams, operator rights |
 
 All positions the core sees are in the base's coordinates.
 On a Sable contraption these are the coordinates of its plot, far away from where the base is shown: `BlockEntityBaseWorld` converts entity positions into them with the base's `core.world.Pose` (from `compat.SubLevelCompat`), and converts the start of a line-of-sight check back into the world.
@@ -91,7 +91,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `core.base` | `TurretBaseLogic`: targeting per face, ammo, energy, upgrades, addons, redstone modes |
 | `core.turret` | turret types and ammo types, `TurretState` (cooldown, concealment), aim and damage math (`TurretMath`, `RayMath`, `ProjectileMath`) |
 | `core.target` | `TargetSelector`: who is a valid target and who is the best one |
-| `core.security` | owner, trusted players, access levels, `DamageRules` (who turret damage may hit) |
+| `core.security` | `DamageRules` (who turret damage may hit); the owner, trusted players and access levels (`TrustManager`) are in OMLib |
 | `core.energy` | `EnergyStore` (the energy buffer of bases and the generator) and `EnergyAccess` (what other blocks may do with it) |
 | `core.generator`, `core.camo`, `core.card` | generator burning, camouflage light rules, memory card copy rules |
 | `core.item`, `core.settings`, `core.world` | upgrade/addon types, config value types, the world interfaces above |
@@ -103,7 +103,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `item`, `inventory`, `menu` | items (ammo, upgrades, addons, memory card; using the card on a block is `block.MemoryCardInteraction`), base inventory rules and `ItemAccess` (the slots other blocks may use, wrapped by the loader adapters), container menus |
 | `network` | packets: client→server requests (always re-validated) and server→client sync (OMLib's `ConfigSync` sends the configs on join) |
 | `config` | the JSON config: fields, comments, ranges, migration, the server's config on clients |
-| `security`, `camo` | Minecraft side of trust lists (NBT, player lookup) and camouflage |
+| `security`, `camo` | the mod's ownership rules (`OMTOwnershipSettings`); the trust lists' Minecraft side (NBT, player lookup) is in OMLib, and camouflage rules |
 | `compat` | every 1.20.1 / 1.21.1 / 1.21.11 difference (`VersionCompat`, `CompatBlockEntity`, networking, menus; `compat.nbt.NbtCompat` for all NBT reads and `compat.block.BlockCompat` depend on Minecraft only, so any package may use them), small loader differences (`//? if fabric` / `neoforge` / `forge`), Jade (server half here, tooltips in `client.compat.jade`), and Sable contraptions (`SubLevelCompat`: poses and velocities through Sable Companion, 1.21.1 only; `client.compat.ClientSubLevelCompat` for the drawn pose) |
 | `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`); `platform.fabric` / `platform.neoforge` / `platform.forge` hold the entrypoints, the implementations and the energy/item adapters, and only compile for their loader |
 | `datagen` | recipes, loot tables, tags, damage types (generated per version; Fabric only, the NeoForge build converts the 1.21.1 output and the Forge build the 1.20.1 output) |
@@ -175,10 +175,11 @@ The client is never trusted: every C2S handler re-checks distance and permission
 
 ### Owners and claiming
 
-Every block with an owner is a `security.OwnedHost`: the turret bases and the camouflage trap through `TrustHost` (which forwards to its `TrustManager`), the passive defense blocks through `OwnedBlockEntity`.
+The ownership code is in OMLib; this mod provides the rules (`OMTOwnershipSettings`, read from the config) and the blocks.
+Every block with an owner is an `OwnedHost` (OMLib): the turret bases and the camouflage trap through `TrustHost` (which forwards to its `TrustManager`), the passive defense blocks through `PassiveDefenseBlockEntity`, an `OwnedBlockEntity`.
 A block placed without a player (machines, structures, `setblock`) or disowned has no owner; an unowned base does not fire unless `bases.unownedBasesActive` is set.
-A main-hand right-click without sneaking on an unowned block (on a turret: its base) claims it (`ClaimInteraction`, an `InteractiveBlock` interceptor, checked after the wand).
-`block.ClaimSpread` then claims the unowned blocks connected to it through their faces (`core.world.FloodFill`, turrets connect too, at most `bases.claimSpreadLimit` blocks); blocks with an owner are never taken or walked through.
+A main-hand right-click without sneaking on an unowned block (on a turret: its base) claims it (`ClaimInteraction`, an `InteractiveBlock` interceptor of the library, checked after the wand).
+`block.ClaimSpread` then claims the unowned blocks connected to it through their faces (`core.world.FloodFill`, blocks whose `ClaimLink` connects claims, the turrets, join too; at most `bases.claimSpreadLimit` blocks, from `OMTOwnershipSettings`); blocks with an owner are never taken or walked through.
 The loaders' fake players claim only if `general.fakePlayersCanClaim` is set.
 While a player holds the wand, turrets still target them but nothing affects them (`TurretImmunity`, checked in `TurretDamage.canDamage`, the effect weapon dispatch and, for explosions, `LivingEntityMixin`).
 Game masters set or remove owners with the `OwnershipWandItem` (`block.WandInteraction`, checked before claiming), spreading to the connected blocks of the same owner unless switched off.

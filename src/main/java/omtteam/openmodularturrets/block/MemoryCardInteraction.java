@@ -18,8 +18,8 @@ import omtteam.omlib.compat.block.BlockCompat;
 import omtteam.openmodularturrets.core.card.MemoryCardData;
 import omtteam.openmodularturrets.core.card.MemoryCardRules;
 import omtteam.openmodularturrets.item.MemoryCardItem;
-import omtteam.openmodularturrets.network.PacketValidation;
-import omtteam.openmodularturrets.security.PlayerAdapter;
+import omtteam.omlib.network.PacketValidation;
+import omtteam.omlib.security.PlayerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

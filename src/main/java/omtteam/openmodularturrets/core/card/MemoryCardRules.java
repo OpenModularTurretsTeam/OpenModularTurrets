@@ -1,8 +1,8 @@
 package omtteam.openmodularturrets.core.card;
 
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
-import omtteam.openmodularturrets.core.security.PlayerInfo;
-import omtteam.openmodularturrets.core.security.TrustManager;
+import omtteam.omlib.core.security.PlayerInfo;
+import omtteam.omlib.core.security.TrustManager;
 
 /**
  * Copying settings of a turret base to a memory card and writing them to another base, and who may do that.

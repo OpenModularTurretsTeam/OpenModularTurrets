@@ -40,8 +40,9 @@ class ArchitectureTest {
             // registry, blocks, block entities, menus and network all reach each other; the turret API's weapons take
             // the block entities. Out of it since 2026-10-25: (root) (start-up in startup.OMTStartup), config (addon
             // turret defaults handed to OMTConfig.init, join sync in the library), security, item
-            // (MemoryCardInteraction in block), camo (CamoMenus in menu)
-            Set.of("api", "api.weapon", "block", "block.base", "block.defense", "block.misc", "block.turret",
+            // (MemoryCardInteraction in block), camo (CamoMenus in menu); since 2026-10-27 also the package block itself (the claiming
+            // classes moved to the library, so only the blocks of its subpackages are left)
+            Set.of("api", "api.weapon", "block.base", "block.defense", "block.misc", "block.turret",
                     "blockentity", "blockentity.base", "blockentity.defense", "blockentity.misc", "blockentity.turret",
                     "entity.projectile", "inventory", "menu", "network", "registry"),
             Set.of("core.base", "core.item", "core.settings", "core.target", "core.turret", "core.world"),

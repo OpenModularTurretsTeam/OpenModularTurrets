@@ -1,5 +1,7 @@
 package omtteam.openmodularturrets.core.world;
 
+import omtteam.omlib.core.world.Face;
+
 /**
  * Immutable 3D vector (in world coordinates, or a contraption's plot coordinates, see {@link Pose}).
  */

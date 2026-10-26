@@ -5,7 +5,7 @@ import omtteam.omlib.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.core.base.MachineMode;
 import omtteam.omlib.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.card.MemoryCardData;
-import omtteam.openmodularturrets.security.SecurityNbt;
+import omtteam.omlib.security.SecurityNbt;
 
 import java.util.Locale;
 import java.util.Optional;

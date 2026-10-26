@@ -30,7 +30,7 @@ import omtteam.omlib.compat.BlockCodec;
 import omtteam.omlib.compat.CompatEntityBlock;
 import omtteam.omlib.compat.block.BlockCompat;
 import omtteam.omlib.menu.CamoMenus;
-import omtteam.openmodularturrets.security.PlayerAdapter;
+import omtteam.omlib.security.PlayerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

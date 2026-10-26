@@ -14,13 +14,13 @@ import omtteam.omlib.client.compat.ClientCompat;
 import omtteam.omlib.client.compat.ClientNetworkCompat;
 import omtteam.openmodularturrets.core.base.TargetingSettings;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
-import omtteam.openmodularturrets.core.security.AccessLevel;
-import omtteam.openmodularturrets.core.security.PlayerIdentity;
-import omtteam.openmodularturrets.core.security.TrustedPlayer;
+import omtteam.omlib.core.security.AccessLevel;
+import omtteam.omlib.core.security.PlayerIdentity;
+import omtteam.omlib.core.security.TrustedPlayer;
 import omtteam.openmodularturrets.menu.TurretBaseMenu;
 import omtteam.openmodularturrets.network.BasePackets;
 import omtteam.openmodularturrets.network.OMTPackets;
-import omtteam.openmodularturrets.security.PlayerAdapter;
+import omtteam.omlib.security.PlayerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

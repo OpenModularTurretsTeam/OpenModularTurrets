@@ -3,15 +3,17 @@ package omtteam.openmodularturrets.network;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.omlib.compat.MenuCompat;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
-import omtteam.openmodularturrets.core.security.AccessLevel;
-import omtteam.openmodularturrets.core.security.PlayerInfo;
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.security.AccessLevel;
+import omtteam.omlib.core.security.PlayerInfo;
+import omtteam.omlib.core.world.Face;
+import omtteam.omlib.network.PacketValidation;
 import omtteam.openmodularturrets.menu.TurretBaseMenu;
-import omtteam.openmodularturrets.security.PlayerAdapter;
+import omtteam.omlib.security.PlayerAdapter;
 
 import java.util.Optional;
 
@@ -19,12 +21,23 @@ import java.util.Optional;
  * Server handlers for {@link BasePackets}. Each action requires the access level the 1.12.2 message handler checked.
  */
 public final class BasePacketHandler {
+    /** 1.12.2 {@code TurretBaseContainer.canInteractWith}: squared distance below 64. */
+    private static final double MAX_DISTANCE_SQR = 64.0;
+
     private BasePacketHandler() {
+    }
+
+    /** The turret base at {@code pos} if it is loaded and the player is close enough to interact with it. */
+    private static Optional<TurretBaseBlockEntity> findBase(ServerPlayer player, BlockPos pos) {
+        if (!player.level().isLoaded(pos)) return Optional.empty();
+        if (player.distanceToSqr(Vec3.atCenterOf(pos)) >= MAX_DISTANCE_SQR) return Optional.empty();
+        return player.level().getBlockEntity(pos) instanceof TurretBaseBlockEntity base
+                ? Optional.of(base) : Optional.empty();
     }
 
     /** The base, if the player is close enough and has at least {@code required}; otherwise tells the player. */
     private static Optional<TurretBaseBlockEntity> authorize(ServerPlayer player, BlockPos pos, AccessLevel required) {
-        Optional<TurretBaseBlockEntity> base = PacketValidation.findBase(player, pos);
+        Optional<TurretBaseBlockEntity> base = findBase(player, pos);
         if (base.isEmpty()) return Optional.empty();
         if (!base.get().getTrustManager().hasAccess(PlayerAdapter.info(player), required)) {
             PacketValidation.sendNoPermission(player);

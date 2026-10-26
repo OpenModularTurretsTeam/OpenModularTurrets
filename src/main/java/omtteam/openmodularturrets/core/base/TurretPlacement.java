@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.core.base;
 
 import omtteam.openmodularturrets.core.settings.LogicSettings;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.world.Face;
 
 import java.util.Map;
 

@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.core.security;
 
+import omtteam.omlib.core.security.SecurityEnvironment;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -22,7 +23,7 @@ class FakeSecurityEnvironment implements SecurityEnvironment {
     }
 
     @Override
-    public boolean turretsDamageTrustedPlayers() {
+    public boolean damageTrustedPlayers() {
         return damageTrusted;
     }
 }

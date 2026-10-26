@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.core.turret;
 
 import omtteam.openmodularturrets.core.target.TargetingPriority;
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.world.Face;
 
 import java.util.Arrays;
 import java.util.EnumSet;

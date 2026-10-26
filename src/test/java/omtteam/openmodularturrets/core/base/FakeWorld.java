@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.core.base;
 import omtteam.openmodularturrets.core.item.ItemSlot;
 import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.world.BaseWorld;
-import omtteam.openmodularturrets.core.world.BlockPosition;
+import omtteam.omlib.core.world.BlockPosition;
 import omtteam.openmodularturrets.core.world.Box;
 
 import java.util.ArrayList;

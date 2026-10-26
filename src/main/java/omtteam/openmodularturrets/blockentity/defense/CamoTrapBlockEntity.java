@@ -13,13 +13,15 @@ import omtteam.openmodularturrets.camo.CamoLightProperties;
 import omtteam.omlib.compat.CompatBlockEntity;
 import omtteam.omlib.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.camo.CamoPermissions;
-import omtteam.openmodularturrets.core.security.AccessProfile;
-import omtteam.openmodularturrets.core.security.TrustManager;
+import omtteam.omlib.core.security.AccessProfile;
+import omtteam.omlib.core.security.TrustManager;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
-import omtteam.openmodularturrets.security.LevelSecurityEnvironment;
-import omtteam.openmodularturrets.security.PlayerAdapter;
-import omtteam.openmodularturrets.security.SecurityNbt;
-import omtteam.openmodularturrets.security.TrustHost;
+import omtteam.omlib.security.LevelSecurityEnvironment;
+import omtteam.omlib.security.PlayerAdapter;
+import omtteam.omlib.security.SecurityNbt;
+import omtteam.omlib.security.OwnershipSettings;
+import omtteam.omlib.security.TrustHost;
+import omtteam.openmodularturrets.security.OMTOwnershipSettings;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -33,11 +35,16 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CamoTrapBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost {
     private final CamoData camoData = new CamoData("Camo", state -> true);
-    private final TrustManager trustManager = new TrustManager(new LevelSecurityEnvironment(this::getLevel),
+    private final TrustManager trustManager = new TrustManager(new LevelSecurityEnvironment(this::getLevel, OMTOwnershipSettings.INSTANCE),
             this::syncToClient, AccessProfile.TRUSTED_AND_ADMIN);
 
     public CamoTrapBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CAMO_TRAP, pos, state);
+    }
+
+    @Override
+    public OwnershipSettings ownershipSettings() {
+        return OMTOwnershipSettings.INSTANCE;
     }
 
     @Override

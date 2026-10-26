@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.compat.jade;
 
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
-import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
+import omtteam.omlib.blockentity.OwnedBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;

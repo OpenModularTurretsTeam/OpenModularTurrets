@@ -35,7 +35,7 @@ import omtteam.openmodularturrets.config.TurretSetting;
 import omtteam.omlib.core.energy.EnergyStore;
 import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.world.Face;
 import omtteam.openmodularturrets.inventory.AmmoRules;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 

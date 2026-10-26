@@ -12,13 +12,13 @@ import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import omtteam.omlib.compat.VersionCompat;
-import omtteam.openmodularturrets.core.security.PlayerIdentity;
-import omtteam.openmodularturrets.core.security.PlayerInfo;
+import omtteam.omlib.core.security.PlayerIdentity;
+import omtteam.omlib.core.security.PlayerInfo;
 import omtteam.openmodularturrets.core.target.EntityCategory;
 import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.world.Pose;
 import omtteam.openmodularturrets.core.world.Vector3;
-import omtteam.openmodularturrets.security.PlayerAdapter;
+import omtteam.omlib.security.PlayerAdapter;
 
 import java.util.Optional;
 import java.util.UUID;

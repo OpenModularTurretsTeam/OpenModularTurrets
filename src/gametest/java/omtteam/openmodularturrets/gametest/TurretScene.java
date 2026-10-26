@@ -13,7 +13,7 @@ import omtteam.openmodularturrets.api.AmmoDefinition;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.core.base.MachineMode;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
-import omtteam.openmodularturrets.core.security.PlayerIdentity;
+import omtteam.omlib.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;

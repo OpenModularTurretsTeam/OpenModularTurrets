@@ -24,7 +24,8 @@ import omtteam.openmodularturrets.client.tooltip.GeneratorTooltip;
 import omtteam.openmodularturrets.client.tooltip.LeverTooltip;
 import omtteam.openmodularturrets.client.tooltip.MemoryCardTooltip;
 import omtteam.openmodularturrets.client.tooltip.ModuleTooltip;
-import omtteam.openmodularturrets.client.tooltip.OwnershipWandTooltip;
+import omtteam.openmodularturrets.client.tooltip.OwnershipWandImmunityTooltip;
+import omtteam.omlib.client.tooltip.OwnershipWandTooltip;
 import omtteam.openmodularturrets.client.tooltip.TurretBaseTooltip;
 import omtteam.openmodularturrets.client.tooltip.TurretTooltip;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
@@ -62,7 +63,7 @@ public final class OMTClient {
 
     private static final List<TooltipAppender> TOOLTIPS = List.of(TurretBaseTooltip::append, TurretTooltip::append,
             AmmoTooltip::append, ModuleTooltip::append, LeverTooltip::append, GeneratorTooltip::append,
-            MemoryCardTooltip::append, OwnershipWandTooltip::append);
+            MemoryCardTooltip::append, OwnershipWandTooltip::append, OwnershipWandImmunityTooltip::append);
 
     private OMTClient() {
     }

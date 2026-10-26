@@ -14,10 +14,10 @@ import omtteam.omlib.compat.VersionCompat;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.security.DamageRules;
 import omtteam.openmodularturrets.core.security.DamageRules.Victim;
-import omtteam.openmodularturrets.core.security.PlayerIdentity;
-import omtteam.openmodularturrets.core.security.TrustManager;
+import omtteam.omlib.core.security.PlayerIdentity;
+import omtteam.omlib.core.security.TrustManager;
 import omtteam.openmodularturrets.core.world.Pose;
-import omtteam.openmodularturrets.security.PlayerAdapter;
+import omtteam.omlib.security.PlayerAdapter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;

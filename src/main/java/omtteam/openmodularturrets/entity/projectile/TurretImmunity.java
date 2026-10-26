@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.entity.projectile;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import omtteam.openmodularturrets.item.OwnershipWandItem;
+import omtteam.omlib.item.OwnershipWandItem;
 
 /**
  * Entities turret weapons must not affect although turrets may still target and fire at them: players holding the

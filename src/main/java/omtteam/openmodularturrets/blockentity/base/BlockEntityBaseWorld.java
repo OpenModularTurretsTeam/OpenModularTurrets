@@ -19,7 +19,7 @@ import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.item.ItemSlot;
 import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.world.BaseWorld;
-import omtteam.openmodularturrets.core.world.BlockPosition;
+import omtteam.omlib.core.world.BlockPosition;
 import omtteam.openmodularturrets.core.world.Box;
 import omtteam.openmodularturrets.core.world.Pose;
 import omtteam.openmodularturrets.core.world.Vector3;

@@ -18,7 +18,7 @@ import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.TurretBaseUpgradeItem;
 import omtteam.openmodularturrets.registry.ModMenus;
-import omtteam.openmodularturrets.security.PlayerAdapter;
+import omtteam.omlib.security.PlayerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

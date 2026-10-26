@@ -1,5 +1,7 @@
 package omtteam.openmodularturrets.core.world;
 
+import omtteam.omlib.core.world.BlockPosition;
+import omtteam.omlib.core.world.Face;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

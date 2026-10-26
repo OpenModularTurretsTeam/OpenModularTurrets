@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.core.base;
 
-import omtteam.openmodularturrets.core.security.PlayerIdentity;
-import omtteam.openmodularturrets.core.security.PlayerInfo;
+import omtteam.omlib.core.security.PlayerIdentity;
+import omtteam.omlib.core.security.PlayerInfo;
 import omtteam.openmodularturrets.core.target.EntityCategory;
 import omtteam.openmodularturrets.core.target.TargetEntity;
 

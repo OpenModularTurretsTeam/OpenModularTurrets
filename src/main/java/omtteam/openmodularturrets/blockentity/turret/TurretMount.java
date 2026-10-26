@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.blockentity.turret;
 
 import net.minecraft.world.phys.Vec3;
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.world.Face;
 import omtteam.openmodularturrets.core.world.Pose;
 import omtteam.openmodularturrets.core.world.Vector3;
 

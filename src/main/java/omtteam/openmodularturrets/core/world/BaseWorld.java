@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.core.world;
 
+import omtteam.omlib.core.world.BlockPosition;
 import omtteam.openmodularturrets.core.item.ItemSlot;
 import omtteam.openmodularturrets.core.target.TargetEntity;
 

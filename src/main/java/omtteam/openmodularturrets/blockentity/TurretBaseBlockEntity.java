@@ -31,17 +31,19 @@ import omtteam.omlib.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.camo.CamoPermissions;
 import omtteam.omlib.core.energy.EnergyAccess;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
-import omtteam.openmodularturrets.core.security.TrustManager;
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.security.TrustManager;
+import omtteam.omlib.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
 import omtteam.omlib.inventory.ItemAccess;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.network.BasePacketHandler;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
-import omtteam.openmodularturrets.security.LevelSecurityEnvironment;
-import omtteam.openmodularturrets.security.PlayerAdapter;
-import omtteam.openmodularturrets.security.TrustHost;
-import omtteam.openmodularturrets.security.SecurityNbt;
+import omtteam.omlib.security.LevelSecurityEnvironment;
+import omtteam.omlib.security.PlayerAdapter;
+import omtteam.omlib.security.OwnershipSettings;
+import omtteam.omlib.security.TrustHost;
+import omtteam.openmodularturrets.security.OMTOwnershipSettings;
+import omtteam.omlib.security.SecurityNbt;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
@@ -68,7 +70,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
     public TurretBaseBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TURRET_BASE, pos, state);
         int tier = ((TurretBaseBlock) state.getBlock()).getTier();
-        this.logic = new TurretBaseLogic(tier, ConfigLogicSettings.INSTANCE, new LevelSecurityEnvironment(this::getLevel),
+        this.logic = new TurretBaseLogic(tier, ConfigLogicSettings.INSTANCE, new LevelSecurityEnvironment(this::getLevel, OMTOwnershipSettings.INSTANCE),
                 new BlockEntityBaseWorld(this::getLevel, pos, inventory), new Random(), this::onLogicChanged);
     }
 
@@ -144,6 +146,11 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
 
     public int getTier() {
         return logic.getTier();
+    }
+
+    @Override
+    public OwnershipSettings ownershipSettings() {
+        return OMTOwnershipSettings.INSTANCE;
     }
 
     /** Owner, trusted players and every permission check. */

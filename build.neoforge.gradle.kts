@@ -174,6 +174,17 @@ sourceSets.main { resources.srcDir(convertFabricData) }
 
 tasks.check { dependsOn("runGameTestServer") }
 
+// A game test server whose mod fails to load can still exit normally (Forge did), so `check` also needs the server's own
+// "All N required tests passed" line in its log.
+tasks.named("runGameTestServer") {
+    val log = layout.projectDirectory.file("run/logs/latest.log")
+    doLast {
+        if (!log.asFile.exists() || !log.asFile.readText().contains("required tests passed")) {
+            throw GradleException("The game test server did not report that its tests passed (see ${log.asFile})")
+        }
+    }
+}
+
 tasks.jar { from(client.output) }
 tasks.named<Jar>("sourcesJar") { from(client.allSource) }
 

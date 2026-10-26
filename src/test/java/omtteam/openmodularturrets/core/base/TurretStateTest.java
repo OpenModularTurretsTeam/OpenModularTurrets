@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.core.base;
 
-import omtteam.openmodularturrets.core.security.PlayerIdentity;
-import omtteam.openmodularturrets.core.security.SecurityEnvironment;
+import omtteam.omlib.core.security.PlayerIdentity;
+import omtteam.omlib.core.security.SecurityEnvironment;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretState;
 import omtteam.openmodularturrets.core.turret.TurretState.Concealment;
@@ -33,7 +33,7 @@ class TurretStateTest {
         }
 
         @Override
-        public boolean turretsDamageTrustedPlayers() {
+        public boolean damageTrustedPlayers() {
             return false;
         }
     };

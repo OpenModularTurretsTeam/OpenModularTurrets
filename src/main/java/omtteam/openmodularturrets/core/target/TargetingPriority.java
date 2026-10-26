@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.core.target;
 
-import omtteam.openmodularturrets.core.world.BlockPosition;
+import omtteam.omlib.core.world.BlockPosition;
 
 /**
  * Factors that decide which valid target a turret prefers (1.12.2 {@code EnumTargetingPriority}). Each turret type

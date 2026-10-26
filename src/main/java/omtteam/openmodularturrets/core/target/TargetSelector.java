@@ -1,16 +1,16 @@
 package omtteam.openmodularturrets.core.target;
 
 import omtteam.openmodularturrets.core.base.TargetingSettings;
-import omtteam.openmodularturrets.core.security.PlayerIdentity;
-import omtteam.openmodularturrets.core.security.PlayerInfo;
-import omtteam.openmodularturrets.core.security.TrustManager;
+import omtteam.omlib.core.security.PlayerIdentity;
+import omtteam.omlib.core.security.PlayerInfo;
+import omtteam.omlib.core.security.TrustManager;
 import omtteam.openmodularturrets.core.settings.LogicSettings;
 import omtteam.openmodularturrets.core.turret.TurretMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.BaseWorld;
-import omtteam.openmodularturrets.core.world.BlockPosition;
+import omtteam.omlib.core.world.BlockPosition;
 import omtteam.openmodularturrets.core.world.Box;
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.world.Face;
 import omtteam.openmodularturrets.core.world.Vector3;
 
 import java.util.Collection;

@@ -35,7 +35,7 @@ import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.core.turret.TurretMath;
 import omtteam.openmodularturrets.core.turret.TurretState;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.world.Face;
 import omtteam.openmodularturrets.core.world.Pose;
 import omtteam.openmodularturrets.core.world.Vector3;
 import omtteam.openmodularturrets.entity.projectile.TurretDamage;

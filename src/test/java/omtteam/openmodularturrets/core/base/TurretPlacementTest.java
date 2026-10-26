@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.core.base;
 import omtteam.openmodularturrets.core.base.TurretPlacement.Result;
 import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.world.Face;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 

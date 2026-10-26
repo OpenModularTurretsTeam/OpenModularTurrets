@@ -1,5 +1,7 @@
 package omtteam.openmodularturrets.client.screen;
 
+import omtteam.omlib.client.screen.DisownConfirm;
+import omtteam.omlib.client.screen.TrustedPlayersScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
@@ -12,7 +14,7 @@ import omtteam.omlib.client.compat.ClientNetworkCompat;
 import omtteam.omlib.menu.CamoMenu;
 import omtteam.omlib.network.CamoPackets;
 import omtteam.omlib.network.OMLibPackets;
-import omtteam.openmodularturrets.security.PlayerAdapter;
+import omtteam.omlib.security.PlayerAdapter;
 
 import java.util.function.Consumer;
 

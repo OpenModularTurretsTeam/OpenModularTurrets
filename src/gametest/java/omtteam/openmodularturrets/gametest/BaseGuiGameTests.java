@@ -42,7 +42,7 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.menu.TurretBaseMenu;
 import omtteam.openmodularturrets.registry.ModBlocks;
-import omtteam.openmodularturrets.security.PlayerAdapter;
+import omtteam.omlib.security.PlayerAdapter;
 import org.jetbrains.annotations.Nullable;
 //? if neoforge {
 /*import net.minecraft.network.RegistryFriendlyByteBuf;

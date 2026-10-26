@@ -3,14 +3,14 @@ package omtteam.openmodularturrets.core.base;
 import omtteam.openmodularturrets.core.card.MemoryCardData;
 import omtteam.openmodularturrets.core.card.MemoryCardRules;
 import omtteam.omlib.core.camo.CamoLight;
-import omtteam.openmodularturrets.core.security.AccessLevel;
-import omtteam.openmodularturrets.core.security.AccessProfile;
-import omtteam.openmodularturrets.core.security.PlayerInfo;
-import omtteam.openmodularturrets.core.security.SecurityEnvironment;
-import omtteam.openmodularturrets.core.security.TrustManager;
-import omtteam.openmodularturrets.core.security.TrustResult;
+import omtteam.omlib.core.security.AccessLevel;
+import omtteam.omlib.core.security.AccessProfile;
+import omtteam.omlib.core.security.PlayerInfo;
+import omtteam.omlib.core.security.SecurityEnvironment;
+import omtteam.omlib.core.security.TrustManager;
+import omtteam.omlib.core.security.TrustResult;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ class MemoryCardRulesTest {
         }
 
         @Override
-        public boolean turretsDamageTrustedPlayers() {
+        public boolean damageTrustedPlayers() {
             return false;
         }
     };

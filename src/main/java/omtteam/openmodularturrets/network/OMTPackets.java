@@ -1,5 +1,7 @@
 package omtteam.openmodularturrets.network;
 
+import omtteam.omlib.network.TrustPacketHandler;
+import omtteam.omlib.network.TrustPackets;
 import omtteam.openmodularturrets.OMT;
 import omtteam.omlib.compat.network.NetworkCompat;
 import omtteam.omlib.compat.network.PacketType;
@@ -11,20 +13,6 @@ import omtteam.omlib.compat.network.PacketType;
 public final class OMTPackets {
     public static final PacketType<RayPacket> RAY =
             NetworkCompat.registerS2C(OMT.id("ray"), RayPacket::write, RayPacket::read);
-
-    // Trusted player screen
-    public static final PacketType<TrustPackets.Add> ADD_TRUSTED_PLAYER = NetworkCompat.registerC2S(
-            OMT.id("add_trusted_player"), TrustPackets.Add::write, TrustPackets.Add::read,
-            TrustPacketHandler::handleAdd);
-    public static final PacketType<TrustPackets.Remove> REMOVE_TRUSTED_PLAYER = NetworkCompat.registerC2S(
-            OMT.id("remove_trusted_player"), TrustPackets.Remove::write, TrustPackets.Remove::read,
-            TrustPacketHandler::handleRemove);
-    public static final PacketType<TrustPackets.ChangeAccess> CHANGE_ACCESS_LEVEL = NetworkCompat.registerC2S(
-            OMT.id("change_access_level"), TrustPackets.ChangeAccess::write, TrustPackets.ChangeAccess::read,
-            TrustPacketHandler::handleChangeAccess);
-    public static final PacketType<TrustPackets.Disown> DISOWN = NetworkCompat.registerC2S(
-            OMT.id("disown"), TrustPackets.Disown::write, TrustPackets.Disown::read,
-            TrustPacketHandler::handleDisown);
 
     // Base and configure screens
     public static final PacketType<BasePackets.SimpleAction> BASE_ACTION = NetworkCompat.registerC2S(

@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.core.turret;
 
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.world.Face;
 import omtteam.openmodularturrets.core.world.Vector3;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

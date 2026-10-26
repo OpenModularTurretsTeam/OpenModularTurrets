@@ -1,16 +1,16 @@
 package omtteam.openmodularturrets.core.base;
 
-import omtteam.openmodularturrets.core.security.AccessLevel;
-import omtteam.openmodularturrets.core.security.PlayerInfo;
-import omtteam.openmodularturrets.core.security.SecurityEnvironment;
+import omtteam.omlib.core.security.AccessLevel;
+import omtteam.omlib.core.security.PlayerInfo;
+import omtteam.omlib.core.security.SecurityEnvironment;
 import omtteam.openmodularturrets.core.settings.BaseTierStats;
 import omtteam.openmodularturrets.core.target.EntityCategory;
 import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.target.TargetSelector;
 import omtteam.openmodularturrets.core.target.TargetingPriority;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.core.world.BlockPosition;
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.world.BlockPosition;
+import omtteam.omlib.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -52,7 +52,7 @@ class TargetingTest {
         }
 
         @Override
-        public boolean turretsDamageTrustedPlayers() {
+        public boolean damageTrustedPlayers() {
             return false;
         }
     };

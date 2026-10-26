@@ -1,5 +1,7 @@
 package omtteam.openmodularturrets.core.security;
 
+import omtteam.omlib.core.security.PlayerIdentity;
+import omtteam.omlib.core.security.TrustManager;
 import java.util.Optional;
 
 /**

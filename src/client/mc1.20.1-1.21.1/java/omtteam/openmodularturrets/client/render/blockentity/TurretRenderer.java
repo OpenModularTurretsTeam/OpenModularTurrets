@@ -10,7 +10,7 @@ import omtteam.openmodularturrets.client.model.TurretModel;
 import omtteam.openmodularturrets.client.model.TurretModels;
 import omtteam.openmodularturrets.core.turret.TurretMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.world.Face;
 import omtteam.openmodularturrets.core.world.Vector3;
 import org.joml.Matrix3f;
 import org.joml.Quaternionf;

@@ -1,5 +1,7 @@
 package omtteam.openmodularturrets.client.screen;
 
+import omtteam.omlib.client.screen.DisownConfirm;
+import omtteam.omlib.client.screen.TrustedPlayersScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -10,14 +12,14 @@ import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.omlib.client.compat.ClientCompat;
 import omtteam.omlib.client.compat.ClientNetworkCompat;
-import omtteam.openmodularturrets.client.compat.CompatScreen;
+import omtteam.omlib.client.compat.CompatScreen;
 import omtteam.openmodularturrets.core.base.TargetingSettings;
-import omtteam.openmodularturrets.core.security.AccessLevel;
+import omtteam.omlib.core.security.AccessLevel;
 import omtteam.openmodularturrets.network.BasePackets;
 import omtteam.omlib.network.CamoPackets;
 import omtteam.omlib.network.OMLibPackets;
 import omtteam.openmodularturrets.network.OMTPackets;
-import omtteam.openmodularturrets.security.PlayerAdapter;
+import omtteam.omlib.security.PlayerAdapter;
 
 import java.util.Optional;
 

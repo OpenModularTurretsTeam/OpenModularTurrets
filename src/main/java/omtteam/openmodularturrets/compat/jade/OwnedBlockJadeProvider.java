@@ -4,9 +4,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import omtteam.openmodularturrets.OMT;
-import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
+import omtteam.omlib.blockentity.OwnedBlockEntity;
 import omtteam.omlib.compat.nbt.NbtCompat;
-import omtteam.openmodularturrets.core.security.PlayerIdentity;
+import omtteam.omlib.core.security.PlayerIdentity;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IServerDataProvider;
 

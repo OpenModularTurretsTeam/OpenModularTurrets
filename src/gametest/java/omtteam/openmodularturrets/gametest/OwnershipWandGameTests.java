@@ -40,18 +40,18 @@ import omtteam.openmodularturrets.api.OMTApi;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.omlib.compat.VersionCompat;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
-import omtteam.openmodularturrets.core.security.AccessLevel;
-import omtteam.openmodularturrets.core.security.PlayerIdentity;
-import omtteam.openmodularturrets.core.security.TrustedPlayer;
+import omtteam.omlib.core.security.AccessLevel;
+import omtteam.omlib.core.security.PlayerIdentity;
+import omtteam.omlib.core.security.TrustedPlayer;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.entity.projectile.TurretDamage;
-import omtteam.openmodularturrets.item.OwnershipWandItem;
+import omtteam.omlib.item.OwnershipWandItem;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 import omtteam.openmodularturrets.registry.ModItems;
-import omtteam.openmodularturrets.security.OwnedHost;
-import omtteam.openmodularturrets.security.PlayerAdapter;
-import omtteam.openmodularturrets.security.TrustHost;
+import omtteam.omlib.security.OwnedHost;
+import omtteam.omlib.security.PlayerAdapter;
+import omtteam.omlib.security.TrustHost;
 
 //? if >=1.21.11 {
 /*import net.minecraft.server.permissions.LevelBasedPermissionSet;

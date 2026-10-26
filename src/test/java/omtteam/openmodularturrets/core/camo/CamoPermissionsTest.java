@@ -1,11 +1,11 @@
 package omtteam.openmodularturrets.core.camo;
 
-import omtteam.openmodularturrets.core.security.AccessLevel;
-import omtteam.openmodularturrets.core.security.AccessProfile;
-import omtteam.openmodularturrets.core.security.PlayerInfo;
-import omtteam.openmodularturrets.core.security.SecurityEnvironment;
-import omtteam.openmodularturrets.core.security.TrustManager;
-import omtteam.openmodularturrets.core.security.TrustResult;
+import omtteam.omlib.core.security.AccessLevel;
+import omtteam.omlib.core.security.AccessProfile;
+import omtteam.omlib.core.security.PlayerInfo;
+import omtteam.omlib.core.security.SecurityEnvironment;
+import omtteam.omlib.core.security.TrustManager;
+import omtteam.omlib.core.security.TrustResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +35,7 @@ class CamoPermissionsTest {
         }
 
         @Override
-        public boolean turretsDamageTrustedPlayers() {
+        public boolean damageTrustedPlayers() {
             return false;
         }
     };

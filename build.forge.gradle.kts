@@ -106,9 +106,11 @@ dependencies {
     val omlib = project.extra["omlibCoordinates"] as String
     val omlibVersion = project.extra["omlibVersion"] as String
     "modImplementation"(omlib) { isTransitive = false }
-    "clientCompileOnly"(omlib) { isTransitive = false }
-    "gametestCompileOnly"(omlib) { isTransitive = false }
-    "gametestRuntimeOnly"(omlib) { isTransitive = false }
+    // The client and game test source sets use the jar with the dev names (classifier dev): they have no remapping, and
+    // the game test server would fail to load the SRG-named jar (and still exit normally).
+    "clientCompileOnly"("$omlib:dev") { isTransitive = false }
+    "gametestCompileOnly"("$omlib:dev") { isTransitive = false }
+    "gametestRuntimeOnly"("$omlib:dev") { isTransitive = false }
     jarJar("omtteam.omlib:omlib") {
         version {
             strictly("[$omlibVersion,)")
@@ -158,6 +160,17 @@ sourceSets.main { resources.srcDir(packMetadata("modPackMetadata", "${property("
 gametest.resources.srcDir(packMetadata("gametestPackMetadata", "${property("mod_name")} game test resources"))
 
 tasks.check { dependsOn("runGameTestServer") }
+
+// A game test server whose mod fails to load can still exit normally (Forge did), so `check` also needs the server's own
+// "All N required tests passed" line in its log.
+tasks.named("runGameTestServer") {
+    val log = layout.projectDirectory.file("run/logs/latest.log")
+    doLast {
+        if (!log.asFile.exists() || !log.asFile.readText().contains("required tests passed")) {
+            throw GradleException("The game test server did not report that its tests passed (see ${log.asFile})")
+        }
+    }
+}
 
 tasks.jar {
     from(client.output)

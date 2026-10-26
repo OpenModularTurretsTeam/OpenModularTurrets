@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
-import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
+import omtteam.omlib.blockentity.OwnedBlockEntity;
 import omtteam.omlib.compat.block.BlockCompat;
 
 /**

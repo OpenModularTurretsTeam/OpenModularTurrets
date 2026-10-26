@@ -9,9 +9,9 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import omtteam.omlib.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
-import omtteam.openmodularturrets.core.security.PlayerIdentity;
+import omtteam.omlib.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.security.PlayerAdapter;
+import omtteam.omlib.security.PlayerAdapter;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IServerDataProvider;
 

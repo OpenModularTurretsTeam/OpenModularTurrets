@@ -3,12 +3,12 @@ package omtteam.openmodularturrets.core.base;
 import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.item.ReactorFuel;
 import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
-import omtteam.openmodularturrets.core.security.PlayerInfo;
-import omtteam.openmodularturrets.core.security.SecurityEnvironment;
+import omtteam.omlib.core.security.PlayerInfo;
+import omtteam.omlib.core.security.SecurityEnvironment;
 import omtteam.openmodularturrets.core.settings.BaseTierStats;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.core.world.Face;
+import omtteam.omlib.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -63,7 +63,7 @@ class TurretBaseLogicTest {
         }
 
         @Override
-        public boolean turretsDamageTrustedPlayers() {
+        public boolean damageTrustedPlayers() {
             return false;
         }
     };

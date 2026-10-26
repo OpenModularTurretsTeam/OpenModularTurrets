@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.core.camo;
 
-import omtteam.openmodularturrets.core.security.PlayerInfo;
-import omtteam.openmodularturrets.core.security.TrustManager;
+import omtteam.omlib.core.security.PlayerInfo;
+import omtteam.omlib.core.security.TrustManager;
 
 /**
  * Who may change the camouflage (1.12.2: OMLib {@code handleCamoActivation} was owner-only, the light messages

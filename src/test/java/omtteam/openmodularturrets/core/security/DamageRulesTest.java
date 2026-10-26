@@ -1,5 +1,8 @@
 package omtteam.openmodularturrets.core.security;
 
+import omtteam.omlib.core.security.PlayerInfo;
+import omtteam.omlib.core.security.TrustManager;
+import omtteam.omlib.core.security.TrustResult;
 import omtteam.openmodularturrets.core.security.DamageRules.Victim;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
