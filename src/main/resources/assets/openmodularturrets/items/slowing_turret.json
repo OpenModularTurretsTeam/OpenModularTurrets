@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "openmodularturrets:item/slowing_turret",
+    "model": {
+      "type": "openmodularturrets:turret",
+      "turret": "openmodularturrets:slowing_turret"
+    }
+  }
+}

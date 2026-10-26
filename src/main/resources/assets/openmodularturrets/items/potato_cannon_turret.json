@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "openmodularturrets:item/potato_cannon_turret",
+    "model": {
+      "type": "openmodularturrets:turret",
+      "turret": "openmodularturrets:potato_cannon_turret"
+    }
+  }
+}

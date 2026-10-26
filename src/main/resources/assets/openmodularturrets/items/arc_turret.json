@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "openmodularturrets:item/arc_turret",
+    "model": {
+      "type": "openmodularturrets:turret",
+      "turret": "openmodularturrets:arc_turret"
+    }
+  }
+}

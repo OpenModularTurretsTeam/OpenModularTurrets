@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "openmodularturrets:item/melee_turret",
+    "model": {
+      "type": "openmodularturrets:turret",
+      "turret": "openmodularturrets:melee_turret"
+    }
+  }
+}
