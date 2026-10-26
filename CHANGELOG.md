@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Added
+
+- Minecraft 1.21.11 for Fabric and NeoForge (the Sable and Create Aeronautics support stays 1.21.1 only, as they have no 1.21.11 versions yet)
+
 ### Changed
 
 - The camouflage menu has a dark grey background like the turret base GUI instead of the vanilla light grey

@@ -105,6 +105,8 @@ dependencies {
     "modCompileOnly"("maven.modrinth:jade:${property("jade_version")}")
     localRuntime("maven.modrinth:jade:${property("jade_version")}")
 }
+// The client half of the Jade plugin (client/compat/jade) compiles against it too (remapped, through compileOnly)
+configurations.named("clientCompileOnly") { extendsFrom(configurations.compileOnly.get()) }
 
 // The client half of the Jade plugin (client/compat/jade) compiles against it too (remapped, through compileOnly)
 configurations.named("clientCompileOnly") { extendsFrom(configurations.compileOnly.get()) }

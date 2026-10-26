@@ -30,7 +30,9 @@ loom {
 
 fabricApi {
     configureDataGeneration {
-        client = true
+        // The providers need no client classes (block models are handwritten), so datagen runs without the client
+        // source set; it also works while a new Minecraft version's client code is not ported yet
+        client = false
         // versions/<v>/src/main/generated, committed per version
         outputDirectory = project.file("src/main/generated")
     }

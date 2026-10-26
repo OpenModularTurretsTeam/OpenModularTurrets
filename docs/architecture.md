@@ -20,7 +20,7 @@ The Minecraft-facing code around it translates between the game and the core and
 flowchart TB
     client["client<br/>screens, renderers, models, tooltips<br/><i>client only</i>"]
     game["game layer (main)<br/>blocks, block entities, items, menus, network,<br/>registry, config, projectiles, api"]
-    compat["compat<br/>1.20.1 / 1.21.1 differences"]
+    compat["compat<br/>1.20.1 / 1.21.1 / 1.21.11 differences"]
     platform["platform<br/>loader services and adapters<br/><i>platform.fabric / platform.neoforge / platform.forge</i>"]
     core["core<br/>game rules, plain Java"]
     client --> game
@@ -101,7 +101,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `network` | packets: client→server requests (always re-validated) and server→client sync (`ConfigSync` sends the config on join) |
 | `config` | the JSON config: fields, comments, ranges, migration, the server's config on clients |
 | `security`, `camo` | Minecraft side of trust lists (NBT, player lookup) and camouflage |
-| `compat` | every 1.20.1 / 1.21.1 difference (`VersionCompat`, `CompatBlockEntity`, networking, menus), small loader differences (`//? if fabric` / `neoforge` / `forge`), Jade, and Sable contraptions (`SubLevelCompat`: poses and velocities through Sable Companion, 1.21.1 only; `client.compat.ClientSubLevelCompat` for the drawn pose) |
+| `compat` | every 1.20.1 / 1.21.1 / 1.21.11 difference (`VersionCompat`, `CompatBlockEntity`, networking, menus; `compat.nbt.NbtCompat` for all NBT reads and `compat.block.BlockCompat` depend on Minecraft only, so any package may use them), small loader differences (`//? if fabric` / `neoforge` / `forge`), Jade (server half here, tooltips in `client.compat.jade`), and Sable contraptions (`SubLevelCompat`: poses and velocities through Sable Companion, 1.21.1 only; `client.compat.ClientSubLevelCompat` for the drawn pose) |
 | `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`); `platform.fabric` / `platform.neoforge` / `platform.forge` hold the entrypoints, the implementations and the energy/item adapters, and only compile for their loader |
 | `datagen` | recipes, loot tables, tags, damage types (generated per version; Fabric only, the NeoForge build converts the 1.21.1 output and the Forge build the 1.20.1 output) |
 
@@ -210,18 +210,21 @@ If you change a **default**, add a step to `config.ConfigMigration` and raise `C
 Define the payload (a record with `write`/`read`), register it in `network.OMTPackets` through `NetworkCompat`, and handle it in a `*PacketHandler`.
 A C2S handler must start with `PacketValidation` and an access check.
 
-### Code that differs between 1.20.1 and 1.21.1
+### Code that differs between the Minecraft versions
 
-The source is written for 1.21.1; Stonecutter comments switch it to 1.20.1.
+The source is written for 1.21.1; Stonecutter comments switch it to 1.20.1 or 1.21.11.
 Put the difference into a small helper in `compat` (for example `VersionCompat`) and call that, instead of `//? if` blocks in gameplay code.
 Blocks with a block entity extend `compat.CompatEntityBlock`, which hides the block codec (pass a `BlockCodec` made with `codecOf`) and the pick block signature (override `pickItem`).
 Block entities extend `compat.CompatBlockEntity`.
 Right-click handling goes through `InteractiveBlock`, not vanilla's `use` methods.
+NBT is only read through `compat.nbt.NbtCompat`, and the block, damage and registration differences of 1.21.11 are in `compat.block.BlockCompat` and `VersionCompat`.
+A class that differs completely between versions goes into a version source folder instead of conditions: `src/<source set>/mc<first>-<last>/java` (`src/main/mc1.20.1-1.21.1`, `src/client/mc1.21.11-`, `src/gametest/mc1.21.11-`), with the same package and class name in each variant.
+The 1.21.11 renderers, turret models and special item models, the transfer API adapters on NeoForge and the game test framework are such classes; Mojang renames that apply everywhere are Stonecutter replacements in `stonecutter.gradle.kts`.
 The table of known differences is in `CLAUDE.md`, section 5.
 
 ### Code that differs between the loaders
 
-The source is shared; Stonecutter also has a loader axis (nodes `1.20.1-fabric`, `1.20.1-forge`, `1.21.1-fabric`, `1.21.1-neoforge`).
+The source is shared; Stonecutter also has a loader axis (nodes `1.20.1-fabric`, `1.20.1-forge`, `1.21.1-fabric`, `1.21.1-neoforge`, `1.21.11-fabric`, `1.21.11-neoforge`).
 
 - A whole loader-specific class goes into `platform/fabric/`, `platform/neoforge/` or `platform/forge/` (also under `client/` and `gametest/`), which only compile for their loader.
 - Gameplay code that needs the loader calls a service through `Platform`; a new service is a new component of `PlatformServices`, so every entrypoint must supply it.

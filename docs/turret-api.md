@@ -141,7 +141,7 @@ An `AmmoItem` created with your ammo type counts as that type even without a def
 With Sable installed, turrets can sit on contraptions (sub-levels).
 Their blocks are stored in a plot far away from where they are shown, so `turret.getBlockPos()` and the base's position are plot coordinates, while entities are in the world.
 `turret.getMount()` (a `TurretMount`, made once per tick) gives the world values: `centre()`, `up()` (out of the mounting face), `velocity()` (the contraption's, in blocks per tick), and converts with `toWorld(plotPoint)`, `toLocal(worldPoint)` and `toLocalDirection(worldDirection)`.
-Outside contraptions (and on 1.20.1) it is the plain block position and changes nothing.
+Outside contraptions (and on 1.20.1 and 1.21.11, which have no Sable) it is the plain block position and changes nothing.
 
 - Projectile, ray and effect weapons need nothing: OMT aims, spawns projectiles (with the contraption's velocity) and traces rays in the world.
 - An `AreaWeapon`'s `area()` stays in plot coordinates (around `turret.getBlockPos()`); OMT only passes entities that really touch it.

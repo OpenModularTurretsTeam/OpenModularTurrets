@@ -7,10 +7,11 @@ Read it fully before making changes.
 
 ## 1. Project Overview
 
-**OpenModularTurrets (OMT)** is being maintained on **Fabric**, targeting **1.20.1 and 1.21.1 from a single codebase** using **Stonecutter**.
-The port from 1.12.2 is complete; this repo maintains the 1.20.1 / 1.21.1 versions.
+**OpenModularTurrets (OMT)** is being maintained on **Fabric**, targeting **1.20.1, 1.21.1 and 1.21.11 from a single codebase** using **Stonecutter**.
+The port from 1.12.2 is complete; this repo maintains the 1.20.1 / 1.21.1 / 1.21.11 versions.
 A **NeoForge 1.21.1** build is being added on the branch `neoforge-test`, with the setup worked out in OpenModularLighting (`../OpenModularLighting`, branch `neoforge-test`; see §4 "Loaders" and §9).
 A **Forge 1.20.1** build is being added on the branch `forge-test` (requested by the user on 2026-10-24), ported from OpenModularLighting (branch `forge-test`; see §4 "Forge 1.20.1" and §9).
+**Minecraft 1.21.11** (Fabric and NeoForge nodes, same codebase) was ported on 2026-10-26 following OpenModularLighting's 1.21.11 port (see §9); it builds and passes the game tests, but its client has not been checked by hand yet, and the nodes are not published yet.
 Inventory and power expanders were dropped and are not to be re-added.
 
 Core gameplay:
@@ -33,9 +34,9 @@ Core gameplay:
   Fabric API, including Transfer API, Networking, Rendering and Datagen, may be used freely.
 - **Team Reborn Energy** for power, as the de facto Fabric energy standard.
   Jar-in-jar it (approved).
-- **Jade** (optional integration, `compat/jade/`, registered through the `jade` entrypoint on Fabric and `@WailaPlugin` on NeoForge).
+- **Jade** (optional integration, `compat/jade/` for the server half and `client/compat/jade/` for the tooltips, registered through the `jade` entrypoint on Fabric and `@WailaPlugin` on NeoForge and Forge).
   Compile-only (`modCompileOnly`, Modrinth maven), never bundled and never required at runtime.
-- **NeoForge** 21.1.x (1.21.1 only), built with **ModDevGradle** (approved by the user; build-time only).
+- **NeoForge** 21.1.x (1.21.1) and 21.11.x (1.21.11), built with **ModDevGradle** (approved by the user; build-time only).
   On NeoForge, the Fabric-only APIs above are replaced by NeoForge's own (capabilities, events, payload registration); see §4 "Loaders".
 - **Forge** 47.x (1.20.1 only), built with the legacy variant of ModDevGradle (`net.neoforged.moddev.legacyforge`, same artifact and version as `moddev`; build-time only), requested by the user.
   On Forge, the Fabric-only APIs are replaced by Forge's own (capabilities, events, event network channels); see §4 "Forge 1.20.1".
@@ -55,13 +56,16 @@ Core gameplay:
 
 ## 2. Tech Stack
 
-| | 1.20.1 (Fabric) | 1.20.1 (Forge) | 1.21.1 (Fabric) | 1.21.1 (NeoForge) |
-| --- | --- | --- | --- | --- |
-| Java | 17 | 17 | 21 | 21 |
-| Loader | Fabric Loader 0.19.x | Forge 47.4.x | Fabric Loader 0.19.x | NeoForge 21.1.x |
-| API | Fabric API `0.92.x+1.20.1` | – | Fabric API `0.116.x+1.21.1` | – |
-| Gradle plugin | Loom 1.18 | ModDevGradle 2.0 (legacy) | Loom 1.18 | ModDevGradle 2.0 |
-| Mappings | Mojang official (+ Parchment optional) | Mojang official (jar reobfuscated to SRG, mixin refmap) | Mojang official (+ Parchment optional) | Mojang official (NeoForge runtime names) |
+| | 1.20.1 (Fabric) | 1.20.1 (Forge) | 1.21.1 (Fabric) | 1.21.1 (NeoForge) | 1.21.11 (Fabric) | 1.21.11 (NeoForge) |
+| --- | --- | --- | --- | --- | --- | --- |
+| Java | 17 | 17 | 21 | 21 | 21 | 21 |
+| Loader | Fabric Loader 0.19.x | Forge 47.4.x | Fabric Loader 0.19.x | NeoForge 21.1.x | Fabric Loader 0.19.x | NeoForge 21.11.x |
+| API | Fabric API `0.92.x+1.20.1` | – | Fabric API `0.116.x+1.21.1` | – | Fabric API `0.141.x+1.21.11` | – |
+| Gradle plugin | Loom 1.18 | ModDevGradle 2.0 (legacy) | Loom 1.18 | ModDevGradle 2.0 | Loom 1.18 | ModDevGradle 2.0 |
+| Mappings | Mojang official (+ Parchment optional) | Mojang official (jar reobfuscated to SRG, mixin refmap) | Mojang official (+ Parchment optional) | Mojang official (NeoForge runtime names) | Mojang official | Mojang official (NeoForge runtime names) |
+
+The 1.21.11 nodes (Fabric and NeoForge) are built like 1.21.1 (the same Gradle plugins).
+They have no Sable, Create or Create Aeronautics properties (no 1.21.11 builds known); the build scripts skip those dependencies when `sable_companion_version` is missing.
 
 - Build system: Gradle 9.8 (Kotlin DSL) + **Stonecutter 0.9**, with Fabric Loom 1.18 (`net.fabricmc.fabric-loom-remap`, the variant for obfuscated MC versions) on the Fabric nodes and ModDevGradle 2.0 (`net.neoforged.moddev`) on the NeoForge node.
 - Shared build logic is the convention plugin `buildSrc/src/main/kotlin/mod-common.gradle.kts` (Java toolchain, metadata templating, JUnit, `verifyCoreIsolation`, licenses in the jar via `bundled_licenses`, publishing).
@@ -101,12 +105,18 @@ Do not hard-code guesses into the build without verifying.
 │   ├── 1.21.1-fabric/
 │   │   ├── gradle.properties   # minecraft_version, fabric_api, java_version=21 …
 │   │   └── src/main/generated/ # datagen output for 1.21.1 (committed; NeoForge converts it, datagen_from)
-│   └── 1.21.1-neoforge/
+│   ├── 1.21.1-neoforge/
+│   │   └── gradle.properties   # neoforge_version, minecraft_dependency (Maven range) …
+│   ├── 1.21.11-fabric/
+│   │   └── gradle.properties   # minecraft_version, fabric_api, java_version=21 …
+│   └── 1.21.11-neoforge/
 │       └── gradle.properties   # neoforge_version, minecraft_dependency (Maven range) …
 ├── src/
     ├── main/java/omtteam/openmodularturrets/...
+    ├── main/mc1.20.1-1.21.1/java/ and main/mc1.21.11-/java/   # version source folders: whole classes that differ between versions (§4)
     ├── main/resources/         # SHARED assets + fabric.mod.json, META-INF/neoforge.mods.toml and META-INF/mods.toml (templated)
-    ├── client/java/...         # client-only code (split source sets)
+    ├── client/java/...         # client-only code (split source sets); client/mc…/java: its version source folders
+    ├── gametest/mc1.21.11-/    # the game test framework of 1.21.11 (stand-in @GameTest, GameTestCases)
     ├── test/java/...           # JUnit tests for core/
     └── gametest/               # server game tests for both loaders (own mod id openmodularturrets_gametest)
 ```
@@ -133,6 +143,7 @@ stonecutter {
         versions(
             "1.20.1-fabric" to "1.20.1", "1.20.1-forge" to "1.20.1",
             "1.21.1-fabric" to "1.21.1", "1.21.1-neoforge" to "1.21.1",
+            "1.21.11-fabric" to "1.21.11", "1.21.11-neoforge" to "1.21.11",
         )
         mapBuilds { _, node -> "build.${node.project.substringAfterLast('-')}.gradle.kts" }
         vcsVersion = "1.21.1-fabric" // the version the committed source is written for
@@ -160,6 +171,11 @@ If this does not match the installed version, check the Stonecutter docs and upd
   Prefer letting Stonecutter generate this by switching versions over hand-writing it.
 - **Minimize conditional blocks.** Hide version differences behind small helpers in `omtteam.openmodularturrets.compat.VersionCompat` (or similar) rather than sprinkling `//? if` across gameplay code.
   Gameplay logic (targeting, permissions, consumption) should be version-agnostic.
+- **Whole classes that differ between versions** go into version source folders instead of large conditions: `src/<source set>/mc<first>-<last>/java` (both ends included, no `<last>` = no upper bound).
+  `mod-common` adds the folders whose range contains the node's Minecraft version, at the node's own path, so Stonecutter processes them on every node and the replacements below reach them.
+  Each variant keeps the same package and class name, the ranges of one class must not overlap, and the folders hold no `//?` conditions.
+- **Renames** that Mojang applies everywhere are Stonecutter replacements in `stonecutter.gradle.kts`, not conditions: from 1.21.11 `ResourceLocation` → `Identifier`, `noCollission(` → `noCollision(`, `MOVEMENT_SLOWDOWN` → `SLOWNESS`, `animal.horse` → `animal.equine`, `hasImpulse` → `needsSync` and `net.minecraft.Util` → `net.minecraft.util.Util`.
+  They work in both directions, so the new names must not be used for anything else in the source.
 - Constants can be compared in conditions: `//? if >=1.21 {`, `//? if <1.21 {`, `//? if 1.20.1 {`.
 - Version-specific *properties* live in `versions/<v>/gradle.properties`.
   Read them in the build via `property("…")`.
@@ -223,7 +239,7 @@ New questions that these do not answer go through §7 "Designing APIs".
   `onChange` may fire for a Fabric transaction that is rolled back later (an extra `setChanged()` is accepted).
 - Block entities expose `@Nullable EnergyAccess getEnergyAccess(side)` (core interface; a store or a view over several).
 - Fabric adapter: one `SnapshotParticipant` per store, cached in `platform/fabric` with weak keys **and weak values** (a plain `WeakHashMap` would leak, because the adapter references its store).
-  NeoForge adapter: `IEnergyStorage`, clamped to `int`; 1 E = 1 FE.
+  NeoForge adapter: `IEnergyStorage` (`EnergyHandler` with one `SnapshotJournal` per store on 1.21.11), clamped to `int`; 1 E = 1 FE.
 - Item transfer: the vanilla `Container` stays the inventory; `inventory.ItemAccess` (record: container, first slot, slot count, insert filter, extract filter; `insertOnly(container)`) describes what other blocks may do, exposed by `getItemAccess(side)`.
   Adapters build on the loaders' own container wrappers (Fabric `InventoryStorage`, slotted for Jade; NeoForge `RangedWrapper` + `InvWrapper`).
 
@@ -262,6 +278,7 @@ New questions that these do not answer go through §7 "Designing APIs".
 **Jade**
 
 - `@WailaPlugin` on the plugin without a loader condition (NeoForge finds it by the annotation, Fabric keeps the `jade` entrypoint).
+- The plugin is split in two for every version, because Jade 21's `ITooltip` extends a client class: `compat.jade.OMTJadePlugin` and the providers (server data, and `lines(…)` that turn the data into tooltip lines) stay in main, `client.compat.jade.OMTJadeClientPlugin` and `JadeLinesComponent` (the tooltip) are in the client source set; both are listed under the `jade` entrypoint.
 - Jade stays off the NeoForge GameTest server (it sends a packet to the vanilla mock players, which NeoForge refuses).
   It is in the NeoForge dev runs (`localRuntime`), which load only the mod itself, not the test mod (`loadedMods`).
 
@@ -293,7 +310,12 @@ The node `1.20.1-forge` follows the NeoForge setup and was worked out in OpenMod
 ./gradlew :1.21.1-neoforge:runGameTestServer      # the same game tests on NeoForge (also run by check / build)
 ./gradlew :1.20.1-fabric:runDatagen               # regenerate data for a node
 ./gradlew :1.21.1-fabric:runDatagen
+./gradlew :1.21.11-fabric:runDatagen              # (the 1.21.11 NeoForge node converts this output)
 ./gradlew :1.21.1-neoforge:runClient              # NeoForge client (run dir versions/1.21.1-neoforge/run; with Jade)
+./gradlew :1.21.11-fabric:runClient               # Fabric 1.21.11 client (shared run dir)
+./gradlew :1.21.11-neoforge:runClient             # NeoForge 1.21.11 client (run dir versions/1.21.11-neoforge/run; with Jade)
+./gradlew :1.21.11-fabric:runGameTest             # the game tests on the 1.21.11 nodes (also run by check / build)
+./gradlew :1.21.11-neoforge:runGameTestServer
 ./gradlew :1.20.1-forge:runClient                 # Forge client (run dir versions/1.20.1-forge/run; with Jade)
 ./gradlew :1.20.1-forge:runGameTestServer         # the game tests on Forge (also run by check / build)
 ./gradlew dependencyMap                           # interactive package dependency map -> build/reports/dependency-map/index.html
@@ -345,6 +367,9 @@ On Fabric (Loom `fabricApi.configureTests`) they are listed under the `fabric-ga
 The test mod's loader entrypoints (`gametest/platform/<loader>`) run its registration steps (`OMTGameTestMod`) and forward entity loads to `ProjectileTurretGameTests.onEntityLoad`.
 `check` (and so `build` / `chiseledBuild`) runs them on a dedicated test server: `runGameTest` on Fabric (`versions/<v>/build/run/gameTest`, the world is deleted before every run), `runGameTestServer` on NeoForge and Forge.
 
+- **From 1.21.11 on** (the framework changed in 1.21.5: a test is a registered test function plus a data-driven test instance, batched by test environment) vanilla's `@GameTest` is gone.
+  The version folder `src/gametest/mc1.21.11-` has a stand-in `@GameTest` with the same name and attributes in the test classes' own package, and `GameTestCases`, which turns the methods into test functions and instances `openmodularturrets_gametest:<class>/<method>` and each `batch` into an empty test environment (`timeoutTicks`, default 100, as before).
+  Fabric registers them from the `fabric-gametest` entrypoints, NeoForge from the mod file scan (the classes with `@GameTest` methods); the `@GameTestHolder` / `@PrefixGameTestTemplate` conditions stop at 1.21.11.
 - `TurretScene` builds a ready-to-fire base + turret (owner, always on, full energy, max range) and spawns targets (husks without AI).
   A base placed with `setBlock` has no owner: it stays, but does not fire until it has one (`bases.unownedBasesActive`).
 - `TurretScene` also loads the turret's ammo into the base (energy alone is not enough for the railgun and the projectile turrets).
@@ -380,6 +405,30 @@ Wrap each of these behind a helper where possible.
 | VertexConsumer | `.vertex().color().uv()…endVertex()` | `.addVertex().setColor().setUv()…` (no `endVertex`) |
 | Data folders | `tags/blocks`, `tags/items`, `loot_tables`, `recipes`, `advancements` | `tags/block`, `tags/item`, `loot_table`, `recipe`, `advancement` |
 | Recipe JSON result | `"result": {"item": "...", "count": n}` | `"result": {"id": "...", "count": n}` |
+
+**1.21.11 helpers** (use these instead of new `//? if` blocks; the port follows OpenModularLighting's):
+
+| Difference | Helper |
+| --- | --- |
+| Reading NBT (1.21.11 getters return `Optional`, UUID and list helpers changed) | `compat.nbt.NbtCompat`: `getInt` / `getLong` / `getFloat` / `getDouble` / `getBoolean` / `getString` (with a fallback), `getCompound` (also of a `ListTag` index), `getCompoundList`, `getIntArray` / `getLongArray`, `hasCompound` / `hasList` / `hasString` / `hasNumber`, `getUuid` (null if missing) / `putUuid`, `readBlockState`; never call the `CompoundTag` getters or `Tag.TAG_*` directly. It depends on Minecraft only, so packages outside the `compat` cycle may use it |
+| BlockEntity NBT | `CompatBlockEntity` keeps `readData` / `writeData` with a `CompoundTag`; on 1.21.11 it passes the whole compound through `ValueInput` / `ValueOutput`, so the saved format stays the same |
+| Block broken or replaced (`onRemove` is gone in 1.21.11) | override `CompatBlockEntity.onBlockRemoved(Level)` (server only, before the block entity is removed; the turret base and the generator drop their items there); on <1.21.11 the block's `onRemove` calls `CompatBlockEntity.handleRemove` (behind `//? if <1.21.11`), on 1.21.11 vanilla's `preRemoveSideEffects` calls it |
+| Block state queries, interaction result | `compat.block.BlockCompat.isSolidRender` / `lightBlock`, `sidedSuccess` (gone in 1.21.11, `SUCCESS` there) |
+| Damaging entities, singleplayer host | `VersionCompat.hurt(entity, source, amount)` (`hurtServer` on 1.21.11), `VersionCompat.isSingleplayerOwner(player)`; registry lookups through `registryAccess().lookupOrThrow(registry).getOrThrow(key)` (works on every version) |
+| Stack and slot lists | `VersionCompat.saveItems` / `loadItems` (1.21.11: `ValueOutput` / `ValueInput` behind the compound) |
+| Registering blocks, items, block entity types, entity types | create blocks and items from their properties through `VersionCompat.blockProperties` / `itemProperties` / `blockItemProperties(properties, id)` (1.21.11 needs the registry id before construction; block items keep the `block.` name; `ModBlocks` / `ModItems` take a factory and the properties), block entity types with `VersionCompat.blockEntityType(factory, blocks…)` (no `BlockEntityType.Builder` on 1.21.11), entity types with `VersionCompat.buildEntityType(builder, id)`. Also in the test mod |
+| Neighbour updates, light absorption, pick block (blocks extending `CompatEntityBlock`) | override `onNeighborChanged(state, level, pos, neighbourPos)` (the position is `null` on 1.21.11, which does not tell), `lightAbsorbed(state, vanilla)` / `skylightPropagates(state, vanilla)` and `pickItem`; never `neighborChanged`, `getLightBlock` or `getCloneItemStack` directly |
+| Block facing, render shape, items' `use`, entity collisions | `EnumProperty<Direction>` for `FACING` (`DirectionProperty` is gone, the same type on all versions), `BlockCompat.entityRenderShape()` (`ENTITYBLOCK_ANIMATED` is gone), `Item#use` returns `InteractionResult` on 1.21.11 (two overrides behind a condition that call one shared method), `DefenseFenceBlock#entityInside` has two overrides like that |
+| Creating entities, owners, daylight, per-player sounds | `VersionCompat.createEntity(type, level)` (1.21.11 asks for a spawn reason), `ownerUuid(ownable)`, `isDay(level)`, `playNotifySound(player, sound, source, volume, pitch)`; the server of an entity or player is `level().getServer()`, a player's level is `(ServerLevel) player.level()` |
+| Profiles and operators | `VersionCompat.profileName` / `profileId` (authlib 7 records), `cachedProfile(server, name)` (blocking for unknown names, call it off the server thread), `cachedName(server, uuid)`, `isOwnerOperator(player)` (permission sets on 1.21.11) |
+| Mixins on `LivingEntity` | `LivingEntityMixin` hooks `hurt` (`hurtServer(ServerLevel, …)` on 1.21.11, one `HURT` constant) and `dropAllDeathLoot` / `shouldDropLoot` (which takes the level on 1.21.11); the injection points exist on 1.21.11 as read from the class file, a game test run on 1.21.11 has to confirm them |
+| Client: GUI drawing, tooltips, shift key, input events | `client.compat.ClientCompat`: `blit` (256 × 256 GUI textures; 1.21.11 takes the render pipeline), `renderTooltip` / `renderComponentTooltip` (`setTooltipForNextFrame` on 1.21.11), `hasShiftDown()`, `partialTick()`; GUI text colours need an alpha channel (`0xFF000000`): from 1.21.6 on, text without one is not drawn. 1.21.9 input events: `onClick(MouseButtonEvent, boolean)`, `keyPressed(KeyEvent)`, `onRelease(MouseButtonEvent)` are two overrides behind a condition that call one shared method; the mouse wheel goes through `CompatScreen#onScroll` |
+| Camouflage models, render layers | up to 1.21.1 baked models, from 1.21.11 block state models: `FabricCamoModel` (`ForwardingBakedModel` / `WrapperBlockStateModel`) and `NeoForgeCamoModel` (`BakedModelWrapper` / `DelegateBlockStateModel`) exist once per version folder (`src/client/mc1.20.1-1.21.1`, `src/client/mc1.21.11-`) and the loader client entrypoints wrap the models (by model id up to 1.21.1, by block state on 1.21.11); Fabric render layers through `BlockRenderLayerMap` (new package and `ChunkSectionLayer` on 1.21.11), NeoForge through `"render_type"` in the model JSON |
+| Block entity and entity renderers, turret models (1.21.11 render states) | `src/client/mc1.20.1-1.21.1` and `src/client/mc1.21.11-` hold `BlockEntityRendererRegistrar`, `TurretRenderer`, `LeverRenderer`, `BillboardRenderer`, `ArrowShapedRenderer`, `PlasmaRenderer` and `TurretModel` (decided by the user). On 1.21.11 a renderer copies what it needs into a render state when the frame is extracted and draws in `submit` through `SubmitNodeCollector`; drawing is deferred, so a model shared by many blocks must not be posed at submit time: `TurretModel` and `LeverRenderer.LeverModel` are `Model<S>` whose pose is applied in `setupAnim` right before drawing. `EntityRendererRegistrar` is shared (`EntityRendererProvider` has one type argument on all versions); `OMTClient` and the entrypoints call the same methods on all versions |
+| Turret and crank items (item renderers) | up to 1.21.1 `ItemStackRenderer` (Fabric `BuiltinItemRendererRegistry`, NeoForge `getCustomRenderer`, Forge `ForgeItemRenderer`); from 1.21.11 special model renderers (decided by the user): `TurretSpecialRenderer` / `LeverSpecialRenderer` with the item model types `openmodularturrets:turret` (with `"turret": "<id>"`) and `openmodularturrets:lever` in the item model definitions (`minecraft:special`, `base` = the old `builtin/entity` model for the display transforms), registered by `OMTClient.registerSpecialItemModels` (NeoForge: `RegisterSpecialModelRendererEvent`; Fabric API has no hook, so the client mixin `SpecialModelRenderersMixin` in `openmodularturrets.client.mixins.json` adds the types to vanilla's table; before 1.21.11 the class is an empty `@Pseudo` stub, so the config stays valid) |
+| World-space effects (rays, placement outline) | `ClientCompat.lines()` / `lightning()` / `renderLineBox`; Fabric 1.21.11 draws them in `WorldRenderEvents.END_MAIN` (the new world render events have no after-translucent or last event), NeoForge in `RenderLevelStageEvent.AfterTranslucentBlocks` / `AfterParticles` |
+| Item models | every item needs an item model definition `assets/openmodularturrets/items/<id>.json` (read from 1.21.4 on, older versions ignore the folder) that points at its `models/item/<id>.json`; without one 1.21.11 shows the missing texture. The turret and lever items (item renderer, `builtin/entity` parents) get theirs with the item renderers |
+| Furnace fuel | `Fuel.burnTime(level, stack)` (1.21.11: the level's fuel values; the other versions ignore the level), `GeneratorBlockEntity.isFuel(level, stack)` |
 
 **Same in both** (no conditionals needed): `DamageTypes` / damage-type registry, `GuiGraphics`, `PoseStack`, the general Fabric Transfer API shape, and the `BlockEntityTicker` pattern.
 
@@ -688,6 +737,22 @@ Update this checklist as work progresses.
 - [x] `platform/forge`: `OMTForge`, all services, `ForgeBlockCapabilities` (items, energy of base and generator), `ForgePlugins`; client `OMTForgeClient`, `ForgeClientNetwork`, `ForgeCamoModel`, `ForgeItemRenderer`
 - [x] GameTests on Forge: `OMTForgeGameTests`; all 35 pass (capabilities, FE adapter, plugin discovery, GUI path, mixin loaded)
 - [x] Checked by hand (by the user, 2026-10-24) in a Forge client (`:1.20.1-forge:runClient`) and with the release jar in a real Forge install: turret, projectile, ray and item rendering, camouflage, screens, Jade, joining a dedicated server
+
+### Minecraft 1.21.11 (Fabric + NeoForge, same codebase; started 2026-10-26; steps follow OpenModularLighting's port)
+
+- [x] Build: version source folders in `mod-common`, `ResourceLocation` → `Identifier` and `noCollission` replacements, nodes `1.21.11-fabric` / `1.21.11-neoforge` with their `gradle.properties`, Sable/Create dependencies only where their properties exist, datagen without the client, GameTest namespace property only before 1.21.5; the nodes configure and resolve, they do not compile yet
+- [x] Shared compat: `NbtCompat` (all NBT reads go through it), `CompatBlockEntity` with `ValueInput` / `ValueOutput` and `onBlockRemoved` (base and generator drop their items there), `BlockCompat` (`sidedSuccess`), `VersionCompat.hurt` / `isSingleplayerOwner` / item lists / registry lookups, `Fuel.burnTime(level, stack)`; the registration helpers (`blockProperties`, `blockEntityType`, …) come with the registration step
+- [x] Registration and block callbacks: ids in the block, item, block entity and entity type registrations, `FACING` as `EnumProperty<Direction>`, `CompatEntityBlock` hooks (`onNeighborChanged`, `lightAbsorbed`, `skylightPropagates`, pick block), `BlockCompat.entityRenderShape()`, items' `use`, fence `entityInside`, `ModSounds` ids; the item model definitions (`items/<id>.json`) come with the client steps
+- [x] Entities and damage: projectile entities, `TurretDamage` / `TurretDamageSource` and the explosion calls compile on 1.21.11 (renames as Stonecutter replacements, `createEntity`), `LivingEntityMixin` for `hurtServer` / `shouldDropLoot(ServerLevel)`, profile and permission helpers, `PlayerLookup` through the name cache of `MinecraftServer#services`; behaviour on 1.21.11 is only checked by the GameTests step
+- [x] NeoForge transfer API: `NeoForgeEnergy`, `NeoForgeEnergyHandler`, `NeoForgeItemHandler` and `NeoForgeCapabilities` (the registration moved out of `OMTNeoForge`) exist once per version folder, `src/main/mc1.20.1-1.21.1` (`IEnergyStorage` / `IItemHandler`) and `src/main/mc1.21.11-` (`EnergyHandler` / `ResourceHandler<ItemResource>`, `Capabilities.Energy` / `Capabilities.Item`); the Fabric adapters need no change; OMT has no battery slot and no energy cluster, so the 1.21.11 `Energy` has `pushToBlock` only
+- [x] Datagen: `OMTRecipeProvider` has an inner `Recipes` class with the recipes (on 1.21.11 a vanilla `RecipeProvider`, the builders need the item registry; before, stand-ins), `tagBuilder` helpers in both tag providers (`valueLookupBuilder` / `builder` on 1.21.11), output in `versions/1.21.11-fabric/src/main/generated` (committed; 201 files, only the recipe ingredient format differs from 1.21.1), converted for NeoForge as before; datagen now runs in the server environment (`client = false`). To get `main` compiling on the 1.21.11 Fabric node, `SubLevelCompat` is limited to `>=1.21 && <1.21.11` (no Sable there) and `compat/jade` is left out of the 1.21.11 nodes in the loader build scripts until the Jade split (client step); remove that exclusion then
+- [x] GameTests: stand-in `@GameTest`, `GameTestCases` and the loaders' registrations (`FabricGameTestRegistration`, `NeoForgeGameTestRegistration`) in `src/gametest/mc1.21.11-`, `@GameTestHolder` conditions up to 1.21.11, tests read block entities through `helper.getLevel().getBlockEntity(helper.absolutePos(…))`, `clearContent()` instead of `Clearable.tryClear`, the test player follows `permissions()` / `isInvulnerableTo(level, source)`; all 57 pass on both 1.21.11 nodes (the NeoForge node builds without the Create movement check, the Simulated mixin and its config, and the Sable / Create / Simulated tests, in `build.neoforge.gradle.kts`). The runs need the client source set to compile, which it does not yet on 1.21.11 (client steps): I ran them with a throwaway Gradle init script that lets `compileClientJava` fail
+- [x] Client, first half: screens and tooltips through `ClientCompat` (blit, tooltips, shift key, text colours with alpha, input events), Jade split (server half in main, tooltips in `client/compat/jade`; the temporary exclusion of `compat/jade` is gone), camouflage models as block state models in version folders wrapped by the entrypoints, render layers (`BlockRenderLayerMap` on 1.21.11), `ClientPacketDistributor`, item model definitions for the items without item renderer, `ClientSubLevelCompat` limited to `<1.21.11`; not checked by hand (the client does not compile on 1.21.11 before the next step)
+- [x] Client, second half: the renderers, turret models and item rendering (rows in §5; the two decisions were made by the user: special model renderers for the items, version folders for the renderer classes), rays and placement outline through `ClientCompat`, world render events per loader, item model definitions for the turret and crank items (all 74 items have one); the client compiles on all nodes, `chiseledBuild` builds all six; not checked in a client (the rendering needs a look by hand: turrets and cranks in the world and as items, projectiles, rays, outline, camouflage, GUI screens, Jade)
+- [x] Sable / Create / Create Aeronautics stay 1.21.1-only: checked on 2026-10-26, Modrinth lists Sable and Create Aeronautics for 1.21.1 only (Create also for 1.20.1) and the Sable maven has Companion for 1.21.1 only. The 1.21.11 nodes have no `sable_*` / `create_*` properties; `SubLevelCompat` and `ClientSubLevelCompat` are limited to `>=1.21 && <1.21.11` (every block is outside a contraption), `build.neoforge.gradle.kts` leaves out `NeoForgeCreateMovement`, the Simulated mixin and its config and the Sable / Create / Simulated GameTests there; `bases.allowContraptionMovement` exists but does nothing on 1.21.11. Check again when a new Sable release appears, and add the properties and remove the exclusions then
+- [x] `chiseledBuild` on all six nodes (build, unit tests, ArchUnit, 57 game tests on each 1.21.11 node), docs (this file, `docs/architecture.md`, README) and `CHANGELOG.md`
+- [ ] Checked by hand in a 1.21.11 client on Fabric and NeoForge (`runClient`): the GUI screens, turret and crank models in the world and as items (special item models; on Fabric they need the client mixin to apply), projectiles, rays, the placement outline, camouflage and Jade
+- [ ] Publishing of the 1.21.11 nodes: they go out with the next release through `release.sh` (`chiseledPublish` covers all nodes; `publish_enabled=false` in a node's properties would keep it a dry run); never uploaded from here
 
 ### Ownership for adventure maps (requested by the user on 2026-10-25; designed step by step with the user)
 

@@ -3,12 +3,12 @@
 Repo for [OpenModularTurrets](https://minecraft.curseforge.com/projects/openmodularturrets) for Minecraft.
 
 Build turret bases, mount turrets on any face of them (the number depends on the tier) and keep your home safe from mobs and unwanted visitors, whether you're online or offline.
-Open Modular Turrets has long been a popular choice in PvP modpacks, and it is now available for Fabric 1.20.1 and 1.21.1, and natively for NeoForge 1.21.1.
+Open Modular Turrets has long been a popular choice in PvP modpacks, and it is now available for Fabric 1.20.1, 1.21.1 and 1.21.11, and natively for NeoForge 1.21.1 and 1.21.11.
 
 ## Loaders
 
-- **Fabric** for Minecraft 1.20.1 and 1.21.1 (Fabric Loader + Fabric API), published to CurseForge and Modrinth.
-- **NeoForge** for Minecraft 1.21.1, built natively (no Sinytra Connector, Connector Extras or Forgified Fabric API needed).
+- **Fabric** for Minecraft 1.20.1, 1.21.1 and 1.21.11 (Fabric Loader + Fabric API), published to CurseForge and Modrinth.
+- **NeoForge** for Minecraft 1.21.1 and 1.21.11, built natively (no Sinytra Connector, Connector Extras or Forgified Fabric API needed).
   This is still a test build and is not yet published; build it yourself (see "Building" below).
 - For Forge, or NeoForge on 1.20.1, run the Fabric mod through [Sinytra Connector](https://www.curseforge.com/minecraft/mc-mods/sinytra-connector), [Connector Extras](https://www.curseforge.com/minecraft/mc-mods/connector-extras) and [Forgified Fabric API](https://www.curseforge.com/minecraft/mc-mods/forgified-fabric-api).
 
@@ -30,9 +30,9 @@ Open Modular Turrets has long been a popular choice in PvP modpacks, and it is n
 
 ## Requirements
 
-- Minecraft 1.20.1 or 1.21.1
+- Minecraft 1.20.1, 1.21.1 or 1.21.11
 - Fabric: Fabric Loader and Fabric API
-- NeoForge (1.21.1 only): NeoForge 21.1.x, no extra mods needed
+- NeoForge (1.21.1 and 1.21.11): NeoForge 21.1.x or 21.11.x, no extra mods needed
 - For Forge, or NeoForge on 1.20.1: (Neo)Forge + Sinytra Connector + Connector Extras + Forgified Fabric API
 
 ## Pre-Release
@@ -43,13 +43,15 @@ The NeoForge build is newer still (native port, not yet published) and wants ext
 
 ## Building
 
-The project uses Stonecutter to build Fabric 1.20.1, Fabric 1.21.1 and NeoForge 1.21.1 from one source tree (Gradle must run on Java 25 or newer).
+The project uses Stonecutter to build Fabric 1.20.1, 1.21.1 and 1.21.11, NeoForge 1.21.1 and 1.21.11 and Forge 1.20.1 from one source tree (Gradle must run on Java 25 or newer).
 
 ```bash
-./gradlew chiseledBuild # build all three nodes
+./gradlew chiseledBuild # build all nodes
 ./gradlew check         # unit tests, architecture rules, game tests, code quality report
 ./gradlew :1.21.1-fabric:runClient
 ./gradlew :1.21.1-neoforge:runClient
+./gradlew :1.21.11-fabric:runClient
+./gradlew :1.21.11-neoforge:runClient
 ```
 
 See [docs/architecture.md](docs/architecture.md) for how the code is structured and how to add things, [CLAUDE.md](CLAUDE.md) for the conventions, and [CHANGELOG.md](CHANGELOG.md) for changes.

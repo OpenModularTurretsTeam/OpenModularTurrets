@@ -20,6 +20,7 @@ stonecutter {
         versions(
             "1.20.1-fabric" to "1.20.1", "1.20.1-forge" to "1.20.1",
             "1.21.1-fabric" to "1.21.1", "1.21.1-neoforge" to "1.21.1",
+            "1.21.11-fabric" to "1.21.11", "1.21.11-neoforge" to "1.21.11",
         )
         mapBuilds { _, node -> "build.${node.project.substringAfterLast('-')}.gradle.kts" }
         vcsVersion = "1.21.1-fabric" // the version the committed source is written for
