@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge {
+//? if neoforge && <1.21.11 {
 /*import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 *///?}
@@ -8,11 +8,13 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 /*import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 *///?}
-//? if neoforge || forge {
+//? if (neoforge && <1.21.11) || forge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
 import net.minecraft.core.BlockPos;
+//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
+//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -30,7 +32,7 @@ import omtteam.openmodularturrets.registry.ModItems;
  * pushes its energy into neighbours. Every test has its own batch and removes its blocks when it passed (1.20.1 keeps a
  * finished batch's blocks).
  */
-//? if neoforge || forge {
+//? if (neoforge && <1.21.11) || forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
@@ -50,7 +52,7 @@ public class GeneratorGameTests implements OMTGameTests {
     @GameTest(template = EMPTY_STRUCTURE, batch = "generator_multiplier", timeoutTicks = TIMEOUT_TICKS)
     public void energyMultiplierBurnsFasterForTheSameEnergy(GameTestHelper helper) {
         helper.setBlock(GENERATOR, ModBlocks.GENERATOR);
-        GeneratorBlockEntity generator = (GeneratorBlockEntity) helper.getBlockEntity(GENERATOR);
+        GeneratorBlockEntity generator = (GeneratorBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(GENERATOR));
         generator.getFuelContainer().setItem(0, new ItemStack(Items.COAL));
         generator.getUpgradeContainer().setItem(0, new ItemStack(ModItems.UPGRADE_ENERGY_MULTIPLIER, UPGRADES));
         long expected = (long) COAL_TICKS * OMTConfig.get().miscellaneous.generatorEnergyPerTick;
@@ -73,9 +75,9 @@ public class GeneratorGameTests implements OMTGameTests {
     @GameTest(template = EMPTY_STRUCTURE, batch = "generator_push", timeoutTicks = TIMEOUT_TICKS)
     public void pushesEnergyIntoANeighbouringBase(GameTestHelper helper) {
         helper.setBlock(BASE, ModBlocks.TURRET_BASES.get(0));
-        TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getBlockEntity(BASE);
+        TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(BASE));
         helper.setBlock(GENERATOR, ModBlocks.GENERATOR);
-        GeneratorBlockEntity generator = (GeneratorBlockEntity) helper.getBlockEntity(GENERATOR);
+        GeneratorBlockEntity generator = (GeneratorBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(GENERATOR));
         generator.getFuelContainer().setItem(0, new ItemStack(Items.COAL));
         generator.getUpgradeContainer().setItem(0, new ItemStack(ModItems.UPGRADE_ENERGY_MULTIPLIER, 4));
         long produced = (long) COAL_TICKS * OMTConfig.get().miscellaneous.generatorEnergyPerTick;
@@ -95,7 +97,7 @@ public class GeneratorGameTests implements OMTGameTests {
     @GameTest(template = EMPTY_STRUCTURE, batch = "generator_remainder", timeoutTicks = TIMEOUT_TICKS)
     public void burntLavaBucketLeavesTheBucket(GameTestHelper helper) {
         helper.setBlock(GENERATOR, ModBlocks.GENERATOR);
-        GeneratorBlockEntity generator = (GeneratorBlockEntity) helper.getBlockEntity(GENERATOR);
+        GeneratorBlockEntity generator = (GeneratorBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(GENERATOR));
         generator.getFuelContainer().setItem(0, new ItemStack(Items.LAVA_BUCKET));
         helper.succeedWhen(() -> {
             helper.assertTrue(generator.getBurnTime() > 0, "The lava bucket is not burning");
@@ -110,7 +112,7 @@ public class GeneratorGameTests implements OMTGameTests {
     @GameTest(template = EMPTY_STRUCTURE, batch = "generator_upgrade_slots")
     public void upgradesOnlyFitTheirMachine(GameTestHelper helper) {
         helper.setBlock(GENERATOR, ModBlocks.GENERATOR);
-        GeneratorBlockEntity generator = (GeneratorBlockEntity) helper.getBlockEntity(GENERATOR);
+        GeneratorBlockEntity generator = (GeneratorBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(GENERATOR));
         helper.assertTrue(generator.getUpgradeContainer().canPlaceItem(0, new ItemStack(ModItems.UPGRADE_ENERGY_MULTIPLIER)),
                 "The generator does not accept its energy multiplier upgrade");
         helper.assertFalse(generator.getUpgradeContainer().canPlaceItem(0, new ItemStack(ModItems.UPGRADE_RANGE)),

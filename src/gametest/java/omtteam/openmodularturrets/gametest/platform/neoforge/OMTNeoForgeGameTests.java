@@ -12,7 +12,8 @@ import omtteam.openmodularturrets.registry.RegistrationStep;
 import java.util.List;
 
 /**
- * NeoForge entrypoint of the test mod. The test classes are found through their {@code @GameTestHolder} annotation.
+ * NeoForge entrypoint of the test mod. Before 1.21.11 NeoForge finds the test classes through their
+ * {@code @GameTestHolder} annotation; from 1.21.11 on {@code NeoForgeGameTestRegistration} registers them.
  */
 @Mod(OMTGameTestMod.MOD_ID)
 public final class OMTNeoForgeGameTests {
@@ -22,6 +23,9 @@ public final class OMTNeoForgeGameTests {
         modBus.addListener((RegisterEvent event) -> steps.stream()
                 .filter(step -> step.registry().equals(event.getRegistryKey()))
                 .forEach(step -> step.register().run()));
+        //? if >=1.21.11 {
+        /*NeoForgeGameTestRegistration.register(modBus);
+        *///?}
         NeoForge.EVENT_BUS.addListener((EntityJoinLevelEvent event) -> {
             if (!event.getLevel().isClientSide()) {
                 ProjectileTurretGameTests.onEntityLoad(event.getEntity());

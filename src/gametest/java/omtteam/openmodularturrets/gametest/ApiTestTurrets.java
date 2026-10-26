@@ -16,6 +16,7 @@ import omtteam.openmodularturrets.api.weapon.EffectWeapon;
 import omtteam.openmodularturrets.api.weapon.ProjectileWeapon;
 import omtteam.openmodularturrets.api.weapon.RayWeapon;
 import omtteam.openmodularturrets.api.weapon.SelfTargetingWeapon;
+import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.RayProfile;
@@ -92,7 +93,7 @@ public final class ApiTestTurrets implements OMTPlugin {
                 CUSTOM_LOGIC_STATS));
         registrar.registerTurret(new TurretDefinition(API_PROJECTILE_TURRET,
                 ProjectileWeapon.of(ModSounds.MACHINE_GUN_LAUNCH,
-                                (level, ammo, target) -> ApiTestEntities.PROJECTILE.create(level))
+                                (level, ammo, target) -> VersionCompat.createEntity(ApiTestEntities.PROJECTILE, level))
                         .onHit((level, projectile, base, hit) -> mark(hit,
                                 new MobEffectInstance(MobEffects.HUNGER, MARK_TICKS))),
                 CUSTOM_LOGIC_STATS));

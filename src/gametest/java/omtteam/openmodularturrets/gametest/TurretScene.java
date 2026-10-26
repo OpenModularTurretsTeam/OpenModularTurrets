@@ -63,7 +63,7 @@ public final class TurretScene {
         }
         helper.setBlock(BASE, ModBlocks.TURRET_BASES.get(type.getRequiredBaseTier() - 1));
         helper.setBlock(TURRET, ModBlocks.TURRETS.get(type));
-        TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getBlockEntity(BASE);
+        TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(BASE));
         // a base without owner does not fire
         base.getTrustManager().setOwner(OWNER);
         base.onNeighbourChanged();

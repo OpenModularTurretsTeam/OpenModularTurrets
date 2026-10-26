@@ -2,7 +2,9 @@ package omtteam.openmodularturrets.gametest.platform.neoforge;
 
 import com.simibubi.create.api.contraption.BlockMovementChecks;
 import net.minecraft.core.BlockPos;
+//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
+//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;

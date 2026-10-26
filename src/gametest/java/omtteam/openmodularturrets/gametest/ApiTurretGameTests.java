@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge {
+//? if neoforge && <1.21.11 {
 /*import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 *///?}
@@ -8,11 +8,13 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 /*import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 *///?}
-//? if neoforge || forge {
+//? if (neoforge && <1.21.11) || forge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
 import net.minecraft.core.registries.BuiltInRegistries;
+//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
+//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -44,7 +46,7 @@ import java.util.Map;
  * they are registered with their ids and config entries, and each runs its custom code at the right time, and only
  * then. Every test has its own batch, so no turret reaches the target of another test.
  */
-//? if neoforge || forge {
+//? if (neoforge && <1.21.11) || forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
@@ -113,7 +115,7 @@ public class ApiTurretGameTests implements OMTGameTests {
     public void apiRayTurretUsesItsOwnAmmo(GameTestHelper helper) {
         helper.assertTrue(AmmoRules.isValidAmmo(new ItemStack(Items.ARROW)), "Arrows are not accepted as ammo");
         TurretBaseBlockEntity base = TurretScene.build(helper, ApiTestTurrets.API_RAY_TURRET, TIMEOUT_TICKS);
-        helper.assertTrue(helper.getBlockEntity(TurretScene.TURRET) instanceof TurretBlockEntity,
+        helper.assertTrue(helper.getLevel().getBlockEntity(helper.absolutePos(TurretScene.TURRET)) instanceof TurretBlockEntity,
                 "The API turret has no turret block entity");
         int ammo = base.getLogic().getAmmoLevel(ApiTestTurrets.API_RAY_TURRET);
         helper.assertTrue(ammo == 64, "The base counts " + ammo + " shots of arrow ammo instead of 64");

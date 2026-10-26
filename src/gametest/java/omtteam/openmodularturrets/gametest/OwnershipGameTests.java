@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge {
+//? if neoforge && <1.21.11 {
 /*import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 *///?}
@@ -8,13 +8,15 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 /*import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 *///?}
-//? if neoforge || forge {
+//? if (neoforge && <1.21.11) || forge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
+//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -47,7 +49,7 @@ import java.util.UUID;
  * them. The test players are the loaders' fake players, so the claim tests turn on {@code general.fakePlayersCanClaim}
  * for the click only (in their own batch).
  */
-//? if neoforge || forge {
+//? if (neoforge && <1.21.11) || forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
@@ -171,7 +173,7 @@ public class OwnershipGameTests implements OMTGameTests {
         BlockPos pos = new BlockPos(1, 1, 1);
         helper.setBlock(pos, ModBlocks.TURRET_BASES.get(0));
         ServerPlayer owner = playerAt(helper, "Owner", pos);
-        TrustHost base = (TrustHost) helper.getBlockEntity(pos);
+        TrustHost base = (TrustHost) helper.getLevel().getBlockEntity(helper.absolutePos(pos));
         base.setOwner(PlayerAdapter.identity(owner));
         base.getTrustManager().addTrustedPlayer(PlayerAdapter.info(owner), new PlayerIdentity(UUID.randomUUID(), "Friend"));
         helper.assertTrue(base.getTrustManager().getTrustedPlayers().size() == 1, "The friend was not trusted");
@@ -191,7 +193,7 @@ public class OwnershipGameTests implements OMTGameTests {
         helper.setBlock(pos, ModBlocks.TURRET_BASES.get(0));
         ServerPlayer owner = playerAt(helper, "Owner", pos);
         ServerPlayer admin = playerAt(helper, "Admin", pos);
-        TrustHost base = (TrustHost) helper.getBlockEntity(pos);
+        TrustHost base = (TrustHost) helper.getLevel().getBlockEntity(helper.absolutePos(pos));
         base.setOwner(PlayerAdapter.identity(owner));
         base.getTrustManager().addTrustedPlayer(PlayerAdapter.info(owner), PlayerAdapter.identity(admin));
         base.getTrustManager().setAccessLevel(PlayerAdapter.info(owner), admin.getUUID(), AccessLevel.ADMIN);
@@ -251,7 +253,7 @@ public class OwnershipGameTests implements OMTGameTests {
     }
 
     private static OwnedHost owned(GameTestHelper helper, BlockPos relative) {
-        return (OwnedHost) helper.getBlockEntity(relative);
+        return (OwnedHost) helper.getLevel().getBlockEntity(helper.absolutePos(relative));
     }
 
     private static void assertOwner(GameTestHelper helper, BlockPos relative, PlayerIdentity expected) {

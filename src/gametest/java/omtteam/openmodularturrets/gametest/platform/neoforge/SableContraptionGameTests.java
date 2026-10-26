@@ -7,7 +7,9 @@ import dev.ryanhcode.sable.companion.math.BoundingBox3i;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import dev.ryanhcode.sable.sublevel.storage.SubLevelRemovalReason;
 import net.minecraft.core.BlockPos;
+//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
+//?}
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +24,7 @@ import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretMount;
+import omtteam.openmodularturrets.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.core.turret.TurretMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Vector3;
@@ -117,7 +120,7 @@ public class SableContraptionGameTests implements OMTGameTests {
         TurretMount mount = turret.getMount();
         helper.assertTrue(mount.isOnContraption(), "The turret does not know it is on a contraption");
         CompoundTag tag = turret.saveWithoutMetadata(level.registryAccess());
-        Vector3 local = TurretMath.direction(mount.face(), new TurretMath.Angles(tag.getFloat("Yaw"), tag.getFloat("Pitch")));
+        Vector3 local = TurretMath.direction(mount.face(), new TurretMath.Angles(NbtCompat.getFloat(tag, "Yaw", 0), NbtCompat.getFloat(tag, "Pitch", 0)));
         Vector3 aim = mount.pose().directionToWorld(local);
         Vec3 toEyes = target.getEyePosition().subtract(mount.centre()).normalize();
         double cos = (aim.x() * toEyes.x + aim.y() * toEyes.y + aim.z() * toEyes.z) / aim.length();

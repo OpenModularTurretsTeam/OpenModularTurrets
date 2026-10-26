@@ -10,7 +10,7 @@ import net.fabricmc.fabric.api.entity.FakePlayer;
 //? if forge {
 /*import net.minecraftforge.common.util.FakePlayer;
 *///?}
-//? if neoforge {
+//? if neoforge && <1.21.11 {
 /*import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 *///?}
@@ -18,12 +18,14 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 /*import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 *///?}
-//? if neoforge || forge {
+//? if (neoforge && <1.21.11) || forge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
+//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -51,6 +53,10 @@ import omtteam.openmodularturrets.security.OwnedHost;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 import omtteam.openmodularturrets.security.TrustHost;
 
+//? if >=1.21.11 {
+/*import net.minecraft.server.permissions.LevelBasedPermissionSet;
+import net.minecraft.server.permissions.PermissionSet;
+*///?}
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.UUID;
@@ -60,7 +66,7 @@ import java.util.UUID;
  * only game masters can use it, and that turrets still fire at a player holding it without affecting them. Every
  * immunity test has a control without the wand, so a test player that turrets cannot reach does not pass by accident.
  */
-//? if neoforge || forge {
+//? if (neoforge && <1.21.11) || forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
@@ -82,7 +88,7 @@ public class OwnershipWandGameTests implements OMTGameTests {
         PlayerIdentity owner = new PlayerIdentity(UUID.randomUUID(), "Owner");
         PlayerIdentity other = new PlayerIdentity(UUID.randomUUID(), "Other");
         buildScene(helper, owner, other);
-        TrustHost base = (TrustHost) helper.getBlockEntity(BASE);
+        TrustHost base = (TrustHost) helper.getLevel().getBlockEntity(helper.absolutePos(BASE));
         base.getTrustManager().load(owner, List.of(
                 new TrustedPlayer(new PlayerIdentity(UUID.randomUUID(), "Friend"), AccessLevel.ADMIN)));
         ServerPlayer master = gameMaster(helper, "Master");
@@ -133,7 +139,7 @@ public class OwnershipWandGameTests implements OMTGameTests {
     @GameTest(template = EMPTY_STRUCTURE, batch = "ownership_wand_immune_effect", timeoutTicks = EFFECT_TIMEOUT_TICKS)
     public void wandHolderIsFiredAtButNotSlowed(GameTestHelper helper) {
         ServerPlayer player = slowingTurretAimingAtPlayer(helper, true);
-        TurretBaseLogic logic = ((TurretBaseBlockEntity) helper.getBlockEntity(TurretScene.BASE)).getLogic();
+        TurretBaseLogic logic = ((TurretBaseBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(TurretScene.BASE))).getLogic();
         long full = logic.getEnergy().getAmount();
         helper.succeedWhen(() -> {
             helper.assertTrue(logic.getTargetIds().containsValue(player.getId()), "The wand holder is not targeted");
@@ -161,7 +167,7 @@ public class OwnershipWandGameTests implements OMTGameTests {
     @GameTest(template = EMPTY_STRUCTURE, batch = "ownership_wand_immune_damage", timeoutTicks = TIMEOUT_TICKS)
     public void wandHolderTakesNoTurretDamage(GameTestHelper helper) {
         helper.setBlock(BASE, ModBlocks.TURRET_BASES.get(0));
-        TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getBlockEntity(BASE);
+        TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(BASE));
         base.getTrustManager().setOwner(new PlayerIdentity(UUID.randomUUID(), "Owner"));
         ServerPlayer player = new TestPlayer(helper.getLevel(), new GameProfile(UUID.randomUUID(), "Target"), false);
 
@@ -238,7 +244,7 @@ public class OwnershipWandGameTests implements OMTGameTests {
     }
 
     private static OwnedHost owned(GameTestHelper helper, BlockPos relative) {
-        return (OwnedHost) helper.getBlockEntity(relative);
+        return (OwnedHost) helper.getLevel().getBlockEntity(helper.absolutePos(relative));
     }
 
     private static void assertOwner(GameTestHelper helper, BlockPos relative, PlayerIdentity expected) {
@@ -267,6 +273,8 @@ public class OwnershipWandGameTests implements OMTGameTests {
          * private, and game tests run with Mojang names on every loader.
          */
         private void endSpawnProtection() {
+            // 1.21.11 has no such field; there the player's isInvulnerableTo override below is enough
+            //? if <1.21.11 {
             try {
                 Field field = ServerPlayer.class.getDeclaredField("spawnInvulnerableTime");
                 field.setAccessible(true);
@@ -274,8 +282,21 @@ public class OwnershipWandGameTests implements OMTGameTests {
             } catch (ReflectiveOperationException e) {
                 throw new IllegalStateException("Cannot end the spawn protection of the test player", e);
             }
+            //?}
         }
 
+        //? if >=1.21.11 {
+        /*@Override
+        public PermissionSet permissions() {
+            return gameMaster ? LevelBasedPermissionSet.GAMEMASTER : LevelBasedPermissionSet.ALL;
+        }
+
+        @Override
+        @SuppressWarnings("NullableProblems")
+        public boolean isInvulnerableTo(ServerLevel level, DamageSource source) {
+            return false;
+        }
+        *///?} else {
         @Override
         public int getPermissionLevel() {
             return gameMaster ? 2 : 0;
@@ -286,5 +307,6 @@ public class OwnershipWandGameTests implements OMTGameTests {
         public boolean isInvulnerableTo(DamageSource source) {
             return false;
         }
+        //?}
     }
 }

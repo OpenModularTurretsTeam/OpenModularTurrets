@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge {
+//? if neoforge && <1.21.11 {
 /*import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 *///?}
@@ -8,11 +8,13 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 /*import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 *///?}
-//? if neoforge || forge {
+//? if (neoforge && <1.21.11) || forge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
 import net.minecraft.core.BlockPos;
+//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
+//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
@@ -33,7 +35,7 @@ import omtteam.openmodularturrets.registry.ModItems;
  * it. Every test has its own batch and empties and removes its blocks when it passed (1.20.1 keeps a finished batch's
  * blocks and entities).
  */
-//? if neoforge || forge {
+//? if (neoforge && <1.21.11) || forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
@@ -49,7 +51,7 @@ public class ItemTransferGameTests implements OMTGameTests {
     @GameTest(template = EMPTY_STRUCTURE, batch = "items_base_ammo", timeoutTicks = TIMEOUT_TICKS)
     public void hopperFillsTheBaseWithAmmoOnly(GameTestHelper helper) {
         helper.setBlock(MACHINE, ModBlocks.TURRET_BASES.get(0));
-        TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getBlockEntity(MACHINE);
+        TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(MACHINE));
         HopperBlockEntity hopper = hopper(helper, ABOVE);
         hopper.setItem(0, new ItemStack(Items.DIRT));
         hopper.setItem(1, new ItemStack(ModItems.AMMO_BULLET, 2));
@@ -67,7 +69,7 @@ public class ItemTransferGameTests implements OMTGameTests {
     @GameTest(template = EMPTY_STRUCTURE, batch = "items_base_no_extract", timeoutTicks = TIMEOUT_TICKS)
     public void hopperTakesNoAmmoFromTheBase(GameTestHelper helper) {
         helper.setBlock(MACHINE, ModBlocks.TURRET_BASES.get(0));
-        TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getBlockEntity(MACHINE);
+        TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(MACHINE));
         base.getInventory().setItem(0, new ItemStack(ModItems.AMMO_BULLET, 2));
         HopperBlockEntity hopper = hopper(helper, BELOW);
         helper.runAfterDelay(EXTRACT_WAIT_TICKS, () -> {
@@ -108,13 +110,13 @@ public class ItemTransferGameTests implements OMTGameTests {
 
     private static GeneratorBlockEntity generator(GameTestHelper helper) {
         helper.setBlock(MACHINE, ModBlocks.GENERATOR);
-        return (GeneratorBlockEntity) helper.getBlockEntity(MACHINE);
+        return (GeneratorBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(MACHINE));
     }
 
     /** A hopper pointing down (its default), so one above the machine pushes into it and one below pulls from it. */
     private static HopperBlockEntity hopper(GameTestHelper helper, BlockPos pos) {
         helper.setBlock(pos, Blocks.HOPPER);
-        return (HopperBlockEntity) helper.getBlockEntity(pos);
+        return (HopperBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(pos));
     }
 
     private static int count(Container container, Item item) {
