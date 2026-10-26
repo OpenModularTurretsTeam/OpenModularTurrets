@@ -8,6 +8,14 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+### Added
+
+- The disposable ammo list accepts `ore:oreName[,damage]` entries (e.g. `ore:cobblestone`, `ore:plankWood`) for every item of an ore dictionary entry
+
+### Fixed
+
+- Disposable ammo list entries with a damage bonus (`minecraft:cobblestone,2`, the defaults) were not parsed, so no item was valid disposable ammo
+
 ## [4.0.0-beta.3] - 2026-10-26
 
 ### Changed

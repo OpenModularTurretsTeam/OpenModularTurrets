@@ -28,13 +28,14 @@ public class OMTConfig {
     private static void parseDisposableAmmoList() {
         try {
             DisposableAmmo.clear();
-            for (String itemListEntry : GENERAL.stringAmmoAllowList) {
-                int damage = itemListEntry.split(",").length > 1 ? Integer.parseInt(itemListEntry.split(",")[1]) : 1;
-                String[] item = itemListEntry.split(":");
-                if (item.length == 3) {
-                    DisposableAmmo.add(new ItemStack(getItem(item[0], item[1]), 1, Integer.parseInt(item[2])), damage);
+            for (String line : GENERAL.stringAmmoAllowList) {
+                AmmoListEntry entry = AmmoListEntry.parse(line);
+                if (entry.oreName != null) {
+                    DisposableAmmo.addOre(entry.oreName, entry.damage);
+                } else if (entry.meta >= 0) {
+                    DisposableAmmo.add(new ItemStack(getItem(entry.modId, entry.itemName), 1, entry.meta), entry.damage);
                 } else {
-                    DisposableAmmo.add(new ItemStack(getItem(item[0], item[1]), 2), damage);
+                    DisposableAmmo.add(new ItemStack(getItem(entry.modId, entry.itemName), 2), entry.damage);
                 }
             }
         } catch (Exception e) {
@@ -50,7 +51,7 @@ public class OMTConfig {
         @Config.Comment("Use a whitelist for ammo (which items fit into ammo slots of base)?")
         public boolean useWhitelistForAmmo = true;
 
-        @Config.Comment("If enabled: Which items (modid:item[:meta]) can be used as disposable ammo. Value behind ',' is damage bonus.")
+        @Config.Comment("If enabled: Which items (modid:item[:meta], or ore:oreDictName for every item of an ore dictionary entry, e.g. ore:cobblestone) can be used as disposable ammo. Value behind ',' is damage bonus.")
         public String[] stringAmmoAllowList = new String[]{"minecraft:cobblestone,2", "minecraft:planks,1"};
 
         @Config.Comment("Which entities should not be targeted by turrets?")
