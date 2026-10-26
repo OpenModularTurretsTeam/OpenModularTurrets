@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.base.LivingTargetEntity;
+import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.security.DamageRules;
 import omtteam.openmodularturrets.core.security.DamageRules.Victim;
@@ -45,7 +46,7 @@ public final class TurretDamage {
         if (lootingLevel != TurretBaseLogic.NO_LOOT && !(target instanceof Player) && level instanceof ServerLevel serverLevel) {
             causing = TurretKiller.withLooting(serverLevel, lootingLevel);
         }
-        target.hurt(TurretDamageSource.of(level, type, direct, causing, basePos, lootingLevel), amount);
+        VersionCompat.hurt(target, TurretDamageSource.of(level, type, direct, causing, basePos, lootingLevel), amount);
         target.invulnerableTime = 0;
     }
 

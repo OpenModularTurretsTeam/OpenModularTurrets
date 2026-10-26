@@ -27,12 +27,12 @@ public final class TrustPacketHandler {
      */
     public static void handleAdd(TrustPackets.Add packet, ServerPlayer player) {
         String name = packet.name().trim();
-        if (player.getServer() == null || authorizeAdd(packet, player).isEmpty()) return;
+        if (player.level().getServer() == null || authorizeAdd(packet, player).isEmpty()) return;
         if (name.isEmpty()) {
             player.sendSystemMessage(Component.translatable("message.openmodularturrets.player_not_found", name));
             return;
         }
-        PlayerLookup.findByName(player.getServer(), player, name, target -> {
+        PlayerLookup.findByName(player.level().getServer(), player, name, target -> {
             if (player.hasDisconnected()) return;
             authorizeAdd(packet, player).ifPresent(trust -> addTrusted(player, trust, name, target));
         });

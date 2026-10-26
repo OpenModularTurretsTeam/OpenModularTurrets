@@ -1,6 +1,5 @@
 package omtteam.openmodularturrets.blockentity.base;
 
-import com.mojang.authlib.GameProfile;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.effect.MobEffects;
@@ -12,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.PlayerInfo;
 import omtteam.openmodularturrets.core.target.EntityCategory;
@@ -139,13 +139,10 @@ public class LivingTargetEntity extends TargetEntity {
     @Override
     public Optional<PlayerIdentity> getOwner() {
         if (!(entity instanceof OwnableEntity ownable)) return Optional.empty();
-        UUID owner = ownable.getOwnerUUID();
+        UUID owner = VersionCompat.ownerUuid(ownable);
         if (owner == null) return Optional.empty();
-        MinecraftServer server = entity.getServer();
-        String name = "";
-        if (server != null && server.getProfileCache() != null) {
-            name = server.getProfileCache().get(owner).map(GameProfile::getName).orElse("");
-        }
+        MinecraftServer server = entity.level().getServer();
+        String name = server == null ? "" : VersionCompat.cachedName(server, owner).orElse("");
         return Optional.of(new PlayerIdentity(owner, name));
     }
 }

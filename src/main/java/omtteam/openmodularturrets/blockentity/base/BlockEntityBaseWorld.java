@@ -14,6 +14,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.compat.SubLevelCompat;
+import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.item.ItemSlot;
 import omtteam.openmodularturrets.core.target.TargetEntity;
@@ -75,7 +76,7 @@ public class BlockEntityBaseWorld implements BaseWorld {
     @Override
     public boolean canGenerateSolarPower() {
         Level current = level.get();
-        return current != null && current.isDay() && !current.isRaining() && current.canSeeSky(pos.above(2));
+        return current != null && VersionCompat.isDay(current) && !current.isRaining() && current.canSeeSky(pos.above(2));
     }
 
     /**
@@ -151,7 +152,7 @@ public class BlockEntityBaseWorld implements BaseWorld {
         }
         // 1.12.2 dispatchWarnMessage: only the warned player hears the alarm
         if (OMTConfig.get().turrets.turretAlarmSound) {
-            serverPlayer.playNotifySound(ModSounds.WARNING, SoundSource.BLOCKS, 1.0F, 1.0F);
+            VersionCompat.playNotifySound(serverPlayer, ModSounds.WARNING, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
         if (OMTConfig.get().turrets.turretWarnMessage) {
             serverPlayer.sendSystemMessage(Component.translatable("message.openmodularturrets.turret_warning")

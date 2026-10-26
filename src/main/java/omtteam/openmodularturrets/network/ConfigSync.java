@@ -1,6 +1,7 @@
 package omtteam.openmodularturrets.network;
 
 import net.minecraft.server.level.ServerPlayer;
+import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.compat.network.NetworkCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 
@@ -17,7 +18,7 @@ public final class ConfigSync {
      */
     public static void onPlayerJoin(ServerPlayer player) {
         // The singleplayer host already uses this config
-        if (!player.server.isSingleplayerOwner(player.getGameProfile()) && NetworkCompat.canSend(player, OMTPackets.CONFIG_SYNC)) {
+        if (!VersionCompat.isSingleplayerOwner(player) && NetworkCompat.canSend(player, OMTPackets.CONFIG_SYNC)) {
             NetworkCompat.sendToPlayer(player, OMTPackets.CONFIG_SYNC, new ConfigSyncPacket(OMTConfig.localJson()));
         }
     }
