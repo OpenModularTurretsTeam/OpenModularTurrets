@@ -1,4 +1,6 @@
 pluginManagement {
+    // Shared build logic (the mod-common convention plugin and convertFabricData), in the omlib git submodule
+    includeBuild("omlib/build-logic")
     repositories {
         mavenCentral()
         gradlePluginPortal()

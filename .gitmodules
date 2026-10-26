@@ -1,0 +1,4 @@
+[submodule "omlib"]
+	path = omlib
+	url = ../OMLib.git
+	branch = 1.20.1+
