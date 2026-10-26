@@ -8,7 +8,7 @@ import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.omlib.compat.VersionCompat;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 import omtteam.openmodularturrets.registry.ModItems;

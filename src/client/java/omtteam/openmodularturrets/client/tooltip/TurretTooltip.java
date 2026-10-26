@@ -7,7 +7,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
-import omtteam.openmodularturrets.client.compat.ClientCompat;
+import omtteam.omlib.client.compat.ClientCompat;
 import omtteam.openmodularturrets.config.ConfigData;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.turret.AmmoType;

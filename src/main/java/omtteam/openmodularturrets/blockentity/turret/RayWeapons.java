@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.api.weapon.RayWeapon;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
-import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.omlib.compat.VersionCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.turret.ProjectileMath;

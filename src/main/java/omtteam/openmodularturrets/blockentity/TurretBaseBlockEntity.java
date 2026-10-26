@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.blockentity;
 
+import omtteam.omlib.blockentity.TransferHost;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.Direction;
@@ -16,22 +17,24 @@ import omtteam.openmodularturrets.block.base.TurretBaseBlock;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.base.BlockEntityBaseWorld;
 import omtteam.openmodularturrets.blockentity.base.TurretBaseNbt;
-import omtteam.openmodularturrets.camo.CamoData;
-import omtteam.openmodularturrets.camo.CamoHost;
+import omtteam.omlib.camo.CamoData;
+import omtteam.omlib.camo.DisguiseRules;
+import omtteam.omlib.camo.CamoHost;
+import omtteam.openmodularturrets.camo.CamoRules;
 import omtteam.openmodularturrets.camo.CamoLightProperties;
-import omtteam.openmodularturrets.compat.CompatBlockEntity;
-import omtteam.openmodularturrets.compat.VersionCompat;
-import omtteam.openmodularturrets.compat.nbt.NbtCompat;
+import omtteam.omlib.compat.CompatBlockEntity;
+import omtteam.omlib.compat.VersionCompat;
+import omtteam.omlib.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
-import omtteam.openmodularturrets.core.camo.CamoLight;
+import omtteam.omlib.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.camo.CamoPermissions;
-import omtteam.openmodularturrets.core.energy.EnergyAccess;
+import omtteam.omlib.core.energy.EnergyAccess;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.security.TrustManager;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
-import omtteam.openmodularturrets.inventory.ItemAccess;
+import omtteam.omlib.inventory.ItemAccess;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.network.BasePacketHandler;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
@@ -205,6 +208,11 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
         if (camoData.set(camo)) {
             syncToClient();
         }
+    }
+
+    @Override
+    public DisguiseRules disguiseRules() {
+        return CamoRules.RULES;
     }
 
     @Override

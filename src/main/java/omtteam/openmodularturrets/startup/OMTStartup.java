@@ -11,7 +11,7 @@ import omtteam.openmodularturrets.registry.ModEntities;
 import omtteam.openmodularturrets.registry.ModItems;
 import omtteam.openmodularturrets.registry.ModMenus;
 import omtteam.openmodularturrets.registry.ModSounds;
-import omtteam.openmodularturrets.registry.RegistrationStep;
+import omtteam.omlib.registry.RegistrationStep;
 import omtteam.openmodularturrets.registry.TurretRegistry;
 
 import java.util.List;

@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.security;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import omtteam.openmodularturrets.compat.nbt.NbtCompat;
+import omtteam.omlib.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.core.security.AccessLevel;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.TrustManager;

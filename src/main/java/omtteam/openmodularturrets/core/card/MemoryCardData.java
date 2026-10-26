@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.core.card;
 
 import omtteam.openmodularturrets.core.base.MachineMode;
-import omtteam.openmodularturrets.core.camo.CamoLight;
+import omtteam.omlib.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.security.TrustedPlayer;
 
 import java.util.List;

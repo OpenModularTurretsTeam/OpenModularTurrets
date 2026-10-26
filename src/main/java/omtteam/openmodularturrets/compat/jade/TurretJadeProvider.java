@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
-import omtteam.openmodularturrets.compat.nbt.NbtCompat;
+import omtteam.omlib.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.turret.TurretType;

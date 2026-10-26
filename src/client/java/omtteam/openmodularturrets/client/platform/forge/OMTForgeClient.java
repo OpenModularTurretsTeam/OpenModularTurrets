@@ -1,10 +1,10 @@
 package omtteam.openmodularturrets.client.platform.forge;
 
+import omtteam.omlib.client.platform.forge.ForgeCamoModel;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -14,14 +14,11 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import omtteam.openmodularturrets.client.OMTClient;
 import omtteam.openmodularturrets.client.api.OMTClientPlugin;
-import omtteam.openmodularturrets.client.camo.CamoModels;
+import omtteam.omlib.client.camo.CamoModels;
 import omtteam.openmodularturrets.client.model.TurretModels;
-import omtteam.openmodularturrets.client.platform.ClientPlatform;
-import omtteam.openmodularturrets.client.platform.ClientPlatformServices;
 import omtteam.openmodularturrets.client.render.effect.RayRenderer;
 import omtteam.openmodularturrets.client.render.outline.TurretPlacementOutline;
-import omtteam.openmodularturrets.platform.Platform;
-import omtteam.openmodularturrets.platform.forge.ForgeNetwork;
+import omtteam.omlib.platform.Platform;
 import omtteam.openmodularturrets.platform.forge.ForgePlugins;
 
 /**
@@ -33,7 +30,6 @@ import omtteam.openmodularturrets.platform.forge.ForgePlugins;
  */
 public final class OMTForgeClient {
     public OMTForgeClient(IEventBus modBus) {
-        ClientPlatform.install(new ClientPlatformServices(new ForgeClientNetwork((ForgeNetwork) Platform.network())));
         OMTClient.init(ForgePlugins.find(OMTClientPlugin.Register.class, OMTClientPlugin.class, TurretModels.Plugin::new));
         // no screen or item extension events on Forge 1.20.1: both on the main thread during client setup
         modBus.addListener((FMLClientSetupEvent event) -> event.enqueueWork(() -> {
@@ -46,8 +42,6 @@ public final class OMTForgeClient {
             OMTClient.registerBlockEntityRenderers(event::registerBlockEntityRenderer);
             OMTClient.registerEntityRenderers(event::registerEntityRenderer);
         });
-        modBus.addListener((ModelEvent.ModifyBakingResult event) -> event.getModels().replaceAll((id, model) ->
-                CamoModels.isCamoModel(id) ? new ForgeCamoModel(model) : model));
         modBus.addListener((RegisterColorHandlersEvent.Block event) ->
                 event.register(ForgeCamoModel::color, CamoModels.camoBlocks().toArray(Block[]::new)));
         MinecraftForge.EVENT_BUS.addListener((ItemTooltipEvent event) ->

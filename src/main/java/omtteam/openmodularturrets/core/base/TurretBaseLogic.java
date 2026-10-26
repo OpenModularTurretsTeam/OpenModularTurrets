@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.core.base;
 
-import omtteam.openmodularturrets.core.energy.EnergyStore;
+import omtteam.omlib.core.energy.EnergyStore;
 import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.item.ItemSlot;
 import omtteam.openmodularturrets.core.item.ReactorFuel;

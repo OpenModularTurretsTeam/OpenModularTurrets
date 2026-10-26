@@ -1,8 +1,9 @@
 package omtteam.openmodularturrets.network;
 
+import omtteam.omlib.network.ConfigSyncPacket;
 import net.minecraft.server.level.ServerPlayer;
-import omtteam.openmodularturrets.compat.VersionCompat;
-import omtteam.openmodularturrets.compat.network.NetworkCompat;
+import omtteam.omlib.compat.VersionCompat;
+import omtteam.omlib.compat.network.NetworkCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 
 /**

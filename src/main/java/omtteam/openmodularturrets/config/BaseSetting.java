@@ -1,5 +1,8 @@
 package omtteam.openmodularturrets.config;
 
+import omtteam.omlib.config.Comment;
+import omtteam.omlib.config.Range;
+
 /**
  * Per-tier turret base settings. Fields and defaults ported from 1.12.2 {@code handler/config/BaseSetting}.
  */

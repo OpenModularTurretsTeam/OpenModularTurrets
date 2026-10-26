@@ -5,11 +5,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
-import omtteam.openmodularturrets.camo.CamoData;
-import omtteam.openmodularturrets.camo.CamoHost;
+import omtteam.omlib.camo.CamoData;
+import omtteam.omlib.camo.DisguiseRules;
+import omtteam.omlib.camo.CamoHost;
+import omtteam.openmodularturrets.camo.CamoRules;
 import omtteam.openmodularturrets.camo.CamoLightProperties;
-import omtteam.openmodularturrets.compat.CompatBlockEntity;
-import omtteam.openmodularturrets.core.camo.CamoLight;
+import omtteam.omlib.compat.CompatBlockEntity;
+import omtteam.omlib.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.camo.CamoPermissions;
 import omtteam.openmodularturrets.core.security.AccessProfile;
 import omtteam.openmodularturrets.core.security.TrustManager;
@@ -59,6 +61,11 @@ public class CamoTrapBlockEntity extends CompatBlockEntity implements CamoHost, 
         if (camoData.set(camo)) {
             syncToClient();
         }
+    }
+
+    @Override
+    public DisguiseRules disguiseRules() {
+        return CamoRules.RULES;
     }
 
     @Override

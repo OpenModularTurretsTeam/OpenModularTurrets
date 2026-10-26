@@ -16,7 +16,7 @@ import omtteam.openmodularturrets.block.defense.PassiveDefense;
 import omtteam.openmodularturrets.block.misc.GeneratorBlock;
 import omtteam.openmodularturrets.block.misc.LeverBlock;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
-import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.omlib.compat.VersionCompat;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.turret.TurretTypes;
 

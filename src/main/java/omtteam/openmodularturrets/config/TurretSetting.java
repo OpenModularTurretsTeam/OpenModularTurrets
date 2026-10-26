@@ -1,5 +1,7 @@
 package omtteam.openmodularturrets.config;
 
+import omtteam.omlib.config.Comment;
+import omtteam.omlib.config.Range;
 import omtteam.openmodularturrets.core.settings.TurretStats;
 
 /**

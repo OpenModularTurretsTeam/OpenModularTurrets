@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.core.camo;
 
+import omtteam.omlib.core.camo.CamoLight;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

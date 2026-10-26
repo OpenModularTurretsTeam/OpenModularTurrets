@@ -1,5 +1,7 @@
 package omtteam.openmodularturrets.client.platform.neoforge;
 
+import omtteam.omlib.client.platform.neoforge.NeoForgeCamoModel;
+import omtteam.omlib.client.platform.neoforge.NeoForgeCamoModel;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -7,7 +9,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
@@ -22,17 +23,14 @@ import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.client.OMTClient;
 import omtteam.openmodularturrets.client.api.OMTClientPlugin;
-import omtteam.openmodularturrets.client.camo.CamoModels;
+import omtteam.omlib.client.camo.CamoModels;
 import omtteam.openmodularturrets.client.model.TurretModels;
-import omtteam.openmodularturrets.client.platform.ClientPlatform;
-import omtteam.openmodularturrets.client.platform.ClientPlatformServices;
 import omtteam.openmodularturrets.client.render.effect.RayRenderer;
 import omtteam.openmodularturrets.client.render.outline.TurretPlacementOutline;
-import omtteam.openmodularturrets.platform.Platform;
-import omtteam.openmodularturrets.platform.neoforge.NeoForgeNetwork;
+import omtteam.omlib.platform.Platform;
 import omtteam.openmodularturrets.platform.neoforge.NeoForgePlugins;
 //? if >=1.21.11 {
-/*import omtteam.openmodularturrets.camo.CamoBlock;
+/*import omtteam.omlib.camo.CamoBlock;
 *///?}
 
 /**
@@ -44,7 +42,6 @@ import omtteam.openmodularturrets.platform.neoforge.NeoForgePlugins;
 @Mod(value = OMT.MOD_ID, dist = Dist.CLIENT)
 public final class OMTNeoForgeClient {
     public OMTNeoForgeClient(IEventBus modBus) {
-        ClientPlatform.install(new ClientPlatformServices(new NeoForgeClientNetwork((NeoForgeNetwork) Platform.network())));
         OMTClient.init(NeoForgePlugins.find(OMTClientPlugin.Register.class, OMTClientPlugin.class, TurretModels.Plugin::new));
         modBus.addListener((RegisterMenuScreensEvent event) -> OMTClient.registerScreens(event::register));
         modBus.addListener((EntityRenderersEvent.RegisterLayerDefinitions event) ->
@@ -59,14 +56,6 @@ public final class OMTNeoForgeClient {
         *///?} else {
         modBus.addListener((RegisterClientExtensionsEvent event) -> OMTClient.registerItemRenderers((item, renderer) ->
                 event.registerItem(NeoForgeItemRenderer.extensions(renderer), item)));
-        //?}
-        // the disguise model around the models of the camouflage hosts (NeoForgeCamoModel)
-        //? if >=1.21.11 {
-        /*modBus.addListener((ModelEvent.ModifyBakingResult event) -> event.getBakingResult().blockStateModels()
-                .replaceAll((state, model) -> state.getBlock() instanceof CamoBlock ? new NeoForgeCamoModel(model) : model));
-        *///?} else {
-        modBus.addListener((ModelEvent.ModifyBakingResult event) -> event.getModels().replaceAll((id, model) ->
-                CamoModels.isCamoModel(id.id()) ? new NeoForgeCamoModel(model) : model));
         //?}
         modBus.addListener((RegisterColorHandlersEvent.Block event) ->
                 event.register(NeoForgeCamoModel::color, CamoModels.camoBlocks().toArray(Block[]::new)));

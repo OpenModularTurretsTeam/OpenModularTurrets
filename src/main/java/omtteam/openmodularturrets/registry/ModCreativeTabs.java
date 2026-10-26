@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
-import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.omlib.compat.VersionCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 
 public final class ModCreativeTabs {

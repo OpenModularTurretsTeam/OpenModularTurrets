@@ -16,7 +16,7 @@ import omtteam.openmodularturrets.api.weapon.EffectWeapon;
 import omtteam.openmodularturrets.api.weapon.ProjectileWeapon;
 import omtteam.openmodularturrets.api.weapon.RayWeapon;
 import omtteam.openmodularturrets.api.weapon.SelfTargetingWeapon;
-import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.omlib.compat.VersionCompat;
 import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.RayProfile;

@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.client;
 
+import omtteam.omlib.client.ScreenRegistrar;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.network.chat.Component;
@@ -15,8 +16,7 @@ import omtteam.openmodularturrets.client.render.blockentity.TurretRenderer;
 import omtteam.openmodularturrets.client.render.effect.RayRenderer;
 import omtteam.openmodularturrets.client.render.entity.PlasmaRenderer;
 import omtteam.openmodularturrets.client.render.entity.ProjectileRenderers;
-import omtteam.openmodularturrets.client.screen.CamoScreen;
-import omtteam.openmodularturrets.client.screen.CamoScreenExtras;
+import omtteam.omlib.client.screen.CamoScreenExtras;
 import omtteam.openmodularturrets.client.screen.GeneratorScreen;
 import omtteam.openmodularturrets.client.screen.TurretBaseScreen;
 import omtteam.openmodularturrets.client.screen.TrapCamoExtras;
@@ -87,7 +87,6 @@ public final class OMTClient {
     public static void registerScreens(ScreenRegistrar registrar) {
         registrar.register(ModMenus.TURRET_BASE, TurretBaseScreen::new);
         registrar.register(ModMenus.GENERATOR, GeneratorScreen::new);
-        registrar.register(ModMenus.CAMO, CamoScreen::new);
     }
 
     /**

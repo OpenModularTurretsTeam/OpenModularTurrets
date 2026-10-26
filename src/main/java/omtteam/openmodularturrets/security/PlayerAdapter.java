@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.security;
 
 import net.minecraft.world.entity.player.Player;
-import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.omlib.compat.VersionCompat;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.PlayerInfo;
 

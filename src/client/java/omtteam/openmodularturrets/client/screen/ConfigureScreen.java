@@ -8,13 +8,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
-import omtteam.openmodularturrets.client.compat.ClientCompat;
-import omtteam.openmodularturrets.client.compat.ClientNetworkCompat;
+import omtteam.omlib.client.compat.ClientCompat;
+import omtteam.omlib.client.compat.ClientNetworkCompat;
 import omtteam.openmodularturrets.client.compat.CompatScreen;
 import omtteam.openmodularturrets.core.base.TargetingSettings;
 import omtteam.openmodularturrets.core.security.AccessLevel;
 import omtteam.openmodularturrets.network.BasePackets;
-import omtteam.openmodularturrets.network.CamoPackets;
+import omtteam.omlib.network.CamoPackets;
+import omtteam.omlib.network.OMLibPackets;
 import omtteam.openmodularturrets.network.OMTPackets;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 
@@ -125,7 +126,7 @@ public class ConfigureScreen extends CompatScreen {
 
     /** Opens the camouflage menu (a server-side menu, like the base GUI). */
     private void openCamo() {
-        ClientNetworkCompat.sendToServer(OMTPackets.OPEN_CAMO_MENU, new CamoPackets.OpenMenu(pos));
+        ClientNetworkCompat.sendToServer(OMLibPackets.OPEN_CAMO_MENU, new CamoPackets.OpenMenu(pos));
     }
 
     /** "Back": reopen the base GUI (a server-side menu). */

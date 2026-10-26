@@ -4,7 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
-import omtteam.openmodularturrets.compat.network.NetworkCompat;
+import omtteam.omlib.compat.network.NetworkCompat;
 
 /**
  * S2C: draw a ray for a few ticks (OMLib {@code MessageRenderRay}; the arc turret's lightning is drawn jagged).

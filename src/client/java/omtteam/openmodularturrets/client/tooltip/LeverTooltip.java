@@ -4,7 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import omtteam.openmodularturrets.client.compat.ClientCompat;
+import omtteam.omlib.client.compat.ClientCompat;
 import omtteam.openmodularturrets.registry.ModItems;
 
 import java.util.List;

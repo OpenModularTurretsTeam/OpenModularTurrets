@@ -18,7 +18,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.block.UnownedMarker;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
-import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.omlib.compat.VersionCompat;
 //? if >=1.21.11 {
 /*import net.minecraft.world.entity.InsideBlockEffectApplier;
 *///?}

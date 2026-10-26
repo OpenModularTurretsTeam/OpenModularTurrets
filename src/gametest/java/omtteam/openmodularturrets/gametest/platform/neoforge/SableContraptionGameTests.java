@@ -24,7 +24,7 @@ import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretMount;
-import omtteam.openmodularturrets.compat.nbt.NbtCompat;
+import omtteam.omlib.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.core.turret.TurretMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Vector3;

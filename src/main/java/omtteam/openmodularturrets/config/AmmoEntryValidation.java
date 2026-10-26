@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.config;
 
+import omtteam.omlib.config.ConfigValidator;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;

@@ -14,6 +14,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ### Changed
 
+- The mod bundles the new library OMLib (jar-in-jar), which now holds the code it shares with Open Modular Lighting; nothing to install separately
 - The camouflage menu has a dark grey background like the turret base GUI instead of the vanilla light grey
 - The generator GUI labels are black like in the other turret GUIs (were dark grey on the dark background)
 

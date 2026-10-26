@@ -21,7 +21,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
-import omtteam.openmodularturrets.client.compat.ClientCompat;
+import omtteam.omlib.client.compat.ClientCompat;
 import omtteam.openmodularturrets.client.compat.ClientSubLevelCompat;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.core.base.TurretPlacement;

@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.client.network;
 
-import omtteam.openmodularturrets.client.compat.ClientNetworkCompat;
+import omtteam.omlib.client.compat.ClientNetworkCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.network.OMTPackets;
 

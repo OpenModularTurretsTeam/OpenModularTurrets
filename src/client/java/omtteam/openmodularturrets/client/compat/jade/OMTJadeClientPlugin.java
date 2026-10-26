@@ -10,7 +10,7 @@ import omtteam.openmodularturrets.block.defense.HardenedBlock;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
-import omtteam.openmodularturrets.camo.CamoHost;
+import omtteam.omlib.camo.CamoHost;
 import omtteam.openmodularturrets.compat.jade.OwnedBlockJadeProvider;
 import omtteam.openmodularturrets.compat.jade.TurretBaseJadeProvider;
 import omtteam.openmodularturrets.compat.jade.TurretJadeProvider;

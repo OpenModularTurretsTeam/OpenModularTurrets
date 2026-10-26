@@ -12,8 +12,8 @@ import net.minecraft.resources.ResourceLocation;
 /*import net.minecraft.client.input.KeyEvent;
 *///?}
 import omtteam.openmodularturrets.OMT;
-import omtteam.openmodularturrets.client.compat.ClientCompat;
-import omtteam.openmodularturrets.client.compat.ClientNetworkCompat;
+import omtteam.omlib.client.compat.ClientCompat;
+import omtteam.omlib.client.compat.ClientNetworkCompat;
 import omtteam.openmodularturrets.client.compat.CompatScreen;
 import omtteam.openmodularturrets.core.security.AccessLevel;
 import omtteam.openmodularturrets.core.security.TrustedPlayer;

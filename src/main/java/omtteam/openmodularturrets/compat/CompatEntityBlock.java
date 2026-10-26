@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.compat;
 
+import omtteam.omlib.compat.CompatBlockEntity;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;

@@ -1,6 +1,10 @@
 package omtteam.openmodularturrets.camo;
 
+import omtteam.omlib.camo.CamoBlock;
+import omtteam.omlib.camo.CamoBlock;
+import omtteam.omlib.camo.CamoHost;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -12,6 +16,7 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import omtteam.omlib.camo.DisguiseRules;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,6 +24,24 @@ import org.jetbrains.annotations.Nullable;
  * (stone, glass, leaves, ice, ...).
  */
 public final class CamoRules {
+    /** These rules as the camouflage menu of OMLib asks the hosts for them (with this mod's texts). */
+    public static final DisguiseRules RULES = new DisguiseRules() {
+        @Override
+        public boolean isValidDisguise(BlockState state) {
+            return CamoRules.isValidDisguise(state);
+        }
+
+        @Override
+        public Component invalidMessage() {
+            return Component.translatable("message.openmodularturrets.camo_invalid");
+        }
+
+        @Override
+        public Component slotHint() {
+            return Component.translatable("tooltip.openmodularturrets.camouflage_slot");
+        }
+    };
+
     private CamoRules() {
     }
 

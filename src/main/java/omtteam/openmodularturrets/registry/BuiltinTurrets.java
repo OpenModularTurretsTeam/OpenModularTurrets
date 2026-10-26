@@ -14,7 +14,7 @@ import omtteam.openmodularturrets.api.weapon.RayWeapon;
 import omtteam.openmodularturrets.api.weapon.TurretWeapon;
 import omtteam.openmodularturrets.blockentity.turret.EffectWeapons;
 import omtteam.openmodularturrets.blockentity.turret.RayWeapons;
-import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.omlib.compat.VersionCompat;
 import omtteam.openmodularturrets.config.ConfigData;
 import omtteam.openmodularturrets.core.base.AmmoDraw;
 import omtteam.openmodularturrets.core.turret.AmmoType;

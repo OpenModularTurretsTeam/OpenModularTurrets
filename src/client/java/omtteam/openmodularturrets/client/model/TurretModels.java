@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.client.api.OMTClientPlugin;
 import omtteam.openmodularturrets.client.api.TurretModelRegistrar;
-import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.omlib.compat.VersionCompat;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.turret.TurretTypes;
 import org.jetbrains.annotations.Nullable;

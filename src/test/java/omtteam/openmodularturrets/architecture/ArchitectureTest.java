@@ -45,8 +45,6 @@ class ArchitectureTest {
                     "blockentity", "blockentity.base", "blockentity.defense", "blockentity.misc", "blockentity.turret",
                     "entity.projectile", "inventory", "menu", "network", "registry"),
             Set.of("core.base", "core.item", "core.settings", "core.target", "core.turret", "core.world"),
-            // the compat facades forward to the platform services, whose interfaces use the facades' types
-            Set.of("compat", "compat.network", "platform"),
             Set.of("client.api", "client.model"));
 
     private static JavaClasses classes;
@@ -62,7 +60,7 @@ class ArchitectureTest {
     @Test
     void coreDependsOnlyOnCoreAndJava() {
         classes().that().resideInAPackage(BASE + ".core..")
-                .should().onlyDependOnClassesThat().resideInAnyPackage(BASE + ".core..", "java..")
+                .should().onlyDependOnClassesThat().resideInAnyPackage(BASE + ".core..", "omtteam.omlib.core..", "java..")
                 .because("the core game logic must stay testable without the game")
                 .check(classes);
     }

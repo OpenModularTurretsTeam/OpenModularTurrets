@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets;
 
 import net.minecraft.resources.ResourceLocation;
-import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.omlib.compat.VersionCompat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

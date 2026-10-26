@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import omtteam.openmodularturrets.OMT;
-import omtteam.openmodularturrets.client.compat.ClientCompat;
+import omtteam.omlib.client.compat.ClientCompat;
 import omtteam.openmodularturrets.menu.GeneratorMenu;
 
 /**

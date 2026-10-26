@@ -1,5 +1,8 @@
 package omtteam.openmodularturrets.platform.neoforge;
 
+import omtteam.omlib.platform.neoforge.NeoForgeNetwork;
+import omtteam.omlib.platform.neoforge.NeoForgeCapabilities;
+import omtteam.omlib.platform.neoforge.NeoForgeCapabilities;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.neoforged.bus.api.EventPriority;
@@ -10,16 +13,18 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.api.OMTPlugin;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.entity.projectile.KillCounter;
 import omtteam.openmodularturrets.network.ConfigSync;
-import omtteam.openmodularturrets.platform.Platform;
-import omtteam.openmodularturrets.platform.PlatformServices;
-import omtteam.openmodularturrets.registry.RegistrationStep;
+import omtteam.omlib.platform.Platform;
+import omtteam.omlib.registry.RegistrationStep;
 import omtteam.openmodularturrets.registry.TurretRegistry;
+import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.startup.OMTStartup;
 
 import java.util.HashSet;
@@ -36,12 +41,13 @@ public final class OMTNeoForge {
     private final Set<RegistrationStep> done = new HashSet<>();
 
     public OMTNeoForge(IEventBus modBus) {
-        Platform.install(new PlatformServices(new NeoForgeLoaderInfo(), new NeoForgeFuel(), new NeoForgeNetwork(modBus),
-                new NeoForgeMenus(), new NeoForgeEnergy()));
         OMTStartup.init(NeoForgePlugins.find(OMTPlugin.Register.class, OMTPlugin.class, TurretRegistry.Plugin::new));
         modBus.addListener(this::onRegister);
         modBus.addListener(this::onCommonSetup);
-        modBus.addListener(NeoForgeCapabilities::register);
+        modBus.addListener((RegisterCapabilitiesEvent event) ->
+                NeoForgeCapabilities.register(event, ModBlockEntities.transferTypes()));
+        modBus.addListener((RegisterPayloadHandlersEvent event) ->
+                ((NeoForgeNetwork) Platform.network()).applyRegistrations(event, OMT.MOD_ID));
         NeoForge.EVENT_BUS.addListener(OMTNeoForge::onRightClickBlock);
         NeoForge.EVENT_BUS.addListener(OMTNeoForge::onPlayerLoggedIn);
         // lowest priority: mods that cancel the death have run, and cancelled deaths do not arrive here

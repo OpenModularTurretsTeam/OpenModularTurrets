@@ -8,7 +8,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegisterEvent;
 import omtteam.openmodularturrets.gametest.OMTGameTestMod;
 import omtteam.openmodularturrets.gametest.ProjectileTurretGameTests;
-import omtteam.openmodularturrets.registry.RegistrationStep;
+import omtteam.omlib.registry.RegistrationStep;
 
 import java.util.List;
 

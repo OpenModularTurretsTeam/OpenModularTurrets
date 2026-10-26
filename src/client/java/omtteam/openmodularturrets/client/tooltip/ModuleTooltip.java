@@ -5,7 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import omtteam.openmodularturrets.client.compat.ClientCompat;
+import omtteam.omlib.client.compat.ClientCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.GeneratorUpgradeItem;

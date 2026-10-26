@@ -7,7 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import omtteam.openmodularturrets.OMT;
-import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.omlib.compat.VersionCompat;
 import omtteam.openmodularturrets.entity.projectile.ArrowProjectile;
 import omtteam.openmodularturrets.entity.projectile.BlazingClayProjectile;
 import omtteam.openmodularturrets.entity.projectile.BulletProjectile;

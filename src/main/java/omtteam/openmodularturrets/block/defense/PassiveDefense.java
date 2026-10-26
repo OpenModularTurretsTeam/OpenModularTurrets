@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
-import omtteam.openmodularturrets.compat.block.BlockCompat;
+import omtteam.omlib.compat.block.BlockCompat;
 
 /**
  * Behaviour shared by the OMPD blocks (OMPD {@code BlockHelper}).

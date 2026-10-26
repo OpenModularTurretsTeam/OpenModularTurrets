@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.menu;
 
+import omtteam.omlib.menu.LongContainerData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;

@@ -7,7 +7,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import omtteam.openmodularturrets.client.compat.ClientNetworkCompat;
+import omtteam.omlib.client.compat.ClientNetworkCompat;
 import omtteam.openmodularturrets.network.OMTPackets;
 import omtteam.openmodularturrets.network.TrustPackets;
 

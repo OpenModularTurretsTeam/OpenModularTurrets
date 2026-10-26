@@ -31,7 +31,7 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.misc.LeverBlockEntity;
 import omtteam.openmodularturrets.compat.BlockCodec;
 import omtteam.openmodularturrets.compat.CompatEntityBlock;
-import omtteam.openmodularturrets.compat.block.BlockCompat;
+import omtteam.omlib.compat.block.BlockCompat;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.registry.ModSounds;
 import org.jetbrains.annotations.NotNull;

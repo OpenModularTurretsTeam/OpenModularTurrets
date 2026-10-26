@@ -1,5 +1,10 @@
 package omtteam.openmodularturrets.config;
 
+import omtteam.omlib.config.Comment;
+import omtteam.omlib.config.Range;
+import omtteam.omlib.config.ConfigWriter;
+import omtteam.omlib.config.ConfigMigration;
+import omtteam.omlib.config.ConfigValidator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -9,7 +14,7 @@ import com.google.gson.JsonPrimitive;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.platform.Platform;
+import omtteam.omlib.platform.Platform;
 
 import java.io.IOException;
 import java.io.Reader;

@@ -5,7 +5,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import omtteam.openmodularturrets.compat.CompatBlockEntity;
+import omtteam.omlib.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 
 /**

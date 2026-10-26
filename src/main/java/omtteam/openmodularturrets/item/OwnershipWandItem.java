@@ -13,9 +13,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
-import omtteam.openmodularturrets.compat.VersionCompat;
-import omtteam.openmodularturrets.compat.block.BlockCompat;
-import omtteam.openmodularturrets.compat.nbt.NbtCompat;
+import omtteam.omlib.compat.VersionCompat;
+import omtteam.omlib.compat.block.BlockCompat;
+import omtteam.omlib.compat.nbt.NbtCompat;
 
 /**
  * The map maker's ownership wand (creative only): right-click an owned block to become its owner, sneak-right-click to

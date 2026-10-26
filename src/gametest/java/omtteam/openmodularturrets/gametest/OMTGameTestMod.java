@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.gametest;
 
 import net.minecraft.core.registries.Registries;
-import omtteam.openmodularturrets.registry.RegistrationStep;
+import omtteam.omlib.registry.RegistrationStep;
 
 import java.util.List;
 

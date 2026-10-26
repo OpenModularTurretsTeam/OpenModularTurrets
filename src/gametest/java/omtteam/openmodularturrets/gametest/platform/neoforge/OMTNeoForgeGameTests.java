@@ -7,7 +7,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import omtteam.openmodularturrets.gametest.OMTGameTestMod;
 import omtteam.openmodularturrets.gametest.ProjectileTurretGameTests;
-import omtteam.openmodularturrets.registry.RegistrationStep;
+import omtteam.omlib.registry.RegistrationStep;
 
 import java.util.List;
 

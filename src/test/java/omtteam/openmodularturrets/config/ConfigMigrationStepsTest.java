@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.config;
 
+import omtteam.omlib.config.ConfigMigration;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;

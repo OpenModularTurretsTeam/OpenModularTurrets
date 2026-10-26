@@ -2,7 +2,6 @@ package omtteam.openmodularturrets.platform.forge;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -20,9 +19,7 @@ import omtteam.openmodularturrets.api.OMTPlugin;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.entity.projectile.KillCounter;
 import omtteam.openmodularturrets.network.ConfigSync;
-import omtteam.openmodularturrets.platform.Platform;
-import omtteam.openmodularturrets.platform.PlatformServices;
-import omtteam.openmodularturrets.registry.RegistrationStep;
+import omtteam.omlib.registry.RegistrationStep;
 import omtteam.openmodularturrets.registry.TurretRegistry;
 import omtteam.openmodularturrets.startup.OMTStartup;
 
@@ -45,12 +42,9 @@ public final class OMTForge {
 
     public OMTForge() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        Platform.install(new PlatformServices(new ForgeLoaderInfo(), new ForgeFuel(), new ForgeNetwork(),
-                new ForgeMenus(), new ForgeEnergy()));
         OMTStartup.init(ForgePlugins.find(OMTPlugin.Register.class, OMTPlugin.class, TurretRegistry.Plugin::new));
         modBus.addListener(this::onRegister);
         modBus.addListener(this::onCommonSetup);
-        MinecraftForge.EVENT_BUS.addGenericListener(BlockEntity.class, ForgeBlockCapabilities::attach);
         MinecraftForge.EVENT_BUS.addListener(OMTForge::onRightClickBlock);
         MinecraftForge.EVENT_BUS.addListener(OMTForge::onPlayerLoggedIn);
         // lowest priority: mods that cancel the death have run, and cancelled deaths do not arrive here

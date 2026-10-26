@@ -32,7 +32,7 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.config.TurretSetting;
-import omtteam.openmodularturrets.core.energy.EnergyStore;
+import omtteam.omlib.core.energy.EnergyStore;
 import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;

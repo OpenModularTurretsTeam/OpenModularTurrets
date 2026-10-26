@@ -49,8 +49,11 @@ Core gameplay:
   The NeoForge test mod also compiles against Sable (and Companion) for the contraption game tests (approved by the user on 2026-10-25).
 - **Create Aeronautics** and **Create** (Modrinth, pinned by version id), in the NeoForge dev runs only (`localRuntime`), never bundled (requested by the user on 2026-10-25), to try turrets on airships by hand.
   Create is also compile-only on NeoForge (approved by the user on 2026-10-25) for `platform/neoforge/NeoForgeCreateMovement`, a `BlockMovementChecks` check registered only when Create is loaded; Create and Create Aeronautics are on the NeoForge game test server for the movement tests.
+- **OMLib** (the user's own library, `../OMLib1.20.1+`, branch `1.20.1+`), mounted as the git submodule `omlib` and bundled into every jar (jar-in-jar; Fabric `include`, NeoForge and Forge `jarJar`; requested by the user on 2026-10-27).
+  It holds the code both mods used to share (platform services, version compat, energy and item transfer, config, the camouflage menu) and the build logic.
+  The library is a mod of its own (`omlib`), declared as a required dependency in the mod metadata, and built as a nested step of the mod build, see §4 "OMLib".
 - Nothing else without asking the user first.
-  No Architectury, no Cloth Config, no OMLib, no Kotlin.
+  No Architectury, no Cloth Config, no Kotlin.
 
 ---
 
@@ -71,7 +74,7 @@ They have no Sable, Create or Create Aeronautics properties (no 1.21.11 builds k
 - Shared build logic is the convention plugin `omlib/build-logic/src/main/kotlin/mod-common.gradle.kts` (Java toolchain, metadata templating, JUnit, `verifyCoreIsolation`, licenses in the jar via `bundled_licenses`, publishing).
   It is mod-independent and lives in its own repository, `OMLib` (`../OMLib1.20.1+`), which every mod mounts as the git submodule `omlib` (the branch `1.20.1+` of the OMLib repository, clean history; an included build in `pluginManagement` of `settings.gradle.kts`).
   Change it inside `omlib/`, commit and push there, then commit the new submodule pointer in each mod; clone a mod with `--recurse-submodules` (or run `git submodule update --init`).
-  Source files that the mods copy from each other are listed in `omlib/shared-sources.txt`; after changing one, run `python3 -I omlib/tools/shared_sources.py sync --from . --write . ../OpenModularLighting` and then `check` (see the README of OMLib).
+  The few source files that the mods still copy from each other are listed in `omlib/shared-sources.txt`; after changing one, run `python3 -I omlib/tools/shared_sources.py sync --from . --write . ../OpenModularLighting` and then `check`.
   The OMT-specific quality tools (ArchUnit, JaCoCo, PIT, PMD) stay in `build.fabric.gradle.kts`.
 - **Gradle itself must run on Java 25+** (Loom 1.18 requirement).
   The compile toolchains (17 / 21) are resolved separately (foojay auto-provisions them if missing).
@@ -94,7 +97,7 @@ Do not hard-code guesses into the build without verifying.
 ├── build.fabric.gradle.kts     # Fabric nodes (Loom, Fabric API, datagen, GameTests, ArchUnit/JaCoCo/PIT/PMD)
 ├── build.neoforge.gradle.kts   # NeoForge node (ModDevGradle)
 ├── build.forge.gradle.kts      # Forge node (legacy ModDevGradle: reobfJar, mixin refmap, MixinExtras jar-in-jar, pack.mcmeta)
-├── omlib/                      # git submodule (OMLib, branch 1.20.1+): build-logic/ (mod-common convention plugin shared by all mods and loaders), shared-sources check
+├── omlib/                      # git submodule (OMLib, branch 1.20.1+): the library (src/) every mod bundles, and build-logic/ (the mod-common convention plugin); see §4 "OMLib"
 ├── stonecutter.gradle.kts      # Stonecutter controller (active version, loader constants, chiseled tasks)
 ├── settings.gradle.kts         # declares the Stonecutter nodes (<minecraft version>-<loader>)
 ├── gradle.properties           # shared properties (mod_id, mod_version, maven_group …)
@@ -182,6 +185,22 @@ If this does not match the installed version, check the Stonecutter docs and upd
 - Version-specific *properties* live in `versions/<v>/gradle.properties`.
   Read them in the build via `property("…")`.
 
+### OMLib (the library, `omlib/`)
+
+Requested by the user on 2026-10-27: the code that OpenModularTurrets and OpenModularLighting used to share lives in the library OMLib (`../OMLib1.20.1+`, a mod of its own with the id `omlib`, package `omtteam.omlib`), which both mods bundle jar-in-jar.
+Its README and `CLAUDE.md` describe the layout and the rules (no mod knowledge in the library, public API only where a mod needs it).
+
+- **Where things are:** the platform layer (`Platform`, `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy` and their loader classes), the compat helpers (`VersionCompat`, `NbtCompat`, `BlockCompat`, `NetworkCompat`, `MenuCompat`, `CompatBlockEntity`, `CommonTags`, `ClientCompat`), `core.energy`, `inventory.ItemAccess`, `TransferHost`, the config machinery (`@Comment`, `@Range`, `ConfigWriter`, `ConfigRanges`, `ConfigValidator`, `ConfigMigration`), `RegistrationStep` and the camouflage menu with its screen, packets and models are in the `omtteam.omlib` packages.
+  Wherever the rest of this file names those classes under `omtteam.openmodularturrets`, read `omtteam.omlib`; they kept their names and package layout.
+- **Build:** the settings script runs `omlib/tools/bootstrap.sh` first (inside `pluginManagement`), which builds the library for all six nodes into `omlib/build/maven` when its sources changed (Loom resolves mod dependencies while it configures, so a task is too late).
+  `mod-common` adds that repository and exposes `project.extra["omlibCoordinates"]` / `["omlibVersion"]`; the loader scripts declare the dependency and bundle it, and the metadata templates declare it (`${omlib_version}`).
+  The settings script also drops Loom's cached remapped copy of the library when it was rebuilt from other sources.
+  `OMLIB_SKIP_BUILD=1` skips the library build.
+- **Runtime:** the library's services (`Platform`, `ClientPlatform`) are created on first use, so it does not matter which mod's entrypoint runs first; the library's own entrypoints register the camo menu type and packets.
+  The mod passes its transfer block entity types to the registrars (`FabricBlockLookups.register(ModBlockEntities.transferTypes())`, `NeoForgeCapabilities.register(event, ModBlockEntities.transferTypes())` in its own event) and applies its own NeoForge packets in its own `RegisterPayloadHandlersEvent` (`NeoForgeNetwork.applyRegistrations(event, MOD_ID)`).
+- **Camouflage:** `CamoBlock` (with `overlayTintIndex()`), `CamoHost` (with `disguiseRules()`) and `DisguiseRules` (this mod: `CamoRules.RULES`) are the hooks; the screen's extra buttons come from `CamoScreenExtras` (`TrapCamoExtras`, registered in `OMTClient.init`: the camouflage trap's Trusted and Disown buttons).
+- **Changing the library:** edit, commit and push it, move the `omlib` pointer of both mods and build both (`./gradlew chiseledBuild`); a public signature change touches both mods.
+
 ### Loaders
 
 Each Stonecutter node is `<minecraft version>-<loader>`; the loader picks the build script (`build.<loader>.gradle.kts`).
@@ -232,7 +251,7 @@ New questions that these do not answer go through §7 "Designing APIs".
 - `Network` / `ClientNetwork`: NeoForge registrations are recorded and applied in `RegisterPayloadHandlersEvent` (later registration throws); a server-to-client packet without a client handler is logged and dropped; channels are `optional()`; handlers run on the main thread.
 - `Menus`: `createBlockMenuType(factory)` / `openBlockMenu(player, title, pos, factory)`; opening data is a `BlockPos` only.
 - `Energy`: `isBattery(stack)`, `dischargeItem(container, slot, target, maxAmount)`, `pushToBlock(level, pos, side, source, maxAmount)` (side = face of the target block; the generator needs the push).
-  OMT has no battery slot yet, but its `Energy` and the loader classes are the same as OpenModularLighting's (decided by the user on 2026-10-26, so the files can be shared), so the battery methods are there for when one is added.
+  These services are in OMLib. OMT has no battery slot yet, but the battery methods are there (decided by the user on 2026-10-26, so that both mods use the same classes) for when one is added.
   `core.energy.EnergyGroup` is an `EnergyAccess` that spreads an insert over several stores (`fill(maxAmount, StoreInserter)`); the Fabric and NeoForge 1.21.11 adapters insert through their own per-store adapters.
   OMT has no group, OpenModularLighting's panel light cluster is one.
 
@@ -241,7 +260,7 @@ New questions that these do not answer go through §7 "Designing APIs".
 - Energy approach: one loader-neutral buffer plus thin adapters per loader (not Team Reborn Energy as the internal model, not a buffer per loader).
 - The buffer is `core.energy.EnergyStore` (OMT's `core.base.EnergyStore`, extended in OpenModularLighting): `final`; `insert` / `extract` (limited by `maxInsert` / `maxExtract`) for other blocks, `generate` / `consume` / `drain` for the owner, `setAmountUnchecked` for loading and rollback.
   `onChange` may fire for a Fabric transaction that is rolled back later (an extra `setChanged()` is accepted).
-- Block entities expose `@Nullable EnergyAccess getEnergyAccess(side)` (core interface; a store or a view over several) and `getItemAccess(side)` by implementing `blockentity.TransferHost`; `ModBlockEntities.transferTypes()` lists them, and the loader registrations (`FabricBlockLookups`, `NeoForgeCapabilities`, `ForgeBlockCapabilities`) iterate over that list, so a new transfer block entity needs no loader code (these files are identical in OpenModularLighting).
+- Block entities expose `@Nullable EnergyAccess getEnergyAccess(side)` (core interface; a store or a view over several) and `getItemAccess(side)` by implementing `blockentity.TransferHost`; `ModBlockEntities.transferTypes()` lists them, and the loader registrations (`FabricBlockLookups`, `NeoForgeCapabilities`, `ForgeBlockCapabilities`) iterate over that list, so a new transfer block entity needs no loader code.
 - Fabric adapter: one `SnapshotParticipant` per store, cached in `platform/fabric` with weak keys **and weak values** (a plain `WeakHashMap` would leak, because the adapter references its store).
   NeoForge adapter: `IEnergyStorage` (`EnergyHandler` with one `SnapshotJournal` per store on 1.21.11), clamped to `int`; 1 E = 1 FE.
 - Item transfer: the vanilla `Container` stays the inventory; `inventory.ItemAccess` (record: container, first slot, slot count, insert filter, extract filter; `insertOnly(container)`) describes what other blocks may do, exposed by `getItemAccess(side)`.
@@ -591,7 +610,7 @@ The built-in turrets use the same path, so there is no special casing per turret
 - **Upgrades are per machine:** `core.item.UpgradeType` is the common interface, each machine has its own enum (`TurretBaseUpgradeType`, `GeneratorUpgradeType`) and item subclass of `item.UpgradeItem` (`TurretBaseUpgradeItem`, `GeneratorUpgradeItem`).
   A machine's upgrade slots accept only its own subclass.
   A new machine gets its own enum and item subclass.
-- **Config versions:** `configVersion` in the config file; `ConfigMigration` (shared with OpenModularLighting) runs the `ConfigMigrationSteps.STEPS` newer than the file, replacing old default values (only if unchanged) when a file of an older version is loaded.
+- **Config versions:** `configVersion` in the config file; `ConfigMigration` (OMLib) runs the `ConfigMigrationSteps.STEPS` newer than the file, replacing old default values (only if unchanged) when a file of an older version is loaded.
   Bump `CURRENT_VERSION` and add a step when a default changes.
 
 ### Config
@@ -687,7 +706,7 @@ Update this checklist as work progresses.
 - [x] Camouflage for turret bases and the camouflage trap, one shared system (`core.camo`, `camo/`, `CamoMenu`, `FabricCamoModel` / `NeoForgeCamoModel`):
   - Disguise is set and reset the same way on both blocks (via gui with simple phantom slot) and rendered the same way.
   - A small camo settings GUI on both blocks (light value / light opacity sliders for tier 4+ bases and the trap), changes server-validated.
-- [x] The camouflage menu, screen, packets, `CamoHost` and camo models are shared with OpenModularLighting through `omlib/shared-sources.txt` (2026-10-27): `CamoBlock.overlayTintIndex()` (default -1) is the hook for quads of the block's own model on top of the disguise, `CamoData(key, valid)` takes the NBT key (`"Camo"`) and the read validation, `CamoHost.hasParentMenu()` / `openParentMenu` give the screen its generic "Back" (`CamoPackets.Back`), and `CamoScreenExtras` takes the trap's Trusted and Disown buttons (`TrapCamoExtras`, registered in `OMTClient.init`). `camo` must not depend on `compat` (it would join OpenModularLighting's package cycle): hosts call `remesh()` themselves after `CamoData.read`.
+- [x] The code shared with OpenModularLighting is in the library OMLib, bundled jar-in-jar (2026-10-27, requested by the user; §4 "OMLib"). The camouflage menu, screen, packets, `CamoHost` and the camo models are part of it: `CamoBlock.overlayTintIndex()` (default -1) is the hook for quads of the block's own model on top of the disguise, `CamoData(key, valid)` takes the NBT key (`"Camo"`) and the read validation, `CamoHost.disguiseRules()` the rules (`CamoRules.RULES`), `CamoHost.hasParentMenu()` / `openParentMenu` give the screen its generic "Back" (`CamoPackets.Back`), and `CamoScreenExtras` takes the trap's Trusted and Disown buttons (`TrapCamoExtras`, registered in `OMTClient.init`). `camo` must not depend on `compat` (it would join a package cycle): hosts call `remesh()` themselves after `CamoData.read`.
 - [x] Memory card (copy/paste of base and camo trap settings, shift tooltip); camo trap with trusted players (`AccessProfile.TRUSTED_AND_ADMIN`)
 - [x] Playtest both versions (client + dedicated server)
 - [x] Game tests for every turret (`src/gametest`, see "Game tests").

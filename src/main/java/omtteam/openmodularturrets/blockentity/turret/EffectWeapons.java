@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.api.weapon.AreaWeapon;
 import omtteam.openmodularturrets.api.weapon.EffectWeapon;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
-import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.omlib.compat.VersionCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.entity.projectile.TurretImmunity;

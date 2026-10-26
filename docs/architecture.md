@@ -3,6 +3,9 @@
 A guide to the code of Open Modular Turrets (OMT) for people working on it: how it is layered, what lives where, how the main flows run, and how to add the common things.
 It describes the code as it is; where it falls short of its own rules, the last section says so.
 
+**OMLib.** Since 2026-10-27 the code that both Open Modular mods used to share is in the library OMLib (git submodule `omlib`, bundled jar-in-jar): the platform layer, the compat helpers, energy and item transfer, the config machinery and the camouflage menu.
+Where this document names those classes under `omtteam.openmodularturrets`, they are in `omtteam.omlib` with the same names and sub-packages; the README of OMLib lists them.
+
 OMT is built for Fabric (1.20.1 and 1.21.1), NeoForge (1.21.1) and Forge (1.20.1) from one source tree.
 Building, running and the Stonecutter commands are in the README, `CONTRIBUTING.md` and `CLAUDE.md` (section 4).
 The turret API for other mods has its own guide: [turret-api.md](turret-api.md).

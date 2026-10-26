@@ -3,7 +3,6 @@ package omtteam.openmodularturrets.client.platform.fabric;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -12,10 +11,7 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import omtteam.openmodularturrets.client.OMTClient;
 import omtteam.openmodularturrets.client.api.OMTClientPlugin;
-import omtteam.openmodularturrets.client.camo.CamoModels;
 import omtteam.openmodularturrets.client.model.TurretModels;
-import omtteam.openmodularturrets.client.platform.ClientPlatform;
-import omtteam.openmodularturrets.client.platform.ClientPlatformServices;
 import omtteam.openmodularturrets.client.render.effect.RayRenderer;
 import omtteam.openmodularturrets.client.render.outline.TurretPlacementOutline;
 
@@ -25,7 +21,6 @@ import java.util.List;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
-import omtteam.openmodularturrets.camo.CamoBlock;
 *///?} else {
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
@@ -40,7 +35,6 @@ import net.minecraft.client.renderer.RenderType;
 public final class OMTFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        ClientPlatform.install(new ClientPlatformServices(new FabricClientNetwork()));
         OMTClient.init(plugins());
         OMTClient.registerScreens(MenuScreens::register);
         OMTClient.registerModelLayers((layer, definition) -> EntityModelLayerRegistry.registerModelLayer(layer, definition::get));
@@ -57,22 +51,6 @@ public final class OMTFabricClient implements ClientModInitializer {
         *///?} else {
         OMTClient.cutoutBlocks().forEach(block -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout()));
         //?}
-        // the disguise model around the models of the camouflage hosts (FabricCamoModel)
-        ModelLoadingPlugin.register(plugin -> {
-            //? if >=1.21.11 {
-            /*plugin.modifyBlockModelAfterBake().register((model, context) ->
-                    context.state().getBlock() instanceof CamoBlock ? new FabricCamoModel(model) : model);
-            *///?} else if >=1.21 {
-            plugin.modifyModelAfterBake().register((model, context) -> {
-                var topLevel = context.topLevelId();
-                return CamoModels.isCamoModel(topLevel != null ? topLevel.id() : context.resourceId())
-                        ? new FabricCamoModel(model) : model;
-            });
-            //?} else {
-            /*plugin.modifyModelAfterBake().register((model, context) ->
-                    CamoModels.isCamoModel(context.id()) ? new FabricCamoModel(model) : model);
-            *///?}
-        });
         //? if >=1.21 {
         ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> OMTClient.appendTooltip(stack, flag, lines));
         //?} else {

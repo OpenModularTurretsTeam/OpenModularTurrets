@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.core.base;
 
 import omtteam.openmodularturrets.core.card.MemoryCardData;
 import omtteam.openmodularturrets.core.card.MemoryCardRules;
-import omtteam.openmodularturrets.core.camo.CamoLight;
+import omtteam.omlib.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.security.AccessLevel;
 import omtteam.openmodularturrets.core.security.AccessProfile;
 import omtteam.openmodularturrets.core.security.PlayerInfo;

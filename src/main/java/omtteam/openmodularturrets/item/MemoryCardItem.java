@@ -11,9 +11,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import omtteam.openmodularturrets.compat.VersionCompat;
-import omtteam.openmodularturrets.compat.block.BlockCompat;
-import omtteam.openmodularturrets.compat.nbt.NbtCompat;
+import omtteam.omlib.compat.VersionCompat;
+import omtteam.omlib.compat.block.BlockCompat;
+import omtteam.omlib.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.core.card.MemoryCardData;
 
 import java.util.Optional;
