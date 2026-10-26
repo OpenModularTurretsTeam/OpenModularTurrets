@@ -1,5 +1,23 @@
 pluginManagement {
-    // Shared build logic (the mod-common convention plugin and convertFabricData), in the omlib git submodule
+    // The git submodule omlib is the library and the shared build logic. The library is built for all nodes first (a no-op
+    // while its sources are unchanged): the mod's projects need its jars while they are configured. Set
+    // OMLIB_SKIP_BUILD to skip this, for example if the jars are already there.
+    val omlibDir = File(settingsDir, "omlib")
+    if (File(omlibDir, "tools/bootstrap.sh").exists() && System.getenv("OMLIB_SKIP_BUILD") == null) {
+        val build = ProcessBuilder("sh", "tools/bootstrap.sh").directory(omlibDir).inheritIO()
+        build.environment()["JAVA_HOME"] = System.getProperty("java.home")
+        check(build.start().waitFor() == 0) { "Building the omlib submodule failed (see above)" }
+        // Loom keeps the remapped jar of a mod dependency under its version, and a rebuilt library has the same version:
+        // drop that cache when the library was built from other sources than last time
+        val built = File(omlibDir, "build/maven/.stamp")
+        val seen = File(settingsDir, ".gradle/omlib.stamp")
+        if (built.exists() && (!seen.exists() || seen.readText() != built.readText())) {
+            File(settingsDir, ".gradle/loom-cache/remapped_mods/remapped/omtteam").deleteRecursively()
+            seen.parentFile.mkdirs()
+            seen.writeText(built.readText())
+        }
+    }
+    // Shared build logic (the mod-common convention plugin and convertFabricData)
     includeBuild("omlib/build-logic")
     repositories {
         mavenCentral()

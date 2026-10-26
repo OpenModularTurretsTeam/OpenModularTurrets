@@ -100,6 +100,21 @@ if (stonecutter.current.parsed >= "1.21.11") {
 }
 
 dependencies {
+    // OMLib (git submodule omlib, built by :buildOmlib): a mod of its own, jar-in-jar. The client and game test source
+    // sets only see main's classes, not its dependencies.
+    val omlib = project.extra["omlibCoordinates"] as String
+    val omlibVersion = project.extra["omlibVersion"] as String
+    implementation(omlib) { isTransitive = false }
+    "clientCompileOnly"(omlib) { isTransitive = false }
+    "gametestCompileOnly"(omlib) { isTransitive = false }
+    "gametestRuntimeOnly"(omlib) { isTransitive = false }
+    jarJar("omtteam.omlib:omlib") {
+        version {
+            strictly("[$omlibVersion,)")
+            prefer("$omlibVersion+${property("minecraft_version")}-neoforge")
+        }
+    }
+
     // Jade plugin (compat/jade, client/compat/jade): optional, not bundled; present in dev runs to try it
     compileOnly("maven.modrinth:jade:${property("jade_version")}")
     localRuntime("maven.modrinth:jade:${property("jade_version")}")

@@ -26,6 +26,13 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${mod_id}]]
+modId = "omlib"
+mandatory = true
+versionRange = "[${omlib_version},)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
 modId = "jade"
 mandatory = false
 versionRange = "*"

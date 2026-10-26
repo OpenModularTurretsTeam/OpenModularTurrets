@@ -46,6 +46,7 @@
     "fabricloader": ">=${loader_version}",
     "minecraft": "${minecraft_dependency}",
     "java": ">=${java_version}",
-    "fabric-api": "*"
+    "fabric-api": "*",
+    "omlib": ">=${omlib_version}"
   }
 }
