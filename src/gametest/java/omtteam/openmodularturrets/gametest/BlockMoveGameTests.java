@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge {
+//? if neoforge && <1.21.11 {
 /*import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 *///?}
@@ -8,12 +8,14 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 /*import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 *///?}
-//? if neoforge || forge {
+//? if (neoforge && <1.21.11) || forge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
+//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.entity.Entity;
@@ -24,7 +26,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.AABB;
 import omtteam.openmodularturrets.block.misc.GeneratorBlock;
 import omtteam.openmodularturrets.block.misc.LeverBlock;
@@ -40,10 +42,10 @@ import java.util.List;
 
 /**
  * Moving blocks the way {@code /setblock} and Sable contraptions do: they save the block entity's data, call
- * {@link Clearable#tryClear} and then remove the old block, which must not drop the items a second time. Moved blocks
+ * {@link Clearable#clearContent} and then remove the old block, which must not drop the items a second time. Moved blocks
  * are rotated and mirrored through their block state, which must turn their facing with them.
  */
-//? if neoforge || forge {
+//? if (neoforge && <1.21.11) || forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
@@ -55,7 +57,7 @@ public class BlockMoveGameTests implements OMTGameTests {
     @GameTest(template = EMPTY_STRUCTURE, batch = "block_move_base_cleared")
     public void clearedBaseDropsNothing(GameTestHelper helper) {
         TurretBaseBlockEntity base = placeFilledBase(helper);
-        Clearable.tryClear(base);
+        base.clearContent();
         helper.setBlock(POS, Blocks.AIR);
         List<ItemEntity> drops = drops(helper);
         drops.forEach(Entity::discard);
@@ -80,10 +82,10 @@ public class BlockMoveGameTests implements OMTGameTests {
     @GameTest(template = EMPTY_STRUCTURE, batch = "block_move_generator_cleared")
     public void clearedGeneratorDropsNothing(GameTestHelper helper) {
         helper.setBlock(POS, ModBlocks.GENERATOR);
-        GeneratorBlockEntity generator = (GeneratorBlockEntity) helper.getBlockEntity(POS);
+        GeneratorBlockEntity generator = (GeneratorBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(POS));
         generator.getFuelContainer().setItem(0, new ItemStack(Items.COAL, 8));
         generator.getUpgradeContainer().setItem(0, new ItemStack(ModItems.UPGRADE_ENERGY_MULTIPLIER));
-        Clearable.tryClear(generator);
+        generator.clearContent();
         helper.setBlock(POS, Blocks.AIR);
         List<ItemEntity> drops = drops(helper);
         drops.forEach(Entity::discard);
@@ -104,7 +106,7 @@ public class BlockMoveGameTests implements OMTGameTests {
         helper.succeed();
     }
 
-    private static void assertTurns(GameTestHelper helper, BlockState state, DirectionProperty facing) {
+    private static void assertTurns(GameTestHelper helper, BlockState state, EnumProperty<Direction> facing) {
         BlockState north = state.setValue(facing, Direction.NORTH);
         String name = state.getBlock().getDescriptionId();
         helper.assertTrue(north.rotate(Rotation.CLOCKWISE_90).getValue(facing) == Direction.EAST,
@@ -116,7 +118,7 @@ public class BlockMoveGameTests implements OMTGameTests {
     /** A tier 1 base with a stack of ammo and an upgrade (no owner). */
     private static TurretBaseBlockEntity placeFilledBase(GameTestHelper helper) {
         helper.setBlock(POS, ModBlocks.TURRET_BASES.get(0));
-        TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getBlockEntity(POS);
+        TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(POS));
         base.getInventory().setItem(TurretBaseInventory.AMMO_START, new ItemStack(ModItems.AMMO_BULLET, 16));
         base.getInventory().setItem(TurretBaseInventory.UPGRADE_START, new ItemStack(ModItems.UPGRADE_RANGE));
         return base;

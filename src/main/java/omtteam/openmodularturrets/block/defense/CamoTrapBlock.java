@@ -28,6 +28,7 @@ import omtteam.openmodularturrets.camo.CamoLightProperties;
 import omtteam.openmodularturrets.camo.CamoRules;
 import omtteam.openmodularturrets.compat.BlockCodec;
 import omtteam.openmodularturrets.compat.CompatEntityBlock;
+import omtteam.openmodularturrets.compat.block.BlockCompat;
 import omtteam.openmodularturrets.menu.CamoMenus;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -77,15 +78,13 @@ public class CamoTrapBlock extends CompatEntityBlock implements InteractiveBlock
     }
 
     @Override
-    @SuppressWarnings({"deprecation", "RedundantSuppression"})
-    public int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
+    protected int lightAbsorbed(BlockState state, int vanilla) {
         return CamoLightProperties.lightBlock(state);
     }
 
     /** Fully transparent traps let sky light through, like glass. */
     @Override
-    @SuppressWarnings({"deprecation", "RedundantSuppression"})
-    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    protected boolean skylightPropagates(BlockState state, boolean vanilla) {
         return CamoLightProperties.lightBlock(state) == 0;
     }
 
@@ -142,6 +141,6 @@ public class CamoTrapBlock extends CompatEntityBlock implements InteractiveBlock
         if (player instanceof ServerPlayer serverPlayer) {
             CamoMenus.open(serverPlayer, trap);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return BlockCompat.sidedSuccess(level.isClientSide());
     }
 }

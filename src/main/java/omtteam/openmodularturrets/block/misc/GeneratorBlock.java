@@ -8,7 +8,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -26,14 +25,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.blockentity.misc.GeneratorBlockEntity;
 import omtteam.openmodularturrets.compat.BlockCodec;
+import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.compat.CompatEntityBlock;
 import omtteam.openmodularturrets.compat.MenuCompat;
+import omtteam.openmodularturrets.compat.block.BlockCompat;
 import omtteam.openmodularturrets.menu.GeneratorMenu;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +45,7 @@ import org.jetbrains.annotations.Nullable;
  * use it (no owner). {@link #FACING} is the front, {@link #LIT} is set while burning.
  */
 public class GeneratorBlock extends CompatEntityBlock implements InteractiveBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
     private static final BlockCodec<GeneratorBlock> CODEC = codecOf(GeneratorBlock::new);
@@ -105,17 +106,17 @@ public class GeneratorBlock extends CompatEntityBlock implements InteractiveBloc
             MenuCompat.open(serverPlayer, Component.translatable(getDescriptionId()), pos,
                     (containerId, inventory, menuPlayer) -> GeneratorMenu.server(containerId, inventory, generator));
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return BlockCompat.sidedSuccess(level.isClientSide());
     }
 
+    //? if <1.21.11 {
+    /** The generator drops its items in {@code onBlockRemoved}; 1.21.11 calls that itself. */
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof GeneratorBlockEntity generator) {
-            Containers.dropContents(level, pos, generator.getFuelContainer());
-            Containers.dropContents(level, pos, generator.getUpgradeContainer());
-        }
+        CompatBlockEntity.handleRemove(state, level, pos, newState);
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
+    //?}
 
     /** Furnace-style crackle and smoke at the front while burning. */
     @Override

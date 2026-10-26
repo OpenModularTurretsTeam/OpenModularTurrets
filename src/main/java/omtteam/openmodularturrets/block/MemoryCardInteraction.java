@@ -14,6 +14,7 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.defense.CamoTrapBlockEntity;
 import omtteam.openmodularturrets.camo.CamoHost;
 import omtteam.openmodularturrets.camo.CamoRules;
+import omtteam.openmodularturrets.compat.block.BlockCompat;
 import omtteam.openmodularturrets.core.card.MemoryCardData;
 import omtteam.openmodularturrets.core.card.MemoryCardRules;
 import omtteam.openmodularturrets.item.MemoryCardItem;
@@ -62,7 +63,7 @@ public final class MemoryCardInteraction {
                 pasteToTrap(serverPlayer, data.get(), (CamoTrapBlockEntity) target);
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return BlockCompat.sidedSuccess(level.isClientSide());
     }
 
     // ---- Copy ----

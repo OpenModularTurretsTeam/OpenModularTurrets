@@ -2,7 +2,11 @@ package omtteam.openmodularturrets.item;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
+//? if >=1.21.11 {
+/*import net.minecraft.world.InteractionResult;
+*///?} else {
 import net.minecraft.world.InteractionResultHolder;
+//?}
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -10,6 +14,8 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.openmodularturrets.compat.block.BlockCompat;
+import omtteam.openmodularturrets.compat.nbt.NbtCompat;
 
 /**
  * The map maker's ownership wand (creative only): right-click an owned block to become its owner, sneak-right-click to
@@ -26,7 +32,7 @@ public class OwnershipWandItem extends Item {
 
     /** Whether the wand changes the connected blocks of the same owner too (the default), or only the clicked one. */
     public static boolean isSpreading(ItemStack stack) {
-        return !VersionCompat.getCustomData(stack).getBoolean(NO_SPREAD);
+        return !NbtCompat.getBoolean(VersionCompat.getCustomData(stack), NO_SPREAD, false);
     }
 
     public static void setSpreading(ItemStack stack, boolean spreading) {
@@ -50,13 +56,32 @@ public class OwnershipWandItem extends Item {
     }
 
     /** Sneak-right-click into the air switches spreading. */
+    //? if >=1.21.11 {
+    /*@Override
+    @SuppressWarnings("NullableProblems")
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        if (toggleSpreading(level, player, player.getItemInHand(hand))) {
+            return BlockCompat.sidedSuccess(level.isClientSide());
+        }
+        return super.use(level, player, hand);
+    }
+    *///?} else {
     @Override
     @SuppressWarnings("NullableProblems")
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        if (toggleSpreading(level, player, stack)) {
+            return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        }
+        return super.use(level, player, hand);
+    }
+    //?}
+
+    /** @return whether this was the sneak-click into the air, which toggled the setting (or told why not) */
+    private boolean toggleSpreading(Level level, Player player, ItemStack stack) {
         if (!player.isShiftKeyDown()
                 || getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE).getType() != HitResult.Type.MISS) {
-            return super.use(level, player, hand);
+            return false;
         }
         if (!level.isClientSide()) {
             if (mayUse(player)) {
@@ -68,6 +93,6 @@ public class OwnershipWandItem extends Item {
                 player.displayClientMessage(Component.translatable("message.openmodularturrets.wand.game_masters_only"), true);
             }
         }
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        return true;
     }
 }

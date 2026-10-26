@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,6 +34,7 @@ import omtteam.openmodularturrets.camo.CamoRules;
 import omtteam.openmodularturrets.config.BaseSetting;
 import omtteam.openmodularturrets.config.ConfigData;
 import omtteam.openmodularturrets.compat.BlockCodec;
+import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.compat.CompatEntityBlock;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.camo.CamoLight;
@@ -114,15 +114,13 @@ public class TurretBaseBlock extends CompatEntityBlock implements InteractiveBlo
 
     /** Without adjustable light the base blocks all light (the default opacity), like the solid block it used to be. */
     @Override
-    @SuppressWarnings({"deprecation", "RedundantSuppression"})
-    public int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
+    protected int lightAbsorbed(BlockState state, int vanilla) {
         return CamoLightProperties.lightBlock(state);
     }
 
     /** Fully transparent bases let sky light through, like glass. */
     @Override
-    @SuppressWarnings({"deprecation", "RedundantSuppression"})
-    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    protected boolean skylightPropagates(BlockState state, boolean vanilla) {
         return CamoLightProperties.lightBlock(state) == 0;
     }
 
@@ -180,9 +178,7 @@ public class TurretBaseBlock extends CompatEntityBlock implements InteractiveBlo
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbourBlock, BlockPos neighbourPos,
-                                boolean movedByPiston) {
-        super.neighborChanged(state, level, pos, neighbourBlock, neighbourPos, movedByPiston);
+    protected void onNeighborChanged(BlockState state, Level level, BlockPos pos, @Nullable BlockPos neighbourPos) {
         if (!level.isClientSide() && level.getBlockEntity(pos) instanceof TurretBaseBlockEntity base) {
             base.onNeighbourChanged();
         }
@@ -212,14 +208,14 @@ public class TurretBaseBlock extends CompatEntityBlock implements InteractiveBlo
         return InteractionResult.CONSUME;
     }
 
-    /** Drops the whole inventory (ammo, addons, upgrades) when the base is removed (OMLib {@code dropItems}). */
+    //? if <1.21.11 {
+    /** The base drops its inventory in {@code onBlockRemoved}; 1.21.11 calls that itself. */
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof TurretBaseBlockEntity base) {
-            Containers.dropContents(level, pos, base.getInventory());
-        }
+        CompatBlockEntity.handleRemove(state, level, pos, newState);
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
+    //?}
 
     /** Sparkles while the block has no owner ({@link UnownedMarker}). */
     @Override

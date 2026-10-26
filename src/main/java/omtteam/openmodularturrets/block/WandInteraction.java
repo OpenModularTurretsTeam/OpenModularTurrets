@@ -7,6 +7,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import omtteam.openmodularturrets.compat.block.BlockCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.item.OwnershipWandItem;
@@ -40,7 +41,7 @@ public final class WandInteraction {
                 player.displayClientMessage(Component.translatable("message.openmodularturrets.wand.game_masters_only"), true);
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return BlockCompat.sidedSuccess(level.isClientSide());
     }
 
     private static void apply(Player player, Level level, BlockPos target, OwnedHost clicked, boolean reset, boolean spread) {

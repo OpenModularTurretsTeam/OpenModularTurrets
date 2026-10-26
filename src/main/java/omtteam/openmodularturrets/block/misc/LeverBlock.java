@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -31,6 +31,7 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.misc.LeverBlockEntity;
 import omtteam.openmodularturrets.compat.BlockCodec;
 import omtteam.openmodularturrets.compat.CompatEntityBlock;
+import omtteam.openmodularturrets.compat.block.BlockCompat;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.registry.ModSounds;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
  * {@link #FACING} points towards the base.
  */
 public class LeverBlock extends CompatEntityBlock implements InteractiveBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     /** 1.12.2 {@code storage.receiveEnergy(50, false)} per turn (limited by the base's max input). */
     private static final long ENERGY_PER_TURN = 50;
     /** Bounding box 0.1–0.9. */
@@ -87,7 +88,7 @@ public class LeverBlock extends CompatEntityBlock implements InteractiveBlock {
 
     @Override
     public @NotNull RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
+        return BlockCompat.entityRenderShape();
     }
 
     @Override
@@ -125,9 +126,7 @@ public class LeverBlock extends CompatEntityBlock implements InteractiveBlock {
 
     /** 1.12.2 {@code neighborChanged}: drops when the base is gone. */
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbourBlock, BlockPos neighbourPos,
-                                boolean movedByPiston) {
-        super.neighborChanged(state, level, pos, neighbourBlock, neighbourPos, movedByPiston);
+    protected void onNeighborChanged(BlockState state, Level level, BlockPos pos, @Nullable BlockPos neighbourPos) {
         if (!level.isClientSide() && !canSurvive(state, level, pos)) {
             level.destroyBlock(pos, true);
         }
@@ -148,6 +147,6 @@ public class LeverBlock extends CompatEntityBlock implements InteractiveBlock {
                 level.playSound(null, pos, ModSounds.WINDUP, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return BlockCompat.sidedSuccess(level.isClientSide());
     }
 }

@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
+import omtteam.openmodularturrets.compat.block.BlockCompat;
 
 /**
  * Behaviour shared by the OMPD blocks (OMPD {@code BlockHelper}).
@@ -40,9 +41,9 @@ public final class PassiveDefense {
             if (owned == null || owned.isOwner(player)) {
                 level.destroyBlock(pos, true);
             } else {
-                player.sendSystemMessage(Component.translatable("message.openmodularturrets.not_owner"));
+                player.displayClientMessage(Component.translatable("message.openmodularturrets.not_owner"), false);
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return BlockCompat.sidedSuccess(level.isClientSide());
     }
 }

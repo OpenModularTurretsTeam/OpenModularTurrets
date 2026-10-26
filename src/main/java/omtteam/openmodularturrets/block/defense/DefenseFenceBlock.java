@@ -18,6 +18,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.block.UnownedMarker;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
+import omtteam.openmodularturrets.compat.VersionCompat;
+//? if >=1.21.11 {
+/*import net.minecraft.world.entity.InsideBlockEffectApplier;
+*///?}
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -52,14 +56,26 @@ public class DefenseFenceBlock extends IronBarsBlock implements EntityBlock, Int
         }
     }
 
-    /** OMPD {@code onEntityCollidedWithBlock}. */
+    //? if >=1.21.11 {
+    /*@Override
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity,
+                                InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+        onEntityInside(level, pos, entity);
+    }
+    *///?} else {
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        onEntityInside(level, pos, entity);
+    }
+    //?}
+
+    /** OMPD {@code onEntityCollidedWithBlock}. */
+    private static void onEntityInside(Level level, BlockPos pos, Entity entity) {
         if (level.isClientSide() || entity instanceof ItemEntity) return;
         boolean owner = entity instanceof Player player && level.getBlockEntity(pos) instanceof OwnedBlockEntity be
                 && be.isOwner(player);
         if (!owner) {
-            entity.hurt(level.damageSources().cactus(), DAMAGE);
+            VersionCompat.hurt(entity, level.damageSources().cactus(), DAMAGE);
         }
     }
 

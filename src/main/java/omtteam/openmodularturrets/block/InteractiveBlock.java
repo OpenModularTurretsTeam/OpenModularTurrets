@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.openmodularturrets.compat.block.BlockCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.security.OwnedHost;
 import omtteam.openmodularturrets.security.PlayerAdapter;
@@ -58,6 +59,6 @@ public interface InteractiveBlock {
             String key = result.limitReached() ? "message.openmodularturrets.claimed_limit" : "message.openmodularturrets.claimed";
             player.displayClientMessage(Component.translatable(key, result.claimed()), true);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return BlockCompat.sidedSuccess(level.isClientSide());
     }
 }

@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -31,6 +31,7 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import omtteam.openmodularturrets.compat.BlockCodec;
 import omtteam.openmodularturrets.compat.CompatEntityBlock;
+import omtteam.openmodularturrets.compat.block.BlockCompat;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.TurretPlacement;
@@ -52,7 +53,7 @@ import java.util.Map;
  * with the base GUI's "Drop turrets" button or drop when their base disappears.
  */
 public class TurretBlock extends CompatEntityBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
     /** 1.12.2 {@code CONCEALED}: retracted into the base by the concealer addon (no shape). */
     public static final BooleanProperty CONCEALED = BooleanProperty.create("concealed");
     /** Bounding box 0.2–0.8 on every axis. */
@@ -120,7 +121,7 @@ public class TurretBlock extends CompatEntityBlock {
     /** Drawn only by the block entity renderer (1.12.2: invisible block + TESR). */
     @Override
     public @NotNull RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
+        return BlockCompat.entityRenderShape();
     }
 
     @Override
@@ -209,11 +210,10 @@ public class TurretBlock extends CompatEntityBlock {
 
     /** 1.12.2 {@code onNeighborChange}: a turret whose base is gone drops itself. */
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbourBlock, BlockPos neighbourPos,
-                                boolean movedByPiston) {
-        super.neighborChanged(state, level, pos, neighbourBlock, neighbourPos, movedByPiston);
+    protected void onNeighborChanged(BlockState state, Level level, BlockPos pos, @Nullable BlockPos neighbourPos) {
         BlockPos basePos = pos.relative(state.getValue(FACING).getOpposite());
-        if (!level.isClientSide() && neighbourPos.equals(basePos)
+        // 1.21.11 does not tell which neighbour changed, so any update checks the base
+        if (!level.isClientSide() && (neighbourPos == null || neighbourPos.equals(basePos))
                 && !(level.getBlockEntity(basePos) instanceof TurretBaseBlockEntity)) {
             level.destroyBlock(pos, true);
         }
