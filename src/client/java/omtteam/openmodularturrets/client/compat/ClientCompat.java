@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import org.lwjgl.glfw.GLFW;
 //? if >=1.21.11 {
 /*import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.ShapeRenderer;
@@ -79,6 +80,33 @@ public final class ClientCompat {
     public static void renderComponentTooltip(GuiGraphics graphics, Font font, List<Component> lines, int x, int y) {
         //? if >=1.21.11 {
         /*graphics.setComponentTooltipForNextFrame(font, lines, x, y);
+        *///?} else {
+        graphics.renderComponentTooltip(font, lines, x, y);
+        //?}
+    }
+
+    /**
+     * Shows a tooltip-styled box that stays on screen next to other tooltips. Up to 1.21.1 tooltips are drawn at once,
+     * so this is a plain tooltip; 1.21.11 keeps only one tooltip per frame, so the box is drawn by hand.
+     */
+    public static void renderStaticTooltip(GuiGraphics graphics, Font font, List<Component> lines, int x, int y) {
+        //? if >=1.21.11 {
+        /*int boxX = x + 12;
+        int boxY = y - 12;
+        int width = 0;
+        for (Component line : lines) width = Math.max(width, font.width(line));
+        int height = lines.size() * font.lineHeight;
+        graphics.fill(boxX - 4, boxY - 4, boxX + width + 4, boxY + height + 4, 0xF0100010);
+        graphics.fill(boxX - 3, boxY - 3, boxX + width + 3, boxY + height + 3, 0xF0100010);
+        graphics.fill(boxX - 3, boxY - 3, boxX + width + 3, boxY - 2, 0xFF5000FF);
+        graphics.fill(boxX - 3, boxY + height + 2, boxX + width + 3, boxY + height + 3, 0xFF28007F);
+        graphics.fill(boxX - 3, boxY - 3, boxX - 2, boxY + height + 3, 0xFF5000FF);
+        graphics.fill(boxX + width + 2, boxY - 3, boxX + width + 3, boxY + height + 3, 0xFF28007F);
+        int lineY = boxY;
+        for (Component line : lines) {
+            graphics.drawString(font, line, boxX, lineY, 0xFFFFFFFF, true);
+            lineY += font.lineHeight;
+        }
         *///?} else {
         graphics.renderComponentTooltip(font, lines, x, y);
         //?}
@@ -171,5 +199,39 @@ public final class ClientCompat {
         //?} else {
         /*poseStack.scale(-scale, -scale, scale);
         *///?}
+    }
+
+    private static final long CURSOR_MAX_AGE_MS = 2000;
+    private static double savedCursorX;
+    private static double savedCursorY;
+    private static long savedCursorTime;
+
+    private static long windowHandle() {
+        //? if >=1.21.11 {
+        /*return Minecraft.getInstance().getWindow().handle();
+        *///?} else {
+        return Minecraft.getInstance().getWindow().getWindow();
+        //?}
+    }
+
+    /**
+     * Remembers the mouse position when a GUI is removed; opening the next one recentres the cursor, so that screen
+     * puts it back with {@link #restoreCursor()}.
+     */
+    public static void rememberCursor() {
+        double[] x = new double[1];
+        double[] y = new double[1];
+        GLFW.glfwGetCursorPos(windowHandle(), x, y);
+        savedCursorX = x[0];
+        savedCursorY = y[0];
+        savedCursorTime = System.currentTimeMillis();
+    }
+
+    /** Moves the mouse back to where {@link #rememberCursor()} saw it, if that was a moment ago. */
+    public static void restoreCursor() {
+        if (savedCursorTime == 0) return;
+        boolean fresh = System.currentTimeMillis() - savedCursorTime <= CURSOR_MAX_AGE_MS;
+        savedCursorTime = 0;
+        if (fresh) GLFW.glfwSetCursorPos(windowHandle(), savedCursorX, savedCursorY);
     }
 }

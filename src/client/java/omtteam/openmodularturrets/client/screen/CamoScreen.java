@@ -62,8 +62,15 @@ public class CamoScreen extends AbstractContainerScreen<CamoMenu> {
     }
 
     @Override
+    public void removed() {
+        ClientCompat.rememberCursor();
+        super.removed();
+    }
+
+    @Override
     protected void init() {
         super.init();
+        ClientCompat.restoreCursor();
         Optional<CamoHost> host = host();
         if (menu.showsLight()) {
             CamoLight light = host.map(CamoHost::getLight).orElse(CamoLight.DEFAULT);

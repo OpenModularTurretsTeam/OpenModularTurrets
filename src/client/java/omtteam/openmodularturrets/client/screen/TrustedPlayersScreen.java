@@ -80,7 +80,14 @@ public class TrustedPlayersScreen extends CompatScreen {
     }
 
     @Override
+    public void removed() {
+        ClientCompat.rememberCursor();
+        super.removed();
+    }
+
+    @Override
     protected void init() {
+        ClientCompat.restoreCursor();
         left = (width - WIDTH) / 2;
         top = (height - HEIGHT) / 2;
 

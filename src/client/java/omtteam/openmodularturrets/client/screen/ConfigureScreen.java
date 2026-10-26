@@ -63,9 +63,16 @@ public class ConfigureScreen extends CompatScreen {
                 && base().map(base -> base.getTrustManager().isOwner(PlayerAdapter.info(minecraft.player))).orElse(false);
     }
 
+    @Override
+    public void removed() {
+        ClientCompat.rememberCursor();
+        super.removed();
+    }
+
     @SuppressWarnings("DataFlowIssue")
     @Override
     protected void init() {
+        ClientCompat.restoreCursor();
         left = (width - WIDTH) / 2;
         top = (height - HEIGHT) / 2;
         shownAccess = access();

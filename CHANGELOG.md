@@ -10,7 +10,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ### Added
 
-- Minecraft 1.21.11 for Fabric and NeoForge (the Sable and Create Aeronautics support stays 1.21.1 only, as they have no 1.21.11 versions yet)
+- Minecraft 1.21.11 for Fabric and NeoForge support
 
 ### Changed
 
@@ -20,6 +20,9 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 ### Fixed
 
 - A turret base placed without saved data (e.g. by `/setblock` or a structure) with turrets already attached no longer starts with range 0; it starts at the range of its shortest reaching turret
+- The base configure screen dims the world behind it like the base and camouflage GUIs (it was blurred before on 1.21 and later)
+- The info panel left of the base GUI no longer disappears while a button tooltip is shown (Minecraft 1.21.11)
+- The mouse stays where it was when you move between the base, configure, trusted players and camouflage GUIs instead of jumping to the screen centre
 
 ## [4.0.0-beta.9] - 2026-10-25
 

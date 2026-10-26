@@ -60,8 +60,15 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
     }
 
     @Override
+    public void removed() {
+        ClientCompat.rememberCursor();
+        super.removed();
+    }
+
+    @Override
     protected void init() {
         super.init();
+        ClientCompat.restoreCursor();
         shownAccess = access();
         int x = leftPos;
         int y = topPos;
@@ -199,7 +206,7 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
         lines.add(ScreenTexts.gui("attack_mobs").append(": ").withStyle(ChatFormatting.GRAY).append(ScreenTexts.yesNo(targeting.isTargetMobs())));
         lines.add(ScreenTexts.gui("attack_neutrals").append(": ").withStyle(ChatFormatting.GRAY).append(ScreenTexts.yesNo(targeting.isTargetPassive())));
         lines.add(ScreenTexts.gui("attack_players").append(": ").withStyle(ChatFormatting.GRAY).append(ScreenTexts.yesNo(targeting.isTargetPlayers())));
-        ClientCompat.renderComponentTooltip(graphics, font, lines, leftPos - 128 - 12, topPos + 17 + 12);
+        ClientCompat.renderStaticTooltip(graphics, font, lines, leftPos - 128 - 12, topPos + 17 + 12);
     }
 
     /** 1.12.2 {@code drawTooltips}: energy, slot group labels and the range number. */
