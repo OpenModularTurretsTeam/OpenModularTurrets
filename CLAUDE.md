@@ -49,7 +49,7 @@ Core gameplay:
   The NeoForge test mod also compiles against Sable (and Companion) for the contraption game tests (approved by the user on 2026-10-25).
 - **Create Aeronautics** and **Create** (Modrinth, pinned by version id), in the NeoForge dev runs only (`localRuntime`), never bundled (requested by the user on 2026-10-25), to try turrets on airships by hand.
   Create is also compile-only on NeoForge (approved by the user on 2026-10-25) for `platform/neoforge/NeoForgeCreateMovement`, a `BlockMovementChecks` check registered only when Create is loaded; Create and Create Aeronautics are on the NeoForge game test server for the movement tests.
-- **OMLib** (the user's own library, `../OMLib1.20.1+`, branch `1.20.1+`), mounted as the git submodule `omlib` and bundled into every jar (jar-in-jar; Fabric `include`, NeoForge and Forge `jarJar`; requested by the user on 2026-10-27).
+- **OMLib** (the user's own library, `../OMLib`, branch `1.20.1+`), mounted as the git submodule `omlib` and bundled into every jar (jar-in-jar; Fabric `include`, NeoForge and Forge `jarJar`; requested by the user on 2026-10-27).
   It holds the code both mods used to share (platform services, version compat, energy and item transfer, config, the camouflage menu) and the build logic.
   The library is a mod of its own (`omlib`), declared as a required dependency in the mod metadata, and built as a nested step of the mod build, see §4 "OMLib".
 - Nothing else without asking the user first.
@@ -72,7 +72,7 @@ They have no Sable, Create or Create Aeronautics properties (no 1.21.11 builds k
 
 - Build system: Gradle 9.8 (Kotlin DSL) + **Stonecutter 0.9**, with Fabric Loom 1.18 (`net.fabricmc.fabric-loom-remap`, the variant for obfuscated MC versions) on the Fabric nodes and ModDevGradle 2.0 (`net.neoforged.moddev`) on the NeoForge node.
 - Shared build logic is the convention plugin `omlib/build-logic/src/main/kotlin/mod-common.gradle.kts` (Java toolchain, metadata templating, JUnit, `verifyCoreIsolation`, licenses in the jar via `bundled_licenses`, publishing).
-  It is mod-independent and lives in its own repository, `OMLib` (`../OMLib1.20.1+`), which every mod mounts as the git submodule `omlib` (the branch `1.20.1+` of the OMLib repository, clean history; an included build in `pluginManagement` of `settings.gradle.kts`).
+  It is mod-independent and lives in its own repository, `OMLib` (`../OMLib`), which every mod mounts as the git submodule `omlib` (the branch `1.20.1+` of the OMLib repository, clean history; an included build in `pluginManagement` of `settings.gradle.kts`).
   Change it inside `omlib/`, commit and push there, then commit the new submodule pointer in each mod; clone a mod with `--recurse-submodules` (or run `git submodule update --init`).
   The few source files that the mods still copy from each other are listed in `omlib/shared-sources.txt`; after changing one, run `python3 -I omlib/tools/shared_sources.py sync --from . --write . ../OpenModularLighting` and then `check`.
   The OMT-specific quality tools (ArchUnit, JaCoCo, PIT, PMD) stay in `build.fabric.gradle.kts`.
@@ -187,7 +187,7 @@ If this does not match the installed version, check the Stonecutter docs and upd
 
 ### OMLib (the library, `omlib/`)
 
-Requested by the user on 2026-10-27: the code that OpenModularTurrets and OpenModularLighting used to share lives in the library OMLib (`../OMLib1.20.1+`, a mod of its own with the id `omlib`, package `omtteam.omlib`), which both mods bundle jar-in-jar.
+Requested by the user on 2026-10-27: the code that OpenModularTurrets and OpenModularLighting used to share lives in the library OMLib (`../OMLib`, a mod of its own with the id `omlib`, package `omtteam.omlib`), which both mods bundle jar-in-jar.
 Its README and `CLAUDE.md` describe the layout and the rules (no mod knowledge in the library, public API only where a mod needs it).
 
 - **Where things are:** the platform layer (`Platform`, `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy` and their loader classes), the compat helpers (`VersionCompat`, `NbtCompat`, `BlockCompat`, `NetworkCompat`, `MenuCompat`, `CompatBlockEntity`, `CommonTags`, `ClientCompat`), `core.energy`, `inventory.ItemAccess`, `TransferHost`, the config machinery (`@Comment`, `@Range`, `ConfigWriter`, `ConfigRanges`, `ConfigValidator`, `ConfigMigration`), `RegistrationStep`, the block base `CompatEntityBlock` with `BlockCodec`, the single right-click handling `InteractiveBlock` (with interceptors), `ConfigManager` (with the config sync) and the camouflage menu with its screen, packets and models are in the `omtteam.omlib` packages.
