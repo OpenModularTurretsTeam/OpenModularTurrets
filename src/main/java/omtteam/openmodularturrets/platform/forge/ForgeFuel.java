@@ -2,12 +2,13 @@ package omtteam.openmodularturrets.platform.forge;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeHooks;
 import omtteam.openmodularturrets.platform.Fuel;
 
 public final class ForgeFuel implements Fuel {
     @Override
-    public int burnTime(ItemStack stack) {
+    public int burnTime(Level level, ItemStack stack) {
         // includes items that override their burn time and Forge's FurnaceFuelBurnTimeEvent
         return stack.isEmpty() ? 0 : Math.max(0, ForgeHooks.getBurnTime(stack, RecipeType.SMELTING));
     }

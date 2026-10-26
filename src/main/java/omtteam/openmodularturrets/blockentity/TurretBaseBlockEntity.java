@@ -4,10 +4,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,6 +20,7 @@ import omtteam.openmodularturrets.camo.CamoHost;
 import omtteam.openmodularturrets.camo.CamoLightProperties;
 import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.openmodularturrets.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.camo.CamoLight;
@@ -153,11 +154,17 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
 
     /**
      * Empties the inventory. Whoever moves or replaces the block after saving its data ({@code /setblock}, Sable
-     * contraptions) calls this first, so {@link TurretBaseBlock#onRemove} does not drop a second copy of the items.
+     * contraptions) calls this first, so {@link #onBlockRemoved} does not drop a second copy of the items.
      */
     @Override
     public void clearContent() {
         inventory.clearContent();
+    }
+
+    /** Drops the whole inventory (ammo, addons, upgrades) when the base is removed (OMLib {@code dropItems}). */
+    @Override
+    protected void onBlockRemoved(Level level) {
+        Containers.dropContents(level, worldPosition, inventory);
     }
 
     /** Ammo slots as exposed to automation on all sides, insert only (the loader adapters wrap it). */
@@ -239,7 +246,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
         logic.loadState(TurretBaseNbt.load(tag));
         CamoData.remeshIfChanged(this, camoData.read(tag));
         // client updates carry no items; the open menu syncs its slots itself
-        if (tag.contains("Items", Tag.TAG_LIST)) {
+        if (NbtCompat.hasList(tag, "Items")) {
             inventory.getItems().clear();
             VersionCompat.loadItems(tag, inventory.getItems(), registries);
         }

@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.security;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import omtteam.openmodularturrets.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.core.security.AccessLevel;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.security.TrustManager;
@@ -10,6 +10,7 @@ import omtteam.openmodularturrets.core.security.TrustedPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Saves and loads the owner and trust list of a {@link TrustManager}.
@@ -42,10 +43,10 @@ public final class SecurityNbt {
     public static List<TrustedPlayer> loadTrustedPlayers(ListTag list) {
         List<TrustedPlayer> entries = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            CompoundTag entryTag = list.getCompound(i);
+            CompoundTag entryTag = NbtCompat.getCompound(list, i);
             PlayerIdentity identity = loadIdentity(entryTag);
             if (identity != null) {
-                AccessLevel level = AccessLevel.bySerializedName(entryTag.getString("AccessLevel"), AccessLevel.NONE);
+                AccessLevel level = AccessLevel.bySerializedName(NbtCompat.getString(entryTag, "AccessLevel", ""), AccessLevel.NONE);
                 entries.add(new TrustedPlayer(identity, level));
             }
         }
@@ -54,18 +55,19 @@ public final class SecurityNbt {
 
     /** Entries without a valid UUID are dropped. */
     public static void load(TrustManager manager, CompoundTag tag) {
-        PlayerIdentity owner = tag.contains(OWNER, Tag.TAG_COMPOUND) ? loadIdentity(tag.getCompound(OWNER)) : null;
-        manager.load(owner, loadTrustedPlayers(tag.getList(TRUSTED_PLAYERS, Tag.TAG_COMPOUND)));
+        PlayerIdentity owner = NbtCompat.hasCompound(tag, OWNER) ? loadIdentity(NbtCompat.getCompound(tag, OWNER)) : null;
+        manager.load(owner, loadTrustedPlayers(NbtCompat.getCompoundList(tag, TRUSTED_PLAYERS)));
     }
 
     private static CompoundTag saveIdentity(PlayerIdentity identity) {
         CompoundTag tag = new CompoundTag();
-        tag.putUUID("UUID", identity.uuid());
+        NbtCompat.putUuid(tag, "UUID", identity.uuid());
         tag.putString("Name", identity.name());
         return tag;
     }
 
     private static PlayerIdentity loadIdentity(CompoundTag tag) {
-        return tag.hasUUID("UUID") ? new PlayerIdentity(tag.getUUID("UUID"), tag.getString("Name")) : null;
+        UUID uuid = NbtCompat.getUuid(tag, "UUID");
+        return uuid != null ? new PlayerIdentity(uuid, NbtCompat.getString(tag, "Name", "")) : null;
     }
 }

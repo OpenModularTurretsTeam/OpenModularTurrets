@@ -1,11 +1,10 @@
 package omtteam.openmodularturrets.camo;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.state.BlockState;
 import omtteam.openmodularturrets.compat.CompatBlockEntity;
+import omtteam.openmodularturrets.compat.nbt.NbtCompat;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -38,8 +37,8 @@ public final class CamoData {
     /** @return whether the disguise changed */
     public boolean read(CompoundTag tag) {
         BlockState state = null;
-        if (tag.contains(KEY, Tag.TAG_COMPOUND)) {
-            BlockState read = NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound(KEY));
+        if (NbtCompat.hasCompound(tag, KEY)) {
+            BlockState read = NbtCompat.readBlockState(NbtCompat.getCompound(tag, KEY));
             state = read.isAir() ? null : read;
         }
         return set(state);

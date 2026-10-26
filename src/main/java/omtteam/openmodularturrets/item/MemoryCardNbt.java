@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.item;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import omtteam.openmodularturrets.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.core.base.MachineMode;
 import omtteam.openmodularturrets.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.card.MemoryCardData;
@@ -55,29 +55,30 @@ public final class MemoryCardNbt {
     public static Optional<MemoryCardData> read(CompoundTag tag) {
         MemoryCardData.Source source;
         try {
-            source = MemoryCardData.Source.valueOf(tag.getString(SOURCE).toUpperCase(Locale.ROOT));
+            source = MemoryCardData.Source.valueOf(NbtCompat.getString(tag, SOURCE, "").toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
             return Optional.empty();
         }
         MemoryCardData.BaseSettings base = null;
-        if (tag.contains(BASE, Tag.TAG_COMPOUND)) {
-            CompoundTag baseTag = tag.getCompound(BASE);
+        if (NbtCompat.hasCompound(tag, BASE)) {
+            CompoundTag baseTag = NbtCompat.getCompound(tag, BASE);
             base = new MemoryCardData.BaseSettings(
-                    MachineMode.bySerializedName(baseTag.getString("Mode"), MachineMode.INVERTED),
-                    baseTag.getBoolean("MultiTargeting"), baseTag.getBoolean("TargetPlayers"),
-                    baseTag.getBoolean("TargetMobs"), baseTag.getBoolean("TargetPassive"), baseTag.getInt("Range"));
+                    MachineMode.bySerializedName(NbtCompat.getString(baseTag, "Mode", ""), MachineMode.INVERTED),
+                    NbtCompat.getBoolean(baseTag, "MultiTargeting", false), NbtCompat.getBoolean(baseTag, "TargetPlayers", false),
+                    NbtCompat.getBoolean(baseTag, "TargetMobs", false), NbtCompat.getBoolean(baseTag, "TargetPassive", false),
+                    NbtCompat.getInt(baseTag, "Range", 0));
         }
         // cards written before the trust list had its own section kept it in the base settings
-        var trustList = tag.contains(TRUST, Tag.TAG_LIST) ? tag.getList(TRUST, Tag.TAG_COMPOUND)
-                : tag.getCompound(BASE).getList("TrustedPlayers", Tag.TAG_COMPOUND);
+        var trustList = NbtCompat.hasList(tag, TRUST) ? NbtCompat.getCompoundList(tag, TRUST)
+                : NbtCompat.getCompoundList(NbtCompat.getCompound(tag, BASE), "TrustedPlayers");
         MemoryCardData.TrustSettings trust = new MemoryCardData.TrustSettings(SecurityNbt.loadTrustedPlayers(trustList));
         MemoryCardData.CamoSettings camo = null;
-        if (tag.contains(CAMO, Tag.TAG_COMPOUND)) {
-            CompoundTag camoTag = tag.getCompound(CAMO);
+        if (NbtCompat.hasCompound(tag, CAMO)) {
+            CompoundTag camoTag = NbtCompat.getCompound(tag, CAMO);
             camo = new MemoryCardData.CamoSettings(
-                    camoTag.contains("Disguise", Tag.TAG_STRING) ? camoTag.getString("Disguise") : null,
-                    camoTag.contains("LightValue", Tag.TAG_ANY_NUMERIC)
-                            ? new CamoLight(camoTag.getInt("LightValue"), camoTag.getInt("LightOpacity")) : null);
+                    NbtCompat.hasString(camoTag, "Disguise") ? NbtCompat.getString(camoTag, "Disguise", "") : null,
+                    NbtCompat.hasNumber(camoTag, "LightValue")
+                            ? new CamoLight(NbtCompat.getInt(camoTag, "LightValue", 0), NbtCompat.getInt(camoTag, "LightOpacity", 0)) : null);
         }
         try {
             return Optional.of(new MemoryCardData(source, base, trust, camo));

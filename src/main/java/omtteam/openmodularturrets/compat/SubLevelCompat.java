@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.core.world.Pose;
-//? if >=1.21 {
+//? if >=1.21 && <1.21.11 {
 import dev.ryanhcode.sable.companion.SableCompanion;
 import dev.ryanhcode.sable.companion.SubLevelAccess;
 import dev.ryanhcode.sable.companion.math.Pose3dc;
@@ -17,8 +17,8 @@ import org.joml.Vector3dc;
 
 /**
  * Sable contraptions (sub-levels), through Sable Companion: their blocks are stored in a plot far away from where
- * they are shown, and a {@link Pose} places the plot in the world. Without Sable (and on 1.20.1, which has neither
- * Sable nor Companion) every block is outside a contraption.
+ * they are shown, and a {@link Pose} places the plot in the world. Without Sable (and on 1.20.1 and 1.21.11, which have
+ * neither Sable nor Companion) every block is outside a contraption.
  * <p>
  * Poses change every tick: ask for them when needed, never keep them.
  */
@@ -32,7 +32,7 @@ public final class SubLevelCompat {
     /** Current (logical) pose of the contraption whose plot contains {@code pos}; {@link Pose#IDENTITY} if none. */
     @SuppressWarnings("unused")
     public static Pose poseAt(Level level, BlockPos pos) {
-        //? if >=1.21 {
+        //? if >=1.21 && <1.21.11 {
         SubLevelAccess subLevel = SableCompanion.INSTANCE.getContaining(level, pos);
         return subLevel == null ? Pose.IDENTITY : toPose(subLevel.logicalPose());
         //?} else {
@@ -46,7 +46,7 @@ public final class SubLevelCompat {
      */
     @SuppressWarnings("unused")
     public static Vec3 velocityAt(Level level, Vec3 plotPoint) {
-        //? if >=1.21 {
+        //? if >=1.21 && <1.21.11 {
         Vector3d velocity = SableCompanion.INSTANCE.getVelocity(level, new Vector3d(plotPoint.x, plotPoint.y, plotPoint.z));
         return new Vec3(velocity.x, velocity.y, velocity.z).scale(1.0D / TICKS_PER_SECOND);
         //?} else {
@@ -54,7 +54,7 @@ public final class SubLevelCompat {
         *///?}
     }
 
-    //? if >=1.21 {
+    //? if >=1.21 && <1.21.11 {
     // Companion's pose as a core Pose (same formula); line comments only, this block is commented out on 1.20.1
     public static Pose toPose(Pose3dc pose) {
         Quaterniondc orientation = pose.orientation();

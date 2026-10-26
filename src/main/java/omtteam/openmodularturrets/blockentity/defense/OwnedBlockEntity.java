@@ -3,12 +3,12 @@ package omtteam.openmodularturrets.blockentity.defense;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import omtteam.openmodularturrets.compat.CompatBlockEntity;
+import omtteam.openmodularturrets.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.security.OwnedHost;
@@ -16,6 +16,7 @@ import omtteam.openmodularturrets.security.PlayerAdapter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A passive defense block with an owner (OMPD {@code TileEntityPassiveTiered} / OMLib {@code TileEntityOwnedBlock}).
@@ -73,16 +74,16 @@ public class OwnedBlockEntity extends CompatBlockEntity implements OwnedHost {
 
     @Override
     protected void readData(CompoundTag tag, HolderLookup.Provider registries) {
-        CompoundTag ownerTag = tag.getCompound("Owner");
-        owner = tag.contains("Owner", Tag.TAG_COMPOUND) && ownerTag.hasUUID("UUID")
-                ? new PlayerIdentity(ownerTag.getUUID("UUID"), ownerTag.getString("Name")) : null;
+        CompoundTag ownerTag = NbtCompat.getCompound(tag, "Owner");
+        UUID uuid = NbtCompat.getUuid(ownerTag, "UUID");
+        owner = uuid != null ? new PlayerIdentity(uuid, NbtCompat.getString(ownerTag, "Name", "")) : null;
     }
 
     @Override
     protected void writeData(CompoundTag tag, HolderLookup.Provider registries) {
         if (owner != null) {
             CompoundTag ownerTag = new CompoundTag();
-            ownerTag.putUUID("UUID", owner.uuid());
+            NbtCompat.putUuid(ownerTag, "UUID", owner.uuid());
             ownerTag.putString("Name", owner.name());
             tag.put("Owner", ownerTag);
         }

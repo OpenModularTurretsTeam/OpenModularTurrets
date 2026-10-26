@@ -25,6 +25,7 @@ import omtteam.openmodularturrets.blockentity.base.BlockEntityBaseWorld;
 import omtteam.openmodularturrets.blockentity.base.LivingTargetEntity;
 import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.compat.SubLevelCompat;
+import omtteam.openmodularturrets.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.AmmoDraw;
@@ -471,11 +472,11 @@ public class TurretBlockEntity extends CompatBlockEntity {
     @Override
     protected void readData(CompoundTag tag, HolderLookup.Provider registries) {
         if (tag.contains("TicksSinceShot")) {
-            state.setTicksSinceShot(tag.getInt("TicksSinceShot"));
+            state.setTicksSinceShot(NbtCompat.getInt(tag, "TicksSinceShot", 0));
         }
-        yaw = tag.getFloat("Yaw");
-        pitch = tag.getFloat("Pitch");
-        active = tag.getBoolean("Active");
+        yaw = NbtCompat.getFloat(tag, "Yaw", 0);
+        pitch = NbtCompat.getFloat(tag, "Pitch", 0);
+        active = NbtCompat.getBoolean(tag, "Active", false);
         if (!renderInitialised) {
             renderYaw = prevRenderYaw = yaw;
             renderPitch = prevRenderPitch = pitch;

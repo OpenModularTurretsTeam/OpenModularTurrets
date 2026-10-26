@@ -8,12 +8,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.Containers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import omtteam.openmodularturrets.block.misc.GeneratorBlock;
 import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.compat.VersionCompat;
+import omtteam.openmodularturrets.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.config.ConfigData;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.energy.EnergyAccess;
@@ -43,7 +45,7 @@ public class GeneratorBlockEntity extends CompatBlockEntity implements Clearable
     private final SimpleContainer fuel = new SimpleContainer(FUEL_SLOTS) {
         @Override
         public boolean canPlaceItem(int slot, ItemStack stack) {
-            return isFuel(stack);
+            return isFuel(level, stack);
         }
     };
     /** One upgrade slot holding up to 4 generator upgrades. */
@@ -66,7 +68,7 @@ public class GeneratorBlockEntity extends CompatBlockEntity implements Clearable
             .toList();
     /** Hoppers and pipes may only insert fuel and only extract leftovers (empty buckets). */
     private final ItemAccess itemAccess = new ItemAccess(fuel, 0, FUEL_SLOTS,
-            GeneratorBlockEntity::isFuel, stack -> !isFuel(stack));
+            stack -> isFuel(level, stack), stack -> !isFuel(level, stack));
 
     public GeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.GENERATOR, pos, state);
@@ -80,8 +82,9 @@ public class GeneratorBlockEntity extends CompatBlockEntity implements Clearable
         return stack.getItem() instanceof GeneratorUpgradeItem;
     }
 
-    public static boolean isFuel(ItemStack stack) {
-        return Platform.fuel().burnTime(stack) > 0;
+    /** Whether the stack is furnace fuel; the level holds the fuel values (nothing is fuel while there is none). */
+    public static boolean isFuel(@Nullable Level level, ItemStack stack) {
+        return level != null && Platform.fuel().burnTime(level, stack) > 0;
     }
 
     public SimpleContainer getFuelContainer() {
@@ -94,12 +97,18 @@ public class GeneratorBlockEntity extends CompatBlockEntity implements Clearable
 
     /**
      * Empties fuel and upgrade slots. Whoever moves or replaces the block after saving its data ({@code /setblock},
-     * Sable contraptions) calls this first, so {@link GeneratorBlock#onRemove} does not drop a second copy of the items.
+     * Sable contraptions) calls this first, so {@link #onBlockRemoved} does not drop a second copy of the items.
      */
     @Override
     public void clearContent() {
         fuel.clearContent();
         upgrades.clearContent();
+    }
+
+    @Override
+    protected void onBlockRemoved(Level level) {
+        Containers.dropContents(level, worldPosition, fuel);
+        Containers.dropContents(level, worldPosition, upgrades);
     }
 
     /** Number of energy multiplier upgrades in the upgrade slot. */
@@ -163,7 +172,8 @@ public class GeneratorBlockEntity extends CompatBlockEntity implements Clearable
      */
     private int consumeFuel(int slot) {
         ItemStack stack = fuel.getItem(slot);
-        int ticks = Platform.fuel().burnTime(stack);
+        if (level == null) return 0;
+        int ticks = Platform.fuel().burnTime(level, stack);
         if (ticks <= 0) return 0;
         ItemStack remainder = Platform.fuel().remainder(stack);
         stack.shrink(1);
@@ -193,10 +203,10 @@ public class GeneratorBlockEntity extends CompatBlockEntity implements Clearable
             fuel.setItem(slot, items.get(slot));
         }
         NonNullList<ItemStack> upgradeItems = NonNullList.withSize(1, ItemStack.EMPTY);
-        VersionCompat.loadItems(tag.getCompound("Upgrades"), upgradeItems, registries);
+        VersionCompat.loadItems(NbtCompat.getCompound(tag, "Upgrades"), upgradeItems, registries);
         upgrades.setItem(0, upgradeItems.get(0));
-        energy.setAmountUnchecked(Math.min(energy.getCapacity(), tag.getLong("Energy")));
-        logic.load(tag.getInt("BurnTime"), tag.getInt("BurnDuration"));
+        energy.setAmountUnchecked(Math.min(energy.getCapacity(), NbtCompat.getLong(tag, "Energy", 0)));
+        logic.load(NbtCompat.getInt(tag, "BurnTime", 0), NbtCompat.getInt(tag, "BurnDuration", 0));
     }
 
     @Override

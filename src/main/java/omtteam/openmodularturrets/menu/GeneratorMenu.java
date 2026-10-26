@@ -10,6 +10,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.blockentity.misc.GeneratorBlockEntity;
 import omtteam.openmodularturrets.core.item.GeneratorUpgradeType;
@@ -66,6 +67,7 @@ public class GeneratorMenu extends AbstractContainerMenu {
         this.pos = pos;
         this.generator = generator;
         this.data = data;
+        Level level = playerInventory.player.level();
         for (int x = 0; x < 9; x++) {
             addSlot(new Slot(playerInventory, x, 8 + x * 18, 142));
         }
@@ -78,7 +80,7 @@ public class GeneratorMenu extends AbstractContainerMenu {
             addSlot(new Slot(fuel, slot, FUEL_X + slot % FUEL_COLUMNS * 18, FUEL_Y + slot / FUEL_COLUMNS * 18) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
-                    return GeneratorBlockEntity.isFuel(stack);
+                    return GeneratorBlockEntity.isFuel(level, stack);
                 }
             });
         }
@@ -125,7 +127,7 @@ public class GeneratorMenu extends AbstractContainerMenu {
                 // safeInsert keeps the slot limit of 4 (moveItemStackTo would fill up to 64)
                 slots.get(UPGRADE_SLOT).safeInsert(stack);
                 if (stack.getCount() == original.getCount()) return ItemStack.EMPTY;
-            } else if (!GeneratorBlockEntity.isFuel(stack)
+            } else if (!GeneratorBlockEntity.isFuel(player.level(), stack)
                     || !moveItemStackTo(stack, FUEL_START, FUEL_END, false)) {
                 return ItemStack.EMPTY;
             }

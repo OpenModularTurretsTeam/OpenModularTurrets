@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.blockentity.base;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import omtteam.openmodularturrets.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.core.base.MachineMode;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 
@@ -30,19 +30,19 @@ public final class TurretBaseNbt {
 
     public static TurretBaseLogic.State load(CompoundTag tag) {
         TurretBaseLogic.State defaults = TurretBaseLogic.State.defaults();
-        boolean hasTargeting = tag.contains("Targeting", Tag.TAG_COMPOUND);
-        CompoundTag targeting = tag.getCompound("Targeting");
+        boolean hasTargeting = NbtCompat.hasCompound(tag, "Targeting");
+        CompoundTag targeting = NbtCompat.getCompound(tag, "Targeting");
         return new TurretBaseLogic.State(
-                tag.getLong("Energy"),
-                MachineMode.bySerializedName(tag.getString("Mode"), defaults.mode()),
-                tag.getBoolean("Redstone"),
-                hasTargeting ? targeting.getBoolean("TargetPlayers") : defaults.targetPlayers(),
-                hasTargeting ? targeting.getBoolean("TargetMobs") : defaults.targetMobs(),
-                hasTargeting ? targeting.getBoolean("TargetPassive") : defaults.targetPassive(),
-                targeting.getInt("Range"),
-                targeting.getInt("MaxRange"),
-                tag.getBoolean("MultiTargeting"),
-                tag.getInt("Kills"),
-                tag.getInt("PlayerKills"));
+                NbtCompat.getLong(tag, "Energy", 0),
+                MachineMode.bySerializedName(NbtCompat.getString(tag, "Mode", ""), defaults.mode()),
+                NbtCompat.getBoolean(tag, "Redstone", false),
+                hasTargeting ? NbtCompat.getBoolean(targeting, "TargetPlayers", false) : defaults.targetPlayers(),
+                hasTargeting ? NbtCompat.getBoolean(targeting, "TargetMobs", false) : defaults.targetMobs(),
+                hasTargeting ? NbtCompat.getBoolean(targeting, "TargetPassive", false) : defaults.targetPassive(),
+                NbtCompat.getInt(targeting, "Range", 0),
+                NbtCompat.getInt(targeting, "MaxRange", 0),
+                NbtCompat.getBoolean(tag, "MultiTargeting", false),
+                NbtCompat.getInt(tag, "Kills", 0),
+                NbtCompat.getInt(tag, "PlayerKills", 0));
     }
 }
