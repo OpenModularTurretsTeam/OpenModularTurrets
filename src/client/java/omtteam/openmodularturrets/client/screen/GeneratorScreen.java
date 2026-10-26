@@ -43,6 +43,12 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> {
     }
 
     @Override
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+        graphics.drawString(font, title, titleLabelX, titleLabelY, 0x000000, false);
+        graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x000000, false);
+    }
+
+    @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         int flame = (int) Math.ceil(menu.getBurnProgress() * FLAME_SIZE);

@@ -31,6 +31,14 @@ import java.util.Optional;
 public class CamoScreen extends AbstractContainerScreen<CamoMenu> {
     private static final int WIDTH = 176;
     private static final int SLOT_SIZE = 18;
+    /** Dark grey as in the turret base GUI textures, instead of the vanilla light grey. */
+    private static final int PANEL = 0xFF585858;
+    private static final int PANEL_LIGHT = 0xFF767676;
+    private static final int PANEL_SHADOW = 0xFF323232;
+    private static final int SLOT = 0xFF464646;
+    private static final int SLOT_SHADOW = 0xFF232323;
+    private static final int SLOT_LIGHT = 0xFF9A9A9A;
+    private static final int LABEL_COLOR = 0x000000;
     private static final int SLIDER_WIDTH = 160;
     private static final int SLIDER_VALUE_Y = 48;
     private static final int SLIDER_OPACITY_Y = 72;
@@ -118,8 +126,9 @@ public class CamoScreen extends AbstractContainerScreen<CamoMenu> {
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        super.renderLabels(graphics, mouseX, mouseY);
-        graphics.drawString(font, ScreenTexts.gui("disguise").append(":"), 8, CamoMenu.PHANTOM_Y + 5, 0x404040, false);
+        graphics.drawString(font, title, titleLabelX, titleLabelY, LABEL_COLOR, false);
+        graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, LABEL_COLOR, false);
+        graphics.drawString(font, ScreenTexts.gui("disguise").append(":"), 8, CamoMenu.PHANTOM_Y + 5, LABEL_COLOR, false);
     }
 
     @Override
@@ -127,22 +136,22 @@ public class CamoScreen extends AbstractContainerScreen<CamoMenu> {
         int right = leftPos + imageWidth;
         int bottom = topPos + imageHeight;
         graphics.fill(leftPos, topPos, right, bottom, 0xFF000000);
-        graphics.fill(leftPos + 1, topPos + 1, right - 1, bottom - 1, 0xFFC6C6C6);
-        graphics.fill(leftPos + 1, topPos + 1, right - 1, topPos + 2, 0xFFFFFFFF);
-        graphics.fill(leftPos + 1, topPos + 1, leftPos + 2, bottom - 1, 0xFFFFFFFF);
-        graphics.fill(right - 2, topPos + 2, right - 1, bottom - 1, 0xFF555555);
-        graphics.fill(leftPos + 2, bottom - 2, right - 1, bottom - 1, 0xFF555555);
+        graphics.fill(leftPos + 1, topPos + 1, right - 1, bottom - 1, PANEL);
+        graphics.fill(leftPos + 1, topPos + 1, right - 1, topPos + 2, PANEL_LIGHT);
+        graphics.fill(leftPos + 1, topPos + 1, leftPos + 2, bottom - 1, PANEL_LIGHT);
+        graphics.fill(right - 2, topPos + 2, right - 1, bottom - 1, PANEL_SHADOW);
+        graphics.fill(leftPos + 2, bottom - 2, right - 1, bottom - 1, PANEL_SHADOW);
         for (Slot slot : menu.slots) {
             slotBackground(graphics, leftPos + slot.x - 1, topPos + slot.y - 1);
         }
     }
 
     private static void slotBackground(GuiGraphics graphics, int x, int y) {
-        graphics.fill(x, y, x + SLOT_SIZE, y + SLOT_SIZE, 0xFF8B8B8B);
-        graphics.fill(x, y, x + SLOT_SIZE - 1, y + 1, 0xFF373737);
-        graphics.fill(x, y, x + 1, y + SLOT_SIZE - 1, 0xFF373737);
-        graphics.fill(x + 1, y + SLOT_SIZE - 1, x + SLOT_SIZE, y + SLOT_SIZE, 0xFFFFFFFF);
-        graphics.fill(x + SLOT_SIZE - 1, y + 1, x + SLOT_SIZE, y + SLOT_SIZE, 0xFFFFFFFF);
+        graphics.fill(x, y, x + SLOT_SIZE, y + SLOT_SIZE, SLOT);
+        graphics.fill(x, y, x + SLOT_SIZE - 1, y + 1, SLOT_SHADOW);
+        graphics.fill(x, y, x + 1, y + SLOT_SIZE - 1, SLOT_SHADOW);
+        graphics.fill(x + 1, y + SLOT_SIZE - 1, x + SLOT_SIZE, y + SLOT_SIZE, SLOT_LIGHT);
+        graphics.fill(x + SLOT_SIZE - 1, y + 1, x + SLOT_SIZE, y + SLOT_SIZE, SLOT_LIGHT);
     }
 
     /** A 0–15 slider that sends its values to the server when released. */

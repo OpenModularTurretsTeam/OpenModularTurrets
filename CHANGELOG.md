@@ -8,6 +8,11 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Changed
+
+- The camouflage menu has a dark grey background like the turret base GUI instead of the vanilla light grey
+- The generator GUI labels are black like in the other turret GUIs (were dark grey on the dark background)
+
 ### Fixed
 
 - A turret base placed without saved data (e.g. by `/setblock` or a structure) with turrets already attached no longer starts with range 0; it starts at the range of its shortest reaching turret
