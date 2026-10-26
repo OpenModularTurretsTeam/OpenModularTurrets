@@ -8,10 +8,16 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+## [4.0.0-beta.4] - 2026-10-27
+
 ### Added
 
 - Turret bases accept transparent blocks (glass, ice, leaves) as camouflage; the config option `allowTransparentDisguises` turns it off
 - The disposable ammo list accepts `ore:oreName[,damage]` entries (e.g. `ore:cobblestone`, `ore:plankWood`) for every item of an ore dictionary entry
+
+### Changed
+
+- Requires OMLib 4.0.0-beta.4 or newer
 
 ### Fixed
 
