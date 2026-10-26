@@ -13,10 +13,12 @@ import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelDataManager;
+import omtteam.openmodularturrets.client.camo.CamoModels;
 import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,14 +40,30 @@ public final class ForgeCamoModel extends BakedModelWrapper<BakedModel> {
                                              @NotNull ModelData data, @Nullable RenderType renderType) {
         BlockState camo = camo(data);
         if (camo == null) return super.getQuads(state, side, rand, data, renderType);
-        return model(camo).getQuads(camo, side, rand, ModelData.EMPTY, renderType);
+        List<BakedQuad> quads = new ArrayList<>();
+        BakedModel camoModel = model(camo);
+        // vanilla models ignore the render type: only ask the disguise for its own layers
+        if (renderType == null || camoModel.getRenderTypes(camo, rand, ModelData.EMPTY).contains(renderType)) {
+            quads.addAll(camoModel.getQuads(camo, side, rand, ModelData.EMPTY, renderType));
+        }
+        // what stays of the block's own model on top (e.g. a lamp), in its own layer
+        int overlay = CamoModels.overlayTintIndex(state);
+        if (overlay >= 0 && (renderType == null || super.getRenderTypes(state, rand, data).contains(renderType))) {
+            for (BakedQuad quad : super.getQuads(state, side, rand, data, renderType)) {
+                if (quad.getTintIndex() == overlay) quads.add(quad);
+            }
+        }
+        return quads;
     }
 
     @Override
     public @NotNull ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand,
                                                       @NotNull ModelData data) {
         BlockState camo = camo(data);
-        return camo == null ? super.getRenderTypes(state, rand, data) : model(camo).getRenderTypes(camo, rand, ModelData.EMPTY);
+        if (camo == null) return super.getRenderTypes(state, rand, data);
+        ChunkRenderTypeSet disguise = model(camo).getRenderTypes(camo, rand, ModelData.EMPTY);
+        return CamoModels.overlayTintIndex(state) < 0 ? disguise
+                : ChunkRenderTypeSet.union(disguise, super.getRenderTypes(state, rand, data));
     }
 
     /**

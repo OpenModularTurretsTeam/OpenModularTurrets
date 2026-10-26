@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -20,12 +21,15 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -55,6 +59,7 @@ import net.minecraft.server.players.GameProfileCache;
 //?}
 //? if >=1.21.11 {
 /*import com.mojang.serialization.MapCodec;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.permissions.Permissions;
 import net.minecraft.server.players.NameAndId;
 import net.minecraft.world.entity.EntityReference;
@@ -294,6 +299,36 @@ public final class VersionCompat {
     // ---- ItemStack NBT ----
 
     /**
+     * Serializes a stack (empty stacks become an empty tag).
+     */
+    public static CompoundTag saveStack(ItemStack stack, HolderLookup.Provider registries) {
+        //? if >=1.21.11 {
+        /*if (stack.isEmpty()) return new CompoundTag();
+        Tag tag = ItemStack.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), stack).getOrThrow();
+        return tag instanceof CompoundTag compound ? compound : new CompoundTag();
+        *///?} else if >=1.21 {
+        Tag tag = stack.saveOptional(registries);
+        return tag instanceof CompoundTag compound ? compound : new CompoundTag();
+        //?} else {
+        /*return stack.save(new CompoundTag());
+        *///?}
+    }
+
+    /**
+     * Deserializes a stack written by {@link #saveStack}; returns {@link ItemStack#EMPTY} on invalid data.
+     */
+    public static ItemStack loadStack(CompoundTag tag, HolderLookup.Provider registries) {
+        //? if >=1.21.11 {
+        /*return ItemStack.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag).result()
+                .orElse(ItemStack.EMPTY);
+        *///?} else if >=1.21 {
+        return ItemStack.parseOptional(registries, tag);
+        //?} else {
+        /*return ItemStack.of(tag);
+        *///?}
+    }
+
+    /**
      * Writes a slot list to {@code tag} under {@code "Items"} (vanilla container format).
      */
     public static void saveItems(CompoundTag tag, NonNullList<ItemStack> items, HolderLookup.Provider registries) {
@@ -322,6 +357,14 @@ public final class VersionCompat {
     }
 
     // ---- Custom item data (NBT on 1.20.1, CUSTOM_DATA component on 1.21+) ----
+
+    public static boolean hasCustomData(ItemStack stack) {
+        //? if >=1.21 {
+        return stack.has(DataComponents.CUSTOM_DATA);
+        //?} else {
+        /*return stack.hasTag();
+        *///?}
+    }
 
     /**
      * Returns a <b>copy</b> of the custom data of a stack (empty tag if none). Use {@link #setCustomData}
@@ -354,6 +397,40 @@ public final class VersionCompat {
         CompoundTag tag = getCustomData(stack);
         updater.accept(tag);
         setCustomData(stack, tag);
+    }
+
+    // ---- Blocks ----
+
+    /** Whether bonemeal would work on this block (1.20.1 had an extra {@code isClient} parameter). */
+    public static boolean isValidBonemealTarget(BonemealableBlock block, LevelReader level, BlockPos pos, BlockState state) {
+        //? if >=1.21 {
+        return block.isValidBonemealTarget(level, pos, state);
+        //?} else {
+        /*return block.isValidBonemealTarget(level, pos, state, false);
+        *///?}
+    }
+
+    // ---- Block entity data on block items (BlockEntityTag on 1.20.1, BLOCK_ENTITY_DATA component on 1.21+) ----
+
+    /**
+     * Stores block entity data on a block item; vanilla loads it into the block entity when the block is placed.
+     */
+    public static void setBlockEntityData(ItemStack stack, BlockEntityType<?> type, CompoundTag tag) {
+        //? if >=1.21.11 {
+        /*TagValueOutput output = TagValueOutput.createWithoutContext(ProblemReporter.DISCARDING);
+        output.store(WHOLE_TAG, tag);
+        BlockItem.setBlockEntityData(stack, type, output);
+        *///?} else {
+        BlockItem.setBlockEntityData(stack, type, tag);
+        //?}
+    }
+
+    public static boolean hasBlockEntityData(ItemStack stack) {
+        //? if >=1.21 {
+        return stack.has(DataComponents.BLOCK_ENTITY_DATA);
+        //?} else {
+        /*return BlockItem.getBlockEntityData(stack) != null;
+        *///?}
     }
 
     // ---- Loader differences ----

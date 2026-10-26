@@ -16,8 +16,10 @@ import omtteam.openmodularturrets.client.render.effect.RayRenderer;
 import omtteam.openmodularturrets.client.render.entity.PlasmaRenderer;
 import omtteam.openmodularturrets.client.render.entity.ProjectileRenderers;
 import omtteam.openmodularturrets.client.screen.CamoScreen;
+import omtteam.openmodularturrets.client.screen.CamoScreenExtras;
 import omtteam.openmodularturrets.client.screen.GeneratorScreen;
 import omtteam.openmodularturrets.client.screen.TurretBaseScreen;
+import omtteam.openmodularturrets.client.screen.TrapCamoExtras;
 import omtteam.openmodularturrets.client.tooltip.AmmoTooltip;
 import omtteam.openmodularturrets.client.tooltip.GeneratorTooltip;
 import omtteam.openmodularturrets.client.tooltip.LeverTooltip;
@@ -74,6 +76,7 @@ public final class OMTClient {
      */
     public static void init(List<TurretModels.Plugin> plugins) {
         ClientPacketHandlers.init();
+        CamoScreenExtras.register(TrapCamoExtras::addWidgets);
         RayRenderer.init();
         TurretModels.init(plugins);
     }

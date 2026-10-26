@@ -28,6 +28,17 @@ public final class CamoPacketHandler {
         }
     }
 
+    /** Back to the menu this one was opened from; that menu checks the permission itself. */
+    public static void handleBack(CamoPackets.Back packet, ServerPlayer player) {
+        if (!player.level().isLoaded(packet.pos())
+                || player.distanceToSqr(Vec3.atCenterOf(packet.pos())) >= MAX_DISTANCE_SQR) {
+            return;
+        }
+        if (player.level().getBlockEntity(packet.pos()) instanceof CamoHost host && host.hasParentMenu()) {
+            host.openParentMenu(player);
+        }
+    }
+
     public static void handleSetLight(CamoPackets.SetLight packet, ServerPlayer player) {
         if (!player.level().isLoaded(packet.pos())
                 || player.distanceToSqr(Vec3.atCenterOf(packet.pos())) >= MAX_DISTANCE_SQR

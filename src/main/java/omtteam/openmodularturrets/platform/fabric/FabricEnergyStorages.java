@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import omtteam.openmodularturrets.core.energy.EnergyAccess;
+import omtteam.openmodularturrets.core.energy.EnergyGroup;
 import omtteam.openmodularturrets.core.energy.EnergyStore;
 import team.reborn.energy.api.EnergyStorage;
 
@@ -12,7 +13,7 @@ import java.util.Map;
 
 /**
  * Team Reborn Energy views of {@link EnergyAccess}. A store gets one {@link SnapshotParticipant} for exact rollback in
- * transactions.
+ * transactions; a group distributes into the adapters of its stores.
  */
 public final class FabricEnergyStorages {
     /**
@@ -27,6 +28,9 @@ public final class FabricEnergyStorages {
     public static EnergyStorage of(EnergyAccess access) {
         if (access instanceof EnergyStore store) {
             return STORES.computeIfAbsent(store, StoreStorage::new);
+        }
+        if (access instanceof EnergyGroup group) {
+            return new GroupStorage(group);
         }
         throw new IllegalArgumentException("No Team Reborn Energy adapter for " + access.getClass());
     }
@@ -88,6 +92,41 @@ public final class FabricEnergyStorages {
         @Override
         protected void readSnapshot(Long snapshot) {
             store.setAmountUnchecked(snapshot);
+        }
+    }
+
+    /** Insert only: distributes through {@link EnergyGroup#fill}. */
+    private static final class GroupStorage implements EnergyStorage {
+        private final EnergyGroup group;
+
+        GroupStorage(EnergyGroup group) {
+            this.group = group;
+        }
+
+        @Override
+        public long insert(long maxAmount, TransactionContext transaction) {
+            StoragePreconditions.notNegative(maxAmount);
+            return group.fill(maxAmount, (store, amount) -> of(store).insert(amount, transaction));
+        }
+
+        @Override
+        public boolean supportsExtraction() {
+            return false;
+        }
+
+        @Override
+        public long extract(long maxAmount, TransactionContext transaction) {
+            return 0;
+        }
+
+        @Override
+        public long getAmount() {
+            return group.getAmount();
+        }
+
+        @Override
+        public long getCapacity() {
+            return group.getCapacity();
         }
     }
 }

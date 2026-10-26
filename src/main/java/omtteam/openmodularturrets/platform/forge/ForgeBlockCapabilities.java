@@ -1,10 +1,14 @@
 package omtteam.openmodularturrets.platform.forge;
 
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import omtteam.openmodularturrets.OMT;
+import omtteam.openmodularturrets.blockentity.TransferHost;
 import omtteam.openmodularturrets.core.energy.EnergyAccess;
 import omtteam.openmodularturrets.inventory.ItemAccess;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +33,15 @@ final class ForgeBlockCapabilities implements ICapabilityProvider {
     ForgeBlockCapabilities(Function<Direction, ItemAccess> items, Function<Direction, EnergyAccess> energy) {
         this.items = items;
         this.energy = energy;
+    }
+
+    /** Attaches the capabilities to every {@link TransferHost} (listens to {@code AttachCapabilitiesEvent<BlockEntity>}). */
+    static void attach(AttachCapabilitiesEvent<BlockEntity> event) {
+        if (event.getObject() instanceof TransferHost host) {
+            ForgeBlockCapabilities capabilities = new ForgeBlockCapabilities(host::getItemAccess, host::getEnergyAccess);
+            event.addCapability(OMT.id("transfer"), capabilities);
+            event.addListener(capabilities::invalidate);
+        }
     }
 
     @Override

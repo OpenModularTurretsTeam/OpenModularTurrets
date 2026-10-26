@@ -123,7 +123,7 @@ Then the registrations of `OMTStartup.registrationSteps()`: sounds, blocks, item
 Fabric runs them in this order; NeoForge and Forge run each in the `RegisterEvent` of its registry (and fail at common setup if one never ran).
 A registry class registers its content when it is loaded, so it must not be touched before its step; `ModSounds` is the exception (loading it only creates the sounds, which the turret definitions use in step 1).
 
-Last, the entrypoint wires its loader to the shared code: the item and energy access of the base and the generator (`FabricBlockLookups`, NeoForge capabilities, Forge capabilities attached in `AttachCapabilitiesEvent` by `ForgeBlockCapabilities`), block use (`InteractiveBlock.handleUse`), the config sync on join (`ConfigSync.onPlayerJoin`) and the kill counter (`KillCounter.onDeath`).
+Last, the entrypoint wires its loader to the shared code: the item and energy access of the `TransferHost` block entities (`ModBlockEntities.transferTypes()`: `FabricBlockLookups`, NeoForge capabilities, Forge capabilities attached in `AttachCapabilitiesEvent` by `ForgeBlockCapabilities`), block use (`InteractiveBlock.handleUse`), the config sync on join (`ConfigSync.onPlayerJoin`) and the kill counter (`KillCounter.onDeath`).
 
 On the client, the loader client entrypoint (`OMTFabricClient`, `OMTNeoForgeClient`, `OMTForgeClient`; Forge 1.20.1 has no client-only `@Mod` classes, so `OMTForge` constructs it by name) installs the client platform services and calls `OMTClient.init(plugins)` (client packet handlers, ray packets, turret models, also from other mods).
 It then registers what `OMTClient` lists with its loader: screens, model layers, block entity and entity renderers, item renderers, cutout blocks and tooltips, plus the camouflage models (`FabricCamoModel`, `NeoForgeCamoModel`, `ForgeCamoModel`) and the ray rendering.
@@ -203,7 +203,7 @@ A new machine gets its own enum and item subclass of `UpgradeItem`; its slots ac
 ### A config value
 
 Add a field to the right section of `config.ConfigData` with `@Comment` and `@Range`; the config file, its comments and the range check follow from them.
-If you change a **default**, add a step to `config.ConfigMigration` and raise `CURRENT_VERSION`, so existing files still on the old default get the new one.
+If you change a **default**, add a step to `config.ConfigMigrationSteps` (the version follows the last step), so existing files still on the old default get the new one.
 
 ### A packet
 

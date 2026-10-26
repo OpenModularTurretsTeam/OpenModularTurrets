@@ -13,6 +13,8 @@ import net.minecraft.world.item.Item;
  */
 public final class CommonTags {
     //? if >=1.21 {
+    /** Wrenches of other mods: {@code c:wrenches} on 1.20.1, {@code c:tools/wrench} on 1.21. */
+    public static final TagKey<Item> WRENCHES = tag("tools/wrench");
     /** Ore dictionary {@code ingotIron}. */
     public static final TagKey<Item> IRON_INGOTS = tag("ingots/iron");
     /** Ore dictionary {@code dustRedstone}. */
@@ -24,7 +26,9 @@ public final class CommonTags {
     /** Ore dictionary {@code gemDiamond}. */
     public static final TagKey<Item> DIAMOND_GEMS = tag("gems/diamond");
     //?} else {
-    /*/^* Ore dictionary {@code ingotIron}. ^/
+    /*/^* Wrenches of other mods: {@code c:wrenches} on 1.20.1, {@code c:tools/wrench} on 1.21. ^/
+    public static final TagKey<Item> WRENCHES = tag("wrenches");
+    /^* Ore dictionary {@code ingotIron}. ^/
     public static final TagKey<Item> IRON_INGOTS = tag("iron_ingots");
     /^* Ore dictionary {@code dustRedstone}. ^/
     public static final TagKey<Item> REDSTONE_DUSTS = tag("redstone_dusts");

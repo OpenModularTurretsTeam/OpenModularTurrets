@@ -19,6 +19,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ### Fixed
 
+- Camouflaged turret bases and traps no longer crash the client on Fabric 1.20.1 when no Fabric Renderer API implementation is installed (Sodium without Indium); they show their own look then
 - A turret base placed without saved data (e.g. by `/setblock` or a structure) with turrets already attached no longer starts with range 0; it starts at the range of its shortest reaching turret
 - The base configure screen dims the world behind it like the base and camouflage GUIs (it was blurred before on 1.21 and later)
 - The info panel left of the base GUI no longer disappears while a button tooltip is shown (Minecraft 1.21.11)

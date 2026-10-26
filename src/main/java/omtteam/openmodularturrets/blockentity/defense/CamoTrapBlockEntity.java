@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
  * existed load with the owner they had.
  */
 public class CamoTrapBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost {
-    private final CamoData camoData = new CamoData();
+    private final CamoData camoData = new CamoData("Camo", state -> true);
     private final TrustManager trustManager = new TrustManager(new LevelSecurityEnvironment(this::getLevel),
             this::syncToClient, AccessProfile.TRUSTED_AND_ADMIN);
 
@@ -107,7 +107,9 @@ public class CamoTrapBlockEntity extends CompatBlockEntity implements CamoHost, 
     @Override
     protected void readData(CompoundTag tag, HolderLookup.Provider registries) {
         SecurityNbt.load(trustManager, tag);
-        CamoData.remeshIfChanged(this, camoData.read(tag));
+        if (camoData.read(tag)) {
+            remesh(); // the model reads the disguise while the chunk is meshed
+        }
     }
 
     @Override

@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import omtteam.openmodularturrets.block.misc.GeneratorBlock;
+import omtteam.openmodularturrets.blockentity.TransferHost;
 import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.compat.nbt.NbtCompat;
@@ -39,7 +40,7 @@ import java.util.stream.IntStream;
  * where there is no other power. Energy multiplier upgrades in its upgrade slot make it burn faster
  * ({@link GeneratorLogic#multiplier}).
  */
-public class GeneratorBlockEntity extends CompatBlockEntity implements Clearable {
+public class GeneratorBlockEntity extends CompatBlockEntity implements TransferHost, Clearable {
     public static final int FUEL_SLOTS = 9;
 
     private final SimpleContainer fuel = new SimpleContainer(FUEL_SLOTS) {
@@ -119,13 +120,13 @@ public class GeneratorBlockEntity extends CompatBlockEntity implements Clearable
     }
 
     /** Energy as exposed to automation on all sides (extract only). */
-    @SuppressWarnings("unused")
+    @Override
     public EnergyAccess getEnergyAccess(@Nullable Direction side) {
         return energy;
     }
 
     /** The fuel slots as exposed to automation on all sides (the loader adapters wrap it). */
-    @SuppressWarnings("unused")
+    @Override
     public ItemAccess getItemAccess(@Nullable Direction side) {
         return itemAccess;
     }

@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.client.platform.fabric;
 
+import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.material.MaterialFinder;
@@ -14,9 +15,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import omtteam.openmodularturrets.client.camo.CamoModels;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -44,15 +45,26 @@ public final class FabricCamoModel extends ForwardingBakedModel {
     public void emitBlockQuads(BlockAndTintGetter view, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier,
                                RenderContext context) {
         BlockState camo = camoAt(view, pos);
-        if (camo == null) {
+        Renderer renderer = RendererAccess.INSTANCE.getRenderer();
+        if (camo == null || renderer == null) {
+            // no renderer implementation (e.g. Sodium on 1.20.1 without Indium): the block's own look
             super.emitBlockQuads(view, state, pos, randomSupplier, context);
             return;
         }
         BakedModel camoModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(camo);
-        DisguiseTransform transform = new DisguiseTransform(view, pos, camo, Minecraft.getInstance().getBlockColors());
-        context.pushTransform(transform);
+        context.pushTransform(new DisguiseTransform(view, pos, camo, Minecraft.getInstance().getBlockColors(),
+                renderer.materialFinder()));
         try {
             camoModel.emitBlockQuads(view, camo, pos, randomSupplier, context);
+        } finally {
+            context.popTransform();
+        }
+        // what stays of the block's own model on top (e.g. a lamp), in its own layer
+        int overlay = CamoModels.overlayTintIndex(state);
+        if (overlay < 0) return;
+        context.pushTransform(quad -> quad.colorIndex() == overlay);
+        try {
+            super.emitBlockQuads(view, state, pos, randomSupplier, context);
         } finally {
             context.popTransform();
         }
@@ -72,15 +84,16 @@ public final class FabricCamoModel extends ForwardingBakedModel {
         private final BlockPos pos;
         private final BlockState camo;
         private final BlockColors colors;
-        private final MaterialFinder finder = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer(),
-                "No Fabric Renderer API implementation").materialFinder();
+        private final MaterialFinder finder;
         private final BlendMode blendMode;
 
-        private DisguiseTransform(BlockAndTintGetter view, BlockPos pos, BlockState camo, BlockColors colors) {
+        private DisguiseTransform(BlockAndTintGetter view, BlockPos pos, BlockState camo, BlockColors colors,
+                                  MaterialFinder finder) {
             this.view = view;
             this.pos = pos;
             this.camo = camo;
             this.colors = colors;
+            this.finder = finder;
             this.blendMode = BlendMode.fromRenderLayer(ItemBlockRenderTypes.getChunkRenderType(camo));
         }
 
@@ -95,7 +108,7 @@ public final class FabricCamoModel extends ForwardingBakedModel {
                         quad.color(vertex, multiply(quad.color(vertex), 0xFF000000 | tint));
                     }
                 }
-                // the tint is applied; the host block has no colour provider that could apply it a second time
+                // the tint is applied; the colour provider of the block would apply its own colour instead
                 quad.colorIndex(-1);
             }
             return true;

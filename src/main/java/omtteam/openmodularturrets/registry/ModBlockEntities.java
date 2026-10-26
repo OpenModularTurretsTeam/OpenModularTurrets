@@ -5,6 +5,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import omtteam.openmodularturrets.OMT;
+import omtteam.openmodularturrets.blockentity.TransferHost;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.defense.CamoTrapBlockEntity;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
@@ -46,6 +47,12 @@ public final class ModBlockEntities {
     private ModBlockEntities() {
     }
 
+    /** Loads the class, registering all block entity types. */
     public static void init() {
+    }
+
+    /** The block entities whose items and energy other blocks may use; each loader registers them. */
+    public static List<BlockEntityType<? extends TransferHost>> transferTypes() {
+        return List.of(TURRET_BASE, GENERATOR);
     }
 }

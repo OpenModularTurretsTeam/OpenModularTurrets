@@ -76,6 +76,8 @@ class EnergyStoreTest {
         assertFalse(store.consume(-1));
         assertTrue(store.consume(0));
         assertEquals(2, changes, "generate and the one real consumption");
+        assertTrue(store.consume(100), "exactly the stored amount");
+        assertEquals(0, store.getAmount());
     }
 
     @Test
@@ -123,6 +125,9 @@ class EnergyStoreTest {
 
     @Test
     void limitsCanChange() {
+        assertEquals(1000, store.getCapacity());
+        assertEquals(100, store.getMaxInsert());
+        assertEquals(40, store.getMaxExtract());
         store.setMaxInsert(10);
         assertEquals(10, store.getMaxInsert());
         assertEquals(10, store.insert(100, false));

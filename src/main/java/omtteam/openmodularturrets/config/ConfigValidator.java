@@ -41,29 +41,8 @@ final class ConfigValidator {
         return filter(name, ids, entry -> ResourceLocation.tryParse(entry) != null);
     }
 
-    /**
-     * Validates ammo allow-list entries of the form {@code namespace:item[,damageBonus]} or
-     * {@code #namespace:tag[,damageBonus]}.
-     */
-    List<String> ammoEntries(String name, List<String> entries) {
-        return filter(name, entries, entry -> {
-            String[] parts = entry.split(",", -1);
-            if (parts.length > 2) return false;
-            String id = parts[0].trim();
-            if (id.startsWith("#")) id = id.substring(1);
-            if (ResourceLocation.tryParse(id) == null) return false;
-            if (parts.length == 2) {
-                try {
-                    Integer.parseInt(parts[1].trim());
-                } catch (NumberFormatException e) {
-                    return false;
-                }
-            }
-            return true;
-        });
-    }
-
-    private List<String> filter(String name, List<String> entries, Predicate<String> valid) {
+    /** Keeps the entries that are not null and pass {@code valid}; logs and counts as a correction what it drops. */
+    List<String> filter(String name, List<String> entries, Predicate<String> valid) {
         List<String> result = new ArrayList<>();
         if (entries == null) {
             changed = true;

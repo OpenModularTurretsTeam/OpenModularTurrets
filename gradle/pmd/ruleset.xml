@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Code quality report: only rules about how hard code is to read and change (complexity, size, nesting,
-  coupling), not style. Report only for now (build.gradle.kts: isIgnoreFailures); once the limits are agreed,
+  coupling), not style. Report only for now (build.fabric.gradle.kts: isIgnoreFailures); once the limits are agreed,
   switch that off so new code above them fails the build.
   Thresholds are PMD defaults unless noted.
 -->

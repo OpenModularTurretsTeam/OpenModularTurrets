@@ -13,9 +13,11 @@ import net.minecraft.util.TriState;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.DelegateBlockStateModel;
+import omtteam.openmodularturrets.client.camo.CamoModels;
 import omtteam.openmodularturrets.compat.CompatBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,6 +48,12 @@ public final class NeoForgeCamoModel extends DelegateBlockStateModel {
         BlockStateModel camoModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(camo);
         for (BlockModelPart part : camoModel.collectParts(level, pos, camo, random)) {
             parts.add(new DisguisePart(part, camo));
+        }
+        // what stays of the block's own model on top (e.g. a lamp), in its own layer
+        int overlay = CamoModels.overlayTintIndex(state);
+        if (overlay < 0) return;
+        for (BlockModelPart part : delegate.collectParts(level, pos, state, random)) {
+            parts.add(new OverlayPart(part, overlay));
         }
     }
 
@@ -86,6 +94,39 @@ public final class NeoForgeCamoModel extends DelegateBlockStateModel {
         @Override
         public ChunkSectionLayer getRenderType(BlockState state) {
             return part.getRenderType(camo);
+        }
+    }
+
+    /** Only the overlay quads (the ones with {@code tintIndex}) of a part of the block's own model. */
+    private record OverlayPart(BlockModelPart part, int tintIndex) implements BlockModelPart {
+        @Override
+        public List<BakedQuad> getQuads(@Nullable Direction side) {
+            List<BakedQuad> overlay = new ArrayList<>();
+            for (BakedQuad quad : part.getQuads(side)) {
+                if (quad.tintIndex() == tintIndex) overlay.add(quad);
+            }
+            return overlay;
+        }
+
+        @Override
+        @SuppressWarnings("deprecation")
+        public boolean useAmbientOcclusion() {
+            return part.useAmbientOcclusion();
+        }
+
+        @Override
+        public TriState ambientOcclusion() {
+            return part.ambientOcclusion();
+        }
+
+        @Override
+        public TextureAtlasSprite particleIcon() {
+            return part.particleIcon();
+        }
+
+        @Override
+        public ChunkSectionLayer getRenderType(BlockState state) {
+            return part.getRenderType(state);
         }
     }
 }

@@ -1,6 +1,7 @@
 package omtteam.openmodularturrets.camo;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import omtteam.openmodularturrets.core.camo.CamoLight;
@@ -45,4 +46,13 @@ public interface CamoHost {
 
     /** Server-side permission check for {@link #setLight}. */
     boolean canChangeLight(Player player);
+
+    /** Whether the camouflage menu is opened from another menu of this block, which a "Back" button returns to. */
+    default boolean hasParentMenu() {
+        return false;
+    }
+
+    /** Server side: opens that menu again (only called if {@link #hasParentMenu()}). */
+    default void openParentMenu(ServerPlayer player) {
+    }
 }

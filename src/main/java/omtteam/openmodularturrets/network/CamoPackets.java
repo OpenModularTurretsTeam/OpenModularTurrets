@@ -21,6 +21,17 @@ public final class CamoPackets {
         }
     }
 
+    /** "Back" from the camouflage menu to the menu it was opened from ({@code CamoHost#openParentMenu}). */
+    public record Back(BlockPos pos) {
+        public static void write(FriendlyByteBuf buf, Back packet) {
+            buf.writeBlockPos(packet.pos);
+        }
+
+        public static Back read(FriendlyByteBuf buf) {
+            return new Back(buf.readBlockPos());
+        }
+    }
+
     /** Sets light value and light opacity of a camouflaged block (1.12.2 {@code MessageAdjustLightValue/Opacity}). */
     public record SetLight(BlockPos pos, int value, int opacity) {
         public static void write(FriendlyByteBuf buf, SetLight packet) {

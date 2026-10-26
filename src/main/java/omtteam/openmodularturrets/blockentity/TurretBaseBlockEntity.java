@@ -1,6 +1,7 @@
 package omtteam.openmodularturrets.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -32,6 +33,7 @@ import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
 import omtteam.openmodularturrets.inventory.ItemAccess;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
+import omtteam.openmodularturrets.network.BasePacketHandler;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.security.LevelSecurityEnvironment;
 import omtteam.openmodularturrets.security.PlayerAdapter;
@@ -49,7 +51,7 @@ import java.util.Random;
  * connects it to the world: it forwards redstone, inventory and neighbour changes, ticks it, exposes the inventory
  * and energy to automation, and saves/syncs its state.
  */
-public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost, Clearable {
+public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost, TransferHost, Clearable {
     private final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged,
             player -> Container.stillValidBlockEntity(this, player));
     /** The ammo slots: anything the inventory accepts goes in, everything may come out. */
@@ -58,7 +60,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
             TurretBaseInventory.AMMO_COUNT, stack -> true, stack -> false);
     private final TurretBaseLogic logic;
     private boolean neighboursScanned;
-    private final CamoData camoData = new CamoData();
+    private final CamoData camoData = new CamoData("Camo", state -> true);
 
     public TurretBaseBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TURRET_BASE, pos, state);
@@ -168,18 +170,29 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
     }
 
     /** Ammo slots as exposed to automation on all sides, insert only (the loader adapters wrap it). */
-    @SuppressWarnings("unused")
+    @Override
     public ItemAccess getItemAccess(@Nullable Direction side) {
         return ammoAccess;
     }
 
     /** Energy as exposed to automation on all sides (insert only). */
-    @SuppressWarnings("unused")
+    @Override
     public EnergyAccess getEnergyAccess(@Nullable Direction side) {
         return logic.getEnergy();
     }
 
     // ---- Camouflage ----
+
+    @Override
+    public boolean hasParentMenu() {
+        return true;
+    }
+
+    /** "Back" from the camouflage menu: the base GUI again (for those who may open it). */
+    @Override
+    public void openParentMenu(ServerPlayer player) {
+        BasePacketHandler.openMenu(player, this);
+    }
 
     @Nullable
     @Override
@@ -244,7 +257,9 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
     protected void readData(CompoundTag tag, HolderLookup.Provider registries) {
         SecurityNbt.load(getTrustManager(), tag);
         logic.loadState(TurretBaseNbt.load(tag));
-        CamoData.remeshIfChanged(this, camoData.read(tag));
+        if (camoData.read(tag)) {
+            remesh(); // the model reads the disguise while the chunk is meshed
+        }
         // client updates carry no items; the open menu syncs its slots itself
         if (NbtCompat.hasList(tag, "Items")) {
             inventory.getItems().clear();

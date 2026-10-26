@@ -14,6 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import omtteam.openmodularturrets.client.camo.CamoModels;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
@@ -46,6 +47,15 @@ public final class FabricCamoModel extends WrapperBlockStateModel {
         emitter.pushTransform(new DisguiseTransform(view, pos, camo, Minecraft.getInstance().getBlockColors()));
         try {
             camoModel.emitQuads(emitter, view, pos, camo, random, cullTest);
+        } finally {
+            emitter.popTransform();
+        }
+        // what stays of the block's own model on top (e.g. a lamp), in its own layer
+        int overlay = CamoModels.overlayTintIndex(state);
+        if (overlay < 0) return;
+        emitter.pushTransform(quad -> quad.tintIndex() == overlay);
+        try {
+            super.emitQuads(emitter, view, pos, state, random, cullTest);
         } finally {
             emitter.popTransform();
         }
@@ -96,7 +106,7 @@ public final class FabricCamoModel extends WrapperBlockStateModel {
                         quad.color(vertex, multiply(quad.color(vertex), 0xFF000000 | tint));
                     }
                 }
-                // the tint is applied; the host block has no colour provider that could apply it a second time
+                // the tint is applied; the colour provider of the block would apply its own colour instead
                 quad.tintIndex(-1);
             }
             return true;

@@ -177,10 +177,6 @@ public final class ClientCompat {
         *///?}
     }
 
-    /**
-     * Turns the pose towards the camera and scales it for text, like a name tag: x right, y down. The camera rotation
-     * changed in 1.20.5, so 1.20.1 mirrors x and 1.21 does not (a mirrored label faces away and is culled).
-     */
     /** Partial tick of the frame being drawn (stands still while the game is paused). */
     public static float partialTick() {
         //? if >=1.21.11 {
@@ -192,6 +188,10 @@ public final class ClientCompat {
         *///?}
     }
 
+    /**
+     * Turns the pose towards the camera and scales it for text, like a name tag: x right, y down. The camera rotation
+     * changed in 1.20.5, so 1.20.1 mirrors x and 1.21 does not (a mirrored label faces away and is culled).
+     */
     public static void faceCamera(PoseStack poseStack, Camera camera, float scale) {
         poseStack.mulPose(camera.rotation());
         //? if >=1.21 {

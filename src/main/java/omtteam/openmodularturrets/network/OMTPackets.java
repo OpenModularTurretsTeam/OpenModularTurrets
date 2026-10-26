@@ -49,6 +49,10 @@ public final class OMTPackets {
             OMT.id("open_camo_menu"), CamoPackets.OpenMenu::write, CamoPackets.OpenMenu::read,
             CamoPacketHandler::handleOpenMenu);
 
+    public static final PacketType<CamoPackets.Back> CAMO_BACK = NetworkCompat.registerC2S(
+            OMT.id("camo_back"), CamoPackets.Back::write, CamoPackets.Back::read,
+            CamoPacketHandler::handleBack);
+
     private OMTPackets() {
     }
 

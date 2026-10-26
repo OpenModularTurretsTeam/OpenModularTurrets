@@ -6,14 +6,15 @@ import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import omtteam.openmodularturrets.core.energy.EnergyAccess;
+import omtteam.openmodularturrets.core.energy.EnergyGroup;
 import omtteam.openmodularturrets.core.energy.EnergyStore;
 
 import java.util.Map;
 
 /**
- * NeoForge view ({@link EnergyHandler}, FE, {@code int}) of an {@link EnergyAccess}; 1 E = 1 FE, larger amounts are
- * clamped to {@link Integer#MAX_VALUE}. A store gets one {@link SnapshotJournal} for exact rollback in transactions
- * (like {@code FabricEnergyStorages}).
+ * NeoForge views ({@link EnergyHandler}, FE, {@code int}) of {@link EnergyAccess}; 1 E = 1 FE, larger amounts are
+ * clamped to {@link Integer#MAX_VALUE}. A store gets one {@link SnapshotJournal} for exact rollback in transactions; a
+ * group distributes into the handlers of its stores (like {@code FabricEnergyStorages}).
  */
 public final class NeoForgeEnergyHandler {
     /**
@@ -28,6 +29,9 @@ public final class NeoForgeEnergyHandler {
     public static EnergyHandler of(EnergyAccess access) {
         if (access instanceof EnergyStore store) {
             return STORES.computeIfAbsent(store, StoreHandler::new);
+        }
+        if (access instanceof EnergyGroup group) {
+            return new GroupHandler(group);
         }
         throw new IllegalArgumentException("No NeoForge energy handler for " + access.getClass());
     }
@@ -83,6 +87,36 @@ public final class NeoForgeEnergyHandler {
         @Override
         protected void revertToSnapshot(Long snapshot) {
             store.setAmountUnchecked(snapshot);
+        }
+    }
+
+    /** Insert only: distributes through {@link EnergyGroup#fill}. */
+    private static final class GroupHandler implements EnergyHandler {
+        private final EnergyGroup group;
+
+        GroupHandler(EnergyGroup group) {
+            this.group = group;
+        }
+
+        @Override
+        public long getAmountAsLong() {
+            return group.getAmount();
+        }
+
+        @Override
+        public long getCapacityAsLong() {
+            return group.getCapacity();
+        }
+
+        @Override
+        public int insert(int amount, TransactionContext transaction) {
+            TransferPreconditions.checkNonNegative(amount);
+            return clamp(group.fill(amount, (store, part) -> of(store).insert(clamp(part), transaction)));
+        }
+
+        @Override
+        public int extract(int amount, TransactionContext transaction) {
+            return 0;
         }
     }
 }

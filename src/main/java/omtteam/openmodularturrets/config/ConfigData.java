@@ -24,7 +24,7 @@ import java.util.Set;
  */
 public class ConfigData {
     @Comment("Version of this file's layout, used to update old default values. Do not change it.") @Range(min = 1)
-    public int configVersion = ConfigMigration.CURRENT_VERSION;
+    public int configVersion = ConfigMigrationSteps.CURRENT_VERSION;
     @Comment("Turret behaviour and per-turret stats.")
     public Turrets turrets = new Turrets();
     @Comment("Turret base stats per tier.")
@@ -94,7 +94,7 @@ public class ConfigData {
         }
 
         void validate(ConfigValidator v) {
-            ammoAllowList = v.ammoEntries("general.ammoAllowList", ammoAllowList);
+            ammoAllowList = AmmoEntryValidation.validate(v, "general.ammoAllowList", ammoAllowList);
             mobBlackList = v.ids("general.mobBlackList", mobBlackList);
             mobForceList = v.ids("general.mobForceList", mobForceList);
             neutralForceList = v.ids("general.neutralForceList", neutralForceList);
@@ -119,7 +119,7 @@ public class ConfigData {
         }
 
         /**
-         * Entries were already checked by {@link ConfigValidator#ammoEntries}. The damage bonus defaults to 1
+         * Entries were already checked by {@link AmmoEntryValidation}. The damage bonus defaults to 1
          * (1.12.2 {@code OMTConfig.parseDisposableAmmoList}); later duplicates win.
          */
         private void parseAmmoList() {

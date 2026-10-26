@@ -3,19 +3,31 @@ package omtteam.openmodularturrets.client.camo;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.camo.CamoBlock;
 import omtteam.openmodularturrets.compat.VersionCompat;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 /**
  * Which models show a disguise: those of the {@link CamoBlock}s. The loader client entrypoints wrap them in their
  * camouflage model ({@code FabricCamoModel}, {@code NeoForgeCamoModel}); the block entity hands the disguise to the
- * model through {@code CompatBlockEntity#renderData}.
+ * model through {@code CompatBlockEntity#renderData}. A block with a {@link CamoBlock#overlayTintIndex} also keeps
+ * those quads of its own model over the disguise.
  */
 public final class CamoModels {
     private CamoModels() {
+    }
+
+    /**
+     * The tint index of the quads of this block's own model that stay visible over a disguise ({@link CamoBlock#overlayTintIndex}),
+     * -1 if none (also for blocks that cannot be disguised, and for the item model, which has no state).
+     */
+    public static int overlayTintIndex(@Nullable BlockState state) {
+        return state != null && state.getBlock() instanceof CamoBlock camo ? camo.overlayTintIndex() : -1;
     }
 
     /** All camouflage host blocks (after registration). */
