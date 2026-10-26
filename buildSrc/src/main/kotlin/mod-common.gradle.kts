@@ -41,6 +41,36 @@ sourceSets.configureEach {
     }
 }
 
+/** Compares dotted version numbers ("1.21.1" < "1.21.11" < "26.1"); missing parts count as 0. */
+fun compareVersions(a: String, b: String): Int {
+    val x = a.split('.').map(String::toInt)
+    val y = b.split('.').map(String::toInt)
+    for (i in 0 until maxOf(x.size, y.size)) {
+        val c = x.getOrElse(i) { 0 }.compareTo(y.getOrElse(i) { 0 })
+        if (c != 0) return c
+    }
+    return 0
+}
+
+/** "mc<first>-<last>": the Minecraft versions a version source folder is for, both included; no <last> = no upper bound. */
+val versionRange = Regex("""mc(\d+(?:\.\d+)*)-(\d+(?:\.\d+)*)?""")
+
+// Classes that differ completely between Minecraft versions (e.g. datagen providers) live in version source folders,
+// src/<source set>/mc<first>-<last>/java, instead of large Stonecutter conditions. A node compiles the folders whose
+// range contains its Minecraft version; the variants keep the same class names.
+// Each folder is added at the node's own path (versions/<v>/src/...), like src/<set>/java: Stonecutter maps it to the
+// folder itself on the active node and to its processed copy on the others (its second pass after evaluation), so the
+// replacements (ResourceLocation <-> Identifier) reach these classes on every node.
+sourceSets.configureEach {
+    rootProject.file("src/$name").listFiles()?.sorted()?.forEach { dir ->
+        val range = versionRange.matchEntire(dir.name) ?: return@forEach
+        val (first, last) = range.destructured
+        if (compareVersions(minecraftVersion, first) >= 0 && (last.isEmpty() || compareVersions(minecraftVersion, last) <= 0)) {
+            java.srcDir(project.file("src/$name/${dir.name}/java"))
+        }
+    }
+}
+
 dependencies {
     // Unit tests for the core game logic (test only, not shipped)
     testImplementation(platform("org.junit:junit-bom:${property("junit_version")}"))

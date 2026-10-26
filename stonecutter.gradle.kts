@@ -36,6 +36,23 @@ stonecutter active "1.21.1-fabric"
 // Prefer whole classes in platform/<loader>/ packages (left out of the other loaders' builds) over conditions.
 stonecutter parameters {
     constants.match(current.project.substringAfterLast('-'), "fabric", "neoforge", "forge")
+    // Renames from 1.21.11. They work both ways, so the new names (Identifier, noCollision) must not be used for anything
+    // else in the source. 1.21.11 renamed ResourceLocation to Identifier (same package).
+    replacements.regex(current.parsed >= "1.21.11") {
+        replace("\\bResourceLocation\\b", "Identifier", "\\bIdentifier\\b", "ResourceLocation")
+    }
+    // 1.21.11 renamed the slowness effect, the horse package, Entity#hasImpulse and #moveTo, and moved Util
+    replacements.regex(current.parsed >= "1.21.11") {
+        replace("\\bMOVEMENT_SLOWDOWN\\b", "SLOWNESS", "\\bSLOWNESS\\b", "MOVEMENT_SLOWDOWN")
+        replace("\\banimal\\.horse\\b", "animal.equine", "\\banimal\\.equine\\b", "animal.horse")
+        replace("\\bhasImpulse\\b", "needsSync", "\\bneedsSync\\b", "hasImpulse")
+        replace("\\bmoveTo\\(", "snapTo(", "\\bsnapTo\\(", "moveTo(")
+        replace("\\bnet\\.minecraft\\.Util\\b", "net.minecraft.util.Util", "\\bnet\\.minecraft\\.util\\.Util\\b", "net.minecraft.Util")
+    }
+    // 1.21.11 fixed the spelling of BlockBehaviour.Properties#noCollission
+    replacements.regex(current.parsed >= "1.21.11") {
+        replace("\\bnoCollission\\(", "noCollision(", "\\bnoCollision\\(", "noCollission(")
+    }
 }
 
 // Builds every version in one go: ./gradlew chiseledBuild
