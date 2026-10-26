@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "openmodularturrets:io_bus",
+    "M": "#c:gems/diamond",
+    "P": "openmodularturrets:turret_base_tier_three",
+    "S": "openmodularturrets:sensor_tier_four"
+  },
+  "pattern": [
+    "MPM",
+    "BSB",
+    "MBM"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:turret_base_tier_four"
+  }
+}

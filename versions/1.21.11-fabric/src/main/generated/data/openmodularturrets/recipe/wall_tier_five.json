@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "H": "openmodularturrets:hardened_tier_five"
+  },
+  "pattern": [
+    "HHH",
+    "HHH"
+  ],
+  "result": {
+    "count": 6,
+    "id": "openmodularturrets:wall_tier_five"
+  }
+}

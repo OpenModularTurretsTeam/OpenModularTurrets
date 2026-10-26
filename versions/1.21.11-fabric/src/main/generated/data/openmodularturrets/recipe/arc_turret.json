@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "openmodularturrets:chamber_tier_four",
+    "D": "#c:gems/diamond",
+    "I": "openmodularturrets:io_bus",
+    "L": "minecraft:lightning_rod",
+    "R": "minecraft:redstone_block"
+  },
+  "pattern": [
+    " L ",
+    "RCR",
+    "DID"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:arc_turret"
+  }
+}

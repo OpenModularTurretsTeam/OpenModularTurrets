@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "openmodularturrets:io_bus",
+    "E": "minecraft:ender_eye",
+    "L": "minecraft:lapis_block",
+    "Q": "#c:gems/quartz"
+  },
+  "pattern": [
+    "QLQ",
+    "LEB",
+    "QLQ"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:addon_fake_drops"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "openmodularturrets:io_bus",
+    "G": "#c:ingots/gold",
+    "S": "openmodularturrets:sensor_tier_two"
+  },
+  "pattern": [
+    " B ",
+    "GSG",
+    " B "
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:sensor_tier_three"
+  }
+}

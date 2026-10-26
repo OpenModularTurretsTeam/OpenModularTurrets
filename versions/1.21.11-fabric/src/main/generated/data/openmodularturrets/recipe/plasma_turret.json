@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "openmodularturrets:barrel_tier_five",
+    "C": "openmodularturrets:chamber_tier_five",
+    "D": "#c:gems/diamond",
+    "I": "openmodularturrets:io_bus",
+    "M": "minecraft:magma_cream"
+  },
+  "pattern": [
+    " B ",
+    "MCM",
+    "DID"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:plasma_turret"
+  }
+}

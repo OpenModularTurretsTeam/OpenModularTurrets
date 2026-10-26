@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_hardened": {
+      "conditions": {
+        "items": [
+          {
+            "items": "openmodularturrets:hardened_tier_one"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "openmodularturrets:camo_trap"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_hardened"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "openmodularturrets:camo_trap"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "minecraft:cobblestone",
+    "I": "#c:ingots/iron",
+    "R": "#c:dusts/redstone",
+    "S": "openmodularturrets:sensor_tier_one"
+  },
+  "pattern": [
+    " I ",
+    "ISI",
+    "CRC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:melee_turret"
+  }
+}

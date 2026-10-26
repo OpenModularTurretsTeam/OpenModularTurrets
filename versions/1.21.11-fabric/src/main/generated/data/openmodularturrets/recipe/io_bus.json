@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": "#c:ingots/gold",
+    "I": "#c:ingots/iron",
+    "R": "#c:dusts/redstone"
+  },
+  "pattern": [
+    " G ",
+    "RRR",
+    " I "
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:io_bus"
+  }
+}

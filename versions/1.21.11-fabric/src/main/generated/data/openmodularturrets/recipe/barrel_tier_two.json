@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "openmodularturrets:barrel_tier_one",
+    "I": "#c:ingots/iron"
+  },
+  "pattern": [
+    "III",
+    " B ",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:barrel_tier_two"
+  }
+}

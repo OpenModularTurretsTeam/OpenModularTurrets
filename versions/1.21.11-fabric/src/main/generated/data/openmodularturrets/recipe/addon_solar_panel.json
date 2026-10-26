@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "openmodularturrets:io_bus",
+    "I": "#c:ingots/iron",
+    "L": "minecraft:lapis_block",
+    "P": "#c:glass_panes",
+    "R": "#c:dusts/redstone"
+  },
+  "pattern": [
+    "PPP",
+    "RLR",
+    "IBI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:addon_solar_panel"
+  }
+}

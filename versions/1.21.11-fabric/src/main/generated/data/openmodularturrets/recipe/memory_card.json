@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "openmodularturrets:io_bus",
+    "G": "#c:ingots/gold",
+    "I": "#c:ingots/iron",
+    "L": "minecraft:lapis_lazuli",
+    "P": "minecraft:paper",
+    "R": "#c:dusts/redstone"
+  },
+  "pattern": [
+    "RGR",
+    "IPI",
+    "LBL"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:memory_card"
+  }
+}

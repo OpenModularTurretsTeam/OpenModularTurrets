@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": "minecraft:cobblestone"
+  },
+  "pattern": [
+    "CCC",
+    "C  ",
+    "C  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:lever_block"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": "minecraft:ender_eye",
+    "I": "#c:ingots/iron",
+    "R": "minecraft:redstone_block"
+  },
+  "pattern": [
+    "III",
+    "ERE",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:addon_damage_amp"
+  }
+}
