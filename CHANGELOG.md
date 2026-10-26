@@ -25,6 +25,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 - The base configure screen dims the world behind it like the base and camouflage GUIs (it was blurred before on 1.21 and later)
 - The info panel left of the base GUI no longer disappears while a button tooltip is shown (Minecraft 1.21.11)
 - The mouse stays where it was when you move between the base, configure, trusted players and camouflage GUIs instead of jumping to the screen centre
+- The grenade turret's grenades now properly fall down after hitting a target again.
 
 ## [4.0.0-beta.9] - 2026-10-25
 
