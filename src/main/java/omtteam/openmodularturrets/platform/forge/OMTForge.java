@@ -1,12 +1,8 @@
 package omtteam.openmodularturrets.platform.forge;
 
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -16,9 +12,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegisterEvent;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.api.OMTPlugin;
-import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.entity.projectile.KillCounter;
-import omtteam.openmodularturrets.network.ConfigSync;
 import omtteam.omlib.registry.RegistrationStep;
 import omtteam.openmodularturrets.registry.TurretRegistry;
 import omtteam.openmodularturrets.startup.OMTStartup;
@@ -45,8 +39,6 @@ public final class OMTForge {
         OMTStartup.init(ForgePlugins.find(OMTPlugin.Register.class, OMTPlugin.class, TurretRegistry.Plugin::new));
         modBus.addListener(this::onRegister);
         modBus.addListener(this::onCommonSetup);
-        MinecraftForge.EVENT_BUS.addListener(OMTForge::onRightClickBlock);
-        MinecraftForge.EVENT_BUS.addListener(OMTForge::onPlayerLoggedIn);
         // lowest priority: mods that cancel the death have run, and cancelled deaths do not arrive here
         MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, OMTForge::onLivingDeath);
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -76,21 +68,6 @@ public final class OMTForge {
         if (done.size() != steps.size()) {
             List<RegistrationStep> missing = steps.stream().filter(step -> !done.contains(step)).toList();
             throw new IllegalStateException("Registration steps never ran: " + missing);
-        }
-    }
-
-    private static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        InteractionResult result = InteractiveBlock.handleUse(event.getEntity(), event.getLevel(), event.getHand(),
-                event.getHitVec());
-        if (result != InteractionResult.PASS) {
-            event.setCanceled(true);
-            event.setCancellationResult(result);
-        }
-    }
-
-    private static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            ConfigSync.onPlayerJoin(player);
         }
     }
 

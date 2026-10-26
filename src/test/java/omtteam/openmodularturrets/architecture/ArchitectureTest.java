@@ -39,7 +39,7 @@ class ArchitectureTest {
     private static final List<Set<String>> KNOWN_CYCLES = List.of(
             // registry, blocks, block entities, menus and network all reach each other; the turret API's weapons take
             // the block entities. Out of it since 2026-10-25: (root) (start-up in startup.OMTStartup), config (addon
-            // turret defaults handed to OMTConfig.init, join sync in network.ConfigSync), security, item
+            // turret defaults handed to OMTConfig.init, join sync in the library), security, item
             // (MemoryCardInteraction in block), camo (CamoMenus in menu)
             Set.of("api", "api.weapon", "block", "block.base", "block.defense", "block.misc", "block.turret",
                     "blockentity", "blockentity.base", "blockentity.defense", "blockentity.misc", "blockentity.turret",

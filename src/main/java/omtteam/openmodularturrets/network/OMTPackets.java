@@ -1,18 +1,14 @@
 package omtteam.openmodularturrets.network;
 
-import omtteam.omlib.network.ConfigSyncPacket;
 import omtteam.openmodularturrets.OMT;
 import omtteam.omlib.compat.network.NetworkCompat;
 import omtteam.omlib.compat.network.PacketType;
 
 /**
- * All packet types of the mod. Client handlers are registered in
- * {@code omtteam.openmodularturrets.client.network.ClientPacketHandlers}.
+ * All packet types of the mod. Client handlers are registered with the client platform services, see
+ * {@code ClientNetworkCompat}.
  */
 public final class OMTPackets {
-    public static final PacketType<ConfigSyncPacket> CONFIG_SYNC =
-            NetworkCompat.registerS2C(OMT.id("config_sync"), ConfigSyncPacket::write, ConfigSyncPacket::read);
-
     public static final PacketType<RayPacket> RAY =
             NetworkCompat.registerS2C(OMT.id("ray"), RayPacket::write, RayPacket::read);
 

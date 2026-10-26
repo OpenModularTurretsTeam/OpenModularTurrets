@@ -8,7 +8,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
 import omtteam.openmodularturrets.client.model.TurretModels;
-import omtteam.openmodularturrets.client.network.ClientPacketHandlers;
 import omtteam.openmodularturrets.client.render.BlockEntityRendererRegistrar;
 import omtteam.openmodularturrets.client.render.EntityRendererRegistrar;
 import omtteam.openmodularturrets.client.render.blockentity.LeverRenderer;
@@ -28,7 +27,6 @@ import omtteam.openmodularturrets.client.tooltip.ModuleTooltip;
 import omtteam.openmodularturrets.client.tooltip.OwnershipWandTooltip;
 import omtteam.openmodularturrets.client.tooltip.TurretBaseTooltip;
 import omtteam.openmodularturrets.client.tooltip.TurretTooltip;
-import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.registry.ModItems;
@@ -75,7 +73,6 @@ public final class OMTClient {
      * @param plugins other mods' client turret plugins, as the loader found them
      */
     public static void init(List<TurretModels.Plugin> plugins) {
-        ClientPacketHandlers.init();
         CamoScreenExtras.register(TrapCamoExtras::addWidgets);
         RayRenderer.init();
         TurretModels.init(plugins);
@@ -149,7 +146,6 @@ public final class OMTClient {
      * After leaving a server: back to the local config, and no rays left over.
      */
     public static void onDisconnect() {
-        OMTConfig.useLocalConfig();
         RayRenderer.clear();
     }
 }

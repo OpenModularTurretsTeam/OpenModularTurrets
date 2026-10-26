@@ -12,12 +12,12 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import omtteam.openmodularturrets.block.InteractiveBlock;
+import omtteam.omlib.block.InteractiveBlock;
 import omtteam.openmodularturrets.block.UnownedMarker;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
 import omtteam.openmodularturrets.camo.PlainLookingBlock;
-import omtteam.openmodularturrets.compat.BlockCodec;
-import omtteam.openmodularturrets.compat.CompatEntityBlock;
+import omtteam.omlib.compat.BlockCodec;
+import omtteam.omlib.compat.CompatEntityBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

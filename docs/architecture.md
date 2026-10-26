@@ -101,7 +101,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `blockentity.*` | block entities; `blockentity.base` holds the adapters to core |
 | `entity.projectile` | turret projectiles and turret damage (`TurretDamage`) |
 | `item`, `inventory`, `menu` | items (ammo, upgrades, addons, memory card; using the card on a block is `block.MemoryCardInteraction`), base inventory rules and `ItemAccess` (the slots other blocks may use, wrapped by the loader adapters), container menus |
-| `network` | packets: client→server requests (always re-validated) and server→client sync (`ConfigSync` sends the config on join) |
+| `network` | packets: client→server requests (always re-validated) and server→client sync (OMLib's `ConfigSync` sends the configs on join) |
 | `config` | the JSON config: fields, comments, ranges, migration, the server's config on clients |
 | `security`, `camo` | Minecraft side of trust lists (NBT, player lookup) and camouflage |
 | `compat` | every 1.20.1 / 1.21.1 / 1.21.11 difference (`VersionCompat`, `CompatBlockEntity`, networking, menus; `compat.nbt.NbtCompat` for all NBT reads and `compat.block.BlockCompat` depend on Minecraft only, so any package may use them), small loader differences (`//? if fabric` / `neoforge` / `forge`), Jade (server half here, tooltips in `client.compat.jade`), and Sable contraptions (`SubLevelCompat`: poses and velocities through Sable Companion, 1.21.1 only; `client.compat.ClientSubLevelCompat` for the drawn pose) |
@@ -177,7 +177,7 @@ The client is never trusted: every C2S handler re-checks distance and permission
 
 Every block with an owner is a `security.OwnedHost`: the turret bases and the camouflage trap through `TrustHost` (which forwards to its `TrustManager`), the passive defense blocks through `OwnedBlockEntity`.
 A block placed without a player (machines, structures, `setblock`) or disowned has no owner; an unowned base does not fire unless `bases.unownedBasesActive` is set.
-A main-hand right-click without sneaking on an unowned block (on a turret: its base) claims it, checked first in `InteractiveBlock.handleUse`.
+A main-hand right-click without sneaking on an unowned block (on a turret: its base) claims it (`ClaimInteraction`, an `InteractiveBlock` interceptor, checked after the wand).
 `block.ClaimSpread` then claims the unowned blocks connected to it through their faces (`core.world.FloodFill`, turrets connect too, at most `bases.claimSpreadLimit` blocks); blocks with an owner are never taken or walked through.
 The loaders' fake players claim only if `general.fakePlayersCanClaim` is set.
 While a player holds the wand, turrets still target them but nothing affects them (`TurretImmunity`, checked in `TurretDamage.canDamage`, the effect weapon dispatch and, for explosions, `LivingEntityMixin`).

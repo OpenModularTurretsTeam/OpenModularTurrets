@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import omtteam.openmodularturrets.block.InteractiveBlock;
+import omtteam.omlib.block.InteractiveBlock;
 import omtteam.openmodularturrets.block.UnownedMarker;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
 import org.jetbrains.annotations.Nullable;

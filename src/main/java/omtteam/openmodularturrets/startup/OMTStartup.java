@@ -1,7 +1,11 @@
 package omtteam.openmodularturrets.startup;
 
 import net.minecraft.core.registries.Registries;
+import omtteam.omlib.block.InteractiveBlock;
 import omtteam.openmodularturrets.OMT;
+import omtteam.openmodularturrets.block.ClaimInteraction;
+import omtteam.openmodularturrets.block.MemoryCardInteraction;
+import omtteam.openmodularturrets.block.WandInteraction;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.network.OMTPackets;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
@@ -37,6 +41,10 @@ public final class OMTStartup {
         OMT.LOGGER.info("Initializing Open Modular Turrets");
         TurretRegistry.load(plugins);
         OMTPackets.init();
+        // before a block's own right-click: the ownership wand, claiming an unowned block, a memory card in hand
+        InteractiveBlock.addInterceptor((player, level, hand, hit) -> WandInteraction.use(player, level, hand, hit.getBlockPos()));
+        InteractiveBlock.addInterceptor(ClaimInteraction::use);
+        InteractiveBlock.addInterceptor((player, level, hand, hit) -> MemoryCardInteraction.use(player, level, hand, hit.getBlockPos()));
         OMTConfig.init(TurretRegistry.addonDefaultStats());
     }
 

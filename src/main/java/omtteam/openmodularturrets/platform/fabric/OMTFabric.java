@@ -3,13 +3,9 @@ package omtteam.openmodularturrets.platform.fabric;
 import omtteam.omlib.platform.fabric.FabricBlockLookups;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import omtteam.openmodularturrets.api.OMTPlugin;
-import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.entity.projectile.KillCounter;
-import omtteam.openmodularturrets.network.ConfigSync;
 import omtteam.openmodularturrets.registry.TurretRegistry;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.startup.OMTStartup;
@@ -26,8 +22,6 @@ public final class OMTFabric implements ModInitializer {
         OMTStartup.init(plugins());
         OMTStartup.registrationSteps().forEach(step -> step.register().run());
         FabricBlockLookups.register(ModBlockEntities.transferTypes());
-        UseBlockCallback.EVENT.register(InteractiveBlock::handleUse);
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> ConfigSync.onPlayerJoin(handler.getPlayer()));
         ServerLivingEntityEvents.AFTER_DEATH.register(KillCounter::onDeath);
     }
 

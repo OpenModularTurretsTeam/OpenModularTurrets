@@ -3,24 +3,18 @@ package omtteam.openmodularturrets.platform.neoforge;
 import omtteam.omlib.platform.neoforge.NeoForgeNetwork;
 import omtteam.omlib.platform.neoforge.NeoForgeCapabilities;
 import omtteam.omlib.platform.neoforge.NeoForgeCapabilities;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionResult;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.api.OMTPlugin;
-import omtteam.openmodularturrets.block.InteractiveBlock;
 import omtteam.openmodularturrets.entity.projectile.KillCounter;
-import omtteam.openmodularturrets.network.ConfigSync;
 import omtteam.omlib.platform.Platform;
 import omtteam.omlib.registry.RegistrationStep;
 import omtteam.openmodularturrets.registry.TurretRegistry;
@@ -48,8 +42,6 @@ public final class OMTNeoForge {
                 NeoForgeCapabilities.register(event, ModBlockEntities.transferTypes()));
         modBus.addListener((RegisterPayloadHandlersEvent event) ->
                 ((NeoForgeNetwork) Platform.network()).applyRegistrations(event, OMT.MOD_ID));
-        NeoForge.EVENT_BUS.addListener(OMTNeoForge::onRightClickBlock);
-        NeoForge.EVENT_BUS.addListener(OMTNeoForge::onPlayerLoggedIn);
         // lowest priority: mods that cancel the death have run, and cancelled deaths do not arrive here
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, OMTNeoForge::onLivingDeath);
     }
@@ -77,21 +69,6 @@ public final class OMTNeoForge {
             event.enqueueWork(NeoForgeCreateMovement::register);
         }
         //?}
-    }
-
-    private static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        InteractionResult result = InteractiveBlock.handleUse(event.getEntity(), event.getLevel(), event.getHand(),
-                event.getHitVec());
-        if (result != InteractionResult.PASS) {
-            event.setCanceled(true);
-            event.setCancellationResult(result);
-        }
-    }
-
-    private static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            ConfigSync.onPlayerJoin(player);
-        }
     }
 
     private static void onLivingDeath(LivingDeathEvent event) {
