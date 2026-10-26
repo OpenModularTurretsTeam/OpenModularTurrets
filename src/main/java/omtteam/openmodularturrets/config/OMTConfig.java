@@ -172,6 +172,8 @@ public class OMTConfig {
         public BaseSetting baseTierFive = new BaseSetting(10000000, 50000, 4, 25, 60);
         @Config.RequiresMcRestart
         public boolean allowBaseCamo = true;
+        @Config.Comment("Turret bases also accept transparent full blocks (glass, ice, leaves) as camouflage.")
+        public boolean allowTransparentDisguises = true;
         public boolean baseBreakable = false;
         @Config.Comment("Turret bases without an owner keep targeting and firing (at everyone, as nobody is trusted). If false, they stay inert until someone claims them.")
         public boolean unownedBasesActive = false;

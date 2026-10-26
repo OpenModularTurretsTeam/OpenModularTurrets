@@ -671,6 +671,11 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
         return OMTConfig.BASES.allowBaseCamo;
     }
 
+    @Override
+    public boolean acceptsTransparentDisguises() {
+        return OMTConfig.BASES.allowTransparentDisguises;
+    }
+
     /** Only the tier 4 and 5 bases have adjustable light. */
     @Override
     public boolean supportsLight() {

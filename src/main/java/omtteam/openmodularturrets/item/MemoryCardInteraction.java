@@ -139,7 +139,7 @@ public final class MemoryCardInteraction {
     /** The disguise for a stored id, if the block still exists and is a valid disguise. */
     @Nullable
     @SuppressWarnings("deprecation")
-    private static IBlockState disguiseById(String id) {
+    private static IBlockState disguiseById(String id, boolean allowTransparent) {
         int at = id.lastIndexOf('@');
         Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(at < 0 ? id : id.substring(0, at)));
         if (block == null || block.getRegistryName() == null || !id.startsWith(block.getRegistryName().toString())) {
@@ -151,7 +151,7 @@ public final class MemoryCardInteraction {
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
             return null;
         }
-        return CamoRules.isValidDisguise(state) ? state : null;
+        return CamoRules.isValidDisguise(state, allowTransparent) ? state : null;
     }
 
     /** Disguise and light, each only if the player may change it. */
@@ -159,7 +159,7 @@ public final class MemoryCardInteraction {
                                      List<String> skipped) {
         boolean applied = false;
         if (host.canSetCamo(player)) {
-            IBlockState disguise = camo.disguise() == null ? host.getDefaultCamoState() : disguiseById(camo.disguise());
+            IBlockState disguise = camo.disguise() == null ? host.getDefaultCamoState() : disguiseById(camo.disguise(), host.acceptsTransparentDisguises());
             if (disguise != null) {
                 host.setCamoState(disguise);
                 applied = true;
