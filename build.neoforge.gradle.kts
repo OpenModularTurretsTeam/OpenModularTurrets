@@ -78,7 +78,7 @@ repositories {
 }
 
 dependencies {
-    // Jade plugin (compat/jade): optional, not bundled; present in dev runs to try it
+    // Jade plugin (compat/jade, client/compat/jade): optional, not bundled; present in dev runs to try it
     compileOnly("maven.modrinth:jade:${property("jade_version")}")
     localRuntime("maven.modrinth:jade:${property("jade_version")}")
 
@@ -111,6 +111,9 @@ dependencies {
     // Simulated (bundled in Create Aeronautics) on the GameTest server, for the test of the Physics Assembler mixin
     "gametestRuntimeOnly"("maven.modrinth:create-aeronautics:${property("create_aeronautics_version")}")
 }
+
+// The client half of the Jade plugin (client/compat/jade) compiles against it too, as with Loom's client source set
+configurations.named("clientCompileOnly") { extendsFrom(configurations.compileOnly.get()) }
 
 // ---- Data (recipes, loot tables, tags, damage types, advancements) ----
 // Not generated here: copied from the Fabric datagen output of the same Minecraft version (datagen_from) with NeoForge

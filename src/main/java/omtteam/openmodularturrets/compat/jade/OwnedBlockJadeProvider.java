@@ -1,21 +1,25 @@
 package omtteam.openmodularturrets.compat.jade;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.defense.OwnedBlockEntity;
+import omtteam.openmodularturrets.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import snownee.jade.api.BlockAccessor;
-import snownee.jade.api.ITooltip;
-import snownee.jade.api.config.IPluginConfig;
+import snownee.jade.api.IServerDataProvider;
+
+import java.util.List;
 
 /**
- * Jade tooltip of the passive defense blocks (hardened blocks, walls, fences): their owner, or that they have none and
- * can be claimed.
+ * Server half of the Jade tooltip of the passive defense blocks (hardened blocks, walls, fences): their owner, or that
+ * they have none and can be claimed. {@link #lines} turns the data into the tooltip; the client half
+ * ({@code client.compat.jade}) shows it.
  */
-final class OwnedBlockJadeProvider extends JadeBlockProvider {
-    static final OwnedBlockJadeProvider INSTANCE = new OwnedBlockJadeProvider();
-    private static final ResourceLocation UID = OMT.id("owned_block");
+public final class OwnedBlockJadeProvider implements IServerDataProvider<BlockAccessor> {
+    public static final OwnedBlockJadeProvider INSTANCE = new OwnedBlockJadeProvider();
+    public static final ResourceLocation UID = OMT.id("owned_block");
     private static final String KNOWN = "Known";
     private static final String OWNER = "Owner";
 
@@ -35,10 +39,9 @@ final class OwnedBlockJadeProvider extends JadeBlockProvider {
         if (owner != null) data.putString(OWNER, owner.name());
     }
 
-    @Override
-    public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-        CompoundTag data = accessor.getServerData();
-        if (!data.contains(KNOWN)) return;
-        tooltip.add(ownerLine(data.contains(OWNER) ? data.getString(OWNER) : null));
+    /** The tooltip lines for the data the server sent. */
+    public static List<Component> lines(CompoundTag data) {
+        if (!data.contains(KNOWN)) return List.of();
+        return List.of(JadeLines.ownerLine(data.contains(OWNER) ? NbtCompat.getString(data, OWNER, "") : null));
     }
 }

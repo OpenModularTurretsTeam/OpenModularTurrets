@@ -25,14 +25,19 @@
       "omtteam.openmodularturrets.client.platform.fabric.OMTFabricClient"
     ],
     "jade": [
-      "omtteam.openmodularturrets.compat.jade.OMTJadePlugin"
+      "omtteam.openmodularturrets.compat.jade.OMTJadePlugin",
+      "omtteam.openmodularturrets.client.compat.jade.OMTJadeClientPlugin"
     ],
     "fabric-datagen": [
       "omtteam.openmodularturrets.datagen.OMTDataGenerator"
     ]
   },
   "mixins": [
-    "openmodularturrets.mixins.json"
+    "openmodularturrets.mixins.json",
+    {
+      "config": "openmodularturrets.client.mixins.json",
+      "environment": "client"
+    }
   ],
   "suggests": {
     "jade": "*"

@@ -1,20 +1,18 @@
 package omtteam.openmodularturrets.client.platform.fabric;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import omtteam.openmodularturrets.client.OMTClient;
 import omtteam.openmodularturrets.client.api.OMTClientPlugin;
+import omtteam.openmodularturrets.client.camo.CamoModels;
 import omtteam.openmodularturrets.client.model.TurretModels;
 import omtteam.openmodularturrets.client.platform.ClientPlatform;
 import omtteam.openmodularturrets.client.platform.ClientPlatformServices;
@@ -22,6 +20,18 @@ import omtteam.openmodularturrets.client.render.effect.RayRenderer;
 import omtteam.openmodularturrets.client.render.outline.TurretPlacementOutline;
 
 import java.util.List;
+//? if >=1.21.11 {
+/*import net.minecraft.world.phys.Vec3;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import omtteam.openmodularturrets.camo.CamoBlock;
+*///?} else {
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.minecraft.client.renderer.RenderType;
+//?}
 
 /**
  * Fabric client entrypoint: installs the client platform services, starts the client, registers the content of
@@ -36,10 +46,33 @@ public final class OMTFabricClient implements ClientModInitializer {
         OMTClient.registerModelLayers((layer, definition) -> EntityModelLayerRegistry.registerModelLayer(layer, definition::get));
         OMTClient.registerBlockEntityRenderers(BlockEntityRenderers::register);
         OMTClient.registerEntityRenderers(EntityRendererRegistry::register);
+        // up to 1.21.1 the turret and crank items have item renderers; from 1.21.11 on they are special item models, whose
+        // types SpecialModelRenderersMixin registers
+        //? if <1.21.11 {
         OMTClient.registerItemRenderers((item, renderer) -> BuiltinItemRendererRegistry.INSTANCE.register(item, renderer::render));
+        //?}
         // NeoForge reads these from "render_type" in the block models; Fabric ignores that field
+        //? if >=1.21.11 {
+        /*OMTClient.cutoutBlocks().forEach(block -> BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT));
+        *///?} else {
         OMTClient.cutoutBlocks().forEach(block -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout()));
-        FabricCamoModel.register();
+        //?}
+        // the disguise model around the models of the camouflage hosts (FabricCamoModel)
+        ModelLoadingPlugin.register(plugin -> {
+            //? if >=1.21.11 {
+            /*plugin.modifyBlockModelAfterBake().register((model, context) ->
+                    context.state().getBlock() instanceof CamoBlock ? new FabricCamoModel(model) : model);
+            *///?} else if >=1.21 {
+            plugin.modifyModelAfterBake().register((model, context) -> {
+                var topLevel = context.topLevelId();
+                return CamoModels.isCamoModel(topLevel != null ? topLevel.id() : context.resourceId())
+                        ? new FabricCamoModel(model) : model;
+            });
+            //?} else {
+            /*plugin.modifyModelAfterBake().register((model, context) ->
+                    CamoModels.isCamoModel(context.id()) ? new FabricCamoModel(model) : model);
+            *///?}
+        });
         //? if >=1.21 {
         ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> OMTClient.appendTooltip(stack, flag, lines));
         //?} else {
@@ -47,12 +80,22 @@ public final class OMTFabricClient implements ClientModInitializer {
         *///?}
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> OMTClient.onDisconnect());
         ClientTickEvents.END_CLIENT_TICK.register(client -> RayRenderer.tick());
+        //? if >=1.21.11 {
+        /*// the end of the main pass: after the translucent blocks, and late enough for the label to be on top
+        WorldRenderEvents.END_MAIN.register(context -> {
+            Vec3 camera = context.worldState().cameraRenderState.pos;
+            RayRenderer.render(context.matrices(), camera);
+            TurretPlacementOutline.render(context.matrices(), camera);
+            TurretPlacementOutline.renderLabel(context.matrices(), camera);
+        });
+        *///?} else {
         WorldRenderEvents.AFTER_TRANSLUCENT.register(context -> {
             RayRenderer.render(context.matrixStack(), context.camera().getPosition());
             TurretPlacementOutline.render(context.matrixStack(), context.camera().getPosition());
         });
         WorldRenderEvents.LAST.register(context ->
                 TurretPlacementOutline.renderLabel(context.matrixStack(), context.camera().getPosition()));
+        //?}
     }
 
     /** Other mods' client turret plugins: the {@value OMTClientPlugin#ENTRYPOINT} entrypoints in their {@code fabric.mod.json}. */

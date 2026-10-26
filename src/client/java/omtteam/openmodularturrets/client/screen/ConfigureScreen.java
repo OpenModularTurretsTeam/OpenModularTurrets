@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
+import omtteam.openmodularturrets.client.compat.ClientCompat;
 import omtteam.openmodularturrets.client.compat.ClientNetworkCompat;
 import omtteam.openmodularturrets.client.compat.CompatScreen;
 import omtteam.openmodularturrets.core.base.TargetingSettings;
@@ -153,10 +154,10 @@ public class ConfigureScreen extends CompatScreen {
 
     @Override
     protected void renderPanel(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.blit(TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
-        graphics.drawString(font, ScreenTexts.gui("targeting_options").append(":"), left + 10, top + 9, 0x000000, false);
+        ClientCompat.blit(graphics, TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
+        graphics.drawString(font, ScreenTexts.gui("targeting_options").append(":"), left + 10, top + 9, 0xFF000000, false);
         if (isAdmin()) {
-            graphics.drawString(font, ScreenTexts.gui("trusted_players").append(":"), left + 10, top + 84, 0x000000, false);
+            graphics.drawString(font, ScreenTexts.gui("trusted_players").append(":"), left + 10, top + 84, 0xFF000000, false);
         }
     }
 }

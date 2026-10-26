@@ -33,8 +33,13 @@ public abstract class TurretModel {
     public void setActivity(boolean active, float spinDegrees) {
     }
 
+    /** Whether back faces are culled; the flat parts of some models must be seen from both sides. */
+    protected boolean cull() {
+        return true;
+    }
+
     public RenderType getRenderType() {
-        return RenderType.entityCutout(getTexture());
+        return cull() ? RenderType.entityCutout(getTexture()) : RenderType.entityCutoutNoCull(getTexture());
     }
 
     public void render(PoseStack poseStack, VertexConsumer consumer, int packedLight, int packedOverlay) {

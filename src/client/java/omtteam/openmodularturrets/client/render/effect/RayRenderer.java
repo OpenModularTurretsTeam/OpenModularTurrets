@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.client.compat.ClientCompat;
 import omtteam.openmodularturrets.client.compat.ClientNetworkCompat;
@@ -74,7 +73,7 @@ public final class RayRenderer {
     public static void render(PoseStack poseStack, Vec3 camera) {
         if (RAYS.isEmpty() || poseStack == null) return;
         MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
-        VertexConsumer consumer = buffers.getBuffer(RenderType.lightning());
+        VertexConsumer consumer = buffers.getBuffer(ClientCompat.lightning());
         poseStack.pushPose();
         poseStack.translate(-camera.x, -camera.y, -camera.z);
         Matrix4f pose = poseStack.last().pose();
@@ -84,7 +83,7 @@ public final class RayRenderer {
             }
         }
         poseStack.popPose();
-        buffers.endBatch(RenderType.lightning());
+        buffers.endBatch(ClientCompat.lightning());
     }
 
     /** Two crossed quads along the segment, each drawn from both sides. */

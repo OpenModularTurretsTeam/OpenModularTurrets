@@ -1,7 +1,6 @@
 package omtteam.openmodularturrets.client.model;
 
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import omtteam.openmodularturrets.OMT;
 
@@ -28,8 +27,8 @@ public class MeleeTurretModel extends TurretModel {
 
     /** No culling, so the flat blades are visible from both sides. */
     @Override
-    public RenderType getRenderType() {
-        return RenderType.entityCutoutNoCull(getTexture());
+    protected boolean cull() {
+        return false;
     }
 
     /** The melee turret does not aim. */

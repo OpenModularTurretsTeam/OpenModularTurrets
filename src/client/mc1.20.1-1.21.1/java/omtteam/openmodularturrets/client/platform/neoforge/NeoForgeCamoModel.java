@@ -26,6 +26,8 @@ import java.util.List;
  * <p>
  * Tinted quads keep their tint index; {@link #color} gives the hosts the colour of their disguise, so the vanilla
  * mesher tints them with the client's biome blend like on the real block.
+ * <p>
+ * The variant up to 1.21.1 (baked models); {@code OMTNeoForgeClient} wraps the models.
  */
 public final class NeoForgeCamoModel extends BakedModelWrapper<BakedModel> {
     public NeoForgeCamoModel(BakedModel original) {

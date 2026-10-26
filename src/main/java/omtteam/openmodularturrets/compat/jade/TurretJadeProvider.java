@@ -5,28 +5,30 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import omtteam.openmodularturrets.OMT;
-import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
+import omtteam.openmodularturrets.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.security.PlayerAdapter;
 import snownee.jade.api.BlockAccessor;
-import snownee.jade.api.ITooltip;
-import snownee.jade.api.config.IPluginConfig;
+import snownee.jade.api.IServerDataProvider;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
 /**
- * Jade tooltip of a turret (ported from the 1.12.2 {@code WailaTurretHandler}): whether it is active, its owner and,
+ * Server half of the Jade tooltip of a turret (ported from the 1.12.2 {@code WailaTurretHandler}): whether it is active, its owner and,
  * for players who may open the base, ammo, damage amp, accuracy and rate of fire. The stats show what the base
- * contains, so the server only sends them to players with that permission.
+ * contains, so the server only sends them to players with that permission. {@link #lines} turns the data into the tooltip; the
+ * client half ({@code client.compat.jade}) shows it.
  */
-final class TurretJadeProvider extends JadeBlockProvider {
-    static final TurretJadeProvider INSTANCE = new TurretJadeProvider();
-    private static final ResourceLocation UID = OMT.id("turret");
+public final class TurretJadeProvider implements IServerDataProvider<BlockAccessor> {
+    public static final TurretJadeProvider INSTANCE = new TurretJadeProvider();
+    public static final ResourceLocation UID = OMT.id("turret");
     private static final String ACTIVE = "Active";
     private static final String OWNER = "Owner";
     private static final String AMMO = "Ammo";
@@ -63,20 +65,20 @@ final class TurretJadeProvider extends JadeBlockProvider {
         data.putDouble(RATE_OF_FIRE, cooldown > 0 ? 20.0D / cooldown : 0);
     }
 
-    @Override
-    public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-        if (accessor.getBlockState().getValue(TurretBlock.CONCEALED)) return;
-        CompoundTag data = accessor.getServerData();
-        if (!data.contains(ACTIVE)) return;
-        tooltip.add(line("active", yesNo(data.getBoolean(ACTIVE))));
-        tooltip.add(ownerLine(data.contains(OWNER) ? data.getString(OWNER) : null));
-        if (!data.contains(AMMO)) return;
-        int ammo = data.getInt(AMMO);
-        tooltip.add(line("ammo", ammo < 0 ? Component.translatable("gui.openmodularturrets.unlimited")
+    /** The tooltip lines for the data the server sent; a concealed turret shows nothing. */
+    public static List<Component> lines(CompoundTag data, boolean concealed) {
+        if (concealed || !data.contains(ACTIVE)) return List.of();
+        List<Component> lines = new ArrayList<>();
+        lines.add(JadeLines.line("active", JadeLines.yesNo(NbtCompat.getBoolean(data, ACTIVE, false))));
+        lines.add(JadeLines.ownerLine(data.contains(OWNER) ? NbtCompat.getString(data, OWNER, "") : null));
+        if (!data.contains(AMMO)) return lines;
+        int ammo = NbtCompat.getInt(data, AMMO, 0);
+        lines.add(JadeLines.line("ammo", ammo < 0 ? Component.translatable("gui.openmodularturrets.unlimited")
                 .withStyle(ChatFormatting.WHITE) : Component.literal(String.valueOf(ammo)).withStyle(ChatFormatting.WHITE)));
-        tooltip.add(line("damage_amp", format(data.getDouble(DAMAGE_AMP)) + "%"));
-        tooltip.add(line("accuracy", format(data.getDouble(ACCURACY)) + "%"));
-        tooltip.add(line("rate_of_fire", format(data.getDouble(RATE_OF_FIRE)) + "/s"));
+        lines.add(JadeLines.line("damage_amp", format(NbtCompat.getDouble(data, DAMAGE_AMP, 0)) + "%"));
+        lines.add(JadeLines.line("accuracy", format(NbtCompat.getDouble(data, ACCURACY, 0)) + "%"));
+        lines.add(JadeLines.line("rate_of_fire", format(NbtCompat.getDouble(data, RATE_OF_FIRE, 0)) + "/s"));
+        return lines;
     }
 
     private static String format(double value) {

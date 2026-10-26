@@ -7,6 +7,9 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
+//? if >=1.21.11 {
+/*import net.minecraft.client.input.MouseButtonEvent;
+*///?}
 import omtteam.openmodularturrets.core.security.AccessLevel;
 import omtteam.openmodularturrets.core.security.TrustedPlayer;
 
@@ -67,8 +70,19 @@ public class TrustedPlayerList extends AbstractWidget {
         return true;
     }
 
+    //? if >=1.21.11 {
+    /*@Override
+    public void onClick(MouseButtonEvent event, boolean doubleClick) {
+        select(event.y());
+    }
+    *///?} else {
     @Override
     public void onClick(double mouseX, double mouseY) {
+        select(mouseY);
+    }
+    //?}
+
+    private void select(double mouseY) {
         int row = (int) ((mouseY - getY() - PADDING) / ROW_HEIGHT) + scrollRows;
         selected = row >= 0 && row < entries.size() ? entries.get(row).getUuid() : null;
     }
@@ -86,7 +100,7 @@ public class TrustedPlayerList extends AbstractWidget {
             }
             Component text = Component.literal(entry.getName() + ", ")
                     .append(levelNamer.apply(entry.getAccessLevel()));
-            graphics.drawString(font, text, getX() + PADDING + 2, rowY + 1, 0xFFFFFF, false);
+            graphics.drawString(font, text, getX() + PADDING + 2, rowY + 1, 0xFFFFFFFF, false);
         }
         graphics.disableScissor();
     }

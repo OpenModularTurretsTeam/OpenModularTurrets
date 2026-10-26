@@ -34,30 +34,30 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> {
         int x = mouseX - leftPos;
         int y = mouseY - topPos;
         if (x > 153 && x < 167 && y > 17 && y < 68) {
-            graphics.renderTooltip(font, Component.literal(menu.getEnergy() + "/" + menu.getCapacity() + " RF"), mouseX, mouseY);
+            ClientCompat.renderTooltip(graphics, font, Component.literal(menu.getEnergy() + "/" + menu.getCapacity() + " RF"), mouseX, mouseY);
         } else if (hoveredSlot != null && !hoveredSlot.hasItem()
                 && hoveredSlot.x == GeneratorMenu.UPGRADE_X && hoveredSlot.y == GeneratorMenu.UPGRADE_Y) {
-            graphics.renderTooltip(font, Component.translatable("tooltip.openmodularturrets.generator_upgrade_slot"),
+            ClientCompat.renderTooltip(graphics, font, Component.translatable("tooltip.openmodularturrets.generator_upgrade_slot"),
                     mouseX, mouseY);
         }
     }
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, title, titleLabelX, titleLabelY, 0x000000, false);
-        graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x000000, false);
+        graphics.drawString(font, title, titleLabelX, titleLabelY, 0xFF000000, false);
+        graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0xFF000000, false);
     }
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        ClientCompat.blit(graphics, TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         int flame = (int) Math.ceil(menu.getBurnProgress() * FLAME_SIZE);
         if (flame > 0) {
-            graphics.blit(TEXTURE, leftPos + FLAME_X, topPos + FLAME_Y + FLAME_SIZE - flame, 176, 72 + FLAME_SIZE - flame,
+            ClientCompat.blit(graphics, TEXTURE, leftPos + FLAME_X, topPos + FLAME_Y + FLAME_SIZE - flame, 176, 72 + FLAME_SIZE - flame,
                     FLAME_SIZE, flame);
         }
         long capacity = menu.getCapacity();
         int filled = (int) (menu.getEnergy() * ENERGY_HEIGHT / (capacity == 0 ? 1 : capacity));
-        graphics.blit(TEXTURE, leftPos + 153, topPos + 17 + ENERGY_HEIGHT - filled, 196, 68 - filled, 14, filled);
+        ClientCompat.blit(graphics, TEXTURE, leftPos + 153, topPos + 17 + ENERGY_HEIGHT - filled, 196, 68 - filled, 14, filled);
     }
 }

@@ -10,6 +10,9 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+//? if >=1.21.11 {
+/*import net.minecraft.client.input.MouseButtonEvent;
+*///?}
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.defense.CamoTrapBlockEntity;
 import omtteam.openmodularturrets.camo.CamoHost;
@@ -38,7 +41,7 @@ public class CamoScreen extends AbstractContainerScreen<CamoMenu> {
     private static final int SLOT = 0xFF464646;
     private static final int SLOT_SHADOW = 0xFF232323;
     private static final int SLOT_LIGHT = 0xFF9A9A9A;
-    private static final int LABEL_COLOR = 0x000000;
+    private static final int LABEL_COLOR = 0xFF000000;
     private static final int SLIDER_WIDTH = 160;
     private static final int SLIDER_VALUE_Y = 48;
     private static final int SLIDER_OPACITY_Y = 72;
@@ -120,7 +123,7 @@ public class CamoScreen extends AbstractContainerScreen<CamoMenu> {
         renderTooltip(graphics, mouseX, mouseY);
         Slot hovered = hoveredSlot;
         if (hovered != null && hovered.index == CamoMenu.PHANTOM_SLOT && !hovered.hasItem()) {
-            graphics.renderTooltip(font, Component.translatable("tooltip.openmodularturrets.camouflage_slot"), mouseX, mouseY);
+            ClientCompat.renderTooltip(graphics, font, Component.translatable("tooltip.openmodularturrets.camouflage_slot"), mouseX, mouseY);
         }
     }
 
@@ -180,10 +183,18 @@ public class CamoScreen extends AbstractContainerScreen<CamoMenu> {
             value = level() / (double) CamoLight.MAX;
         }
 
+        //? if >=1.21.11 {
+        /*@Override
+        public void onRelease(MouseButtonEvent event) {
+            super.onRelease(event);
+            onChange.run();
+        }
+        *///?} else {
         @Override
         public void onRelease(double mouseX, double mouseY) {
             super.onRelease(mouseX, mouseY);
             onChange.run();
         }
+        //?}
     }
 }

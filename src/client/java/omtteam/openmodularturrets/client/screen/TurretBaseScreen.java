@@ -143,27 +143,27 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(texture, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        ClientCompat.blit(graphics, texture, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         long capacity = menu.getCapacity();
         int filled = (int) (menu.getEnergy() * 51 / (capacity == 0 ? 1 : capacity));
-        graphics.blit(texture, leftPos + 153, topPos + 17, 178, 17, 14, 51);
+        ClientCompat.blit(graphics, texture, leftPos + 153, topPos + 17, 178, 17, 14, 51);
         int u = ENERGY_FILL_U[random.nextInt(ENERGY_FILL_U.length)];
-        graphics.blit(texture, leftPos + 153, topPos + 17 + 51 - filled, u, 68 - filled, 14, filled);
+        ClientCompat.blit(graphics, texture, leftPos + 153, topPos + 17 + 51 - filled, u, 68 - filled, 14, filled);
     }
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         if (menu.getTier() > 1) {
-            graphics.drawString(font, ScreenTexts.gui("addons"), 71, 6, 0x000000, false);
-            graphics.drawString(font, ScreenTexts.gui("upgrades"), 71, 39, 0x000000, false);
+            graphics.drawString(font, ScreenTexts.gui("addons"), 71, 6, 0xFF000000, false);
+            graphics.drawString(font, ScreenTexts.gui("upgrades"), 71, 39, 0xFF000000, false);
         }
-        graphics.drawString(font, ScreenTexts.gui("ammo"), 8, 6, 0x000000, false);
-        graphics.drawString(font, ScreenTexts.gui("inventory"), 8, inventoryLabelY, 0x000000, false);
-        graphics.drawString(font, ScreenTexts.gui("range"), 116, 6, 0x000000, false);
+        graphics.drawString(font, ScreenTexts.gui("ammo"), 8, 6, 0xFF000000, false);
+        graphics.drawString(font, ScreenTexts.gui("inventory"), 8, inventoryLabelY, 0xFF000000, false);
+        graphics.drawString(font, ScreenTexts.gui("range"), 116, 6, 0xFF000000, false);
         base().ifPresent(base -> {
             TargetingSettings targeting = base.getLogic().getTargetingSettings();
             String range = String.valueOf(targeting.getRange());
-            int color = targeting.getRange() == targeting.getMaxRange() ? 0xFF3232 : 0x009C40;
+            int color = targeting.getRange() == targeting.getMaxRange() ? 0xFFFF3232 : 0xFF009C40;
             graphics.drawString(font, range, range.length() == 1 ? 127 : 124, 39, color, true);
         });
     }
@@ -199,7 +199,7 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
         lines.add(ScreenTexts.gui("attack_mobs").append(": ").withStyle(ChatFormatting.GRAY).append(ScreenTexts.yesNo(targeting.isTargetMobs())));
         lines.add(ScreenTexts.gui("attack_neutrals").append(": ").withStyle(ChatFormatting.GRAY).append(ScreenTexts.yesNo(targeting.isTargetPassive())));
         lines.add(ScreenTexts.gui("attack_players").append(": ").withStyle(ChatFormatting.GRAY).append(ScreenTexts.yesNo(targeting.isTargetPlayers())));
-        graphics.renderComponentTooltip(font, lines, leftPos - 128 - 12, topPos + 17 + 12);
+        ClientCompat.renderComponentTooltip(graphics, font, lines, leftPos - 128 - 12, topPos + 17 + 12);
     }
 
     /** 1.12.2 {@code drawTooltips}: energy, slot group labels and the range number. */
@@ -218,6 +218,6 @@ public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
         } else if (x > 123 && x < 134 && y > 35 && y < 48) {
             tooltip = Component.translatable("tooltip.openmodularturrets.base_max_range");
         }
-        if (tooltip != null) graphics.renderTooltip(font, tooltip, mouseX, mouseY);
+        if (tooltip != null) ClientCompat.renderTooltip(graphics, font, tooltip, mouseX, mouseY);
     }
 }

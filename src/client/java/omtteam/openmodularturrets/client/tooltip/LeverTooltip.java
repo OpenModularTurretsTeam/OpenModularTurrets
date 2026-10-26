@@ -1,10 +1,10 @@
 package omtteam.openmodularturrets.client.tooltip;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import omtteam.openmodularturrets.client.compat.ClientCompat;
 import omtteam.openmodularturrets.registry.ModItems;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public final class LeverTooltip {
     @SuppressWarnings("unused")
     public static void append(ItemStack stack, TooltipFlag flag, List<Component> lines) {
         if (!stack.is(ModItems.LEVER)) return;
-        lines.add(Screen.hasShiftDown()
+        lines.add(ClientCompat.hasShiftDown()
                 ? Component.translatable("tooltip.openmodularturrets.lever_block").withStyle(ChatFormatting.GRAY)
                 : TurretBaseTooltip.shiftHint());
     }

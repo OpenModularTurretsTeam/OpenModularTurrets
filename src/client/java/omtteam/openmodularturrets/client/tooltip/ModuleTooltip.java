@@ -1,11 +1,11 @@
 package omtteam.openmodularturrets.client.tooltip;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import omtteam.openmodularturrets.client.compat.ClientCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.GeneratorUpgradeItem;
@@ -35,7 +35,7 @@ public final class ModuleTooltip {
         } else if (stack.getItem() instanceof GeneratorUpgradeItem) {
             lines.add(text("upgrade.machine.generator"));
         }
-        if (!Screen.hasShiftDown()) {
+        if (!ClientCompat.hasShiftDown()) {
             lines.add(TurretBaseTooltip.shiftHint());
             return;
         }

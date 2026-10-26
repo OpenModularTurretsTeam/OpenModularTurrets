@@ -4,26 +4,16 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.Nullable;
-import snownee.jade.api.BlockAccessor;
-import snownee.jade.api.IServerDataProvider;
-//? if >=1.21 {
-import snownee.jade.api.IComponentProvider;
-//?} else {
-/*import snownee.jade.api.IBlockComponentProvider;
-*///?}
 
 /**
- * Base of the Jade providers: server data and block tooltip in one class. The tooltip interface is the only thing that
- * differs between the Jade versions of 1.20.1 and 1.21.1.
+ * Lines of the Jade tooltips, free of Jade: the server half of each provider builds them from the data it sent, the
+ * client half only shows them.
  */
-abstract class JadeBlockProvider implements IServerDataProvider<BlockAccessor>,
-        //? if >=1.21 {
-        IComponentProvider<BlockAccessor>
-        //?} else {
-        /*IBlockComponentProvider
-        *///?}
-{
+public final class JadeLines {
     private static final String GUI = "gui.openmodularturrets.";
+
+    private JadeLines() {
+    }
 
     /** "Label: value" line in the colours of the old WAILA tooltips (gold label, white value). */
     static Component line(String labelKey, Component value) {

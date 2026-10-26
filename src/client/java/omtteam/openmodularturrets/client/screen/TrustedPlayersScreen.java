@@ -8,7 +8,11 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+//? if >=1.21.11 {
+/*import net.minecraft.client.input.KeyEvent;
+*///?}
 import omtteam.openmodularturrets.OMT;
+import omtteam.openmodularturrets.client.compat.ClientCompat;
 import omtteam.openmodularturrets.client.compat.ClientNetworkCompat;
 import omtteam.openmodularturrets.client.compat.CompatScreen;
 import omtteam.openmodularturrets.core.security.AccessLevel;
@@ -141,13 +145,25 @@ public class TrustedPlayersScreen extends CompatScreen {
         refreshList();
     }
 
+    //? if >=1.21.11 {
+    /*@Override
+    public boolean keyPressed(KeyEvent event) {
+        return addOnEnter(event.key()) || super.keyPressed(event);
+    }
+    *///?} else {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        return addOnEnter(keyCode) || super.keyPressed(keyCode, scanCode, modifiers);
+    }
+    //?}
+
+    /** Enter in the name field adds the player. */
+    private boolean addOnEnter(int keyCode) {
         if (nameField.isFocused() && (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)) {
             addPlayer();
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return false;
     }
 
     @Override
@@ -157,11 +173,11 @@ public class TrustedPlayersScreen extends CompatScreen {
 
     @Override
     protected void renderPanel(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.blit(TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
+        ClientCompat.blit(graphics, TEXTURE, left, top, 0, 0, WIDTH, HEIGHT);
         graphics.drawString(font, Component.translatable("gui.openmodularturrets.add_trusted_player").append(":"),
-                left + 10, top + 220, 0x000000, false);
+                left + 10, top + 220, 0xFF000000, false);
         graphics.drawString(font, Component.translatable("gui.openmodularturrets.permissions"),
-                left + 186, top + 220, 0x000000, false);
+                left + 186, top + 220, 0xFF000000, false);
     }
 
     /** Hovering the "Permissions" label explains the selected player's level. */
@@ -174,7 +190,7 @@ public class TrustedPlayersScreen extends CompatScreen {
         Component text = list.getSelected()
                 .map(entry -> Component.translatable("tooltip.openmodularturrets." + describe(entry, isSimpleProfile())))
                 .orElse(Component.translatable("tooltip.openmodularturrets.info_access_level"));
-        graphics.renderTooltip(font, text.copy().withStyle(ChatFormatting.WHITE), mouseX, mouseY);
+        ClientCompat.renderTooltip(graphics, font, text.copy().withStyle(ChatFormatting.WHITE), mouseX, mouseY);
     }
 
     private static String describe(TrustedPlayer entry, boolean simpleProfile) {

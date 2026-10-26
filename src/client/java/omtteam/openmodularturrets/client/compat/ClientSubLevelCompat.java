@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.client.compat;
 
 import net.minecraft.core.BlockPos;
 import omtteam.openmodularturrets.core.world.Pose;
-//? if >=1.21 {
+//? if >=1.21 && <1.21.11 {
 import dev.ryanhcode.sable.companion.ClientSubLevelAccess;
 import dev.ryanhcode.sable.companion.SableCompanion;
 import omtteam.openmodularturrets.compat.SubLevelCompat;
@@ -21,7 +21,7 @@ public final class ClientSubLevelCompat {
      */
     @SuppressWarnings("unused")
     public static Pose renderPoseAt(BlockPos pos, float partialTick) {
-        //? if >=1.21 {
+        //? if >=1.21 && <1.21.11 {
         ClientSubLevelAccess subLevel = SableCompanion.INSTANCE.getContainingClient(pos);
         return subLevel == null ? Pose.IDENTITY : SubLevelCompat.toPose(subLevel.renderPose(partialTick));
         //?} else {

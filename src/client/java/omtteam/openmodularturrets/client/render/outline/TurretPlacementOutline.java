@@ -5,10 +5,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -91,10 +89,11 @@ public final class TurretPlacementOutline {
         toBlockCorner(poseStack, camera, pos, ClientSubLevelCompat.renderPoseAt(pos, ClientCompat.partialTick()));
         float red = state != null ? 0F : 1F;
         float greenBlue = state != null ? 1F : 0F;
-        LevelRenderer.renderLineBox(poseStack, buffers.getBuffer(RenderType.lines()), outline(facing.getAxis()),
-                red, greenBlue, greenBlue, ALPHA);
+        AABB box = outline(facing.getAxis());
+        ClientCompat.renderLineBox(poseStack, buffers.getBuffer(ClientCompat.lines()), box.minX, box.minY, box.minZ,
+                box.maxX, box.maxY, box.maxZ, red, greenBlue, greenBlue, ALPHA);
         poseStack.popPose();
-        buffers.endBatch(RenderType.lines());
+        buffers.endBatch(ClientCompat.lines());
         if (state == null) {
             Component reason = context.canPlace() ? reason(level, pos, facing, turret, player) : BLOCKED;
             if (reason != null) pending = new Label(pos, reason);

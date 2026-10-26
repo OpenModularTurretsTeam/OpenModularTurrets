@@ -11,6 +11,7 @@ import omtteam.openmodularturrets.client.api.TurretModelRegistrar;
 import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.turret.TurretTypes;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -103,6 +104,13 @@ public final class TurretModels {
         Map<TurretType, TurretModel> baked = new HashMap<>();
         ENTRIES.forEach((type, entry) -> baked.put(type, entry.factory().apply(models.bakeLayer(entry.layer()))));
         return Collections.unmodifiableMap(baked);
+    }
+
+    /** Bakes the model of one turret; {@code null} if it has none. */
+    @Nullable
+    public static TurretModel bake(EntityModelSet models, TurretType type) {
+        Entry entry = ENTRIES.get(type);
+        return entry == null ? null : entry.factory().apply(models.bakeLayer(entry.layer()));
     }
 
     public static boolean hasModel(TurretType type) {

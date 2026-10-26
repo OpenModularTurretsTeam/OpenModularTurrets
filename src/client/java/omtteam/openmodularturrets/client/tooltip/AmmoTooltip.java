@@ -1,10 +1,10 @@
 package omtteam.openmodularturrets.client.tooltip;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import omtteam.openmodularturrets.client.compat.ClientCompat;
 import omtteam.openmodularturrets.item.AmmoItem;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public final class AmmoTooltip {
     @SuppressWarnings("unused")
     public static void append(ItemStack stack, TooltipFlag flag, List<Component> lines) {
         if (!(stack.getItem() instanceof AmmoItem ammo)) return;
-        if (!Screen.hasShiftDown()) {
+        if (!ClientCompat.hasShiftDown()) {
             lines.add(TurretBaseTooltip.shiftHint());
             return;
         }

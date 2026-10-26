@@ -1,13 +1,14 @@
 package omtteam.openmodularturrets.client.tooltip;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import omtteam.openmodularturrets.client.compat.ClientCompat;
 import omtteam.openmodularturrets.core.card.MemoryCardData;
 import omtteam.openmodularturrets.core.security.TrustedPlayer;
 import omtteam.openmodularturrets.item.MemoryCardItem;
@@ -31,7 +32,7 @@ public final class MemoryCardTooltip {
     @SuppressWarnings("unused")
     public static void append(ItemStack stack, TooltipFlag flag, List<Component> lines) {
         if (!(stack.getItem() instanceof MemoryCardItem)) return;
-        if (!Screen.hasShiftDown()) {
+        if (!ClientCompat.hasShiftDown()) {
             lines.add(TurretBaseTooltip.shiftHint());
             return;
         }
@@ -97,8 +98,9 @@ public final class MemoryCardTooltip {
     private static Component disguiseName(String id) {
         if (id == null) return Component.translatable(GUI + "none").withStyle(ChatFormatting.WHITE);
         ResourceLocation location = ResourceLocation.tryParse(id);
-        if (location != null && BuiltInRegistries.BLOCK.containsKey(location)) {
-            return BuiltInRegistries.BLOCK.get(location).getName().withStyle(ChatFormatting.WHITE);
+        Optional<Block> block = location == null ? Optional.empty() : BuiltInRegistries.BLOCK.getOptional(location);
+        if (block.isPresent()) {
+            return block.get().getName().withStyle(ChatFormatting.WHITE);
         }
         return white(id);
     }

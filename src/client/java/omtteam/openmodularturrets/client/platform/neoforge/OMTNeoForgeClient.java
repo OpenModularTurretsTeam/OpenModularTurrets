@@ -11,7 +11,12 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+//? if >=1.21.11 {
+/*import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
+*///?} else {
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+//?}
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import omtteam.openmodularturrets.OMT;
@@ -26,6 +31,9 @@ import omtteam.openmodularturrets.client.render.outline.TurretPlacementOutline;
 import omtteam.openmodularturrets.platform.Platform;
 import omtteam.openmodularturrets.platform.neoforge.NeoForgeNetwork;
 import omtteam.openmodularturrets.platform.neoforge.NeoForgePlugins;
+//? if >=1.21.11 {
+/*import omtteam.openmodularturrets.camo.CamoBlock;
+*///?}
 
 /**
  * NeoForge client entrypoint: installs the client platform services, starts the client, registers the content of
@@ -45,19 +53,47 @@ public final class OMTNeoForgeClient {
             OMTClient.registerBlockEntityRenderers(event::registerBlockEntityRenderer);
             OMTClient.registerEntityRenderers(event::registerEntityRenderer);
         });
+        //? if >=1.21.11 {
+        /*// the turret and crank items are special item models
+        modBus.addListener((RegisterSpecialModelRendererEvent event) -> OMTClient.registerSpecialItemModels(event::register));
+        *///?} else {
         modBus.addListener((RegisterClientExtensionsEvent event) -> OMTClient.registerItemRenderers((item, renderer) ->
                 event.registerItem(NeoForgeItemRenderer.extensions(renderer), item)));
+        //?}
+        // the disguise model around the models of the camouflage hosts (NeoForgeCamoModel)
+        //? if >=1.21.11 {
+        /*modBus.addListener((ModelEvent.ModifyBakingResult event) -> event.getBakingResult().blockStateModels()
+                .replaceAll((state, model) -> state.getBlock() instanceof CamoBlock ? new NeoForgeCamoModel(model) : model));
+        *///?} else {
         modBus.addListener((ModelEvent.ModifyBakingResult event) -> event.getModels().replaceAll((id, model) ->
                 CamoModels.isCamoModel(id.id()) ? new NeoForgeCamoModel(model) : model));
+        //?}
         modBus.addListener((RegisterColorHandlersEvent.Block event) ->
                 event.register(NeoForgeCamoModel::color, CamoModels.camoBlocks().toArray(Block[]::new)));
         NeoForge.EVENT_BUS.addListener((ItemTooltipEvent event) ->
                 OMTClient.appendTooltip(event.getItemStack(), event.getFlags(), event.getToolTip()));
         NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut event) -> OMTClient.onDisconnect());
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> RayRenderer.tick());
+        //? if >=1.21.11 {
+        /*NeoForge.EVENT_BUS.addListener(OMTNeoForgeClient::onAfterTranslucentBlocks);
+        NeoForge.EVENT_BUS.addListener(OMTNeoForgeClient::onAfterParticles);
+        *///?} else {
         NeoForge.EVENT_BUS.addListener(OMTNeoForgeClient::onRenderLevelStage);
+        //?}
     }
 
+    //? if >=1.21.11 {
+    /*private static void onAfterTranslucentBlocks(RenderLevelStageEvent.AfterTranslucentBlocks event) {
+        Vec3 camera = event.getLevelRenderState().cameraRenderState.pos;
+        RayRenderer.render(event.getPoseStack(), camera);
+        TurretPlacementOutline.render(event.getPoseStack(), camera);
+    }
+
+    // AfterLevel comes from GameRenderer after the level, without a pose stack
+    private static void onAfterParticles(RenderLevelStageEvent.AfterParticles event) {
+        TurretPlacementOutline.renderLabel(event.getPoseStack(), event.getLevelRenderState().cameraRenderState.pos);
+    }
+    *///?} else {
     private static void onRenderLevelStage(RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
             RayRenderer.render(event.getPoseStack(), event.getCamera().getPosition());
@@ -67,4 +103,5 @@ public final class OMTNeoForgeClient {
             TurretPlacementOutline.renderLabel(event.getPoseStack(), event.getCamera().getPosition());
         }
     }
+    //?}
 }
