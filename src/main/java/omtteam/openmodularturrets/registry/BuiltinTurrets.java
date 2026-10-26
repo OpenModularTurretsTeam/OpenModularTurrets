@@ -14,6 +14,7 @@ import omtteam.openmodularturrets.api.weapon.RayWeapon;
 import omtteam.openmodularturrets.api.weapon.TurretWeapon;
 import omtteam.openmodularturrets.blockentity.turret.EffectWeapons;
 import omtteam.openmodularturrets.blockentity.turret.RayWeapons;
+import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.config.ConfigData;
 import omtteam.openmodularturrets.core.base.AmmoDraw;
 import omtteam.openmodularturrets.core.turret.AmmoType;
@@ -64,25 +65,25 @@ final class BuiltinTurrets {
 
     private static TurretWeapon weapon(TurretType type) {
         if (type == TurretType.DISPOSABLE_TURRET) return ProjectileWeapon.of(ModSounds.DISPOSABLE_LAUNCH,
-                (level, ammo, target) -> withItem(ModEntities.DISPOSABLE.create(level), ammo, Items.COBBLESTONE));
+                (level, ammo, target) -> withItem(VersionCompat.createEntity(ModEntities.DISPOSABLE, level), ammo, Items.COBBLESTONE));
         if (type == TurretType.POTATO_CANNON_TURRET) return ProjectileWeapon.of(ModSounds.POTATO_LAUNCH,
-                (level, ammo, target) -> withItem(ModEntities.POTATO.create(level), ammo, Items.POTATO));
+                (level, ammo, target) -> withItem(VersionCompat.createEntity(ModEntities.POTATO, level), ammo, Items.POTATO));
         if (type == TurretType.CROSSBOW_TURRET) return ProjectileWeapon.of(ModSounds.POTATO_LAUNCH,
-                (level, ammo, target) -> ModEntities.ARROW.create(level));
+                (level, ammo, target) -> VersionCompat.createEntity(ModEntities.ARROW, level));
         if (type == TurretType.MACHINE_GUN_TURRET) return ProjectileWeapon.of(ModSounds.MACHINE_GUN_LAUNCH,
-                (level, ammo, target) -> ModEntities.BULLET.create(level));
+                (level, ammo, target) -> VersionCompat.createEntity(ModEntities.BULLET, level));
         if (type == TurretType.INCENDIARY_TURRET) return ProjectileWeapon.of(ModSounds.INCENDIARY_LAUNCH,
-                (level, ammo, target) -> ModEntities.BLAZING_CLAY.create(level));
+                (level, ammo, target) -> VersionCompat.createEntity(ModEntities.BLAZING_CLAY, level));
         if (type == TurretType.GRENADE_TURRET) return ProjectileWeapon.of(ModSounds.GRENADE_LAUNCH,
-                (level, ammo, target) -> ModEntities.GRENADE.create(level));
+                (level, ammo, target) -> VersionCompat.createEntity(ModEntities.GRENADE, level));
         if (type == TurretType.ROCKET_TURRET) return ProjectileWeapon.of(ModSounds.ROCKET_LAUNCH,
                 (level, ammo, target) -> {
-                    RocketProjectile rocket = ModEntities.ROCKET.create(level);
+                    RocketProjectile rocket = VersionCompat.createEntity(ModEntities.ROCKET, level);
                     if (rocket != null) rocket.setTarget(target);
                     return rocket;
                 });
         if (type == TurretType.PLASMA_TURRET) return ProjectileWeapon.of(ModSounds.PLASMA_LAUNCH,
-                (level, ammo, target) -> ModEntities.PLASMA.create(level));
+                (level, ammo, target) -> VersionCompat.createEntity(ModEntities.PLASMA, level));
         if (type == TurretType.MELEE_TURRET) return new AreaWeapon(ModSounds.SLOWING_LAUNCH, EffectWeapons::meleeArea,
                 EffectWeapons::strike);
         if (type == TurretType.SLOWING_TURRET) return new EffectWeapon(ModSounds.SLOWING_LAUNCH, EffectWeapons::slow);

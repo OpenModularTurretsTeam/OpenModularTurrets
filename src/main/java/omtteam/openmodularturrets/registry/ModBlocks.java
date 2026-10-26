@@ -2,7 +2,9 @@ package omtteam.openmodularturrets.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.block.base.TurretBaseBlock;
 import omtteam.openmodularturrets.block.defense.CamoTrapBlock;
@@ -23,6 +25,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -47,47 +50,52 @@ public final class ModBlocks {
     public static final Map<TurretType, TurretBlock> TURRETS = registerTurrets();
 
     // Misc
-    public static final LeverBlock LEVER = register("lever_block", new LeverBlock(LeverBlock.createProperties()));
+    public static final LeverBlock LEVER = register("lever_block", LeverBlock::new, LeverBlock.createProperties());
     /** New block (not in the 1.12.2 version). */
-    public static final GeneratorBlock GENERATOR = register("generator", new GeneratorBlock(GeneratorBlock.createProperties()));
+    public static final GeneratorBlock GENERATOR = register("generator", GeneratorBlock::new, GeneratorBlock.createProperties());
 
     // Passive defense (OMPD), one block per tier
-    public static final List<HardenedBlock> HARDENED = registerTiers("hardened",
-            tier -> new HardenedBlock(tier, PassiveDefense.properties(tier)));
-    public static final List<DefenseWallBlock> WALLS = registerTiers("wall",
-            tier -> new DefenseWallBlock(tier, PassiveDefense.properties(tier).forceSolidOn()));
-    public static final List<DefenseFenceBlock> FENCES = registerTiers("fence",
-            tier -> new DefenseFenceBlock(tier, PassiveDefense.properties(tier).noOcclusion()));
-    public static final CamoTrapBlock CAMO_TRAP = register("camo_trap", new CamoTrapBlock(CamoTrapBlock.createProperties()));
+    public static final List<HardenedBlock> HARDENED = registerTiers("hardened", HardenedBlock::new,
+            PassiveDefense::properties);
+    public static final List<DefenseWallBlock> WALLS = registerTiers("wall", DefenseWallBlock::new,
+            tier -> PassiveDefense.properties(tier).forceSolidOn());
+    public static final List<DefenseFenceBlock> FENCES = registerTiers("fence", DefenseFenceBlock::new,
+            tier -> PassiveDefense.properties(tier).noOcclusion());
+    public static final CamoTrapBlock CAMO_TRAP = register("camo_trap", CamoTrapBlock::new, CamoTrapBlock.createProperties());
 
     private ModBlocks() {
     }
 
     private static TurretBaseBlock registerBase(String name, int tier) {
-        return register(name, new TurretBaseBlock(tier, TurretBaseBlock.createProperties(tier)));
+        return register(name, properties -> new TurretBaseBlock(tier, properties), TurretBaseBlock.createProperties(tier));
     }
 
     private static Map<TurretType, TurretBlock> registerTurrets() {
         if (!TurretTypes.isFrozen()) throw new IllegalStateException("Turret blocks registered before the turret types");
         Map<TurretType, TurretBlock> turrets = new LinkedHashMap<>();
         for (TurretType type : TurretTypes.all()) {
-            turrets.put(type, Registry.register(BuiltInRegistries.BLOCK, VersionCompat.id(type.getNamespace(), type.getPath()),
-                    new TurretBlock(type, TurretBlock.createProperties())));
+            ResourceLocation id = VersionCompat.id(type.getNamespace(), type.getPath());
+            turrets.put(type, Registry.register(BuiltInRegistries.BLOCK, id,
+                    new TurretBlock(type, VersionCompat.blockProperties(TurretBlock.createProperties(), id))));
         }
         return Collections.unmodifiableMap(turrets);
     }
 
     /** {@code <name>_tier_one} … {@code <name>_tier_five}, ordered by tier. */
-    private static <T extends Block> List<T> registerTiers(String name, Function<DefenseTier, T> factory) {
+    private static <T extends Block> List<T> registerTiers(String name, BiFunction<DefenseTier, BlockBehaviour.Properties, T> factory,
+                                                           Function<DefenseTier, BlockBehaviour.Properties> properties) {
         List<T> blocks = new ArrayList<>();
         for (DefenseTier tier : DefenseTier.values()) {
-            blocks.add(register(name + "_tier_" + tier.getName(), factory.apply(tier)));
+            blocks.add(register(name + "_tier_" + tier.getName(), props -> factory.apply(tier, props), properties.apply(tier)));
         }
         return List.copyOf(blocks);
     }
 
-    private static <T extends Block> T register(String name, T block) {
-        return Registry.register(BuiltInRegistries.BLOCK, OMT.id(name), block);
+    /** Creates the block from its properties (1.21.11 needs the registry id in them) and registers it as {@code name}. */
+    private static <T extends Block> T register(String name, Function<BlockBehaviour.Properties, T> factory,
+                                                BlockBehaviour.Properties properties) {
+        ResourceLocation id = OMT.id(name);
+        return Registry.register(BuiltInRegistries.BLOCK, id, factory.apply(VersionCompat.blockProperties(properties, id)));
     }
 
     /** Loads the class, registering all blocks. */

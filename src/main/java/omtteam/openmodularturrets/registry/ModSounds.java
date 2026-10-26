@@ -2,11 +2,12 @@ package omtteam.openmodularturrets.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import omtteam.openmodularturrets.OMT;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * All sounds (1.12.2 {@code ModSounds}); the files and {@code sounds.json} are copied from the 1.12.2 version.
@@ -16,7 +17,7 @@ import java.util.List;
  * opens.
  */
 public final class ModSounds {
-    private static final List<SoundEvent> ALL = new ArrayList<>();
+    private static final Map<ResourceLocation, SoundEvent> ALL = new LinkedHashMap<>();
 
     public static final SoundEvent TURRET_DEPLOY = create("turret_deploy");
     public static final SoundEvent TURRET_RETRACT = create("turret_retract");
@@ -43,15 +44,14 @@ public final class ModSounds {
     }
 
     private static SoundEvent create(String name) {
-        SoundEvent sound = SoundEvent.createVariableRangeEvent(OMT.id(name));
-        ALL.add(sound);
+        ResourceLocation id = OMT.id(name);
+        SoundEvent sound = SoundEvent.createVariableRangeEvent(id);
+        ALL.put(id, sound);
         return sound;
     }
 
     /** Registers all sounds (the same instances the fields hold). */
     public static void init() {
-        for (SoundEvent sound : ALL) {
-            Registry.register(BuiltInRegistries.SOUND_EVENT, sound.getLocation(), sound);
-        }
+        ALL.forEach((id, sound) -> Registry.register(BuiltInRegistries.SOUND_EVENT, id, sound));
     }
 }

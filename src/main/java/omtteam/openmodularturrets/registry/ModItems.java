@@ -2,11 +2,13 @@ package omtteam.openmodularturrets.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
 import omtteam.openmodularturrets.OMT;
+import omtteam.openmodularturrets.compat.VersionCompat;
 import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.item.GeneratorUpgradeType;
 import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
@@ -24,6 +26,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * All items, including block items.
@@ -52,15 +55,14 @@ public final class ModItems {
     public static final AmmoItem AMMO_ROCKET = registerAmmo("ammo_rocket", AmmoType.ROCKET);
 
     // Intermediate products (1.12.2 IntermediateProductRegular)
-    public static final Item IO_BUS = register("io_bus", new Item(new Item.Properties()));
+    public static final Item IO_BUS = register("io_bus", Item::new, new Item.Properties());
 
     // Memory card (1.12.2 UsableMetaItem meta 2)
-    public static final MemoryCardItem MEMORY_CARD = register("memory_card",
-            new MemoryCardItem(new Item.Properties().stacksTo(1)));
+    public static final MemoryCardItem MEMORY_CARD = register("memory_card", MemoryCardItem::new, new Item.Properties().stacksTo(1));
 
     // Map maker's ownership wand (creative only)
-    public static final OwnershipWandItem OWNERSHIP_WAND = register("ownership_wand",
-            new OwnershipWandItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+    public static final OwnershipWandItem OWNERSHIP_WAND = register("ownership_wand", OwnershipWandItem::new,
+            new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 
     // Tiered intermediate products (1.12.2 IntermediateProductTiered meta 0–14), index = tier - 1
     public static final List<Item> SENSORS = registerTiered("sensor");
@@ -79,7 +81,7 @@ public final class ModItems {
     // Generator upgrades
     public static final GeneratorUpgradeItem UPGRADE_ENERGY_MULTIPLIER = register(
             "upgrade_" + GeneratorUpgradeType.ENERGY_MULTIPLIER.getSerializedName(),
-            new GeneratorUpgradeItem(GeneratorUpgradeType.ENERGY_MULTIPLIER, new Item.Properties()));
+            properties -> new GeneratorUpgradeItem(GeneratorUpgradeType.ENERGY_MULTIPLIER, properties), new Item.Properties());
 
     // Addons (1.12.2 AddonMetaItem; potentia and serial port are not ported, see AddonType)
     public static final AddonItem ADDON_CONCEALER = registerAddon(AddonType.CONCEALER);
@@ -109,32 +111,37 @@ public final class ModItems {
     private static List<Item> registerTiered(String kind) {
         List<Item> items = new ArrayList<>();
         for (String tier : TIER_NAMES) {
-            items.add(register(kind + "_tier_" + tier, new Item(new Item.Properties())));
+            items.add(register(kind + "_tier_" + tier, Item::new, new Item.Properties()));
         }
         return List.copyOf(items);
     }
 
     private static TurretBaseUpgradeItem registerUpgrade(TurretBaseUpgradeType type) {
-        return register("upgrade_" + type.getSerializedName(), new TurretBaseUpgradeItem(type, new Item.Properties()));
+        return register("upgrade_" + type.getSerializedName(), properties -> new TurretBaseUpgradeItem(type, properties),
+                new Item.Properties());
     }
 
     private static AddonItem registerAddon(AddonType type) {
-        return register("addon_" + type.getSerializedName(), new AddonItem(type, new Item.Properties()));
+        return register("addon_" + type.getSerializedName(), properties -> new AddonItem(type, properties), new Item.Properties());
     }
 
     private static AmmoItem registerAmmo(String name, AmmoType type) {
-        return register(name, new AmmoItem(type, new Item.Properties()));
+        return register(name, properties -> new AmmoItem(type, properties), new Item.Properties());
     }
 
-    private static <T extends Item> T register(String name, T item) {
+    /** Creates the item from its properties (1.21.11 needs the registry id in them) and registers it as {@code name}. */
+    private static <T extends Item> T register(String name, Function<Item.Properties, T> factory, Item.Properties properties) {
+        ResourceLocation id = OMT.id(name);
+        T item = factory.apply(VersionCompat.itemProperties(properties, id));
         ITEMS.add(item);
-        return Registry.register(BuiltInRegistries.ITEM, OMT.id(name), item);
+        return Registry.register(BuiltInRegistries.ITEM, id, item);
     }
 
     private static BlockItem registerBlock(Block block) {
-        BlockItem item = new BlockItem(block, new Item.Properties());
+        ResourceLocation id = BuiltInRegistries.BLOCK.getKey(block);
+        BlockItem item = new BlockItem(block, VersionCompat.blockItemProperties(new Item.Properties(), id));
         ITEMS.add(item);
-        return Registry.register(BuiltInRegistries.ITEM, BuiltInRegistries.BLOCK.getKey(block), item);
+        return Registry.register(BuiltInRegistries.ITEM, id, item);
     }
 
     /** Loads the class, registering all items. */
