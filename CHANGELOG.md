@@ -8,9 +8,12 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+## [4.0.0-beta.3] - 2026-10-26
+
 ### Changed
 
 - The generator GUI labels are black like in the other turret GUIs (were dark grey on the dark background)
+- Requires OMLib 4.0.0-beta.3 or newer
 
 ## [4.0.0-beta.2] - 2026-10-26
 
