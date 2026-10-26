@@ -53,8 +53,8 @@ public class GeneratorGui extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        fontRenderer.drawString(safeLocalize("tile.generator.name"), 8, 6, 0x404040);
-        fontRenderer.drawString(safeLocalize("container.inventory"), 8, ySize - 94, 0x404040);
+        fontRenderer.drawString(safeLocalize("tile.generator.name"), 8, 6, 0x000000);
+        fontRenderer.drawString(safeLocalize("container.inventory"), 8, ySize - 94, 0x000000);
     }
 
     @Override

@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+### Changed
+
+- The generator GUI labels are black like in the other turret GUIs (were dark grey on the dark background)
+
 ## [4.0.0-beta.2] - 2026-10-26
 
 ### Added
