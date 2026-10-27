@@ -21,6 +21,7 @@ import net.minecraftforge.gametest.PrefixGameTestTemplate;
 //? if (neoforge && <1.21.11) || forge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 //? if <1.21.11 {
@@ -30,10 +31,12 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.api.OMTApi;
@@ -62,8 +65,9 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The map maker's ownership wand: claiming and resetting, spreading to the connected blocks of the same owner, that
- * only game masters can use it, and that turrets still fire at a player holding it without affecting them. Every
+ * The map maker's ownership wand: claiming and resetting, spreading to the connected blocks of the same owner and
+ * switching it with a sneak-click into the air, that only game masters can use it, and that turrets still fire at a
+ * player holding it without affecting them. Every
  * immunity test has a control without the wand, so a test player that turrets cannot reach does not pass by accident.
  */
 //? if (neoforge && <1.21.11) || forge {
@@ -78,6 +82,13 @@ public class OwnershipWandGameTests implements OMTGameTests {
     private static final BlockPos SAME_OWNER = BASE.east();
     private static final BlockPos OTHER_OWNER = SAME_OWNER.east();
     private static final BlockPos UNOWNED = BASE.south();
+    /**
+     * Where a player stands to click into the air: a bottom corner of the test, looking at the opposite top corner, with
+     * more than the reach of air in between (the test sits underground on Forge 1.20.1, so there may be no sky).
+     */
+    private static final BlockPos CORNER = new BlockPos(0, 1, 0);
+    private static final Vec3 FAR_CORNER = new Vec3(7.5D, 7.5D, 7.5D);
+    private static final BlockPos FLOOR = new BlockPos(4, 1, 4);
 
     /**
      * A wand claim on a base makes the game master the owner of it and of the connected block of the same owner, with
@@ -132,6 +143,52 @@ public class OwnershipWandGameTests implements OMTGameTests {
         rightClick(helper, player, BASE, true);
 
         assertOwner(helper, BASE, owner);
+        helper.succeed();
+    }
+
+    /**
+     * A game master's sneak-click into the air switches spreading off and on again; the setting is kept on the stack,
+     * and switching it back on removes it from there.
+     */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "ownership_wand_toggle", timeoutTicks = TIMEOUT_TICKS)
+    public void sneakClickIntoTheAirSwitchesSpreading(GameTestHelper helper) {
+        ServerPlayer master = gameMaster(helper, "Master");
+        helper.assertTrue(OwnershipWandItem.isSpreading(master.getMainHandItem()), "A new wand does not spread");
+
+        InteractionResult off = use(helper, master, CORNER, FAR_CORNER, true);
+        helper.assertTrue(off.consumesAction(), "The sneak-click into the air was not used: " + off);
+        helper.assertTrue(!OwnershipWandItem.isSpreading(master.getMainHandItem()), "Spreading was not switched off");
+
+        use(helper, master, CORNER, FAR_CORNER, true);
+        ItemStack wand = master.getMainHandItem();
+        helper.assertTrue(OwnershipWandItem.isSpreading(wand), "Spreading was not switched on again");
+        helper.assertTrue(!VersionCompat.getCustomData(wand).contains("OwnershipWandNoSpread"), "The setting is still on the stack");
+        helper.succeed();
+    }
+
+    /** A click into the air without sneaking, and a sneak-click at a block, leave spreading as it is. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "ownership_wand_toggle", timeoutTicks = TIMEOUT_TICKS)
+    public void onlyASneakClickIntoTheAirSwitchesSpreading(GameTestHelper helper) {
+        ServerPlayer master = gameMaster(helper, "Master");
+        helper.setBlock(FLOOR, Blocks.STONE);
+
+        InteractionResult notSneaking = use(helper, master, CORNER, FAR_CORNER, false);
+        use(helper, master, FLOOR.above(), Vec3.atCenterOf(FLOOR), true);
+
+        helper.assertTrue(!notSneaking.consumesAction(), "A click without sneaking was used: " + notSneaking);
+        helper.assertTrue(OwnershipWandItem.isSpreading(master.getMainHandItem()), "Spreading was switched off");
+        helper.succeed();
+    }
+
+    /** Players who are not game masters cannot switch spreading either. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "ownership_wand_toggle", timeoutTicks = TIMEOUT_TICKS)
+    public void nonGameMastersCannotSwitchSpreading(GameTestHelper helper) {
+        ServerPlayer player = new TestPlayer(helper.getLevel(), new GameProfile(UUID.randomUUID(), "Player"), false);
+        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.OWNERSHIP_WAND));
+
+        use(helper, player, CORNER, FAR_CORNER, true);
+
+        helper.assertTrue(OwnershipWandItem.isSpreading(player.getMainHandItem()), "A player who is not a game master switched spreading off");
         helper.succeed();
     }
 
@@ -232,6 +289,20 @@ public class OwnershipWandGameTests implements OMTGameTests {
         ServerPlayer player = new TestPlayer(helper.getLevel(), new GameProfile(UUID.randomUUID(), name), true);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.OWNERSHIP_WAND));
         return player;
+    }
+
+    /**
+     * A main-hand right click with the item (not on a block), standing at {@code relative} and looking at {@code target}
+     * (relative too), as the server handles it.
+     */
+    private static InteractionResult use(GameTestHelper helper, ServerPlayer player, BlockPos relative, Vec3 target, boolean sneaking) {
+        BlockPos pos = helper.absolutePos(relative);
+        player.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+        player.lookAt(EntityAnchorArgument.Anchor.EYES, helper.absoluteVec(target));
+        player.setShiftKeyDown(sneaking);
+        InteractionResult result = player.gameMode.useItem(player, helper.getLevel(), player.getMainHandItem(), InteractionHand.MAIN_HAND);
+        player.setShiftKeyDown(false);
+        return result;
     }
 
     /** A main-hand right click on the top of the block, as the server handles it. */

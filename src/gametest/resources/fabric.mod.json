@@ -17,6 +17,7 @@
       "omtteam.openmodularturrets.gametest.BaseGuiGameTests",
       "omtteam.openmodularturrets.gametest.ItemTransferGameTests",
       "omtteam.openmodularturrets.gametest.CamoGameTests",
+      "omtteam.openmodularturrets.gametest.CamoMenuGameTests",
       "omtteam.openmodularturrets.gametest.BlockMoveGameTests",
       "omtteam.openmodularturrets.gametest.OwnershipGameTests",
       "omtteam.openmodularturrets.gametest.OwnershipWandGameTests",

@@ -1,15 +1,5 @@
 package omtteam.openmodularturrets.gametest;
 
-import com.mojang.authlib.GameProfile;
-//? if fabric {
-import net.fabricmc.fabric.api.entity.FakePlayer;
-//?}
-//? if neoforge {
-/*import net.neoforged.neoforge.common.util.FakePlayer;
-*///?}
-//? if forge {
-/*import net.minecraftforge.common.util.FakePlayer;
-*///?}
 //? if neoforge && <1.21.11 {
 /*import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
@@ -27,12 +17,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 //?}
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -43,14 +30,6 @@ import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.menu.TurretBaseMenu;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.omlib.security.PlayerAdapter;
-import org.jetbrains.annotations.Nullable;
-//? if neoforge {
-/*import net.minecraft.network.RegistryFriendlyByteBuf;
-import java.util.function.Consumer;
-*///?}
-
-import java.util.OptionalInt;
-import java.util.UUID;
 
 /**
  * Right-clicking a turret base opens its GUI for players with access, and only for them; only its admins attach
@@ -143,41 +122,9 @@ public class BaseGuiGameTests implements OMTGameTests {
         helper.succeed();
     }
 
-    /**
-     * A fake player with its own profile; every test uses new profiles, as fake players are cached by profile. The
-     * loader's {@link FakePlayer} refuses to open menus; this one opens them like a real player but sends no packet to
-     * a client (there is none): the menu factory is called and the menu becomes the player's current menu.
-     */
-    private static final class GuiTestPlayer extends FakePlayer {
-        private int menuCounter;
-
-        private GuiTestPlayer(ServerLevel level, GameProfile profile) {
-            super(level, profile);
-        }
-
-        @Override
-        @SuppressWarnings("NullableProblems")
-        public OptionalInt openMenu(@Nullable MenuProvider provider) {
-            if (provider == null) return OptionalInt.empty();
-            if (containerMenu != inventoryMenu) closeContainer();
-            AbstractContainerMenu menu = provider.createMenu(++menuCounter, getInventory(), this);
-            if (menu == null) return OptionalInt.empty();
-            containerMenu = menu;
-            return OptionalInt.of(menu.containerId);
-        }
-
-        //? if neoforge {
-        /*/^* NeoForge opens block menus with extra data for the client (none here), through this variant. ^/
-        @Override
-        public OptionalInt openMenu(@Nullable MenuProvider provider, @Nullable Consumer<RegistryFriendlyByteBuf> extraDataWriter) {
-            return openMenu(provider);
-        }
-        *///?}
-    }
-
     /** A new player for every call: no state is shared between tests. */
     private static ServerPlayer player(GameTestHelper helper, String name) {
-        return new GuiTestPlayer(helper.getLevel(), new GameProfile(UUID.randomUUID(), name));
+        return GuiTestPlayer.create(helper, name);
     }
 
     /** A tier 1 base owned by {@code owner}. */
