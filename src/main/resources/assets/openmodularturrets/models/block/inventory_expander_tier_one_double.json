@@ -1,0 +1,7 @@
+{
+  "parent": "openmodularturrets:block/inventory_expander_double",
+  "textures": {
+    "top": "openmodularturrets:block/inventory_expander_tier_one_top",
+    "side": "openmodularturrets:block/inventory_expander_tier_one_side"
+  }
+}

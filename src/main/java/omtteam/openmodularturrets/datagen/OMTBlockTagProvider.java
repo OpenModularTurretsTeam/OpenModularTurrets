@@ -36,6 +36,8 @@ public class OMTBlockTagProvider extends FabricTagProvider.BlockTagProvider {
         });
         // generator: like a furnace (pickaxe, any tier)
         tagBuilder(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.GENERATOR);
+        // inventory expanders: stone like the bases (pickaxe, any tier)
+        ModBlocks.INVENTORY_EXPANDERS.forEach(tagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)::add);
         // vanilla walls and panes connect to blocks in #minecraft:walls
         ModBlocks.WALLS.forEach(tagBuilder(BlockTags.WALLS)::add);
     }

@@ -87,6 +87,11 @@ public final class ConfigLogicSettings implements LogicSettings {
     }
 
     @Override
+    public int expanderStacks(int tier) {
+        return OMTConfig.get().expanders.tier(tier).stacks;
+    }
+
+    @Override
     public int solarPanelGeneration() {
         return OMTConfig.get().miscellaneous.solarPanelAddonGen;
     }

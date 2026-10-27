@@ -1,19 +1,19 @@
 package omtteam.openmodularturrets.menu;
 
+import omtteam.omlib.menu.LargeStackMenu;
+import omtteam.omlib.menu.LargeStackSlot;
 import omtteam.omlib.menu.LongContainerData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
-import omtteam.omlib.core.energy.EnergyStore;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.TurretBaseUpgradeItem;
@@ -24,14 +24,17 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Turret base inventory menu. Ported from 1.12.2 {@code TurretBaseContainer}: 3x3 ammo slots, addon and upgrade slots
- * depending on the tier, and the player inventory. Energy is synced as container data; everything else the screen
- * shows comes from the block entity sync.
+ * depending on the tier, and the player inventory. Energy and the stacks the inventory expanders add to the ammo
+ * slots are synced as container data (the client container needs the slot limits); everything else the screen shows
+ * comes from the block entity sync.
  */
-public class TurretBaseMenu extends AbstractContainerMenu {
+public class TurretBaseMenu extends LargeStackMenu {
     /** 1.12.2 {@code canInteractWith}: squared distance below 64. */
     private static final double MAX_DISTANCE_SQR = 64.0;
     private static final int DATA_ENERGY = 0;
     private static final int DATA_CAPACITY = 1;
+    private static final int DATA_BONUS_STACKS = 2;
+    private static final int DATA_VALUES = 3;
 
     private final BlockPos pos;
     private final int tier;
@@ -45,14 +48,17 @@ public class TurretBaseMenu extends AbstractContainerMenu {
     public static TurretBaseMenu client(int containerId, Inventory playerInventory, BlockPos pos) {
         int tier = playerInventory.player.level().getBlockEntity(pos) instanceof TurretBaseBlockEntity base
                 ? base.getTier() : 1;
-        return new TurretBaseMenu(containerId, playerInventory, pos, tier, null,
-                new SimpleContainer(TurretBaseInventory.SIZE), new SimpleContainerData(LongContainerData.size(2)));
+        ContainerData data = new SimpleContainerData(LongContainerData.size(DATA_VALUES));
+        TurretBaseInventory container = new TurretBaseInventory(() -> { }, player -> true,
+                () -> new SlotCapacity((int) LongContainerData.read(data, DATA_BONUS_STACKS)));
+        return new TurretBaseMenu(containerId, playerInventory, pos, tier, null, container, data);
     }
 
     /** Server side. */
     public static TurretBaseMenu server(int containerId, Inventory playerInventory, TurretBaseBlockEntity base) {
         return new TurretBaseMenu(containerId, playerInventory, base.getBlockPos(), base.getTier(), base,
-                base.getInventory(), energyData(base.getLogic().getEnergy()));
+                base.getInventory(), new LongContainerData(base.getLogic().getEnergy()::getAmount,
+                        base.getLogic().getEnergy()::getCapacity, () -> base.getSlotCapacity().bonusStacks()));
     }
 
     private TurretBaseMenu(int containerId, Inventory playerInventory, BlockPos pos, int tier,
@@ -74,7 +80,7 @@ public class TurretBaseMenu extends AbstractContainerMenu {
         baseSlotStart = slots.size();
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
-                addSlot(new BaseSlot(container, TurretBaseInventory.AMMO_START + x + y * 3, 8 + x * 18, 17 + y * 18));
+                addSlot(new AmmoSlot(container, TurretBaseInventory.AMMO_START + x + y * 3, 8 + x * 18, 17 + y * 18));
             }
         }
         addIfUsable(container, TurretBaseInventory.ADDON_START, 72, 18);
@@ -175,11 +181,19 @@ public class TurretBaseMenu extends AbstractContainerMenu {
 
         @Override
         public int getMaxStackSize(ItemStack stack) {
-            return Math.min(super.getMaxStackSize(stack), TurretBaseInventory.getSlotLimit(getContainerSlot(), stack));
+            return Math.min(super.getMaxStackSize(stack), TurretBaseInventory.getBaseSlotLimit(getContainerSlot(), stack));
         }
     }
 
-    private static ContainerData energyData(EnergyStore store) {
-        return new LongContainerData(store::getAmount, store::getCapacity);
+    /** Ammo slot: holds as much as the attached expanders allow ({@link TurretBaseInventory#getSlotLimit}). */
+    private static class AmmoSlot extends LargeStackSlot {
+        AmmoSlot(Container container, int index, int x, int y) {
+            super(container, index, x, y);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return TurretBaseInventory.mayPlace(getContainerSlot(), stack);
+        }
     }
 }

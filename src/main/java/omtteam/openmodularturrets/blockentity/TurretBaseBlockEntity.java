@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import omtteam.openmodularturrets.block.base.TurretBaseBlock;
+import omtteam.openmodularturrets.block.misc.InventoryExpanderBlock;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.base.BlockEntityBaseWorld;
 import omtteam.openmodularturrets.blockentity.base.TurretBaseNbt;
@@ -31,6 +32,7 @@ import omtteam.omlib.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.camo.CamoPermissions;
 import omtteam.omlib.core.energy.EnergyAccess;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.omlib.core.security.TrustManager;
 import omtteam.omlib.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
@@ -58,7 +60,7 @@ import java.util.Random;
  */
 public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost, TransferHost, Clearable {
     private final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged,
-            player -> Container.stillValidBlockEntity(this, player));
+            player -> Container.stillValidBlockEntity(this, player), this::getSlotCapacity);
     /** The ammo slots: anything the inventory accepts goes in, everything may come out. */
     /** Insert only: other blocks never take ammo out, so a stranger's hopper cannot disarm the base. */
     private final ItemAccess ammoAccess = new ItemAccess(inventory, TurretBaseInventory.AMMO_START,
@@ -99,29 +101,36 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
     }
 
     /**
-     * Tells the logic what is attached to each face. Waits until all neighbour blocks are loaded, so a turret in an
-     * unloaded chunk does not count as removed.
+     * Tells the logic what is attached to each face. Waits until all neighbour blocks (and the second blocks of
+     * expander lines) are loaded, so a turret or expander in an unloaded chunk does not count as removed.
      */
     private void refreshNeighbours() {
         if (level == null) return;
         Map<Face, Neighbour> attached = new EnumMap<>(Face.class);
         for (Direction direction : Direction.values()) {
             BlockPos neighbourPos = worldPosition.relative(direction);
-            if (!level.isLoaded(neighbourPos)) return;
+            if (!level.isLoaded(neighbourPos)
+                    || !InventoryExpanderBlock.isChainLoaded(level, worldPosition, direction)) return;
             scanNeighbour(neighbourPos, direction).ifPresent(neighbour -> attached.put(toFace(direction), neighbour));
         }
         logic.updateNeighbours(attached);
         neighboursScanned = true;
     }
 
-    /** A turret counts if it faces away from this base (1.12.2 {@code TurretHeadUtil.getBaseTurrets}). */
+    /**
+     * A turret counts if it faces away from this base (1.12.2 {@code TurretHeadUtil.getBaseTurrets}); inventory
+     * expanders count in a line from the face ({@link InventoryExpanderBlock#chainTiers}).
+     */
     private Optional<Neighbour> scanNeighbour(BlockPos pos, Direction direction) {
         if (level instanceof ServerLevel) {
             BlockState state = level.getBlockState(pos);
-
-        if (state.getBlock() instanceof TurretBlock turret && state.getValue(TurretBlock.FACING) == direction) {
-            return Optional.of(new Neighbour.Turret(turret.getTurretType()));
-        }
+            if (state.getBlock() instanceof TurretBlock turret && state.getValue(TurretBlock.FACING) == direction) {
+                return Optional.of(new Neighbour.Turret(turret.getTurretType()));
+            }
+            if (state.getBlock() instanceof InventoryExpanderBlock) {
+                return Optional.of(new Neighbour.Expanders(
+                        InventoryExpanderBlock.chainTiers(level, worldPosition, direction)));
+            }
         }
         return Optional.empty();
     }
@@ -146,6 +155,11 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
 
     public int getTier() {
         return logic.getTier();
+    }
+
+    /** What the attached inventory expanders add to the ammo slots ({@link TurretBaseLogic#getSlotCapacity}). */
+    public SlotCapacity getSlotCapacity() {
+        return logic.getSlotCapacity();
     }
 
     @Override

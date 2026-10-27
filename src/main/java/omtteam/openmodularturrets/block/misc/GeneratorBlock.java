@@ -98,6 +98,14 @@ public class GeneratorBlock extends CompatEntityBlock implements InteractiveBloc
         return level.isClientSide() ? null : createTickerHelper(type, ModBlockEntities.GENERATOR, GeneratorBlockEntity::serverTick);
     }
 
+    /** Attached inventory expanders may have changed. */
+    @Override
+    protected void onNeighborChanged(BlockState state, Level level, BlockPos pos, @Nullable BlockPos neighbourPos) {
+        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof GeneratorBlockEntity generator) {
+            generator.onNeighbourChanged();
+        }
+    }
+
     @Override
     public InteractionResult onUse(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (hand != InteractionHand.MAIN_HAND || player.isShiftKeyDown()) return InteractionResult.PASS;

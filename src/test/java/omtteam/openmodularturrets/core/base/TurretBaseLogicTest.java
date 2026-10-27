@@ -6,6 +6,7 @@ import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.omlib.core.security.PlayerInfo;
 import omtteam.omlib.core.security.SecurityEnvironment;
 import omtteam.openmodularturrets.core.settings.BaseTierStats;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.omlib.core.world.Face;
@@ -474,6 +475,84 @@ class TurretBaseLogicTest {
             logic.loadState(saved);
             logic.tick(5);
             assertEquals(20, logic.getTargetingSettings().getRange());
+        }
+    }
+
+    @Nested
+    class Expanders {
+        @Test
+        void withoutExpandersASlotHoldsOneStack() {
+            TurretBaseLogic logic = base(1);
+            assertEquals(SlotCapacity.NONE, logic.getSlotCapacity());
+            assertEquals(64, logic.getSlotCapacity().limit(64));
+            assertEquals(16, logic.getSlotCapacity().limit(16));
+        }
+
+        @Test
+        void eachExpanderAddsTheStacksOfItsTier() {
+            TurretBaseLogic logic = base(1);
+            Map<Face, Neighbour> attached = new EnumMap<>(Face.class);
+            attached.put(Face.UP, new Neighbour.Expanders(List.of(1, 3)));
+            attached.put(Face.NORTH, new Neighbour.Expanders(List.of(2)));
+            logic.updateNeighbours(attached);
+            assertEquals(6, logic.getSlotCapacity().bonusStacks());
+            assertEquals(64 * 7, logic.getSlotCapacity().limit(64));
+            assertEquals(16 * 7, logic.getSlotCapacity().limit(16));
+        }
+
+        @Test
+        void tierOneExpandersAddOneStackEach() {
+            TurretBaseLogic logic = base(1);
+            Map<Face, Neighbour> attached = new EnumMap<>(Face.class);
+            attached.put(Face.UP, new Neighbour.Expanders(List.of(1, 1)));
+            attached.put(Face.DOWN, new Neighbour.Expanders(List.of(1)));
+            logic.updateNeighbours(attached);
+            assertEquals(64 * 4, logic.getSlotCapacity().limit(64));
+        }
+
+        @Test
+        void configChangesApplyWithoutRescan() {
+            TurretBaseLogic logic = base(1);
+            logic.updateNeighbours(Map.of(Face.UP, new Neighbour.Expanders(List.of(2))));
+            settings.expanderStacks[1] = 5;
+            assertEquals(64 * 6, logic.getSlotCapacity().limit(64));
+        }
+
+        @Test
+        void expandersAreNoTurrets() {
+            TurretBaseLogic logic = base(1);
+            Map<Face, Neighbour> attached = turrets(TurretType.MACHINE_GUN_TURRET);
+            attached.put(Face.UP, new Neighbour.Expanders(List.of(1)));
+            logic.updateNeighbours(attached);
+            assertEquals(Map.of(Face.DOWN, TurretType.MACHINE_GUN_TURRET), logic.getTurrets());
+        }
+
+        @Test
+        void removedExpandersNoLongerCount() {
+            TurretBaseLogic logic = base(1);
+            logic.updateNeighbours(Map.of(Face.UP, new Neighbour.Expanders(List.of(3))));
+            logic.updateNeighbours(Map.of());
+            assertEquals(64, logic.getSlotCapacity().limit(64));
+        }
+
+        @Test
+        void negativeConfigStacksCountAsNone() {
+            settings.expanderStacks[0] = -4;
+            assertEquals(0, SlotCapacity.of(List.of(1, 1), settings::expanderStacks).bonusStacks());
+        }
+
+        @Test
+        void limitDoesNotOverflow() {
+            assertEquals(Integer.MAX_VALUE, new SlotCapacity(Integer.MAX_VALUE).limit(64));
+            assertEquals(0, new SlotCapacity(-3).bonusStacks());
+        }
+
+        @Test
+        void chainsHoldOneOrTwoExpandersOfTiersOneToThree() {
+            assertThrows(IllegalArgumentException.class, () -> new Neighbour.Expanders(List.of()));
+            assertThrows(IllegalArgumentException.class, () -> new Neighbour.Expanders(List.of(1, 1, 1)));
+            assertThrows(IllegalArgumentException.class, () -> new Neighbour.Expanders(List.of(0)));
+            assertThrows(IllegalArgumentException.class, () -> new Neighbour.Expanders(List.of(4)));
         }
     }
 

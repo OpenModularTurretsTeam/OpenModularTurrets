@@ -10,6 +10,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ### Added
 
+- Inventory expanders (tiers 1–3): placed next to a turret base or generator (up to 2 per face, in a line or two of one tier in one block like slabs), each lets every ammo or fuel slot hold 1, 2 or 3 more stacks (`expanders` config section); they have no inventory of their own, and counts from four digits on are drawn smaller
 - Hardness and explosion resistance of the hardened blocks, walls and fences and the fence damage are configurable per tier (`hardness`, `explosionResistance`, `fenceDamage` in the `passiveDefense` section; no restart needed)
 
 ### Changed

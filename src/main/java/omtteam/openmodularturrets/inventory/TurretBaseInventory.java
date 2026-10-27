@@ -1,15 +1,18 @@
 package omtteam.openmodularturrets.inventory;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import omtteam.omlib.inventory.LargeStackContainer;
 import omtteam.openmodularturrets.core.base.BaseTier;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.TurretBaseUpgradeItem;
 import omtteam.openmodularturrets.item.UpgradeItem;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Supplier;
 
 /**
  * The 13 slots of a turret base (1.12.2 {@code TurretBase.setupInventory} / {@code setupSlotMap}):
@@ -18,19 +21,24 @@ import org.jetbrains.annotations.NotNull;
  *     <li>9–10: addons (tier 2+)</li>
  *     <li>11–12: upgrades (slot 11 from tier 2, slot 12 on tier 5)</li>
  * </ul>
- * Which slots a tier may use is defined in {@link omtteam.openmodularturrets.core.base.BaseTier}.
+ * Which slots a tier may use is defined in {@link omtteam.openmodularturrets.core.base.BaseTier}. An ammo slot holds
+ * one stack plus the stacks of the attached inventory expanders ({@link SlotCapacity}); the base menu's client side
+ * uses this class too, with the capacity the server syncs.
  * Deliberately not implemented by the block entity, so vanilla hoppers go through the Transfer API exposure.
  */
-public class TurretBaseInventory implements Container {
+public class TurretBaseInventory implements LargeStackContainer {
     public static final int SIZE = 13;
     public static final int AMMO_START = 0;
     public static final int AMMO_COUNT = 9;
     public static final int ADDON_START = 9;
     public static final int UPGRADE_START = 11;
+    /** Max stack size of most items, the limit {@link #getSlotLimit} gives for an empty stack. */
+    private static final int DEFAULT_STACK = 64;
 
     private final NonNullList<ItemStack> items = NonNullList.withSize(SIZE, ItemStack.EMPTY);
     private final Runnable onChange;
     private final StillValid stillValid;
+    private final Supplier<SlotCapacity> capacity;
 
     /** Distance check for menus. */
     @FunctionalInterface
@@ -40,10 +48,12 @@ public class TurretBaseInventory implements Container {
 
     /**
      * @param onChange called after every change (the block entity saves and informs the base logic)
+     * @param capacity what the attached expanders add to the ammo slots, asked on every limit check
      */
-    public TurretBaseInventory(Runnable onChange, StillValid stillValid) {
+    public TurretBaseInventory(Runnable onChange, StillValid stillValid, Supplier<SlotCapacity> capacity) {
         this.onChange = onChange;
         this.stillValid = stillValid;
+        this.capacity = capacity;
     }
 
     public static boolean isAmmoSlot(int slot) {
@@ -78,11 +88,21 @@ public class TurretBaseInventory implements Container {
         return false;
     }
 
-    /** Stack limit of a slot for an item (upgrades 4, damage amp / fake drops 4, other addons 1). */
-    public static int getSlotLimit(int slot, ItemStack stack) {
+    /**
+     * Stack limit of a slot for an item without expanders (upgrades 4, damage amp / fake drops 4, other addons 1,
+     * ammo one stack).
+     */
+    public static int getBaseSlotLimit(int slot, ItemStack stack) {
         if (isUpgradeSlot(slot) && stack.getItem() instanceof UpgradeItem upgrade) return upgrade.getUpgradeType().maxPerSlot();
         if (isAddonSlot(slot) && stack.getItem() instanceof AddonItem addon) return addon.getAddonType().getMaxPerSlot();
         return stack.getMaxStackSize();
+    }
+
+    /** {@link #getBaseSlotLimit}, with the stacks of the attached expanders in the ammo slots. */
+    @Override
+    public int getSlotLimit(int slot, ItemStack stack) {
+        if (!isAmmoSlot(slot)) return getBaseSlotLimit(slot, stack);
+        return capacity.get().limit(stack.isEmpty() ? DEFAULT_STACK : stack.getMaxStackSize());
     }
 
     public NonNullList<ItemStack> getItems() {

@@ -17,7 +17,7 @@ public interface BaseWorld {
     /** Position of the base block. */
     BlockPosition getPosition();
 
-    /** Ammo slots of the base (0–8), followed by the slots of attached inventory expanders. */
+    /** Ammo slots of the base (0–8); how much each holds depends on the attached inventory expanders. */
     List<ItemSlot> getAmmoSlots();
 
     /** Both addon slots of the base (9–10), whether or not the tier can use them. */

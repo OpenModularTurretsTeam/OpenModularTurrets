@@ -2,6 +2,18 @@ package omtteam.openmodularturrets.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+//? if >=1.21.11 {
+/*import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+*///?} else {
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+//?}
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import omtteam.openmodularturrets.block.misc.InventoryExpanderBlock;
 import omtteam.openmodularturrets.registry.ModBlocks;
 //? if >=1.21 {
 import net.minecraft.core.HolderLookup;
@@ -20,6 +32,16 @@ public class OMTBlockLootProvider extends FabricBlockLootTableProvider {
     }
     *///?}
 
+    /** Like a slab: the expander drops itself, twice for a double block. */
+    private void dropExpander(InventoryExpanderBlock block) {
+        add(block, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                .add(applyExplosionDecay(block, LootItem.lootTableItem(block)
+                        .apply(SetItemCountFunction.setCount(ConstantValue.exactly(2.0F))
+                                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                        .setProperties(StatePropertiesPredicate.Builder.properties()
+                                                .hasProperty(InventoryExpanderBlock.DOUBLE, true))))))));
+    }
+
     @Override
     public void generate() {
         // 1.12.2 getDrops: the base drops itself (contents are dropped separately)
@@ -31,6 +53,7 @@ public class OMTBlockLootProvider extends FabricBlockLootTableProvider {
         });
         dropSelf(ModBlocks.LEVER);
         dropSelf(ModBlocks.GENERATOR);
+        ModBlocks.INVENTORY_EXPANDERS.forEach(this::dropExpander);
         ModBlocks.HARDENED.forEach(this::dropSelf);
         ModBlocks.WALLS.forEach(this::dropSelf);
         ModBlocks.FENCES.forEach(this::dropSelf);

@@ -14,6 +14,7 @@ import omtteam.openmodularturrets.block.defense.DefenseWallBlock;
 import omtteam.openmodularturrets.block.defense.HardenedBlock;
 import omtteam.openmodularturrets.block.defense.PassiveDefense;
 import omtteam.openmodularturrets.block.misc.GeneratorBlock;
+import omtteam.openmodularturrets.block.misc.InventoryExpanderBlock;
 import omtteam.openmodularturrets.block.misc.LeverBlock;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.omlib.compat.VersionCompat;
@@ -53,6 +54,9 @@ public final class ModBlocks {
     public static final LeverBlock LEVER = register("lever_block", LeverBlock::new, LeverBlock.createProperties());
     /** New block (not in the 1.12.2 version). */
     public static final GeneratorBlock GENERATOR = register("generator", GeneratorBlock::new, GeneratorBlock.createProperties());
+    /** Inventory expanders ordered by tier ({@code inventory_expander_tier_one} … {@code _tier_three}). */
+    public static final List<InventoryExpanderBlock> INVENTORY_EXPANDERS = List.of(registerExpander("one", 1),
+            registerExpander("two", 2), registerExpander("three", 3));
 
     // Passive defense (OMPD), one block per tier
     public static final List<HardenedBlock> HARDENED = registerTiers("hardened", HardenedBlock::new,
@@ -68,6 +72,11 @@ public final class ModBlocks {
 
     private static TurretBaseBlock registerBase(String name, int tier) {
         return register(name, properties -> new TurretBaseBlock(tier, properties), TurretBaseBlock.createProperties(tier));
+    }
+
+    private static InventoryExpanderBlock registerExpander(String tierName, int tier) {
+        return register("inventory_expander_tier_" + tierName, properties -> new InventoryExpanderBlock(tier, properties),
+                InventoryExpanderBlock.createProperties(tier));
     }
 
     private static Map<TurretType, TurretBlock> registerTurrets() {

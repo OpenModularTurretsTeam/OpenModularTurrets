@@ -12,7 +12,7 @@ The port from 1.12.2 is complete; this repo maintains the 1.20.1 / 1.21.1 / 1.21
 A **NeoForge 1.21.1** build is being added on the branch `neoforge-test`, with the setup worked out in OpenModularLighting (`../OpenModularLighting`, branch `neoforge-test`; see §4 "Loaders" and §9).
 A **Forge 1.20.1** build is being added on the branch `forge-test` (requested by the user on 2026-10-24), ported from OpenModularLighting (branch `forge-test`; see §4 "Forge 1.20.1" and §9).
 **Minecraft 1.21.11** (Fabric and NeoForge nodes, same codebase) was ported on 2026-10-26 following OpenModularLighting's 1.21.11 port (see §9); it builds and passes the game tests, but its client has not been checked by hand yet, and the nodes are not published yet.
-Inventory and power expanders were dropped and are not to be re-added.
+The old inventory and power expanders (with their own inventory or energy) were dropped and are not to be re-added; their 4.x replacement is the inventory expander without an inventory (requested by the user on 2026-10-27, see "Power & items").
 
 Core gameplay:
 
@@ -619,6 +619,10 @@ The built-in turrets use the same path, so there is no special casing per turret
   It pauses while its buffer (`generatorCapacity`, default 1,000,000) is full and pushes up to `generatorMaxOutput` (default 65,536 RF/t, a flat limit) into all neighbours via Team Reborn Energy.
   GUI: 3×3 fuel grid on the left, the blue upgrade slot centred in the free area (the rest of it stays free for later slots that are not fuel slots), the flame next to the energy bar.
   Hoppers insert fuel only and take out only leftovers (empty buckets).
+- **Inventory expanders** (`InventoryExpanderBlock`, tiers 1–3, no block entity; decided with the user on 2026-10-27): they have no inventory, but every ammo slot of a turret base and fuel slot of a generator they reach holds `itemMaxStackSize × (1 + Σ stacks)` (`core.storage.SlotCapacity`; `expanders.tier_N.stacks`, defaults 1/2/3).
+  Up to 2 plates count per face, in a line or as one double block (two of one tier in one block space, like slabs, `DOUBLE`; decided by the user on 2026-10-27: same tier only, the plates count, so a double block fills the face); an expander counts for every machine it reaches, and its facing is only the look; fuel with a remainder (lava buckets) is not enlarged.
+  The slots are OMLib large stacks (`LargeStackContainer`, `LargeStackMenu`, `LargeStackSlot`, `LargeStackScreen`): the cursor and the player's inventory only ever get normal stacks out of them, `VersionCompat.saveItems` saves the counts.
+  Hardness and blast resistance come from the config while the game runs (defaults of base tiers 1, 3 and 5); models and textures are those of the 1.12.2 inventory expanders of tiers 1, 3 and 5.
 - **Upgrades are per machine:** `core.item.UpgradeType` is the common interface, each machine has its own enum (`TurretBaseUpgradeType`, `GeneratorUpgradeType`) and item subclass of `item.UpgradeItem` (`TurretBaseUpgradeItem`, `GeneratorUpgradeItem`).
   A machine's upgrade slots accept only its own subclass.
   A new machine gets its own enum and item subclass.
@@ -700,7 +704,7 @@ Update this checklist as work progresses.
 - [x] `compat/` helpers (id, NBT save/load, item data, networking registration)
 - [x] Config system (incl. server → client sync on join)
 - [x] Core Game Logic for turret base and trusted player system (`core.security`, `core.base.TurretBaseLogic`, `core.target`, turret/ammo/upgrade/addon enums)
-- [x] Turret base blocks (all tiers) + block entity (inventory, energy) — expanders skipped
+- [x] Turret base blocks (all tiers) + block entity (inventory, energy) — the old expanders skipped
 - [x] Security: owner, trusted players, access levels, permission checks, trusted players screen + server-validated packets
 - [x] Base GUI (inventory, energy display, targeting settings, trust management) — camo light sliders pending with camo
 - [x] Networking for settings and trust changes (server-validated)
@@ -710,7 +714,8 @@ Update this checklist as work progresses.
 - [x] Individual turrets + projectiles (all 14 turrets: projectile, ray and effect weapons; projectile visuals and particles)
 - [x] Ammo items (items, tooltips, recipes)
 - [x] Upgrades and addons (items, tooltips, recipes, base effects, fake drops loot rule)
-- [x] Expanders are to be skipped
+- [x] The old expanders (own inventory or energy) are skipped
+- [x] Inventory expanders without an inventory (2026-10-27, designed with the user): 3 tiers enlarge the ammo slots of bases and the fuel slots of generators (`SlotCapacity`, OMLib's large stacks), game tests `ExpanderGameTests`; not checked in a client yet (count drawing, tooltip, model)
 - [x] Misc blocks (crank; OMPD hardened blocks, walls, fences, camouflage trap; loot deleter and power generator skipped)
 - [x] Recipes, loot tables, tags via datagen for all content
 - [x] Lang, sounds, creative tab

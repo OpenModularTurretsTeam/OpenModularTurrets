@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "openmodularturrets:item/inventory_expander_tier_one"
+  }
+}

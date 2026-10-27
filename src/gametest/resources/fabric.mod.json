@@ -24,7 +24,8 @@
       "omtteam.openmodularturrets.gametest.TrustListGameTests",
       "omtteam.openmodularturrets.gametest.PassiveDefenseGameTests",
       "omtteam.openmodularturrets.gametest.CompatGameTests",
-      "omtteam.openmodularturrets.gametest.SolarPanelGameTests"
+      "omtteam.openmodularturrets.gametest.SolarPanelGameTests",
+      "omtteam.openmodularturrets.gametest.ExpanderGameTests"
     ],
     "openmodularturrets": [
       "omtteam.openmodularturrets.gametest.ApiTestTurrets"

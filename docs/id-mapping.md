@@ -53,7 +53,8 @@ Old meta/damage-based variants are flattened into separate registry entries.
 | `ompd:ownedBlock` (`TileEntityPassiveTiered`) | `openmodularturrets:owned_block` |
 | `ompd:camo_trap` (`TileEntityCamo`) | `openmodularturrets:camo_trap` |
 
-Not ported: OMT power generator (`BlockPowerAttachment`, had no function), loot deleter (`BlockBaseAttachment`), expanders.
+Not ported: OMT power generator (`BlockPowerAttachment`, had no function), loot deleter (`BlockBaseAttachment`), the expanders with their own inventory (`expander_inv_tier_*`) and the power expanders (`expander_power_tier_*`).
+The inventory expanders of 4.x (`inventory_expander_tier_one` to `_three`, the models and textures of the old tiers 1, 3 and 5) are new blocks without an inventory, so old expanders do not map to them.
 
 ## Entities
 

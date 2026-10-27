@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "tag": "c:gold_ingots"
+    },
+    "B": {
+      "item": "openmodularturrets:inventory_expander_tier_one"
+    },
+    "C": {
+      "item": "minecraft:chest"
+    },
+    "D": {
+      "item": "openmodularturrets:io_bus"
+    }
+  },
+  "pattern": [
+    "ABA",
+    "DCD",
+    "ADA"
+  ],
+  "result": {
+    "item": "openmodularturrets:inventory_expander_tier_two"
+  },
+  "show_notification": true
+}

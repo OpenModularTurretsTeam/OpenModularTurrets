@@ -121,7 +121,7 @@ public class GeneratorGameTests implements OMTGameTests {
                 new ItemStack(ModItems.UPGRADE_ENERGY_MULTIPLIER)), "A turret base accepts the generator upgrade");
         helper.assertTrue(TurretBaseInventory.mayPlace(TurretBaseInventory.UPGRADE_START, new ItemStack(ModItems.UPGRADE_RANGE)),
                 "A turret base does not accept its range upgrade");
-        helper.assertTrue(TurretBaseInventory.getSlotLimit(TurretBaseInventory.UPGRADE_START,
+        helper.assertTrue(TurretBaseInventory.getBaseSlotLimit(TurretBaseInventory.UPGRADE_START,
                 new ItemStack(ModItems.UPGRADE_RANGE)) == 4, "Turret base upgrades do not stack to 4");
         helper.setBlock(GENERATOR, Blocks.AIR);
         helper.succeed();

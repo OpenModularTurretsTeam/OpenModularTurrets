@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:cobblestone"
+    },
+    "B": {
+      "tag": "minecraft:planks"
+    },
+    "C": {
+      "item": "minecraft:chest"
+    },
+    "D": {
+      "item": "openmodularturrets:io_bus"
+    }
+  },
+  "pattern": [
+    "ABA",
+    "DCD",
+    "ADA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:inventory_expander_tier_one"
+  }
+}

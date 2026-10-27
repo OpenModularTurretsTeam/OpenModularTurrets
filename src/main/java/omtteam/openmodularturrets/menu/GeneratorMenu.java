@@ -1,12 +1,13 @@
 package omtteam.openmodularturrets.menu;
 
+import omtteam.omlib.menu.LargeStackMenu;
+import omtteam.omlib.menu.LargeStackSlot;
 import omtteam.omlib.menu.LongContainerData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
@@ -15,21 +16,25 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.blockentity.misc.GeneratorBlockEntity;
 import omtteam.openmodularturrets.core.item.GeneratorUpgradeType;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
+import omtteam.openmodularturrets.inventory.FuelContainer;
 import omtteam.openmodularturrets.registry.ModMenus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Generator menu: a 3×3 grid of fuel slots on the left, the upgrade slot in the middle and the player inventory. The
- * rest of the area between the fuel grid and the flame is kept free for later slots. Energy, capacity and burn
- * progress are synced as container data.
+ * rest of the area between the fuel grid and the flame is kept free for later slots. Energy, capacity, burn
+ * progress and the stacks the inventory expanders add to the fuel slots are synced as container data.
  */
-public class GeneratorMenu extends AbstractContainerMenu {
+public class GeneratorMenu extends LargeStackMenu {
     private static final double MAX_DISTANCE_SQR = 64.0;
     private static final int DATA_ENERGY = 0;
     private static final int DATA_CAPACITY = 1;
     private static final int DATA_BURN_TIME = 2;
     private static final int DATA_BURN_DURATION = 3;
+    private static final int DATA_BONUS_STACKS = 4;
+    private static final int DATA_VALUES = 5;
     /** Menu index of the first fuel slot (after the 36 player inventory slots). */
     private static final int FUEL_START = 36;
     private static final int FUEL_END = FUEL_START + GeneratorBlockEntity.FUEL_SLOTS;
@@ -50,15 +55,20 @@ public class GeneratorMenu extends AbstractContainerMenu {
 
     /** Client side. Uses its own container; the server keeps it in sync. */
     public static GeneratorMenu client(int containerId, Inventory playerInventory, BlockPos pos) {
-        return new GeneratorMenu(containerId, playerInventory, pos, null, new SimpleContainer(GeneratorBlockEntity.FUEL_SLOTS),
-                new SimpleContainer(1), new SimpleContainerData(LongContainerData.size(4)));
+        ContainerData data = new SimpleContainerData(LongContainerData.size(DATA_VALUES));
+        Level level = playerInventory.player.level();
+        FuelContainer fuel = new FuelContainer(GeneratorBlockEntity.FUEL_SLOTS,
+                stack -> GeneratorBlockEntity.isFuel(level, stack), GeneratorBlockEntity::leavesRemainder,
+                () -> new SlotCapacity((int) LongContainerData.read(data, DATA_BONUS_STACKS)));
+        return new GeneratorMenu(containerId, playerInventory, pos, null, fuel, new SimpleContainer(1), data);
     }
 
     /** Server side. */
     public static GeneratorMenu server(int containerId, Inventory playerInventory, GeneratorBlockEntity generator) {
         return new GeneratorMenu(containerId, playerInventory, generator.getBlockPos(), generator,
-                generator.getFuelContainer(), generator.getUpgradeContainer(), new LongContainerData(generator::getEnergy, generator::getCapacity,
-                        generator::getBurnTime, generator::getBurnDuration));
+                generator.getFuelContainer(), generator.getUpgradeContainer(),
+                new LongContainerData(generator::getEnergy, generator::getCapacity, generator::getBurnTime,
+                        generator::getBurnDuration, () -> generator.getSlotCapacity().bonusStacks()));
     }
 
     private GeneratorMenu(int containerId, Inventory playerInventory, BlockPos pos,
@@ -78,7 +88,7 @@ public class GeneratorMenu extends AbstractContainerMenu {
             }
         }
         for (int slot = 0; slot < GeneratorBlockEntity.FUEL_SLOTS; slot++) {
-            addSlot(new Slot(fuel, slot, FUEL_X + slot % FUEL_COLUMNS * 18, FUEL_Y + slot / FUEL_COLUMNS * 18) {
+            addSlot(new LargeStackSlot(fuel, slot, FUEL_X + slot % FUEL_COLUMNS * 18, FUEL_Y + slot / FUEL_COLUMNS * 18) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
                     return GeneratorBlockEntity.isFuel(level, stack);

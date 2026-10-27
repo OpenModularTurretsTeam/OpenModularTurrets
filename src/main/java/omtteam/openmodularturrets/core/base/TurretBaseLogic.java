@@ -11,6 +11,7 @@ import omtteam.omlib.core.security.TrustManager;
 import omtteam.openmodularturrets.core.settings.BaseTierStats;
 import omtteam.openmodularturrets.core.settings.LogicSettings;
 import omtteam.openmodularturrets.core.settings.TurretStats;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.target.TargetSelector;
 import omtteam.openmodularturrets.core.turret.AmmoType;
@@ -208,6 +209,18 @@ public class TurretBaseLogic {
     }
 
     /**
+     * How much each ammo slot holds with the inventory expanders attached as of the last {@link #updateNeighbours}
+     * (config values are read on every call).
+     */
+    public SlotCapacity getSlotCapacity() {
+        List<Integer> tiers = new ArrayList<>();
+        for (Neighbour neighbour : neighbours.values()) {
+            if (neighbour instanceof Neighbour.Expanders expanders) tiers.addAll(expanders.tiers());
+        }
+        return tiers.isEmpty() ? SlotCapacity.NONE : SlotCapacity.of(tiers, settings::expanderStacks);
+    }
+
+    /**
      * Max range = best {@code baseRange + range upgrades} of the attached turrets (1.12.2 {@code updateMaxRange}).
      * Skipped until the neighbours are known, so the player's range is not reset while loading.
      */
@@ -234,8 +247,8 @@ public class TurretBaseLogic {
     }
 
     /**
-     * Shots available to a turret (1.12.2 {@code TurretHeadUtil.getAmmoLevel}): matching items in the base and its
-     * inventory expanders; for energy turrets the stored energy divided by the power usage; unlimited if ammo is
+     * Shots available to a turret (1.12.2 {@code TurretHeadUtil.getAmmoLevel}): matching items in the base's ammo
+     * slots; for energy turrets the stored energy divided by the power usage; unlimited if ammo is
      * disabled or the base has a creative upgrade.
      */
     public int getAmmoLevel(TurretType type) {

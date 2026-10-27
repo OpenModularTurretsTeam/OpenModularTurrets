@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.client.screen;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import omtteam.omlib.client.screen.LargeStackScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,7 +13,7 @@ import omtteam.openmodularturrets.menu.GeneratorMenu;
  * Generator GUI: 3×3 fuel slots, the blue upgrade slot, a furnace-style flame and the turret base energy bar. The
  * area around the upgrade slot is left empty for later slots.
  */
-public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> {
+public class GeneratorScreen extends LargeStackScreen<GeneratorMenu> {
     private static final ResourceLocation TEXTURE = OMT.id("textures/gui/generator.png");
     private static final int FLAME_SIZE = 14;
     /** The flame sits left of the energy bar, level with the middle fuel row. */

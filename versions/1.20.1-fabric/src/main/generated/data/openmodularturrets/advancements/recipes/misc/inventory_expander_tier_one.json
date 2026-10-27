@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_io_bus": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "openmodularturrets:io_bus"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "openmodularturrets:inventory_expander_tier_one"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_io_bus",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "openmodularturrets:inventory_expander_tier_one"
+    ]
+  },
+  "sends_telemetry_event": false
+}

@@ -4,7 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import omtteam.omlib.client.screen.LargeStackScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -31,7 +31,7 @@ import java.util.Random;
  * Turret base GUI. Ported from 1.12.2 {@code TurretBaseGui}: inventory, energy bar, range, info panel and the
  * admin/settings buttons. Buttons only send requests; the server checks permissions.
  */
-public class TurretBaseScreen extends AbstractContainerScreen<TurretBaseMenu> {
+public class TurretBaseScreen extends LargeStackScreen<TurretBaseMenu> {
     private static final String[] TIER_NAMES = {"one", "two", "three", "four", "five"};
     /** The energy bar flickers between three fill textures (1.12.2 {@code drawEnergyBar}). */
     private static final int[] ENERGY_FILL_U = {196, 215, 234};

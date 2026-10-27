@@ -21,6 +21,7 @@ import omtteam.openmodularturrets.client.screen.TurretBaseScreen;
 import omtteam.openmodularturrets.client.screen.TrapCamoExtras;
 import omtteam.openmodularturrets.client.tooltip.AmmoTooltip;
 import omtteam.openmodularturrets.client.tooltip.GeneratorTooltip;
+import omtteam.openmodularturrets.client.tooltip.InventoryExpanderTooltip;
 import omtteam.openmodularturrets.client.tooltip.LeverTooltip;
 import omtteam.openmodularturrets.client.tooltip.MemoryCardTooltip;
 import omtteam.openmodularturrets.client.tooltip.ModuleTooltip;
@@ -63,7 +64,8 @@ public final class OMTClient {
 
     private static final List<TooltipAppender> TOOLTIPS = List.of(TurretBaseTooltip::append, TurretTooltip::append,
             AmmoTooltip::append, ModuleTooltip::append, LeverTooltip::append, GeneratorTooltip::append,
-            MemoryCardTooltip::append, OwnershipWandTooltip::append, OwnershipWandImmunityTooltip::append);
+            InventoryExpanderTooltip::append, MemoryCardTooltip::append, OwnershipWandTooltip::append,
+            OwnershipWandImmunityTooltip::append);
 
     private OMTClient() {
     }

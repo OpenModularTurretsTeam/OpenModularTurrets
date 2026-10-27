@@ -34,6 +34,9 @@
     "openmodularturrets:fence_tier_three",
     "openmodularturrets:fence_tier_four",
     "openmodularturrets:fence_tier_five",
-    "openmodularturrets:generator"
+    "openmodularturrets:generator",
+    "openmodularturrets:inventory_expander_tier_one",
+    "openmodularturrets:inventory_expander_tier_two",
+    "openmodularturrets:inventory_expander_tier_three"
   ]
 }

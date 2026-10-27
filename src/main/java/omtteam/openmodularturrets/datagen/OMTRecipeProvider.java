@@ -292,6 +292,21 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
                     .define('C', Items.COBBLESTONE).define('I', CommonTags.IRON_INGOTS).define('F', Items.FURNACE)
                     .define('B', ModItems.IO_BUS)
                     .unlockedBy("has_io_bus", has(ModItems.IO_BUS)));
+            // 1.12.2 expander_0/2/4_vanilla.json (inventory expanders of tiers 1, 3 and 5 became tiers 1–3)
+            List<BlockItem> expanders = ModItems.INVENTORY_EXPANDERS;
+            save.accept(expander(expanders.get(0)).define('A', Items.COBBLESTONE).define('B', ItemTags.PLANKS)
+                    .unlockedBy("has_io_bus", has(ModItems.IO_BUS)));
+            save.accept(expander(expanders.get(1)).define('A', CommonTags.GOLD_INGOTS).define('B', expanders.get(0))
+                    .unlockedBy("has_previous_tier", has(expanders.get(0))));
+            save.accept(expander(expanders.get(2)).define('A', Items.OBSIDIAN).define('B', expanders.get(1))
+                    .unlockedBy("has_previous_tier", has(expanders.get(1))));
+        }
+
+        /** The inventory expander pattern: A casing, B core (planks or the previous tier), a chest and I/O buses. */
+        private ShapedRecipeBuilder expander(BlockItem result) {
+            return shaped(RecipeCategory.MISC, result)
+                    .pattern("ABA").pattern("DCD").pattern("ADA")
+                    .define('C', Items.CHEST).define('D', ModItems.IO_BUS);
         }
 
         /** OMPD recipes (1.12.2 {@code recipes/*.json}), 1.12 block names updated. */

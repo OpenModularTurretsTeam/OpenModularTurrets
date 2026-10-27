@@ -94,6 +94,7 @@ public final class ModItems {
     // Misc and passive defense blocks
     public static final BlockItem LEVER = registerBlock(ModBlocks.LEVER);
     public static final BlockItem GENERATOR = registerBlock(ModBlocks.GENERATOR);
+    public static final List<BlockItem> INVENTORY_EXPANDERS = ModBlocks.INVENTORY_EXPANDERS.stream().map(ModItems::registerBlock).toList();
     public static final List<BlockItem> HARDENED = ModBlocks.HARDENED.stream().map(ModItems::registerBlock).toList();
     public static final List<BlockItem> WALLS = ModBlocks.WALLS.stream().map(ModItems::registerBlock).toList();
     public static final List<BlockItem> FENCES = ModBlocks.FENCES.stream().map(ModItems::registerBlock).toList();

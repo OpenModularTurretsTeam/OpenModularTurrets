@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "minecraft:obsidian",
+    "B": "openmodularturrets:inventory_expander_tier_two",
+    "C": "minecraft:chest",
+    "D": "openmodularturrets:io_bus"
+  },
+  "pattern": [
+    "ABA",
+    "DCD",
+    "ADA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:inventory_expander_tier_three"
+  }
+}

@@ -40,6 +40,8 @@ public class ConfigData {
     public Miscellaneous miscellaneous = new Miscellaneous();
     @Comment("Hardened blocks, walls and fences per tier.")
     public PassiveDefense passiveDefense = new PassiveDefense();
+    @Comment("Inventory expanders per tier.")
+    public Expanders expanders = new Expanders();
 
     /** Clamps annotated ranges, then validates and parses the lists. */
     void validate(ConfigValidator v) {
@@ -366,6 +368,33 @@ public class ConfigData {
                 case 4 -> tierFour;
                 case 5 -> tierFive;
                 default -> throw new IllegalArgumentException("Invalid passive defense tier: " + tier);
+            };
+        }
+    }
+
+    /**
+     * Inventory expanders: blocks without an inventory of their own that enlarge the ammo slots of a turret base and
+     * the fuel slots of a generator (up to two in a line on each face). Hardness and explosion resistance follow the
+     * turret base tiers 1, 3 and 5.
+     */
+    public static class Expanders {
+        @Comment("Tier 1 inventory expander.")
+        @SerializedName("tier_1")
+        public ExpanderSetting tierOne = new ExpanderSetting(1, 20, 5);
+        @Comment("Tier 2 inventory expander.")
+        @SerializedName("tier_2")
+        public ExpanderSetting tierTwo = new ExpanderSetting(2, 40, 15);
+        @Comment("Tier 3 inventory expander.")
+        @SerializedName("tier_3")
+        public ExpanderSetting tierThree = new ExpanderSetting(3, 60, 25);
+
+        /** @param tier 1–3 */
+        public ExpanderSetting tier(int tier) {
+            return switch (tier) {
+                case 1 -> tierOne;
+                case 2 -> tierTwo;
+                case 3 -> tierThree;
+                default -> throw new IllegalArgumentException("Invalid inventory expander tier: " + tier);
             };
         }
     }

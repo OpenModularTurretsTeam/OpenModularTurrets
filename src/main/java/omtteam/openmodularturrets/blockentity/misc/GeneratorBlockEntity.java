@@ -13,22 +13,27 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import omtteam.openmodularturrets.block.misc.GeneratorBlock;
+import omtteam.openmodularturrets.block.misc.InventoryExpanderBlock;
 import omtteam.omlib.blockentity.TransferHost;
 import omtteam.omlib.compat.CompatBlockEntity;
 import omtteam.omlib.compat.VersionCompat;
 import omtteam.omlib.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.config.ConfigData;
+import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.omlib.core.energy.EnergyAccess;
 import omtteam.omlib.core.energy.EnergyStore;
 import omtteam.openmodularturrets.core.generator.GeneratorLogic;
 import omtteam.openmodularturrets.core.item.GeneratorUpgradeType;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.omlib.inventory.ItemAccess;
+import omtteam.openmodularturrets.inventory.FuelContainer;
 import omtteam.openmodularturrets.item.GeneratorUpgradeItem;
 import omtteam.omlib.platform.Platform;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalLong;
 import java.util.stream.IntStream;
@@ -37,18 +42,14 @@ import java.util.stream.IntStream;
  * Generator (new block, not in the 1.12.2 version): burns furnace fuel into energy and pushes it into all neighbouring energy
  * storages (turret bases, cables). One burn tick of a fuel produces {@code generatorEnergyPerTick}. Burning pauses
  * while the buffer is full, so no fuel is wasted. Its {@value #FUEL_SLOTS} fuel slots let it run for a long time
- * where there is no other power. Energy multiplier upgrades in its upgrade slot make it burn faster
+ * where there is no other power; attached inventory expanders let each slot hold more. Energy multiplier upgrades in its upgrade slot make it burn faster
  * ({@link GeneratorLogic#multiplier}).
  */
 public class GeneratorBlockEntity extends CompatBlockEntity implements TransferHost, Clearable {
     public static final int FUEL_SLOTS = 9;
 
-    private final SimpleContainer fuel = new SimpleContainer(FUEL_SLOTS) {
-        @Override
-        public boolean canPlaceItem(int slot, ItemStack stack) {
-            return isFuel(level, stack);
-        }
-    };
+    private final FuelContainer fuel = new FuelContainer(FUEL_SLOTS, stack -> isFuel(level, stack),
+            GeneratorBlockEntity::leavesRemainder, this::getSlotCapacity);
     /** One upgrade slot holding up to 4 generator upgrades. */
     private final SimpleContainer upgrades = new SimpleContainer(1) {
         @Override
@@ -62,6 +63,9 @@ public class GeneratorBlockEntity extends CompatBlockEntity implements TransferH
         }
     };
     private final EnergyStore energy;
+    /** Tiers of the inventory expanders on all faces; {@code null} until the neighbours were looked at. */
+    @Nullable
+    private List<Integer> expanderTiers;
     private final GeneratorLogic logic = new GeneratorLogic();
     /** The fuel slots for {@link GeneratorLogic#burn}, in container order. */
     private final List<GeneratorLogic.FuelSlot> fuelSlots = IntStream.range(0, FUEL_SLOTS)
@@ -88,7 +92,12 @@ public class GeneratorBlockEntity extends CompatBlockEntity implements TransferH
         return level != null && Platform.fuel().burnTime(level, stack) > 0;
     }
 
-    public SimpleContainer getFuelContainer() {
+    /** Fuel with a remainder (lava bucket → bucket) is not stacked beyond its max stack size ({@link FuelContainer}). */
+    public static boolean leavesRemainder(ItemStack stack) {
+        return !Platform.fuel().remainder(stack).isEmpty();
+    }
+
+    public FuelContainer getFuelContainer() {
         return fuel;
     }
 
@@ -110,6 +119,33 @@ public class GeneratorBlockEntity extends CompatBlockEntity implements TransferH
     protected void onBlockRemoved(Level level) {
         Containers.dropContents(level, worldPosition, fuel);
         Containers.dropContents(level, worldPosition, upgrades);
+    }
+
+    /** What the attached inventory expanders add to every fuel slot (the config in effect, see {@link SlotCapacity}). */
+    public SlotCapacity getSlotCapacity() {
+        List<Integer> tiers = expanderTiers;
+        return tiers == null || tiers.isEmpty() ? SlotCapacity.NONE
+                : SlotCapacity.of(tiers, ConfigLogicSettings.INSTANCE::expanderStacks);
+    }
+
+    /** Called by the block (and the expanders) when a neighbour changed: attached expanders. */
+    public void onNeighbourChanged() {
+        if (level == null || level.isClientSide()) return;
+        scanExpanders(level);
+    }
+
+    /**
+     * Collects the expanders in line from every face ({@link InventoryExpanderBlock#chainTiers}); waits while a
+     * block of a line is not loaded, so an expander in a loading chunk does not shrink the slots for a moment.
+     */
+    private void scanExpanders(Level level) {
+        List<Integer> tiers = new ArrayList<>();
+        for (Direction direction : Direction.values()) {
+            if (!level.isLoaded(worldPosition.relative(direction))
+                    || !InventoryExpanderBlock.isChainLoaded(level, worldPosition, direction)) return;
+            tiers.addAll(InventoryExpanderBlock.chainTiers(level, worldPosition, direction));
+        }
+        expanderTiers = List.copyOf(tiers);
     }
 
     /** Number of energy multiplier upgrades in the upgrade slot. */
@@ -148,6 +184,7 @@ public class GeneratorBlockEntity extends CompatBlockEntity implements TransferH
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, GeneratorBlockEntity generator) {
+        if (generator.expanderTiers == null) generator.scanExpanders(level);
         generator.pushEnergy(level, pos);
         boolean lit = generator.burn();
         if (state.getValue(GeneratorBlock.LIT) != lit) {
