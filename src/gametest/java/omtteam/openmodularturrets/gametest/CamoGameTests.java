@@ -18,9 +18,12 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import omtteam.omlib.camo.CamoHost;
+import omtteam.omlib.compat.CompatBlockEntity;
 import omtteam.omlib.compat.VersionCompat;
 import omtteam.omlib.core.camo.CamoLight;
 import omtteam.omlib.core.security.AccessLevel;
@@ -33,7 +36,9 @@ import omtteam.openmodularturrets.camo.CamoRules;
 import omtteam.openmodularturrets.config.ConfigData;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.registry.ModBlocks;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -139,6 +144,23 @@ public class CamoGameTests implements OMTGameTests {
         helper.succeed();
     }
 
+    /**
+     * A camouflaged base picks (middle click) as its disguise and hands the disguise to its model; without one, and on a
+     * hardened block, picking gives the block itself and the model gets nothing.
+     */
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void camouflagedBasesPickAndShowTheirDisguise(GameTestHelper helper) {
+        Block baseBlock = ModBlocks.TURRET_BASES.get(0);
+        CamoHost base = place(helper, baseBlock);
+        assertPickAndModel(helper, baseBlock, null);
+        BlockState stone = Blocks.STONE.defaultBlockState();
+        base.setCamo(stone);
+        assertPickAndModel(helper, Blocks.STONE, stone);
+        helper.setBlock(BLOCK, ModBlocks.HARDENED.get(0));
+        assertPickAndModel(helper, ModBlocks.HARDENED.get(0), null);
+        helper.succeed();
+    }
+
     /** Places {@code block} at {@link #BLOCK} and returns its block entity. */
     private static CamoHost place(GameTestHelper helper, Block block) {
         helper.setBlock(BLOCK, block);
@@ -175,6 +197,25 @@ public class CamoGameTests implements OMTGameTests {
 
     private static void assertLight(GameTestHelper helper, CamoHost host, CamoLight expected) {
         helper.assertTrue(host.getLight().equals(expected), "Light is " + host.getLight() + ", expected " + expected);
+    }
+
+    /** What picking the block at {@link #BLOCK} gives, and what its model reads while the chunk is meshed. */
+    private static void assertPickAndModel(GameTestHelper helper, Block picked, @Nullable BlockState disguise) {
+        BlockPos pos = helper.absolutePos(BLOCK);
+        BlockState state = helper.getLevel().getBlockState(pos);
+        //? if >=1.21.11 {
+        /*ItemStack pick = state.getCloneItemStack(helper.getLevel(), pos, false);
+        *///?} else {
+        ItemStack pick = state.getBlock().getCloneItemStack(helper.getLevel(), pos, state);
+        //?}
+        helper.assertTrue(pick.is(picked.asItem()), state + " picks as " + pick + ", expected " + picked);
+        CompatBlockEntity entity = (CompatBlockEntity) helper.getLevel().getBlockEntity(pos);
+        //? if fabric {
+        Object model = entity.getRenderData();
+        //?} else {
+        /*Object model = entity.getModelData().get(CompatBlockEntity.RENDER_DATA);
+        *///?}
+        helper.assertTrue(Objects.equals(model, disguise), state + " hands " + model + " to its model, expected " + disguise);
     }
 
     private static void assertDisguise(GameTestHelper helper, Block block, boolean valid) {

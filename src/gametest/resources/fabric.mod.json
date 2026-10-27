@@ -21,7 +21,10 @@
       "omtteam.openmodularturrets.gametest.BlockMoveGameTests",
       "omtteam.openmodularturrets.gametest.OwnershipGameTests",
       "omtteam.openmodularturrets.gametest.OwnershipWandGameTests",
-      "omtteam.openmodularturrets.gametest.TrustListGameTests"
+      "omtteam.openmodularturrets.gametest.TrustListGameTests",
+      "omtteam.openmodularturrets.gametest.PassiveDefenseGameTests",
+      "omtteam.openmodularturrets.gametest.CompatGameTests",
+      "omtteam.openmodularturrets.gametest.SolarPanelGameTests"
     ],
     "openmodularturrets": [
       "omtteam.openmodularturrets.gametest.ApiTestTurrets"

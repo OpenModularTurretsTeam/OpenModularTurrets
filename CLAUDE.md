@@ -415,7 +415,7 @@ The test mod's loader entrypoints (`gametest/platform/<loader>`) run its registr
   Fake players are not on the server's player list, so the test that adds an online player by name puts one there for the (synchronous) request only (`TrustListGameTests.online`), on Fabric only: NeoForge and Forge return a read-only view of the list, and vanilla's mock players would log in for real (on the NeoForge test server Simulated sends them a payload that NeoForge refuses, which fails the test).
   Names of players who are not online go to the server's name cache: the 1.21.11 test server has one (offline mode, so the name's offline UUID), the older ones have none (not found).
   OMLib's `ConfigSync` is not covered: it only sends to clients that negotiated its channel, and the test server has none.
-- The Forge 1.20.1 game test server places the tests underground (no flat world), so a test that needs open air (the wand's sneak-click into the air) stays inside its own 8 × 8 × 8 structure, looking from one corner to the opposite one.
+- The Forge 1.20.1 game test server places the tests underground (no flat world), so a test that needs open air (the wand's sneak-click into the air) stays inside its own 8 × 8 × 8 structure, looking from one corner to the opposite one.; the solar panel test under open sky is left out there (`//? if fabric || neoforge`).
 
 ---
 
