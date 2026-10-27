@@ -5,15 +5,16 @@ import java.util.function.IntUnaryOperator;
 
 /**
  * How much one ammo slot of a turret base or fuel slot of the generator holds: one stack of the item, plus
- * {@code bonusStacks} more from the attached inventory expanders, each adding its tier's {@code stacks}
- * (so 64 * (1 + expanders) for tier 1 expanders and a 64-stack item).
+ * {@code bonusStacks} more. The attached inventory expanders add their tier's {@code stacks} each; a turret base
+ * multiplies the result by the stacks of its tier ({@code baseAmmoStacks}), so 64 * (1 + expanders) for tier 1
+ * expanders, a one-stack base and a 64-stack item, twice that on a two-stack base.
  */
 public record SlotCapacity(int bonusStacks) {
-    /** Most inventory expanders that count in a line from one face of a machine. */
+    /** Most inventory expander plates that count on one face of a machine (one double expander block). */
     public static final int MAX_STACKED = 2;
     /** Highest inventory expander tier. */
     public static final int MAX_TIER = 3;
-    /** A machine without expanders: one stack per slot. */
+    /** One stack per slot (a generator or a one-stack base without expanders). */
     public static final SlotCapacity NONE = new SlotCapacity(0);
 
     public SlotCapacity {

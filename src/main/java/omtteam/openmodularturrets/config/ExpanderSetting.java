@@ -9,7 +9,7 @@ import omtteam.omlib.config.Range;
  */
 public class ExpanderSetting {
     @Comment("Stacks the expander adds to every ammo slot of a turret base and fuel slot of a generator it is attached "
-            + "to (a slot holds one stack plus the stacks of all attached expanders).") @Range(min = 0, max = 1000)
+            + "to (a slot holds one stack plus those of all attached expanders, times the stacks of its turret base tier).") @Range(min = 0, max = 1000)
     public int stacks;
     @Comment("Hardness of the expander (stone 1.5, obsidian 50).") @Range(min = 0, max = 1000000)
     public double hardness;

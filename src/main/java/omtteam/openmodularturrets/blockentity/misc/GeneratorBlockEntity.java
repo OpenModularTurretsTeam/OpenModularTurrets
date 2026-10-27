@@ -128,22 +128,22 @@ public class GeneratorBlockEntity extends CompatBlockEntity implements TransferH
                 : SlotCapacity.of(tiers, ConfigLogicSettings.INSTANCE::expanderStacks);
     }
 
-    /** Called by the block (and the expanders) when a neighbour changed: attached expanders. */
+    /** Called by the block when a neighbour changed: attached expanders. */
     public void onNeighbourChanged() {
         if (level == null || level.isClientSide()) return;
         scanExpanders(level);
     }
 
     /**
-     * Collects the expanders in line from every face ({@link InventoryExpanderBlock#chainTiers}); waits while a
-     * block of a line is not loaded, so an expander in a loading chunk does not shrink the slots for a moment.
+     * Collects the plates of the expanders next to every face ({@link InventoryExpanderBlock#plateTiers}); waits while
+     * a neighbour is not loaded, so an expander in a loading chunk does not shrink the slots for a moment.
      */
     private void scanExpanders(Level level) {
         List<Integer> tiers = new ArrayList<>();
         for (Direction direction : Direction.values()) {
-            if (!level.isLoaded(worldPosition.relative(direction))
-                    || !InventoryExpanderBlock.isChainLoaded(level, worldPosition, direction)) return;
-            tiers.addAll(InventoryExpanderBlock.chainTiers(level, worldPosition, direction));
+            BlockPos neighbour = worldPosition.relative(direction);
+            if (!level.isLoaded(neighbour)) return;
+            tiers.addAll(InventoryExpanderBlock.plateTiers(level.getBlockState(neighbour)));
         }
         expanderTiers = List.copyOf(tiers);
     }

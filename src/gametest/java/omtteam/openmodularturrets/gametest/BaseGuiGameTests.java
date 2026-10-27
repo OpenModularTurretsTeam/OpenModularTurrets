@@ -26,9 +26,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
+import omtteam.openmodularturrets.inventory.TurretBaseInventory;
+import omtteam.openmodularturrets.network.BasePacketHandler;
+import omtteam.openmodularturrets.network.BasePackets;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.menu.TurretBaseMenu;
 import omtteam.openmodularturrets.registry.ModBlocks;
+import omtteam.openmodularturrets.registry.ModItems;
 import omtteam.omlib.security.PlayerAdapter;
 
 /**
@@ -117,6 +121,49 @@ public class BaseGuiGameTests implements OMTGameTests {
             rightClick(helper, owner, InteractionHand.MAIN_HAND);
             helper.assertBlockPresent(turret, TurretScene.TURRET);
         } finally {
+            TurretScene.clear(helper);
+        }
+        helper.succeed();
+    }
+
+    /**
+     * The sort button merges equal ammo and puts Minecraft's items first, then Open Modular Turrets' ammo, each by
+     * registry name; a player without access to the GUI cannot sort.
+     */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "base_sort_ammo")
+    public void sortButtonSortsTheAmmo(GameTestHelper helper) {
+        ServerPlayer owner = player(helper, "SortTestOwner");
+        ServerPlayer stranger = player(helper, "SortTestStranger");
+        TurretBaseBlockEntity base = placeBase(helper, owner);
+        Vec3 nearBase = Vec3.atCenterOf(helper.absolutePos(BASE.above()));
+        owner.setPos(nearBase);
+        stranger.setPos(nearBase);
+        TurretBaseInventory inventory = base.getInventory();
+        ItemStack[] filled = {new ItemStack(ModItems.AMMO_ROCKET, 3), new ItemStack(Items.ARROW, 40),
+                ItemStack.EMPTY, new ItemStack(ModItems.AMMO_BULLET, 50), new ItemStack(Items.FIRE_CHARGE, 5),
+                new ItemStack(ModItems.AMMO_BULLET, 30), new ItemStack(Items.ARROW, 40), ItemStack.EMPTY,
+                new ItemStack(ModItems.AMMO_BOLT, 7)};
+        try {
+            for (int slot = 0; slot < filled.length; slot++) {
+                inventory.setItem(TurretBaseInventory.AMMO_START + slot, filled[slot].copy());
+            }
+            BasePackets.SimpleAction sort = new BasePackets.SimpleAction(helper.absolutePos(BASE), BasePackets.Action.SORT_AMMO);
+            BasePacketHandler.handleAction(sort, stranger);
+            helper.assertTrue(inventory.getItem(TurretBaseInventory.AMMO_START).is(ModItems.AMMO_ROCKET),
+                    "A stranger sorted the ammo");
+
+            BasePacketHandler.handleAction(sort, owner);
+            ItemStack[] expected = {new ItemStack(Items.ARROW, 64), new ItemStack(Items.ARROW, 16),
+                    new ItemStack(Items.FIRE_CHARGE, 5), new ItemStack(ModItems.AMMO_BOLT, 7),
+                    new ItemStack(ModItems.AMMO_BULLET, 64), new ItemStack(ModItems.AMMO_BULLET, 16),
+                    new ItemStack(ModItems.AMMO_ROCKET, 3), ItemStack.EMPTY, ItemStack.EMPTY};
+            for (int slot = 0; slot < expected.length; slot++) {
+                ItemStack actual = inventory.getItem(TurretBaseInventory.AMMO_START + slot);
+                helper.assertTrue(actual.getItem() == expected[slot].getItem() && actual.getCount() == expected[slot].getCount(),
+                        "Slot " + slot + " holds " + actual + " instead of " + expected[slot]);
+            }
+        } finally {
+            inventory.clearContent();
             TurretScene.clear(helper);
         }
         helper.succeed();

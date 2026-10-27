@@ -58,51 +58,53 @@ public class ExpanderGameTests implements OMTGameTests {
     private static final int FIRST_AMMO_SLOT = 36;
 
     /**
-     * Two expanders in line from a face count, a third one and one with a gap before it do not; every face counts on
-     * its own: tier 1 + tier 3 to the east, tier 2 on top make 6 extra stacks.
+     * Only the expander next to a face counts, not one behind it or one with a gap before it; every face counts on its
+     * own: tier 1 to the east and tier 2 on top make 3 extra stacks.
      */
     @GameTest(template = EMPTY_STRUCTURE, batch = "expander_scan", timeoutTicks = TIMEOUT_TICKS)
-    public void baseCountsTwoExpandersInLinePerFace(GameTestHelper helper) {
+    public void baseCountsOnlyTheExpanderNextToIt(GameTestHelper helper) {
         TurretBaseBlockEntity base = base(helper);
-        BlockPos[] expanders = {MACHINE.east(), MACHINE.east(2), MACHINE.east(3), MACHINE.above(), MACHINE.south(2)};
-        int[] tiers = {1, 3, 3, 2, 3};
+        BlockPos[] expanders = {MACHINE.east(), MACHINE.east(2), MACHINE.above(), MACHINE.south(2)};
+        int[] tiers = {1, 3, 2, 3};
         for (int i = 0; i < expanders.length; i++) {
             helper.setBlock(expanders[i], ModBlocks.INVENTORY_EXPANDERS.get(tiers[i] - 1));
         }
         helper.succeedWhen(() -> {
-            helper.assertTrue(base.getSlotCapacity().bonusStacks() == 6,
-                    "Bonus stacks " + base.getSlotCapacity().bonusStacks() + " instead of 6");
-            helper.assertTrue(base.getInventory().getSlotLimit(0, new ItemStack(ModItems.AMMO_BULLET)) == 7 * 64,
-                    "An ammo slot does not hold 7 stacks");
+            helper.assertTrue(base.getSlotCapacity().bonusStacks() == 3,
+                    "Bonus stacks " + base.getSlotCapacity().bonusStacks() + " instead of 3");
+            helper.assertTrue(base.getInventory().getSlotLimit(0, new ItemStack(ModItems.AMMO_BULLET)) == 4 * 64,
+                    "An ammo slot does not hold 4 stacks");
             helper.assertTrue(base.getInventory().getSlotLimit(TurretBaseInventory.UPGRADE_START,
                     new ItemStack(ModItems.UPGRADE_RANGE)) == 4, "The expanders changed the upgrade slot");
             removeAll(helper, expanders);
         });
     }
 
-    /** The base hears of the second expander through the first one (it is not its neighbour). */
+    /** A double expander that loses a plate, then the expander's removal, shrink the slots. */
     @GameTest(template = EMPTY_STRUCTURE, batch = "expander_remove", timeoutTicks = TIMEOUT_TICKS)
-    public void removingTheSecondExpanderShrinksTheSlots(GameTestHelper helper) {
+    public void removingAPlateShrinksTheSlots(GameTestHelper helper) {
         TurretBaseBlockEntity base = base(helper);
-        BlockPos[] expanders = {MACHINE.east(), MACHINE.east(2)};
-        helper.setBlock(expanders[0], ModBlocks.INVENTORY_EXPANDERS.get(0));
-        helper.setBlock(expanders[1], ModBlocks.INVENTORY_EXPANDERS.get(2));
+        BlockState single = ModBlocks.INVENTORY_EXPANDERS.get(0).defaultBlockState()
+                .setValue(InventoryExpanderBlock.FACING, Direction.WEST);
+        BlockPos expander = MACHINE.east();
+        helper.setBlock(expander, single.setValue(InventoryExpanderBlock.DOUBLE, true));
         helper.runAfterDelay(2, () -> {
-            helper.assertTrue(base.getSlotCapacity().bonusStacks() == 4, "The second expander did not count");
-            helper.setBlock(expanders[1], Blocks.AIR);
-            helper.succeedWhen(() -> {
-                helper.assertTrue(base.getSlotCapacity().bonusStacks() == 1, "The removed expander still counts");
-                removeAll(helper, expanders);
+            helper.assertTrue(base.getSlotCapacity().bonusStacks() == 2, "The double expander did not count twice");
+            helper.setBlock(expander, single);
+            helper.runAfterDelay(2, () -> {
+                helper.assertTrue(base.getSlotCapacity().bonusStacks() == 1, "The removed plate still counts");
+                helper.setBlock(expander, Blocks.AIR);
+                helper.succeedWhen(() -> {
+                    helper.assertTrue(base.getSlotCapacity().bonusStacks() == 0, "The removed expander still counts");
+                    removeAll(helper);
+                });
             });
         });
     }
 
-    /**
-     * A double block counts as two expanders and fills the face (the block behind it no longer counts); it drops
-     * two items.
-     */
+    /** A double block counts as two expanders (the block behind it does not count); it drops two items. */
     @GameTest(template = EMPTY_STRUCTURE, batch = "expander_double", timeoutTicks = TIMEOUT_TICKS)
-    public void doubleExpanderCountsTwiceAndFillsTheFace(GameTestHelper helper) {
+    public void doubleExpanderCountsTwice(GameTestHelper helper) {
         TurretBaseBlockEntity base = base(helper);
         InventoryExpanderBlock tierThree = ModBlocks.INVENTORY_EXPANDERS.get(2);
         BlockState doubleState = tierThree.defaultBlockState()
@@ -121,27 +123,71 @@ public class ExpanderGameTests implements OMTGameTests {
     }
 
     /**
-     * Clicking the open face of a single expander with one of the same tier adds the second plate; one of another
-     * tier is placed in front of it instead.
+     * An expander goes onto a machine's face, not onto another block: against stone or the open face of another
+     * tier's expander, nothing is placed.
+     */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "expander_place_machine", timeoutTicks = TIMEOUT_TICKS)
+    public void expandersOnlyGoOntoMachines(GameTestHelper helper) {
+        TurretBaseBlockEntity base = base(helper);
+        InventoryExpanderBlock tierOne = ModBlocks.INVENTORY_EXPANDERS.get(0);
+        BlockPos[] blocks = {MACHINE.east(), MACHINE.east(2), MACHINE.west(), MACHINE.west(2)};
+        helper.setBlock(blocks[3], Blocks.STONE);
+        ServerPlayer player = GuiTestPlayer.create(helper, "expander_machine");
+        // sneaking, so the base does not open its menu
+        player.setShiftKeyDown(true);
+
+        click(helper, player, MACHINE, new Vec3(1.0, 0.5, 0.5), tierOne);
+        BlockState placed = helper.getBlockState(blocks[0]);
+        helper.assertTrue(placed.is(tierOne) && placed.getValue(InventoryExpanderBlock.FACING) == Direction.WEST,
+                "The expander was not placed against the base: " + placed);
+
+        click(helper, player, blocks[0], new Vec3(6.0 / 16.0, 0.5, 0.5), ModBlocks.INVENTORY_EXPANDERS.get(1));
+        helper.assertTrue(helper.getBlockState(blocks[1]).isAir(), "An expander was placed against another expander");
+        helper.assertFalse(helper.getBlockState(blocks[0]).getValue(InventoryExpanderBlock.DOUBLE),
+                "An expander of another tier became the second plate");
+
+        click(helper, player, blocks[3], new Vec3(1.0, 0.5, 0.5), tierOne);
+        helper.assertTrue(helper.getBlockState(blocks[2]).isAir(), "An expander was placed against stone");
+        helper.succeedWhen(() -> {
+            helper.assertTrue(base.getSlotCapacity().bonusStacks() == 1,
+                    "Bonus stacks " + base.getSlotCapacity().bonusStacks() + " instead of 1");
+            removeAll(helper, blocks);
+        });
+    }
+
+    /**
+     * Clicking the open side of a single expander with one of the same tier stacks the second plate onto the first,
+     * from the plate's open face or from the base's face around the plate; clicking the block across the free side
+     * places nothing.
      */
     @GameTest(template = EMPTY_STRUCTURE, batch = "expander_place_double", timeoutTicks = TIMEOUT_TICKS)
-    public void secondPlateGoesOntoTheOpenSide(GameTestHelper helper) {
+    public void secondPlateStacksOntoTheFirst(GameTestHelper helper) {
         TurretBaseBlockEntity base = base(helper);
+        InventoryExpanderBlock tierOne = ModBlocks.INVENTORY_EXPANDERS.get(0);
+        BlockState single = tierOne.defaultBlockState().setValue(InventoryExpanderBlock.FACING, Direction.WEST);
         BlockPos[] expanders = {MACHINE.east(), MACHINE.east(2)};
-        helper.setBlock(expanders[0], ModBlocks.INVENTORY_EXPANDERS.get(0).defaultBlockState()
-                .setValue(InventoryExpanderBlock.FACING, Direction.WEST));
+        helper.setBlock(expanders[0], single);
         ServerPlayer player = GuiTestPlayer.create(helper, "expander_place");
+        // sneaking, so the base does not open its menu
+        player.setShiftKeyDown(true);
 
-        clickOpenFace(helper, player, expanders[0], ModBlocks.INVENTORY_EXPANDERS.get(1));
-        helper.assertFalse(helper.getBlockState(expanders[0]).getValue(InventoryExpanderBlock.DOUBLE),
-                "An expander of another tier became the second plate");
-        helper.assertTrue(helper.getBlockState(expanders[1]).is(ModBlocks.INVENTORY_EXPANDERS.get(1)),
-                "The expander of another tier was not placed in front");
+        helper.setBlock(expanders[1], Blocks.STONE);
+        click(helper, player, expanders[1], new Vec3(0.0, 0.5, 0.5), tierOne);
+        helper.assertTrue(helper.getBlockState(expanders[0]).equals(single),
+                "Clicking the block across the free side changed the expander");
         helper.setBlock(expanders[1], Blocks.AIR);
 
-        clickOpenFace(helper, player, expanders[0], ModBlocks.INVENTORY_EXPANDERS.get(0));
+        click(helper, player, expanders[0], new Vec3(6.0 / 16.0, 0.5, 0.5), tierOne);
+        BlockState stacked = helper.getBlockState(expanders[0]);
+        helper.assertTrue(stacked.getValue(InventoryExpanderBlock.DOUBLE),
+                "Clicking the plate's open face did not add the second plate");
+        double depth = stacked.getShape(helper.getLevel(), helper.absolutePos(expanders[0])).max(Direction.Axis.X);
+        helper.assertTrue(depth == 12.0 / 16.0, "The two plates reach " + depth + " into the block, not 12 / 16");
+
+        helper.setBlock(expanders[0], single);
+        click(helper, player, MACHINE, new Vec3(1.0, 1.0 / 16.0, 0.5), tierOne);
         helper.assertTrue(helper.getBlockState(expanders[0]).getValue(InventoryExpanderBlock.DOUBLE),
-                "The expander of the same tier did not become the second plate");
+                "Clicking the base's face around the plate did not add the second plate");
         helper.succeedWhen(() -> {
             helper.assertTrue(base.getSlotCapacity().bonusStacks() == 2,
                     "Bonus stacks " + base.getSlotCapacity().bonusStacks() + " instead of 2");
@@ -149,12 +195,12 @@ public class ExpanderGameTests implements OMTGameTests {
         });
     }
 
-    /** Right-clicks the open (east) face of a single expander whose plate lies against its west side. */
-    private static void clickOpenFace(GameTestHelper helper, ServerPlayer player, BlockPos expander, Block held) {
+    /** Right-clicks {@code block} at {@code at} (relative to its corner; x 0 is the west face, otherwise the east face). */
+    private static void click(GameTestHelper helper, ServerPlayer player, BlockPos block, Vec3 at, Block held) {
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(held));
-        BlockPos pos = helper.absolutePos(expander);
-        BlockHitResult hit = new BlockHitResult(Vec3.atLowerCornerOf(pos).add(6.0 / 16.0, 0.5, 0.5), Direction.EAST,
-                pos, false);
+        BlockPos pos = helper.absolutePos(block);
+        Direction face = at.x == 0.0 ? Direction.WEST : Direction.EAST;
+        BlockHitResult hit = new BlockHitResult(Vec3.atLowerCornerOf(pos).add(at), face, pos, false);
         player.gameMode.useItemOn(player, helper.getLevel(), player.getMainHandItem(), InteractionHand.MAIN_HAND, hit);
     }
 
@@ -209,6 +255,9 @@ public class ExpanderGameTests implements OMTGameTests {
         helper.runAfterDelay(2, () -> {
             ServerPlayer player = GuiTestPlayer.create(helper, "expander_menu");
             TurretBaseMenu menu = TurretBaseMenu.server(1, player.getInventory(), base);
+            // the max stack size of the GUI's info panel, from the data the client gets
+            helper.assertTrue(menu.getSlotCapacity().limit(64) == 4 * 64,
+                    "The menu reports " + menu.getSlotCapacity().limit(64) + " items per slot instead of 256");
 
             menu.clicked(FIRST_AMMO_SLOT, 0, ClickType.PICKUP, player);
             helper.assertTrue(menu.getCarried().getCount() == 64, "Picked up " + menu.getCarried().getCount());

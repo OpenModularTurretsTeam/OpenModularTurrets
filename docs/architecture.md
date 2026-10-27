@@ -194,10 +194,10 @@ It has no owner and no trust list.
 ### Inventory expanders
 
 `InventoryExpanderBlock` (tiers 1–3, no block entity, no inventory) enlarges the 9 ammo slots of a turret base and the 9 fuel slots of a generator next to it.
-A machine counts the expander plates in a line from each face, at most `SlotCapacity.MAX_STACKED` (2) per face (`InventoryExpanderBlock.chainTiers`); an expander counts for every machine it reaches that way, and its facing is only the look.
-Two expanders of one tier fit into one block space like slabs (`DOUBLE`, the second plate on the open side, placed through `canBeReplaced`; it drops two): such a block counts as two plates and fills the face on its own.
-A slot holds `itemMaxStackSize × (1 + Σ stacks)`, with the stacks per tier from the config (`expanders.tier_N.stacks`, read on every check, so a changed config needs no rescan; `core.storage.SlotCapacity`); fuel that leaves a remainder (lava buckets) keeps its normal limit.
-The base learns of its expanders through `Neighbour.Expanders` in `TurretBaseLogic.updateNeighbours`, the generator scans them itself; a machine only hears of changes next to itself, so an expander passes changes of its own neighbours (the second expander of a line) on to the machines next to it.
+An expander is placed only against a turret base or generator (`InventoryExpanderBlock.isMachine`, checked in `getStateForPlacement`); a machine counts the plates of the expander next to each face, at most `SlotCapacity.MAX_STACKED` (2, one double block; `InventoryExpanderBlock.plateTiers`), and an expander counts for every machine next to it.
+Two expanders of one tier fit into one block space like slabs (`DOUBLE`, the second plate stacked onto the first, placed by clicking the open side, `canBeReplaced`; it drops two): such a block counts as two plates.
+A slot holds `itemMaxStackSize × base stacks × (1 + Σ stacks)`: a turret base's own stacks come from its tier (`bases.tier_N.baseAmmoStacks`, 2 on tiers 4 and 5, otherwise 1; a generator has 1), the stacks per expander tier from the config (`expanders.tier_N.stacks`, read on every check, so a changed config needs no rescan; `core.storage.SlotCapacity`); fuel that leaves a remainder (lava buckets) keeps its normal limit.
+The base learns of its expanders through `Neighbour.Expanders` in `TurretBaseLogic.updateNeighbours`, the generator scans them itself, both on their neighbour updates.
 The stacks above one stack are OMLib's large stacks: `TurretBaseInventory` and `FuelContainer` implement `LargeStackContainer` (also on the client, with the bonus stacks synced as menu data), the menus extend `LargeStackMenu` with `LargeStackSlot`s, the screens `LargeStackScreen`, and `VersionCompat.saveItems` saves the counts.
 Removing an expander leaves larger stacks in the slots; they only cannot grow until they are below the new limit.
 

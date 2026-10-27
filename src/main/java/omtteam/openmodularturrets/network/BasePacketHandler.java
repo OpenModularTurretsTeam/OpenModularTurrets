@@ -50,7 +50,8 @@ public final class BasePacketHandler {
         AccessLevel required = switch (packet.action()) {
             case TOGGLE_MODE, DROP_BASE, DROP_TURRETS -> AccessLevel.ADMIN;
             case TOGGLE_MULTI_TARGETING -> AccessLevel.CHANGE_SETTINGS;
-            case OPEN_MENU -> AccessLevel.OPEN_GUI;
+            // whoever opens the GUI can move the ammo by hand too
+            case OPEN_MENU, SORT_AMMO -> AccessLevel.OPEN_GUI;
         };
         authorize(player, packet.pos(), required).ifPresent(base -> {
             TurretBaseLogic logic = base.getLogic();
@@ -60,6 +61,7 @@ public final class BasePacketHandler {
                 case DROP_BASE -> player.level().destroyBlock(packet.pos(), true);
                 case DROP_TURRETS -> dropTurrets((ServerLevel) player.level(), packet.pos(), logic);
                 case OPEN_MENU -> openMenu(player, base);
+                case SORT_AMMO -> base.getInventory().sortAmmo();
             }
         });
     }

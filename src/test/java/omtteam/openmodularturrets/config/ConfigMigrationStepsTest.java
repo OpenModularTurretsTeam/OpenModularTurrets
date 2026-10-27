@@ -39,9 +39,39 @@ class ConfigMigrationStepsTest {
 
     @Test
     void runsOncePerFile() {
-        JsonObject config = json("{\"configVersion\": 2, \"miscellaneous\": {\"generatorCapacity\": 50000}}");
+        JsonObject config = json("{\"configVersion\": 3, \"miscellaneous\": {\"generatorCapacity\": 50000},"
+                + " \"bases\": {\"tier_1\": {\"baseMaxCharge\": 500}}}");
         assertFalse(migrate(config), "an owner may set the old value again");
         assertEquals(50_000, config.getAsJsonObject("miscellaneous").get("generatorCapacity").getAsInt());
+        assertEquals(500, baseCharge(config, 1));
+    }
+
+    @Test
+    void oldBaseChargeDefaultsAreRaised() {
+        JsonObject config = json("{\"configVersion\": 2, \"bases\": {\"tier_1\": {\"baseMaxCharge\": 500},"
+                + " \"tier_2\": {\"baseMaxCharge\": 50000}, \"tier_3\": {\"baseMaxCharge\": 150000},"
+                + " \"tier_4\": {\"baseMaxCharge\": 500000}, \"tier_5\": {\"baseMaxCharge\": 10000000}}}");
+        assertTrue(migrate(config));
+        long[] expected = {5_000, 500_000, 1_500_000, 10_000_000, 100_000_000};
+        for (int tier = 1; tier <= 5; tier++) {
+            assertEquals(expected[tier - 1], baseCharge(config, tier), "tier " + tier);
+        }
+        assertEquals(ConfigMigrationSteps.CURRENT_VERSION, config.get(ConfigMigration.VERSION_KEY).getAsInt());
+    }
+
+    @Test
+    void chosenBaseChargesStayAndVersionTwoKeepsItsGenerator() {
+        JsonObject config = json("{\"configVersion\": 2, \"miscellaneous\": {\"generatorCapacity\": 50000},"
+                + " \"bases\": {\"tier_1\": {\"baseMaxCharge\": 800}, \"tier_2\": {\"baseMaxCharge\": 500}}}");
+        assertTrue(migrate(config));
+        assertEquals(800, baseCharge(config, 1));
+        assertEquals(500, baseCharge(config, 2), "tier 1's old default is no default of tier 2");
+        assertEquals(50_000, config.getAsJsonObject("miscellaneous").get("generatorCapacity").getAsInt(),
+                "the version 2 step ran again");
+    }
+
+    private static long baseCharge(JsonObject config, int tier) {
+        return config.getAsJsonObject("bases").getAsJsonObject("tier_" + tier).get("baseMaxCharge").getAsLong();
     }
 
     @Test

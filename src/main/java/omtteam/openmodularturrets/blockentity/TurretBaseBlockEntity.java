@@ -101,16 +101,15 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
     }
 
     /**
-     * Tells the logic what is attached to each face. Waits until all neighbour blocks (and the second blocks of
-     * expander lines) are loaded, so a turret or expander in an unloaded chunk does not count as removed.
+     * Tells the logic what is attached to each face. Waits until all neighbour blocks are loaded, so a turret or
+     * expander in an unloaded chunk does not count as removed.
      */
     private void refreshNeighbours() {
         if (level == null) return;
         Map<Face, Neighbour> attached = new EnumMap<>(Face.class);
         for (Direction direction : Direction.values()) {
             BlockPos neighbourPos = worldPosition.relative(direction);
-            if (!level.isLoaded(neighbourPos)
-                    || !InventoryExpanderBlock.isChainLoaded(level, worldPosition, direction)) return;
+            if (!level.isLoaded(neighbourPos)) return;
             scanNeighbour(neighbourPos, direction).ifPresent(neighbour -> attached.put(toFace(direction), neighbour));
         }
         logic.updateNeighbours(attached);
@@ -119,7 +118,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
 
     /**
      * A turret counts if it faces away from this base (1.12.2 {@code TurretHeadUtil.getBaseTurrets}); inventory
-     * expanders count in a line from the face ({@link InventoryExpanderBlock#chainTiers}).
+     * expanders count with their plates ({@link InventoryExpanderBlock#plateTiers}).
      */
     private Optional<Neighbour> scanNeighbour(BlockPos pos, Direction direction) {
         if (level instanceof ServerLevel) {
@@ -128,8 +127,7 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
                 return Optional.of(new Neighbour.Turret(turret.getTurretType()));
             }
             if (state.getBlock() instanceof InventoryExpanderBlock) {
-                return Optional.of(new Neighbour.Expanders(
-                        InventoryExpanderBlock.chainTiers(level, worldPosition, direction)));
+                return Optional.of(new Neighbour.Expanders(InventoryExpanderBlock.plateTiers(state)));
             }
         }
         return Optional.empty();

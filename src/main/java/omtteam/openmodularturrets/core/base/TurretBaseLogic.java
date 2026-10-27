@@ -209,15 +209,18 @@ public class TurretBaseLogic {
     }
 
     /**
-     * How much each ammo slot holds with the inventory expanders attached as of the last {@link #updateNeighbours}
-     * (config values are read on every call).
+     * How much each ammo slot holds: the stacks of the base's tier ({@link BaseTierStats#ammoStacks}) times one stack
+     * plus those of the inventory expanders attached as of the last {@link #updateNeighbours}, so a two-stack base
+     * holds twice as much with the same expanders (config values are read on every call).
      */
     public SlotCapacity getSlotCapacity() {
         List<Integer> tiers = new ArrayList<>();
         for (Neighbour neighbour : neighbours.values()) {
             if (neighbour instanceof Neighbour.Expanders expanders) tiers.addAll(expanders.tiers());
         }
-        return tiers.isEmpty() ? SlotCapacity.NONE : SlotCapacity.of(tiers, settings::expanderStacks);
+        long baseStacks = Math.max(1L, settings.baseTier(tier).ammoStacks());
+        long stacks = baseStacks * (1L + SlotCapacity.of(tiers, settings::expanderStacks).bonusStacks());
+        return new SlotCapacity((int) Math.min(Integer.MAX_VALUE, stacks - 1L));
     }
 
     /**

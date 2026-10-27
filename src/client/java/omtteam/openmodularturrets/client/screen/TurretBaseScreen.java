@@ -32,6 +32,8 @@ import java.util.Random;
  * admin/settings buttons. Buttons only send requests; the server checks permissions.
  */
 public class TurretBaseScreen extends LargeStackScreen<TurretBaseMenu> {
+    /** A full stack of ammo, for the max stack size of an ammo slot in items. */
+    private static final int FULL_STACK = 64;
     private static final String[] TIER_NAMES = {"one", "two", "three", "four", "five"};
     /** The energy bar flickers between three fill textures (1.12.2 {@code drawEnergyBar}). */
     private static final int[] ENERGY_FILL_U = {196, 215, 234};
@@ -91,6 +93,9 @@ public class TurretBaseScreen extends LargeStackScreen<TurretBaseMenu> {
             targetButton = addRenderableWidget(button(targetLabel(), x + 180, y + 50, "multi_targeting",
                     () -> sendAction(BasePackets.Action.TOGGLE_MULTI_TARGETING)));
         }
+        // for everyone who opens the GUI, below the admin buttons
+        addRenderableWidget(button(ScreenTexts.gui("sort_ammo"), x + 180, y + 125, "sort_ammo",
+                () -> sendAction(BasePackets.Action.SORT_AMMO)));
     }
 
     private Button button(Component label, int x, int y, String tooltipKey, Runnable action) {
@@ -175,7 +180,7 @@ public class TurretBaseScreen extends LargeStackScreen<TurretBaseMenu> {
         });
     }
 
-    /** Info box to the left of the GUI: owner, mode, kills, trusted players, targeting. */
+    /** Info box to the left of the GUI: owner, mode, max stack size of an ammo slot, kills, trusted players, targeting. */
     private void renderInfoPanel(GuiGraphics graphics) {
         Optional<TurretBaseBlockEntity> found = base();
         if (found.isEmpty()) return;
@@ -188,6 +193,8 @@ public class TurretBaseScreen extends LargeStackScreen<TurretBaseMenu> {
         lines.add(ScreenTexts.gui("mode").append(": ").withStyle(ChatFormatting.GOLD)
                 .append(Component.translatable(logic.getMode().getTranslationKey()).withStyle(ChatFormatting.WHITE)));
         lines.add(ScreenTexts.gui("active").append(": ").withStyle(ChatFormatting.GOLD).append(ScreenTexts.yesNo(logic.isActive())));
+        lines.add(ScreenTexts.gui("max_stack_size").append(": ").withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(String.valueOf(menu.getSlotCapacity().limit(FULL_STACK))).withStyle(ChatFormatting.WHITE)));
         lines.add(Component.empty());
         lines.add(ScreenTexts.gui("kills").append(": " + logic.getKills()).withStyle(ChatFormatting.GOLD));
         lines.add(ScreenTexts.gui("player_kills").append(": " + logic.getPlayerKills()).withStyle(ChatFormatting.GOLD));

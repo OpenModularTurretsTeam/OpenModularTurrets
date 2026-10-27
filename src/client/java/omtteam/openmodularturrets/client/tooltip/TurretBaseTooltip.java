@@ -19,6 +19,8 @@ import java.util.List;
  */
 public final class TurretBaseTooltip {
     private static final String PREFIX = "tooltip.openmodularturrets.";
+    /** A full stack of ammo, for the slot size in items. */
+    private static final int FULL_STACK = 64;
 
     private TurretBaseTooltip() {
     }
@@ -47,6 +49,7 @@ public final class TurretBaseTooltip {
             lines.add(text(tier == 5 ? "extras.upgrade.2" : "extras.upgrade.1"));
         }
         lines.add(value("turret_limit", settings.baseMaxTurrets));
+        lines.add(value("max_stack_size", settings.baseAmmoStacks * FULL_STACK));
         lines.add(Component.empty());
         if (tier == 5) {
             lines.add(flavour("flavour.base.5a"));

@@ -14,7 +14,7 @@ public sealed interface Neighbour permits Neighbour.Turret, Neighbour.Expanders 
     }
 
     /**
-     * Inventory expanders stacked in a line on this face, nearest first: 1 to {@value SlotCapacity#MAX_STACKED}
+     * The plates of the inventory expander on this face: 1 to {@value SlotCapacity#MAX_STACKED}
      * tiers (1–{@value SlotCapacity#MAX_TIER}).
      */
     record Expanders(List<Integer> tiers) implements Neighbour {

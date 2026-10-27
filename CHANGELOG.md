@@ -10,11 +10,14 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ### Added
 
-- Inventory expanders (tiers 1–3): placed next to a turret base or generator (up to 2 per face, in a line or two of one tier in one block like slabs), each lets every ammo or fuel slot hold 1, 2 or 3 more stacks (`expanders` config section); they have no inventory of their own, and counts from four digits on are drawn smaller
+- Inventory expanders (tiers 1–3): placed against a turret base or generator (one block per face, which holds two of one tier like slabs), each lets every ammo or fuel slot hold 1, 2 or 3 more stacks (`expanders` config section); they have no inventory of their own, and counts from four digits on are drawn smaller
+- "Sort Ammo" button in the turret base GUI: merges equal ammo and sorts Minecraft items first, then Open Modular Turrets ammo, each by internal name
 - Hardness and explosion resistance of the hardened blocks, walls and fences and the fence damage are configurable per tier (`hardness`, `explosionResistance`, `fenceDamage` in the `passiveDefense` section; no restart needed)
 
 ### Changed
 
+- Turret bases store more energy by default (`baseMaxCharge` 5,000 / 500,000 / 1,500,000 / 10,000,000 / 100,000,000 for tiers 1–5); configs that still have the old defaults get the new ones
+- Tier 4 and 5 turret bases hold 2 stacks in each ammo slot, and twice as much as the lower tiers with inventory expanders (`baseAmmoStacks` per base tier); the base's tooltip shows the max stack size, the info panel of its GUI the current one (with inventory expanders)
 - Admins of a turret base can set and remove its camouflage, not only its owner
 
 ### Fixed

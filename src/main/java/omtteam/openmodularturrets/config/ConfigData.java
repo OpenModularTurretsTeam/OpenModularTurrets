@@ -296,19 +296,19 @@ public class ConfigData {
     public static class Bases {
         @Comment("Tier 1 turret base.")
         @SerializedName("tier_1")
-        public BaseSetting tierOne = new BaseSetting(500, 50, 1, 5, 20);
+        public BaseSetting tierOne = new BaseSetting(5000, 50, 1, 1, 5, 20);
         @Comment("Tier 2 turret base.")
         @SerializedName("tier_2")
-        public BaseSetting tierTwo = new BaseSetting(50000, 100, 1, 10, 30);
+        public BaseSetting tierTwo = new BaseSetting(500000, 100, 1, 1, 10, 30);
         @Comment("Tier 3 turret base.")
         @SerializedName("tier_3")
-        public BaseSetting tierThree = new BaseSetting(150000, 1000, 2, 15, 40);
+        public BaseSetting tierThree = new BaseSetting(1500000, 1000, 2, 1, 15, 40);
         @Comment("Tier 4 turret base.")
         @SerializedName("tier_4")
-        public BaseSetting tierFour = new BaseSetting(500000, 2500, 3, 20, 50);
+        public BaseSetting tierFour = new BaseSetting(10000000, 2500, 3, 2, 20, 50);
         @Comment("Tier 5 turret base.")
         @SerializedName("tier_5")
-        public BaseSetting tierFive = new BaseSetting(10000000, 50000, 4, 25, 60);
+        public BaseSetting tierFive = new BaseSetting(100000000, 50000, 4, 2, 25, 60);
         @Comment("Allow camouflage on turret bases. Requires a restart.")
         public boolean allowBaseCamo = true;
         @Comment("Turret bases are breakable with tools (using the hardness and blast resistance below).")

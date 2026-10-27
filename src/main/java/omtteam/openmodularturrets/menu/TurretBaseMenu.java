@@ -105,6 +105,11 @@ public class TurretBaseMenu extends LargeStackMenu {
         return tier;
     }
 
+    /** How much each ammo slot holds (the base's tier and its inventory expanders), as the server sent it. */
+    public SlotCapacity getSlotCapacity() {
+        return new SlotCapacity((int) LongContainerData.read(data, DATA_BONUS_STACKS));
+    }
+
     public long getEnergy() {
         return LongContainerData.read(data, DATA_ENERGY);
     }

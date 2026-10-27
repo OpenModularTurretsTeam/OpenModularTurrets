@@ -501,6 +501,26 @@ class TurretBaseLogicTest {
         }
 
         @Test
+        void tierFourAndFiveBasesHoldTwoStacks() {
+            assertEquals(64 * 2, base(4).getSlotCapacity().limit(64));
+            assertEquals(64 * 2, base(5).getSlotCapacity().limit(64));
+            assertEquals(64, base(3).getSlotCapacity().limit(64));
+        }
+
+        @Test
+        void theStacksOfTheBaseTierMultiplyWithTheExpanders() {
+            Map<Face, Neighbour> attached = Map.of(Face.UP, new Neighbour.Expanders(List.of(3, 3)));
+            TurretBaseLogic tierThree = base(3);
+            tierThree.updateNeighbours(attached);
+            assertEquals(64 * 7, tierThree.getSlotCapacity().limit(64));
+            TurretBaseLogic tierFive = base(5);
+            tierFive.updateNeighbours(attached);
+            assertEquals(64 * 14, tierFive.getSlotCapacity().limit(64));
+            settings.tiers[4] = new BaseTierStats(10000000, 50000, 4, 4);
+            assertEquals(64 * 28, tierFive.getSlotCapacity().limit(64));
+        }
+
+        @Test
         void tierOneExpandersAddOneStackEach() {
             TurretBaseLogic logic = base(1);
             Map<Face, Neighbour> attached = new EnumMap<>(Face.class);
@@ -587,7 +607,7 @@ class TurretBaseLogicTest {
         void configChangesReachTheBase() {
             TurretBaseLogic logic = base(1); // capacity 500, io 50
             logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET)); // max range 18
-            settings.tiers[0] = new BaseTierStats(800, 70, 1);
+            settings.tiers[0] = new BaseTierStats(800, 70, 1, 1);
             settings.turrets.put(TurretType.MACHINE_GUN_TURRET,
                     FakeSettings.stats(20, 8, 2, 100, 30, 4, 0.06D, 0.1D, 2, 0.2D, 0.08D, 0.1D));
             logic.setRange(20);
@@ -602,7 +622,7 @@ class TurretBaseLogicTest {
             tick(logic, 5);
             assertEquals(22, logic.getTargetingSettings().getMaxRange());
 
-            settings.tiers[0] = new BaseTierStats(900, 70, 1);
+            settings.tiers[0] = new BaseTierStats(900, 70, 1, 1);
             logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET));
             assertEquals(900, logic.getEnergy().getCapacity(), "a neighbour update applies the capacity at once");
         }

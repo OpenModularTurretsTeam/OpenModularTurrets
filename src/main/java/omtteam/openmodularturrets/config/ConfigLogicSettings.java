@@ -83,7 +83,7 @@ public final class ConfigLogicSettings implements LogicSettings {
     @Override
     public BaseTierStats baseTier(int tier) {
         BaseSetting s = OMTConfig.get().bases.tier(tier);
-        return new BaseTierStats(s.baseMaxCharge, s.baseMaxIo, s.baseMaxTurrets);
+        return new BaseTierStats(s.baseMaxCharge, s.baseMaxIo, s.baseMaxTurrets, s.baseAmmoStacks);
     }
 
     @Override
