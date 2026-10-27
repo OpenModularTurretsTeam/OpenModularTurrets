@@ -82,10 +82,11 @@ tasks.processResources {
     }
 }
 
-// Dev-run-only dependencies, never in the published metadata (Loom's modLocalRuntime), remapped like the mod* ones
+// Dev-run-only dependencies, never in the published metadata (Loom's modLocalRuntime), remapped like the mod* ones:
+// declared on modLocalRuntime, which puts them remapped to the dev names into localRuntime
 val localRuntime: Configuration = configurations.create("localRuntime")
-val remappedLocalRuntime: Configuration = obfuscation.createRemappingConfiguration(localRuntime)
-configurations.runtimeClasspath { extendsFrom(remappedLocalRuntime) }
+val modLocalRuntime: Configuration = obfuscation.createRemappingConfiguration(localRuntime)
+configurations.runtimeClasspath { extendsFrom(localRuntime) }
 // Not on the GameTest server, as on NeoForge.
 
 dependencies {
@@ -120,7 +121,7 @@ dependencies {
 
     // Jade plugin (compat/jade, client/compat/jade): optional, not bundled; present in dev runs to try it
     "modCompileOnly"("maven.modrinth:jade:${property("jade_version")}")
-    localRuntime("maven.modrinth:jade:${property("jade_version")}")
+    modLocalRuntime("maven.modrinth:jade:${property("jade_version")}")
 }
 // The client half of the Jade plugin (client/compat/jade) compiles against it too (remapped, through compileOnly)
 configurations.named("clientCompileOnly") { extendsFrom(configurations.compileOnly.get()) }
