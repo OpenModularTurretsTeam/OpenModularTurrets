@@ -5,6 +5,8 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
@@ -32,6 +34,11 @@ import java.util.UUID;
  * therefore end with {@link #succeedWhen} or {@link #succeed}, which clear the scene once the test passed. A failing
  * test clears it too: {@link #onEachTick} clears it when a check throws, and {@link #build} clears it one tick before
  * the test times out.
+ * <p>
+ * A target that an explosion knocks out of its scene is not cleared with it, and once its test released the forced
+ * chunks it no longer ticks, so it stays where it flew. {@link #build} therefore removes every hostile mob within the
+ * new turret's range first; otherwise the turret could pick it instead of its own target (seen with the railgun, whose
+ * range is the largest: probably why its ray once aimed 25 blocks above its target on Forge 1.20.1).
  */
 @SuppressWarnings("RedundantCast")
 public final class TurretScene {
@@ -72,6 +79,7 @@ public final class TurretScene {
         logic.getEnergy().generate(logic.getEnergy().getCapacity());
         logic.updateMaxRange();
         logic.setRange(logic.getTargetingSettings().getMaxRange());
+        removeStrayEnemies(helper, logic.getTargetingSettings().getMaxRange());
         type.getAmmo().ifPresent(ammo -> base.getInventory().setItem(TurretBaseInventory.AMMO_START, ammoStack(ammo)));
         return base;
     }
@@ -127,6 +135,17 @@ public final class TurretScene {
             for (int z = centreZ - FORCED_CHUNK_RADIUS; z <= centreZ + FORCED_CHUNK_RADIUS; z++) {
                 helper.getLevel().setChunkForced(x, z, forced);
             }
+        }
+    }
+
+    /**
+     * Removes the hostile mobs that earlier tests left within {@code range} of the turret (each turret test has a
+     * batch of its own, so no running test loses its target).
+     */
+    private static void removeStrayEnemies(GameTestHelper helper, int range) {
+        AABB area = new AABB(helper.absolutePos(TURRET)).inflate(range + 1.0D);
+        for (Mob mob : helper.getLevel().getEntitiesOfClass(Mob.class, area, mob -> mob instanceof Enemy)) {
+            mob.discard();
         }
     }
 
