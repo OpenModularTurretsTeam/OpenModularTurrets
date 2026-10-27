@@ -134,6 +134,17 @@ public class BlockGenerator extends Block {
         return true;
     }
 
+    /** Attached inventory expanders change what the fuel slots hold. */
+    @Override
+    @SuppressWarnings("deprecation")
+    @ParametersAreNonnullByDefault
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if (tileEntity instanceof GeneratorTileEntity) {
+            ((GeneratorTileEntity) tileEntity).onNeighbourChanged();
+        }
+    }
+
     @Override
     @ParametersAreNonnullByDefault
     public void breakBlock(World world, BlockPos pos, IBlockState state) {

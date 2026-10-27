@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "result": {
+    "item": "openmodularturrets:inventory_expander_tier_two"
+  },
+  "pattern": [
+    "ABA",
+    "DCD",
+    "ADA"
+  ],
+  "key": {
+    "A": {
+      "item": "#INGOTGOLD"
+    },
+    "B": {
+      "item": "openmodularturrets:inventory_expander_tier_one"
+    },
+    "C": {
+      "item": "#CHESTWOOD"
+    },
+    "D": {
+      "item": "#IOBUS"
+    }
+  }
+}

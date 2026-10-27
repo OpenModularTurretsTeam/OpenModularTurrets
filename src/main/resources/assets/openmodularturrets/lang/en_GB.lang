@@ -272,6 +272,13 @@ tooltip.openmodularturrets.upgrade.energy_multiplier.a=Doubles the energy the ge
 tooltip.openmodularturrets.upgrade.energy_multiplier.b=but it also burns its fuel twice as fast.
 tooltip.openmodularturrets.upgrade.energy_multiplier.flavour=Same coal, more hurry.
 tooltip.openmodularturrets.generator_upgrade_slot=Upgrades for the generator.
+tile.inventory_expander_tier_one.name=Inventory Expander (Tier 1)
+tile.inventory_expander_tier_two.name=Inventory Expander (Tier 2)
+tile.inventory_expander_tier_three.name=Inventory Expander (Tier 3)
+tooltip.openmodularturrets.inventory_expander.desc1=Attach to a turret base or generator: each of its ammo or fuel slots holds %s more stacks.
+tooltip.openmodularturrets.inventory_expander.desc2=Two fit into one block space; up to 2 count on each face of a machine.
+text.openmodularturrets.gui.max_stack_size=Max Stack Size
+tooltip.openmodularturrets.max_stack_size=Max Stack Size
 
 # 4.0.0 camouflage menu button
 text.openmodularturrets.gui.camouflage=Camouflage

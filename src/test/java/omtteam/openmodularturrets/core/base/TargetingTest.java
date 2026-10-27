@@ -407,7 +407,7 @@ class TargetingTest {
 
         @Test
         void singleTargetingFocusesFire() {
-            settings.tiers[1] = new BaseTierStats(50000, 100, 2);
+            settings.tiers[1] = new BaseTierStats(50000, 100, 2, 1);
             logic = base(2, twoGuns());
             logic.setRange(18);
             zombie(105, 66, 100);
@@ -418,7 +418,7 @@ class TargetingTest {
 
         @Test
         void multiTargetingSpreadsFire() {
-            settings.tiers[1] = new BaseTierStats(50000, 100, 2);
+            settings.tiers[1] = new BaseTierStats(50000, 100, 2, 1);
             logic = base(2, twoGuns());
             logic.setRange(18);
             logic.setMultiTargeting(true);

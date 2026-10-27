@@ -76,6 +76,8 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add(safeLocalize("text.openmodularturrets.extras.addons.0"));
                     tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + TextFormatting.WHITE
                                         + OMTConfig.BASES.baseTierOne.baseMaxTurrets);
+                    tooltip.add(safeLocalize(OMTNames.Localizations.Text.MAX_STACK_SIZE) + ": " + TextFormatting.WHITE
+                                        + OMTConfig.BASES.baseTierOne.baseAmmoStacks * 64);
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.1"));
                     return;
@@ -92,6 +94,8 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add(safeLocalize("text.openmodularturrets.extras.upgrade.1"));
                     tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + TextFormatting.WHITE
                                         + OMTConfig.BASES.baseTierTwo.baseMaxTurrets);
+                    tooltip.add(safeLocalize(OMTNames.Localizations.Text.MAX_STACK_SIZE) + ": " + TextFormatting.WHITE
+                                        + OMTConfig.BASES.baseTierTwo.baseAmmoStacks * 64);
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.2"));
                     return;
@@ -108,6 +112,8 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add(safeLocalize("text.openmodularturrets.extras.upgrade.1"));
                     tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + TextFormatting.WHITE
                                         + OMTConfig.BASES.baseTierThree.baseMaxTurrets);
+                    tooltip.add(safeLocalize(OMTNames.Localizations.Text.MAX_STACK_SIZE) + ": " + TextFormatting.WHITE
+                                        + OMTConfig.BASES.baseTierThree.baseAmmoStacks * 64);
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.3"));
                     return;
@@ -124,6 +130,8 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add(safeLocalize("text.openmodularturrets.extras.upgrade.1"));
                     tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + TextFormatting.WHITE
                                         + OMTConfig.BASES.baseTierFour.baseMaxTurrets);
+                    tooltip.add(safeLocalize(OMTNames.Localizations.Text.MAX_STACK_SIZE) + ": " + TextFormatting.WHITE
+                                        + OMTConfig.BASES.baseTierFour.baseAmmoStacks * 64);
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.4"));
                     return;
@@ -140,6 +148,8 @@ public class ItemBlockTurretBase extends ItemBlock {
                     tooltip.add(safeLocalize("text.openmodularturrets.extras.upgrade.2"));
                     tooltip.add(safeLocalize(OMTNames.Localizations.Text.TURRET_LIMIT) + ": " + TextFormatting.WHITE
                                         + OMTConfig.BASES.baseTierFive.baseMaxTurrets);
+                    tooltip.add(safeLocalize(OMTNames.Localizations.Text.MAX_STACK_SIZE) + ": " + TextFormatting.WHITE
+                                        + OMTConfig.BASES.baseTierFive.baseAmmoStacks * 64);
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.5a"));
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.flavour.base.5b"));

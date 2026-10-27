@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "result": {
+    "item": "openmodularturrets:inventory_expander_tier_one"
+  },
+  "pattern": [
+    "ABA",
+    "DCD",
+    "ADA"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:cobblestone"
+    },
+    "B": {
+      "item": "#PLANKWOOD"
+    },
+    "C": {
+      "item": "#CHESTWOOD"
+    },
+    "D": {
+      "item": "#IOBUS"
+    }
+  }
+}

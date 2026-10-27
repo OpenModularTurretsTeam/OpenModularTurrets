@@ -3,11 +3,15 @@ package omtteam.openmodularturrets.container;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.omlib.container.LargeStackContainer;
+import omtteam.omlib.container.WindowValues;
 import omtteam.omlib.util.DebugHandler;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.inventory.AddonSlot;
 import omtteam.openmodularturrets.inventory.AmmoSlot;
 import omtteam.openmodularturrets.inventory.EnumSlotType;
@@ -26,16 +30,22 @@ import static omtteam.omlib.util.inventory.InvUtil.mergeItemStackWithStackLimit;
 
 /**
  * Created by Keridos on 09/12/2015.
- * This Class
+ * The turret base GUI: the ammo slots hold as many stacks as the base tier and its inventory expanders allow
+ * ({@link LargeStackContainer}); the extra stacks go to the client as a window value ({@link #getSlotCapacity}).
  */
-public class TurretBaseContainer extends Container {
+public class TurretBaseContainer extends LargeStackContainer {
+    /** Window value: the bonus stacks of the ammo slots ({@link SlotCapacity#bonusStacks}). */
+    private static final int VALUE_BONUS_STACKS = 0;
+
     TurretBase base;
+    private final WindowValues values;
     // Actual slot start index of turret base
     int slotStart = 36;
     int ammoSlotStart = 100, ammoSlotEnd = 0, addonSlotStart = 100, addonSlotEnd = 0, upgSlotStart = 100, upgSlotEnd = 0;
 
     public TurretBaseContainer(InventoryPlayer inventoryPlayer, TurretBase turretBase) {
         this.base = turretBase;
+        this.values = new WindowValues(() -> turretBase.getSlotCapacity().bonusStacks());
 
         for (int x = 0; x < 9; x++) {
             this.addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 142));
@@ -112,13 +122,13 @@ public class TurretBaseContainer extends Container {
                         return ItemStack.EMPTY;
                     }
                 } else {
-                    if (!mergeItemStackWithStackLimit(stackInSlot, slotStart, slotStart + 9, false, this)) {
+                    if (!mergeItemStack(stackInSlot, slotStart, slotStart + 9, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             } else // Transfer from turret base inventory
             {
-                if (!mergeItemStackWithStackLimit(stackInSlot, 0, slotStart, false, this)) {
+                if (!mergeItemStack(stackInSlot, 0, slotStart, false)) {
                     slotObject.onSlotChanged();
                     base.updateMaxRange();
                     base.turretResetCaches();
@@ -129,7 +139,8 @@ public class TurretBaseContainer extends Container {
             if (getStackSize(stackInSlot) == 0) {
                 slotObject.putStack(ItemStack.EMPTY);
             } else {
-                slotObject.onSlotChanged();
+                // through the handler, so the base saves the smaller (possibly large) stack
+                slotObject.putStack(stackInSlot);
             }
             base.updateMaxRange();
             base.turretResetCaches();
@@ -163,5 +174,25 @@ public class TurretBaseContainer extends Container {
         base.updateMaxRange();
         base.turretResetCaches();
         super.detectAndSendChanges();
+        values.detectAndSendChanges(this, listeners);
+    }
+
+    @Override
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
+        values.addListener(this, listener);
+    }
+
+    /** Client: the bonus stacks from the server; the base's ammo slots use them for their limits. */
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void updateProgressBar(int id, int data) {
+        values.updateProgressBar(id, data);
+        base.setClientSlotCapacity(getSlotCapacity());
+    }
+
+    /** Client: what the ammo slots hold (the GUI shows it), as the server sent it. */
+    public SlotCapacity getSlotCapacity() {
+        return new SlotCapacity(values.get(VALUE_BONUS_STACKS));
     }
 }

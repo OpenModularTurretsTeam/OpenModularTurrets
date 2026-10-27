@@ -12,6 +12,7 @@ import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.settings.BaseTierStats;
 import omtteam.openmodularturrets.core.settings.LogicSettings;
 import omtteam.openmodularturrets.core.settings.TurretStats;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.target.TargetSelector;
 import omtteam.openmodularturrets.core.turret.AmmoType;
@@ -212,6 +213,21 @@ public class TurretBaseLogic {
             if (neighbour instanceof Neighbour.Turret) turrets.put(face, ((Neighbour.Turret) neighbour).type());
         });
         return turrets;
+    }
+
+    /**
+     * How much each ammo slot holds: the stacks of the base's tier ({@link BaseTierStats#ammoStacks}) times one stack
+     * plus those of the inventory expanders attached as of the last {@link #updateNeighbours}, so a two-stack base
+     * holds twice as much with the same expanders (config values are read on every call).
+     */
+    public SlotCapacity getSlotCapacity() {
+        List<Integer> tiers = new ArrayList<>();
+        for (Neighbour neighbour : neighbours.values()) {
+            if (neighbour instanceof Neighbour.Expanders) tiers.addAll(((Neighbour.Expanders) neighbour).tiers());
+        }
+        long baseStacks = Math.max(1L, settings.baseTier(tier).ammoStacks());
+        long stacks = baseStacks * (1L + SlotCapacity.of(tiers, settings::expanderStacks).bonusStacks());
+        return new SlotCapacity((int) Math.min(Integer.MAX_VALUE, stacks - 1L));
     }
 
     /**

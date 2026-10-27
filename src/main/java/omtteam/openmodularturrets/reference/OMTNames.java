@@ -35,6 +35,11 @@ public class OMTNames {
         /** 3.x power generator attachment, remapped to {@link #generator}. */
         public static final String powerGenerator = "power_generator";
         public static final String generator = "generator";
+
+        /** Inventory expanders of tiers 1–3 (new in 4.0.0, as on 1.20.1+; not the removed 3.x {@link #expander}). */
+        public static final String inventoryExpanderTierOne = "inventory_expander_tier_one";
+        public static final String inventoryExpanderTierTwo = "inventory_expander_tier_two";
+        public static final String inventoryExpanderTierThree = "inventory_expander_tier_three";
     }
 
     public static class Items {
@@ -112,6 +117,7 @@ public class OMTNames {
             public static final String PLAYER_KILLS = "text.openmodularturrets.gui.player_kills";
             public static final String CAMOUFLAGE = "text.openmodularturrets.gui.camouflage";
             public static final String CAMOUFLAGE_TOOLTIP = "tooltip.openmodularturrets.camouflage";
+            public static final String MAX_STACK_SIZE = "text.openmodularturrets.gui.max_stack_size";
         }
 
         public static class Text {
@@ -126,6 +132,9 @@ public class OMTNames {
             public static final String TOGGLE_MODE = "text.openmodularturrets.toggle_mode";
             public static final String STATUS_WARNING = "text.openmodularturrets.status.warning";
             public static final String TURRET_LIMIT = "text.openmodularturrets:turret_limit";
+            public static final String MAX_STACK_SIZE = "tooltip.openmodularturrets.max_stack_size";
+            public static final String INVENTORY_EXPANDER_DESC1 = "tooltip.openmodularturrets.inventory_expander.desc1";
+            public static final String INVENTORY_EXPANDER_DESC2 = "tooltip.openmodularturrets.inventory_expander.desc2";
         }
     }
 

@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -16,17 +17,22 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import omtteam.omlib.core.energy.EnergyStore;
 import omtteam.omlib.inventory.AutomationItemHandler;
+import omtteam.omlib.inventory.LargeStackItemHandler;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.tileentity.TileEntityBase;
+import omtteam.openmodularturrets.block.expander.BlockInventoryExpander;
 import omtteam.openmodularturrets.block.misc.BlockGenerator;
+import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.generator.GeneratorLogic;
 import omtteam.openmodularturrets.core.item.GeneratorUpgradeType;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.item.ItemGeneratorUpgrade;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalLong;
@@ -39,14 +45,25 @@ import java.util.OptionalLong;
  * <p>
  * Reads the inventory of a 3.x power generator (its tile entity id is renamed by {@code GeneratorTileEntityFix}):
  * its six fuel slots and the redstone slot land in the first seven fuel slots.
+ * <p>
+ * Inventory expanders next to it make every fuel slot hold more ({@link #getSlotCapacity}), except for fuel that
+ * leaves a remainder (a lava bucket), which keeps one stack, so the remainder fits into its slot.
  */
 public class GeneratorTileEntity extends TileEntityBase implements ITickable {
     public static final int FUEL_SLOTS = 9;
+    /** Max stack size of most items, the limit of an empty fuel slot. */
+    private static final int DEFAULT_STACK = 64;
 
-    private final ItemStackHandler fuel = new ItemStackHandler(FUEL_SLOTS) {
+    private final LargeStackItemHandler fuel = new LargeStackItemHandler(FUEL_SLOTS) {
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             return isFuel(stack);
+        }
+
+        @Override
+        public int getSlotLimit(int slot, @Nonnull ItemStack stack) {
+            int itemMax = stack.isEmpty() ? DEFAULT_STACK : stack.getMaxStackSize();
+            return leavesRemainder(stack) ? itemMax : getSlotCapacity().limit(itemMax);
         }
 
         @Override
@@ -78,6 +95,11 @@ public class GeneratorTileEntity extends TileEntityBase implements ITickable {
     private final GeneratorLogic logic = new GeneratorLogic();
     /** The fuel slots for {@link GeneratorLogic#burn}, in slot order. */
     private final List<GeneratorLogic.FuelSlot> fuelSlots = new ArrayList<>();
+    /** Plate tiers of the attached inventory expanders (server); null until scanned on the first tick. */
+    @Nullable
+    private List<Integer> expanderTiers;
+    /** The slot capacity the open generator GUI got from the server (clients do not scan the neighbours). */
+    private SlotCapacity clientSlotCapacity = SlotCapacity.NONE;
 
     public GeneratorTileEntity() {
         energy = new EnergyStore(OMTConfig.MISCELLANEOUS.generatorCapacity, 0,
@@ -97,8 +119,55 @@ public class GeneratorTileEntity extends TileEntityBase implements ITickable {
         return !stack.isEmpty() && TileEntityFurnace.getItemBurnTime(stack) > 0;
     }
 
+    /** Whether burning the item leaves something in its slot (lava bucket → bucket). */
+    public static boolean leavesRemainder(ItemStack stack) {
+        return !stack.isEmpty() && stack.getItem().hasContainerItem(stack);
+    }
+
     public ItemStackHandler getFuel() {
         return fuel;
+    }
+
+    /**
+     * What the attached inventory expanders add to every fuel slot (the config in effect, see {@link SlotCapacity});
+     * on the client the one the open generator GUI got from the server.
+     */
+    public SlotCapacity getSlotCapacity() {
+        if (world != null && world.isRemote) {
+            return clientSlotCapacity;
+        }
+        List<Integer> tiers = expanderTiers;
+        return tiers == null || tiers.isEmpty() ? SlotCapacity.NONE
+                : SlotCapacity.of(tiers, ConfigLogicSettings.INSTANCE::expanderStacks);
+    }
+
+    /** Client: the slot capacity synced by the generator GUI. */
+    public void setClientSlotCapacity(SlotCapacity capacity) {
+        this.clientSlotCapacity = capacity;
+    }
+
+    /** Called by the block when a neighbour changed: attached expanders. */
+    public void onNeighbourChanged() {
+        if (world == null || world.isRemote) {
+            return;
+        }
+        scanExpanders();
+    }
+
+    /**
+     * Collects the plates of the expanders next to every face ({@link BlockInventoryExpander#plateTiers}); waits while
+     * a neighbour is not loaded, so an expander in a loading chunk does not shrink the slots for a moment.
+     */
+    private void scanExpanders() {
+        List<Integer> tiers = new ArrayList<>();
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            BlockPos neighbour = pos.offset(facing);
+            if (!world.isBlockLoaded(neighbour)) {
+                return;
+            }
+            tiers.addAll(BlockInventoryExpander.plateTiers(world.getBlockState(neighbour)));
+        }
+        expanderTiers = Collections.unmodifiableList(tiers);
     }
 
     public ItemStackHandler getUpgrades() {
@@ -131,6 +200,9 @@ public class GeneratorTileEntity extends TileEntityBase implements ITickable {
     public void update() {
         if (world.isRemote) {
             return;
+        }
+        if (expanderTiers == null) {
+            scanExpanders();
         }
         pushEnergy();
         boolean lit = burn();
