@@ -411,6 +411,10 @@ The test mod's loader entrypoints (`gametest/platform/<loader>`) run its registr
 - `BaseGuiGameTests` clicks a base through `ServerPlayerGameMode#useItemOn` (the real server path, including the loader's block-use event) and checks that the menu opens for the owner only.
   The loaders' `FakePlayer`s refuse to open menus, so the test uses a small subclass that opens them without sending a packet (NeoForge opens block menus through the two-argument `openMenu`, which it overrides too).
   Cast `getBlockEntity` results where 1.20.1 returns a plain `BlockEntity` (IntelliJ only sees 1.21 and calls such casts redundant).
+- `TrustListGameTests` and the light tests in `CamoGameTests` call OMLib's packet handlers (`TrustPacketHandler`, `CamoPacketHandler`) directly with fake players placed next to the block, as the server does on a packet, and check permission, reach and the access level steps.
+  Fake players are not on the server's player list, so the test that adds an online player by name puts one there for the (synchronous) request only (`TrustListGameTests.online`), on Fabric only: NeoForge and Forge return a read-only view of the list, and vanilla's mock players would log in for real (on the NeoForge test server Simulated sends them a payload that NeoForge refuses, which fails the test).
+  Names of players who are not online go to the server's name cache: the 1.21.11 test server has one (offline mode, so the name's offline UUID), the older ones have none (not found).
+  OMLib's `ConfigSync` is not covered: it only sends to clients that negotiated its channel, and the test server has none.
 
 ---
 
