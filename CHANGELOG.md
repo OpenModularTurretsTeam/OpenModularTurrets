@@ -8,16 +8,19 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+## [4.0.0-beta.5] - 2026-10-27
+
 ### Added
 
-- Inventory expanders (tiers 1–3, as on 1.20.1+): placed against a turret base or generator, each of its ammo or fuel slots holds 1, 2 or 3 more stacks; two plates of a tier fit into one block space, up to 2 count per face (config section `expanders`, with the next OMLib release)
+- Inventory expanders (tiers 1–3, as on 1.20.1+): placed against a turret base or generator, each of its ammo or fuel slots holds 1, 2 or 3 more stacks; two plates of a tier fit into one block space, up to 2 count per face (config section `expanders`)
 - The turret base GUI shows the max stack size of the ammo slots, the turret base tooltip that of each tier
 
 ### Changed
 
-- Trusted admins of a turret base can change its camouflage disguise, not only the owner (with the next OMLib release)
+- Requires OMLib 4.0.0-beta.5 or newer
+- Trusted admins of a turret base can change its camouflage disguise, not only the owner
 - Turret bases of tiers 4 and 5 hold 2 stacks in each ammo slot, which also doubles what expanders add (config option `baseAmmoStacks` per tier)
-- Turret bases store more energy: 5,000 / 500,000 / 1,500,000 / 10,000,000 / 100,000,000 RF for tiers 1–5; config files that still have the old defaults get the new ones once (`general.configVersion`)
+- Turret bases store more energy: 5,000 / 500,000 / 1,500,000 / 10,000,000 / 100,000,000 RF for tiers 1–5; config files that still have the old defaults get the new ones if (`general.configVersion`) is low enough
 
 ## [4.0.0-beta.4] - 2026-10-27
 
