@@ -8,6 +8,8 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+## [4.0.0-beta.10] - 2026-10-27
+
 ### Added
 
 - Minecraft 1.21.11 for Fabric and NeoForge support
