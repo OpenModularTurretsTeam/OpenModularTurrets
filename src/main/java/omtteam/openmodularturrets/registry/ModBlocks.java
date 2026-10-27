@@ -6,6 +6,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import omtteam.omlib.util.InitHelper;
 import omtteam.openmodularturrets.api.TurretDefinition;
 import omtteam.openmodularturrets.block.base.BlockTurretBase;
+import omtteam.openmodularturrets.block.expander.BlockInventoryExpander;
 import omtteam.openmodularturrets.block.misc.BlockGenerator;
 import omtteam.openmodularturrets.block.misc.LeverBlock;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
@@ -43,10 +44,16 @@ public class ModBlocks {
     public static Block leverBlock;
 
     public static Block generator;
+    public static Block inventoryExpanderTierOne;
+    public static Block inventoryExpanderTierTwo;
+    public static Block inventoryExpanderTierThree;
 
     public static void initBlocks(IForgeRegistry<Block> registry) {
         turretBase = InitHelper.registerBlock(inTab(new BlockTurretBase()), registry, ModItems.subblocks);
         generator = InitHelper.registerBlock(inTab(new BlockGenerator()), registry, ModItems.subblocks);
+        inventoryExpanderTierOne = registerExpander(registry, 1, OMTNames.Blocks.inventoryExpanderTierOne);
+        inventoryExpanderTierTwo = registerExpander(registry, 2, OMTNames.Blocks.inventoryExpanderTierTwo);
+        inventoryExpanderTierThree = registerExpander(registry, 3, OMTNames.Blocks.inventoryExpanderTierThree);
 
         disposableItemTurret = registerTurret(registry, OMTNames.Blocks.disposableItemTurret,
                 TurretType.DISPOSABLE_TURRET);
@@ -68,6 +75,10 @@ public class ModBlocks {
         registerAddonTurrets(registry);
 
         leverBlock = InitHelper.registerBlock(inTab(new LeverBlock()), registry, ModItems.subblocks);
+    }
+
+    private static Block registerExpander(IForgeRegistry<Block> registry, int tier, String name) {
+        return InitHelper.registerBlock(inTab(new BlockInventoryExpander(tier, name)), registry, ModItems.subblocks);
     }
 
     /** Registers the block of an enabled built-in turret under its 3.x id; null if the turret is disabled. */

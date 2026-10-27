@@ -11,10 +11,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import omtteam.omlib.api.permission.TrustedPlayer;
-import omtteam.omlib.client.gui.BlockingAbstractGuiContainer;
 import omtteam.omlib.client.gui.GuiParameters;
 import omtteam.omlib.client.gui.IHasTooltips;
 import omtteam.omlib.client.gui.ISupportsBackSystem;
+import omtteam.omlib.client.gui.LargeStackGui;
 import omtteam.omlib.network.MessageCloseGUITile;
 import omtteam.omlib.network.MessageOpenGUITile;
 import omtteam.omlib.network.OMLibNetworkingHandler;
@@ -45,8 +45,9 @@ import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
  * Abstract class for all turret base GUIs.
  */
 
-public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasTooltips, ISupportsBackSystem {
+public class TurretBaseGui extends LargeStackGui implements IHasTooltips, ISupportsBackSystem {
     private final TurretBase base;
+    private final TurretBaseContainer container;
     private final EntityPlayer player;
     /** Space between the info panel and the GUI. */
     private static final int INFO_PANEL_GAP = 4;
@@ -56,7 +57,12 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
     private boolean addedToSyncList;
 
     public TurretBaseGui(InventoryPlayer inventoryPlayer, TurretBase turretBase) {
-        super(new TurretBaseContainer(inventoryPlayer, turretBase));
+        this(inventoryPlayer, turretBase, new TurretBaseContainer(inventoryPlayer, turretBase));
+    }
+
+    private TurretBaseGui(InventoryPlayer inventoryPlayer, TurretBase turretBase, TurretBaseContainer container) {
+        super(container);
+        this.container = container;
         this.base = turretBase;
         player = inventoryPlayer.player;
         DebugHandler.getInstance().setPlayer(player);
@@ -209,6 +215,8 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        // the large ammo slots first (LargeStackGui), below the labels and tooltips
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 
         fontRenderer.drawString(base.getTier() > 1 ? safeLocalize(OMTNames.Localizations.GUI.ADDONS) : "", 71, 6, 0);
@@ -227,6 +235,8 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7f" + getMachineModeLocalization(base.getMode()));
         boolean isCurrentlyOn = base.isActive();
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(isCurrentlyOn));
+        targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.MAX_STACK_SIZE) + ": \u00A7f"
+                + container.getSlotCapacity().limit(64));
         targetInfo.add("");
         targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.KILLS) + ": " + base.getKills());
         targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.PLAYER_KILLS) + ": " + base.getPlayerKills());
@@ -252,7 +262,6 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
             infoWidth = Math.max(infoWidth, fontRenderer.getStringWidth(line));
         }
         this.drawHoveringText(targetInfo, -infoWidth - 12 - 3 - INFO_PANEL_GAP, 17, fontRenderer);
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         drawTooltips();
     }
 

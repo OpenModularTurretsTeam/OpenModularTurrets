@@ -21,6 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.client.render.camo.CamoBlockColor;
 import omtteam.openmodularturrets.CommonProxy;
+import omtteam.openmodularturrets.block.expander.BlockInventoryExpander;
 import omtteam.openmodularturrets.block.misc.LeverBlock;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.client.gui.ConfigureGui;
@@ -87,6 +88,10 @@ public class ClientProxy extends CommonProxy {
         StateMap ignoreConcealed = new StateMap.Builder().ignore(BlockTurret.CONCEALED).build();
         ModelLoader.setCustomStateMapper(ModBlocks.leverBlock, ignoreRotation);
         for (Block block : ForgeRegistries.BLOCKS.getValuesCollection()) {
+            if (block instanceof BlockInventoryExpander) {
+                ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
+                        new ModelResourceLocation(block.getRegistryName(), "inventory"));
+            }
             if (block instanceof BlockTurret) {
                 ModelLoader.setCustomStateMapper(block, ignoreConcealed);
                 Item item = Item.getItemFromBlock(block);

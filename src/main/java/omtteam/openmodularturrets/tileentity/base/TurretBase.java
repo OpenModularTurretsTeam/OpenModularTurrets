@@ -41,12 +41,14 @@ import omtteam.omlib.util.camo.CamoSettings;
 import omtteam.omlib.util.player.Player;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.api.tileentity.ITurretBase;
+import omtteam.openmodularturrets.block.expander.BlockInventoryExpander;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.BaseTier;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.item.AddonType;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
@@ -85,7 +87,8 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
     private final TurretBaseWorld baseWorld = new TurretBaseWorld(this);
     protected CamoSettings camoSettings;
     protected int tier = BaseTier.MIN;
-    protected final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged);
+    protected final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged,
+            this::getSlotCapacity);
     protected final TrustedPlayersManager trustManager;
     private TurretBaseLogic logic;
     /** Forge Energy / RF / Tesla access to the logic's energy store (recreated with the logic). */
@@ -97,6 +100,8 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
     private IBlockState camoBlockStateTemp;
     private int ticks;
     private boolean forceFire = false;
+    /** The slot capacity the open base GUI got from the server (clients do not scan the neighbours). */
+    private SlotCapacity clientSlotCapacity = SlotCapacity.NONE;
 
     /** The energy capacity and maximum input come from the tier's config through the logic. */
     public TurretBase(int tier, IBlockState camoState) {
@@ -147,13 +152,30 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
         return logic;
     }
 
+    /**
+     * What the base tier and the attached inventory expanders let the ammo slots hold
+     * ({@link TurretBaseLogic#getSlotCapacity}); on the client the one the open base GUI got from the server.
+     */
+    public SlotCapacity getSlotCapacity() {
+        if (world != null && world.isRemote) {
+            return clientSlotCapacity;
+        }
+        return logic != null ? logic.getSlotCapacity() : SlotCapacity.NONE;
+    }
+
+    /** Client: the slot capacity synced by the base GUI. */
+    public void setClientSlotCapacity(SlotCapacity capacity) {
+        this.clientSlotCapacity = capacity;
+    }
+
     /** The core face of a direction (both enums are in the same order). */
     public static Face toFace(EnumFacing facing) {
         return Face.values()[facing.ordinal()];
     }
 
     /**
-     * Scans the six neighbours for turrets and tells the logic (1.20.1+ {@code updateNeighbours}). Called on the
+     * Scans the six neighbours for turrets and inventory expanders (with their plates,
+     * {@link BlockInventoryExpander#plateTiers}) and tells the logic (1.20.1+ {@code updateNeighbours}). Called on the
      * first server tick and when a neighbour changes.
      */
     public void updateNeighbours() {
@@ -166,10 +188,13 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
             if (!world.isBlockLoaded(neighbour)) {
                 continue;
             }
-            Block block = world.getBlockState(neighbour).getBlock();
+            IBlockState state = world.getBlockState(neighbour);
+            Block block = state.getBlock();
             if (block instanceof BlockTurret) {
                 attached.put(toFace(facing),
                         new Neighbour.Turret(((BlockTurret) block).getCoreType()));
+            } else if (block instanceof BlockInventoryExpander) {
+                attached.put(toFace(facing), new Neighbour.Expanders(BlockInventoryExpander.plateTiers(state)));
             }
         }
         logic.updateNeighbours(attached);

@@ -9,6 +9,7 @@ import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.item.ReactorFuel;
 import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.settings.BaseTierStats;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
@@ -504,6 +506,107 @@ class TurretBaseLogicTest {
     }
 
     @Nested
+    class Expanders {
+        private Map<Face, Neighbour> expanders(Face face, Integer... tiers) {
+            Map<Face, Neighbour> map = new EnumMap<>(Face.class);
+            map.put(face, new Neighbour.Expanders(Arrays.asList(tiers)));
+            return map;
+        }
+
+        @Test
+        void withoutExpandersASlotHoldsOneStack() {
+            TurretBaseLogic logic = base(1);
+            assertEquals(SlotCapacity.NONE, logic.getSlotCapacity());
+            assertEquals(64, logic.getSlotCapacity().limit(64));
+            assertEquals(16, logic.getSlotCapacity().limit(16));
+        }
+
+        @Test
+        void eachExpanderAddsTheStacksOfItsTier() {
+            TurretBaseLogic logic = base(1);
+            Map<Face, Neighbour> attached = expanders(Face.UP, 1, 3);
+            attached.put(Face.NORTH, new Neighbour.Expanders(Collections.singletonList(2)));
+            logic.updateNeighbours(attached);
+            assertEquals(6, logic.getSlotCapacity().bonusStacks());
+            assertEquals(64 * 7, logic.getSlotCapacity().limit(64));
+            assertEquals(16 * 7, logic.getSlotCapacity().limit(16));
+        }
+
+        @Test
+        void tierFourAndFiveBasesHoldTwoStacks() {
+            assertEquals(64 * 2, base(4).getSlotCapacity().limit(64));
+            assertEquals(64 * 2, base(5).getSlotCapacity().limit(64));
+            assertEquals(64, base(3).getSlotCapacity().limit(64));
+        }
+
+        @Test
+        void theStacksOfTheBaseTierMultiplyWithTheExpanders() {
+            TurretBaseLogic tierThree = base(3);
+            tierThree.updateNeighbours(expanders(Face.UP, 3, 3));
+            assertEquals(64 * 7, tierThree.getSlotCapacity().limit(64));
+            TurretBaseLogic tierFive = base(5);
+            tierFive.updateNeighbours(expanders(Face.UP, 3, 3));
+            assertEquals(64 * 14, tierFive.getSlotCapacity().limit(64));
+            settings.tiers[4] = new BaseTierStats(10000000, 50000, 4, 4);
+            assertEquals(64 * 28, tierFive.getSlotCapacity().limit(64));
+        }
+
+        @Test
+        void tierOneExpandersAddOneStackEach() {
+            TurretBaseLogic logic = base(1);
+            Map<Face, Neighbour> attached = expanders(Face.UP, 1, 1);
+            attached.put(Face.DOWN, new Neighbour.Expanders(Collections.singletonList(1)));
+            logic.updateNeighbours(attached);
+            assertEquals(64 * 4, logic.getSlotCapacity().limit(64));
+        }
+
+        @Test
+        void configChangesApplyWithoutRescan() {
+            TurretBaseLogic logic = base(1);
+            logic.updateNeighbours(expanders(Face.UP, 2));
+            settings.expanderStacks[1] = 5;
+            assertEquals(64 * 6, logic.getSlotCapacity().limit(64));
+        }
+
+        @Test
+        void expandersAreNoTurrets() {
+            TurretBaseLogic logic = base(1);
+            Map<Face, Neighbour> attached = turrets(TurretType.MACHINE_GUN_TURRET);
+            attached.put(Face.UP, new Neighbour.Expanders(Collections.singletonList(1)));
+            logic.updateNeighbours(attached);
+            assertEquals(Collections.singletonMap(Face.DOWN, TurretType.MACHINE_GUN_TURRET), logic.getTurrets());
+        }
+
+        @Test
+        void removedExpandersNoLongerCount() {
+            TurretBaseLogic logic = base(1);
+            logic.updateNeighbours(expanders(Face.UP, 3));
+            logic.updateNeighbours(new EnumMap<>(Face.class));
+            assertEquals(64, logic.getSlotCapacity().limit(64));
+        }
+
+        @Test
+        void negativeConfigStacksCountAsNone() {
+            settings.expanderStacks[0] = -4;
+            assertEquals(0, SlotCapacity.of(Arrays.asList(1, 1), settings::expanderStacks).bonusStacks());
+        }
+
+        @Test
+        void limitDoesNotOverflow() {
+            assertEquals(Integer.MAX_VALUE, new SlotCapacity(Integer.MAX_VALUE).limit(64));
+            assertEquals(0, new SlotCapacity(-3).bonusStacks());
+        }
+
+        @Test
+        void chainsHoldOneOrTwoExpandersOfTiersOneToThree() {
+            assertThrows(IllegalArgumentException.class, () -> new Neighbour.Expanders(Collections.emptyList()));
+            assertThrows(IllegalArgumentException.class, () -> new Neighbour.Expanders(Arrays.asList(1, 1, 1)));
+            assertThrows(IllegalArgumentException.class, () -> new Neighbour.Expanders(Collections.singletonList(0)));
+            assertThrows(IllegalArgumentException.class, () -> new Neighbour.Expanders(Collections.singletonList(4)));
+        }
+    }
+
+    @Nested
     class Energy {
         @Test
         void externalInsertionIsLimitedByMaxIo() {
@@ -534,7 +637,7 @@ class TurretBaseLogicTest {
         void configChangesReachTheBase() {
             TurretBaseLogic logic = base(1); // capacity 500, io 50
             logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET)); // max range 18
-            settings.tiers[0] = new BaseTierStats(800, 70, 1);
+            settings.tiers[0] = new BaseTierStats(800, 70, 1, 1);
             settings.turrets.put(TurretType.MACHINE_GUN_TURRET,
                     FakeSettings.stats(20, 8, 2, 100, 30, 4, 0.06D, 0.1D, 2, 0.2D, 0.08D, 0.1D));
             logic.setRange(20);
@@ -549,7 +652,7 @@ class TurretBaseLogicTest {
             tick(logic, 5);
             assertEquals(22, logic.getTargetingSettings().getMaxRange());
 
-            settings.tiers[0] = new BaseTierStats(900, 70, 1);
+            settings.tiers[0] = new BaseTierStats(900, 70, 1, 1);
             logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET));
             assertEquals(900, logic.getEnergy().getCapacity(), "a neighbour update applies the capacity at once");
         }

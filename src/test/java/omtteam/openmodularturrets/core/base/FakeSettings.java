@@ -18,8 +18,9 @@ import java.util.Set;
 final class FakeSettings implements LogicSettings {
     final Map<TurretType, TurretStats> turrets = new HashMap<>();
     BaseTierStats[] tiers = {
-            new BaseTierStats(500, 50, 1), new BaseTierStats(50000, 100, 1), new BaseTierStats(150000, 1000, 2),
-            new BaseTierStats(500000, 2500, 3), new BaseTierStats(10000000, 50000, 4)};
+            new BaseTierStats(500, 50, 1, 1), new BaseTierStats(50000, 100, 1, 1), new BaseTierStats(150000, 1000, 2, 1),
+            new BaseTierStats(500000, 2500, 3, 2), new BaseTierStats(10000000, 50000, 4, 2)};
+    int[] expanderStacks = {1, 2, 3};
     int solar = 10;
     int reactor = 1600;
     boolean needAmmo = true;
@@ -63,6 +64,11 @@ final class FakeSettings implements LogicSettings {
     @Override
     public BaseTierStats baseTier(int tier) {
         return tiers[tier - 1];
+    }
+
+    @Override
+    public int expanderStacks(int tier) {
+        return expanderStacks[tier - 1];
     }
 
     @Override

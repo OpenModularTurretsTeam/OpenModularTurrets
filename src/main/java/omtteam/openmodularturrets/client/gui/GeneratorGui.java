@@ -1,10 +1,10 @@
 package omtteam.openmodularturrets.client.gui;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
+import omtteam.omlib.client.gui.LargeStackGui;
 import omtteam.openmodularturrets.container.GeneratorContainer;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.misc.GeneratorTileEntity;
@@ -13,9 +13,9 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 /**
  * Generator GUI (1.20.1+ {@code GeneratorScreen}): 3×3 fuel slots, the upgrade slot, a furnace-style flame and the
- * energy bar.
+ * energy bar; the fuel slots may hold more than a stack (inventory expanders, {@link LargeStackGui}).
  */
-public class GeneratorGui extends GuiContainer {
+public class GeneratorGui extends LargeStackGui {
     private static final ResourceLocation TEXTURE =
             new ResourceLocation(Reference.MOD_ID, "textures/gui/generator.png");
     private static final int FLAME_SIZE = 14;
@@ -53,6 +53,7 @@ public class GeneratorGui extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRenderer.drawString(safeLocalize("tile.generator.name"), 8, 6, 0x000000);
         fontRenderer.drawString(safeLocalize("container.inventory"), 8, ySize - 94, 0x000000);
     }

@@ -2,15 +2,17 @@ package omtteam.openmodularturrets.inventory;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 import omtteam.omlib.inventory.AutomationItemHandler;
+import omtteam.omlib.inventory.LargeStackItemHandler;
 import omtteam.openmodularturrets.core.base.BaseTier;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * The 13 slots of a turret base (1.20.1+ {@code inventory.TurretBaseInventory}, 3.x layout):
@@ -19,21 +21,41 @@ import java.util.List;
  *     <li>9–10: addons (tier 2+)</li>
  *     <li>11–12: upgrades (slot 11 from tier 2, slot 12 on tier 5)</li>
  * </ul>
- * Which slots a tier may use is defined in {@link BaseTier}.
+ * Which slots a tier may use is defined in {@link BaseTier}. An ammo slot holds the stacks of the base tier plus those
+ * of the attached inventory expanders ({@link SlotCapacity}); on the client the capacity is the one the base GUI
+ * got from the server.
  */
-public class TurretBaseInventory extends ItemStackHandler {
+public class TurretBaseInventory extends LargeStackItemHandler {
     public static final int SIZE = 13;
     public static final int AMMO_START = 0;
     public static final int AMMO_COUNT = 9;
     public static final int ADDON_START = 9;
     public static final int UPGRADE_START = 11;
+    /** Max stack size of most items, the limit {@link #getSlotLimit} gives for an empty stack. */
+    private static final int DEFAULT_STACK = 64;
 
     private final Runnable onChange;
+    private final Supplier<SlotCapacity> capacity;
 
-    /** @param onChange called after every change of a slot (the base informs its logic) */
-    public TurretBaseInventory(Runnable onChange) {
+    /**
+     * @param onChange called after every change of a slot (the base informs its logic)
+     * @param capacity what the base tier and the attached expanders let the ammo slots hold, asked on every limit check
+     */
+    public TurretBaseInventory(Runnable onChange, Supplier<SlotCapacity> capacity) {
         super(SIZE);
         this.onChange = onChange;
+        this.capacity = capacity;
+    }
+
+    public static boolean isAmmoSlot(int slot) {
+        return slot >= AMMO_START && slot < AMMO_START + AMMO_COUNT;
+    }
+
+    /** One stack in the addon and upgrade slots; the ammo slots hold what {@link SlotCapacity} allows. */
+    @Override
+    public int getSlotLimit(int slot, @Nonnull ItemStack stack) {
+        int itemMax = stack.isEmpty() ? DEFAULT_STACK : stack.getMaxStackSize();
+        return isAmmoSlot(slot) ? capacity.get().limit(itemMax) : Math.min(DEFAULT_STACK, itemMax);
     }
 
     /** Automation inserts only ammo, into the ammo slots. */

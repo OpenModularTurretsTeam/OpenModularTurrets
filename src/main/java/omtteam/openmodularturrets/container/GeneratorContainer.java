@@ -2,14 +2,16 @@ package omtteam.openmodularturrets.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.SlotItemHandler;
+import omtteam.omlib.container.LargeStackContainer;
+import omtteam.omlib.container.LargeStackSlot;
 import omtteam.omlib.container.WindowValues;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.tileentity.misc.GeneratorTileEntity;
 
 import javax.annotation.Nonnull;
@@ -17,13 +19,15 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Generator container (1.20.1+ {@code GeneratorMenu}): the player inventory, a 3×3 grid of fuel slots and the upgrade
- * slot. Energy, capacity and burn progress are synced as window properties (OMLib's {@link WindowValues}).
+ * slot. Energy, capacity, burn progress and the bonus stacks of the fuel slots (inventory expanders, see
+ * {@link LargeStackContainer}) are synced as window properties (OMLib's {@link WindowValues}).
  */
-public class GeneratorContainer extends Container {
+public class GeneratorContainer extends LargeStackContainer {
     private static final int DATA_ENERGY = 0;
     private static final int DATA_CAPACITY = 1;
     private static final int DATA_BURN_TIME = 2;
     private static final int DATA_BURN_DURATION = 3;
+    private static final int DATA_BONUS_STACKS = 4;
     /** Index of the first fuel slot (after the 36 player inventory slots). */
     private static final int FUEL_START = 36;
     private static final int FUEL_END = FUEL_START + GeneratorTileEntity.FUEL_SLOTS;
@@ -43,7 +47,7 @@ public class GeneratorContainer extends Container {
         this.generator = generator;
         this.values = new WindowValues(() -> (int) Math.min(Integer.MAX_VALUE, generator.getEnergy()),
                 () -> (int) Math.min(Integer.MAX_VALUE, generator.getCapacity()), generator::getBurnTime,
-                generator::getBurnDuration);
+                generator::getBurnDuration, () -> generator.getSlotCapacity().bonusStacks());
         for (int x = 0; x < 9; x++) {
             addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 142));
         }
@@ -53,7 +57,7 @@ public class GeneratorContainer extends Container {
             }
         }
         for (int slot = 0; slot < GeneratorTileEntity.FUEL_SLOTS; slot++) {
-            addSlotToContainer(new SlotItemHandler(generator.getFuel(), slot, FUEL_X + slot % FUEL_COLUMNS * 18,
+            addSlotToContainer(new LargeStackSlot(generator.getFuel(), slot, FUEL_X + slot % FUEL_COLUMNS * 18,
                     FUEL_Y + slot / FUEL_COLUMNS * 18));
         }
         addSlotToContainer(new SlotItemHandler(generator.getUpgrades(), 0, UPGRADE_X, UPGRADE_Y));
@@ -73,6 +77,11 @@ public class GeneratorContainer extends Container {
         return duration <= 0 ? 0F : Math.min(1F, (float) values.get(DATA_BURN_TIME) / duration);
     }
 
+    /** Client: what the attached expanders add to the fuel slots, as the server sent it. */
+    public SlotCapacity getSlotCapacity() {
+        return new SlotCapacity(values.get(DATA_BONUS_STACKS));
+    }
+
     @Override
     public void addListener(@Nonnull IContainerListener listener) {
         super.addListener(listener);
@@ -89,6 +98,7 @@ public class GeneratorContainer extends Container {
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int data) {
         values.updateProgressBar(id, data);
+        generator.setClientSlotCapacity(getSlotCapacity());
     }
 
     @Override
@@ -121,7 +131,8 @@ public class GeneratorContainer extends Container {
         if (stack.isEmpty()) {
             slot.putStack(ItemStack.EMPTY);
         } else {
-            slot.onSlotChanged();
+            // through the handler, so the generator saves the smaller (possibly large) stack
+            slot.putStack(stack);
         }
         return stack.getCount() == original.getCount() ? ItemStack.EMPTY : original;
     }
