@@ -8,12 +8,17 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Added
+
+- Hardness and explosion resistance of the hardened blocks, walls and fences and the fence damage are configurable per tier (`hardness`, `explosionResistance`, `fenceDamage` in the `passiveDefense` section; no restart needed)
+
 ### Changed
 
 - Admins of a turret base can set and remove its camouflage, not only its owner
 
 ### Fixed
 
+- Fences dealt the same damage on every tier; it now grows from 5 (tier 1) to 9 (tier 5)
 - Forge 1.20.1: recipes that take iron, gold, redstone, quartz, diamonds or glass panes can be crafted (their common tags were empty on Forge)
 
 ## [4.0.0-beta.10] - 2026-10-27

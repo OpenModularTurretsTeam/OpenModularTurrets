@@ -7,6 +7,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -39,6 +40,18 @@ public class HardenedBlock extends CompatEntityBlock implements InteractiveBlock
 
     public DefenseTier getTier() {
         return tier;
+    }
+
+    /** Mines with the configured hardness ({@link PassiveDefense#destroyProgress}). */
+    @Override
+    public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+        return PassiveDefense.destroyProgress(super.getDestroyProgress(state, player, level, pos), tier);
+    }
+
+    /** The configured blast resistance ({@link PassiveDefense#setting}). */
+    @Override
+    public float getExplosionResistance() {
+        return (float) PassiveDefense.setting(tier).explosionResistance;
     }
 
     @Override

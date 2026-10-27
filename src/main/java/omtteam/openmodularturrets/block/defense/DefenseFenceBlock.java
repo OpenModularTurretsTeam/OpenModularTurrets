@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.IronBarsBlock;
@@ -27,12 +28,9 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Razor fence (OMPD {@code BlockFence}, a pane), one block per tier. Hurts everything touching it except its owner and
- * item entities, like a cactus.
+ * item entities, like a cactus, for the damage of its tier.
  */
 public class DefenseFenceBlock extends IronBarsBlock implements EntityBlock, InteractiveBlock {
-    /** OMPD: {@code DamageSource.CACTUS}, 5 damage. */
-    private static final float DAMAGE = 5.0F;
-
     private final DefenseTier tier;
 
     public DefenseFenceBlock(DefenseTier tier, Properties properties) {
@@ -42,6 +40,18 @@ public class DefenseFenceBlock extends IronBarsBlock implements EntityBlock, Int
 
     public DefenseTier getTier() {
         return tier;
+    }
+
+    /** Mines with the configured hardness ({@link PassiveDefense#destroyProgress}). */
+    @Override
+    public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+        return PassiveDefense.destroyProgress(super.getDestroyProgress(state, player, level, pos), tier);
+    }
+
+    /** The configured blast resistance ({@link PassiveDefense#setting}). */
+    @Override
+    public float getExplosionResistance() {
+        return (float) PassiveDefense.setting(tier).explosionResistance;
     }
 
     @Override
@@ -70,13 +80,13 @@ public class DefenseFenceBlock extends IronBarsBlock implements EntityBlock, Int
     }
     //?}
 
-    /** OMPD {@code onEntityCollidedWithBlock}. */
-    private static void onEntityInside(Level level, BlockPos pos, Entity entity) {
+    /** OMPD {@code onEntityCollidedWithBlock}: {@code DamageSource.CACTUS}, the configured damage of the tier. */
+    private void onEntityInside(Level level, BlockPos pos, Entity entity) {
         if (level.isClientSide() || entity instanceof ItemEntity) return;
         boolean owner = entity instanceof Player player && level.getBlockEntity(pos) instanceof OwnedBlockEntity be
                 && be.isOwner(player);
         if (!owner) {
-            VersionCompat.hurt(entity, level.damageSources().cactus(), DAMAGE);
+            VersionCompat.hurt(entity, level.damageSources().cactus(), (float) PassiveDefense.setting(tier).fenceDamage);
         }
     }
 

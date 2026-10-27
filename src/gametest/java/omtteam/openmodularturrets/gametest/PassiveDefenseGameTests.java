@@ -25,11 +25,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import omtteam.omlib.blockentity.OwnedBlockEntity;
@@ -37,14 +40,20 @@ import omtteam.omlib.compat.VersionCompat;
 import omtteam.omlib.compat.nbt.NbtCompat;
 import omtteam.omlib.core.security.PlayerIdentity;
 import omtteam.omlib.security.PlayerAdapter;
+import omtteam.openmodularturrets.block.defense.DefenseFenceBlock;
+import omtteam.openmodularturrets.block.defense.PassiveDefense;
+import omtteam.openmodularturrets.config.DefenseSetting;
+import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.registry.ModBlocks;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 /**
  * Hardened blocks, walls and fences (OMLib's {@code OwnedBlockEntity}): the player who places one owns it, only the
- * owner picks it up again, and the owner is saved with the block and sent to clients.
+ * owner picks it up again, and the owner is saved with the block and sent to clients. Hardness, blast resistance and
+ * fence damage come from the config of their tier.
  */
 //? if (neoforge && <1.21.11) || forge {
 /*@GameTestHolder(OMT.MOD_ID)
@@ -110,6 +119,61 @@ public class PassiveDefenseGameTests implements OMTGameTests {
         helper.assertTrue(owner.uuid().equals(NbtCompat.getUuid(sent, "UUID")),
                 "The update packet has no owner: " + packet.getTag());
         helper.succeed();
+    }
+
+    /** Blast resistance and mining progress follow the config while the game runs (no restart). */
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void hardnessAndResistanceComeFromTheConfig(GameTestHelper helper) {
+        Block wall = ModBlocks.WALLS.get(2);
+        BlockState hardened = ModBlocks.HARDENED.get(0).defaultBlockState();
+        helper.setBlock(BLOCK, hardened);
+        BlockPos pos = helper.absolutePos(BLOCK);
+        ServerPlayer player = player(helper, "Miner");
+        DefenseSetting tierOne = OMTConfig.get().passiveDefense.tier(1);
+        DefenseSetting tierThree = OMTConfig.get().passiveDefense.tier(3);
+        double hardness = tierOne.hardness;
+        double resistance = tierThree.explosionResistance;
+        try {
+            helper.assertTrue(wall.getExplosionResistance() == (float) resistance,
+                    "Tier 3 wall resists " + wall.getExplosionResistance() + ", config " + resistance);
+            tierThree.explosionResistance = 123.0D;
+            helper.assertTrue(wall.getExplosionResistance() == 123.0F,
+                    "Tier 3 wall resists " + wall.getExplosionResistance() + " after the config changed to 123");
+
+            float progress = hardened.getDestroyProgress(player, helper.getLevel(), pos);
+            tierOne.hardness = hardness * 2.0D;
+            float harder = hardened.getDestroyProgress(player, helper.getLevel(), pos);
+            helper.assertTrue(Math.abs(harder - progress / 2.0F) < 1.0E-7F,
+                    "Twice the hardness mines at " + harder + " per tick instead of half of " + progress);
+            tierOne.hardness = 0.0D;
+            helper.assertTrue(hardened.getDestroyProgress(player, helper.getLevel(), pos) >= 1.0F,
+                    "A hardness of 0 does not break the block at once");
+        } finally {
+            tierOne.hardness = hardness;
+            tierThree.explosionResistance = resistance;
+        }
+        helper.succeed();
+    }
+
+    /** A fence hits for the damage of its tier: 5 on tier 1, 7 on tier 3 by default. */
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void fenceDamageGrowsWithTheTier(GameTestHelper helper) {
+        List<Integer> tiers = List.of(1, 3);
+        List<Mob> pigs = new ArrayList<>();
+        for (int i = 0; i < tiers.size(); i++) {
+            BlockPos fence = new BlockPos(1 + 2 * i, 1, 1);
+            helper.setBlock(fence, ModBlocks.FENCES.get(tiers.get(i) - 1));
+            pigs.add(helper.spawnWithNoFreeWill(EntityType.PIG, fence));
+        }
+        helper.succeedWhen(() -> {
+            for (int i = 0; i < tiers.size(); i++) {
+                DefenseFenceBlock fence = ModBlocks.FENCES.get(tiers.get(i) - 1);
+                float expected = pigs.get(i).getMaxHealth() - (float) PassiveDefense.setting(fence.getTier()).fenceDamage;
+                helper.assertTrue(pigs.get(i).getHealth() == expected, "Pig in the tier " + tiers.get(i)
+                        + " fence has " + pigs.get(i).getHealth() + " health, expected " + expected);
+            }
+            pigs.forEach(Mob::discard);
+        });
     }
 
     /** Saves the block entity as a chunk does and loads a new one from the data. */

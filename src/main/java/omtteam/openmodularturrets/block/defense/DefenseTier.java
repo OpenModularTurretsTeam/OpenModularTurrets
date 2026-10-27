@@ -1,8 +1,9 @@
 package omtteam.openmodularturrets.block.defense;
 
 /**
- * OMPD block tiers. Hardness and blast resistance from OMPD {@code getBlockHardness} /
- * {@code getExplosionResistance} (equal values).
+ * OMPD block tiers. The strength is the hardness and blast resistance the blocks are registered with (OMPD
+ * {@code getBlockHardness} / {@code getExplosionResistance}, equal values, and the config defaults); while the game
+ * runs, the blocks use the config values instead ({@link PassiveDefense#setting}).
  */
 public enum DefenseTier {
     ONE("one", 10.0F),
@@ -24,7 +25,13 @@ public enum DefenseTier {
         return name;
     }
 
+    /** Hardness and blast resistance the blocks are registered with. */
     public float getStrength() {
         return strength;
+    }
+
+    /** 1 … 5. */
+    public int getNumber() {
+        return ordinal() + 1;
     }
 }

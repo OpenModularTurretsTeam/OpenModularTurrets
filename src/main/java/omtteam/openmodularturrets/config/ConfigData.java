@@ -38,6 +38,8 @@ public class ConfigData {
     public General general = new General();
     @Comment("Energy generation of addons and the generator block.")
     public Miscellaneous miscellaneous = new Miscellaneous();
+    @Comment("Hardened blocks, walls and fences per tier.")
+    public PassiveDefense passiveDefense = new PassiveDefense();
 
     /** Clamps annotated ranges, then validates and parses the lists. */
     void validate(ConfigValidator v) {
@@ -330,6 +332,40 @@ public class ConfigData {
                 case 4 -> tierFour;
                 case 5 -> tierFive;
                 default -> throw new IllegalArgumentException("Invalid base tier: " + tier);
+            };
+        }
+    }
+
+    /**
+     * Hardness and explosion resistance keep the 3.x values (both the same per tier); fences hit for 5 on tier 1 and
+     * one more per tier above (3.x: 5 on every tier).
+     */
+    public static class PassiveDefense {
+        @Comment("Tier 1 hardened block, wall and fence.")
+        @SerializedName("tier_1")
+        public DefenseSetting tierOne = new DefenseSetting(10, 10, 5);
+        @Comment("Tier 2 hardened block, wall and fence.")
+        @SerializedName("tier_2")
+        public DefenseSetting tierTwo = new DefenseSetting(20, 20, 6);
+        @Comment("Tier 3 hardened block, wall and fence.")
+        @SerializedName("tier_3")
+        public DefenseSetting tierThree = new DefenseSetting(30, 30, 7);
+        @Comment("Tier 4 hardened block, wall and fence.")
+        @SerializedName("tier_4")
+        public DefenseSetting tierFour = new DefenseSetting(50, 50, 8);
+        @Comment("Tier 5 hardened block, wall and fence.")
+        @SerializedName("tier_5")
+        public DefenseSetting tierFive = new DefenseSetting(80, 80, 9);
+
+        /** @param tier 1–5 */
+        public DefenseSetting tier(int tier) {
+            return switch (tier) {
+                case 1 -> tierOne;
+                case 2 -> tierTwo;
+                case 3 -> tierThree;
+                case 4 -> tierFour;
+                case 5 -> tierFive;
+                default -> throw new IllegalArgumentException("Invalid passive defense tier: " + tier);
             };
         }
     }
