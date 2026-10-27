@@ -8,6 +8,8 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+## [4.0.0-beta.11] - 2026-10-27
+
 ### Added
 
 - Inventory expanders (tiers 1–3): placed against a turret base or generator (one block per face, which holds two of one tier like slabs), each lets every ammo or fuel slot hold 1, 2 or 3 more stacks (`expanders` config section); they have no inventory of their own, and counts from four digits on are drawn smaller
