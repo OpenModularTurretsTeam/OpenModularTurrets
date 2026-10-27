@@ -25,8 +25,7 @@
       "omtteam.openmodularturrets.client.platform.fabric.OMTFabricClient"
     ],
     "jade": [
-      "omtteam.openmodularturrets.compat.jade.OMTJadePlugin",
-      "omtteam.openmodularturrets.client.compat.jade.OMTJadeClientPlugin"
+      "omtteam.openmodularturrets.compat.jade.OMTJadePlugin"
     ],
     "fabric-datagen": [
       "omtteam.openmodularturrets.datagen.OMTDataGenerator"

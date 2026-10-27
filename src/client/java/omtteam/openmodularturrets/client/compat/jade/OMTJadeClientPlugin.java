@@ -19,7 +19,6 @@ import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaPlugin;
-import snownee.jade.api.WailaPlugin;
 //? if >=1.21 {
 import snownee.jade.api.JadeIds;
 //?} else {
@@ -27,11 +26,11 @@ import snownee.jade.api.JadeIds;
 *///?}
 
 /**
- * Client half of the Jade integration ({@code compat.jade.OMTJadePlugin} has the server half), found the same way: the
- * {@code jade} entrypoint on Fabric, {@link WailaPlugin} on NeoForge and Forge. Jade also creates it on a dedicated
- * server, but calls {@link #registerClient} only on a client, so no client class is loaded there.
+ * Client half of the Jade integration ({@code compat.jade.OMTJadePlugin} has the server half). Not registered with Jade
+ * itself (no {@code jade} entrypoint, no {@code @WailaPlugin}): Jade creates every plugin it finds on a dedicated server
+ * too, where this class cannot be loaded. {@code OMTJadePlugin.registerClient} creates it by name on a client and
+ * forwards to {@link #registerClient}.
  */
-@WailaPlugin
 public class OMTJadeClientPlugin implements IWailaPlugin {
     /** Id Jade tags the lines of its universal item storage view with. */
     private static final ResourceLocation ITEM_STORAGE =

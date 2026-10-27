@@ -26,6 +26,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 - The info panel left of the base GUI no longer disappears while a button tooltip is shown (Minecraft 1.21.11)
 - The mouse stays where it was when you move between the base, configure, trusted players and camouflage GUIs instead of jumping to the screen centre
 - The grenade turret's grenades now properly fall down after hitting a target again.
+- Dedicated servers with Jade no longer fail to load the turret tooltip plugin (an error in the log; on Minecraft 1.21.11 the server crashed)
 
 ## [4.0.0-beta.9] - 2026-10-25
 

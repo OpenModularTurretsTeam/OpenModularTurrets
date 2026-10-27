@@ -304,7 +304,9 @@ New questions that these do not answer go through §7 "Designing APIs".
 **Jade**
 
 - `@WailaPlugin` on the plugin without a loader condition (NeoForge finds it by the annotation, Fabric keeps the `jade` entrypoint).
-- The plugin is split in two for every version, because Jade 21's `ITooltip` extends a client class: `compat.jade.OMTJadePlugin` and the providers (server data, and `lines(…)` that turn the data into tooltip lines) stay in main, `client.compat.jade.OMTJadeClientPlugin` and `JadeLinesComponent` (the tooltip) are in the client source set; both are listed under the `jade` entrypoint.
+- The plugin is split in two for every version, because Jade 21's `ITooltip` extends a client class: `compat.jade.OMTJadePlugin` and the providers (server data, and `lines(…)` that turn the data into tooltip lines) stay in main, `client.compat.jade.OMTJadeClientPlugin` and `JadeLinesComponent` (the tooltip) are in the client source set.
+  Only `OMTJadePlugin` is registered with Jade (`jade` entrypoint, `@WailaPlugin`): Jade creates every plugin it finds on a dedicated server too, where the client class cannot be loaded (Fabric refuses it, NeoForge 1.21.11 fails on its client types).
+  Its `registerClient`, which Jade calls only on a client, creates `OMTJadeClientPlugin` by name and forwards to it (fixed on 2026-10-27: before, dedicated servers with Jade logged errors, and on 1.21.11 they crashed).
 - Jade stays off the NeoForge GameTest server (it sends a packet to the vanilla mock players, which NeoForge refuses).
   It is in the NeoForge dev runs (`localRuntime`), which load only the mod itself, not the test mod (`loadedMods`).
 
