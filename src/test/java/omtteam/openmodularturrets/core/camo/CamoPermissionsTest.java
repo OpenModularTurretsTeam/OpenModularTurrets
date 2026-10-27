@@ -65,9 +65,9 @@ class CamoPermissionsTest {
     }
 
     @Test
-    void onlyTheOwnerSetsTheDisguiseOfABase() {
+    void adminsSetTheDisguiseOfABase() {
         assertTrue(CamoPermissions.canSetDisguise(base, OWNER));
-        assertFalse(CamoPermissions.canSetDisguise(base, ADMIN));
+        assertTrue(CamoPermissions.canSetDisguise(base, ADMIN));
         assertFalse(CamoPermissions.canSetDisguise(base, SETTINGS));
         assertFalse(CamoPermissions.canSetDisguise(base, STRANGER));
     }

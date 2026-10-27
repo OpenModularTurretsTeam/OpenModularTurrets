@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Changed
+
+- Admins of a turret base can set and remove its camouflage, not only its owner
+
 ## [4.0.0-beta.10] - 2026-10-27
 
 ### Added

@@ -77,6 +77,30 @@ public class CamoMenuGameTests implements OMTGameTests {
         helper.succeed();
     }
 
+    /** Admins set and remove the disguise of a base through its menu like the owner; a player one level below cannot. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "camo_menu")
+    public void adminsSetTheDisguiseOfABase(GameTestHelper helper) {
+        CamoHost base = place(helper, ModBlocks.TURRET_BASES.get(0));
+        ServerPlayer owner = owner(helper, base);
+        ServerPlayer admin = trusted(helper, base, owner, "Admin", AccessLevel.ADMIN);
+        ServerPlayer settings = trusted(helper, base, owner, "Settings", AccessLevel.CHANGE_SETTINGS);
+
+        CamoMenu settingsMenu = CamoMenu.server(1, settings.getInventory(), base);
+        settingsMenu.setCarried(new ItemStack(Items.STONE));
+        settingsMenu.clicked(CamoMenu.PHANTOM_SLOT, 0, ClickType.PICKUP, settings);
+        helper.assertTrue(base.getCamo() == null, "A player below admin set the disguise " + base.getCamo());
+
+        open(helper, admin);
+        CamoMenu menu = assertCamoMenu(helper, admin);
+        menu.setCarried(new ItemStack(Items.STONE));
+        menu.clicked(CamoMenu.PHANTOM_SLOT, 0, ClickType.PICKUP, admin);
+        helper.assertTrue(base.getCamo() == Blocks.STONE.defaultBlockState(), "The admin did not set the disguise, it is " + base.getCamo());
+        menu.setCarried(ItemStack.EMPTY);
+        menu.clicked(CamoMenu.PHANTOM_SLOT, 0, ClickType.PICKUP, admin);
+        helper.assertTrue(base.getCamo() == null, "The admin did not remove the disguise, it is " + base.getCamo());
+        helper.succeed();
+    }
+
     /** Strangers and trusted players who may neither set the disguise nor change the light get no menu. */
     @GameTest(template = EMPTY_STRUCTURE, batch = "camo_menu")
     public void playersWithoutCamoRightsGetNoMenu(GameTestHelper helper) {
