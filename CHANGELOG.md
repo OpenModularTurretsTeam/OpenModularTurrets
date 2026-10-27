@@ -12,6 +12,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 - Admins of a turret base can set and remove its camouflage, not only its owner
 
+### Fixed
+
+- Forge 1.20.1: recipes that take iron, gold, redstone, quartz, diamonds or glass panes can be crafted (their common tags were empty on Forge)
+
 ## [4.0.0-beta.10] - 2026-10-27
 
 ### Added
