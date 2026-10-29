@@ -75,7 +75,7 @@ public final class MemoryCardTooltip {
         lines.add(line("trusted_players", white(String.valueOf(trusted.size()))));
         for (TrustedPlayer player : trusted.subList(0, Math.min(MAX_LISTED_PLAYERS, trusted.size()))) {
             lines.add(Component.literal("  " + player.getName() + " ").withStyle(ChatFormatting.GRAY)
-                    .append(Component.translatable(GUI + "access_level." + player.getAccessLevel().getSerializedName())
+                    .append(Component.translatable("gui.omlib.access_level." + player.getAccessLevel().getSerializedName())
                             .withStyle(ChatFormatting.DARK_GRAY)));
         }
         if (trusted.size() > MAX_LISTED_PLAYERS) {

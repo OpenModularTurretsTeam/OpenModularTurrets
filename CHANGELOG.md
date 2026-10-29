@@ -15,6 +15,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 ### Fixed
 
 - The Jade tooltip of a turret showed its inaccuracy labelled as "Accuracy"; it is now labelled "Inaccuracy"
+- The memory card tooltip showed raw translation keys instead of the access levels of the trusted players
 
 ## [4.0.0-beta.11] - 2026-10-27
 
