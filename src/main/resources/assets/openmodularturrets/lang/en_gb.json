@@ -92,7 +92,7 @@
   "death.attack.openmodularturrets.potato": "%s was mashed by a potato cannon.",
   "death.attack.openmodularturrets.railgun": "%s found atomized minerva.",
   "death.attack.openmodularturrets.rocket": "%s found that rainbow connection in the form of a rocket.",
-  "gui.openmodularturrets.accuracy": "Accuracy",
+  "gui.openmodularturrets.inaccuracy": "Inaccuracy",
   "gui.openmodularturrets.active": "Active",
   "gui.openmodularturrets.addons": "Addons",
   "gui.openmodularturrets.ammo": "Ammo/Fuel",

@@ -92,7 +92,7 @@
   "death.attack.openmodularturrets.potato": "%s was mashed by a potato cannon.",
   "death.attack.openmodularturrets.railgun": "%s 看到了迷雾中的智慧女神.",
   "death.attack.openmodularturrets.rocket": "%s 看到了用火箭连起来的彩虹.",
-  "gui.openmodularturrets.accuracy": "Accuracy",
+  "gui.openmodularturrets.inaccuracy": "Inaccuracy",
   "gui.openmodularturrets.active": "激活",
   "gui.openmodularturrets.addons": "附件",
   "gui.openmodularturrets.ammo": "弹药/燃料",

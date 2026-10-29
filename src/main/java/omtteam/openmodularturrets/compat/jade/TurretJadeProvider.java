@@ -22,7 +22,7 @@ import java.util.Optional;
 
 /**
  * Server half of the Jade tooltip of a turret (ported from the 1.12.2 {@code WailaTurretHandler}): whether it is active, its owner and,
- * for players who may open the base, ammo, damage amp, accuracy and rate of fire. The stats show what the base
+ * for players who may open the base, ammo, damage amp, inaccuracy and rate of fire. The stats show what the base
  * contains, so the server only sends them to players with that permission. {@link #lines} turns the data into the tooltip; the
  * client half ({@code client.compat.jade}) shows it.
  */
@@ -33,7 +33,7 @@ public final class TurretJadeProvider implements IServerDataProvider<BlockAccess
     private static final String OWNER = "Owner";
     private static final String AMMO = "Ammo";
     private static final String DAMAGE_AMP = "DamageAmp";
-    private static final String ACCURACY = "Accuracy";
+    private static final String INACCURACY = "Inaccuracy";
     private static final String RATE_OF_FIRE = "RateOfFire";
 
     private TurretJadeProvider() {
@@ -60,7 +60,7 @@ public final class TurretJadeProvider implements IServerDataProvider<BlockAccess
         // -1: unlimited
         data.putInt(AMMO, ammo == Integer.MAX_VALUE ? -1 : ammo);
         data.putDouble(DAMAGE_AMP, logic.getDamageAmpBonus(type) * 100);
-        data.putDouble(ACCURACY, Math.min(100.0D, logic.getAccuracyDeviation(type)));
+        data.putDouble(INACCURACY, Math.min(100.0D, logic.getAccuracyDeviation(type)));
         double cooldown = logic.getFireCooldownTicks(type);
         data.putDouble(RATE_OF_FIRE, cooldown > 0 ? 20.0D / cooldown : 0);
     }
@@ -76,7 +76,7 @@ public final class TurretJadeProvider implements IServerDataProvider<BlockAccess
         lines.add(JadeLines.line("ammo", ammo < 0 ? Component.translatable("gui.openmodularturrets.unlimited")
                 .withStyle(ChatFormatting.WHITE) : Component.literal(String.valueOf(ammo)).withStyle(ChatFormatting.WHITE)));
         lines.add(JadeLines.line("damage_amp", format(NbtCompat.getDouble(data, DAMAGE_AMP, 0)) + "%"));
-        lines.add(JadeLines.line("accuracy", format(NbtCompat.getDouble(data, ACCURACY, 0)) + "%"));
+        lines.add(JadeLines.line("inaccuracy", format(NbtCompat.getDouble(data, INACCURACY, 0)) + "%"));
         lines.add(JadeLines.line("rate_of_fire", format(NbtCompat.getDouble(data, RATE_OF_FIRE, 0)) + "/s"));
         return lines;
     }

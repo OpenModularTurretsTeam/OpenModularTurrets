@@ -92,7 +92,7 @@
   "death.attack.openmodularturrets.potato": "%s wurde von einer Kartoffelkanone zu Brei verarbeitet.",
   "death.attack.openmodularturrets.railgun": "%s wurde von einer Railgun durchlöchert..",
   "death.attack.openmodularturrets.rocket": "%s fand die Rakete am Ende des Regenbogens.",
-  "gui.openmodularturrets.accuracy": "Genauigkeit",
+  "gui.openmodularturrets.inaccuracy": "Ungenauigkeit",
   "gui.openmodularturrets.active": "Aktiv",
   "gui.openmodularturrets.addons": "Addons",
   "gui.openmodularturrets.ammo": "Mun./Treibst.",
