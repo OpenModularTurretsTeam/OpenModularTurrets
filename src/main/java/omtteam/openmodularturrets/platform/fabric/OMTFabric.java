@@ -22,6 +22,7 @@ public final class OMTFabric implements ModInitializer {
         OMTStartup.init(plugins());
         OMTStartup.registrationSteps().forEach(step -> step.register().run());
         FabricBlockLookups.register(ModBlockEntities.transferTypes());
+        FabricModuleEnabledCondition.register();
         ServerLivingEntityEvents.AFTER_DEATH.register(KillCounter::onDeath);
     }
 
