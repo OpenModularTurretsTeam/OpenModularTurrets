@@ -1,11 +1,14 @@
 package omtteam.openmodularturrets.core.base;
 
+import omtteam.openmodularturrets.core.item.AddonType;
+import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.settings.BaseTierStats;
 import omtteam.openmodularturrets.core.settings.LogicSettings;
 import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.TurretType;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -21,6 +24,8 @@ final class FakeSettings implements LogicSettings {
             new BaseTierStats(500, 50, 1, 1), new BaseTierStats(50000, 100, 1, 1), new BaseTierStats(150000, 1000, 2, 1),
             new BaseTierStats(500000, 2500, 3, 2), new BaseTierStats(10000000, 50000, 4, 2)};
     int[] expanderStacks = {1, 2, 3};
+    final Set<TurretBaseUpgradeType> disabledUpgrades = EnumSet.noneOf(TurretBaseUpgradeType.class);
+    final Set<AddonType> disabledAddons = EnumSet.noneOf(AddonType.class);
     int solar = 10;
     int reactor = 1600;
     boolean needAmmo = true;
@@ -69,6 +74,16 @@ final class FakeSettings implements LogicSettings {
     @Override
     public int expanderStacks(int tier) {
         return expanderStacks[tier - 1];
+    }
+
+    @Override
+    public boolean upgradeEnabled(TurretBaseUpgradeType type) {
+        return !disabledUpgrades.contains(type);
+    }
+
+    @Override
+    public boolean addonEnabled(AddonType type) {
+        return !disabledAddons.contains(type);
     }
 
     @Override

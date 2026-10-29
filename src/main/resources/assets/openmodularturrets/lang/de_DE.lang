@@ -223,6 +223,7 @@ text.openmodularturrets.turret.upgrade.scatter.flavour=Einfach mit mehr Kugeln s
 tooltip.openmodularturrets.upgrade.scatter.ignored=Rail Gun Turm, Nahkampf Turm, Verlangsamungsturm und Teleport Turm ignorieren dieses Upgrade.
 tooltip.openmodularturrets.upgrade.machine.turret_base=Passt in: Turmbasis
 tooltip.openmodularturrets.upgrade.machine.generator=Passt in: Generator
+tooltip.openmodularturrets.module_disabled=In der Konfiguration deaktiviert: ohne Wirkung
 
 text.openmodularturrets.turret.ammo.label=Munition für Türme
 text.openmodularturrets.turret.ammo.blazing_clay=Glühender Ton für den Feuer Turm.

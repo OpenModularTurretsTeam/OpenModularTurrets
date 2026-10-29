@@ -26,6 +26,10 @@
     {
       "type": "openmodularturrets:recipetype",
       "mod": "enderio"
+    },
+    {
+      "type": "openmodularturrets:module_enabled",
+      "items": ["upgrade_scatter_shot"]
     }
   ]
 }

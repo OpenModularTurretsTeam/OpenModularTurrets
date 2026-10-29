@@ -343,8 +343,9 @@ public class TurretBaseLogic {
         return slots.subList(0, Math.min(slots.size(), BaseTier.addonSlots(tier)));
     }
 
-    /** Number of upgrade items of a type (stack sizes count). */
+    /** Number of upgrade items of a type (stack sizes count); 0 while the upgrade is disabled in the config. */
     public int getUpgradeCount(TurretBaseUpgradeType type) {
+        if (!settings.upgradeEnabled(type)) return 0;
         int count = 0;
         for (ItemSlot slot : usableUpgradeSlots()) {
             if (slot.getCount() > 0 && slot.getUpgrade().filter(type::equals).isPresent()) count += slot.getCount();
@@ -352,8 +353,9 @@ public class TurretBaseLogic {
         return count;
     }
 
-    /** Number of addon items of a type (stack sizes count). */
+    /** Number of addon items of a type (stack sizes count); 0 while the addon is disabled in the config. */
     public int getAddonCount(AddonType type) {
+        if (!settings.addonEnabled(type)) return 0;
         int count = 0;
         for (ItemSlot slot : usableAddonSlots()) {
             if (slot.getCount() > 0 && slot.getAddon().filter(type::equals).isPresent()) count += slot.getCount();

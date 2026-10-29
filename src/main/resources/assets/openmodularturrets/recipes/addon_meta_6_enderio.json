@@ -34,6 +34,10 @@
     {
       "type": "openmodularturrets:recipetype",
       "mod": "enderio"
+    },
+    {
+      "type": "openmodularturrets:module_enabled",
+      "items": ["addon_solar_panel"]
     }
   ]
 }
