@@ -1,8 +1,12 @@
 {
-  "parent": "minecraft:block/orientable",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "top": "openmodularturrets:block/generator_top",
-    "front": "openmodularturrets:block/generator_front",
-    "side": "openmodularturrets:block/generator_side"
+    "particle": "openmodularturrets:block/generator_front",
+    "north": "openmodularturrets:block/generator_front",
+    "south": "openmodularturrets:block/generator_back",
+    "east": "openmodularturrets:block/generator_side_left",
+    "west": "openmodularturrets:block/generator_side_right",
+    "up": "openmodularturrets:block/generator_top",
+    "down": "openmodularturrets:block/generator_bottom"
   }
 }

@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Changed
+
+- New generator textures: every side has its own texture, and the tubes on the sides of a running generator are animated
+
 ## [4.0.0-beta.11] - 2026-10-27
 
 ### Added
