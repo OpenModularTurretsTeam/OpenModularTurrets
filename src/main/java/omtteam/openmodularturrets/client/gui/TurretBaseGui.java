@@ -23,6 +23,7 @@ import omtteam.omlib.util.DebugHandler;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.openmodularturrets.client.render.DisabledModuleOverlay;
 import omtteam.openmodularturrets.container.TurretBaseContainer;
 import omtteam.openmodularturrets.network.BasePackets;
 import omtteam.openmodularturrets.network.OMTNetworkingHandler;
@@ -218,6 +219,7 @@ public class TurretBaseGui extends LargeStackGui implements IHasTooltips, ISuppo
                 this.mc.renderEngine.bindTexture(new ResourceLocation(OMTNames.Textures.turretBaseTierFiveGUI));
         }
         this.drawEnergyBar();
+        DisabledModuleOverlay.renderSlotFrames(inventorySlots, guiLeft, guiTop);
     }
 
     @Override

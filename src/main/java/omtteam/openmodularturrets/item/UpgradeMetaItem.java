@@ -62,6 +62,10 @@ public class UpgradeMetaItem extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
+        // first, so it shows without shift
+        if (ModuleToggles.isDisabled(stack)) {
+            tooltip.add(TextFormatting.RED + safeLocalize("tooltip.openmodularturrets.module_disabled"));
+        }
         // which machine an upgrade fits into, also without shift (each machine has its own upgrades)
         tooltip.add(safeLocalize("tooltip.openmodularturrets.upgrade.machine.turret_base"));
         if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {

@@ -2,6 +2,10 @@ package omtteam.openmodularturrets.config;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Config;
+import omtteam.openmodularturrets.core.item.AddonType;
+import omtteam.openmodularturrets.core.item.GeneratorUpgradeType;
+import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
+import omtteam.openmodularturrets.core.item.UpgradeType;
 import omtteam.openmodularturrets.reference.Reference;
 
 import static omtteam.omlib.util.GeneralUtil.getItem;
@@ -24,6 +28,14 @@ public class OMTConfig {
     @Config.Name("Expanders")
     @Config.Comment("Inventory expanders per tier.")
     public static ConfigExpanders EXPANDERS = new ConfigExpanders();
+
+    @Config.Name("Upgrades")
+    @Config.Comment("Switches of the upgrades of every machine. A disabled upgrade has no recipe (needs a restart) and does nothing in a machine; installed ones stay in their slots and are marked red.")
+    public static ConfigUpgrades UPGRADES = new ConfigUpgrades();
+
+    @Config.Name("Addons")
+    @Config.Comment("Switches of the turret base addons. A disabled addon has no recipe (needs a restart) and does nothing in a base; installed ones stay in their slots and are marked red.")
+    public static ConfigAddons ADDONS = new ConfigAddons();
 
     public static void parseLists() {
         parseDisposableAmmoList();
@@ -210,6 +222,84 @@ public class OMTConfig {
                     return tierThree;
                 default:
                     throw new IllegalArgumentException("Invalid inventory expander tier: " + tier);
+            }
+        }
+    }
+
+    /** Switches of the upgrades of every machine (turret base and generator). */
+    public static class ConfigUpgrades {
+        @Config.Comment("Accuracy upgrade (turret base).")
+        public boolean accuracy = true;
+        @Config.Comment("Efficiency upgrade (turret base).")
+        public boolean efficiency = true;
+        @Config.Comment("Fire rate upgrade (turret base).")
+        public boolean fireRate = true;
+        @Config.Comment("Range upgrade (turret base).")
+        public boolean range = true;
+        @Config.Comment("Scattershot upgrade (turret base).")
+        public boolean scatterShot = true;
+        @Config.Comment("Energy multiplier upgrade (generator).")
+        public boolean energyMultiplier = true;
+
+        /** Whether the upgrade works and can be crafted; the creative upgrade has no item on 1.12, so no switch. */
+        public boolean isEnabled(UpgradeType type) {
+            if (type instanceof TurretBaseUpgradeType) {
+                switch ((TurretBaseUpgradeType) type) {
+                    case ACCURACY:
+                        return accuracy;
+                    case EFFICIENCY:
+                        return efficiency;
+                    case FIRE_RATE:
+                        return fireRate;
+                    case RANGE:
+                        return range;
+                    case SCATTERSHOT:
+                        return scatterShot;
+                    default:
+                        return true;
+                }
+            }
+            if (type == GeneratorUpgradeType.ENERGY_MULTIPLIER) return energyMultiplier;
+            return true;
+        }
+    }
+
+    /** Switches of the turret base addons (those with an item and a function). */
+    public static class ConfigAddons {
+        @Config.Comment("Concealer addon.")
+        public boolean concealer = true;
+        @Config.Comment("Damage amplifier addon.")
+        public boolean damageAmp = true;
+        @Config.Comment("Recycler addon.")
+        public boolean recycler = true;
+        @Config.Comment("Redstone reactor addon.")
+        public boolean redstoneReactor = true;
+        @Config.Comment("Serial port addon (computer access, with OpenComputers or ComputerCraft).")
+        public boolean serialPort = true;
+        @Config.Comment("Solar panel addon.")
+        public boolean solarPanel = true;
+        @Config.Comment("Fake drops addon.")
+        public boolean fakeDrops = true;
+
+        /** Whether the addon works and can be crafted; the potentia addon does nothing, so it has no switch. */
+        public boolean isEnabled(AddonType type) {
+            switch (type) {
+                case CONCEALER:
+                    return concealer;
+                case DAMAGE_AMP:
+                    return damageAmp;
+                case RECYCLER:
+                    return recycler;
+                case REDSTONE_REACTOR:
+                    return redstoneReactor;
+                case SERIAL_PORT:
+                    return serialPort;
+                case SOLAR_PANEL:
+                    return solarPanel;
+                case FAKE_DROPS:
+                    return fakeDrops;
+                default:
+                    return true;
             }
         }
     }

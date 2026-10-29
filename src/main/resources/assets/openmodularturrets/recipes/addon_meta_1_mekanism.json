@@ -25,6 +25,10 @@
     {
       "type": "openmodularturrets:recipetype",
       "mod": "mekanism"
+    },
+    {
+      "type": "openmodularturrets:module_enabled",
+      "items": ["addon_damage_amp"]
     }
   ]
 }
