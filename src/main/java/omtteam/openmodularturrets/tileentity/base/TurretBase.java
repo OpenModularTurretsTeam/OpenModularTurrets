@@ -695,12 +695,6 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
         return OMTConfig.BASES.allowBaseCamo;
     }
 
-    /** Transparent full blocks (glass, ice, leaves) are valid disguises, as on 1.20.1+. */
-    @Override
-    public boolean acceptsTransparentDisguises() {
-        return true;
-    }
-
     /** Only the tier 4 and 5 bases have adjustable light. */
     @Override
     public boolean supportsLight() {

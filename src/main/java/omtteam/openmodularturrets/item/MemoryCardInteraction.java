@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import omtteam.omlib.api.render.camo.DisguiseRules;
 import omtteam.omlib.api.render.camo.ICamoSupport;
 import omtteam.omlib.api.tile.IHasTrustManager;
 import omtteam.omlib.core.camo.CamoLight;
@@ -17,7 +18,6 @@ import omtteam.omlib.core.card.MemoryCardRules;
 import omtteam.omlib.core.security.PlayerInfo;
 import omtteam.omlib.core.security.TrustManager;
 import omtteam.omlib.reference.OMLibNames;
-import omtteam.omlib.util.camo.CamoRules;
 import omtteam.omlib.util.camo.CamoSettings;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.core.card.BaseCardRules;
@@ -139,7 +139,7 @@ public final class MemoryCardInteraction {
     /** The disguise for a stored id, if the block still exists and is a valid disguise. */
     @Nullable
     @SuppressWarnings("deprecation")
-    private static IBlockState disguiseById(String id, boolean allowTransparent) {
+    private static IBlockState disguiseById(String id, DisguiseRules rules) {
         int at = id.lastIndexOf('@');
         Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(at < 0 ? id : id.substring(0, at)));
         if (block == null || block.getRegistryName() == null || !id.startsWith(block.getRegistryName().toString())) {
@@ -151,7 +151,7 @@ public final class MemoryCardInteraction {
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
             return null;
         }
-        return CamoRules.isValidDisguise(state, allowTransparent) ? state : null;
+        return rules.isValidDisguise(state) ? state : null;
     }
 
     /** Disguise and light, each only if the player may change it. */
@@ -159,7 +159,7 @@ public final class MemoryCardInteraction {
                                      List<String> skipped) {
         boolean applied = false;
         if (host.canSetCamo(player)) {
-            IBlockState disguise = camo.disguise() == null ? host.getDefaultCamoState() : disguiseById(camo.disguise(), host.acceptsTransparentDisguises());
+            IBlockState disguise = camo.disguise() == null ? host.getDefaultCamoState() : disguiseById(camo.disguise(), host.getDisguiseRules());
             if (disguise != null) {
                 host.setCamoState(disguise);
                 applied = true;
