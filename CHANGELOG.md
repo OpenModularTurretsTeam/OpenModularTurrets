@@ -8,6 +8,8 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+## [4.0.0-beta.6] - 2026-10-29
+
 ### Added
 
 - Turret API: hit handlers for addon turrets, `ProjectileWeapon.onHit` and `RayWeapon.Builder.onEntityHit` (as on 1.20.1+)
@@ -42,6 +44,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - The arc turret's lightning is light blue, as on 1.20.1+
 - New generator textures, as on 1.20.1+: every side has its own texture, and the tubes on the sides of a running generator are animated
 - The crossbow turret fires crossbow bolts instead of vanilla arrows (as on 1.20.1+); arrows already in a base stay in its slots but are no longer used
+- Requires OMLib 4.0.0-beta.6 or newer
 
 ### Fixed
 
