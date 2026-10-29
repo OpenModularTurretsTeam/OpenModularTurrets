@@ -9,6 +9,7 @@ import omtteam.omlib.client.compat.ClientCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.GeneratorUpgradeItem;
+import omtteam.openmodularturrets.item.ModuleToggles;
 import omtteam.openmodularturrets.item.TurretBaseUpgradeItem;
 import omtteam.openmodularturrets.item.UpgradeItem;
 
@@ -29,6 +30,10 @@ public final class ModuleTooltip {
         boolean upgrade = stack.getItem() instanceof UpgradeItem;
         boolean addon = stack.getItem() instanceof AddonItem;
         if (!upgrade && !addon) return;
+        // switched off in the (server's) config: the item stays, but does nothing
+        if (ModuleToggles.isDisabled(stack)) {
+            lines.add(translated("module_disabled").withStyle(ChatFormatting.RED));
+        }
         // which machine an upgrade fits into, also without shift (each machine has its own upgrades)
         if (stack.getItem() instanceof TurretBaseUpgradeItem) {
             lines.add(text("upgrade.machine.turret_base"));

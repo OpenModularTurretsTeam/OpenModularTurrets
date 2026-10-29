@@ -4,6 +4,7 @@
   "package": "omtteam.openmodularturrets.client.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "GuiGraphicsMixin",
     "SpecialModelRenderersMixin"
   ],
   "injectors": {

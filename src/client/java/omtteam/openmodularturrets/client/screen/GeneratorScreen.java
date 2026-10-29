@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import omtteam.openmodularturrets.OMT;
+import omtteam.openmodularturrets.client.render.DisabledModuleOverlay;
 import omtteam.omlib.client.compat.ClientCompat;
 import omtteam.openmodularturrets.menu.GeneratorMenu;
 
@@ -59,5 +60,6 @@ public class GeneratorScreen extends LargeStackScreen<GeneratorMenu> {
         long capacity = menu.getCapacity();
         int filled = (int) (menu.getEnergy() * ENERGY_HEIGHT / (capacity == 0 ? 1 : capacity));
         ClientCompat.blit(graphics, TEXTURE, leftPos + 153, topPos + 17 + ENERGY_HEIGHT - filled, 196, 68 - filled, 14, filled);
+        DisabledModuleOverlay.renderSlotFrames(graphics, menu, leftPos, topPos);
     }
 }

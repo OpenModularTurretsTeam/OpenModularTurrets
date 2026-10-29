@@ -1,4 +1,12 @@
 {
+  "fabric:load_conditions": [
+    {
+      "condition": "openmodularturrets:module_enabled",
+      "items": [
+        "upgrade_scatter_shot"
+      ]
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
