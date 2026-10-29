@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+### Changed
+
+- The Hwyla and The One Probe turret tooltips show the inaccuracy (higher is less accurate, as on 1.20.1+) instead of an accuracy of 100 minus that value
+
 ## [4.0.0-beta.5] - 2026-10-27
 
 ### Added

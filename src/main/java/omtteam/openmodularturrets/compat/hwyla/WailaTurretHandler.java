@@ -64,7 +64,7 @@ public class WailaTurretHandler implements IOMLibWailaDataProvider {
             }
             currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.AMMO) + ": \u00A7F" + data.getInteger("ammoLevel"));
             currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": \u00A7F" + data.getString("ampLevel") + "%");
-            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.ACCURACY) + ": \u00A7F" + data.getString("accuracy") + "%");
+            currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.INACCURACY) + ": \u00A7F" + data.getString("inaccuracy") + "%");
             currenttip.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": \u00A7F" + data.getString("rof") + "s/sec");
         }
         return currenttip;
@@ -93,7 +93,7 @@ public class WailaTurretHandler implements IOMLibWailaDataProvider {
             }
             tag.setInteger("ammoLevel", turret.getAmmoLevel());
             tag.setString("ampLevel", String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * turret.getDamageAmpLevel()));
-            tag.setString("accuracy", String.format("%.2f", 100F - turret.getActualTurretAccuracyDeviation()));
+            tag.setString("inaccuracy", String.format("%.2f", Math.min(100D, turret.getActualTurretAccuracyDeviation())));
             tag.setString("rof", String.format("%.2f", 20F / turret.getFireCooldownTicks()));
         }
 

@@ -108,7 +108,7 @@ public class OMTNames {
             public static final String SINGLE = "text.openmodularturrets.gui.single";
             public static final String TURRET_BASE_DESCRIPTION = "text.openmodularturrets.gui.turret_base_description";
             public static final String TURRET_LEVER_DESCRIPTION = "text.openmodularturrets.gui.turret_lever_description";
-            public static final String ACCURACY = "text.openmodularturrets.gui.accuracy";
+            public static final String INACCURACY = "text.openmodularturrets.gui.inaccuracy";
             public static final String RATE_OF_FIRE = "text.openmodularturrets.gui.rof";
             public static final String DROP_TURRETS = "text.openmodularturrets.gui.drop_turrets";
             public static final String DROP_BASE = "text.openmodularturrets.gui.drop_base";

@@ -315,8 +315,8 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": §F"
                 + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * turret.getDamageAmpLevel()) + "%",
                 probeInfo.defaultTextStyle());
-        probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.ACCURACY) + ": §F"
-                + String.format("%.2f", Math.min(100F, 100F - turret.getActualTurretAccuracyDeviation())) + "%",
+        probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.INACCURACY) + ": §F"
+                + String.format("%.2f", Math.min(100D, turret.getActualTurretAccuracyDeviation())) + "%",
                 probeInfo.defaultTextStyle());
         probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": §F"
                 + String.format("%.2f", 20F / turret.getFireCooldownTicks()) + "s/sec", probeInfo.defaultTextStyle());
