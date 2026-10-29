@@ -1,0 +1,29 @@
+{
+  "result": {
+    "item": "openmodularturrets:melee_turret"
+  },
+  "pattern": [
+    " I ",
+    "ISI",
+    "CRC"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "S": {
+      "item": "openmodularturrets:intermediate_tiered",
+      "data": 0
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "cobblestone"
+    },
+    "R": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    }
+  }
+}

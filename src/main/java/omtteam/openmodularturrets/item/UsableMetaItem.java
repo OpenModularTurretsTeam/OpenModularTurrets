@@ -99,14 +99,23 @@ public class UsableMetaItem extends Item {
         }
     }
 
+    /**
+     * Only the memory card: the throwable bullet and grenade (meta 0 and 1) have no function and no recipe; they stay
+     * registered for 3.x worlds.
+     */
     @Override
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         if (isInCreativeTab(itemIn)) {
-            for (int i = 0; i < 3; i++) {
-                subItems.add(new ItemStack(this, 1, i));
-            }
+            subItems.add(new ItemStack(this, 1, 2));
         }
+    }
+
+    /** Memory cards do not stack (1.20.1+). */
+    @Override
+    @ParametersAreNonnullByDefault
+    public int getItemStackLimit(ItemStack stack) {
+        return stack.getItemDamage() == 2 ? 1 : super.getItemStackLimit(stack);
     }
 
     @Override

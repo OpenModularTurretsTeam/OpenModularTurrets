@@ -1,0 +1,32 @@
+{
+  "result": {
+    "item": "openmodularturrets:arc_turret"
+  },
+  "pattern": [
+    " L ",
+    "RCR",
+    "DID"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "L": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "R": {
+      "type": "forge:ore_dict",
+      "ore": "blockRedstone"
+    },
+    "C": {
+      "item": "openmodularturrets:intermediate_tiered",
+      "data": 8
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    },
+    "I": {
+      "item": "#IOBUS"
+    }
+  }
+}

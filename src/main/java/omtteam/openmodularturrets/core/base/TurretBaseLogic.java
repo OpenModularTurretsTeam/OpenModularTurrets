@@ -319,11 +319,10 @@ public class TurretBaseLogic {
         return Optional.of(new AmmoDraw(ammo, needed, damageBonus, false, item));
     }
 
-    /** Removes one item of a reactor fuel from the first ammo slot holding it; false if there is none. */
+    /** Removes one item of a reactor fuel from the first ammo slot that gives one out; false if there is none. */
     private boolean extractFuel(ReactorFuel fuel) {
         for (ItemSlot slot : world.getAmmoSlots()) {
-            if (slot.getCount() > 0 && slot.isReactorFuel(fuel)) {
-                slot.extract(1);
+            if (slot.getCount() > 0 && slot.isReactorFuel(fuel) && slot.extract(1) == 1) {
                 return true;
             }
         }

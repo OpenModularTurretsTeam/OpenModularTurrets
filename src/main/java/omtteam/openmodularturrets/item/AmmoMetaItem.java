@@ -39,7 +39,8 @@ public class AmmoMetaItem extends Item {
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         if (isInCreativeTab(itemIn)) {
-            for (int i = 0; i < 6; i++) {
+            // not the fake disposable ammo (meta 5): it has no function; it stays registered for 3.x worlds
+            for (int i = 0; i < 5; i++) {
                 subItems.add(new ItemStack(this, 1, i));
             }
         }

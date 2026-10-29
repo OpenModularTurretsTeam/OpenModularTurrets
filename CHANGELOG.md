@@ -8,9 +8,22 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+### Added
+
+- Recipes for the Melee, Crossbow, Arc and Plasma Turrets (as on 1.20.1+; the Arc Turret takes a gold ingot instead of a lightning rod)
+
 ### Changed
 
 - The Hwyla and The One Probe turret tooltips show the inaccuracy (higher is less accurate, as on 1.20.1+) instead of an accuracy of 100 minus that value
+
+### Fixed
+
+- Unbreakable turret bases (`baseBreakable=false`) were destroyed by explosions
+- The tier 3 turret base tooltip showed a raw translation key instead of "Energy"
+- Memory cards stacked; they now stack to 1
+- The functionless Throwable Bullet, Throwable Grenade and fake disposable ammo items are no longer in the creative tab
+- Tipped arrows were accepted as ammo but never fired
+- The redstone reactor counted fuel it could not take out of a slot
 
 ## [4.0.0-beta.5] - 2026-10-27
 

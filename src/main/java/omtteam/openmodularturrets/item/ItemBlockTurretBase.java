@@ -101,7 +101,7 @@ public class ItemBlockTurretBase extends ItemBlock {
                     return;
                 case 2:
                     tooltip.add("");
-                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturret.energy.label") + "--");
+                    tooltip.add(TextFormatting.AQUA + "--" + safeLocalize("text.openmodularturrets.energy.label") + "--");
                     tooltip.add(safeLocalize("text.openmodularturrets.rf.max") + ": " + TextFormatting.WHITE +
                                         OMTConfig.BASES.baseTierThree.baseMaxCharge);
                     tooltip.add(safeLocalize("text.openmodularturrets.rf.io") + ": " + TextFormatting.WHITE +
