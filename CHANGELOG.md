@@ -8,6 +8,11 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Added
+
+- Slowing and railgun turrets show ambient dust particles again, as on 1.12.2 (light grey; blue while the railgun is deployed)
+- Turret API: TurretDefinition.builder(...).ambientEffect(...) adds client particles to a placed turret
+
 ### Changed
 
 - New generator textures: every side has its own texture, and the tubes on the sides of a running generator are animated

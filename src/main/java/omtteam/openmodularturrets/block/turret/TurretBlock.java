@@ -28,6 +28,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import omtteam.omlib.block.ClaimLink;
 import omtteam.omlib.block.UnownedMarker;
+import omtteam.openmodularturrets.api.TurretDefinition;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import omtteam.omlib.compat.BlockCodec;
@@ -39,6 +40,7 @@ import omtteam.openmodularturrets.core.base.TurretPlacement;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.omlib.core.world.Face;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
+import omtteam.openmodularturrets.registry.TurretRegistry;
 import omtteam.omlib.security.PlayerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -232,10 +234,15 @@ public class TurretBlock extends CompatEntityBlock implements ClaimLink {
         return true;
     }
 
-    /** Sparkles while its base has no owner ({@link UnownedMarker}); not while concealed. */
+    /**
+     * The definition's {@link TurretDefinition.AmbientEffect ambient effect}, if it has one (also while concealed),
+     * then a sparkle while its base has no owner ({@link UnownedMarker}); not while concealed.
+     */
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         super.animateTick(state, level, pos, random);
+        TurretRegistry.find(turretType).map(TurretDefinition::ambientEffect)
+                .ifPresent(effect -> effect.spawn(level, pos, random));
         if (state.getValue(CONCEALED)) return;
         UnownedMarker.animateTick(level, pos, pos.relative(state.getValue(FACING).getOpposite()), random);
     }

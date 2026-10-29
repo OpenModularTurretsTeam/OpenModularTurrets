@@ -51,6 +51,10 @@ That matters for the weapon's sound: create the `SoundEvent` in a static field (
 OMT then registers a `TurretBlock` and a `BlockItem` with the id `example:flak_turret` and adds it to its turret block entity type.
 Get them with `OMTApi.block(type)` / `OMTApi.item(type)` once loading is done (not inside `registerTurrets`).
 
+`TurretDefinition.builder(type, weapon, stats).ambientEffect((level, pos, random) -> …).build()` adds client particles around the placed turret.
+The turret block calls the effect from `animateTick` (client only), also while the turret is concealed; spawn the particles with `level.addParticle`.
+The built-in slowing and railgun turrets use it for their coloured dust, as on 1.12.2.
+
 ### `TurretType` options
 
 | Builder call | Effect |

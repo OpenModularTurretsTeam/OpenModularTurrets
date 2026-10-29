@@ -1,9 +1,11 @@
 package omtteam.openmodularturrets.registry;
 
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.state.BlockState;
 import omtteam.openmodularturrets.api.AmmoDefinition;
 import omtteam.openmodularturrets.api.TurretDefinition;
 import omtteam.openmodularturrets.api.TurretRegistrar;
@@ -12,6 +14,7 @@ import omtteam.openmodularturrets.api.weapon.EffectWeapon;
 import omtteam.openmodularturrets.api.weapon.ProjectileWeapon;
 import omtteam.openmodularturrets.api.weapon.RayWeapon;
 import omtteam.openmodularturrets.api.weapon.TurretWeapon;
+import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.turret.EffectWeapons;
 import omtteam.openmodularturrets.blockentity.turret.RayWeapons;
 import omtteam.omlib.compat.VersionCompat;
@@ -25,6 +28,9 @@ import omtteam.openmodularturrets.entity.projectile.RocketProjectile;
 import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
 import omtteam.openmodularturrets.inventory.AmmoRules;
 import org.jetbrains.annotations.Nullable;
+//? if <1.21.2 {
+import org.joml.Vector3f;
+//?}
 
 import static omtteam.openmodularturrets.api.weapon.RayWeapon.argb;
 
@@ -41,7 +47,11 @@ final class BuiltinTurrets {
         ConfigData.Turrets defaults = new ConfigData.Turrets();
         for (TurretType type : TurretType.values()) {
             if (type.isBuiltIn()) {
-                registrar.registerTurret(new TurretDefinition(type, weapon(type), defaults.get(type).toStats()));
+                TurretDefinition.Builder definition = TurretDefinition.builder(type, weapon(type),
+                        defaults.get(type).toStats());
+                TurretDefinition.AmbientEffect effect = ambientEffect(type);
+                if (effect != null) definition.ambientEffect(effect);
+                registrar.registerTurret(definition.build());
             }
         }
     }
@@ -99,6 +109,35 @@ final class BuiltinTurrets {
                 .color(argb(1F, 0.5F, 0F, 0.2F)).duration(3).hitSound(ModSounds.RAIL_GUN_HIT)
                 .damageTypes(null, ModDamageTypes.RAILGUN).onBlockHit(RayWeapons::railgunBlockHit).build();
         throw new IllegalArgumentException("No built-in weapon for " + type);
+    }
+
+    /** 1.12.2 ambient particles: slowing turret light grey dust, railgun blue dust while deployed. */
+    @Nullable
+    private static TurretDefinition.AmbientEffect ambientEffect(TurretType type) {
+        if (type == TurretType.SLOWING_TURRET) return dust(0.8F, 0.8F, 0.8F, false);
+        if (type == TurretType.RAILGUN_TURRET) return dust(0.1F, 0.2F, 0.8F, true);
+        return null;
+    }
+
+    /**
+     * 1.12.2 {@code BlockTurret.dust}: six specks of coloured dust around the block centre (Gaussian, ±0.1); with
+     * {@code onlyDeployed} not while the turret is concealed.
+     */
+    private static TurretDefinition.AmbientEffect dust(float red, float green, float blue, boolean onlyDeployed) {
+        //? if >=1.21.2 {
+        /*DustParticleOptions dust = new DustParticleOptions(
+                ((int) (red * 255) << 16) | ((int) (green * 255) << 8) | (int) (blue * 255), 1.0F);
+        *///?} else {
+        DustParticleOptions dust = new DustParticleOptions(new Vector3f(red, green, blue), 1.0F);
+        //?}
+        return (level, pos, random) -> {
+            BlockState state = level.getBlockState(pos);
+            if (onlyDeployed && state.getBlock() instanceof TurretBlock && state.getValue(TurretBlock.CONCEALED)) return;
+            for (int i = 0; i < 6; i++) {
+                level.addParticle(dust, pos.getX() + 0.5D + random.nextGaussian() / 10, pos.getY() + 0.5D,
+                        pos.getZ() + 0.5D + random.nextGaussian() / 10, 0.0D, 0.0D, 0.0D);
+            }
+        };
     }
 
     /**
