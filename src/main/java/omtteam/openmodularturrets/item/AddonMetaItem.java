@@ -110,10 +110,18 @@ public class AddonMetaItem extends Item {
                     tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.recycler.1"));
                     tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.recycler.2"));
                     tooltip.add("");
-                    tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.recycler.flavour"));
                     return;
                 case 4:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.RED + safeLocalize("text.openmodularturrets.turret.addon.label"));
+                    tooltip.add("");
+                    tooltip.add(safeLocalize(
+                            "text.openmodularturrets.turret.addon.redstone.a") + " " + OMTConfig.MISCELLANEOUS.redstoneReactorAddonGen + " " + safeLocalize(
+                            "text.openmodularturrets.turret.addon.redstone.b"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.redstone.c"));
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.redstone.flavour"));
                     return;
                 case 5:
                     tooltip.add("");
@@ -140,6 +148,9 @@ public class AddonMetaItem extends Item {
                     tooltip.add("");
                     tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.fakedrops.a"));
                     tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.fakedrops.b"));
+                    // without this addon turret kills drop nothing, more addons add Looting
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.fakedrops.c"));
+                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.fakedrops.d"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.fakedrops.flavour"));
             }

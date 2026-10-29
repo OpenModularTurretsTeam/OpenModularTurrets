@@ -29,6 +29,8 @@ final class MemoryCardTooltip {
     private static final String TOOLTIP = "tooltip.openmodularturrets.memory_card.";
     /** Trusted players listed before the rest is summarized. */
     private static final int MAX_LISTED_PLAYERS = 8;
+    /** OMLib's access level names, followed by {@code AccessLevel.getSerializedName()}. */
+    private static final String ACCESS_LEVEL = "gui.omtteam.omlib:access_level_";
 
     private MemoryCardTooltip() {
     }
@@ -43,49 +45,64 @@ final class MemoryCardTooltip {
             return;
         }
         lines.add(TextFormatting.AQUA + safeLocalize(TOOLTIP + "source." + data.source().name().toLowerCase()));
-        MemoryCardData.BaseSettings base = data.base();
-        if (base != null) {
-            lines.add("");
-            lines.add(TextFormatting.GOLD + safeLocalize(TOOLTIP + "base.label"));
-            lines.add(line(safeLocalize(OMLibNames.Localizations.GUI.MODE),
-                    getMachineModeLocalization(EnumMachineMode.fromCore(base.mode()))));
-            lines.add(line(safeLocalize(OMTNames.Localizations.GUI.MULTI_TARGETING),
-                    getColoredBooleanLocalizationYesNo(base.multiTargeting())));
-            lines.add(line(safeLocalize(OMLibNames.Localizations.GUI.ATTACK_MOBS),
-                    getColoredBooleanLocalizationYesNo(base.targetMobs())));
-            lines.add(line(safeLocalize(OMLibNames.Localizations.GUI.ATTACK_NEUTRALS),
-                    getColoredBooleanLocalizationYesNo(base.targetPassive())));
-            lines.add(line(safeLocalize(OMLibNames.Localizations.GUI.ATTACK_PLAYERS),
-                    getColoredBooleanLocalizationYesNo(base.targetPlayers())));
-            lines.add(line(safeLocalize(TOOLTIP + "range"), TextFormatting.WHITE + String.valueOf(base.range())));
+        if (data.base() != null) {
+            appendBase(data.base(), lines);
         }
-        List<TrustedPlayer> trusted = data.trust().trustedPlayers();
+        appendTrust(data.trust(), lines);
+        if (data.camo() != null) {
+            appendCamo(data.camo(), lines);
+        }
+    }
+
+    private static void appendBase(MemoryCardData.BaseSettings base, List<String> lines) {
         lines.add("");
-        lines.add(TextFormatting.GOLD + safeLocalize(TOOLTIP + "trust.label") + ": " + TextFormatting.WHITE
-                + trusted.size());
+        lines.add(heading("base"));
+        lines.add(line(OMLibNames.Localizations.GUI.MODE,
+                TextFormatting.GREEN + getMachineModeLocalization(EnumMachineMode.fromCore(base.mode()))));
+        lines.add(line(OMTNames.Localizations.GUI.TARGET, TextFormatting.WHITE + safeLocalize(
+                base.multiTargeting() ? OMTNames.Localizations.GUI.MULTI : OMTNames.Localizations.GUI.SINGLE)));
+        lines.add(line(OMLibNames.Localizations.GUI.ATTACK_MOBS, getColoredBooleanLocalizationYesNo(base.targetMobs())));
+        lines.add(line(OMLibNames.Localizations.GUI.ATTACK_NEUTRALS,
+                getColoredBooleanLocalizationYesNo(base.targetPassive())));
+        lines.add(line(OMLibNames.Localizations.GUI.ATTACK_PLAYERS,
+                getColoredBooleanLocalizationYesNo(base.targetPlayers())));
+        lines.add(line(OMTNames.Localizations.GUI.RANGE, TextFormatting.WHITE + String.valueOf(base.range())));
+    }
+
+    private static void appendTrust(MemoryCardData.TrustSettings settings, List<String> lines) {
+        lines.add("");
+        lines.add(heading("trust"));
+        List<TrustedPlayer> trusted = settings.trustedPlayers();
+        lines.add(line(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS, TextFormatting.WHITE + String.valueOf(trusted.size())));
         for (TrustedPlayer player : trusted.subList(0, Math.min(MAX_LISTED_PLAYERS, trusted.size()))) {
-            lines.add(TextFormatting.GRAY + "  " + player.getName());
+            lines.add(TextFormatting.GRAY + "  " + player.getName() + " " + TextFormatting.DARK_GRAY
+                    + safeLocalize(ACCESS_LEVEL + player.getAccessLevel().getSerializedName()));
         }
         if (trusted.size() > MAX_LISTED_PLAYERS) {
             lines.add(TextFormatting.DARK_GRAY
                     + I18n.format(TOOLTIP + "more_players", trusted.size() - MAX_LISTED_PLAYERS));
         }
-        MemoryCardData.CamoSettings camo = data.camo();
-        if (camo != null) {
-            lines.add("");
-            lines.add(TextFormatting.GOLD + safeLocalize(TOOLTIP + "camo.label"));
-            lines.add(line(safeLocalize("text.omlib.camo.disguise"), disguiseName(camo.disguise())));
-            if (camo.light() != null) {
-                lines.add(line(safeLocalize("text.omlib.camo.light_value"),
-                        TextFormatting.WHITE + String.valueOf(camo.light().value())));
-                lines.add(line(safeLocalize("text.omlib.camo.light_opacity"),
-                        TextFormatting.WHITE + String.valueOf(camo.light().opacity())));
-            }
+    }
+
+    private static void appendCamo(MemoryCardData.CamoSettings camo, List<String> lines) {
+        lines.add("");
+        lines.add(heading("camo"));
+        lines.add(line("text.omlib.camo.disguise", disguiseName(camo.disguise())));
+        if (camo.light() != null) {
+            lines.add(line("text.omlib.camo.light_value", TextFormatting.WHITE + String.valueOf(camo.light().value())));
+            lines.add(line("text.omlib.camo.light_opacity",
+                    TextFormatting.WHITE + String.valueOf(camo.light().opacity())));
         }
     }
 
-    private static String line(String label, String value) {
-        return TextFormatting.GRAY + label + ": " + value;
+    /** A yellow "--Section--" heading. */
+    private static String heading(String section) {
+        return TextFormatting.YELLOW + "--" + safeLocalize(TOOLTIP + section + ".label") + "--";
+    }
+
+    /** Gold "Label: " followed by the value, which brings its own colour. */
+    private static String line(String labelKey, String value) {
+        return TextFormatting.GOLD + safeLocalize(labelKey) + ": " + value;
     }
 
     /** The item name of a stored disguise ({@code registry@meta}), or "none". */

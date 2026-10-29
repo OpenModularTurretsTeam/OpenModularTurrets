@@ -18,7 +18,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import omtteam.omlib.api.network.ISyncableTE;
 import omtteam.omlib.api.permission.TrustedPlayersManager;
 import omtteam.omlib.api.render.camo.ICamoSupport;
@@ -468,7 +467,7 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
 
     // Getters and Setters
     /** The whole inventory: ammo, addon and upgrade slots. */
-    public IItemHandlerModifiable getInventory() {
+    public TurretBaseInventory getInventory() {
         return inventory;
     }
 

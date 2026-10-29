@@ -11,10 +11,21 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 ### Added
 
 - Recipes for the Melee, Crossbow, Arc and Plasma Turrets (as on 1.20.1+; the Arc Turret takes a gold ingot instead of a lightning rod)
+- "Sort Ammo" button in the turret base GUI (as on 1.20.1+): merges equal ammo and sorts Minecraft items first, then Open Modular Turrets ammo, then other mods'
 
 ### Changed
 
 - The Hwyla and The One Probe turret tooltips show the inaccuracy (higher is less accurate, as on 1.20.1+) instead of an accuracy of 100 minus that value
+- The info panel of the turret base GUI sits at a fixed place left of the GUI and shows "none" as the owner of an unowned base, as on 1.20.1+
+- The configure screen of the turret base sits where it does on 1.20.1+, with the Camouflage button lower and without its "Camouflage:" label
+- Upgrade tooltips show which machine they fit into (Turret Base or Generator), and the Scatter Shot tooltip names the turrets that ignore it
+- The Fake Drops addon tooltip is worded as on 1.20.1+
+- The generator tooltip shows its description only while Shift is held
+- The Disposable Item Turret tooltip names its ammo as "Cobblestone, planks and more (see config)"
+- The memory card tooltip shows the settings as on 1.20.1+: section headings, target mode, trusted players with their access levels
+- Hwyla and The One Probe show "Damage Boost", "Rate of Fire" in /s and "Unlimited" ammo, with the colours of 1.20.1+ (green for unowned blocks)
+- Turret stats in Hwyla and The One Probe are only shown to players who may open the base; turrets without a base or concealed show nothing
+- Hwyla and The One Probe show a camouflaged turret base as its disguise to players who may not open it
 
 ### Fixed
 
@@ -24,6 +35,12 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - The functionless Throwable Bullet, Throwable Grenade and fake disposable ammo items are no longer in the creative tab
 - Tipped arrows were accepted as ammo but never fired
 - The redstone reactor counted fuel it could not take out of a slot
+- The Redstone Reactor addon had no tooltip
+- The Recycler addon tooltip had an extra blank line
+
+### Removed
+
+- The One Probe no longer shows a turret's base damage (as Jade on 1.20.1+)
 
 ## [4.0.0-beta.5] - 2026-10-27
 

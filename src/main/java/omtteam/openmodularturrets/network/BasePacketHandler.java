@@ -16,7 +16,8 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 
 /**
- * Server handlers for {@link BasePackets}. Each action requires the access level the 3.x message handler checked.
+ * Server handlers for {@link BasePackets}. Each action requires the access level the 3.x message handler checked (the
+ * ammo sort: opening the GUI, as on 1.20.1+).
  */
 public final class BasePacketHandler {
     private BasePacketHandler() {
@@ -33,10 +34,21 @@ public final class BasePacketHandler {
         return base;
     }
 
+    /** The access level an action needs, as on 1.20.1+. */
+    private static BiPredicate<EntityPlayerMP, TurretBase> requiredAccess(BasePackets.Action action) {
+        switch (action) {
+            case TOGGLE_MULTI_TARGETING:
+                return PlayerUtil::canPlayerChangeSetting;
+            case SORT_AMMO:
+                // whoever opens the GUI can move the ammo by hand too
+                return PlayerUtil::canPlayerAccessBlock;
+            default:
+                return PlayerUtil::isPlayerAdmin;
+        }
+    }
+
     static void handleAction(BasePackets.SimpleAction message, EntityPlayerMP player) {
-        BiPredicate<EntityPlayerMP, TurretBase> access = message.action == BasePackets.Action.TOGGLE_MULTI_TARGETING
-                ? PlayerUtil::canPlayerChangeSetting : PlayerUtil::isPlayerAdmin;
-        authorize(player, message.pos, access).ifPresent(base -> {
+        authorize(player, message.pos, requiredAccess(message.action)).ifPresent(base -> {
             switch (message.action) {
                 case TOGGLE_MODE:
                     base.toggleMode();
@@ -51,6 +63,9 @@ public final class BasePacketHandler {
                     break;
                 case DROP_TURRETS:
                     dropTurrets(player.getEntityWorld(), message.pos);
+                    break;
+                case SORT_AMMO:
+                    base.getInventory().sortAmmo();
                     break;
                 default:
             }

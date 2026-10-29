@@ -62,6 +62,8 @@ public class UpgradeMetaItem extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
+        // which machine an upgrade fits into, also without shift (each machine has its own upgrades)
+        tooltip.add(safeLocalize("tooltip.openmodularturrets.upgrade.machine.turret_base"));
         if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
             tooltip.add(GeneralUtil.getShiftDetail());
         } else {
@@ -109,6 +111,7 @@ public class UpgradeMetaItem extends Item {
                     tooltip.add("");
                     tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.scatter.a"));
                     tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.scatter.b"));
+                    tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.openmodularturrets.upgrade.scatter.ignored"));
                     tooltip.add("");
                     tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.stacks"));
                     tooltip.add("");

@@ -6,12 +6,14 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 import omtteam.omlib.inventory.AutomationItemHandler;
 import omtteam.omlib.inventory.LargeStackItemHandler;
 import omtteam.openmodularturrets.core.base.BaseTier;
+import omtteam.openmodularturrets.core.storage.AmmoSort;
 import omtteam.openmodularturrets.core.storage.SlotCapacity;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -78,6 +80,59 @@ public class TurretBaseInventory extends LargeStackItemHandler {
     @Override
     protected void onContentsChanged(int slot) {
         onChange.run();
+    }
+
+    /**
+     * Sorts the ammo slots (the GUI's "Sort Ammo" button, as on 1.20.1+) in the order of {@link AmmoSort}: equal items
+     * merge up to the slot limit, Minecraft's items first, Open Modular Turrets' next, other mods' last. Leaves the
+     * slots as they are if the merged items would need more than {@link #AMMO_COUNT} slots (slots above their limit
+     * after an inventory expander was removed).
+     */
+    public void sortAmmo() {
+        List<AmmoSort.Stack<ItemStack>> filled = new ArrayList<>();
+        for (int slot = AMMO_START; slot < AMMO_START + AMMO_COUNT; slot++) {
+            ItemStack stack = stacks.get(slot);
+            if (!stack.isEmpty()) {
+                filled.add(new AmmoSort.Stack<>(stack, stack.getCount()));
+            }
+        }
+        Optional<List<AmmoSort.Stack<ItemStack>>> sorted = AmmoSort.sort(filled, AMMO_COUNT, new AmmoItems());
+        if (!sorted.isPresent()) {
+            return;
+        }
+        for (int i = 0; i < AMMO_COUNT; i++) {
+            ItemStack stack = ItemStack.EMPTY;
+            if (i < sorted.get().size()) {
+                AmmoSort.Stack<ItemStack> entry = sorted.get().get(i);
+                stack = entry.getItem().copy();
+                stack.setCount(entry.getCount());
+            }
+            stacks.set(AMMO_START + i, stack);
+        }
+        onContentsChanged(AMMO_START);
+    }
+
+    /** The item stacks of the ammo slots as {@link AmmoSort} sees them. */
+    private class AmmoItems implements AmmoSort.Items<ItemStack> {
+        @Override
+        public boolean isSameKind(ItemStack a, ItemStack b) {
+            return ItemStack.areItemsEqual(a, b) && ItemStack.areItemStackTagsEqual(a, b);
+        }
+
+        @Override
+        public String registryName(ItemStack stack) {
+            return String.valueOf(stack.getItem().getRegistryName());
+        }
+
+        @Override
+        public String variantName(ItemStack stack) {
+            return stack.getTranslationKey();
+        }
+
+        @Override
+        public int slotLimit(ItemStack stack) {
+            return getSlotLimit(AMMO_START, stack);
+        }
     }
 
     /** The ammo slots, the part of the inventory other blocks may use. */

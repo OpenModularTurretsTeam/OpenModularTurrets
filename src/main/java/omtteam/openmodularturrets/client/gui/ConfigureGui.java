@@ -38,8 +38,13 @@ import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
 
 public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBackSystem {
     protected final int xSize = 176;
+    /**
+     * Height the screen is centred with, as on 1.20.1+ ({@code ConfigureScreen.HEIGHT}): 3.x had two light sliders
+     * below the panel; the rows of {@code configure.png} below the panel are transparent.
+     */
+    protected final int ySize = 205;
     /** Height of the panel in {@code configure.png}. */
-    protected final int ySize = 166;
+    private static final int PANEL_HEIGHT = 166;
     private final TurretBase base;
     private final EntityPlayer player;
     protected int guiLeft;
@@ -75,7 +80,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
             this.buttonList.add(new GuiButton(3, guiLeft + 10, guiTop + 95, 155, 20, safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS)));
         }
         if (base.isCamoEnabled() && (base.canSetCamo(player) || base.canChangeLight(player))) {
-            this.buttonList.add(new GuiButton(4, guiLeft + 10, guiTop + 132, 155, 20,
+            this.buttonList.add(new GuiButton(4, guiLeft + 10, guiTop + 135, 155, 20,
                                               safeLocalize(OMTNames.Localizations.GUI.CAMOUFLAGE)));
         }
         this.buttonList.add(new GuiButton(6, guiLeft + 185, guiTop + 20, 80, 20, safeLocalize(OMLibNames.Localizations.GUI.BACK)));
@@ -123,14 +128,11 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
         ResourceLocation texture = (new ResourceLocation(OMTNames.Textures.configureGUI));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
-        this.drawTexturedModalRect((width - xSize) / 2, (height - ySize) / 2, 0, 0, xSize, ySize);
+        this.drawTexturedModalRect((width - xSize) / 2, (height - ySize) / 2, 0, 0, xSize, PANEL_HEIGHT);
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
         fontRenderer.drawString(safeLocalize(OMLibNames.Localizations.GUI.TARGETING_OPTIONS) + ": ", guiLeft + 10, guiTop + 9, 0);
         if (accessLevel > 2) {
             fontRenderer.drawString(safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS) + ": ", guiLeft + 10, guiTop + 84, 0);
-        }
-        if (base.isCamoEnabled() && (base.canSetCamo(player) || base.canChangeLight(player))) {
-            fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.CAMOUFLAGE) + ": ", guiLeft + 10, guiTop + 121, 0);
         }
         buttonList.get(0).displayString = safeLocalize(OMLibNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
         buttonList.get(1).displayString = safeLocalize(OMLibNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));

@@ -1,8 +1,10 @@
 package omtteam.openmodularturrets.block.base;
 
+import mcjty.theoneprobe.api.IProbeConfig;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
+import mcjty.theoneprobe.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -33,9 +35,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.block.IHasItemBlock;
 import omtteam.omlib.block.BlockAbstractCamoTileEntity;
 import omtteam.omlib.block.UnownedMarker;
-import omtteam.omlib.compat.theoneprobe.TOPInfoProvider;
+import omtteam.omlib.compat.theoneprobe.TOPCompatibility;
+import omtteam.omlib.compat.theoneprobe.TOPInfoModifier;
 import omtteam.omlib.reference.OMLibNames;
-import omtteam.omlib.util.EnumMachineMode;
 import omtteam.omlib.util.player.Player;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.omlib.util.world.WorldUtil;
@@ -45,6 +47,7 @@ import omtteam.openmodularturrets.item.ItemBlockTurretBase;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
+import omtteam.openmodularturrets.tileentity.base.TurretBaseOverlay;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -53,12 +56,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static omtteam.omlib.compat.theoneprobe.TOPCompatibility.getLocalizationString;
-import static omtteam.omlib.util.GeneralUtil.*;
+import static mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoProvider.showStandardBlockInfo;
 import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
 import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntities;
 
-public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHasItemBlock, TOPInfoProvider {
+public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHasItemBlock, TOPInfoModifier {
     public static final PropertyInteger TIER = PropertyInteger.create("tier", 1, 5);
     public static final PropertyInteger LIGHT_VALUE = PropertyInteger.create("light_value", 0, 15);
     public static final PropertyInteger LIGHT_OPACITY = PropertyInteger.create("light_opacity", 0, 15);
@@ -329,23 +331,25 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
         UnownedMarker.randomDisplayTick(world, pos, random);
     }
 
+    /**
+     * Replaces The One Probe's block info (1.20.1+ Jade): players who may not open the base see its disguise and
+     * nothing else, the others the base and the lines of {@link TurretBaseOverlay}.
+     */
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         TileEntity te = world.getTileEntity(data.getPos());
+        IProbeConfig config = Config.getRealConfig();
+        if (te instanceof TurretBase && TurretBaseOverlay.isDisguisedFor((TurretBase) te, blockState, player)) {
+            IBlockState camo = ((TurretBase) te).getCamoState();
+            showStandardBlockInfo(config, mode, probeInfo, camo, camo.getBlock(), world, data.getPos(), player, data);
+            return;
+        }
+        showStandardBlockInfo(config, mode, probeInfo, blockState, this, world, data.getPos(), player, data);
         if (te instanceof TurretBase) {
-            TurretBase base = (TurretBase) te;
-            EnumMachineMode machineMode = base.getMode();
-            boolean active = base.isActive();
-            probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.MODE) + ": \u00A7A"
-                                   + getLocalizationString(getMachineModeUnlocalization(machineMode)), probeInfo.defaultTextStyle());
-
-            probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.ACTIVE)
-                                   + ": " + getColoredBooleanColor(active) + getLocalizationString(getBooleanUnlocalizationYesNo(active)), probeInfo.defaultTextStyle());
-
-            String ownerName = base.getOwnerOrNull() == null ? getLocalizationString("text.omlib.unowned")
-                    : base.getOwner().getName();
-            probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.OWNER)
-                                   + ": \u00A7F" + ownerName, probeInfo.defaultTextStyle());
+            for (String line : TurretBaseOverlay.lines(TurretBaseOverlay.data((TurretBase) te),
+                    TOPCompatibility::getLocalizationString)) {
+                probeInfo.text(line, probeInfo.defaultTextStyle());
+            }
         }
     }
 }

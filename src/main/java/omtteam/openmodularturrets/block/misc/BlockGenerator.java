@@ -30,6 +30,7 @@ import omtteam.omlib.util.inventory.InvUtil;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.misc.GeneratorTileEntity;
+import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -161,6 +162,10 @@ public class BlockGenerator extends Block {
     @SideOnly(Side.CLIENT)
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+        if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
+            tooltip.add(GeneralUtil.getShiftDetail());
+            return;
+        }
         tooltip.add(TextFormatting.GRAY + GeneralUtil.safeLocalize("tooltip.openmodularturrets.generator"));
     }
 

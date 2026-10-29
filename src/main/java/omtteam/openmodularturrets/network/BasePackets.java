@@ -7,7 +7,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 /**
  * C2S messages of the base and configure GUIs, as on 1.20.1+. They replace the 3.x {@code MessageAdjustRange},
  * {@code MessageToggleMode}, {@code MessageSetBaseTargetingType}, {@code MessageToggleAttack*},
- * {@code MessageDropBase} and {@code MessageDropTurrets}; {@link BasePacketHandler} handles them.
+ * {@code MessageDropBase} and {@code MessageDropTurrets} (plus the ammo sort of 1.20.1+); {@link BasePacketHandler}
+ * handles them.
  */
 public final class BasePackets {
     private BasePackets() {
@@ -22,7 +23,9 @@ public final class BasePackets {
         /** Admin: destroy the base (drops it). */
         DROP_BASE,
         /** Admin: destroy all attached turrets (drops them). */
-        DROP_TURRETS
+        DROP_TURRETS,
+        /** Open GUI: sort the ammo slots ({@code TurretBaseInventory.sortAmmo}). */
+        SORT_AMMO
     }
 
     public enum TargetCategory {

@@ -49,8 +49,10 @@ public class TurretBaseGui extends LargeStackGui implements IHasTooltips, ISuppo
     private final TurretBase base;
     private final TurretBaseContainer container;
     private final EntityPlayer player;
-    /** Space between the info panel and the GUI. */
-    private static final int INFO_PANEL_GAP = 4;
+    /** The info panel's text starts this far left of the GUI (as on 1.20.1+, whatever the width of the text). */
+    private static final int INFO_PANEL_X = -128;
+    /** The info panel's text starts this far below the top of the GUI (as on 1.20.1+). */
+    private static final int INFO_PANEL_Y = 17;
     private int mouseX;
     private int mouseY;
     private int accessLevel = 0;
@@ -118,6 +120,8 @@ public class TurretBaseGui extends LargeStackGui implements IHasTooltips, ISuppo
             this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "+"));
             this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "-"));
         }
+        // for everyone who opens the GUI, below the admin buttons
+        this.buttonList.add(new GuiButton(8, x + 180, y + 125, 80, 20, safeLocalize(OMTNames.Localizations.GUI.SORT_AMMO)));
     }
 
     @Override
@@ -188,6 +192,9 @@ public class TurretBaseGui extends LargeStackGui implements IHasTooltips, ISuppo
         if (guibutton.id == 7) {
             sendToggleModeToServer();
         }
+        if (guibutton.id == 8) {
+            sendAction(BasePackets.Action.SORT_AMMO);
+        }
 
     }
 
@@ -222,7 +229,7 @@ public class TurretBaseGui extends LargeStackGui implements IHasTooltips, ISuppo
         fontRenderer.drawString(base.getTier() > 1 ? safeLocalize(OMTNames.Localizations.GUI.ADDONS) : "", 71, 6, 0);
         fontRenderer.drawString(base.getTier() > 1 ? safeLocalize(OMTNames.Localizations.GUI.UPGRADES) : "", 71, 39, 0);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.AMMO), 8, 6, 0);
-        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.INVENTORY), 8, ySize - 97 + 4, 0);
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.INVENTORY), 8, ySize - 94, 0);
 
         fontRenderer.drawStringWithShadow("" + base.getTargetingSettings().getRange(), String.valueOf(base.getRange()).length() == 1 ?
                 127 : 124, 39, base.getTargetingSettings().getRange() == getBaseUpperBoundRange() ? 16724530 : 40000);
@@ -231,7 +238,7 @@ public class TurretBaseGui extends LargeStackGui implements IHasTooltips, ISuppo
         ArrayList<String> targetInfo = new ArrayList<>();
 
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7f"
-                + (base.getOwnerOrNull() == null ? safeLocalize("text.omlib.unowned") : base.getOwner().getName()));
+                + (base.getOwnerOrNull() == null ? safeLocalize(OMTNames.Localizations.GUI.NONE) : base.getOwner().getName()));
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7f" + getMachineModeLocalization(base.getMode()));
         boolean isCurrentlyOn = base.isActive();
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(isCurrentlyOn));
@@ -255,13 +262,9 @@ public class TurretBaseGui extends LargeStackGui implements IHasTooltips, ISuppo
         targetInfo.add("\u00A77" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
         targetInfo.add("\u00A77" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
 
-        // the info panel sits left of the GUI: Forge draws a tooltip from 12 px right of the given point and adds a
-        // 3 px border, so place it by its width (a fixed x let long lines run over the GUI)
-        int infoWidth = 0;
-        for (String line : targetInfo) {
-            infoWidth = Math.max(infoWidth, fontRenderer.getStringWidth(line));
-        }
-        this.drawHoveringText(targetInfo, -infoWidth - 12 - 3 - INFO_PANEL_GAP, 17, fontRenderer);
+        // the info panel sits left of the GUI at a fixed place, as on 1.20.1+: Forge draws a tooltip's text from 12 px
+        // right of and 12 px above the given point
+        this.drawHoveringText(targetInfo, INFO_PANEL_X - 12, INFO_PANEL_Y + 12, fontRenderer);
         drawTooltips();
     }
 
@@ -286,6 +289,9 @@ public class TurretBaseGui extends LargeStackGui implements IHasTooltips, ISuppo
                 break;
             case 7:
                 tooltip.add(safeLocalize(OMTNames.Localizations.Text.TOGGLE_MODE));
+                break;
+            case 8:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Text.SORT_AMMO));
                 break;
 
         }
@@ -349,6 +355,7 @@ public class TurretBaseGui extends LargeStackGui implements IHasTooltips, ISuppo
             rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2 + 30, 80, 40);
         }
         list.add(rectangleGUI);
+        list.add(new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2 + 125, 80, 20));
         return list;
     }
 

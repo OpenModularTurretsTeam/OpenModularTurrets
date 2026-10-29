@@ -27,8 +27,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.block.IHasItemBlock;
 import omtteam.omlib.block.BlockAbstractTileEntity;
 import omtteam.omlib.block.UnownedMarker;
+import omtteam.omlib.compat.theoneprobe.TOPCompatibility;
 import omtteam.omlib.compat.theoneprobe.TOPInfoProvider;
-import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.MathUtil;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
@@ -39,9 +39,9 @@ import omtteam.openmodularturrets.core.base.TurretPlacement;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.item.ItemBlockTurret;
-import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
+import omtteam.openmodularturrets.tileentity.turret.TurretOverlay;
 import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
 import omtteam.openmodularturrets.turret.TurretRegistry;
 
@@ -52,9 +52,6 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
 
-import static omtteam.omlib.compat.theoneprobe.TOPCompatibility.getLocalizationString;
-import static omtteam.omlib.util.GeneralUtil.getBooleanUnlocalizationYesNo;
-import static omtteam.omlib.util.GeneralUtil.getColoredBooleanColor;
 import static omtteam.openmodularturrets.tileentity.turret.TurretMount.getTurretBaseFacing;
 
 /**
@@ -293,32 +290,17 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         UnownedMarker.randomDisplayTick(world, pos, random);
     }
 
+    /** The lines of the turret's overlay ({@link TurretOverlay}, as on 1.20.1+ Jade). */
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         TileEntity te = world.getTileEntity(data.getPos());
-        if (!(te instanceof TurretTileEntity) || ((TurretTileEntity) te).getBase() == null) {
+        if (!(te instanceof TurretTileEntity)) {
             return;
         }
         TurretTileEntity turret = (TurretTileEntity) te;
-        TurretBase base = turret.getBase();
-        boolean active = base.isActive();
-        probeInfo.text("§6" + getLocalizationString(OMLibNames.Localizations.GUI.ACTIVE)
-                + ": " + getColoredBooleanColor(active)
-                + getLocalizationString(getBooleanUnlocalizationYesNo(active)), probeInfo.defaultTextStyle());
-        probeInfo.text("§6" + getLocalizationString(OMLibNames.Localizations.GUI.OWNER)
-                + ": §F" + (base.getOwnerOrNull() == null ? getLocalizationString("text.omlib.unowned")
-                : base.getOwner().getName()), probeInfo.defaultTextStyle());
-        probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.AMMO) + ": §F"
-                + turret.getAmmoLevel(), probeInfo.defaultTextStyle());
-        probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE) + ": §F"
-                + ConfigLogicSettings.INSTANCE.turret(coreType).baseDamage(), probeInfo.defaultTextStyle());
-        probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": §F"
-                + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * turret.getDamageAmpLevel()) + "%",
-                probeInfo.defaultTextStyle());
-        probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.INACCURACY) + ": §F"
-                + String.format("%.2f", Math.min(100D, turret.getActualTurretAccuracyDeviation())) + "%",
-                probeInfo.defaultTextStyle());
-        probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": §F"
-                + String.format("%.2f", 20F / turret.getFireCooldownTicks()) + "s/sec", probeInfo.defaultTextStyle());
+        for (String line : TurretOverlay.lines(TurretOverlay.data(turret, player), turret.isConcealed(),
+                TOPCompatibility::getLocalizationString)) {
+            probeInfo.text(line, probeInfo.defaultTextStyle());
+        }
     }
 }

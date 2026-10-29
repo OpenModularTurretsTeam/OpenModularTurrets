@@ -79,7 +79,7 @@ Packages below `omtteam.openmodularturrets`:
 | `core.target` | `TargetSelector`: who is a valid target and the best one; `TargetEntity`, `EntityCategory`, `TargetingPriority` |
 | `core.security`, `core.card` | `DamageRules` (who turret damage may hit); `BaseCardRules` (the base part of the memory card copy rules) |
 | `core.item`, `core.settings`, `core.world` | upgrade and addon types, the slot interface; stats and `LogicSettings`; the world interface, `Face`, `Neighbour` (turrets and inventory expanders), `Vector3`, `Box` |
-| `core.storage` | `SlotCapacity`: how many stacks a slot holds with the base tier's stacks and the attached inventory expanders |
+| `core.storage` | `SlotCapacity`: how many stacks a slot holds with the base tier's stacks and the attached inventory expanders; `AmmoSort`: the order of the base GUI's "Sort Ammo" button (`TurretBaseInventory.sortAmmo`) |
 | `core.generator` | `GeneratorLogic`: burning fuel, the energy multiplier upgrade |
 | `api`, `api.weapon`, `api.tileentity` | the public turret API (`OMTPlugin`, `TurretDefinition`, `TurretRegistrar`, `AmmoDefinition`, `OMTApi`) and its weapons (`ProjectileWeapon`, `RayWeapon`, `EffectWeapon`, `AreaWeapon`, `SelfTargetingWeapon`); the built-in turrets use it too; the 3.x interfaces `ITurretBase`, `ITurretHead`, `ITurretBaseAddonTileEntity` |
 | `turret` | `TurretRegistry`: turret and ammo definitions and the turret blocks, looked up by everything |
@@ -87,8 +87,8 @@ Packages below `omtteam.openmodularturrets`:
 | `sound` | `ModSounds` (created before the turret definitions that use them) |
 | `block.base`, `block.turret`, `block.misc` | the base (`BlockTurretBase`, tier in the metadata), the turrets (one `BlockTurret` class per type under the 3.x ids), the generator and the lever |
 | `block.expander` | the inventory expanders (`BlockInventoryExpander`, one block per tier, facing and double plate in the metadata) and their item (`ItemBlockInventoryExpander`, stacks a second plate like a slab); it finds the machines by registry name, so it stays out of the package cycles |
-| `tileentity.base` | `TurretBase` (the tile entity of the base) with `TurretBaseNbt`, and the adapters to core: `TurretBaseWorld`, `ContainerItemSlot`, `ItemClassifier`, `LivingTargetEntity`, `OMTSecurityEnvironment` |
-| `tileentity.turret` | `TurretTileEntity` (the one tile entity of every turret), `TurretMount` (finding the turrets of a base and the bases of a turret), `RayWeapons`, `EffectWeapons` |
+| `tileentity.base` | `TurretBase` (the tile entity of the base) with `TurretBaseNbt`, `TurretBaseOverlay` (the Hwyla / The One Probe lines and who sees the disguise), and the adapters to core: `TurretBaseWorld`, `ContainerItemSlot`, `ItemClassifier`, `LivingTargetEntity`, `OMTSecurityEnvironment` |
+| `tileentity.turret` | `TurretTileEntity` (the one tile entity of every turret), `TurretMount` (finding the turrets of a base and the bases of a turret), `RayWeapons`, `EffectWeapons`, `TurretOverlay` (the Hwyla / The One Probe lines; stats only for players who may open the base) |
 | `tileentity.misc` | `GeneratorTileEntity`, `LeverTileEntity` |
 | `entity.projectile` | the projectiles, `TurretDamage` (damage rules, hit tags, kill counting, the fake drops addon), `TurretImmunity`, `OMTFakePlayer` |
 | `item`, `inventory`, `container` | items (ammo, upgrades, addons, intermediates, the memory card: `MemoryCardInteraction`, `MemoryCardNbt`); the base's slots and rules (`TurretBaseInventory`, `AmmoRules`; the ammo slots are OMLib large-stack slots); the container menus (OMLib `LargeStackContainer`s, the slot capacity synced as a window value) |
@@ -96,7 +96,7 @@ Packages below `omtteam.openmodularturrets`:
 | `config` | `OMTConfig` (Forge `@Config`), `ConfigLogicSettings`, `ConfigMigration` (runs the `ConfigMigrationSteps` newer than the file's `general.configVersion`), `AddonTurretConfig` (stats of other mods' turrets), `DisposableAmmo`, `RecipeConfigFactory` |
 | `fixes` | `MissingIds` (renamed or removed ids), the data fixers `TENameFix`, `TurretTileEntityFix`, `GeneratorTileEntityFix` |
 | `handler` | `OMTEventHandler` (loot, config, login), `OMTGuiHandler` (GUI ids) |
-| `compat` | JEI, Hwyla, ComputerCraft (`TurretBasePeripheral`), OpenComputers; `compat.computer.BaseComputerCommands` is what both computer mods share |
+| `compat` | JEI, Hwyla (the lines come from `TurretBaseOverlay` / `TurretOverlay`, which the blocks also give The One Probe), ComputerCraft (`TurretBasePeripheral`), OpenComputers; `compat.computer.BaseComputerCommands` is what both computer mods share |
 | `client` | `ClientProxy`, `ClientEventHandler`; `client.gui` (base, configure and generator screens), `client.model` (the 3.x turret models, the base's baked model), `client.render` (`TurretRenderer`, `TurretItemRenderer`, projectile renderers, the placement label), `client.network`, `client.api` (`OMTClientPlugin`, `TurretModelRegistrar`) |
 
 `./gradlew dependencyMap` draws these packages and every import between them as an interactive page.
