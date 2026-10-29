@@ -2,6 +2,7 @@ package omtteam.openmodularturrets.entity.projectile;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
@@ -18,9 +19,16 @@ public abstract class AbstractOMTDamageSource extends DamageSource {
     private final TurretBase base;
     private FakePlayer player;
 
-    public AbstractOMTDamageSource(String damageTypeIn, int fakeDrops, TurretBase base, WorldServer worldServer) {
+    /**
+     * @param fakeDrops the looting level of the base's fake drops addon, -1 without one
+     * @param victim    the entity the damage is dealt to: only a non-player is hurt "by" the fake player (for player
+     *                  kill loot); players never are, so PvP rules do not apply to turret damage (1.20.1+
+     *                  {@code TurretDamage.hurt})
+     */
+    public AbstractOMTDamageSource(String damageTypeIn, int fakeDrops, TurretBase base, WorldServer worldServer,
+                                   Entity victim) {
         super(damageTypeIn);
-        if (fakeDrops > -1) {
+        if (fakeDrops > -1 && !(victim instanceof EntityPlayer)) {
             player = OMTFakePlayer.getFakePlayer(worldServer);
             player.getEntityAttribute(SharedMonsterAttributes.LUCK).setBaseValue(fakeDrops);
         }

@@ -5,6 +5,7 @@ item.ammo_grenade.name=Munition - Granate
 item.ammo_rocket.name=Munition - Rakete
 item.ammo_ferro_slug.name=Munition - Ferro-Magnetisches Geschoss
 item.ammo_blazing_clay.name=Munition - Glühender Ton
+item.ammo_bolt.name=Munition - Armbrustbolzen
 item.upgrade_fire_rate.name=Upgrade - Feuerrate
 item.upgrade_efficiency.name=Upgrade - Effizienz
 item.upgrade_range.name=Upgrade - Reichweite
@@ -157,7 +158,7 @@ text.openmodularturrets.turret.ammo.2=Granate
 text.openmodularturrets.turret.ammo.3=Zielsuchende Rakete
 text.openmodularturrets.turret.ammo.4=Keine
 text.openmodularturrets.turret.ammo.5=Ferro-Magnetisches Geschoss
-text.openmodularturrets.turret.ammo.6=Kartoffel
+text.openmodularturrets.turret.ammo.6=Kartoffel oder giftige Kartoffel
 text.openmodularturrets.turret.ammo.7=Glühender Ton
 
 text.openmodularturrets.base.tier.1=Turm Basis (Tier 1)
@@ -229,6 +230,7 @@ text.openmodularturrets.turret.ammo.bullet=Eine einfache Kugel für den Maschine
 text.openmodularturrets.turret.ammo.ferro_slug=Diese fortschrittlich aussehende Kugel ist für die Railgun.
 text.openmodularturrets.turret.ammo.grenade=Eine schöne Granate für den Granatwerfer Turm..
 text.openmodularturrets.turret.ammo.rocket=Die Rakete kommt natürlich im Raketenwerfen zum Einsatz!
+text.openmodularturrets.turret.ammo.bolt=Ein stabiler Eisenbolzen für den Armbrustturm.
 
 text.openmodularturrets.status.warning=Du betrittst einen turmgesicherten Bereich. Weitergehen auf eigene Gefahr.
 

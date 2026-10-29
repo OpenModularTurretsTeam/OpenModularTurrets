@@ -2,6 +2,7 @@ package omtteam.openmodularturrets.tileentity.turret;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
@@ -15,6 +16,7 @@ import omtteam.openmodularturrets.api.weapon.EffectWeapon;
 import omtteam.openmodularturrets.api.weapon.SelfTargetingWeapon;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.entity.projectile.NormalDamageSource;
+import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.entity.projectile.TurretImmunity;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
@@ -99,14 +101,18 @@ public final class EffectWeapons {
      * 1.12.2 {@code MeleeTurretTileEntity}: damages every damageable living entity in reach with the turret's base
      * damage. The melee turret needs no target from the base; it strikes whenever something is in
      * {@link #meleeArea} (1.20.1+, user decision; 1.12.2 struck a 7×3×7 area once the base had a target). No damage
-     * amp bonus, as in 1.12.2.
+     * amp bonus, as in 1.12.2. As other turret damage (1.20.1+ {@code TurretDamage.hurt}) it tags the victims for the
+     * loot rules and resets their hurt cooldown.
      */
     public static void strike(WorldServer world, TurretTileEntity turret, TurretBase base,
                               List<EntityLivingBase> victims) {
         float damage = ConfigLogicSettings.INSTANCE.turret(turret.getCoreType()).baseDamage();
+        if (damage <= 0) return;
         int fakeDrops = base.getLogic().getLootingLevel(3);
         for (EntityLivingBase entity : victims) {
-            entity.attackEntityFrom(new NormalDamageSource("melee", fakeDrops, base, world, false), damage);
+            if (!(entity instanceof EntityPlayer)) TurretDamage.setTagsForTurretHit(entity, base);
+            entity.attackEntityFrom(new NormalDamageSource("melee", fakeDrops, base, world, false, entity), damage);
+            entity.hurtResistantTime = -1;
         }
     }
 

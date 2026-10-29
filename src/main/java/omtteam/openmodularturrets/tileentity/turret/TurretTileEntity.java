@@ -439,6 +439,7 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         for (int i = 0; i <= logic.getScattershotCount(type); i++) {
             TurretProjectile projectile = weapon.factory().create(world, ammo, target, base);
             if (projectile == null) continue;
+            projectile.setHitHandler(weapon.hitHandler());
             projectile.setPosition(origin.x, origin.y, origin.z);
             // the lead depends on the projectile's gravity, so it is worked out per projectile
             TurretMath.Lead lead = TurretMath.lead(toAim, velocity, weapon.speed(),

@@ -1,11 +1,14 @@
 package omtteam.openmodularturrets.api.weapon;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import omtteam.omlib.api.render.ColorOM;
 import omtteam.openmodularturrets.core.turret.RayMath;
 import omtteam.openmodularturrets.core.turret.RayProfile;
+import omtteam.openmodularturrets.tileentity.base.TurretBase;
+import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -26,6 +29,8 @@ public final class RayWeapon implements TurretWeapon {
     private final SoundEvent hitSound;
     @Nullable
     private final BlockHitHandler blockHit;
+    @Nullable
+    private final EntityHitHandler entityHit;
 
     private RayWeapon(Builder builder) {
         this.launchSound = builder.launchSound;
@@ -36,6 +41,7 @@ public final class RayWeapon implements TurretWeapon {
         this.drawFromTip = builder.drawFromTip;
         this.hitSound = builder.hitSound;
         this.blockHit = builder.blockHit;
+        this.entityHit = builder.entityHit;
     }
 
     public static Builder builder(SoundEvent launchSound, RayProfile profile) {
@@ -83,6 +89,12 @@ public final class RayWeapon implements TurretWeapon {
         return blockHit;
     }
 
+    /** Called for every entity the ray damages, or null; see {@link Builder#onEntityHit}. */
+    @Nullable
+    public EntityHitHandler entityHit() {
+        return entityHit;
+    }
+
     @Override
     public boolean aims() {
         return true;
@@ -94,6 +106,12 @@ public final class RayWeapon implements TurretWeapon {
         void onBlockHit(WorldServer world, BlockPos pos);
     }
 
+    /** Called for an entity a ray damaged (e.g. to add an effect). */
+    @FunctionalInterface
+    public interface EntityHitHandler {
+        void onEntityHit(WorldServer world, TurretTileEntity turret, TurretBase base, Entity hit);
+    }
+
     public static final class Builder {
         private final SoundEvent launchSound;
         private final RayProfile profile;
@@ -103,6 +121,7 @@ public final class RayWeapon implements TurretWeapon {
         private boolean drawFromTip;
         private SoundEvent hitSound;
         private BlockHitHandler blockHit;
+        private EntityHitHandler entityHit;
 
         private Builder(SoundEvent launchSound, RayProfile profile) {
             this.launchSound = Objects.requireNonNull(launchSound, "launchSound");
@@ -138,6 +157,15 @@ public final class RayWeapon implements TurretWeapon {
 
         public Builder onBlockHit(BlockHitHandler handler) {
             this.blockHit = handler;
+            return this;
+        }
+
+        /**
+         * Called for every entity a ray damages, after the damage: the entity it hit and, for arc chain profiles,
+         * every entity the arc jumps to. Each ray of a scattershot counts on its own.
+         */
+        public Builder onEntityHit(EntityHitHandler handler) {
+            this.entityHit = handler;
             return this;
         }
 

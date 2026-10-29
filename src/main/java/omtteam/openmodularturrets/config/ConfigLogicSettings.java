@@ -4,6 +4,7 @@ import omtteam.openmodularturrets.core.settings.BaseTierStats;
 import omtteam.openmodularturrets.core.settings.LogicSettings;
 import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.TurretType;
+import omtteam.openmodularturrets.reference.Reference;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -91,12 +92,22 @@ public final class ConfigLogicSettings implements LogicSettings {
             blocked = toSet(blockedList);
             blockedSource = blockedList;
         }
-        if (hostileList != hostileSource) {
-            forcedHostile = toSet(hostileList);
+        if (hostileList != hostileSource || neutralList != neutralSource) {
+            Set<String> hostile = new HashSet<>(toSet(hostileList));
+            Set<String> neutral = new HashSet<>(toSet(neutralList));
+            // As on 1.20.1+: an entity on both force lists is ignored on both, so it keeps its default category.
+            // The entries stay in the file, so the error is logged again until the server owner fixes it.
+            Set<String> conflicts = new HashSet<>(hostile);
+            conflicts.retainAll(neutral);
+            for (String id : conflicts) {
+                Reference.LOGGER.error("OMTConfigError: {} is in both general.stringMobForceList and "
+                        + "general.stringNeutralForceList, ignoring it in both lists", id);
+            }
+            hostile.removeAll(conflicts);
+            neutral.removeAll(conflicts);
+            forcedHostile = Collections.unmodifiableSet(hostile);
+            forcedNeutral = Collections.unmodifiableSet(neutral);
             hostileSource = hostileList;
-        }
-        if (neutralList != neutralSource) {
-            forcedNeutral = toSet(neutralList);
             neutralSource = neutralList;
         }
     }

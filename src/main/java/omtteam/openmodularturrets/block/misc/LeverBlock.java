@@ -16,6 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -29,6 +30,7 @@ import omtteam.omlib.util.MathUtil;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.item.ItemBlockLever;
 import omtteam.openmodularturrets.reference.Reference;
+import omtteam.openmodularturrets.sound.ModSounds;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.misc.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.turret.TurretMount;
@@ -154,8 +156,8 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
                 lever.isTurning = true;
 
                 if (lever.rotation == 0F) {
-                    //worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
                     storage.receiveEnergy(50, false);
+                    playWindup(worldIn, pos);
                 }
             }
         }
@@ -166,8 +168,8 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
-                    //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
                     storage.receiveEnergy(50, false);
+                    playWindup(worldIn, pos);
                 }
             }
         }
@@ -178,8 +180,8 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
-                    //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
                     storage.receiveEnergy(50, false);
+                    playWindup(worldIn, pos);
                 }
             }
         }
@@ -190,12 +192,19 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
-                    //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
                     storage.receiveEnergy(50, false);
+                    playWindup(worldIn, pos);
                 }
             }
         }
         return true;
+    }
+
+    /** Each turn that charges the base plays the windup sound, as on 1.20.1+ (server side, heard by everyone near). */
+    private static void playWindup(World world, BlockPos pos) {
+        if (!world.isRemote) {
+            world.playSound(null, pos, ModSounds.windupSound, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        }
     }
 
     @Override

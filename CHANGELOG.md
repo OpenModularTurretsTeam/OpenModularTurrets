@@ -10,8 +10,12 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ### Added
 
+- Turret API: hit handlers for addon turrets, `ProjectileWeapon.onHit` and `RayWeapon.Builder.onEntityHit` (as on 1.20.1+)
 - Recipes for the Melee, Crossbow, Arc and Plasma Turrets (as on 1.20.1+; the Arc Turret takes a gold ingot instead of a lightning rod)
 - "Sort Ammo" button in the turret base GUI (as on 1.20.1+): merges equal ammo and sorts Minecraft items first, then Open Modular Turrets ammo, then other mods'
+- Poisonous potatoes are potato cannon ammo, as on 1.20.1+
+- The crank plays its windup sound on every charging turn, as on 1.20.1+
+- Crossbow bolts (`openmodularturrets:ammo_bolt`), the ammo of the crossbow turret: 16 from an iron ingot, a stick and a feather (as on 1.20.1+)
 
 ### Changed
 
@@ -26,6 +30,18 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - Hwyla and The One Probe show "Damage Boost", "Rate of Fire" in /s and "Unlimited" ammo, with the colours of 1.20.1+ (green for unowned blocks)
 - Turret stats in Hwyla and The One Probe are only shown to players who may open the base; turrets without a base or concealed show nothing
 - Hwyla and The One Probe show a camouflaged turret base as its disguise to players who may not open it
+- Grenades explode after 29 ticks, or 4 ticks after hitting an entity, as on 1.20.1+
+- Grenade and rocket explosions only break blocks with canGrenadesDestroyBlocks / canRocketsDestroyBlocks, and their blast deals turret damage (kill counting, loot rules), as on 1.20.1+
+- The default disposable ammo list allows the planks of every mod (ore:plankWood); configs still listing minecraft:planks,1 are updated
+- An entity on both force lists is ignored on both (with an error in the log), as on 1.20.1+
+- baseFireRate has no maximum any more and turretWarningDistance cannot be negative, as on 1.20.1+
+- The base energy capacity, energy input and turret count settings apply without a restart
+- Breakable turrets (turretBreakable) need a pickaxe to drop, as on 1.20.1+
+- The bullet recipe has the 1.20.1+ shape
+- The ownership wand is in the Open Modular Turrets creative tab
+- The arc turret's lightning is light blue, as on 1.20.1+
+- New generator textures, as on 1.20.1+: every side has its own texture, and the tubes on the sides of a running generator are animated
+- The crossbow turret fires crossbow bolts instead of vanilla arrows (as on 1.20.1+); arrows already in a base stay in its slots but are no longer used
 
 ### Fixed
 
@@ -37,10 +53,21 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - The redstone reactor counted fuel it could not take out of a slot
 - The Redstone Reactor addon had no tooltip
 - The Recycler addon tooltip had an extra blank line
+- Turrets with a fake drops addon knocked their targets back towards the world origin; turret damage no longer causes knockback
+- Melee turret hits did not reset the hurt cooldown or mark the victim for the loot rules
+- The disposable turret with ammo disabled fired an invisible projectile without cobblestone's damage bonus, and showed the whole drawn stack instead of one item
+- Only the warned player hears the turret alarm; everyone else nearby heard it instead
+- Arrows fired by crossbow turrets could show up as plasma on clients (two projectiles shared a network id)
+- Turrets with a fake drops addon could not hurt players on servers with PvP turned off
+- The slowing and railgun turrets' ambient dust has its intended light grey and blue colours
+- Crossbow turret shots crashed the client when they were rendered (drawn with the vanilla arrow renderer)
+- Breaking or hitting a turret showed missing-texture particles; they now come from the turret's texture
 
 ### Removed
 
 - The One Probe no longer shows a turret's base damage (as Jade on 1.20.1+)
+- Config option allowTransparentDisguises; turret bases always accept glass, ice and leaves as camouflage
+- Vanilla arrows are no longer turret ammo, and tipped arrows no longer give the crossbow turret's shots potion effects
 
 ## [4.0.0-beta.5] - 2026-10-27
 

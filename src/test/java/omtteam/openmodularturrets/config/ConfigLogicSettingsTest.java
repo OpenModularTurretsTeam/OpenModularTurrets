@@ -89,10 +89,25 @@ class ConfigLogicSettingsTest {
             OMTConfig.GENERAL.stringMobForceList = new String[]{id};
             assertEquals(Collections.singleton(id), settings.forcedHostileEntities(), "hostile");
         }
-        for (String id : new String[]{"minecraft:creeper", "minecraft:spider"}) {
+        for (String id : new String[]{"minecraft:cow", "minecraft:pig"}) {
             OMTConfig.GENERAL.stringNeutralForceList = new String[]{id};
             assertEquals(Collections.singleton(id), settings.forcedNeutralEntities(), "neutral");
         }
+    }
+
+    @Test
+    void anEntityOnBothForceListsIsIgnoredOnBoth() {
+        ConfigLogicSettings settings = ConfigLogicSettings.INSTANCE;
+        OMTConfig.GENERAL.stringMobForceList = new String[]{"minecraft:creeper", "zombie"};
+        OMTConfig.GENERAL.stringNeutralForceList = new String[]{"minecraft:zombie", "minecraft:cow"};
+        assertEquals(Collections.singleton("minecraft:creeper"), settings.forcedHostileEntities());
+        assertEquals(Collections.singleton("minecraft:cow"), settings.forcedNeutralEntities());
+
+        // fixing one list brings the entity back on the other
+        OMTConfig.GENERAL.stringNeutralForceList = new String[]{"minecraft:cow"};
+        assertEquals(new HashSet<>(Arrays.asList("minecraft:creeper", "minecraft:zombie")),
+                settings.forcedHostileEntities());
+        assertEquals(Collections.singleton("minecraft:cow"), settings.forcedNeutralEntities());
     }
 
     @Test

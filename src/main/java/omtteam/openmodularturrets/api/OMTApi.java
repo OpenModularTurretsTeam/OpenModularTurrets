@@ -83,8 +83,8 @@ public final class OMTApi {
         WorldServer world = (WorldServer) base.getWorld();
         int looting = base.getLogic().getLootingLevel(3);
         AbstractOMTDamageSource source = bypassArmor
-                ? new ArmorBypassDamageSource(damageType, looting, base, world, direct != null)
-                : new NormalDamageSource(damageType, looting, base, world, direct != null);
+                ? new ArmorBypassDamageSource(damageType, looting, base, world, direct != null, target)
+                : new NormalDamageSource(damageType, looting, base, world, direct != null, target);
         if (!(target instanceof EntityPlayer)) {
             TurretDamage.setTagsForTurretHit(target, base);
         }

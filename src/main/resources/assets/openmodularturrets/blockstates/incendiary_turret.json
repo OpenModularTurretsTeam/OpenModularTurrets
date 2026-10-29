@@ -5,7 +5,9 @@
   },
   "variants": {
     "normal": [
-      {}
+      {
+        "model": "openmodularturrets:turret/incendiary_turret"
+      }
     ],
     "inventory": [
       {}

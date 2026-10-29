@@ -97,6 +97,25 @@ public final class ConfigMigration {
         }
     }
 
+    /**
+     * Replaces the entry {@code oldEntry} of the list {@code key} of {@code category} with {@code newEntry}, if the list
+     * still contains it; the other entries and their order stay.
+     */
+    static void replaceListEntry(Configuration config, String category, String key, String oldEntry, String newEntry) {
+        if (!config.hasCategory(category)) return;
+        Property property = config.getCategory(category).get(key);
+        if (property == null || !property.isList()) return;
+        String[] entries = property.getStringList();
+        boolean found = false;
+        for (int i = 0; i < entries.length; i++) {
+            if (entries[i].trim().equals(oldEntry)) {
+                entries[i] = newEntry;
+                found = true;
+            }
+        }
+        if (found) property.set(entries);
+    }
+
     /** Moves the properties of section {@code from} to {@code to} (unless {@code to} exists already) and removes it. */
     static boolean moveCategory(Configuration config, String from, String to) {
         if (!config.hasCategory(from)) return false;

@@ -5,6 +5,7 @@ item.ammo_grenade.name=弹药-榴弹
 item.ammo_rocket.name=弹药-制导火箭
 item.ammo_ferro_slug.name=弹药-铁磁弹
 item.ammo_blazing_clay.name=弹药-燃烧弹
+item.ammo_bolt.name=Ammo - Crossbow Bolt
 item.upgrade_fire_rate.name=升级组件-射速
 item.upgrade_efficiency.name=升级组件-效率
 item.upgrade_range.name=升级组件-范围
@@ -225,6 +226,7 @@ text.openmodularturrets.turret.ammo.bullet=普通的子弹适用于机关枪炮�
 text.openmodularturrets.turret.ammo.ferro_slug=铁磁弹适用于磁轨炮炮塔。
 text.openmodularturrets.turret.ammo.grenade=榴弹适用于榴弹发射炮塔。
 text.openmodularturrets.turret.ammo.rocket=制导火箭适用于火箭发射炮塔。
+text.openmodularturrets.turret.ammo.bolt=A sturdy iron bolt for the crossbow turret.
 
 text.openmodularturrets.status.warning=你进入了炮塔攻击范围,谁都保不住你
 

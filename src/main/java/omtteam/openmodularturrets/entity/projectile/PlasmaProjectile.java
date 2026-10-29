@@ -74,8 +74,9 @@ public class PlasmaProjectile extends TurretProjectile {
 
                 if ((entity instanceof EntityPlayer && canDamagePlayer((EntityPlayer) entity)) || canDamageEntity(entity)) {
                     if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
-                    entity.attackEntityFrom(new NormalDamageSource("plasma", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage * 0.5F);
-                    entity.attackEntityFrom(new ArmorBypassDamageSource("plasma", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage * 0.5F);
+                    entity.attackEntityFrom(new NormalDamageSource("plasma", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), damage * 0.5F);
+                    entity.attackEntityFrom(new ArmorBypassDamageSource("plasma", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), damage * 0.5F);
+                    if (damage > 0) notifyHit(entity);
                     entity.hurtResistantTime = -1;
                 }
             }

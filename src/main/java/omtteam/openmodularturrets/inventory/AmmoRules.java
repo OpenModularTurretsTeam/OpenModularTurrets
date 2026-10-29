@@ -12,7 +12,8 @@ public class AmmoRules {
     public static boolean isItemStackValidAmmo(ItemStack itemStack) {
         if (itemStack == ItemStack.EMPTY) return false;
         return !OMTConfig.GENERAL.useWhitelistForAmmo || itemStack.getItem() == Items.POTATO
-                || itemStack.getItem() == Items.REDSTONE || itemStack.getItem() == Items.ARROW
+                || itemStack.getItem() == Items.POISONOUS_POTATO
+                || itemStack.getItem() == Items.REDSTONE
                 || itemStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK)
                 || TurretRegistry.isAnyAmmo(itemStack);
     }

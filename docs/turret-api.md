@@ -68,6 +68,23 @@ Filter with `OMTApi.canDamage(base, entity)` to spare the owner, trusted players
 
 Projectiles extend `omtteam.openmodularturrets.entity.projectile.TurretProjectile`; register the entity and its renderer yourself.
 
+**Projectile hits**: `ProjectileWeapon.onHit` runs code when one of the weapon's projectiles damages an entity (a direct hit or its explosion), once per projectile and entity, after the damage.
+It gets the world, the projectile, the base that fired it (null if it is gone or unloaded) and the hit entity.
+It works with the built-in projectiles too.
+Your own projectiles that deal no damage call `notifyHit(entity)` themselves.
+The handler can also be passed to the four-argument constructor.
+
+```java
+ProjectileWeapon.of(ExampleSounds.FLAK, (world, ammo, target, base) -> new FlakProjectile(world, base))
+        .onHit((world, projectile, base, hit) -> hit.setGlowing(true));
+```
+
+**Ray hits**: `RayWeapon.builder(…).onEntityHit((world, turret, base, hit) -> …)` runs after a ray damaged an entity: the entity it hit and, with an arc chain profile, every entity the arc jumps to.
+Each ray of a scattershot counts on its own.
+`onBlockHit` is called when a ray hits a block instead.
+
+All callbacks run on the server thread.
+
 ### Stats and config
 
 `TurretStats` are the defaults of the turret's config entry.

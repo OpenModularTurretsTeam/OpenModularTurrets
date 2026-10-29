@@ -5,6 +5,7 @@ item.ammo_grenade.name=Ammo - Grenade
 item.ammo_rocket.name=Ammo - Rocket
 item.ammo_ferro_slug.name=Ammo - Ferro-Magnetic Slug
 item.ammo_blazing_clay.name=Ammo - Blazing Clay
+item.ammo_bolt.name=Ammo - Crossbow Bolt
 item.upgrade_fire_rate.name=Upgrade - Fire Rate
 item.upgrade_efficiency.name=Upgrade - Efficiency
 item.upgrade_range.name=Upgrade - Range
@@ -153,7 +154,7 @@ text.openmodularturrets.turret.ammo.2=Grenade
 text.openmodularturrets.turret.ammo.3=Homing Rocket
 text.openmodularturrets.turret.ammo.4=None
 text.openmodularturrets.turret.ammo.5=Ferro-Magnetic Slugs
-text.openmodularturrets.turret.ammo.6=Potato
+text.openmodularturrets.turret.ammo.6=Potato or Poisonous Potato
 text.openmodularturrets.turret.ammo.7=Blazing Clay
 
 text.openmodularturrets.base.tier.1=Tier 1 Turret Base
@@ -223,6 +224,7 @@ text.openmodularturrets.turret.ammo.bullet=A simple bullet for use with the mach
 text.openmodularturrets.turret.ammo.ferro_slug=This advanced looking slug is for the railgun.
 text.openmodularturrets.turret.ammo.grenade=Nice grenade for the grenade launcher.
 text.openmodularturrets.turret.ammo.rocket=Rockets are being used by the rocket launcher, obviously!
+text.openmodularturrets.turret.ammo.bolt=A sturdy iron bolt for the crossbow turret.
 
 text.openmodularturrets.status.warning=You are entering a turret-protected area. Continue at your own risk.
 
@@ -262,7 +264,6 @@ tooltip.openmodularturrets.turret.arc_turret.description=Shoots lightning that j
 tooltip.openmodularturrets.turret.laser_turret.description=Burns its target with a laser beam. Weaker against armor.
 tooltip.openmodularturrets.turret.rail_gun_turret.description=Fires an instant, armor-piercing slug. Stronger against armor.
 tooltip.openmodularturrets.turret.plasma_turret.description=Shoots plasma balls that burst on impact and hurt everything close by.
-text.openmodularturrets.turret.ammo.arrow=Arrow
 
 # 4.0.0 generator (from 1.20.1+)
 tile.generator.name=Generator

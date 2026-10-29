@@ -108,7 +108,7 @@ class ConfigMigrationTest {
 
     @Test
     void runsOncePerFile() {
-        write(ConfigMigration.VERSION_CATEGORY, ConfigMigration.VERSION_KEY, 3);
+        write(ConfigMigration.VERSION_CATEGORY, ConfigMigration.VERSION_KEY, ConfigMigrationSteps.CURRENT_VERSION);
         write("bases.tier 1", "baseMaxCharge", 500);
         write(OLD, "baseRange", 33);
 
@@ -129,6 +129,46 @@ class ConfigMigrationTest {
         assertEquals(100_000_000, baseCharge(5));
         assertEquals(33, new Configuration(file).getCategory(OLD).get("baseRange").getInt(),
                 "the version 2 step ran again");
+    }
+
+    @Test
+    void theOldPlanksAmmoDefaultBecomesTheOreDictionaryEntry() {
+        writeAmmo("minecraft:cobblestone,2", "minecraft:planks,1", "minecraft:sand,3");
+
+        ConfigMigration.migrate(file);
+
+        assertArrayEquals(new String[]{"minecraft:cobblestone,2", "ore:plankWood,1", "minecraft:sand,3"}, ammo());
+    }
+
+    @Test
+    void chosenPlanksAmmoEntriesStay() {
+        writeAmmo("minecraft:cobblestone,2", "minecraft:planks,4", "minecraft:planks:2,1");
+
+        ConfigMigration.migrate(file);
+
+        assertArrayEquals(new String[]{"minecraft:cobblestone,2", "minecraft:planks,4", "minecraft:planks:2,1"}, ammo());
+    }
+
+    @Test
+    void versionThreeFilesOnlyGetThePlanksAmmo() {
+        write(ConfigMigration.VERSION_CATEGORY, ConfigMigration.VERSION_KEY, 3);
+        write("bases.tier 1", "baseMaxCharge", 500);
+        writeAmmo("minecraft:planks,1");
+
+        ConfigMigration.migrate(file);
+
+        assertArrayEquals(new String[]{"ore:plankWood,1"}, ammo());
+        assertEquals(500, baseCharge(1), "the version 3 step ran again");
+    }
+
+    private void writeAmmo(String... entries) {
+        Configuration config = new Configuration(file);
+        config.get("general", "stringAmmoAllowList", entries);
+        config.save();
+    }
+
+    private String[] ammo() {
+        return new Configuration(file).getCategory("general").get("stringAmmoAllowList").getStringList();
     }
 
     private int baseCharge(int tier) {

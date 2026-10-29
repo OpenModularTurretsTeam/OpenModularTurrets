@@ -89,8 +89,12 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         this.setRegistryName(id);
     }
 
-    /** Ambient particles of the 1.12.2 melee, relativistic and railgun turrets: coloured redstone dust. */
-    public static TurretDefinition.AmbientEffect dust(int red, int green, int blue, boolean onlyDeployed) {
+    /**
+     * Ambient particles of the slowing and railgun turrets: coloured redstone dust, six specks around the block centre;
+     * with {@code onlyDeployed} not while concealed. The colour is 0–1 per channel (redstone dust takes it as its
+     * speed; values above 1 overflow, and a red of exactly 0 turns into the default red).
+     */
+    public static TurretDefinition.AmbientEffect dust(float red, float green, float blue, boolean onlyDeployed) {
         return (world, pos, random) -> {
             IBlockState state = world.getBlockState(pos);
             if (onlyDeployed && state.getBlock() instanceof BlockTurret && state.getValue(CONCEALED)) return;
@@ -267,6 +271,31 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
     @ParametersAreNonnullByDefault
     public boolean causesSuffocation_OM(IBlockState state) {
         return false;
+    }
+
+    /**
+     * A breakable turret ({@code turretBreakable}) drops only when mined with a pickaxe, as on 1.20.1+
+     * ({@code requiresCorrectToolForDrops} and {@code mineable/pickaxe}). Forge's check would let it drop by hand,
+     * since {@link Material#GLASS} needs no tool.
+     */
+    @Override
+    @ParametersAreNonnullByDefault
+    public boolean canHarvestBlock(IBlockAccess world, BlockPos pos, EntityPlayer player) {
+        IBlockState state = world.getBlockState(pos);
+        ItemStack tool = player.getHeldItemMainhand();
+        return !tool.isEmpty() && getHarvestLevel(state) >= 0
+                && tool.getItem().getHarvestLevel(tool, "pickaxe", player, state) >= getHarvestLevel(state);
+    }
+
+    /** Forge's {@code blockStrength} with {@link #canHarvestBlock}: mining without a pickaxe is slow, as on 1.20.1+. */
+    @Override
+    @ParametersAreNonnullByDefault
+    public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer player, World world, BlockPos pos) {
+        float hardness = state.getBlockHardness(world, pos);
+        if (hardness < 0.0F) {
+            return 0.0F;
+        }
+        return player.getDigSpeed(state, pos) / hardness / (canHarvestBlock(world, pos, player) ? 30F : 100F);
     }
 
     @Override

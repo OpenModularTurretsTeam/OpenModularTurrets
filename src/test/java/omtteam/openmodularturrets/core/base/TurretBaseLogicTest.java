@@ -161,7 +161,7 @@ class TurretBaseLogicTest {
             FakeSlot first = FakeSlot.ammo(AmmoType.POTATO, 1);
             FakeSlot second = FakeSlot.ammo(AmmoType.POTATO, 5);
             ammoSlot(0, first);
-            ammoSlot(1, FakeSlot.ammo(AmmoType.ARROW, 10));
+            ammoSlot(1, FakeSlot.ammo(AmmoType.BOLT, 10));
             ammoSlot(2, second);
             assertEquals(3, logic.drawAmmo(TurretType.POTATO_CANNON_TURRET).get().count());
             assertEquals(0, first.count);
@@ -171,7 +171,7 @@ class TurretBaseLogicTest {
         @Test
         void countOnlyIncludesTheRequestedAmmo() {
             TurretBaseLogic logic = base(5);
-            ammoSlot(0, FakeSlot.ammo(AmmoType.ARROW, 10));
+            ammoSlot(0, FakeSlot.ammo(AmmoType.BOLT, 10));
             ammoSlot(1, FakeSlot.ammo(AmmoType.POTATO, 4));
             ammoSlot(2, FakeSlot.fuel(ReactorFuel.REDSTONE, 3));
             assertEquals(4, logic.countAmmo(AmmoType.POTATO));

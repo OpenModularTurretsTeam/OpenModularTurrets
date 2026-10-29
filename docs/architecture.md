@@ -91,7 +91,7 @@ Packages below `omtteam.openmodularturrets`:
 | `tileentity.turret` | `TurretTileEntity` (the one tile entity of every turret), `TurretMount` (finding the turrets of a base and the bases of a turret), `RayWeapons`, `EffectWeapons`, `TurretOverlay` (the Hwyla / The One Probe lines; stats only for players who may open the base) |
 | `tileentity.misc` | `GeneratorTileEntity`, `LeverTileEntity` |
 | `entity.projectile` | the projectiles, `TurretDamage` (damage rules, hit tags, kill counting, the fake drops addon), `TurretImmunity`, `OMTFakePlayer` |
-| `item`, `inventory`, `container` | items (ammo, upgrades, addons, intermediates, the memory card: `MemoryCardInteraction`, `MemoryCardNbt`); the base's slots and rules (`TurretBaseInventory`, `AmmoRules`; the ammo slots are OMLib large-stack slots); the container menus (OMLib `LargeStackContainer`s, the slot capacity synced as a window value) |
+| `item`, `inventory`, `container` | items (ammo: the 3.x `AmmoMetaItem` and one `AmmoItem` per new ammo type, the crossbow bolt; upgrades, addons, intermediates, the memory card: `MemoryCardInteraction`, `MemoryCardNbt`); the base's slots and rules (`TurretBaseInventory`, `AmmoRules`; the ammo slots are OMLib large-stack slots); the container menus (OMLib `LargeStackContainer`s, the slot capacity synced as a window value) |
 | `network` | `BasePackets` and `BasePacketHandler` (C2S requests of the base GUIs, always re-validated), `MessageTurretBase` and `MessageUpdateTurret` (S2C sync), `OMTNetworkingHandler` |
 | `config` | `OMTConfig` (Forge `@Config`), `ConfigLogicSettings`, `ConfigMigration` (runs the `ConfigMigrationSteps` newer than the file's `general.configVersion`), `AddonTurretConfig` (stats of other mods' turrets), `DisposableAmmo`, `RecipeConfigFactory` |
 | `fixes` | `MissingIds` (renamed or removed ids), the data fixers `TENameFix`, `TurretTileEntityFix`, `GeneratorTileEntityFix` |
@@ -164,6 +164,8 @@ The base and its turrets use OMLib's ownership: `TurretBase` extends `TileEntity
 An unowned base does not fire unless `bases.unownedBasesActive` is set.
 While a player holds the ownership wand, turrets still target them but nothing affects them (`TurretImmunity`, checked in `TurretDamage`, the effect weapons and, for explosions, `ExplosionEvent.Detonate`).
 Looting is inverted as on 1.20.1+: turret kills drop nothing unless the base has the fake drops addon (`OMTEventHandler.lootEvent`).
+Turret damage never knocks the victim back (`OMTEventHandler.knockBackEvent` cancels knockback by the turrets' fake player, the attacker of turret damage with a fake drops addon).
+Grenade and rocket explosions (`TurretProjectile.explodeHere`) break blocks only with their `can…DestroyBlocks` config option; on `ExplosionEvent.Detonate` the projectile takes over vanilla's entity damage and push with a turret damage source (`TurretProjectile.affectByExplosion`).
 
 ### The generator
 

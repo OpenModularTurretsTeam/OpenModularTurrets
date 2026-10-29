@@ -1,6 +1,7 @@
 package omtteam.openmodularturrets.entity.projectile;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldServer;
@@ -8,6 +9,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import omtteam.omlib.registry.OMLibItems;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 /**
@@ -33,6 +35,11 @@ public class OMTFakePlayer {
 
     public static FakePlayer getFakePlayer(WorldServer worldServer) {
         return FakePlayerFactory.get(worldServer, profile);
+    }
+
+    /** Whether the entity is the turrets' fake player, the attacker named by turret damage with a fake drops addon. */
+    public static boolean isFakePlayer(@Nullable Entity entity) {
+        return entity instanceof FakePlayer && profile.getId().equals(((FakePlayer) entity).getGameProfile().getId());
     }
 
     public static ItemStack getSword(int fakeDrops) {

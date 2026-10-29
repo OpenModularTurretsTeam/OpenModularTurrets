@@ -123,6 +123,7 @@ public class ClientProxy extends CommonProxy {
         for (int i = 0; i < 5; i++) {
             registerItemModel(ModItems.ammoMetaItem, i, AmmoMetaItem.subNames[i], true);
         }
+        registerItemModel(ModItems.ammoBolt, 0);
         for (int i = 0; i < 3; i++) {
             registerItemModel(ModItems.usableMetaItem, i, UsableMetaItem.subNames[i], true);
         }

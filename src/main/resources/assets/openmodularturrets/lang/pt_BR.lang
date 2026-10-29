@@ -5,6 +5,7 @@ item.ammo_grenade.name=Munição - Granada
 item.ammo_rocket.name=Munição - Foguete
 item.ammo_ferro_slug.name=Munição - Lesma Ferromagnética
 item.ammo_blazing_clay.name=Munição - Argila Ardente
+item.ammo_bolt.name=Ammo - Crossbow Bolt
 item.upgrade_fire_rate.name=Aprimoramento - Taxa de Fogo
 item.upgrade_efficiency.name=Aprimoramento - Eficiência
 item.upgrade_range.name=Aprimoramento - Alcance
@@ -231,6 +232,7 @@ text.openmodularturrets.turret.ammo.bullet=Uma bala simples para usar na torre m
 text.openmodularturrets.turret.ammo.ferro_slug=Esta lesma de aparência avançada é para o canhão elétrico.
 text.openmodularturrets.turret.ammo.grenade=Uma bela granada para o lançador de granadas.
 text.openmodularturrets.turret.ammo.rocket=Foguetes estão sendo usados pelo lançador de foguetes, obviamente!
+text.openmodularturrets.turret.ammo.bolt=A sturdy iron bolt for the crossbow turret.
 
 text.openmodularturrets.status.warning=Você está entrando em uma área protegida por torre(s). Continue por sua própria conta e risco.
 

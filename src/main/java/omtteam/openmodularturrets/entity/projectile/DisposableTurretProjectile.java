@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -28,8 +29,19 @@ public class DisposableTurretProjectile extends TurretProjectile {
     }
 
     public DisposableTurretProjectile(World par1World, ItemStack ammo, TurretBase turretBase) {
-        super(par1World, ammo, turretBase);
+        super(par1World, shownItem(ammo), turretBase);
         this.gravity = 0.03F;
+    }
+
+    /**
+     * The item the projectile carries, one of the drawn ammo (1.20.1+); without drawn ammo (creative upgrade, ammo
+     * disabled in the config) a cobblestone, so the projectile is not invisible and deals cobblestone's bonus.
+     */
+    private static ItemStack shownItem(ItemStack ammo) {
+        if (ammo.isEmpty()) return new ItemStack(Blocks.COBBLESTONE);
+        ItemStack item = ammo.copy();
+        item.setCount(1);
+        return item;
     }
 
     @Override
@@ -69,8 +81,8 @@ public class DisposableTurretProjectile extends TurretProjectile {
     public void onHitEntity(Entity entity) {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile) && !this.isDead) {
             int damage = OMTConfig.TURRETS.disposable_turret.baseDamage;
-            if (this.itemBound != null) {
-                damage += DisposableAmmo.getDamage(this.itemBound.getItem());
+            if (ammo != null) {
+                damage += DisposableAmmo.getDamage(ammo);
             }
             if (isAmped) {
                 if (entity instanceof EntityLivingBase) {
@@ -81,7 +93,8 @@ public class DisposableTurretProjectile extends TurretProjectile {
 
             if (canDamageEntity(entity)) {
                 if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
-                entity.attackEntityFrom(new NormalDamageSource("disposable", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
+                entity.attackEntityFrom(new NormalDamageSource("disposable", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), damage);
+                if (damage > 0) notifyHit(entity);
                 entity.hurtResistantTime = -1;
             } else {
                 return;

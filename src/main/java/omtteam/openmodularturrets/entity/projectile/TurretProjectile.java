@@ -2,23 +2,31 @@ package omtteam.openmodularturrets.entity.projectile;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import omtteam.openmodularturrets.api.weapon.ProjectileWeapon;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("unused")
 public abstract class TurretProjectile extends EntityThrowable implements IEntityAdditionalSpawnData {
@@ -30,6 +38,14 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
     ItemStack ammo;
     private BlockPos turretBasePos;
     private int framesRendered = 0;
+    /** Strength of the explosion this projectile is setting off ({@link #explodeHere}), 0 at other times. */
+    private float explosionStrength;
+    /** From the weapon that fired the projectile (see {@link ProjectileWeapon#onHit}). */
+    @Nullable
+    private ProjectileWeapon.HitHandler hitHandler;
+    /** Ids of the entities {@link #hitHandler} was called for. */
+    @Nullable
+    private Set<Integer> notifiedHits;
 
     TurretProjectile(World world) {
         super(world);
@@ -166,6 +182,28 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
         return false;
     }
 
+    /** Set by the turret that fires the projectile, from its {@link ProjectileWeapon}. */
+    public void setHitHandler(@Nullable ProjectileWeapon.HitHandler hitHandler) {
+        this.hitHandler = hitHandler;
+    }
+
+    /**
+     * Calls the weapon's {@link ProjectileWeapon#onHit hit handler} for an entity this projectile hit, once per entity
+     * (the projectiles do this after damaging it; projectiles that deal no damage call it themselves).
+     */
+    public void notifyHit(Entity target) {
+        if (hitHandler == null || !(getEntityWorld() instanceof WorldServer)) return;
+        if (notifiedHits == null) notifiedHits = new HashSet<>();
+        if (!notifiedHits.add(target.getEntityId())) return;
+        WorldServer world = (WorldServer) getEntityWorld();
+        TurretBase base = null;
+        if (turretBasePos != null && world.isBlockLoaded(turretBasePos)
+                && world.getTileEntity(turretBasePos) instanceof TurretBase) {
+            base = (TurretBase) world.getTileEntity(turretBasePos);
+        }
+        hitHandler.onHit(world, this, base, target);
+    }
+
     protected void setTagsForTurretHit(Entity entity) {
         EntityLivingBase entityLivingBase;
         if (entity instanceof EntityLivingBase) {
@@ -177,6 +215,67 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
                 entityLivingBase.addTag("openmodularturrets:fake_drops_" + this.fakeDrops);
             }
         }
+    }
+
+    /**
+     * A vanilla explosion at this projectile (particles, sound, and block damage only with {@code destroyBlocks})
+     * whose entity damage is turret damage (1.20.1+ {@code explodeHere}): {@code OMTEventHandler} hands the entities
+     * it affects to {@link #affectByExplosion}.
+     */
+    protected void explodeHere(float strength, boolean destroyBlocks) {
+        explosionStrength = strength;
+        try {
+            getEntityWorld().createExplosion(this, posX, posY, posZ, strength, destroyBlocks);
+        } finally {
+            explosionStrength = 0;
+        }
+    }
+
+    /**
+     * Called from {@code ExplosionEvent.Detonate} for an explosion of this projectile: deals vanilla's explosion
+     * damage and push ({@code Explosion.doExplosionA}) to the affected entities, but with a turret damage source
+     * (kill counting, loot rules, no knockback), and spares {@linkplain TurretImmunity immune} entities. Empties
+     * {@code entities}, so vanilla does not hurt them again.
+     *
+     * @return false if this projectile is not setting off an explosion (the entities are left to vanilla)
+     */
+    public boolean affectByExplosion(Explosion explosion, List<Entity> entities) {
+        if (explosionStrength <= 0 || !(getEntityWorld() instanceof WorldServer)) return false;
+        WorldServer world = (WorldServer) getEntityWorld();
+        double diameter = explosionStrength * 2.0F;
+        Vec3d centre = explosion.getPosition();
+        for (Entity entity : entities) {
+            if (entity.isImmuneToExplosions() || TurretImmunity.isImmune(entity)) continue;
+            double distance = entity.getDistance(centre.x, centre.y, centre.z) / diameter;
+            if (distance > 1.0D) continue;
+            double dx = entity.posX - centre.x;
+            double dy = entity.posY + entity.getEyeHeight() - centre.y;
+            double dz = entity.posZ - centre.z;
+            double length = MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
+            if (length == 0.0D) continue;
+            dx /= length;
+            dy /= length;
+            dz /= length;
+            double impact = (1.0D - distance) * world.getBlockDensity(centre, entity.getEntityBoundingBox());
+            // vanilla's explosion damage and source flags (DamageSource.causeExplosionDamage)
+            DamageSource source = new NormalDamageSource("explosion", fakeDrops, turretBase, world, false, entity)
+                    .setDifficultyScaled().setExplosion();
+            if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
+            entity.attackEntityFrom(source, (float) ((int) ((impact * impact + impact) / 2.0D * 7.0D * diameter + 1.0D)));
+            double push = entity instanceof EntityLivingBase
+                    ? EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, impact) : impact;
+            entity.motionX += dx * push;
+            entity.motionY += dy * push;
+            entity.motionZ += dz * push;
+            if (entity instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) entity;
+                if (!player.isSpectator() && (!player.isCreative() || !player.capabilities.isFlying)) {
+                    explosion.getPlayerKnockbackMap().put(player, new Vec3d(dx * impact, dy * impact, dz * impact));
+                }
+            }
+        }
+        entities.clear();
+        return true;
     }
 
     public int getFramesRendered() {

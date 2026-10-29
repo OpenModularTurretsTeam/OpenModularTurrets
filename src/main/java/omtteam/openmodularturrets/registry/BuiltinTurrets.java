@@ -51,7 +51,7 @@ final class BuiltinTurrets {
         return TurretDefinition.builder(type, weapon, ConfigLogicSettings.defaultStats(type));
     }
 
-    /** The ammo of the built-in turrets: the {@code AmmoMetaItem} variants, potatoes, arrows and disposable ammo. */
+    /** The ammo of the built-in turrets: the {@code AmmoMetaItem} variants, crossbow bolts, potatoes and disposable ammo. */
     static List<AmmoDefinition> ammo() {
         return Arrays.asList(
                 AmmoDefinition.ofItem(AmmoType.BLAZING_CLAY, () -> ModItems.ammoMetaItem, 0),
@@ -59,10 +59,10 @@ final class BuiltinTurrets {
                 AmmoDefinition.ofItem(AmmoType.FERRO_SLUG, () -> ModItems.ammoMetaItem, 2),
                 AmmoDefinition.ofItem(AmmoType.GRENADE, () -> ModItems.ammoMetaItem, 3),
                 AmmoDefinition.ofItem(AmmoType.ROCKET, () -> ModItems.ammoMetaItem, 4),
-                new AmmoDefinition(AmmoType.POTATO, stack -> stack.getItem() == Items.POTATO, AMMO + "6",
+                new AmmoDefinition(AmmoType.POTATO,
+                        stack -> stack.getItem() == Items.POTATO || stack.getItem() == Items.POISONOUS_POTATO, AMMO + "6",
                         () -> new ItemStack(Items.POTATO)),
-                new AmmoDefinition(AmmoType.ARROW, stack -> stack.getItem() == Items.ARROW, AMMO + "arrow",
-                        () -> new ItemStack(Items.ARROW)),
+                AmmoDefinition.ofItem(AmmoType.BOLT, () -> ModItems.ammoBolt, 0),
                 new AmmoDefinition(AmmoType.DISPOSABLE, stack -> DisposableAmmo.getDamage(stack) > 0, AMMO + "0",
                         () -> new ItemStack(Blocks.COBBLESTONE)));
     }
@@ -91,16 +91,17 @@ final class BuiltinTurrets {
                                 (world, ammo, target, base) -> new GrenadeProjectile(world, ammo, base))),
                 builder(TurretType.SLOWING_TURRET,
                         new EffectWeapon(ModSounds.slowingLaunchSound, EffectWeapons::slow))
-                        .ambientEffect(BlockTurret.dust(200, 200, 200, false)).build(),
+                        .ambientEffect(BlockTurret.dust(0.8F, 0.8F, 0.8F, false)).build(),
                 turret(TurretType.ROCKET_TURRET,
                         ProjectileWeapon.of(ModSounds.rocketLaunchSound,
                                 (world, ammo, target, base) -> new RocketProjectile(world, target, ammo, base))),
                 turret(TurretType.TELEPORTER_TURRET,
                         new EffectWeapon(ModSounds.teleportLaunchSound, EffectWeapons::teleport)),
-                // ray colours from 1.12.2 ColorOM(r, g, b, a)
+                // ray colours from 1.12.2 ColorOM(r, g, b, a); the arc lightning is light blue, as on 1.20.1+
                 turret(TurretType.ARC_TURRET,
-                        RayWeapon.builder(ModSounds.arcLaunchSound, RayProfile.ARC).duration(3).lightning()
-                                .drawFromTip().build()),
+                        RayWeapon.builder(ModSounds.arcLaunchSound, RayProfile.ARC)
+                                .color(new ColorOM(0.6F, 0.8F, 1F, 0.6F)).duration(3).lightning().drawFromTip()
+                                .build()),
                 turret(TurretType.LASER_TURRET,
                         RayWeapon.builder(ModSounds.laserLaunchSound, RayProfile.LASER)
                                 .color(new ColorOM(1F, 0.1F, 0F, 0.38F)).duration(5).hitSound(ModSounds.laserHitSound)
@@ -109,7 +110,7 @@ final class BuiltinTurrets {
                         RayWeapon.builder(ModSounds.railgunLaunchSound, RayProfile.RAILGUN)
                                 .color(new ColorOM(1F, 0.5F, 0F, 0.2F)).duration(3).hitSound(ModSounds.railGunHitSound)
                                 .onBlockHit(RayWeapons::railgunBlockHit).build())
-                        .ambientEffect(BlockTurret.dust(0, 50, 200, true)).build(),
+                        .ambientEffect(BlockTurret.dust(0.1F, 0.2F, 0.8F, true)).build(),
                 turret(TurretType.PLASMA_TURRET,
                         ProjectileWeapon.of(ModSounds.plasmaLaunchSound,
                                 (world, ammo, target, base) -> new PlasmaProjectile(world, base))));

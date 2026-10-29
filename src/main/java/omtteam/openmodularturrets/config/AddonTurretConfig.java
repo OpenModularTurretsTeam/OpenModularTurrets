@@ -54,7 +54,7 @@ public final class AddonTurretConfig {
         return new TurretSetting(
                 config.getBoolean("enabled", category, d.enabled(), "Whether the turret exists (needs a restart)"),
                 config.getInt("baseRange", category, d.baseRange(), 1, 100, ""),
-                config.getInt("baseFireRate", category, d.baseFireRate(), 1, 200, "Ticks between shots"),
+                config.getInt("baseFireRate", category, d.baseFireRate(), 1, Integer.MAX_VALUE, "Ticks between shots"),
                 config.getInt("baseDamage", category, d.baseDamage(), 0, Integer.MAX_VALUE, "In half hearts"),
                 config.getInt("powerUsage", category, d.powerUsage(), 0, Integer.MAX_VALUE, "RF per shot"),
                 number(config, "baseAccuracyDeviation", category, d.baseAccuracyDeviation(), "In percent", 100D),

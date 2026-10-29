@@ -30,6 +30,7 @@ public final class ModSounds {
     public static final SoundEvent teleportLaunchSound = sound("teleport");
     public static final SoundEvent arcLaunchSound = sound("arc");
     public static final SoundEvent amped = sound("amped");
+    public static final SoundEvent windupSound = sound("windup");
 
     private ModSounds() {
     }
@@ -59,5 +60,6 @@ public final class ModSounds {
         registry.register(teleportLaunchSound);
         registry.register(arcLaunchSound);
         registry.register(amped);
+        registry.register(windupSound);
     }
 }

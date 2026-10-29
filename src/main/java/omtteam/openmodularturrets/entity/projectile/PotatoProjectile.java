@@ -78,7 +78,8 @@ public class PotatoProjectile extends TurretProjectile {
 
             if (canDamageEntity(entity)) {
                 if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
-                entity.attackEntityFrom(new NormalDamageSource("potato", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
+                entity.attackEntityFrom(new NormalDamageSource("potato", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), damage);
+                if (damage > 0) notifyHit(entity);
                 entity.hurtResistantTime = -1;
             } else {
                 return;

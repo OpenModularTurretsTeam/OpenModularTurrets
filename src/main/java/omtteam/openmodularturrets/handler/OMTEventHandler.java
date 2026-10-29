@@ -16,6 +16,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -67,12 +68,28 @@ public class OMTEventHandler {
         attributeToFakePlayer(event.getEntityLiving());
     }
 
-    /** Explosions of turret projectiles spare players holding the ownership wand (no damage, no knockback). */
+    /**
+     * Explosions of turret projectiles deal turret damage (1.20.1+): the projectile takes over the affected entities
+     * ({@link TurretProjectile#affectByExplosion}); players holding the ownership wand are spared (no damage, no push).
+     */
     @SubscribeEvent
     public void explosionEvent(ExplosionEvent.Detonate event) {
-        if (event.getExplosion().getExplosivePlacedBy() == null
-                && exploder(event.getExplosion()) instanceof TurretProjectile) {
+        if (event.getExplosion().getExplosivePlacedBy() != null) return;
+        Entity exploder = exploder(event.getExplosion());
+        if (exploder instanceof TurretProjectile
+                && !((TurretProjectile) exploder).affectByExplosion(event.getExplosion(), event.getAffectedEntities())) {
             event.getAffectedEntities().removeIf(TurretImmunity::isImmune);
+        }
+    }
+
+    /**
+     * Turret damage never knocks the victim back (1.20.1+ {@code LivingEntityMixin}): with a fake drops addon the
+     * damage source names the fake player as attacker, which vanilla would push the victim away from.
+     */
+    @SubscribeEvent
+    public void knockBackEvent(LivingKnockBackEvent event) {
+        if (OMTFakePlayer.isFakePlayer(event.getAttacker())) {
+            event.setCanceled(true);
         }
     }
 

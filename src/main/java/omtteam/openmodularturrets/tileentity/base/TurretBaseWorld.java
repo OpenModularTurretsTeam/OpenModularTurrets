@@ -4,6 +4,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.play.server.SPacketSoundEffect;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -139,8 +141,10 @@ public class TurretBaseWorld implements BaseWorld {
         EntityLivingBase entity = ((LivingTargetEntity) player).getEntity();
         if (!(entity instanceof EntityPlayerMP)) return;
         EntityPlayerMP serverPlayer = (EntityPlayerMP) entity;
-        if (OMTConfig.TURRETS.turretAlarmSound) {
-            serverPlayer.playSound(ModSounds.warningSound, 1.0F, 1.0F);
+        // only the warned player hears the alarm, as on 1.20.1+ (EntityPlayer.playSound plays it to everyone else)
+        if (OMTConfig.TURRETS.turretAlarmSound && serverPlayer.connection != null) {
+            serverPlayer.connection.sendPacket(new SPacketSoundEffect(ModSounds.warningSound, SoundCategory.BLOCKS,
+                    serverPlayer.posX, serverPlayer.posY, serverPlayer.posZ, 1.0F, 1.0F));
         }
         if (OMTConfig.TURRETS.turretWarnMessage) {
             addChatMessage(serverPlayer, new TextComponentTranslation(OMTNames.Localizations.Text.STATUS_WARNING)

@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.entity.projectile;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
@@ -8,8 +9,10 @@ import omtteam.openmodularturrets.tileentity.base.TurretBase;
  * This is the armor bypassing damage source
  */
 public class ArmorBypassDamageSource extends AbstractOMTDamageSource {
-    public ArmorBypassDamageSource(String damageSource, int fakeDrops, TurretBase base, WorldServer worldServer, boolean projectile) {
-        super(damageSource, fakeDrops, base, worldServer);
+    /** @param victim the entity this damage is dealt to, see {@link AbstractOMTDamageSource} */
+    public ArmorBypassDamageSource(String damageSource, int fakeDrops, TurretBase base, WorldServer worldServer, boolean projectile,
+                                   Entity victim) {
+        super(damageSource, fakeDrops, base, worldServer, victim);
         if (projectile) {
             this.setProjectile();
         }

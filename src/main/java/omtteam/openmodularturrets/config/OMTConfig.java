@@ -59,8 +59,8 @@ public class OMTConfig {
         @Config.Comment("Use a whitelist for ammo (which items fit into ammo slots of base)?")
         public boolean useWhitelistForAmmo = true;
 
-        @Config.Comment("If enabled: Which items (modid:item[:meta], or ore:oreDictName for every item of an ore dictionary entry, e.g. ore:cobblestone) can be used as disposable ammo. Value behind ',' is damage bonus.")
-        public String[] stringAmmoAllowList = new String[]{"minecraft:cobblestone,2", "minecraft:planks,1"};
+        @Config.Comment("If enabled: Which items (modid:item[:meta], or ore:oreDictName for every item of an ore dictionary entry, e.g. ore:plankWood) can be used as disposable ammo. Value behind ',' is damage bonus.")
+        public String[] stringAmmoAllowList = new String[]{"minecraft:cobblestone,2", "ore:plankWood,1"};
 
         @Config.Comment("Which entities should not be targeted by turrets?")
         public String[] stringMobBlackList = new String[]{"minecraft:armor_stand"};
@@ -68,7 +68,7 @@ public class OMTConfig {
         @Config.Comment("Which entities should always be seen as hostile by turrets?")
         public String[] stringMobForceList = new String[]{"minecraft:creeper"};
 
-        @Config.Comment("Which entities should always be seen as neutral by turrets?")
+        @Config.Comment("Which entities should always be seen as neutral by turrets? An entity on both force lists is ignored on both.")
         public String[] stringNeutralForceList = new String[]{"minecraft:cow"};
     }
 
@@ -134,6 +134,7 @@ public class OMTConfig {
         public boolean turretWarnMessage = true;
 
         @Config.Comment("The warning distance that is added to the range of the turret")
+        @Config.RangeInt(min = 0)
         public int turretWarningDistance = 5;
 
         @Config.Name("Disposable Turret")
@@ -180,8 +181,6 @@ public class OMTConfig {
         public BaseSetting baseTierFive = new BaseSetting(100000000, 50000, 4, 2, 25, 60);
         @Config.RequiresMcRestart
         public boolean allowBaseCamo = true;
-        @Config.Comment("Turret bases also accept transparent full blocks (glass, ice, leaves) as camouflage.")
-        public boolean allowTransparentDisguises = true;
         public boolean baseBreakable = false;
         @Config.Comment("Turret bases without an owner keep targeting and firing (at everyone, as nobody is trusted). If false, they stay inert until someone claims them.")
         public boolean unownedBasesActive = false;

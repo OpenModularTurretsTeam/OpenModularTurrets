@@ -5,7 +5,9 @@
   },
   "variants": {
     "normal": [
-      {}
+      {
+        "model": "openmodularturrets:turret/plasma_turret"
+      }
     ],
     "inventory": [
       {}

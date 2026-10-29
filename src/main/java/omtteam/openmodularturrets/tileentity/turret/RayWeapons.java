@@ -165,8 +165,9 @@ public final class RayWeapons {
     }
 
     /**
-     * Deals {@link RayMath#damage}, split into a normal and an armor-piercing part ({@link RayMath#split}); as in
-     * 1.12.2 the hurt cooldown is reset so every ray of a scattershot hits.
+     * Deals {@link RayMath#damage}, split into a normal and an armor-piercing part ({@link RayMath#split}), then calls
+     * the weapon's {@linkplain RayWeapon#entityHit() entity hit handler}; as in 1.12.2 the hurt cooldown is reset so
+     * every ray of a scattershot hits.
      */
     private static void damage(WorldServer world, TurretTileEntity turret, TurretBase base, RayWeapon weapon,
                                Entity entity, double modifier) {
@@ -182,13 +183,16 @@ public final class RayWeapons {
             TurretDamage.setTagsForTurretHit(entity, base);
         }
         if (split.normal() > 0) {
-            entity.attackEntityFrom(new NormalDamageSource(name, fakeDrops, base, world, false), split.normal());
+            entity.attackEntityFrom(new NormalDamageSource(name, fakeDrops, base, world, false, entity), split.normal());
         }
         if (split.armorBypass() > 0) {
-            entity.attackEntityFrom(new ArmorBypassDamageSource(name, fakeDrops, base, world, false),
+            entity.attackEntityFrom(new ArmorBypassDamageSource(name, fakeDrops, base, world, false, entity),
                     split.armorBypass());
         }
         entity.hurtResistantTime = -1;
+        if (weapon.entityHit() != null) {
+            weapon.entityHit().onEntityHit(world, turret, base, entity);
+        }
     }
 
     /**
@@ -210,7 +214,7 @@ public final class RayWeapons {
         NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimension(), from.x,
                 from.y, from.z, RENDER_RANGE);
         if (weapon.lightning()) {
-            OMLibNetworkingHandler.INSTANCE.sendToAllAround(new MessageRenderLightning(from, to, weapon.duration()), point);
+            OMLibNetworkingHandler.INSTANCE.sendToAllAround(new MessageRenderLightning(from, to, weapon.color(), weapon.duration()), point);
         } else {
             OMLibNetworkingHandler.INSTANCE.sendToAllAround(
                     new MessageRenderRay(from, to, weapon.color(), weapon.duration(), true), point);

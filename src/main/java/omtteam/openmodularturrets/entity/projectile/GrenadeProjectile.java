@@ -18,6 +18,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 public class GrenadeProjectile extends TurretProjectile {
+    /** Explodes at this age (1.20.1+; was 39). */
+    private static final int FUSE_TICKS = 29;
+    /** The age set on hitting an entity: explodes 4 ticks later (1.20.1+; was 9 ticks). */
+    private static final int TICKS_AFTER_ENTITY_HIT = 25;
     private boolean hit = false;
 
     @SuppressWarnings("unused")
@@ -34,11 +38,10 @@ public class GrenadeProjectile extends TurretProjectile {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (ticksExisted >= 39) {
+        if (ticksExisted >= FUSE_TICKS) {
             if (!getEntityWorld().isRemote) {
-                float strength = OMTConfig.TURRETS.canGrenadesDestroyBlocks ? 1.4F : 0.1F;
-                // the projectile as exploder: OMTEventHandler spares wand holders from turret explosions
-                getEntityWorld().createExplosion(this, posX, posY, posZ, strength, true);
+                boolean destroyBlocks = OMTConfig.TURRETS.canGrenadesDestroyBlocks;
+                explodeHere(destroyBlocks ? 1.4F : 0.1F, destroyBlocks);
                 AxisAlignedBB axis = new AxisAlignedBB(this.posX - 3, this.posY - 3, this.posZ - 3,
                                                        this.posX + 3, this.posY + 3, this.posZ + 3);
                 List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
@@ -53,8 +56,9 @@ public class GrenadeProjectile extends TurretProjectile {
 
                     if (canDamageEntity(entity)) {
                         if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
-                        entity.attackEntityFrom(new NormalDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage * 0.9F);
-                        entity.attackEntityFrom(new ArmorBypassDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage * 0.1F);
+                        entity.attackEntityFrom(new NormalDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), damage * 0.9F);
+                        entity.attackEntityFrom(new ArmorBypassDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), damage * 0.1F);
+                        if (damage > 0) notifyHit(entity);
                         entity.hurtResistantTime = -1;
                     }
                 }
@@ -91,7 +95,7 @@ public class GrenadeProjectile extends TurretProjectile {
             this.motionZ = this.motionZ * 0.2F;
             this.markVelocityChanged();
             this.hit = true;
-            this.ticksExisted = 30;
+            this.ticksExisted = TICKS_AFTER_ENTITY_HIT;
         }
     }
 
