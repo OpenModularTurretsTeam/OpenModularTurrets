@@ -214,6 +214,8 @@ The full list is in [turret-api.md](turret-api.md); a game test per turret belon
 Upgrades belong to one machine.
 Add a constant to the machine's enum (`core.item.TurretBaseUpgradeType` or `GeneratorUpgradeType`), register the item in `ModItems` with the matching item class (`TurretBaseUpgradeItem`, `GeneratorUpgradeItem`), and implement the effect in the machine's logic.
 A new machine gets its own enum and item subclass of `UpgradeItem`; its slots accept only those.
+Give it a switch in `ConfigData.Upgrades` (field and `isEnabled` case): a disabled upgrade counts as not installed (`TurretBaseLogic.getUpgradeCount` asks `LogicSettings.upgradeEnabled`; another machine asks `item.ModuleToggles`), and its recipe needs the `module_enabled` condition (`OMTRecipeProvider` adds it to the upgrades and addons).
+The client marks disabled ones by itself (`client.render.DisabledModuleOverlay`).
 
 ### A config value
 

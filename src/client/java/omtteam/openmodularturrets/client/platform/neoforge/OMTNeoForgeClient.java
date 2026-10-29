@@ -10,6 +10,7 @@ import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterItemDecorationsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 //? if >=1.21.11 {
@@ -25,6 +26,7 @@ import omtteam.openmodularturrets.client.OMTClient;
 import omtteam.openmodularturrets.client.api.OMTClientPlugin;
 import omtteam.omlib.client.camo.CamoModels;
 import omtteam.openmodularturrets.client.model.TurretModels;
+import omtteam.openmodularturrets.client.render.DisabledModuleOverlay;
 import omtteam.openmodularturrets.client.render.effect.RayRenderer;
 import omtteam.openmodularturrets.client.render.outline.TurretPlacementOutline;
 import omtteam.omlib.platform.Platform;
@@ -57,6 +59,11 @@ public final class OMTNeoForgeClient {
         modBus.addListener((RegisterClientExtensionsEvent event) -> OMTClient.registerItemRenderers((item, renderer) ->
                 event.registerItem(NeoForgeItemRenderer.extensions(renderer), item)));
         //?}
+        modBus.addListener((RegisterItemDecorationsEvent event) -> DisabledModuleOverlay.moduleItems().forEach(item ->
+                event.register(item, (graphics, font, stack, x, y) -> {
+                    DisabledModuleOverlay.renderItemOverlay(graphics, stack, x, y);
+                    return false;
+                })));
         modBus.addListener((RegisterColorHandlersEvent.Block event) ->
                 event.register(NeoForgeCamoModel::color, CamoModels.camoBlocks().toArray(Block[]::new)));
         NeoForge.EVENT_BUS.addListener((ItemTooltipEvent event) ->

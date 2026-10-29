@@ -271,5 +271,6 @@
   "tooltip.openmodularturrets.generator_upgrade_slot": "Upgrades für den Generator.",
   "tooltip.openmodularturrets.ownership_wand.desc4": "Solange gehalten: Geschützschüsse wirken nicht auf dich",
   "tooltip.openmodularturrets.upgrade.machine.turret_base": "Passt in: Turmbasis",
-  "tooltip.openmodularturrets.upgrade.machine.generator": "Passt in: Generator"
+  "tooltip.openmodularturrets.upgrade.machine.generator": "Passt in: Generator",
+  "tooltip.openmodularturrets.module_disabled": "In der Konfiguration deaktiviert: ohne Wirkung"
 }

@@ -12,6 +12,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 - Slowing and railgun turrets show ambient dust particles again, as on 1.12.2 (light grey; blue while the railgun is deployed)
 - Turret API: TurretDefinition.builder(...).ambientEffect(...) adds client particles to a placed turret
+- Config sections `upgrades` and `addons` switch each upgrade and addon off: it loses its recipe and does nothing in a machine, which shows it with a red slot frame, a "no" symbol over the icon and a red tooltip line
 
 ### Changed
 

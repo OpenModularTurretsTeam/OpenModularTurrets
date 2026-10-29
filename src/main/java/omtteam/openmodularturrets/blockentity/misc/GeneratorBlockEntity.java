@@ -29,6 +29,7 @@ import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.omlib.inventory.ItemAccess;
 import omtteam.openmodularturrets.inventory.FuelContainer;
 import omtteam.openmodularturrets.item.GeneratorUpgradeItem;
+import omtteam.openmodularturrets.item.ModuleToggles;
 import omtteam.omlib.platform.Platform;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import org.jetbrains.annotations.Nullable;
@@ -148,11 +149,12 @@ public class GeneratorBlockEntity extends CompatBlockEntity implements TransferH
         expanderTiers = List.copyOf(tiers);
     }
 
-    /** Number of energy multiplier upgrades in the upgrade slot. */
+    /** Number of energy multiplier upgrades in the upgrade slot; 0 while the upgrade is disabled in the config. */
     public int getMultiplierUpgrades() {
         ItemStack stack = upgrades.getItem(0);
         return stack.getItem() instanceof GeneratorUpgradeItem upgrade
-                && upgrade.getUpgradeType() == GeneratorUpgradeType.ENERGY_MULTIPLIER ? stack.getCount() : 0;
+                && upgrade.getUpgradeType() == GeneratorUpgradeType.ENERGY_MULTIPLIER
+                && ModuleToggles.isEnabled(upgrade.getUpgradeType()) ? stack.getCount() : 0;
     }
 
     /** Energy as exposed to automation on all sides (extract only). */

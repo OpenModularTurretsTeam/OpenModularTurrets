@@ -11,9 +11,11 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.api.OMTPlugin;
+import omtteam.openmodularturrets.compat.ModuleEnabledCondition;
 import omtteam.openmodularturrets.entity.projectile.KillCounter;
 import omtteam.omlib.platform.Platform;
 import omtteam.omlib.registry.RegistrationStep;
@@ -53,6 +55,8 @@ public final class OMTNeoForge {
                 done.add(step);
             }
         }
+        event.register(NeoForgeRegistries.Keys.CONDITION_CODECS, ModuleEnabledCondition.ID,
+                () -> NeoForgeModuleEnabledCondition.CODEC);
     }
 
     /**

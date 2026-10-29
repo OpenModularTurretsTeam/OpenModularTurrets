@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -16,6 +17,7 @@ import omtteam.openmodularturrets.client.OMTClient;
 import omtteam.openmodularturrets.client.api.OMTClientPlugin;
 import omtteam.omlib.client.camo.CamoModels;
 import omtteam.openmodularturrets.client.model.TurretModels;
+import omtteam.openmodularturrets.client.render.DisabledModuleOverlay;
 import omtteam.openmodularturrets.client.render.effect.RayRenderer;
 import omtteam.openmodularturrets.client.render.outline.TurretPlacementOutline;
 import omtteam.omlib.platform.Platform;
@@ -42,6 +44,11 @@ public final class OMTForgeClient {
             OMTClient.registerBlockEntityRenderers(event::registerBlockEntityRenderer);
             OMTClient.registerEntityRenderers(event::registerEntityRenderer);
         });
+        modBus.addListener((RegisterItemDecorationsEvent event) -> DisabledModuleOverlay.moduleItems().forEach(item ->
+                event.register(item, (graphics, font, stack, x, y) -> {
+                    DisabledModuleOverlay.renderItemOverlay(graphics, stack, x, y);
+                    return false;
+                })));
         modBus.addListener((RegisterColorHandlersEvent.Block event) ->
                 event.register(ForgeCamoModel::color, CamoModels.camoBlocks().toArray(Block[]::new)));
         MinecraftForge.EVENT_BUS.addListener((ItemTooltipEvent event) ->
