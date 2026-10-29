@@ -64,6 +64,10 @@ public class AddonMetaItem extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
+        // first, so it shows without shift
+        if (ModuleToggles.isDisabled(stack)) {
+            tooltip.add(TextFormatting.RED + safeLocalize("tooltip.openmodularturrets.module_disabled"));
+        }
         if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
             tooltip.add(GeneralUtil.getShiftDetail());
         } else {

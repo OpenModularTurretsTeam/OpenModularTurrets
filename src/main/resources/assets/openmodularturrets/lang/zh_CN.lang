@@ -219,6 +219,7 @@ text.openmodularturrets.turret.upgrade.scatter.flavour=你只需倾泻更多弹�
 tooltip.openmodularturrets.upgrade.scatter.ignored=Rail Gun, Melee, Slowing and Teleporter Turrets ignore this upgrade.
 tooltip.openmodularturrets.upgrade.machine.turret_base=Fits into: Turret Base
 tooltip.openmodularturrets.upgrade.machine.generator=Fits into: Generator
+tooltip.openmodularturrets.module_disabled=Disabled in the config: does nothing
 
 text.openmodularturrets.turret.ammo.label=炮塔弹药
 text.openmodularturrets.turret.ammo.blazing_clay=燃烧弹适用于燃烧弹炮塔。

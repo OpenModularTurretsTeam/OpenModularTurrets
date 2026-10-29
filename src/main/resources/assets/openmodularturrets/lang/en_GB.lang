@@ -276,6 +276,7 @@ tooltip.openmodularturrets.upgrade.energy_multiplier.flavour=Same coal, more hur
 tooltip.openmodularturrets.generator_upgrade_slot=Upgrades for the generator.
 tooltip.openmodularturrets.upgrade.machine.turret_base=Fits into: Turret Base
 tooltip.openmodularturrets.upgrade.machine.generator=Fits into: Generator
+tooltip.openmodularturrets.module_disabled=Disabled in the config: does nothing
 tile.inventory_expander_tier_one.name=Inventory Expander (Tier 1)
 tile.inventory_expander_tier_two.name=Inventory Expander (Tier 2)
 tile.inventory_expander_tier_three.name=Inventory Expander (Tier 3)

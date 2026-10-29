@@ -225,6 +225,7 @@ text.openmodularturrets.turret.upgrade.scatter.flavour=Você só precisa atirar 
 tooltip.openmodularturrets.upgrade.scatter.ignored=Rail Gun, Melee, Slowing and Teleporter Turrets ignore this upgrade.
 tooltip.openmodularturrets.upgrade.machine.turret_base=Fits into: Turret Base
 tooltip.openmodularturrets.upgrade.machine.generator=Fits into: Generator
+tooltip.openmodularturrets.module_disabled=Disabled in the config: does nothing
 
 text.openmodularturrets.turret.ammo.label=Munição de Torre
 text.openmodularturrets.turret.ammo.blazing_clay=Argila Ardente para a Torre Incendiária

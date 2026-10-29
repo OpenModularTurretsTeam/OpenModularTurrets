@@ -28,6 +28,7 @@ import omtteam.openmodularturrets.core.generator.GeneratorLogic;
 import omtteam.openmodularturrets.core.item.GeneratorUpgradeType;
 import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.item.ItemGeneratorUpgrade;
+import omtteam.openmodularturrets.item.ModuleToggles;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -174,10 +175,11 @@ public class GeneratorTileEntity extends TileEntityBase implements ITickable {
         return upgrades;
     }
 
-    /** Number of energy multiplier upgrades in the upgrade slot. */
+    /** Number of energy multiplier upgrades in the upgrade slot; 0 while the upgrade is disabled in the config. */
     public int getMultiplierUpgrades() {
         ItemStack stack = upgrades.getStackInSlot(0);
-        return isUpgrade(stack) ? stack.getCount() : 0;
+        return isUpgrade(stack) && ModuleToggles.isEnabled(((ItemGeneratorUpgrade) stack.getItem()).getUpgradeType())
+                ? stack.getCount() : 0;
     }
 
     public long getEnergy() {

@@ -22,6 +22,10 @@
     {
       "type": "openmodularturrets:recipetype",
       "mod": "computer"
+    },
+    {
+      "type": "openmodularturrets:module_enabled",
+      "items": ["addon_serial_port"]
     }
   ]
 }
