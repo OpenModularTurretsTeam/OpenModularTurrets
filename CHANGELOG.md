@@ -12,6 +12,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 - Config sections `upgrades` and `addons` switch each upgrade and addon off (as on 1.20.1+): it loses its recipe and does nothing in a machine, which shows it with a red slot frame, a "no" symbol over the icon and a red tooltip line
 
+### Changed
+
+- The potentia converter addon is no longer in the creative tab and JEI: it does nothing and has no recipe
+
 ## [4.0.0] - 2026-11-02
 
 ### Changed

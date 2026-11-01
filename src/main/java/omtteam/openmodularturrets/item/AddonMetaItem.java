@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.util.GeneralUtil;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import org.lwjgl.input.Keyboard;
@@ -43,7 +44,10 @@ public class AddonMetaItem extends Item {
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         if (isInCreativeTab(itemIn)) {
             for (int i = 0; i < 8; i++) {
-                subItems.add(new ItemStack(this, 1, i));
+                // the potentia converter does nothing and has no recipe, so it stays out of the tab (and JEI)
+                if (i != AddonType.POTENTIA.ordinal()) {
+                    subItems.add(new ItemStack(this, 1, i));
+                }
             }
         }
     }
