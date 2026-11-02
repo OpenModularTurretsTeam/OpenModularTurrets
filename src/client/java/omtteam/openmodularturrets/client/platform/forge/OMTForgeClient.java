@@ -2,7 +2,6 @@ package omtteam.openmodularturrets.client.platform.forge;
 
 import omtteam.omlib.client.platform.forge.ForgeCamoModel;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -14,7 +13,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import omtteam.openmodularturrets.client.OMTClient;
 import omtteam.openmodularturrets.client.api.OMTClientPlugin;
-import omtteam.omlib.client.camo.CamoModels;
 import omtteam.openmodularturrets.client.model.TurretModels;
 import omtteam.openmodularturrets.client.render.effect.RayRenderer;
 import omtteam.openmodularturrets.client.render.outline.TurretPlacementOutline;
@@ -43,7 +41,7 @@ public final class OMTForgeClient {
             OMTClient.registerEntityRenderers(event::registerEntityRenderer);
         });
         modBus.addListener((RegisterColorHandlersEvent.Block event) ->
-                event.register(ForgeCamoModel::color, CamoModels.camoBlocks().toArray(Block[]::new)));
+                event.register(ForgeCamoModel::color, OMTClient.camoBlocks()));
         MinecraftForge.EVENT_BUS.addListener((ItemTooltipEvent event) ->
                 OMTClient.appendTooltip(event.getItemStack(), event.getFlags(), event.getToolTip()));
         MinecraftForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut event) -> OMTClient.onDisconnect());

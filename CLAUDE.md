@@ -287,6 +287,7 @@ New questions that these do not answer go through §7 "Designing APIs".
 - Renderers and colour providers expose their content (e.g. a `BlockColor` method plus the block list, a render method taking level, pose stack, buffers and camera); the loader entrypoints register them.
 - Render types on NeoForge come from `"render_type"` in the model JSON; Fabric keeps `BlockRenderLayerMap` (keep both in sync).
 - OMT (decided by the user): client turret plugins are handed in by the loader client entrypoint like on the server (`OMTClient.init(plugins)`); entity renderers, block entity renderers and model layers go through `OMTClient.registerEntityRenderers(EntityRendererRegistrar)`, `registerBlockEntityRenderers(BlockEntityRendererRegistrar)` (both generic interfaces in `client.render`, there to avoid a package cycle) and `registerModelLayers(BiConsumer)`; on NeoForge the camouflage disguise reaches the model as `CompatBlockEntity.RENDER_DATA` model data, and a colour provider on the hosts forwards the disguise's colour.
+  It is registered for this mod's camouflage blocks only (`OMTClient.camoBlocks()`, NeoForge and Forge): `CamoModels.camoBlocks()` lists every `CamoBlock` in the registry, and a block takes only one colour provider, so registering it for Open Modular Lighting's floodlights took away their dye colour (fixed on 2026-11-02).
 
 **Data**
 

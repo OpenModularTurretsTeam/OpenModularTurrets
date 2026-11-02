@@ -21,6 +21,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 - The Jade tooltip of a turret showed its inaccuracy labelled as "Accuracy"; it is now labelled "Inaccuracy"
 - The memory card tooltip showed raw translation keys instead of the access levels of the trusted players
+- NeoForge and Forge, with Open Modular Lighting installed: its floodlights could lose their dye colour
 
 ## [4.0.0-beta.11] - 2026-10-27
 

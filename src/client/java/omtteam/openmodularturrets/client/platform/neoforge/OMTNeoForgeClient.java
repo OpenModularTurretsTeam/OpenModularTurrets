@@ -1,8 +1,6 @@
 package omtteam.openmodularturrets.client.platform.neoforge;
 
 import omtteam.omlib.client.platform.neoforge.NeoForgeCamoModel;
-import omtteam.omlib.client.platform.neoforge.NeoForgeCamoModel;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -23,7 +21,6 @@ import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.client.OMTClient;
 import omtteam.openmodularturrets.client.api.OMTClientPlugin;
-import omtteam.omlib.client.camo.CamoModels;
 import omtteam.openmodularturrets.client.model.TurretModels;
 import omtteam.openmodularturrets.client.render.effect.RayRenderer;
 import omtteam.openmodularturrets.client.render.outline.TurretPlacementOutline;
@@ -58,7 +55,7 @@ public final class OMTNeoForgeClient {
                 event.registerItem(NeoForgeItemRenderer.extensions(renderer), item)));
         //?}
         modBus.addListener((RegisterColorHandlersEvent.Block event) ->
-                event.register(NeoForgeCamoModel::color, CamoModels.camoBlocks().toArray(Block[]::new)));
+                event.register(NeoForgeCamoModel::color, OMTClient.camoBlocks()));
         NeoForge.EVENT_BUS.addListener((ItemTooltipEvent event) ->
                 OMTClient.appendTooltip(event.getItemStack(), event.getFlags(), event.getToolTip()));
         NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut event) -> OMTClient.onDisconnect());

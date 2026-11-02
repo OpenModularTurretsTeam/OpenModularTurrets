@@ -1,12 +1,15 @@
 package omtteam.openmodularturrets.client;
 
 import omtteam.omlib.client.ScreenRegistrar;
+import omtteam.omlib.client.camo.CamoModels;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
+import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.client.model.TurretModels;
 import omtteam.openmodularturrets.client.render.BlockEntityRendererRegistrar;
 import omtteam.openmodularturrets.client.render.EntityRendererRegistrar;
@@ -41,7 +44,6 @@ import java.util.function.Supplier;
 /*import com.mojang.serialization.MapCodec;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.resources.ResourceLocation;
-import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.client.render.item.LeverSpecialRenderer;
 import omtteam.openmodularturrets.client.render.item.TurretSpecialRenderer;
 *///?} else {
@@ -134,6 +136,16 @@ public final class OMTClient {
      */
     public static List<? extends Block> cutoutBlocks() {
         return ModBlocks.FENCES;
+    }
+
+    /**
+     * This mod's camouflage blocks (turret bases, camouflage trap), for the colour provider of the NeoForge and Forge
+     * clients; other mods' camouflage blocks (Open Modular Lighting's floodlights) register their own.
+     */
+    public static Block[] camoBlocks() {
+        return CamoModels.camoBlocks().stream()
+                .filter(block -> BuiltInRegistries.BLOCK.getKey(block).getNamespace().equals(OMT.MOD_ID))
+                .toArray(Block[]::new);
     }
 
     /**
