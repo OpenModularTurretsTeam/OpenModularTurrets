@@ -15,7 +15,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ### Changed
 
-- New generator textures: every side has its own texture, and the tubes on the sides of a running generator are animated
+- New generator textures: every side has its own texture, and the belts on the sides of a running generator are animated
 
 ### Fixed
 
