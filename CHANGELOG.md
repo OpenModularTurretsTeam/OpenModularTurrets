@@ -8,6 +8,8 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-11-03
+
 ### Added
 
 - Slowing and railgun turrets show ambient dust particles again, as on 1.12.2 (light grey; blue while the railgun is deployed)
