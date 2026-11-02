@@ -10,6 +10,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ### Changed
 
+- Requires OMLib 4.0.0 or newer
 - The tubes on the sides of a running generator animate faster, as on 1.20.1+
 
 ## [4.0.0-beta.6] - 2026-10-29
