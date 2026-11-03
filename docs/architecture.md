@@ -264,6 +264,7 @@ The NeoForge and Forge builds have no datagen of their own: they convert the Fab
 | shared code does not use Fabric API or Team Reborn Energy | compiling the `1.21.1-neoforge` and `1.20.1-forge` nodes |
 | main code never uses client code | `ArchitectureTest.mainCodeNeverDependsOnClientCode` |
 | no new package cycles, and the known ones only shrink | `ArchitectureTest.noNewPackageCycles` (list `KNOWN_CYCLES`) |
+| every item has a recipe (unless `recipe-exempt.txt` names it with a reason), and every recipe makes an item of the mod | the `checkRecipes` task on every node (`omlib/build-logic/src/main/kotlin/RecipeCoverage.kt`), on the node's processed resources |
 | core rules behave as specified | unit tests in `src/test` |
 | every turret hits in a real world, on every loader | game tests in `src/gametest` (`runGameTest` on Fabric, `runGameTestServer` on NeoForge and Forge) |
 | right-clicking a base opens its GUI for players with access only | `BaseGuiGameTests` |
