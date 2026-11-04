@@ -45,3 +45,11 @@ type = "optional"
 versionRange = "*"
 ordering = "NONE"
 side = "BOTH"
+
+# OpenComputers: Rebooted (1.21.1 only): the turret base becomes a component when it is installed
+[[dependencies.${mod_id}]]
+modId = "opencomputers"
+type = "optional"
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"

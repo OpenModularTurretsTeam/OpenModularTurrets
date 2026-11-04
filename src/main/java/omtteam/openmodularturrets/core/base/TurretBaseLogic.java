@@ -67,6 +67,7 @@ public class TurretBaseLogic {
     private int kills;
     private int playerKills;
     private boolean concealTurrets;
+    private boolean computerControlled;
     private int ticks;
 
     /**
@@ -118,7 +119,8 @@ public class TurretBaseLogic {
     /**
      * Server tick (1.12.2 {@code TurretBase.update}). Every tick: solar panel, player warnings (throttled); every 5
      * ticks: concealment, energy capacity and max range; every 20 ticks: redstone reactor. The
-     * creative upgrade fills the energy storage every tick, right before the targeting.
+     * creative upgrade fills the energy storage every tick, right before the targeting. While a
+     * {@linkplain #isComputerControlled() computer controls the turrets} there is no targeting and no warning.
      */
     public void tick(long gameTime) {
         ticks++;
@@ -188,6 +190,11 @@ public class TurretBaseLogic {
             redstone = powered;
             markSync();
         }
+    }
+
+    /** The last redstone signal (1.12.2 {@code TurretBase.getRedstone}). */
+    public boolean hasRedstoneSignal() {
+        return redstone;
     }
 
     /** The base inventory changed (ammo, upgrades or addons), e.g. through the GUI or automation. */
@@ -557,6 +564,36 @@ public class TurretBaseLogic {
         markSync();
     }
 
+    // ---- Computer control ----
+
+    /**
+     * Whether a computer controls the turrets (no own targeting). Only while the base {@linkplain #acceptsComputers()
+     * accepts computers}: a base that lost its serial port targets on its own again (the setting is kept and applies
+     * again once the port is back), since no computer could switch it off.
+     */
+    public boolean isComputerControlled() {
+        return computerControlled && acceptsComputers();
+    }
+
+    /**
+     * Sets it; notifies the listener (client-relevant). Switching it on drops all targets at once; while it is on
+     * the base searches no targets and warns no players, and the computer aims and fires the turrets.
+     */
+    public void setComputerControlled(boolean controlled) {
+        if (computerControlled == controlled) return;
+        computerControlled = controlled;
+        if (controlled) targets.clear();
+        markSync();
+    }
+
+    /**
+     * Whether computers may use the base (1.12.2 {@code TurretBase.isComputerAccessible} without the check for a
+     * computer mod): a tier 5 base, or a serial port addon in a slot the tier can use.
+     */
+    public boolean acceptsComputers() {
+        return tier == BaseTier.MAX || hasAddon(AddonType.SERIAL_PORT);
+    }
+
     // ---- Targeting ----
 
     /**
@@ -564,6 +601,8 @@ public class TurretBaseLogic {
      * {@code TurretHead.targetingChecks}:
      * <ul>
      *     <li>inactive base: all targets are dropped;</li>
+     *     <li>{@linkplain #isComputerControlled() computer-controlled} base: all targets are dropped and none are
+     *     searched;</li>
      *     <li>not enough energy for the turret's next shot: nothing happens;</li>
      *     <li>without a target the turret searches every {@code turretTargetSearchTicks} + 1 ticks;</li>
      *     <li>with a target it re-checks it every tick and searches a new one as soon as the old one is no longer
@@ -573,7 +612,7 @@ public class TurretBaseLogic {
      * longer a valid target at all (out of range, became trusted, setting changed, …).
      */
     private void updateTargets() {
-        if (!isActive()) {
+        if (!isActive() || isComputerControlled()) {
             targets.clear();
             return;
         }
@@ -637,10 +676,13 @@ public class TurretBaseLogic {
     /**
      * 1.12.2 {@code TurretHeadUtil.warnPlayers}, called per turret while the base is active and has enough energy for
      * a shot: players in the cube {@code turret ± (baseRange + warning distance)} who are not owner, trusted or in
-     * creative mode are warned once every {@value #WARNING_COOLDOWN_TICKS} ticks.
+     * creative mode are warned once every {@value #WARNING_COOLDOWN_TICKS} ticks. Nobody is warned while a
+     * {@linkplain #isComputerControlled() computer controls the turrets}.
      */
     void warnPlayers(long gameTime) {
-        if (!targeting.isTargetPlayers() || !settings.globalCanTargetPlayers() || !isActive()) return;
+        if (isComputerControlled() || !targeting.isTargetPlayers() || !settings.globalCanTargetPlayers() || !isActive()) {
+            return;
+        }
         warnedPlayers.values().removeIf(until -> until < gameTime);
         for (Map.Entry<Face, TurretType> turret : getTurrets().entrySet()) {
             if (!hasEnergyForShot(turret.getValue())) continue;
@@ -697,7 +739,7 @@ public class TurretBaseLogic {
     public State getState() {
         return new State(energy.getAmount(), mode, redstone, targeting.isTargetPlayers(), targeting.isTargetMobs(),
                 targeting.isTargetPassive(), targeting.getRange(), targeting.getMaxRange(), multiTargeting, kills,
-                playerKills);
+                playerKills, computerControlled);
     }
 
     /** Restores state saved with {@link #getState()}. Does not notify the listener. */
@@ -710,19 +752,21 @@ public class TurretBaseLogic {
         multiTargeting = state.multiTargeting();
         kills = state.kills();
         playerKills = state.playerKills();
+        computerControlled = state.computerControlled();
     }
 
     /**
-     * Saved base state (the trust list is saved separately through {@link #getTrustManager()}).
+     * Saved base state (the trust list is saved separately through {@link #getTrustManager()});
+     * {@code computerControlled} is {@link #isComputerControlled()}.
      */
     public record State(long energy, MachineMode mode, boolean redstone, boolean targetPlayers, boolean targetMobs,
                         boolean targetPassive, int range, int maxRange, boolean multiTargeting, int kills,
-                        int playerKills) {
+                        int playerKills, boolean computerControlled) {
         /** State of a newly placed base. */
         public static State defaults() {
             TargetingSettings targeting = TargetingSettings.defaults();
             return new State(0, MachineMode.INVERTED, false, targeting.isTargetPlayers(), targeting.isTargetMobs(),
-                    targeting.isTargetPassive(), 0, 0, false, 0, 0);
+                    targeting.isTargetPassive(), 0, 0, false, 0, 0, false);
         }
     }
 }

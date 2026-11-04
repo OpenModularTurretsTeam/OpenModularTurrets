@@ -3,8 +3,9 @@ package omtteam.openmodularturrets.core.item;
 /**
  * Addons that go into the addon slots of a base. Ported from 1.12.2 {@code AddonMetaItem} (meta 0–7).
  * <p>
- * {@link #POTENTIA} (Thaumcraft, already without function and recipe in 1.12.2) and {@link #SERIAL_PORT}
- * (OpenComputers/ComputerCraft, out of scope) have no item.
+ * {@link #POTENTIA} (Thaumcraft, already without function and recipe in 1.12.2) has no item. {@link #SERIAL_PORT}
+ * lets computers access bases of tiers below 5 (OpenComputers: Rebooted on 1.21.1 NeoForge; ComputerCraft is not
+ * supported).
  */
 public enum AddonType {
     CONCEALER("concealer", 1),

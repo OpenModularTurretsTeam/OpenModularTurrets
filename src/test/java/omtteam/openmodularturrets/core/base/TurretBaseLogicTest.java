@@ -7,6 +7,8 @@ import omtteam.omlib.core.security.PlayerInfo;
 import omtteam.omlib.core.security.SecurityEnvironment;
 import omtteam.openmodularturrets.core.settings.BaseTierStats;
 import omtteam.openmodularturrets.core.storage.SlotCapacity;
+import omtteam.openmodularturrets.core.target.EntityCategory;
+import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.omlib.core.world.Face;
@@ -422,7 +424,7 @@ class TurretBaseLogicTest {
             TurretBaseLogic logic = new TurretBaseLogic(4, settings, NO_TEAMS, world, random, clientRelevant -> {
             });
             logic.loadState(new TurretBaseLogic.State(0, MachineMode.INVERTED, false, false, true, false, 5, 30,
-                    false, 0, 0));
+                    false, 0, 0, false));
             logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET));
             assertEquals(5, logic.getTargetingSettings().getRange());
         }
@@ -441,7 +443,7 @@ class TurretBaseLogicTest {
             TurretBaseLogic logic = new TurretBaseLogic(4, settings, NO_TEAMS, world, random, clientRelevant -> {
             });
             logic.loadState(new TurretBaseLogic.State(0, MachineMode.INVERTED, false, false, true, false, 0, 30,
-                    false, 0, 0));
+                    false, 0, 0, false));
             logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET));
             assertEquals(0, logic.getTargetingSettings().getRange());
         }
@@ -471,7 +473,7 @@ class TurretBaseLogicTest {
             TurretBaseLogic logic = new TurretBaseLogic(5, settings, NO_TEAMS, world, random, changed -> {
             });
             TurretBaseLogic.State saved = new TurretBaseLogic.State(0, MachineMode.INVERTED, false, false, true,
-                    false, 20, 30, false, 0, 0);
+                    false, 20, 30, false, 0, 0, false);
             logic.loadState(saved);
             logic.tick(5);
             assertEquals(20, logic.getTargetingSettings().getRange());
@@ -904,6 +906,119 @@ class TurretBaseLogicTest {
             logic.getEnergy().consume(logic.getEnergy().getAmount());
             logic.warnPlayers(10);
             assertTrue(world.warned.isEmpty());
+        }
+    }
+
+    @Nested
+    class ComputerControl {
+        private TurretBaseLogic logic;
+        private FakeTarget zombie;
+
+        @BeforeEach
+        void setUpBase() {
+            logic = base(5);
+            logic.updateNeighbours(Map.of(Face.UP, new Neighbour.Turret(TurretType.MACHINE_GUN_TURRET)));
+            logic.getEnergy().generate(10000);
+            // turret at (100, 65, 100), range 18
+            zombie = FakeTarget.mob(105, 65, 100, "minecraft:zombie", EntityCategory.MONSTER);
+            world.entities.add(zombie);
+        }
+
+        private Optional<Integer> targetId() {
+            return logic.getTarget(Face.UP).map(TargetEntity::getId);
+        }
+
+        @Test
+        void switchingItOnDropsTheTargets() {
+            tick(logic, 11);
+            assertEquals(Optional.of(zombie.getId()), targetId());
+            logic.setComputerControlled(true);
+            assertTrue(logic.isComputerControlled());
+            assertTrue(logic.getTargetIds().isEmpty());
+        }
+
+        @Test
+        void controlledBasesSearchNoTargets() {
+            logic.setComputerControlled(true);
+            tick(logic, 50);
+            assertTrue(logic.getTargetIds().isEmpty());
+            logic.setComputerControlled(false);
+            tick(logic, 11);
+            assertEquals(Optional.of(zombie.getId()), targetId(), "own targeting again once the computer lets go");
+        }
+
+        @Test
+        void controlledBasesWarnNobody() {
+            logic.setTargetPlayers(true);
+            world.entities.add(new FakeTarget(100, 70, 100, STRANGER));
+            logic.setComputerControlled(true);
+            logic.warnPlayers(10);
+            assertTrue(world.warned.isEmpty());
+            logic.setComputerControlled(false);
+            logic.warnPlayers(10);
+            assertEquals(1, world.warned.size());
+        }
+
+        @Test
+        void changesAreSyncedOnce() {
+            int syncsBefore = syncCount;
+            logic.setComputerControlled(true);
+            logic.setComputerControlled(true);
+            assertEquals(syncsBefore + 1, syncCount, "clients show whether a computer controls the base");
+            logic.setComputerControlled(false);
+            assertEquals(syncsBefore + 2, syncCount);
+        }
+
+        @Test
+        void stateRoundTrip() {
+            assertFalse(logic.getState().computerControlled());
+            assertFalse(TurretBaseLogic.State.defaults().computerControlled());
+            logic.setComputerControlled(true);
+            TurretBaseLogic.State state = logic.getState();
+            assertTrue(state.computerControlled());
+            TurretBaseLogic copy = base(5);
+            copy.loadState(state);
+            assertTrue(copy.isComputerControlled());
+            assertEquals(state, copy.getState());
+        }
+
+        @Test
+        void tierFiveBasesAcceptComputers() {
+            assertTrue(logic.acceptsComputers());
+            assertFalse(base(4).acceptsComputers());
+            assertFalse(base(2).acceptsComputers());
+        }
+
+        @Test
+        void aSerialPortOpensLowerTiers() {
+            addon(1, AddonType.SERIAL_PORT, 1);
+            assertTrue(base(2).acceptsComputers());
+            assertTrue(base(4).acceptsComputers());
+            assertFalse(base(1).acceptsComputers(), "tier 1 bases have no addon slots");
+        }
+
+        @Test
+        void controlEndsWhileTheBaseAcceptsNoComputers() {
+            TurretBaseLogic lower = base(3);
+            lower.updateNeighbours(Map.of(Face.UP, new Neighbour.Turret(TurretType.MACHINE_GUN_TURRET)));
+            lower.getEnergy().generate(10000);
+            addon(1, AddonType.SERIAL_PORT, 1);
+            lower.setComputerControlled(true);
+            assertTrue(lower.isComputerControlled());
+            world.addonSlots.set(1, FakeSlot.empty());
+            assertFalse(lower.isComputerControlled(), "no computer could switch it off any more");
+            assertTrue(lower.getState().computerControlled(), "kept for when the serial port is back");
+            tick(lower, 11);
+            assertEquals(Optional.of(zombie.getId()), lower.getTarget(Face.UP).map(TargetEntity::getId));
+            addon(1, AddonType.SERIAL_PORT, 1);
+            assertTrue(lower.isComputerControlled());
+        }
+
+        @Test
+        void redstoneSignalIsReported() {
+            assertFalse(logic.hasRedstoneSignal());
+            logic.setRedstone(true);
+            assertTrue(logic.hasRedstoneSignal());
         }
     }
 }

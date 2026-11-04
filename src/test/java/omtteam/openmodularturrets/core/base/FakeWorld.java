@@ -12,10 +12,10 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /** Test world with editable slots and entities. */
-final class FakeWorld implements BaseWorld {
+public final class FakeWorld implements BaseWorld {
     final BlockPosition position = new BlockPosition(100, 64, 100);
-    final List<ItemSlot> ammoSlots = new ArrayList<>();
-    final List<ItemSlot> addonSlots = new ArrayList<>(List.of(FakeSlot.empty(), FakeSlot.empty()));
+    public final List<ItemSlot> ammoSlots = new ArrayList<>();
+    public final List<ItemSlot> addonSlots = new ArrayList<>(List.of(FakeSlot.empty(), FakeSlot.empty()));
     final List<ItemSlot> upgradeSlots = new ArrayList<>(List.of(FakeSlot.empty(), FakeSlot.empty()));
     final List<TargetEntity> entities = new ArrayList<>();
     final List<TargetEntity> warned = new ArrayList<>();

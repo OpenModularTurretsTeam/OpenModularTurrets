@@ -9,7 +9,7 @@ import omtteam.openmodularturrets.core.turret.AmmoType;
 import java.util.Optional;
 
 /** Test slot holding a stack of one kind of item. */
-final class FakeSlot implements ItemSlot {
+public final class FakeSlot implements ItemSlot {
     AmmoType ammo;
     int disposableBonus;
     ReactorFuel fuel;
@@ -19,7 +19,7 @@ final class FakeSlot implements ItemSlot {
     /** A slot whose items cannot be taken out (extract removes nothing). */
     boolean locked;
 
-    static FakeSlot empty() {
+    public static FakeSlot empty() {
         return new FakeSlot();
     }
 
@@ -50,7 +50,7 @@ final class FakeSlot implements ItemSlot {
         return slot;
     }
 
-    static FakeSlot addon(AddonType type, int count) {
+    public static FakeSlot addon(AddonType type, int count) {
         FakeSlot slot = new FakeSlot();
         slot.addon = type;
         slot.count = count;

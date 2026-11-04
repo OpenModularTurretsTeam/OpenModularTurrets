@@ -15,6 +15,9 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.api.OMTPlugin;
 import omtteam.openmodularturrets.entity.projectile.KillCounter;
+//? if <1.21.11 {
+import omtteam.openmodularturrets.platform.neoforge.opencomputers.OpenComputersCompat;
+//?}
 import omtteam.omlib.platform.Platform;
 import omtteam.omlib.registry.RegistrationStep;
 import omtteam.openmodularturrets.registry.TurretRegistry;
@@ -57,7 +60,8 @@ public final class OMTNeoForge {
 
     /**
      * A step whose registry fired no event would leave its content unregistered: fail loudly instead. With Create
-     * installed, its contraptions may move bases and turrets ({@link NeoForgeCreateMovement}).
+     * installed, its contraptions may move bases and turrets ({@link NeoForgeCreateMovement}); with OpenComputers:
+     * Rebooted installed, turret bases are components ({@code OpenComputersCompat}). Both classes are only loaded then.
      */
     private void onCommonSetup(FMLCommonSetupEvent event) {
         if (done.size() != steps.size()) {
@@ -67,6 +71,9 @@ public final class OMTNeoForge {
         //? if <1.21.11 {
         if (Platform.loaderInfo().isModLoaded(NeoForgeCreateMovement.CREATE_MOD_ID)) {
             event.enqueueWork(NeoForgeCreateMovement::register);
+        }
+        if (Platform.loaderInfo().isModLoaded(OpenComputersCompat.MOD_ID)) {
+            event.enqueueWork(OpenComputersCompat::register);
         }
         //?}
     }

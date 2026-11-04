@@ -107,7 +107,7 @@ The inventory expanders of 4.x (`inventory_expander_tier_one` to `_three`, the m
 | `openmodularturrets:addon_meta` | 2 | *(not ported: potentia converter, no function in oldmod)* |
 | `openmodularturrets:addon_meta` | 3 | `openmodularturrets:addon_recycler` |
 | `openmodularturrets:addon_meta` | 4 | `openmodularturrets:addon_redstone_reactor` |
-| `openmodularturrets:addon_meta` | 5 | *(not ported: serial port, computer integration out of scope)* |
+| `openmodularturrets:addon_meta` | 5 | `openmodularturrets:addon_serial_port` |
 | `openmodularturrets:addon_meta` | 6 | `openmodularturrets:addon_solar_panel` |
 | `openmodularturrets:addon_meta` | 7 | `openmodularturrets:addon_fake_drops` |
 

@@ -27,6 +27,7 @@ Open Modular Turrets has long been a popular choice in PvP modpacks, and it is n
 - **Turret API for other mods:** add turrets with their own weapons, ammo, models and custom hit logic; see [docs/turret-api.md](docs/turret-api.md)
 - Uses **Team Reborn Energy** on Fabric, so it works with energy from other Fabric tech mods; the NeoForge build uses its energy capability instead
 - Optional **Jade** support for turret bases and turrets, on both loaders
+- Optional **OpenComputers: Rebooted** support (NeoForge 1.21.1, the only version it exists for): turret bases are computer components, as on 1.12.2, with a Serial Port addon or on tier 5; computers can read and change targeting and trusted players and aim and fire the turrets themselves
 
 ## Requirements
 

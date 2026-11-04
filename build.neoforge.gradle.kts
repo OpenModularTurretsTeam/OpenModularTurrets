@@ -76,19 +76,28 @@ repositories {
         forRepository { maven("https://maven.ryanhcode.dev/releases") { name = "Sable" } }
         filter { includeGroup("dev.ryanhcode.sable-companion") }
     }
+    // OpenComputers: Rebooted (1.21.1 only) comes from its own maven
+    exclusiveContent {
+        forRepository { maven("https://maven.michiyo.me/releases/") { name = "OpenComputers" } }
+        filter { includeGroup("li.cil.oc") }
+    }
 }
 
 // No Sable, Create or Create Aeronautics for 1.21.11 (their properties are missing there): no movement check, no hook
-// into Simulated (and so no second mixin config), and none of the game tests that need them
+// into Simulated (and so no second mixin config), and none of the game tests that need them. No OpenComputers: Rebooted
+// either (1.21.1 only): no turret base component and no test for it
 if (stonecutter.current.parsed >= "1.21.11") {
     sourceSets.main {
-        java { exclude("**/platform/neoforge/NeoForgeCreateMovement.java", "**/platform/neoforge/mixin/**") }
+        java {
+            exclude("**/platform/neoforge/NeoForgeCreateMovement.java", "**/platform/neoforge/mixin/**",
+                "**/platform/neoforge/opencomputers/**")
+        }
         resources { exclude("openmodularturrets.neoforge.mixins.json") }
     }
     sourceSets.named("gametest") {
         java {
             exclude("**/platform/neoforge/SableContraptionGameTests.java", "**/platform/neoforge/CreateMovementGameTests.java",
-                "**/platform/neoforge/SimulatedAssemblyGameTests.java")
+                "**/platform/neoforge/SimulatedAssemblyGameTests.java", "**/platform/neoforge/OpenComputersGameTests.java")
         }
     }
     tasks.processResources {
@@ -147,6 +156,17 @@ dependencies {
         "gametestRuntimeOnly"("maven.modrinth:create:${property("create_version")}")
         // Simulated (bundled in Create Aeronautics) on the GameTest server, for the test of the Physics Assembler mixin
         "gametestRuntimeOnly"("maven.modrinth:create-aeronautics:${property("create_aeronautics_version")}")
+    }
+
+    // OpenComputers: Rebooted (1.21.1 only; the 1.21.11 node has no opencomputers_version): the turret base component
+    // (platform/neoforge/opencomputers) compiles against its API jar, never bundled, only used when OpenComputers is
+    // installed; the full mod (Scala bundled inside) is in the dev runs and on the GameTest server for its test. Not
+    // transitive: its POM lists Create, AE2 and others as runtime dependencies, which it does not require.
+    (findProperty("opencomputers_version") as String?)?.let { oc ->
+        compileOnly("li.cil.oc:opencomputers:$oc:api") { isTransitive = false }
+        localRuntime("li.cil.oc:opencomputers:$oc") { isTransitive = false }
+        "gametestCompileOnly"("li.cil.oc:opencomputers:$oc:api") { isTransitive = false }
+        "gametestRuntimeOnly"("li.cil.oc:opencomputers:$oc") { isTransitive = false }
     }
 }
 // The client half of the Jade plugin (client/compat/jade) compiles against it too, as with Loom's client source set

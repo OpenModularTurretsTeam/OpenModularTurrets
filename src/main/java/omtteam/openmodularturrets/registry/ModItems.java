@@ -83,13 +83,14 @@ public final class ModItems {
             "upgrade_" + GeneratorUpgradeType.ENERGY_MULTIPLIER.getSerializedName(),
             properties -> new GeneratorUpgradeItem(GeneratorUpgradeType.ENERGY_MULTIPLIER, properties), new Item.Properties());
 
-    // Addons (1.12.2 AddonMetaItem; potentia and serial port are not ported, see AddonType)
+    // Addons (1.12.2 AddonMetaItem; potentia is not ported, see AddonType)
     public static final AddonItem ADDON_CONCEALER = registerAddon(AddonType.CONCEALER);
     public static final AddonItem ADDON_DAMAGE_AMP = registerAddon(AddonType.DAMAGE_AMP);
     public static final AddonItem ADDON_RECYCLER = registerAddon(AddonType.RECYCLER);
     public static final AddonItem ADDON_REDSTONE_REACTOR = registerAddon(AddonType.REDSTONE_REACTOR);
     public static final AddonItem ADDON_SOLAR_PANEL = registerAddon(AddonType.SOLAR_PANEL);
     public static final AddonItem ADDON_FAKE_DROPS = registerAddon(AddonType.FAKE_DROPS);
+    public static final AddonItem ADDON_SERIAL_PORT = registerAddon(AddonType.SERIAL_PORT);
 
     // Misc and passive defense blocks
     public static final BlockItem LEVER = registerBlock(ModBlocks.LEVER);

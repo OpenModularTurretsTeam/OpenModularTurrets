@@ -26,6 +26,7 @@ public final class TurretBaseNbt {
         tag.putBoolean("MultiTargeting", state.multiTargeting());
         tag.putInt("Kills", state.kills());
         tag.putInt("PlayerKills", state.playerKills());
+        tag.putBoolean("ComputerControl", state.computerControlled());
     }
 
     public static TurretBaseLogic.State load(CompoundTag tag) {
@@ -43,6 +44,7 @@ public final class TurretBaseNbt {
                 NbtCompat.getInt(targeting, "MaxRange", 0),
                 NbtCompat.getBoolean(tag, "MultiTargeting", false),
                 NbtCompat.getInt(tag, "Kills", 0),
-                NbtCompat.getInt(tag, "PlayerKills", 0));
+                NbtCompat.getInt(tag, "PlayerKills", 0),
+                NbtCompat.getBoolean(tag, "ComputerControl", false));
     }
 }

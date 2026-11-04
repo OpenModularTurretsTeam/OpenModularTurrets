@@ -8,6 +8,12 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Added
+
+- Serial Port addon, with the recipe from 1.12.2 (quartz and I/O buses): lets computers use turret bases of tiers 2–4 (tier 5 bases accept them without it)
+- NeoForge 1.21.1 with OpenComputers: Rebooted: an Adapter next to a turret base offers it as the component `turret_base`, with the callbacks of 1.12.2 (targeting, trusted players, redstone mode, energy, turret aim, auto fire and forced shots)
+- Computer control: `setComputerControl(true)` stops a base's turrets from targeting on their own, so a computer aims and fires them (`isComputerControl` tells whether it is on)
+
 ## [4.0.0] - 2026-11-03
 
 ### Added
