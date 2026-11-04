@@ -19,5 +19,11 @@
     "C": {
       "item": "#IOBUS"
     }
-  }
+  },
+  "conditions": [
+    {
+      "type": "openmodularturrets:module_enabled",
+      "items": ["upgrade_energy_multiplier"]
+    }
+  ]
 }

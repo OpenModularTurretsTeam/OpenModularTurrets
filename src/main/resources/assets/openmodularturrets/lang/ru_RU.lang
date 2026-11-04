@@ -211,6 +211,7 @@ tooltip.openmodularturrets.upgrade.creative.b=and turrets on this base use no am
 tooltip.openmodularturrets.upgrade.creative.flavour=Infinite power, infinite bullets.
 tooltip.openmodularturrets.upgrade.machine.turret_base=Fits into: Turret Base
 tooltip.openmodularturrets.upgrade.machine.generator=Fits into: Generator
+tooltip.openmodularturrets.module_disabled=Disabled in the config: does nothing
 text.openmodularturrets.turret.ammo.label=Turret Ammunition
 text.openmodularturrets.turret.ammo.blazing_clay=Blazing clay for the Incendiary Turret
 text.openmodularturrets.turret.ammo.bullet=A simple bullet for use with the machine gun turret.

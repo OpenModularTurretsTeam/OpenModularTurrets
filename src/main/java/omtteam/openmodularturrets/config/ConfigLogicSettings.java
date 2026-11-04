@@ -1,5 +1,7 @@
 package omtteam.openmodularturrets.config;
 
+import omtteam.openmodularturrets.core.item.AddonType;
+import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.settings.BaseTierStats;
 import omtteam.openmodularturrets.core.settings.LogicSettings;
 import omtteam.openmodularturrets.core.settings.TurretStats;
@@ -134,6 +136,16 @@ public final class ConfigLogicSettings implements LogicSettings {
                 OMTConfig.BASES.baseTierFour, OMTConfig.BASES.baseTierFive};
         if (tier < 1 || tier > tiers.length) throw new IllegalArgumentException("Invalid base tier: " + tier);
         return tiers[tier - 1];
+    }
+
+    @Override
+    public boolean upgradeEnabled(TurretBaseUpgradeType type) {
+        return OMTConfig.UPGRADES.isEnabled(type);
+    }
+
+    @Override
+    public boolean addonEnabled(AddonType type) {
+        return OMTConfig.ADDONS.isEnabled(type);
     }
 
     @Override
