@@ -25,8 +25,10 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 public class UpgradeMetaItem extends Item {
     public final static String[] subNames = {
             OMTNames.Items.accuraccyUpgrade, OMTNames.Items.efficiencyUpgrade, OMTNames.Items.fireRateUpgrade,
-            OMTNames.Items.rangeUpgrade, OMTNames.Items.scattershotUpgrade
+            OMTNames.Items.rangeUpgrade, OMTNames.Items.scattershotUpgrade, OMTNames.Items.creativeUpgrade
     };
+    /** The creative upgrade (1.20.1+ {@code upgrade_creative}): full energy, no ammo usage; creative only, no recipe. */
+    public static final int CREATIVE_META = 5;
 
     public UpgradeMetaItem() {
         super();
@@ -40,7 +42,7 @@ public class UpgradeMetaItem extends Item {
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         if (isInCreativeTab(itemIn)) {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < subNames.length; i++) {
                 subItems.add(new ItemStack(this, 1, i));
             }
         }
@@ -120,6 +122,15 @@ public class UpgradeMetaItem extends Item {
                     tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.stacks"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.upgrade.scatter.flavour"));
+                    return;
+                case CREATIVE_META:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("text.openmodularturrets.turret.upgrade.label"));
+                    tooltip.add("");
+                    tooltip.add(safeLocalize("tooltip.openmodularturrets.upgrade.creative.a"));
+                    tooltip.add(safeLocalize("tooltip.openmodularturrets.upgrade.creative.b"));
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("tooltip.openmodularturrets.upgrade.creative.flavour"));
             }
         }
     }
