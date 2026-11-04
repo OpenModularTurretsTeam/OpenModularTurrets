@@ -19,10 +19,10 @@ import java.util.Optional;
  * What an item stack is for the core logic: ammo, reactor fuel, upgrade or addon (the 3.x item metadata).
  */
 public final class ItemClassifier {
-    /** {@code UpgradeMetaItem} meta 0–4. */
+    /** {@code UpgradeMetaItem} meta 0–5 (5: the creative upgrade). */
     private static final TurretBaseUpgradeType[] UPGRADE_BY_META = {TurretBaseUpgradeType.ACCURACY,
             TurretBaseUpgradeType.EFFICIENCY, TurretBaseUpgradeType.FIRE_RATE, TurretBaseUpgradeType.RANGE,
-            TurretBaseUpgradeType.SCATTERSHOT};
+            TurretBaseUpgradeType.SCATTERSHOT, TurretBaseUpgradeType.CREATIVE};
 
     private ItemClassifier() {
     }

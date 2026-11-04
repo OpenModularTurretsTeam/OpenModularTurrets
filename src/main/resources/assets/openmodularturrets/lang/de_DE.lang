@@ -11,6 +11,7 @@ item.upgrade_efficiency.name=Upgrade - Effizienz
 item.upgrade_range.name=Upgrade - Reichweite
 item.upgrade_accuracy.name=Upgrade - Genauigkeit
 item.upgrade_scatter_shot.name=Upgrade - Schrotschuss
+item.upgrade_creative.name=Upgrade - Kreativ
 item.addon_redstone_reactor.name=Addon - Redstone Reaktor
 item.addon_damage_amp.name=Addon - Schadens Boost
 item.addon_solar_panel.name=Addon - Solar Panel
@@ -215,6 +216,9 @@ text.openmodularturrets.turret.upgrade.scatter.a=Fügt 2 Projektile zu jedem Sch
 text.openmodularturrets.turret.upgrade.scatter.b=+2 Munitionsverbrauch, weniger Genauigkeit, und mehr RF Verbrauch.
 text.openmodularturrets.turret.upgrade.scatter.flavour=Einfach mit mehr Kugeln schiessen.
 tooltip.openmodularturrets.upgrade.scatter.ignored=Rail Gun Turm, Nahkampf Turm, Verlangsamungsturm und Teleport Turm ignorieren dieses Upgrade.
+tooltip.openmodularturrets.upgrade.creative.a=Füllt den Energiespeicher der Basis vollständig auf
+tooltip.openmodularturrets.upgrade.creative.b=und Türme dieser Basis verbrauchen keine Munition.
+tooltip.openmodularturrets.upgrade.creative.flavour=Unendlich Energie, unendlich Kugeln.
 tooltip.openmodularturrets.upgrade.machine.turret_base=Passt in: Turmbasis
 tooltip.openmodularturrets.upgrade.machine.generator=Passt in: Generator
 

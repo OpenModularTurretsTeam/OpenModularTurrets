@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+### Fixed
+
+- The creative upgrade was missing (creative only, as on 1.20.1+): it fills the base's energy storage, and its turrets use no ammo
+
 ### Removed
 
 - The potentia converter addon (it had no recipe and no function on 1.12); existing ones keep their name and texture but do nothing

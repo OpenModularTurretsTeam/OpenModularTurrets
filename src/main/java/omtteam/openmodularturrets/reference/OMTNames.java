@@ -63,6 +63,7 @@ public class OMTNames {
         public static final String rangeUpgrade = "upgrade_range";
         public static final String accuraccyUpgrade = "upgrade_accuracy";
         public static final String scattershotUpgrade = "upgrade_scatter_shot";
+        public static final String creativeUpgrade = "upgrade_creative";
         public static final String redReactorAddon = "addon_redstone_reactor";
         public static final String damageAmpAddon = "addon_damage_amp";
         public static final String solarPanelAddon = "addon_solar_panel";

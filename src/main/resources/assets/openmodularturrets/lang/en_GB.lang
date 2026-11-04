@@ -11,6 +11,7 @@ item.upgrade_efficiency.name=Upgrade - Efficiency
 item.upgrade_range.name=Upgrade - Range
 item.upgrade_accuracy.name=Upgrade - Accuracy
 item.upgrade_scatter_shot.name=Upgrade - Scatter Shot
+item.upgrade_creative.name=Upgrade - Creative
 item.addon_redstone_reactor.name=Addon - Redstone Reactor
 item.addon_damage_amp.name=Addon - Damage Boost
 item.addon_solar_panel.name=Addon - Solar Panel
@@ -211,6 +212,9 @@ text.openmodularturrets.turret.upgrade.scatter.a=Adds 2 projectiles to each shot
 text.openmodularturrets.turret.upgrade.scatter.b=+2 ammo usage, decr. accuracy and increased RF usage.
 text.openmodularturrets.turret.upgrade.scatter.flavour=You just need to shoot more bullets.
 tooltip.openmodularturrets.upgrade.scatter.ignored=Rail Gun, Melee, Slowing and Teleporter Turrets ignore this upgrade.
+tooltip.openmodularturrets.upgrade.creative.a=Fills the energy storage of the base completely
+tooltip.openmodularturrets.upgrade.creative.b=and turrets on this base use no ammo.
+tooltip.openmodularturrets.upgrade.creative.flavour=Infinite power, infinite bullets.
 
 text.openmodularturrets.turret.ammo.label=Turret Ammunition
 text.openmodularturrets.turret.ammo.blazing_clay=Blazing clay for the Incendiary Turret
