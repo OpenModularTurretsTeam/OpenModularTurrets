@@ -9,10 +9,7 @@ public enum TurretBaseUpgradeType implements UpgradeType {
     FIRE_RATE("fire_rate"),
     RANGE("range"),
     SCATTERSHOT("scatter_shot"),
-    /**
-     * 1.20.1+: fills the energy storage and removes the ammo usage of the base's turrets. Kept so the logic matches
-     * 1.20.1+; there is no creative upgrade item on 1.12, so no slot reports it.
-     */
+    /** Fills the energy storage and removes the ammo usage of the base's turrets (creative only, no recipe). */
     CREATIVE("creative");
 
     private final String serializedName;
