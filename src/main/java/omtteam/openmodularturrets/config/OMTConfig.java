@@ -238,10 +238,12 @@ public class OMTConfig {
         public boolean range = true;
         @Config.Comment("Scattershot upgrade (turret base).")
         public boolean scatterShot = true;
+        @Config.Comment("Creative upgrade (turret base).")
+        public boolean creative = true;
         @Config.Comment("Energy multiplier upgrade (generator).")
         public boolean energyMultiplier = true;
 
-        /** Whether the upgrade works and can be crafted; the creative upgrade has no item on 1.12, so no switch. */
+        /** Whether the upgrade works and can be crafted. */
         public boolean isEnabled(UpgradeType type) {
             if (type instanceof TurretBaseUpgradeType) {
                 switch ((TurretBaseUpgradeType) type) {
@@ -255,6 +257,8 @@ public class OMTConfig {
                         return range;
                     case SCATTERSHOT:
                         return scatterShot;
+                    case CREATIVE:
+                        return creative;
                     default:
                         return true;
                 }
