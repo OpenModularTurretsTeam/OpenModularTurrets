@@ -51,6 +51,7 @@ Two directions, so that gameplay code stays loader-free:
   Each entrypoint installs its implementations first thing; the `compat` facades (`NetworkCompat`, `MenuCompat`, `ClientNetworkCompat`) forward to them.
 
 Energy and items other blocks may use are described loader-free (`core.energy.EnergyAccess`, `inventory.ItemAccess`, exposed by `getEnergyAccess(side)` / `getItemAccess(side)`) and wrapped by thin adapters per loader (Team Reborn Energy and Transfer API on Fabric, FE and item handler capabilities on NeoForge and Forge).
+On Fabric 1.20.1 with NEEPMeat installed, OMLib also makes them sinks of its vascular network (`FabricNeepMeatPower`, 1 eJ = 1 E).
 
 ### How core talks to the game
 

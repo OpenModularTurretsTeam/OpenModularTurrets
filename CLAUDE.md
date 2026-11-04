@@ -36,6 +36,8 @@ Core gameplay:
   Jar-in-jar it (approved).
 - **Jade** (optional integration, `compat/jade/` for the server half and `client/compat/jade/` for the tooltips, registered through the `jade` entrypoint on Fabric and `@WailaPlugin` on NeoForge and Forge).
   Compile-only (`modCompileOnly`, Modrinth maven), never bundled and never required at runtime.
+- **NEEPMeat** (Fabric 1.20.1 only, Modrinth `maven.modrinth:neepmeat`, version in `versions/1.20.1-fabric/gradle.properties`; requested by the user on 2026-11-04): its vascular network charges the turret bases through OMLib (`platform/fabric/FabricNeepMeatPower`, registered by `FabricBlockLookups` when NEEPMeat is loaded; 1 eJ = 1 E, a full buffer takes nothing), so the mod has no code of its own for it.
+  Never bundled (`suggests` in `fabric.mod.json`); `modCompileOnly` for the game test `gametest/platform/fabric/NeepMeatGameTests` (in `src/gametest/mc1.20.1-1.20.1`; the other nodes drop its line from the test mod's `fabric-gametest` entrypoints), and `modLocalRuntime` with the mods nested in its jar (Loom leaves them out of its remapped copy; OMLib's `nestedModJars`) and **GeckoLib**, which it requires, for the dev runs and the game test server.
 - **NeoForge** 21.1.x (1.21.1) and 21.11.x (1.21.11), built with **ModDevGradle** (approved by the user; build-time only).
   On NeoForge, the Fabric-only APIs above are replaced by NeoForge's own (capabilities, events, payload registration); see §4 "Loaders".
 - **Forge** 47.x (1.20.1 only), built with the legacy variant of ModDevGradle (`net.neoforged.moddev.legacyforge`, same artifact and version as `moddev`; build-time only), requested by the user.
