@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+### Changed
+
+- Requires OMLib 4.0.1 or newer
+
 ### Fixed
 
 - The creative upgrade was missing (creative only, as on 1.20.1+): it fills the base's energy storage, and its turrets use no ammo
