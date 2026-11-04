@@ -57,11 +57,17 @@ public final class ItemClassifier {
         return meta >= 0 && meta < UPGRADE_BY_META.length ? Optional.of(UPGRADE_BY_META[meta]) : Optional.empty();
     }
 
-    /** The addon of an {@code AddonMetaItem} stack; {@link AddonType} is in metadata order. */
+    /**
+     * {@code AddonMetaItem} metadata -> addon; meta 2, the removed potentia converter, is none (old stacks do nothing).
+     */
+    private static final AddonType[] ADDON_BY_META = {AddonType.CONCEALER, AddonType.DAMAGE_AMP, null,
+            AddonType.RECYCLER, AddonType.REDSTONE_REACTOR, AddonType.SERIAL_PORT, AddonType.SOLAR_PANEL,
+            AddonType.FAKE_DROPS};
+
+    /** The addon of an {@code AddonMetaItem} stack. */
     public static Optional<AddonType> getAddon(ItemStack stack) {
         if (stack.isEmpty() || !(stack.getItem() instanceof AddonMetaItem)) return Optional.empty();
         int meta = stack.getMetadata();
-        AddonType[] addons = AddonType.values();
-        return meta >= 0 && meta < addons.length ? Optional.of(addons[meta]) : Optional.empty();
+        return meta >= 0 && meta < ADDON_BY_META.length ? Optional.ofNullable(ADDON_BY_META[meta]) : Optional.empty();
     }
 }

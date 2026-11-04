@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+### Removed
+
+- The potentia converter addon (it had no recipe and no function on 1.12); existing ones keep their name and texture but do nothing
+
 ## [4.0.0] - 2026-11-02
 
 ### Changed

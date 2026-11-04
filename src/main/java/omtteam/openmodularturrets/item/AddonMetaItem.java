@@ -24,6 +24,12 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 
 @SuppressWarnings("deprecation")
 public class AddonMetaItem extends Item {
+    /**
+     * Meta 2 was the potentia converter (Thaumcraft; no recipe and no function on 1.12), removed after 4.0.0: hidden, without
+     * tooltip, but old stacks keep their name and texture.
+     */
+    public static final int REMOVED_POTENTIA_META = 2;
+
     public final static String[] subNames = {
             OMTNames.Items.concealerAddon, OMTNames.Items.damageAmpAddon, OMTNames.Items.potentiaAddon,
             OMTNames.Items.recyclerAddon, OMTNames.Items.redReactorAddon, OMTNames.Items.serialPortAddon,
@@ -43,7 +49,9 @@ public class AddonMetaItem extends Item {
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         if (isInCreativeTab(itemIn)) {
             for (int i = 0; i < 8; i++) {
-                subItems.add(new ItemStack(this, 1, i));
+                if (i != REMOVED_POTENTIA_META) {
+                    subItems.add(new ItemStack(this, 1, i));
+                }
             }
         }
     }
@@ -64,6 +72,9 @@ public class AddonMetaItem extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
+        if (stack.getMetadata() == REMOVED_POTENTIA_META) {
+            return;
+        }
         if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
             tooltip.add(GeneralUtil.getShiftDetail());
         } else {
@@ -85,23 +96,6 @@ public class AddonMetaItem extends Item {
                     tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.amp.b.label"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.amp.flavour"));
-                    return;
-                case 2:
-                    tooltip.add("");
-                    tooltip.add(TextFormatting.RED + safeLocalize("text.openmodularturrets.turret.addon.label"));
-                    /*tooltip.add("");
-                    tooltip.add(safeLocalize(
-                            "text.openmodularturrets.turret.addon.potentia.a") + OMTConfigHandler.getPotentiaToRFRatio() + " " + safeLocalize(
-                            "text.openmodularturrets.turret.addon.potentia.b"));
-                    tooltip.add("");
-                    tooltip.add(safeLocalize(
-                            "text.openmodularturrets.turret.addon.potentia.c") + OMTConfigHandler.getPotentiaAddonCapacity() + ".");
-                    tooltip.add("");
-                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.potentia.d"));
-                    tooltip.add(safeLocalize("text.openmodularturrets.turret.addon.potentia.e"));
-                    tooltip.add("");
-                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.addon.potentia.flavour"));
-                    */
                     return;
                 case 3:
                     tooltip.add("");
