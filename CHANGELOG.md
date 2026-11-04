@@ -11,6 +11,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 ### Added
 
 - Config sections `upgrades` and `addons` switch each upgrade and addon off (as on 1.20.1+): it loses its recipe and does nothing in a machine, which shows it with a red slot frame, a "no" symbol over the icon and a red tooltip line
+
 ### Changed
 
 - Requires OMLib 4.0.1 or newer
