@@ -1,0 +1,3 @@
+# Items with no recipe on purpose; checked by runenv's checkRecipes task (part of the workspace's ./gradlew check).
+# One "<item id> # <reason>" (all metas) or "<item id>@<meta> # <reason>" per line; an exemption of an item that has a recipe fails the check.
+addon_meta@5 # serial port addon: its recipe (set "computer") loads only with ComputerCraft or OpenComputers, which runenv does not have
