@@ -99,20 +99,25 @@ dependencies {
     }
 
     // NEEPMeat (1.20.1 only; the other nodes have no neepmeat_version): OMLib's FabricNeepMeatPower lets its vascular
-    // network charge the bases. Not bundled, the mod needs nothing of it; NEEPMeat and GeckoLib (which it requires) are in
-    // the dev runs and on the game test server, where gametest/platform/fabric/NeepMeatGameTests checks the bases
-    // (with the mods nested in its jar, which Loom leaves out of its remapped copy: nestedModJars in omlib/build-logic)
+    // network charge the bases. Not bundled, the mod needs nothing of it; NEEPMeat (with the mods nested in its jar,
+    // which Loom leaves out of its remapped copy: nestedModJars in omlib/build-logic) and GeckoLib (which it requires,
+    // also with the library nested in its jar) are in the dev runs and on the game test server, where
+    // gametest/platform/fabric/NeepMeatGameTests checks the bases
     findProperty("neepmeat_version")?.let { version ->
         val neepmeat = "maven.modrinth:neepmeat:$version"
         modCompileOnly(neepmeat)
         modLocalRuntime(neepmeat)
         // resolved lazily, when Loom resolves modLocalRuntime (earlier, it would use the repository before Loom sets it up)
-        val nested = layout.buildDirectory.dir("nested-mods/neepmeat")
+        val geckolib = "maven.modrinth:geckolib:${property("geckolib_version")}"
+        modLocalRuntime(geckolib)
+        // GeckoLib nests a library too (mclib; without it the client's resource reload fails)
+        val nested = layout.buildDirectory.dir("nested-mods")
         modLocalRuntime(files(Callable {
-            val jar = configurations.detachedConfiguration(dependencies.create(neepmeat)).apply { isTransitive = false }.singleFile
-            nestedModJars(jar, nested.get().asFile)
+            listOf(neepmeat, geckolib).flatMap { notation ->
+                val jar = configurations.detachedConfiguration(dependencies.create(notation)).apply { isTransitive = false }.singleFile
+                nestedModJars(jar, nested.get().asFile)
+            }
         }))
-        modLocalRuntime("maven.modrinth:geckolib:${property("geckolib_version")}")
     }
 
     // Architecture rules (src/test/.../architecture): they read the compiled main and client classes
