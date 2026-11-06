@@ -634,28 +634,10 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
     public void triggerResetCaches() {
     }
 
-    /** Ticks between shots, with the base's fire rate upgrades (without a base: the configured fire rate). */
-    public double getFireCooldownTicks() {
-        TurretBase base = getBase();
-        return base != null ? base.getLogic().getFireCooldownTicks(getCoreType()) : getTurretBaseFireRate();
-    }
-
     /** Range with the base's range upgrades (without a base: the configured range). */
     public int getTurretRange() {
         TurretBase base = getBase();
         return base != null ? base.getLogic().getRange(getCoreType()) : getTurretBaseRange();
-    }
-
-    /** Shots left in the base: matching ammo items, or the energy for energy turrets; 0 without a base. */
-    public int getAmmoLevel() {
-        TurretBase base = getBase();
-        return base != null ? base.getLogic().getAmmoLevel(getCoreType()) : 0;
-    }
-
-    /** Damage amp addons of the base; 0 without a base. */
-    public int getDamageAmpLevel() {
-        TurretBase base = getBase();
-        return base != null ? base.getLogic().getDamageAmpLevel() : 0;
     }
 
     // ---- NBT (3.x keys) ----

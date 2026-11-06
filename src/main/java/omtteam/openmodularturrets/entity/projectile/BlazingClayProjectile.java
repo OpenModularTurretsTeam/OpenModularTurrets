@@ -74,12 +74,7 @@ public class BlazingClayProjectile extends TurretProjectile {
 
             int damage = OMTConfig.TURRETS.incendiary_turret.baseDamage;
 
-            if (isAmped) {
-                if (entity instanceof EntityLivingBase) {
-                    EntityLivingBase elb = (EntityLivingBase) entity;
-                    damage += ((int) elb.getHealth() * (getDamageAmpBonus() * amp_level));
-                }
-            }
+            damage = damageWithAmp(damage, entity);
 
             for (EntityLivingBase mob : targets) {
                 setTagsForTurretHit(mob);

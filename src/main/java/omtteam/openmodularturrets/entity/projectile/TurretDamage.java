@@ -50,7 +50,7 @@ public class TurretDamage {
      * holding the ownership wand).
      */
     public static boolean canDamageEntity(Entity entity, @Nullable TurretBase base) {
-        if (entity != null && TurretImmunity.isImmune(entity)) return false;
+        if (TurretImmunity.isImmune(entity)) return false;
         return entity == null || DamageRules.canDamage(trust(base), victim(entity));
     }
 

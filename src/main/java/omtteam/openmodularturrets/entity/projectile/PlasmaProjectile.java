@@ -68,9 +68,7 @@ public class PlasmaProjectile extends TurretProjectile {
             for (EntityLivingBase entity : targets) {
                 int damage = OMTConfig.TURRETS.plasma_turret.baseDamage;
 
-                if (isAmped) {
-                    damage += ((int) entity.getHealth() * (getDamageAmpBonus() * amp_level));
-                }
+                damage = damageWithAmp(damage, entity);
 
                 if ((entity instanceof EntityPlayer && canDamagePlayer((EntityPlayer) entity)) || canDamageEntity(entity)) {
                     if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);

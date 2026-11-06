@@ -161,7 +161,8 @@ tasks.named("check") { dependsOn "jacocoTestReport" }
 // --- Mutation testing (PIT): ./gradlew pitest, on demand --------------------------------------
 
 // Plants small mistakes in core (flipped conditions, changed boundaries, removed calls) and checks whether a unit test
-// fails. Surviving mistakes show behaviour the tests do not pin down. Report only, not part of check.
+// fails. Surviving mistakes show behaviour the tests do not pin down. Not part of check; fails below the mod's
+// minimum score (pitest_mutation_threshold in gradle.properties).
 // PIT 1.17 is the last release that runs on Java 8. Report: <build dir>/reports/pitest/index.html
 configurations {
     // resolved by the pitest task only; not offered to other projects
@@ -184,6 +185,8 @@ tasks.register("pitest", JavaExec) {
     dependsOn "testClasses"
     def reportDir = { layout.buildDirectory.dir("reports/pitest").get().asFile }
     outputs.dir reportDir
+    // a changed threshold runs PIT again instead of keeping the last result
+    inputs.property("mutationThreshold", (project.findProperty("pitest_mutation_threshold") ?: "").toString())
     onlyIf {
         boolean hasCore = sourceSets.main.java.srcDirs.any { new File(it, corePath).isDirectory() }
         if (!hasCore) {
@@ -209,6 +212,11 @@ tasks.register("pitest", JavaExec) {
                 "--outputFormats", "HTML,XML",
                 "--timestampedReports=false",
         ]
+        // the mod's minimum mutation score in percent (gradle.properties): pitest fails below it
+        def threshold = project.findProperty("pitest_mutation_threshold")
+        if (threshold) {
+            args "--mutationThreshold", threshold.toString()
+        }
     }
     doLast {
         println "PIT report: ${new File(reportDir(), "index.html").toURI()}"
