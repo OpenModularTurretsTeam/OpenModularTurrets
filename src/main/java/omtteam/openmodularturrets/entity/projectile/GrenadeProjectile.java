@@ -50,9 +50,7 @@ public class GrenadeProjectile extends TurretProjectile {
 
                     int damage = OMTConfig.TURRETS.grenade_turret.baseDamage;
 
-                    if (isAmped) {
-                        damage += ((int) entity.getHealth() * (getDamageAmpBonus() * amp_level));
-                    }
+                    damage = damageWithAmp(damage, entity);
 
                     if (canDamageEntity(entity)) {
                         if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);

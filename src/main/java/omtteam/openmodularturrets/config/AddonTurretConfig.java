@@ -8,7 +8,6 @@ import omtteam.openmodularturrets.core.turret.TurretType;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

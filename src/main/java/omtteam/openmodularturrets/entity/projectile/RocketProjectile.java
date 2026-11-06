@@ -78,9 +78,7 @@ public class RocketProjectile extends TurretProjectile {
             for (EntityLivingBase entity : targets) {
                 int damage = OMTConfig.TURRETS.rocket_turret.baseDamage;
 
-                if (isAmped) {
-                    damage += ((int) entity.getHealth() * (getDamageAmpBonus() * amp_level));
-                }
+                damage = damageWithAmp(damage, entity);
 
                 if (OMTConfig.TURRETS.canRocketsHurtEnderDragon && entity instanceof EntityDragon) {
                     setTagsForTurretHit(entity);

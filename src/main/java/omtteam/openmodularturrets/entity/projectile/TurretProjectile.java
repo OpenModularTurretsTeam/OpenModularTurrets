@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import omtteam.openmodularturrets.api.weapon.ProjectileWeapon;
+import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.Nullable;
@@ -106,6 +107,15 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
     public abstract void playSound();
 
     public abstract double getDamageAmpBonus();
+
+    /** {@link ProjectileMath#damageWithAmp}: the damage amp addon adds a share of a living target's health. */
+    protected int damageWithAmp(int damage, Entity target) {
+        if (isAmped && target instanceof EntityLivingBase) {
+            return ProjectileMath.damageWithAmp(damage, amp_level, getDamageAmpBonus(),
+                    ((EntityLivingBase) target).getHealth());
+        }
+        return damage;
+    }
 
     @Override
     public void onUpdate() {

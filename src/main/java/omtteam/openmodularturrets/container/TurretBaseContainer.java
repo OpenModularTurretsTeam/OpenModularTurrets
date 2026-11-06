@@ -34,7 +34,7 @@ import static omtteam.omlib.util.inventory.InvUtil.mergeItemStackWithStackLimit;
  * ({@link LargeStackContainer}); the extra stacks go to the client as a window value ({@link #getSlotCapacity}).
  */
 public class TurretBaseContainer extends LargeStackContainer {
-    /** Window value: the bonus stacks of the ammo slots ({@link SlotCapacity#bonusStacks}). */
+    /** Window value: the bonus stacks of the ammo slots ({@link SlotCapacity#bonusStacks()}). */
     private static final int VALUE_BONUS_STACKS = 0;
 
     TurretBase base;

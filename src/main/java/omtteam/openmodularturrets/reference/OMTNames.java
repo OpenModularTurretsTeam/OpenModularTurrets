@@ -97,7 +97,6 @@ public class OMTNames {
     public static class Localizations {
         public static class GUI {
             public static final String RANGE = "text.openmodularturrets.gui.range";
-            public static final String MULTI_TARGETING = "text.openmodularturrets.gui.multi_targeting";
             public static final String ADDONS = "text.openmodularturrets.gui.addons";
             public static final String UPGRADES = "text.openmodularturrets.gui.upgrades";
             public static final String AMMO = "text.openmodularturrets.gui.ammo";
