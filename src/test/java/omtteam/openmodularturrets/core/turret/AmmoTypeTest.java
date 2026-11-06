@@ -17,6 +17,13 @@ class AmmoTypeTest {
     }
 
     @Test
+    void differentIdsSpreadOverHashCodes() {
+        AmmoType shell = AmmoType.of("othermod", "shell");
+        assertNotEquals(AmmoType.of("othermod", "bullet").hashCode(), shell.hashCode());
+        assertNotEquals(AmmoType.of("thirdmod", "shell").hashCode(), shell.hashCode());
+    }
+
+    @Test
     void namesComeFromTheId() {
         AmmoType shell = AmmoType.of("othermod", "shell");
         assertEquals("othermod", shell.getNamespace());
