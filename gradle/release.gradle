@@ -227,7 +227,9 @@ tasks.register("curseforge") {
         }
         String url = "${curseforgeApi}/projects/${curse_project_id}/upload-file"
         File main = tasks.reobfJar.archiveFile.get().asFile
-        Map metadata = [changelog: releaseNotes, changelogType: "markdown", releaseType: releaseChannel, gameVersions: gameVersions]
+        // the title is the jar name without ".jar" (<mod_id>-<version>-mc<minecraft_version>-forge), as on 1.20.1+
+        Map metadata = [displayName: main.name - ~/\.jar$/, changelog: releaseNotes, changelogType: "markdown",
+                        releaseType: releaseChannel, gameVersions: gameVersions]
         def relations = curseRelations()
         if (!relations.isEmpty()) {
             metadata.relations = [projects: relations]
@@ -236,7 +238,7 @@ tasks.register("curseforge") {
         logger.lifecycle("CurseForge: uploaded ${main.name} as file ${fileId} of project ${curse_project_id}")
         ["sourcesJar", "jar"].collect { tasks.findByName(it) }.findAll { it != null }.each { jarTask ->
             File extra = jarTask.archiveFile.get().asFile
-            Map extraMetadata = [changelog: releaseNotes, changelogType: "markdown", releaseType: "alpha", parentFileID: fileId]
+            Map extraMetadata = [displayName: extra.name - ~/\.jar$/, changelog: releaseNotes, changelogType: "markdown", releaseType: "alpha", parentFileID: fileId]
             try {
                 postJar(url, headers, "metadata", extraMetadata, "file", extra, "CurseForge upload of ${extra.name}")
             } catch (GradleException e) {
@@ -260,8 +262,9 @@ tasks.register("modrinth") {
         File file = tasks.reobfJar.archiveFile.get().asFile
         Map data = [
                 project_id    : modrinthProjectId,
-                name          : "${mod_id_cap} ${version}".toString(),
-                version_number: "${minecraft_version}-${version}".toString(),
+                // title like the jar name, version number like the 1.20.1+ mod versions (<version>+<minecraft_version>-forge)
+                name          : file.name - ~/\.jar$/,
+                version_number: "${version}+${minecraft_version}-forge".toString(),
                 changelog     : releaseNotes,
                 dependencies  : modrinthDependencies(),
                 game_versions : [minecraft_version],

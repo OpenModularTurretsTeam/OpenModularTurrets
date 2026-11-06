@@ -13,8 +13,9 @@ apply from: file("gradle/mod-common.gradle")
 apply from: file("gradle/release.gradle")
 
 group = group_id
-// jars: <mod_id>-<version>-mc<minecraft_version>-forge[-dev|-sources].jar (name, version, Minecraft, loader)
-base.archivesName = mod_id
+// jars: <archives_base_name>-<version>-mc<minecraft_version>-forge[-dev|-sources].jar (name, version, Minecraft, loader),
+// as on 1.20.1+; the release title on CurseForge and Modrinth is the jar name without ".jar" (gradle/release.gradle)
+base.archivesName = archives_base_name
 tasks.withType(Jar).configureEach {
     archiveVersion = "${project.version}-mc${minecraft_version}-forge"
 }
