@@ -271,5 +271,6 @@
   "tooltip.openmodularturrets.generator_upgrade_slot": "Upgrades for the generator.",
   "tooltip.openmodularturrets.ownership_wand.desc4": "手持时：炮塔的射击对你无效",
   "tooltip.openmodularturrets.upgrade.machine.turret_base": "Fits into: Turret Base",
-  "tooltip.openmodularturrets.upgrade.machine.generator": "Fits into: Generator"
+  "tooltip.openmodularturrets.upgrade.machine.generator": "Fits into: Generator",
+  "tooltip.openmodularturrets.module_disabled": "Disabled in the config: does nothing"
 }
