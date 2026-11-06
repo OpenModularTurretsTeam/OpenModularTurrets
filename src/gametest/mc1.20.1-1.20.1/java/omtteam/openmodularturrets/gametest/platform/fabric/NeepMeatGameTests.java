@@ -57,8 +57,8 @@ public class NeepMeatGameTests implements OMTGameTests {
     }
 
     /**
-     * The base as a sink: an active sink that claims only its energy's intake per tick, charges that much each tick,
-     * asks the network for a new share when it is full and then claims nothing.
+     * The base as a sink: a plain (not active) sink that claims only its energy's intake per tick, charges that much
+     * each tick, asks the network for a new share when it is full and then claims nothing.
      */
     @GameTest(template = EMPTY_STRUCTURE, batch = "neepmeat_sink", timeoutTicks = 300)
     public void baseClaimsOnlyWhatItsEnergyAccepts(GameTestHelper helper) {
@@ -66,7 +66,7 @@ public class NeepMeatGameTests implements OMTGameTests {
         EnergyStore energy = ((TurretBaseBlockEntity) helper.getBlockEntity(BASE)).getLogic().getEnergy();
         BloodAcceptor sink = BloodAcceptor.SIDED.find(helper.getLevel(), helper.absolutePos(BASE), Direction.WEST);
         helper.assertTrue(sink != null, "The base is no sink of a vascular network");
-        helper.assertTrue(sink.getMode() == BloodAcceptor.Mode.ACTIVE_SINK, "The base is a " + sink.getMode() + " sink");
+        helper.assertTrue(sink.getMode() == BloodAcceptor.Mode.SINK, "The base is a " + sink.getMode() + " sink");
         int[] updates = {0};
         sink.setChangeListener(changed -> updates[0]++);
         helper.assertTrue(sink.getDemandHint() == TIER_ONE_INTAKE, "The base asks for " + sink.getDemandHint() + " eJ/t");
