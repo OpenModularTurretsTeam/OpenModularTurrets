@@ -1,3 +1,5 @@
+import java.util.concurrent.Callable
+
 // Fabric nodes (Loom). Shared logic (Java, metadata templating, tests, publishing) is in buildSrc/mod-common.
 plugins {
     id("mod-common")
@@ -96,15 +98,48 @@ dependencies {
         "modClientRuntimeOnly"("maven.modrinth:sable:${property("sable_version")}")
     }
 
+    // NEEPMeat (1.20.1 only; the other nodes have no neepmeat_version): OMLib's FabricNeepMeatPower lets its vascular
+    // network charge the bases. Not bundled, the mod needs nothing of it; NEEPMeat (with the mods nested in its jar,
+    // which Loom leaves out of its remapped copy: nestedModJars in omlib/build-logic) and GeckoLib (which it requires,
+    // also with the library nested in its jar) are in the dev runs and on the game test server, where
+    // gametest/platform/fabric/NeepMeatGameTests checks the bases
+    findProperty("neepmeat_version")?.let { version ->
+        val neepmeat = "maven.modrinth:neepmeat:$version"
+        modCompileOnly(neepmeat)
+        modLocalRuntime(neepmeat)
+        // resolved lazily, when Loom resolves modLocalRuntime (earlier, it would use the repository before Loom sets it up)
+        val geckolib = "maven.modrinth:geckolib:${property("geckolib_version")}"
+        modLocalRuntime(geckolib)
+        // GeckoLib nests a library too (mclib; without it the client's resource reload fails)
+        val nested = layout.buildDirectory.dir("nested-mods")
+        modLocalRuntime(files(Callable {
+            listOf(neepmeat, geckolib).flatMap { notation ->
+                val jar = configurations.detachedConfiguration(dependencies.create(notation)).apply { isTransitive = false }.singleFile
+                nestedModJars(jar, nested.get().asFile)
+            }
+        }))
+    }
+
     // Architecture rules (src/test/.../architecture): they read the compiled main and client classes
     testImplementation("com.tngtech.archunit:archunit-junit5:${property("archunit_version")}")
     testRuntimeOnly(sourceSets["client"].output)
 }
 
-// The game test source set also gets the client's runtime dependencies; Sable (see above) must stay off the test
-// server. Loom renames remapped mods to the group remapped.<group>; Jade is compile-only, so nothing else is affected.
-configurations.named("gametestRuntimeClasspath") {
-    exclude(group = "remapped.maven.modrinth")
+// The game test source set also gets the client's runtime dependencies; Sable (see above, 1.21.1) must stay off the
+// test server. Loom renames remapped mods to the group remapped.<group> (and their modules to <name>-<hash>); Jade is
+// compile-only, so nothing else is affected there. 1.20.1 has no Sable: NEEPMeat and GeckoLib stay on its test server.
+if (findProperty("sable_companion_version") != null) {
+    configurations.named("gametestRuntimeClasspath") {
+        exclude(group = "remapped.maven.modrinth")
+    }
+}
+
+// NeepMeatGameTests exists only where NEEPMeat does (src/gametest/mc1.20.1-1.20.1): the other nodes drop its line from
+// the test mod's fabric-gametest entrypoints
+if (findProperty("neepmeat_version") == null) {
+    tasks.named<ProcessResources>("processGametestResources") {
+        filesMatching("fabric.mod.json") { filter { line -> if ("NeepMeatGameTests" in line) null else line } }
+    }
 }
 
 // ---- Test coverage (JaCoCo): check prints the line coverage of core and api ----

@@ -26,6 +26,7 @@ Open Modular Turrets has long been a popular choice in PvP modpacks, and it is n
 - **Generator:** burns furnace fuel (9 slots) and powers adjacent turret bases and other machines; an upgrade slot multiplies production and fuel use together
 - **Turret API for other mods:** add turrets with their own weapons, ammo, models and custom hit logic; see [docs/turret-api.md](docs/turret-api.md)
 - Uses **Team Reborn Energy** on Fabric, so it works with energy from other Fabric tech mods; the NeoForge build uses its energy capability instead
+- Optional **NEEPMeat** support (Fabric 1.20.1): vascular conduits power turret bases, 1 eJ per energy unit
 - Optional **Jade** support for turret bases and turrets, on both loaders
 
 ## Requirements
