@@ -71,7 +71,7 @@ The 1.21.11 nodes (Fabric and NeoForge) are built like 1.21.1 (the same Gradle p
 They have no Sable, Create or Create Aeronautics properties (no 1.21.11 builds known); the build scripts skip those dependencies when `sable_companion_version` is missing.
 
 - Build system: Gradle 9.8 (Kotlin DSL) + **Stonecutter 0.9**, with Fabric Loom 1.18 (`net.fabricmc.fabric-loom-remap`, the variant for obfuscated MC versions) on the Fabric nodes and ModDevGradle 2.0 (`net.neoforged.moddev`) on the NeoForge node.
-- Shared build logic is the convention plugin `omlib/build-logic/src/main/kotlin/mod-common.gradle.kts` (Java toolchain, metadata templating, JUnit, `verifyCoreIsolation`, licenses in the jar via `bundled_licenses`, publishing).
+- Shared build logic is the convention plugin `omlib/build-logic/src/main/kotlin/mod-common.gradle.kts` (Java toolchain, metadata templating, JUnit, `verifyCoreIsolation`, `checkRecipes`, licenses in the jar via `bundled_licenses`, publishing).
   It is mod-independent and lives in its own repository, `OMLib` (`../OMLib`), which every mod mounts as the git submodule `omlib` (the branch `1.20.1+` of the OMLib repository, clean history; an included build in `pluginManagement` of `settings.gradle.kts`).
   Change it inside `omlib/`, commit and push there, then commit the new submodule pointer in each mod; clone a mod with `--recurse-submodules` (or run `git submodule update --init`).
   The few source files that the mods still copy from each other are listed in `omlib/shared-sources.txt`; after changing one, run `python3 -I omlib/tools/shared_sources.py sync --from . --write . ../OpenModularLighting` and then `check`.
@@ -386,8 +386,10 @@ The logic consists of:
 PMD (`gradle/pmd/ruleset.xml`, report only, active version) measures complexity and size: `versions/1.21.1/build/reports/pmd/`.
 JaCoCo records coverage in the unit tests and on the game test server; `check` prints the line coverage of `core` and `api` per package (active version only).
 PIT (`./gradlew :1.21.1-fabric:pitest`, on demand, not part of `check`) runs mutation testing on `core`; surviving mutations show behaviour the tests do not pin down.
+It fails when the results get worse than the thresholds in `gradle.properties` (`pitest_*`); see `docs/architecture.md`.
 
 `./gradlew check` runs `verifyCoreIsolation`, which fails if anything under `core/` imports `net.minecraft`, `net.fabricmc`, `com.mojang`, `team.reborn` or non-core mod packages.
+`./gradlew check` also runs `checkRecipes` (from `mod-common`): every item (item model) of the mod needs a recipe on that node, unless `recipe-exempt.txt` lists it as `<id> # <reason>`, and every recipe result of the mod's namespace must be one of its items.
 Tests live in `src/test/java` (JUnit, test-only dependency).
 
 ### Game tests

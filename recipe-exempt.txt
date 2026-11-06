@@ -1,0 +1,4 @@
+# Items with no recipe on purpose; checked by the checkRecipes task of every node (part of `check`).
+# One "<item id> # <reason>" per line; an exemption of an item that has a recipe fails the check.
+ownership_wand # game masters only
+upgrade_creative # creative only
