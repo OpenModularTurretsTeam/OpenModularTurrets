@@ -11,10 +11,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import omtteam.omlib.api.permission.TrustedPlayer;
-import omtteam.omlib.client.gui.BlockingAbstractGuiContainer;
 import omtteam.omlib.client.gui.GuiParameters;
 import omtteam.omlib.client.gui.IHasTooltips;
 import omtteam.omlib.client.gui.ISupportsBackSystem;
+import omtteam.omlib.client.gui.LargeStackGui;
 import omtteam.omlib.network.MessageCloseGUITile;
 import omtteam.omlib.network.MessageOpenGUITile;
 import omtteam.omlib.network.OMLibNetworkingHandler;
@@ -24,11 +24,7 @@ import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.container.TurretBaseContainer;
-import omtteam.openmodularturrets.network.MessageAdjustRange;
-import omtteam.openmodularturrets.network.MessageDropBase;
-import omtteam.openmodularturrets.network.MessageDropTurrets;
-import omtteam.openmodularturrets.network.MessageSetBaseTargetingType;
-import omtteam.openmodularturrets.network.MessageToggleMode;
+import omtteam.openmodularturrets.network.BasePackets;
 import omtteam.openmodularturrets.network.OMTNetworkingHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
@@ -49,18 +45,26 @@ import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
  * Abstract class for all turret base GUIs.
  */
 
-public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasTooltips, ISupportsBackSystem {
+public class TurretBaseGui extends LargeStackGui implements IHasTooltips, ISupportsBackSystem {
     private final TurretBase base;
+    private final TurretBaseContainer container;
     private final EntityPlayer player;
-    /** Space between the info panel and the GUI. */
-    private static final int INFO_PANEL_GAP = 4;
+    /** The info panel's text starts this far left of the GUI (as on 1.20.1+, whatever the width of the text). */
+    private static final int INFO_PANEL_X = -128;
+    /** The info panel's text starts this far below the top of the GUI (as on 1.20.1+). */
+    private static final int INFO_PANEL_Y = 17;
     private int mouseX;
     private int mouseY;
     private int accessLevel = 0;
     private boolean addedToSyncList;
 
     public TurretBaseGui(InventoryPlayer inventoryPlayer, TurretBase turretBase) {
-        super(new TurretBaseContainer(inventoryPlayer, turretBase));
+        this(inventoryPlayer, turretBase, new TurretBaseContainer(inventoryPlayer, turretBase));
+    }
+
+    private TurretBaseGui(InventoryPlayer inventoryPlayer, TurretBase turretBase, TurretBaseContainer container) {
+        super(container);
+        this.container = container;
         this.base = turretBase;
         player = inventoryPlayer.player;
         DebugHandler.getInstance().setPlayer(player);
@@ -116,6 +120,8 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
             this.buttonList.add(new GuiButton(1, x + 120, y + 15, 20, 20, "+"));
             this.buttonList.add(new GuiButton(2, x + 120, y + 50, 20, 20, "-"));
         }
+        // for everyone who opens the GUI, below the admin buttons
+        this.buttonList.add(new GuiButton(8, x + 180, y + 125, 80, 20, safeLocalize(OMTNames.Localizations.GUI.SORT_AMMO)));
     }
 
     @Override
@@ -186,6 +192,10 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         if (guibutton.id == 7) {
             sendToggleModeToServer();
         }
+        if (guibutton.id == 8) {
+            sendAction(BasePackets.Action.SORT_AMMO);
+        }
+
     }
 
     @Override
@@ -212,12 +222,14 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        // the large ammo slots first (LargeStackGui), below the labels and tooltips
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 
         fontRenderer.drawString(base.getTier() > 1 ? safeLocalize(OMTNames.Localizations.GUI.ADDONS) : "", 71, 6, 0);
         fontRenderer.drawString(base.getTier() > 1 ? safeLocalize(OMTNames.Localizations.GUI.UPGRADES) : "", 71, 39, 0);
         fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.AMMO), 8, 6, 0);
-        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.INVENTORY), 8, ySize - 97 + 4, 0);
+        fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.INVENTORY), 8, ySize - 94, 0);
 
         fontRenderer.drawStringWithShadow("" + base.getTargetingSettings().getRange(), String.valueOf(base.getRange()).length() == 1 ?
                 127 : 124, 39, base.getTargetingSettings().getRange() == getBaseUpperBoundRange() ? 16724530 : 40000);
@@ -225,10 +237,13 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
 
         ArrayList<String> targetInfo = new ArrayList<>();
 
-        targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7f" + base.getOwner().getName());
+        targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.OWNER) + ": \u00A7f"
+                + (base.getOwnerOrNull() == null ? safeLocalize(OMTNames.Localizations.GUI.NONE) : base.getOwner().getName()));
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.MODE) + ": \u00A7f" + getMachineModeLocalization(base.getMode()));
         boolean isCurrentlyOn = base.isActive();
         targetInfo.add("\u00A76" + safeLocalize(OMLibNames.Localizations.GUI.ACTIVE) + ": " + getColoredBooleanLocalizationYesNo(isCurrentlyOn));
+        targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.MAX_STACK_SIZE) + ": \u00A7f"
+                + container.getSlotCapacity().limit(64));
         targetInfo.add("");
         targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.KILLS) + ": " + base.getKills());
         targetInfo.add("\u00A76" + safeLocalize(OMTNames.Localizations.GUI.PLAYER_KILLS) + ": " + base.getPlayerKills());
@@ -247,14 +262,9 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         targetInfo.add("\u00A77" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
         targetInfo.add("\u00A77" + safeLocalize(OMLibNames.Localizations.GUI.ATTACK_PLAYERS) + ": " + getColoredBooleanLocalizationYesNo(base.isAttacksPlayers()));
 
-        // the info panel sits left of the GUI: Forge draws a tooltip from 12 px right of the given point and adds a
-        // 3 px border, so place it by its width (a fixed x let long lines run over the GUI)
-        int infoWidth = 0;
-        for (String line : targetInfo) {
-            infoWidth = Math.max(infoWidth, fontRenderer.getStringWidth(line));
-        }
-        this.drawHoveringText(targetInfo, -infoWidth - 12 - 3 - INFO_PANEL_GAP, 17, fontRenderer);
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+        // the info panel sits left of the GUI at a fixed place, as on 1.20.1+: Forge draws a tooltip's text from 12 px
+        // right of and 12 px above the given point
+        this.drawHoveringText(targetInfo, INFO_PANEL_X - 12, INFO_PANEL_Y + 12, fontRenderer);
         drawTooltips();
     }
 
@@ -280,6 +290,10 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
             case 7:
                 tooltip.add(safeLocalize(OMTNames.Localizations.Text.TOGGLE_MODE));
                 break;
+            case 8:
+                tooltip.add(safeLocalize(OMTNames.Localizations.Text.SORT_AMMO));
+                break;
+
         }
 
         if (mouseX > k + 153 && mouseX < k + 153 + 14 && mouseY > l + 17 && mouseY < l + 17 + 51) {
@@ -307,31 +321,28 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
     }
 
     private void sendChangeToServer() {
-        MessageAdjustRange message = new MessageAdjustRange(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
-                                                            base.getRange());
-
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
+        OMTNetworkingHandler.INSTANCE.sendToServer(new BasePackets.SetRange(base.getPos(), base.getRange()));
     }
 
     private void sendDropTurretsToServer() {
-        MessageDropTurrets message = new MessageDropTurrets(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
+        sendAction(BasePackets.Action.DROP_TURRETS);
     }
 
     private void sendDropBaseToServer() {
         player.closeScreen();
-        MessageDropBase message = new MessageDropBase(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
+        sendAction(BasePackets.Action.DROP_BASE);
     }
 
     private void sendSetBaseTargetingToServer() {
-        MessageSetBaseTargetingType message = new MessageSetBaseTargetingType(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
+        sendAction(BasePackets.Action.TOGGLE_MULTI_TARGETING);
     }
 
     private void sendToggleModeToServer() {
-        MessageToggleMode message = new MessageToggleMode(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ());
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
+        sendAction(BasePackets.Action.TOGGLE_MODE);
+    }
+
+    private void sendAction(BasePackets.Action action) {
+        OMTNetworkingHandler.INSTANCE.sendToServer(new BasePackets.SimpleAction(base.getPos(), action));
     }
 
     @Override
@@ -344,6 +355,7 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
             rectangleGUI = new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2 + 30, 80, 40);
         }
         list.add(rectangleGUI);
+        list.add(new Rectangle((width - xSize) / 2 + 180, (height - ySize) / 2 + 125, 80, 20));
         return list;
     }
 
@@ -351,7 +363,7 @@ public class TurretBaseGui extends BlockingAbstractGuiContainer implements IHasT
         int maxRange = 0;
         List<TileEntity> tileEntities = WorldUtil.getTouchingTileEntities(base.getWorld(), base.getPos());
         for (TileEntity te : tileEntities) {
-            if (te instanceof TurretTileEntity) {
+            if (te instanceof TurretTileEntity && ((TurretTileEntity) te).getBase() == base) {
                 maxRange = Math.max(((TurretTileEntity) te).getTurretRange(), maxRange);
             }
         }

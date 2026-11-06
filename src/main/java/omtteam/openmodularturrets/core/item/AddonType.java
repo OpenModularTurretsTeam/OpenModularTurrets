@@ -1,15 +1,14 @@
 package omtteam.openmodularturrets.core.item;
 
 /**
- * Addons that go into the addon slots of a base. Ported from 1.12.2 {@code AddonMetaItem} (meta 0–7), in meta order.
+ * Addons that go into the addon slots of a base. Ported from 1.12.2 {@code AddonMetaItem} (meta 0–7, without meta 2,
+ * the removed potentia converter; the game layer maps the metas, {@code ItemClassifier}).
  * <p>
- * {@link #POTENTIA} (Thaumcraft) and {@link #SERIAL_PORT} (OpenComputers/ComputerCraft) keep their 3.x behaviour,
- * which lives outside the core.
+ * {@link #SERIAL_PORT} (OpenComputers/ComputerCraft) keeps its 3.x behaviour, which lives outside the core.
  */
 public enum AddonType {
     CONCEALER("concealer", 1),
     DAMAGE_AMP("damage_amp", 4),
-    POTENTIA("potentia", 1),
     RECYCLER("recycler", 1),
     REDSTONE_REACTOR("redstone_reactor", 1),
     SERIAL_PORT("serial_port", 1),

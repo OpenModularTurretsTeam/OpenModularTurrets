@@ -1,8 +1,12 @@
 {
-  "parent": "block/orientable",
+  "parent": "block/cube",
   "textures": {
-    "top": "openmodularturrets:blocks/generator_top",
-    "front": "openmodularturrets:blocks/generator_front_on",
-    "side": "openmodularturrets:blocks/generator_side"
+    "particle": "openmodularturrets:blocks/generator_front_on",
+    "north": "openmodularturrets:blocks/generator_front_on",
+    "south": "openmodularturrets:blocks/generator_back_on",
+    "east": "openmodularturrets:blocks/generator_side_left_on",
+    "west": "openmodularturrets:blocks/generator_side_right_on",
+    "up": "openmodularturrets:blocks/generator_top",
+    "down": "openmodularturrets:blocks/generator_bottom"
   }
 }

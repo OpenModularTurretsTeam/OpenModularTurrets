@@ -1,0 +1,31 @@
+{
+  "result": {
+    "item": "openmodularturrets:plasma_turret"
+  },
+  "pattern": [
+    " B ",
+    "MCM",
+    "DID"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "B": {
+      "item": "openmodularturrets:intermediate_tiered",
+      "data": 14
+    },
+    "M": {
+      "item": "minecraft:magma_cream"
+    },
+    "C": {
+      "item": "openmodularturrets:intermediate_tiered",
+      "data": 9
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    },
+    "I": {
+      "item": "#IOBUS"
+    }
+  }
+}

@@ -1,14 +1,10 @@
 package omtteam.openmodularturrets.tileentity.base;
 
-import dan200.computercraft.api.lua.ILuaContext;
-import dan200.computercraft.api.peripheral.IComputerAccess;
-import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -16,52 +12,53 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RangedWrapper;
-import omtteam.omlib.api.permission.EnumAccessLevel;
-import omtteam.omlib.api.permission.TrustedPlayer;
+import omtteam.omlib.api.network.ISyncableTE;
 import omtteam.omlib.api.permission.TrustedPlayersManager;
 import omtteam.omlib.api.render.camo.ICamoSupport;
 import omtteam.omlib.api.tile.IDebugTile;
 import omtteam.omlib.api.tile.IHasTargetingSettings;
+import omtteam.omlib.api.tile.IHasTrustManager;
 import omtteam.omlib.core.camo.CamoLight;
 import omtteam.omlib.core.camo.CamoPermissions;
-import omtteam.omlib.core.machine.MachineMode;
 import omtteam.omlib.network.MessageCamoSettings;
 import omtteam.omlib.network.OMLibNetworkingHandler;
+import omtteam.omlib.power.EnergyCapabilities;
 import omtteam.omlib.power.OMEnergyStorage;
-import omtteam.omlib.tileentity.TileEntityTrustedMachine;
+import omtteam.omlib.tileentity.InventoryNbt;
+import omtteam.omlib.tileentity.TileEntityOwnedBlock;
 import omtteam.omlib.util.EnumMachineMode;
 import omtteam.omlib.util.NetworkUtil;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.omlib.util.TargetingSettings;
 import omtteam.omlib.util.camo.CamoSettings;
+import omtteam.omlib.util.player.Player;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.api.tileentity.ITurretBase;
+import omtteam.openmodularturrets.block.expander.BlockInventoryExpander;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.BaseTier;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.item.AddonType;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.core.target.TargetEntity;
-import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
 import omtteam.openmodularturrets.inventory.EnumSlotType;
+import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.network.MessageTurretBase;
 import omtteam.openmodularturrets.network.OMTNetworkingHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
+import omtteam.openmodularturrets.tileentity.turret.TurretMount;
 import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
-import omtteam.openmodularturrets.util.OMTUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -75,27 +72,26 @@ import java.util.Map;
 
 import static omtteam.omlib.compat.OMLibModCompatibility.ComputerCraftLoaded;
 import static omtteam.omlib.compat.OMLibModCompatibility.OpenComputersLoaded;
-import static omtteam.omlib.util.player.PlayerUtil.getPlayerUUID;
-import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntities;
-import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntitiesByClass;
 
 /**
  * The turret base tile entity. The game rules (targeting, ammo, energy, upgrades, addons, redstone mode) live in the
  * core {@link TurretBaseLogic} it owns; this class connects the logic to the world (inventory, neighbours, ticking,
- * syncing), keeps the 3.x NBT format and the 3.x API ({@link ITurretBase}, ComputerCraft, OpenComputers).
+ * syncing), keeps the 3.x NBT format and the 3.x API ({@link ITurretBase}; ComputerCraft and OpenComputers through
+ * {@code compat.computer.BaseComputerCommands}). The slots are a {@link TurretBaseInventory}.
  */
-@Optional.InterfaceList({
-        @Optional.Interface(iface = "dan200.computercraft.api.peripheral.IPeripheral", modid = "computercraft")}
-)
-public class TurretBase extends TileEntityTrustedMachine implements ITurretBase, IPeripheral, ICamoSupport, IDebugTile, ITickable, IHasTargetingSettings {
+public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHasTrustManager, ISyncableTE, ICamoSupport,
+        IDebugTile, ITickable, IHasTargetingSettings {
     private final List<EntityPlayerMP> openClients = new ArrayList<>(); // for GUI Stuff
-    private final HashMap<EnumSlotType, List<Integer>> slotMap = new HashMap<>();
+    private HashMap<EnumSlotType, List<Integer>> slotMap;
     private final TurretBaseWorld baseWorld = new TurretBaseWorld(this);
     protected CamoSettings camoSettings;
     protected int tier = BaseTier.MIN;
-    protected IItemHandlerModifiable inventory;
-    protected FluidTank tank;
+    protected final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged,
+            this::getSlotCapacity);
+    protected final TrustedPlayersManager trustManager;
     private TurretBaseLogic logic;
+    /** Forge Energy / RF / Tesla access to the logic's energy store (recreated with the logic). */
+    private EnergyCapabilities energy;
     /** Whether the attached turrets were scanned since the logic was created (done on the first server tick). */
     private boolean neighboursScanned;
     /** Set while reading NBT, so loading does not count as a change. */
@@ -103,23 +99,23 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     private IBlockState camoBlockStateTemp;
     private int ticks;
     private boolean forceFire = false;
+    /** The slot capacity the open base GUI got from the server (clients do not scan the neighbours). */
+    private SlotCapacity clientSlotCapacity = SlotCapacity.NONE;
 
     /** The energy capacity and maximum input come from the tier's config through the logic. */
     public TurretBase(int tier, IBlockState camoState) {
         super();
-        this.trustManager = new TrustedPlayersManager(this.getOwner(), this, OMTSecurityEnvironment.INSTANCE);
+        this.trustManager = new TrustedPlayersManager(this.getOwnerOrNull(), this, OMTSecurityEnvironment.INSTANCE);
         this.tier = tier;
         this.camoBlockStateTemp = camoState;
         this.camoSettings = new CamoSettings();
-        setupInventory();
         setupSlotMap();
         createLogic();
     }
 
     public TurretBase() {
         super();
-        this.trustManager = new TrustedPlayersManager(this.getOwner(), this, OMTSecurityEnvironment.INSTANCE);
-        setupInventory();
+        this.trustManager = new TrustedPlayersManager(this.getOwnerOrNull(), this, OMTSecurityEnvironment.INSTANCE);
         setupSlotMap();
         createLogic();
     }
@@ -132,7 +128,7 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
         TurretBaseLogic.State state = logic != null ? logic.getState() : null;
         logic = new TurretBaseLogic(tier, ConfigLogicSettings.INSTANCE, trustManager.core(), baseWorld,
                 RandomUtil.random, this::onLogicChanged);
-        storage = new OMEnergyStorage(logic.getEnergy());
+        energy = new EnergyCapabilities(new OMEnergyStorage(logic.getEnergy()));
         if (state != null) {
             logic.loadState(state);
         }
@@ -155,13 +151,30 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
         return logic;
     }
 
+    /**
+     * What the base tier and the attached inventory expanders let the ammo slots hold
+     * ({@link TurretBaseLogic#getSlotCapacity}); on the client the one the open base GUI got from the server.
+     */
+    public SlotCapacity getSlotCapacity() {
+        if (world != null && world.isRemote) {
+            return clientSlotCapacity;
+        }
+        return logic != null ? logic.getSlotCapacity() : SlotCapacity.NONE;
+    }
+
+    /** Client: the slot capacity synced by the base GUI. */
+    public void setClientSlotCapacity(SlotCapacity capacity) {
+        this.clientSlotCapacity = capacity;
+    }
+
     /** The core face of a direction (both enums are in the same order). */
     public static Face toFace(EnumFacing facing) {
         return Face.values()[facing.ordinal()];
     }
 
     /**
-     * Scans the six neighbours for turrets and tells the logic (1.20.1+ {@code updateNeighbours}). Called on the
+     * Scans the six neighbours for turrets and inventory expanders (with their plates,
+     * {@link BlockInventoryExpander#plateTiers}) and tells the logic (1.20.1+ {@code updateNeighbours}). Called on the
      * first server tick and when a neighbour changes.
      */
     public void updateNeighbours() {
@@ -174,10 +187,13 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
             if (!world.isBlockLoaded(neighbour)) {
                 continue;
             }
-            Block block = world.getBlockState(neighbour).getBlock();
+            IBlockState state = world.getBlockState(neighbour);
+            Block block = state.getBlock();
             if (block instanceof BlockTurret) {
                 attached.put(toFace(facing),
                         new Neighbour.Turret(((BlockTurret) block).getCoreType()));
+            } else if (block instanceof BlockInventoryExpander) {
+                attached.put(toFace(facing), new Neighbour.Expanders(BlockInventoryExpander.plateTiers(state)));
             }
         }
         logic.updateNeighbours(attached);
@@ -196,61 +212,25 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
                 ? ((LivingTargetEntity) target.get()).getEntity() : null;
     }
 
-    @Override
-    public IItemHandler getCapabilityInventory(EnumFacing facing) {
-        return new RangedWrapper(inventory, 0, 9);
+    /** The ammo slots as other blocks see them: insert only. */
+    public IItemHandler getCapabilityInventory(@Nullable EnumFacing facing) {
+        return inventory.getAutomationSlots();
     }
 
+    /** The ammo slots for code of other mods (3.x API), which may also take ammo out. */
     @Override
     public List<IItemHandler> getAmmoInventories() {
-        return Collections.singletonList(this.getCapabilityInventory(EnumFacing.DOWN));
+        return Collections.singletonList(inventory.getAmmoSlots());
     }
 
-    protected void setupInventory() {
-        slotMap.clear();
-        inventory = new ItemStackHandler(13) {
-            @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-            public boolean isItemValidForSlot(int index, ItemStack stack) {
-                if (index < 9) {
-                    return OMTUtil.isItemStackValidAmmo(stack);
-                }
-                return false;
-            }
-
-            @Nonnull
-            @Override
-            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-                if (!isItemValidForSlot(slot, stack))
-                    return stack;
-                return super.insertItem(slot, stack, simulate);
-            }
-
-            @Override
-            protected void onContentsChanged(int slot) {
-                if (logic != null && !loading) {
-                    logic.onInventoryChanged();
-                }
-            }
-        };
+    private void onInventoryChanged() {
+        if (logic != null && !loading) {
+            logic.onInventoryChanged();
+        }
     }
 
     private void setupSlotMap() {
-        slotMap.clear();
-        List<Integer> ammoList = new ArrayList<>();
-        List<Integer> addonList = new ArrayList<>();
-        List<Integer> upgradeList = new ArrayList<>();
-        for (int i = 0; i < TurretBaseWorld.AMMO_SLOTS; i++) {
-            ammoList.add(i);
-        }
-        for (int i = 0; i < BaseTier.addonSlots(tier); i++) {
-            addonList.add(TurretBaseWorld.ADDON_START + i);
-        }
-        for (int i = 0; i < BaseTier.upgradeSlots(tier); i++) {
-            upgradeList.add(TurretBaseWorld.UPGRADE_START + i);
-        }
-        slotMap.put(EnumSlotType.AmmoSlot, ammoList);
-        slotMap.put(EnumSlotType.AddonSlot, addonList);
-        slotMap.put(EnumSlotType.UpgradeSlot, upgradeList);
+        slotMap = TurretBaseInventory.slotMap(tier);
     }
 
     @Override
@@ -306,28 +286,19 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public NBTTagCompound saveToNBT(NBTTagCompound tag) {
-        super.saveToNBT(tag);
-        TurretBaseLogic.State state = logic.getState();
-        // TileEntityMachine writes its own fields; the logic holds the real values
-        tag.setBoolean("active", logic.isActive());
-        tag.setBoolean("redstone", state.redstone());
-        tag.setBoolean("shouldConcealTurrets", logic.isConcealingTurrets());
-        tag.setBoolean("multiTargeting", state.multiTargeting());
+        super.saveToNBT(tag); // owner
+        energy.writeToNBT(tag);
+        InventoryNbt.write(inventory, tag);
+        trustManager.writeToNBT(tag);
+        TurretBaseNbt.save(logic, tag);
         tag.setBoolean("forceFire", this.forceFire);
         tag.setInteger("tier", this.tier);
-        tag.setInteger("mode", state.mode().ordinal());
-        tag.setInteger("kills", state.kills());
-        tag.setInteger("playerKills", state.playerKills());
-        getTargetingSettings().writeToNBT(tag);
         getCamoSettings().writeNBT(tag);
         return tag;
     }
 
-    /**
-     * Reads the 3.x keys. 3.x never saved the player kills (and loaded the missing key into the kills); they are
-     * saved as {@code playerKills} now.
-     */
     @Override
     public void loadFromNBT(NBTTagCompound tag) {
         loading = true;
@@ -338,14 +309,12 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
                 setupSlotMap();
                 createLogic();
             }
-            super.loadFromNBT(tag); // owner, trust list, energy, inventory
-            TargetingSettings targeting = TargetingSettings.readFromNBT(tag);
-            MachineMode mode = tag.hasKey("mode")
-                    ? MachineMode.byOrdinal(tag.getInteger("mode"), MachineMode.INVERTED) : MachineMode.INVERTED;
-            logic.loadState(new TurretBaseLogic.State(logic.getEnergy().getAmount(), mode, tag.getBoolean("redstone"),
-                    targeting.isTargetPlayers(), targeting.isTargetMobs(), targeting.isTargetPassive(),
-                    targeting.getRange(), targeting.getMaxRange(), tag.getBoolean("multiTargeting"),
-                    tag.getInteger("kills"), tag.getInteger("playerKills")));
+            super.loadFromNBT(tag); // owner
+            energy.readFromNBT(tag);
+            InventoryNbt.read(inventory, tag);
+            trustManager.readFromNBT(tag);
+            trustManager.setOwner(this.getOwnerOrNull());
+            logic.loadState(TurretBaseNbt.load(tag, logic.getEnergy().getAmount()));
             logic.onInventoryChanged();
             this.forceFire = tag.getBoolean("forceFire");
             this.camoSettings = CamoSettings.getSettingsFromNBT(tag);
@@ -357,6 +326,54 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
         } finally {
             loading = false;
         }
+    }
+
+    @Override
+    public void setOwner(Player owner) {
+        this.trustManager.setOwner(owner);
+        super.setOwner(owner);
+    }
+
+    /** Disowning: the trust list goes too; the base stays inert until claimed (unless {@code unownedBasesActive}). */
+    @Override
+    public void clearOwner() {
+        this.trustManager.clearOwner();
+        super.clearOwner();
+        informUpdate();
+    }
+
+    @Override
+    public TrustedPlayersManager getTrustManager() {
+        return trustManager;
+    }
+
+    // ---- capabilities: energy (EnergyCapabilities) and the ammo slots ----
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || energy.hasCapability(capability)
+                || super.hasCapability(capability, facing);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    @Nullable
+    @ParametersAreNonnullByDefault
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return (T) getCapabilityInventory(facing);
+        }
+        T energyCapability = energy.getCapability(capability);
+        return energyCapability != null ? energyCapability : super.getCapability(capability, facing);
+    }
+
+    public int getEnergyStored(@Nullable EnumFacing facing) {
+        return energy.getStorage().getEnergyStored();
+    }
+
+    public int getMaxEnergyStored(@Nullable EnumFacing facing) {
+        return energy.getStorage().getMaxEnergyStored();
     }
 
     @Override
@@ -391,6 +408,7 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     @Override
     public List<String> getDebugInfo() {
         List<String> debugInfo = new ArrayList<>();
+        debugInfo.add("Active: " + isActive() + ", Redstone: " + getRedstone() + ", Mode: " + getMode().getName());
         debugInfo.add("Camo: " + this.camoSettings.getCamoBlockState().getBlock().getRegistryName());
         debugInfo.add("Force Fire: " + this.forceFire + ", UpperMaxRange: " + this.getMaxRange());
         debugInfo.add("Targets: " + logic.getTargetIds());
@@ -406,10 +424,6 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     @Override
     public void update() {
         if (this.getWorld().isRemote) {
-            return;
-        }
-        if (dropBlock) {
-            this.getWorld().destroyBlock(this.pos, true);
             return;
         }
         if (this.updateNBT) {
@@ -441,7 +455,7 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     @Override
     public void turretResetCaches() {
         logic.onInventoryChanged();
-        for (TurretTileEntity turretHead : getTouchingTileEntitiesByClass(this.getWorld(), this.getPos(), TurretTileEntity.class)) {
+        for (TurretTileEntity turretHead : TurretMount.getTurrets(this)) {
             turretHead.triggerResetCaches();
         }
     }
@@ -452,51 +466,33 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
     }
 
     // Getters and Setters
-    @Nullable
-    @Override
-    public FluidTank getTank() {
-        return tank;
-    }
-
-    @Nullable
-    @Override
-    public FluidTank getCapabilityTank(EnumFacing facing) {
-        return tank;
-    }
-
-    @Override
-    public IItemHandlerModifiable getInventory() {
+    /** The whole inventory: ammo, addon and upgrade slots. */
+    public TurretBaseInventory getInventory() {
         return inventory;
     }
 
-    // ---- redstone mode (TileEntityMachine API, held by the logic) ----
+    // ---- redstone mode (3.x TileEntityMachine API, held by the logic) ----
 
-    @Override
     public boolean isActive() {
         return logic.isActive();
     }
 
-    @Override
     public EnumMachineMode getMode() {
         return EnumMachineMode.fromCore(logic.getMode());
     }
 
-    @Override
     public void setMode(EnumMachineMode mode) {
         logic.setMode(mode.toCore());
     }
 
-    @Override
     public void toggleMode() {
         logic.cycleMode();
     }
 
-    @Override
     public boolean getRedstone() {
         return logic.getState().redstone();
     }
 
-    @Override
     public void setRedstone(boolean redstone) {
         logic.setRedstone(redstone);
     }
@@ -647,301 +643,51 @@ public class TurretBase extends TileEntityTrustedMachine implements ITurretBase,
         return this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
     }
 
+    // ---- turret control of the 3.x API (ComputerCraft and OpenComputers) ----
+
     @Override
     public void setAllTurretsYawPitch(float yaw, float pitch) {
-        List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
-        for (TileEntity te : tileEntities) {
-            if (te instanceof TurretTileEntity) {
-                ((TurretTileEntity) te).setYawPitch(yaw, pitch);
-            }
+        for (TurretTileEntity turret : TurretMount.getTurrets(this)) {
+            turret.setYawPitch(yaw, pitch);
         }
     }
 
     @Override
     public boolean setTurretYawPitch(EnumFacing facing, float yaw, float pitch) {
-        TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
-        if (turretHead instanceof TurretTileEntity) {
-            ((TurretTileEntity) turretHead).setYawPitch(yaw, pitch);
-            return true;
-        }
-        return false;
+        TurretTileEntity turret = TurretMount.getTurret(this, facing);
+        if (turret == null) return false;
+        turret.setYawPitch(yaw, pitch);
+        return true;
     }
 
     @Override
     public void setAllTurretsForceFire(boolean state) {
-        List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
-        for (TileEntity te : tileEntities) {
-            if (te instanceof TurretTileEntity) {
-                ((TurretTileEntity) te).setAutoFire(state);
-            }
+        for (TurretTileEntity turret : TurretMount.getTurrets(this)) {
+            turret.setAutoFire(state);
         }
     }
 
     @Override
     public boolean setTurretForceFire(EnumFacing facing, boolean state) {
-        TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
-        if (turretHead instanceof TurretTileEntity) {
-            ((TurretTileEntity) turretHead).setAutoFire(state);
-            return true;
-        }
-        return false;
+        TurretTileEntity turret = TurretMount.getTurret(this, facing);
+        if (turret == null) return false;
+        turret.setAutoFire(state);
+        return true;
     }
 
     @Override
     public boolean forceShootTurret(EnumFacing facing) {
-        TileEntity turretHead = this.getWorld().getTileEntity(this.pos.offset(facing));
-        return (turretHead instanceof TurretTileEntity && ((TurretTileEntity) turretHead).forceShot());
+        TurretTileEntity turret = TurretMount.getTurret(this, facing);
+        return turret != null && turret.forceShot();
     }
 
     @Override
     public int forceShootAllTurrets() {
-        List<TileEntity> tileEntities = getTouchingTileEntities(this.getWorld(), this.pos);
         int successes = 0;
-        for (TileEntity te : tileEntities) {
-            if (te instanceof TurretTileEntity) {
-                successes += ((TurretTileEntity) te).forceShot() ? 1 : 0;
-            }
+        for (TurretTileEntity turret : TurretMount.getTurrets(this)) {
+            successes += turret.forceShot() ? 1 : 0;
         }
         return successes;
-    }
-
-    // Mod Compatibility  functions:
-
-    @Optional.Method(modid = "computercraft")
-    @Override
-    @Nonnull
-    public String getType() {
-        return "turret_base";
-    }
-
-    @Optional.Method(modid = "computercraft")
-    @Override
-    @Nonnull
-    public String[] getMethodNames() {
-        // list commands you want..
-        return new String[]{commands.getOwner.toString(), commands.isAttacksPlayers.toString(),
-                commands.setAttacksPlayers.toString(), commands.isAttacksMobs.toString(),
-                commands.setAttacksMobs.toString(), commands.isAttacksNeutrals.toString(),
-                commands.setAttacksNeutrals.toString(), commands.getTrustedPlayers.toString(),
-                commands.getTrustedPlayer.toString(), commands.addTrustedPlayer.toString(),
-                commands.removeTrustedPlayer.toString(), commands.changeAccessLevel.toString(),
-                commands.getActive.toString(), commands.getMode.toString(), commands.getRedstone.toString(),
-                commands.setMode.toString(), commands.getType.toString(), commands.setAllAutoForceFire.toString(),
-                commands.setTurretAutoForceFire.toString(), commands.forceShootAllTurrets.toString(),
-                commands.forceShootTurret.toString(), commands.setAllYawPitch.toString(),
-                commands.setTurretYawPitch.toString(), commands.getMaxEnergyStorage.toString(), commands.getCurrentEnergyStorage.toString()};
-    }
-
-    @Optional.Method(modid = "computercraft")
-    @Override
-    @ParametersAreNonnullByDefault
-    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) {
-        // method is command
-        if (!isComputerAccessible()) {
-            return new Object[]{"Computer access deactivated!"};
-        }
-        try {
-            return callCommand(commands.values()[method], arguments);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return new Object[]{"Wrong parameters!"};
-        }
-    }
-
-    /**
-     * Runs one computer command. Lua numbers arrive as {@code Double}, so number arguments go through {@link #intArgument}.
-     */
-    private Object[] callCommand(commands command, Object[] arguments) {
-        boolean b;
-        TrustedPlayer trustedPlayer;
-        Integer number;
-        switch (command) {
-            case getOwner:
-                return new Object[]{this.getOwner().getName()};
-            case isAttacksPlayers:
-                return new Object[]{this.isAttacksPlayers()};
-            case setAttacksPlayers:
-                if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
-                    return new Object[]{"Wrong parameters!"};
-                }
-                b = (arguments[0].toString().equals("true"));
-                this.setAttacksPlayers(b);
-                return new Object[]{true};
-            case isAttacksMobs:
-                return new Object[]{this.isAttacksMobs()};
-            case setAttacksMobs:
-                if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
-                    return new Object[]{"Wrong parameters!"};
-                }
-                b = (arguments[0].toString().equals("true"));
-                this.setAttacksMobs(b);
-                return new Object[]{true};
-            case isAttacksNeutrals:
-                return new Object[]{this.isAttacksNeutrals()};
-            case setAttacksNeutrals:
-                if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
-                    return new Object[]{"Wrong parameters!"};
-                }
-                b = (arguments[0].toString().equals("true"));
-                this.setAttacksNeutrals(b);
-                return new Object[]{true};
-            case getTrustedPlayers:
-                return new Object[]{this.getTrustManager().getTrustedPlayersAsListMap()};
-            case getTrustedPlayer:
-                trustedPlayer = this.getTrustManager().getTrustedPlayer(arguments[0].toString());
-                if (trustedPlayer == null) {
-                    return new Object[]{"Not found!"};
-                }
-                return new Object[]{trustedPlayer.asMap()};
-            case addTrustedPlayer:
-                if (arguments[0].toString().isEmpty()) {
-                    return new Object[]{"Wrong parameters!"};
-                }
-                number = null;
-                if (arguments.length > 1 && !arguments[1].toString().isEmpty()) {
-                    number = intArgument(arguments[1]);
-                    if (number == null || number < 0 || number >= EnumAccessLevel.values().length) {
-                        return new Object[]{"Wrong parameters!"};
-                    }
-                }
-                if (!this.getTrustManager().addTrustedPlayer(arguments[0].toString())) {
-                    return new Object[]{"Name not valid!"};
-                }
-                if (number == null) {
-                    return new Object[]{"successfully added"};
-                }
-                trustedPlayer = this.getTrustManager().getTrustedPlayer(arguments[0].toString());
-                trustedPlayer.setAccessLevel(EnumAccessLevel.values()[number]);
-                trustedPlayer.setUuid(getPlayerUUID(arguments[0].toString()));
-
-                return new Object[]{true};
-            case removeTrustedPlayer:
-                if (arguments[0].toString().isEmpty()) {
-                    return new Object[]{"Wrong parameters!"};
-                }
-                this.getTrustManager().removeTrustedPlayer(arguments[0].toString());
-                return new Object[]{true};
-            case changeAccessLevel:
-                trustedPlayer = this.getTrustManager().getTrustedPlayer(arguments[0].toString());
-                if (trustedPlayer == null) {
-                    return new Object[]{"Not found!"};
-                }
-                number = intArgument(arguments[1]);
-                if (number == null || number < 0 || number >= EnumAccessLevel.values().length) {
-                    return new Object[]{"Invalid Access Level!"};
-                }
-                trustedPlayer.setAccessLevel(EnumAccessLevel.values()[number]);
-                return new Object[]{true};
-            case getActive:
-                return new Object[]{this.isActive()};
-            case getMode:
-                return new Object[]{this.getMode().getName()};
-            case getRedstone:
-                return new Object[]{this.getRedstone()};
-            case setMode:
-                number = intArgument(arguments[0]);
-                if (number == null || number < 0 || number >= EnumMachineMode.values().length) {
-                    return new Object[]{"Wrong parameters! expects number between 0 and 3"};
-                }
-                this.setMode(EnumMachineMode.values()[number]);
-                return new Object[]{true};
-            case getType:
-                return new Object[]{this.getType()};
-            case setAllAutoForceFire:
-                if (!(arguments[0].toString().equals("true") || arguments[0].toString().equals("false"))) {
-                    return new Object[]{"Wrong parameters!"};
-                }
-                b = (arguments[0].toString().equals("true"));
-                this.setAllTurretsForceFire(b);
-                return new Object[]{true};
-            case setTurretAutoForceFire:
-                number = intArgument(arguments[0]);
-                if (!isFaceIndex(number) || !(arguments[1].toString().equals("true") || arguments[1].toString().equals("false"))) {
-                    return new Object[]{"Wrong parameters!"};
-                }
-                return new Object[]{this.setTurretForceFire(EnumFacing.byIndex(number), Boolean.parseBoolean(arguments[1].toString()))};
-            case forceShootAllTurrets:
-                return new Object[]{this.forceShootAllTurrets()};
-            case forceShootTurret:
-                number = intArgument(arguments[0]);
-                if (!isFaceIndex(number)) {
-                    return new Object[]{"Wrong parameters!"};
-                }
-                return new Object[]{this.forceShootTurret(EnumFacing.byIndex(number))};
-            case setAllYawPitch:
-                try {
-                    this.setAllTurretsYawPitch(Float.parseFloat(arguments[0].toString()),
-                                               Float.parseFloat(arguments[1].toString()));
-                    return new Object[]{"set yaw and pitch successfully"};
-                } catch (Exception e) {
-                    return new Object[]{"Wrong parameters!"};
-                }
-            case setTurretYawPitch:
-                number = intArgument(arguments[0]);
-                if (!isFaceIndex(number)) {
-                    return new Object[]{"Wrong parameters!"};
-                }
-                try {
-                    this.setTurretYawPitch(EnumFacing.byIndex(number),
-                                           Float.parseFloat(arguments[1].toString()),
-                                           Float.parseFloat(arguments[2].toString()));
-                    return new Object[]{"setting successful"};
-                } catch (Exception e) {
-                    return new Object[]{"Wrong parameters!"};
-                }
-            case getMaxEnergyStorage:
-                return new Object[]{this.getMaxEnergyStored(null)};
-
-            case getCurrentEnergyStorage:
-                return new Object[]{this.getEnergyStored(null)};
-            default:
-                break;
-        }
-        return new Object[]{"Nonexisting command"};
-    }
-
-    /** A whole number argument from a computer (Lua numbers arrive as {@code Double}, strings are parsed), or null. */
-    @Nullable
-    private static Integer intArgument(Object argument) {
-        double value;
-        if (argument instanceof Number) {
-            value = ((Number) argument).doubleValue();
-        } else {
-            try {
-                value = Double.parseDouble(argument.toString());
-            } catch (NumberFormatException e) {
-                return null;
-            }
-        }
-        return value == Math.rint(value) && Math.abs(value) <= Integer.MAX_VALUE ? (int) value : null;
-    }
-
-    private static boolean isFaceIndex(@Nullable Integer index) {
-        return index != null && index >= 0 && index < EnumFacing.values().length;
-    }
-
-    @Optional.Method(modid = "computercraft")
-    @Override
-    public boolean equals(IPeripheral other) {
-        return other.getType().equals(getType());
-    }
-
-    @Optional.Method(modid = "computercraft")
-    @Override
-    public void attach(@Nonnull IComputerAccess computer) {
-
-    }
-
-    @Optional.Method(modid = "computercraft")
-    @Override
-    public void detach(@Nonnull IComputerAccess computer) {
-
-    }
-
-    public enum commands {
-        getOwner, isAttacksPlayers, setAttacksPlayers, isAttacksMobs, setAttacksMobs, isAttacksNeutrals, setAttacksNeutrals,
-        getTrustedPlayers, getTrustedPlayer, addTrustedPlayer, removeTrustedPlayer, changeAccessLevel, getActive,
-        getMode, getRedstone, setMode, getType, setAllAutoForceFire, setTurretAutoForceFire, forceShootAllTurrets,
-        forceShootTurret, setAllYawPitch, setTurretYawPitch, getMaxEnergyStorage, getCurrentEnergyStorage
     }
 
     @Override

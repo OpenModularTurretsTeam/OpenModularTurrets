@@ -8,7 +8,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.util.GeneralUtil;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.core.item.GeneratorUpgradeType;
 import omtteam.openmodularturrets.reference.Reference;
 import org.lwjgl.input.Keyboard;
@@ -29,7 +28,6 @@ public class ItemGeneratorUpgrade extends Item {
     public ItemGeneratorUpgrade(GeneratorUpgradeType upgradeType) {
         this.upgradeType = upgradeType;
         String name = "upgrade_" + upgradeType.getSerializedName();
-        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setTranslationKey(name);
         this.setRegistryName(Reference.MOD_ID, name);
     }
@@ -42,6 +40,8 @@ public class ItemGeneratorUpgrade extends Item {
     @SideOnly(Side.CLIENT)
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+        // which machine an upgrade fits into, also without shift (each machine has its own upgrades)
+        tooltip.add(safeLocalize("tooltip.openmodularturrets.upgrade.machine.generator"));
         if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
             tooltip.add(GeneralUtil.getShiftDetail());
             return;

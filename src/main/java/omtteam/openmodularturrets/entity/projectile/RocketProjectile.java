@@ -69,8 +69,8 @@ public class RocketProjectile extends TurretProjectile {
 
     private void explode() {
         if (!getEntityWorld().isRemote) {
-            float strength = OMTConfig.TURRETS.canRocketsDestroyBlocks ? 2.3F : 0.1F;
-            getEntityWorld().createExplosion(null, posX, posY, posZ, strength, true);
+            boolean destroyBlocks = OMTConfig.TURRETS.canRocketsDestroyBlocks;
+            explodeHere(destroyBlocks ? 2.3F : 0.1F, destroyBlocks);
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
                                                    this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
@@ -78,17 +78,17 @@ public class RocketProjectile extends TurretProjectile {
             for (EntityLivingBase entity : targets) {
                 int damage = OMTConfig.TURRETS.rocket_turret.baseDamage;
 
-                if (isAmped) {
-                    damage += ((int) entity.getHealth() * (getDamageAmpBonus() * amp_level));
-                }
+                damage = damageWithAmp(damage, entity);
 
                 if (OMTConfig.TURRETS.canRocketsHurtEnderDragon && entity instanceof EntityDragon) {
                     setTagsForTurretHit(entity);
                     (entity).setHealth((entity).getHealth() - damage);
                     entity.hurtResistantTime = -1;
+                    if (damage > 0) notifyHit(entity);
                 } else if (canDamageEntity(entity)) {
                     if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
-                    entity.attackEntityFrom(new NormalDamageSource("rocket", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
+                    entity.attackEntityFrom(new NormalDamageSource("rocket", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), damage);
+                    if (damage > 0) notifyHit(entity);
                     entity.hurtResistantTime = -1;
                 }
             }

@@ -33,7 +33,7 @@ public final class TurretType {
             .priorities(5, 5, -5, 1, 10).build();
     public static final TurretType POTATO_CANNON_TURRET = builtIn("potato_cannon_turret", 1, AmmoType.POTATO)
             .priorities(-5, -5, -5, 1, 10).build();
-    public static final TurretType CROSSBOW_TURRET = builtIn("crossbow_turret", 1, AmmoType.ARROW)
+    public static final TurretType CROSSBOW_TURRET = builtIn("crossbow_turret", 1, AmmoType.BOLT)
             .priorities(-5, -5, -5, 1, 10).build();
     /**
      * The melee turret's blades spin flat around the face normal, so it only mounts on top of or below a base (user

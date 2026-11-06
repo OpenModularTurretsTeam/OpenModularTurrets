@@ -2,7 +2,6 @@ package omtteam.openmodularturrets.entity.projectile;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
@@ -13,7 +12,7 @@ import net.minecraft.world.WorldServer;
 import omtteam.omlib.util.RandomUtil;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.OMTConfig;
-import omtteam.openmodularturrets.registry.ModSounds;
+import omtteam.openmodularturrets.sound.ModSounds;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -53,16 +52,12 @@ public class BulletProjectile extends TurretProjectile {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile) && !this.isDead) {
             int damage = OMTConfig.TURRETS.machine_gun_turret.baseDamage;
 
-            if (isAmped) {
-                if (entity instanceof EntityLivingBase) {
-                    EntityLivingBase elb = (EntityLivingBase) entity;
-                    damage += ((int) elb.getHealth() * (getDamageAmpBonus() * amp_level));
-                }
-            }
+            damage = damageWithAmp(damage, entity);
 
             if (canDamageEntity(entity)) {
                 if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
-                entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
+                entity.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), damage);
+                if (damage > 0) notifyHit(entity);
                 entity.hurtResistantTime = -1;
             } else {
                 return;

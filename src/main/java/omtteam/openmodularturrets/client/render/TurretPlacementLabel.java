@@ -11,6 +11,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -29,7 +30,7 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
-import static omtteam.openmodularturrets.turret.TurretHeadUtil.getTurretBaseFacing;
+import static omtteam.openmodularturrets.tileentity.turret.TurretMount.getTurretBaseFacing;
 
 /**
  * While the player holds a turret and OMLib draws a red placement outline next to a base, says why the turret cannot
@@ -62,7 +63,7 @@ public final class TurretPlacementLabel {
         if (!(stack.getItem() instanceof ItemBlockTurret)) return;
         BlockTurret turret = (BlockTurret) ((ItemBlockTurret) stack.getItem()).getBlock();
         BlockPos pos = hit.getBlockPos().offset(hit.sideHit);
-        String reason = reason(minecraft.world, pos, turret);
+        String reason = reason(minecraft.world, pos, turret, (EntityPlayer) viewer);
         if (reason != null) {
             draw(minecraft, viewer, partialTicks, pos, reason);
         }
@@ -73,14 +74,16 @@ public final class TurretPlacementLabel {
      * next to {@code pos} (then OMLib draws no outline either).
      */
     @Nullable
-    private static String reason(World world, BlockPos pos, BlockTurret turret) {
+    private static String reason(World world, BlockPos pos, BlockTurret turret, EntityPlayer player) {
         EnumFacing towardsBase = getTurretBaseFacing(world, pos);
         if (towardsBase == null) return null;
         // ItemBlockTurret.canPlace: the outline is red for any block in the way
         if (!world.isAirBlock(pos)) return I18n.format(KEY + "blocked");
-        TurretPlacement.Result result = turret.attachResult(world, pos);
+        TurretPlacement.Result result = turret.attachResult(world, pos, player);
         if (result == null || result.allowed()) return null;
-        TurretBase base = (TurretBase) world.getTileEntity(pos.offset(towardsBase));
+        TileEntity tile = world.getTileEntity(pos.offset(towardsBase));
+        if (!(tile instanceof TurretBase)) return null;
+        TurretBase base = (TurretBase) tile;
         TurretType type = turret.getCoreType();
         String key = KEY + result.name().toLowerCase(Locale.ROOT);
         switch (result) {

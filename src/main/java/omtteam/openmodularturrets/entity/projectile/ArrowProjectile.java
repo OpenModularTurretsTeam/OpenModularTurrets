@@ -1,15 +1,9 @@
 package omtteam.openmodularturrets.entity.projectile;
 
-import com.google.common.collect.Sets;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.potion.PotionType;
-import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -19,13 +13,12 @@ import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collection;
-import java.util.Set;
 
+/**
+ * Crossbow turret bolt (shown as an arrow). The class and its entity id {@code arrowProjectile} stay from the time the
+ * crossbow turret fired vanilla arrows.
+ */
 public class ArrowProjectile extends TurretProjectile {
-    private final Set<PotionEffect> customPotionEffects = Sets.newHashSet();
-    private PotionType potion = PotionTypes.EMPTY;
-
     @SuppressWarnings("unused")
     public ArrowProjectile(World p_i1776_1_) {
         super(p_i1776_1_);
@@ -35,14 +28,6 @@ public class ArrowProjectile extends TurretProjectile {
     public ArrowProjectile(World par1World, ItemStack ammo, TurretBase turretBase) {
         super(par1World, ammo, turretBase);
         this.gravity = 0.03F;
-        this.potion = PotionUtils.getPotionFromItem(ammo);
-        Collection<PotionEffect> collection = PotionUtils.getFullEffectsFromItem(ammo);
-
-        if (!collection.isEmpty()) {
-            for (PotionEffect potioneffect : collection) {
-                this.customPotionEffects.add(new PotionEffect(potioneffect));
-            }
-        }
     }
 
     @Override
@@ -65,25 +50,12 @@ public class ArrowProjectile extends TurretProjectile {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile) && !this.isDead) {
             int damage = OMTConfig.TURRETS.crossbow_turret.baseDamage;
 
-            if (isAmped) {
-                if (entity instanceof EntityLivingBase) {
-                    EntityLivingBase elb = (EntityLivingBase) entity;
-                    damage += ((int) elb.getHealth() * (getDamageAmpBonus() * amp_level));
-                }
-            }
+            damage = damageWithAmp(damage, entity);
 
             if (canDamageEntity(entity)) {
                 if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
-                if (entity instanceof EntityLivingBase) {
-                    EntityLivingBase elb = (EntityLivingBase) entity;
-                    for (PotionEffect effect : potion.getEffects()) {
-                        elb.addPotionEffect(effect);
-                    }
-                    for (PotionEffect effect : customPotionEffects) {
-                        elb.addPotionEffect(effect);
-                    }
-                }
-                entity.attackEntityFrom(new NormalDamageSource("arrow", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
+                entity.attackEntityFrom(new NormalDamageSource("arrow", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), damage);
+                if (damage > 0) notifyHit(entity);
                 entity.hurtResistantTime = -1;
             } else {
                 return;

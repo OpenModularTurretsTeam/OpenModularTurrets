@@ -17,8 +17,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -26,23 +26,24 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.block.IHasItemBlock;
 import omtteam.omlib.block.BlockAbstractTileEntity;
+import omtteam.omlib.block.UnownedMarker;
+import omtteam.omlib.compat.theoneprobe.TOPCompatibility;
 import omtteam.omlib.compat.theoneprobe.TOPInfoProvider;
-import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.MathUtil;
-import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.api.TurretDefinition;
-import omtteam.openmodularturrets.item.ItemBlockTurret;
-import omtteam.openmodularturrets.reference.OMTNames;
-import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.registry.TurretRegistry;
-import omtteam.openmodularturrets.tileentity.base.TurretBase;
-import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.TurretPlacement;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
+import omtteam.openmodularturrets.item.ItemBlockTurret;
+import omtteam.openmodularturrets.reference.Reference;
+import omtteam.openmodularturrets.tileentity.base.TurretBase;
+import omtteam.openmodularturrets.tileentity.turret.TurretOverlay;
+import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
+import omtteam.openmodularturrets.turret.TurretRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -51,10 +52,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
 
-import static omtteam.omlib.compat.theoneprobe.TOPCompatibility.getLocalizationString;
-import static omtteam.omlib.util.GeneralUtil.getBooleanUnlocalizationYesNo;
-import static omtteam.omlib.util.GeneralUtil.getColoredBooleanColor;
-import static omtteam.openmodularturrets.turret.TurretHeadUtil.getTurretBaseFacing;
+import static omtteam.openmodularturrets.tileentity.turret.TurretMount.getTurretBaseFacing;
 
 /**
  * A turret block (1.12.2 {@code BlockAbstractTurretHead} and its 14 subclasses; 1.20.1+ {@code TurretBlock}): one
@@ -76,7 +74,6 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
     public BlockTurret(ResourceLocation id, TurretType coreType) {
         super(Material.GLASS);
         this.coreType = coreType;
-        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         if (OMTConfig.TURRETS.turretBreakable) {
             this.setHardness(BREAKABLE_HARDNESS);
             this.setHarvestLevel("pickaxe", 0);
@@ -92,8 +89,12 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         this.setRegistryName(id);
     }
 
-    /** Ambient particles of the 1.12.2 melee, relativistic and railgun turrets: coloured redstone dust. */
-    public static TurretDefinition.AmbientEffect dust(int red, int green, int blue, boolean onlyDeployed) {
+    /**
+     * Ambient particles of the slowing and railgun turrets: coloured redstone dust, six specks around the block centre;
+     * with {@code onlyDeployed} not while concealed. The colour is 0–1 per channel (redstone dust takes it as its
+     * speed; values above 1 overflow, and a red of exactly 0 turns into the default red).
+     */
+    public static TurretDefinition.AmbientEffect dust(float red, float green, float blue, boolean onlyDeployed) {
         return (world, pos, random) -> {
             IBlockState state = world.getBlockState(pos);
             if (onlyDeployed && state.getBlock() instanceof BlockTurret && state.getValue(CONCEALED)) return;
@@ -123,6 +124,7 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
 
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }
@@ -199,7 +201,40 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         EnumFacing towardsBase = getTurretBaseFacing(world, pos);
         if (towardsBase == null) return null;
         BlockPos basePos = pos.offset(towardsBase);
-        TurretBase base = (TurretBase) world.getTileEntity(basePos);
+        TileEntity tile = world.getTileEntity(basePos);
+        if (!(tile instanceof TurretBase)) return null;
+        TurretBase base = (TurretBase) tile;
+        return attachResult(world, towardsBase, base);
+    }
+
+    /**
+     * Whether {@code player} may attach this turret at {@code pos}: only the admins of the base next to it may (like
+     * dropping turrets), on a base without owner only players who may use command blocks (map makers; everyone else
+     * claims it first), and placing without a player is refused; then {@link TurretPlacement#canAttach}. Also asked
+     * on the client, which knows the trust list, for the reason the placement label shows.
+     *
+     * @return {@code null} if there is no base next to {@code pos}
+     */
+    @Nullable
+    public TurretPlacement.Result attachResult(World world, BlockPos pos, @Nullable EntityPlayer player) {
+        EnumFacing towardsBase = getTurretBaseFacing(world, pos);
+        if (towardsBase == null) return null;
+        TileEntity tile = world.getTileEntity(pos.offset(towardsBase));
+        if (!(tile instanceof TurretBase)) return null;
+        TurretBase base = (TurretBase) tile;
+        if (player == null || !mayAttach(base, player)) {
+            return TurretPlacement.Result.NO_PERMISSION;
+        }
+        return attachResult(world, towardsBase, base);
+    }
+
+    private static boolean mayAttach(TurretBase base, EntityPlayer player) {
+        if (base.getOwnerOrNull() == null) return player.canUseCommandBlock();
+        return PlayerUtil.isPlayerAdmin(player, base);
+    }
+
+    private TurretPlacement.Result attachResult(World world, EnumFacing towardsBase, TurretBase base) {
+        BlockPos basePos = base.getPos();
         return TurretPlacement.canAttach(coreType, TurretBase.toFace(towardsBase.getOpposite()), base.getTier(),
                 attachedTurrets(world, basePos), ConfigLogicSettings.INSTANCE);
     }
@@ -238,6 +273,31 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         return false;
     }
 
+    /**
+     * A breakable turret ({@code turretBreakable}) drops only when mined with a pickaxe, as on 1.20.1+
+     * ({@code requiresCorrectToolForDrops} and {@code mineable/pickaxe}). Forge's check would let it drop by hand,
+     * since {@link Material#GLASS} needs no tool.
+     */
+    @Override
+    @ParametersAreNonnullByDefault
+    public boolean canHarvestBlock(IBlockAccess world, BlockPos pos, EntityPlayer player) {
+        IBlockState state = world.getBlockState(pos);
+        ItemStack tool = player.getHeldItemMainhand();
+        return !tool.isEmpty() && getHarvestLevel(state) >= 0
+                && tool.getItem().getHarvestLevel(tool, "pickaxe", player, state) >= getHarvestLevel(state);
+    }
+
+    /** Forge's {@code blockStrength} with {@link #canHarvestBlock}: mining without a pickaxe is slow, as on 1.20.1+. */
+    @Override
+    @ParametersAreNonnullByDefault
+    public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer player, World world, BlockPos pos) {
+        float hardness = state.getBlockHardness(world, pos);
+        if (hardness < 0.0F) {
+            return 0.0F;
+        }
+        return player.getDigSpeed(state, pos) / hardness / (canHarvestBlock(world, pos, player) ? 30F : 100F);
+    }
+
     @Override
     @ParametersAreNonnullByDefault
     public void onNeighborChange_OM(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
@@ -250,38 +310,26 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
 
     @Override
     @SideOnly(Side.CLIENT)
+    @ParametersAreNonnullByDefault
     public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random random) {
         TurretDefinition.AmbientEffect effect = TurretRegistry.get(coreType).ambientEffect();
         if (effect != null) {
             effect.spawn(world, pos, random);
         }
+        UnownedMarker.randomDisplayTick(world, pos, random);
     }
 
+    /** The lines of the turret's overlay ({@link TurretOverlay}, as on 1.20.1+ Jade). */
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         TileEntity te = world.getTileEntity(data.getPos());
-        if (!(te instanceof TurretTileEntity) || ((TurretTileEntity) te).getBase() == null) {
+        if (!(te instanceof TurretTileEntity)) {
             return;
         }
         TurretTileEntity turret = (TurretTileEntity) te;
-        TurretBase base = turret.getBase();
-        boolean active = base.isActive();
-        probeInfo.text("§6" + getLocalizationString(OMLibNames.Localizations.GUI.ACTIVE)
-                + ": " + getColoredBooleanColor(active)
-                + getLocalizationString(getBooleanUnlocalizationYesNo(active)), probeInfo.defaultTextStyle());
-        probeInfo.text("§6" + getLocalizationString(OMLibNames.Localizations.GUI.OWNER)
-                + ": §F" + base.getOwner().getName(), probeInfo.defaultTextStyle());
-        probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.AMMO) + ": §F"
-                + turret.getAmmoLevel(), probeInfo.defaultTextStyle());
-        probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE) + ": §F"
-                + ConfigLogicSettings.INSTANCE.turret(coreType).baseDamage(), probeInfo.defaultTextStyle());
-        probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.DAMAGE_AMP) + ": §F"
-                + String.format("%.2f", turret.getTurretDamageAmpBonus() * 100 * turret.getDamageAmpLevel()) + "%",
-                probeInfo.defaultTextStyle());
-        probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.ACCURACY) + ": §F"
-                + String.format("%.2f", Math.min(100F, 100F - turret.getActualTurretAccuracyDeviation())) + "%",
-                probeInfo.defaultTextStyle());
-        probeInfo.text("§6" + getLocalizationString(OMTNames.Localizations.GUI.RATE_OF_FIRE) + ": §F"
-                + String.format("%.2f", 20F / turret.getFireCooldownTicks()) + "s/sec", probeInfo.defaultTextStyle());
+        for (String line : TurretOverlay.lines(TurretOverlay.data(turret, player), turret.isConcealed(),
+                TOPCompatibility::getLocalizationString)) {
+            probeInfo.text(line, probeInfo.defaultTextStyle());
+        }
     }
 }

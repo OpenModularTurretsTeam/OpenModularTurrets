@@ -15,6 +15,14 @@ public interface LogicSettings {
     /** @param tier 1–5 */
     BaseTierStats baseTier(int tier);
 
+    /**
+     * {@code expanders.tier_N.stacks}: stacks an inventory expander of this tier adds to every ammo and fuel slot of
+     * the machine it is attached to.
+     *
+     * @param tier 1–3
+     */
+    int expanderStacks(int tier);
+
     /** {@code miscellaneous.solarPanelAddonGen}. */
     int solarPanelGeneration();
 
@@ -23,6 +31,15 @@ public interface LogicSettings {
 
     /** {@code turrets.doTurretsNeedAmmo}. */
     boolean turretsNeedAmmo();
+
+    /**
+     * {@code turrets.dropTurretsOverMaxSimultaneous}: attached turrets over their type's {@code maxSimultaneous} drop
+     * (otherwise the limit only applies to placing).
+     */
+    boolean dropTurretsOverMaxSimultaneous();
+
+    /** {@code bases.unownedBasesActive}: bases without an owner target and fire; otherwise they are inert. */
+    boolean unownedBasesActive();
 
     /** {@code turrets.canTurretsConcealWithoutAddon}. */
     boolean turretsConcealWithoutAddon();

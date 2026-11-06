@@ -6,12 +6,15 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import omtteam.omlib.config.ConfigSync;
+import omtteam.openmodularturrets.config.AddonTurretConfig;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.entity.projectile.OMTFakePlayer;
 import omtteam.openmodularturrets.handler.OMTEventHandler;
 import omtteam.openmodularturrets.network.OMTNetworkingHandler;
+import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.registry.ModEntities;
-import omtteam.openmodularturrets.util.OMTFakePlayer;
 
 import javax.annotation.Nullable;
 
@@ -36,7 +39,11 @@ public class CommonProxy {
     }
 
     protected void initHandlers() {
-        OMTNetworkingHandler.initNetworking();
+        OMTNetworkingHandler.initNetworking(this::clientMessageHandler);
+        // the server's config also rebuilds the parsed ammo list and replaces the addon turrets' settings
+        ConfigSync.register(Reference.MOD_ID, OMTConfig::parseLists);
+        ConfigSync.registerValue(Reference.MOD_ID, AddonTurretConfig.FILE_NAME, AddonTurretConfig.SETTINGS_TYPE,
+                AddonTurretConfig::getSettings, AddonTurretConfig::setSettings);
     }
 
     public void init() {

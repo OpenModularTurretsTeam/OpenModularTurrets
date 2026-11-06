@@ -12,6 +12,7 @@ import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.settings.BaseTierStats;
 import omtteam.openmodularturrets.core.settings.LogicSettings;
 import omtteam.openmodularturrets.core.settings.TurretStats;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.target.TargetSelector;
 import omtteam.openmodularturrets.core.turret.AmmoType;
@@ -34,7 +35,7 @@ import java.util.UUID;
 
 /**
  * Game logic of one turret base, independent of Minecraft. Ported from 1.12.2 {@code TurretBase} and the base-related
- * parts of {@code TurretHeadUtil}, {@code OMTUtil} and OMLib's machine classes (via the 1.20.1+ port).
+ * parts of {@code TurretMount}, {@code OMTUtil} and OMLib's machine classes (via the 1.20.1+ port).
  * <p>
  * The tile entity owns one instance, forwards world events to it ({@link #setRedstone}, {@link #onInventoryChanged},
  * {@link #updateNeighbours}, {@link #tick}) and persists its state. Turrets ask it for ammo, energy, their target and
@@ -44,7 +45,7 @@ import java.util.UUID;
  * and writes the 3.x format), so the logic is given its {@link TrustManager} instead of creating one.
  */
 public class TurretBaseLogic {
-    /** 1.12.2 {@code TurretHeadUtil.warnPlayers}: a warned player is warned again after this many ticks. */
+    /** 1.12.2 {@code TurretMount.warnPlayers}: a warned player is warned again after this many ticks. */
     static final long WARNING_COOLDOWN_TICKS = 12000;
 
     private final int tier;
@@ -176,6 +177,15 @@ public class TurretBaseLogic {
                     break;
                 }
             }
+        } else if (previousMaxRange == 0 && !turrets.isEmpty()) {
+            // first scan of a base without a saved max range (no NBT, e.g. /setblock or a structure) that already
+            // has turrets: start at the range of the shortest reaching turret instead of 0
+            int shortest = Integer.MAX_VALUE;
+            for (TurretType type : turrets.values()) {
+                shortest = Math.min(shortest, getRange(type));
+            }
+            targeting.setRange(shortest);
+            markSync();
         }
     }
 
@@ -206,6 +216,21 @@ public class TurretBaseLogic {
     }
 
     /**
+     * How much each ammo slot holds: the stacks of the base's tier ({@link BaseTierStats#ammoStacks()}) times one stack
+     * plus those of the inventory expanders attached as of the last {@link #updateNeighbours}, so a two-stack base
+     * holds twice as much with the same expanders (config values are read on every call).
+     */
+    public SlotCapacity getSlotCapacity() {
+        List<Integer> tiers = new ArrayList<>();
+        for (Neighbour neighbour : neighbours.values()) {
+            if (neighbour instanceof Neighbour.Expanders) tiers.addAll(((Neighbour.Expanders) neighbour).tiers());
+        }
+        long baseStacks = Math.max(1L, settings.baseTier(tier).ammoStacks());
+        long stacks = baseStacks * (1L + SlotCapacity.of(tiers, settings::expanderStacks).bonusStacks());
+        return new SlotCapacity((int) Math.min(Integer.MAX_VALUE, stacks - 1L));
+    }
+
+    /**
      * Max range = best {@code baseRange + range upgrades} of the attached turrets (1.12.2 {@code updateMaxRange}).
      * Skipped until the neighbours are known, so the player's range is not reset while loading.
      */
@@ -232,7 +257,7 @@ public class TurretBaseLogic {
     }
 
     /**
-     * Shots available to a turret (1.12.2 {@code TurretHeadUtil.getAmmoLevel}): matching items in the base; for
+     * Shots available to a turret (1.12.2 {@code TurretMount.getAmmoLevel}): matching items in the base; for
      * energy turrets the stored energy divided by the power usage; unlimited if ammo is
      * disabled or the base has a creative upgrade.
      */
@@ -294,11 +319,10 @@ public class TurretBaseLogic {
         return Optional.of(new AmmoDraw(ammo, needed, damageBonus, false, item));
     }
 
-    /** Removes one item of a reactor fuel from the first ammo slot holding it; false if there is none. */
+    /** Removes one item of a reactor fuel from the first ammo slot that gives one out; false if there is none. */
     private boolean extractFuel(ReactorFuel fuel) {
         for (ItemSlot slot : world.getAmmoSlots()) {
-            if (slot.getCount() > 0 && slot.isReactorFuel(fuel)) {
-                slot.extract(1);
+            if (slot.getCount() > 0 && slot.isReactorFuel(fuel) && slot.extract(1) == 1) {
                 return true;
             }
         }
@@ -355,14 +379,14 @@ public class TurretBaseLogic {
     }
 
     /**
-     * Scattershot upgrades that apply to a turret (1.12.2 {@code TurretHeadUtil.getScattershotUpgrades}); always 0
+     * Scattershot upgrades that apply to a turret (1.12.2 {@code TurretMount.getScattershotUpgrades}); always 0
      * for turrets that {@linkplain TurretType#usesScattershot() ignore them}.
      */
     public int getScattershotCount(TurretType type) {
         return type.usesScattershot() ? getUpgradeCount(TurretBaseUpgradeType.SCATTERSHOT) : 0;
     }
 
-    /** 1.12.2 {@code TurretHeadUtil.getAmpLevel}. */
+    /** 1.12.2 {@code TurretMount.getAmpLevel}. */
     public int getDamageAmpLevel() {
         return getAddonCount(AddonType.DAMAGE_AMP);
     }
@@ -382,7 +406,7 @@ public class TurretBaseLogic {
         return addons == 0 ? NO_LOOT : Math.min(addons - 1, Math.max(0, maxLooting));
     }
 
-    /** 1.12.2 {@code TurretHeadUtil.hasConcealmentAddon}. */
+    /** 1.12.2 {@code TurretMount.hasConcealmentAddon}. */
     public boolean shouldConcealTurrets() {
         return tier > 1 && (hasAddon(AddonType.CONCEALER) || settings.turretsConcealWithoutAddon());
     }
@@ -467,7 +491,7 @@ public class TurretBaseLogic {
         }
     }
 
-    /** 1.12.2 {@code TurretHeadUtil.updateSolarPanelAddon}; inserted like external energy (limited by max IO). */
+    /** 1.12.2 {@code TurretMount.updateSolarPanelAddon}; inserted like external energy (limited by max IO). */
     private void updateSolarPanel() {
         if (hasAddon(AddonType.SOLAR_PANEL) && world.canGenerateSolarPower()) {
             energy.insert(settings.solarPanelGeneration(), false);
@@ -478,6 +502,7 @@ public class TurretBaseLogic {
 
     /** Whether the redstone mode currently lets the base work. */
     public boolean isActive() {
+        if (trustManager.getOwner() == null && !settings.unownedBasesActive()) return false;
         return mode.isActive(redstone);
     }
 
@@ -617,7 +642,7 @@ public class TurretBaseLogic {
     // ---- Player warnings ----
 
     /**
-     * 1.12.2 {@code TurretHeadUtil.warnPlayers}, called per turret while the base is active and has enough energy for
+     * 1.12.2 {@code TurretMount.warnPlayers}, called per turret while the base is active and has enough energy for
      * a shot: players in the cube {@code turret ± (baseRange + warning distance)} who are not owner, trusted or in
      * creative mode are warned once every {@value #WARNING_COOLDOWN_TICKS} ticks.
      */

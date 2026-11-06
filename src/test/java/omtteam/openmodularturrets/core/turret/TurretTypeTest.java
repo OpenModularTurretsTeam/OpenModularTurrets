@@ -19,7 +19,7 @@ class TurretTypeTest {
     void ammoMatchesOriginalTurrets() {
         assertEquals(Optional.of(AmmoType.DISPOSABLE), TurretType.DISPOSABLE_TURRET.getAmmo());
         assertEquals(Optional.of(AmmoType.POTATO), TurretType.POTATO_CANNON_TURRET.getAmmo());
-        assertEquals(Optional.of(AmmoType.ARROW), TurretType.CROSSBOW_TURRET.getAmmo());
+        assertEquals(Optional.of(AmmoType.BOLT), TurretType.CROSSBOW_TURRET.getAmmo());
         assertEquals(Optional.of(AmmoType.BULLET), TurretType.MACHINE_GUN_TURRET.getAmmo());
         assertEquals(Optional.of(AmmoType.BLAZING_CLAY), TurretType.INCENDIARY_TURRET.getAmmo());
         assertEquals(Optional.of(AmmoType.GRENADE), TurretType.GRENADE_TURRET.getAmmo());
@@ -135,7 +135,10 @@ class TurretTypeTest {
 
     @Test
     void registeredTypesFollowTheBuiltInOnes() {
+        assertFalse(TurretTypes.isFrozen(), "only the mod freezes the types, after loading the turret API plugins");
         TurretType added = TurretTypes.register(TurretType.builder("othermod", "registered_turret").build());
+        assertEquals("othermod", added.getNamespace());
+        assertEquals("openmodularturrets", TurretType.LASER_TURRET.getNamespace());
         assertEquals(TurretType.BUILT_IN, TurretTypes.all().subList(0, TurretType.BUILT_IN.size()));
         assertTrue(TurretTypes.all().contains(added));
         assertEquals(Optional.of(added), TurretTypes.byId("othermod:registered_turret"));

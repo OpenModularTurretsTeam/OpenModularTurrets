@@ -4,7 +4,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import omtteam.omlib.api.tile.IOwnedBlockAddon;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
-import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import omtteam.openmodularturrets.tileentity.turret.TurretMount;
 
 /**
  * Created by Keridos on 17/05/17.
@@ -20,6 +20,6 @@ public interface ITurretBaseAddonTileEntity extends IOwnedBlockAddon {
      * @return the corresponding base.
      */
     default TurretBase getBase(World world, BlockPos pos) {
-        return TurretHeadUtil.getTurretBase(world, pos);
+        return TurretMount.getTurretBase(world, pos);
     }
 }

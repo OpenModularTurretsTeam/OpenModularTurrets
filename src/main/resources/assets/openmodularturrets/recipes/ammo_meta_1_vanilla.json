@@ -6,7 +6,7 @@
   },
   "pattern": [
     " A ",
-    "BC ",
+    " BC",
     " A "
   ],
   "type": "forge:ore_shaped",

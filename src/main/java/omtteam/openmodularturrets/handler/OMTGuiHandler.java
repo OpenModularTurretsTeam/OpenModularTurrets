@@ -5,23 +5,19 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.container.GeneratorContainer;
 import omtteam.openmodularturrets.container.TurretBaseContainer;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.misc.GeneratorTileEntity;
 
+import javax.annotation.Nullable;
+
 public class OMTGuiHandler implements IGuiHandler {
-    private static OMTGuiHandler instance;
+    private final ClientGuis clientGuis;
 
-    private OMTGuiHandler() {
-    }
-
-    public static OMTGuiHandler getInstance() {
-        if (instance == null) {
-            instance = new OMTGuiHandler();
-        }
-        return instance;
+    /** @param clientGuis the GUI screens, supplied by the proxy (screens only exist on the client) */
+    public OMTGuiHandler(ClientGuis clientGuis) {
+        this.clientGuis = clientGuis;
     }
 
     @Override
@@ -41,6 +37,12 @@ public class OMTGuiHandler implements IGuiHandler {
 
     @Override
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        return OpenModularTurrets.proxy.getClientGuiElement(id, player, world, x, y, z);
+        return clientGuis.getClientGuiElement(id, player, world, x, y, z);
+    }
+
+    /** Creates the GUI screen of a GUI id; only the client proxy has screens. */
+    public interface ClientGuis {
+        @Nullable
+        Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z);
     }
 }

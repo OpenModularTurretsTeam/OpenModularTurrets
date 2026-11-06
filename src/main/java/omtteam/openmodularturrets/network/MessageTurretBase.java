@@ -16,6 +16,7 @@ import omtteam.omlib.util.EnumMachineMode;
 import omtteam.omlib.util.player.Player;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +33,8 @@ public class MessageTurretBase implements IMessage {
     private String camoBlockRegName;
     private List<TrustedPlayer> trustedPlayers = new ArrayList<>();
     private EnumMachineMode mode;
+    /** {@code null}: the base has no owner (disowned or never claimed). */
+    @Nullable
     private Player owner;
 
     public MessageTurretBase() {
@@ -48,7 +51,7 @@ public class MessageTurretBase implements IMessage {
             this.tier = base.getTier();
             this.lightValue = base.getCamoSettings().getLightValue();
             this.lightOpacity = base.getCamoSettings().getLightOpacity();
-            this.owner = base.getOwner();
+            this.owner = base.getOwnerOrNull();
             this.rfStorageCurrent = base.getEnergyStored(EnumFacing.DOWN);
             this.rfStorageMax = base.getMaxEnergyStored(EnumFacing.DOWN);
             this.attacksMobs = base.isAttacksMobs();
@@ -74,7 +77,7 @@ public class MessageTurretBase implements IMessage {
         this.tier = buf.readInt();
         this.lightValue = buf.readInt();
         this.lightOpacity = buf.readInt();
-        this.owner = Player.readFromByteBuf(buf);
+        this.owner = buf.readBoolean() ? Player.readFromByteBuf(buf) : null;
         this.rfStorageCurrent = buf.readInt();
         this.rfStorageMax = buf.readInt();
         this.range = buf.readInt();
@@ -108,7 +111,10 @@ public class MessageTurretBase implements IMessage {
         buf.writeInt(tier);
         buf.writeInt(lightValue);
         buf.writeInt(lightOpacity);
-        Player.writeToByteBuf(owner, buf);
+        buf.writeBoolean(owner != null);
+        if (owner != null) {
+            Player.writeToByteBuf(owner, buf);
+        }
         buf.writeInt(rfStorageCurrent);
         buf.writeInt(rfStorageMax);
         buf.writeInt(range);
@@ -146,6 +152,7 @@ public class MessageTurretBase implements IMessage {
     @SuppressWarnings("deprecation")
     public void applyTo(TurretBase base) {
         OMEnergyStorage storage = (OMEnergyStorage) base.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
+        // null keeps a disowned base unowned on the client (sparkle, owner line)
         base.setOwner(owner);
         if (storage != null) {
             storage.setEnergyStored(rfStorageCurrent);

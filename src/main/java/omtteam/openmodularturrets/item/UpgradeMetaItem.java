@@ -10,10 +10,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.util.GeneralUtil;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.registry.ModItems;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
@@ -27,14 +25,15 @@ import static omtteam.omlib.util.GeneralUtil.safeLocalize;
 public class UpgradeMetaItem extends Item {
     public final static String[] subNames = {
             OMTNames.Items.accuraccyUpgrade, OMTNames.Items.efficiencyUpgrade, OMTNames.Items.fireRateUpgrade,
-            OMTNames.Items.rangeUpgrade, OMTNames.Items.scattershotUpgrade
+            OMTNames.Items.rangeUpgrade, OMTNames.Items.scattershotUpgrade, OMTNames.Items.creativeUpgrade
     };
+    /** The creative upgrade (1.20.1+ {@code upgrade_creative}): full energy, no ammo usage; creative only, no recipe. */
+    public static final int CREATIVE_META = 5;
 
     public UpgradeMetaItem() {
         super();
 
         this.setHasSubtypes(true);
-        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Items.upgradeMetaItem);
         this.setTranslationKey(OMTNames.Items.upgradeMetaItem);
     }
@@ -43,8 +42,8 @@ public class UpgradeMetaItem extends Item {
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         if (isInCreativeTab(itemIn)) {
-            for (int i = 0; i < 5; i++) {
-                subItems.add(new ItemStack(ModItems.upgradeMetaItem, 1, i));
+            for (int i = 0; i < subNames.length; i++) {
+                subItems.add(new ItemStack(this, 1, i));
             }
         }
     }
@@ -65,6 +64,8 @@ public class UpgradeMetaItem extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
+        // which machine an upgrade fits into, also without shift (each machine has its own upgrades)
+        tooltip.add(safeLocalize("tooltip.openmodularturrets.upgrade.machine.turret_base"));
         if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
             tooltip.add(GeneralUtil.getShiftDetail());
         } else {
@@ -112,10 +113,20 @@ public class UpgradeMetaItem extends Item {
                     tooltip.add("");
                     tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.scatter.a"));
                     tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.scatter.b"));
+                    tooltip.add(TextFormatting.GOLD + safeLocalize("tooltip.openmodularturrets.upgrade.scatter.ignored"));
                     tooltip.add("");
                     tooltip.add(safeLocalize("text.openmodularturrets.turret.upgrade.stacks"));
                     tooltip.add("");
                     tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("text.openmodularturrets.turret.upgrade.scatter.flavour"));
+                    return;
+                case CREATIVE_META:
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.BLUE + safeLocalize("text.openmodularturrets.turret.upgrade.label"));
+                    tooltip.add("");
+                    tooltip.add(safeLocalize("tooltip.openmodularturrets.upgrade.creative.a"));
+                    tooltip.add(safeLocalize("tooltip.openmodularturrets.upgrade.creative.b"));
+                    tooltip.add("");
+                    tooltip.add(TextFormatting.DARK_GRAY + safeLocalize("tooltip.openmodularturrets.upgrade.creative.flavour"));
             }
         }
     }

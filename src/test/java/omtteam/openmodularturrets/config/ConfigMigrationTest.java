@@ -59,13 +59,125 @@ class ConfigMigrationTest {
     }
 
     @Test
-    void aConfigWithoutTheOldSectionIsNotRewritten() throws Exception {
+    void aConfigAtTheCurrentVersionIsNotRewritten() throws Exception {
         write(NEW, "baseRange", 20);
+        write(ConfigMigration.VERSION_CATEGORY, ConfigMigration.VERSION_KEY, ConfigMigrationSteps.CURRENT_VERSION);
         byte[] before = Files.readAllBytes(file.toPath());
 
         ConfigMigration.migrate(file);
 
         assertArrayEquals(before, Files.readAllBytes(file.toPath()));
+    }
+
+    @Test
+    void filesWithoutAVersionGetTheCurrentOne() {
+        write(NEW, "baseRange", 20);
+
+        ConfigMigration.migrate(file);
+
+        assertEquals(ConfigMigrationSteps.CURRENT_VERSION, version());
+        assertEquals(20, new Configuration(file).getCategory(NEW).get("baseRange").getInt());
+    }
+
+    @Test
+    void oldBaseChargeDefaultsAreRaised() {
+        int[] old = {500, 50_000, 150_000, 500_000, 10_000_000};
+        for (int tier = 1; tier <= 5; tier++) {
+            write("bases.tier " + tier, "baseMaxCharge", old[tier - 1]);
+        }
+
+        ConfigMigration.migrate(file);
+
+        int[] expected = {5_000, 500_000, 1_500_000, 10_000_000, 100_000_000};
+        for (int tier = 1; tier <= 5; tier++) {
+            assertEquals(expected[tier - 1], baseCharge(tier), "tier " + tier);
+        }
+        assertEquals(ConfigMigrationSteps.CURRENT_VERSION, version());
+    }
+
+    @Test
+    void chosenBaseChargesStay() {
+        write("bases.tier 1", "baseMaxCharge", 800);
+        write("bases.tier 2", "baseMaxCharge", 500);
+
+        ConfigMigration.migrate(file);
+
+        assertEquals(800, baseCharge(1));
+        assertEquals(500, baseCharge(2), "tier 1's old default is no default of tier 2");
+    }
+
+    @Test
+    void runsOncePerFile() {
+        write(ConfigMigration.VERSION_CATEGORY, ConfigMigration.VERSION_KEY, ConfigMigrationSteps.CURRENT_VERSION);
+        write("bases.tier 1", "baseMaxCharge", 500);
+        write(OLD, "baseRange", 33);
+
+        ConfigMigration.migrate(file);
+
+        assertEquals(500, baseCharge(1), "an owner may set the old value again");
+        assertEquals(33, new Configuration(file).getCategory(OLD).get("baseRange").getInt());
+    }
+
+    @Test
+    void versionTwoFilesOnlyGetTheBaseCharges() {
+        write(ConfigMigration.VERSION_CATEGORY, ConfigMigration.VERSION_KEY, 2);
+        write("bases.tier 5", "baseMaxCharge", 10_000_000);
+        write(OLD, "baseRange", 33);
+
+        ConfigMigration.migrate(file);
+
+        assertEquals(100_000_000, baseCharge(5));
+        assertEquals(33, new Configuration(file).getCategory(OLD).get("baseRange").getInt(),
+                "the version 2 step ran again");
+    }
+
+    @Test
+    void theOldPlanksAmmoDefaultBecomesTheOreDictionaryEntry() {
+        writeAmmo("minecraft:cobblestone,2", "minecraft:planks,1", "minecraft:sand,3");
+
+        ConfigMigration.migrate(file);
+
+        assertArrayEquals(new String[]{"minecraft:cobblestone,2", "ore:plankWood,1", "minecraft:sand,3"}, ammo());
+    }
+
+    @Test
+    void chosenPlanksAmmoEntriesStay() {
+        writeAmmo("minecraft:cobblestone,2", "minecraft:planks,4", "minecraft:planks:2,1");
+
+        ConfigMigration.migrate(file);
+
+        assertArrayEquals(new String[]{"minecraft:cobblestone,2", "minecraft:planks,4", "minecraft:planks:2,1"}, ammo());
+    }
+
+    @Test
+    void versionThreeFilesOnlyGetThePlanksAmmo() {
+        write(ConfigMigration.VERSION_CATEGORY, ConfigMigration.VERSION_KEY, 3);
+        write("bases.tier 1", "baseMaxCharge", 500);
+        writeAmmo("minecraft:planks,1");
+
+        ConfigMigration.migrate(file);
+
+        assertArrayEquals(new String[]{"ore:plankWood,1"}, ammo());
+        assertEquals(500, baseCharge(1), "the version 3 step ran again");
+    }
+
+    private void writeAmmo(String... entries) {
+        Configuration config = new Configuration(file);
+        config.get("general", "stringAmmoAllowList", entries);
+        config.save();
+    }
+
+    private String[] ammo() {
+        return new Configuration(file).getCategory("general").get("stringAmmoAllowList").getStringList();
+    }
+
+    private int baseCharge(int tier) {
+        return new Configuration(file).getCategory("bases.tier " + tier).get("baseMaxCharge").getInt();
+    }
+
+    private int version() {
+        return new Configuration(file).getCategory(ConfigMigration.VERSION_CATEGORY).get(ConfigMigration.VERSION_KEY)
+                .getInt();
     }
 
     @Test

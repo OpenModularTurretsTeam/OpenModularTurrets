@@ -5,7 +5,9 @@
   },
   "variants": {
     "normal": [
-      {}
+      {
+        "model": "openmodularturrets:turret/arc_turret"
+      }
     ],
     "inventory": [
       {}

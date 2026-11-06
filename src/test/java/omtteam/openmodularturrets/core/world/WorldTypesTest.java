@@ -19,6 +19,12 @@ class WorldTypesTest {
     @Test
     void boxEdgesAreInside() {
         Box box = Box.around(new BlockPosition(0, 0, 0), 2);
+        assertEquals(-2, box.minX());
+        assertEquals(-2, box.minY());
+        assertEquals(-2, box.minZ());
+        assertEquals(2, box.maxX());
+        assertEquals(2, box.maxY());
+        assertEquals(2, box.maxZ());
         assertTrue(box.contains(-2, -2, -2));
         assertTrue(box.contains(2, 2, 2));
         assertFalse(box.contains(2.01, 0, 0));

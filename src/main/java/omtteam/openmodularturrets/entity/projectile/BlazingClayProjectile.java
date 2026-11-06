@@ -52,7 +52,8 @@ public class BlazingClayProjectile extends TurretProjectile {
 
                 if (canDamageEntity(entity)) {
                     if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
-                    entity.attackEntityFrom(new NormalDamageSource("blazing_clay", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
+                    entity.attackEntityFrom(new NormalDamageSource("blazing_clay", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), damage);
+                    if (damage > 0) notifyHit(entity);
                     entity.hurtResistantTime = -1;
                     entity.setFire(5);
                     playSound();
@@ -73,25 +74,22 @@ public class BlazingClayProjectile extends TurretProjectile {
 
             int damage = OMTConfig.TURRETS.incendiary_turret.baseDamage;
 
-            if (isAmped) {
-                if (entity instanceof EntityLivingBase) {
-                    EntityLivingBase elb = (EntityLivingBase) entity;
-                    damage += ((int) elb.getHealth() * (getDamageAmpBonus() * amp_level));
-                }
-            }
+            damage = damageWithAmp(damage, entity);
 
             for (EntityLivingBase mob : targets) {
                 setTagsForTurretHit(mob);
 
                 if (mob instanceof EntityPlayer) {
                     if (canDamagePlayer((EntityPlayer) mob)) {
-                        mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
+                        mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, mob), damage);
+                        if (damage > 0) notifyHit(mob);
                         mob.hurtResistantTime = 0;
                         mob.setFire(5);
                     }
                 } else if (canDamageEntity(mob)) {
                     setTagsForTurretHit(entity);
-                    mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true), damage);
+                    mob.attackEntityFrom(new NormalDamageSource("bullet", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, mob), damage);
+                    if (damage > 0) notifyHit(mob);
                     mob.hurtResistantTime = 0;
                     mob.setFire(5);
                 }

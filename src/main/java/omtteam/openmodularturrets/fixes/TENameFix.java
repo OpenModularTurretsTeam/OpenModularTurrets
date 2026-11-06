@@ -3,7 +3,6 @@ package omtteam.openmodularturrets.fixes;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.datafix.IFixableData;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 
@@ -41,7 +40,7 @@ public class TENameFix implements IFixableData {
     public NBTTagCompound fixTagCompound(@Nonnull NBTTagCompound compound) {
         String oldId = compound.getString("id");
         if (NAME_MAP.containsKey(oldId)) {
-            OpenModularTurrets.getLogger().info("Fixed TE from {} to {}", oldId, NAME_MAP.get(oldId));
+            Reference.LOGGER.info("Fixed TE from {} to {}", oldId, NAME_MAP.get(oldId));
             compound.setString("id", NAME_MAP.get(oldId));
         }
         return compound;

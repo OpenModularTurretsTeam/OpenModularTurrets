@@ -12,6 +12,8 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TurretPlacementTest {
     private final FakeSettings settings = new FakeSettings();
@@ -122,16 +124,51 @@ class TurretPlacementTest {
 
     @Nested
     class CanStay {
+        private final Map<Face, TurretType> threeRockets = attached(Face.DOWN, TurretType.ROCKET_TURRET,
+                Face.UP, TurretType.ROCKET_TURRET, Face.NORTH, TurretType.ROCKET_TURRET);
+
         @Test
         void wrongFaceAndTierDrop() {
-            assertEquals(Result.WRONG_FACE, TurretPlacement.canStay(TurretType.MELEE_TURRET, Face.EAST, 5));
-            assertEquals(Result.TIER_TOO_LOW, TurretPlacement.canStay(TurretType.ROCKET_TURRET, Face.UP, 3));
+            assertEquals(Result.WRONG_FACE,
+                    TurretPlacement.canStay(TurretType.MELEE_TURRET, Face.EAST, 5, none(), settings));
+            assertEquals(Result.TIER_TOO_LOW,
+                    TurretPlacement.canStay(TurretType.ROCKET_TURRET, Face.UP, 3, none(), settings));
         }
 
         @Test
         void sufficientTierOnAnAllowedFaceStays() {
-            assertEquals(Result.OK, TurretPlacement.canStay(TurretType.MELEE_TURRET, Face.UP, 1));
-            assertEquals(Result.OK, TurretPlacement.canStay(TurretType.ROCKET_TURRET, Face.EAST, 4));
+            assertEquals(Result.OK, TurretPlacement.canStay(TurretType.MELEE_TURRET, Face.UP, 1, none(), settings));
+            assertEquals(Result.OK, TurretPlacement.canStay(TurretType.ROCKET_TURRET, Face.EAST, 4, none(), settings));
+        }
+
+        @Test
+        void limitsAndDisablingKeepTurretsByDefault() {
+            limit(TurretType.ROCKET_TURRET, 1);
+            disable(TurretType.ROCKET_TURRET);
+            for (Face face : threeRockets.keySet()) {
+                // tier 4 holds 3 turrets; the type is disabled and over its limit
+                assertTrue(TurretPlacement.canStay(TurretType.ROCKET_TURRET, face, 4, threeRockets, settings).allowed());
+            }
+        }
+
+        @Test
+        void overTheLimitDropsTheLastFacesWhenEnabled() {
+            settings.dropOverMaxSimultaneous = true;
+            limit(TurretType.ROCKET_TURRET, 2);
+            assertEquals(Result.OK, TurretPlacement.canStay(TurretType.ROCKET_TURRET, Face.DOWN, 5, threeRockets, settings));
+            assertEquals(Result.OK, TurretPlacement.canStay(TurretType.ROCKET_TURRET, Face.UP, 5, threeRockets, settings));
+            assertEquals(Result.TYPE_LIMIT,
+                    TurretPlacement.canStay(TurretType.ROCKET_TURRET, Face.NORTH, 5, threeRockets, settings));
+        }
+
+        @Test
+        void otherTypesDoNotCountTowardsTheLimit() {
+            settings.dropOverMaxSimultaneous = true;
+            limit(TurretType.ROCKET_TURRET, 1);
+            assertFalse(TurretPlacement.canStay(TurretType.ROCKET_TURRET, Face.UP, 5,
+                    attached(Face.DOWN, TurretType.ROCKET_TURRET, Face.UP, TurretType.ROCKET_TURRET), settings).allowed());
+            assertTrue(TurretPlacement.canStay(TurretType.ROCKET_TURRET, Face.UP, 5,
+                    attached(Face.DOWN, TurretType.LASER_TURRET, Face.UP, TurretType.ROCKET_TURRET), settings).allowed());
         }
     }
 }

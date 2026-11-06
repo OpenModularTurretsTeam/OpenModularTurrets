@@ -9,6 +9,7 @@ import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.item.ReactorFuel;
 import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.settings.BaseTierStats;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
@@ -148,6 +150,8 @@ class TurretBaseLogicTest {
             int dirtyBefore = dirtyCount;
             Optional<AmmoDraw> draw = logic.drawAmmo(TurretType.POTATO_CANNON_TURRET);
             assertEquals(Optional.of(new AmmoDraw(AmmoType.POTATO, 1, 0, false, AmmoType.POTATO)), draw);
+            assertEquals(AmmoType.POTATO, draw.get().type());
+            assertEquals(AmmoType.POTATO, draw.get().item(), "the snapshot of the slot the ammo came from");
             assertEquals(2, potatoes.count);
             assertEquals(dirtyBefore + 1, dirtyCount, "the used ammo must be saved");
         }
@@ -159,7 +163,7 @@ class TurretBaseLogicTest {
             FakeSlot first = FakeSlot.ammo(AmmoType.POTATO, 1);
             FakeSlot second = FakeSlot.ammo(AmmoType.POTATO, 5);
             ammoSlot(0, first);
-            ammoSlot(1, FakeSlot.ammo(AmmoType.ARROW, 10));
+            ammoSlot(1, FakeSlot.ammo(AmmoType.BOLT, 10));
             ammoSlot(2, second);
             assertEquals(3, logic.drawAmmo(TurretType.POTATO_CANNON_TURRET).get().count());
             assertEquals(0, first.count);
@@ -169,7 +173,7 @@ class TurretBaseLogicTest {
         @Test
         void countOnlyIncludesTheRequestedAmmo() {
             TurretBaseLogic logic = base(5);
-            ammoSlot(0, FakeSlot.ammo(AmmoType.ARROW, 10));
+            ammoSlot(0, FakeSlot.ammo(AmmoType.BOLT, 10));
             ammoSlot(1, FakeSlot.ammo(AmmoType.POTATO, 4));
             ammoSlot(2, FakeSlot.fuel(ReactorFuel.REDSTONE, 3));
             assertEquals(4, logic.countAmmo(AmmoType.POTATO));
@@ -438,6 +442,28 @@ class TurretBaseLogicTest {
             assertEquals(5, logic.getTargetingSettings().getRange());
         }
 
+        @Test
+        void firstScanWithoutSavedRangeUsesTheShortestTurret() {
+            TurretBaseLogic logic = new TurretBaseLogic(4, settings, trust(), world, random, clientRelevant -> {
+                if (clientRelevant) syncCount++;
+            });
+            int syncsBefore = syncCount;
+            logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET, TurretType.MACHINE_GUN_TURRET));
+            assertEquals(30, logic.getTargetingSettings().getMaxRange());
+            assertEquals(18, logic.getTargetingSettings().getRange());
+            assertTrue(syncCount > syncsBefore, "clients see the new range");
+        }
+
+        @Test
+        void firstScanKeepsASavedRangeOfZero() {
+            TurretBaseLogic logic = new TurretBaseLogic(4, settings, trust(), world, random, clientRelevant -> {
+            });
+            logic.loadState(new TurretBaseLogic.State(0, MachineMode.INVERTED, false, false, true, false, 0, 30,
+                    false, 0, 0));
+            logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET));
+            assertEquals(0, logic.getTargetingSettings().getRange());
+        }
+
         /** {@code TargetingSettings} clamps a saved range above the saved maximum, so tick needs no clamp. */
         @Test
         void loadedRangeAboveTheMaximumIsClamped() {
@@ -485,6 +511,107 @@ class TurretBaseLogicTest {
     }
 
     @Nested
+    class Expanders {
+        private Map<Face, Neighbour> expanders(Face face, Integer... tiers) {
+            Map<Face, Neighbour> map = new EnumMap<>(Face.class);
+            map.put(face, new Neighbour.Expanders(Arrays.asList(tiers)));
+            return map;
+        }
+
+        @Test
+        void withoutExpandersASlotHoldsOneStack() {
+            TurretBaseLogic logic = base(1);
+            assertEquals(SlotCapacity.NONE, logic.getSlotCapacity());
+            assertEquals(64, logic.getSlotCapacity().limit(64));
+            assertEquals(16, logic.getSlotCapacity().limit(16));
+        }
+
+        @Test
+        void eachExpanderAddsTheStacksOfItsTier() {
+            TurretBaseLogic logic = base(1);
+            Map<Face, Neighbour> attached = expanders(Face.UP, 1, 3);
+            attached.put(Face.NORTH, new Neighbour.Expanders(Collections.singletonList(2)));
+            logic.updateNeighbours(attached);
+            assertEquals(6, logic.getSlotCapacity().bonusStacks());
+            assertEquals(64 * 7, logic.getSlotCapacity().limit(64));
+            assertEquals(16 * 7, logic.getSlotCapacity().limit(16));
+        }
+
+        @Test
+        void tierFourAndFiveBasesHoldTwoStacks() {
+            assertEquals(64 * 2, base(4).getSlotCapacity().limit(64));
+            assertEquals(64 * 2, base(5).getSlotCapacity().limit(64));
+            assertEquals(64, base(3).getSlotCapacity().limit(64));
+        }
+
+        @Test
+        void theStacksOfTheBaseTierMultiplyWithTheExpanders() {
+            TurretBaseLogic tierThree = base(3);
+            tierThree.updateNeighbours(expanders(Face.UP, 3, 3));
+            assertEquals(64 * 7, tierThree.getSlotCapacity().limit(64));
+            TurretBaseLogic tierFive = base(5);
+            tierFive.updateNeighbours(expanders(Face.UP, 3, 3));
+            assertEquals(64 * 14, tierFive.getSlotCapacity().limit(64));
+            settings.tiers[4] = new BaseTierStats(10000000, 50000, 4, 4);
+            assertEquals(64 * 28, tierFive.getSlotCapacity().limit(64));
+        }
+
+        @Test
+        void tierOneExpandersAddOneStackEach() {
+            TurretBaseLogic logic = base(1);
+            Map<Face, Neighbour> attached = expanders(Face.UP, 1, 1);
+            attached.put(Face.DOWN, new Neighbour.Expanders(Collections.singletonList(1)));
+            logic.updateNeighbours(attached);
+            assertEquals(64 * 4, logic.getSlotCapacity().limit(64));
+        }
+
+        @Test
+        void configChangesApplyWithoutRescan() {
+            TurretBaseLogic logic = base(1);
+            logic.updateNeighbours(expanders(Face.UP, 2));
+            settings.expanderStacks[1] = 5;
+            assertEquals(64 * 6, logic.getSlotCapacity().limit(64));
+        }
+
+        @Test
+        void expandersAreNoTurrets() {
+            TurretBaseLogic logic = base(1);
+            Map<Face, Neighbour> attached = turrets(TurretType.MACHINE_GUN_TURRET);
+            attached.put(Face.UP, new Neighbour.Expanders(Collections.singletonList(1)));
+            logic.updateNeighbours(attached);
+            assertEquals(Collections.singletonMap(Face.DOWN, TurretType.MACHINE_GUN_TURRET), logic.getTurrets());
+        }
+
+        @Test
+        void removedExpandersNoLongerCount() {
+            TurretBaseLogic logic = base(1);
+            logic.updateNeighbours(expanders(Face.UP, 3));
+            logic.updateNeighbours(new EnumMap<>(Face.class));
+            assertEquals(64, logic.getSlotCapacity().limit(64));
+        }
+
+        @Test
+        void negativeConfigStacksCountAsNone() {
+            settings.expanderStacks[0] = -4;
+            assertEquals(0, SlotCapacity.of(Arrays.asList(1, 1), settings::expanderStacks).bonusStacks());
+        }
+
+        @Test
+        void limitDoesNotOverflow() {
+            assertEquals(Integer.MAX_VALUE, new SlotCapacity(Integer.MAX_VALUE).limit(64));
+            assertEquals(0, new SlotCapacity(-3).bonusStacks());
+        }
+
+        @Test
+        void chainsHoldOneOrTwoExpandersOfTiersOneToThree() {
+            assertThrows(IllegalArgumentException.class, () -> new Neighbour.Expanders(Collections.emptyList()));
+            assertThrows(IllegalArgumentException.class, () -> new Neighbour.Expanders(Arrays.asList(1, 1, 1)));
+            assertThrows(IllegalArgumentException.class, () -> new Neighbour.Expanders(Collections.singletonList(0)));
+            assertThrows(IllegalArgumentException.class, () -> new Neighbour.Expanders(Collections.singletonList(4)));
+        }
+    }
+
+    @Nested
     class Energy {
         @Test
         void externalInsertionIsLimitedByMaxIo() {
@@ -515,7 +642,7 @@ class TurretBaseLogicTest {
         void configChangesReachTheBase() {
             TurretBaseLogic logic = base(1); // capacity 500, io 50
             logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET)); // max range 18
-            settings.tiers[0] = new BaseTierStats(800, 70, 1);
+            settings.tiers[0] = new BaseTierStats(800, 70, 1, 1);
             settings.turrets.put(TurretType.MACHINE_GUN_TURRET,
                     FakeSettings.stats(20, 8, 2, 100, 30, 4, 0.06D, 0.1D, 2, 0.2D, 0.08D, 0.1D));
             logic.setRange(20);
@@ -530,7 +657,7 @@ class TurretBaseLogicTest {
             tick(logic, 5);
             assertEquals(22, logic.getTargetingSettings().getMaxRange());
 
-            settings.tiers[0] = new BaseTierStats(900, 70, 1);
+            settings.tiers[0] = new BaseTierStats(900, 70, 1, 1);
             logic.updateNeighbours(turrets(TurretType.MACHINE_GUN_TURRET));
             assertEquals(900, logic.getEnergy().getCapacity(), "a neighbour update applies the capacity at once");
         }
@@ -544,6 +671,18 @@ class TurretBaseLogicTest {
             tick(logic, 20);
             assertEquals(0, logic.getEnergy().getAmount());
             assertEquals(5, potatoes.count);
+        }
+
+        @Test
+        void redstoneReactorNeedsFuelItCanTakeOut() {
+            TurretBaseLogic logic = base(2);
+            addon(0, AddonType.REDSTONE_REACTOR, 1);
+            FakeSlot blocks = FakeSlot.fuel(ReactorFuel.REDSTONE_BLOCK, 1);
+            blocks.locked = true;
+            ammoSlot(0, blocks);
+            tick(logic, 20);
+            assertEquals(0, logic.getEnergy().getAmount());
+            assertEquals(1, blocks.count);
         }
 
         @Test
@@ -629,6 +768,27 @@ class TurretBaseLogicTest {
             assertFalse(logic.isActive());
             logic.setMode(MachineMode.ALWAYS_ON);
             logic.setRedstone(false);
+            assertTrue(logic.isActive());
+        }
+
+        @Test
+        void unownedBaseIsInert() {
+            TurretBaseLogic logic = base(1);
+            logic.setMode(MachineMode.ALWAYS_ON);
+            logic.getTrustManager().clearOwner();
+            assertFalse(logic.isActive());
+            settings.unownedActive = true;
+            assertTrue(logic.isActive(), "active without owner if the config allows it");
+            logic.setMode(MachineMode.ALWAYS_OFF);
+            assertFalse(logic.isActive(), "the redstone mode still applies");
+        }
+
+        @Test
+        void claimedBaseIsActiveAgain() {
+            TurretBaseLogic logic = base(1);
+            logic.setMode(MachineMode.ALWAYS_ON);
+            logic.getTrustManager().clearOwner();
+            logic.getTrustManager().claim(OWNER.identity());
             assertTrue(logic.isActive());
         }
 

@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
@@ -21,12 +22,24 @@ public final class ProjectileWeapon implements TurretWeapon {
     private final SoundEvent launchSound;
     private final float speed;
     private final ProjectileFactory factory;
+    @Nullable
+    private final HitHandler hitHandler;
 
     /** @param speed blocks per tick */
     public ProjectileWeapon(SoundEvent launchSound, float speed, ProjectileFactory factory) {
+        this(launchSound, speed, factory, null);
+    }
+
+    /**
+     * @param speed      blocks per tick
+     * @param hitHandler called when one of the weapon's projectiles hits an entity, or null; see {@link #onHit}
+     */
+    public ProjectileWeapon(SoundEvent launchSound, float speed, ProjectileFactory factory,
+                            @Nullable HitHandler hitHandler) {
         this.launchSound = Objects.requireNonNull(launchSound, "launchSound");
         this.speed = speed;
         this.factory = Objects.requireNonNull(factory, "factory");
+        this.hitHandler = hitHandler;
     }
 
     /** A projectile weapon with the {@link #DEFAULT_SPEED}. */
@@ -48,6 +61,21 @@ public final class ProjectileWeapon implements TurretWeapon {
         return factory;
     }
 
+    /** Called when one of the weapon's projectiles hits an entity, or null. */
+    @Nullable
+    public HitHandler hitHandler() {
+        return hitHandler;
+    }
+
+    /**
+     * This weapon with a hit handler: called once per projectile and entity, when the projectile damages the entity
+     * (a direct hit, or the explosion of a grenade, rocket or plasma bolt), after the damage. Projectiles that deal no
+     * damage call it through {@link TurretProjectile#notifyHit}.
+     */
+    public ProjectileWeapon onHit(HitHandler handler) {
+        return new ProjectileWeapon(launchSound, speed, factory, Objects.requireNonNull(handler, "handler"));
+    }
+
     @Override
     public boolean aims() {
         return true;
@@ -64,5 +92,12 @@ public final class ProjectileWeapon implements TurretWeapon {
          */
         @Nullable
         TurretProjectile create(World world, ItemStack ammo, @Nullable Entity target, TurretBase base);
+    }
+
+    /** Called when one of the weapon's projectiles hits an entity (e.g. to add an effect). */
+    @FunctionalInterface
+    public interface HitHandler {
+        /** @param base the base that fired the projectile, null if it is gone or unloaded */
+        void onHit(WorldServer world, TurretProjectile projectile, @Nullable TurretBase base, Entity hit);
     }
 }

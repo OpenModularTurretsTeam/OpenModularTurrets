@@ -1,8 +1,10 @@
 package omtteam.openmodularturrets.block.base;
 
+import mcjty.theoneprobe.api.IProbeConfig;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
+import mcjty.theoneprobe.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -21,7 +23,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
@@ -33,39 +34,39 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.api.block.IHasItemBlock;
 import omtteam.omlib.block.BlockAbstractCamoTileEntity;
-import omtteam.omlib.compat.theoneprobe.TOPInfoProvider;
+import omtteam.omlib.block.UnownedMarker;
+import omtteam.omlib.compat.theoneprobe.TOPCompatibility;
+import omtteam.omlib.compat.theoneprobe.TOPInfoModifier;
 import omtteam.omlib.reference.OMLibNames;
-import omtteam.omlib.util.EnumMachineMode;
 import omtteam.omlib.util.player.Player;
 import omtteam.omlib.util.player.PlayerUtil;
-import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.omlib.util.world.WorldUtil;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.BaseTier;
 import omtteam.openmodularturrets.item.ItemBlockTurretBase;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
+import omtteam.openmodularturrets.tileentity.base.TurretBaseOverlay;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import static omtteam.omlib.compat.theoneprobe.TOPCompatibility.getLocalizationString;
-import static omtteam.omlib.util.GeneralUtil.*;
+import static mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoProvider.showStandardBlockInfo;
 import static omtteam.omlib.util.player.PlayerUtil.addChatMessage;
 import static omtteam.omlib.util.world.WorldUtil.getTouchingTileEntities;
 
-public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHasItemBlock, TOPInfoProvider {
+public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHasItemBlock, TOPInfoModifier {
     public static final PropertyInteger TIER = PropertyInteger.create("tier", 1, 5);
     public static final PropertyInteger LIGHT_VALUE = PropertyInteger.create("light_value", 0, 15);
     public static final PropertyInteger LIGHT_OPACITY = PropertyInteger.create("light_opacity", 0, 15);
 
     public BlockTurretBase() {
         super(Material.ROCK);
-        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         if (!OMTConfig.BASES.baseBreakable) {
             this.setBlockUnbreakable();
         }
@@ -143,14 +144,12 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @Nonnull
     @ParametersAreNonnullByDefault
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        if (state.getBlock() instanceof BlockTurretBase && worldIn.getTileEntity(pos) instanceof TurretBase) {
-            TurretBase base = (TurretBase) worldIn.getTileEntity(pos);
-            if (base != null) {
-                int lightValue, lightOpacity;
-                lightValue = base.getCamoSettings().getLightValue();
-                lightOpacity = base.getCamoSettings().getLightOpacity();
-                return state.withProperty(LIGHT_VALUE, lightValue).withProperty(LIGHT_OPACITY, lightOpacity);
-            }
+        TileEntity tileEntity = WorldUtil.getTileEntity(worldIn, pos);
+        if (state.getBlock() instanceof BlockTurretBase && tileEntity instanceof TurretBase) {
+            TurretBase base = (TurretBase) tileEntity;
+            int lightValue = base.getCamoSettings().getLightValue();
+            int lightOpacity = base.getCamoSettings().getLightOpacity();
+            return state.withProperty(LIGHT_VALUE, lightValue).withProperty(LIGHT_OPACITY, lightOpacity);
         }
         return super.getActualState(state, worldIn, pos);
     }
@@ -163,7 +162,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             // Open GUI
             if (!player.isSneaking() && base != null) {
                 if (PlayerUtil.canPlayerAccessBlock(player, base)) {
-                    player.openGui(OpenModularTurrets.instance, 1, world, pos.getX(), pos.getY(), pos.getZ());
+                    player.openGui(Reference.MOD_ID, 1, world, pos.getX(), pos.getY(), pos.getZ());
                 } else {
                     addChatMessage(player, new TextComponentTranslation(OMLibNames.Localizations.Text.STATUS_PERMISSION));
                 }
@@ -247,7 +246,10 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @ParametersAreNonnullByDefault
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         if (!worldIn.isRemote) {
-            dropItems(worldIn, pos);
+            TileEntity tileEntity = worldIn.getTileEntity(pos);
+            if (tileEntity instanceof TurretBase) {
+                dropItems(worldIn, pos, ((TurretBase) tileEntity).getInventory());
+            }
             worldIn.removeTileEntity(pos);
         }
     }
@@ -270,7 +272,8 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             }
             return 10.0F;
         } else {
-            return -1.0F;
+            // as bedrock: a negative resistance would make explosions stronger, so they destroyed the base
+            return 3600000.0F;
         }
     }
 
@@ -301,7 +304,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     @ParametersAreNonnullByDefault
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> drops = new ArrayList<>();
-        drops.add(0, new ItemStack(ModBlocks.turretBase, 1, this.getMetaFromState(state)));
+        drops.add(0, new ItemStack(this, 1, this.getMetaFromState(state)));
         return drops;
     }
 
@@ -312,38 +315,41 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
     }
 
     @Override
-    @Nonnull
-    @ParametersAreNonnullByDefault
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer
-            player) {
-        return new ItemStack(ModBlocks.turretBase, 1, state.getValue(TIER) - 1);
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     @ParametersAreNonnullByDefault
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         for (int i = 0; i < 5; i++) {
-            subItems.add(new ItemStack(ModBlocks.turretBase, 1, i));
+            subItems.add(new ItemStack(this, 1, i));
         }
     }
 
+    /** Bases without an owner sparkle green, so players see they can claim them. */
+    @Override
+    @SideOnly(Side.CLIENT)
+    @ParametersAreNonnullByDefault
+    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random random) {
+        UnownedMarker.randomDisplayTick(world, pos, random);
+    }
+
+    /**
+     * Replaces The One Probe's block info (1.20.1+ Jade): players who may not open the base see its disguise and
+     * nothing else, the others the base and the lines of {@link TurretBaseOverlay}.
+     */
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         TileEntity te = world.getTileEntity(data.getPos());
+        IProbeConfig config = Config.getRealConfig();
+        if (te instanceof TurretBase && TurretBaseOverlay.isDisguisedFor((TurretBase) te, blockState, player)) {
+            IBlockState camo = ((TurretBase) te).getCamoState();
+            showStandardBlockInfo(config, mode, probeInfo, camo, camo.getBlock(), world, data.getPos(), player, data);
+            return;
+        }
+        showStandardBlockInfo(config, mode, probeInfo, blockState, this, world, data.getPos(), player, data);
         if (te instanceof TurretBase) {
-            TurretBase base = (TurretBase) te;
-            EnumMachineMode machineMode = base.getMode();
-            boolean active = base.isActive();
-            probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.MODE) + ": \u00A7A"
-                                   + getLocalizationString(getMachineModeUnlocalization(machineMode)), probeInfo.defaultTextStyle());
-
-            probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.ACTIVE)
-                                   + ": " + getColoredBooleanColor(active) + getLocalizationString(getBooleanUnlocalizationYesNo(active)), probeInfo.defaultTextStyle());
-
-            String ownerName = base.getOwner().getName();
-            probeInfo.text("\u00A76" + getLocalizationString(OMLibNames.Localizations.GUI.OWNER)
-                                   + ": \u00A7F" + ownerName, probeInfo.defaultTextStyle());
+            for (String line : TurretBaseOverlay.lines(TurretBaseOverlay.data((TurretBase) te),
+                    TOPCompatibility::getLocalizationString)) {
+                probeInfo.text(line, probeInfo.defaultTextStyle());
+            }
         }
     }
 }

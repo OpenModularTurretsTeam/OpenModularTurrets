@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 /**
  * Item ammunition used by turrets. The built-in types are ported from 1.12.2 {@code AmmoMetaItem} (meta 0–5) plus the
- * vanilla items some turrets fire; other mods create their own with {@link #of}. Energy-only turrets have no ammo
+ * crossbow bolt and the vanilla potato; other mods create their own with {@link #of}. Energy-only turrets have no ammo
  * type. Which items count as an ammo type is decided in the Minecraft layer.
  * <p>
  * Ammo types are values: two instances with the same id are equal.
@@ -24,10 +24,10 @@ public final class AmmoType {
     public static final AmmoType GRENADE = builtIn("grenade");
     /** 1.12.2 {@code AmmoMetaItem} meta 4. */
     public static final AmmoType ROCKET = builtIn("rocket");
-    /** Vanilla potato. */
+    /** Vanilla potato or poisonous potato. */
     public static final AmmoType POTATO = builtIn("potato");
-    /** Vanilla arrow, ammo of the crossbow turret (1.20.1+ has a crossbow bolt item instead). */
-    public static final AmmoType ARROW = builtIn("arrow");
+    /** New in 4.0: crossbow bolt, ammo of the crossbow turret (3.x fired vanilla arrows). */
+    public static final AmmoType BOLT = builtIn("bolt");
     /**
      * Any item on the config's ammo allow list (1.12.2 "fake disposable item", meta 5). The item's damage bonus is
      * reported with each draw.

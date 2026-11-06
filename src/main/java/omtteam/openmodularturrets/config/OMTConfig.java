@@ -2,7 +2,6 @@ package omtteam.openmodularturrets.config;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Config;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.reference.Reference;
 
 import static omtteam.omlib.util.GeneralUtil.getItem;
@@ -22,6 +21,10 @@ public class OMTConfig {
     @Config.Name("Miscellaneous")
     public static ConfigMisc MISCELLANEOUS = new ConfigMisc();
 
+    @Config.Name("Expanders")
+    @Config.Comment("Inventory expanders per tier.")
+    public static ConfigExpanders EXPANDERS = new ConfigExpanders();
+
     public static void parseLists() {
         parseDisposableAmmoList();
     }
@@ -29,21 +32,26 @@ public class OMTConfig {
     private static void parseDisposableAmmoList() {
         try {
             DisposableAmmo.clear();
-            for (String itemListEntry : GENERAL.stringAmmoAllowList) {
-                int damage = itemListEntry.split(",").length > 1 ? Integer.parseInt(itemListEntry.split(",")[1]) : 1;
-                String[] item = itemListEntry.split(":");
-                if (item.length == 3) {
-                    DisposableAmmo.add(new ItemStack(getItem(item[0], item[1]), 1, Integer.parseInt(item[2])), damage);
+            for (String line : GENERAL.stringAmmoAllowList) {
+                AmmoListEntry entry = AmmoListEntry.parse(line);
+                if (entry.oreName != null) {
+                    DisposableAmmo.addOre(entry.oreName, entry.damage);
+                } else if (entry.meta >= 0) {
+                    DisposableAmmo.add(new ItemStack(getItem(entry.modId, entry.itemName), 1, entry.meta), entry.damage);
                 } else {
-                    DisposableAmmo.add(new ItemStack(getItem(item[0], item[1]), 2), damage);
+                    DisposableAmmo.add(new ItemStack(getItem(entry.modId, entry.itemName), 2), entry.damage);
                 }
             }
         } catch (Exception e) {
-            OpenModularTurrets.getLogger().error("error while parsing disp. ammo list config!", e);
+            Reference.LOGGER.error("error while parsing disp. ammo list config!", e);
         }
     }
 
     public static class ConfigGeneral {
+        @Config.Comment("Version of this file's format and defaults; the mod updates it when it migrates the file. Do not change it.")
+        @Config.RangeInt(min = 1)
+        public int configVersion = ConfigMigrationSteps.CURRENT_VERSION;
+
         @Config.RequiresMcRestart
         @Config.Comment("Which recipes to use. Valid values: auto, enderio, mekanism, vanilla")
         public String recipes = "auto";
@@ -51,8 +59,8 @@ public class OMTConfig {
         @Config.Comment("Use a whitelist for ammo (which items fit into ammo slots of base)?")
         public boolean useWhitelistForAmmo = true;
 
-        @Config.Comment("If enabled: Which items (modid:item[:meta]) can be used as disposable ammo. Value behind ',' is damage bonus.")
-        public String[] stringAmmoAllowList = new String[]{"minecraft:cobblestone,2", "minecraft:planks,1"};
+        @Config.Comment("If enabled: Which items (modid:item[:meta], or ore:oreDictName for every item of an ore dictionary entry, e.g. ore:plankWood) can be used as disposable ammo. Value behind ',' is damage bonus.")
+        public String[] stringAmmoAllowList = new String[]{"minecraft:cobblestone,2", "ore:plankWood,1"};
 
         @Config.Comment("Which entities should not be targeted by turrets?")
         public String[] stringMobBlackList = new String[]{"minecraft:armor_stand"};
@@ -60,7 +68,7 @@ public class OMTConfig {
         @Config.Comment("Which entities should always be seen as hostile by turrets?")
         public String[] stringMobForceList = new String[]{"minecraft:creeper"};
 
-        @Config.Comment("Which entities should always be seen as neutral by turrets?")
+        @Config.Comment("Which entities should always be seen as neutral by turrets? An entity on both force lists is ignored on both.")
         public String[] stringNeutralForceList = new String[]{"minecraft:cow"};
     }
 
@@ -91,6 +99,9 @@ public class OMTConfig {
         public boolean canRailgunDestroyBlocks = false;
         public boolean canTurretsConcealWithoutAddon = false;
         public boolean doTurretsNeedAmmo = true;
+
+        @Config.Comment("Attached turrets over their type's maxSimultaneous drop, e.g. after the limit was lowered. If false, the limit only applies to placing new turrets.")
+        public boolean dropTurretsOverMaxSimultaneous = false;
 
         @Config.Comment("If turrets can target players")
         public boolean globalCanTargetPlayers = true;
@@ -123,6 +134,7 @@ public class OMTConfig {
         public boolean turretWarnMessage = true;
 
         @Config.Comment("The warning distance that is added to the range of the turret")
+        @Config.RangeInt(min = 0)
         public int turretWarningDistance = 5;
 
         @Config.Name("Disposable Turret")
@@ -158,17 +170,47 @@ public class OMTConfig {
 
     public static class ConfigBases {
         @Config.Name("Tier 1")
-        public BaseSetting baseTierOne = new BaseSetting(500, 50, 1, 5, 20);
+        public BaseSetting baseTierOne = new BaseSetting(5000, 50, 1, 1, 5, 20);
         @Config.Name("Tier 2")
-        public BaseSetting baseTierTwo = new BaseSetting(50000, 100, 1, 10, 30);
+        public BaseSetting baseTierTwo = new BaseSetting(500000, 100, 1, 1, 10, 30);
         @Config.Name("Tier 3")
-        public BaseSetting baseTierThree = new BaseSetting(150000, 1000, 2, 15, 40);
+        public BaseSetting baseTierThree = new BaseSetting(1500000, 1000, 2, 1, 15, 40);
         @Config.Name("Tier 4")
-        public BaseSetting baseTierFour = new BaseSetting(500000, 2500, 3, 20, 50);
+        public BaseSetting baseTierFour = new BaseSetting(10000000, 2500, 3, 2, 20, 50);
         @Config.Name("Tier 5")
-        public BaseSetting baseTierFive = new BaseSetting(10000000, 50000, 4, 25, 60);
+        public BaseSetting baseTierFive = new BaseSetting(100000000, 50000, 4, 2, 25, 60);
         @Config.RequiresMcRestart
         public boolean allowBaseCamo = true;
         public boolean baseBreakable = false;
+        @Config.Comment("Turret bases without an owner keep targeting and firing (at everyone, as nobody is trusted). If false, they stay inert until someone claims them.")
+        public boolean unownedBasesActive = false;
+    }
+
+    /**
+     * Inventory expanders: blocks without an inventory of their own that enlarge the ammo slots of a turret base and
+     * the fuel slots of a generator (one block of up to two plates on each face). Hardness and explosion resistance
+     * follow the turret base tiers 1, 3 and 5.
+     */
+    public static class ConfigExpanders {
+        @Config.Name("Tier 1")
+        public ExpanderSetting tierOne = new ExpanderSetting(1, 20, 5);
+        @Config.Name("Tier 2")
+        public ExpanderSetting tierTwo = new ExpanderSetting(2, 40, 15);
+        @Config.Name("Tier 3")
+        public ExpanderSetting tierThree = new ExpanderSetting(3, 60, 25);
+
+        /** @param tier 1–3 */
+        public ExpanderSetting tier(int tier) {
+            switch (tier) {
+                case 1:
+                    return tierOne;
+                case 2:
+                    return tierTwo;
+                case 3:
+                    return tierThree;
+                default:
+                    throw new IllegalArgumentException("Invalid inventory expander tier: " + tier);
+            }
+        }
     }
 }

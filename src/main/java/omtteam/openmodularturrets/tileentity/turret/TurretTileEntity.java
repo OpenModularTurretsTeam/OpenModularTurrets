@@ -7,10 +7,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import omtteam.omlib.compat.valkyrien.ShipFrame;
@@ -39,14 +39,14 @@ import omtteam.openmodularturrets.core.turret.TurretState;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Vector3;
+import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
 import omtteam.openmodularturrets.network.MessageUpdateTurret;
 import omtteam.openmodularturrets.network.OMTNetworkingHandler;
-import omtteam.openmodularturrets.registry.ModSounds;
-import omtteam.openmodularturrets.registry.TurretRegistry;
+import omtteam.openmodularturrets.sound.ModSounds;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.base.TurretBaseWorld;
-import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import omtteam.openmodularturrets.turret.TurretRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -140,7 +140,7 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
     @Nullable
     public EnumFacing getFacing() {
         if (facing == null && world != null) {
-            EnumFacing towardsBase = TurretHeadUtil.getTurretBaseFacing(world, pos);
+            EnumFacing towardsBase = TurretMount.getTurretBaseFacing(world, pos);
             facing = towardsBase == null ? null : towardsBase.getOpposite();
         }
         return facing;
@@ -190,8 +190,9 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         TurretBase base = getBase();
         TurretType type = getCoreType();
         if (type == null) return;
-        // a turret without base, or one that may not stay there (TurretPlacement.canStay: tier, face), drops itself
-        if (base == null || base.isInvalid() || !TurretPlacement.canStay(type, getFace(), base.getTier()).allowed()) {
+        // a turret without base, or one that may not stay there (TurretPlacement.canStay: tier, face, limit), drops itself
+        if (base == null || base.isInvalid() || !TurretPlacement.canStay(type, getFace(), base.getTier(),
+                base.getLogic().getTurrets(), ConfigLogicSettings.INSTANCE).allowed()) {
             facing = null;
             world.destroyBlock(pos, true);
             return;
@@ -319,7 +320,7 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         List<EntityLivingBase> victims = new ArrayList<>();
         for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, weapon.area().apply(this))) {
             if (entity.isEntityAlive() && !(entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator())
-                    && omtteam.openmodularturrets.util.OMTUtil.canDamageEntity(entity, base)) {
+                    && TurretDamage.canDamageEntity(entity, base)) {
                 victims.add(entity);
             }
         }
@@ -452,6 +453,7 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         for (int i = 0; i <= logic.getScattershotCount(type); i++) {
             TurretProjectile projectile = weapon.factory().create(world, ammo, target, base);
             if (projectile == null) continue;
+            projectile.setHitHandler(weapon.hitHandler());
             projectile.setPosition(origin.x, origin.y, origin.z);
             // the lead depends on the projectile's gravity, so it is worked out per projectile
             TurretMath.Lead lead = TurretMath.lead(toAim, velocity, weapon.speed(),
@@ -576,11 +578,13 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         }
     }
 
-    // ---- ITurretHead (3.x API) ----
+    // ---- ITurretHead (3.x API); without a base (none, or its chunk unloaded) the stats come from the config ----
 
+    /** The base's settings; without a base, settings that target nothing. */
     @Override
     public TargetingSettings getTargetingSettings() {
-        return getBase().getTargetingSettings();
+        TurretBase base = getBase();
+        return base != null ? base.getTargetingSettings() : new TargetingSettings(false, false, false, 0, 0);
     }
 
     /** The targeting weights of the turret type (3.x saved them per turret, but they were never changed). */
@@ -637,7 +641,8 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
 
     @Override
     public double getActualTurretAccuracyDeviation() {
-        return getBase().getLogic().getAccuracyDeviation(getCoreType());
+        TurretBase base = getBase();
+        return base != null ? base.getLogic().getAccuracyDeviation(getCoreType()) : getBaseTurretAccuracyDeviation();
     }
 
     /** Nothing is cached; the stats are read from the base logic on use. */
@@ -645,30 +650,17 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
     public void triggerResetCaches() {
     }
 
-    /** Ticks between shots, with the base's fire rate upgrades. */
-    public double getFireCooldownTicks() {
-        return getBase().getLogic().getFireCooldownTicks(getCoreType());
-    }
-
-    /** Range with the base's range upgrades. */
+    /** Range with the base's range upgrades (without a base: the configured range). */
     public int getTurretRange() {
-        return getBase().getLogic().getRange(getCoreType());
-    }
-
-    /** Shots left in the base: matching ammo items, or the energy for energy turrets. */
-    public int getAmmoLevel() {
-        return getBase().getLogic().getAmmoLevel(getCoreType());
-    }
-
-    /** Damage amp addons of the base. */
-    public int getDamageAmpLevel() {
-        return getBase().getLogic().getDamageAmpLevel();
+        TurretBase base = getBase();
+        return base != null ? base.getLogic().getRange(getCoreType()) : getTurretBaseRange();
     }
 
     // ---- NBT (3.x keys) ----
 
     @Override
-    public NBTTagCompound saveToNBT(NBTTagCompound tag) {
+    @Nonnull
+    public NBTTagCompound saveToNBT(@Nonnull NBTTagCompound tag) {
         super.saveToNBT(tag);
         tag.setInteger("ticksBeforeFire", state.getTicksSinceShot());
         tag.setBoolean("autoFire", autoFire);
@@ -680,7 +672,7 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
 
     /** Reads the 3.x keys; 3.x yaw and pitch were world angles, they are replaced at the first aim. */
     @Override
-    public void loadFromNBT(NBTTagCompound tag) {
+    public void loadFromNBT(@Nonnull NBTTagCompound tag) {
         super.loadFromNBT(tag);
         state.setTicksSinceShot(tag.getInteger("ticksBeforeFire"));
         autoFire = tag.getBoolean("autoFire");

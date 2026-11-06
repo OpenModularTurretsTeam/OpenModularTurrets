@@ -1,0 +1,2 @@
+# Every feature adds lines under ## [Unreleased]: keep both sides when merging (check for doubled ### headings)
+CHANGELOG.md merge=union

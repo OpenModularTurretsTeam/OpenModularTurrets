@@ -11,18 +11,164 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 ### Added
 
 - Turrets work on Rifted Valkyrium ships (Cleanroom; probably also Valkyrien Skies 1): they aim, lead and fire relative to the ship as it moves and turns, the ship's own hull blocks their line of sight, and the teleporter turret pulls targets to where the ship is
-- Holding a turret next to a turret base where it cannot be placed shows a short reason next to the red outline (block in the way, wrong side, base tier too low, base full, too many of this turret), as on 1.20.1+
+
+## [4.0.1] - 2026-11-04
 
 ### Changed
 
-- The jar files are named `openmodularturrets-<version>-mc1.12.2-forge.jar` (Minecraft version with `mc`, as on 1.20.1+)
+- Requires OMLib 4.0.1 or newer
 
 ### Fixed
 
+- The creative upgrade was missing (creative only, as on 1.20.1+): it fills the base's energy storage, and its turrets use no ammo
+
+### Removed
+
+- The potentia converter addon (it had no recipe and no function on 1.12); existing ones keep their name and texture but do nothing
+
+## [4.0.0] - 2026-11-02
+
+### Changed
+
+- Requires OMLib 4.0.0 or newer
+- The tubes on the sides of a running generator animate faster, as on 1.20.1+
+
+## [4.0.0-beta.6] - 2026-10-29
+
+### Added
+
+- Turret API: hit handlers for addon turrets, `ProjectileWeapon.onHit` and `RayWeapon.Builder.onEntityHit` (as on 1.20.1+)
+- Recipes for the Melee, Crossbow, Arc and Plasma Turrets (as on 1.20.1+; the Arc Turret takes a gold ingot instead of a lightning rod)
+- "Sort Ammo" button in the turret base GUI (as on 1.20.1+): merges equal ammo and sorts Minecraft items first, then Open Modular Turrets ammo, then other mods'
+- Poisonous potatoes are potato cannon ammo, as on 1.20.1+
+- The crank plays its windup sound on every charging turn, as on 1.20.1+
+- Crossbow bolts (`openmodularturrets:ammo_bolt`), the ammo of the crossbow turret: 16 from an iron ingot, a stick and a feather (as on 1.20.1+)
+
+### Changed
+
+- The Hwyla and The One Probe turret tooltips show the inaccuracy (higher is less accurate, as on 1.20.1+) instead of an accuracy of 100 minus that value
+- The info panel of the turret base GUI sits at a fixed place left of the GUI and shows "none" as the owner of an unowned base, as on 1.20.1+
+- The configure screen of the turret base sits where it does on 1.20.1+, with the Camouflage button lower and without its "Camouflage:" label
+- Upgrade tooltips show which machine they fit into (Turret Base or Generator), and the Scatter Shot tooltip names the turrets that ignore it
+- The Fake Drops addon tooltip is worded as on 1.20.1+
+- The generator tooltip shows its description only while Shift is held
+- The Disposable Item Turret tooltip names its ammo as "Cobblestone, planks and more (see config)"
+- The memory card tooltip shows the settings as on 1.20.1+: section headings, target mode, trusted players with their access levels
+- Hwyla and The One Probe show "Damage Boost", "Rate of Fire" in /s and "Unlimited" ammo, with the colours of 1.20.1+ (green for unowned blocks)
+- Turret stats in Hwyla and The One Probe are only shown to players who may open the base; turrets without a base or concealed show nothing
+- Hwyla and The One Probe show a camouflaged turret base as its disguise to players who may not open it
+- Grenades explode after 29 ticks, or 4 ticks after hitting an entity, as on 1.20.1+
+- Grenade and rocket explosions only break blocks with canGrenadesDestroyBlocks / canRocketsDestroyBlocks, and their blast deals turret damage (kill counting, loot rules), as on 1.20.1+
+- The default disposable ammo list allows the planks of every mod (ore:plankWood); configs still listing minecraft:planks,1 are updated
+- An entity on both force lists is ignored on both (with an error in the log), as on 1.20.1+
+- baseFireRate has no maximum any more and turretWarningDistance cannot be negative, as on 1.20.1+
+- The base energy capacity, energy input and turret count settings apply without a restart
+- Breakable turrets (turretBreakable) need a pickaxe to drop, as on 1.20.1+
+- The bullet recipe has the 1.20.1+ shape
+- The ownership wand is in the Open Modular Turrets creative tab
+- The arc turret's lightning is light blue, as on 1.20.1+
+- New generator textures, as on 1.20.1+: every side has its own texture, and the tubes on the sides of a running generator are animated
+- The crossbow turret fires crossbow bolts instead of vanilla arrows (as on 1.20.1+); arrows already in a base stay in its slots but are no longer used
+- Requires OMLib 4.0.0-beta.6 or newer
+
+### Fixed
+
+- Unbreakable turret bases (`baseBreakable=false`) were destroyed by explosions
+- The tier 3 turret base tooltip showed a raw translation key instead of "Energy"
+- Memory cards stacked; they now stack to 1
+- The functionless Throwable Bullet, Throwable Grenade and fake disposable ammo items are no longer in the creative tab
+- Tipped arrows were accepted as ammo but never fired
+- The redstone reactor counted fuel it could not take out of a slot
+- The Redstone Reactor addon had no tooltip
+- The Recycler addon tooltip had an extra blank line
+- Turrets with a fake drops addon knocked their targets back towards the world origin; turret damage no longer causes knockback
+- Melee turret hits did not reset the hurt cooldown or mark the victim for the loot rules
+- The disposable turret with ammo disabled fired an invisible projectile without cobblestone's damage bonus, and showed the whole drawn stack instead of one item
+- Only the warned player hears the turret alarm; everyone else nearby heard it instead
+- Arrows fired by crossbow turrets could show up as plasma on clients (two projectiles shared a network id)
+- Turrets with a fake drops addon could not hurt players on servers with PvP turned off
+- The slowing and railgun turrets' ambient dust has its intended light grey and blue colours
+- Crossbow turret shots crashed the client when they were rendered (drawn with the vanilla arrow renderer)
+- Breaking or hitting a turret showed missing-texture particles; they now come from the turret's texture
+
+### Removed
+
+- The One Probe no longer shows a turret's base damage (as Jade on 1.20.1+)
+- Config option allowTransparentDisguises; turret bases always accept glass, ice and leaves as camouflage
+- Vanilla arrows are no longer turret ammo, and tipped arrows no longer give the crossbow turret's shots potion effects
+
+## [4.0.0-beta.5] - 2026-10-27
+
+### Added
+
+- Inventory expanders (tiers 1–3, as on 1.20.1+): placed against a turret base or generator, each of its ammo or fuel slots holds 1, 2 or 3 more stacks; two plates of a tier fit into one block space, up to 2 count per face (config section `expanders`)
+- The turret base GUI shows the max stack size of the ammo slots, the turret base tooltip that of each tier
+
+### Changed
+
+- Requires OMLib 4.0.0-beta.5 or newer
+- Trusted admins of a turret base can change its camouflage disguise, not only the owner
+- Turret bases of tiers 4 and 5 hold 2 stacks in each ammo slot, which also doubles what expanders add (config option `baseAmmoStacks` per tier)
+- Turret bases store more energy: 5,000 / 500,000 / 1,500,000 / 10,000,000 / 100,000,000 RF for tiers 1–5; config files that still have the old defaults get the new ones if (`general.configVersion`) is low enough
+
+## [4.0.0-beta.4] - 2026-10-27
+
+### Added
+
+- Turret bases accept transparent blocks (glass, ice, leaves) as camouflage; the config option `allowTransparentDisguises` turns it off
+- The disposable ammo list accepts `ore:oreName[,damage]` entries (e.g. `ore:cobblestone`, `ore:plankWood`) for every item of an ore dictionary entry
+
+### Changed
+
+- Requires OMLib 4.0.0-beta.4 or newer
+
+### Fixed
+
+- Disposable ammo list entries with a damage bonus (`minecraft:cobblestone,2`, the defaults) were not parsed, so no item was valid disposable ammo
+
+## [4.0.0-beta.3] - 2026-10-26
+
+### Changed
+
+- The generator GUI labels are black like in the other turret GUIs (were dark grey on the dark background)
+- Requires OMLib 4.0.0-beta.3 or newer
+
+## [4.0.0-beta.2] - 2026-10-26
+
+### Added
+
+- Holding a turret next to a turret base where it cannot be placed shows a short reason next to the red outline (block in the way, wrong side, base tier too low, base full, too many of this turret), as on 1.20.1+
+- Config option `turrets.dropTurretsOverMaxSimultaneous` (default false): attached turrets over their type's `maxSimultaneous` drop, e.g. after the limit was lowered (as on 1.20.1+)
+- Turret bases, their turrets and OMPD's hardened blocks/walls/fences without an owner sparkle green, and WAILA/HWYLA and The One Probe show "Owner: nobody (right-click to claim)"; right-click claims them (OMLib), as on 1.20.1+
+- The owner of a turret base can disown it ("Disown" in its configure screen, after a confirmation, as on 1.20.1+); the trust list is cleared and anyone can claim it
+- While you hold OMLib's Ownership Wand, turrets still target and fire at you, but their shots, explosions and effects do not affect you (as on 1.20.1+)
+
+### Changed
+
+- A broken turret base scatters its items like a chest
+- Only admins of a turret base can attach turrets to it (the placement label says why otherwise), as on 1.20.1+
+- Hoppers and pipes can no longer take ammo out of a turret base, so nobody can disarm someone else's base with them (as on 1.20.1+)
+- The jar files are named `openmodularturrets-<version>-mc1.12.2-forge.jar` (Minecraft version with `mc`, as on 1.20.1+)
+- The server sends its config values (`openmodularturrets.cfg` and `openmodularturrets_addon_turrets.cfg`) to clients when they join, so tooltips, the ammo slots and the turret placement outline follow the server's rules; after leaving, the client uses its own config again
+- Turret bases without an owner (e.g. placed by a machine or a structure) no longer drop themselves; they stay inert until claimed, unless `bases.unownedBasesActive` is set (as on 1.20.1+)
+- Turrets can be attached to a turret base without an owner only by players who may use command blocks (operators in creative mode, mapmakers)
+- Requires OMLib 4.0.0-beta.2 or newer
+
+### Fixed
+
+- A turret base placed without saved data (e.g. by `/setblock` or a structure) with turrets already attached no longer starts with range 0; it starts at the range of its shortest reaching turret (as on 1.20.1+)
 - Turrets added by other mods could not fire slower than every 20 ticks (their config clamped `baseFireRate` to 20)
 - Decimal settings of turrets added by other mods (damage amp, upgrades, recycler chances, accuracy deviation) were not limited to their range
 - The config ranges of `baseFireRate` (now 1–200 ticks) and `baseAccuracyDeviation` (0–100 %) did not include the turrets' default values
 - Boxes in the turret logic compared `0.0` and `-0.0` as equal while hashing them differently
+- Computers (ComputerCraft, OpenComputers) could not change access levels: `changeAccessLevel` / `changeTrustedPlayerAccess` and `addTrustedPlayer` with a level reported success but changed nothing
+- OpenComputers: `setTurretYawPitch` rejected valid angles and used the side as yaw, `forceShootTurret` did not check the side, side 6 counted as the bottom, `addTrustedPlayer` without an access level failed, `getTrustedPlayer` returned nothing for unknown players
+- Turret base GUI actions (range, mode, targeting, dropping) were handled for unloaded or far-away bases, which could load chunks; they now need the base loaded and the player within reach
+- Tooltips and the turret placement outline used the client's own config instead of the server's
+- Other mods asking a turret without base (or with its base in an unloaded chunk) for its stats crashed; such a turret now reports its configured values and targets nothing
+- The maximum range shown in the turret base GUI also counted turrets mounted on a neighbouring base
+- Turret bases could create their tile entity on the chunk render thread (camouflage light settings), which can crash or corrupt the world
+- Cranks and generators did not turn with rotated or mirrored structures
 
 ## [4.0.0-beta.1] - 2026-10-24
 

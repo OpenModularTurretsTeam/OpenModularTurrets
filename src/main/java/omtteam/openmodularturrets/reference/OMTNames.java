@@ -35,6 +35,11 @@ public class OMTNames {
         /** 3.x power generator attachment, remapped to {@link #generator}. */
         public static final String powerGenerator = "power_generator";
         public static final String generator = "generator";
+
+        /** Inventory expanders of tiers 1–3 (new in 4.0.0, as on 1.20.1+; not the removed 3.x {@link #expander}). */
+        public static final String inventoryExpanderTierOne = "inventory_expander_tier_one";
+        public static final String inventoryExpanderTierTwo = "inventory_expander_tier_two";
+        public static final String inventoryExpanderTierThree = "inventory_expander_tier_three";
     }
 
     public static class Items {
@@ -58,6 +63,7 @@ public class OMTNames {
         public static final String rangeUpgrade = "upgrade_range";
         public static final String accuraccyUpgrade = "upgrade_accuracy";
         public static final String scattershotUpgrade = "upgrade_scatter_shot";
+        public static final String creativeUpgrade = "upgrade_creative";
         public static final String redReactorAddon = "addon_redstone_reactor";
         public static final String damageAmpAddon = "addon_damage_amp";
         public static final String solarPanelAddon = "addon_solar_panel";
@@ -91,11 +97,9 @@ public class OMTNames {
     public static class Localizations {
         public static class GUI {
             public static final String RANGE = "text.openmodularturrets.gui.range";
-            public static final String MULTI_TARGETING = "text.openmodularturrets.gui.multi_targeting";
             public static final String ADDONS = "text.openmodularturrets.gui.addons";
             public static final String UPGRADES = "text.openmodularturrets.gui.upgrades";
             public static final String AMMO = "text.openmodularturrets.gui.ammo";
-            public static final String DAMAGE = "text.openmodularturrets.damage.label";
             public static final String DAMAGE_AMP = "text.openmodularturrets.gui.damage_amp";
             public static final String INVENTORY = "text.openmodularturrets.gui.inventory";
             public static final String TARGET = "text.openmodularturrets.gui.target";
@@ -103,8 +107,9 @@ public class OMTNames {
             public static final String SINGLE = "text.openmodularturrets.gui.single";
             public static final String TURRET_BASE_DESCRIPTION = "text.openmodularturrets.gui.turret_base_description";
             public static final String TURRET_LEVER_DESCRIPTION = "text.openmodularturrets.gui.turret_lever_description";
-            public static final String ACCURACY = "text.openmodularturrets.gui.accuracy";
+            public static final String INACCURACY = "text.openmodularturrets.gui.inaccuracy";
             public static final String RATE_OF_FIRE = "text.openmodularturrets.gui.rof";
+            public static final String UNLIMITED = "text.openmodularturrets.gui.unlimited";
             public static final String DROP_TURRETS = "text.openmodularturrets.gui.drop_turrets";
             public static final String DROP_BASE = "text.openmodularturrets.gui.drop_base";
             public static final String CONFIGURE = "text.openmodularturrets.gui.configure";
@@ -112,6 +117,10 @@ public class OMTNames {
             public static final String PLAYER_KILLS = "text.openmodularturrets.gui.player_kills";
             public static final String CAMOUFLAGE = "text.openmodularturrets.gui.camouflage";
             public static final String CAMOUFLAGE_TOOLTIP = "tooltip.openmodularturrets.camouflage";
+            public static final String MAX_STACK_SIZE = "text.openmodularturrets.gui.max_stack_size";
+            /** Owner line of the base GUI's info panel for an unowned base. */
+            public static final String NONE = "text.openmodularturrets.gui.none";
+            public static final String SORT_AMMO = "text.openmodularturrets.gui.sort_ammo";
         }
 
         public static class Text {
@@ -126,6 +135,10 @@ public class OMTNames {
             public static final String TOGGLE_MODE = "text.openmodularturrets.toggle_mode";
             public static final String STATUS_WARNING = "text.openmodularturrets.status.warning";
             public static final String TURRET_LIMIT = "text.openmodularturrets:turret_limit";
+            public static final String MAX_STACK_SIZE = "tooltip.openmodularturrets.max_stack_size";
+            public static final String SORT_AMMO = "tooltip.openmodularturrets.sort_ammo";
+            public static final String INVENTORY_EXPANDER_DESC1 = "tooltip.openmodularturrets.inventory_expander.desc1";
+            public static final String INVENTORY_EXPANDER_DESC2 = "tooltip.openmodularturrets.inventory_expander.desc2";
         }
     }
 

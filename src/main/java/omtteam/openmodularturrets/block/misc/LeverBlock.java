@@ -14,6 +14,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -24,20 +27,20 @@ import omtteam.omlib.api.block.IHasItemBlock;
 import omtteam.omlib.block.BlockAbstractTileEntity;
 import omtteam.omlib.power.OMEnergyStorage;
 import omtteam.omlib.util.MathUtil;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.api.ITurretBaseAddonBlock;
 import omtteam.openmodularturrets.item.ItemBlockLever;
 import omtteam.openmodularturrets.reference.Reference;
+import omtteam.openmodularturrets.sound.ModSounds;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.misc.LeverTileEntity;
-import omtteam.openmodularturrets.turret.TurretHeadUtil;
+import omtteam.openmodularturrets.tileentity.turret.TurretMount;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static omtteam.openmodularturrets.reference.OMTNames.Blocks.lever;
-import static omtteam.openmodularturrets.turret.TurretHeadUtil.getTurretBase;
-import static omtteam.openmodularturrets.turret.TurretHeadUtil.getTurretBaseFacing;
+import static omtteam.openmodularturrets.tileentity.turret.TurretMount.getTurretBase;
+import static omtteam.openmodularturrets.tileentity.turret.TurretMount.getTurretBaseFacing;
 
 @SuppressWarnings("deprecation")
 public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock, ITurretBaseAddonBlock {
@@ -46,7 +49,6 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     public LeverBlock() {
         super(Material.GLASS);
         this.setTranslationKey(lever);
-        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setHardness(2F);
         this.setResistance(15F);
         this.setSoundType(SoundType.STONE);
@@ -96,6 +98,25 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
                 isBaseValid(worldIn.getTileEntity(pos.west())));
     }
 
+    /** {@link #ROTATION} 0–3 is the horizontal index of the direction towards the base; structures turn it along. */
+    @Override
+    @Nonnull
+    @SuppressWarnings("deprecation")
+    public IBlockState withRotation(IBlockState state, Rotation rotation) {
+        int value = state.getValue(ROTATION);
+        if (value > 3) return state;
+        return state.withProperty(ROTATION, rotation.rotate(EnumFacing.byHorizontalIndex(value)).getHorizontalIndex());
+    }
+
+    @Override
+    @Nonnull
+    @SuppressWarnings("deprecation")
+    public IBlockState withMirror(IBlockState state, Mirror mirror) {
+        int value = state.getValue(ROTATION);
+        if (value > 3) return state;
+        return state.withProperty(ROTATION, mirror.mirror(EnumFacing.byHorizontalIndex(value)).getHorizontalIndex());
+    }
+
     @Override
     @ParametersAreNonnullByDefault
     public void onBlockPlacedBy_OM(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
@@ -119,7 +140,7 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
     @Override
     @ParametersAreNonnullByDefault
     public boolean onBlockActivated_OM(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.DOWN || TurretHeadUtil.getTurretBaseFacing(worldIn, pos) == EnumFacing.UP) {
+        if (TurretMount.getTurretBaseFacing(worldIn, pos) == EnumFacing.DOWN || TurretMount.getTurretBaseFacing(worldIn, pos) == EnumFacing.UP) {
             return true;
         }
         TurretBase base = getTurretBase(worldIn, pos);
@@ -135,8 +156,8 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
                 lever.isTurning = true;
 
                 if (lever.rotation == 0F) {
-                    //worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
                     storage.receiveEnergy(50, false);
+                    playWindup(worldIn, pos);
                 }
             }
         }
@@ -147,8 +168,8 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
-                    //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
                     storage.receiveEnergy(50, false);
+                    playWindup(worldIn, pos);
                 }
             }
         }
@@ -159,8 +180,8 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
-                    //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
                     storage.receiveEnergy(50, false);
+                    playWindup(worldIn, pos);
                 }
             }
         }
@@ -171,21 +192,30 @@ public class LeverBlock extends BlockAbstractTileEntity implements IHasItemBlock
             if (base != null) {
                 lever.isTurning = true;
                 if (lever.rotation == 0F) {
-                    //worldIn.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), "omtteam.openmodularturrets:windup", 1.0F, 1.0F);
                     storage.receiveEnergy(50, false);
+                    playWindup(worldIn, pos);
                 }
             }
         }
         return true;
     }
 
+    /** Each turn that charges the base plays the windup sound, as on 1.20.1+ (server side, heard by everyone near). */
+    private static void playWindup(World world, BlockPos pos) {
+        if (!world.isRemote) {
+            world.playSound(null, pos, ModSounds.windupSound, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        }
+    }
+
     @Override
     @Nonnull
+    @ParametersAreNonnullByDefault
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isOpaqueCube_OM(IBlockState state) {
         return false;
     }

@@ -25,8 +25,8 @@ import omtteam.openmodularturrets.core.turret.RayMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.entity.projectile.ArmorBypassDamageSource;
 import omtteam.openmodularturrets.entity.projectile.NormalDamageSource;
+import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
-import omtteam.openmodularturrets.util.OMTUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -123,7 +123,7 @@ public final class RayWeapons {
     /** 1.12.2 {@code onHitEntity}: damage, arc chain and hit sound if the entity may be damaged. */
     private static boolean hitEntity(WorldServer world, TurretTileEntity turret, TurretBase base, RayWeapon weapon,
                                      Entity entity) {
-        if (!OMTUtil.canDamageEntity(entity, base)) return false;
+        if (!TurretDamage.canDamageEntity(entity, base)) return false;
         damage(world, turret, base, weapon, entity, RayMath.damageModifier(weapon.profile(), armor(entity)));
         if (weapon.profile().arcChain()) {
             shootArcChain(world, base, turret, weapon, entity, RayMath.ARC_HOPS, new ArrayList<>());
@@ -153,7 +153,7 @@ public final class RayWeapons {
         AxisAlignedBB area = new AxisAlignedBB(from.posX, from.posY, from.posZ, from.posX, from.posY, from.posZ)
                 .grow(range);
         for (EntityLivingBase next : world.getEntitiesWithinAABB(EntityLivingBase.class, area)) {
-            if (!hitIds.contains(next.getEntityId()) && OMTUtil.canDamageEntity(next, base)) {
+            if (!hitIds.contains(next.getEntityId()) && TurretDamage.canDamageEntity(next, base)) {
                 // 1.12.2 order: the chain continues from the next target before it is damaged
                 shootArcChain(world, base, turret, weapon, next, remaining, hitIds);
                 damage(world, turret, base, weapon, next, RayMath.ARC_JUMP_FACTOR);
@@ -166,8 +166,9 @@ public final class RayWeapons {
     }
 
     /**
-     * Deals {@link RayMath#damage}, split into a normal and an armor-piercing part ({@link RayMath#split}); as in
-     * 1.12.2 the hurt cooldown is reset so every ray of a scattershot hits.
+     * Deals {@link RayMath#damage}, split into a normal and an armor-piercing part ({@link RayMath#split}), then calls
+     * the weapon's {@linkplain RayWeapon#entityHit() entity hit handler}; as in 1.12.2 the hurt cooldown is reset so
+     * every ray of a scattershot hits.
      */
     private static void damage(WorldServer world, TurretTileEntity turret, TurretBase base, RayWeapon weapon,
                                Entity entity, double modifier) {
@@ -180,16 +181,19 @@ public final class RayWeapons {
         int fakeDrops = logic.getLootingLevel(3);
         String name = turret.getDamageTypeName();
         if (!(entity instanceof EntityPlayer)) {
-            OMTUtil.setTagsForTurretHit(entity, base);
+            TurretDamage.setTagsForTurretHit(entity, base);
         }
         if (split.normal() > 0) {
-            entity.attackEntityFrom(new NormalDamageSource(name, fakeDrops, base, world, false), split.normal());
+            entity.attackEntityFrom(new NormalDamageSource(name, fakeDrops, base, world, false, entity), split.normal());
         }
         if (split.armorBypass() > 0) {
-            entity.attackEntityFrom(new ArmorBypassDamageSource(name, fakeDrops, base, world, false),
+            entity.attackEntityFrom(new ArmorBypassDamageSource(name, fakeDrops, base, world, false, entity),
                     split.armorBypass());
         }
         entity.hurtResistantTime = -1;
+        if (weapon.entityHit() != null) {
+            weapon.entityHit().onEntityHit(world, turret, base, entity);
+        }
     }
 
     /**
@@ -211,7 +215,7 @@ public final class RayWeapons {
         NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimension(), from.x,
                 from.y, from.z, RENDER_RANGE);
         if (weapon.lightning()) {
-            OMLibNetworkingHandler.INSTANCE.sendToAllAround(new MessageRenderLightning(from, to, weapon.duration()), point);
+            OMLibNetworkingHandler.INSTANCE.sendToAllAround(new MessageRenderLightning(from, to, weapon.color(), weapon.duration()), point);
         } else {
             OMLibNetworkingHandler.INSTANCE.sendToAllAround(
                     new MessageRenderRay(from, to, weapon.color(), weapon.duration(), true), point);

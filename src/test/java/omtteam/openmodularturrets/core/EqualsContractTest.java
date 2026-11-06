@@ -5,6 +5,7 @@ import nl.jqno.equalsverifier.Warning;
 import omtteam.openmodularturrets.core.base.AmmoDraw;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.settings.TurretStats;
+import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.core.turret.TurretMath;
@@ -62,6 +63,16 @@ class EqualsContractTest {
     @Test
     void neighbourTurret() {
         EqualsVerifier.forClass(Neighbour.Turret.class).suppress(Warning.NULL_FIELDS).verify();
+    }
+
+    @Test
+    void neighbourExpanders() {
+        EqualsVerifier.forClass(Neighbour.Expanders.class).suppress(Warning.NULL_FIELDS).verify();
+    }
+
+    @Test
+    void slotCapacity() {
+        EqualsVerifier.forClass(SlotCapacity.class).verify();
     }
 
     @Test

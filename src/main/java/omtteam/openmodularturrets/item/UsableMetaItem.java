@@ -21,10 +21,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.core.card.MemoryCardData;
 import omtteam.omlib.util.GeneralUtil;
-import omtteam.openmodularturrets.OpenModularTurrets;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
-import omtteam.openmodularturrets.registry.ModItems;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
@@ -43,7 +41,6 @@ public class UsableMetaItem extends Item {
         super();
 
         this.setHasSubtypes(true);
-        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setRegistryName(Reference.MOD_ID, OMTNames.Items.usableMetaItem);
         this.setTranslationKey(OMTNames.Items.usableMetaItem);
     }
@@ -102,14 +99,23 @@ public class UsableMetaItem extends Item {
         }
     }
 
+    /**
+     * Only the memory card: the throwable bullet and grenade (meta 0 and 1) have no function and no recipe; they stay
+     * registered for 3.x worlds.
+     */
     @Override
     @ParametersAreNonnullByDefault
     public void getSubItems(CreativeTabs itemIn, NonNullList<ItemStack> subItems) {
         if (isInCreativeTab(itemIn)) {
-            for (int i = 0; i < 3; i++) {
-                subItems.add(new ItemStack(ModItems.usableMetaItem, 1, i));
-            }
+            subItems.add(new ItemStack(this, 1, 2));
         }
+    }
+
+    /** Memory cards do not stack (1.20.1+). */
+    @Override
+    @ParametersAreNonnullByDefault
+    public int getItemStackLimit(ItemStack stack) {
+        return stack.getItemDamage() == 2 ? 1 : super.getItemStackLimit(stack);
     }
 
     @Override

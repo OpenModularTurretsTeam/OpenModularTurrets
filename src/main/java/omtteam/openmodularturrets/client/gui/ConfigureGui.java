@@ -9,6 +9,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import omtteam.omlib.OMLib;
+import omtteam.omlib.client.gui.DisownConfirm;
 import omtteam.omlib.client.gui.GUIBackSystem;
 import omtteam.omlib.client.gui.GuiParameters;
 import omtteam.omlib.client.gui.IHasTooltips;
@@ -20,9 +21,7 @@ import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.OpenModularTurrets;
-import omtteam.openmodularturrets.network.MessageToggleAttackMobs;
-import omtteam.openmodularturrets.network.MessageToggleAttackNeutralMobs;
-import omtteam.openmodularturrets.network.MessageToggleAttackPlayers;
+import omtteam.openmodularturrets.network.BasePackets;
 import omtteam.openmodularturrets.network.OMTNetworkingHandler;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
@@ -39,8 +38,13 @@ import static omtteam.omlib.util.player.PlayerUtil.isPlayerOwner;
 
 public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBackSystem {
     protected final int xSize = 176;
+    /**
+     * Height the screen is centred with, as on 1.20.1+ ({@code ConfigureScreen.HEIGHT}): 3.x had two light sliders
+     * below the panel; the rows of {@code configure.png} below the panel are transparent.
+     */
+    protected final int ySize = 205;
     /** Height of the panel in {@code configure.png}. */
-    protected final int ySize = 166;
+    private static final int PANEL_HEIGHT = 166;
     private final TurretBase base;
     private final EntityPlayer player;
     protected int guiLeft;
@@ -76,10 +80,13 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
             this.buttonList.add(new GuiButton(3, guiLeft + 10, guiTop + 95, 155, 20, safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS)));
         }
         if (base.isCamoEnabled() && (base.canSetCamo(player) || base.canChangeLight(player))) {
-            this.buttonList.add(new GuiButton(4, guiLeft + 10, guiTop + 132, 155, 20,
+            this.buttonList.add(new GuiButton(4, guiLeft + 10, guiTop + 135, 155, 20,
                                               safeLocalize(OMTNames.Localizations.GUI.CAMOUFLAGE)));
         }
         this.buttonList.add(new GuiButton(6, guiLeft + 185, guiTop + 20, 80, 20, safeLocalize(OMLibNames.Localizations.GUI.BACK)));
+        if (DisownConfirm.isOwner(player, base)) {
+            this.buttonList.add(DisownConfirm.button(7, guiLeft + 185, guiTop + 45, 80));
+        }
     }
 
     @Override
@@ -121,14 +128,11 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
         ResourceLocation texture = (new ResourceLocation(OMTNames.Textures.configureGUI));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(texture);
-        this.drawTexturedModalRect((width - xSize) / 2, (height - ySize) / 2, 0, 0, xSize, ySize);
+        this.drawTexturedModalRect((width - xSize) / 2, (height - ySize) / 2, 0, 0, xSize, PANEL_HEIGHT);
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
         fontRenderer.drawString(safeLocalize(OMLibNames.Localizations.GUI.TARGETING_OPTIONS) + ": ", guiLeft + 10, guiTop + 9, 0);
         if (accessLevel > 2) {
             fontRenderer.drawString(safeLocalize(OMLibNames.Localizations.GUI.TRUSTED_PLAYERS) + ": ", guiLeft + 10, guiTop + 84, 0);
-        }
-        if (base.isCamoEnabled() && (base.canSetCamo(player) || base.canChangeLight(player))) {
-            fontRenderer.drawString(safeLocalize(OMTNames.Localizations.GUI.CAMOUFLAGE) + ": ", guiLeft + 10, guiTop + 121, 0);
         }
         buttonList.get(0).displayString = safeLocalize(OMLibNames.Localizations.GUI.ATTACK_MOBS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksMobs()));
         buttonList.get(1).displayString = safeLocalize(OMLibNames.Localizations.GUI.ATTACK_NEUTRALS) + ": " + (getColoredBooleanLocalizationYesNo(base.isAttacksNeutrals()));
@@ -143,7 +147,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 0) { //change Attack Mobs
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
-                sendChangeToServerMobs(!base.isAttacksMobs());
+                sendTargeting(BasePackets.TargetCategory.MOBS, !base.isAttacksMobs());
             } else {
                 addChatMessage(player, new TextComponentString(safeLocalize(OMLibNames.Localizations.Text.STATUS_PERMISSION)));
             }
@@ -151,7 +155,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
 
         if (guibutton.id == 1) { //change Attack Neutrals
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
-                sendChangeToServerNeutrals(!base.isAttacksNeutrals());
+                sendTargeting(BasePackets.TargetCategory.NEUTRALS, !base.isAttacksNeutrals());
             } else {
                 addChatMessage(player, new TextComponentString(safeLocalize(OMLibNames.Localizations.Text.STATUS_PERMISSION)));
             }
@@ -159,7 +163,7 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
 
         if (guibutton.id == 2) { // change Attack Players
             if (PlayerUtil.canPlayerChangeSetting(player, base)) {
-                sendChangeToServerPlayers(!base.isAttacksPlayers());
+                sendTargeting(BasePackets.TargetCategory.PLAYERS, !base.isAttacksPlayers());
             } else {
                 addChatMessage(player, new TextComponentString(safeLocalize(OMLibNames.Localizations.Text.STATUS_PERMISSION)));
             }
@@ -176,6 +180,13 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
         }
         if (guibutton.id == 6) { //back button
             GUIBackSystem.getInstance().openLastGui(player);
+        }
+        if (guibutton.id == 7) { // disown, after a confirmation
+            DisownConfirm.ask(base.getPos(), () -> {
+                // the confirmation closed this screen, which took the player off the base's sync list
+                addedToSyncList = false;
+                mc.displayGuiScreen(this);
+            });
         }
     }
 
@@ -203,28 +214,17 @@ public class ConfigureGui extends GuiScreen implements IHasTooltips, ISupportsBa
             case 4:
                 tooltip.add(safeLocalize(OMTNames.Localizations.GUI.CAMOUFLAGE_TOOLTIP));
                 break;
+            case 7:
+                tooltip.add(safeLocalize("tooltip.omlib.disown"));
+                break;
             default:
         }
         if (!tooltip.isEmpty())
             this.drawHoveringText(tooltip, guiLeft + mouseX - k, guiTop + mouseY - l, Minecraft.getMinecraft().fontRenderer);
     }
 
-    private void sendChangeToServerMobs(boolean setTo) {
-        MessageToggleAttackMobs message = new MessageToggleAttackMobs(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(), setTo);
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
-    }
-
-    private void sendChangeToServerNeutrals(boolean setTo) {
-        MessageToggleAttackNeutralMobs message = new MessageToggleAttackNeutralMobs(base.getPos().getX(), base.getPos().getY(),
-                                                                                    base.getPos().getZ(), setTo);
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
-    }
-
-    private void sendChangeToServerPlayers(boolean setTo) {
-        MessageToggleAttackPlayers message = new MessageToggleAttackPlayers(base.getPos().getX(), base.getPos().getY(), base.getPos().getZ(),
-                                                                            setTo);
-
-        OMTNetworkingHandler.INSTANCE.sendToServer(message);
+    private void sendTargeting(BasePackets.TargetCategory category, boolean enabled) {
+        OMTNetworkingHandler.INSTANCE.sendToServer(new BasePackets.SetTargeting(base.getPos(), category, enabled));
     }
 
     @Override

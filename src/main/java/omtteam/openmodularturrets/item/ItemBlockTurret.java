@@ -1,8 +1,10 @@
 package omtteam.openmodularturrets.item;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -12,12 +14,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import omtteam.omlib.util.GeneralUtil;
+import omtteam.openmodularturrets.api.AmmoDefinition;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
-import omtteam.openmodularturrets.api.AmmoDefinition;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.base.TurretPlacement;
 import omtteam.openmodularturrets.core.turret.TurretType;
-import omtteam.openmodularturrets.registry.TurretRegistry;
+import omtteam.openmodularturrets.turret.TurretRegistry;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
@@ -42,6 +45,23 @@ public class ItemBlockTurret extends AbstractItemBlockBaseAddon {
     @Override
     public boolean canPlace(EnumFacing facing, World world, BlockPos pos) {
         return super.canPlace(facing, world, pos) && this.getBlock().canPlaceBlockAt(world, pos);
+    }
+
+    /** The outline is red for players who may not attach turrets to the base (not one of its admins). */
+    @Override
+    public boolean canPlace(EnumFacing facing, World world, BlockPos pos, EntityPlayer player) {
+        TurretPlacement.Result result = ((BlockTurret) this.getBlock()).attachResult(world, pos, player);
+        return super.canPlace(facing, world, pos) && result != null && result.allowed();
+    }
+
+    /** Only admins of the base may attach turrets to it ({@link BlockTurret#attachResult(World, BlockPos, EntityPlayer)}). */
+    @Override
+    @ParametersAreNonnullByDefault
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side,
+                                float hitX, float hitY, float hitZ, IBlockState newState) {
+        TurretPlacement.Result result = ((BlockTurret) this.getBlock()).attachResult(world, pos, player);
+        if (result == null || !result.allowed()) return false;
+        return super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState);
     }
 
     /**

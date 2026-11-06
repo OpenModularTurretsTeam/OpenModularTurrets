@@ -11,12 +11,13 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
@@ -24,12 +25,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.IItemHandler;
 import omtteam.omlib.util.GeneralUtil;
-import omtteam.openmodularturrets.OpenModularTurrets;
+import omtteam.omlib.util.inventory.InvUtil;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.misc.GeneratorTileEntity;
+import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,7 +51,6 @@ public class BlockGenerator extends Block {
 
     public BlockGenerator() {
         super(Material.IRON);
-        this.setCreativeTab(OpenModularTurrets.modularTurretsTab);
         this.setHardness(3.5F);
         this.setResistance(3.5F);
         this.setSoundType(SoundType.METAL);
@@ -78,6 +78,20 @@ public class BlockGenerator extends Block {
     @Override
     public int getMetaFromState(IBlockState state) {
         return state.getValue(FACING).getHorizontalIndex() | (state.getValue(LIT) ? 4 : 0);
+    }
+
+    @Override
+    @Nonnull
+    @SuppressWarnings("deprecation")
+    public IBlockState withRotation(IBlockState state, Rotation rotation) {
+        return state.withProperty(FACING, rotation.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    @Nonnull
+    @SuppressWarnings("deprecation")
+    public IBlockState withMirror(IBlockState state, Mirror mirror) {
+        return state.withRotation(mirror.toRotation(state.getValue(FACING)));
     }
 
     @Nonnull
@@ -116,9 +130,20 @@ public class BlockGenerator extends Block {
             return false;
         }
         if (!world.isRemote && world.getTileEntity(pos) instanceof GeneratorTileEntity) {
-            player.openGui(OpenModularTurrets.instance, GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
+            player.openGui(Reference.MOD_ID, GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
+    }
+
+    /** Attached inventory expanders change what the fuel slots hold. */
+    @Override
+    @SuppressWarnings("deprecation")
+    @ParametersAreNonnullByDefault
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if (tileEntity instanceof GeneratorTileEntity) {
+            ((GeneratorTileEntity) tileEntity).onNeighbourChanged();
+        }
     }
 
     @Override
@@ -127,25 +152,20 @@ public class BlockGenerator extends Block {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof GeneratorTileEntity) {
             GeneratorTileEntity generator = (GeneratorTileEntity) tileEntity;
-            dropAll(world, pos, generator.getFuel());
-            dropAll(world, pos, generator.getUpgrades());
+            InvUtil.dropItems(world, pos, generator.getFuel());
+            InvUtil.dropItems(world, pos, generator.getUpgrades());
         }
         super.breakBlock(world, pos, state);
-    }
-
-    private static void dropAll(World world, BlockPos pos, IItemHandler items) {
-        for (int slot = 0; slot < items.getSlots(); slot++) {
-            ItemStack stack = items.getStackInSlot(slot);
-            if (!stack.isEmpty()) {
-                InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack.copy());
-            }
-        }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+        if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
+            tooltip.add(GeneralUtil.getShiftDetail());
+            return;
+        }
         tooltip.add(TextFormatting.GRAY + GeneralUtil.safeLocalize("tooltip.openmodularturrets.generator"));
     }
 

@@ -8,7 +8,7 @@ public class TurretSetting {
     @Config.RangeInt(min = 1, max = 100)
     public int baseRange;
     /** Ticks between shots. */
-    @Config.RangeInt(min = 1, max = 200)
+    @Config.RangeInt(min = 1)
     public int baseFireRate;
     @Config.RangeInt(min = 0)
     public int baseDamage;

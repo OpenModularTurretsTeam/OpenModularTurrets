@@ -4,7 +4,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import omtteam.openmodularturrets.registry.TurretRegistry;
 import omtteam.openmodularturrets.config.DisposableAmmo;
 import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.item.ReactorFuel;
@@ -12,6 +11,7 @@ import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.item.AddonMetaItem;
 import omtteam.openmodularturrets.item.UpgradeMetaItem;
+import omtteam.openmodularturrets.turret.TurretRegistry;
 
 import java.util.Optional;
 
@@ -19,10 +19,10 @@ import java.util.Optional;
  * What an item stack is for the core logic: ammo, reactor fuel, upgrade or addon (the 3.x item metadata).
  */
 public final class ItemClassifier {
-    /** {@code UpgradeMetaItem} meta 0–4. */
+    /** {@code UpgradeMetaItem} meta 0–5 (5: the creative upgrade). */
     private static final TurretBaseUpgradeType[] UPGRADE_BY_META = {TurretBaseUpgradeType.ACCURACY,
             TurretBaseUpgradeType.EFFICIENCY, TurretBaseUpgradeType.FIRE_RATE, TurretBaseUpgradeType.RANGE,
-            TurretBaseUpgradeType.SCATTERSHOT};
+            TurretBaseUpgradeType.SCATTERSHOT, TurretBaseUpgradeType.CREATIVE};
 
     private ItemClassifier() {
     }
@@ -57,11 +57,17 @@ public final class ItemClassifier {
         return meta >= 0 && meta < UPGRADE_BY_META.length ? Optional.of(UPGRADE_BY_META[meta]) : Optional.empty();
     }
 
-    /** The addon of an {@code AddonMetaItem} stack; {@link AddonType} is in metadata order. */
+    /**
+     * {@code AddonMetaItem} metadata -> addon; meta 2, the removed potentia converter, is none (old stacks do nothing).
+     */
+    private static final AddonType[] ADDON_BY_META = {AddonType.CONCEALER, AddonType.DAMAGE_AMP, null,
+            AddonType.RECYCLER, AddonType.REDSTONE_REACTOR, AddonType.SERIAL_PORT, AddonType.SOLAR_PANEL,
+            AddonType.FAKE_DROPS};
+
+    /** The addon of an {@code AddonMetaItem} stack. */
     public static Optional<AddonType> getAddon(ItemStack stack) {
         if (stack.isEmpty() || !(stack.getItem() instanceof AddonMetaItem)) return Optional.empty();
         int meta = stack.getMetadata();
-        AddonType[] addons = AddonType.values();
-        return meta >= 0 && meta < addons.length ? Optional.of(addons[meta]) : Optional.empty();
+        return meta >= 0 && meta < ADDON_BY_META.length ? Optional.ofNullable(ADDON_BY_META[meta]) : Optional.empty();
     }
 }

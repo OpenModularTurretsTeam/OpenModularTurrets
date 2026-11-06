@@ -6,6 +6,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import omtteam.omlib.util.InitHelper;
 import omtteam.openmodularturrets.api.TurretDefinition;
 import omtteam.openmodularturrets.block.base.BlockTurretBase;
+import omtteam.openmodularturrets.block.expander.BlockInventoryExpander;
 import omtteam.openmodularturrets.block.misc.BlockGenerator;
 import omtteam.openmodularturrets.block.misc.LeverBlock;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
@@ -17,17 +18,15 @@ import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.misc.GeneratorTileEntity;
 import omtteam.openmodularturrets.tileentity.misc.LeverTileEntity;
 import omtteam.openmodularturrets.tileentity.turret.TurretTileEntity;
+import omtteam.openmodularturrets.turret.TurretRegistry;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * The blocks of this mod. Turrets are one {@link BlockTurret} per turret type, registered under the 3.x ids.
  */
 public class ModBlocks {
     public static Block laserTurret;
-    private static final Map<TurretType, Block> TURRETS = new HashMap<>();
     public static Block turretBase;
     public static Block disposableItemTurret;
     public static Block potatoCannonTurret;
@@ -45,10 +44,16 @@ public class ModBlocks {
     public static Block leverBlock;
 
     public static Block generator;
+    public static Block inventoryExpanderTierOne;
+    public static Block inventoryExpanderTierTwo;
+    public static Block inventoryExpanderTierThree;
 
     public static void initBlocks(IForgeRegistry<Block> registry) {
-        turretBase = InitHelper.registerBlock(new BlockTurretBase(), registry, ModItems.subblocks);
-        generator = InitHelper.registerBlock(new BlockGenerator(), registry, ModItems.subblocks);
+        turretBase = InitHelper.registerBlock(inTab(new BlockTurretBase()), registry, ModItems.subblocks);
+        generator = InitHelper.registerBlock(inTab(new BlockGenerator()), registry, ModItems.subblocks);
+        inventoryExpanderTierOne = registerExpander(registry, 1, OMTNames.Blocks.inventoryExpanderTierOne);
+        inventoryExpanderTierTwo = registerExpander(registry, 2, OMTNames.Blocks.inventoryExpanderTierTwo);
+        inventoryExpanderTierThree = registerExpander(registry, 3, OMTNames.Blocks.inventoryExpanderTierThree);
 
         disposableItemTurret = registerTurret(registry, OMTNames.Blocks.disposableItemTurret,
                 TurretType.DISPOSABLE_TURRET);
@@ -69,7 +74,11 @@ public class ModBlocks {
 
         registerAddonTurrets(registry);
 
-        leverBlock = InitHelper.registerBlock(new LeverBlock(), registry, ModItems.subblocks);
+        leverBlock = InitHelper.registerBlock(inTab(new LeverBlock()), registry, ModItems.subblocks);
+    }
+
+    private static Block registerExpander(IForgeRegistry<Block> registry, int tier, String name) {
+        return InitHelper.registerBlock(inTab(new BlockInventoryExpander(tier, name)), registry, ModItems.subblocks);
     }
 
     /** Registers the block of an enabled built-in turret under its 3.x id; null if the turret is disabled. */
@@ -86,8 +95,8 @@ public class ModBlocks {
         // Forge checks the namespace against the active mod already when the registry name is set
         Block[] block = new Block[1];
         ModContainerScope.registerAs(id, () ->
-                block[0] = InitHelper.registerBlock(new BlockTurret(id, type), registry, ModItems.subblocks));
-        TURRETS.put(type, block[0]);
+                block[0] = InitHelper.registerBlock(inTab(new BlockTurret(id, type)), registry, ModItems.subblocks));
+        TurretRegistry.registerBlock(type, block[0]);
         return block[0];
     }
 
@@ -101,10 +110,10 @@ public class ModBlocks {
         }
     }
 
-    /** The block of a turret type, null if the turret is disabled. */
-    @Nullable
-    public static Block turret(TurretType type) {
-        return TURRETS.get(type);
+    /** Puts a block into the mod's creative tab (its item block shows it there too). */
+    private static <T extends Block> T inTab(T block) {
+        block.setCreativeTab(ModularTurretsTab.getInstance());
+        return block;
     }
 
     public static void initTileEntities() {

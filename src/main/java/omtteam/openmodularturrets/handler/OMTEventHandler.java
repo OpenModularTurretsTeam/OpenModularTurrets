@@ -8,25 +8,33 @@ import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import omtteam.omlib.config.ConfigSync;
 import omtteam.openmodularturrets.entity.projectile.AbstractOMTDamageSource;
+import omtteam.openmodularturrets.entity.projectile.OMTFakePlayer;
+import omtteam.openmodularturrets.entity.projectile.TurretDamage;
+import omtteam.openmodularturrets.entity.projectile.TurretImmunity;
+import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
 import omtteam.openmodularturrets.fixes.MissingIds;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.registry.ModItems;
-import omtteam.openmodularturrets.registry.ModSounds;
-import omtteam.openmodularturrets.util.OMTFakePlayer;
-import omtteam.openmodularturrets.util.OMTUtil;
+import omtteam.openmodularturrets.sound.ModSounds;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by Keridos on 02/05/17.
@@ -46,29 +54,63 @@ public class OMTEventHandler {
     }
 
     @SubscribeEvent
-    public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equals(Reference.MOD_ID)) {
-            ConfigManager.sync(Reference.MOD_ID, Config.Type.INSTANCE);
-        }
-    }
-
-    @SubscribeEvent
     public void entityHurtEvent(LivingHurtEvent event) {
-        EntityLivingBase entity = event.getEntityLiving();
-        int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
-        if (fakeDrops >= 0) {
-            FakePlayer player = OMTFakePlayer.getFakePlayer((WorldServer) event.getEntityLiving().getEntityWorld());
-            player.setHeldItem(EnumHand.MAIN_HAND, OMTFakePlayer.getSword(fakeDrops));
-            entity.setLastAttackedEntity(player);
-        }
+        attributeToFakePlayer(event.getEntityLiving());
     }
 
     @SubscribeEvent
     public void entityAttackedEvent(LivingAttackEvent event) {
-        EntityLivingBase entity = event.getEntityLiving();
-        int fakeDrops = OMTUtil.getFakeDropsLevel(entity);
+        // turret damage never hurts a player holding the ownership wand (the shot itself may still hit them)
+        if (event.getSource() instanceof AbstractOMTDamageSource && TurretImmunity.isImmune(event.getEntityLiving())) {
+            event.setCanceled(true);
+            return;
+        }
+        attributeToFakePlayer(event.getEntityLiving());
+    }
+
+    /**
+     * Explosions of turret projectiles deal turret damage (1.20.1+): the projectile takes over the affected entities
+     * ({@link TurretProjectile#affectByExplosion}); players holding the ownership wand are spared (no damage, no push).
+     */
+    @SubscribeEvent
+    public void explosionEvent(ExplosionEvent.Detonate event) {
+        if (event.getExplosion().getExplosivePlacedBy() != null) return;
+        Entity exploder = exploder(event.getExplosion());
+        if (exploder instanceof TurretProjectile
+                && !((TurretProjectile) exploder).affectByExplosion(event.getExplosion(), event.getAffectedEntities())) {
+            event.getAffectedEntities().removeIf(TurretImmunity::isImmune);
+        }
+    }
+
+    /**
+     * Turret damage never knocks the victim back (1.20.1+ {@code LivingEntityMixin}): with a fake drops addon the
+     * damage source names the fake player as attacker, which vanilla would push the victim away from.
+     */
+    @SubscribeEvent
+    public void knockBackEvent(LivingKnockBackEvent event) {
+        if (OMTFakePlayer.isFakePlayer(event.getAttacker())) {
+            event.setCanceled(true);
+        }
+    }
+
+    /** The entity that caused the explosion; 1.12 has no getter for it ({@code exploder}, SRG {@code field_77283_e}). */
+    @Nullable
+    private static Entity exploder(Explosion explosion) {
+        try {
+            return ObfuscationReflectionHelper.getPrivateValue(Explosion.class, explosion, "exploder", "field_77283_e");
+        } catch (ReflectionHelper.UnableToAccessFieldException e) {
+            return null;
+        }
+    }
+
+    /**
+     * An entity hit by a base with the fake drops addon was last attacked by the fake player, holding a sword with
+     * the addons' looting level, so its drops are player drops.
+     */
+    private static void attributeToFakePlayer(EntityLivingBase entity) {
+        int fakeDrops = TurretDamage.getFakeDropsLevel(entity);
         if (fakeDrops >= 0) {
-            FakePlayer player = OMTFakePlayer.getFakePlayer((WorldServer) event.getEntityLiving().getEntityWorld());
+            FakePlayer player = OMTFakePlayer.getFakePlayer((WorldServer) entity.getEntityWorld());
             player.setHeldItem(EnumHand.MAIN_HAND, OMTFakePlayer.getSword(fakeDrops));
             entity.setLastAttackedEntity(player);
         }
@@ -133,7 +175,7 @@ public class OMTEventHandler {
         } else if (killer instanceof EntityPlayer && !(killer instanceof FakePlayer)) {
             noLoot = false;
         } else {
-            noLoot = entity.getTags().contains("openmodularturrets:turret_hit") && OMTUtil.getFakeDropsLevel(entity) < 0;
+            noLoot = entity.getTags().contains("openmodularturrets:turret_hit") && TurretDamage.getFakeDropsLevel(entity) < 0;
         }
         if (noLoot) {
             event.setCanceled(true);
@@ -143,7 +185,7 @@ public class OMTEventHandler {
     @SubscribeEvent
     public void configReloadEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.getModID().equalsIgnoreCase(Reference.MOD_ID)) {
-            ConfigManager.sync(Reference.MOD_ID, Config.Type.INSTANCE);
+            ConfigSync.syncLocal(Reference.MOD_ID);
         }
     }
 }
