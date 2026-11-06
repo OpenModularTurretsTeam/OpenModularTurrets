@@ -66,6 +66,14 @@ class TurretMathTest {
     }
 
     @Test
+    void leadAtZeroDistanceAimsAtTheOffset() {
+        Vector3 offset = new Vector3(0, 0, 1.0E-7);
+        TurretMath.Lead lead = TurretMath.lead(offset, new Vector3(0.5, 0, 0), 3.0, 0.03);
+        assertEquals(offset, lead.direction(), "no lead and no drop for a target at the muzzle");
+        assertEquals(1.0F, lead.speedFactor());
+    }
+
+    @Test
     void leadFollowsTheTarget() {
         // 6 blocks at speed 3 take a little over 2 ticks (air drag); the target moves 0.5 blocks/tick sideways
         TurretMath.Lead lead = TurretMath.lead(new Vector3(0, 0, 6), new Vector3(0.5, 0, 0), 3.0, 0);

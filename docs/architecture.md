@@ -235,7 +235,7 @@ Never add to either without asking the user.
 | Tool | Command | Output |
 | --- | --- | --- |
 | Test coverage of `core` (JaCoCo) | part of `check`, which prints the line coverage per package | `build/reports/jacoco/test/html/index.html` |
-| Mutation testing of `core` (PIT, on demand) | `./gradlew pitest` | `build/reports/pitest/index.html` |
+| Mutation testing of `core` (PIT, on demand; fails below `pitest_mutation_threshold` in `gradle.properties`) | `./gradlew pitest` | `build/reports/pitest/index.html` |
 | Dependency map | `./gradlew dependencyMap` | `build/reports/dependency-map/index.html` |
 
 Run Gradle with a JDK 17+ in `JAVA_HOME`; the mod compiles and tests on the Java 8 toolchain.

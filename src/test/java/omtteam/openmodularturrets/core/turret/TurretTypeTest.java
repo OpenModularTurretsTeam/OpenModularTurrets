@@ -135,7 +135,10 @@ class TurretTypeTest {
 
     @Test
     void registeredTypesFollowTheBuiltInOnes() {
+        assertFalse(TurretTypes.isFrozen(), "only the mod freezes the types, after loading the turret API plugins");
         TurretType added = TurretTypes.register(TurretType.builder("othermod", "registered_turret").build());
+        assertEquals("othermod", added.getNamespace());
+        assertEquals("openmodularturrets", TurretType.LASER_TURRET.getNamespace());
         assertEquals(TurretType.BUILT_IN, TurretTypes.all().subList(0, TurretType.BUILT_IN.size()));
         assertTrue(TurretTypes.all().contains(added));
         assertEquals(Optional.of(added), TurretTypes.byId("othermod:registered_turret"));

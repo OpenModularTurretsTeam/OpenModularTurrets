@@ -150,6 +150,8 @@ class TurretBaseLogicTest {
             int dirtyBefore = dirtyCount;
             Optional<AmmoDraw> draw = logic.drawAmmo(TurretType.POTATO_CANNON_TURRET);
             assertEquals(Optional.of(new AmmoDraw(AmmoType.POTATO, 1, 0, false, AmmoType.POTATO)), draw);
+            assertEquals(AmmoType.POTATO, draw.get().type());
+            assertEquals(AmmoType.POTATO, draw.get().item(), "the snapshot of the slot the ammo came from");
             assertEquals(2, potatoes.count);
             assertEquals(dirtyBefore + 1, dirtyCount, "the used ammo must be saved");
         }
@@ -443,10 +445,13 @@ class TurretBaseLogicTest {
         @Test
         void firstScanWithoutSavedRangeUsesTheShortestTurret() {
             TurretBaseLogic logic = new TurretBaseLogic(4, settings, trust(), world, random, clientRelevant -> {
+                if (clientRelevant) syncCount++;
             });
+            int syncsBefore = syncCount;
             logic.updateNeighbours(turrets(TurretType.ROCKET_TURRET, TurretType.MACHINE_GUN_TURRET));
             assertEquals(30, logic.getTargetingSettings().getMaxRange());
             assertEquals(18, logic.getTargetingSettings().getRange());
+            assertTrue(syncCount > syncsBefore, "clients see the new range");
         }
 
         @Test
