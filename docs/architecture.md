@@ -290,6 +290,19 @@ Coverage says which lines the tests run; mutation testing says whether they chec
 PIT plants small mistakes in core (a flipped condition, `<` instead of `<=`, a removed call) and runs the unit tests against each one.
 A mistake no test notices ("survived") marks behaviour the tests do not pin down, often an edge case or a missing save or sync call.
 Not every survivor is a gap: where `>` and `>=` behave the same for every possible value, the change cannot be noticed.
+When one survives, add the missing assertion to the unit test of that class; if it cannot be noticed, add it to the list below with the reason.
+It fails when the results get worse than the thresholds in `gradle.properties` (`pitest_mutation_threshold`, `pitest_coverage_threshold`, `pitest_max_surviving`, the state of 2026-11-06); tighten them when a test kills a survivor (lower `pitest_max_surviving`), and raise it only for a survivor that no test can notice, listed below with its reason.
+
+State on 2026-11-06: PIT detects 686 of 696 mutations (99 %); the 10 survivors cannot be noticed:
+
+- `TurretBaseLogic.drawAmmo`: `>` instead of `>=` when collecting slots (one more slot is collected, but the extraction stops at the needed amount), `< 0` instead of `<= 0` when extracting (the next slot gets an extraction of 0).
+- `TurretBaseLogic.tick`: `ticks--` instead of `ticks++` (the counter is only used modulo 5 and 20 and reset at 20, so the timing is the same).
+- `TurretBaseLogic.updateNeighbours`: the `markSync()` after the first scan sets the range (`updateMaxRange` has just synced the new max range in the same call, which always changes from 0 there).
+- `ProjectileMath.damageWithAmp`, `RayMath.damage`: `< 0` / `>= 0` for the amp level or factor (an amp of 0 adds a bonus of 0).
+- `ProjectileMath.flightTime`: `< 0` instead of `<= 0` (a reach of 0 gives an infinite time, which is capped to the same `MAX_AGE`).
+- `ProjectileMath.dropAfter`: `<=` instead of `<` (the extra step adds `fall * 0`).
+- `TurretMath.limit`: `>` instead of `>=` (a pitch equal to the limit is replaced by the same value).
+- `TargetingSettings.setMaxRange`: `>=` instead of `>` (a range equal to the max is set to the same value).
 
 ## Known weak spots
 

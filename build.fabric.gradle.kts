@@ -216,6 +216,14 @@ tasks.register<JavaExec>("pitest") {
     val reportDir = layout.buildDirectory.dir("reports/pitest")
     val sources = sourceSets.main.get().java.srcDirs
     outputs.dir(reportDir)
+    // fail on a degradation: % of mutations detected, % line coverage of the mutated classes, mutations not detected
+    // (survived or not reached by any test); the values are in gradle.properties
+    val thresholds = listOf(
+        "--mutationThreshold", project.property("pitest_mutation_threshold").toString(),
+        "--coverageThreshold", project.property("pitest_coverage_threshold").toString(),
+        "--maxSurviving", project.property("pitest_max_surviving").toString(),
+    )
+    inputs.property("thresholds", thresholds)
     argumentProviders.add(CommandLineArgumentProvider {
         listOf(
             "--reportDir", reportDir.get().asFile.path,
@@ -227,7 +235,7 @@ tasks.register<JavaExec>("pitest") {
             "--threads", Runtime.getRuntime().availableProcessors().toString(),
             "--outputFormats", "HTML,XML",
             "--timestampedReports=false",
-        )
+        ) + thresholds
     })
     doLast {
         println("PIT report: ${reportDir.get().asFile.resolve("index.html").toURI()}")
