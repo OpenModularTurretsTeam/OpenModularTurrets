@@ -62,6 +62,12 @@ tasks.register("chiseledBuild") {
     dependsOn(stonecutter.versions.map { ":${it.project}:build" })
 }
 
+// Checks every version: from the workspace, :<repo>:check names only this (root) project's check, which would leave
+// out the nodes' tests; inside this folder ./gradlew check runs them anyway (Gradle runs each task once)
+tasks.named("check") {
+    dependsOn(stonecutter.versions.map { ":${it.project}:check" })
+}
+
 // Publishes every version to CurseForge / Modrinth: ./gradlew chiseledPublish (see publishMods in build.gradle.kts)
 tasks.register("chiseledPublish") {
     group = "publishing"

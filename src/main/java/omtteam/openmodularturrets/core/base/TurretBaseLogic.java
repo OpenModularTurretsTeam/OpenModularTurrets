@@ -216,7 +216,7 @@ public class TurretBaseLogic {
     }
 
     /**
-     * How much each ammo slot holds: the stacks of the base's tier ({@link BaseTierStats#ammoStacks}) times one stack
+     * How much each ammo slot holds: the stacks of the base's tier ({@link BaseTierStats#ammoStacks()}) times one stack
      * plus those of the inventory expanders attached as of the last {@link #updateNeighbours}, so a two-stack base
      * holds twice as much with the same expanders (config values are read on every call).
      */

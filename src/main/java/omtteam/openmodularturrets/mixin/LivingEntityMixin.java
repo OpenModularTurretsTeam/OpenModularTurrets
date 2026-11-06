@@ -62,6 +62,7 @@ public abstract class LivingEntityMixin {
     }
     //?}
 
+    @Unique
     private void openmodularturrets$cancelForImmune(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
         if (source instanceof TurretDamageSource && TurretImmunity.isImmune((LivingEntity) (Object) this)) {
             cir.setReturnValue(false);

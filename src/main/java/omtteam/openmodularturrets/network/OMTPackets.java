@@ -1,7 +1,5 @@
 package omtteam.openmodularturrets.network;
 
-import omtteam.omlib.network.TrustPacketHandler;
-import omtteam.omlib.network.TrustPackets;
 import omtteam.openmodularturrets.OMT;
 import omtteam.omlib.compat.network.NetworkCompat;
 import omtteam.omlib.compat.network.PacketType;
