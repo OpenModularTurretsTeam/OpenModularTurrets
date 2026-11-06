@@ -61,7 +61,6 @@ import java.util.Random;
 public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost, TrustHost, TransferHost, Clearable {
     private final TurretBaseInventory inventory = new TurretBaseInventory(this::onInventoryChanged,
             player -> Container.stillValidBlockEntity(this, player), this::getSlotCapacity);
-    /** The ammo slots: anything the inventory accepts goes in, everything may come out. */
     /** Insert only: other blocks never take ammo out, so a stranger's hopper cannot disarm the base. */
     private final ItemAccess ammoAccess = new ItemAccess(inventory, TurretBaseInventory.AMMO_START,
             TurretBaseInventory.AMMO_COUNT, stack -> true, stack -> false);
