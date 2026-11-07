@@ -12,7 +12,9 @@ The port from 1.12.2 is complete; this repo maintains the 1.20.1 / 1.21.1 / 1.21
 A **NeoForge 1.21.1** build is being added on the branch `neoforge-test`, with the setup worked out in OpenModularLighting (`../OpenModularLighting`, branch `neoforge-test`; see §4 "Loaders" and §9).
 A **Forge 1.20.1** build is being added on the branch `forge-test` (requested by the user on 2026-10-24), ported from OpenModularLighting (branch `forge-test`; see §4 "Forge 1.20.1" and §9).
 **Minecraft 1.21.11** (Fabric and NeoForge nodes, same codebase) was ported on 2026-10-26 following OpenModularLighting's 1.21.11 port (see §9); it builds and passes the game tests, but its client has not been checked by hand yet, and the nodes are not published yet.
-The old inventory and power expanders (with their own inventory or energy) were dropped and are not to be re-added; their 4.x replacement is the inventory expander without an inventory (requested by the user on 2026-10-27, see "Power & items").
+Inventory expanders exist in 4.x with new functionality: three tiers that hold no items themselves but raise the stack limit of the ammo slots of turret bases and the fuel slots of generators they touch (designed with the user on 2026-10-27, see "Power & items").
+The 1.12.2 design (inventory expanders with their own storage, and power expanders) is not to be brought back.
+The Relativistic Turret is now the Slowing Turret (see CHANGELOG); its 1.12.2 name only appears in port comments.
 
 Core gameplay:
 
