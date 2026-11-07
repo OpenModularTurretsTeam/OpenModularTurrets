@@ -1,4 +1,4 @@
-# CLAUDE.md — OpenModularTurrets (Fabric, Multi-Version)
+# CLAUDE.md — OpenModularTurrets (Fabric, NeoForge, Forge; Multi-Version)
 
 This file guides Claude Code when working in this repository.
 Read it fully before making changes.
@@ -7,11 +7,10 @@ Read it fully before making changes.
 
 ## 1. Project Overview
 
-**OpenModularTurrets (OMT)** is being maintained on **Fabric**, targeting **1.20.1, 1.21.1 and 1.21.11 from a single codebase** using **Stonecutter**.
-The port from 1.12.2 is complete; this repo maintains the 1.20.1 / 1.21.1 / 1.21.11 versions.
-A **NeoForge 1.21.1** build is being added on the branch `neoforge-test`, with the setup worked out in OpenModularLighting (`../OpenModularLighting`, branch `neoforge-test`; see §4 "Loaders" and §9).
-A **Forge 1.20.1** build is being added on the branch `forge-test` (requested by the user on 2026-10-24), ported from OpenModularLighting (branch `forge-test`; see §4 "Forge 1.20.1" and §9).
-**Minecraft 1.21.11** (Fabric and NeoForge nodes, same codebase) was ported on 2026-10-26 following OpenModularLighting's 1.21.11 port (see §9); it builds and passes the game tests, but its client has not been checked by hand yet, and the nodes are not published yet.
+**OpenModularTurrets (OMT)** is maintained for **Fabric (1.20.1, 1.21.1, 1.21.11), NeoForge (1.21.1, 1.21.11) and Forge (1.20.1) from a single codebase** using **Stonecutter**.
+The port from 1.12.2 is complete and released (4.0.0 on 2026-11-03); this repo maintains the 1.20.1 / 1.21.1 / 1.21.11 versions.
+The **NeoForge** build was worked out in OpenModularLighting first (`../OpenModularLighting`; see §4 "Loaders" and §9), the **Forge 1.20.1** build was ported from it (requested by the user on 2026-10-24; see §4 "Forge 1.20.1" and §9); both have been released since 4.0.0-beta.6.
+**Minecraft 1.21.11** (Fabric and NeoForge nodes, same codebase) was ported on 2026-10-26 following OpenModularLighting's 1.21.11 port (see §9); it builds and passes the game tests, but its client has not been checked by hand yet.
 Inventory expanders exist in 4.x with new functionality: three tiers that hold no items themselves but raise the stack limit of the ammo slots of turret bases and the fuel slots of generators they touch (designed with the user on 2026-10-27, see "Power & items").
 The 1.12.2 design (inventory expanders with their own storage, and power expanders) is not to be brought back.
 The Relativistic Turret is now the Slowing Turret (see CHANGELOG); its 1.12.2 name only appears in port comments.
@@ -72,10 +71,10 @@ Core gameplay:
 The 1.21.11 nodes (Fabric and NeoForge) are built like 1.21.1 (the same Gradle plugins).
 They have no Sable, Create or Create Aeronautics properties (no 1.21.11 builds known); the build scripts skip those dependencies when `sable_companion_version` is missing.
 
-- Build system: Gradle 9.8 (Kotlin DSL) + **Stonecutter 0.9**, with Fabric Loom 1.18 (`net.fabricmc.fabric-loom-remap`, the variant for obfuscated MC versions) on the Fabric nodes and ModDevGradle 2.0 (`net.neoforged.moddev`) on the NeoForge node.
+- Build system: Gradle 9.8 (Kotlin DSL) + **Stonecutter 0.9**, with Fabric Loom 1.18 (`net.fabricmc.fabric-loom-remap`, the variant for obfuscated MC versions) on the Fabric nodes, ModDevGradle 2.0 (`net.neoforged.moddev`) on the NeoForge nodes and its legacy variant on the Forge node.
 - Shared build logic is the convention plugin `omlib/build-logic/src/main/kotlin/mod-common.gradle.kts` (Java toolchain, metadata templating, JUnit, `verifyCoreIsolation`, `checkRecipes`, licenses in the jar via `bundled_licenses`, publishing).
   It is mod-independent and lives in its own repository, `OMLib` (`../OMLib`), which every mod mounts as the git submodule `omlib` (the branch `1.20.1+` of the OMLib repository, clean history; an included build in `pluginManagement` of `settings.gradle.kts`).
-  Change it inside `omlib/`, commit and push there, then commit the new submodule pointer in each mod; clone a mod with `--recurse-submodules` (or run `git submodule update --init`).
+  Change it in the OMLib repository (`../OMLib` in the workspace, never inside `omlib/`), then move the `omlib` submodule of each mod to the new commit and commit the pointer (see the workspace `CLAUDE.md`, "OMLib in the mods"); clone a mod with `--recurse-submodules` (or run `git submodule update --init`).
   The few source files that the mods still copy from each other are listed in `omlib/shared-sources.txt`; after changing one, run `python3 -I omlib/tools/shared_sources.py sync --from . --write . ../OpenModularLighting` and then `check`.
   The OMT-specific quality tools (ArchUnit, JaCoCo, PIT, PMD) stay in `build.fabric.gradle.kts`.
 - **Gradle itself must run on Java 25+** (Loom 1.18 requirement).
@@ -83,7 +82,7 @@ They have no Sable, Create or Create Aeronautics properties (no 1.21.11 builds k
 - **Use Mojang mappings** (`loom.officialMojangMappings()`).
   All class and method names in code and in this doc are Mojmap names (`BlockEntity`, `ResourceLocation`, `AbstractContainerMenu`, and so on).
 - Language: Java only.
-- Toolchain: configure the Java toolchain per version (17 for 1.20.1, 21 for 1.21.1) in the shared build script.
+- Toolchain: configure the Java toolchain per version (17 for 1.20.1, 21 for 1.21.1 and 1.21.11) in the shared build script.
   Use the version-specific `gradle.properties` to switch.
 
 Check exact latest patch versions of Loader, API, Loom and Stonecutter when setting up or bumping.
@@ -97,7 +96,7 @@ Do not hard-code guesses into the build without verifying.
 .
 ├── CLAUDE.md
 ├── build.fabric.gradle.kts     # Fabric nodes (Loom, Fabric API, datagen, GameTests, ArchUnit/JaCoCo/PIT/PMD)
-├── build.neoforge.gradle.kts   # NeoForge node (ModDevGradle)
+├── build.neoforge.gradle.kts   # NeoForge nodes (ModDevGradle)
 ├── build.forge.gradle.kts      # Forge node (legacy ModDevGradle: reobfJar, mixin refmap, MixinExtras jar-in-jar, pack.mcmeta)
 ├── omlib/                      # git submodule (OMLib, branch 1.20.1+): the library (src/) every mod bundles, and build-logic/ (the mod-common convention plugin); see §4 "OMLib"
 ├── stonecutter.gradle.kts      # Stonecutter controller (active version, loader constants, chiseled tasks)
@@ -118,14 +117,14 @@ Do not hard-code guesses into the build without verifying.
 │   │   └── gradle.properties   # minecraft_version, fabric_api, java_version=21 …
 │   └── 1.21.11-neoforge/
 │       └── gradle.properties   # neoforge_version, minecraft_dependency (Maven range) …
-├── src/
+└── src/
     ├── main/java/omtteam/openmodularturrets/...
     ├── main/mc1.20.1-1.21.1/java/ and main/mc1.21.11-/java/   # version source folders: whole classes that differ between versions (§4)
     ├── main/resources/         # SHARED assets + fabric.mod.json, META-INF/neoforge.mods.toml and META-INF/mods.toml (templated)
     ├── client/java/...         # client-only code (split source sets); client/mc…/java: its version source folders
-    ├── gametest/mc1.21.11-/    # the game test framework of 1.21.11 (stand-in @GameTest, GameTestCases)
     ├── test/java/...           # JUnit tests for core/
-    └── gametest/               # server game tests for both loaders (own mod id openmodularturrets_gametest)
+    └── gametest/               # server game tests for all loaders (own mod id openmodularturrets_gametest);
+                                # gametest/mc1.21.11-/: the game test framework of 1.21.11 (stand-in @GameTest, GameTestCases)
 ```
 
 - **Mod ID:** `openmodularturrets`.
@@ -133,7 +132,7 @@ Do not hard-code guesses into the build without verifying.
 - Use Loom **split environment source sets** (`splitEnvironmentSourceSets()`).
   Client-only code (renderers, screens, models, client networking handlers) goes in `src/client/java`.
   Never reference client classes from `main`.
-- `fabric.mod.json` is templated via `processResources`.
+- `fabric.mod.json`, `neoforge.mods.toml` and `mods.toml` are templated via `processResources`.
   Inject `${version}`, `${minecraft_dependency}` and `${java_version}` from the per-version properties.
 
 ---
@@ -203,13 +202,14 @@ Its README and `CLAUDE.md` describe the layout and the rules (no mod knowledge i
 - **Security and ownership** (moved on 2026-10-27, requested by the user): `core.security` (`TrustManager`, `AccessLevel`, `AccessProfile`, `TrustedPlayer`, `PlayerInfo`, `PlayerIdentity`, `SecurityEnvironment`, `TrustResult`; `DamageRules` stayed here), `security` (`OwnedHost`, `TrustHost`, `OwnershipSettings`, `LevelSecurityEnvironment`, `PlayerAdapter`, `PlayerLookup`, `SecurityNbt`), `blockentity.OwnedBlockEntity`, the claiming classes in `block` (`ClaimLink`, `ClaimSpread`, `ClaimInteraction`, `WandInteraction`, `UnownedMarker`), `item.OwnershipWandItem`, `core.world.Face` / `BlockPosition` / `FloodFill`, the trust packets (`omlib:add_trusted_player`, `omlib:remove_trusted_player`, `omlib:change_access_level`, `omlib:disown`) and the client screens (`TrustedPlayersScreen`, `DisownConfirm`, `CompatScreen`, `OwnershipWandTooltip`, the `trusted_players.png` texture, texts under `*.omlib.*`).
   The mod supplies `OMTOwnershipSettings` (reads the config), `TurretBlock implements ClaimLink` (a turret's owner is its base, and turrets connect claims), `PassiveDefenseBlockEntity extends OwnedBlockEntity`, and `ownershipSettings()` on the base and the trap; the library registers the wand and claim interceptors itself, before the mods' own.
   The mod registers its own item of `OwnershipWandItem` (`ModItems.OWNERSHIP_WAND`) and adds its immunity line to the tooltip (`OwnershipWandImmunityTooltip`).
-- **Camouflage:** `CamoBlock' (with `overlayTintIndex()`), `CamoHost` (with `disguiseRules()`) and `DisguiseRules` (this mod: `CamoRules.RULES`) are the hooks; the screen's extra buttons come from `CamoScreenExtras` (`TrapCamoExtras`, registered in `OMTClient.init`: the camouflage trap's Trusted and Disown buttons).
-- **Changing the library:** edit, commit and push it, move the `omlib` pointer of both mods and build both (`./gradlew chiseledBuild`); a public signature change touches both mods.
+- **Camouflage:** `CamoBlock` (with `overlayTintIndex()`), `CamoHost` (with `disguiseRules()`) and `DisguiseRules` (this mod: `CamoRules.RULES`) are the hooks; the screen's extra buttons come from `CamoScreenExtras` (`TrapCamoExtras`, registered in `OMTClient.init`: the camouflage trap's Trusted and Disown buttons).
+- **Changing the library:** edit and commit it in `../OMLib` (never inside `omlib/`), move the `omlib` pointer of both mods and build both (`./gradlew chiseledBuild`); a public signature change touches both mods.
+  The OMLib commit must be pushed before the mod that points to it.
 
 ### Loaders
 
 Each Stonecutter node is `<minecraft version>-<loader>`; the loader picks the build script (`build.<loader>.gradle.kts`).
-The setup and the patterns come from OpenModularLighting (branch `neoforge-test`), where the whole port is done; port OMT the same way, step by step, and design new cross-cutting interfaces with the user (§7 "Designing APIs").
+The setup and the patterns come from OpenModularLighting, where the loader ports were done first; OMT follows them, and new cross-cutting interfaces are designed with the user (§7 "Designing APIs").
 
 - **Whole loader-specific classes** go into a `platform/<loader>/` package (`platform/fabric/`, `platform/neoforge/`, `platform/forge/`, also under `client/` and the test mod).
   `mod-common` leaves the other loaders' `platform/` packages out of the compilation, so these classes need no Stonecutter comments.
@@ -234,8 +234,8 @@ New questions that these do not answer go through §7 "Designing APIs".
 **Overall approach**
 
 - Native NeoForge support, not Sinytra Connector, not Forgified Fabric API, not Architectury, not a MultiLoader subproject layout.
-- Stonecutter loader axis: one source set, nodes `<minecraft version>-<loader>`, one build script per loader; NeoForge only for 1.21.1 (1.20.1 stays Fabric-only).
-- ModDevGradle for the NeoForge node (build-time only).
+- Stonecutter loader axis: one source set, nodes `<minecraft version>-<loader>`, one build script per loader; NeoForge for 1.21.1 and 1.21.11, Forge for 1.20.1 (see "Forge 1.20.1").
+- ModDevGradle for the NeoForge nodes (build-time only).
 - Whole loader-specific classes in `platform/<loader>/` (left out of the other loaders' builds); `//? if fabric` / `//? if neoforge` only for small differences inside `compat/` and `platform/`.
 - Mod-independent build logic in `omlib/build-logic` (`mod-common`), shared between the mods as the `omlib` git submodule (OMLib, `build-logic/`); publishing for NeoForge and Forge was enabled by the user on 2026-10-24.
 
@@ -247,7 +247,7 @@ New questions that these do not answer go through §7 "Designing APIs".
   A new service is a new record component, so every entrypoint stops compiling until it supplies one.
 - Fail fast: a getter before `install`, or a second `install`, throws `IllegalStateException`.
 - The existing `compat/` facades (`NetworkCompat`, `ClientNetworkCompat`, `MenuCompat`) keep their signatures and forward to the services, so call sites do not change.
-- `OMT` holds the shared constants (`MOD_ID`, `LOGGER`, `id()`) and nothing else; the shared start-up is `startup.OMTStartup` (moved out of `OMT` by the user on 2026-10-25, so `OMT` leaves the package cycle); the loader entrypoints are `OMTFabric` / `OMTNeoForge` (`OMTFabricClient` / `OMTNeoForgeClient`).
+- `OMT` holds the shared constants (`MOD_ID`, `LOGGER`, `id()`) and nothing else; the shared start-up is `startup.OMTStartup` (moved out of `OMT` by the user on 2026-10-25, so `OMT` leaves the package cycle); the loader entrypoints are `OMTFabric` / `OMTNeoForge` / `OMTForge` (`OMTFabricClient` / `OMTNeoForgeClient` / `OMTForgeClient`).
 
 **Services (names and scope as decided)**
 
@@ -256,7 +256,8 @@ New questions that these do not answer go through §7 "Designing APIs".
 - `Network` / `ClientNetwork`: NeoForge registrations are recorded and applied in `RegisterPayloadHandlersEvent` (later registration throws); a server-to-client packet without a client handler is logged and dropped; channels are `optional()`; handlers run on the main thread.
 - `Menus`: `createBlockMenuType(factory)` / `openBlockMenu(player, title, pos, factory)`; opening data is a `BlockPos` only.
 - `Energy`: `isBattery(stack)`, `dischargeItem(container, slot, target, maxAmount)`, `pushToBlock(level, pos, side, source, maxAmount)` (side = face of the target block; the generator needs the push).
-  These services are in OMLib. OMT has no battery slot yet, but the battery methods are there (decided by the user on 2026-10-26, so that both mods use the same classes) for when one is added.
+  These services are in OMLib.
+  OMT has no battery slot yet, but the battery methods are there (decided by the user on 2026-10-26, so that both mods use the same classes) for when one is added.
   `core.energy.EnergyGroup` is an `EnergyAccess` that spreads an insert over several stores (`fill(maxAmount, StoreInserter)`); the Fabric and NeoForge 1.21.11 adapters insert through their own per-store adapters.
   OMT has no group, OpenModularLighting's panel light cluster is one.
 
@@ -320,13 +321,22 @@ The node `1.20.1-forge` follows the NeoForge setup and was worked out in OpenMod
 - **Build:** `build.forge.gradle.kts` uses `net.neoforged.moddev.legacyforge` (`legacyForge { version = forge_version }`).
   Forge 1.20.1 runs on SRG names: the released jar is `reobfJar` (what `publishMods` uploads), and other mods (Jade) come through legacy ModDevGradle's remapping configurations: dependencies are declared on a `mod…` configuration (`modCompileOnly`, built in; `modLocalRuntime`, created by `obfuscation.createRemappingConfiguration(localRuntime)`), and their remapped jars land in its parent (`compileOnly`, `localRuntime`, which `runtimeClasspath` extends).
   Declaring them on the parent instead skips the remapping (fixed on 2026-10-27: before, Jade was missing from the Forge dev runs).
-- **Mixins:** the mixin annotation processor writes `openmodularturrets.refmap.json`; the Forge build adds `"refmap"` to its copy of the shared mixin config and names the config in the jar manifest (`MixinConfigs`; Forge 1.20.1 has no `[[mixins]]` in `mods.toml`). MixinExtras (`mixinextras_version`) is jar-in-jar'd into the Forge jar only. Forge's own events cannot replace `LivingEntityMixin`: knockback happens before `hurt` records the damage source, and cancelling `LivingDropsEvent` would also drop a killed player's inventory.
-- **Data:** `convertFabricData` (a function in `omlib/build-logic`, shared with NeoForge) copies the 1.20.1 Fabric output with `"conditions"`. The node also generates `pack.mcmeta` (pack format 15) for the mod and the test mod: without one, Forge 1.20.1 loads neither's data.
-- **Entrypoints:** `OMTForge` (`@Mod`, mod bus from `FMLJavaModLoadingContext`); Forge 1.20.1 has no client-only `@Mod` classes, so it constructs `client.platform.forge.OMTForgeClient` by name on a client (main cannot see the client source set). Plugins: `ForgePlugins`, the same `@OMTPlugin.Register` / `@OMTClientPlugin.Register` scan as `NeoForgePlugins`.
-- **Services:** `ForgeNetwork` uses one `EventNetworkChannel` per packet type (named by its id, missing remote accepted, decoded on the network thread, handled on the main thread; S2C handlers dispatched like on NeoForge). `ForgeMenus` uses `IForgeMenuType` / `NetworkHooks.openScreen` (which builds the menu itself, so `BaseGuiGameTests` needs no Forge override).
-- **Capabilities:** no registration event in 1.20.1; `OMTForge` attaches `ForgeBlockCapabilities` to every `TransferHost` in `AttachCapabilitiesEvent` (`ForgeBlockCapabilities::attach`). It asks the block entity on every query (attached during construction) and keeps a side's `LazyOptional` while the block entity returns the same access object.
-- **Client:** screens and item renderers are registered in `FMLClientSetupEvent` (no events for them). Forge 1.20.1 takes item renderers only from `Item#initializeClient`, so `ForgeItemRenderer.register` sets the Forge-added `Item.renderProperties` field by reflection (same name in dev and release; the shared item classes stay loader-free). `ForgeCamoModel` is `NeoForgeCamoModel` without the ambient occlusion override (Forge 1.20.1 does not pass model data there); its colour provider reads the model data through `level.getModelDataManager()`.
-- **GameTests:** `runGameTestServer` with `forge.enabledGameTestNamespaces`; the same annotations as NeoForge (`net.minecraftforge.gametest`). Vanilla 1.20.1's `makeMockServerPlayerInLevel` breaks Forge's login handling (no netty channel); OMT's tests use the loaders' fake players instead, which work.
+- **Mixins:** the mixin annotation processor writes `openmodularturrets.refmap.json`; the Forge build adds `"refmap"` to its copy of the shared mixin config and names the config in the jar manifest (`MixinConfigs`; Forge 1.20.1 has no `[[mixins]]` in `mods.toml`).
+  MixinExtras (`mixinextras_version`) is jar-in-jar'd into the Forge jar only.
+  Forge's own events cannot replace `LivingEntityMixin`: knockback happens before `hurt` records the damage source, and cancelling `LivingDropsEvent` would also drop a killed player's inventory.
+- **Data:** `convertFabricData` (a function in `omlib/build-logic`, shared with NeoForge) copies the 1.20.1 Fabric output with `"conditions"`.
+  The node also generates `pack.mcmeta` (pack format 15) for the mod and the test mod: without one, Forge 1.20.1 loads neither's data.
+- **Entrypoints:** `OMTForge` (`@Mod`, mod bus from `FMLJavaModLoadingContext`); Forge 1.20.1 has no client-only `@Mod` classes, so it constructs `client.platform.forge.OMTForgeClient` by name on a client (main cannot see the client source set).
+  Plugins: `ForgePlugins`, the same `@OMTPlugin.Register` / `@OMTClientPlugin.Register` scan as `NeoForgePlugins`.
+- **Services:** `ForgeNetwork` uses one `EventNetworkChannel` per packet type (named by its id, missing remote accepted, decoded on the network thread, handled on the main thread; S2C handlers dispatched like on NeoForge).
+  `ForgeMenus` uses `IForgeMenuType` / `NetworkHooks.openScreen` (which builds the menu itself, so `BaseGuiGameTests` needs no Forge override).
+- **Capabilities:** no registration event in 1.20.1; `OMTForge` attaches `ForgeBlockCapabilities` to every `TransferHost` in `AttachCapabilitiesEvent` (`ForgeBlockCapabilities::attach`).
+  It asks the block entity on every query (attached during construction) and keeps a side's `LazyOptional` while the block entity returns the same access object.
+- **Client:** screens and item renderers are registered in `FMLClientSetupEvent` (no events for them).
+  Forge 1.20.1 takes item renderers only from `Item#initializeClient`, so `ForgeItemRenderer.register` sets the Forge-added `Item.renderProperties` field by reflection (same name in dev and release; the shared item classes stay loader-free).
+  `ForgeCamoModel` is `NeoForgeCamoModel` without the ambient occlusion override (Forge 1.20.1 does not pass model data there); its colour provider reads the model data through `level.getModelDataManager()`.
+- **GameTests:** `runGameTestServer` with `forge.enabledGameTestNamespaces`; the same annotations as NeoForge (`net.minecraftforge.gametest`).
+  Vanilla 1.20.1's `makeMockServerPlayerInLevel` breaks Forge's login handling (no netty channel); OMT's tests use the loaders' fake players instead, which work.
   The library jar the client and game test source sets use is the one with the dev names (classifier `dev`, published by OMLib next to the SRG-named one): the game test run has no remapping, and a Forge game test server whose mod fails to load still exits normally, so `check` also requires the "All N required tests passed" line in `run/logs/latest.log` (Forge and NeoForge build scripts).
 - Learned in OpenModularLighting: `DamageSources#source` is private in vanilla 1.20.1 (only Fabric API widens it); OMT does not use it.
 
@@ -360,7 +370,7 @@ The node `1.20.1-forge` follows the NeoForge setup and was worked out in OpenMod
 ### Publishing
 
 - Uses `me.modmuss50.mod-publish-plugin` (approved by the user), configured in `publishMods` in `omlib/build-logic/src/main/kotlin/mod-common.gradle.kts` (the loader scripts only set the jar to upload).
-- Settings in `gradle.properties`: `release_type` (release/beta/alpha), `curseforge_project_id` (224663, the old OMT page), `modrinth_project_id` (empty = Modrinth skipped).
+- Settings in `gradle.properties`: `release_type` (release/beta/alpha), `curseforge_project_id` (224663, the old OMT page), `modrinth_project_id` (`GEFsJ5uX`; empty would skip Modrinth).
 - Tokens are never committed: environment variables `CURSEFORGE_TOKEN` / `MODRINTH_TOKEN`, or `curseforge_token` / `modrinth_token` in `~/.gradle/gradle.properties`.
   Without a token the upload is a dry run (output in `versions/<v>/build/publishMods/`).
 - **Changelog** (`CHANGELOG.md`, Keep a Changelog format): every user-visible change gets a one-line entry under `## [Unreleased]` (Added / Changed / Fixed / Removed), by hand or via `./gradlew changelogEntry --type=fixed --entry="…"`.
@@ -385,12 +395,12 @@ The logic consists of:
 
 `docs/architecture.md` is the human-oriented guide to the structure (layers, flows, how to add things, known weak spots); keep it in sync when the structure changes.
 `ArchitectureTest` (`src/test/.../architecture`, ArchUnit) checks core isolation, that main never uses client code, and package cycles against its `KNOWN_CYCLES` list (a ratchet: update the list when a cycle shrinks; never add to it without asking the user).
-PMD (`gradle/pmd/ruleset.xml`, report only, active version) measures complexity and size: `versions/1.21.1/build/reports/pmd/`.
+PMD (`gradle/pmd/ruleset.xml`, report only, active version) measures complexity and size: `versions/1.21.1-fabric/build/reports/pmd/`.
 JaCoCo records coverage in the unit tests and on the game test server; `check` prints the line coverage of `core` and `api` per package (active version only).
 PIT (`./gradlew :1.21.1-fabric:pitest`, on demand, not part of `check`) runs mutation testing on `core`; surviving mutations show behaviour the tests do not pin down.
 It fails when the results get worse than the thresholds in `gradle.properties` (`pitest_*`); see `docs/architecture.md`.
 
-`./gradlew check` runs `verifyCoreIsolation`, which fails if anything under `core/` imports `net.minecraft`, `net.fabricmc`, `com.mojang`, `team.reborn` or non-core mod packages.
+`./gradlew check` runs `verifyCoreIsolation`, which fails if anything under `core/` imports `net.minecraft`, `net.fabricmc`, `net.neoforged`, `net.minecraftforge`, `com.mojang`, `team.reborn` or non-core mod packages.
 `./gradlew check` also runs `checkRecipes` (from `mod-common`): every item (item model) of the mod needs a recipe on that node, unless `recipe-exempt.txt` lists it as `<id> # <reason>`, and every recipe result of the mod's namespace must be one of its items.
 Tests live in `src/test/java` (JUnit, test-only dependency).
 
@@ -420,7 +430,7 @@ The test mod's loader entrypoints (`gametest/platform/<loader>`) run its registr
   Fake players are not on the server's player list, so the test that adds an online player by name puts one there for the (synchronous) request only (`TrustListGameTests.online`), on Fabric only: NeoForge and Forge return a read-only view of the list, and vanilla's mock players would log in for real (on the NeoForge test server Simulated sends them a payload that NeoForge refuses, which fails the test).
   Names of players who are not online go to the server's name cache: the 1.21.11 test server has one (offline mode, so the name's offline UUID), the older ones have none (not found).
   OMLib's `ConfigSync` is not covered: it only sends to clients that negotiated its channel, and the test server has none.
-- The Forge 1.20.1 game test server places the tests underground (no flat world), so a test that needs open air (the wand's sneak-click into the air) stays inside its own 8 × 8 × 8 structure, looking from one corner to the opposite one.; the solar panel test under open sky is left out there (`//? if fabric || neoforge`).
+- The Forge 1.20.1 game test server places the tests underground (no flat world), so a test that needs open air (the wand's sneak-click into the air) stays inside its own 8 × 8 × 8 structure, looking from one corner to the opposite one; the solar panel test under open sky is left out there (`//? if fabric || neoforge`).
 
 ---
 
@@ -494,38 +504,46 @@ omtteam.openmodularturrets
 ├── OMT.java                     # MOD_ID, id() helper, logger (constants only)
 ├── startup/                     # OMTStartup: shared start-up (init, registrationSteps)
 ├── api/                         # public turret API: OMTPlugin entrypoint, TurretDefinition, AmmoDefinition,
-│   └── weapon/                  # OMTApi lookups; weapon kinds (Projectile/Ray/Effect/AreaWeapon)
-├── registry/                    # ModBlocks, ModItems, ModBlockEntities, ModEntities,
-│                                # ModMenus, ModSounds, ModCreativeTabs, ModDataComponents (1.21),
-│                                # TurretRegistry (definitions, plugin loading), BuiltinTurrets
-├── block/
+│   └── weapon/                  # OMTApi lookups; weapon kinds (Projectile/Ray/Effect/Area/SelfTargetingWeapon)
+├── registry/                    # ModBlocks, ModItems, ModBlockEntities, ModEntities, ModMenus, ModSounds,
+│                                # ModCreativeTabs, ModDamageTypes; TurretRegistry (definitions, plugin loading), BuiltinTurrets
+├── block/                       # MemoryCardInteraction, ContraptionMovement
 │   ├── base/                    # TurretBaseBlock (tiers 1–5)
-│   ├── turret/                  # AbstractTurretBlock + one class per turret type
-│   └── misc/                    # lever, hard walls, fences, etc.
+│   ├── turret/                  # TurretBlock (one class for every turret type, built-in and API)
+│   ├── defense/                 # hardened blocks, walls, fences, camouflage trap (former OMPD)
+│   └── misc/                    # crank (LeverBlock), generator, inventory expanders
 ├── blockentity/
-│   ├── TurretBaseBlockEntity    # targeting, inventory, energy, upgrades, addons, permissions
-│   └── turret/                  # AbstractTurretBlockEntity + subclasses
-├── targeting/                   # TargetingSettings, TargetSelector, line-of-sight, priorities
-├── core/                        # The core logic files for turret base logic (targeting/upgrades/ticking etc.)
-├── camo/                        # CamoHost (bases + camo trap), CamoRules, CamoData, light block state properties
-├── security/                    # TrustedPlayer, AccessLevel, PermissionManager
-├── inventory/                   # base inventory, slot filters, ItemAccess (what other blocks may move)
-├── item/                        # ammo, upgrades, addons, additional items
-├── entity/projectile/           # bullets, grenades, rockets, lasers, slugs, …
-├── menu/                        # AbstractContainerMenu implementations
-├── network/                     # packets (C2S: settings/trust changes; S2C: sync)
-├── config/                      # self-written config (JSON via Gson), no library
-└── compat/                      # VersionCompat, CompatBlockEntity, CompatEntityBlock (Stonecutter-conditional code lives here)
+│   ├── TurretBaseBlockEntity    # forwards to core.base.TurretBaseLogic; inventory, energy, trust list
+│   ├── base/                    # adapters to core (BlockEntityBaseWorld, ContainerItemSlot, LivingTargetEntity)
+│   ├── turret/                  # TurretBlockEntity (one type for all turrets), TurretMount, RayWeapons, EffectWeapons
+│   ├── defense/                 # PassiveDefenseBlockEntity, CamoTrapBlockEntity
+│   └── misc/                    # GeneratorBlockEntity, LeverBlockEntity
+├── core/                        # game rules without Minecraft: base, turret, target, security (DamageRules), generator,
+│                                # camo, card, item, settings, storage, world
+├── camo/                        # CamoRules, CamoLightProperties (CamoHost, CamoData and the menu are in OMLib)
+├── security/                    # OMTOwnershipSettings (trust lists, access levels and claiming are in OMLib)
+├── inventory/                   # TurretBaseInventory, FuelContainer, AmmoRules
+├── item/                        # ammo, upgrades (per machine), addons, memory card
+├── entity/projectile/           # projectiles, TurretDamage, TurretImmunity, KillCounter
+├── menu/                        # TurretBaseMenu, GeneratorMenu
+├── network/                     # OMTPackets, BasePackets + BasePacketHandler (C2S), RayPacket (S2C)
+├── config/                      # self-written config (JSON via Gson, OMLib's machinery), no library
+├── compat/                      # SubLevelCompat (Sable), jade/ (server half); the version helpers are in OMLib
+├── mixin/                       # LivingEntityMixin
+├── platform/                    # fabric/, neoforge/, forge/: entrypoints, services, adapters (each built for its loader only)
+└── datagen/                     # recipes, loot tables, tags, damage types (Fabric only)
 
 (client source set)
 omtteam.openmodularturrets.client
 ├── OMTClient.java               # shared client start-up (loader entrypoints in client/platform/<loader>)
 ├── api/                         # OMTClientPlugin entrypoint, TurretModelRegistrar
-├── render/blockentity/          # turret renderers (rotating heads), base renderer
-├── render/entity/               # projectile renderers
-├── model/                       # Java entity-style turret models
-├── screen/                      # base GUI, configuration/targeting/trust screens
-└── network/                     # client packet handlers
+├── model/                       # Java entity-style turret models (TurretModel in the version folders)
+├── render/                      # turret and crank renderers, projectile renderers, item renderers (version folders),
+│                                # rays (effect/RayRenderer, also the ray packet), placement outline
+├── screen/                      # base GUI, configure screen, generator screen
+├── tooltip/                     # item tooltips
+├── compat/                      # ClientSubLevelCompat, jade/ (tooltips)
+└── platform/                    # fabric/, neoforge/, forge/: client entrypoints, camo models, item renderers
 ```
 
 ### Turret ↔ base relationship
@@ -594,7 +612,7 @@ The built-in turrets use the same path, so there is no special casing per turret
 - Each base stores:
   - **owner** (UUID + last known name)
   - a list of **TrustedPlayer** (UUID, name, **access level**)
-- Access levels gate actions (`core.security`):
+- Access levels gate actions (OMLib's `core.security`):
   - a low level can open the GUI / view
   - a higher level can change targeting and settings
   - the highest level can manage trusted players
@@ -621,7 +639,7 @@ The built-in turrets use the same path, so there is no special casing per turret
   Burns any furnace fuel (the loader's fuel values through the `Fuel` service; remainders like empty buckets stay in the slot) from its 9 fuel slots, using them in order.
   One fuel tick yields `generatorEnergyPerTick` (default 40 RF).
   Energy multiplier upgrades (one upgrade slot, up to 4) burn `2^n` fuel ticks per tick, so production and fuel use both scale by `2^n` while one fuel item still yields the same energy (`GeneratorLogic.multiplier`).
-  It pauses while its buffer (`generatorCapacity`, default 1,000,000) is full and pushes up to `generatorMaxOutput` (default 65,536 RF/t, a flat limit) into all neighbours via Team Reborn Energy.
+  It pauses while its buffer (`generatorCapacity`, default 1,000,000) is full and pushes up to `generatorMaxOutput` (default 65,536 RF/t, a flat limit) into all neighbours through the `Energy` service (Team Reborn Energy on Fabric, FE on NeoForge and Forge).
   GUI: 3×3 fuel grid on the left, the blue upgrade slot centred in the free area (the rest of it stays free for later slots that are not fuel slots), the flame next to the energy bar.
   Hoppers insert fuel only and take out only leftovers (empty buckets).
 - **Inventory expanders** (`InventoryExpanderBlock`, tiers 1–3, no block entity; decided with the user on 2026-10-27): they have no inventory, but every ammo slot of a turret base and fuel slot of a generator they reach holds `itemMaxStackSize × base stacks × (1 + Σ stacks)` (`core.storage.SlotCapacity`; `expanders.tier_N.stacks`, defaults 1/2/3; the base stacks are `bases.tier_N.baseAmmoStacks`, defaults 1/1/1/2/2, tiers 4 and 5 doubled with and without expanders as requested by the user on 2026-10-27, 1 on a generator).
@@ -661,7 +679,7 @@ Deliberately not optimized yet; revisit only if profiling shows a problem.
 
 1. Implement gameplay logic in `core/` (with unit tests) where possible; keep Minecraft-facing code thin.
 2. Wrap version differences in `compat/`.
-3. Add assets, lang entries and datagen entries; regenerate data for **both** versions.
+3. Add assets, lang entries and datagen entries; regenerate data for **all three** Fabric nodes (1.20.1, 1.21.1, 1.21.11).
 4. Add a `CHANGELOG.md` entry for user-visible changes.
 5. Run `./gradlew chiseledBuild`.
 
@@ -755,7 +773,7 @@ Update this checklist as work progresses.
     - [x] Slowing turret (slowness lowers the movement speed; `EffectTurretGameTests`)
     - [x] Teleporter turret (target pulled onto the turret)
     - [x] Melee turret (only reaches the 3×2×3 area around itself and its base, so it is tested with a target in reach instead of 5 blocks away)
-- [x] Publishing to CurseForge / Modrinth via Gradle (`chiseledPublish`; CurseForge 224663, Modrinth `open-modular-turrets`)
+- [x] Publishing to CurseForge / Modrinth via Gradle (`chiseledPublish`; CurseForge 224663, Modrinth `GEFsJ5uX`)
 - [x] Changelog system (`CHANGELOG.md`, `changelogEntry`, `releaseChangelog`; publish uploads the version's section)
 - [x] Generator block (new in this version; design agreed with the user, see "Power & items")
 - [x] Turret API for other mods (`api/`, `docs/turret-api.md`); built-in turrets registered through it, game test for an API turret
@@ -800,7 +818,7 @@ Update this checklist as work progresses.
 - [x] Sable / Create / Create Aeronautics stay 1.21.1-only: checked on 2026-10-26, Modrinth lists Sable and Create Aeronautics for 1.21.1 only (Create also for 1.20.1) and the Sable maven has Companion for 1.21.1 only. The 1.21.11 nodes have no `sable_*` / `create_*` properties; `SubLevelCompat` and `ClientSubLevelCompat` are limited to `>=1.21 && <1.21.11` (every block is outside a contraption), `build.neoforge.gradle.kts` leaves out `NeoForgeCreateMovement`, the Simulated mixin and its config and the Sable / Create / Simulated GameTests there; `bases.allowContraptionMovement` exists but does nothing on 1.21.11. Check again when a new Sable release appears, and add the properties and remove the exclusions then
 - [x] `chiseledBuild` on all six nodes (build, unit tests, ArchUnit, 57 game tests on each 1.21.11 node), docs (this file, `docs/architecture.md`, README) and `CHANGELOG.md`
 - [ ] Checked by hand in a 1.21.11 client on Fabric and NeoForge (`runClient`): the GUI screens, turret and crank models in the world and as items (special item models; on Fabric they need the client mixin to apply), projectiles, rays, the placement outline, camouflage and Jade
-- [ ] Publishing of the 1.21.11 nodes: they go out with the next release through `release.sh` (`chiseledPublish` covers all nodes; `publish_enabled=false` in a node's properties would keep it a dry run); never uploaded from here
+- [x] Publishing of the 1.21.11 nodes: released with the other nodes since 4.0.0-beta.10 (`chiseledPublish` covers all nodes; `publish_enabled=false` in a node's properties would keep it a dry run); never uploaded from here
 
 ### Ownership for adventure maps (requested by the user on 2026-10-25; designed step by step with the user)
 

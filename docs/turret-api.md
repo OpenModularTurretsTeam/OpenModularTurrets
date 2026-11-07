@@ -4,7 +4,7 @@ Other mods (Fabric, NeoForge and Forge) can add turrets to Open Modular Turrets 
 An added turret is a full turret: it mounts on a base, uses the base's targeting, energy, ammo, upgrades, addons and trusted players, has a config entry and shows in the OMT creative tab, in tooltips and in Jade.
 The 14 built-in turrets are registered through the same API (`registry/BuiltinTurrets.java`), so they are the reference examples.
 
-Works the same on 1.20.1 and 1.21.1 (Fabric), on 1.21.1 (NeoForge) and on 1.20.1 (Forge); only the way OMT finds your classes differs.
+Works the same on 1.20.1, 1.21.1 and 1.21.11 (Fabric), on 1.21.1 and 1.21.11 (NeoForge) and on 1.20.1 (Forge); only the way OMT finds your classes differs.
 On Fabric, add OMT as a `modCompileOnly`/`modImplementation` dependency and to `depends` in your `fabric.mod.json`.
 On NeoForge, add it as a `compileOnly`/`implementation` dependency and as a `[[dependencies.<your mod id>]]` entry in your `neoforge.mods.toml`.
 On Forge, add it as a `modCompileOnly`/`modImplementation` dependency (OMT's Forge jar uses SRG names) and as a `[[dependencies.<your mod id>]]` entry in your `mods.toml`.

@@ -3,14 +3,13 @@
 Repo for [OpenModularTurrets](https://minecraft.curseforge.com/projects/openmodularturrets) for Minecraft.
 
 Build turret bases, mount turrets on any face of them (the number depends on the tier) and keep your home safe from mobs and unwanted visitors, whether you're online or offline.
-Open Modular Turrets has long been a popular choice in PvP modpacks, and it is now available for Fabric 1.20.1, 1.21.1 and 1.21.11, and natively for NeoForge 1.21.1 and 1.21.11.
+Open Modular Turrets has long been a popular choice in PvP modpacks, and it is now available for Fabric 1.20.1, 1.21.1 and 1.21.11, and natively for NeoForge 1.21.1 and 1.21.11 and Forge 1.20.1.
 
 ## Loaders
 
 - **Fabric** for Minecraft 1.20.1, 1.21.1 and 1.21.11 (Fabric Loader + Fabric API), published to CurseForge and Modrinth.
-- **NeoForge** for Minecraft 1.21.1 and 1.21.11, built natively (no Sinytra Connector, Connector Extras or Forgified Fabric API needed).
-  This is still a test build and is not yet published; build it yourself (see "Building" below).
-- For Forge, or NeoForge on 1.20.1, run the Fabric mod through [Sinytra Connector](https://www.curseforge.com/minecraft/mc-mods/sinytra-connector), [Connector Extras](https://www.curseforge.com/minecraft/mc-mods/connector-extras) and [Forgified Fabric API](https://www.curseforge.com/minecraft/mc-mods/forgified-fabric-api).
+- **NeoForge** for Minecraft 1.21.1 and 1.21.11, built natively (no Sinytra Connector, Connector Extras or Forgified Fabric API needed), published to CurseForge and Modrinth.
+- **Forge** for Minecraft 1.20.1, built natively, published to CurseForge and Modrinth.
 
 ## Features
 
@@ -25,21 +24,20 @@ Open Modular Turrets has long been a popular choice in PvP modpacks, and it is n
 - **Passive defenses** from Open Modular Passive Defense: hardened blocks, walls, fences and the camouflage trap, which only trusted players can walk through
 - **Generator:** burns furnace fuel (9 slots) and powers adjacent turret bases and other machines; an upgrade slot multiplies production and fuel use together
 - **Turret API for other mods:** add turrets with their own weapons, ammo, models and custom hit logic; see [docs/turret-api.md](docs/turret-api.md)
-- Uses **Team Reborn Energy** on Fabric, so it works with energy from other Fabric tech mods; the NeoForge build uses its energy capability instead
-- Optional **Jade** support for turret bases and turrets, on both loaders
+- Uses **Team Reborn Energy** on Fabric, so it works with energy from other Fabric tech mods; the NeoForge and Forge builds use their energy capability (FE) instead
+- Optional **Jade** support for turret bases and turrets, on all loaders
 
 ## Requirements
 
 - Minecraft 1.20.1, 1.21.1 or 1.21.11
 - Fabric: Fabric Loader and Fabric API
 - NeoForge (1.21.1 and 1.21.11): NeoForge 21.1.x or 21.11.x, no extra mods needed
-- For Forge, or NeoForge on 1.20.1: (Neo)Forge + Sinytra Connector + Connector Extras + Forgified Fabric API
+- Forge (1.20.1): Forge 47.x, no extra mods needed
 
-## Pre-Release
+## Reporting bugs
 
-This mod is in beta.
-Expect bugs, and please report them.
-The NeoForge build is newer still (native port, not yet published) and wants extra testing.
+Version 4.0.0 is the first full release of the port.
+If you find a bug, please report it on the [issue tracker](https://github.com/OpenModularTurretsTeam/OpenModularTurrets/issues).
 
 ## Building
 
@@ -52,10 +50,11 @@ The project uses Stonecutter to build Fabric 1.20.1, 1.21.1 and 1.21.11, NeoForg
 ./gradlew :1.21.1-neoforge:runClient
 ./gradlew :1.21.11-fabric:runClient
 ./gradlew :1.21.11-neoforge:runClient
+./gradlew :1.20.1-forge:runClient
 ```
 
 See [docs/architecture.md](docs/architecture.md) for how the code is structured and how to add things, [CLAUDE.md](CLAUDE.md) for the conventions, and [CHANGELOG.md](CHANGELOG.md) for changes.
 
 ## License
 
-The projects source code is licensed under the [MIT license](LICENSE), the projects art is licenced under the [CC-BY-NC-SA 4.0 license](LICENSE-ART)
+The project's source code is licensed under the [MIT license](LICENSE), the project's art is licensed under the [CC-BY-NC-SA 4.0 license](LICENSE-ART)

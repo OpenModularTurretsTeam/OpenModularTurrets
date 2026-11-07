@@ -1,4 +1,4 @@
-# ID mapping: 1.12.2 → Fabric
+# ID mapping: 1.12.2 → 1.20.1+
 
 Old meta/damage-based variants are flattened into separate registry entries.
 
@@ -102,6 +102,7 @@ The inventory expanders of 4.x (`inventory_expander_tier_one` to `_three`, the m
 | `openmodularturrets:upgrade_meta` | 2 | `openmodularturrets:upgrade_fire_rate` |
 | `openmodularturrets:upgrade_meta` | 3 | `openmodularturrets:upgrade_range` |
 | `openmodularturrets:upgrade_meta` | 4 | `openmodularturrets:upgrade_scatter_shot` |
+| `openmodularturrets:upgrade_creative` | – | `openmodularturrets:upgrade_creative` |
 | `openmodularturrets:addon_meta` | 0 | `openmodularturrets:addon_concealer` |
 | `openmodularturrets:addon_meta` | 1 | `openmodularturrets:addon_damage_amp` |
 | `openmodularturrets:addon_meta` | 2 | *(not ported: potentia converter, no function in oldmod)* |
@@ -111,4 +112,4 @@ The inventory expanders of 4.x (`inventory_expander_tier_one` to `_three`, the m
 | `openmodularturrets:addon_meta` | 6 | `openmodularturrets:addon_solar_panel` |
 | `openmodularturrets:addon_meta` | 7 | `openmodularturrets:addon_fake_drops` |
 
-New in the Fabric port (no old ID): `openmodularturrets:generator`.
+New in the 1.20.1+ port (no old ID): the blocks `openmodularturrets:generator` and `inventory_expander_tier_one` to `_three` (see above), and the items `openmodularturrets:ownership_wand` and `upgrade_energy_multiplier` (the generator's upgrade).

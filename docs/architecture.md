@@ -6,7 +6,7 @@ It describes the code as it is; where it falls short of its own rules, the last 
 **OMLib.** Since 2026-10-27 the code that both Open Modular mods used to share is in the library OMLib (git submodule `omlib`, bundled jar-in-jar): the platform layer, the compat helpers, energy and item transfer, the config machinery and the camouflage menu.
 Where this document names those classes under `omtteam.openmodularturrets`, they are in `omtteam.omlib` with the same names and sub-packages; the README of OMLib lists them.
 
-OMT is built for Fabric (1.20.1 and 1.21.1), NeoForge (1.21.1) and Forge (1.20.1) from one source tree.
+OMT is built for Fabric (1.20.1, 1.21.1 and 1.21.11), NeoForge (1.21.1 and 1.21.11) and Forge (1.20.1) from one source tree.
 Building, running and the Stonecutter commands are in the README, `CONTRIBUTING.md` and `CLAUDE.md` (section 4).
 The turret API for other mods has its own guide: [turret-api.md](turret-api.md).
 
@@ -92,7 +92,6 @@ Packages below `omtteam.openmodularturrets` (main):
 | `core.turret` | turret types and ammo types, `TurretState` (cooldown, concealment), aim and damage math (`TurretMath`, `RayMath`, `ProjectileMath`) |
 | `core.target` | `TargetSelector`: who is a valid target and who is the best one |
 | `core.security` | `DamageRules` (who turret damage may hit); the owner, trusted players and access levels (`TrustManager`) are in OMLib |
-| `core.energy` | `EnergyStore` (the energy buffer of bases and the generator) and `EnergyAccess` (what other blocks may do with it) |
 | `core.generator`, `core.camo`, `core.card` | generator burning, camouflage light rules, memory card copy rules |
 | `core.item`, `core.settings`, `core.world` | upgrade/addon types, config value types, the world interfaces above |
 | `core.storage` | `SlotCapacity`: how much an ammo or fuel slot holds with the attached inventory expanders |
@@ -107,7 +106,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `security`, `camo` | the mod's ownership rules (`OMTOwnershipSettings`); the trust lists' Minecraft side (NBT, player lookup) is in OMLib, and camouflage rules |
 | `compat` | every 1.20.1 / 1.21.1 / 1.21.11 difference (`VersionCompat`, `CompatBlockEntity`, networking, menus; `compat.nbt.NbtCompat` for all NBT reads and `compat.block.BlockCompat` depend on Minecraft only, so any package may use them), small loader differences (`//? if fabric` / `neoforge` / `forge`), Jade (server half here, tooltips in `client.compat.jade`), and Sable contraptions (`SubLevelCompat`: poses and velocities through Sable Companion, 1.21.1 only; `client.compat.ClientSubLevelCompat` for the drawn pose) |
 | `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`); `platform.fabric` / `platform.neoforge` / `platform.forge` hold the entrypoints, the implementations and the energy/item adapters, and only compile for their loader |
-| `datagen` | recipes, loot tables, tags, damage types (generated per version; Fabric only, the NeoForge build converts the 1.21.1 output and the Forge build the 1.20.1 output) |
+| `datagen` | recipes, loot tables, tags, damage types (generated per version; Fabric only, the NeoForge builds convert the 1.21.1 and 1.21.11 output and the Forge build the 1.20.1 output) |
 
 `./gradlew dependencyMap` draws these packages and every import between them as an interactive page.
 
@@ -250,9 +249,9 @@ The source is shared; Stonecutter also has a loader axis (nodes `1.20.1-fabric`,
 
 ### Recipes, loot tables, tags
 
-Never handwrite files under `data/`: add them to the providers in `datagen` and run `./gradlew :1.21.1-fabric:runDatagen :1.20.1-fabric:runDatagen`.
+Never handwrite files under `data/`: add them to the providers in `datagen` and run `./gradlew :1.21.1-fabric:runDatagen :1.20.1-fabric:runDatagen :1.21.11-fabric:runDatagen`.
 The output is committed per version.
-The NeoForge and Forge builds have no datagen of their own: they convert the Fabric output of the same Minecraft version (`convertFabricData` in `buildSrc`, Fabric load conditions become the loader's conditions).
+The NeoForge and Forge builds have no datagen of their own: they convert the Fabric output of the same Minecraft version (`convertFabricData` in `omlib/build-logic`, Fabric load conditions become the loader's conditions).
 
 ## Rules the build checks
 
