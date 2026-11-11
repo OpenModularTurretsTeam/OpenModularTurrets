@@ -1,0 +1,67 @@
+# Runs ./gradlew check (every node's unit tests, game tests, verifyCoreIsolation, checkRecipes and the rest of check) on
+# every push to any branch and on every pull request.
+name: check
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+concurrency:
+  group: check-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      # The omlib submodule (url ../OMLib.git): the commit the branch records must be pushed to OMLib
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      # Gradle runs on 25; the nodes compile with 17 (1.20.1) and 21 (1.21.x). Installing them here spares foojay the
+      # download; Gradle finds them through the JAVA_HOME_<n>_X64 variables (org.gradle.java.installations.fromEnv below).
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: |
+            17
+            21
+            25
+
+      # Caches ~/.gradle (wrapper, dependencies, Loom's Minecraft jars); written on pushes, read on pull requests
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+      # The library as built by omlib/tools/bootstrap.sh (all six nodes, with its .stamp), per submodule commit
+      - name: Find the omlib commit
+        id: omlib
+        run: echo "commit=$(git rev-parse HEAD:omlib)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v6
+        with:
+          path: omlib/build/maven
+          key: omlib-maven-${{ steps.omlib.outputs.commit }}
+
+      - name: Check all nodes
+        run: >
+          ./gradlew check --continue --console=plain
+          -Porg.gradle.java.installations.fromEnv=JAVA_HOME_17_X64,JAVA_HOME_21_X64
+
+      - name: Upload reports
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: reports
+          path: |
+            versions/*/build/reports/
+            versions/*/build/run/gameTest/crash-reports/
+            versions/*/build/run/gameTest/logs/
+            versions/*/run/crash-reports/
+            versions/*/run/logs/
+          if-no-files-found: ignore
