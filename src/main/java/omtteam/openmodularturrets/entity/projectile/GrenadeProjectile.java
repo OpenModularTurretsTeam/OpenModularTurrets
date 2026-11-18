@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -54,8 +55,9 @@ public class GrenadeProjectile extends TurretProjectile {
 
                     if (canDamageEntity(entity)) {
                         if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
-                        entity.attackEntityFrom(new NormalDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), damage * 0.9F);
-                        entity.attackEntityFrom(new ArmorBypassDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), damage * 0.1F);
+                        ProjectileMath.Split split = ProjectileMath.grenadeSplit(damage);
+                        entity.attackEntityFrom(new NormalDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), split.normal());
+                        entity.attackEntityFrom(new ArmorBypassDamageSource("grenade", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), split.armorBypass());
                         if (damage > 0) notifyHit(entity);
                         entity.hurtResistantTime = -1;
                     }

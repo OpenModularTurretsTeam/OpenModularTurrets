@@ -21,6 +21,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import omtteam.openmodularturrets.api.weapon.ProjectileWeapon;
 import omtteam.openmodularturrets.core.turret.ProjectileMath;
+import omtteam.openmodularturrets.core.world.Vector3;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.Nullable;
@@ -119,7 +120,7 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
 
     @Override
     public void onUpdate() {
-        if (this.ticksExisted > 40) {
+        if (this.ticksExisted > ProjectileMath.MAX_AGE) {
             this.setDead();
             return;
         }
@@ -164,23 +165,19 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
 
         this.rotationPitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * 0.2F;
         this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
-        float f1 = 0.99F;
-        float f2 = this.getGravityVelocity();
-
-        if (this.isInWater()) {
+        boolean inWater = this.isInWater();
+        if (inWater) {
             for (int j = 0; j < 4; ++j) {
                 this.getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
             }
-            f1 = 0.8F;
         }
 
-        this.motionX *= f1;
-        this.motionY *= f1;
-        this.motionZ *= f1;
-
-        if (!this.hasNoGravity()) {
-            this.motionY -= f2;
-        }
+        // drag (stronger in water) and gravity, as the core predicts the flight for aiming
+        Vector3 next = ProjectileMath.nextMotion(new Vector3(this.motionX, this.motionY, this.motionZ), inWater,
+                this.hasNoGravity(), this.getGravityVelocity());
+        this.motionX = next.x();
+        this.motionY = next.y();
+        this.motionZ = next.z();
 
         this.setPosition(this.posX, this.posY, this.posZ);
     }
