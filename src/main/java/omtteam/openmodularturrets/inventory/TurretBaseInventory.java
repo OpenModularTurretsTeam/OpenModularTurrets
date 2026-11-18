@@ -6,8 +6,8 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import omtteam.omlib.inventory.LargeStackContainer;
-import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.core.base.BaseTier;
+import omtteam.openmodularturrets.core.storage.AmmoSort;
 import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.item.AddonItem;
 import omtteam.openmodularturrets.item.TurretBaseUpgradeItem;
@@ -15,8 +15,8 @@ import omtteam.openmodularturrets.item.UpgradeItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -111,68 +111,54 @@ public class TurretBaseInventory implements LargeStackContainer {
     }
 
     /**
-     * Sorts the ammo slots (the GUI's sort button): equal items merge into as few slots as their limit allows, then
-     * Minecraft's items come first, Open Modular Turrets' next and other mods' last, each ordered by registry name;
-     * empty slots end up last. Items of one kind with different data keep their order. Leaves the slots as they are if
-     * the merged items would need more than {@link #AMMO_COUNT} slots (slots above their limit after an expander was
-     * removed).
+     * Sorts the ammo slots (the GUI's sort button) with the core's {@link AmmoSort}: equal items merge into as few
+     * slots as their limit allows, then Minecraft's items come first, Open Modular Turrets' next and other mods' last,
+     * each ordered by registry name; empty slots end up last. Items of one kind with different data keep their order.
+     * Leaves the slots as they are if the merged items would need more than {@link #AMMO_COUNT} slots (slots above their
+     * limit after an expander was removed).
      */
     public void sortAmmo() {
-        List<AmmoKind> kinds = new ArrayList<>();
+        List<AmmoSort.Stack<ItemStack>> stacks = new ArrayList<>();
         for (int slot = AMMO_START; slot < AMMO_START + AMMO_COUNT; slot++) {
             ItemStack stack = items.get(slot);
-            if (stack.isEmpty()) continue;
-            AmmoKind kind = kinds.stream().filter(k -> sameItem(k.item, stack)).findFirst().orElse(null);
-            if (kind == null) {
-                kinds.add(new AmmoKind(stack.copyWithCount(1), stack.getCount()));
-            } else {
-                kind.count += stack.getCount();
-            }
+            if (!stack.isEmpty()) stacks.add(new AmmoSort.Stack<>(stack, stack.getCount()));
         }
-        kinds.sort(Comparator.comparingInt((AmmoKind kind) -> namespaceRank(kind.item)).thenComparing(kind -> itemName(kind.item)));
-        List<ItemStack> sorted = new ArrayList<>();
-        for (AmmoKind kind : kinds) {
-            int limit = getSlotLimit(AMMO_START, kind.item);
-            for (long left = kind.count; left > 0; left -= limit) {
-                sorted.add(kind.item.copyWithCount((int) Math.min(left, limit)));
-            }
-        }
-        if (sorted.size() > AMMO_COUNT) return;
+        Optional<List<AmmoSort.Stack<ItemStack>>> sorted = AmmoSort.sort(stacks, AMMO_COUNT, ammoItems);
+        if (sorted.isEmpty()) return;
         for (int i = 0; i < AMMO_COUNT; i++) {
-            items.set(AMMO_START + i, i < sorted.size() ? sorted.get(i) : ItemStack.EMPTY);
+            items.set(AMMO_START + i, i < sorted.get().size()
+                    ? sorted.get().get(i).item().copyWithCount(sorted.get().get(i).count()) : ItemStack.EMPTY);
         }
         setChanged();
     }
 
-    /** One kind of ammo while sorting: the item with its data, and how many there are in all slots. */
-    private static final class AmmoKind {
-        private final ItemStack item;
-        private long count;
-
-        private AmmoKind(ItemStack item, long count) {
-            this.item = item;
-            this.count = count;
+    /** What {@link AmmoSort} needs to know about the ammo in this inventory. */
+    private final AmmoSort.Items<ItemStack> ammoItems = new AmmoSort.Items<>() {
+        @Override
+        public boolean isSameKind(ItemStack a, ItemStack b) {
+            //? if >=1.21 {
+            return ItemStack.isSameItemSameComponents(a, b);
+            //?} else {
+            /*return ItemStack.isSameItemSameTags(a, b);
+            *///?}
         }
-    }
 
-    private static boolean sameItem(ItemStack a, ItemStack b) {
-        //? if >=1.21 {
-        return ItemStack.isSameItemSameComponents(a, b);
-        //?} else {
-        /*return ItemStack.isSameItemSameTags(a, b);
-        *///?}
-    }
+        @Override
+        public String registryName(ItemStack stack) {
+            return BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();
+        }
 
-    /** 0 for Minecraft's items, 1 for Open Modular Turrets', 2 for other mods'. */
-    private static int namespaceRank(ItemStack stack) {
-        String namespace = BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace();
-        if (namespace.equals("minecraft")) return 0;
-        return namespace.equals(OMT.MOD_ID) ? 1 : 2;
-    }
+        /** Every item has its own registry name here, so items with the same name keep their order. */
+        @Override
+        public String variantName(ItemStack stack) {
+            return "";
+        }
 
-    private static String itemName(ItemStack stack) {
-        return BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();
-    }
+        @Override
+        public int slotLimit(ItemStack stack) {
+            return getSlotLimit(AMMO_START, stack);
+        }
+    };
 
     public NonNullList<ItemStack> getItems() {
         return items;
