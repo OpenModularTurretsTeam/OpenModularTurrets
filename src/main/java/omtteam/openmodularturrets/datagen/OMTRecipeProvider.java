@@ -2,6 +2,7 @@ package omtteam.openmodularturrets.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.tags.ItemTags;
@@ -11,7 +12,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import omtteam.omlib.compat.CommonTags;
+import omtteam.openmodularturrets.compat.ModuleEnabledCondition;
 import omtteam.openmodularturrets.core.turret.TurretType;
+import omtteam.openmodularturrets.platform.fabric.FabricModuleEnabledCondition;
 import omtteam.openmodularturrets.registry.ModItems;
 
 import java.util.List;
@@ -30,7 +33,8 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * Crafting recipes, ported from the 1.12.2 {@code *_vanilla.json} recipes (ore dictionary entries become {@code c:}
- * tags). The EnderIO/Mekanism variants are not ported.
+ * tags). The EnderIO/Mekanism variants are not ported. Upgrade and addon recipes carry a {@link ModuleEnabledCondition}:
+ * they load only while the upgrade or addon is enabled in the config.
  * <p>
  * The recipes themselves are in {@link Recipes}, the same on every version; only the way into it differs.
  */
@@ -107,6 +111,8 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
 
         private void generate() {
             Consumer<ShapedRecipeBuilder> save = builder -> builder.save(output);
+            Consumer<ShapedRecipeBuilder> saveModule = builder -> builder.save(withConditions(output,
+                    FabricModuleEnabledCondition.of(BuiltInRegistries.ITEM.getKey(builder.getResult()).getPath())));
             ammo(save);
             intermediates(save);
             tieredIntermediates(save);
@@ -114,8 +120,8 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
             turrets(save);
             misc(save);
             passiveDefense(save);
-            upgrades(save);
-            addons(save);
+            upgrades(saveModule);
+            addons(saveModule);
         }
 
         /** 1.12.2 {@code intermediate_regular_0_vanilla.json}. */

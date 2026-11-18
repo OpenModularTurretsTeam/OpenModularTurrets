@@ -11,6 +11,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import omtteam.openmodularturrets.OMT;
+import omtteam.openmodularturrets.core.item.AddonType;
+import omtteam.openmodularturrets.core.item.GeneratorUpgradeType;
+import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
+import omtteam.openmodularturrets.core.item.UpgradeType;
 import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.TurretType;
 
@@ -42,6 +46,12 @@ public class ConfigData {
     public PassiveDefense passiveDefense = new PassiveDefense();
     @Comment("Inventory expanders per tier.")
     public Expanders expanders = new Expanders();
+    @Comment("Enable or disable upgrades. A disabled upgrade has no recipe (needs a restart) and does nothing in a "
+            + "machine; machines and tooltips mark it.")
+    public Upgrades upgrades = new Upgrades();
+    @Comment("Enable or disable addons. A disabled addon has no recipe (needs a restart) and does nothing in a turret "
+            + "base; bases and tooltips mark it.")
+    public Addons addons = new Addons();
 
     /** Clamps annotated ranges, then validates and parses the lists. */
     void validate(ConfigValidator v) {
@@ -395,6 +405,73 @@ public class ConfigData {
                 case 2 -> tierTwo;
                 case 3 -> tierThree;
                 default -> throw new IllegalArgumentException("Invalid inventory expander tier: " + tier);
+            };
+        }
+    }
+
+    /** Switches of the upgrades of every machine (turret base and generator). */
+    public static class Upgrades {
+        @Comment("Accuracy upgrade (turret base).")
+        public boolean accuracy = true;
+        @Comment("Efficiency upgrade (turret base).")
+        public boolean efficiency = true;
+        @Comment("Fire rate upgrade (turret base).")
+        public boolean fireRate = true;
+        @Comment("Range upgrade (turret base).")
+        public boolean range = true;
+        @Comment("Scattershot upgrade (turret base).")
+        public boolean scatterShot = true;
+        @Comment("Creative upgrade (turret base).")
+        public boolean creative = true;
+        @Comment("Energy multiplier upgrade (generator).")
+        public boolean energyMultiplier = true;
+
+        /** Whether the upgrade works and can be crafted. */
+        public boolean isEnabled(UpgradeType type) {
+            if (type instanceof TurretBaseUpgradeType upgrade) {
+                return switch (upgrade) {
+                    case ACCURACY -> accuracy;
+                    case EFFICIENCY -> efficiency;
+                    case FIRE_RATE -> fireRate;
+                    case RANGE -> range;
+                    case SCATTERSHOT -> scatterShot;
+                    case CREATIVE -> creative;
+                };
+            }
+            if (type instanceof GeneratorUpgradeType upgrade) {
+                return switch (upgrade) {
+                    case ENERGY_MULTIPLIER -> energyMultiplier;
+                };
+            }
+            return true;
+        }
+    }
+
+    /** Switches of the turret base addons (those with an item). */
+    public static class Addons {
+        @Comment("Concealer addon.")
+        public boolean concealer = true;
+        @Comment("Damage amplifier addon.")
+        public boolean damageAmp = true;
+        @Comment("Recycler addon.")
+        public boolean recycler = true;
+        @Comment("Redstone reactor addon.")
+        public boolean redstoneReactor = true;
+        @Comment("Solar panel addon.")
+        public boolean solarPanel = true;
+        @Comment("Fake drops addon.")
+        public boolean fakeDrops = true;
+
+        /** Whether the addon works and can be crafted; addons without an item have no switch. */
+        public boolean isEnabled(AddonType type) {
+            return switch (type) {
+                case CONCEALER -> concealer;
+                case DAMAGE_AMP -> damageAmp;
+                case RECYCLER -> recycler;
+                case REDSTONE_REACTOR -> redstoneReactor;
+                case SOLAR_PANEL -> solarPanel;
+                case FAKE_DROPS -> fakeDrops;
+                case POTENTIA, SERIAL_PORT -> true;
             };
         }
     }

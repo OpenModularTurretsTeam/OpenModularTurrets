@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Added
+
+- Config sections `upgrades` and `addons` switch each upgrade and addon off: it loses its recipe and does nothing in a machine, which shows it with a red slot frame, a "no" symbol over the icon and a red tooltip line
+
 ## [4.0.0] - 2026-11-03
 
 ### Added

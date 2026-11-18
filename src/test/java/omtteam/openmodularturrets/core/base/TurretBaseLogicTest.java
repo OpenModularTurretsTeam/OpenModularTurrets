@@ -393,6 +393,83 @@ class TurretBaseLogicTest {
         }
     }
 
+    /** Upgrades and addons switched off in the config stay in their slots but count as not installed. */
+    @Nested
+    class DisabledModules {
+        @Test
+        void disabledUpgradeDoesNothing() {
+            TurretBaseLogic logic = base(5);
+            upgrade(0, TurretBaseUpgradeType.RANGE, 2);
+            upgrade(1, TurretBaseUpgradeType.FIRE_RATE, 2);
+            settings.disabledUpgrades.add(TurretBaseUpgradeType.RANGE);
+            assertEquals(0, logic.getUpgradeCount(TurretBaseUpgradeType.RANGE));
+            assertEquals(18, logic.getRange(TurretType.MACHINE_GUN_TURRET));
+            assertEquals(2, logic.getUpgradeCount(TurretBaseUpgradeType.FIRE_RATE), "other upgrades still work");
+            settings.disabledUpgrades.clear();
+            assertEquals(18 + 2 * 2, logic.getRange(TurretType.MACHINE_GUN_TURRET), "works again once enabled");
+        }
+
+        @Test
+        void disabledCreativeUpgradeNeedsAmmoAndEnergy() {
+            TurretBaseLogic logic = base(5);
+            tick(logic, 5);
+            upgrade(0, TurretBaseUpgradeType.CREATIVE, 1);
+            settings.disabledUpgrades.add(TurretBaseUpgradeType.CREATIVE);
+            assertFalse(logic.hasCreativeUpgrade());
+            assertEquals(Optional.of(AmmoType.BULLET), logic.getRequiredAmmo(TurretType.MACHINE_GUN_TURRET));
+            logic.tick(6);
+            assertEquals(0, logic.getEnergy().getAmount());
+        }
+
+        @Test
+        void disabledAddonsDoNothing() {
+            TurretBaseLogic logic = base(2);
+            addon(0, AddonType.DAMAGE_AMP, 2);
+            addon(1, AddonType.FAKE_DROPS, 2);
+            settings.disabledAddons.add(AddonType.DAMAGE_AMP);
+            settings.disabledAddons.add(AddonType.FAKE_DROPS);
+            assertEquals(0, logic.getDamageAmpLevel());
+            assertEquals(0, logic.getDamageAmpBonus(TurretType.MACHINE_GUN_TURRET), 1e-9);
+            assertEquals(TurretBaseLogic.NO_LOOT, logic.getLootingLevel(3));
+        }
+
+        @Test
+        void disabledConcealerDoesNotConceal() {
+            TurretBaseLogic logic = base(2);
+            addon(0, AddonType.CONCEALER, 1);
+            settings.disabledAddons.add(AddonType.CONCEALER);
+            logic.onInventoryChanged();
+            assertFalse(logic.isConcealingTurrets());
+        }
+
+        @Test
+        void disabledGeneratorAddonsGenerateNothing() {
+            TurretBaseLogic logic = base(2);
+            addon(0, AddonType.REDSTONE_REACTOR, 1);
+            addon(1, AddonType.SOLAR_PANEL, 1);
+            settings.disabledAddons.add(AddonType.REDSTONE_REACTOR);
+            settings.disabledAddons.add(AddonType.SOLAR_PANEL);
+            FakeSlot blocks = FakeSlot.fuel(ReactorFuel.REDSTONE_BLOCK, 1);
+            ammoSlot(0, blocks);
+            world.solar = true;
+            tick(logic, 20);
+            assertEquals(0, logic.getEnergy().getAmount());
+            assertEquals(1, blocks.count, "the reactor burns no fuel");
+        }
+
+        @Test
+        void disabledRecyclerNeverSavesAmmo() {
+            settings.disabledAddons.add(AddonType.RECYCLER);
+            TurretBaseLogic logic = base(2);
+            addon(0, AddonType.RECYCLER, 1);
+            FakeSlot potatoes = FakeSlot.ammo(AmmoType.POTATO, 5);
+            ammoSlot(0, potatoes);
+            random.value = 0;
+            assertFalse(logic.drawAmmo(TurretType.POTATO_CANNON_TURRET).orElseThrow().recycled());
+            assertEquals(4, potatoes.count);
+        }
+    }
+
     @Nested
     class Neighbours {
         @Test

@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
+import omtteam.openmodularturrets.client.render.DisabledModuleOverlay;
 import omtteam.omlib.client.compat.ClientCompat;
 import omtteam.omlib.client.compat.ClientNetworkCompat;
 import omtteam.openmodularturrets.core.base.TargetingSettings;
@@ -161,6 +162,7 @@ public class TurretBaseScreen extends LargeStackScreen<TurretBaseMenu> {
         ClientCompat.blit(graphics, texture, leftPos + 153, topPos + 17, 178, 17, 14, 51);
         int u = ENERGY_FILL_U[random.nextInt(ENERGY_FILL_U.length)];
         ClientCompat.blit(graphics, texture, leftPos + 153, topPos + 17 + 51 - filled, u, 68 - filled, 14, filled);
+        DisabledModuleOverlay.renderSlotFrames(graphics, menu, leftPos, topPos);
     }
 
     @Override
