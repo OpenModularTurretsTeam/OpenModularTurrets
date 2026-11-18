@@ -67,6 +67,14 @@ tasks.named("test") {
 
 // --- core isolation ----------------------------------------------------------------------------
 
+// The mod's base package (omtteam.omlib, omtteam.openmodularturrets, omtteam.ompd) and its core
+def basePackage = group_id.toString()
+def corePackage = "${basePackage}.core".toString()
+def corePath = corePackage.replace('.', '/')
+// The core of OMLib and OMT comes from the shared core (OpenModularCore, which runs these checks itself), so the
+// core checks below (isolation, coverage, mutation testing) only run in a mod that still has a core package of its own
+def hasCore = { sourceSets.main.java.srcDirs.any { new File(it, corePath).isDirectory() } }
+
 // core/ holds the game rules as plain Java: only java.*, javax.annotation.* and core packages
 // (the mod's own and OMLib's) may be used there
 tasks.register("verifyCoreIsolation") {
@@ -97,12 +105,11 @@ tasks.register("verifyCoreIsolation") {
         }
     }
 }
-tasks.named("check") { dependsOn "verifyCoreIsolation" }
-
-// The mod's base package (omtteam.omlib, omtteam.openmodularturrets, omtteam.ompd) and its core
-def basePackage = group_id.toString()
-def corePackage = "${basePackage}.core".toString()
-def corePath = corePackage.replace('.', '/')
+tasks.named("check") {
+    if (hasCore()) {
+        dependsOn "verifyCoreIsolation"
+    }
+}
 
 // --- Test coverage (JaCoCo): check prints the line coverage of core ----------------------------
 
@@ -156,7 +163,11 @@ tasks.named("jacocoTestReport") {
         println "  Report: ${reports.html.outputLocation.get().asFile.toURI()}index.html"
     }
 }
-tasks.named("check") { dependsOn "jacocoTestReport" }
+tasks.named("check") {
+    if (hasCore()) {
+        dependsOn "jacocoTestReport"
+    }
+}
 
 // --- Mutation testing (PIT): ./gradlew pitest, on demand --------------------------------------
 
@@ -188,11 +199,11 @@ tasks.register("pitest", JavaExec) {
     // a changed threshold runs PIT again instead of keeping the last result
     inputs.property("mutationThreshold", (project.findProperty("pitest_mutation_threshold") ?: "").toString())
     onlyIf {
-        boolean hasCore = sourceSets.main.java.srcDirs.any { new File(it, corePath).isDirectory() }
-        if (!hasCore) {
+        if (!hasCore()) {
             logger.lifecycle("pitest: ${project.name} has no core package, nothing to mutate")
+            return false
         }
-        return hasCore
+        return true
     }
     classpath = configurations.pitest + sourceSets.test.runtimeClasspath
     mainClass = "org.pitest.mutationtest.commandline.MutationCoverageReport"
