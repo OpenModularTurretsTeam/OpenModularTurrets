@@ -1,5 +1,7 @@
 package omtteam.openmodularturrets.core.settings;
 
+import omtteam.openmodularturrets.core.item.AddonType;
+import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.turret.TurretType;
 
 import java.util.Set;
@@ -22,6 +24,12 @@ public interface LogicSettings {
      * @param tier 1–3
      */
     int expanderStacks(int tier);
+
+    /** {@code upgrades.<name>}: a disabled upgrade counts as not installed. */
+    boolean upgradeEnabled(TurretBaseUpgradeType type);
+
+    /** {@code addons.<name>}: a disabled addon counts as not installed. */
+    boolean addonEnabled(AddonType type);
 
     /** {@code miscellaneous.solarPanelAddonGen}. */
     int solarPanelGeneration();

@@ -75,6 +75,10 @@ public class AddonMetaItem extends Item {
         if (stack.getMetadata() == REMOVED_POTENTIA_META) {
             return;
         }
+        // first, so it shows without shift
+        if (ModuleToggles.isDisabled(stack)) {
+            tooltip.add(TextFormatting.RED + safeLocalize("tooltip.openmodularturrets.module_disabled"));
+        }
         if (!(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
             tooltip.add(GeneralUtil.getShiftDetail());
         } else {

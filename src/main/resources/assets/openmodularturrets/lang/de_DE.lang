@@ -221,6 +221,7 @@ tooltip.openmodularturrets.upgrade.creative.b=und Türme dieser Basis verbrauche
 tooltip.openmodularturrets.upgrade.creative.flavour=Unendlich Energie, unendlich Kugeln.
 tooltip.openmodularturrets.upgrade.machine.turret_base=Passt in: Turmbasis
 tooltip.openmodularturrets.upgrade.machine.generator=Passt in: Generator
+tooltip.openmodularturrets.module_disabled=In der Konfiguration deaktiviert: ohne Wirkung
 
 text.openmodularturrets.turret.ammo.label=Munition für Türme
 text.openmodularturrets.turret.ammo.blazing_clay=Glühender Ton für den Feuer Turm.

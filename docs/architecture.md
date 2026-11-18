@@ -93,7 +93,7 @@ Packages below `omtteam.openmodularturrets`:
 | `entity.projectile` | the projectiles, `TurretDamage` (damage rules, hit tags, kill counting, the fake drops addon), `TurretImmunity`, `OMTFakePlayer` |
 | `item`, `inventory`, `container` | items (ammo: the 3.x `AmmoMetaItem` and one `AmmoItem` per new ammo type, the crossbow bolt; upgrades, addons, intermediates, the memory card: `MemoryCardInteraction`, `MemoryCardNbt`); the base's slots and rules (`TurretBaseInventory`, `AmmoRules`; the ammo slots are OMLib large-stack slots); the container menus (OMLib `LargeStackContainer`s, the slot capacity synced as a window value) |
 | `network` | `BasePackets` and `BasePacketHandler` (C2S requests of the base GUIs, always re-validated), `MessageTurretBase` and `MessageUpdateTurret` (S2C sync), `OMTNetworkingHandler` |
-| `config` | `OMTConfig` (Forge `@Config`), `ConfigLogicSettings`, `ConfigMigration` (runs the `ConfigMigrationSteps` newer than the file's `general.configVersion`), `AddonTurretConfig` (stats of other mods' turrets), `DisposableAmmo`, `RecipeConfigFactory` |
+| `config` | `OMTConfig` (Forge `@Config`), `ConfigLogicSettings`, `ConfigMigration` (runs the `ConfigMigrationSteps` newer than the file's `general.configVersion`), `AddonTurretConfig` (stats of other mods' turrets), `DisposableAmmo`, `RecipeConfigFactory`, `ModuleEnabledConditionFactory` (recipe conditions) |
 | `fixes` | `MissingIds` (renamed or removed ids), the data fixers `TENameFix`, `TurretTileEntityFix`, `GeneratorTileEntityFix` |
 | `handler` | `OMTEventHandler` (loot, config, login), `OMTGuiHandler` (GUI ids) |
 | `compat` | JEI, Hwyla (the lines come from `TurretBaseOverlay` / `TurretOverlay`, which the blocks also give The One Probe), ComputerCraft (`TurretBasePeripheral`), OpenComputers; `compat.computer.BaseComputerCommands` is what both computer mods share |
@@ -190,6 +190,8 @@ The full list is in [turret-api.md](turret-api.md).
 
 Upgrades belong to one machine.
 Add a constant to the machine's enum (`core.item.TurretBaseUpgradeType`, `AddonType` or `GeneratorUpgradeType`), register the item in `ModItems`, and implement the effect in the machine's logic; its slots accept only its own upgrades.
+Give it a switch in `OMTConfig.ConfigUpgrades` or `ConfigAddons` (field and `isEnabled` case): a disabled one counts as not installed (`TurretBaseLogic.getUpgradeCount` / `getAddonCount` ask `LogicSettings.upgradeEnabled` / `addonEnabled`; another machine asks `item.ModuleToggles`), and its recipe JSONs need the condition `openmodularturrets:module_enabled` with the item's 1.20.1+ name in `"items"` (`config.ModuleEnabledConditionFactory`; `ModuleEnabledConditionFactoryTest` checks every upgrade and addon recipe).
+The client marks disabled ones by itself: a red slot frame in the machine GUIs (`client.render.DisabledModuleOverlay`) and the barrier sprite over the icon in GUIs (`client.model.DisabledModuleModel`, a wrapper of the item models; 1.12 has no item decoration hook).
 
 ### A config value
 
