@@ -37,6 +37,9 @@ import omtteam.omlib.block.BlockAbstractCamoTileEntity;
 import omtteam.omlib.block.UnownedMarker;
 import omtteam.omlib.compat.theoneprobe.TOPCompatibility;
 import omtteam.omlib.compat.theoneprobe.TOPInfoModifier;
+import omtteam.omlib.core.security.PlayerInfo;
+import omtteam.omlib.core.security.TrustManager;
+import omtteam.omlib.core.security.TrustedPlayer;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.player.Player;
 import omtteam.omlib.util.player.PlayerUtil;
@@ -54,6 +57,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import static mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoProvider.showStandardBlockInfo;
@@ -161,6 +165,7 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             TurretBase base = (TurretBase) world.getTileEntity(pos);
             // Open GUI
             if (!player.isSneaking() && base != null) {
+                refreshName(base, PlayerUtil.getPlayerInfo(player));
                 if (PlayerUtil.canPlayerAccessBlock(player, base)) {
                     player.openGui(Reference.MOD_ID, 1, world, pos.getX(), pos.getY(), pos.getZ());
                 } else {
@@ -169,6 +174,29 @@ public class BlockTurretBase extends BlockAbstractCamoTileEntity implements IHas
             }
         }
         return true;
+    }
+
+    /**
+     * Updates the stored name of the owner or of a trusted player who was renamed, before the access check (as 1.20.1,
+     * 1.21.1 and 1.21.11 do on right-click): in offline mode names are matched, so a stale name would still match
+     * whoever takes it next. The owner is kept by the tile entity, which hands it to the trust list.
+     */
+    static void refreshName(TurretBase base, PlayerInfo info) {
+        TrustManager trust = base.getTrustManager().core();
+        Player owner = base.getOwnerOrNull();
+        boolean changed = false;
+        if (owner != null && info.uuid().equals(owner.getUuid()) && !info.name().equals(owner.getName())) {
+            base.setOwner(new Player(owner.getUuid(), info.name(), owner.getTeamName()));
+            changed = true;
+        }
+        Optional<TrustedPlayer> entry = trust.getTrustedPlayer(info.uuid());
+        if (entry.isPresent() && !entry.get().getName().equals(info.name())) {
+            changed = true;
+        }
+        trust.refreshName(info);
+        if (changed) {
+            base.syncToClient();
+        }
     }
 
     @Override

@@ -8,6 +8,14 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ## [Unreleased]
 
+### Changed
+
+- The game rules (`omtteam.openmodularturrets.core`) come from the shared core OpenModularCore 1.0.0, the same on every Minecraft version, and are part of the OMT jar
+
+### Fixed
+
+- Right-clicking a turret base updates the stored name of its owner or of a trusted player who was renamed, so a stale name no longer matches another player in offline mode, as on 1.20.1, 1.21.1 and 1.21.11
+
 ## [4.0.1] - 2026-11-04
 
 ### Changed
