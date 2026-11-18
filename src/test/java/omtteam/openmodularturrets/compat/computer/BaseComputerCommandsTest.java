@@ -54,6 +54,14 @@ class BaseComputerCommandsTest {
         assertEquals(EnumAccessLevel.OPEN_GUI, level("friend"));
     }
 
+    /** The trust functions change the list through OMLib's facade, which calls the core's change methods. */
+    @Test
+    void removeTrustedPlayerRemovesTheEntry() {
+        assertArrayEquals(new Object[]{true}, commands.call(Command.removeTrustedPlayer, new Object[]{"FRIEND"}));
+        assertNull(base.getTrustManager().getTrustedPlayer("friend"));
+        assertArrayEquals(new Object[]{"Not found!"}, commands.call(Command.changeAccessLevel, new Object[]{"friend", 1.0}));
+    }
+
     @Test
     void invalidAccessLevelChangesNothing() {
         assertArrayEquals(new Object[]{"Invalid Access Level!"},
