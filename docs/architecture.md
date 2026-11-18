@@ -15,6 +15,8 @@ OMT requires OMLib (`required-after:omlib`), which provides ownership and trust 
 A **turret base** is the brain: it owns targeting, ammo, energy, upgrades, addons and the list of trusted players.
 **Turrets** mounted on its six faces are thin: they aim at the target their base picked, keep their cooldown and fire.
 All game rules (who is a target, how much a shot costs, what an upgrade does, who may change what) are plain Java in `core`, without any Minecraft class, so they are unit-tested in milliseconds.
+The core is not part of this repository: it comes from the shared core, [OpenModularCore](https://github.com/OpenModularTurretsTeam/OpenModularCore) (module `omt-core-j8`, version `core_version` in `gradle.properties`, from JitPack), the same rules as on every other Minecraft version, downgraded to Java 8.
+The OMT jars carry its classes (`omtteam/openmodularturrets/core`) and the stubs of the Java 9+ API it uses (`omtteam/openmodularturrets/jvmdg`); OMLib's core (`omlib-core-j8`) comes with OMLib.
 The Minecraft-facing code around it translates between the game and the core and is kept as thin as possible.
 
 ## Layers
@@ -24,7 +26,7 @@ flowchart TB
     client["client<br/>GUIs, renderers, turret models, client packet handlers<br/><i>client only, via ClientProxy</i>"]
     game["game layer<br/>blocks, tile entities, items, containers, network,<br/>registry, config, projectiles, api, fixes"]
     compat["compat<br/>JEI, Hwyla, ComputerCraft, OpenComputers"]
-    core["core<br/>game rules, plain Java"]
+    core["core (OpenModularCore)<br/>game rules, plain Java"]
     omlib["OMLib<br/>ownership, trust, abstract blocks, camouflage, energy"]
     client --> game
     compat --> game
@@ -36,7 +38,7 @@ flowchart TB
 An arrow means "may use".
 The other directions are forbidden and checked by the build (see [Rules the build checks](#rules-the-build-checks)):
 
-- **core** uses only Java, itself and OMLib's `core`: no Minecraft, Forge, `com.mojang` or non-core packages.
+- **core** uses only Java, itself and OMLib's `core`: no Minecraft, Forge, `com.mojang` or non-core packages (checked in OpenModularCore).
 - **common code** never uses **client** code: client classes do not exist on a dedicated server.
   Forge 1.12 dev environments have no separate client source set, so `client` is a package; common code reaches it only through the proxy (`@SidedProxy`: `CommonProxy`, `client.ClientProxy`) or `@SideOnly` methods.
 - The mod class, `registry` and `handler` are on top and may use everything; nothing else imports the mod class or `registry` (registration only).
@@ -46,7 +48,7 @@ The other directions are forbidden and checked by the build (see [Rules the buil
 ### How core talks to the game
 
 The core defines small interfaces for what it needs from the world; the game layer implements them.
-This is the only place where the two meet, and the reason the core can be tested with fakes (`src/test/.../core/base/Fake*`).
+This is the only place where the two meet, and the reason the core can be tested with fakes (in OpenModularCore).
 
 | Core interface | Implemented by (game layer) | What it gives the core |
 | --- | --- | --- |
@@ -54,10 +56,10 @@ This is the only place where the two meet, and the reason the core can be tested
 | `core.item.ItemSlot` | `tileentity.base.ContainerItemSlot` (classified by `ItemClassifier`) | one inventory slot: count, what the item is (ammo, upgrade, addon, reactor fuel), extract |
 | `core.target.TargetEntity` | `tileentity.base.LivingTargetEntity` | one living entity: position and eyes, health, armor, category, owner (pets), player info |
 | `core.settings.LogicSettings` | `config.ConfigLogicSettings` | config values: turret stats, base tiers, entity lists, switches |
-| OMLib `core.security.SecurityEnvironment` | `tileentity.base.OMTSecurityEnvironment` | scoreboard teams, operator rights, `turretsDamageTrustedPlayers` |
+| OMLib `core.security.SecurityEnvironment` | `tileentity.base.OMTSecurityEnvironment` | scoreboard teams, operator rights, `damageTrustedPlayers` |
 
 The tile entities own one core object each and forward to it: `TurretBase` → `core.base.TurretBaseLogic`, `TurretTileEntity` → `core.turret.TurretState`, `GeneratorTileEntity` → `core.generator.GeneratorLogic`.
-The base's trust list is OMLib's `TrustManager`, which `TurretBaseLogic` gets from the base.
+The base's trust list is OMLib's `TrustManager`, which `TurretBaseLogic` gets from the base, together with its random source (a `LongSupplier`).
 
 ## Where things live
 
@@ -66,10 +68,10 @@ The base's trust list is OMLib's `TrustManager`, which `TurretBaseLogic` gets fr
 | `src/main/java` | all code; client code in the `client` package | yes |
 | `src/main/resources` | `assets/openmodularturrets` (models, blockstates, lang, textures, handwritten recipes), `mcmod.info` | yes |
 | `src/api/java` | the ComputerCraft API, its own source set, compiled against and not packed | no |
-| `src/test/java` | JUnit 5 tests of the core and the config, and the architecture rules | no |
+| `src/test/java` | JUnit 5 tests of the game layer (config, NBT, computer commands, turret heads, damage) and the architecture rules (the core's tests are in OpenModularCore) | no |
 | `src/test/resources/archunit_store` | the frozen architecture violations (a ratchet) | no |
 
-Packages below `omtteam.openmodularturrets`:
+Packages below `omtteam.openmodularturrets` (the `core` ones come from OpenModularCore):
 
 | Package | Responsibility |
 | --- | --- |
@@ -77,8 +79,8 @@ Packages below `omtteam.openmodularturrets`:
 | `core.base` | `TurretBaseLogic`: targeting per face, ammo, energy, upgrades, addons, redstone modes; `BaseTier`; `AmmoDraw`; `TurretPlacement` (what may be attached and stay) |
 | `core.turret` | `TurretType` and `TurretTypes`, `AmmoType`, `TurretState` (cooldown, concealment, shot cost), aim and damage math (`TurretMath`, `RayMath`, `RayProfile`, `ProjectileMath`) |
 | `core.target` | `TargetSelector`: who is a valid target and the best one; `TargetEntity`, `EntityCategory`, `TargetingPriority` |
-| `core.security`, `core.card` | `DamageRules` (who turret damage may hit); `BaseCardRules` (the base part of the memory card copy rules) |
-| `core.item`, `core.settings`, `core.world` | upgrade and addon types, the slot interface; stats and `LogicSettings`; the world interface, `Face`, `Neighbour` (turrets and inventory expanders), `Vector3`, `Box` |
+| `core.security`, `core.card` | `DamageRules` (who turret damage may hit); `MemoryCardData` and `MemoryCardRules` (the memory card copy rules) |
+| `core.item`, `core.settings`, `core.world` | upgrade and addon types, the slot interface; stats and `LogicSettings`; the world interface, `Neighbour` (turrets and inventory expanders), `Vector3`, `Box` (`Face` and `BlockPosition` are in OMLib's `core.world`) |
 | `core.storage` | `SlotCapacity`: how many stacks a slot holds with the base tier's stacks and the attached inventory expanders; `AmmoSort`: the order of the base GUI's "Sort Ammo" button (`TurretBaseInventory.sortAmmo`) |
 | `core.generator` | `GeneratorLogic`: burning fuel, the energy multiplier upgrade |
 | `api`, `api.weapon`, `api.tileentity` | the public turret API (`OMTPlugin`, `TurretDefinition`, `TurretRegistrar`, `AmmoDefinition`, `OMTApi`) and its weapons (`ProjectileWeapon`, `RayWeapon`, `EffectWeapon`, `AreaWeapon`, `SelfTargetingWeapon`); the built-in turrets use it too; the 3.x interfaces `ITurretBase`, `ITurretHead`, `ITurretBaseAddonTileEntity` |
@@ -206,7 +208,7 @@ An S2C handler goes into `client.network.ClientMessageHandlers`.
 
 ### A rule
 
-Put it in `core` with a unit test first; the tile entity forwards.
+Put it in the shared core (OpenModularCore, see its `CLAUDE.md`) with a unit test first; the tile entity forwards once a core release with it is in `core_version`.
 Range, accuracy, fire rate, efficiency and scattershot formulas are not changed without asking the user.
 
 ### Recipes, loot, assets
@@ -217,14 +219,13 @@ All art must be made by a human: use a placeholder and say which images are miss
 
 ## Rules the build checks
 
-`./gradlew check` fails when one of these is broken:
+`./gradlew check` fails when one of these is broken (the core's own rules, isolation and tests are checked in OpenModularCore):
 
 | Rule | Checked by |
 | --- | --- |
-| core uses only Java, core and OMLib core | `ArchitectureTest.coreDependsOnlyOnCoreAndJava` and the `verifyCoreIsolation` task |
 | common code reaches `client` only through the proxy | `ArchitectureTest.commonCodeReachesClientCodeOnlyThroughTheProxy` (frozen in `src/test/resources/archunit_store`, empty now) |
 | no new package cycles, and the known ones only shrink | `ArchitectureTest.noNewPackageCycles` (list `KNOWN_CYCLES`) |
-| core rules behave as specified | unit tests in `src/test` |
+| the game layer behaves as specified | unit tests in `src/test` |
 
 There are no GameTests on 1.12: in-game behaviour is checked with the dev client and server in the workspace (`./gradlew :runenv:runServer -Pomcompat_action=boot` boots a server and stops it) and with the 3.x compatibility worlds.
 `KNOWN_CYCLES` and the frozen store are ratchets; when the cycle test fails it prints the cycle, the class dependencies inside it (fewest first) and the updated list.
@@ -234,13 +235,10 @@ Never add to either without asking the user.
 
 | Tool | Command | Output |
 | --- | --- | --- |
-| Test coverage of `core` (JaCoCo) | part of `check`, which prints the line coverage per package | `build/reports/jacoco/test/html/index.html` |
-| Mutation testing of `core` (PIT, on demand; fails below `pitest_mutation_threshold` in `gradle.properties`) | `./gradlew pitest` | `build/reports/pitest/index.html` |
 | Dependency map | `./gradlew dependencyMap` | `build/reports/dependency-map/index.html` |
 
 Run Gradle with a JDK 17+ in `JAVA_HOME`; the mod compiles and tests on the Java 8 toolchain.
-Coverage says which lines the tests run; mutation testing says whether they check the results.
-PIT plants small mistakes in core and runs the unit tests against each one; a survivor marks behaviour the tests do not pin down, unless the change cannot be noticed (an equivalent mutant).
+Test coverage (JaCoCo) and mutation testing (PIT) measure the core, so they run in OpenModularCore; here `check` skips them, as OMT has no core package of its own.
 
 ## Known weak spots
 
@@ -249,8 +247,8 @@ They are known, not hidden:
 
 - **A package cycle around the turret API.** `api`, `api.tileentity`, `api.weapon`, `block.turret`, `entity.projectile`, `inventory`, `item`, `network`, `tileentity.base`, `tileentity.turret` and `turret` depend on each other in a loop: the API's weapons and `OMTApi` take `TurretBase` / `TurretTileEntity`, which use the weapons, projectiles, items and the definitions.
   The 3.x `api.tileentity` interfaces are only implemented, not used as types inside OMT; they could be kept, deprecated or removed (a decision for the user).
-- **Two smaller cycles:** `block.misc` ↔ `tileentity.misc` (generator and lever), and in `core` (`core.base`, `core.item`, `core.settings`, `core.target`, `core.turret`, `core.world` reach each other, as on 1.20.1+).
-- **`TurretBaseLogic` is large:** targeting, ammo, energy, upgrades, addons and warnings in one class.
+- **A smaller cycle:** `block.misc` ↔ `tileentity.misc` (generator and lever); the core's packages reach each other too, as on every Minecraft version (OpenModularCore).
+- **`TurretBaseLogic` is large** (in OpenModularCore): targeting, ammo, energy, upgrades, addons and warnings in one class.
   Candidates to move out are the ammo drawing and the energy generation.
 - **Client code in the main source set.** The client rule is enforced by a test, not by the compiler.
 - **Entities other mods add to the old target lists** (`MobBlockList`, …, removed with the 3.x `api.lists`) no longer affect targeting: the lists come from the config only.
