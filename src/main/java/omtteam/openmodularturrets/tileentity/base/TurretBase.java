@@ -126,7 +126,7 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
      */
     private void createLogic() {
         TurretBaseLogic.State state = logic != null ? logic.getState() : null;
-        // the random source is read on every draw: OMLib sets RandomUtil.random at mod init, after a base may exist
+        // RandomUtil.random is read on every draw: it stays null until OMLib's init (and in unit tests)
         logic = new TurretBaseLogic(tier, ConfigLogicSettings.INSTANCE, trustManager.core(), baseWorld,
                 () -> RandomUtil.random.nextLong(), this::onLogicChanged);
         energy = new EnergyCapabilities(new OMEnergyStorage(logic.getEnergy()));
