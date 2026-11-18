@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Changed
+
+- The game rules (`omtteam.openmodularturrets.core`) come from the shared OpenModularCore 1.0.0 (module `omt-core`, the same on every Minecraft version) and are bundled into the jar
+
 ## [4.0.0] - 2026-11-03
 
 ### Added

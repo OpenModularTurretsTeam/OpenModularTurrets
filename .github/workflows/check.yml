@@ -1,4 +1,4 @@
-# Runs ./gradlew check (every node's unit tests, game tests, verifyCoreIsolation, checkRecipes and the rest of check) on
+# Runs ./gradlew check (every node's unit tests, game tests, verifyNoCoreSources, checkRecipes and the rest of check) on
 # every push to any branch and on every pull request.
 name: check
 

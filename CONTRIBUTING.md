@@ -41,7 +41,7 @@ To change the library, change and push it in its own clone of the OMLib reposito
 ./gradlew :1.21.1-fabric:runClient              # start a client (also :1.20.1-fabric:runClient, :runServer)
 ./gradlew :1.21.1-neoforge:runClient            # start a NeoForge client (also :runServer, and the 1.21.11 nodes)
 ./gradlew :1.20.1-forge:runClient               # start a Forge client (also :runServer)
-./gradlew check                                 # unit tests, core isolation check, game tests
+./gradlew check                                 # unit tests, game tests, recipe check
 ./gradlew :1.21.1-fabric:runDatagen             # regenerate recipes, loot tables, tags (run for all three Fabric nodes)
 ./gradlew "Set active project to 1.20.1-fabric" # switch the source to 1.20.1
 ./gradlew "Set active project to 1.21.1-fabric" # switch back
@@ -78,9 +78,9 @@ To change the library, change and push it in its own clone of the OMLib reposito
 - `src/main/java` holds common and server code.
   `src/client/java` holds client-only code (renderers, screens, models).
   Never reference client classes from `main`.
-- `omtteam.openmodularturrets.core` holds the game logic (targeting, ammo, upgrades, trusted players).
-  It must not import Minecraft, Fabric, NeoForge, Forge, Mojang or Team Reborn Energy classes; `./gradlew check` fails if it does.
-  Unit tests for it live in `src/test/java`.
+- `omtteam.openmodularturrets.core` holds the game logic (targeting, ammo, upgrades), plain Java without Minecraft.
+  It is not in this repository: it comes from [OpenModularCore](https://github.com/OpenModularTurretsTeam/OpenModularCore) (module `omt-core`, version `core_version` in `gradle.properties`), the same on every Minecraft version, and the build bundles it into the jar.
+  Changes to the game rules and their unit tests go there; `./gradlew check` fails if `src` has files in the core package.
 
 ## Code style
 
@@ -92,7 +92,7 @@ To change the library, change and push it in its own clone of the OMLib reposito
 - Gameplay logic runs on the server.
   Every client-to-server packet must check permissions again on the server.
 - Add a short Javadoc to any non-obvious formula, noting where it came from in the old mod.
-- Dependencies are limited to Fabric Loader, Fabric API and Team Reborn Energy (Fabric), NeoForge, Forge (with MixinExtras), the library OMLib, Sable Companion (1.21.1) and the optional Jade integration.
+- Dependencies are limited to Fabric Loader, Fabric API and Team Reborn Energy (Fabric), NeoForge, Forge (with MixinExtras), the library OMLib, the shared core OpenModularCore, Sable Companion (1.21.1) and the optional Jade integration.
   Ask before adding anything else.
 
 ## Pull requests

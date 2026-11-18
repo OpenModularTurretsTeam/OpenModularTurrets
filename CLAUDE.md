@@ -50,6 +50,8 @@ Core gameplay:
   The NeoForge test mod also compiles against Sable (and Companion) for the contraption game tests (approved by the user on 2026-10-25).
 - **Create Aeronautics** and **Create** (Modrinth, pinned by version id), in the NeoForge dev runs only (`localRuntime`), never bundled (requested by the user on 2026-10-25), to try turrets on airships by hand.
   Create is also compile-only on NeoForge (approved by the user on 2026-10-25) for `platform/neoforge/NeoForgeCreateMovement`, a `BlockMovementChecks` check registered only when Create is loaded; Create and Create Aeronautics are on the NeoForge game test server for the movement tests.
+- **OpenModularCore** (the team's shared core, `../../OpenModularCore`, module `omt-core` from JitPack, approved by the user on 2026-11-16): the game rules (`omtteam.openmodularturrets.core`), the same on every Minecraft version; compile-only, its classes are bundled into the mod's jar (see "Core Game Logic Source").
+  The JitPack repository is asked only for the core's group.
 - **OMLib** (the user's own library, `../OMLib`, branch `1.20.1+`), mounted as the git submodule `omlib` and bundled into every jar (jar-in-jar; Fabric `include`, NeoForge and Forge `jarJar`; requested by the user on 2026-10-27).
   It holds the code both mods used to share (platform services, version compat, energy and item transfer, config, the camouflage menu) and the build logic.
   The library is a mod of its own (`omlib`), declared as a required dependency in the mod metadata, and built as a nested step of the mod build, see §4 "OMLib".
@@ -72,11 +74,11 @@ The 1.21.11 nodes (Fabric and NeoForge) are built like 1.21.1 (the same Gradle p
 They have no Sable, Create or Create Aeronautics properties (no 1.21.11 builds known); the build scripts skip those dependencies when `sable_companion_version` is missing.
 
 - Build system: Gradle 9.8 (Kotlin DSL) + **Stonecutter 0.9**, with Fabric Loom 1.18 (`net.fabricmc.fabric-loom-remap`, the variant for obfuscated MC versions) on the Fabric nodes, ModDevGradle 2.0 (`net.neoforged.moddev`) on the NeoForge nodes and its legacy variant on the Forge node.
-- Shared build logic is the convention plugin `omlib/build-logic/src/main/kotlin/mod-common.gradle.kts` (Java toolchain, metadata templating, JUnit, `verifyCoreIsolation`, `checkRecipes`, licenses in the jar via `bundled_licenses`, publishing).
+- Shared build logic is the convention plugin `omlib/build-logic/src/main/kotlin/mod-common.gradle.kts` (Java toolchain, metadata templating, JUnit, the OpenModularCore wiring with `extractCore` and `verifyNoCoreSources`, `checkRecipes`, licenses in the jar via `bundled_licenses`, publishing).
   It is mod-independent and lives in its own repository, `OMLib` (`../OMLib`), which every mod mounts as the git submodule `omlib` (the branch `1.20.1+` of the OMLib repository, clean history; an included build in `pluginManagement` of `settings.gradle.kts`).
   Change it in the OMLib repository (`../OMLib` in the workspace, never inside `omlib/`), then move the `omlib` submodule of each mod to the new commit and commit the pointer (see the workspace `CLAUDE.md`, "OMLib in the mods"); clone a mod with `--recurse-submodules` (or run `git submodule update --init`).
   The few source files that the mods still copy from each other are listed in `omlib/shared-sources.txt`; after changing one, run `python3 -I omlib/tools/shared_sources.py sync --from . --write . ../OpenModularLighting` and then `check`.
-  The OMT-specific quality tools (ArchUnit, JaCoCo, PIT, PMD) stay in `build.fabric.gradle.kts`.
+  The OMT-specific quality tools (ArchUnit, JaCoCo, PMD) stay in `build.fabric.gradle.kts`.
 - **Gradle itself must run on Java 25+** (Loom 1.18 requirement).
   The compile toolchains (17 / 21) are resolved separately (foojay auto-provisions them if missing).
 - **Use Mojang mappings** (`loom.officialMojangMappings()`).
@@ -95,7 +97,7 @@ Do not hard-code guesses into the build without verifying.
 ```
 .
 ├── CLAUDE.md
-├── build.fabric.gradle.kts     # Fabric nodes (Loom, Fabric API, datagen, GameTests, ArchUnit/JaCoCo/PIT/PMD)
+├── build.fabric.gradle.kts     # Fabric nodes (Loom, Fabric API, datagen, GameTests, ArchUnit/JaCoCo/PMD)
 ├── build.neoforge.gradle.kts   # NeoForge nodes (ModDevGradle)
 ├── build.forge.gradle.kts      # Forge node (legacy ModDevGradle: reobfJar, mixin refmap, MixinExtras jar-in-jar, pack.mcmeta)
 ├── omlib/                      # git submodule (OMLib, branch 1.20.1+): the library (src/) every mod bundles, and build-logic/ (the mod-common convention plugin); see §4 "OMLib"
@@ -122,7 +124,7 @@ Do not hard-code guesses into the build without verifying.
     ├── main/mc1.20.1-1.21.1/java/ and main/mc1.21.11-/java/   # version source folders: whole classes that differ between versions (§4)
     ├── main/resources/         # SHARED assets + fabric.mod.json, META-INF/neoforge.mods.toml and META-INF/mods.toml (templated)
     ├── client/java/...         # client-only code (split source sets); client/mc…/java: its version source folders
-    ├── test/java/...           # JUnit tests for core/
+    ├── test/java/...           # JUnit tests: architecture rules, config (Fabric nodes; the core's tests are in OpenModularCore)
     └── gametest/               # server game tests for all loaders (own mod id openmodularturrets_gametest);
                                 # gametest/mc1.21.11-/: the game test framework of 1.21.11 (stand-in @GameTest, GameTestCases)
 ```
@@ -218,7 +220,7 @@ The setup and the patterns come from OpenModularLighting, where the loader ports
   `NetworkCompat`, `ClientNetworkCompat` and `MenuCompat` forward to them.
 - **Small differences** inside a shared class use the loader constants: `//? if fabric {` / `//? if neoforge {` / `//? if forge {` (set in `stonecutter.gradle.kts`); `//? if neoforge || forge {` where both share an API (model data, GameTest annotations), with separate import blocks because the packages differ.
   Keep them inside `compat/` and `platform/`, never in gameplay code.
-- `core/` stays loader-free (`verifyCoreIsolation` also forbids `net.neoforged` and `net.minecraftforge`).
+- The core (`omtteam.openmodularturrets.core`) comes from OpenModularCore, which has no Minecraft or loader on its classpath; `verifyNoCoreSources` fails if `src` has files in the core package.
 - `build.neoforge.gradle.kts` and `build.forge.gradle.kts` compile everything except `datagen` (Fabric-only by design: NeoForge gets the converted Fabric data, `convertFabricData`).
   New code must not use Fabric API or Team Reborn Energy outside `platform/fabric` (and `datagen`), or the NeoForge and Forge nodes stop compiling.
 - NeoForge and Forge publishing is active (enabled by the user on 2026-10-24); `publish_enabled=false` in a node's `gradle.properties` would turn that node back into a dry run even with tokens.
@@ -362,7 +364,6 @@ The node `1.20.1-forge` follows the NeoForge setup and was worked out in OpenMod
 ./gradlew :1.20.1-forge:runClient                 # Forge client (run dir versions/1.20.1-forge/run; with Jade)
 ./gradlew :1.20.1-forge:runGameTestServer         # the game tests on Forge (also run by check / build)
 ./gradlew dependencyMap                           # interactive package dependency map -> build/reports/dependency-map/index.html
-./gradlew :1.21.1-fabric:pitest                   # mutation testing of core -> versions/1.21.1-fabric/build/reports/pitest/index.html
 ./gradlew chiseledPublish                         # upload all nodes to CurseForge/Modrinth (custom task)
 ./gradlew :1.21.1-fabric:publishMods              # upload one node
 ```
@@ -384,25 +385,33 @@ The node `1.20.1-forge` follows the NeoForge setup and was worked out in OpenMod
 
 ### Core Game Logic Source
 
-The game logic of the mod should be implemented in the "core" folder and be completely free from minecraft imports.
+The game logic of the mod is plain Java without Minecraft imports, in the package `omtteam.openmodularturrets.core`.
+Since 2026-11-18 it is not in this repository: it is the module `omt-core` of OpenModularCore (`../../OpenModularCore`, published on JitPack as `com.github.OpenModularTurretsTeam.OpenModularCore:omt-core`), shared with the 1.12.2 version, so the rules cannot drift between Minecraft versions (see the root `CLAUDE.md`, "Shared core logic").
 The logic consists of:
 
-1. The turret base behaviour (targeting, ammo handling, upgrade/addon handling) and the turret's own rules (`TurretState`: fire cooldown, concealer cycle; `RayMath`, `ProjectileMath`: damage formulas)
-2. The trusted player permission system (incl. who turret damage may hit: `DamageRules`)
+1. The turret base behaviour (targeting, ammo handling, upgrade/addon handling, the sort order of the ammo slots `core.storage.AmmoSort`) and the turret's own rules (`TurretState`: fire cooldown, concealer cycle; `RayMath`, `ProjectileMath`: damage formulas)
+2. Who turret damage may hit (`DamageRules`); the trusted player permission system, the machine mode, the targeting settings and the camouflage permissions are OMLib's core (`omlib-core`: `core.security`, `core.machine`, `core.camo`)
 3. an abstract representation of a target entity
 4. The generator's burning rules (`core.generator.GeneratorLogic`)
-5. Unit Tests to test its behaviour.
+5. Unit Tests to test its behaviour (in OpenModularCore, run there on Java 17 and on Java 8).
+
+How the mod uses it (`mod-common` in `omlib/build-logic`, the same in every mod):
+
+- `gradle.properties` names `core_module=omt-core` and `core_version` (the same in every mod and every workspace; raised together, see the root `CLAUDE.md`).
+- The module is a compile-only dependency; `extractCore` unpacks its `omtteam.openmodularturrets.core` classes into a classes folder of the main source set, so every jar bundles them (Loom `remapJar`, ModDevGradle `jar`, legacy `reobfJar` and the dev jar) and the dev runs, game tests and unit tests load them as part of the mod on every loader.
+  OMLib's core comes with OMLib's jar (OMLib declares it `compileOnlyApi`).
+- `verifyNoCoreSources` (part of `check`) fails if `src` has files in the core package: a rule change goes to OpenModularCore, never into a copy here.
+- The core's isolation, its package cycles, coverage and mutation testing are checked in OpenModularCore.
+- Game-layer wiring decided with the reconciliation (2026-11-18): `TurretBaseBlockEntity` builds the base's `TrustManager` (`LevelSecurityEnvironment`, change callback `onLogicChanged(true)`) and passes it to `TurretBaseLogic`; the logic's randomness is `level.random`'s `nextLong`; the machine mode's language key is built in the game layer (`"gui.openmodularturrets.mode." + getSerializedName()`, Jade provider, base screen, memory card tooltip); `TurretBaseInventory.sortAmmo` uses `AmmoSort` with an empty variant name (every item has its own registry name, so items of one kind keep their order).
 
 `docs/architecture.md` is the human-oriented guide to the structure (layers, flows, how to add things, known weak spots); keep it in sync when the structure changes.
-`ArchitectureTest` (`src/test/.../architecture`, ArchUnit) checks core isolation, that main never uses client code, and package cycles against its `KNOWN_CYCLES` list (a ratchet: update the list when a cycle shrinks; never add to it without asking the user).
+`ArchitectureTest` (`src/test/.../architecture`, ArchUnit) checks that main never uses client code, and package cycles against its `KNOWN_CYCLES` list (a ratchet: update the list when a cycle shrinks; never add to it without asking the user); it leaves the bundled core classes out.
 PMD (`gradle/pmd/ruleset.xml`, report only, active version) measures complexity and size: `versions/1.21.1-fabric/build/reports/pmd/`.
-JaCoCo records coverage in the unit tests and on the game test server; `check` prints the line coverage of `core` and `api` per package (active version only).
-PIT (`./gradlew :1.21.1-fabric:pitest`, on demand, not part of `check`) runs mutation testing on `core`; surviving mutations show behaviour the tests do not pin down.
-It fails when the results get worse than the thresholds in `gradle.properties` (`pitest_*`); see `docs/architecture.md`.
+JaCoCo records coverage in the unit tests and on the game test server; `check` prints the line coverage of `api` per package (active version only).
+This repository has no PIT task since the core moved to OpenModularCore (its mutation testing runs there).
 
-`./gradlew check` runs `verifyCoreIsolation`, which fails if anything under `core/` imports `net.minecraft`, `net.fabricmc`, `net.neoforged`, `net.minecraftforge`, `com.mojang`, `team.reborn` or non-core mod packages.
 `./gradlew check` also runs `checkRecipes` (from `mod-common`): every item (item model) of the mod needs a recipe on that node, unless `recipe-exempt.txt` lists it as `<id> # <reason>`, and every recipe result of the mod's namespace must be one of its items.
-Tests live in `src/test/java` (JUnit, test-only dependency).
+Tests live in `src/test/java` (JUnit, test-only dependency); they run on the Fabric nodes.
 
 ### Game tests
 
@@ -518,8 +527,8 @@ omtteam.openmodularturrets
 │   ├── turret/                  # TurretBlockEntity (one type for all turrets), TurretMount, RayWeapons, EffectWeapons
 │   ├── defense/                 # PassiveDefenseBlockEntity, CamoTrapBlockEntity
 │   └── misc/                    # GeneratorBlockEntity, LeverBlockEntity
-├── core/                        # game rules without Minecraft: base, turret, target, security (DamageRules), generator,
-│                                # camo, card, item, settings, storage, world
+├── core/                        # (from OpenModularCore, omt-core; bundled, not in src/) game rules without Minecraft:
+│                                # base, turret, target, security (DamageRules), generator, card, item, settings, storage, world
 ├── camo/                        # CamoRules, CamoLightProperties (CamoHost, CamoData and the menu are in OMLib)
 ├── security/                    # OMTOwnershipSettings (trust lists, access levels and claiming are in OMLib)
 ├── inventory/                   # TurretBaseInventory, FuelContainer, AmmoRules
@@ -605,7 +614,7 @@ The built-in turrets use the same path, so there is no special casing per turret
   Respect line of sight.
 - Range is affected by tier and upgrades.
   Accuracy, fire rate, efficiency and scattershot are upgrades.
-  The formulas live in `core/`; don't change them without asking the user.
+  The formulas live in the core (OpenModularCore); don't change them without asking the user.
 
 ### Security / trusted players
 
@@ -677,7 +686,7 @@ Deliberately not optimized yet; revisit only if profiling shows a problem.
 
 ## 7. Change Workflow
 
-1. Implement gameplay logic in `core/` (with unit tests) where possible; keep Minecraft-facing code thin.
+1. Implement gameplay logic in the core where possible: in OpenModularCore (`../../OpenModularCore`, with unit tests there; see the root `CLAUDE.md`, "Changing the core"), never as sources in this repository; keep Minecraft-facing code thin.
 2. Wrap version differences in `compat/`.
 3. Add assets, lang entries and datagen entries; regenerate data for **all three** Fabric nodes (1.20.1, 1.21.1, 1.21.11).
 4. Add a `CHANGELOG.md` entry for user-visible changes.
@@ -731,7 +740,7 @@ Update this checklist as work progresses.
 - [x] Turret base blocks (all tiers) + block entity (inventory, energy) — the old expanders skipped
 - [x] Security: owner, trusted players, access levels, permission checks, trusted players screen + server-validated packets
 - [x] Base GUI (inventory, energy display, targeting settings, trust management) — camo light sliders pending with camo
-- [x] "Sort Ammo" button in the base GUI (requested by the user on 2026-10-27; right column below the admin buttons, for everyone who opens the GUI, `BasePackets.Action.SORT_AMMO`): `TurretBaseInventory.sortAmmo` merges equal ammo up to the slot limit and orders Minecraft items, then OMT ammo, then other mods' items, each by registry name; `BaseGuiGameTests.sortButtonSortsTheAmmo`
+- [x] "Sort Ammo" button in the base GUI (requested by the user on 2026-10-27; right column below the admin buttons, for everyone who opens the GUI, `BasePackets.Action.SORT_AMMO`): `TurretBaseInventory.sortAmmo` merges equal ammo up to the slot limit and orders Minecraft items, then OMT ammo, then other mods' items, each by registry name (since 2026-11-18 through the core's `AmmoSort`); `BaseGuiGameTests.sortButtonSortsTheAmmo`, `AmmoSortGameTests` (the order, the slot limit, and 2000 random fillings compared with the sort of 4.0.0)
 - [x] Networking for settings and trust changes (server-validated)
 - [x] Targeting logic (core `TargetSelector`, per-turret targets in `TurretBaseLogic`; aiming/yaw-pitch limits come with the turret framework)
 - [x] Turret block framework (6-face mounting, `TurretMath`, aiming sync)

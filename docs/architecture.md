@@ -15,6 +15,7 @@ The turret API for other mods has its own guide: [turret-api.md](turret-api.md).
 A **turret base** is the brain: it owns targeting, ammo, energy, upgrades, addons and the list of trusted players.
 **Turrets** mounted on its six faces are thin: they aim at the target their base picked, keep their cooldown and fire.
 All game rules (who is a target, how much a shot costs, what an upgrade does, who may change what) are plain Java in `core`, without any Minecraft class, so they are unit-tested in milliseconds.
+The core is not in this repository: it is the module `omt-core` of the shared repository OpenModularCore (`omtteam.openmodularturrets.core`, with OMLib's `omtteam.omlib.core` in `omlib-core`), the same on every Minecraft version, and the build bundles its classes into the mod's jar (see [The shared core](#the-shared-core)).
 The Minecraft-facing code around it translates between the game and the core and is kept as thin as possible.
 
 ## Layers
@@ -25,7 +26,7 @@ flowchart TB
     game["game layer (main)<br/>blocks, block entities, items, menus, network,<br/>registry, config, projectiles, api"]
     compat["compat<br/>1.20.1 / 1.21.1 / 1.21.11 differences"]
     platform["platform<br/>loader services and adapters<br/><i>platform.fabric / platform.neoforge / platform.forge</i>"]
-    core["core<br/>game rules, plain Java"]
+    core["core (OpenModularCore)<br/>game rules, plain Java"]
     client --> game
     client --> compat
     client --> platform
@@ -38,7 +39,7 @@ flowchart TB
 An arrow means "may use".
 The other directions are forbidden and checked by the build (see [Rules the build checks](#rules-the-build-checks)):
 
-- **core** uses only Java and itself: no Minecraft, Fabric, NeoForge, Forge or other OMT packages.
+- **core** uses only Java and itself: no Minecraft, Fabric, NeoForge, Forge or other OMT packages (checked in OpenModularCore).
 - **main** code never uses **client** code: client classes do not exist on a dedicated server.
 - Shared code uses only the `platform` interfaces, never `platform.fabric`, `platform.neoforge` or `platform.forge`: each of those is only compiled for its own loader.
 
@@ -55,7 +56,7 @@ Energy and items other blocks may use are described loader-free (`core.energy.En
 ### How core talks to the game
 
 The core defines small interfaces for what it needs from the world; the game layer implements them.
-This is the only place where the two meet, and the reason the core can be tested with fakes (`src/test/.../core/base/Fake*`).
+This is the only place where the two meet, and the reason the core can be tested with fakes (in OpenModularCore, `omt-core/src/test/.../core/base/Fake*`).
 
 | Core interface (`core`) | Implemented by (game layer) | What it gives the core |
 | --- | --- | --- |
@@ -70,6 +71,19 @@ On a Sable contraption these are the coordinates of its plot, far away from wher
 Outside contraptions the pose is `Pose.IDENTITY` and nothing is converted.
 
 The block entities own one core object each and forward to it: `TurretBaseBlockEntity` → `core.base.TurretBaseLogic`, `TurretBlockEntity` → `core.turret.TurretState`, `GeneratorBlockEntity` → `core.generator.GeneratorLogic`.
+`TurretBaseBlockEntity` also owns the base's `TrustManager` (OMLib's core): it builds it with a change callback that saves and syncs the base, and hands it to the logic, which only reads it.
+The randomness of the logic (the recycler addon's rolls) comes from the level's random source.
+
+### The shared core
+
+`gradle.properties` names the core module and its version (`core_module=omt-core`, `core_version`, the same in every mod and on every Minecraft version); `mod-common` in `omlib/build-logic` does the rest:
+
+- The module comes from JitPack (`com.github.OpenModularTurretsTeam.OpenModularCore`), asked for nothing else; it is a compile-only dependency.
+- `extractCore` unpacks its `omtteam.openmodularturrets.core` classes into a classes folder of the main source set, so every jar bundles them and the dev runs, game tests and unit tests load them as part of the mod on every loader.
+  OMLib's core (`omlib-core`: trust lists, access levels, energy buffer, camouflage permissions, machine mode and targeting settings, faces) comes with OMLib's jar.
+- `verifyNoCoreSources` (part of `check`) fails if `src` has files in the core package: a rule change is made in OpenModularCore, never as a copy here.
+- The core's unit tests, its isolation check, its architecture rules (package cycles), coverage and mutation testing run in OpenModularCore.
+  Game behaviour that needs the game (turrets firing, the sort button, permissions on packets) stays tested by the game tests here.
 
 ## Where things live
 
@@ -79,7 +93,7 @@ Source sets (main and client split as with Loom's split source sets; the NeoForg
 | --- | --- | --- |
 | `src/main` | everything that runs on both sides | yes |
 | `src/client` | rendering, screens, client networking | yes, client only |
-| `src/test` | JUnit tests of the core, config tests, architecture rules | no |
+| `src/test` | config tests, architecture rules (the core's tests are in OpenModularCore) | no |
 | `src/gametest` | game tests in a real server world, shared by Fabric, NeoForge and Forge (own test mod `openmodularturrets_gametest`) | no |
 
 Packages below `omtteam.openmodularturrets` (main):
@@ -88,13 +102,14 @@ Packages below `omtteam.openmodularturrets` (main):
 | --- | --- |
 | `OMT` | shared constants: `MOD_ID`, `LOGGER`, `OMT.id(path)` (depends on nothing of the mod but `VersionCompat`) |
 | `startup` | shared start-up (`OMTStartup`: `init`, `registrationSteps`), called by the loader entrypoints |
+| `core.*` | from OpenModularCore (`omt-core`), bundled into the jar; listed here because the game layer is built around it |
 | `core.base` | `TurretBaseLogic`: targeting per face, ammo, energy, upgrades, addons, redstone modes |
 | `core.turret` | turret types and ammo types, `TurretState` (cooldown, concealment), aim and damage math (`TurretMath`, `RayMath`, `ProjectileMath`) |
 | `core.target` | `TargetSelector`: who is a valid target and who is the best one |
 | `core.security` | `DamageRules` (who turret damage may hit); the owner, trusted players and access levels (`TrustManager`) are in OMLib |
-| `core.generator`, `core.camo`, `core.card` | generator burning, camouflage light rules, memory card copy rules |
+| `core.generator`, `core.card` | generator burning, memory card copy rules (camouflage permissions are OMLib's `core.camo`, machine mode and targeting settings OMLib's `core.machine`) |
 | `core.item`, `core.settings`, `core.world` | upgrade/addon types, config value types, the world interfaces above |
-| `core.storage` | `SlotCapacity`: how much an ammo or fuel slot holds with the attached inventory expanders |
+| `core.storage` | `SlotCapacity`: how much an ammo or fuel slot holds with the attached inventory expanders; `AmmoSort`: the order of the sort button (`TurretBaseInventory.sortAmmo`) |
 | `api`, `api.weapon` | public turret API for other mods; the built-in turrets use it too |
 | `registry` | registration of blocks, items, block entities, entities, menus, sounds, creative tab; `TurretRegistry` (turret definitions) |
 | `block.*` | blocks: bases, turrets, defenses (hardened blocks, walls, fences, camo trap), lever, generator, inventory expanders |
@@ -259,12 +274,13 @@ The NeoForge and Forge builds have no datagen of their own: they convert the Fab
 
 | Rule | Checked by |
 | --- | --- |
-| core uses only Java and core | `ArchitectureTest.coreDependsOnlyOnCoreAndJava` and the `verifyCoreIsolation` task (also forbids NeoForge and Forge) |
+| the core comes only from OpenModularCore (no sources in the core package) | the `verifyNoCoreSources` task (`omlib/build-logic`); the core's own isolation is checked in OpenModularCore |
 | shared code does not use Fabric API or Team Reborn Energy | compiling the `1.21.1-neoforge` and `1.20.1-forge` nodes |
 | main code never uses client code | `ArchitectureTest.mainCodeNeverDependsOnClientCode` |
 | no new package cycles, and the known ones only shrink | `ArchitectureTest.noNewPackageCycles` (list `KNOWN_CYCLES`) |
 | every item has a recipe (unless `recipe-exempt.txt` names it with a reason), and every recipe makes an item of the mod | the `checkRecipes` task on every node (`omlib/build-logic/src/main/kotlin/RecipeCoverage.kt`), on the node's processed resources |
-| core rules behave as specified | unit tests in `src/test` |
+| the config migration steps and the passive defense config behave as specified | unit tests in `src/test` (the core's unit tests run in OpenModularCore) |
+| the sort button gives the same order as before the core's `AmmoSort` | `AmmoSortGameTests` |
 | every turret hits in a real world, on every loader | game tests in `src/gametest` (`runGameTest` on Fabric, `runGameTestServer` on NeoForge and Forge) |
 | right-clicking a base opens its GUI for players with access only | `BaseGuiGameTests` |
 
@@ -276,31 +292,13 @@ When the cycle test fails it prints the cycle, the class dependencies inside it 
 | Tool | Command | Output |
 | --- | --- | --- |
 | PMD: complexity, size, nesting, coupling (rules in `gradle/pmd/ruleset.xml`) | `./gradlew :1.21.1-fabric:pmdMain :1.21.1-fabric:pmdClient` (also part of `check`) | `versions/1.21.1-fabric/build/reports/pmd/main.html`, `client.html` |
-| Test coverage of `core` and `api` (JaCoCo, unit and game tests) | part of `check`, which prints a summary per package | `versions/1.21.1-fabric/build/reports/jacoco/test/html/index.html` |
-| Mutation testing of `core` (PIT) | `./gradlew :1.21.1-fabric:pitest` | `versions/1.21.1-fabric/build/reports/pitest/index.html` |
+| Test coverage of `api` (JaCoCo, unit and game tests) | part of `check`, which prints a summary per package | `versions/1.21.1-fabric/build/reports/jacoco/test/html/index.html` |
 | Dependency map | `./gradlew dependencyMap` | `build/reports/dependency-map/index.html` |
 
 PMD reports only for now; it does not fail the build.
 Once the limits are agreed, switching off `isIgnoreFailures` in `build.fabric.gradle.kts` makes new code above them fail.
-These tools run on the Fabric nodes only; code in `platform/neoforge` and `platform/forge` is covered by their game tests, not by coverage or mutation testing.
-
-Coverage says which lines the tests run; mutation testing says whether they check the results.
-PIT plants small mistakes in core (a flipped condition, `<` instead of `<=`, a removed call) and runs the unit tests against each one.
-A mistake no test notices ("survived") marks behaviour the tests do not pin down, often an edge case or a missing save or sync call.
-Not every survivor is a gap: where `>` and `>=` behave the same for every possible value, the change cannot be noticed.
-When one survives, add the missing assertion to the unit test of that class; if it cannot be noticed, add it to the list below with the reason.
-It fails when the results get worse than the thresholds in `gradle.properties` (`pitest_mutation_threshold`, `pitest_coverage_threshold`, `pitest_max_surviving`, the state of 2026-11-06); tighten them when a test kills a survivor (lower `pitest_max_surviving`), and raise it only for a survivor that no test can notice, listed below with its reason.
-
-State on 2026-11-06: PIT detects 686 of 696 mutations (99 %); the 10 survivors cannot be noticed:
-
-- `TurretBaseLogic.drawAmmo`: `>` instead of `>=` when collecting slots (one more slot is collected, but the extraction stops at the needed amount), `< 0` instead of `<= 0` when extracting (the next slot gets an extraction of 0).
-- `TurretBaseLogic.tick`: `ticks--` instead of `ticks++` (the counter is only used modulo 5 and 20 and reset at 20, so the timing is the same).
-- `TurretBaseLogic.updateNeighbours`: the `markSync()` after the first scan sets the range (`updateMaxRange` has just synced the new max range in the same call, which always changes from 0 there).
-- `ProjectileMath.damageWithAmp`, `RayMath.damage`: `< 0` / `>= 0` for the amp level or factor (an amp of 0 adds a bonus of 0).
-- `ProjectileMath.flightTime`: `< 0` instead of `<= 0` (a reach of 0 gives an infinite time, which is capped to the same `MAX_AGE`).
-- `ProjectileMath.dropAfter`: `<=` instead of `<` (the extra step adds `fall * 0`).
-- `TurretMath.limit`: `>` instead of `>=` (a pitch equal to the limit is replaced by the same value).
-- `TargetingSettings.setMaxRange`: `>=` instead of `>` (a range equal to the max is set to the same value).
+These tools run on the Fabric nodes only; code in `platform/neoforge` and `platform/forge` is covered by their game tests, not by coverage.
+The coverage and mutation testing (PIT) of the core run in OpenModularCore; this repository has no PIT task since the core moved there (2026-11-18).
 
 ## Known weak spots
 
@@ -310,7 +308,7 @@ They are known and measured, not hidden:
 - **A large package cycle.** 17 game-layer packages (registry, blocks, block entities, menus, network, inventory, api, projectiles) depend on each other in a loop, so none of them can be understood or changed in isolation.
   Typical for Minecraft mods (registry ↔ blocks ↔ block entities, and the turret API's weapons take the block entities); `noNewPackageCycles` and the dependency map list the cheapest links to cut.
   `OMT`, `config`, `security`, `item` and `camo` were taken out of it (start-up in `startup`, config sync in `network`, card use in `block`, camo menu opening in `menu`); `inventory` hangs on one link (`AmmoRules` → `TurretRegistry`).
-  Three smaller cycles exist: in `core` (six packages around `core.base`), in `client` (`client.api` ↔ `client.model`), and between the `compat` facades and `platform` (the facades forward to the services, whose interfaces use the facades' types; accepted for the NeoForge port).
+  Smaller cycles exist in `client` (`client.api` ↔ `client.model`) and between the `compat` facades and `platform` (the facades forward to the services, whose interfaces use the facades' types; accepted for the NeoForge port).
 - **`TurretBaseLogic` is large** (about 700 lines): targeting, ammo, energy, upgrades, addons and warnings in one class.
   Candidates to move out are the ammo drawing and the energy generation.
 - **29 PMD findings** above the complexity limits, mostly long methods with many branches (`RayWeapons.shoot`, `TargetSelector`, `TurretBaseScreen`, `ConfigWriter`).
