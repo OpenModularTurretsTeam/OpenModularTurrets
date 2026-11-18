@@ -14,7 +14,7 @@ public class OMTSecurityEnvironment extends OMLibSecurityEnvironment {
     }
 
     @Override
-    public boolean turretsDamageTrustedPlayers() {
+    public boolean damageTrustedPlayers() {
         return OMTConfig.TURRETS.turretDamageTrustedPlayers;
     }
 }

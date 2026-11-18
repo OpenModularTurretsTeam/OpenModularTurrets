@@ -15,11 +15,11 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
+import omtteam.omlib.core.world.BlockPosition;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.item.ItemSlot;
 import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.world.BaseWorld;
-import omtteam.openmodularturrets.core.world.BlockPosition;
 import omtteam.openmodularturrets.core.world.Box;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.reference.OMTNames;
@@ -114,7 +114,7 @@ public class TurretBaseWorld implements BaseWorld {
     public boolean hasLineOfSight(double fromX, double fromY, double fromZ, TargetEntity target) {
         World world = base.getWorld();
         if (world == null) return false;
-        Vec3d end = new Vec3d(target.getX(), target.getY() + target.getEyeHeight(), target.getZ());
+        Vec3d end = new Vec3d(target.getEyeX(), target.getEyeY(), target.getEyeZ());
         return isClear(world, new Vec3d(fromX, fromY, fromZ), end);
     }
 

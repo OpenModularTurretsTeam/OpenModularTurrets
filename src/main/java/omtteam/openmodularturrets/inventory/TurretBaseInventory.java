@@ -104,8 +104,8 @@ public class TurretBaseInventory extends LargeStackItemHandler {
             ItemStack stack = ItemStack.EMPTY;
             if (i < sorted.get().size()) {
                 AmmoSort.Stack<ItemStack> entry = sorted.get().get(i);
-                stack = entry.getItem().copy();
-                stack.setCount(entry.getCount());
+                stack = entry.item().copy();
+                stack.setCount(entry.count());
             }
             stacks.set(AMMO_START + i, stack);
         }

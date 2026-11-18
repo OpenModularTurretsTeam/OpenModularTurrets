@@ -22,7 +22,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.library.freeze.FreezingArchRule.freeze;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -49,11 +48,7 @@ class ArchitectureTest {
             set("api", "api.tileentity", "api.weapon", "block.turret", "entity.projectile", "inventory", "item",
                     "network", "tileentity.base", "tileentity.turret", "turret"),
             // the generator and lever blocks and their tile entities
-            set("block.misc", "tileentity.misc"),
-            // the core types reach each other as in 1.20.1+ (BaseWorld -> ItemSlot -> AmmoType, TurretType -> Face,
-            // Neighbour -> TurretType, LogicSettings -> TurretType, TargetSelector -> LogicSettings,
-            // TurretState -> TurretBaseLogic)
-            set("core.base", "core.item", "core.settings", "core.target", "core.turret", "core.world"));
+            set("block.misc", "tileentity.misc"));
 
     private static JavaClasses classes;
 
@@ -61,20 +56,12 @@ class ArchitectureTest {
     static void importClasses() {
         classes = new ClassFileImporter()
                 .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
+                // only OMT's own classes: the core (omtteam.openmodularturrets.core) is a library from OpenModularCore,
+                // which checks its isolation and its package cycles itself
+                .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_JARS)
                 // the workspace build puts test classes in build/<Mod>/classes/java/test, which the option above misses
                 .withImportOption(location -> !location.contains("/classes/java/test/"))
                 .importPackages(BASE);
-    }
-
-    /** Core stays plain Java: no Minecraft, Forge or other mod packages (also enforced by verifyCoreIsolation). */
-    @Test
-    void coreDependsOnlyOnCoreAndJava() {
-        classes().that().resideInAPackage(BASE + ".core..")
-                .should().onlyDependOnClassesThat()
-                .resideInAnyPackage("java..", "javax.annotation..", "omtteam.omlib.core..", BASE + ".core..")
-                .because("the core game logic must stay testable without the game")
-                .allowEmptyShould(true)
-                .check(classes);
     }
 
     /** Client-only code (GUIs, renderers) must never be loaded on a dedicated server; it is reached through the proxy. */
