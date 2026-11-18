@@ -20,7 +20,9 @@ val client: SourceSet = sourceSets.create("client") {
 
 // Datagen is Fabric-only by design: Forge gets the converted Fabric output (convertFabricData below)
 sourceSets.main { java { exclude("$packagePath/datagen/**") } }
-sourceSets.test { java { include("$packagePath/core/**") } }
+// The unit tests left in this repository (ArchUnit, config migration) run on the Fabric nodes only, as before; the core's
+// own tests, which ran here on every node, run in OpenModularCore (Java 17 and Java 8)
+sourceSets.test { java { exclude("**") } }
 
 // In-world tests (src/gametest): a separate test mod (openmodularturrets_gametest) that is never shipped, sharing
 // its test classes with Fabric and NeoForge. `check` runs them on a headless GameTest server.

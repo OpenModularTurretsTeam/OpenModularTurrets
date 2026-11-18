@@ -154,7 +154,7 @@ public final class ModuleTooltip {
                 lines.add(Component.empty());
                 lines.add(flavour("addon.fakedrops.flavour"));
             }
-            case POTENTIA, SERIAL_PORT -> {
+            case SERIAL_PORT -> {
             }
         }
     }

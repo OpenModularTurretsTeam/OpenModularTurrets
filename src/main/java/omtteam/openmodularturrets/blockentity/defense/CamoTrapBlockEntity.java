@@ -12,7 +12,7 @@ import omtteam.openmodularturrets.camo.CamoRules;
 import omtteam.openmodularturrets.camo.CamoLightProperties;
 import omtteam.omlib.compat.CompatBlockEntity;
 import omtteam.omlib.core.camo.CamoLight;
-import omtteam.openmodularturrets.core.camo.CamoPermissions;
+import omtteam.omlib.core.camo.CamoPermissions;
 import omtteam.omlib.core.security.AccessProfile;
 import omtteam.omlib.core.security.TrustManager;
 import omtteam.openmodularturrets.registry.ModBlockEntities;

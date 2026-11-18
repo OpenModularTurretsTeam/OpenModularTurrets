@@ -13,7 +13,7 @@ import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.omlib.client.compat.ClientCompat;
 import omtteam.omlib.client.compat.ClientNetworkCompat;
 import omtteam.omlib.client.compat.CompatScreen;
-import omtteam.openmodularturrets.core.base.TargetingSettings;
+import omtteam.omlib.core.machine.TargetingSettings;
 import omtteam.omlib.core.security.AccessLevel;
 import omtteam.openmodularturrets.network.BasePackets;
 import omtteam.omlib.network.CamoPackets;

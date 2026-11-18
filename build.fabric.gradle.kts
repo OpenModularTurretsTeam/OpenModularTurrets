@@ -5,7 +5,7 @@ plugins {
     `maven-publish`
     // Code quality report (gradle/pmd/ruleset.xml): complexity and size, report only
     pmd
-    // Test coverage of core and api, from the unit tests and the game tests
+    // Test coverage of api, from the unit tests and the game tests
     jacoco
 }
 
@@ -107,12 +107,13 @@ configurations.named("gametestRuntimeClasspath") {
     exclude(group = "remapped.maven.modrinth")
 }
 
-// ---- Test coverage (JaCoCo): check prints the line coverage of core and api ----
-// Both the unit tests and the game test server record coverage; core is mostly covered by the unit tests, api only
-// by the game tests (API turrets). Active version only (both versions share the source).
+// ---- Test coverage (JaCoCo): check prints the line coverage of api ----
+// Both the unit tests and the game test server record coverage; api is covered by the game tests (API turrets). The
+// core (omtteam.openmodularturrets.core) comes from OpenModularCore, whose own build measures its coverage, so only this
+// repository's classes count here. Active version only (both versions share the source).
 // Report: versions/<v>/build/reports/jacoco/test/html/index.html
 val coverageActive = stonecutter.current.isActive
-val coveredPackages = listOf("omtteam/openmodularturrets/core/**", "omtteam/openmodularturrets/api/**")
+val coveredPackages = listOf("omtteam/openmodularturrets/api/**")
 jacoco {
     toolVersion = property("jacoco_version") as String
 }
@@ -128,7 +129,8 @@ tasks.jacocoTestReport {
     dependsOn(tasks.test, tasks.named("runGameTest"))
     executionData.setFrom(layout.buildDirectory.files("jacoco/test.exec", "jacoco/runGameTest.exec"))
     sourceDirectories.setFrom(sourceSets.main.get().java.srcDirs)
-    classDirectories.setFrom(sourceSets.main.get().output.classesDirs.asFileTree.matching { include(coveredPackages) })
+    // main's own classes only: its classes folders also hold the bundled OpenModularCore classes (mod-common)
+    classDirectories.setFrom(sourceSets.main.get().java.classesDirectory.map { dir -> dir.asFileTree.matching { include(coveredPackages) } })
     reports {
         csv.required = true
         xml.required = true
@@ -137,7 +139,7 @@ tasks.jacocoTestReport {
     val csv = reports.csv.outputLocation
     val html = reports.html.outputLocation
     doLast {
-        // line coverage per package, summed per area (core, api)
+        // line coverage per package, summed per area
         val rows = csv.get().asFile.readLines().drop(1).map { it.split(',') }
         val byPackage = sortedMapOf<String, IntArray>()
         for (row in rows) {
@@ -147,7 +149,7 @@ tasks.jacocoTestReport {
         }
         fun percent(l: IntArray) = "%5.1f%%  (%d/%d lines)".format(100.0 * l[1] / maxOf(1, l[0] + l[1]), l[1], l[0] + l[1])
         println("Test coverage (unit and game tests):")
-        for (area in listOf("core", "api")) {
+        for (area in listOf("api")) {
             val packages = byPackage.filterKeys { it == area || it.startsWith("$area.") }
             val total = IntArray(2).also { t -> packages.values.forEach { t[0] += it[0]; t[1] += it[1] } }
             println("  %-24s %s".format(area, percent(total)))
@@ -158,53 +160,6 @@ tasks.jacocoTestReport {
 }
 tasks.check {
     dependsOn(tasks.jacocoTestReport)
-}
-
-// ---- Mutation testing (PIT): ./gradlew :1.21.1:pitest, on demand ----
-// Plants small mistakes in core (flipped conditions, changed boundaries, removed calls) and checks whether a unit test
-// fails. Surviving mistakes show behaviour the tests do not pin down. Report only, not part of check.
-// Report: versions/<v>/build/reports/pitest/index.html
-val pitest = configurations.create("pitest") {
-    isCanBeConsumed = false
-}
-dependencies {
-    pitest("org.pitest:pitest-command-line:${property("pitest_version")}")
-    pitest("org.pitest:pitest-junit5-plugin:${property("pitest_junit5_version")}")
-}
-tasks.register<JavaExec>("pitest") {
-    group = "verification"
-    description = "Mutation testing of the core logic (report in build/reports/pitest)"
-    dependsOn(tasks.testClasses)
-    classpath = pitest + sourceSets.test.get().runtimeClasspath
-    mainClass = "org.pitest.mutationtest.commandline.MutationCoverageReport"
-    javaLauncher = javaToolchains.launcherFor(java.toolchain)
-    val reportDir = layout.buildDirectory.dir("reports/pitest")
-    val sources = sourceSets.main.get().java.srcDirs
-    outputs.dir(reportDir)
-    // fail on a degradation: % of mutations detected, % line coverage of the mutated classes, mutations not detected
-    // (survived or not reached by any test); the values are in gradle.properties
-    val thresholds = listOf(
-        "--mutationThreshold", project.property("pitest_mutation_threshold").toString(),
-        "--coverageThreshold", project.property("pitest_coverage_threshold").toString(),
-        "--maxSurviving", project.property("pitest_max_surviving").toString(),
-    )
-    inputs.property("thresholds", thresholds)
-    argumentProviders.add(CommandLineArgumentProvider {
-        listOf(
-            "--reportDir", reportDir.get().asFile.path,
-            "--targetClasses", "omtteam.openmodularturrets.core.*",
-            "--targetTests", "omtteam.openmodularturrets.core.*",
-            // the tests and their fakes share the core packages
-            "--excludedClasses", "*Test,*Test\$*,*.Fake*",
-            "--sourceDirs", sources.joinToString(","),
-            "--threads", Runtime.getRuntime().availableProcessors().toString(),
-            "--outputFormats", "HTML,XML",
-            "--timestampedReports=false",
-        ) + thresholds
-    })
-    doLast {
-        println("PIT report: ${reportDir.get().asFile.resolve("index.html").toURI()}")
-    }
 }
 
 // Report only for now: the limits in gradle/pmd/ruleset.xml are not enforced yet. Runs for the active version only

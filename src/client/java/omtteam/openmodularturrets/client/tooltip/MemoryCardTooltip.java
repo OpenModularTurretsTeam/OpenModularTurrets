@@ -59,7 +59,8 @@ public final class MemoryCardTooltip {
     private static void appendBase(MemoryCardData.BaseSettings base, List<Component> lines) {
         lines.add(Component.empty());
         lines.add(heading("base"));
-        lines.add(line("mode", Component.translatable(base.mode().getTranslationKey()).withStyle(ChatFormatting.GREEN)));
+        lines.add(line("mode", Component.translatable("gui.openmodularturrets.mode." + base.mode().getSerializedName())
+                .withStyle(ChatFormatting.GREEN)));
         lines.add(line("target", Component.translatable(GUI + (base.multiTargeting() ? "multi" : "single"))
                 .withStyle(ChatFormatting.WHITE)));
         lines.add(line("attack_mobs", yesNo(base.targetMobs())));

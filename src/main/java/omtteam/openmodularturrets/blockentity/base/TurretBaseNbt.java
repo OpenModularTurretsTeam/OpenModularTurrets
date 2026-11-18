@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.blockentity.base;
 
 import net.minecraft.nbt.CompoundTag;
 import omtteam.omlib.compat.nbt.NbtCompat;
-import omtteam.openmodularturrets.core.base.MachineMode;
+import omtteam.omlib.core.machine.MachineMode;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 
 /**

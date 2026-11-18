@@ -83,7 +83,7 @@ public final class ModItems {
             "upgrade_" + GeneratorUpgradeType.ENERGY_MULTIPLIER.getSerializedName(),
             properties -> new GeneratorUpgradeItem(GeneratorUpgradeType.ENERGY_MULTIPLIER, properties), new Item.Properties());
 
-    // Addons (1.12.2 AddonMetaItem; potentia and serial port are not ported, see AddonType)
+    // Addons (1.12.2 AddonMetaItem; the potentia converter is gone, the serial port has no item, see AddonType)
     public static final AddonItem ADDON_CONCEALER = registerAddon(AddonType.CONCEALER);
     public static final AddonItem ADDON_DAMAGE_AMP = registerAddon(AddonType.DAMAGE_AMP);
     public static final AddonItem ADDON_RECYCLER = registerAddon(AddonType.RECYCLER);

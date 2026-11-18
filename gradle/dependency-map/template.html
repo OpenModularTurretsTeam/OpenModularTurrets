@@ -413,13 +413,10 @@ function renderPanel() {
 }
 
 function rulesHtml() {
-  const coreEdges = DATA.edges.filter(e => e.violations.length);
-  const coreLibs = DATA.nodes.filter(n => n.violations.length);
-  const c1 = !coreEdges.some(e => e.violations.some(v => v.startsWith('core'))) && !coreLibs.length;
-  const c2 = !coreEdges.some(e => e.violations.some(v => v.startsWith('main')));
+  const badEdges = DATA.edges.filter(e => e.violations.length);
+  const c2 = !badEdges.some(e => e.violations.some(v => v.startsWith('main')));
   const row = (ok, text) => `<div class="check ${ok ? 'ok' : 'bad'}"><span class="mark">${ok ? '✓' : '✗'}</span><span>${text}</span></div>`;
-  return row(c1, 'Core uses no Minecraft, Fabric or other mod packages (<span class="mono">verifyCoreIsolation</span>)')
-    + row(c2, 'Main code never imports client-only code');
+  return row(c2, 'Main code never imports client-only code');
 }
 
 function cutCandidates(cycle) {

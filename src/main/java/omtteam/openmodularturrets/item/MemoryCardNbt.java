@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.item;
 
 import net.minecraft.nbt.CompoundTag;
 import omtteam.omlib.compat.nbt.NbtCompat;
-import omtteam.openmodularturrets.core.base.MachineMode;
+import omtteam.omlib.core.machine.MachineMode;
 import omtteam.omlib.core.camo.CamoLight;
 import omtteam.openmodularturrets.core.card.MemoryCardData;
 import omtteam.omlib.security.SecurityNbt;

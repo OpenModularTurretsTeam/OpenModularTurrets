@@ -12,7 +12,7 @@ import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.omlib.client.compat.ClientCompat;
 import omtteam.omlib.client.compat.ClientNetworkCompat;
-import omtteam.openmodularturrets.core.base.TargetingSettings;
+import omtteam.omlib.core.machine.TargetingSettings;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.omlib.core.security.AccessLevel;
 import omtteam.omlib.core.security.PlayerIdentity;
@@ -191,7 +191,8 @@ public class TurretBaseScreen extends LargeStackScreen<TurretBaseMenu> {
         lines.add(ScreenTexts.gui("owner").append(": ").withStyle(ChatFormatting.GOLD)
                 .append((owner == null ? ScreenTexts.gui("none") : Component.literal(owner.name())).withStyle(ChatFormatting.WHITE)));
         lines.add(ScreenTexts.gui("mode").append(": ").withStyle(ChatFormatting.GOLD)
-                .append(Component.translatable(logic.getMode().getTranslationKey()).withStyle(ChatFormatting.WHITE)));
+                .append(Component.translatable("gui.openmodularturrets.mode." + logic.getMode().getSerializedName())
+                        .withStyle(ChatFormatting.WHITE)));
         lines.add(ScreenTexts.gui("active").append(": ").withStyle(ChatFormatting.GOLD).append(ScreenTexts.yesNo(logic.isActive())));
         lines.add(ScreenTexts.gui("max_stack_size").append(": ").withStyle(ChatFormatting.GOLD)
                 .append(Component.literal(String.valueOf(menu.getSlotCapacity().limit(FULL_STACK))).withStyle(ChatFormatting.WHITE)));

@@ -165,9 +165,10 @@ tasks.register("releaseChangelog") {
 /**
  * Writes an interactive map of the package dependencies to build/reports/dependency-map/index.html: one node per
  * package (tests as their own nodes), one arrow per package pair with the class imports behind it, the libraries each
- * package uses and the architecture rules (core isolation, no client code in main). Built from the active import lines
- * of src/{main,client,gametest,test}; imports in comments (inactive Stonecutter branches) do not count. Cycles and
- * layers are worked out by the page (gradle/dependency-map/template.html).
+ * package uses and the architecture rule (no client code in main). Built from the active import lines of
+ * src/{main,client,gametest,test}; imports in comments (inactive Stonecutter branches) do not count. The core
+ * (omtteam.openmodularturrets.core) comes from OpenModularCore, so it is not in the map; its rules are checked there.
+ * Cycles and layers are worked out by the page (gradle/dependency-map/template.html).
  */
 abstract class DependencyMapTask : DefaultTask() {
     @get:InputDirectory
@@ -242,8 +243,6 @@ abstract class DependencyMapTask : DefaultTask() {
                 candidate = candidate.substring(0, dot)
             }
         }
-        fun isCore(id: String) = id.startsWith("core")
-
         class Node(val id: String, var set: String) {
             val classes = mutableListOf<Map<String, Any>>()
             var lines = 0
@@ -278,7 +277,7 @@ abstract class DependencyMapTask : DefaultTask() {
                     "id" to n.id, "set" to n.set, "lines" to n.lines,
                     "classes" to n.classes.sortedBy { it["name"] as String },
                     "external" to n.external.mapValues { it.value.toList() },
-                    "violations" to n.external.keys.filter { isCore(n.id) && it != "JUnit" }.map { "core uses $it" },
+                    "violations" to emptyList<String>(),
                 )
             },
             "edges" to edges.values.map { (source, target, imports) ->
@@ -286,7 +285,6 @@ abstract class DependencyMapTask : DefaultTask() {
                     "source" to source, "target" to target,
                     "imports" to imports.map { it.split('\u0000') },
                     "violations" to listOfNotNull(
-                        "core depends on non-core code".takeIf { isCore(source) && !isCore(target) },
                         "main code depends on client code".takeIf { setOf[source] == "main" && setOf[target] == "client" },
                     ),
                 )

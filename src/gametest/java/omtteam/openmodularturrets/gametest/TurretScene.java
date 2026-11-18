@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import omtteam.openmodularturrets.api.AmmoDefinition;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
-import omtteam.openmodularturrets.core.base.MachineMode;
+import omtteam.omlib.core.machine.MachineMode;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.omlib.core.security.PlayerIdentity;
 import omtteam.openmodularturrets.core.turret.AmmoType;

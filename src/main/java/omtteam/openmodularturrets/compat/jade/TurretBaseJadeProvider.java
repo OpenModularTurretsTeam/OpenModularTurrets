@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.omlib.compat.nbt.NbtCompat;
-import omtteam.openmodularturrets.core.base.MachineMode;
+import omtteam.omlib.core.machine.MachineMode;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.omlib.core.security.PlayerIdentity;
 import snownee.jade.api.BlockAccessor;
@@ -50,7 +50,8 @@ public final class TurretBaseJadeProvider implements IServerDataProvider<BlockAc
         if (!data.contains(MODE)) return List.of();
         MachineMode mode = MachineMode.bySerializedName(NbtCompat.getString(data, MODE, ""), MachineMode.INVERTED);
         return List.of(
-                JadeLines.line("mode", Component.translatable(mode.getTranslationKey()).withStyle(ChatFormatting.GREEN)),
+                JadeLines.line("mode", Component.translatable("gui.openmodularturrets.mode." + mode.getSerializedName())
+                        .withStyle(ChatFormatting.GREEN)),
                 JadeLines.line("active", JadeLines.yesNo(NbtCompat.getBoolean(data, ACTIVE, false))),
                 JadeLines.ownerLine(data.contains(OWNER) ? NbtCompat.getString(data, OWNER, "") : null));
     }

@@ -29,7 +29,7 @@ import omtteam.omlib.compat.nbt.NbtCompat;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.omlib.core.camo.CamoLight;
-import omtteam.openmodularturrets.core.camo.CamoPermissions;
+import omtteam.omlib.core.camo.CamoPermissions;
 import omtteam.omlib.core.energy.EnergyAccess;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.storage.SlotCapacity;
@@ -51,7 +51,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 
 /**
  * Turret base block entity. All game rules live in the Minecraft-independent {@link TurretBaseLogic}; this class
@@ -71,8 +70,12 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
     public TurretBaseBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TURRET_BASE, pos, state);
         int tier = ((TurretBaseBlock) state.getBlock()).getTier();
-        this.logic = new TurretBaseLogic(tier, ConfigLogicSettings.INSTANCE, new LevelSecurityEnvironment(this::getLevel, OMTOwnershipSettings.INSTANCE),
-                new BlockEntityBaseWorld(this::getLevel, pos, inventory), new Random(), this::onLogicChanged);
+        // the trust list belongs to the base; a change to it is saved and synced like any client-relevant change
+        TrustManager trustManager = new TrustManager(new LevelSecurityEnvironment(this::getLevel, OMTOwnershipSettings.INSTANCE),
+                () -> onLogicChanged(true));
+        // the level is not set yet while the constructor runs; the logic only draws random numbers while it ticks
+        this.logic = new TurretBaseLogic(tier, ConfigLogicSettings.INSTANCE, trustManager,
+                new BlockEntityBaseWorld(this::getLevel, pos, inventory), () -> level.random.nextLong(), this::onLogicChanged);
     }
 
     @SuppressWarnings("unused")
