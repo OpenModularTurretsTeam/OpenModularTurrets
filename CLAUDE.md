@@ -402,6 +402,7 @@ How the mod uses it (`mod-common` in `omlib/build-logic`, the same in every mod)
   OMLib's core comes with OMLib's jar (OMLib declares it `compileOnlyApi`).
 - `verifyNoCoreSources` (part of `check`) fails if `src` has files in the core package: a rule change goes to OpenModularCore, never into a copy here.
 - The core's isolation, its package cycles, coverage and mutation testing are checked in OpenModularCore.
+- **Local core:** when `../../OpenModularCore` exists, `settings.gradle.kts` includes it, so the build (and the `omlib/` bootstrap) uses its source instead of the JitPack artifact and a core edit is live without a release; `-Pomm.noLocalCore` or `OMM_NO_LOCAL_CORE=1` turns that off, as on CI (root `CLAUDE.md`, "Local development").
 - Game-layer wiring decided with the reconciliation (2026-11-18): `TurretBaseBlockEntity` builds the base's `TrustManager` (`LevelSecurityEnvironment`, change callback `onLogicChanged(true)`) and passes it to `TurretBaseLogic`; the logic's randomness is `level.random`'s `nextLong`; the machine mode's language key is built in the game layer (`"gui.openmodularturrets.mode." + getSerializedName()`, Jade provider, base screen, memory card tooltip); `TurretBaseInventory.sortAmmo` uses `AmmoSort` with an empty variant name (every item has its own registry name, so items of one kind keep their order).
 
 `docs/architecture.md` is the human-oriented guide to the structure (layers, flows, how to add things, known weak spots); keep it in sync when the structure changes.
