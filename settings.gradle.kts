@@ -6,6 +6,10 @@ pluginManagement {
     if (File(omlibDir, "tools/bootstrap.sh").exists() && System.getenv("OMLIB_SKIP_BUILD") == null) {
         val build = ProcessBuilder("sh", "tools/bootstrap.sh").directory(omlibDir).inheritIO()
         build.environment()["JAVA_HOME"] = System.getProperty("java.home")
+        // the library build follows the switch of the local OpenModularCore (see below)
+        if (providers.gradleProperty("omm.noLocalCore").getOrElse("false") != "false") {
+            build.environment()["OMM_NO_LOCAL_CORE"] = "1"
+        }
         check(build.start().waitFor() == 0) { "Building the omlib submodule failed (see above)" }
         // Loom keeps the remapped jar of a mod dependency under its version, and a rebuilt library has the same version:
         // drop that cache when the library was built from other sources than last time
@@ -48,3 +52,20 @@ stonecutter {
 }
 
 rootProject.name = "openmodularturrets"
+
+// OpenModularCore from source (CLAUDE.md of the OMM root, "Local development"): when a folder above this one
+// holds OpenModularCore/, that build replaces the JitPack modules com.github.OpenModularTurretsTeam.OpenModularCore:<module>
+// (its group is the JitPack group, its project names are the module names). -Pomm.noLocalCore or OMM_NO_LOCAL_CORE=1
+// turns this off: the build then takes the JitPack artifact of core_version, as CI does (CI has no OpenModularCore/).
+// The same block is in the mods' settings and the workspace's; omlib/tools/bootstrap.sh finds the folder the same way.
+val localCoreOff = providers.gradleProperty("omm.noLocalCore").getOrElse("false") != "false" ||
+    !(System.getenv("OMM_NO_LOCAL_CORE") ?: "0").matches(Regex("0?"))
+if (!localCoreOff) {
+    generateSequence(settingsDir) { it.parentFile }
+        .map { File(it, "OpenModularCore") }
+        .firstOrNull { File(it, "settings.gradle.kts").isFile }
+        ?.let { localCore ->
+            logger.lifecycle("OpenModularCore: local source at $localCore (OMM_NO_LOCAL_CORE=1 for the JitPack artifact)")
+            includeBuild(localCore)
+        }
+}
