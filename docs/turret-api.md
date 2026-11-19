@@ -8,6 +8,7 @@ Works the same on 1.20.1, 1.21.1 and 1.21.11 (Fabric), on 1.21.1 and 1.21.11 (Ne
 On Fabric, add OMT as a `modCompileOnly`/`modImplementation` dependency and to `depends` in your `fabric.mod.json`.
 On NeoForge, add it as a `compileOnly`/`implementation` dependency and as a `[[dependencies.<your mod id>]]` entry in your `neoforge.mods.toml`.
 On Forge, add it as a `modCompileOnly`/`modImplementation` dependency (OMT's Forge jar uses SRG names) and as a `[[dependencies.<your mod id>]]` entry in your `mods.toml`.
+The rule classes the API uses (`TurretType`, `AmmoType`, `TurretStats`, `TargetingPriority`, `RayProfile`; package `omtteam.openmodularturrets.core`) come from the shared core OpenModularCore and are part of the OMT jar, and OMLib's `Face` (`omtteam.omlib.core.world`) is part of the OMLib jar.
 
 ## 1. Register the turret (common)
 
