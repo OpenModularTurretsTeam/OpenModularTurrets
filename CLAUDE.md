@@ -390,7 +390,7 @@ Since 2026-11-18 it is not in this repository: it is the module `omt-core` of Op
 The logic consists of:
 
 1. The turret base behaviour (targeting, ammo handling, upgrade/addon handling, the sort order of the ammo slots `core.storage.AmmoSort`) and the turret's own rules (`TurretState`: fire cooldown, concealer cycle; `RayMath`, `ProjectileMath`: damage formulas)
-2. Who turret damage may hit (`DamageRules`); the trusted player permission system, the machine mode, the targeting settings and the camouflage permissions are OMLib's core (`omlib-core`: `core.security`, `core.machine`, `core.camo`)
+2. Who turret damage may hit (`DamageRules`); the trusted player permission system, the machine mode, the targeting settings, the camouflage permissions, the memory card data and its trust list copy rules are OMLib's core (`omlib-core`: `core.security`, `core.machine`, `core.camo`, `core.card`); the memory card's copy rules for a base's settings are `core.card.BaseCardRules` here
 3. an abstract representation of a target entity
 4. The generator's burning rules (`core.generator.GeneratorLogic`)
 5. Unit Tests to test its behaviour (in OpenModularCore, run there on Java 17 and on Java 8).

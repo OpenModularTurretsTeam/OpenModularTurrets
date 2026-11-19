@@ -4,7 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import omtteam.omlib.compat.nbt.NbtCompat;
 import omtteam.omlib.core.machine.MachineMode;
 import omtteam.omlib.core.camo.CamoLight;
-import omtteam.openmodularturrets.core.card.MemoryCardData;
+import omtteam.omlib.core.card.MemoryCardData;
 import omtteam.omlib.security.SecurityNbt;
 
 import java.util.Locale;

@@ -80,7 +80,7 @@ The randomness of the logic (the recycler addon's rolls) comes from the level's 
 
 - The module comes from JitPack (`com.github.OpenModularTurretsTeam.OpenModularCore`), asked for nothing else; it is a compile-only dependency.
 - `extractCore` unpacks its `omtteam.openmodularturrets.core` classes into a classes folder of the main source set, so every jar bundles them and the dev runs, game tests and unit tests load them as part of the mod on every loader.
-  OMLib's core (`omlib-core`: trust lists, access levels, energy buffer, camouflage permissions, machine mode and targeting settings, faces) comes with OMLib's jar.
+  OMLib's core (`omlib-core`: trust lists, access levels, energy buffer, camouflage permissions, machine mode and targeting settings, memory card data and trust list copy rules, faces) comes with OMLib's jar.
 - `verifyNoCoreSources` (part of `check`) fails if `src` has files in the core package: a rule change is made in OpenModularCore, never as a copy here.
 - The core's unit tests, its isolation check, its architecture rules (package cycles), coverage and mutation testing run in OpenModularCore.
   Game behaviour that needs the game (turrets firing, the sort button, permissions on packets) stays tested by the game tests here.
@@ -107,7 +107,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `core.turret` | turret types and ammo types, `TurretState` (cooldown, concealment), aim and damage math (`TurretMath`, `RayMath`, `ProjectileMath`) |
 | `core.target` | `TargetSelector`: who is a valid target and who is the best one |
 | `core.security` | `DamageRules` (who turret damage may hit); the owner, trusted players and access levels (`TrustManager`) are in OMLib |
-| `core.generator`, `core.card` | generator burning, memory card copy rules (camouflage permissions are OMLib's `core.camo`, machine mode and targeting settings OMLib's `core.machine`) |
+| `core.generator`, `core.card` | generator burning, the memory card's copy rules for a base's settings (`BaseCardRules`; the card data and the trust list copy rules are OMLib's `core.card`, camouflage permissions OMLib's `core.camo`, machine mode and targeting settings OMLib's `core.machine`) |
 | `core.item`, `core.settings`, `core.world` | upgrade/addon types, config value types, the world interfaces above |
 | `core.storage` | `SlotCapacity`: how much an ammo or fuel slot holds with the attached inventory expanders; `AmmoSort`: the order of the sort button (`TurretBaseInventory.sortAmmo`) |
 | `api`, `api.weapon` | public turret API for other mods; the built-in turrets use it too |

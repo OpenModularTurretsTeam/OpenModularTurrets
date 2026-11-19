@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import omtteam.omlib.client.compat.ClientCompat;
-import omtteam.openmodularturrets.core.card.MemoryCardData;
+import omtteam.omlib.core.card.MemoryCardData;
 import omtteam.omlib.core.security.TrustedPlayer;
 import omtteam.openmodularturrets.item.MemoryCardItem;
 

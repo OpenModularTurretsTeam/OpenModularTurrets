@@ -15,8 +15,9 @@ import omtteam.openmodularturrets.blockentity.defense.CamoTrapBlockEntity;
 import omtteam.omlib.camo.CamoHost;
 import omtteam.openmodularturrets.camo.CamoRules;
 import omtteam.omlib.compat.block.BlockCompat;
-import omtteam.openmodularturrets.core.card.MemoryCardData;
-import omtteam.openmodularturrets.core.card.MemoryCardRules;
+import omtteam.omlib.core.card.MemoryCardData;
+import omtteam.omlib.core.card.MemoryCardRules;
+import omtteam.openmodularturrets.core.card.BaseCardRules;
 import omtteam.openmodularturrets.item.MemoryCardItem;
 import omtteam.omlib.network.PacketValidation;
 import omtteam.omlib.security.PlayerAdapter;
@@ -74,7 +75,7 @@ public final class MemoryCardInteraction {
             return;
         }
         MemoryCardItem.setData(stack, new MemoryCardData(MemoryCardData.Source.TURRET_BASE,
-                MemoryCardRules.capture(base.getLogic()), MemoryCardRules.captureTrust(base.getTrustManager()),
+                BaseCardRules.capture(base.getLogic()), MemoryCardRules.captureTrust(base.getTrustManager()),
                 base.isCamoEnabled() ? camoSettings(base) : null));
         notify(player, "card_copied");
     }
@@ -99,7 +100,7 @@ public final class MemoryCardInteraction {
         boolean applied = false;
         if (MemoryCardRules.canPaste(base.getTrustManager(), PlayerAdapter.info(player))) {
             if (data.base() != null) {
-                MemoryCardRules.apply(data.base(), base.getLogic());
+                BaseCardRules.apply(data.base(), base.getLogic());
             }
             MemoryCardRules.applyTrust(data.trust(), base.getTrustManager());
             applied = true;
