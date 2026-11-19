@@ -80,7 +80,7 @@ Packages below `omtteam.openmodularturrets` (the `core` ones come from OpenModul
 | `core.base` | `TurretBaseLogic`: targeting per face, ammo, energy, upgrades, addons, redstone modes; `BaseTier`; `AmmoDraw`; `TurretPlacement` (what may be attached and stay) |
 | `core.turret` | `TurretType` and `TurretTypes`, `AmmoType`, `TurretState` (cooldown, concealment, shot cost), aim and damage math (`TurretMath`, `RayMath`, `RayProfile`, `ProjectileMath`) |
 | `core.target` | `TargetSelector`: who is a valid target and the best one; `TargetEntity`, `EntityCategory`, `TargetingPriority` |
-| `core.security`, `core.card` | `DamageRules` (who turret damage may hit); `MemoryCardData` and `MemoryCardRules` (the memory card copy rules) |
+| `core.security`, `core.card` | `DamageRules` (who turret damage may hit); `BaseCardRules` (the turret base part of a memory card: capturing and applying the base settings; the card data and the trust list part are OMLib's `core.card`, shared with the camouflage trap) |
 | `core.item`, `core.settings`, `core.world` | upgrade and addon types, the slot interface; stats and `LogicSettings`; the world interface, `Neighbour` (turrets and inventory expanders), `Vector3`, `Box` (`Face` and `BlockPosition` are in OMLib's `core.world`) |
 | `core.storage` | `SlotCapacity`: how many stacks a slot holds with the base tier's stacks and the attached inventory expanders; `AmmoSort`: the order of the base GUI's "Sort Ammo" button (`TurretBaseInventory.sortAmmo`) |
 | `core.generator` | `GeneratorLogic`: burning fuel, the energy multiplier upgrade |

@@ -10,7 +10,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 
 ### Changed
 
-- The game rules (`omtteam.openmodularturrets.core`) come from the shared core OpenModularCore 1.0.0, the same on every Minecraft version, and are part of the OMT jar
+- The game rules (`omtteam.openmodularturrets.core`) come from the shared core OpenModularCore 2.0.0, the same on every Minecraft version, and are part of the OMT jar
 - API: `TurretType.Builder.mountFaces` and `TurretType.canMountOn` take OMLib's `omtteam.omlib.core.world.Face` instead of `omtteam.openmodularturrets.core.world.Face`, which is gone; addon turrets that call them must be rebuilt
 
 ### Fixed

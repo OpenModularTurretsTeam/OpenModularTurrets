@@ -2,7 +2,6 @@ package omtteam.openmodularturrets.tileentity.base;
 
 import net.minecraft.nbt.NBTTagCompound;
 import omtteam.omlib.core.machine.MachineMode;
-import omtteam.omlib.util.EnumMachineMode;
 import omtteam.omlib.util.TargetingSettings;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 
@@ -30,7 +29,7 @@ final class TurretBaseNbt {
     static TurretBaseLogic.State load(NBTTagCompound tag, long energy) {
         TargetingSettings targeting = TargetingSettings.readFromNBT(tag);
         MachineMode mode = tag.hasKey("mode")
-                ? EnumMachineMode.byOrdinal(tag.getInteger("mode"), MachineMode.INVERTED) : MachineMode.INVERTED;
+                ? MachineMode.byOrdinal(tag.getInteger("mode"), MachineMode.INVERTED) : MachineMode.INVERTED;
         return new TurretBaseLogic.State(energy, mode, tag.getBoolean("redstone"),
                 targeting.isTargetPlayers(), targeting.isTargetMobs(), targeting.isTargetPassive(),
                 targeting.getRange(), targeting.getMaxRange(), tag.getBoolean("multiTargeting"),

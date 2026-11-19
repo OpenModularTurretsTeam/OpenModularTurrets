@@ -13,13 +13,14 @@ import omtteam.omlib.api.render.camo.DisguiseRules;
 import omtteam.omlib.api.render.camo.ICamoSupport;
 import omtteam.omlib.api.tile.IHasTrustManager;
 import omtteam.omlib.core.camo.CamoLight;
+import omtteam.omlib.core.card.MemoryCardData;
+import omtteam.omlib.core.card.MemoryCardRules;
 import omtteam.omlib.core.security.PlayerInfo;
 import omtteam.omlib.core.security.TrustManager;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.camo.CamoSettings;
 import omtteam.omlib.util.player.PlayerUtil;
-import omtteam.openmodularturrets.core.card.MemoryCardData;
-import omtteam.openmodularturrets.core.card.MemoryCardRules;
+import omtteam.openmodularturrets.core.card.BaseCardRules;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.Nullable;
@@ -95,7 +96,7 @@ public final class MemoryCardInteraction {
             return;
         }
         card.setCardData(stack, new MemoryCardData(MemoryCardData.Source.TURRET_BASE,
-                MemoryCardRules.capture(base.getLogic()), MemoryCardRules.captureTrust(trust),
+                BaseCardRules.capture(base.getLogic()), MemoryCardRules.captureTrust(trust),
                 base.isCamoEnabled() ? camoSettings(base) : null));
         notify(player, "card_copied");
     }
@@ -106,7 +107,7 @@ public final class MemoryCardInteraction {
         TrustManager trust = base.getTrustManager().core();
         if (MemoryCardRules.canPaste(trust, info)) {
             if (data.base() != null) {
-                MemoryCardRules.apply(data.base(), base.getLogic());
+                BaseCardRules.apply(data.base(), base.getLogic());
             }
             MemoryCardRules.applyTrust(data.trust(), trust);
             base.markDirty();

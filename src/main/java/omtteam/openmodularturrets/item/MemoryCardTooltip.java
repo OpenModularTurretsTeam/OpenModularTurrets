@@ -8,10 +8,10 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import omtteam.omlib.core.card.MemoryCardData;
 import omtteam.omlib.core.security.TrustedPlayer;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.EnumMachineMode;
-import omtteam.openmodularturrets.core.card.MemoryCardData;
 import omtteam.openmodularturrets.reference.OMTNames;
 
 import javax.annotation.Nullable;

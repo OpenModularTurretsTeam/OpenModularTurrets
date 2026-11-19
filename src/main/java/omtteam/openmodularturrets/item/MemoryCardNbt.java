@@ -4,11 +4,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
 import omtteam.omlib.api.permission.TrustedPlayersManager;
 import omtteam.omlib.core.camo.CamoLight;
+import omtteam.omlib.core.card.MemoryCardData;
 import omtteam.omlib.core.machine.MachineMode;
 import omtteam.omlib.core.security.TrustedPlayer;
-import omtteam.omlib.util.EnumMachineMode;
 import omtteam.omlib.util.TargetingSettings;
-import omtteam.openmodularturrets.core.card.MemoryCardData;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -100,7 +99,7 @@ public final class MemoryCardNbt {
     private static MemoryCardData readThreeX(NBTTagCompound tag) {
         TargetingSettings targeting = TargetingSettings.readFromNBT(tag);
         MachineMode mode = tag.hasKey("mode")
-                ? EnumMachineMode.byOrdinal(tag.getInteger("mode"), MachineMode.INVERTED) : MachineMode.INVERTED;
+                ? MachineMode.byOrdinal(tag.getInteger("mode"), MachineMode.INVERTED) : MachineMode.INVERTED;
         MemoryCardData.BaseSettings base = new MemoryCardData.BaseSettings(mode, tag.getBoolean("multiTargeting"),
                 targeting.isTargetPlayers(), targeting.isTargetMobs(), targeting.isTargetPassive(),
                 targeting.getRange());

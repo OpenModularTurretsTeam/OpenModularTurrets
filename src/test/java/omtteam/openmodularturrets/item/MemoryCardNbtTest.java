@@ -3,11 +3,11 @@ package omtteam.openmodularturrets.item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import omtteam.omlib.core.camo.CamoLight;
+import omtteam.omlib.core.card.MemoryCardData;
 import omtteam.omlib.core.machine.MachineMode;
 import omtteam.omlib.core.security.AccessLevel;
 import omtteam.omlib.core.security.PlayerIdentity;
 import omtteam.omlib.core.security.TrustedPlayer;
-import omtteam.openmodularturrets.core.card.MemoryCardData;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
