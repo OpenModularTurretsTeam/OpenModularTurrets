@@ -17,6 +17,7 @@ A **turret base** is the brain: it owns targeting, ammo, energy, upgrades, addon
 All game rules (who is a target, how much a shot costs, what an upgrade does, who may change what) are plain Java in `core`, without any Minecraft class, so they are unit-tested in milliseconds.
 The core is not part of this repository: it comes from the shared core, [OpenModularCore](https://github.com/OpenModularTurretsTeam/OpenModularCore) (module `omt-core-j8`, version `core_version` in `gradle.properties`, from JitPack), the same rules as on every other Minecraft version, downgraded to Java 8.
 The OMT jars carry its classes (`omtteam/openmodularturrets/core`) and the stubs of the Java 9+ API it uses (`omtteam/openmodularturrets/jvmdg`); OMLib's core (`omlib-core-j8`) comes with OMLib.
+A checkout of OpenModularCore in a folder above this repository (`../../OpenModularCore` in the team's dev layout) replaces the JitPack artifact: `settings.gradle` includes it, so a core change can be built and tested here before it is released; `-Pomm.noLocalCore` or `OMM_NO_LOCAL_CORE=1` builds against JitPack again.
 The Minecraft-facing code around it translates between the game and the core and is kept as thin as possible.
 
 ## Layers
