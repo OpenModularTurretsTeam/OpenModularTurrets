@@ -95,17 +95,7 @@ public class GeneratorMenu extends LargeStackMenu {
                 }
             });
         }
-        addSlot(new Slot(upgrades, 0, UPGRADE_X, UPGRADE_Y) {
-            @Override
-            public boolean mayPlace(ItemStack stack) {
-                return GeneratorBlockEntity.isUpgrade(stack);
-            }
-
-            @Override
-            public int getMaxStackSize() {
-                return GeneratorUpgradeType.ENERGY_MULTIPLIER.maxPerSlot();
-            }
-        });
+        addSlot(new UpgradeSlot(upgrades));
         addDataSlots(data);
     }
 
@@ -157,5 +147,27 @@ public class GeneratorMenu extends LargeStackMenu {
     public boolean stillValid(Player player) {
         if (generator == null) return true; // client side
         return !generator.isRemoved() && player.distanceToSqr(Vec3.atCenterOf(pos)) < MAX_DISTANCE_SQR;
+    }
+
+    /**
+     * The energy multiplier upgrade slot.
+     * A named class, not an anonymous one: javac names an anonymous class's constructor parameters after the super
+     * constructor's, and the Forge 1.20.1 game jar that ModDevGradle builds without recompilation (on CI) names all of
+     * {@code Slot}'s {@code o}, which fails as "variable o is already defined".
+     */
+    private static final class UpgradeSlot extends Slot {
+        UpgradeSlot(Container upgrades) {
+            super(upgrades, 0, UPGRADE_X, UPGRADE_Y);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return GeneratorBlockEntity.isUpgrade(stack);
+        }
+
+        @Override
+        public int getMaxStackSize() {
+            return GeneratorUpgradeType.ENERGY_MULTIPLIER.maxPerSlot();
+        }
     }
 }
