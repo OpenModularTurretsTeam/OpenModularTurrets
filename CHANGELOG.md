@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Open Modular Turrets (Fabric, NeoForge and Forge).
+All notable changes to Open Modular Turrets (Fabric and Forge).
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 Add every user-visible change as a one-line entry under **Unreleased** (sections: Added, Changed, Fixed, Removed), by hand or with `./gradlew changelogEntry --type=added --entry="…"`.
