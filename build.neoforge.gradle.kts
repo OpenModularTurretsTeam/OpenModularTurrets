@@ -56,12 +56,12 @@ neoForge {
             loadedMods = setOf(mods.getByName(modId))
         }
         // Headless in-world tests (no EULA needed); runs the GameTests and exits with the number of failed tests,
-        // which fails the task. Up to 1.21.4 only those of this mod's namespace; from 1.21.5 on every registered test
-        // (the test mod registers only its own)
+        // which fails the task. Only those of this mod's
+        // namespace.
         register("gameTestServer") {
             type = "gameTestServer"
             sourceSet = gametest
-            if (stonecutter.current.parsed < "1.21.5") systemProperty("neoforge.enabledGameTestNamespaces", modId)
+            systemProperty("neoforge.enabledGameTestNamespaces", modId)
         }
     }
 }
@@ -77,27 +77,6 @@ repositories {
     exclusiveContent {
         forRepository { maven("https://maven.ryanhcode.dev/releases") { name = "Sable" } }
         filter { includeGroup("dev.ryanhcode.sable-companion") }
-    }
-}
-
-// No Sable, Create or Create Aeronautics for 1.21.11 (their properties are missing there): no movement check, no hook
-// into Simulated (and so no second mixin config), and none of the game tests that need them
-if (stonecutter.current.parsed >= "1.21.11") {
-    sourceSets.main {
-        java { exclude("**/platform/neoforge/NeoForgeCreateMovement.java", "**/platform/neoforge/mixin/**") }
-        resources { exclude("openmodularturrets.neoforge.mixins.json") }
-    }
-    sourceSets.named("gametest") {
-        java {
-            exclude("**/platform/neoforge/SableContraptionGameTests.java", "**/platform/neoforge/CreateMovementGameTests.java",
-                "**/platform/neoforge/SimulatedAssemblyGameTests.java")
-        }
-    }
-    tasks.processResources {
-        doLast {
-            val toml = destinationDir.resolve("META-INF/neoforge.mods.toml")
-            toml.writeText(toml.readText().replace(Regex("(?s)# NeoForge only:.*?neoforge\\.mixins\\.json\"\n\n"), ""))
-        }
     }
 }
 
@@ -151,9 +130,6 @@ dependencies {
         "gametestRuntimeOnly"("maven.modrinth:create-aeronautics:${property("create_aeronautics_version")}")
     }
 }
-// The client half of the Jade plugin (client/compat/jade) compiles against it too, as with Loom's client source set
-configurations.named("clientCompileOnly") { extendsFrom(configurations.compileOnly.get()) }
-
 // The client half of the Jade plugin (client/compat/jade) compiles against it too, as with Loom's client source set
 configurations.named("clientCompileOnly") { extendsFrom(configurations.compileOnly.get()) }
 

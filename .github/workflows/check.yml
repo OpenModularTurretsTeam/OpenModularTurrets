@@ -24,13 +24,12 @@ jobs:
         with:
           submodules: true
 
-      # Gradle runs on 25; the nodes compile with 17 (1.20.1) and 21 (1.21.x). Installing them here spares foojay the
+      # Gradle runs on 25; the nodes compile with 21. Installing them here spares foojay the
       # download; Gradle finds them through the JAVA_HOME_<n>_X64 variables (org.gradle.java.installations.fromEnv below).
       - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: |
-            17
             21
             25
 
@@ -39,7 +38,7 @@ jobs:
         with:
           cache-read-only: ${{ github.event_name == 'pull_request' }}
 
-      # The library as built by omlib/tools/bootstrap.sh (all six nodes, with its .stamp), per submodule commit
+      # The library as built by omlib/tools/bootstrap.sh (both nodes, with its .stamp), per submodule commit
       - name: Find the omlib commit
         id: omlib
         run: echo "commit=$(git rev-parse HEAD:omlib)" >> "$GITHUB_OUTPUT"
@@ -51,7 +50,7 @@ jobs:
       - name: Check all nodes
         run: >
           ./gradlew check --continue --console=plain
-          -Porg.gradle.java.installations.fromEnv=JAVA_HOME_17_X64,JAVA_HOME_21_X64
+          -Porg.gradle.java.installations.fromEnv=JAVA_HOME_21_X64
 
       - name: Upload reports
         if: failure()
