@@ -23,8 +23,7 @@ import omtteam.openmodularturrets.registry.ModItems;
 
 /**
  * The generator with energy multiplier upgrades: it burns faster, but a fuel item still yields the same energy; and it
- * pushes its energy into neighbours. Every test has its own batch and removes its blocks when it passed (1.20.1 keeps a
- * finished batch's blocks).
+ * pushes its energy into neighbours. Every test has its own batch and removes its blocks when it passed.
  */
 //? if neoforge {
 /*@GameTestHolder(OMT.MOD_ID)

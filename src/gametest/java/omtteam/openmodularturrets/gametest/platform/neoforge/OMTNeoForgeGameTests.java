@@ -12,8 +12,7 @@ import omtteam.omlib.registry.RegistrationStep;
 import java.util.List;
 
 /**
- * NeoForge entrypoint of the test mod. Before 1.21.11 NeoForge finds the test classes through their
- * {@code @GameTestHolder} annotation; from 1.21.11 on {@code NeoForgeGameTestRegistration} registers them.
+ * NeoForge entrypoint of the test mod. The test classes are found through their {@code @GameTestHolder} annotation.
  */
 @Mod(OMTGameTestMod.MOD_ID)
 public final class OMTNeoForgeGameTests {

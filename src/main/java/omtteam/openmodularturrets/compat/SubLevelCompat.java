@@ -15,8 +15,8 @@ import org.joml.Vector3dc;
 
 /**
  * Sable contraptions (sub-levels), through Sable Companion: their blocks are stored in a plot far away from where
- * they are shown, and a {@link Pose} places the plot in the world. Without Sable (and on 1.20.1 and 1.21.11, which have
- * neither Sable nor Companion) every block is outside a contraption.
+ * they are shown, and a {@link Pose} places the plot in the world. Without Sable every block is outside a
+ * contraption.
  * <p>
  * Poses change every tick: ask for them when needed, never keep them.
  */
@@ -44,7 +44,7 @@ public final class SubLevelCompat {
         return new Vec3(velocity.x, velocity.y, velocity.z).scale(1.0D / TICKS_PER_SECOND);
     }
 
-    // Companion's pose as a core Pose (same formula); line comments only, this block is commented out on 1.20.1
+    // Companion's pose as a core Pose (same formula)
     public static Pose toPose(Pose3dc pose) {
         Quaterniondc orientation = pose.orientation();
         return new Pose(toVector(pose.position()),

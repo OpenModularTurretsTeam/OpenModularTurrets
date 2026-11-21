@@ -118,8 +118,8 @@ public final class OMTClient {
     }
 
     /**
-     * This mod's camouflage blocks (turret bases, camouflage trap), for the colour provider of the NeoForge and Forge
-     * clients; other mods' camouflage blocks (Open Modular Lighting's floodlights) register their own.
+     * This mod's camouflage blocks (turret bases, camouflage trap), for the colour provider of the NeoForge
+     * client; other mods' camouflage blocks (Open Modular Lighting's floodlights) register their own.
      */
     public static Block[] camoBlocks() {
         return CamoModels.camoBlocks().stream()

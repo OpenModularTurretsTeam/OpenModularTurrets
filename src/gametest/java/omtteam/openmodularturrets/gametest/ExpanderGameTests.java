@@ -38,7 +38,7 @@ import omtteam.openmodularturrets.registry.ModItems;
 /**
  * Inventory expanders: which ones a machine counts, the larger slots through hoppers, saving and the menu, which hands
  * out at most one stack at a time. The config defaults apply (tier 1–3 add 1, 2 and 3 stacks). Every test has its own
- * batch and empties and removes its blocks when it passed (1.20.1 keeps a finished batch's blocks).
+ * batch and empties and removes its blocks when it passed.
  */
 //? if neoforge {
 /*@GameTestHolder(OMT.MOD_ID)

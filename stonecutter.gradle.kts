@@ -1,7 +1,7 @@
 plugins {
     id("dev.kikugie.stonecutter")
-    // Loader plugins, applied by build.fabric.gradle.kts / build.neoforge.gradle.kts / build.forge.gradle.kts
-    // (the publish plugin comes from buildSrc, see buildSrc/build.gradle.kts)
+    // Loader plugins, applied by build.fabric.gradle.kts / build.neoforge.gradle.kts
+    // (the publish plugin comes from omlib/build-logic, see omlib/build-logic/build.gradle.kts)
     id("net.fabricmc.fabric-loom-remap") version "1.18.4" apply false
     id("net.neoforged.moddev") version "2.0.148" apply false
     // Formatting checks (./gradlew spotlessCheck / spotlessApply)
@@ -30,26 +30,26 @@ spotless {
 
 stonecutter active "1.21.1-fabric"
 
-// Loader constants for conditions: //? if fabric { ... //? if neoforge { ... //? if forge {
+// Loader constants for conditions: //? if fabric { ... //? if neoforge {
 // Prefer whole classes in platform/<loader>/ packages (left out of the other loaders' builds) over conditions.
 stonecutter parameters {
     constants.match(current.project.substringAfterLast('-'), "fabric", "neoforge", "forge")
 }
 
-// Builds every version in one go: ./gradlew chiseledBuild
+// Builds every node in one go: ./gradlew chiseledBuild
 tasks.register("chiseledBuild") {
     group = "build"
     description = "Builds the mod for all Stonecutter versions"
     dependsOn(stonecutter.versions.map { ":${it.project}:build" })
 }
 
-// Checks every version: from the workspace, :<repo>:check names only this (root) project's check, which would leave
+// Checks every node: from the workspace, :<repo>:check names only this (root) project's check, which would leave
 // out the nodes' tests; inside this folder ./gradlew check runs them anyway (Gradle runs each task once)
 tasks.named("check") {
     dependsOn(stonecutter.versions.map { ":${it.project}:check" })
 }
 
-// Publishes every version to CurseForge / Modrinth: ./gradlew chiseledPublish (see publishMods in build.gradle.kts)
+// Publishes every node to CurseForge / Modrinth: ./gradlew chiseledPublish (see publishMods in build.gradle.kts)
 tasks.register("chiseledPublish") {
     group = "publishing"
     description = "Publishes the mod for all Stonecutter versions"

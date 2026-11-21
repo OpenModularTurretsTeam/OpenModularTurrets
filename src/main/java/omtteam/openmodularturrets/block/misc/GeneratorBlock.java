@@ -117,7 +117,7 @@ public class GeneratorBlock extends CompatEntityBlock implements InteractiveBloc
         return BlockCompat.sidedSuccess(level.isClientSide());
     }
 
-    /** The generator drops its items in {@code onBlockRemoved}; 1.21.11 calls that itself. */
+    /** The generator drops its items in {@code onBlockRemoved}, which {@code CompatBlockEntity.handleRemove} calls. */
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         CompatBlockEntity.handleRemove(state, level, pos, newState);

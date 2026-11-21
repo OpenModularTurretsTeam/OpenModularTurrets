@@ -10,11 +10,11 @@ import snownee.jade.api.WailaPlugin;
 
 /**
  * Jade integration, only loaded if Jade is installed: Fabric Jade finds it through the {@code jade} entrypoint in
- * fabric.mod.json, NeoForge and Forge Jade through {@link WailaPlugin} (Fabric has no annotation scanning, so it is not
+ * fabric.mod.json, NeoForge Jade through {@link WailaPlugin} (Fabric has no annotation scanning, so it is not
  * registered twice). Replaces the 1.12.2 WAILA/HWYLA handlers.
  * <p>
  * The server half is here; the tooltips are in {@code client.compat.jade.OMTJadeClientPlugin}, because Jade's tooltip
- * classes are client classes (from Jade 21 on 1.21.11, {@code ITooltip} extends one), which main cannot see.
+ * code may use client classes, which main cannot see.
  * Jade creates every plugin it finds on a dedicated server too, so the client half is not one of them: this plugin
  * loads it by name in {@link #registerClient}, which Jade calls only on a client.
  */

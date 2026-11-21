@@ -38,7 +38,7 @@ import java.util.Locale;
  * While the player holds a turret and looks at a block next to a turret base, outlines where the turret would go:
  * cyan if it can be placed there, red if not (1.12.2 OMLib {@code ClientEventHandler.drawBlockOutline}), with a small
  * label saying why ({@link TurretPlacement.Result}). The loader client entrypoints call {@link #render} after the
- * translucent blocks and {@link #renderLabel} as late as their loader allows (Fabric: last, NeoForge and Forge: after
+ * translucent blocks and {@link #renderLabel} as late as their loader allows (Fabric: last, NeoForge: after
  * the particles). On a Sable contraption both are drawn where the plot block is shown (its render pose).
  */
 public final class TurretPlacementOutline {
