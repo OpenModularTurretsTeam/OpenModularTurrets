@@ -1,20 +1,14 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-*///?}
 //? if forge {
 /*import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 *///?}
-//? if (neoforge && <1.21.11) || forge {
+//? if forge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
 import net.minecraft.core.BlockPos;
-//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
-//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.ClickType;
@@ -43,7 +37,7 @@ import omtteam.openmodularturrets.registry.ModBlocks;
  * owner are tested in OpenModularLighting's {@code CamoGameTest}, the light in {@link CamoGameTests}. The players are
  * {@link GuiTestPlayer}s, which open menus without a client.
  */
-//? if (neoforge && <1.21.11) || forge {
+//? if forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}

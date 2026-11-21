@@ -1,20 +1,14 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-*///?}
 //? if forge {
 /*import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 *///?}
-//? if (neoforge && <1.21.11) || forge {
+//? if forge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
 import net.minecraft.core.BlockPos;
-//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
-//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,7 +32,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * The ray turrets must trace their rays towards a target 5 blocks in front and hit it. They scatter, so a missed
  * shot is repeated with a fresh target, up to {@value TargetAttempts#MAX_ATTEMPTS} times; the test fails if none of them hits.
  */
-//? if (neoforge && <1.21.11) || forge {
+//? if forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}

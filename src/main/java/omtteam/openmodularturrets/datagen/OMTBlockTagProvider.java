@@ -11,9 +11,6 @@ import omtteam.openmodularturrets.registry.ModBlocks;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
-//? if >=1.21.11 {
-/*import net.minecraft.data.tags.TagAppender;
-*///?}
 
 public class OMTBlockTagProvider extends FabricTagProvider.BlockTagProvider {
     public OMTBlockTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registries) {
@@ -43,13 +40,7 @@ public class OMTBlockTagProvider extends FabricTagProvider.BlockTagProvider {
     }
 
     /** The builder that adds blocks by value (renamed in the Fabric API for 1.21.5). */
-    //? if >=1.21.11 {
-    /*private TagAppender<Block, Block> tagBuilder(TagKey<Block> tag) {
-        return valueLookupBuilder(tag);
-    }
-    *///?} else {
     private FabricTagBuilder tagBuilder(TagKey<Block> tag) {
         return getOrCreateTagBuilder(tag);
     }
-    //?}
 }

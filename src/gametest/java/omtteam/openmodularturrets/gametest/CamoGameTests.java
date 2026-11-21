@@ -1,19 +1,13 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-*///?}
 //? if forge {
 /*import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 *///?}
-//? if (neoforge && <1.21.11) || forge {
+//? if forge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
-//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
-//?}
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -47,7 +41,7 @@ import java.util.UUID;
  * (OMLib's {@code CamoPacketHandler}): only on tier 4 and 5 bases and the trap, only by admins within reach, and not
  * with base camouflage turned off.
  */
-//? if (neoforge && <1.21.11) || forge {
+//? if forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
@@ -203,11 +197,7 @@ public class CamoGameTests implements OMTGameTests {
     private static void assertPickAndModel(GameTestHelper helper, Block picked, @Nullable BlockState disguise) {
         BlockPos pos = helper.absolutePos(BLOCK);
         BlockState state = helper.getLevel().getBlockState(pos);
-        //? if >=1.21.11 {
-        /*ItemStack pick = state.getCloneItemStack(helper.getLevel(), pos, false);
-        *///?} else {
         ItemStack pick = state.getBlock().getCloneItemStack(helper.getLevel(), pos, state);
-        //?}
         helper.assertTrue(pick.is(picked.asItem()), state + " picks as " + pick + ", expected " + picked);
         CompatBlockEntity entity = (CompatBlockEntity) helper.getLevel().getBlockEntity(pos);
         //? if fabric {

@@ -1,22 +1,13 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-*///?}
 //? if forge {
 /*import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 *///?}
-//? if (neoforge && <1.21.11) || forge {
+//? if forge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
-//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
-//?}
-//? if >=1.21 {
-import net.minecraft.core.HolderLookup;
-//?}
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -55,7 +46,7 @@ import java.util.UUID;
  * owner picks it up again, and the owner is saved with the block and sent to clients. Hardness, blast resistance and
  * fence damage come from the config of their tier.
  */
-//? if (neoforge && <1.21.11) || forge {
+//? if forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
@@ -178,14 +169,8 @@ public class PassiveDefenseGameTests implements OMTGameTests {
 
     /** Saves the block entity as a chunk does and loads a new one from the data. */
     private static OwnedBlockEntity reload(GameTestHelper helper, OwnedBlockEntity owned) {
-        //? if >=1.21 {
-        HolderLookup.Provider registries = helper.getLevel().registryAccess();
-        CompoundTag tag = owned.saveWithFullMetadata(registries);
-        BlockEntity loaded = BlockEntity.loadStatic(owned.getBlockPos(), owned.getBlockState(), tag, registries);
-        //?} else {
-        /*CompoundTag tag = owned.saveWithFullMetadata();
+        CompoundTag tag = owned.saveWithFullMetadata();
         BlockEntity loaded = BlockEntity.loadStatic(owned.getBlockPos(), owned.getBlockState(), tag);
-        *///?}
         helper.assertTrue(loaded instanceof OwnedBlockEntity, "Loaded " + loaded + " from " + tag);
         return (OwnedBlockEntity) loaded;
     }

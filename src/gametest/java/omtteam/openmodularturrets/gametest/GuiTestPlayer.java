@@ -4,9 +4,6 @@ import com.mojang.authlib.GameProfile;
 //? if fabric {
 import net.fabricmc.fabric.api.entity.FakePlayer;
 //?}
-//? if neoforge {
-/*import net.neoforged.neoforge.common.util.FakePlayer;
-*///?}
 //? if forge {
 /*import net.minecraftforge.common.util.FakePlayer;
 *///?}
@@ -16,10 +13,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.jetbrains.annotations.Nullable;
-//? if neoforge {
-/*import net.minecraft.network.RegistryFriendlyByteBuf;
-import java.util.function.Consumer;
-*///?}
 
 import java.util.OptionalInt;
 import java.util.UUID;
@@ -52,11 +45,4 @@ final class GuiTestPlayer extends FakePlayer {
         return OptionalInt.of(menu.containerId);
     }
 
-    //? if neoforge {
-    /*/^* NeoForge opens block menus with extra data for the client (none here), through this variant. ^/
-    @Override
-    public OptionalInt openMenu(@Nullable MenuProvider provider, @Nullable Consumer<RegistryFriendlyByteBuf> extraDataWriter) {
-        return openMenu(provider);
-    }
-    *///?}
 }

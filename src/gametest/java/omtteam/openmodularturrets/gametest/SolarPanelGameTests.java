@@ -1,19 +1,13 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-*///?}
 //? if forge {
 /*import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 *///?}
-//? if (neoforge && <1.21.11) || forge {
+//? if forge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
-//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
-//?}
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +26,7 @@ import omtteam.openmodularturrets.registry.ModItems;
  * light update. The light engine runs on its own thread in real time, so while the test servers of all nodes run at
  * once it can be many ticks behind.
  */
-//? if (neoforge && <1.21.11) || forge {
+//? if forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
@@ -49,7 +43,7 @@ public class SolarPanelGameTests implements OMTGameTests {
     /** Day time of noon; the day ends at about 12000. */
     private static final long NOON = 6000L;
 
-    //? if fabric || neoforge {
+    //? if fabric {
     /** Not on Forge: its game test server places the tests underground. */
     @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = TIMEOUT_TICKS)
     public void solarPanelChargesUnderTheSky(GameTestHelper helper) {

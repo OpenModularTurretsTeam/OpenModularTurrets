@@ -1,9 +1,7 @@
 package omtteam.openmodularturrets.gametest.platform.neoforge;
 
 import net.minecraft.core.BlockPos;
-//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
-//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;

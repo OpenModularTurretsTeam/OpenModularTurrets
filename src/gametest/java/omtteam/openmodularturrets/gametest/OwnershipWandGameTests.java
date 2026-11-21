@@ -4,29 +4,20 @@ import com.mojang.authlib.GameProfile;
 //? if fabric {
 import net.fabricmc.fabric.api.entity.FakePlayer;
 //?}
-//? if neoforge {
-/*import net.neoforged.neoforge.common.util.FakePlayer;
-*///?}
 //? if forge {
 /*import net.minecraftforge.common.util.FakePlayer;
-*///?}
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 *///?}
 //? if forge {
 /*import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 *///?}
-//? if (neoforge && <1.21.11) || forge {
+//? if forge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
-//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -56,10 +47,6 @@ import omtteam.omlib.security.OwnedHost;
 import omtteam.omlib.security.PlayerAdapter;
 import omtteam.omlib.security.TrustHost;
 
-//? if >=1.21.11 {
-/*import net.minecraft.server.permissions.LevelBasedPermissionSet;
-import net.minecraft.server.permissions.PermissionSet;
-*///?}
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.UUID;
@@ -70,7 +57,7 @@ import java.util.UUID;
  * player holding it without affecting them. Every
  * immunity test has a control without the wand, so a test player that turrets cannot reach does not pass by accident.
  */
-//? if (neoforge && <1.21.11) || forge {
+//? if forge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
@@ -345,7 +332,6 @@ public class OwnershipWandGameTests implements OMTGameTests {
          */
         private void endSpawnProtection() {
             // 1.21.11 has no such field; there the player's isInvulnerableTo override below is enough
-            //? if <1.21.11 {
             try {
                 Field field = ServerPlayer.class.getDeclaredField("spawnInvulnerableTime");
                 field.setAccessible(true);
@@ -353,21 +339,8 @@ public class OwnershipWandGameTests implements OMTGameTests {
             } catch (ReflectiveOperationException e) {
                 throw new IllegalStateException("Cannot end the spawn protection of the test player", e);
             }
-            //?}
         }
 
-        //? if >=1.21.11 {
-        /*@Override
-        public PermissionSet permissions() {
-            return gameMaster ? LevelBasedPermissionSet.GAMEMASTER : LevelBasedPermissionSet.ALL;
-        }
-
-        @Override
-        @SuppressWarnings("NullableProblems")
-        public boolean isInvulnerableTo(ServerLevel level, DamageSource source) {
-            return false;
-        }
-        *///?} else {
         @Override
         public int getPermissionLevel() {
             return gameMaster ? 2 : 0;
@@ -378,6 +351,5 @@ public class OwnershipWandGameTests implements OMTGameTests {
         public boolean isInvulnerableTo(DamageSource source) {
             return false;
         }
-        //?}
     }
 }

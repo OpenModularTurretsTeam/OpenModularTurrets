@@ -136,11 +136,7 @@ public class TurretBaseInventory implements LargeStackContainer {
     private final AmmoSort.Items<ItemStack> ammoItems = new AmmoSort.Items<>() {
         @Override
         public boolean isSameKind(ItemStack a, ItemStack b) {
-            //? if >=1.21 {
-            return ItemStack.isSameItemSameComponents(a, b);
-            //?} else {
-            /*return ItemStack.isSameItemSameTags(a, b);
-            *///?}
+            return ItemStack.isSameItemSameTags(a, b);
         }
 
         @Override
