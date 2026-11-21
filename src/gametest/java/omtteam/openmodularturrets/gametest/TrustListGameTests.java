@@ -19,6 +19,7 @@ import omtteam.openmodularturrets.registry.ModBlocks;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The packets of the trusted player screen as the server handles them (OMLib's {@code TrustPacketHandler}): only admins
@@ -35,6 +36,14 @@ public class TrustListGameTests implements OMTGameTests {
      * thread (it took more than 20 ticks in a run with several game test servers at once).
      */
     private static final int LOOKUP_TICKS = 60;
+    /**
+     * How long the test that expects an entry waits for the name lookup, in seconds. The lookup waits for a background
+     * worker, while the game test server runs its ticks back to back, so a timeout in ticks can pass before the answer is
+     * back (it did in most runs with the coverage agent attached, even after 1200 ticks).
+     */
+    private static final long LOOKUP_SECONDS = 30;
+    /** More ticks than the server runs in {@link #LOOKUP_SECONDS}; the test ends as soon as the entry is there. */
+    private static final int LOOKUP_TIMEOUT_TICKS = 200_000;
     private static final BlockPos BASE = new BlockPos(1, 1, 1);
 
     /** The owner adds an online player by name (surrounding spaces ignored); the new entry has no access yet. */
@@ -79,7 +88,7 @@ public class TrustListGameTests implements OMTGameTests {
      * (as an offline-mode server does), before 1.21.11 it has no profile cache and the name is not found. An empty name is
      * not looked up at all.
      */
-    @GameTest(template = EMPTY_STRUCTURE, batch = "trust_add_offline", timeoutTicks = TIMEOUT_TICKS)
+    @GameTest(template = EMPTY_STRUCTURE, batch = "trust_add_offline", timeoutTicks = LOOKUP_TIMEOUT_TICKS)
     public void namesOfOfflinePlayersAreLookedUp(GameTestHelper helper) {
         TrustManager trust = base(helper, ModBlocks.TURRET_BASES.get(0));
         ServerPlayer owner = owner(helper, trust);
@@ -87,10 +96,15 @@ public class TrustListGameTests implements OMTGameTests {
         TrustPacketHandler.handleAdd(new TrustPackets.Add(helper.absolutePos(BASE), "Offline_7f3a"), owner);
 
         PlayerIdentity expected = new PlayerIdentity(UUIDUtil.createOfflinePlayerUUID("Offline_7f3a"), "Offline_7f3a");
-        helper.succeedWhen(() -> {
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(LOOKUP_SECONDS);
+        helper.onEachTick(() -> {
             List<TrustedPlayer> entries = trust.getTrustedPlayers();
-            helper.assertTrue(entries.size() == 1 && entries.get(0).getIdentity().equals(expected),
-                    "Trust list is " + entries.stream().map(TrustedPlayer::getIdentity).toList() + ", expected " + expected);
+            if (entries.size() == 1 && entries.get(0).getIdentity().equals(expected)) {
+                helper.succeed();
+            } else if (System.nanoTime() > deadline) {
+                helper.fail("Trust list is " + entries.stream().map(TrustedPlayer::getIdentity).toList() + ", expected "
+                        + expected + " within " + LOOKUP_SECONDS + " seconds");
+            }
         });
     }
 
