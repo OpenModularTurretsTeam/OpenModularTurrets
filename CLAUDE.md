@@ -38,6 +38,8 @@ Core gameplay:
   Jar-in-jar it (approved).
 - **Jade** (optional integration, `compat/jade/` for the server half and `client/compat/jade/` for the tooltips, registered through the `jade` entrypoint on Fabric and `@WailaPlugin` on Forge).
   Compile-only (`modCompileOnly`, Modrinth maven), never bundled and never required at runtime.
+- **NEEPMeat** (Fabric, Modrinth `maven.modrinth:neepmeat`, version in `versions/1.20.1-fabric/gradle.properties`; requested by the user on 2026-11-04): its vascular network charges the turret bases through OMLib (`platform/fabric/FabricNeepMeatPower`, registered by `FabricBlockLookups` when NEEPMeat is loaded; 1 eJ = 1 E, a full buffer takes nothing), so the mod has no code of its own for it.
+  Never bundled (`suggests` in `fabric.mod.json`); `modCompileOnly` for the game test `gametest/platform/fabric/NeepMeatGameTests`, and `modLocalRuntime` with the mods nested in its jar (Loom leaves them out of its remapped copy; OMLib's `nestedModJars`) and **GeckoLib**, which it requires, for the dev runs and the game test server.
 - **Forge** 47.x, built with the legacy variant of ModDevGradle (`net.neoforged.moddev.legacyforge`, same artifact and version as `moddev`; build-time only), requested by the user.
   On Forge, the Fabric-only APIs are replaced by Forge's own (capabilities, events, event network channels); see §4 "Forge 1.20.1".
 - **MixinExtras** (`io.github.llamalad7:mixinextras-forge`), jar-in-jar in the **Forge jar only** (approved by the user on 2026-10-24): Fabric Loader ships it, Forge 1.20.1 does not, and `LivingEntityMixin` needs it.

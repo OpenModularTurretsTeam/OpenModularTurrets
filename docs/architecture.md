@@ -52,6 +52,7 @@ Two directions, so that gameplay code stays loader-free:
   OMLib creates the implementations of the running loader on first use (`Platform`, `ClientPlatform`), so it does not matter which mod starts first; the `compat` facades (`NetworkCompat`, `MenuCompat`, `ClientNetworkCompat`) forward to them.
 
 Energy and items other blocks may use are described loader-free (`core.energy.EnergyAccess`, `inventory.ItemAccess`, exposed by `getEnergyAccess(side)` / `getItemAccess(side)`) and wrapped by thin adapters per loader (Team Reborn Energy and Transfer API on Fabric, FE and item handler capabilities on Forge).
+On Fabric with NEEPMeat installed, OMLib also makes them sinks of its vascular network (`FabricNeepMeatPower`, 1 eJ = 1 E).
 
 ### How core talks to the game
 

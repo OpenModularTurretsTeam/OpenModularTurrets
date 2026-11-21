@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Added
+
+- NEEPMeat compatibility (Fabric 1.20.1): vascular conduits power turret bases (1 eJ = 1 E); a full turret base takes no power from the network
+
 ### Changed
 
 - Config: `bases.allowContraptionMovement` is deprecated on Minecraft 1.20.1; it never had an effect here, as no contraption mod (Create, Create Aeronautics) is supported on this version
