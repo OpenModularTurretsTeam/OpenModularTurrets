@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Added
+
+- Turrets on a base with a damage amp addon show a small red light on each corner of their base plate
+
 ### Changed
 
 - The game rules (`omtteam.openmodularturrets.core`) come from the shared OpenModularCore 2.1.0 (module `omt-core`, the same on every Minecraft version) and are bundled into the jar
