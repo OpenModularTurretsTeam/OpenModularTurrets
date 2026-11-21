@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.entity.projectile.PlasmaProjectile;
@@ -25,7 +25,7 @@ import omtteam.openmodularturrets.entity.projectile.PlasmaProjectile;
  */
 public class PlasmaRenderer extends EntityRenderer<PlasmaProjectile> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(OMT.id("plasma"), "main");
-    private static final ResourceLocation TEXTURE = OMT.id("textures/entity/projectile/plasma.png");
+    private static final Identifier TEXTURE = OMT.id("textures/entity/projectile/plasma.png");
     private static final float SCALE = 0.675F;
 
     private final ModelPart shot;
@@ -59,7 +59,7 @@ public class PlasmaRenderer extends EntityRenderer<PlasmaProjectile> {
 
     @Override
     @SuppressWarnings("NullableProblems")
-    public ResourceLocation getTextureLocation(PlasmaProjectile entity) {
+    public Identifier getTextureLocation(PlasmaProjectile entity) {
         return TEXTURE;
     }
 }

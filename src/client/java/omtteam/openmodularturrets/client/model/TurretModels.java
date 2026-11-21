@@ -4,7 +4,7 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.client.api.OMTClientPlugin;
 import omtteam.openmodularturrets.client.api.TurretModelRegistrar;
@@ -88,7 +88,7 @@ public final class TurretModels {
         registrar.register(type, definition, texture(type), HOLDER, HOLDER_WEAPON);
     }
 
-    private static ResourceLocation texture(TurretType type) {
+    private static Identifier texture(TurretType type) {
         return OMT.id("textures/block/turret/" + type.getPath() + ".png");
     }
 

@@ -1,21 +1,7 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if forge {
-/*import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if (neoforge && <1.21.11) || forge {
-/*import omtteam.openmodularturrets.OMT;
-*///?}
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-//? if <1.21.11 {
-import net.minecraft.gametest.framework.GameTest;
-//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.entity.Entity;
@@ -45,10 +31,6 @@ import java.util.List;
  * {@link Clearable#clearContent} and then remove the old block, which must not drop the items a second time. Moved blocks
  * are rotated and mirrored through their block state, which must turn their facing with them.
  */
-//? if (neoforge && <1.21.11) || forge {
-/*@GameTestHolder(OMT.MOD_ID)
-@PrefixGameTestTemplate(false)
-*///?}
 @SuppressWarnings({"unused", "RedundantCast", "deprecation"})
 public class BlockMoveGameTests implements OMTGameTests {
     private static final BlockPos POS = new BlockPos(3, 1, 3);

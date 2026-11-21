@@ -117,14 +117,6 @@ public class GeneratorBlock extends CompatEntityBlock implements InteractiveBloc
         return BlockCompat.sidedSuccess(level.isClientSide());
     }
 
-    //? if <1.21.11 {
-    /** The generator drops its items in {@code onBlockRemoved}; 1.21.11 calls that itself. */
-    @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        CompatBlockEntity.handleRemove(state, level, pos, newState);
-        super.onRemove(state, level, pos, newState, movedByPiston);
-    }
-    //?}
 
     /** Furnace-style crackle and smoke at the front while burning. */
     @Override

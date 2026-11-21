@@ -13,9 +13,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-//? if >=1.21.11 {
-/*import net.minecraft.server.level.ServerLevel;
-*///?}
+import net.minecraft.server.level.ServerLevel;
 
 /**
  * Turret damage rules on the victim's side:
@@ -32,35 +30,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityMixin {
     /** The method that applies damage ({@code hurtServer} on 1.21.11). */
     @Unique
-    //? if >=1.21.11 {
-    /*private static final String HURT = "hurtServer";
-    *///?} else {
-    private static final String HURT = "hurt";
-    //?}
+    private static final String HURT = "hurtServer";
 
-    //? if >=1.21.11 {
-    /*@ModifyExpressionValue(method = "dropAllDeathLoot", at = @At(value = "INVOKE",
+    @ModifyExpressionValue(method = "dropAllDeathLoot", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;shouldDropLoot(Lnet/minecraft/server/level/ServerLevel;)Z"))
-    *///?} else {
-    @ModifyExpressionValue(method = "dropAllDeathLoot",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;shouldDropLoot()Z"))
-    //?}
     private boolean openmodularturrets$turretLootRule(boolean original, @Local(argsOnly = true) DamageSource source) {
         //noinspection ConstantValue
         return original && TurretLoot.mayDropLoot((LivingEntity) (Object) this, source);
     }
 
     @Inject(method = HURT, at = @At("HEAD"), cancellable = true)
-    //? if >=1.21.11 {
-    /*private void openmodularturrets$turretImmunity(ServerLevel level, DamageSource source, float amount,
+    private void openmodularturrets$turretImmunity(ServerLevel level, DamageSource source, float amount,
                                                    CallbackInfoReturnable<Boolean> cir) {
         openmodularturrets$cancelForImmune(source, cir);
     }
-    *///?} else {
-    private void openmodularturrets$turretImmunity(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        openmodularturrets$cancelForImmune(source, cir);
-    }
-    //?}
 
     @Unique
     private void openmodularturrets$cancelForImmune(DamageSource source, CallbackInfoReturnable<Boolean> cir) {

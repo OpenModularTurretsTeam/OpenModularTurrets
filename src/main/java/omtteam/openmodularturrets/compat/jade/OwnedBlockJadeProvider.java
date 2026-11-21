@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.compat.jade;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.openmodularturrets.OMT;
 import omtteam.omlib.blockentity.OwnedBlockEntity;
 import omtteam.omlib.compat.nbt.NbtCompat;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public final class OwnedBlockJadeProvider implements IServerDataProvider<BlockAccessor> {
     public static final OwnedBlockJadeProvider INSTANCE = new OwnedBlockJadeProvider();
-    public static final ResourceLocation UID = OMT.id("owned_block");
+    public static final Identifier UID = OMT.id("owned_block");
     private static final String KNOWN = "Known";
     private static final String OWNER = "Owner";
 
@@ -27,7 +27,7 @@ public final class OwnedBlockJadeProvider implements IServerDataProvider<BlockAc
     }
 
     @Override
-    public ResourceLocation getUid() {
+    public Identifier getUid() {
         return UID;
     }
 

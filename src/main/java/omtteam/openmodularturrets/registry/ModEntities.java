@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -36,7 +36,7 @@ public final class ModEntities {
     /** Tracking range 64 blocks (4 chunks); small, fast projectiles. */
     private static <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {
         // noSave: projectiles are never saved (TurretProjectile.shouldBeSaved), so no data fixer is needed
-        ResourceLocation id = OMT.id(name);
+        Identifier id = OMT.id(name);
         EntityType<T> type = VersionCompat.buildEntityType(
                 builder.sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).noSave(), id);
         return Registry.register(BuiltInRegistries.ENTITY_TYPE, id, type);

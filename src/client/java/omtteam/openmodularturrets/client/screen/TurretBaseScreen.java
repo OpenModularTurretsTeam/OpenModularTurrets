@@ -6,7 +6,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import omtteam.omlib.client.screen.LargeStackScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
@@ -38,7 +38,7 @@ public class TurretBaseScreen extends LargeStackScreen<TurretBaseMenu> {
     /** The energy bar flickers between three fill textures (1.12.2 {@code drawEnergyBar}). */
     private static final int[] ENERGY_FILL_U = {196, 215, 234};
 
-    private final ResourceLocation texture;
+    private final Identifier texture;
     private final Random random = new Random();
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<AccessLevel> shownAccess = Optional.empty();

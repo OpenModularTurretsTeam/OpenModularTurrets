@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import omtteam.omlib.client.compat.ClientCompat;
@@ -21,17 +21,17 @@ import omtteam.omlib.client.compat.ClientCompat;
  * crossbow bolt can use it as well. The variant for 1.21.11 (render states).
  */
 public class ArrowShapedRenderer<T extends Entity> extends EntityRenderer<T, ProjectileRenderState> {
-    private final ResourceLocation texture;
+    private final Identifier texture;
     /** As 1.12.2 {@code RocketRenderer}: skip the first frames so the projectile does not flash inside the turret. */
     private final int hiddenTicks;
     /** Half the length of the shaft in texture pixels (vanilla arrow: 8). */
     private final int halfLength;
 
-    public ArrowShapedRenderer(EntityRendererProvider.Context context, ResourceLocation texture, int hiddenTicks) {
+    public ArrowShapedRenderer(EntityRendererProvider.Context context, Identifier texture, int hiddenTicks) {
         this(context, texture, hiddenTicks, 8);
     }
 
-    public ArrowShapedRenderer(EntityRendererProvider.Context context, ResourceLocation texture, int hiddenTicks,
+    public ArrowShapedRenderer(EntityRendererProvider.Context context, Identifier texture, int hiddenTicks,
                                int halfLength) {
         super(context);
         this.texture = texture;

@@ -19,7 +19,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.block.misc.LeverBlock;
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class LeverRenderer implements BlockEntityRenderer<LeverBlockEntity, LeverRenderer.State> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(OMT.id("lever_block"), "main");
-    public static final ResourceLocation TEXTURE = OMT.id("textures/block/lever_block.png");
+    public static final Identifier TEXTURE = OMT.id("textures/block/lever_block.png");
     /** 1.12.2 {@code rotateAngleZ = rotation / 55}: the crank angle in degrees divided by 55 (about one turn). */
     private static final float ANGLE_DIVISOR = 55F;
 

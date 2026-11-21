@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import omtteam.omlib.client.compat.ClientCompat;
 
@@ -15,10 +15,10 @@ import omtteam.omlib.client.compat.ClientCompat;
  * both sides, so it is visible whichever way the camera orientation is defined.
  */
 public class BillboardRenderer<T extends Entity> extends EntityRenderer<T> {
-    private final ResourceLocation texture;
+    private final Identifier texture;
     private final float size;
 
-    public BillboardRenderer(EntityRendererProvider.Context context, ResourceLocation texture, float size) {
+    public BillboardRenderer(EntityRendererProvider.Context context, Identifier texture, float size) {
         super(context);
         this.texture = texture;
         this.size = size;
@@ -41,7 +41,7 @@ public class BillboardRenderer<T extends Entity> extends EntityRenderer<T> {
 
     @Override
     @SuppressWarnings("NullableProblems")
-    public ResourceLocation getTextureLocation(T entity) {
+    public Identifier getTextureLocation(T entity) {
         return texture;
     }
 }

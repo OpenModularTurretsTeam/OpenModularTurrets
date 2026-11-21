@@ -4,7 +4,7 @@ import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * A turret model (1.12.2 {@code ModelAbstractTurret}). Models are built like the 1.12.2 Java models (Y down, the base
@@ -29,7 +29,7 @@ public abstract class TurretModel extends Model<TurretModel.Pose> {
         super(root, RenderTypes::entityCutout);
     }
 
-    public abstract ResourceLocation getTexture();
+    public abstract Identifier getTexture();
 
     /**
      * Points the model: yaw turns around the mounting face normal, pitch raises the weapon (degrees, see

@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.config;
 
 import omtteam.omlib.config.ConfigValidator;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ final class AmmoEntryValidation {
             if (parts.length > 2) return false;
             String id = parts[0].trim();
             if (id.startsWith("#")) id = id.substring(1);
-            if (ResourceLocation.tryParse(id) == null) return false;
+            if (Identifier.tryParse(id) == null) return false;
             if (parts.length == 2) {
                 try {
                     Integer.parseInt(parts[1].trim());

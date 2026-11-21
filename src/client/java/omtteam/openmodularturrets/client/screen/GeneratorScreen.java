@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.client.screen;
 import net.minecraft.client.gui.GuiGraphics;
 import omtteam.omlib.client.screen.LargeStackScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import omtteam.openmodularturrets.OMT;
 import omtteam.omlib.client.compat.ClientCompat;
@@ -14,7 +14,7 @@ import omtteam.openmodularturrets.menu.GeneratorMenu;
  * area around the upgrade slot is left empty for later slots.
  */
 public class GeneratorScreen extends LargeStackScreen<GeneratorMenu> {
-    private static final ResourceLocation TEXTURE = OMT.id("textures/gui/generator.png");
+    private static final Identifier TEXTURE = OMT.id("textures/gui/generator.png");
     private static final int FLAME_SIZE = 14;
     /** The flame sits left of the energy bar, level with the middle fuel row. */
     private static final int FLAME_X = 136;

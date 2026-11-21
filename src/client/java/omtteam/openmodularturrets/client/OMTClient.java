@@ -40,18 +40,11 @@ import omtteam.openmodularturrets.registry.ModMenus;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-//? if >=1.21.11 {
-/*import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.openmodularturrets.client.render.item.LeverSpecialRenderer;
 import omtteam.openmodularturrets.client.render.item.TurretSpecialRenderer;
-*///?} else {
-import net.minecraft.world.item.Item;
-import omtteam.openmodularturrets.client.render.item.ItemStackRenderer;
-import omtteam.openmodularturrets.client.render.item.LeverItemRenderer;
-import omtteam.openmodularturrets.client.render.item.TurretItemRenderer;
-//?}
 
 /**
  * Shared client start-up, the client counterpart of {@code OMT}. The loader client entrypoints
@@ -109,26 +102,16 @@ public final class OMTClient {
         ProjectileRenderers.register(registrar);
     }
 
-    //? if >=1.21.11 {
-    /*/^**
+    /***
      * The types of the special item models of the turret and crank items ({@code minecraft:special} with
      * {@code "type": "openmodularturrets:turret"} / {@code "openmodularturrets:lever"} in their item model
      * definitions), through the loader's registration.
-     ^/
+     */
     public static void registerSpecialItemModels(
-            BiConsumer<ResourceLocation, MapCodec<? extends SpecialModelRenderer.Unbaked>> registrar) {
+            BiConsumer<Identifier, MapCodec<? extends SpecialModelRenderer.Unbaked>> registrar) {
         registrar.accept(OMT.id("turret"), TurretSpecialRenderer.Unbaked.CODEC);
         registrar.accept(OMT.id("lever"), LeverSpecialRenderer.Unbaked.CODEC);
     }
-    *///?} else {
-    /**
-     * Items drawn by a renderer instead of a baked model (their item models have {@code parent: builtin/entity}).
-     */
-    public static void registerItemRenderers(BiConsumer<Item, ItemStackRenderer> registrar) {
-        registrar.accept(ModItems.LEVER, new LeverItemRenderer());
-        TurretItemRenderer.register(ModItems.TURRETS, registrar);
-    }
-    //?}
 
     /**
      * Blocks drawn in the cutout layer (OMPD fences have transparent parts). Fabric registers them; NeoForge reads

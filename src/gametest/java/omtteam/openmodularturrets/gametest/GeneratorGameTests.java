@@ -1,20 +1,6 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if forge {
-/*import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if (neoforge && <1.21.11) || forge {
-/*import omtteam.openmodularturrets.OMT;
-*///?}
 import net.minecraft.core.BlockPos;
-//? if <1.21.11 {
-import net.minecraft.gametest.framework.GameTest;
-//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -32,10 +18,6 @@ import omtteam.openmodularturrets.registry.ModItems;
  * pushes its energy into neighbours. Every test has its own batch and removes its blocks when it passed (1.20.1 keeps a
  * finished batch's blocks).
  */
-//? if (neoforge && <1.21.11) || forge {
-/*@GameTestHolder(OMT.MOD_ID)
-@PrefixGameTestTemplate(false)
-*///?}
 @SuppressWarnings({"unused", "RedundantCast"})
 public class GeneratorGameTests implements OMTGameTests {
     private static final BlockPos GENERATOR = new BlockPos(1, 1, 1);

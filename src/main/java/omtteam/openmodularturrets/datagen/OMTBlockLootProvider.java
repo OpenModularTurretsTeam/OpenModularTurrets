@@ -2,11 +2,7 @@ package omtteam.openmodularturrets.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
-//? if >=1.21.11 {
-/*import net.minecraft.advancements.criterion.StatePropertiesPredicate;
-*///?} else {
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-//?}
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -15,22 +11,14 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePrope
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import omtteam.openmodularturrets.block.misc.InventoryExpanderBlock;
 import omtteam.openmodularturrets.registry.ModBlocks;
-//? if >=1.21 {
 import net.minecraft.core.HolderLookup;
 
 import java.util.concurrent.CompletableFuture;
-//?}
 
 public class OMTBlockLootProvider extends FabricBlockLootTableProvider {
-    //? if >=1.21 {
     public OMTBlockLootProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
-    //?} else {
-    /*public OMTBlockLootProvider(FabricDataOutput output) {
-        super(output);
-    }
-    *///?}
 
     /** Like a slab: the expander drops itself, twice for a double block. */
     private void dropExpander(InventoryExpanderBlock block) {

@@ -1,19 +1,5 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if forge {
-/*import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if (neoforge && <1.21.11) || forge {
-/*import omtteam.openmodularturrets.OMT;
-*///?}
-//? if <1.21.11 {
-import net.minecraft.gametest.framework.GameTest;
-//?}
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -47,10 +33,6 @@ import java.util.UUID;
  * (OMLib's {@code CamoPacketHandler}): only on tier 4 and 5 bases and the trap, only by admins within reach, and not
  * with base camouflage turned off.
  */
-//? if (neoforge && <1.21.11) || forge {
-/*@GameTestHolder(OMT.MOD_ID)
-@PrefixGameTestTemplate(false)
-*///?}
 @SuppressWarnings("unused")
 public class CamoGameTests implements OMTGameTests {
     private static final BlockPos BLOCK = new BlockPos(1, 1, 1);
@@ -120,7 +102,7 @@ public class CamoGameTests implements OMTGameTests {
         CamoHost base = place(helper, ModBlocks.TURRET_BASES.get(3));
         ServerPlayer owner = owner(helper, base);
         BlockPos pos = helper.absolutePos(BLOCK);
-        owner.moveTo(pos.getX() + 9.5D, pos.getY(), pos.getZ() + 0.5D);
+        owner.snapTo(pos.getX() + 9.5D, pos.getY(), pos.getZ() + 0.5D);
 
         setLight(helper, owner, 12, 4);
         assertLight(helper, base, CamoLight.DEFAULT);
@@ -187,7 +169,7 @@ public class CamoGameTests implements OMTGameTests {
     private static ServerPlayer playerAt(GameTestHelper helper, String name) {
         ServerPlayer player = VersionCompat.fakePlayer(helper.getLevel(), new GameProfile(UUID.randomUUID(), name));
         BlockPos pos = helper.absolutePos(BLOCK);
-        player.moveTo(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
+        player.snapTo(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
         return player;
     }
 
@@ -203,11 +185,7 @@ public class CamoGameTests implements OMTGameTests {
     private static void assertPickAndModel(GameTestHelper helper, Block picked, @Nullable BlockState disguise) {
         BlockPos pos = helper.absolutePos(BLOCK);
         BlockState state = helper.getLevel().getBlockState(pos);
-        //? if >=1.21.11 {
-        /*ItemStack pick = state.getCloneItemStack(helper.getLevel(), pos, false);
-        *///?} else {
-        ItemStack pick = state.getBlock().getCloneItemStack(helper.getLevel(), pos, state);
-        //?}
+        ItemStack pick = state.getCloneItemStack(helper.getLevel(), pos, false);
         helper.assertTrue(pick.is(picked.asItem()), state + " picks as " + pick + ", expected " + picked);
         CompatBlockEntity entity = (CompatBlockEntity) helper.getLevel().getBlockEntity(pos);
         //? if fabric {

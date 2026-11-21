@@ -28,9 +28,6 @@ import omtteam.openmodularturrets.entity.projectile.RocketProjectile;
 import omtteam.openmodularturrets.entity.projectile.TurretProjectile;
 import omtteam.openmodularturrets.inventory.AmmoRules;
 import org.jetbrains.annotations.Nullable;
-//? if <1.21.2 {
-import org.joml.Vector3f;
-//?}
 
 import static omtteam.openmodularturrets.api.weapon.RayWeapon.argb;
 
@@ -124,12 +121,8 @@ final class BuiltinTurrets {
      * {@code onlyDeployed} not while the turret is concealed.
      */
     private static TurretDefinition.AmbientEffect dust(float red, float green, float blue, boolean onlyDeployed) {
-        //? if >=1.21.2 {
-        /*DustParticleOptions dust = new DustParticleOptions(
+        DustParticleOptions dust = new DustParticleOptions(
                 ((int) (red * 255) << 16) | ((int) (green * 255) << 8) | (int) (blue * 255), 1.0F);
-        *///?} else {
-        DustParticleOptions dust = new DustParticleOptions(new Vector3f(red, green, blue), 1.0F);
-        //?}
         return (level, pos, random) -> {
             BlockState state = level.getBlockState(pos);
             if (onlyDeployed && state.getBlock() instanceof TurretBlock && state.getValue(TurretBlock.CONCEALED)) return;

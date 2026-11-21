@@ -1,20 +1,6 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if forge {
-/*import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if (neoforge && <1.21.11) || forge {
-/*import omtteam.openmodularturrets.OMT;
-*///?}
 import net.minecraft.core.registries.BuiltInRegistries;
-//? if <1.21.11 {
-import net.minecraft.gametest.framework.GameTest;
-//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -46,10 +32,6 @@ import java.util.Map;
  * they are registered with their ids and config entries, and each runs its custom code at the right time, and only
  * then. Every test has its own batch, so no turret reaches the target of another test.
  */
-//? if (neoforge && <1.21.11) || forge {
-/*@GameTestHolder(OMT.MOD_ID)
-@PrefixGameTestTemplate(false)
-*///?}
 public class ApiTurretGameTests implements OMTGameTests {
     private static final int TIMEOUT_TICKS = 400;
     /** Ticks a test waits to see that a turret does nothing (several cooldowns and target scans). */

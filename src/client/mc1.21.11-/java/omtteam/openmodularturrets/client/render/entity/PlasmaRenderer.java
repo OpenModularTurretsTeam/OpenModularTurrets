@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.entity.projectile.PlasmaProjectile;
@@ -27,7 +27,7 @@ import omtteam.openmodularturrets.entity.projectile.PlasmaProjectile;
  */
 public class PlasmaRenderer extends EntityRenderer<PlasmaProjectile, ProjectileRenderState> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(OMT.id("plasma"), "main");
-    private static final ResourceLocation TEXTURE = OMT.id("textures/entity/projectile/plasma.png");
+    private static final Identifier TEXTURE = OMT.id("textures/entity/projectile/plasma.png");
     private static final float SCALE = 0.675F;
 
     private final ModelPart shot;

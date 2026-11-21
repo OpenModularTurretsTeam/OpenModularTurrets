@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import omtteam.openmodularturrets.OMT;
 
@@ -17,7 +17,7 @@ import java.util.Map;
  * opens.
  */
 public final class ModSounds {
-    private static final Map<ResourceLocation, SoundEvent> ALL = new LinkedHashMap<>();
+    private static final Map<Identifier, SoundEvent> ALL = new LinkedHashMap<>();
 
     public static final SoundEvent TURRET_DEPLOY = create("turret_deploy");
     public static final SoundEvent TURRET_RETRACT = create("turret_retract");
@@ -44,7 +44,7 @@ public final class ModSounds {
     }
 
     private static SoundEvent create(String name) {
-        ResourceLocation id = OMT.id(name);
+        Identifier id = OMT.id(name);
         SoundEvent sound = SoundEvent.createVariableRangeEvent(id);
         ALL.put(id, sound);
         return sound;

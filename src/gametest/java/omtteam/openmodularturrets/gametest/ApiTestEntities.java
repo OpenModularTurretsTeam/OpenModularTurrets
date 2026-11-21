@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.gametest;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -21,7 +21,7 @@ public final class ApiTestEntities {
 
     @SuppressWarnings("SameParameterValue")
     private static <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {
-        ResourceLocation id = Objects.requireNonNull(ResourceLocation.tryParse(ApiTestTurrets.NAMESPACE + ":" + name));
+        Identifier id = Objects.requireNonNull(Identifier.tryParse(ApiTestTurrets.NAMESPACE + ":" + name));
         return Registry.register(BuiltInRegistries.ENTITY_TYPE, id, VersionCompat.buildEntityType(builder, id));
     }
 

@@ -73,7 +73,7 @@ public class GrenadeProjectile extends TurretProjectile implements ItemSupplier 
         if (hitEntity || !canDamage(entity)) return;
         Vec3 motion = getDeltaMovement();
         setDeltaMovement(motion.x * 0.2D, motion.y * 1.2D, motion.z * 0.2D);
-        hasImpulse = true;
+        needsSync = true;
         hitEntity = true;
         tickCount = TICKS_AFTER_ENTITY_HIT;
     }

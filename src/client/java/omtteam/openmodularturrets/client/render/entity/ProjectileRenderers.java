@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.client.render.entity;
 
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.client.render.EntityRendererRegistrar;
 import omtteam.openmodularturrets.registry.ModEntities;
@@ -11,11 +11,11 @@ import omtteam.openmodularturrets.registry.ModEntities;
  * Projectile renderers, following the 1.12.2 {@code ProjectileRenderers}.
  */
 public final class ProjectileRenderers {
-    private static final ResourceLocation BOLT_TEXTURE = OMT.id("textures/entity/projectile/bolt.png");
+    private static final Identifier BOLT_TEXTURE = OMT.id("textures/entity/projectile/bolt.png");
     /** The bolt is shorter than an arrow (10 instead of 16 pixels). */
     private static final int BOLT_HALF_LENGTH = 5;
-    private static final ResourceLocation ROCKET_TEXTURE = OMT.id("textures/entity/projectile/rocket.png");
-    private static final ResourceLocation BULLET_TEXTURE = OMT.id("textures/entity/projectile/bullet.png");
+    private static final Identifier ROCKET_TEXTURE = OMT.id("textures/entity/projectile/rocket.png");
+    private static final Identifier BULLET_TEXTURE = OMT.id("textures/entity/projectile/bullet.png");
     /** Vanilla's thrown snowball is drawn at half a block. */
     private static final float BULLET_SIZE = 0.5F;
 

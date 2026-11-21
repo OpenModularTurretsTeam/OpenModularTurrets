@@ -1,19 +1,5 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if forge {
-/*import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if (neoforge && <1.21.11) || forge {
-/*import omtteam.openmodularturrets.OMT;
-*///?}
-//? if <1.21.11 {
-import net.minecraft.gametest.framework.GameTest;
-//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,10 +12,6 @@ import omtteam.openmodularturrets.core.turret.TurretType;
  * so a single attempt is enough. Every test has its own batch: batches run one after another, so a turret never
  * reaches the target of a test running next to it.
  */
-//? if (neoforge && <1.21.11) || forge {
-/*@GameTestHolder(OMT.MOD_ID)
-@PrefixGameTestTemplate(false)
-*///?}
 @SuppressWarnings("unused")
 public class EffectTurretGameTests implements OMTGameTests {
     private static final int TIMEOUT_TICKS = 200;
@@ -40,10 +22,10 @@ public class EffectTurretGameTests implements OMTGameTests {
         TurretScene.build(helper, TurretType.SLOWING_TURRET, TIMEOUT_TICKS);
         LivingEntity target = TurretScene.spawnTarget(helper, TurretScene.TARGET_IN_FRONT);
         double normalSpeed = target.getAttributeValue(Attributes.MOVEMENT_SPEED);
-        helper.assertTrue(!target.hasEffect(MobEffects.MOVEMENT_SLOWDOWN), "Target is slowed before the turret fired");
+        helper.assertTrue(!target.hasEffect(MobEffects.SLOWNESS), "Target is slowed before the turret fired");
 
         TurretScene.succeedWhen(helper, () -> {
-            helper.assertTrue(target.hasEffect(MobEffects.MOVEMENT_SLOWDOWN), "Target was not given slowness");
+            helper.assertTrue(target.hasEffect(MobEffects.SLOWNESS), "Target was not given slowness");
             double speed = target.getAttributeValue(Attributes.MOVEMENT_SPEED);
             helper.assertTrue(speed < normalSpeed, "Target speed " + speed + " is not below " + normalSpeed);
         });

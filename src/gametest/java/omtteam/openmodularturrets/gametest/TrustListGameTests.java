@@ -1,24 +1,8 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if forge {
-/*import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if (neoforge && <1.21.11) || forge {
-/*import omtteam.openmodularturrets.OMT;
-*///?}
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
-//? if >=1.21.11 {
-/*import net.minecraft.core.UUIDUtil;
-*///?}
-//? if <1.21.11 {
-import net.minecraft.gametest.framework.GameTest;
-//?}
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
@@ -43,10 +27,6 @@ import java.util.UUID;
  * players. On Fabric a player added by name is put on the server's player list for the request only ({@code online}):
  * vanilla's mock players log in for real, and mods on the NeoForge test server send them packets that NeoForge refuses.
  */
-//? if (neoforge && <1.21.11) || forge {
-/*@GameTestHolder(OMT.MOD_ID)
-@PrefixGameTestTemplate(false)
-*///?}
 @SuppressWarnings("unused")
 public class TrustListGameTests implements OMTGameTests {
     private static final int TIMEOUT_TICKS = 100;
@@ -106,20 +86,12 @@ public class TrustListGameTests implements OMTGameTests {
         TrustPacketHandler.handleAdd(new TrustPackets.Add(helper.absolutePos(BASE), "   "), owner);
         TrustPacketHandler.handleAdd(new TrustPackets.Add(helper.absolutePos(BASE), "Offline_7f3a"), owner);
 
-        //? if >=1.21.11 {
-        /*PlayerIdentity expected = new PlayerIdentity(UUIDUtil.createOfflinePlayerUUID("Offline_7f3a"), "Offline_7f3a");
+        PlayerIdentity expected = new PlayerIdentity(UUIDUtil.createOfflinePlayerUUID("Offline_7f3a"), "Offline_7f3a");
         helper.succeedWhen(() -> {
             List<TrustedPlayer> entries = trust.getTrustedPlayers();
             helper.assertTrue(entries.size() == 1 && entries.get(0).getIdentity().equals(expected),
                     "Trust list is " + entries.stream().map(TrustedPlayer::getIdentity).toList() + ", expected " + expected);
         });
-        *///?} else {
-        helper.runAfterDelay(LOOKUP_TICKS, () -> {
-            List<TrustedPlayer> entries = trust.getTrustedPlayers();
-            helper.assertTrue(entries.isEmpty(), "Trust list is " + entries.stream().map(TrustedPlayer::getIdentity).toList());
-            helper.succeed();
-        });
-        //?}
     }
 
     /** The owner removes a trusted player; a player below admin cannot. */
@@ -200,7 +172,7 @@ public class TrustListGameTests implements OMTGameTests {
         ServerPlayer owner = owner(helper, trust);
         ServerPlayer friend = trusted(helper, trust, owner, "Friend", AccessLevel.NONE);
         BlockPos pos = helper.absolutePos(BASE);
-        owner.moveTo(pos.getX() + 9.5D, pos.getY(), pos.getZ() + 0.5D);
+        owner.snapTo(pos.getX() + 9.5D, pos.getY(), pos.getZ() + 0.5D);
 
         changeAccess(helper, owner, friend, 1);
         assertLevel(helper, trust, friend, AccessLevel.NONE);
@@ -237,7 +209,7 @@ public class TrustListGameTests implements OMTGameTests {
     private static ServerPlayer playerAt(GameTestHelper helper, String name) {
         ServerPlayer player = VersionCompat.fakePlayer(helper.getLevel(), new GameProfile(UUID.randomUUID(), name));
         BlockPos pos = helper.absolutePos(BASE);
-        player.moveTo(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
+        player.snapTo(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
         return player;
     }
 

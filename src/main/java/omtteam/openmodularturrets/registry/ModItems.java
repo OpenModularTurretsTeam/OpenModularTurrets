@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -132,14 +132,14 @@ public final class ModItems {
 
     /** Creates the item from its properties (1.21.11 needs the registry id in them) and registers it as {@code name}. */
     private static <T extends Item> T register(String name, Function<Item.Properties, T> factory, Item.Properties properties) {
-        ResourceLocation id = OMT.id(name);
+        Identifier id = OMT.id(name);
         T item = factory.apply(VersionCompat.itemProperties(properties, id));
         ITEMS.add(item);
         return Registry.register(BuiltInRegistries.ITEM, id, item);
     }
 
     private static BlockItem registerBlock(Block block) {
-        ResourceLocation id = BuiltInRegistries.BLOCK.getKey(block);
+        Identifier id = BuiltInRegistries.BLOCK.getKey(block);
         BlockItem item = new BlockItem(block, VersionCompat.blockItemProperties(new Item.Properties(), id));
         ITEMS.add(item);
         return Registry.register(BuiltInRegistries.ITEM, id, item);

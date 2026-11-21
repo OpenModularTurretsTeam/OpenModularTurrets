@@ -7,26 +7,9 @@ import net.fabricmc.fabric.api.entity.FakePlayer;
 //? if neoforge {
 /*import net.neoforged.neoforge.common.util.FakePlayer;
 *///?}
-//? if forge {
-/*import net.minecraftforge.common.util.FakePlayer;
-*///?}
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if forge {
-/*import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if (neoforge && <1.21.11) || forge {
-/*import omtteam.openmodularturrets.OMT;
-*///?}
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-//? if <1.21.11 {
-import net.minecraft.gametest.framework.GameTest;
-//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -56,10 +39,8 @@ import omtteam.omlib.security.OwnedHost;
 import omtteam.omlib.security.PlayerAdapter;
 import omtteam.omlib.security.TrustHost;
 
-//? if >=1.21.11 {
-/*import net.minecraft.server.permissions.LevelBasedPermissionSet;
+import net.minecraft.server.permissions.LevelBasedPermissionSet;
 import net.minecraft.server.permissions.PermissionSet;
-*///?}
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.UUID;
@@ -70,10 +51,6 @@ import java.util.UUID;
  * player holding it without affecting them. Every
  * immunity test has a control without the wand, so a test player that turrets cannot reach does not pass by accident.
  */
-//? if (neoforge && <1.21.11) || forge {
-/*@GameTestHolder(OMT.MOD_ID)
-@PrefixGameTestTemplate(false)
-*///?}
 @SuppressWarnings("unused")
 public class OwnershipWandGameTests implements OMTGameTests {
     private static final int TIMEOUT_TICKS = 40;
@@ -201,7 +178,7 @@ public class OwnershipWandGameTests implements OMTGameTests {
         helper.succeedWhen(() -> {
             helper.assertTrue(logic.getTargetIds().containsValue(player.getId()), "The wand holder is not targeted");
             helper.assertTrue(logic.getEnergy().getAmount() < full, "The turret has not fired yet");
-            helper.assertTrue(!player.hasEffect(MobEffects.MOVEMENT_SLOWDOWN), "The wand holder was slowed");
+            helper.assertTrue(!player.hasEffect(MobEffects.SLOWNESS), "The wand holder was slowed");
             removePlayer(helper, player);
         });
     }
@@ -211,7 +188,7 @@ public class OwnershipWandGameTests implements OMTGameTests {
     public void playerWithoutWandIsSlowed(GameTestHelper helper) {
         ServerPlayer player = slowingTurretAimingAtPlayer(helper, false);
         helper.succeedWhen(() -> {
-            helper.assertTrue(player.hasEffect(MobEffects.MOVEMENT_SLOWDOWN), "The player was not slowed");
+            helper.assertTrue(player.hasEffect(MobEffects.SLOWNESS), "The player was not slowed");
             removePlayer(helper, player);
         });
     }
@@ -262,7 +239,7 @@ public class OwnershipWandGameTests implements OMTGameTests {
         ServerPlayer player = new TestPlayer(helper.getLevel(), new GameProfile(UUID.randomUUID(), "Target"), false);
         if (wand) player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.OWNERSHIP_WAND));
         BlockPos pos = helper.absolutePos(TurretScene.TARGET_IN_FRONT);
-        player.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+        player.snapTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
         helper.getLevel().addNewPlayer(player);
         helper.runAfterDelay(EFFECT_TIMEOUT_TICKS - 1, () -> removePlayer(helper, player));
         return player;
@@ -297,7 +274,7 @@ public class OwnershipWandGameTests implements OMTGameTests {
      */
     private static InteractionResult use(GameTestHelper helper, ServerPlayer player, BlockPos relative, Vec3 target, boolean sneaking) {
         BlockPos pos = helper.absolutePos(relative);
-        player.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+        player.snapTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
         player.lookAt(EntityAnchorArgument.Anchor.EYES, helper.absoluteVec(target));
         player.setShiftKeyDown(sneaking);
         InteractionResult result = player.gameMode.useItem(player, helper.getLevel(), player.getMainHandItem(), InteractionHand.MAIN_HAND);
@@ -345,19 +322,9 @@ public class OwnershipWandGameTests implements OMTGameTests {
          */
         private void endSpawnProtection() {
             // 1.21.11 has no such field; there the player's isInvulnerableTo override below is enough
-            //? if <1.21.11 {
-            try {
-                Field field = ServerPlayer.class.getDeclaredField("spawnInvulnerableTime");
-                field.setAccessible(true);
-                field.setInt(this, 0);
-            } catch (ReflectiveOperationException e) {
-                throw new IllegalStateException("Cannot end the spawn protection of the test player", e);
-            }
-            //?}
         }
 
-        //? if >=1.21.11 {
-        /*@Override
+        @Override
         public PermissionSet permissions() {
             return gameMaster ? LevelBasedPermissionSet.GAMEMASTER : LevelBasedPermissionSet.ALL;
         }
@@ -367,17 +334,5 @@ public class OwnershipWandGameTests implements OMTGameTests {
         public boolean isInvulnerableTo(ServerLevel level, DamageSource source) {
             return false;
         }
-        *///?} else {
-        @Override
-        public int getPermissionLevel() {
-            return gameMaster ? 2 : 0;
-        }
-
-        @Override
-        @SuppressWarnings("NullableProblems")
-        public boolean isInvulnerableTo(DamageSource source) {
-            return false;
-        }
-        //?}
     }
 }

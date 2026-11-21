@@ -1,6 +1,6 @@
 package omtteam.openmodularturrets;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.omlib.compat.VersionCompat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +17,9 @@ public final class OMT {
     }
 
     /**
-     * Creates a {@link ResourceLocation} in the mod namespace.
+     * Creates a {@link Identifier} in the mod namespace.
      */
-    public static ResourceLocation id(String path) {
+    public static Identifier id(String path) {
         return VersionCompat.id(MOD_ID, path);
     }
 }

@@ -1,7 +1,7 @@
 package omtteam.openmodularturrets.client.model;
 
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.openmodularturrets.OMT;
 
 /**
@@ -9,8 +9,8 @@ import omtteam.openmodularturrets.OMT;
  * active. The blades are flat; the active texture draws them extended.
  */
 public class MeleeTurretModel extends TurretModel {
-    private static final ResourceLocation TEXTURE = OMT.id("textures/block/turret/melee_turret.png");
-    private static final ResourceLocation TEXTURE_ACTIVE = OMT.id("textures/block/turret/melee_turret_extended.png");
+    private static final Identifier TEXTURE = OMT.id("textures/block/turret/melee_turret.png");
+    private static final Identifier TEXTURE_ACTIVE = OMT.id("textures/block/turret/melee_turret_extended.png");
 
     private final ModelPart top;
     private boolean active;
@@ -21,7 +21,7 @@ public class MeleeTurretModel extends TurretModel {
     }
 
     @Override
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         return active ? TEXTURE_ACTIVE : TEXTURE;
     }
 

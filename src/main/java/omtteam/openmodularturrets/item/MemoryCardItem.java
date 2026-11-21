@@ -3,9 +3,6 @@ package omtteam.openmodularturrets.item;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-//? if <1.21.11 {
-import net.minecraft.world.InteractionResultHolder;
-//?}
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -44,8 +41,7 @@ public class MemoryCardItem extends Item {
     }
 
     /** Sneak-click in the air clears the card. */
-    //? if >=1.21.11 {
-    /*@Override
+    @Override
     @SuppressWarnings("NullableProblems")
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (clearInAir(level, player, player.getItemInHand(hand))) {
@@ -53,17 +49,6 @@ public class MemoryCardItem extends Item {
         }
         return super.use(level, player, hand);
     }
-    *///?} else {
-    @Override
-    @SuppressWarnings("NullableProblems")
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-        if (clearInAir(level, player, stack)) {
-            return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
-        }
-        return super.use(level, player, hand);
-    }
-    //?}
 
     /** @return whether the card was cleared (a sneak-click with data on it) */
     private static boolean clearInAir(Level level, Player player, ItemStack stack) {

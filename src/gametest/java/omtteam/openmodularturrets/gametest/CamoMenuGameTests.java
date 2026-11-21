@@ -1,20 +1,6 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if forge {
-/*import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if (neoforge && <1.21.11) || forge {
-/*import omtteam.openmodularturrets.OMT;
-*///?}
 import net.minecraft.core.BlockPos;
-//? if <1.21.11 {
-import net.minecraft.gametest.framework.GameTest;
-//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.ClickType;
@@ -43,10 +29,6 @@ import omtteam.openmodularturrets.registry.ModBlocks;
  * owner are tested in OpenModularLighting's {@code CamoGameTest}, the light in {@link CamoGameTests}. The players are
  * {@link GuiTestPlayer}s, which open menus without a client.
  */
-//? if (neoforge && <1.21.11) || forge {
-/*@GameTestHolder(OMT.MOD_ID)
-@PrefixGameTestTemplate(false)
-*///?}
 @SuppressWarnings("unused")
 public class CamoMenuGameTests implements OMTGameTests {
     private static final BlockPos BLOCK = new BlockPos(1, 1, 1);
@@ -291,13 +273,13 @@ public class CamoMenuGameTests implements OMTGameTests {
 
     private static void moveNear(GameTestHelper helper, ServerPlayer player) {
         BlockPos pos = helper.absolutePos(BLOCK);
-        player.moveTo(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
+        player.snapTo(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
     }
 
     /** More than the container distance (8 blocks) away from the block. */
     private static void moveAway(GameTestHelper helper, ServerPlayer player) {
         BlockPos pos = helper.absolutePos(BLOCK);
-        player.moveTo(pos.getX() + 9.5D, pos.getY(), pos.getZ() + 0.5D);
+        player.snapTo(pos.getX() + 9.5D, pos.getY(), pos.getZ() + 0.5D);
     }
 
     private static CamoMenu assertCamoMenu(GameTestHelper helper, ServerPlayer player) {

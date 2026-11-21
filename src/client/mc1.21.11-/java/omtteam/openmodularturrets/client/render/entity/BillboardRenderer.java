@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import omtteam.omlib.client.compat.ClientCompat;
 
@@ -17,10 +17,10 @@ import omtteam.omlib.client.compat.ClientCompat;
  * states).
  */
 public class BillboardRenderer<T extends Entity> extends EntityRenderer<T, EntityRenderState> {
-    private final ResourceLocation texture;
+    private final Identifier texture;
     private final float size;
 
-    public BillboardRenderer(EntityRendererProvider.Context context, ResourceLocation texture, float size) {
+    public BillboardRenderer(EntityRendererProvider.Context context, Identifier texture, float size) {
         super(context);
         this.texture = texture;
         this.size = size;

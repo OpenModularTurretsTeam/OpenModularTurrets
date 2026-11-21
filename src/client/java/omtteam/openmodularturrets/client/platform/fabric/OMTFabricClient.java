@@ -16,17 +16,10 @@ import omtteam.openmodularturrets.client.render.effect.RayRenderer;
 import omtteam.openmodularturrets.client.render.outline.TurretPlacementOutline;
 
 import java.util.List;
-//? if >=1.21.11 {
-/*import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.Vec3;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
-*///?} else {
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-import net.minecraft.client.renderer.RenderType;
-//?}
 
 /**
  * Fabric client entrypoint: installs the client platform services, starts the client, registers the content of
@@ -42,38 +35,18 @@ public final class OMTFabricClient implements ClientModInitializer {
         OMTClient.registerEntityRenderers(EntityRendererRegistry::register);
         // up to 1.21.1 the turret and crank items have item renderers; from 1.21.11 on they are special item models, whose
         // types SpecialModelRenderersMixin registers
-        //? if <1.21.11 {
-        OMTClient.registerItemRenderers((item, renderer) -> BuiltinItemRendererRegistry.INSTANCE.register(item, renderer::render));
-        //?}
         // NeoForge reads these from "render_type" in the block models; Fabric ignores that field
-        //? if >=1.21.11 {
-        /*OMTClient.cutoutBlocks().forEach(block -> BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT));
-        *///?} else {
-        OMTClient.cutoutBlocks().forEach(block -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout()));
-        //?}
-        //? if >=1.21 {
+        OMTClient.cutoutBlocks().forEach(block -> BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT));
         ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> OMTClient.appendTooltip(stack, flag, lines));
-        //?} else {
-        /*ItemTooltipCallback.EVENT.register(OMTClient::appendTooltip);
-        *///?}
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> OMTClient.onDisconnect());
         ClientTickEvents.END_CLIENT_TICK.register(client -> RayRenderer.tick());
-        //? if >=1.21.11 {
-        /*// the end of the main pass: after the translucent blocks, and late enough for the label to be on top
+        // the end of the main pass: after the translucent blocks, and late enough for the label to be on top
         WorldRenderEvents.END_MAIN.register(context -> {
             Vec3 camera = context.worldState().cameraRenderState.pos;
             RayRenderer.render(context.matrices(), camera);
             TurretPlacementOutline.render(context.matrices(), camera);
             TurretPlacementOutline.renderLabel(context.matrices(), camera);
         });
-        *///?} else {
-        WorldRenderEvents.AFTER_TRANSLUCENT.register(context -> {
-            RayRenderer.render(context.matrixStack(), context.camera().getPosition());
-            TurretPlacementOutline.render(context.matrixStack(), context.camera().getPosition());
-        });
-        WorldRenderEvents.LAST.register(context ->
-                TurretPlacementOutline.renderLabel(context.matrixStack(), context.camera().getPosition()));
-        //?}
     }
 
     /** Other mods' client turret plugins: the {@value OMTClientPlugin#ENTRYPOINT} entrypoints in their {@code fabric.mod.json}. */

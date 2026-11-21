@@ -6,7 +6,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.player.Player;
@@ -124,7 +124,7 @@ public class LivingTargetEntity extends TargetEntity {
 
     @Override
     public boolean hasSlowness() {
-        return entity.hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        return entity.hasEffect(MobEffects.SLOWNESS);
     }
 
     /** 1.12.2: {@code isCreatureType(MONSTER)}, {@code EntityAnimal} / {@code EntityAmbientCreature}. */

@@ -4,7 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -98,7 +98,7 @@ public final class MemoryCardTooltip {
     /** The block name of the disguise, or "none"; ids of blocks that no longer exist are shown as they are. */
     private static Component disguiseName(String id) {
         if (id == null) return Component.translatable(GUI + "none").withStyle(ChatFormatting.WHITE);
-        ResourceLocation location = ResourceLocation.tryParse(id);
+        Identifier location = Identifier.tryParse(id);
         Optional<Block> block = location == null ? Optional.empty() : BuiltInRegistries.BLOCK.getOptional(location);
         if (block.isPresent()) {
             return block.get().getName().withStyle(ChatFormatting.WHITE);

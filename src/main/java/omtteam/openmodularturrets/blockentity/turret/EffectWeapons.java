@@ -60,7 +60,7 @@ public final class EffectWeapons {
     @SuppressWarnings("unused")
     public static void slow(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base, Entity target) {
         if (target instanceof LivingEntity living) {
-            living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, EFFECT_TICKS, EFFECT_AMPLIFIER, false, true));
+            living.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, EFFECT_TICKS, EFFECT_AMPLIFIER, false, true));
             living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, EFFECT_TICKS, EFFECT_AMPLIFIER, false, true));
         }
     }

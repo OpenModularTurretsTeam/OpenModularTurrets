@@ -7,7 +7,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.omlib.client.compat.ClientCompat;
@@ -28,7 +28,7 @@ import java.util.Optional;
  * the light sliders of 1.12.2 {@code ConfigureGui}). Ported from 1.12.2 {@code ConfigureGui}.
  */
 public class ConfigureScreen extends CompatScreen {
-    private static final ResourceLocation TEXTURE = OMT.id("textures/gui/configure.png");
+    private static final Identifier TEXTURE = OMT.id("textures/gui/configure.png");
     private static final int WIDTH = 176;
     private static final int HEIGHT = 205;
 

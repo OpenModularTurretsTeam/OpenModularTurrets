@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.client.mixin;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderers;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 import omtteam.openmodularturrets.client.OMTClient;
 import org.spongepowered.asm.mixin.Final;
@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class SpecialModelRenderersMixin {
     @Shadow
     @Final
-    private static ExtraCodecs.LateBoundIdMapper<ResourceLocation, MapCodec<? extends SpecialModelRenderer.Unbaked>> ID_MAPPER;
+    private static ExtraCodecs.LateBoundIdMapper<Identifier, MapCodec<? extends SpecialModelRenderer.Unbaked>> ID_MAPPER;
 
     @Inject(method = "bootstrap", at = @At("TAIL"))
     private static void openmodularturrets$registerItemModels(CallbackInfo ci) {

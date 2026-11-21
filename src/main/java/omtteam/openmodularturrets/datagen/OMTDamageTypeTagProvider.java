@@ -11,9 +11,7 @@ import net.minecraft.world.damagesource.DamageType;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 
 import java.util.concurrent.CompletableFuture;
-//? if >=1.21.11 {
-/*import net.minecraft.data.tags.TagAppender;
-*///?}
+import net.minecraft.data.tags.TagAppender;
 
 /**
  * 1.12.2 {@code setProjectile()} → {@code minecraft:is_projectile}; {@code ArmorBypassDamageSource} →
@@ -31,13 +29,7 @@ public class OMTDamageTypeTagProvider extends FabricTagProvider<DamageType> {
     }
 
     /** The builder that adds damage types by key (renamed in the Fabric API for 1.21.5). */
-    //? if >=1.21.11 {
-    /*private TagAppender<ResourceKey<DamageType>, DamageType> tagBuilder(TagKey<DamageType> tag) {
+    private TagAppender<ResourceKey<DamageType>, DamageType> tagBuilder(TagKey<DamageType> tag) {
         return builder(tag);
     }
-    *///?} else {
-    private FabricTagBuilder tagBuilder(TagKey<DamageType> tag) {
-        return getOrCreateTagBuilder(tag);
-    }
-    //?}
 }

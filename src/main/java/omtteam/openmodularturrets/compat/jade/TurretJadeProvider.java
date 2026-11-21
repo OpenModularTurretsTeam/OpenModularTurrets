@@ -3,7 +3,7 @@ package omtteam.openmodularturrets.compat.jade;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
@@ -28,7 +28,7 @@ import java.util.Optional;
  */
 public final class TurretJadeProvider implements IServerDataProvider<BlockAccessor> {
     public static final TurretJadeProvider INSTANCE = new TurretJadeProvider();
-    public static final ResourceLocation UID = OMT.id("turret");
+    public static final Identifier UID = OMT.id("turret");
     private static final String ACTIVE = "Active";
     private static final String OWNER = "Owner";
     private static final String AMMO = "Ammo";
@@ -40,7 +40,7 @@ public final class TurretJadeProvider implements IServerDataProvider<BlockAccess
     }
 
     @Override
-    public ResourceLocation getUid() {
+    public Identifier getUid() {
         return UID;
     }
 

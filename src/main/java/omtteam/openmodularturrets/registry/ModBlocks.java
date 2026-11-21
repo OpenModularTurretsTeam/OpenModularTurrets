@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import omtteam.openmodularturrets.OMT;
@@ -83,7 +83,7 @@ public final class ModBlocks {
         if (!TurretTypes.isFrozen()) throw new IllegalStateException("Turret blocks registered before the turret types");
         Map<TurretType, TurretBlock> turrets = new LinkedHashMap<>();
         for (TurretType type : TurretTypes.all()) {
-            ResourceLocation id = VersionCompat.id(type.getNamespace(), type.getPath());
+            Identifier id = VersionCompat.id(type.getNamespace(), type.getPath());
             turrets.put(type, Registry.register(BuiltInRegistries.BLOCK, id,
                     new TurretBlock(type, VersionCompat.blockProperties(TurretBlock.createProperties(), id))));
         }
@@ -103,7 +103,7 @@ public final class ModBlocks {
     /** Creates the block from its properties (1.21.11 needs the registry id in them) and registers it as {@code name}. */
     private static <T extends Block> T register(String name, Function<BlockBehaviour.Properties, T> factory,
                                                 BlockBehaviour.Properties properties) {
-        ResourceLocation id = OMT.id(name);
+        Identifier id = OMT.id(name);
         return Registry.register(BuiltInRegistries.BLOCK, id, factory.apply(VersionCompat.blockProperties(properties, id)));
     }
 

@@ -2,7 +2,7 @@ package omtteam.openmodularturrets.client.api;
 
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import omtteam.openmodularturrets.client.model.PortedTurretModel;
 import omtteam.openmodularturrets.client.model.TurretModel;
 import omtteam.openmodularturrets.core.turret.TurretType;
@@ -32,7 +32,7 @@ public interface TurretModelRegistrar {
      *
      * @param texture e.g. {@code mymod:textures/block/turret/my_turret.png}
      */
-    default void register(TurretType type, Supplier<LayerDefinition> layer, ResourceLocation texture,
+    default void register(TurretType type, Supplier<LayerDefinition> layer, Identifier texture,
                           @Nullable String yawPath, @Nullable String pitchPath) {
         register(type, layer, part -> new PortedTurretModel(part, texture, yawPath, pitchPath));
     }

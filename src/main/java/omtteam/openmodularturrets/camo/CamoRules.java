@@ -5,7 +5,7 @@ import omtteam.omlib.camo.CamoHost;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.EmptyBlockGetter;
@@ -64,7 +64,7 @@ public final class CamoRules {
     /** The disguise for a stored registry id, if the block still exists and is a valid disguise. */
     @Nullable
     public static BlockState disguiseById(String id) {
-        ResourceLocation location = ResourceLocation.tryParse(id);
+        Identifier location = Identifier.tryParse(id);
         if (location == null) return null;
         BlockState state = BuiltInRegistries.BLOCK.getOptional(location).map(Block::defaultBlockState).orElse(null);
         return state != null && isValidDisguise(state) ? state : null;

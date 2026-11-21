@@ -7,7 +7,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.gametest.framework.GameTestInstance;
 import net.minecraft.gametest.framework.TestData;
 import net.minecraft.gametest.framework.TestEnvironmentDefinition;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 
 import java.lang.reflect.InvocationTargetException;
@@ -50,7 +50,7 @@ public final class GameTestCases {
     }
 
     /** Registers one test function per test ({@code Registries.TEST_FUNCTION}, a static registry). */
-    public void registerFunctions(BiConsumer<ResourceLocation, Consumer<GameTestHelper>> functions) {
+    public void registerFunctions(BiConsumer<Identifier, Consumer<GameTestHelper>> functions) {
         cases.forEach(test -> functions.accept(test.id(), test.function()));
     }
 
@@ -62,14 +62,14 @@ public final class GameTestCases {
      * @param tests        registers a test instance
      */
     public void registerTests(
-            BiFunction<ResourceLocation, TestEnvironmentDefinition, Holder<TestEnvironmentDefinition>> environments,
-            BiConsumer<ResourceLocation, GameTestInstance> tests) {
+            BiFunction<Identifier, TestEnvironmentDefinition, Holder<TestEnvironmentDefinition>> environments,
+            BiConsumer<Identifier, GameTestInstance> tests) {
         Map<String, Holder<TestEnvironmentDefinition>> batches = new HashMap<>();
         for (Case test : cases) {
             Holder<TestEnvironmentDefinition> environment = batches.computeIfAbsent(test.annotation().batch(),
                     batch -> environments.apply(id(batch), new TestEnvironmentDefinition.AllOf(List.of())));
             TestData<Holder<TestEnvironmentDefinition>> data = new TestData<>(environment,
-                    ResourceLocation.parse(test.annotation().template()), test.annotation().timeoutTicks(), 0, true);
+                    Identifier.parse(test.annotation().template()), test.annotation().timeoutTicks(), 0, true);
             ResourceKey<Consumer<GameTestHelper>> function = ResourceKey.create(Registries.TEST_FUNCTION, test.id());
             tests.accept(test.id(), new FunctionGameTestInstance(function, data));
         }
@@ -90,14 +90,14 @@ public final class GameTestCases {
         };
     }
 
-    private static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(OMTGameTestMod.MOD_ID, path);
+    private static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath(OMTGameTestMod.MOD_ID, path);
     }
 
     private static String snakeCase(String name) {
         return name.replaceAll("([a-z0-9])([A-Z])", "$1_$2").toLowerCase(Locale.ROOT);
     }
 
-    private record Case(ResourceLocation id, Consumer<GameTestHelper> function, GameTest annotation) {
+    private record Case(Identifier id, Consumer<GameTestHelper> function, GameTest annotation) {
     }
 }

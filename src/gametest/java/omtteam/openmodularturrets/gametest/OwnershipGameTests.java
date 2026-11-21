@@ -1,22 +1,8 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
-/*import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if forge {
-/*import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if (neoforge && <1.21.11) || forge {
-/*import omtteam.openmodularturrets.OMT;
-*///?}
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-//? if <1.21.11 {
-import net.minecraft.gametest.framework.GameTest;
-//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -49,10 +35,6 @@ import java.util.UUID;
  * them. The test players are the loaders' fake players, so the claim tests turn on {@code general.fakePlayersCanClaim}
  * for the click only (in their own batch).
  */
-//? if (neoforge && <1.21.11) || forge {
-/*@GameTestHolder(OMT.MOD_ID)
-@PrefixGameTestTemplate(false)
-*///?}
 @SuppressWarnings("unused")
 public class OwnershipGameTests implements OMTGameTests {
     private static final int TIMEOUT_TICKS = 100;
@@ -222,7 +204,7 @@ public class OwnershipGameTests implements OMTGameTests {
     private static ServerPlayer playerAt(GameTestHelper helper, String name, BlockPos relative) {
         ServerPlayer player = player(helper, name);
         BlockPos pos = helper.absolutePos(relative);
-        player.moveTo(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
+        player.snapTo(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
         return player;
     }
 
