@@ -1,7 +1,9 @@
 package omtteam.openmodularturrets.platform.forge;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -60,6 +62,9 @@ public final class OMTForge {
                 step.register().run();
                 done.add(step);
             }
+        }
+        if (event.getRegistryKey().equals(Registries.RECIPE_SERIALIZER)) {
+            CraftingHelper.register(ForgeModuleEnabledCondition.SERIALIZER);
         }
     }
 
