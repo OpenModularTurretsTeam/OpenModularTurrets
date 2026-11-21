@@ -594,6 +594,11 @@ The built-in turrets use the same path, so there is no special casing per turret
 - **Upgrades are per machine:** `core.item.UpgradeType` is the common interface, each machine has its own enum (`TurretBaseUpgradeType`, `GeneratorUpgradeType`) and item subclass of `item.UpgradeItem` (`TurretBaseUpgradeItem`, `GeneratorUpgradeItem`).
   A machine's upgrade slots accept only its own subclass.
   A new machine gets its own enum and item subclass.
+- **Upgrade and addon switches** (requested by the user on 2026-10-29, branch `1.20.1+-module-toggles`, for a later release): the config sections `upgrades` and `addons` have one boolean per upgrade (both machines) and addon item (`ConfigData.Upgrades` / `Addons`, `isEnabled`; `item.ModuleToggles` for stacks and item ids).
+  A disabled one stays in its slot but counts as not installed (`TurretBaseLogic.getUpgradeCount` / `getAddonCount` through `LogicSettings.upgradeEnabled` / `addonEnabled`, `GeneratorBlockEntity.getMultiplierUpgrades`), and its recipe and unlock advancement do not load: the resource condition `openmodularturrets:module_enabled` (`compat.ModuleEnabledCondition`, `"items"`: item id paths; registered per loader like OpenModularLighting's `block_enabled`: `FabricModuleEnabledCondition`, `ForgeModuleEnabledCondition`), added by datagen to every upgrade and addon recipe.
+  Recipes follow the config only when data loads (restart).
+  The client shows it with the synced config (`client.render.DisabledModuleOverlay`): a red frame and tint behind the machine slots holding one (base and generator `renderBg`), vanilla's barrier sprite over the icon in every GUI (Fabric: client mixin `GuiGraphicsMixin` at the end of `renderItemDecorations`; Forge: `RegisterItemDecorationsEvent`), and a red first tooltip line (`ModuleTooltip`, `tooltip.openmodularturrets.module_disabled`).
+  Game tests: `ModuleToggleGameTests`.
 - **Config versions:** `configVersion` in the config file; `ConfigMigration` (OMLib) runs the `ConfigMigrationSteps.STEPS` newer than the file, replacing old default values (only if unchanged) when a file of an older version is loaded.
   Bump `CURRENT_VERSION` and add a step when a default changes.
 
