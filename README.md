@@ -41,19 +41,18 @@ If you find a bug, please report it on the [issue tracker](https://github.com/Op
 
 ## Building
 
-The project uses Stonecutter to build Fabric 1.20.1, 1.21.1 and 1.21.11, NeoForge 1.21.1 and 1.21.11 and Forge 1.20.1 from one source tree (Gradle must run on Java 25 or newer).
+The project uses Stonecutter to build Fabric 1.20.1, 1.21.1 and 1.21.11, NeoForge 1.21.1 and 1.21.11 and Forge 1.20.1 from one source tree.
+Gradle must run on Java 25 or newer; the library OMLib is the git submodule `omlib`, so clone with `--recurse-submodules`.
 
 ```bash
-./gradlew chiseledBuild # build all nodes
-./gradlew check         # unit tests, architecture rules, game tests, code quality report
-./gradlew :1.21.1-fabric:runClient
-./gradlew :1.21.1-neoforge:runClient
-./gradlew :1.21.11-fabric:runClient
-./gradlew :1.21.11-neoforge:runClient
-./gradlew :1.20.1-forge:runClient
+git clone -b 1.20.1+ --recurse-submodules https://github.com/OpenModularTurretsTeam/OpenModularTurrets.git
+cd OpenModularTurrets
+./gradlew chiseledBuild            # build all nodes, jars in versions/<node>/build/libs/
+./gradlew check                    # unit tests, game tests, recipe and style checks
+./gradlew :1.21.1-fabric:runClient # start a client (any node, also :runServer)
 ```
 
-See [docs/architecture.md](docs/architecture.md) for how the code is structured and how to add things, [CLAUDE.md](CLAUDE.md) for the conventions, and [CHANGELOG.md](CHANGELOG.md) for changes.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full development setup (changing OMLib, working on the shared core OpenModularCore locally, testing), [docs/architecture.md](docs/architecture.md) for how the code is structured and how to add things, and [CHANGELOG.md](CHANGELOG.md) for changes.
 
 ## License
 
