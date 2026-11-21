@@ -6,16 +6,16 @@ import omtteam.openmodularturrets.core.world.Pose;
 import omtteam.openmodularturrets.core.world.Vector3;
 
 /**
- * Where a turret is in the world during this tick ({@link TurretBlockEntity#getMount()}). On a Sable contraption the
+ * Where a turret is in the world during this tick ({@link TurretBlockEntity#getMount()}). On a sub-level the
  * turret's block is stored in a plot far away and shown somewhere else; these are the values where it is shown.
- * Outside contraptions the pose is the identity and every value is the plain block position.
+ * Outside sub-levels the pose is the identity and every value is the plain block position.
  *
- * @param pose     the contraption's pose this tick ({@link Pose#IDENTITY} outside contraptions)
+ * @param pose     the sub-level's pose this tick ({@link Pose#IDENTITY} outside sub-levels)
  * @param face     the base face the turret is mounted on (in the plot, like the block state)
  * @param centre   world point the turret block's centre is shown at
  * @param up       world unit vector pointing out of the face
- * @param velocity the contraption's velocity at the centre, in blocks per tick ({@link Vec3#ZERO} outside
- *                 contraptions)
+ * @param velocity the sub-level's velocity at the centre, in blocks per tick ({@link Vec3#ZERO} outside
+ *                 sub-levels)
  */
 public record TurretMount(Pose pose, Face face, Vec3 centre, Vec3 up, Vec3 velocity) {
 

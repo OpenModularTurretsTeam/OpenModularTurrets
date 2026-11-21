@@ -28,8 +28,7 @@ import java.util.Map;
  * Turret renderer (1.12.2 {@code AbstractTurretRenderer}): orients the model on its mounting face with the frame
  * from {@link TurretMath}, then applies the interpolated yaw and pitch. Concealed turrets are not drawn.
  * <p>
- * The variant for 1.21.11: the turret's data is copied into a {@link State} when the frame is extracted, and drawn from
- * it in {@link #submit}.
+ * The turret's data is copied into a {@link State} when the frame is extracted, and drawn from it in {@link #submit}.
  */
 public class TurretRenderer implements BlockEntityRenderer<TurretBlockEntity, TurretRenderer.State> {
     /** What the renderer needs of a turret; {@code model} is {@code null} for a turret that is not drawn. */

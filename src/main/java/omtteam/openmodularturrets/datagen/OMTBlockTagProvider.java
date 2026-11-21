@@ -40,7 +40,7 @@ public class OMTBlockTagProvider extends FabricTagProvider.BlockTagProvider {
         ModBlocks.WALLS.forEach(tagBuilder(BlockTags.WALLS)::add);
     }
 
-    /** The builder that adds blocks by value (renamed in the Fabric API for 1.21.5). */
+    /** The builder that adds blocks by value; the call sites are the same on every version branch. */
     private TagAppender<Block, Block> tagBuilder(TagKey<Block> tag) {
         return valueLookupBuilder(tag);
     }

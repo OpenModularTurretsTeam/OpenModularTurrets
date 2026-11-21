@@ -30,8 +30,8 @@ import org.jetbrains.annotations.Nullable;
  * The crank (1.12.2 {@code LeverRenderer} + {@code ModelLever}): an arm pointing into the base and a handle, both
  * turning around the arm while cranking.
  * <p>
- * The variant for 1.21.11: the crank angle goes into the model when it is drawn ({@link LeverModel#setupAnim}), so
- * every crank is drawn at its own angle.
+ * The crank angle goes into the model when it is drawn ({@link LeverModel#setupAnim}), so every crank is drawn at its
+ * own angle.
  */
 public class LeverRenderer implements BlockEntityRenderer<LeverBlockEntity, LeverRenderer.State> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(OMT.id("lever_block"), "main");

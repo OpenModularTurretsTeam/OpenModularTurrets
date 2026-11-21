@@ -22,8 +22,7 @@ import omtteam.openmodularturrets.entity.projectile.PlasmaProjectile;
 /**
  * Plasma ball (1.12.2 {@code PlasmaRenderer} + {@code ModelPlasmaProjectile}): two crossed 4x4 planes, scaled by
  * 0.675 and turned along the flight direction. 1.12.2 rotated around a point 0.9 blocks below the ball; here it turns
- * around its own centre. The variant for 1.21.11 (render states; the model part is never posed, only the pose stack
- * turns it).
+ * around its own centre. The model part is never posed, only the pose stack turns it.
  */
 public class PlasmaRenderer extends EntityRenderer<PlasmaProjectile, ProjectileRenderState> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(OMT.id("plasma"), "main");

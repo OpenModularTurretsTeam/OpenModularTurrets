@@ -56,8 +56,7 @@ public final class OMTNeoForge {
     }
 
     /**
-     * A step whose registry fired no event would leave its content unregistered: fail loudly instead. With Create
-     * installed, its contraptions may move bases and turrets ({@link NeoForgeCreateMovement}).
+     * A step whose registry fired no event would leave its content unregistered: fail loudly instead.
      */
     private void onCommonSetup(FMLCommonSetupEvent event) {
         if (done.size() != steps.size()) {

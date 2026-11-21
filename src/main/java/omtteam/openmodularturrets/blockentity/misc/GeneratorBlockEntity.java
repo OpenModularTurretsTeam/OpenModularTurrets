@@ -107,7 +107,7 @@ public class GeneratorBlockEntity extends CompatBlockEntity implements TransferH
 
     /**
      * Empties fuel and upgrade slots. Whoever moves or replaces the block after saving its data ({@code /setblock},
-     * Sable contraptions) calls this first, so {@link #onBlockRemoved} does not drop a second copy of the items.
+     * mods that move blocks) calls this first, so {@link #onBlockRemoved} does not drop a second copy of the items.
      */
     @Override
     public void clearContent() {

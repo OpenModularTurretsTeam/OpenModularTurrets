@@ -32,7 +32,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- * {@link BaseWorld} for a turret base block entity. On a Sable contraption the base's coordinates are those of the
+ * {@link BaseWorld} for a turret base block entity. On a sub-level the base's coordinates are those of the
  * plot, so entity positions are converted into them with the base's current {@link Pose}, and line of sight starts at
  * the point the plot position is shown at.
  */
@@ -80,9 +80,9 @@ public class BlockEntityBaseWorld implements BaseWorld {
     }
 
     /**
-     * Entities whose bounding box touches the box (as vanilla searches). On a contraption, Sable widens a search
-     * inside the plot to the world area around the turned box, so there the entities found are filtered by their
-     * position in the base's coordinates.
+     * Entities whose bounding box touches the box (as vanilla searches). On a sub-level, a search inside the plot
+     * can cover the world area around the turned box, so there the entities found are filtered by their position in
+     * the base's coordinates.
      */
     @Override
     public List<TargetEntity> getLivingEntities(Box box) {
@@ -127,9 +127,9 @@ public class BlockEntityBaseWorld implements BaseWorld {
     /**
      * Whether nothing solid lies between a turret's centre {@code plotFrom} and {@code worldTo}, see
      * {@link #hasLineOfSight}. The point where the trace leaves the turret's block is found in the plot, where the
-     * block is axis-aligned, so a turned turret on a contraption does not see its own block.
+     * block is axis-aligned, so a turned turret on a sub-level does not see its own block.
      *
-     * @param pose     the pose of the turret's contraption ({@link Pose#IDENTITY} outside contraptions)
+     * @param pose     the pose of the turret's sub-level ({@link Pose#IDENTITY} outside sub-levels)
      * @param plotFrom the turret's centre in its own (plot) coordinates
      * @param worldTo  the end point in the world
      * @param context  the entity passed to {@link ClipContext} as collision context (must not be null)

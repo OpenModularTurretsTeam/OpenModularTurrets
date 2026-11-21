@@ -66,8 +66,8 @@ public class TrustListGameTests implements OMTGameTests {
     //?}
 
     /**
-     * A trusted player below admin cannot add anyone. The request is refused before the name is looked up; on 1.21.11 the
-     * lookup would find the name (see {@link #namesOfOfflinePlayersAreLookedUp}).
+     * A trusted player below admin cannot add anyone. The request is refused before the name is looked up; the lookup
+     * would find the name (see {@link #namesOfOfflinePlayersAreLookedUp}).
      */
     @GameTest(template = EMPTY_STRUCTURE, batch = "trust_add_not_admin", timeoutTicks = TIMEOUT_TICKS)
     public void playersBelowAdminCannotAdd(GameTestHelper helper) {
@@ -84,9 +84,8 @@ public class TrustListGameTests implements OMTGameTests {
 
     /**
      * A name of a player who is not online is looked up on a background thread and added when the answer is back on the
-     * server thread. The game test server runs in offline mode: on 1.21.11 its name cache gives the name's offline UUID
-     * (as an offline-mode server does), before 1.21.11 it has no profile cache and the name is not found. An empty name is
-     * not looked up at all.
+     * server thread. The game test server runs in offline mode: its name cache gives the name's offline UUID (as
+     * an offline-mode server does). An empty name is not looked up at all.
      */
     @GameTest(template = EMPTY_STRUCTURE, batch = "trust_add_offline", timeoutTicks = LOOKUP_TIMEOUT_TICKS)
     public void namesOfOfflinePlayersAreLookedUp(GameTestHelper helper) {
@@ -230,8 +229,8 @@ public class TrustListGameTests implements OMTGameTests {
     //? if fabric {
     /**
      * Runs {@code request} with {@code player} on the server's player list, where name lookups find online players. The
-     * request is handled at once on the server thread, so no tick sees the player on the list. Fabric only: NeoForge and
-     * Forge return a read-only view of the list.
+     * request is handled at once on the server thread, so no tick sees the player on the list. Fabric only:
+     * NeoForge returns a read-only view of the list.
      */
     private static void online(GameTestHelper helper, ServerPlayer player, Runnable request) {
         List<ServerPlayer> players = helper.getLevel().getServer().getPlayerList().getPlayers();

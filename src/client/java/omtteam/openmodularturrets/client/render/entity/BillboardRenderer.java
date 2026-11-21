@@ -13,8 +13,7 @@ import omtteam.omlib.client.compat.ClientCompat;
 
 /**
  * A camera-facing sprite (1.12.2 used {@code RenderSnowball} with the "throwable bullet" item for bullets). Drawn from
- * both sides, so it is visible whichever way the camera orientation is defined. The variant for 1.21.11 (render
- * states).
+ * both sides, so it is visible whichever way the camera orientation is defined.
  */
 public class BillboardRenderer<T extends Entity> extends EntityRenderer<T, EntityRenderState> {
     private final Identifier texture;

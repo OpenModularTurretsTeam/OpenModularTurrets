@@ -11,9 +11,8 @@ import net.minecraft.resources.Identifier;
  * plate at the bottom); {@link omtteam.openmodularturrets.client.render.blockentity.TurretRenderer} orients them on
  * the mounting face.
  * <p>
- * The variant for 1.21.11: drawing is deferred, so one model shared by all turrets of a type must not be posed when a
- * turret is submitted. The pose travels in a {@link Pose}, which the renderer applies in {@link #setupAnim} right
- * before it draws.
+ * Drawing is deferred, so one model shared by all turrets of a type must not be posed when a turret is submitted. The
+ * pose travels in a {@link Pose}, which the renderer applies in {@link #setupAnim} right before it draws.
  */
 public abstract class TurretModel extends Model<TurretModel.Pose> {
     /**

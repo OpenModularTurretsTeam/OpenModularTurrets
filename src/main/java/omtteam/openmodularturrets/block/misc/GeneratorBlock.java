@@ -71,7 +71,7 @@ public class GeneratorBlock extends CompatEntityBlock implements InteractiveBloc
         return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
-    /** Turns {@link #FACING} with the block (structures, mods that move blocks such as Sable contraptions). */
+    /** Turns {@link #FACING} with the block (structures, mods that move blocks). */
     @Override
     public @NotNull BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));

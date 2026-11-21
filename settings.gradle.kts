@@ -43,7 +43,7 @@ stonecutter {
         // Node name = "<minecraft version>-<loader>"; the build script follows the loader
         versions("1.21.11-fabric" to "1.21.11", "1.21.11-neoforge" to "1.21.11")
         mapBuilds { _, node -> "build.${node.project.substringAfterLast('-')}.gradle.kts" }
-        vcsVersion = "1.21.11-fabric" // the version the committed source is written for
+        vcsVersion = "1.21.11-fabric" // the node the committed source is written for
     }
 }
 

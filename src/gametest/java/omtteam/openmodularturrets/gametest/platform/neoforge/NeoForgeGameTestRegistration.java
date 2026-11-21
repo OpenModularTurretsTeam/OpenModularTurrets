@@ -14,8 +14,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
- * Registers the game tests on NeoForge from 1.21.11 on ({@link GameTestCases}), where {@code @GameTestHolder} is
- * gone: the test classes are the classes of the test mod with {@link GameTest} methods.
+ * Registers the game tests on NeoForge ({@link GameTestCases}), where {@code @GameTestHolder} is gone: the test
+ * classes are the classes of the test mod with {@link GameTest} methods.
  */
 final class NeoForgeGameTestRegistration {
     private NeoForgeGameTestRegistration() {

@@ -7,8 +7,8 @@ import net.minecraft.core.registries.Registries;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
 
 /**
- * Datagen entrypoint. Generates the version-specific {@code data/} files (recipes, loot tables, tags, …)
- * into {@code versions/<v>/src/main/generated}.
+ * Datagen entrypoint. Generates the {@code data/} files (recipes, loot tables, tags, …) into
+ * {@code versions/<node>/src/main/generated}.
  */
 public class OMTDataGenerator implements DataGeneratorEntrypoint {
     @Override

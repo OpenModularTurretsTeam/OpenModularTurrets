@@ -18,9 +18,9 @@ import net.minecraft.server.level.ServerLevel;
 /**
  * Turret damage rules on the victim's side:
  * <ul>
- *     <li>Suppresses death loot of turret kills without a fake drops addon (Fabric API has no drops event for
- *     1.20.1/1.21.1). Hooks the {@code shouldDropLoot} check inside {@code dropAllDeathLoot} (which takes the level on
- *     1.21.11); this also covers mobs that override {@code shouldDropLoot}.</li>
+ *     <li>Suppresses death loot of turret kills without a fake drops addon. Hooks the
+ *     {@code shouldDropLoot} check inside {@code dropAllDeathLoot} (which takes the level); this also covers mobs that
+ *     override {@code shouldDropLoot}.</li>
  *     <li>Turret damage causes no knockback.</li>
  *     <li>Turret damage never hurts an {@linkplain TurretImmunity immune} entity (a player holding the ownership wand).
  *     Direct turret damage already skips it ({@code TurretDamage.canDamage}); this catches turret explosions.</li>
@@ -28,7 +28,7 @@ import net.minecraft.server.level.ServerLevel;
  */
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
-    /** The method that applies damage ({@code hurtServer} on 1.21.11). */
+    /** The method that applies damage ({@code hurtServer}). */
     @Unique
     private static final String HURT = "hurtServer";
 
@@ -53,8 +53,8 @@ public abstract class LivingEntityMixin {
     }
 
     /**
-     * Turret damage never knocks the victim back (user decision). {@code hurt} ({@code hurtServer} on 1.21.11) makes a
-     * single {@code knockback} call on all versions.
+     * Turret damage never knocks the victim back (user decision). {@code hurtServer} makes a single
+     * {@code knockback} call.
      */
     @WrapWithCondition(method = HURT,
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))

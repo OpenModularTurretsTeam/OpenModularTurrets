@@ -1,4 +1,5 @@
-// NeoForge nodes (ModDevGradle). Shared logic (Java, metadata templating, tests, publishing) is in buildSrc/mod-common.
+// NeoForge nodes (ModDevGradle). Shared logic (Java, metadata templating, tests, publishing) is in
+// omlib/build-logic (mod-common).
 plugins {
     id("mod-common")
     id("net.neoforged.moddev")
@@ -16,8 +17,8 @@ val client: SourceSet = sourceSets.create("client") {
 
 // Datagen is Fabric-only by design: NeoForge gets the converted Fabric output (convertFabricData below)
 sourceSets.main { java { exclude("$packagePath/datagen/**") } }
-// The unit tests left in this repository (ArchUnit, config migration) run on the Fabric nodes only, as before; the core's
-// own tests, which ran here on every node, run in OpenModularCore (Java 17 and Java 8)
+// The unit tests left in this repository (ArchUnit, config migration) run on the Fabric node only, as before; the
+// core's own tests, which ran here on every node, run in OpenModularCore (Java 17 and Java 8)
 sourceSets.test { java { exclude("**") } }
 
 // In-world tests (src/gametest): a separate test mod (openmodularturrets_gametest) that is never shipped, sharing
@@ -44,7 +45,7 @@ neoForge {
     }
 
     runs {
-        // Run directory: versions/<v>/run (kept apart from the Fabric runs, whose worlds would not load here)
+        // Run directory: versions/<node>/run (kept apart from the Fabric runs, whose worlds would not load here)
         // Only the mod itself; the test mod is for the GameTest server (as on Fabric, where only runGameTest loads it)
         register("client") {
             client()
@@ -95,8 +96,8 @@ dependencies {
 configurations.named("clientCompileOnly") { extendsFrom(configurations.compileOnly.get()) }
 
 // ---- Data (recipes, loot tables, tags, damage types, advancements) ----
-// Not generated here: copied from the Fabric datagen output of the same Minecraft version (datagen_from) with NeoForge
-// load conditions ("neoforge:conditions"; see convertFabricData in buildSrc).
+// Not generated here: copied from the Fabric node's datagen output (datagen_from) with NeoForge load conditions
+// ("neoforge:conditions"; see convertFabricData in omlib/build-logic).
 
 val fabricData: File = rootProject.file("versions/${property("datagen_from")}/src/main/generated")
 val neoForgeData: Provider<Directory> = layout.buildDirectory.dir("generated/neoforgeData")
@@ -113,7 +114,7 @@ sourceSets.main { resources.srcDir(convertFabricData) }
 
 tasks.check { dependsOn("runGameTestServer") }
 
-// A game test server whose mod fails to load can still exit normally (Forge did), so `check` also needs the server's own
+// A game test server whose mod fails to load can still exit normally, so `check` also needs the server's own
 // "All N required tests passed" line in its log.
 tasks.named("runGameTestServer") {
     val log = layout.projectDirectory.file("run/logs/latest.log")

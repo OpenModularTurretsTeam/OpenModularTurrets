@@ -21,9 +21,9 @@ import java.util.function.Consumer;
 
 /**
  * Draws the model of a turret as its item (1.12.2: turret renderer with {@code turretHead == null}); the display
- * transforms are in the item model JSON ({@code base} of a {@code minecraft:special} model). The variant for 1.21.11,
- * where items are drawn by special model renderers instead of {@code builtin/entity} renderers. An item model names it
- * as {@code openmodularturrets:turret} with the turret's id: {@code "turret": "openmodularturrets:laser_turret"}.
+ * transforms are in the item model JSON ({@code base} of a {@code minecraft:special} model). Items are drawn by
+ * special model renderers, not by {@code builtin/entity} renderers. An item model names it as
+ * {@code openmodularturrets:turret} with the turret's id: {@code "turret": "openmodularturrets:laser_turret"}.
  */
 public final class TurretSpecialRenderer implements SpecialModelRenderer<Void> {
     private final TurretModel model;

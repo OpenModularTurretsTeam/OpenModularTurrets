@@ -152,8 +152,7 @@ public class GeneratorMenu extends LargeStackMenu {
     /**
      * The energy multiplier upgrade slot.
      * A named class, not an anonymous one: javac names an anonymous class's constructor parameters after the super
-     * constructor's, and the Forge 1.20.1 game jar that ModDevGradle builds without recompilation (on CI) names all of
-     * {@code Slot}'s {@code o}, which fails as "variable o is already defined".
+     * constructor's, which can clash with the parameter names of a game jar that is built without recompilation.
      */
     private static final class UpgradeSlot extends Slot {
         UpgradeSlot(Container upgrades) {

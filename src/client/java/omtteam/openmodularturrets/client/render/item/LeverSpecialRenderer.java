@@ -16,8 +16,7 @@ import java.util.function.Consumer;
 
 /**
  * The crank item shows the crank model; display transforms are in the item model JSON ({@code base} of a
- * {@code minecraft:special} model). The variant for 1.21.11; an item model names it as
- * {@code openmodularturrets:lever}.
+ * {@code minecraft:special} model). An item model names it as {@code openmodularturrets:lever}.
  */
 public final class LeverSpecialRenderer implements SpecialModelRenderer<Void> {
     private final LeverRenderer.LeverModel model;

@@ -18,7 +18,7 @@ import omtteam.omlib.client.compat.ClientCompat;
  * Arrow geometry (two crossed fins at the back and four crossed side quads), as vanilla's arrow renderer. The 1.12.2
  * version used it for the crossbow turret's arrows ({@code RenderTippedArrow}) and, with its own texture, for rockets
  * ({@code RocketRenderer}). The geometry is stretched to {@code halfLength}, so shorter projectiles such as the
- * crossbow bolt can use it as well. The variant for 1.21.11 (render states).
+ * crossbow bolt can use it as well.
  */
 public class ArrowShapedRenderer<T extends Entity> extends EntityRenderer<T, ProjectileRenderState> {
     private final Identifier texture;

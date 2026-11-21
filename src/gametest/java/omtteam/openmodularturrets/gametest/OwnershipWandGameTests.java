@@ -61,7 +61,7 @@ public class OwnershipWandGameTests implements OMTGameTests {
     private static final BlockPos UNOWNED = BASE.south();
     /**
      * Where a player stands to click into the air: a bottom corner of the test, looking at the opposite top corner, with
-     * more than the reach of air in between (the test sits underground on Forge 1.20.1, so there may be no sky).
+     * more than the reach of air in between.
      */
     private static final BlockPos CORNER = new BlockPos(0, 1, 0);
     private static final Vec3 FAR_CORNER = new Vec3(7.5D, 7.5D, 7.5D);
@@ -317,11 +317,10 @@ public class OwnershipWandGameTests implements OMTGameTests {
         }
 
         /**
-         * New players ignore damage for their first 60 ticks, and fake players never tick that down; the field is
-         * private, and game tests run with Mojang names on every loader.
+         * New players ignore damage for their first 60 ticks, and fake players never tick that down. There is no field
+         * to reset: the player's isInvulnerableTo override below is enough.
          */
         private void endSpawnProtection() {
-            // 1.21.11 has no such field; there the player's isInvulnerableTo override below is enough
         }
 
         @Override

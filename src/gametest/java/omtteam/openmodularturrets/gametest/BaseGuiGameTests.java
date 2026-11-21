@@ -29,8 +29,7 @@ import omtteam.omlib.security.PlayerAdapter;
  * event hooks into (Fabric {@code UseBlockCallback}, NeoForge {@code RightClickBlock}), so the whole path is covered:
  * the event, the base's {@code InteractiveBlock#onUse}, the permission check and the menu. Players are the loader's
  * fake players (the same class name and constructor on all loaders), one per test, so no state is shared between
- * tests. Forge opens block menus through {@code NetworkHooks.openScreen}, which builds the menu itself (no
- * {@code openMenu}).
+ * tests.
  */
 @SuppressWarnings("unused")
 public class BaseGuiGameTests implements OMTGameTests {

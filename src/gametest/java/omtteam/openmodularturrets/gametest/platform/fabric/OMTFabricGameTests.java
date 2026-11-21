@@ -6,8 +6,8 @@ import omtteam.openmodularturrets.gametest.OMTGameTestMod;
 import omtteam.openmodularturrets.gametest.ProjectileTurretGameTests;
 
 /**
- * Fabric entrypoint of the test mod. The test classes are listed under the {@code fabric-gametest} entrypoint; before
- * 1.21.11 Fabric registers them, from 1.21.11 on {@code FabricGameTestRegistration} does.
+ * Fabric entrypoint of the test mod. The test classes are listed under the {@code fabric-gametest} entrypoint;
+ * {@code FabricGameTestRegistration} registers them.
  */
 public final class OMTFabricGameTests implements ModInitializer {
     @Override

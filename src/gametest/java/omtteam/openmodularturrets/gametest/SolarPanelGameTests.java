@@ -31,7 +31,6 @@ public class SolarPanelGameTests implements OMTGameTests {
     /** Day time of noon; the day ends at about 12000. */
     private static final long NOON = 6000L;
 
-    /** Not on Forge: its game test server places the tests underground. */
     @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = TIMEOUT_TICKS)
     public void solarPanelChargesUnderTheSky(GameTestHelper helper) {
         TurretBaseBlockEntity base = solarBase(helper);

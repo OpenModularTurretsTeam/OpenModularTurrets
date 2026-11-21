@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * Fabric only (NeoForge has {@code RegisterSpecialModelRendererEvent}): Fabric API has no way to register the type of
  * a special item model renderer, so the types are added to vanilla's table once it has its own (client mixin config
- * {@code openmodularturrets.client.mixins.json}). The variant for 1.21.11; before, the class is an empty stub.
+ * {@code openmodularturrets.client.mixins.json}).
  */
 @Mixin(SpecialModelRenderers.class)
 public abstract class SpecialModelRenderersMixin {

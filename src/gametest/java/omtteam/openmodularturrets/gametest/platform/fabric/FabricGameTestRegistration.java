@@ -12,7 +12,7 @@ import omtteam.openmodularturrets.gametest.GameTestCases;
 import java.util.Optional;
 
 /**
- * Registers the game tests on Fabric from 1.21.11 on ({@link GameTestCases}). The test classes are still the
+ * Registers the game tests on Fabric ({@link GameTestCases}). The test classes are still the
  * {@code fabric-gametest} entrypoints. Fabric's own test registration reads them too, but only looks for its own
  * annotation: it logs a warning for each class that it found no test methods in.
  */
