@@ -35,7 +35,8 @@
     "openmodularturrets.mixins.json"
   ],
   "suggests": {
-    "jade": "*"
+    "jade": "*",
+    "neepmeat": "*"
   },
   "depends": {
     "fabricloader": ">=${loader_version}",
