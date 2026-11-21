@@ -14,8 +14,5 @@ public final class OMTFabricGameTests implements ModInitializer {
     public void onInitialize() {
         OMTGameTestMod.registrationSteps().forEach(step -> step.register().run());
         ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> ProjectileTurretGameTests.onEntityLoad(entity));
-        //? if >=1.21.11 {
-        /*FabricGameTestRegistration.register();
-        *///?}
     }
 }

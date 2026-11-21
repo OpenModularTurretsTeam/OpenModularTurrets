@@ -1,27 +1,15 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
+//? if neoforge {
 /*import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 *///?}
-//? if forge {
-/*import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if (neoforge && <1.21.11) || forge {
+//? if neoforge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
-//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
-//?}
-//? if >=1.21 {
 import net.minecraft.core.registries.Registries;
-//?}
-//? if >=1.21.11 {
-/*import net.minecraft.world.entity.animal.wolf.Wolf;
-*///?} else {
 import net.minecraft.world.entity.animal.Wolf;
-//?}
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -58,7 +46,7 @@ import java.util.UUID;
  * uses them: item stacks and their custom data saved and loaded, the common tags the recipes use, the Looting sword of
  * the turret fake player, the owner of a tamed animal, and the render shape of blocks drawn by their renderer.
  */
-//? if (neoforge && <1.21.11) || forge {
+//? if neoforge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
@@ -121,11 +109,7 @@ public class CompatGameTests implements OMTGameTests {
         Wolf wolf = helper.spawn(EntityType.WOLF, new BlockPos(1, 1, 1));
         helper.assertTrue(new LivingTargetEntity(wolf, Pose.IDENTITY).getOwner().isEmpty(), "A wild wolf has an owner");
         ServerPlayer player = VersionCompat.fakePlayer(helper.getLevel(), new GameProfile(UUID.randomUUID(), "Owner"));
-        //? if >=1.21.11 {
-        /*wolf.setOwner(player);
-        *///?} else {
         wolf.setOwnerUUID(player.getUUID());
-        //?}
         Optional<PlayerIdentity> owner = new LivingTargetEntity(wolf, Pose.IDENTITY).getOwner();
         helper.assertTrue(owner.isPresent() && owner.get().is(player.getUUID()), "The wolf's owner is " + owner);
         wolf.discard();
@@ -135,11 +119,7 @@ public class CompatGameTests implements OMTGameTests {
     /** Turrets and cranks are drawn by their block entity renderers only, not as a block model. */
     @GameTest(template = EMPTY_STRUCTURE)
     public void turretsAndCranksAreDrawnByTheirRenderers(GameTestHelper helper) {
-        //? if >=1.21.11 {
-        /*RenderShape expected = RenderShape.INVISIBLE;
-        *///?} else {
         RenderShape expected = RenderShape.ENTITYBLOCK_ANIMATED;
-        //?}
         List<Block> blocks = new ArrayList<>(ModBlocks.TURRETS.values());
         blocks.add(ModBlocks.LEVER);
         for (Block block : blocks) {
@@ -150,11 +130,7 @@ public class CompatGameTests implements OMTGameTests {
     }
 
     private static int lootingLevel(ServerLevel level, ItemStack stack) {
-        //? if >=1.21 {
         return EnchantmentHelper.getItemEnchantmentLevel(
                 level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.LOOTING), stack);
-        //?} else {
-        /*return EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MOB_LOOTING, stack);
-        *///?}
     }
 }

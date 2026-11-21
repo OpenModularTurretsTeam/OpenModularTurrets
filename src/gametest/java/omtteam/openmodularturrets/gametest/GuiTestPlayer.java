@@ -7,9 +7,6 @@ import net.fabricmc.fabric.api.entity.FakePlayer;
 //? if neoforge {
 /*import net.neoforged.neoforge.common.util.FakePlayer;
 *///?}
-//? if forge {
-/*import net.minecraftforge.common.util.FakePlayer;
-*///?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

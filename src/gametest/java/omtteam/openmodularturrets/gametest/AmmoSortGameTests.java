@@ -1,21 +1,15 @@
 package omtteam.openmodularturrets.gametest;
 
-//? if neoforge && <1.21.11 {
+//? if neoforge {
 /*import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 *///?}
-//? if forge {
-/*import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
-*///?}
-//? if (neoforge && <1.21.11) || forge {
+//? if neoforge {
 /*import omtteam.openmodularturrets.OMT;
 *///?}
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
-//? if <1.21.11 {
 import net.minecraft.gametest.framework.GameTest;
-//?}
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
@@ -38,7 +32,7 @@ import java.util.function.ToIntFunction;
  * {@code AmmoSort}): the order it gives, and that it gives exactly what the base's own sort of 4.0.0 gave (kept below
  * as {@link #referenceSort}) for random slot contents. Needs no world, only the item registry.
  */
-//? if (neoforge && <1.21.11) || forge {
+//? if neoforge {
 /*@GameTestHolder(OMT.MOD_ID)
 @PrefixGameTestTemplate(false)
 *///?}
@@ -185,11 +179,7 @@ public class AmmoSortGameTests implements OMTGameTests {
     }
 
     private static boolean referenceSameItem(ItemStack a, ItemStack b) {
-        //? if >=1.21 {
         return ItemStack.isSameItemSameComponents(a, b);
-        //?} else {
-        /*return ItemStack.isSameItemSameTags(a, b);
-        *///?}
     }
 
     private static int referenceNamespaceRank(ItemStack stack) {

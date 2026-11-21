@@ -19,11 +19,7 @@ import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaPlugin;
-//? if >=1.21 {
 import snownee.jade.api.JadeIds;
-//?} else {
-/*import snownee.jade.api.Identifiers;
-*///?}
 
 /**
  * Client half of the Jade integration ({@code compat.jade.OMTJadePlugin} has the server half). Not registered with Jade
@@ -34,11 +30,7 @@ import snownee.jade.api.JadeIds;
 public class OMTJadeClientPlugin implements IWailaPlugin {
     /** Id Jade tags the lines of its universal item storage view with. */
     private static final ResourceLocation ITEM_STORAGE =
-            //? if >=1.21 {
             JadeIds.UNIVERSAL_ITEM_STORAGE;
-            //?} else {
-            /*Identifiers.UNIVERSAL_ITEM_STORAGE;
-            *///?}
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
@@ -58,11 +50,7 @@ public class OMTJadeClientPlugin implements IWailaPlugin {
         registration.addRayTraceCallback((hit, accessor, original) -> disguised(registration, accessor));
         // Jade's item view would list the ammo slots of the base; it stalls on "Collecting items..." there
         registration.addTooltipCollectedCallback(
-                //? if >=1.21 {
                 (box, accessor) -> hideItemStorage(box.getTooltip(), accessor));
-                //?} else {
-                /*(tooltip, accessor) -> hideItemStorage(tooltip, accessor));
-                *///?}
     }
 
     /**
@@ -72,14 +60,8 @@ public class OMTJadeClientPlugin implements IWailaPlugin {
     private static Accessor<?> disguised(IWailaClientRegistration registration, Accessor<?> accessor) {
         if (accessor instanceof BlockAccessor block && block.getBlockEntity() instanceof CamoHost host
                 && host.isCamoEnabled() && host.getCamo() != null && !host.canSeeThroughCamo(block.getPlayer())) {
-            //? if >=1.21.11 {
-            /*// Jade 21 takes name and icon from the block state
-            return registration.blockAccessor().from(block).blockState(host.getCamo()).blockEntity((BlockEntity) null)
-                    .build();
-            *///?} else {
             return registration.blockAccessor().from(block).blockState(host.getCamo()).blockEntity((BlockEntity) null)
                     .fakeBlock(new ItemStack(host.getCamo().getBlock())).build();
-            //?}
         }
         return accessor;
     }

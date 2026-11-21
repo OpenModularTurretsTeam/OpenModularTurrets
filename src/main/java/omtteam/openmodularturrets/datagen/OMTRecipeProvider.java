@@ -16,17 +16,10 @@ import omtteam.openmodularturrets.registry.ModItems;
 
 import java.util.List;
 import java.util.function.Consumer;
-//? if >=1.21.11 {
-/*import net.minecraft.data.recipes.RecipeProvider;
-*///?}
-//? if >=1.21 {
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeOutput;
 
 import java.util.concurrent.CompletableFuture;
-//?} else {
-/*import net.minecraft.data.recipes.FinishedRecipe;
-*///?}
 
 /**
  * Crafting recipes, ported from the 1.12.2 {@code *_vanilla.json} recipes (ore dictionary entries become {@code c:}
@@ -35,66 +28,23 @@ import java.util.concurrent.CompletableFuture;
  * The recipes themselves are in {@link Recipes}, the same on every version; only the way into it differs.
  */
 public class OMTRecipeProvider extends FabricRecipeProvider {
-    //? if >=1.21 {
     public OMTRecipeProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
-    //?} else {
-    /*public OMTRecipeProvider(FabricDataOutput output) {
-        super(output);
-    }
-    *///?}
 
-    //? if >=1.21.11 {
-    /*@Override
-    protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
-        return new Recipes(registries, output);
-    }
-
-    @Override
-    public String getName() {
-        return "Recipes";
-    }
-    *///?} else if >=1.21 {
     @Override
     public void buildRecipes(RecipeOutput output) {
         new Recipes(output).generate();
     }
-    //?} else {
-    /*@Override
-    public void buildRecipes(Consumer<FinishedRecipe> output) {
-        new Recipes(output).generate();
-    }
-    *///?}
 
     // From 1.21.2 the recipe builders need the item registry, so the vanilla provider hands them out (shaped, has).
     // Before, Recipes is a plain class: it inherits the static has from this provider and gets shaped as a stand-in.
-    //? if >=1.21.11 {
-    /*private final class Recipes extends RecipeProvider {
-        Recipes(HolderLookup.Provider registries, RecipeOutput output) {
-            super(registries, output);
-        }
-
-        @Override
-        public void buildRecipes() {
-            generate();
-        }
-    *///?} else if >=1.21 {
     private final class Recipes {
         private final RecipeOutput output;
 
         Recipes(RecipeOutput output) {
             this.output = output;
         }
-    //?} else {
-    /*private final class Recipes {
-        private final Consumer<FinishedRecipe> output;
-
-        Recipes(Consumer<FinishedRecipe> output) {
-            this.output = output;
-        }
-    *///?}
-    //? if <1.21.11 {
 
         private ShapedRecipeBuilder shaped(RecipeCategory category, ItemLike result) {
             return ShapedRecipeBuilder.shaped(category, result);
@@ -103,7 +53,6 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
         private ShapedRecipeBuilder shaped(RecipeCategory category, ItemLike result, int count) {
             return ShapedRecipeBuilder.shaped(category, result, count);
         }
-    //?}
 
         private void generate() {
             Consumer<ShapedRecipeBuilder> save = builder -> builder.save(output);

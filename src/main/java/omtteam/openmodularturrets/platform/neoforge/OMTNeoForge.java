@@ -64,11 +64,9 @@ public final class OMTNeoForge {
             List<RegistrationStep> missing = steps.stream().filter(step -> !done.contains(step)).toList();
             throw new IllegalStateException("Registration steps never ran: " + missing);
         }
-        //? if <1.21.11 {
         if (Platform.loaderInfo().isModLoaded(NeoForgeCreateMovement.CREATE_MOD_ID)) {
             event.enqueueWork(NeoForgeCreateMovement::register);
         }
-        //?}
     }
 
     private static void onLivingDeath(LivingDeathEvent event) {

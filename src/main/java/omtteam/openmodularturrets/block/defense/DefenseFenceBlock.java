@@ -21,9 +21,6 @@ import omtteam.omlib.block.UnownedMarker;
 import omtteam.omlib.blockentity.OwnedBlockEntity;
 import omtteam.openmodularturrets.blockentity.defense.PassiveDefenseBlockEntity;
 import omtteam.omlib.compat.VersionCompat;
-//? if >=1.21.11 {
-/*import net.minecraft.world.entity.InsideBlockEffectApplier;
-*///?}
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -67,18 +64,10 @@ public class DefenseFenceBlock extends IronBarsBlock implements EntityBlock, Int
         }
     }
 
-    //? if >=1.21.11 {
-    /*@Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity,
-                                InsideBlockEffectApplier effectApplier, boolean isPrecise) {
-        onEntityInside(level, pos, entity);
-    }
-    *///?} else {
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         onEntityInside(level, pos, entity);
     }
-    //?}
 
     /** OMPD {@code onEntityCollidedWithBlock}: {@code DamageSource.CACTUS}, the configured damage of the tier. */
     private void onEntityInside(Level level, BlockPos pos, Entity entity) {

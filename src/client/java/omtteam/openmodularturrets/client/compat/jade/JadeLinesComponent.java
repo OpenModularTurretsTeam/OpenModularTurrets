@@ -5,11 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
-//? if >=1.21 {
 import snownee.jade.api.IComponentProvider;
-//?} else {
-/*import snownee.jade.api.IBlockComponentProvider;
-*///?}
 
 import java.util.List;
 import java.util.function.Function;
@@ -19,11 +15,7 @@ import java.util.function.Function;
  * server sent. The tooltip interface is the only thing that differs between the Jade versions of 1.20.1 and 1.21.
  */
 final class JadeLinesComponent implements
-        //? if >=1.21 {
         IComponentProvider<BlockAccessor>
-        //?} else {
-        /*IBlockComponentProvider
-        *///?}
 {
     private final ResourceLocation uid;
     private final Function<BlockAccessor, List<Component>> lines;
