@@ -9,6 +9,8 @@ import net.minecraft.gametest.framework.TestData;
 import net.minecraft.gametest.framework.TestEnvironmentDefinition;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.gamerules.GameRuleMap;
+import net.minecraft.world.level.gamerules.GameRules;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -27,9 +29,9 @@ import java.util.function.Consumer;
 /**
  * The game tests as registry entries: since 1.21.5 a test is a test function plus a data-driven test instance, and
  * the framework batches tests by their test environment. Every {@link GameTest} method becomes a test
- * function and a test instance {@code openmodularturrets_gametest:<class>/<method>} (snake case), and every batch an
- * empty test environment {@code openmodularturrets_gametest:<batch>}. The loader entrypoints pass in the test classes
- * and register the entries through their loader's hooks ({@code platform/<loader>}).
+ * function and a test instance {@code openmodularturrets_gametest:<class>/<method>} (snake case), and every batch a
+ * test environment {@code openmodularturrets_gametest:<batch>} ({@link #batchEnvironment()}). The loader entrypoints
+ * pass in the test classes and register the entries through their loader's hooks ({@code platform/<loader>}).
  */
 public final class GameTestCases {
     /** Batch of the tests that name none. */
@@ -67,12 +69,25 @@ public final class GameTestCases {
         Map<String, Holder<TestEnvironmentDefinition>> batches = new HashMap<>();
         for (Case test : cases) {
             Holder<TestEnvironmentDefinition> environment = batches.computeIfAbsent(test.annotation().batch(),
-                    batch -> environments.apply(id(batch), new TestEnvironmentDefinition.AllOf(List.of())));
+                    batch -> environments.apply(id(batch), batchEnvironment()));
             TestData<Holder<TestEnvironmentDefinition>> data = new TestData<>(environment,
                     Identifier.parse(test.annotation().template()), test.annotation().timeoutTicks(), 0, true);
             ResourceKey<Consumer<GameTestHelper>> function = ResourceKey.create(Registries.TEST_FUNCTION, test.id());
             tests.accept(test.id(), new FunctionGameTestInstance(function, data));
         }
+    }
+
+    /**
+     * The environment of a batch (a new one each, since a registry takes an object only once): no mob spawning and
+     * clear weather. The test server keeps the default game rules, and a run passes tens of thousands of ticks (while a
+     * test waits for the wall clock), so otherwise it reaches rain (no solar power) and nights in which hostile mobs
+     * spawn around the tests and walk into a turret's range (where they become its target). The framework sets it up
+     * before each batch and resets the rules and weather after it.
+     */
+    private static TestEnvironmentDefinition batchEnvironment() {
+        return new TestEnvironmentDefinition.AllOf(
+                new TestEnvironmentDefinition.SetGameRules(new GameRuleMap.Builder().set(GameRules.SPAWN_MOBS, false).build()),
+                new TestEnvironmentDefinition.Weather(TestEnvironmentDefinition.Weather.Type.CLEAR));
     }
 
     private static Consumer<GameTestHelper> function(Object test, Method method) {
