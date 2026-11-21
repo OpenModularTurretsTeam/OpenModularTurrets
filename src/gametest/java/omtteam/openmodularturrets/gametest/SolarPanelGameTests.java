@@ -11,10 +11,9 @@ import omtteam.openmodularturrets.registry.ModItems;
 
 /**
  * The solar panel addon charges its base in daylight under open sky (OMLib's {@code VersionCompat.isDay}), and not
- * with a block above it. The test server leaves the daylight and weather cycles on, and it ticks as fast as it can
- * (while a test waits for the wall clock, a run passes tens of thousands of ticks), so a run reaches the night and
- * often rain; the tests therefore set the time to noon and clear the weather (rain that was falling fades out over a
- * few ticks, which the wait below covers).
+ * with a block above it. The test server leaves the daylight cycle on, and it ticks as fast as it can (while a test
+ * waits for the wall clock, a run passes tens of thousands of ticks), so a run reaches the night; the tests therefore
+ * set the time to noon. The weather is clear in every batch ({@code GameTestCases}).
  * {@code canSeeSky} reads the sky light, which the light engine computes later than the blocks change, so the tests
  * wait for it: a test far out in a new chunk may get its sky light late, and a roof darkens the base only after its
  * light update. The light engine runs on its own thread in real time, so while the test servers of all nodes run at
@@ -66,10 +65,9 @@ public class SolarPanelGameTests implements OMTGameTests {
         });
     }
 
-    /** An empty tier 2 base (the first with addon slots) with a solar panel addon, at noon in clear weather. */
+    /** An empty tier 2 base (the first with addon slots) with a solar panel addon, at noon. */
     private static TurretBaseBlockEntity solarBase(GameTestHelper helper) {
         helper.getLevel().setDayTime(NOON);
-        helper.getLevel().setWeatherParameters(TIMEOUT_TICKS, 0, false, false);
         helper.setBlock(BASE, ModBlocks.TURRET_BASES.get(1));
         TurretBaseBlockEntity base = (TurretBaseBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(BASE));
         base.getInventory().setItem(TurretBaseInventory.ADDON_START, new ItemStack(ModItems.ADDON_SOLAR_PANEL));
