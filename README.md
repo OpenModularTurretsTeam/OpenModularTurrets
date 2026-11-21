@@ -17,13 +17,25 @@ The mod should be fairly well documented in game; if you need any more help, ask
 - **Memory card:** copy the settings of a base (targeting, trusted players, camouflage) onto another one
 - **Generator:** burns furnace fuel and powers adjacent turret bases and other machines
 - **Turret API** for other mods to add their own turrets; see [docs/turret-api.md](docs/turret-api.md)
-- Integrations with JEI, HWYLA, OpenComputers and ComputerCraft
+- Integrations with JEI, HWYLA, The One Probe, OpenComputers and ComputerCraft
 
 ## Requirements
 
 - Minecraft 1.12.2 with Forge
 - [OMLib](https://www.curseforge.com/minecraft/mc-mods/omlib) ([GitHub](https://github.com/OpenModularTurretsTeam/OMLib)), required
 - [OpenModularPassiveDefense](https://www.curseforge.com/minecraft/mc-mods/ompd), optional: hardened blocks, walls, fences and the camouflage trap
+
+## Building
+
+The mod is built with Gradle and RetroFuturaGradle; Gradle runs on Java 25, the mod itself is compiled for Java 8.
+Build it against a local OMLib from branch `1.12`:
+
+```bash
+./gradlew build -Pomlib_local   # needs OMLib in your local Maven repository, see CONTRIBUTING.md
+```
+
+The jars are in `build/libs`.
+[CONTRIBUTING.md](CONTRIBUTING.md) explains the setup: OMLib, the shared core [OpenModularCore](https://github.com/OpenModularTurretsTeam/OpenModularCore), tests and running the game.
 
 ## Mod compatibility requests
 
