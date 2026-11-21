@@ -32,11 +32,7 @@
     ]
   },
   "mixins": [
-    "openmodularturrets.mixins.json",
-    {
-      "config": "openmodularturrets.client.mixins.json",
-      "environment": "client"
-    }
+    "openmodularturrets.mixins.json"
   ],
   "suggests": {
     "jade": "*"
