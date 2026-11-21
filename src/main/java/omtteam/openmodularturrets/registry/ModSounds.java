@@ -13,7 +13,7 @@ import java.util.Map;
  * All sounds (1.12.2 {@code ModSounds}); the files and {@code sounds.json} are copied from the 1.12.2 version.
  * <p>
  * Unlike the other registry classes, loading this class only creates the sounds; {@link #init} registers them. The
- * built-in turret definitions refer to them in {@code OMTStartup.init}, which on NeoForge runs before the sound registry
+ * built-in turret definitions refer to them in {@code OMTStartup.init}, which on Forge runs before the sound registry
  * opens.
  */
 public final class ModSounds {

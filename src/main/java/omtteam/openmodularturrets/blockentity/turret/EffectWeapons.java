@@ -68,7 +68,7 @@ public final class EffectWeapons {
     /**
      * 1.12.2 {@code TeleporterTurretTileEntity}: pulls the target onto the block in front of the turret (1.12.2: on
      * top of it, which is the same for turrets on top of a base) and shows portal particles (1.12.2
-     * {@code BlockTeleporterTurret.randomDisplayTick}). On a Sable contraption the destination is where that block is
+     * {@code BlockTeleporterTurret.randomDisplayTick}). On a sub-level the destination is where that block is
      * shown ({@link TurretMount#toWorld}).
      */
     @SuppressWarnings("unused")

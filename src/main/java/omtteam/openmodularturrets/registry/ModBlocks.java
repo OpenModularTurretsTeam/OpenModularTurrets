@@ -100,7 +100,7 @@ public final class ModBlocks {
         return List.copyOf(blocks);
     }
 
-    /** Creates the block from its properties (1.21.11 needs the registry id in them) and registers it as {@code name}. */
+    /** Creates the block from its properties and registers it as {@code name}. */
     private static <T extends Block> T register(String name, Function<BlockBehaviour.Properties, T> factory,
                                                 BlockBehaviour.Properties properties) {
         ResourceLocation id = OMT.id(name);

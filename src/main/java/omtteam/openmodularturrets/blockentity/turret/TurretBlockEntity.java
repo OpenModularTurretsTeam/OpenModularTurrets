@@ -134,8 +134,8 @@ public class TurretBlockEntity extends CompatBlockEntity {
     }
 
     /**
-     * Where the turret is in the world this tick (on a Sable contraption: where its plot position is shown). Made once
-     * per game tick, so everything in a tick uses the same pose of the contraption.
+     * Where the turret is in the world this tick (on a sub-level: where its plot position is shown). Made once
+     * per game tick, so everything in a tick uses the same pose of the sub-level.
      */
     public TurretMount getMount() {
         long time = level != null ? level.getGameTime() : 0L;
@@ -218,8 +218,8 @@ public class TurretBlockEntity extends CompatBlockEntity {
             aimAt(target);
         }
 
-        // the target's movement relative to the turret's contraption (a target not tracked yet counts as standing
-        // still); the projectiles get the contraption's velocity on top (fire)
+        // the target's movement relative to the turret's sub-level (a target not tracked yet counts as standing
+        // still); the projectiles get the sub-level's velocity on top (fire)
         Vec3 position = target.position();
         Vec3 moved = trackedTargetId == target.getId() && trackedTargetPos != null
                 ? position.subtract(trackedTargetPos) : Vec3.ZERO;
@@ -292,8 +292,8 @@ public class TurretBlockEntity extends CompatBlockEntity {
     }
 
     /**
-     * Whether an entity found for a weapon area (in the plot) really touches it: on a contraption, Sable widens the
-     * search to the world area around the turned box. Like vanilla's search, it counts when the entity's bounding box
+     * Whether an entity found for a weapon area (in the plot) really touches it: on a sub-level, a search can cover the
+     * world area around the turned box. Like vanilla's search, it counts when the entity's bounding box
      * (taken around its centre in the plot) touches the area.
      */
     private static boolean inPlotArea(LivingEntity entity, AABB area, TurretMount mount) {
@@ -392,8 +392,8 @@ public class TurretBlockEntity extends CompatBlockEntity {
      * level, with the turret's inaccuracy.
      *
      * @param toAim    aim point minus turret centre ({@link TurretMount#centre()}), in the world
-     * @param velocity target movement per tick relative to the turret's contraption (the projectiles get the
-     *                 contraption's velocity on top)
+     * @param velocity target movement per tick relative to the turret's sub-level (the projectiles get the
+     *                 sub-level's velocity on top)
      * @return whether a shot was fired
      */
     public boolean fire(Vector3 toAim, Vector3 velocity, @Nullable Entity target) {

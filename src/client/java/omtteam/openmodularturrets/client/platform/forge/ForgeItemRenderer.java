@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
 
 /**
  * Forge view of an {@link ItemStackRenderer}: the {@link BlockEntityWithoutLevelRenderer} that Forge calls for items
- * whose model has {@code parent: builtin/entity} (as {@code NeoForgeItemRenderer}).
+ * whose model has {@code parent: builtin/entity}.
  * <p>
  * Forge 1.20.1 has no event for client item extensions: an item gets them from its own {@code initializeClient},
  * which Forge stores in the item's {@code renderProperties} field while constructing it. The shared item classes stay

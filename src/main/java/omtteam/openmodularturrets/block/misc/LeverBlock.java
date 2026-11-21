@@ -68,7 +68,7 @@ public class LeverBlock extends CompatEntityBlock implements InteractiveBlock {
     }
 
     /**
-     * Turns {@link #FACING} with the block (structures, mods that move blocks such as Sable contraptions), so a
+     * Turns {@link #FACING} with the block (structures, mods that move blocks), so a
      * moved crank still faces its base.
      */
     @Override

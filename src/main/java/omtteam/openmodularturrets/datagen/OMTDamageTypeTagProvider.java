@@ -27,7 +27,7 @@ public class OMTDamageTypeTagProvider extends FabricTagProvider<DamageType> {
         ModDamageTypes.ARMOR_BYPASSING.forEach(tagBuilder(DamageTypeTags.BYPASSES_ARMOR)::add);
     }
 
-    /** The builder that adds damage types by key (renamed in the Fabric API for 1.21.5). */
+    /** The builder that adds damage types by key; the call sites are the same on every version branch. */
     private FabricTagBuilder tagBuilder(TagKey<DamageType> tag) {
         return getOrCreateTagBuilder(tag);
     }

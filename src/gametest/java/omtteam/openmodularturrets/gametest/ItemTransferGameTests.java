@@ -24,10 +24,10 @@ import omtteam.openmodularturrets.registry.ModItems;
 
 /**
  * What hoppers may move in and out of the base and the generator. A vanilla hopper goes through the loader's item API
- * (Fabric's {@code ItemStorage.SIDED}, NeoForge's item handler capability), so these tests cover the adapters of
+ * (Fabric's {@code ItemStorage.SIDED}, Forge's item handler capability), so these tests cover the adapters of
  * {@code ItemAccess}. The unwanted item always sits in the hopper's or machine's first slot, so the filter has to skip
- * it. Every test has its own batch and empties and removes its blocks when it passed (1.20.1 keeps a finished batch's
- * blocks and entities).
+ * it. Every test has its own batch and empties and removes its blocks when it passed (the game test server keeps a
+ * finished batch's blocks and entities).
  */
 //? if forge {
 /*@GameTestHolder(OMT.MOD_ID)

@@ -38,8 +38,8 @@ import java.util.Locale;
  * While the player holds a turret and looks at a block next to a turret base, outlines where the turret would go:
  * cyan if it can be placed there, red if not (1.12.2 OMLib {@code ClientEventHandler.drawBlockOutline}), with a small
  * label saying why ({@link TurretPlacement.Result}). The loader client entrypoints call {@link #render} after the
- * translucent blocks and {@link #renderLabel} as late as their loader allows (Fabric: last, NeoForge and Forge: after
- * the particles). On a Sable contraption both are drawn where the plot block is shown (its render pose).
+ * translucent blocks and {@link #renderLabel} as late as their loader allows (Fabric: last, Forge: after
+ * the particles). On a sub-level both are drawn where the plot block is shown (its render pose).
  */
 public final class TurretPlacementOutline {
     /** Half the width of the outline across the mount axis (1.12.2: 0.6 wide, a full block long). */
@@ -162,7 +162,7 @@ public final class TurretPlacementOutline {
 
     /**
      * Moves the pose stack (at the camera) to the corner of {@code pos} as it is drawn: {@code pose} turns and scales
-     * a contraption's plot around its rotation point. The offset from the rotation point is worked out in doubles, so
+     * a sub-level's plot around its rotation point. The offset from the rotation point is worked out in doubles, so
      * the plot's huge coordinates never reach the float matrix.
      */
     private static void toBlockCorner(PoseStack poseStack, Vec3 camera, BlockPos pos, Pose pose) {

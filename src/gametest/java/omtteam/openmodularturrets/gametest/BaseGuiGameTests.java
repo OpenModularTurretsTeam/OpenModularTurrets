@@ -34,7 +34,7 @@ import omtteam.omlib.security.PlayerAdapter;
  * turrets to it.
  * <p>
  * The click goes through {@code ServerPlayerGameMode#useItemOn}, the vanilla entry point that the loader's block-use
- * event hooks into (Fabric {@code UseBlockCallback}, NeoForge {@code RightClickBlock}), so the whole path is covered:
+ * event hooks into (Fabric {@code UseBlockCallback}, Forge {@code RightClickBlock}), so the whole path is covered:
  * the event, the base's {@code InteractiveBlock#onUse}, the permission check and the menu. Players are the loader's
  * fake players (the same class name and constructor on all loaders), one per test, so no state is shared between
  * tests. Forge opens block menus through {@code NetworkHooks.openScreen}, which builds the menu itself (no

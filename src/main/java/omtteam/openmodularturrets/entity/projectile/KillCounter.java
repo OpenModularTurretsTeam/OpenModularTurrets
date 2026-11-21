@@ -15,7 +15,7 @@ public final class KillCounter {
 
     /**
      * Counts the death if turret damage caused it; called by the loader's death event on the server, once the death is
-     * certain (Fabric {@code AFTER_DEATH}, NeoForge {@code LivingDeathEvent} at the lowest priority).
+     * certain (Fabric {@code AFTER_DEATH}, Forge {@code LivingDeathEvent} at the lowest priority).
      */
     public static void onDeath(LivingEntity entity, DamageSource source) {
         if (!(source instanceof TurretDamageSource turretSource)) return;

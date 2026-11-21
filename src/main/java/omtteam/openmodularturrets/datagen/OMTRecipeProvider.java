@@ -22,7 +22,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
  * Crafting recipes, ported from the 1.12.2 {@code *_vanilla.json} recipes (ore dictionary entries become {@code c:}
  * tags). The EnderIO/Mekanism variants are not ported.
  * <p>
- * The recipes themselves are in {@link Recipes}, the same on every version; only the way into it differs.
+ * The recipes themselves are in {@link Recipes}, the same on every version branch; only the way into it differs.
  */
 public class OMTRecipeProvider extends FabricRecipeProvider {
     public OMTRecipeProvider(FabricDataOutput output) {
@@ -34,8 +34,7 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
         new Recipes(output).generate();
     }
 
-    // From 1.21.2 the recipe builders need the item registry, so the vanilla provider hands them out (shaped, has).
-    // Before, Recipes is a plain class: it inherits the static has from this provider and gets shaped as a stand-in.
+    // Recipes is a plain class: it inherits the static has from this provider and gets shaped as a stand-in.
     private final class Recipes {
         private final Consumer<FinishedRecipe> output;
 
@@ -90,8 +89,7 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
 
         /**
          * 1.12.2 {@code intermediate_tiered_0..14_vanilla.json}: sensors, chambers and barrels, each tier crafted from
-         * the previous one. Ore dictionary {@code cobblestone} and {@code obsidian} have no common tag on 1.20.1, the
-         * vanilla items are used on both versions.
+         * the previous one. Ore dictionary {@code cobblestone} and {@code obsidian} become the vanilla items.
          */
         private void tieredIntermediates(Consumer<ShapedRecipeBuilder> save) {
             List<Item> sensors = ModItems.SENSORS;

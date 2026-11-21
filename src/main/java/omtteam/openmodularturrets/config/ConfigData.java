@@ -313,7 +313,10 @@ public class ConfigData {
         public boolean allowBaseCamo = true;
         @Comment("Turret bases are breakable with tools (using the hardness and blast resistance below).")
         public boolean baseBreakable = false;
-        /** No contraption mod is supported on Minecraft 1.20.1; only the 1.21.1 branch reads this. */
+        /**
+         * No contraption mod is supported on this branch, so the option has no effect; it stays so that existing config
+         * files remain valid.
+         */
         @Deprecated
         @Comment("Deprecated: has no effect on Minecraft 1.20.1, where no contraption mod (Create, Create Aeronautics) is "
                 + "supported; only Minecraft 1.21.1 uses it. Kept so that existing config files stay valid.")

@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 
 /**
- * Registers an entity renderer through the loader: Fabric passes {@code EntityRendererRegistry::register}, NeoForge
+ * Registers an entity renderer through the loader: Fabric passes {@code EntityRendererRegistry::register}, Forge
  * {@code EntityRenderersEvent.RegisterRenderers::registerEntityRenderer}. A generic method, so it takes method
  * references, not lambdas.
  */

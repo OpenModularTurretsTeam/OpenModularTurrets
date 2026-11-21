@@ -31,7 +31,7 @@ public final class OMTStartup {
     /**
      * Loads the turret definitions and the config and registers the packets. Both entrypoints call it first, before
      * any registration: the config needs the turrets' default stats, blocks need the turret types and their properties
-     * come from the config, and NeoForge accepts packets only until its payload registration event.
+     * come from the config.
      *
      * @param plugins other mods' turret plugins, as the loader found them
      */
@@ -46,7 +46,7 @@ public final class OMTStartup {
 
     /**
      * The registration steps in dependency order, each with the registry it fills. Fabric runs them in this order;
-     * NeoForge runs each in the {@code RegisterEvent} of its registry.
+     * Forge runs each in the {@code RegisterEvent} of its registry.
      */
     public static List<RegistrationStep> registrationSteps() {
         return List.of(

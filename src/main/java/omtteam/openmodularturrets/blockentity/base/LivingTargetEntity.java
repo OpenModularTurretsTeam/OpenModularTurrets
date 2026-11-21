@@ -32,7 +32,7 @@ public class LivingTargetEntity extends TargetEntity {
     private final Vector3 position;
     private final Vector3 eyes;
 
-    /** @param pose the pose of the base the entity is seen from ({@link Pose#IDENTITY} outside contraptions) */
+    /** @param pose the pose of the base the entity is seen from ({@link Pose#IDENTITY} outside sub-levels) */
     public LivingTargetEntity(LivingEntity entity, Pose pose) {
         this.entity = entity;
         this.position = pose.toLocal(toVector(entity.position()));

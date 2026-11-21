@@ -130,7 +130,7 @@ public final class ModItems {
         return register(name, properties -> new AmmoItem(type, properties), new Item.Properties());
     }
 
-    /** Creates the item from its properties (1.21.11 needs the registry id in them) and registers it as {@code name}. */
+    /** Creates the item from its properties and registers it as {@code name}. */
     private static <T extends Item> T register(String name, Function<Item.Properties, T> factory, Item.Properties properties) {
         ResourceLocation id = OMT.id(name);
         T item = factory.apply(VersionCompat.itemProperties(properties, id));

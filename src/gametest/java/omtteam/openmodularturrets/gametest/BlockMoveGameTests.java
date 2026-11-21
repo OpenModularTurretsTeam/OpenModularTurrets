@@ -35,7 +35,7 @@ import omtteam.openmodularturrets.registry.ModItems;
 import java.util.List;
 
 /**
- * Moving blocks the way {@code /setblock} and Sable contraptions do: they save the block entity's data, call
+ * Moving blocks the way {@code /setblock} and mods that move blocks do: they save the block entity's data, call
  * {@link Clearable#clearContent} and then remove the old block, which must not drop the items a second time. Moved blocks
  * are rotated and mirrored through their block state, which must turn their facing with them.
  */

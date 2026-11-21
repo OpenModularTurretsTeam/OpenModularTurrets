@@ -103,7 +103,7 @@ public class TurretBlock extends CompatEntityBlock implements ClaimLink {
     }
 
     /**
-     * Turns {@link #FACING} with the block (structures, mods that move blocks such as Sable contraptions), so a
+     * Turns {@link #FACING} with the block (structures, mods that move blocks), so a
      * moved turret still faces away from its base.
      */
     @Override
@@ -215,7 +215,7 @@ public class TurretBlock extends CompatEntityBlock implements ClaimLink {
     @Override
     protected void onNeighborChanged(BlockState state, Level level, BlockPos pos, @Nullable BlockPos neighbourPos) {
         BlockPos basePos = pos.relative(state.getValue(FACING).getOpposite());
-        // 1.21.11 does not tell which neighbour changed, so any update checks the base
+        // the position is null where the game does not tell which neighbour changed: any update then checks the base
         if (!level.isClientSide() && (neighbourPos == null || neighbourPos.equals(basePos))
                 && !(level.getBlockEntity(basePos) instanceof TurretBaseBlockEntity)) {
             level.destroyBlock(pos, true);

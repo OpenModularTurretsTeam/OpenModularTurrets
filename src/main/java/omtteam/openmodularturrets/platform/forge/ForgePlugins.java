@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 /**
- * Finds other mods' plugins on Forge, like {@code NeoForgePlugins}: the classes carrying a marker annotation
- * ({@code OMTPlugin.Register}, {@code OMTClientPlugin.Register}) in the mod scan data, which is complete before any mod
- * is constructed. Only the annotated classes are loaded, so client plugins are never loaded on a dedicated server.
+ * Finds other mods' plugins on Forge: the classes carrying a marker annotation ({@code OMTPlugin.Register},
+ * {@code OMTClientPlugin.Register}) in the mod scan data, which is complete before any mod is constructed. Only the
+ * annotated classes are loaded, so client plugins are never loaded on a dedicated server.
  */
 public final class ForgePlugins {
     private record Found(String modId, String className) {

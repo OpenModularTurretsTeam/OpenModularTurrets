@@ -110,7 +110,7 @@ public final class OMTClient {
     }
 
     /**
-     * Blocks drawn in the cutout layer (OMPD fences have transparent parts). Fabric registers them; NeoForge reads
+     * Blocks drawn in the cutout layer (OMPD fences have transparent parts). Fabric registers them; Forge reads
      * {@code "render_type"} in their block models, which must stay in sync with this list.
      */
     public static List<? extends Block> cutoutBlocks() {
@@ -118,8 +118,8 @@ public final class OMTClient {
     }
 
     /**
-     * This mod's camouflage blocks (turret bases, camouflage trap), for the colour provider of the NeoForge and Forge
-     * clients; other mods' camouflage blocks (Open Modular Lighting's floodlights) register their own.
+     * This mod's camouflage blocks (turret bases, camouflage trap), for the colour provider of the Forge
+     * client; other mods' camouflage blocks (Open Modular Lighting's floodlights) register their own.
      */
     public static Block[] camoBlocks() {
         return CamoModels.camoBlocks().stream()

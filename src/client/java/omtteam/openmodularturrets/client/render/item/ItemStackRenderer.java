@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 
 /**
  * Draws an item whose model has {@code parent: builtin/entity}. The loaders adapt it: Fabric's
- * {@code BuiltinItemRendererRegistry}, NeoForge's {@code IClientItemExtensions#getCustomRenderer}.
+ * {@code BuiltinItemRendererRegistry}, Forge's {@code IClientItemExtensions#getCustomRenderer}.
  */
 @FunctionalInterface
 public interface ItemStackRenderer {

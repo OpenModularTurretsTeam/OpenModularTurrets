@@ -29,16 +29,16 @@ import java.util.UUID;
  * {@link #BASE} and the turret on top of it at {@link #TURRET}, ready to fire (owner set, always on, full energy,
  * maximum range, a stack of the turret's ammo).
  * <p>
- * 1.20.1 places the batches next to each other and keeps their blocks and entities, so a finished test's turret
- * would still shoot at the next test's target, and its target would be picked by the next test's turret. Tests
- * therefore end with {@link #succeedWhen} or {@link #succeed}, which clear the scene once the test passed. A failing
- * test clears it too: {@link #onEachTick} clears it when a check throws, and {@link #build} clears it one tick before
- * the test times out.
+ * The game test server places the batches next to each other and keeps their blocks and entities, so a finished
+ * test's turret would still shoot at the next test's target, and its target would be picked by the next test's turret.
+ * Tests therefore end with {@link #succeedWhen} or {@link #succeed}, which clear the scene once the test passed. A
+ * failing test clears it too: {@link #onEachTick} clears it when a check throws, and {@link #build} clears it one tick
+ * before the test times out.
  * <p>
  * A target that an explosion knocks out of its scene is not cleared with it, and once its test released the forced
  * chunks it no longer ticks, so it stays where it flew. {@link #build} therefore removes every hostile mob within the
  * new turret's range first; otherwise the turret could pick it instead of its own target (seen with the railgun, whose
- * range is the largest: probably why its ray once aimed 25 blocks above its target on Forge 1.20.1).
+ * range is the largest: probably why its ray once aimed 25 blocks above its target on Forge).
  */
 @SuppressWarnings("RedundantCast")
 public final class TurretScene {

@@ -33,10 +33,9 @@ public final class OMTFabricClient implements ClientModInitializer {
         OMTClient.registerModelLayers((layer, definition) -> EntityModelLayerRegistry.registerModelLayer(layer, definition::get));
         OMTClient.registerBlockEntityRenderers(BlockEntityRenderers::register);
         OMTClient.registerEntityRenderers(EntityRendererRegistry::register);
-        // up to 1.21.1 the turret and crank items have item renderers; from 1.21.11 on they are special item models, whose
-        // types SpecialModelRenderersMixin registers
+        // the turret and crank items have item renderers
         OMTClient.registerItemRenderers((item, renderer) -> BuiltinItemRendererRegistry.INSTANCE.register(item, renderer::render));
-        // NeoForge reads these from "render_type" in the block models; Fabric ignores that field
+        // Forge reads these from "render_type" in the block models; Fabric ignores that field
         OMTClient.cutoutBlocks().forEach(block -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout()));
         ItemTooltipCallback.EVENT.register(OMTClient::appendTooltip);
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> OMTClient.onDisconnect());

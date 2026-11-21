@@ -1,6 +1,6 @@
-// Forge nodes (1.20.1; legacy ModDevGradle). Shared logic (Java, metadata templating, tests, publishing) is in
-// buildSrc/mod-common. Forge 1.20.1 runs on SRG names: the jar is reobfuscated (reobfJar), and mods from other
-// sources (Jade) are remapped to Mojang names through the mod* configurations.
+// Forge nodes (legacy ModDevGradle). Shared logic (Java, metadata templating, tests, publishing) is in
+// omlib/build-logic (mod-common). Forge 1.20.1 runs on SRG names: the jar is reobfuscated (reobfJar), and mods from
+// other sources (Jade) are remapped to Mojang names through the mod* configurations.
 plugins {
     id("mod-common")
     id("net.neoforged.moddev.legacyforge")
@@ -20,12 +20,12 @@ val client: SourceSet = sourceSets.create("client") {
 
 // Datagen is Fabric-only by design: Forge gets the converted Fabric output (convertFabricData below)
 sourceSets.main { java { exclude("$packagePath/datagen/**") } }
-// The unit tests left in this repository (ArchUnit, config migration) run on the Fabric nodes only, as before; the core's
-// own tests, which ran here on every node, run in OpenModularCore (Java 17 and Java 8)
+// The unit tests left in this repository (ArchUnit, config migration) run on the Fabric node only, as before; the
+// core's own tests, which ran here on every node, run in OpenModularCore (Java 17 and Java 8)
 sourceSets.test { java { exclude("**") } }
 
 // In-world tests (src/gametest): a separate test mod (openmodularturrets_gametest) that is never shipped, sharing
-// its test classes with Fabric and NeoForge. `check` runs them on a headless GameTest server.
+// its test classes with Fabric. `check` runs them on a headless GameTest server.
 val gametest: SourceSet = sourceSets.create("gametest") {
     compileClasspath += sourceSets.main.get().output
     runtimeClasspath += sourceSets.main.get().output
@@ -48,7 +48,7 @@ legacyForge {
     }
 
     runs {
-        // Run directory: versions/<v>/run (kept apart from the Fabric runs, whose worlds would not load here)
+        // Run directory: versions/<node>/run (kept apart from the Fabric runs, whose worlds would not load here)
         // Only the mod itself; the test mod is for the GameTest server (as on Fabric, where only runGameTest loads it)
         register("client") {
             client()
@@ -71,7 +71,7 @@ legacyForge {
 
 // ---- Mixins ----
 // Forge 1.20.1 runs the mixins on SRG names: the annotation processor writes a refmap, which the Forge copy of the
-// mixin config names (the shared config has no refmap: Fabric and NeoForge need none). Forge finds the config through
+// mixin config names (the shared config has no refmap: Fabric needs none). Forge finds the config through
 // the jar manifest (MixinConfigs). MixinExtras is not part of Forge 1.20.1: bundled into this jar (decided by the user).
 mixin {
     add(sourceSets.main.get(), refmap)
@@ -89,7 +89,7 @@ tasks.processResources {
 val localRuntime: Configuration = configurations.create("localRuntime")
 val modLocalRuntime: Configuration = obfuscation.createRemappingConfiguration(localRuntime)
 configurations.runtimeClasspath { extendsFrom(localRuntime) }
-// Not on the GameTest server, as on NeoForge.
+// Not on the GameTest server.
 
 dependencies {
     annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
@@ -132,8 +132,8 @@ configurations.named("clientCompileOnly") { extendsFrom(configurations.compileOn
 configurations.named("clientCompileOnly") { extendsFrom(configurations.compileOnly.get()) }
 
 // ---- Data (recipes, loot tables, tags, damage types, advancements) ----
-// Not generated here: copied from the Fabric datagen output of the same Minecraft version (datagen_from) with Forge
-// load conditions ("conditions", read by Forge 1.20.1 on recipes and advancements; see convertFabricData in buildSrc).
+// Not generated here: copied from the Fabric node's datagen output (datagen_from) with Forge load conditions
+// ("conditions", read by Forge 1.20.1 on recipes and advancements; see convertFabricData in omlib/build-logic).
 
 val fabricData: File = rootProject.file("versions/${property("datagen_from")}/src/main/generated")
 val forgeData: Provider<Directory> = layout.buildDirectory.dir("generated/forgeData")
@@ -148,8 +148,8 @@ val convertFabricData = tasks.register("convertFabricData") {
 }
 sourceSets.main { resources.srcDir(convertFabricData) }
 
-// Forge 1.20.1 only loads a mod's resources and data as a pack if it has a pack.mcmeta (Fabric and NeoForge 1.21 need
-// none, and a shared one would carry the wrong pack_format there), so this node generates it for both mods.
+// Forge 1.20.1 only loads a mod's resources and data as a pack if it has a pack.mcmeta (Fabric needs none,
+// and a shared one would carry the wrong pack_format there), so this node generates it for both mods.
 fun packMetadata(name: String, description: String) = tasks.register(name) {
     group = "build"
     val output = layout.buildDirectory.dir("generated/$name")

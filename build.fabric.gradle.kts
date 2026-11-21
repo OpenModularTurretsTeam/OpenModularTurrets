@@ -1,4 +1,5 @@
-// Fabric nodes (Loom). Shared logic (Java, metadata templating, tests, publishing) is in buildSrc/mod-common.
+// Fabric nodes (Loom). Shared logic (Java, metadata templating, tests, publishing) is in omlib/build-logic
+// (mod-common).
 plugins {
     id("mod-common")
     id("net.fabricmc.fabric-loom-remap")
@@ -24,19 +25,19 @@ loom {
 
     runConfigs.all {
         generateRunConfig = true
-        runDirectory = rootProject.file("run") // shared run directory for all versions
+        runDirectory = rootProject.file("run") // shared by the Fabric runs
     }
 }
 
 fabricApi {
     configureDataGeneration {
         // The providers need no client classes (block models are handwritten), so datagen runs without the client
-        // source set; it also works while a new Minecraft version's client code is not ported yet
+        // source set
         client = false
-        // versions/<v>/src/main/generated, committed per version
+        // versions/<node>/src/main/generated, committed
         outputDirectory = project.file("src/main/generated")
     }
-    // Server game tests in src/gametest (./gradlew :<v>:runGameTest, also part of check)
+    // Server game tests in src/gametest (./gradlew :<node>:runGameTest, also part of check)
     configureTests {
         createSourceSet = true
         modId = "${modId}_gametest"
@@ -86,8 +87,8 @@ dependencies {
 // ---- Test coverage (JaCoCo): check prints the line coverage of api ----
 // Both the unit tests and the game test server record coverage; api is covered by the game tests (API turrets). The
 // core (omtteam.openmodularturrets.core) comes from OpenModularCore, whose own build measures its coverage, so only this
-// repository's classes count here. Active version only (both versions share the source).
-// Report: versions/<v>/build/reports/jacoco/test/html/index.html
+// repository's classes count here. Active node only (both nodes share the source).
+// Report: versions/<node>/build/reports/jacoco/test/html/index.html
 val coverageActive = stonecutter.current.isActive
 val coveredPackages = listOf("omtteam/openmodularturrets/api/**")
 jacoco {
@@ -138,8 +139,8 @@ tasks.check {
     dependsOn(tasks.jacocoTestReport)
 }
 
-// Report only for now: the limits in gradle/pmd/ruleset.xml are not enforced yet. Runs for the active version only
-// (both versions share the source); reports in versions/<v>/build/reports/pmd/{main,client}.html
+// Report only for now: the limits in gradle/pmd/ruleset.xml are not enforced yet. Runs for the active node only
+// (both nodes share the source); reports in versions/<node>/build/reports/pmd/{main,client}.html
 pmd {
     toolVersion = property("pmd_version") as String
     sourceSets = listOf(project.sourceSets["main"], project.sourceSets["client"])

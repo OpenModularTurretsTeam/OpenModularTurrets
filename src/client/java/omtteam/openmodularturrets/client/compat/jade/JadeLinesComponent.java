@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 /**
  * Client half of a Jade tooltip: shows the lines that the server half's {@code lines} method made from the data the
- * server sent. The tooltip interface is the only thing that differs between the Jade versions of 1.20.1 and 1.21.
+ * server sent.
  */
 final class JadeLinesComponent implements
         IBlockComponentProvider

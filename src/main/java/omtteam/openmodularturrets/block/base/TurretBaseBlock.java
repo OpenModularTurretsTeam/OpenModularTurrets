@@ -208,7 +208,7 @@ public class TurretBaseBlock extends CompatEntityBlock implements InteractiveBlo
         return InteractionResult.CONSUME;
     }
 
-    /** The base drops its inventory in {@code onBlockRemoved}; 1.21.11 calls that itself. */
+    /** The base drops its inventory in {@code onBlockRemoved}, which {@code CompatBlockEntity.handleRemove} calls. */
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         CompatBlockEntity.handleRemove(state, level, pos, newState);
