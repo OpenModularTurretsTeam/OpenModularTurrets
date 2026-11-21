@@ -8,6 +8,10 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ## [Unreleased]
 
+### Added
+
+- Turrets on a base with a damage amp addon show a small red light on each corner of their base plate
+
 ### Changed
 
 - Config: `bases.allowContraptionMovement` is deprecated on Minecraft 1.20.1; it never had an effect here, as no contraption mod (Create, Create Aeronautics) is supported on this version
