@@ -313,9 +313,10 @@ public class ConfigData {
         public boolean allowBaseCamo = true;
         @Comment("Turret bases are breakable with tools (using the hardness and blast resistance below).")
         public boolean baseBreakable = false;
-        @Comment("Contraptions (Create, Create Aeronautics) may move turret bases and their turrets, although they are "
-                + "unbreakable; owner, trusted players and settings move along. Anyone who can reach a base with a "
-                + "contraption can move it.")
+        /** No contraption mod is supported on Minecraft 1.21.11; only the 1.21.1 branch reads this. */
+        @Deprecated
+        @Comment("Deprecated: has no effect on Minecraft 1.21.11, where no contraption mod (Create, Create Aeronautics) is "
+                + "supported; only Minecraft 1.21.1 uses it. Kept so that existing config files stay valid.")
         public boolean allowContraptionMovement = true;
         @Comment("Turret bases without an owner keep targeting and firing (at everyone, as nobody is trusted). If false, "
                 + "they stay inert until someone claims them.")
