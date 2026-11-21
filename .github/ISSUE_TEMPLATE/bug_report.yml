@@ -12,9 +12,10 @@ body:
     attributes:
       label: Minecraft version
       options:
-        - "1.21.1"
+        - "1.12.2"
         - "1.20.1"
-        - Both
+        - "1.21.1"
+        - "1.21.11"
     validations:
       required: true
   - type: input
@@ -22,14 +23,25 @@ body:
     attributes:
       label: Mod version
       description: The OpenModularTurrets version, as shown in the jar name or the mod list.
-      placeholder: 4.0.0-alpha.1
+      placeholder: 4.0.1
+    validations:
+      required: true
+  - type: dropdown
+    id: loader
+    attributes:
+      label: Mod loader
+      options:
+        - Fabric
+        - NeoForge
+        - Forge
     validations:
       required: true
   - type: input
     id: loader-versions
     attributes:
-      label: Fabric Loader and Fabric API versions
-      placeholder: Loader 0.19.x, Fabric API 0.116.x+1.21.1
+      label: Loader and API versions
+      description: The version of the mod loader and of its API, if it has one (Fabric API on Fabric).
+      placeholder: Fabric Loader 0.19.5, Fabric API 0.116.17+1.21.1
     validations:
       required: true
   - type: dropdown
@@ -71,7 +83,7 @@ body:
     id: other-mods
     attributes:
       label: Other mods
-      description: Does the bug still happen with only OpenModularTurrets and Fabric API installed? If not, list the other mods (or link your modpack).
+      description: Does the bug still happen with only OpenModularTurrets and the mods it requires installed? If not, list the other mods (or link your modpack).
   - type: checkboxes
     id: checks
     attributes:

@@ -3,13 +3,22 @@
 Repo for [OpenModularTurrets](https://minecraft.curseforge.com/projects/openmodularturrets) for Minecraft.
 
 Build turret bases, mount turrets on any face of them (the number depends on the tier) and keep your home safe from mobs and unwanted visitors, whether you're online or offline.
-Open Modular Turrets has long been a popular choice in PvP modpacks, and it is now available for Fabric 1.20.1, 1.21.1 and 1.21.11, and natively for NeoForge 1.21.1 and 1.21.11 and Forge 1.20.1.
+Open Modular Turrets has long been a popular choice in PvP modpacks, and it is now available for Minecraft 1.21.11 on Fabric and, natively, on NeoForge.
 
 ## Loaders
 
-- **Fabric** for Minecraft 1.20.1, 1.21.1 and 1.21.11 (Fabric Loader + Fabric API), published to CurseForge and Modrinth.
-- **NeoForge** for Minecraft 1.21.1 and 1.21.11, built natively (no Sinytra Connector, Connector Extras or Forgified Fabric API needed), published to CurseForge and Modrinth.
-- **Forge** for Minecraft 1.20.1, built natively, published to CurseForge and Modrinth.
+- **Fabric** for Minecraft 1.21.11 (Fabric Loader + Fabric API), published to CurseForge and Modrinth.
+- **NeoForge** for Minecraft 1.21.11, built natively (no Sinytra Connector, Connector Extras or Forgified Fabric API needed), published to CurseForge and Modrinth.
+
+## Branches and Minecraft versions
+
+This branch (`1.21.11`) holds the code for Minecraft 1.21.11.
+The other Minecraft versions have their own branches:
+
+- `1.12`: Minecraft 1.12.2 (Forge)
+- `1.20.1`: Minecraft 1.20.1 (Fabric and Forge)
+- `1.21.1`: Minecraft 1.21.1 (Fabric and NeoForge)
+- `1.21.11`: Minecraft 1.21.11 (Fabric and NeoForge)
 
 ## Features
 
@@ -24,15 +33,14 @@ Open Modular Turrets has long been a popular choice in PvP modpacks, and it is n
 - **Passive defenses** from Open Modular Passive Defense: hardened blocks, walls, fences and the camouflage trap, which only trusted players can walk through
 - **Generator:** burns furnace fuel (9 slots) and powers adjacent turret bases and other machines; an upgrade slot multiplies production and fuel use together
 - **Turret API for other mods:** add turrets with their own weapons, ammo, models and custom hit logic; see [docs/turret-api.md](docs/turret-api.md)
-- Uses **Team Reborn Energy** on Fabric, so it works with energy from other Fabric tech mods; the NeoForge and Forge builds use their energy capability (FE) instead
-- Optional **Jade** support for turret bases and turrets, on all loaders
+- Uses **Team Reborn Energy** on Fabric, so it works with energy from other Fabric tech mods; the NeoForge build uses its energy capability (FE) instead
+- Optional **Jade** support for turret bases and turrets, on both loaders
 
 ## Requirements
 
-- Minecraft 1.20.1, 1.21.1 or 1.21.11
+- Minecraft 1.21.11
 - Fabric: Fabric Loader and Fabric API
-- NeoForge (1.21.1 and 1.21.11): NeoForge 21.1.x or 21.11.x, no extra mods needed
-- Forge (1.20.1): Forge 47.x, no extra mods needed
+- NeoForge: NeoForge 21.11.x, no extra mods needed
 
 ## Reporting bugs
 
@@ -41,15 +49,15 @@ If you find a bug, please report it on the [issue tracker](https://github.com/Op
 
 ## Building
 
-The project uses Stonecutter to build Fabric 1.20.1, 1.21.1 and 1.21.11, NeoForge 1.21.1 and 1.21.11 and Forge 1.20.1 from one source tree.
+The project uses Stonecutter to build Fabric and NeoForge for Minecraft 1.21.11 from one source tree.
 Gradle must run on Java 25 or newer; the library OMLib is the git submodule `omlib`, so clone with `--recurse-submodules`.
 
 ```bash
-git clone -b 1.20.1+ --recurse-submodules https://github.com/OpenModularTurretsTeam/OpenModularTurrets.git
+git clone -b 1.21.11 --recurse-submodules https://github.com/OpenModularTurretsTeam/OpenModularTurrets.git
 cd OpenModularTurrets
-./gradlew chiseledBuild            # build all nodes, jars in versions/<node>/build/libs/
+./gradlew chiseledBuild            # build both nodes, jars in versions/<node>/build/libs/
 ./gradlew check                    # unit tests, game tests, recipe and style checks
-./gradlew :1.21.1-fabric:runClient # start a client (any node, also :runServer)
+./gradlew :1.21.11-fabric:runClient # start a client (either node, also :runServer)
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full development setup (changing OMLib, working on the shared core OpenModularCore locally, testing), [docs/architecture.md](docs/architecture.md) for how the code is structured and how to add things, and [CHANGELOG.md](CHANGELOG.md) for changes.

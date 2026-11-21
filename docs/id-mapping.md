@@ -1,4 +1,4 @@
-# ID mapping: 1.12.2 → 1.20.1+
+# ID mapping: 1.12.2 → 4.x
 
 Old meta/damage-based variants are flattened into separate registry entries.
 
@@ -112,4 +112,4 @@ The inventory expanders of 4.x (`inventory_expander_tier_one` to `_three`, the m
 | `openmodularturrets:addon_meta` | 6 | `openmodularturrets:addon_solar_panel` |
 | `openmodularturrets:addon_meta` | 7 | `openmodularturrets:addon_fake_drops` |
 
-New in the 1.20.1+ port (no old ID): the blocks `openmodularturrets:generator` and `inventory_expander_tier_one` to `_three` (see above), and the items `openmodularturrets:ownership_wand` and `upgrade_energy_multiplier` (the generator's upgrade).
+New in the 4.x port (no old ID): the blocks `openmodularturrets:generator` and `inventory_expander_tier_one` to `_three` (see above), and the items `openmodularturrets:ownership_wand` and `upgrade_energy_multiplier` (the generator's upgrade).

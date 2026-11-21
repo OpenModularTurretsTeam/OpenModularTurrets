@@ -1,13 +1,13 @@
 # Turret API
 
-Other mods (Fabric, NeoForge and Forge) can add turrets to Open Modular Turrets (OMT).
+Other mods (Fabric and NeoForge) can add turrets to Open Modular Turrets (OMT).
 An added turret is a full turret: it mounts on a base, uses the base's targeting, energy, ammo, upgrades, addons and trusted players, has a config entry and shows in the OMT creative tab, in tooltips and in Jade.
 The 14 built-in turrets are registered through the same API (`registry/BuiltinTurrets.java`), so they are the reference examples.
 
-Works the same on 1.20.1, 1.21.1 and 1.21.11 (Fabric), on 1.21.1 and 1.21.11 (NeoForge) and on 1.20.1 (Forge); only the way OMT finds your classes differs.
+This guide is for Minecraft 1.21.11 (branch `1.21.11`, Fabric and NeoForge); the wiki page `Turret-API` covers the other Minecraft versions.
+The API is the same on both loaders; only the way OMT finds your classes differs.
 On Fabric, add OMT as a `modCompileOnly`/`modImplementation` dependency and to `depends` in your `fabric.mod.json`.
 On NeoForge, add it as a `compileOnly`/`implementation` dependency and as a `[[dependencies.<your mod id>]]` entry in your `neoforge.mods.toml`.
-On Forge, add it as a `modCompileOnly`/`modImplementation` dependency (OMT's Forge jar uses SRG names) and as a `[[dependencies.<your mod id>]]` entry in your `mods.toml`.
 The rule classes the API uses (`TurretType`, `AmmoType`, `TurretStats`, `TargetingPriority`, `RayProfile`; package `omtteam.openmodularturrets.core`) come from the shared core OpenModularCore and are part of the OMT jar, and OMLib's `Face` (`omtteam.omlib.core.world`) is part of the OMLib jar.
 
 ## 1. Register the turret (common)
@@ -22,7 +22,7 @@ On Fabric, declare an `openmodularturrets` entrypoint (and `openmodularturrets_c
 ```
 
 ```java
-@OMTPlugin.Register // NeoForge and Forge; Fabric ignores it
+@OMTPlugin.Register // NeoForge; Fabric ignores it
 public final class ExampleTurrets implements OMTPlugin {
     public static final AmmoType SHELL = AmmoType.of("example", "shell");
     public static final TurretType FLAK_TURRET = TurretType.builder("example", "flak_turret")
@@ -41,12 +41,12 @@ public final class ExampleTurrets implements OMTPlugin {
 }
 ```
 
-On NeoForge and Forge, annotate the class with `@OMTPlugin.Register` instead; OMT finds it in the mod scan data (the class needs a public no-argument constructor).
-A mod for several loaders does both.
+On NeoForge, annotate the class with `@OMTPlugin.Register` instead; OMT finds it in the mod scan data (the class needs a public no-argument constructor).
+A mod for both loaders does both.
 OMT calls the plugin at the start of its own initialisation, before it loads its config and registers blocks, so mod load order does not matter.
-Several plugins are called in the order Fabric lists the entrypoints, or on NeoForge and Forge sorted by mod id and class name.
+Several plugins are called in the order Fabric lists the entrypoints, or on NeoForge sorted by mod id and class name.
 Suppliers (`() -> ExampleItems.SHELL`) are only called later, so they may point to things your own initializer registers.
-Everything passed directly must already exist when OMT calls the plugin, which on NeoForge and Forge is during mod construction, before any registry opens.
+Everything passed directly must already exist when OMT calls the plugin, which on NeoForge is during mod construction, before any registry opens.
 That matters for the weapon's sound: create the `SoundEvent` in a static field (`SoundEvent.createVariableRangeEvent(id)`) and register that same instance in your sound registration, as OMT's own `ModSounds` does; a `DeferredHolder` from a `DeferredRegister` has no value yet at that point.
 
 OMT then registers a `TurretBlock` and a `BlockItem` with the id `example:flak_turret` and adds it to its turret block entity type.
@@ -141,29 +141,17 @@ Read the current values with `OMTConfig.get().turrets.get(type)`.
 Items matching any definition are accepted by base ammo slots.
 An `AmmoItem` created with your ammo type counts as that type even without a definition.
 
-### Sable contraptions (1.21.1)
-
-With Sable installed, turrets can sit on contraptions (sub-levels).
-Their blocks are stored in a plot far away from where they are shown, so `turret.getBlockPos()` and the base's position are plot coordinates, while entities are in the world.
-`turret.getMount()` (a `TurretMount`, made once per tick) gives the world values: `centre()`, `up()` (out of the mounting face), `velocity()` (the contraption's, in blocks per tick), and converts with `toWorld(plotPoint)`, `toLocal(worldPoint)` and `toLocalDirection(worldDirection)`.
-Outside contraptions (and on 1.20.1 and 1.21.11, which have no Sable) it is the plain block position and changes nothing.
-
-- Projectile, ray and effect weapons need nothing: OMT aims, spawns projectiles (with the contraption's velocity) and traces rays in the world.
-- An `AreaWeapon`'s `area()` stays in plot coordinates (around `turret.getBlockPos()`); OMT only passes entities that really touch it.
-- A `SelfTargetingWeapon`'s picker that measures distances should use `turret.getMount().centre()` instead of the block position, or compare plot positions from `toLocal(...)`.
-- A weapon that spawns entities or plays effects itself should place them at world points from the mount.
-
 ## 2. Model (client)
 
-On Fabric this is the `openmodularturrets_client` entrypoint; on NeoForge and Forge, annotate it with `@OMTClientPlugin.Register` (found on the client only).
+On Fabric this is the `openmodularturrets_client` entrypoint; on NeoForge, annotate it with `@OMTClientPlugin.Register` (found on the client only).
 
 ```java
-@OMTClientPlugin.Register // NeoForge and Forge; Fabric ignores it
+@OMTClientPlugin.Register // NeoForge; Fabric ignores it
 public final class ExampleTurretModels implements OMTClientPlugin {
     @Override
     public void registerTurretModels(TurretModelRegistrar registrar) {
         registrar.register(ExampleTurrets.FLAK_TURRET, ExampleTurretModels::flakLayer,
-                ResourceLocation.tryParse("example:textures/block/turret/flak_turret.png"),
+                Identifier.tryParse("example:textures/block/turret/flak_turret.png"),
                 "base/holder", "base/holder/weapon"); // part that yaws, part that pitches
     }
 }
@@ -181,4 +169,4 @@ In your namespace:
 - `assets/example/blockstates/flak_turret.json`: one variant `""` pointing to a block model that only sets a `particle` texture (the turret is drawn by the block entity renderer).
 - `assets/example/models/item/flak_turret.json`: `"parent": "minecraft:builtin/entity"` and display transforms, e.g. copied from `openmodularturrets:item/laser_turret` (the item renderer draws the turret model).
 - Lang: `block.example.flak_turret`, and `tooltip.example.turret.flak_turret.description` (shift tooltip).
-- Data (both versions' folder names): loot table `blocks/flak_turret` (drop itself), the recipe, and the `minecraft:mineable/pickaxe` block tag if turrets should be breakable with `turretBreakable`.
+- Data (folder names of 1.21.11: `loot_table`, `recipe`, `tags/block`): loot table `blocks/flak_turret` (drop itself), the recipe, and the `minecraft:mineable/pickaxe` block tag if turrets should be breakable with `turretBreakable`.
