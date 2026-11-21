@@ -10,6 +10,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ### Changed
 
+- Config: `bases.allowContraptionMovement` is deprecated on Minecraft 1.20.1; it never had an effect here, as no contraption mod (Create, Create Aeronautics) is supported on this version
 - The game rules (`omtteam.openmodularturrets.core`) come from the shared OpenModularCore 2.0.0 (module `omt-core`, the same on every Minecraft version) and are bundled into the jar
 - API: `MachineMode` and `TargetingSettings` (formerly `core.base`), `CamoPermissions` (`core.camo`) and the memory card's `MemoryCardData` and `MemoryCardRules` (`core.card`) moved to OMLib's core (`omtteam.omlib.core.machine`, `.camo`, `.card`); `MemoryCardRules.capture` and `apply` are now `omtteam.openmodularturrets.core.card.BaseCardRules`, and `MachineMode.getTranslationKey()` is gone
 
