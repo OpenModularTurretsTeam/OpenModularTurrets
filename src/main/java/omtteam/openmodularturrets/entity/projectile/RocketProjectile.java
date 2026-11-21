@@ -45,12 +45,12 @@ public class RocketProjectile extends TurretProjectile {
     /**
      * 1.12.2 {@code onEntityUpdate}: with homing enabled the rocket steers towards its target every tick and is
      * removed when the target is gone. (In 1.12.2 this code was never reached because {@code onUpdate} did not call
-     * it.)
+     * it.) A rocket fired without a target (computer: forced shot, auto fire) flies straight on.
      */
     @Override
     public void tick() {
-        if (!level().isClientSide() && OMTConfig.get().turrets.canRocketsHome) {
-            if (target == null || !target.isAlive()) {
+        if (!level().isClientSide() && OMTConfig.get().turrets.canRocketsHome && target != null) {
+            if (!target.isAlive()) {
                 discard();
                 return;
             }
