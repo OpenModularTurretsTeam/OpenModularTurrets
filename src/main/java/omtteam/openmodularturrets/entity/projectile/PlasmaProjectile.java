@@ -14,6 +14,7 @@ import omtteam.omlib.network.MessageSpawnParticleQuad;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -72,8 +73,9 @@ public class PlasmaProjectile extends TurretProjectile {
 
                 if ((entity instanceof EntityPlayer && canDamagePlayer((EntityPlayer) entity)) || canDamageEntity(entity)) {
                     if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
-                    entity.attackEntityFrom(new NormalDamageSource("plasma", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), damage * 0.5F);
-                    entity.attackEntityFrom(new ArmorBypassDamageSource("plasma", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), damage * 0.5F);
+                    ProjectileMath.Split split = ProjectileMath.plasmaSplit(damage);
+                    entity.attackEntityFrom(new NormalDamageSource("plasma", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), split.normal());
+                    entity.attackEntityFrom(new ArmorBypassDamageSource("plasma", fakeDrops, turretBase, (WorldServer) this.getEntityWorld(), true, entity), split.armorBypass());
                     if (damage > 0) notifyHit(entity);
                     entity.hurtResistantTime = -1;
                 }

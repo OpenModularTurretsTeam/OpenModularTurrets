@@ -63,8 +63,18 @@ public class LivingTargetEntity extends TargetEntity {
     }
 
     @Override
-    public double getEyeHeight() {
-        return entity.getEyeHeight();
+    public double getEyeX() {
+        return entity.posX;
+    }
+
+    @Override
+    public double getEyeY() {
+        return entity.posY + entity.getEyeHeight();
+    }
+
+    @Override
+    public double getEyeZ() {
+        return entity.posZ;
     }
 
     @Override

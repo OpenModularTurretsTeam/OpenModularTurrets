@@ -6,6 +6,7 @@ The 14 built-in turrets are registered through the same API (`registry/BuiltinTu
 
 Add OMT as a dependency and `required-after:openmodularturrets` to your `@Mod` dependencies.
 The API is `omtteam.openmodularturrets.api` (common) and `omtteam.openmodularturrets.client.api` (client); the rules of a turret are the core classes `TurretType`, `AmmoType` and `TurretStats` (`omtteam.openmodularturrets.core`).
+The core classes come from the shared core OpenModularCore and are part of the OMT jar (OMLib's core classes, such as `Face`, of the OMLib jar).
 
 ## 1. Register the turret (common)
 
@@ -46,7 +47,7 @@ Get them with `OMTApi.block(type)` / `OMTApi.item(type)` once the blocks are reg
 | `requiredBaseTier(n)` | lowest base tier the turret can be placed on (lower tiers drop it) |
 | `ammo(type)` | ammo drawn per shot (one item, plus one per scattershot upgrade) |
 | `priorities(…)` | default targeting weights |
-| `mountFaces(Face…)` | base faces it may mount on (default all six; the melee turret uses `UP, DOWN`) |
+| `mountFaces(Face…)` | base faces it may mount on (`omtteam.omlib.core.world.Face`; default all six; the melee turret uses `UP, DOWN`) |
 | `ignoresScattershot()` | scattershot upgrades add no shots, ammo, energy or scatter |
 | `skipsSlowedTargets()` | entities with slowness are not targeted (slowing turret) |
 

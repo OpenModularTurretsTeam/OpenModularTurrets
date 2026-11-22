@@ -26,6 +26,7 @@ import omtteam.omlib.api.tile.IHasTargetingSettings;
 import omtteam.omlib.api.tile.IHasTrustManager;
 import omtteam.omlib.core.camo.CamoLight;
 import omtteam.omlib.core.camo.CamoPermissions;
+import omtteam.omlib.core.world.Face;
 import omtteam.omlib.network.MessageCamoSettings;
 import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.omlib.power.EnergyCapabilities;
@@ -49,7 +50,6 @@ import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.item.AddonType;
 import omtteam.openmodularturrets.core.storage.SlotCapacity;
 import omtteam.openmodularturrets.core.target.TargetEntity;
-import omtteam.openmodularturrets.core.world.Face;
 import omtteam.openmodularturrets.core.world.Neighbour;
 import omtteam.openmodularturrets.inventory.EnumSlotType;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
@@ -126,8 +126,9 @@ public class TurretBase extends TileEntityOwnedBlock implements ITurretBase, IHa
      */
     private void createLogic() {
         TurretBaseLogic.State state = logic != null ? logic.getState() : null;
+        // RandomUtil.random is read on every draw: it stays null until OMLib's init (and in unit tests)
         logic = new TurretBaseLogic(tier, ConfigLogicSettings.INSTANCE, trustManager.core(), baseWorld,
-                RandomUtil.random, this::onLogicChanged);
+                () -> RandomUtil.random.nextLong(), this::onLogicChanged);
         energy = new EnergyCapabilities(new OMEnergyStorage(logic.getEnergy()));
         if (state != null) {
             logic.loadState(state);

@@ -11,6 +11,14 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 ### Added
 
 - Config sections `upgrades` and `addons` switch each upgrade and addon off (as on 1.20.1+): it loses its recipe and does nothing in a machine, which shows it with a red slot frame, a "no" symbol over the icon and a red tooltip line
+### Changed
+
+- The game rules (`omtteam.openmodularturrets.core`) come from the shared core OpenModularCore 2.1.0, the same on every Minecraft version, and are part of the OMT jar
+- API: `TurretType.Builder.mountFaces` and `TurretType.canMountOn` take OMLib's `omtteam.omlib.core.world.Face` instead of `omtteam.openmodularturrets.core.world.Face`, which is gone; addon turrets that call them must be rebuilt
+
+### Fixed
+
+- Right-clicking a turret base updates the stored name of its owner or of a trusted player who was renamed, so a stale name no longer matches another player in offline mode, as on 1.20.1, 1.21.1 and 1.21.11
 
 ## [4.0.1] - 2026-11-04
 
