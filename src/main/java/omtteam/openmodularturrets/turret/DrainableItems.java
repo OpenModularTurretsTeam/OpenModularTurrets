@@ -25,21 +25,34 @@ public final class DrainableItems {
     public static List<EnergyAccess> of(EntityPlayer player) {
         InventoryPlayer inventory = player.inventory;
         List<EnergyAccess> items = new ArrayList<>();
-        for (int i = 0; i < ARMOR_SLOTS; i++) add(items, inventory, MAIN_SLOTS + i);
-        add(items, inventory, inventory.currentItem);
-        add(items, inventory, OFFHAND_SLOT);
+        for (int slot : slots(inventory.currentItem)) ItemEnergy.of(inventory, slot).ifPresent(items::add);
         return items;
     }
 
     /** Whether at least one of those items has energy that can be extracted. */
     public static boolean any(EntityPlayer player) {
-        for (EnergyAccess item : of(player)) {
+        return anyExtractable(of(player));
+    }
+
+    /**
+     * The player inventory slots in drain order: the four armour slots (feet to head), the selected hotbar slot, the
+     * offhand slot.
+     *
+     * @param selectedSlot {@code InventoryPlayer.currentItem}, 0 to 8
+     */
+    static int[] slots(int selectedSlot) {
+        int[] slots = new int[ARMOR_SLOTS + 2];
+        for (int i = 0; i < ARMOR_SLOTS; i++) slots[i] = MAIN_SLOTS + i;
+        slots[ARMOR_SLOTS] = selectedSlot;
+        slots[ARMOR_SLOTS + 1] = OFFHAND_SLOT;
+        return slots;
+    }
+
+    /** Whether one of the items gives energy on a simulated extraction of 1. */
+    static boolean anyExtractable(List<EnergyAccess> items) {
+        for (EnergyAccess item : items) {
             if (item.extract(1, true) > 0) return true;
         }
         return false;
-    }
-
-    private static void add(List<EnergyAccess> items, InventoryPlayer inventory, int slot) {
-        ItemEnergy.of(inventory, slot).ifPresent(items::add);
     }
 }
