@@ -43,6 +43,8 @@ public final class TurretJadeProvider implements IServerDataProvider<BlockAccess
     private static final String OPTIMAL_RANGE = "OptimalRange";
     private static final String FALLOFF_DAMAGE = "FalloffDamage";
     private static final String TURN_RATE = "TurnRate";
+    private static final String EFFECT_TURRET = "EffectTurret";
+    private static final String EFFECT_STRENGTH = "EffectStrength";
 
     private TurretJadeProvider() {
     }
@@ -76,6 +78,10 @@ public final class TurretJadeProvider implements IServerDataProvider<BlockAccess
         data.putDouble(OPTIMAL_RANGE, setting.optimalRange);
         data.putDouble(FALLOFF_DAMAGE, setting.falloffDamage);
         data.putDouble(TURN_RATE, setting.turnRate);
+        if (setting.effectStrength > 0) {
+            data.putString(EFFECT_TURRET, type.getId());
+            data.putDouble(EFFECT_STRENGTH, setting.effectStrength);
+        }
     }
 
     /** The tooltip lines for the data the server sent; a concealed turret shows nothing. */
@@ -98,6 +104,11 @@ public final class TurretJadeProvider implements IServerDataProvider<BlockAccess
         }
         if (data.contains(TURN_RATE)) {
             lines.add(JadeLines.line("turn_rate", TurretStatLines.turnRate(NbtCompat.getDouble(data, TURN_RATE, 0))));
+        }
+        if (data.contains(EFFECT_TURRET)) {
+            TurretType.byId(NbtCompat.getString(data, EFFECT_TURRET, ""))
+                    .map(effectType -> TurretStatLines.effect(effectType, NbtCompat.getDouble(data, EFFECT_STRENGTH, 0)))
+                    .ifPresent(effect -> lines.add(JadeLines.line("effect", effect)));
         }
         return lines;
     }

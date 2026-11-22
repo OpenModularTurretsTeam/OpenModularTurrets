@@ -1,10 +1,18 @@
 package omtteam.openmodularturrets.gametest;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
+import omtteam.omlib.core.energy.EnergyAccess;
+import omtteam.omlib.platform.Platform;
+import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.core.turret.TurretType;
 
 /**
@@ -59,5 +67,101 @@ public class EffectTurretGameTests implements OMTGameTests {
 
         TurretScene.succeedWhen(helper, () -> helper.assertTrue(target.getHealth() < maxHealth,
                 "Target was not damaged (health " + target.getHealth() + " of " + maxHealth + ")"));
+    }
+
+    /** Issue 324: the repelling turret pushes a target 5 blocks in front further away from it. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "repelling_turret", timeoutTicks = TIMEOUT_TICKS)
+    public void repellingTurretPushesTargetAway(GameTestHelper helper) {
+        TurretScene.build(helper, TurretType.REPELLING_TURRET, TIMEOUT_TICKS);
+        LivingEntity target = TurretScene.spawnTarget(helper, TurretScene.TARGET_IN_FRONT);
+        double start = target.getX();
+
+        TurretScene.succeedWhen(helper, () -> helper.assertTrue(target.getX() > start + 1.0D,
+                "Target at x " + target.getX() + " was not pushed away from x " + start));
+    }
+
+    /** Issue 324: the tractor turret pulls a target 5 blocks in front towards it. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "tractor_turret", timeoutTicks = TIMEOUT_TICKS)
+    public void tractorTurretPullsTargetIn(GameTestHelper helper) {
+        TurretScene.build(helper, TurretType.TRACTOR_TURRET, TIMEOUT_TICKS);
+        LivingEntity target = TurretScene.spawnTarget(helper, TurretScene.TARGET_IN_FRONT);
+        double start = target.getX();
+
+        TurretScene.succeedWhen(helper, () -> helper.assertTrue(target.getX() < start - 1.0D,
+                "Target at x " + target.getX() + " was not pulled in from x " + start));
+    }
+
+    /**
+     * Issue 324: the energy drain turret takes energy from a player's armour and held items ({@link TestBattery} in
+     * the head slot and the main hand), but not from the rest of the inventory.
+     */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "energy_drain_turret", timeoutTicks = TIMEOUT_TICKS)
+    public void energyDrainTurretDrainsArmourAndHeldItems(GameTestHelper helper) {
+        TurretBaseBlockEntity base = TurretScene.build(helper, TurretType.ENERGY_DRAIN_TURRET, TIMEOUT_TICKS);
+        base.getLogic().setTargetPlayers(true);
+        ServerPlayer player = playerWithBatteries(helper, HEAD_SLOT, 0, STORED_SLOT);
+        long full = TestBattery.CAPACITY;
+
+        TurretScene.succeedWhen(helper, () -> {
+            helper.assertTrue(energy(player, HEAD_SLOT) < full || energy(player, 0) < full,
+                    "Nothing was drained from the helmet or the main hand");
+            helper.assertTrue(energy(player, STORED_SLOT) == full, "A battery in the inventory was drained");
+            removePlayer(helper, player);
+        });
+    }
+
+    /**
+     * Issue 324: a player whose armour and held items hold no energy is not targeted, even with a charged battery
+     * elsewhere in the inventory; the turret does not fire (its base keeps its energy).
+     */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "energy_drain_turret_skip", timeoutTicks = TIMEOUT_TICKS)
+    public void energyDrainTurretSkipsPlayersWithoutEnergy(GameTestHelper helper) {
+        TurretBaseBlockEntity base = TurretScene.build(helper, TurretType.ENERGY_DRAIN_TURRET, TIMEOUT_TICKS);
+        base.getLogic().setTargetPlayers(true);
+        ServerPlayer player = playerWithBatteries(helper, STORED_SLOT);
+        long baseEnergy = base.getLogic().getEnergy().getAmount();
+
+        TurretScene.onEachTick(helper, () -> helper.assertTrue(!base.getLogic().getTargetIds().containsValue(player.getId()),
+                "A player without energy in armour or hands was targeted"));
+        helper.runAfterDelay(SKIP_CHECK_TICKS, () -> {
+            helper.assertTrue(base.getLogic().getEnergy().getAmount() >= baseEnergy, "The turret fired");
+            helper.assertTrue(energy(player, STORED_SLOT) == TestBattery.CAPACITY, "A battery in the inventory was drained");
+            removePlayer(helper, player);
+            helper.succeed();
+        });
+    }
+
+    /** Head armour slot of the player inventory (36 feet ... 39 head). */
+    private static final int HEAD_SLOT = Inventory.INVENTORY_SIZE + 3;
+    /** A main inventory slot that the drain turret leaves alone. */
+    private static final int STORED_SLOT = 20;
+    /** The skip test waits this long, several target searches and shots. */
+    private static final int SKIP_CHECK_TICKS = 100;
+
+    /** A player 5 blocks in front of the turret with a full {@link TestBattery} in each of the given slots. */
+    private static ServerPlayer playerWithBatteries(GameTestHelper helper, int... slots) {
+        ServerPlayer player = GuiTestPlayer.create(helper, "Drained");
+        Inventory inventory = player.getInventory();
+        inventory.setSelectedSlot(0);
+        for (int slot : slots) {
+            inventory.setItem(slot, new ItemStack(TestBattery.ITEM));
+            EnergyAccess battery = Platform.energy().itemEnergy(inventory, slot)
+                    .orElseThrow(() -> new IllegalStateException("The test battery has no energy"));
+            battery.insert(TestBattery.CAPACITY, false);
+        }
+        BlockPos pos = helper.absolutePos(TurretScene.TARGET_IN_FRONT);
+        player.snapTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+        helper.getLevel().addNewPlayer(player);
+        helper.runAfterDelay(TIMEOUT_TICKS - 1, () -> removePlayer(helper, player));
+        return player;
+    }
+
+    private static long energy(ServerPlayer player, int slot) {
+        return Platform.energy().itemEnergy(player.getInventory(), slot).map(EnergyAccess::getAmount).orElse(0L);
+    }
+
+    private static void removePlayer(GameTestHelper helper, ServerPlayer player) {
+        if (!player.isRemoved()) helper.getLevel().removePlayerImmediately(player, Entity.RemovalReason.DISCARDED);
+        TurretScene.clear(helper);
     }
 }
