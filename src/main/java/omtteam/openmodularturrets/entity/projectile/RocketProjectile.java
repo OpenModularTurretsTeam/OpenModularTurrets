@@ -70,8 +70,11 @@ public class RocketProjectile extends TurretProjectile {
     private void explode() {
         boolean destroyBlocks = OMTConfig.get().turrets.canRocketsDestroyBlocks;
         explodeHere(destroyBlocks ? 2.3F : 0.1F, destroyBlocks ? Level.ExplosionInteraction.TNT : Level.ExplosionInteraction.NONE);
+        // the range falloff at the explosion (straight line from the launch point, also for homing rockets), the same
+        // for every victim; the vanilla explosion's damage is not scaled
+        float falloff = damageFactor();
         for (LivingEntity entity : level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(RADIUS))) {
-            int damage = damageWithAmp(baseDamage(), entity);
+            float damage = ampDamage(baseDamage(), entity) * falloff;
             if (OMTConfig.get().turrets.canRocketsHurtEnderDragon && entity instanceof EnderDragon) {
                 // the dragon ignores most damage sources, so its health is reduced directly
                 entity.setHealth(entity.getHealth() - damage);

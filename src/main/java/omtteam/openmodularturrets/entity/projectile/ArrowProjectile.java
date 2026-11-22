@@ -29,7 +29,7 @@ public class ArrowProjectile extends TurretProjectile {
     @Override
     protected void onHitEntity(Entity entity) {
         if (!canDamage(entity)) return;
-        hurt(entity, ModDamageTypes.ARROW, damageWithAmp(baseDamage(), entity));
+        hurt(entity, ModDamageTypes.ARROW, damage(entity));
         discard();
     }
 

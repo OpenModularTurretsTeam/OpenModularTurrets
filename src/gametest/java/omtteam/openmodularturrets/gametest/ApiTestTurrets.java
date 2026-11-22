@@ -45,8 +45,9 @@ public final class ApiTestTurrets implements OMTPlugin {
     public static final AmmoType ARROW_AMMO = AmmoType.of(NAMESPACE, "arrow");
     public static final TurretType API_RAY_TURRET = TurretType.builder(NAMESPACE, "api_ray_turret")
             .requiredBaseTier(2).ammo(ARROW_AMMO).build();
+    /** With a range falloff and a turn rate, so the registration test covers their way into the config. */
     public static final TurretStats API_RAY_TURRET_STATS = TurretStats.builder(12, 10, 4, 100).accuracyDeviation(1)
-            .build();
+            .falloff(0.8D, 0.5D).turnRate(30).build();
 
     public static final TurretType API_EFFECT_TURRET = TurretType.builder(NAMESPACE, "api_effect_turret").build();
     public static final TurretType API_SELF_TARGETING_TURRET = TurretType.builder(NAMESPACE, "api_self_targeting_turret")

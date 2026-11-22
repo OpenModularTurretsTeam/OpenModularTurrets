@@ -32,7 +32,7 @@ public class BulletProjectile extends TurretProjectile {
     @Override
     protected void onHitEntity(Entity entity) {
         if (!canDamage(entity)) return;
-        hurt(entity, ModDamageTypes.BULLET, damageWithAmp(baseDamage(), entity));
+        hurt(entity, ModDamageTypes.BULLET, damage(entity));
         discard();
     }
 

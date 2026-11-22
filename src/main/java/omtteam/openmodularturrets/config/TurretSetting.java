@@ -36,6 +36,12 @@ public class TurretSetting {
     public double recyclerNegateChance;
     @Comment("Chance that the recycler addon returns extra ammo.") @Range(min = 0, max = 1)
     public double recyclerAddChance;
+    @Comment("Share of the range (with range upgrades) up to which the turret deals full damage; from there the damage falls linearly to falloffDamage at the end of the range. 1 = no falloff.") @Range(min = 0, max = 1)
+    public double optimalRange = TurretStats.NO_FALLOFF_OPTIMAL_RANGE;
+    @Comment("Share of the damage dealt at the end of the range and beyond. 1 = no falloff.") @Range(min = 0, max = 1)
+    public double falloffDamage = TurretStats.NO_FALLOFF_DAMAGE;
+    @Comment("Degrees the turret turns per tick towards its target, on each axis. 0 turns instantly.") @Range(min = 0, max = 180)
+    public double turnRate = TurretStats.INSTANT_TURN;
 
     @SuppressWarnings("unused")
     public TurretSetting() {
@@ -61,15 +67,29 @@ public class TurretSetting {
         this.recyclerAddChance = recyclerAddChance;
     }
 
+    /**
+     * Sets the range falloff and the turn rate (issue 539); without this call a setting has no falloff and turns
+     * instantly.
+     *
+     * @return this setting
+     */
+    public TurretSetting realism(double optimalRange, double falloffDamage, double turnRate) {
+        this.optimalRange = optimalRange;
+        this.falloffDamage = falloffDamage;
+        this.turnRate = turnRate;
+        return this;
+    }
+
     public static TurretSetting of(TurretStats s) {
         return new TurretSetting(s.enabled(), s.baseRange(), s.baseFireRate(), s.baseDamage(), s.powerUsage(),
                 s.baseAccuracyDeviation(), s.maxSimultaneous(), s.damageAmp(), s.fireRateUpgrade(), s.rangeUpgrade(),
-                s.accuracyUpgrade(), s.efficiencyUpgrade(), s.recyclerNegateChance(), s.recyclerAddChance());
+                s.accuracyUpgrade(), s.efficiencyUpgrade(), s.recyclerNegateChance(), s.recyclerAddChance())
+                .realism(s.optimalRange(), s.falloffDamage(), s.turnRate());
     }
 
     public TurretStats toStats() {
         return new TurretStats(enabled, baseRange, baseFireRate, baseDamage, powerUsage, baseAccuracyDeviation,
                 maxSimultaneous, damageAmp, fireRateUpgrade, rangeUpgrade, accuracyUpgrade, efficiencyUpgrade,
-                recyclerNegateChance, recyclerAddChance);
+                recyclerNegateChance, recyclerAddChance, optimalRange, falloffDamage, turnRate);
     }
 }

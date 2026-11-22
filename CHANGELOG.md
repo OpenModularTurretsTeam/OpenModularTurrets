@@ -14,10 +14,19 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 - Serial Port addon, with the recipe from 1.12.2 (quartz and I/O buses): lets computers use turret bases of tiers 2–4 (tier 5 bases accept them without it)
 - NeoForge 1.21.1 with OpenComputers: Rebooted: an Adapter next to a turret base offers it as the component `turret_base`, with the callbacks of 1.12.2 (targeting, trusted players, redstone mode, energy, turret aim, auto fire and forced shots)
 - Computer control: `setComputerControl(true)` stops a base's turrets from targeting on their own, so a computer aims and fires them (`isComputerControl` tells whether it is on)
+- Range falloff (#539): turrets deal full damage up to a share of their range (`optimalRange`), then less down to `falloffDamage` at the end of the range; configurable per turret, off for the grenade, rocket, railgun and effect turrets
+- Turret tracking (#539): turrets turn at most `turnRate` degrees per tick towards their target and fire only once their aim is within `turrets.aimTolerance` (default 5 degrees); configurable per turret, instant for the arc, slowing, teleporter and melee turrets
+- Computer control with the range falloff and turn rate (#539): a computer's aim (`setTurretYawPitch`, `setAllYawPitch`) is still set at once, and forced shots and auto fire do not wait for the aim, but their damage gets the range falloff
+- The turret item tooltip (with shift) and the Jade tooltip of a turret show its optimal range and its turn rate
+- Turret API: `TurretStats.Builder.falloff(optimalShare, damageAtMaxRange)` and `turnRate(degreesPerTick)`; `TurretProjectile` has `damage(Entity)`, `damage(float, Entity)`, `damageFactor(…)`, `ampDamage(…)` and `hitPoint(…)` for projectiles with the range falloff
+- Config: `turrets.aimTolerance` and, in every turret section, `optimalRange`, `falloffDamage` and `turnRate`
 
 ### Changed
 
-- The game rules (`omtteam.openmodularturrets.core`) come from the shared OpenModularCore 2.1.0 (module `omt-core`, the same on every Minecraft version) and are bundled into the jar
+- Existing configs get the new range falloff and turn rate defaults on the next start; set `optimalRange` and `falloffDamage` to 1 and `turnRate` to 0 for the old behaviour
+- Projectile damage is no longer rounded down to whole points (the damage amp addon's bonus and the range falloff keep their fractions)
+- Turret API: `TurretProjectile.damageWithAmp(int, Entity)` is deprecated (whole points, no range falloff); projectiles built against it keep working and deal full damage at every distance
+- The game rules (`omtteam.openmodularturrets.core`) come from the shared OpenModularCore 2.2.0 (module `omt-core`, the same on every Minecraft version) and are bundled into the jar
 - API: `MachineMode` and `TargetingSettings` (formerly `core.base`), `CamoPermissions` (`core.camo`) and the memory card's `MemoryCardData` and `MemoryCardRules` (`core.card`) moved to OMLib's core (`omtteam.omlib.core.machine`, `.camo`, `.card`); `MemoryCardRules.capture` and `apply` are now `omtteam.openmodularturrets.core.card.BaseCardRules`, and `MachineMode.getTranslationKey()` is gone
 
 ## [4.0.0] - 2026-11-03

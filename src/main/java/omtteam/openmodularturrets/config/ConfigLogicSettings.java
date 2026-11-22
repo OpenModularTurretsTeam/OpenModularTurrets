@@ -117,6 +117,11 @@ public final class ConfigLogicSettings implements LogicSettings {
     }
 
     @Override
+    public double aimTolerance() {
+        return OMTConfig.get().turrets.aimTolerance;
+    }
+
+    @Override
     public int turretWarningDistance() {
         return OMTConfig.get().turrets.turretWarningDistance;
     }

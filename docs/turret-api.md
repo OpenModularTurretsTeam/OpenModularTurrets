@@ -36,7 +36,10 @@ public final class ExampleTurrets implements OMTPlugin {
         registrar.registerAmmo(AmmoDefinition.ofItem(SHELL, () -> ExampleItems.SHELL));
         registrar.registerTurret(new TurretDefinition(FLAK_TURRET,
                 ProjectileWeapon.of(ExampleSounds.FLAK, (level, ammo, target) -> ExampleEntities.FLAK.create(level)),
-                TurretStats.builder(24, 20, 6, 500).accuracyDeviation(15).maxSimultaneous(2).build()));
+                TurretStats.builder(24, 20, 6, 500).accuracyDeviation(15).maxSimultaneous(2)
+                        .falloff(0.6, 0.5)   // full damage up to 60 % of the range, half damage at its end
+                        .turnRate(10)        // degrees per tick on each axis; 0 (the default) turns instantly
+                        .build()));
     }
 }
 ```
@@ -97,7 +100,8 @@ new EffectWeapon(ExampleSounds.ZAP, (level, turret, base, target) -> {
 Once the turret is ready to fire (cooldown passed, base active, enough energy), its picker gets the world, the turret and the base, looks for targets itself and returns the ones to shoot at.
 `base.getLogic().getRange(turret.getTurretType())` is the turret's range (base tier and range upgrades).
 If it returns any, OMT takes energy and ammo and calls the shot with them; if not, nothing is consumed and the picker is asked again 5 ticks later.
-With `aims = true` the turret turns towards the first picked entity.
+With `aims = true` the turret turns towards the first picked entity at its `turnRate`.
+While its aim is more than `turrets.aimTolerance` degrees off, nothing is consumed and the shot is not called; the picker is asked again on the next tick (with a `turnRate` of 0 the turret turns instantly and fires at once, as before).
 Filter with `OMTApi.canDamage(base, entity)` to spare the owner, trusted players, their pets and players holding the ownership wand, and damage with `OMTApi.hurt(base, entity, damageType, amount, direct)` so kills count for the base and the fake drops addon applies.
 
 ```java
@@ -127,6 +131,9 @@ Each ray of a scattershot counts on its own.
 All callbacks run on the server thread.
 
 Projectiles extend `omtteam.openmodularturrets.entity.projectile.TurretProjectile` (or `ItemCarryingProjectile`); `getTurretType()` selects the config entry for damage and damage amp, `hurt(…)` / `canDamage(…)` apply the base's trust rules and kill counting.
+Deal `damage(entity)` on a direct hit: the turret's damage with the damage amp bonus and the range falloff, measured from the launch point to where the projectile touches the entity (`damage(base, entity)` for your own base damage).
+For explosions and bursts, multiply `ampDamage(baseDamage(), victim)` by `damageFactor()`, the falloff at the projectile's position, the same for every victim.
+The older `damageWithAmp(int, Entity)` still works but is deprecated: it rounds to whole points and has no falloff.
 Register the entity type and its renderer yourself.
 
 ### Stats and config
@@ -134,6 +141,12 @@ Register the entity type and its renderer yourself.
 `TurretStats` are the defaults of the turret's config entry.
 OMT writes them to `config/openmodularturrets.json` under `turrets.addon_turrets."example:flak_turret"`, with the same keys as a built-in turret section; server values are synced to clients.
 Read the current values with `OMTConfig.get().turrets.get(type)`.
+`falloff(optimalShare, damageAtMaxRange)` sets the range falloff (keys `optimalRange` and `falloffDamage`): full damage up to `optimalShare` of the turret's range (with range upgrades), then linearly less down to `damageAtMaxRange` of the damage at the end of the range and beyond.
+`turnRate(degreesPerTick)` sets how fast the turret turns towards its target (key `turnRate`, on yaw and pitch each); an aiming turret fires only once its aim is within `turrets.aimTolerance` degrees.
+Without these calls a turret has no falloff and turns instantly.
+OMT applies the falloff to projectile and ray weapons: a projectile measures from its launch point to the hit, a ray from the turret to where it enters the entity (arc jumps take the first hit's share).
+Effect, area and self-targeting weapons get no falloff; one that wants it scales its damage by `base.getLogic().getDamageFactor(turret.getTurretType(), distance)`.
+A turn rate only makes sense for a turret whose model turns (`aims() == true`): a ray weapon always aims, so a turn rate on a turret with a static model only delays its shots.
 
 ### Ammo
 
@@ -152,6 +165,8 @@ Outside contraptions it is the plain block position and changes nothing.
 - An `AreaWeapon`'s `area()` stays in plot coordinates (around `turret.getBlockPos()`); OMT only passes entities that really touch it.
 - A `SelfTargetingWeapon`'s picker that measures distances should use `turret.getMount().centre()` instead of the block position, or compare plot positions from `toLocal(...)`.
 - A weapon that spawns entities or plays effects itself should place them at world points from the mount.
+- The range falloff is measured in the world: from the projectile's world launch point, or from the ray's world origin, to the hit.
+- The turn rate turns the aim relative to the plot, so a turret on a turning contraption also has to turn against the contraption's rotation at its `turnRate`; a slow turret may never come within `turrets.aimTolerance` on a fast-spinning contraption, and then never fires.
 
 ## 2. Model (client)
 

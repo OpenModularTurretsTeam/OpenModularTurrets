@@ -373,6 +373,9 @@ The day still passes: a test that needs daylight sets the time itself (`SolarPan
   The test server does not tick entities in the chunks next to a test, and projectiles remove themselves before flying into such a chunk, so `TurretScene` force-loads the chunks around the scene while a test runs (otherwise a grenade that lands just past the target would vanish instead of exploding).
   Projectile tests fail just before their timeout with their state (shots, followed projectile, target) instead of timing out silently.
 - Turret ranges reach into neighbouring tests, so every turret test gets its own `batch` and ends with `TurretScene.succeedWhen`, which removes the turret, base and entities once it passed.
+- A test that needs other config values for a turret type (the range falloff and turn rate tests) changes them with `TurretScene.configure(helper, type, setting -> …)`, which puts every value back when the scene is cleared (on success, on failure and one tick before the timeout); the setting is shared by all tests, so such a test needs a batch of its own.
+  The tests read a turret's aim from its saved `Yaw` / `Pitch`, not through a getter.
+  A local test run keeps its config file, and the merge keeps old values of addon turrets: delete `versions/1.21.1-fabric/build/run/gameTest/config/openmodularturrets*` and `versions/1.21.1-neoforge/run/config/openmodularturrets*` after a default changes.
 - `BaseGuiGameTests` clicks a base through `ServerPlayerGameMode#useItemOn` (the real server path, including the loader's block-use event) and checks that the menu opens for the owner only.
   The loaders' `FakePlayer`s refuse to open menus, so the test uses `GuiTestPlayer`, a small subclass that opens them without sending a packet (NeoForge opens block menus through the two-argument `openMenu`, which it overrides too); `CamoMenuGameTests` uses it for the camouflage menu and its "Back" to the base GUI.
 - `TrustListGameTests`, `CamoMenuGameTests` and the light tests in `CamoGameTests` call OMLib's packet handlers (`TrustPacketHandler`, `CamoPacketHandler`) directly with fake players placed next to the block, as the server does on a packet, and check permission, reach and the access level steps.
@@ -515,6 +518,12 @@ The built-in turrets use the same path, so there is no special casing per turret
   `ConfigWriter`/`ConfigRanges` handle such section maps.
 - Client: `OMTClientPlugin` (Fabric entrypoint `openmodularturrets_client`, NeoForge `@OMTClientPlugin.Register`) registers models via `TurretModelRegistrar`; `TurretModels.init(plugins)` collects built-in and plugin models (the loader client entrypoint passes the plugins it found).
 - The game test mod registers one test turret per weapon kind through the API (`ApiTestTurrets`, with its own projectile entity `ApiTestProjectile` registered in `ApiTestEntities`) and tests registration and every custom-logic hook in `ApiTurretGameTests`.
+  `ApiTestProjectile` stays on the deprecated `damageWithAmp(int, Entity)`, as the check that projectiles of addons built against older versions still work.
+- Range falloff and turn rate (issue 539): `TurretStats` / `TurretSetting` carry `optimalRange`, `falloffDamage` and `turnRate` per turret type, `turrets.aimTolerance` is global (`ConfigLogicSettings.aimTolerance`).
+  Built-in projectiles deal `TurretProjectile.damage(entity)` (damage amp and falloff from the launch point set by `TurretBlockEntity.fire`), explosions and bursts `ampDamage(…) * damageFactor()`; `RayWeapons` scales the ray damage by `TurretBaseLogic.getDamageFactor` at the ray's entry point.
+  `TurretBlockEntity.aimAt` turns at most `turnRate` per tick, and `engage` / `pickAndFire` fire only once the aim is within the tolerance (nothing is used while turning); the gate is in those two, never in the public `fire`.
+  Computer control (decided by the user on 2026-11-22): `setYawPitch` still sets the aim at once, and `forceShot` and auto fire are not gated, but their shots go through `fire` and the shared private `RayWeapons.shoot`, so they get the falloff.
+  Not scaled by the falloff: the incendiary fire time, the vanilla explosion of grenades and rockets, effect, area and self-targeting weapons.
 
 ### Aiming on arbitrary faces
 
@@ -524,6 +533,10 @@ The built-in turrets use the same path, so there is no special casing per turret
 - Put the math in one place, e.g. `TurretMath`, used by both server logic (can it aim there?) and the client renderer.
 - Sync yaw/pitch (or the target entity ID) to clients for smooth interpolated rendering.
   Interpolate on the client; don't sync every tick unless necessary.
+- The server turns the aim at most the type's `turnRate` degrees per tick on each axis (`TurretMath.turnTowards`); the client (`TurretBlockEntity.clientTick`) eases towards the synced aim for turrets that turn instantly, and turns at the turn rate with a catch-up for the others (it reads the synced config), so the model does not pulse between the syncs.
+  The pose is saved (`Yaw`, `Pitch`), so a reloaded turret resumes its turn; the target angles are not saved.
+  A slow turret may never catch a target that circles it closely; the base keeps such a target (option A of issue 539, no core change).
+  On a Sable contraption the angles are relative to the plot, so a turret on a turning contraption also turns against the rotation at its turn rate; a slow turret may never align on a fast-spinning contraption.
 
 ### Targeting (base)
 
@@ -707,6 +720,7 @@ Update this checklist as work progresses.
 - [x] Changelog system (`CHANGELOG.md`, `changelogEntry`, `releaseChangelog`; publish uploads the version's section)
 - [x] Generator block (new in this version; design agreed with the user, see "Power & items")
 - [x] Turret API for other mods (`api/`, `docs/turret-api.md`); built-in turrets registered through it, game test for an API turret
+- [x] Range falloff and turn rate (issue 539, options A chosen by the user on 2026-11-22; OpenModularCore 2.2.0; ported from 1.21.11): per-turret `optimalRange`, `falloffDamage`, `turnRate`, global `turrets.aimTolerance`, tooltip and Jade lines (`turret.TurretStatLines`); computer aim stays instant and forced shots ungated, with the falloff; unit tests `TurretConfigDefaultsTest` and `TurretStatLinesTest`, game tests `railgunDamageFallsOffWithDistance`, `projectileDamageFallsOffWithDistance`, `turnRateDelaysTheFirstShot`, `turnRateZeroFiresAtOnce`; not checked in a client yet
 
 ### NeoForge 1.21.1 (branch `neoforge-test`; follow OpenModularLighting's steps)
 

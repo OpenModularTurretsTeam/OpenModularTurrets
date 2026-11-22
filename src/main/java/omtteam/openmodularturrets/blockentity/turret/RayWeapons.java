@@ -29,6 +29,7 @@ import omtteam.openmodularturrets.network.RayPacket;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Shoots {@link RayWeapon}s (1.12.2 {@code RayTracingTurret} with {@code LaserTurretTileEntity},
@@ -51,7 +52,7 @@ public final class RayWeapons {
     /**
      * 1.12.2 {@code doTargetedShot} + {@code shootRay}: one ray per scattershot level towards the target's eyes,
      * scattered by the turret's accuracy (more for small or far targets). The first damageable entity on the ray
-     * before the first solid block is hit.
+     * before the first solid block is hit, with the range falloff at the point where the ray enters it.
      *
      * @param renderOrigin where a hit is drawn from if the weapon {@linkplain RayWeapon#drawFromTip() draws from the tip}
      */
@@ -67,7 +68,7 @@ public final class RayWeapons {
     /**
      * 1.12.2 {@code RayTracingTurret.forceShot}: a ray without a target (computer control,
      * {@link TurretBlockEntity#forceShot()}), scattered like a shot at a target one block high at {@code end}.
-     * Energy and ammo are already consumed.
+     * Energy and ammo are already consumed. The hit gets the range falloff like a targeted ray.
      *
      * @param end          the aim point, a few blocks in front of the turret
      * @param renderOrigin where a hit is drawn from if the weapon {@linkplain RayWeapon#drawFromTip() draws from the tip}
@@ -109,8 +110,12 @@ public final class RayWeapons {
 
             Entity hit = null;
             for (Entity entity : entitiesOnRay(level, start, end)) {
-                if (entity.getBoundingBox().clip(start, end).map(p -> p.distanceTo(start) <= blockRange).orElse(true)
-                        && hitEntity(level, turret, base, weapon, entity)) {
+                Optional<Vec3> clip = entity.getBoundingBox().clip(start, end);
+                if (clip.isPresent() && clip.get().distanceTo(start) > blockRange) continue;
+                Vec3 hitPoint = clip.orElse(entity.position());
+                // the range falloff is measured from the turret (the ray's origin), not from where the ray is drawn
+                double falloff = logic.getDamageFactor(type, origin.distanceTo(hitPoint));
+                if (hitEntity(level, turret, base, weapon, entity, falloff)) {
                     ray(level, weapon, weapon.drawFromTip() ? renderOrigin : start, end);
                     hit = entity;
                     break;
@@ -140,13 +145,17 @@ public final class RayWeapons {
         return result;
     }
 
-    /** 1.12.2 {@code onHitEntity}: damage, hit effects and hit sound if the entity may be damaged. */
+    /**
+     * 1.12.2 {@code onHitEntity}: damage, hit effects and hit sound if the entity may be damaged.
+     *
+     * @param falloff share of the damage left after the range falloff ({@link TurretBaseLogic#getDamageFactor})
+     */
     private static boolean hitEntity(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base,
-                                     RayWeapon weapon, Entity entity) {
+                                     RayWeapon weapon, Entity entity, double falloff) {
         if (!TurretDamage.canDamage(level, base.getBlockPos(), entity)) return false;
-        damage(level, turret, base, weapon, entity, RayMath.damageModifier(weapon.profile(), armor(entity)));
+        damage(level, turret, base, weapon, entity, RayMath.damageModifier(weapon.profile(), armor(entity)), falloff);
         if (weapon.profile().arcChain()) {
-            shootArcChain(level, base, turret, weapon, entity, RayMath.ARC_HOPS, new ArrayList<>());
+            shootArcChain(level, base, turret, weapon, entity, RayMath.ARC_HOPS, new ArrayList<>(), falloff);
         }
         if (weapon.hitSound() != null) {
             level.playSound(null, entity.blockPosition(), weapon.hitSound(), SoundSource.AMBIENT,
@@ -159,9 +168,10 @@ public final class RayWeapons {
      * 1.12.2 {@code ArcTurretTileEntity.applyHitEffects}: each hit uses one hop; the arc jumps to the first damageable
      * living entity within {@link RayMath#arcJumpRange} that was not hit yet. With two hops the arc reaches one
      * extra entity (the second jump has range 0), which takes {@link RayMath#ARC_JUMP_FACTOR} of the damage.
+     * Every jump target takes the range falloff of the first hit ({@code falloff}), wherever it stands.
      */
     private static void shootArcChain(ServerLevel level, TurretBaseBlockEntity base, TurretBlockEntity turret,
-                                      RayWeapon weapon, Entity from, int hops, List<Integer> hitIds) {
+                                      RayWeapon weapon, Entity from, int hops, List<Integer> hitIds, double falloff) {
         if (hops <= 0) return;
         hitIds.add(from.getId());
         double range = RayMath.arcJumpRange(hops);
@@ -169,8 +179,8 @@ public final class RayWeapons {
         for (LivingEntity next : level.getEntitiesOfClass(LivingEntity.class, new AABB(from.position(), from.position()).inflate(range))) {
             if (!hitIds.contains(next.getId()) && TurretDamage.canDamage(level, base.getBlockPos(), next)) {
                 // 1.12.2 order: the chain continues from the next target before it is damaged
-                shootArcChain(level, base, turret, weapon, next, remaining, hitIds);
-                damage(level, turret, base, weapon, next, RayMath.ARC_JUMP_FACTOR);
+                shootArcChain(level, base, turret, weapon, next, remaining, hitIds, falloff);
+                damage(level, turret, base, weapon, next, RayMath.ARC_JUMP_FACTOR, falloff);
                 double eye = from.getEyeHeight();
                 ray(level, weapon, from.position().add(0, eye, 0), next.position().add(0, eye, 0));
                 break;
@@ -179,16 +189,17 @@ public final class RayWeapons {
     }
 
     /**
-     * Deals {@link RayMath#damage}, split into a normal and an armor-piercing part ({@link RayMath#split}), then calls
-     * the weapon's {@linkplain RayWeapon#entityHit() entity hit handler}.
+     * Deals {@link RayMath#damage} times the range falloff, split into a normal and an armor-piercing part
+     * ({@link RayMath#split}), then calls the weapon's {@linkplain RayWeapon#entityHit() entity hit handler}.
      */
     private static void damage(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base,
-                               RayWeapon weapon, Entity entity, double modifier) {
+                               RayWeapon weapon, Entity entity, double modifier, double falloff) {
         TurretBaseLogic logic = base.getLogic();
         TurretType type = turret.getTurretType();
         float health = entity instanceof LivingEntity living ? living.getHealth() : 0F;
         float damage = RayMath.damage(OMTConfig.get().turrets.get(type).baseDamage, modifier,
                 logic.getDamageAmpBonus(type), health);
+        damage = (float) (damage * falloff);
         ProjectileMath.Split split = RayMath.split(weapon.profile(), damage);
         int looting = logic.getLootingLevel(VersionCompat.maxLootingLevel(level));
         if (weapon.normalDamage() != null) {
