@@ -218,49 +218,65 @@ public class ConfigData {
         public boolean turretWarnMessage = true;
         @Comment("Warning distance in blocks, added to the turret range.") @Range(min = 0)
         public int turretWarningDistance = 5;
+        @Comment("Turrets with a turn rate (turnRate above 0) fire only once their aim is at most this many degrees off the target.") @Range(min = 0, max = 180)
+        public double aimTolerance = 5D;
 
         @Comment("Disposable turret.")
         @SerializedName("disposable_turret")
-        public TurretSetting disposableTurret = new TurretSetting(true, 10, 25, 2, 2, 50, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting disposableTurret = new TurretSetting(true, 10, 25, 2, 2, 50, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.5D, 0.5D, 10);
         @Comment("Potato cannon turret.")
         @SerializedName("potato_cannon_turret")
-        public TurretSetting potatoCannonTurret = new TurretSetting(true, 15, 35, 3, 10, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting potatoCannonTurret = new TurretSetting(true, 15, 35, 3, 10, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.5D, 0.5D, 10);
         @Comment("Machine gun turret.")
         @SerializedName("machine_gun_turret")
-        public TurretSetting machineGunTurret = new TurretSetting(true, 18, 8, 2, 100, 30, 4, 0.06D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting machineGunTurret = new TurretSetting(true, 18, 8, 2, 100, 30, 4, 0.06D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.6D, 0.5D, 20);
         @Comment("Incendiary turret.")
         @SerializedName("incendiary_turret")
-        public TurretSetting incendiaryTurret = new TurretSetting(true, 12, 25, 2, 250, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting incendiaryTurret = new TurretSetting(true, 12, 25, 2, 250, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.6D, 0.4D, 15);
         @Comment("Grenade turret.")
         @SerializedName("grenade_turret")
-        public TurretSetting grenadeTurret = new TurretSetting(true, 18, 40, 8, 3000, 30, 3, 0.08D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting grenadeTurret = new TurretSetting(true, 18, 40, 8, 3000, 30, 3, 0.08D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 8);
         @Comment("Slowing turret.")
         @SerializedName("slowing_turret")
-        public TurretSetting slowingTurret = new TurretSetting(true, 20, 25, 0, 5000, 0, 4, 0D, 0.1D, 2, 0, 0.08D, 0.1D, 0.05D);
+        public TurretSetting slowingTurret = new TurretSetting(true, 20, 25, 0, 5000, 0, 4, 0D, 0.1D, 2, 0, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 0);
         @Comment("Rocket turret.")
         @SerializedName("rocket_turret")
-        public TurretSetting rocketTurret = new TurretSetting(true, 30, 30, 10, 5000, 10, 3, 0.08D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting rocketTurret = new TurretSetting(true, 30, 30, 10, 5000, 10, 3, 0.08D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 8);
         @Comment("Teleporter turret.")
         @SerializedName("teleporter_turret")
-        public TurretSetting teleporterTurret = new TurretSetting(true, 20, 100, 0, 15000, 0, 1, 0D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting teleporterTurret = new TurretSetting(true, 20, 100, 0, 15000, 0, 1, 0D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 0);
         @Comment("Laser turret.")
         @SerializedName("laser_turret")
-        public TurretSetting laserTurret = new TurretSetting(true, 25, 10, 4, 8000, 10, 4, 0.06D, 0.125D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting laserTurret = new TurretSetting(true, 25, 10, 4, 8000, 10, 4, 0.06D, 0.125D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.5D, 0.5D, 15);
         @Comment("Railgun turret.")
         @SerializedName("railgun_turret")
-        public TurretSetting railgunTurret = new TurretSetting(true, 30, 100, 25, 25000, 3, 2, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting railgunTurret = new TurretSetting(true, 30, 100, 25, 25000, 3, 2, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 3);
         @Comment("Plasma turret.")
         @SerializedName("plasma_turret")
-        public TurretSetting plasmaTurret = new TurretSetting(true, 20, 60, 20, 50000, 8, 1, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting plasmaTurret = new TurretSetting(true, 20, 60, 20, 50000, 8, 1, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.7D, 0.5D, 6);
         @Comment("Melee turret.")
         @SerializedName("melee_turret")
-        public TurretSetting meleeTurret = new TurretSetting(true, 1, 20, 8, 2, 0, 4, 0.1D, 0.2D, 0, 0D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting meleeTurret = new TurretSetting(true, 1, 20, 8, 2, 0, 4, 0.1D, 0.2D, 0, 0D, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 0);
         @Comment("Arc turret.")
         @SerializedName("arc_turret")
-        public TurretSetting arcTurret = new TurretSetting(true, 15, 60, 14, 40000, 0, 1, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting arcTurret = new TurretSetting(true, 15, 60, 14, 40000, 0, 1, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.5D, 0.3D, 0);
         @Comment("Crossbow turret.")
         @SerializedName("crossbow_turret")
-        public TurretSetting crossbowTurret = new TurretSetting(true, 15, 30, 5, 20, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting crossbowTurret = new TurretSetting(true, 15, 30, 5, 20, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.7D, 0.6D, 12);
 
         @Comment("Turrets added by other mods, by turret id. Entries are added and removed with the mods.")
         @SerializedName("addon_turrets")

@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import omtteam.openmodularturrets.api.AmmoDefinition;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
+import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.config.TurretSetting;
 import omtteam.omlib.core.machine.MachineMode;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.omlib.core.security.PlayerIdentity;
@@ -22,7 +24,12 @@ import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.registry.ModBlocks;
 import omtteam.openmodularturrets.registry.TurretRegistry;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 /**
  * Builds the shared test scene in the 8×8×8 empty structure: a stone floor, a turret base of the turret's tier at
@@ -54,7 +61,37 @@ public final class TurretScene {
      */
     private static final int FORCED_CHUNK_RADIUS = 2;
 
+    /** How to restore the config a test changed with {@link #configure}, by test; run by {@link #clear}. */
+    private static final Map<GameTestHelper, Runnable> CONFIG_RESTORES = new ConcurrentHashMap<>();
+
     private TurretScene() {
+    }
+
+    /**
+     * Changes the config of a turret type for this test only: {@code change} edits the live setting, and
+     * {@link #clear} (on success, on failure and one tick before the timeout) puts every value back. The turret type
+     * is shared by all tests, so such a test needs a batch of its own.
+     */
+    public static void configure(GameTestHelper helper, TurretType type, Consumer<TurretSetting> change) {
+        TurretSetting setting = OMTConfig.get().turrets.get(type);
+        TurretSetting saved = new TurretSetting();
+        copyFields(setting, saved);
+        // a later change is undone first, so the values from before the test come back last
+        CONFIG_RESTORES.merge(helper, () -> copyFields(saved, setting), (earlier, later) -> () -> {
+            later.run();
+            earlier.run();
+        });
+        change.accept(setting);
+    }
+
+    private static void copyFields(TurretSetting from, TurretSetting to) {
+        try {
+            for (Field field : TurretSetting.class.getFields()) {
+                if (!Modifier.isStatic(field.getModifiers())) field.set(to, field.get(from));
+            }
+        } catch (IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /** Builds the scene and clears it one tick before {@code timeoutTicks} (the test's timeout). */
@@ -117,8 +154,13 @@ public final class TurretScene {
         helper.succeed();
     }
 
-    /** Removes the turret, its base and all entities of the scene, and releases the forced chunks. */
+    /**
+     * Removes the turret, its base and all entities of the scene, releases the forced chunks and restores the config
+     * the test {@linkplain #configure changed}.
+     */
     public static void clear(GameTestHelper helper) {
+        Runnable restore = CONFIG_RESTORES.remove(helper);
+        if (restore != null) restore.run();
         helper.setBlock(TURRET, Blocks.AIR);
         helper.setBlock(BASE, Blocks.AIR);
         removeEntities(helper);
