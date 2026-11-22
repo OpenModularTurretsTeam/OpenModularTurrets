@@ -18,6 +18,7 @@ import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.openmodularturrets.blockentity.turret.RayShotCallback;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.inventory.TurretBaseInventory;
 import omtteam.openmodularturrets.registry.ModItems;
@@ -47,6 +48,14 @@ public class RayTurretGameTests implements OMTGameTests {
 
     private static final int SCATTERSHOT_UPGRADES = 8;
     private static final float TARGET_HEALTH = 1024F;
+    /** Share of the damage at the end of the range in the falloff test. */
+    private static final double FALLOFF_DAMAGE = 0.5D;
+    /**
+     * Distances from the turret (its centre, 0.1 up) where a ray can enter a target standing 5 blocks in front of it:
+     * the husk's front face is at about 4.2 blocks, its eyes a block above the turret.
+     */
+    private static final double FALLOFF_NEAREST = 3.5D;
+    private static final double FALLOFF_FARTHEST = 6.0D;
 
     private record Shot(Vec3 start, Vec3 end, @Nullable Entity hit) {
     }
@@ -118,6 +127,50 @@ public class RayTurretGameTests implements OMTGameTests {
                     + " hitting rays, expected " + expected + " (" + perRay + " per ray)");
             TurretScene.succeed(helper);
         });
+    }
+
+    /**
+     * Range falloff (issue 539) of a ray: with an optimal range of 0 and half damage at the end of the range, a hit at
+     * distance {@code d} deals {@code 1 - 0.5 * d / range} of the full damage. The ray enters the target somewhere
+     * between {@link #FALLOFF_NEAREST} and {@link #FALLOFF_FARTHEST} blocks from the turret, so the damage must lie
+     * between the shares at those distances. The target has no armor, so the full damage is {@code baseDamage * 0.6}.
+     */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "railgun_falloff", timeoutTicks = TIMEOUT_TICKS)
+    @SuppressWarnings("DataFlowIssue")
+    public void railgunDamageFallsOffWithDistance(GameTestHelper helper) {
+        TurretBaseBlockEntity base = TurretScene.build(helper, TurretType.RAILGUN_TURRET, TIMEOUT_TICKS);
+        TurretScene.configure(helper, TurretType.RAILGUN_TURRET, setting -> {
+            setting.optimalRange = 0;
+            setting.falloffDamage = FALLOFF_DAMAGE;
+        });
+        BlockPos turretPos = helper.absolutePos(TurretScene.TURRET);
+        List<Shot> shots = SHOTS.computeIfAbsent(turretPos, pos -> new CopyOnWriteArrayList<>());
+        shots.clear();
+        LivingEntity target = TurretScene.spawnTarget(helper, TurretScene.TARGET_IN_FRONT);
+        target.getAttribute(Attributes.MAX_HEALTH).setBaseValue(TARGET_HEALTH);
+        target.getAttribute(Attributes.ARMOR).setBaseValue(0);
+        target.setHealth(target.getMaxHealth());
+        float startHealth = target.getHealth();
+
+        TurretScene.onEachTick(helper, () -> {
+            if (shots.isEmpty()) return;
+            helper.assertTrue(shots.get(0).hit() == target, "The railgun ray did not hit the target");
+            helper.assertTrue(target.getArmorValue() == 0, "Target has " + target.getArmorValue() + " armor");
+            int range = base.getLogic().getRange(TurretType.RAILGUN_TURRET);
+            float full = OMTConfig.get().turrets.get(TurretType.RAILGUN_TURRET).baseDamage * 0.6F;
+            float least = full * falloffShare(FALLOFF_FARTHEST, range);
+            float most = full * falloffShare(FALLOFF_NEAREST, range);
+            float dealt = startHealth - target.getHealth();
+            helper.assertTrue(dealt >= least - 0.01F && dealt <= most + 0.01F && dealt < full - 0.01F,
+                    "Railgun dealt " + dealt + " damage at about 5 blocks with range " + range + ", expected "
+                            + least + " to " + most + " (full damage " + full + ")");
+            TurretScene.succeed(helper);
+        });
+    }
+
+    /** Share of the damage at {@code distance} with an optimal range of 0 ({@link ProjectileMath#falloff}). */
+    private static float falloffShare(double distance, int range) {
+        return (float) ProjectileMath.falloff(distance, range, 0, FALLOFF_DAMAGE);
     }
 
     /** Builds the scene for a ray turret and passes once one of its rays hit and damaged the target. */

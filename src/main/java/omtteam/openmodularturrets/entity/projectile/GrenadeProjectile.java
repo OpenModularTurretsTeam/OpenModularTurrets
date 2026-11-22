@@ -57,10 +57,11 @@ public class GrenadeProjectile extends TurretProjectile implements ItemSupplier 
     private void explode() {
         boolean destroyBlocks = OMTConfig.get().turrets.canGrenadesDestroyBlocks;
         explodeHere(destroyBlocks ? 1.4F : 0.1F, destroyBlocks ? Level.ExplosionInteraction.TNT : Level.ExplosionInteraction.NONE);
+        // the range falloff at the explosion, the same for every victim (the vanilla explosion's damage is not scaled)
+        float falloff = damageFactor();
         for (LivingEntity target : level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(RADIUS))) {
             if (canDamage(target)) {
-                int damage = damageWithAmp(baseDamage(), target);
-                ProjectileMath.Split split = ProjectileMath.grenadeSplit(damage);
+                ProjectileMath.Split split = ProjectileMath.grenadeSplit(ampDamage(baseDamage(), target) * falloff);
                 hurt(target, ModDamageTypes.GRENADE, split.normal());
                 hurt(target, ModDamageTypes.GRENADE_ARMOR_BYPASS, split.armorBypass());
             }

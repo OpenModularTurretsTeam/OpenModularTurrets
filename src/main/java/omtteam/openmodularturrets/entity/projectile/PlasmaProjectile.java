@@ -53,10 +53,11 @@ public class PlasmaProjectile extends TurretProjectile {
             serverLevel.sendParticles(ParticleTypes.FLAME, getX(), getY(), getZ(), 15, 1.0D, 0.5D, 1.0D, 0.2D);
             serverLevel.sendParticles(ParticleTypes.LARGE_SMOKE, getX(), getY(), getZ(), 15, 1.0D, 0.5D, 1.0D, 0.2D);
         }
+        // the range falloff where the burst is, the same for every victim
+        float falloff = damageFactor();
         for (LivingEntity target : level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(RADIUS))) {
             if (canDamage(target)) {
-                int damage = damageWithAmp(baseDamage(), target);
-                ProjectileMath.Split split = ProjectileMath.plasmaSplit(damage);
+                ProjectileMath.Split split = ProjectileMath.plasmaSplit(ampDamage(baseDamage(), target) * falloff);
                 hurt(target, ModDamageTypes.PLASMA, split.normal());
                 hurt(target, ModDamageTypes.PLASMA_ARMOR_BYPASS, split.armorBypass());
             }

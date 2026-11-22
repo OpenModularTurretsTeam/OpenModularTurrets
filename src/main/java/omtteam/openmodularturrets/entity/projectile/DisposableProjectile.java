@@ -36,8 +36,8 @@ public class DisposableProjectile extends ItemCarryingProjectile {
     @Override
     protected void onHitEntity(Entity entity) {
         if (!canDamage(entity)) return;
-        int damage = baseDamage() + AmmoRules.getDisposableAmmoDamageBonus(getItem());
-        hurt(entity, ModDamageTypes.DISPOSABLE, damageWithAmp(damage, entity));
+        float damage = damage(baseDamage() + AmmoRules.getDisposableAmmoDamageBonus(getItem()), entity);
+        hurt(entity, ModDamageTypes.DISPOSABLE, damage);
         discard();
     }
 

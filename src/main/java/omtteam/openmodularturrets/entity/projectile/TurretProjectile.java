@@ -23,6 +23,7 @@ import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
 import omtteam.omlib.compat.VersionCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.config.TurretSetting;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.turret.ProjectileMath;
 import omtteam.openmodularturrets.core.turret.TurretType;
@@ -50,6 +51,10 @@ public abstract class TurretProjectile extends Projectile {
     /** Ids of the entities {@link #hitHandler} was called for. */
     @Nullable
     private Set<Integer> notifiedHits;
+    /** Launch point and range (with upgrades) for the range falloff; without them the falloff is off. */
+    @Nullable
+    private Vec3 launchPos;
+    private int launchRange;
 
     protected TurretProjectile(EntityType<? extends TurretProjectile> type, Level level) {
         super(type, level);
@@ -68,6 +73,15 @@ public abstract class TurretProjectile extends Projectile {
     /** Set by the turret that fires the projectile, from its {@link ProjectileWeapon}. */
     public void setHitHandler(@Nullable ProjectileWeapon.HitHandler hitHandler) {
         this.hitHandler = hitHandler;
+    }
+
+    /**
+     * Set by the turret that fires the projectile: launch point and range (with upgrades) for the range falloff
+     * (issue 539, {@link #damageFactor(Vec3)}). A projectile that never gets them deals full damage.
+     */
+    public void setLaunch(Vec3 origin, int range) {
+        this.launchPos = origin;
+        this.launchRange = range;
     }
 
     /** The turret type whose config (damage, damage amp) applies. */
@@ -146,7 +160,13 @@ public abstract class TurretProjectile extends Projectile {
 
     // ---- Damage helpers ----
 
-    /** 1.12.2 {@code damage += (int) health * (damageAmp * ampLevel)}: the damage amp addon adds a share of the health. */
+    /**
+     * 1.12.2 {@code damage += (int) health * (damageAmp * ampLevel)}: the damage amp addon adds a share of the health.
+     *
+     * @deprecated whole points and no range falloff; use {@link #damage(Entity)} or {@link #damage(float, Entity)}.
+     *     Kept for projectiles of other mods built against older versions.
+     */
+    @Deprecated
     protected int damageWithAmp(int damage, Entity target) {
         if (ampLevel > 0 && target instanceof LivingEntity living) {
             return ProjectileMath.damageWithAmp(damage, ampLevel, OMTConfig.get().turrets.get(getTurretType()).damageAmp,
@@ -155,8 +175,61 @@ public abstract class TurretProjectile extends Projectile {
         return damage;
     }
 
+    /**
+     * The turret type's configured damage per hit, before the damage amp addon and the range falloff.
+     * For a hit, prefer {@link #damage(Entity)}, which applies both.
+     */
     protected int baseDamage() {
         return OMTConfig.get().turrets.get(getTurretType()).baseDamage;
+    }
+
+    /**
+     * Share of the damage a hit at {@code point} deals (range falloff, {@link ProjectileMath#falloff}): measured from
+     * the launch point ({@link #setLaunch}) with the turret type's {@code optimalRange} and {@code falloffDamage}.
+     * 1 if the projectile has no launch point.
+     */
+    protected float damageFactor(Vec3 point) {
+        if (launchPos == null) return 1.0F;
+        TurretSetting setting = OMTConfig.get().turrets.get(getTurretType());
+        return (float) ProjectileMath.falloff(launchPos.distanceTo(point), launchRange, setting.optimalRange,
+                setting.falloffDamage);
+    }
+
+    /** {@link #damageFactor(Vec3)} at the projectile's position: for explosions and bursts (the same for every victim). */
+    protected float damageFactor() {
+        return damageFactor(position());
+    }
+
+    /**
+     * Where the projectile is when this tick's sweep ({@link #tick()}: its bounding box moved along 1.2 times its
+     * motion) first touches the target, or the projectile's position if the sweep does not touch it (or touches it
+     * from the start). The target's box is grown by the projectile's own box, so the projectile's position path
+     * enters it exactly where the projectile's box would touch the target.
+     */
+    protected Vec3 hitPoint(Entity target) {
+        Vec3 position = position();
+        double halfWidth = getBbWidth() / 2.0D;
+        AABB reach = target.getBoundingBox().expandTowards(0, -getBbHeight(), 0).inflate(halfWidth, 0, halfWidth);
+        return reach.clip(position, position.add(getDeltaMovement().scale(1.2D))).orElse(position);
+    }
+
+    /** {@code damage} plus the damage amp addon's bonus for {@code target} (no rounding, no range falloff). */
+    protected float ampDamage(float damage, Entity target) {
+        if (ampLevel > 0 && target instanceof LivingEntity living) {
+            return ProjectileMath.damageWithAmp(damage, ampLevel,
+                    OMTConfig.get().turrets.get(getTurretType()).damageAmp, living.getHealth());
+        }
+        return damage;
+    }
+
+    /** Damage of a direct hit on {@code target}: {@code base} with the damage amp bonus and the range falloff at the hit point. */
+    protected float damage(float base, Entity target) {
+        return ampDamage(base, target) * damageFactor(hitPoint(target));
+    }
+
+    /** {@link #damage(float, Entity)} with {@link #baseDamage()}. */
+    protected float damage(Entity target) {
+        return damage(baseDamage(), target);
     }
 
     /** Damage via {@link TurretDamage#hurt}, with this projectile as direct source. */

@@ -41,20 +41,23 @@ public class BlazingClayProjectile extends TurretProjectile implements ItemSuppl
         return 0.0F;
     }
 
-    /** The damage amp bonus is computed from the directly hit entity and applied to all. */
+    /**
+     * The damage amp bonus is computed from the directly hit entity and applied to all; the range falloff is taken at
+     * the projectile (the fire time is not scaled).
+     */
     @Override
     protected void onHitEntity(Entity entity) {
         if (!canDamage(entity)) return;
-        burnArea(damageWithAmp(baseDamage(), entity));
+        burnArea(ampDamage(baseDamage(), entity) * damageFactor());
     }
 
-    /** Hitting a block deals the base damage without amp bonus. */
+    /** Hitting a block deals the base damage without amp bonus (with the range falloff). */
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos) {
-        burnArea(baseDamage());
+        burnArea(baseDamage() * damageFactor());
     }
 
-    private void burnArea(int damage) {
+    private void burnArea(float damage) {
         for (LivingEntity target : level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(RADIUS))) {
             if (canDamage(target)) {
                 hurt(target, ModDamageTypes.BLAZING_CLAY, damage);
