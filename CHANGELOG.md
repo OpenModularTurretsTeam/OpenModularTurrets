@@ -32,7 +32,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 - Existing configs get the new range falloff and turn rate defaults on the next start; set `optimalRange` and `falloffDamage` to 1 and `turnRate` to 0 for the old behaviour
 - Projectile damage is no longer rounded down to whole points (the damage amp addon's bonus and the range falloff keep their fractions)
 - Turret API: `TurretProjectile.damageWithAmp(int, Entity)` is deprecated (whole points, no range falloff); projectiles built against it keep working and deal full damage at every distance
-- The game rules (`omtteam.openmodularturrets.core`) come from the shared OpenModularCore 2.2.0 (module `omt-core`, the same on every Minecraft version) and are bundled into the jar
+- The game rules (`omtteam.openmodularturrets.core`) come from the shared OpenModularCore 2.3.0 (module `omt-core`, the same on every Minecraft version) and are bundled into the jar
 - API: `MachineMode` and `TargetingSettings` (formerly `core.base`), `CamoPermissions` (`core.camo`) and the memory card's `MemoryCardData` and `MemoryCardRules` (`core.card`) moved to OMLib's core (`omtteam.omlib.core.machine`, `.camo`, `.card`); `MemoryCardRules.capture` and `apply` are now `omtteam.openmodularturrets.core.card.BaseCardRules`, and `MachineMode.getTranslationKey()` is gone
 
 ## [4.0.0] - 2026-11-03
