@@ -16,6 +16,11 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 - The game rules (`omtteam.openmodularturrets.core`) come from the shared OpenModularCore 2.1.0 (module `omt-core`, the same on every Minecraft version) and are bundled into the jar
 - API: `MachineMode` and `TargetingSettings` (formerly `core.base`), `CamoPermissions` (`core.camo`) and the memory card's `MemoryCardData` and `MemoryCardRules` (`core.card`) moved to OMLib's core (`omtteam.omlib.core.machine`, `.camo`, `.card`); `MemoryCardRules.capture` and `apply` are now `omtteam.openmodularturrets.core.card.BaseCardRules`, and `MachineMode.getTranslationKey()` is gone
+### Added
+
+- Serial Port addon, with the recipe from 1.12.2 (quartz and I/O buses): lets computers use turret bases of tiers 2–4 (tier 5 bases accept them without it)
+- NeoForge 1.21.1 with OpenComputers: Rebooted: an Adapter next to a turret base offers it as the component `turret_base`, with the callbacks of 1.12.2 (targeting, trusted players, redstone mode, energy, turret aim, auto fire and forced shots)
+- Computer control: `setComputerControl(true)` stops a base's turrets from targeting on their own, so a computer aims and fires them (`isComputerControl` tells whether it is on)
 
 ## [4.0.0] - 2026-11-03
 
