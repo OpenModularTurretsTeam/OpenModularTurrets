@@ -6,6 +6,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import omtteam.omlib.compat.VersionCompat;
 
@@ -28,7 +29,8 @@ public final class TestBattery {
     private static Item register() {
         Identifier id = id("test_battery");
         return Registry.register(BuiltInRegistries.ITEM, id,
-                new Item(VersionCompat.itemProperties(new Item.Properties().stacksTo(1), id)));
+                // wearable on the head like energy armour: NeoForge only lets an armour slot take back an item that fits it
+                new Item(VersionCompat.itemProperties(new Item.Properties().stacksTo(1).equippable(EquipmentSlot.HEAD), id)));
     }
 
     static Identifier id(String path) {
