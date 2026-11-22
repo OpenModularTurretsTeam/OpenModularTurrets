@@ -29,6 +29,10 @@
     {
       "type": "openmodularturrets:recipetype",
       "mod": "vanilla"
+    },
+    {
+      "type": "openmodularturrets:module_enabled",
+      "items": ["addon_concealer"]
     }
   ]
 }

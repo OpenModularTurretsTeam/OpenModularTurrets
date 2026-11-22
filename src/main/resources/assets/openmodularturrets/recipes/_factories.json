@@ -1,5 +1,6 @@
 {
   "conditions": {
-    "recipetype": "omtteam.openmodularturrets.config.RecipeConfigFactory"
+    "recipetype": "omtteam.openmodularturrets.config.RecipeConfigFactory",
+    "module_enabled": "omtteam.openmodularturrets.config.ModuleEnabledConditionFactory"
   }
 }

@@ -5,6 +5,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import omtteam.omlib.client.gui.LargeStackGui;
+import omtteam.openmodularturrets.client.render.DisabledModuleOverlay;
 import omtteam.openmodularturrets.container.GeneratorContainer;
 import omtteam.openmodularturrets.reference.Reference;
 import omtteam.openmodularturrets.tileentity.misc.GeneratorTileEntity;
@@ -71,5 +72,6 @@ public class GeneratorGui extends LargeStackGui {
         long capacity = container.getCapacity();
         int filled = (int) (container.getEnergy() * ENERGY_HEIGHT / (capacity == 0 ? 1 : capacity));
         drawTexturedModalRect(guiLeft + 153, guiTop + 17 + ENERGY_HEIGHT - filled, 196, 68 - filled, 14, filled);
+        DisabledModuleOverlay.renderSlotFrames(inventorySlots, guiLeft, guiTop);
     }
 }
