@@ -43,8 +43,6 @@ public class SolarPanelGameTests implements OMTGameTests {
     /** Day time of noon; the day ends at about 12000. */
     private static final long NOON = 6000L;
 
-    //? if fabric {
-    /** Not on Forge: its game test server placed the tests underground until its world was made flat (2026-11-22). */
     @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = TIMEOUT_TICKS)
     public void solarPanelChargesUnderTheSky(GameTestHelper helper) {
         TurretBaseBlockEntity base = solarBase(helper);
@@ -54,7 +52,6 @@ public class SolarPanelGameTests implements OMTGameTests {
             helper.assertTrue(energy(base) > 0, "The solar panel did not charge the base");
         });
     }
-    //?}
 
     /**
      * Once the light engine has seen the roof (until then the panel may still charge), the base is emptied and

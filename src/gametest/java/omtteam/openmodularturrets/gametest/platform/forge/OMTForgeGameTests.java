@@ -1,7 +1,9 @@
 package omtteam.openmodularturrets.gametest.platform.forge;
 
+import net.minecraft.world.level.GameRules;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -14,6 +16,10 @@ import java.util.List;
 
 /**
  * Forge entrypoint of the test mod. The test classes are found through their {@code @GameTestHolder} annotation.
+ * <p>
+ * Forge 1.20.1 builds its game test server from the dedicated server's settings, so the world has the default game
+ * rules instead of vanilla's test rules; the server start turns the weather cycle and mob spawning off, as vanilla's
+ * {@code GameTestServer} (and so the Fabric node) does.
  */
 @Mod(OMTGameTestMod.MOD_ID)
 public final class OMTForgeGameTests {
@@ -24,6 +30,11 @@ public final class OMTForgeGameTests {
         modBus.addListener((RegisterEvent event) -> steps.stream()
                 .filter(step -> step.registry().equals(event.getRegistryKey()))
                 .forEach(step -> step.register().run()));
+        MinecraftForge.EVENT_BUS.addListener((ServerStartingEvent event) -> {
+            GameRules rules = event.getServer().getGameRules();
+            rules.getRule(GameRules.RULE_WEATHER_CYCLE).set(false, event.getServer());
+            rules.getRule(GameRules.RULE_DOMOBSPAWNING).set(false, event.getServer());
+        });
         MinecraftForge.EVENT_BUS.addListener((EntityJoinLevelEvent event) -> {
             if (!event.getLevel().isClientSide()) {
                 ProjectileTurretGameTests.onEntityLoad(event.getEntity());

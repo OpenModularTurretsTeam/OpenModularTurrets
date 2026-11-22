@@ -381,9 +381,9 @@ Classes implement `OMTGameTests` and use its `EMPTY_STRUCTURE` (the mod's own 8�
 On Fabric (Loom `fabricApi.configureTests`) they are listed under the `fabric-gametest` entrypoint in `src/gametest/resources/fabric.mod.json`; on Forge they carry `@GameTestHolder(OMT.MOD_ID)` and `@PrefixGameTestTemplate(false)` behind `//? if forge` (the gametest source set is a second mod, `META-INF/mods.toml`).
 The test mod's loader entrypoints (`gametest/platform/<loader>`) run its registration steps (`OMTGameTestMod`) and forward entity loads to `ProjectileTurretGameTests.onEntityLoad`.
 `check` (and so `build` / `chiseledBuild`) runs them on a dedicated test server: `runGameTest` on Fabric, `runGameTestServer` on Forge, both in `versions/<node>/build/run/gameTest` with a new flat world every run (the world is deleted before it; on Forge the build also writes the flat world settings, see §4 "Forge 1.20.1").
-The test server turns mob spawning and the weather cycle off for the whole run (vanilla's `GameTestServer`, which both loaders start), so no mob spawns around the tests and it never rains.
+Mob spawning and the weather cycle are off for the whole run, so no mob spawns around the tests and it never rains: on Fabric through vanilla's `GameTestServer`, on Forge, whose test server takes the default game rules of the dedicated server's settings, through the test mod's `OMTForgeGameTests`, which turns them off at server start.
 The day still passes: a test that needs daylight sets the time itself (`SolarPanelGameTests`).
-1.21.11's test server keeps the default game rules, so that branch sets these rules in every batch's test environment (`GameTestCases.batchEnvironment`); this branch needs nothing of the kind (checked 2026-11-22).
+1.21.11's test server keeps the default game rules, so that branch sets these rules in every batch's test environment (`GameTestCases.batchEnvironment`); on this branch only the Forge node needs it (`OMTForgeGameTests`, found on 2026-11-22).
 
 - `TurretScene` builds a ready-to-fire base + turret (owner, always on, full energy, max range) and spawns targets (husks without AI).
   A base placed with `setBlock` has no owner: it stays, but does not fire until it has one (`bases.unownedBasesActive`).
@@ -400,7 +400,7 @@ The day still passes: a test that needs daylight sets the time itself (`SolarPan
   Fake players are not on the server's player list, so the test that adds an online player by name puts one there for the (synchronous) request only (`TrustListGameTests.online`), on Fabric only: Forge returns a read-only view of the list, and vanilla's mock players would log in for real, which breaks Forge's login handling.
   Names of players who are not online go to the server's name cache: the test server has none (not found).
   OMLib's `ConfigSync` is not covered: it only sends to clients that negotiated its channel, and the test server has none.
-- A test that needs open air (the wand's sneak-click into the air) stays inside its own 8 × 8 × 8 structure, looking from one corner to the opposite one, and the solar panel test under open sky runs on Fabric only (`//? if fabric`): both date from when the Forge game test world was normal terrain with the tests underground (until 2026-11-22; now flat on both loaders).
+- A test that needs open air (the wand's sneak-click into the air) stays inside its own 8 × 8 × 8 structure, looking from one corner to the opposite one (from when the Forge game test world was normal terrain with the tests underground, until 2026-11-22); the solar panel test under open sky runs on both loaders since the Forge world is flat.
 
 ---
 
