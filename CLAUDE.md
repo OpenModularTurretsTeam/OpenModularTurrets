@@ -38,6 +38,8 @@ Core gameplay:
   Jar-in-jar it (approved).
 - **Jade** (optional integration, `compat/jade/` for the server half and `client/compat/jade/` for the tooltips, registered through the `jade` entrypoint on Fabric and `@WailaPlugin` on Forge).
   Compile-only (`modCompileOnly`, Modrinth maven), never bundled and never required at runtime.
+- **NEEPMeat** (Fabric, Modrinth `maven.modrinth:neepmeat`, version in `versions/1.20.1-fabric/gradle.properties`; requested by the user on 2026-11-04): its vascular network charges the turret bases through OMLib (`platform/fabric/FabricNeepMeatPower`, registered by `FabricBlockLookups` when NEEPMeat is loaded; 1 eJ = 1 E, a full buffer takes nothing), so the mod has no code of its own for it.
+  Never bundled (`suggests` in `fabric.mod.json`); `modCompileOnly` for the game test `gametest/platform/fabric/NeepMeatGameTests`, and `modLocalRuntime` with the mods nested in its jar (Loom leaves them out of its remapped copy; OMLib's `nestedModJars`) and **GeckoLib**, which it requires, for the dev runs and the game test server.
 - **Forge** 47.x, built with the legacy variant of ModDevGradle (`net.neoforged.moddev.legacyforge`, same artifact and version as `moddev`; build-time only), requested by the user.
   On Forge, the Fabric-only APIs are replaced by Forge's own (capabilities, events, event network channels); see §4 "Forge 1.20.1".
 - **MixinExtras** (`io.github.llamalad7:mixinextras-forge`), jar-in-jar in the **Forge jar only** (approved by the user on 2026-10-24): Fabric Loader ships it, Forge 1.20.1 does not, and `LivingEntityMixin` needs it.
@@ -600,6 +602,11 @@ The built-in turrets use the same path, so there is no special casing per turret
 - **Upgrades are per machine:** `core.item.UpgradeType` is the common interface, each machine has its own enum (`TurretBaseUpgradeType`, `GeneratorUpgradeType`) and item subclass of `item.UpgradeItem` (`TurretBaseUpgradeItem`, `GeneratorUpgradeItem`).
   A machine's upgrade slots accept only its own subclass.
   A new machine gets its own enum and item subclass.
+- **Upgrade and addon switches** (requested by the user on 2026-10-29, branch `1.20.1+-module-toggles`, for a later release): the config sections `upgrades` and `addons` have one boolean per upgrade (both machines) and addon item (`ConfigData.Upgrades` / `Addons`, `isEnabled`; `item.ModuleToggles` for stacks and item ids).
+  A disabled one stays in its slot but counts as not installed (`TurretBaseLogic.getUpgradeCount` / `getAddonCount` through `LogicSettings.upgradeEnabled` / `addonEnabled`, `GeneratorBlockEntity.getMultiplierUpgrades`), and its recipe and unlock advancement do not load: the resource condition `openmodularturrets:module_enabled` (`compat.ModuleEnabledCondition`, `"items"`: item id paths; registered per loader like OpenModularLighting's `block_enabled`: `FabricModuleEnabledCondition`, `ForgeModuleEnabledCondition`), added by datagen to every upgrade and addon recipe.
+  Recipes follow the config only when data loads (restart).
+  The client shows it with the synced config (`client.render.DisabledModuleOverlay`): a red frame and tint behind the machine slots holding one (base and generator `renderBg`), vanilla's barrier sprite over the icon in every GUI (Fabric: client mixin `GuiGraphicsMixin` at the end of `renderItemDecorations`; Forge: `RegisterItemDecorationsEvent`), and a red first tooltip line (`ModuleTooltip`, `tooltip.openmodularturrets.module_disabled`).
+  Game tests: `ModuleToggleGameTests`.
 - **Config versions:** `configVersion` in the config file; `ConfigMigration` (OMLib) runs the `ConfigMigrationSteps.STEPS` newer than the file, replacing old default values (only if unchanged) when a file of an older version is loaded.
   Bump `CURRENT_VERSION` and add a step when a default changes.
 

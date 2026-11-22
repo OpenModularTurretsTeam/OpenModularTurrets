@@ -52,6 +52,7 @@ Two directions, so that gameplay code stays loader-free:
   OMLib creates the implementations of the running loader on first use (`Platform`, `ClientPlatform`), so it does not matter which mod starts first; the `compat` facades (`NetworkCompat`, `MenuCompat`, `ClientNetworkCompat`) forward to them.
 
 Energy and items other blocks may use are described loader-free (`core.energy.EnergyAccess`, `inventory.ItemAccess`, exposed by `getEnergyAccess(side)` / `getItemAccess(side)`) and wrapped by thin adapters per loader (Team Reborn Energy and Transfer API on Fabric, FE and item handler capabilities on Forge).
+On Fabric with NEEPMeat installed, OMLib also makes them sinks of its vascular network (`FabricNeepMeatPower`, 1 eJ = 1 E).
 
 ### How core talks to the game
 
@@ -224,6 +225,8 @@ The full list is in [turret-api.md](turret-api.md); a game test per turret belon
 Upgrades belong to one machine.
 Add a constant to the machine's enum (`core.item.TurretBaseUpgradeType` or `GeneratorUpgradeType`), register the item in `ModItems` with the matching item class (`TurretBaseUpgradeItem`, `GeneratorUpgradeItem`), and implement the effect in the machine's logic.
 A new machine gets its own enum and item subclass of `UpgradeItem`; its slots accept only those.
+Give it a switch in `ConfigData.Upgrades` (field and `isEnabled` case): a disabled upgrade counts as not installed (`TurretBaseLogic.getUpgradeCount` asks `LogicSettings.upgradeEnabled`; another machine asks `item.ModuleToggles`), and its recipe needs the `module_enabled` condition (`OMTRecipeProvider` adds it to the upgrades and addons).
+The client marks disabled ones by itself (`client.render.DisabledModuleOverlay`).
 
 ### A config value
 
