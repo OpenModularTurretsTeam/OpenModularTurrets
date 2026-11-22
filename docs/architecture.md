@@ -102,7 +102,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `startup` | shared start-up (`OMTStartup`: `init`, `registrationSteps`), called by the loader entrypoints |
 | `core.*` | from OpenModularCore (`omt-core`), bundled into the jar; listed here because the game layer is built around it |
 | `core.base` | `TurretBaseLogic`: targeting per face, ammo, energy, upgrades, addons, redstone modes |
-| `core.turret` | turret types and ammo types, `TurretState` (cooldown, concealment), aim and damage math (`TurretMath`, `RayMath`, `ProjectileMath`) |
+| `core.turret` | turret types and ammo types, `TurretState` (cooldown, concealment), aim and damage math (`TurretMath`, `RayMath`, `ProjectileMath`), including the turn rate (`TurretMath.turnTowards`, `aimError`) and the range falloff (`ProjectileMath.falloff`, `TurretBaseLogic.getDamageFactor`) |
 | `core.target` | `TargetSelector`: who is a valid target and who is the best one |
 | `core.security` | `DamageRules` (who turret damage may hit); the owner, trusted players and access levels (`TrustManager`) are in OMLib |
 | `core.generator`, `core.card` | generator burning, the memory card's copy rules for a base's settings (`BaseCardRules`; the card data and the trust list copy rules are OMLib's `core.card`, camouflage permissions OMLib's `core.camo`, machine mode and targeting settings OMLib's `core.machine`) |
@@ -113,6 +113,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `block.*` | blocks: bases, turrets, defenses (hardened blocks, walls, fences, camo trap), lever, generator, inventory expanders |
 | `blockentity.*` | block entities; `blockentity.base` holds the adapters to core |
 | `entity.projectile` | turret projectiles and turret damage (`TurretDamage`) |
+| `turret` | `TurretStatLines`: the range falloff and turn rate values shown in the turret item tooltip and in Jade (one text for both) |
 | `item`, `inventory`, `menu` | items (ammo, upgrades, addons, memory card; using the card on a block is `block.MemoryCardInteraction`), base inventory rules and `ItemAccess` (the slots other blocks may use, wrapped by the loader adapters), container menus |
 | `network` | packets: client→server requests (always re-validated) and server→client sync (OMLib's `ConfigSync` sends the configs on join) |
 | `config` | the JSON config: fields, comments, ranges, migration, the server's config on clients |
@@ -168,12 +169,14 @@ The client's `TurretPlacementOutline` uses that to draw the cyan or red outline 
 `TurretBlockEntity.serverTick`:
 
 1. A turret without a base, or one that `TurretPlacement.canStay` rejects (lower tier, a face it may not use, optionally over `maxSimultaneous`), drops itself.
-2. It asks its base for the target of its face and turns towards it (`TurretMath`, yaw and pitch relative to the mounting face).
+2. It asks its base for the target of its face and turns towards it (`TurretMath`, yaw and pitch relative to the mounting face), at most its type's `turnRate` degrees per tick on each axis (`TurretMath.turnTowards`; 0 turns instantly).
+   While the aim is more than `turrets.aimTolerance` degrees off (`TurretMath.aimError`), it stops here: nothing is used, and the cooldown keeps running.
 3. `TurretState.beginShot` checks the cooldown, the base's energy and ammo, and takes them.
 4. The weapon of the turret's definition does the rest: `ProjectileWeapon` spawns projectiles, `RayWeapon` traces rays (`RayWeapons`), `EffectWeapon` and `AreaWeapon` act directly (`EffectWeapons`), `SelfTargetingWeapon` picks its own targets.
-5. Damage goes through `TurretDamage`, which applies the trust rules (`DamageRules`), kill counting and the fake drops addon.
+5. Projectile and ray damage is scaled by the range falloff (`ProjectileMath.falloff` with the type's `optimalRange` and `falloffDamage`): a projectile measures from its launch point (`TurretProjectile.setLaunch`) to where it touches the entity, or to where it explodes; a ray from the turret to where it enters the entity (`TurretBaseLogic.getDamageFactor`).
+6. Damage goes through `TurretDamage`, which applies the trust rules (`DamageRules`), kill counting and the fake drops addon.
 
-The aim is synced to clients every few ticks; `TurretRenderer` interpolates it.
+The aim is synced to clients every few ticks; `TurretRenderer` interpolates it (`TurretBlockEntity.clientTick`: eased for turrets that turn instantly, at the turn rate with a catch-up for the others).
 
 ### A click in a GUI
 

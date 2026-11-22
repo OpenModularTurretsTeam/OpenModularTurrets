@@ -10,15 +10,18 @@ import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.omlib.client.compat.ClientCompat;
 import omtteam.openmodularturrets.config.ConfigData;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.config.TurretSetting;
 import omtteam.openmodularturrets.core.turret.AmmoType;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.registry.TurretRegistry;
+import omtteam.openmodularturrets.turret.TurretStatLines;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Turret item tooltip: what the turret does, the base tier it needs, its ammo and its energy per shot (with shift).
+ * Turret item tooltip: what the turret does, the base tier it needs, its ammo, its energy per shot, its range falloff
+ * (over the base range: an item has no base and so no range upgrades) and its turn rate (with shift).
  * Turrets that ignore scattershot upgrades (the railgun) say so without shift, so it is not missed. Uses the
  * server's config values when connected to a server.
  */
@@ -45,7 +48,11 @@ public final class TurretTooltip {
         lines.add(Component.empty());
         lines.add(value("turret.tier", Component.literal(String.valueOf(type.getRequiredBaseTier()))));
         lines.add(value("turret.ammo", ammo(type, turrets.doTurretsNeedAmmo)));
-        lines.add(value("turret.energy", translated("turret.energy.per_shot", turrets.get(type).powerUsage)));
+        TurretSetting setting = turrets.get(type);
+        lines.add(value("turret.energy", translated("turret.energy.per_shot", setting.powerUsage)));
+        lines.add(value("turret.optimal_range",
+                TurretStatLines.optimalRange(setting.optimalRange, setting.falloffDamage, setting.baseRange)));
+        lines.add(value("turret.turn_rate", TurretStatLines.turnRate(setting.turnRate)));
     }
 
     private static Component ammo(TurretType type, boolean ammoNeeded) {

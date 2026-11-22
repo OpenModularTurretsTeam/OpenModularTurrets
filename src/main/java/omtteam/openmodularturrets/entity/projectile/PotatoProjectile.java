@@ -35,7 +35,7 @@ public class PotatoProjectile extends ItemCarryingProjectile {
     @Override
     protected void onHitEntity(Entity entity) {
         if (!canDamage(entity)) return;
-        hurt(entity, ModDamageTypes.POTATO, damageWithAmp(baseDamage(), entity));
+        hurt(entity, ModDamageTypes.POTATO, damage(entity));
         removeItem();
         discard();
     }

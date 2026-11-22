@@ -17,6 +17,9 @@ import java.util.function.Function;
  * <p>
  * The area is in the turret's block coordinates (around {@code turret.getBlockPos()}); on a sub-level these
  * are plot coordinates, and only entities whose bounding box, seen from the plot, touches the area are struck.
+ * <p>
+ * The range falloff of the built-in turrets is not applied to the strike: a weapon that wants it scales its damage by
+ * {@code base.getLogic().getDamageFactor(turret.getTurretType(), distance)}.
  */
 public record AreaWeapon(SoundEvent launchSound, Function<TurretBlockEntity, AABB> area, AreaStrike strike)
         implements TurretWeapon {
