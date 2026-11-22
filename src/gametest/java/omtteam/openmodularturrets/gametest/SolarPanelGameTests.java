@@ -44,7 +44,7 @@ public class SolarPanelGameTests implements OMTGameTests {
     private static final long NOON = 6000L;
 
     //? if fabric {
-    /** Not on Forge: its game test server places the tests underground. */
+    /** Not on Forge: its game test server placed the tests underground until its world was made flat (2026-11-22). */
     @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = TIMEOUT_TICKS)
     public void solarPanelChargesUnderTheSky(GameTestHelper helper) {
         TurretBaseBlockEntity base = solarBase(helper);

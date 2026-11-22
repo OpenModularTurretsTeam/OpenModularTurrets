@@ -305,7 +305,9 @@ The node `1.20.1-forge` follows the second-loader design decisions above and was
   `ForgeCamoModel` (OMLib) does not override ambient occlusion (Forge 1.20.1 does not pass model data there); its colour provider reads the model data through `level.getModelDataManager()`.
 - **GameTests:** `runGameTestServer` with `forge.enabledGameTestNamespaces`; the test classes carry `@GameTestHolder` and `@PrefixGameTestTemplate` from `net.minecraftforge.gametest`.
   Vanilla 1.20.1's `makeMockServerPlayerInLevel` breaks Forge's login handling (no netty channel); OMT's tests use the loaders' fake players instead, which work.
-  The library jar the client and game test source sets use is the one with the dev names (classifier `dev`, published by OMLib next to the SRG-named one): the game test run has no remapping, and a Forge game test server whose mod fails to load still exits normally, so `check` also requires the "All N required tests passed" line in `run/logs/latest.log` (Forge build script).
+  The library jar the client and game test source sets use is the one with the dev names (classifier `dev`, published by OMLib next to the SRG-named one): the game test run has no remapping, and a Forge game test server whose mod fails to load still exits normally, so `check` also requires the "All N required tests passed" line in `build/run/gameTest/logs/latest.log` (Forge build script).
+  Forge 1.20.1 builds its game test server from the dedicated server's `server.properties` instead of vanilla's flat test world, so `runGameTestServer` runs in its own folder `versions/<node>/build/run/gameTest` and writes a `server.properties` there before every run (flat, seed 0, no structures) and deletes the old world.
+  Without it, the tests got normal terrain with a random seed and sat at y −60 in deepslate, where gravel or lava falling into a test blocked a turret's sight or hurt its target in some runs (CI failures of the teleporter, arc, railgun and unowned base tests; found on 2026-11-22).
 - Learned in OpenModularLighting: `DamageSources#source` is private in vanilla 1.20.1 (only Fabric API widens it); OMT does not use it.
 
 ### Commands
@@ -378,7 +380,7 @@ In-game behaviour (turrets firing, effects on entities) is tested with GameTests
 Classes implement `OMTGameTests` and use its `EMPTY_STRUCTURE` (the mod's own 8×8×8 air structure in `data/openmodularturrets/structures/`) with the scene built in code.
 On Fabric (Loom `fabricApi.configureTests`) they are listed under the `fabric-gametest` entrypoint in `src/gametest/resources/fabric.mod.json`; on Forge they carry `@GameTestHolder(OMT.MOD_ID)` and `@PrefixGameTestTemplate(false)` behind `//? if forge` (the gametest source set is a second mod, `META-INF/mods.toml`).
 The test mod's loader entrypoints (`gametest/platform/<loader>`) run its registration steps (`OMTGameTestMod`) and forward entity loads to `ProjectileTurretGameTests.onEntityLoad`.
-`check` (and so `build` / `chiseledBuild`) runs them on a dedicated test server: `runGameTest` on Fabric (`versions/<node>/build/run/gameTest`, the world is deleted before every run), `runGameTestServer` on Forge.
+`check` (and so `build` / `chiseledBuild`) runs them on a dedicated test server: `runGameTest` on Fabric, `runGameTestServer` on Forge, both in `versions/<node>/build/run/gameTest` with a new flat world every run (the world is deleted before it; on Forge the build also writes the flat world settings, see §4 "Forge 1.20.1").
 The test server turns mob spawning and the weather cycle off for the whole run (vanilla's `GameTestServer`, which both loaders start), so no mob spawns around the tests and it never rains.
 The day still passes: a test that needs daylight sets the time itself (`SolarPanelGameTests`).
 1.21.11's test server keeps the default game rules, so that branch sets these rules in every batch's test environment (`GameTestCases.batchEnvironment`); this branch needs nothing of the kind (checked 2026-11-22).
@@ -398,7 +400,7 @@ The day still passes: a test that needs daylight sets the time itself (`SolarPan
   Fake players are not on the server's player list, so the test that adds an online player by name puts one there for the (synchronous) request only (`TrustListGameTests.online`), on Fabric only: Forge returns a read-only view of the list, and vanilla's mock players would log in for real, which breaks Forge's login handling.
   Names of players who are not online go to the server's name cache: the test server has none (not found).
   OMLib's `ConfigSync` is not covered: it only sends to clients that negotiated its channel, and the test server has none.
-- The Forge 1.20.1 game test server places the tests underground (no flat world), so a test that needs open air (the wand's sneak-click into the air) stays inside its own 8 × 8 × 8 structure, looking from one corner to the opposite one; the solar panel test under open sky is left out there (`//? if fabric`).
+- A test that needs open air (the wand's sneak-click into the air) stays inside its own 8 × 8 × 8 structure, looking from one corner to the opposite one, and the solar panel test under open sky runs on Fabric only (`//? if fabric`): both date from when the Forge game test world was normal terrain with the tests underground (until 2026-11-22; now flat on both loaders).
 
 ---
 

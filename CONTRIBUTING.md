@@ -145,7 +145,7 @@ A change here that needs a new core passes CI only once `core_version` names an 
 - **Unit tests** (`src/test`) run on the Fabric node; the Forge node leaves them out.
 - **Game tests** (`src/gametest`, the test mod `openmodularturrets_gametest`) run on a headless server on both nodes and are part of `check`.
   On Fabric they run in `versions/<node>/build/run/gameTest` with a new world every time.
-  On Forge they run in `versions/<node>/run`, and the task also fails unless `run/logs/latest.log` there says the required tests passed.
+  On Forge they run there too, also with a new flat world every time (the build writes its `server.properties`), and the task also fails unless `logs/latest.log` there says the required tests passed.
 - **Client and server runs** load the mod without the test mod.
   The Fabric node uses the run folder `run/` in the repository root; the Forge node uses `versions/<node>/run`.
   The Forge runs also load Jade.
