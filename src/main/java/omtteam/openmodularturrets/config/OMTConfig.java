@@ -196,6 +196,16 @@ public class OMTConfig {
         @Config.Name("Crossbow Turret")
         public TurretSetting crossbow_turret = new TurretSetting(true, 15, 30, 5, 20, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
                 .realism(0.7D, 0.6D, 12);
+        // issue 324: placeholder stats (the slowing and laser turrets'), to be tuned with the recipe rework (#595)
+        @Config.Name("Repelling Turret")
+        public TurretSetting repelling_turret = new TurretSetting(true, 20, 25, 0, 5000, 0, 4, 0D, 0.1D, 2, 0, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 0).effect(0.8D);
+        @Config.Name("Tractor Turret")
+        public TurretSetting tractor_turret = new TurretSetting(true, 20, 25, 0, 5000, 0, 4, 0D, 0.1D, 2, 0, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 0).effect(0.8D);
+        @Config.Name("Energy Drain Turret")
+        public TurretSetting energy_drain_turret = new TurretSetting(true, 25, 10, 0, 8000, 0, 4, 0D, 0.125D, 2, 0, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 0).effect(10000D);
     }
 
     public static class ConfigBases {

@@ -1,0 +1,16 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "openmodularturrets:repelling_turret"
+  },
+  "variants": {
+    "normal": [
+      {
+        "model": "openmodularturrets:turret/repelling_turret"
+      }
+    ],
+    "inventory": [
+      {}
+    ]
+  }
+}

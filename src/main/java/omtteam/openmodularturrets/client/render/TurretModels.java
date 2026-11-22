@@ -55,6 +55,11 @@ public final class TurretModels {
         put(TurretType.RAILGUN_TURRET, ModelRailgun::new, "rail_gun_turret");
         put(TurretType.PLASMA_TURRET, ModelPlasmaLauncherTurret::new, "plasma_turret");
         put(TurretType.MELEE_TURRET, ModelMeleeTurret::new, "melee_turret_retracted", "melee_turret_extended");
+        // issue 324: placeholders, the slowing, teleporter and arc turrets' models with copies of their textures,
+        // until the turrets get their own models
+        put(TurretType.REPELLING_TURRET, ModelSlowingTurret::new, "repelling_turret");
+        put(TurretType.TRACTOR_TURRET, ModelTeleporterTurret::new, "tractor_turret");
+        put(TurretType.ENERGY_DRAIN_TURRET, ModelArcTurret::new, "energy_drain_turret");
         fallback = MODELS.get(TurretType.MACHINE_GUN_TURRET);
     }
 

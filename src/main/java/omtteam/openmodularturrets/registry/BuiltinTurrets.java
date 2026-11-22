@@ -113,6 +113,13 @@ final class BuiltinTurrets {
                         .ambientEffect(BlockTurret.dust(0.1F, 0.2F, 0.8F, true)).build(),
                 turret(TurretType.PLASMA_TURRET,
                         ProjectileWeapon.of(ModSounds.plasmaLaunchSound,
-                                (world, ammo, target, base) -> new PlasmaProjectile(world, base))));
+                                (world, ammo, target, base) -> new PlasmaProjectile(world, base))),
+                // issue 324: the sounds are stand-ins until the turrets get their own
+                turret(TurretType.REPELLING_TURRET,
+                        new EffectWeapon(ModSounds.slowingLaunchSound, EffectWeapons::repel)),
+                turret(TurretType.TRACTOR_TURRET,
+                        new EffectWeapon(ModSounds.teleportLaunchSound, EffectWeapons::tractor)),
+                turret(TurretType.ENERGY_DRAIN_TURRET,
+                        new EffectWeapon(ModSounds.arcLaunchSound, EffectWeapons::drain)));
     }
 }

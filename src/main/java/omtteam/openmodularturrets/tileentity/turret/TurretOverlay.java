@@ -40,6 +40,8 @@ public final class TurretOverlay {
     private static final String OPTIMAL_RANGE = "overlayOptimalRange";
     private static final String FALLOFF_DAMAGE = "overlayFalloffDamage";
     private static final String TURN_RATE = "overlayTurnRate";
+    private static final String EFFECT_TURRET = "overlayEffectTurret";
+    private static final String EFFECT_STRENGTH = "overlayEffectStrength";
 
     private TurretOverlay() {
     }
@@ -66,6 +68,10 @@ public final class TurretOverlay {
         data.setDouble(OPTIMAL_RANGE, setting.optimalRange);
         data.setDouble(FALLOFF_DAMAGE, setting.falloffDamage);
         data.setDouble(TURN_RATE, setting.turnRate);
+        if (setting.effectStrength > 0) {
+            data.setString(EFFECT_TURRET, type.getId());
+            data.setDouble(EFFECT_STRENGTH, setting.effectStrength);
+        }
         return data;
     }
 
@@ -97,6 +103,11 @@ public final class TurretOverlay {
         if (data.hasKey(TURN_RATE)) {
             lines.add(line(localize, OMTNames.Localizations.GUI.TURN_RATE,
                     white(TurretStatLines.turnRate(data.getDouble(TURN_RATE), format))));
+        }
+        if (data.hasKey(EFFECT_TURRET)) {
+            String effect = TurretType.byId(data.getString(EFFECT_TURRET))
+                    .map(type -> TurretStatLines.effect(type, data.getDouble(EFFECT_STRENGTH), format)).orElse(null);
+            if (effect != null) lines.add(line(localize, OMTNames.Localizations.GUI.EFFECT, white(effect)));
         }
         return lines;
     }

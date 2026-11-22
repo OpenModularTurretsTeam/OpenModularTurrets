@@ -2,7 +2,7 @@
 
 Other mods can add turrets to Open Modular Turrets (OMT) 4.0.0.
 An added turret is a full turret: it mounts on a base, uses the base's targeting, energy, ammo, upgrades, addons and trusted players, has a config entry and shows in the OMT creative tab and in tooltips.
-The 14 built-in turrets are registered through the same API (`registry/BuiltinTurrets.java`), so they are the reference examples; `runenv/src/main/java/omtteam/apiexample/ExampleTurretPlugin.java` in the dev workspace is a small addon turret.
+The 17 built-in turrets are registered through the same API (`registry/BuiltinTurrets.java`), so they are the reference examples; `runenv/src/main/java/omtteam/apiexample/ExampleTurretPlugin.java` in the dev workspace is a small addon turret.
 
 Add OMT as a dependency and `required-after:openmodularturrets` to your `@Mod` dependencies.
 The API is `omtteam.openmodularturrets.api` (common) and `omtteam.openmodularturrets.client.api` (client); the rules of a turret are the core classes `TurretType`, `AmmoType` and `TurretStats` (`omtteam.openmodularturrets.core`).
@@ -53,6 +53,8 @@ Get them with `OMTApi.block(type)` / `OMTApi.item(type)` once the blocks are reg
 | `mountFaces(Face…)` | base faces it may mount on (`omtteam.omlib.core.world.Face`; default all six; the melee turret uses `UP, DOWN`) |
 | `ignoresScattershot()` | scattershot upgrades add no shots, ammo, energy or scatter |
 | `skipsSlowedTargets()` | entities with slowness are not targeted (slowing turret) |
+| `playersOnly()` | only players are targeted, whatever the base's mob settings (energy drain turret) |
+| `skipsTargetsWithoutEnergy()` | entities whose `TargetEntity.hasDrainableEnergy()` is false are not targeted; OMT's adapter answers true for players with energy in their armour or held items (energy drain turret) |
 
 ### Weapons (`api.weapon`)
 
@@ -60,7 +62,7 @@ Get them with `OMTApi.block(type)` / `OMTApi.item(type)` once the blocks are reg
 | --- | --- | --- |
 | `ProjectileWeapon` | spawns a `TurretProjectile` per shot, aimed with lead | machine gun, rocket, plasma |
 | `RayWeapon` | instant ray to the target; damage from a `RayProfile`, visuals from the builder | laser, railgun, arc |
-| `EffectWeapon` | runs a `TargetEffect` on the base's target, no aiming | slowing, teleporter |
+| `EffectWeapon` | runs a `TargetEffect` on the base's target, no aiming | slowing, teleporter, repelling, tractor, energy drain |
 | `AreaWeapon` | ignores the base's target, strikes every damageable living entity in an area | melee |
 | `SelfTargetingWeapon` | ignores the base's target, picks its own | – |
 
@@ -102,6 +104,8 @@ OMT writes them to `config/openmodularturrets_addon_turrets.cfg`, one category p
 `falloff(optimalShare, damageAtMaxRange)` sets the range falloff (keys `optimalRange` and `falloffDamage`): full damage up to `optimalShare` of the turret's range (with range upgrades), then linearly less down to `damageAtMaxRange` of the damage at the end of the range and beyond.
 `turnRate(degreesPerTick)` sets how fast the turret turns towards its target (key `turnRate`, on yaw and pitch each); an aiming turret fires only once its aim is within `turrets.aimTolerance` degrees.
 Without these calls a turret has no falloff and turns instantly; a file written before these keys existed gets them with the definition's values.
+`effectStrength(value)` is a free number for an effect weapon (key `effectStrength`, default 0): the built-in repelling and tractor turrets read it as their push or pull speed in blocks per tick, the energy drain turret as the energy it destroys per shot.
+Read it in your effect with `ConfigLogicSettings.INSTANCE.turret(type).effectStrength()`; with a value above 0 the turret tooltip, Hwyla and The One Probe show it with the lang key `tooltip.<namespace>.turret.<path>.effect` (one `%s` for the value).
 OMT applies the falloff to projectile and ray weapons: a projectile measures from its launch point to the hit, a ray from the turret to where it enters the entity (arc jumps take the first hit's share).
 Effect, area and self-targeting weapons get no falloff; one that wants it scales its damage by `base.getLogic().getDamageFactor(turret.getCoreType(), distance)`.
 A turn rate only makes sense for a turret whose model turns (`aims() == true`): a ray weapon always aims, so a turn rate on a turret with a static model only delays its shots.

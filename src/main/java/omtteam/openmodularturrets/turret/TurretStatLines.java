@@ -1,5 +1,8 @@
 package omtteam.openmodularturrets.turret;
 
+import omtteam.openmodularturrets.core.turret.TurretType;
+
+import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -53,6 +56,20 @@ public final class TurretStatLines {
             return localizer.format(PREFIX + "turn_rate.instant");
         }
         return localizer.format(PREFIX + "turn_rate.value", format(degreesPerTick * TICKS_PER_SECOND));
+    }
+
+    /**
+     * The effect of a turret with an {@code effectStrength} above 0 (issue 324), in the turret's own words: the
+     * translation key {@code tooltip.<namespace>.turret.<path>.effect} with the strength as its argument (e.g.
+     * "Push 0.8").
+     *
+     * @return null for a turret without an effect
+     */
+    @Nullable
+    public static String effect(TurretType type, double effectStrength, Localizer localizer) {
+        if (effectStrength <= 0) return null;
+        return localizer.format("tooltip." + type.getNamespace() + ".turret." + type.getPath() + ".effect",
+                format(effectStrength));
     }
 
     /** One decimal at most, without a trailing ".0" ({@code 7.5}, {@code 9}). */

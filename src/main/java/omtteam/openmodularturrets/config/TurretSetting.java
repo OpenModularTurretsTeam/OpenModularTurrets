@@ -44,6 +44,10 @@ public class TurretSetting {
     @Config.RangeDouble(min = 0D, max = 180D)
     public double turnRate = TurretStats.INSTANT_TURN;
 
+    @Config.Comment("Strength of the turret's effect: push or pull speed in blocks per tick (repelling and tractor turrets), energy destroyed per shot (energy drain turret). Not used by other turrets.")
+    @Config.RangeDouble(min = 0D)
+    public double effectStrength = TurretStats.NO_EFFECT;
+
     /**
      * For Gson (OMLib's config sync of the addon turret settings): without a no-arg constructor Gson skips the field
      * initializers, so a key the server does not send (an older server) would become 0 instead of its default.
@@ -79,6 +83,16 @@ public class TurretSetting {
         this.optimalRange = optimalRange;
         this.falloffDamage = falloffDamage;
         this.turnRate = turnRate;
+        return this;
+    }
+
+    /**
+     * Sets the effect strength of an effect turret (issue 324); without this call a setting has none.
+     *
+     * @return this setting
+     */
+    public TurretSetting effect(double effectStrength) {
+        this.effectStrength = effectStrength;
         return this;
     }
 }

@@ -25,6 +25,9 @@ public class OMTNames {
         public static final String meleeTurret = "melee_turret";
         public static final String arcTurret = "arc_turret";
         public static final String crossbowTurret = "crossbow_turret";
+        public static final String repellingTurret = "repelling_turret";
+        public static final String tractorTurret = "tractor_turret";
+        public static final String energyDrainTurret = "energy_drain_turret";
         public static final String lever = "lever_block";
 
         /** Removed in 4.0.0 (block, item and tile entity); kept for the missing mapping handling. */
@@ -111,6 +114,7 @@ public class OMTNames {
             public static final String RATE_OF_FIRE = "text.openmodularturrets.gui.rof";
             public static final String OPTIMAL_RANGE = "text.openmodularturrets.gui.optimal_range";
             public static final String TURN_RATE = "text.openmodularturrets.gui.turn_rate";
+            public static final String EFFECT = "text.openmodularturrets.gui.effect";
             public static final String UNLIMITED = "text.openmodularturrets.gui.unlimited";
             public static final String DROP_TURRETS = "text.openmodularturrets.gui.drop_turrets";
             public static final String DROP_BASE = "text.openmodularturrets.gui.drop_base";

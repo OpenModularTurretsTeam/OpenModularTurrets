@@ -30,8 +30,8 @@ class TurretConfigDefaultsTest {
     }
 
     /**
-     * The defaults of every built-in turret, the same as on 1.20.1, 1.21.1 and 1.21.11. The arc, slowing, teleporter
-     * and melee turrets turn instantly, because their models do not turn.
+     * The defaults of every built-in turret, the same as on 1.20.1, 1.21.1 and 1.21.11. The arc, slowing, teleporter,
+     * melee, repelling, tractor and energy drain turrets turn instantly, because their models do not turn.
      */
     private static final Map<TurretType, Realism> DEFAULTS = defaults();
 
@@ -51,6 +51,9 @@ class TurretConfigDefaultsTest {
         map.put(TurretType.SLOWING_TURRET, new Realism(1, 1, 0));
         map.put(TurretType.TELEPORTER_TURRET, new Realism(1, 1, 0));
         map.put(TurretType.MELEE_TURRET, new Realism(1, 1, 0));
+        map.put(TurretType.REPELLING_TURRET, new Realism(1, 1, 0));
+        map.put(TurretType.TRACTOR_TURRET, new Realism(1, 1, 0));
+        map.put(TurretType.ENERGY_DRAIN_TURRET, new Realism(1, 1, 0));
         return map;
     }
 
@@ -70,13 +73,31 @@ class TurretConfigDefaultsTest {
         assertEquals(DEFAULTS.size(), checked);
     }
 
-    /** All 17 stats reach the core: an un-updated {@code toStats} would drop the last three silently. */
+    /** All 18 stats reach the core: an un-updated {@code toStats} would drop the last ones silently. */
     @Test
     void toStatsKeepsEveryStat() {
         TurretSetting setting = new TurretSetting(false, 21, 17, 9, 1234, 3.5D, 2, 0.07D, 0.15D, 3, 0.25D, 0.09D, 0.12D,
-                0.06D).realism(0.4D, 0.3D, 7.5D);
+                0.06D).realism(0.4D, 0.3D, 7.5D).effect(2.5D);
         assertEquals(new TurretStats(false, 21, 17, 9, 1234, 3.5D, 2, 0.07D, 0.15D, 3, 0.25D, 0.09D, 0.12D, 0.06D, 0.4D,
-                0.3D, 7.5D), ConfigLogicSettings.toStats(setting));
+                0.3D, 7.5D, 2.5D), ConfigLogicSettings.toStats(setting));
+    }
+
+    /** Issue 324: only the repelling, tractor and energy drain turrets have an effect strength. */
+    @Test
+    void onlyTheEffectTurretsHaveAnEffectStrength() {
+        for (TurretType type : TurretType.values()) {
+            if (!type.isBuiltIn()) continue;
+            double expected = type == TurretType.REPELLING_TURRET || type == TurretType.TRACTOR_TURRET ? 0.8D
+                    : type == TurretType.ENERGY_DRAIN_TURRET ? 10000D : TurretStats.NO_EFFECT;
+            assertEquals(expected, ConfigLogicSettings.defaultStats(type).effectStrength(), DELTA, "effectStrength of " + type);
+        }
+    }
+
+    /** A setting without {@code effect} has none. */
+    @Test
+    void settingWithoutEffectHasNone() {
+        assertEquals(TurretStats.NO_EFFECT, ConfigLogicSettings.toStats(
+                new TurretSetting(true, 10, 20, 2, 50, 4, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)).effectStrength(), DELTA);
     }
 
     /** A setting from the 14-value constructor has no falloff and turns instantly. */
@@ -119,6 +140,7 @@ class TurretConfigDefaultsTest {
         assertRange(TurretSetting.class, "optimalRange", 0, 1);
         assertRange(TurretSetting.class, "falloffDamage", 0, 1);
         assertRange(TurretSetting.class, "turnRate", 0, 180);
+        assertRange(TurretSetting.class, "effectStrength", 0, Double.MAX_VALUE);
         assertRange(OMTConfig.ConfigTurrets.class, "aimTolerance", 0, 180);
     }
 

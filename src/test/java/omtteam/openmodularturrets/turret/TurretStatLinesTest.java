@@ -1,5 +1,6 @@
 package omtteam.openmodularturrets.turret;
 
+import omtteam.openmodularturrets.core.turret.TurretType;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * The tooltip, Hwyla and The One Probe values of the range falloff and the turn rate, by translation key and
@@ -28,6 +30,16 @@ class TurretStatLinesTest {
         assertTranslation(TurretStatLines.optimalRange(0.6D, 0.5D, 18, KEYS), "optimal_range.value", "10.8", "50", "18");
         assertTranslation(TurretStatLines.optimalRange(0.5D, 0.3D, 15, KEYS), "optimal_range.value", "7.5", "30", "15");
         assertTranslation(TurretStatLines.optimalRange(0.5D, 0.5D, 20, KEYS), "optimal_range.value", "10", "50", "20");
+    }
+
+    /** Issue 324: the effect line has the turret's own key with the strength; turrets without an effect have none. */
+    @Test
+    void effectUsesTheTurretsOwnKey() {
+        assertEquals("tooltip.openmodularturrets.turret.repelling_turret.effect[0.8]",
+                TurretStatLines.effect(TurretType.REPELLING_TURRET, 0.8D, KEYS));
+        assertEquals("tooltip.openmodularturrets.turret.energy_drain_turret.effect[10000]",
+                TurretStatLines.effect(TurretType.ENERGY_DRAIN_TURRET, 10000D, KEYS));
+        assertNull(TurretStatLines.effect(TurretType.LASER_TURRET, 0D, KEYS));
     }
 
     /** Without falloff (either share at 1, or above it) the whole range deals full damage. */

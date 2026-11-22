@@ -1,0 +1,16 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "openmodularturrets:energy_drain_turret"
+  },
+  "variants": {
+    "normal": [
+      {
+        "model": "openmodularturrets:turret/energy_drain_turret"
+      }
+    ],
+    "inventory": [
+      {}
+    ]
+  }
+}

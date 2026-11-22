@@ -40,6 +40,9 @@ public class ModBlocks {
     public static Block plasmaTurret;
     public static Block arcTurret;
     public static Block meleeTurret;
+    public static Block repellingTurret;
+    public static Block tractorTurret;
+    public static Block energyDrainTurret;
     public static Block crossbowTurret;
     public static Block leverBlock;
 
@@ -70,6 +73,9 @@ public class ModBlocks {
         plasmaTurret = registerTurret(registry, OMTNames.Blocks.plasmaTurret, TurretType.PLASMA_TURRET);
         arcTurret = registerTurret(registry, OMTNames.Blocks.arcTurret, TurretType.ARC_TURRET);
         meleeTurret = registerTurret(registry, OMTNames.Blocks.meleeTurret, TurretType.MELEE_TURRET);
+        repellingTurret = registerTurret(registry, OMTNames.Blocks.repellingTurret, TurretType.REPELLING_TURRET);
+        tractorTurret = registerTurret(registry, OMTNames.Blocks.tractorTurret, TurretType.TRACTOR_TURRET);
+        energyDrainTurret = registerTurret(registry, OMTNames.Blocks.energyDrainTurret, TurretType.ENERGY_DRAIN_TURRET);
         crossbowTurret = registerTurret(registry, OMTNames.Blocks.crossbowTurret, TurretType.CROSSBOW_TURRET);
 
         registerAddonTurrets(registry);
