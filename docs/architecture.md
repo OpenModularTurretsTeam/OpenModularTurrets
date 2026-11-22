@@ -65,6 +65,8 @@ This is the only place where the two meet, and the reason the core can be tested
 | `target.TargetEntity` | `blockentity.base.LivingTargetEntity` | one living entity: position and eyes (in the base's coordinates), health, armor, category, owner (pets) |
 | `settings.LogicSettings` | `config.ConfigLogicSettings` | config values (turret stats, base tiers, entity lists) |
 | `security.SecurityEnvironment` (OMLib) | `security.LevelSecurityEnvironment` (OMLib, with `OMTOwnershipSettings`) | scoreboard teams, operator rights |
+| `computer.ComputerTurrets` | `blockentity.base.BaseComputerTurrets` | the turrets on a base's faces: aim, auto fire, forced shot |
+| `computer.PlayerNames` | `platform.neoforge.opencomputers.NeoForgePlayerNames` | a player's UUID by name (online, or a player who joined before), without asking Mojang |
 
 All positions the core sees are in the base's coordinates.
 On a Sable contraption these are the coordinates of its plot, far away from where the base is shown: `BlockEntityBaseWorld` converts entity positions into them with the base's `core.world.Pose` (from `compat.SubLevelCompat`), and converts the start of a line-of-sight check back into the world.
@@ -110,6 +112,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `core.generator`, `core.card` | generator burning, the memory card's copy rules for a base's settings (`BaseCardRules`; the card data and the trust list copy rules are OMLib's `core.card`, camouflage permissions OMLib's `core.camo`, machine mode and targeting settings OMLib's `core.machine`) |
 | `core.item`, `core.settings`, `core.world` | upgrade/addon types, config value types, the world interfaces above |
 | `core.storage` | `SlotCapacity`: how much an ammo or fuel slot holds with the attached inventory expanders; `AmmoSort`: the order of the sort button (`TurretBaseInventory.sortAmmo`) |
+| `core.computer` | `BaseComputerCommands`: the commands a computer may send to a turret base (1.12.2's, plus computer control), with the interfaces it needs from the game |
 | `api`, `api.weapon` | public turret API for other mods; the built-in turrets use it too |
 | `registry` | registration of blocks, items, block entities, entities, menus, sounds, creative tab; `TurretRegistry` (turret definitions) |
 | `block.*` | blocks: bases, turrets, defenses (hardened blocks, walls, fences, camo trap), lever, generator, inventory expanders |
@@ -120,7 +123,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `config` | the JSON config: fields, comments, ranges, migration, the server's config on clients |
 | `security`, `camo` | the mod's ownership rules (`OMTOwnershipSettings`); the trust lists' Minecraft side (NBT, player lookup) is in OMLib, and camouflage rules |
 | `compat` | the porting helpers that keep call sites identical on the version branches (`VersionCompat`, `CompatBlockEntity`, networking, menus; `compat.nbt.NbtCompat` for all NBT reads and `compat.block.BlockCompat` depend on Minecraft only, so any package may use them), small loader differences (`//? if fabric` / `neoforge`), Jade (server half here, tooltips in `client.compat.jade`), and Sable contraptions (`SubLevelCompat`: poses and velocities through Sable Companion; `client.compat.ClientSubLevelCompat` for the drawn pose) |
-| `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`); `platform.fabric` / `platform.neoforge` hold the entrypoints, the implementations and the energy/item adapters, and only compile for their loader |
+| `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`); `platform.fabric` / `platform.neoforge` hold the entrypoints, the implementations and the energy/item adapters, and only compile for their loader; `platform.neoforge.opencomputers` is the OpenComputers: Rebooted driver and component |
 | `datagen` | recipes, loot tables, tags, damage types (Fabric only; the NeoForge build converts the Fabric output) |
 
 `./gradlew dependencyMap` draws these packages and every import between them as an interactive page.
@@ -214,6 +217,19 @@ A slot holds `itemMaxStackSize × base stacks × (1 + Σ stacks)`: a turret base
 The base learns of its expanders through `Neighbour.Expanders` in `TurretBaseLogic.updateNeighbours`, the generator scans them itself, both on their neighbour updates.
 The stacks above one stack are OMLib's large stacks: `TurretBaseInventory` and `FuelContainer` implement `LargeStackContainer` (also on the client, with the bonus stacks synced as menu data), the menus extend `LargeStackMenu` with `LargeStackSlot`s, the screens `LargeStackScreen`, and `VersionCompat.saveItems` saves the counts.
 Removing an expander leaves larger stacks in the slots; they only cannot grow until they are below the new limit.
+
+### Computers
+
+A computer reaches a turret base through three layers:
+
+1. `core.computer.BaseComputerCommands` holds the commands (1.12.2's, ported with their names, arguments and messages): plain Java values in, an `Object[]` result out, a wrong argument gives an error message, not an exception.
+   Every command first asks `TurretBaseLogic.acceptsComputers()` (tier 5, or a Serial Port addon); trust changes act as the base's owner through its `TrustManager`, which saves and syncs.
+   The turrets are reached through `ComputerTurrets` (`blockentity.base.BaseComputerTurrets` over the turrets mounted on the base), player names through `PlayerNames`.
+2. Computer control (`setComputerControl`, `TurretBaseLogic.isComputerControlled()`, saved with the base): the base drops its targets and searches none, and its turrets stay deployed and fire only when told to (`TurretBlockEntity.setYawPitch`, `setAutoFire`, `forceShot`).
+   Control and auto fire only apply while the base accepts computers (tier 5 or a Serial Port): a base that lost its Serial Port targets on its own again, since no computer could switch control off.
+3. The mod integration, per loader: `platform.neoforge.opencomputers` (OpenComputers: Rebooted exists for NeoForge 1.21.1 only).
+   `OMTNeoForge` registers `TurretBaseDriver` at common setup when OpenComputers is installed (`OpenComputersCompat`); an Adapter next to a base gets a `TurretBaseEnvironment`, the component `turret_base`, whose callbacks (1.12.2's names and docs) turn OpenComputers' arguments into plain values and call the commands.
+   They are not direct, so OpenComputers runs them on the server thread.
 
 ## How to add …
 

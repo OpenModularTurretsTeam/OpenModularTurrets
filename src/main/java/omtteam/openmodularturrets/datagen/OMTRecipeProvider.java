@@ -344,7 +344,7 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
                     .unlockedBy("has_io_bus", has(ModItems.IO_BUS));
         }
 
-        /** 1.12.2 {@code addon_meta_0,1,3,4,6,7_vanilla.json}. */
+        /** 1.12.2 {@code addon_meta_0,1,3..7_vanilla.json}. */
         private void addons(Consumer<ShapedRecipeBuilder> save) {
             save.accept(shaped(RecipeCategory.MISC, ModItems.ADDON_CONCEALER)
                     .pattern("IQI")
@@ -398,6 +398,14 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
                     .define('Q', CommonTags.QUARTZ_GEMS)
                     .define('L', Items.LAPIS_BLOCK)
                     .define('E', Items.ENDER_EYE)
+                    .define('B', ModItems.IO_BUS)
+                    .unlockedBy("has_io_bus", has(ModItems.IO_BUS)));
+            // serial port: unconditional (1.12.2 only had it with a computer mod)
+            save.accept(shaped(RecipeCategory.MISC, ModItems.ADDON_SERIAL_PORT)
+                    .pattern(" Q ")
+                    .pattern("BQB")
+                    .pattern(" Q ")
+                    .define('Q', CommonTags.QUARTZ_GEMS)
                     .define('B', ModItems.IO_BUS)
                     .unlockedBy("has_io_bus", has(ModItems.IO_BUS)));
         }

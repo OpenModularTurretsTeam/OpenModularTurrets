@@ -52,6 +52,8 @@ Core gameplay:
 - **OMLib** (the user's own library, `../OMLib`, branch `1.21.1`), mounted as the git submodule `omlib` and bundled into every jar (jar-in-jar; Fabric `include`, NeoForge `jarJar`; requested by the user on 2026-10-27).
   It holds the code both mods used to share (platform services, version compat, energy and item transfer, config, the camouflage menu) and the build logic.
   The library is a mod of its own (`omlib`), declared as a required dependency in the mod metadata, and built as a nested step of the mod build, see §4 "OMLib".
+- **OpenComputers: Rebooted** (`li.cil.oc:opencomputers`, from `maven.michiyo.me`), on the **`1.21.1-neoforge` node only** (approved by the user on 2026-11-04): compile-only against its `api` jar, never bundled, an optional dependency in `neoforge.mods.toml`; the full mod (Scala bundled inside, so no ScalableCatsForce) is in the NeoForge dev runs (`localRuntime`), on the NeoForge game test server and in `runenv/1.21.1-neoforge`, all non-transitive (its POM lists Create, AE2 and others it does not require).
+  Gated on `opencomputers_version`, which only `versions/1.21.1-neoforge/gradle.properties` has; the code is loaded behind `isModLoaded("opencomputers")`.
 - Nothing else without asking the user first.
   No Architectury, no Cloth Config, no Kotlin.
 
@@ -439,12 +441,13 @@ omtteam.openmodularturrets
 │   └── misc/                    # crank (LeverBlock), generator, inventory expanders
 ├── blockentity/
 │   ├── TurretBaseBlockEntity    # forwards to core.base.TurretBaseLogic; inventory, energy, trust list
-│   ├── base/                    # adapters to core (BlockEntityBaseWorld, ContainerItemSlot, LivingTargetEntity)
+│   ├── base/                    # adapters to core (BlockEntityBaseWorld, ContainerItemSlot, LivingTargetEntity), BaseComputerTurrets
 │   ├── turret/                  # TurretBlockEntity (one type for all turrets), TurretMount, RayWeapons, EffectWeapons
 │   ├── defense/                 # PassiveDefenseBlockEntity, CamoTrapBlockEntity
 │   └── misc/                    # GeneratorBlockEntity, LeverBlockEntity
 ├── core/                        # (from OpenModularCore, omt-core; bundled, not in src/) game rules without Minecraft:
-│                                # base, turret, target, security (DamageRules), generator, card, item, settings, storage, world
+│                                # base, turret, target, security (DamageRules), generator, card, item, settings, storage, world,
+│                                # computer (BaseComputerCommands, the computer commands of 1.12.2; ComputerTurrets, PlayerNames)
 ├── camo/                        # CamoRules, CamoLightProperties (CamoHost, CamoData and the menu are in OMLib)
 ├── security/                    # OMTOwnershipSettings (trust lists, access levels and claiming are in OMLib)
 ├── inventory/                   # TurretBaseInventory, FuelContainer, AmmoRules
@@ -455,7 +458,8 @@ omtteam.openmodularturrets
 ├── config/                      # self-written config (JSON via Gson, OMLib's machinery), no library
 ├── compat/                      # SubLevelCompat (Sable), jade/ (server half); the porting helpers are in OMLib
 ├── mixin/                       # LivingEntityMixin
-├── platform/                    # fabric/, neoforge/: entrypoints, services, adapters (each built for its loader only)
+├── platform/                    # fabric/, neoforge/: entrypoints, services, adapters (each built for its loader only);
+│                                # neoforge/opencomputers: the OpenComputers: Rebooted driver and turret_base component
 └── datagen/                     # recipes, loot tables, tags, damage types (Fabric only)
 
 (client source set)
@@ -615,7 +619,8 @@ Deliberately not optimized yet; revisit only if profiling shows a problem.
 
 - Every variant (base tier, ammo type, upgrade, addon) is an **individual registered block/item** with a lowercase snake_case ID.
   `docs/id-mapping.md` maps the 1.12.2 IDs to the current ones.
-- OpenComputers / ComputerCraft integration is **out of scope for now** (ask before adding).
+- Computers: **OpenComputers: Rebooted** is supported on `1.21.1-neoforge` only (the only node it exists for; added on 2026-11-04, decided by the user): the commands are loader-free in `core/computer` (`BaseComputerCommands`, a port of 1.12.2's, plus computer control), the OpenComputers driver and component are in `platform/neoforge/opencomputers` (see §6).
+  **ComputerCraft / CC: Tweaked** is still **out of scope** (ask before adding); a peripheral would reuse `BaseComputerCommands` as on 1.12.2.
 
 ### Designing APIs
 
@@ -757,3 +762,13 @@ Sable already handles `Level.clip`, entity box searches, entities added inside a
 - [x] Create contraptions may move bases and turrets (`NeoForgeCreateMovement`; Create refuses unbreakable blocks and `PushReaction.BLOCK`, and its tags can only deny), config `bases.allowContraptionMovement` (default true; Create's check gets no player, so anyone with a contraption can move a base), decided by the user; `CreateMovementGameTests`
 - [x] Simulated's Physics Assembler (Create Aeronautics) ignores Create's checks and only refuses unbreakable blocks (`SimAssemblyContraption.movementAllowed`, no API): `platform/neoforge/mixin/SimAssemblyContraptionMixin`, a `@Pseudo` mixin in its own optional config `openmodularturrets.neoforge.mixins.json` (NeoForge only), for testing until Simulated offers a hook (the user asks upstream); `SimulatedAssemblyGameTests` calls the method by reflection and fails if Simulated renames it (Create Aeronautics on the NeoForge game test server)
 - [ ] Checked by hand in the NeoForge dev client with Create Aeronautics (moving airship, inherited projectile velocity, placement outline)
+
+### Computers: OpenComputers: Rebooted (1.21.1-neoforge only; branch `1.20.1+-opencomputers`, decided by the user on 2026-11-04)
+
+The 1.12.2 computer integration, ported for OpenComputers: Rebooted (the only OpenComputers for the modern versions, NeoForge only); CC: Tweaked stays out of scope.
+
+- [x] Core: `core.computer.BaseComputerCommands` (1.12.2's commands and messages; `ComputerTurrets`, `PlayerNames`), computer control in `TurretBaseLogic` (`setComputerControl`, saved as `ComputerControl`), `acceptsComputers()` (tier 5 or Serial Port); unit tests
+- [x] Turrets: `TurretBlockEntity.setYawPitch` / `setAutoFire` / `forceShot`, `TurretBaseBlockEntity.getTurret(face)`, `blockentity.base.BaseComputerTurrets`; `ComputerControlGameTests`
+- [x] Serial Port addon (`addon_serial_port`, 1.12.2 recipe and texture)
+- [x] OpenComputers glue in `platform/neoforge/opencomputers` (`OpenComputersCompat`, `TurretBaseDriver`, `TurretBaseEnvironment` with 1.12.2's callbacks, `NeoForgePlayerNames` over online players and NeoForge's `UsernameCache`), registered in `OMTNeoForge.onCommonSetup`; `OpenComputersGameTests` on the NeoForge 1.21.1 game test server; OpenComputers in the dev runs and `runenv/1.21.1-neoforge`
+- [ ] Checked by hand in a NeoForge 1.21.1 client with OpenComputers (Adapter next to a base, the Lua calls, aiming and firing under computer control)
