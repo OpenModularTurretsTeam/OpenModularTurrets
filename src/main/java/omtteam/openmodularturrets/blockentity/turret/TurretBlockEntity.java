@@ -76,6 +76,8 @@ public class TurretBlockEntity extends CompatBlockEntity {
     private float syncedPitch;
     private int ticksSinceSync;
     private boolean active;
+    /** Whether the base has a damage amp addon; synced to clients (the turret shows its damage amp LEDs). */
+    private boolean damageAmp;
     /** 1.12.2 {@code autoFire}: fire along the aim whenever ready (computer control); saved, not synced. */
     private boolean autoFire;
 
@@ -198,8 +200,10 @@ public class TurretBlockEntity extends CompatBlockEntity {
                 turret.forceShot();
             }
         }
-        if (engaging != turret.active) {
+        boolean amped = logic.getDamageAmpLevel() > 0;
+        if (engaging != turret.active || amped != turret.damageAmp) {
             turret.active = engaging;
+            turret.damageAmp = amped;
             turret.syncToClient();
         }
         turret.syncAimIfChanged();
@@ -224,6 +228,11 @@ public class TurretBlockEntity extends CompatBlockEntity {
      */
     public boolean isActive() {
         return active;
+    }
+
+    /** Whether the base has a damage amp addon (synced to clients). */
+    public boolean hasDamageAmp() {
+        return damageAmp;
     }
 
     /**
@@ -564,6 +573,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
         yaw = NbtCompat.getFloat(tag, "Yaw", 0);
         pitch = NbtCompat.getFloat(tag, "Pitch", 0);
         active = NbtCompat.getBoolean(tag, "Active", false);
+        damageAmp = NbtCompat.getBoolean(tag, "DamageAmp", false);
         autoFire = NbtCompat.getBoolean(tag, "AutoFire", false);
         if (!renderInitialised) {
             renderYaw = prevRenderYaw = yaw;
@@ -579,11 +589,12 @@ public class TurretBlockEntity extends CompatBlockEntity {
         tag.putBoolean("AutoFire", autoFire);
     }
 
-    /** Clients only need the aim and whether the turret is active. */
+    /** Clients only need the aim, whether the turret is active and whether it shows the damage amp LEDs. */
     @Override
     protected void writeClientData(CompoundTag tag, HolderLookup.Provider registries) {
         tag.putFloat("Yaw", yaw);
         tag.putFloat("Pitch", pitch);
         tag.putBoolean("Active", active);
+        tag.putBoolean("DamageAmp", damageAmp);
     }
 }
