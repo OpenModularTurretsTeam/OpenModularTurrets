@@ -81,6 +81,14 @@ public final class TurretModels {
                 texture(TurretType.SLOWING_TURRET), null, null);
         registrar.register(TurretType.TELEPORTER_TURRET, TurretModelDefinitions::teleporterTurret,
                 texture(TurretType.TELEPORTER_TURRET), null, null);
+        // issue 324: placeholders, the slowing, teleporter and arc turrets' geometry with copies of their textures,
+        // until the turrets get their own models
+        registrar.register(TurretType.REPELLING_TURRET, TurretModelDefinitions::slowingTurret,
+                texture(TurretType.REPELLING_TURRET), null, null);
+        registrar.register(TurretType.TRACTOR_TURRET, TurretModelDefinitions::teleporterTurret,
+                texture(TurretType.TRACTOR_TURRET), null, null);
+        registrar.register(TurretType.ENERGY_DRAIN_TURRET, TurretModelDefinitions::arcTurret,
+                texture(TurretType.ENERGY_DRAIN_TURRET), null, null);
         registrar.register(TurretType.MELEE_TURRET, TurretModelDefinitions::meleeTurret, MeleeTurretModel::new);
     }
 

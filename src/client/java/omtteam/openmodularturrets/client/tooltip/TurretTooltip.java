@@ -53,6 +53,8 @@ public final class TurretTooltip {
         lines.add(value("turret.optimal_range",
                 TurretStatLines.optimalRange(setting.optimalRange, setting.falloffDamage, setting.baseRange)));
         lines.add(value("turret.turn_rate", TurretStatLines.turnRate(setting.turnRate)));
+        Component effect = TurretStatLines.effect(type, setting.effectStrength);
+        if (effect != null) lines.add(value("turret.effect", effect));
     }
 
     private static Component ammo(TurretType type, boolean ammoNeeded) {

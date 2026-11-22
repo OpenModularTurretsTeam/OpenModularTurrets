@@ -22,7 +22,7 @@ The other Minecraft versions have their own branches:
 
 ## Features
 
-- **14 turrets**, from the disposable item turret and potato cannon to machine guns, grenade and rocket launchers, lasers, railguns and teleporter turrets
+- **17 turrets**, from the disposable item turret and potato cannon to machine guns, grenade and rocket launchers, lasers, railguns, teleporter, repelling, tractor and energy drain turrets
 - **Turret bases in 5 tiers** that handle targeting, ammo and energy for every turret mounted on them
 - **Choose your targets:** hostile mobs, neutral mobs, players, or any combination
 - **Trusted players** with access levels, so friends can use your base without being shot (scoreboard team members are never targeted)

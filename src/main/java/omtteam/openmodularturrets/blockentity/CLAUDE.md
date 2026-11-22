@@ -49,6 +49,14 @@ Section numbers (§) and relative paths (`../CLAUDE.md`, `../../OpenModularCore`
   Computer control (decided by the user on 2026-11-22): `setYawPitch` still sets the aim at once, and `forceShot` and auto fire are not gated, but their shots go through `fire` and the shared private `RayWeapons.shoot`, so they get the falloff.
   Not scaled by the falloff: the incendiary fire time, the vanilla explosion of grenades and rockets, effect, area and self-targeting weapons.
 
+## Repelling, tractor and energy drain turrets (issue 324)
+
+- Decided by the user on 2026-11-22; OpenModularCore 2.3.0; ported from 1.21.11.
+  Effect weapons in `EffectWeapons`: `repel` / `tractor` push or pull once per shot through `TurretMath.impulse`, with `effectStrength` as the speed; `drain` destroys up to `effectStrength` RF from a player's armour, main hand and offhand through OMLib's `Energy.itemEnergy` (`turret.DrainableItems`).
+  The drain turret targets only players with such energy (`TurretType.playersOnly` / `skipsTargetsWithoutEnergy`).
+  Placeholder models (slowing, teleporter, arc geometry), copied textures, stand-in sounds and placeholder recipes; the art and sounds are listed in the issue for a human.
+  Game tests in `EffectTurretGameTests` with the test mod's `TestBattery`.
+
 ## Targeting (base)
 
 - Run on the server tick via `BlockEntityTicker`.
