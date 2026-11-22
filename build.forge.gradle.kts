@@ -30,6 +30,8 @@ val gametest: SourceSet = sourceSets.create("gametest") {
     compileClasspath += sourceSets.main.get().output
     runtimeClasspath += sourceSets.main.get().output
 }
+// The game test server's folder, apart from the dev runs' run/ (as on Fabric, versions/<node>/build/run/gameTest)
+val gameTestDir: Directory = layout.projectDirectory.dir("build/run/gameTest")
 
 legacyForge {
     version = property("forge_version") as String
@@ -60,10 +62,11 @@ legacyForge {
             loadedMods = setOf(mods.getByName(modId))
         }
         // Headless in-world tests (no EULA needed); runs the GameTests of this mod's namespace and exits with the
-        // number of failed tests, which fails the task
+        // number of failed tests, which fails the task. Its own folder with a flat world, see runGameTestServer below.
         register("gameTestServer") {
             type = "gameTestServer"
             sourceSet = gametest
+            gameDirectory = gameTestDir
             systemProperty("forge.enabledGameTestNamespaces", modId)
         }
     }
@@ -164,10 +167,22 @@ gametest.resources.srcDir(packMetadata("gametestPackMetadata", "${property("mod_
 
 tasks.check { dependsOn("runGameTestServer") }
 
+// Forge 1.20.1 builds its game test server from the dedicated server's settings (server.properties), not from vanilla's
+// flat test world: without them it gets normal terrain with a random seed, and the tests sit at y -60 in deepslate,
+// where gravel or lava falling into a test blocked a turret's sight or hurt its target in some runs (seen on CI). So every
+// run gets a new flat world, like the vanilla and Fabric game test servers (preset flat, seed 0, no structures).
 // A game test server whose mod fails to load can still exit normally (Forge did), so `check` also needs the server's own
 // "All N required tests passed" line in its log.
 tasks.named("runGameTestServer") {
-    val log = layout.projectDirectory.file("run/logs/latest.log")
+    val dir = gameTestDir.asFile
+    val log = gameTestDir.file("logs/latest.log")
+    doFirst {
+        dir.resolve("world").deleteRecursively()
+        dir.mkdirs()
+        dir.resolve("server.properties").writeText(
+            "level-type=minecraft\\:flat\nlevel-seed=0\ngenerate-structures=false\n"
+        )
+    }
     doLast {
         if (!log.asFile.exists() || !log.asFile.readText().contains("required tests passed")) {
             throw GradleException("The game test server did not report that its tests passed (see ${log.asFile})")
