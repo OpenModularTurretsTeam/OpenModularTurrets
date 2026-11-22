@@ -13,6 +13,9 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 - Config: `bases.allowContraptionMovement` is deprecated on Minecraft 1.21.11; it never had an effect here, as no contraption mod (Create, Create Aeronautics) is supported on this version
 - The game rules (`omtteam.openmodularturrets.core`) come from the shared OpenModularCore 2.1.0 (module `omt-core`, the same on every Minecraft version) and are bundled into the jar
 - API: `MachineMode` and `TargetingSettings` (formerly `core.base`), `CamoPermissions` (`core.camo`) and the memory card's `MemoryCardData` and `MemoryCardRules` (`core.card`) moved to OMLib's core (`omtteam.omlib.core.machine`, `.camo`, `.card`); `MemoryCardRules.capture` and `apply` are now `omtteam.openmodularturrets.core.card.BaseCardRules`, and `MachineMode.getTranslationKey()` is gone
+### Added
+
+- Config sections `upgrades` and `addons` switch each upgrade and addon off: it loses its recipe and does nothing in a machine, which shows it with a red slot frame, a "no" symbol over the icon and a red tooltip line
 
 ## [4.0.0] - 2026-11-03
 
