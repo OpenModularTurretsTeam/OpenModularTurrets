@@ -28,7 +28,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - Projectile damage is no longer rounded down to whole points (the damage amp addon's bonus and the range falloff keep their fractions)
 - Turret API: `TurretProjectile.damageWithAmp(int, Entity)` is deprecated (whole points, no range falloff)
 - Computer control (OpenComputers and ComputerCraft: setting the yaw and pitch, forced shots) and auto fire stay instant and ignore the turn rate; their shots still get the range falloff
-- The game rules (`omtteam.openmodularturrets.core`) come from the shared core OpenModularCore 2.2.0, the same on every Minecraft version, and are part of the OMT jar
+- The game rules (`omtteam.openmodularturrets.core`) come from the shared core OpenModularCore 2.3.0, the same on every Minecraft version, and are part of the OMT jar
 - API: `TurretType.Builder.mountFaces` and `TurretType.canMountOn` take OMLib's `omtteam.omlib.core.world.Face` instead of `omtteam.openmodularturrets.core.world.Face`, which is gone; addon turrets that call them must be rebuilt
 
 ### Fixed
