@@ -155,6 +155,10 @@ public final class ModuleTooltip {
                 lines.add(flavour("addon.fakedrops.flavour"));
             }
             case SERIAL_PORT -> {
+                lines.add(text("addon.serial.a"));
+                lines.add(text("addon.serial.b"));
+                lines.add(Component.empty());
+                lines.add(flavour("addon.serial.flavour"));
             }
         }
     }
