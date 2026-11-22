@@ -47,6 +47,14 @@ Section numbers (§) and relative paths (`../CLAUDE.md`, `../../OpenModularCore`
   `TurretBlockEntity.aimAt` turns at most `turnRate` per tick, and `engage` / `pickAndFire` fire only once the aim is within the tolerance (nothing is used while turning); the gate is in those two, never in the public `fire`.
   Not scaled by the falloff: the incendiary fire time, the vanilla explosion of grenades and rockets, effect, area and self-targeting weapons.
 
+## Repelling, tractor and energy drain turrets (issue 324)
+
+- Decided by the user on 2026-11-22; OpenModularCore 2.3.0; ported from 1.21.11.
+  Effect weapons in `EffectWeapons`: `repel` / `tractor` push or pull once per shot through `TurretMath.impulse`, with `effectStrength` as the speed; `drain` destroys up to `effectStrength` RF from a player's armour, main hand and offhand through OMLib's `Energy.itemEnergy` (`turret.DrainableItems`).
+  The drain turret targets only players with such energy (`TurretType.playersOnly` / `skipsTargetsWithoutEnergy`).
+  Placeholder models (slowing, teleporter, arc geometry), copied textures, stand-in sounds and placeholder recipes; the art and sounds are listed in the issue for a human.
+  Game tests in `EffectTurretGameTests` with the test mod's `TestBattery` (NBT energy capability on Forge).
+
 ## Targeting (base)
 
 - Run on the server tick via `BlockEntityTicker`.

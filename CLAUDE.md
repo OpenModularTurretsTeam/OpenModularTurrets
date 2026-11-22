@@ -251,4 +251,4 @@ The port, the Forge node and every feature above are done and covered by game te
 Still open:
 
 - [ ] Real texture for the ownership wand (placeholder: a copy of the memory card).
-- [ ] Not checked in a client yet: the inventory expanders (count drawing, tooltip, model) and the range falloff and turn rate lines.
+- [ ] Not checked in a client yet: the inventory expanders (count drawing, tooltip, model), the range falloff and turn rate lines, and the repelling, tractor and energy drain turrets (issue 324).

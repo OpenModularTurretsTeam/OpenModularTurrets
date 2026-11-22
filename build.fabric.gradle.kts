@@ -1,3 +1,4 @@
+import java.util.Properties
 import java.util.concurrent.Callable
 
 // Fabric nodes (Loom). Shared logic (Java, metadata templating, tests, publishing) is in omlib/build-logic
@@ -77,6 +78,13 @@ dependencies {
     val omlib = project.extra["omlibCoordinates"] as String
     modImplementation(omlib)
     "include"(omlib) { isTransitive = false }
+
+    // The game test mod's battery (TestBattery) registers its energy with Team Reborn Energy, which OMLib bundles and
+    // puts on the runtime classpath only; the version is OMLib's, so both stay the same
+    val omlibNodeProperties = Properties().apply {
+        rootProject.file("omlib/versions/${project.name}/gradle.properties").reader().use { load(it) }
+    }
+    "modGametestCompileOnly"("teamreborn:energy:${omlibNodeProperties.getProperty("team_reborn_energy_version")}")
 
     // Jade tooltips (optional, not bundled: the mod only registers the plugin when Jade is installed)
     modCompileOnly("maven.modrinth:jade:${property("jade_version")}")

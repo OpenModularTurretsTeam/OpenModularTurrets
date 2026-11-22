@@ -18,6 +18,11 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 - The turret item tooltip (with shift) and the Jade tooltip of a turret show its optimal range and its turn rate
 - Turret API: `TurretStats.Builder.falloff(optimalShare, damageAtMaxRange)` and `turnRate(degreesPerTick)`; `TurretProjectile` has `damage(Entity)`, `damage(float, Entity)`, `damageFactor(…)`, `ampDamage(…)` and `hitPoint(…)` for projectiles with the range falloff
 - Config: `turrets.aimTolerance` and, in every turret section, `optimalRange`, `falloffDamage` and `turnRate`
+- Repelling Turret (#324, tier 3): pushes its target away from the turret with every shot (placeholder model, texture, sound and recipe)
+- Tractor Turret (#324, tier 3): pulls its target towards the turret with every shot (placeholder model, texture, sound and recipe)
+- Energy Drain Turret (#324, tier 5): destroys the energy in a player's armour and held items; targets only players who carry such energy (placeholder model, texture, sound and recipe)
+- Config: `effectStrength` in every turret section (push and pull speed, energy drained per shot); the turret tooltip and Jade show it for the new turrets
+- Turret API: `TurretStats.Builder.effectStrength(…)`, and `TurretType.Builder.playersOnly()` and `skipsTargetsWithoutEnergy()`
 
 ### Changed
 
