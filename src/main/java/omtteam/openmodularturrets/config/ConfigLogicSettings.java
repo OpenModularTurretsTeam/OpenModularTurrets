@@ -1,6 +1,8 @@
 package omtteam.openmodularturrets.config;
 
 import net.minecraft.resources.ResourceLocation;
+import omtteam.openmodularturrets.core.item.AddonType;
+import omtteam.openmodularturrets.core.item.TurretBaseUpgradeType;
 import omtteam.openmodularturrets.core.settings.BaseTierStats;
 import omtteam.openmodularturrets.core.settings.LogicSettings;
 import omtteam.openmodularturrets.core.settings.TurretStats;
@@ -89,6 +91,16 @@ public final class ConfigLogicSettings implements LogicSettings {
     @Override
     public int expanderStacks(int tier) {
         return OMTConfig.get().expanders.tier(tier).stacks;
+    }
+
+    @Override
+    public boolean upgradeEnabled(TurretBaseUpgradeType type) {
+        return OMTConfig.get().upgrades.isEnabled(type);
+    }
+
+    @Override
+    public boolean addonEnabled(AddonType type) {
+        return OMTConfig.get().addons.isEnabled(type);
     }
 
     @Override
