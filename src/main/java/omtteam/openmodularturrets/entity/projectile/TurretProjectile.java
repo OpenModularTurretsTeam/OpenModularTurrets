@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -20,7 +21,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import omtteam.openmodularturrets.api.weapon.ProjectileWeapon;
+import omtteam.openmodularturrets.config.ConfigLogicSettings;
+import omtteam.openmodularturrets.config.TurretSetting;
 import omtteam.openmodularturrets.core.turret.ProjectileMath;
+import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.core.world.Vector3;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
@@ -48,6 +52,10 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
     /** Ids of the entities {@link #hitHandler} was called for. */
     @Nullable
     private Set<Integer> notifiedHits;
+    /** Launch point and range (with upgrades) for the range falloff; without them the falloff is off. */
+    @Nullable
+    private Vec3d launchPos;
+    private int launchRange;
 
     TurretProjectile(World world) {
         super(world);
@@ -109,13 +117,93 @@ public abstract class TurretProjectile extends EntityThrowable implements IEntit
 
     public abstract double getDamageAmpBonus();
 
-    /** {@link ProjectileMath#damageWithAmp}: the damage amp addon adds a share of a living target's health. */
+    /** The turret type whose config (damage, range falloff) applies. */
+    protected abstract TurretType getTurretType();
+
+    /**
+     * Set by the turret that fires the projectile: launch point and range (with upgrades) for the range falloff
+     * (issue 539, {@link #damageFactor(Vec3d)}). A projectile that never gets them deals full damage.
+     */
+    public void setLaunch(Vec3d origin, int range) {
+        this.launchPos = origin;
+        this.launchRange = range;
+    }
+
+    // ---- Damage helpers ----
+
+    /**
+     * {@link ProjectileMath#damageWithAmp}: the damage amp addon adds a share of a living target's health.
+     *
+     * @deprecated whole points and no range falloff; use {@link #damage(Entity)} or {@link #damage(float, Entity)}.
+     */
+    @Deprecated
     protected int damageWithAmp(int damage, Entity target) {
         if (isAmped && target instanceof EntityLivingBase) {
             return ProjectileMath.damageWithAmp(damage, amp_level, getDamageAmpBonus(),
                     ((EntityLivingBase) target).getHealth());
         }
         return damage;
+    }
+
+    /**
+     * The turret type's configured damage per hit, before the damage amp addon and the range falloff.
+     * For a hit, prefer {@link #damage(Entity)}, which applies both.
+     */
+    protected int baseDamage() {
+        return ConfigLogicSettings.setting(getTurretType()).baseDamage;
+    }
+
+    /**
+     * Share of the damage a hit at {@code point} deals (range falloff, {@link ProjectileMath#falloff}): measured from
+     * the launch point ({@link #setLaunch}) with the turret type's {@code optimalRange} and {@code falloffDamage}.
+     * 1 if the projectile has no launch point.
+     */
+    protected float damageFactor(Vec3d point) {
+        if (launchPos == null) return 1.0F;
+        TurretSetting setting = ConfigLogicSettings.setting(getTurretType());
+        return (float) ProjectileMath.falloff(launchPos.distanceTo(point), launchRange, setting.optimalRange,
+                setting.falloffDamage);
+    }
+
+    /** {@link #damageFactor(Vec3d)} at the projectile's position: for explosions and bursts (the same for every victim). */
+    protected float damageFactor() {
+        return damageFactor(getPositionVector());
+    }
+
+    /**
+     * Where the projectile is when this tick's sweep ({@link #onUpdate()}: its bounding box moved along 1.2 times its
+     * motion) first touches the target, or the projectile's position if the sweep does not touch it (or touches it
+     * from the start). The target's box is grown by the projectile's own box, so the projectile's position path
+     * enters it exactly where the projectile's box would touch the target.
+     */
+    protected Vec3d hitPoint(Entity target) {
+        Vec3d position = getPositionVector();
+        double halfWidth = width / 2.0D;
+        AxisAlignedBB reach = target.getEntityBoundingBox().expand(0, -height, 0).grow(halfWidth, 0, halfWidth);
+        // Inside the box from the start: 1.12's calculateIntercept would return the exit face (1.21.11's clip gives none).
+        if (reach.contains(position)) return position;
+        RayTraceResult clip = reach.calculateIntercept(position,
+                position.add(motionX * 1.2D, motionY * 1.2D, motionZ * 1.2D));
+        return clip != null ? clip.hitVec : position;
+    }
+
+    /** {@code damage} plus the damage amp addon's bonus for {@code target} (no rounding, no range falloff). */
+    protected float ampDamage(float damage, Entity target) {
+        if (isAmped && target instanceof EntityLivingBase) {
+            return ProjectileMath.damageWithAmp(damage, amp_level, getDamageAmpBonus(),
+                    ((EntityLivingBase) target).getHealth());
+        }
+        return damage;
+    }
+
+    /** Damage of a direct hit on {@code target}: {@code base} with the damage amp bonus and the range falloff at the hit point. */
+    protected float damage(float base, Entity target) {
+        return ampDamage(base, target) * damageFactor(hitPoint(target));
+    }
+
+    /** {@link #damage(float, Entity)} with {@link #baseDamage()}. */
+    protected float damage(Entity target) {
+        return damage(baseDamage(), target);
     }
 
     @Override

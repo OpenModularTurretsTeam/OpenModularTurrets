@@ -73,7 +73,8 @@ public final class ConfigLogicSettings implements LogicSettings {
     static TurretStats toStats(TurretSetting s) {
         return new TurretStats(s.enabled, s.baseRange, s.baseFireRate, s.baseDamage, s.powerUsage,
                 s.baseAccuracyDeviation, s.maxSimultaneous, s.damageAmp, s.fireRateUpgrade, s.rangeUpgrade,
-                s.accuracyUpgrade, s.efficiencyUpgrade, s.recyclerNegateChance, s.recyclerAddChance);
+                s.accuracyUpgrade, s.efficiencyUpgrade, s.recyclerNegateChance, s.recyclerAddChance, s.optimalRange,
+                s.falloffDamage, s.turnRate);
     }
 
     private static Set<String> toSet(String[] entries) {
@@ -209,6 +210,11 @@ public final class ConfigLogicSettings implements LogicSettings {
     public Set<String> forcedNeutralEntities() {
         refreshLists();
         return forcedNeutral;
+    }
+
+    @Override
+    public double aimTolerance() {
+        return OMTConfig.TURRETS.aimTolerance;
     }
 
     @Override

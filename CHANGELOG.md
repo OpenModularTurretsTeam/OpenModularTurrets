@@ -11,14 +11,25 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 ### Added
 
 - Config sections `upgrades` and `addons` switch each upgrade and addon off (as on 1.20.1+): it loses its recipe and does nothing in a machine, which shows it with a red slot frame, a "no" symbol over the icon and a red tooltip line
+- Range falloff (#539): turrets deal full damage up to a share of their range (`optimalRange`), then less down to `falloffDamage` at the end of the range; configurable per turret, off for the grenade, rocket, railgun and effect turrets
+- Turret tracking (#539): turrets turn at most `turnRate` degrees per tick towards their target and fire only once their aim is within `turrets.aimTolerance` (default 5 degrees); configurable per turret, instant for the arc, slowing, teleporter and melee turrets
+- The turret item tooltip (with shift) and the Hwyla and The One Probe overlays of a turret show its optimal range and its turn rate
+- Turret API: `TurretStats.Builder.falloff(optimalShare, damageAtMaxRange)` and `turnRate(degreesPerTick)`; `TurretProjectile` has `setLaunch(…)`, `damage(Entity)`, `damage(float, Entity)`, `damageFactor(…)`, `ampDamage(…)`, `hitPoint(…)`, `baseDamage()` and `getTurretType()` for projectiles with the range falloff
+- Config: `turrets.aimTolerance` and, in every turret section (also in `openmodularturrets_addon_turrets.cfg`), `optimalRange`, `falloffDamage` and `turnRate`
+
 ### Changed
 
-- The game rules (`omtteam.openmodularturrets.core`) come from the shared core OpenModularCore 2.1.0, the same on every Minecraft version, and are part of the OMT jar
+- Existing configs get the new range falloff and turn rate defaults on the next start; set `optimalRange` and `falloffDamage` to 1 and `turnRate` to 0 for the old behaviour
+- Projectile damage is no longer rounded down to whole points (the damage amp addon's bonus and the range falloff keep their fractions)
+- Turret API: `TurretProjectile.damageWithAmp(int, Entity)` is deprecated (whole points, no range falloff)
+- Computer control (OpenComputers and ComputerCraft: setting the yaw and pitch, forced shots) and auto fire stay instant and ignore the turn rate; their shots still get the range falloff
+- The game rules (`omtteam.openmodularturrets.core`) come from the shared core OpenModularCore 2.2.0, the same on every Minecraft version, and are part of the OMT jar
 - API: `TurretType.Builder.mountFaces` and `TurretType.canMountOn` take OMLib's `omtteam.omlib.core.world.Face` instead of `omtteam.openmodularturrets.core.world.Face`, which is gone; addon turrets that call them must be rebuilt
 
 ### Fixed
 
 - Right-clicking a turret base updates the stored name of its owner or of a trusted player who was renamed, so a stale name no longer matches another player in offline mode, as on 1.20.1, 1.21.1 and 1.21.11
+- The turret item tooltip is German in the German language, as on 1.20.1, 1.21.1 and 1.21.11 (it was English)
 
 ## [4.0.1] - 2026-11-04
 

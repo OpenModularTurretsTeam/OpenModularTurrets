@@ -49,7 +49,8 @@ public final class RayWeapons {
     /**
      * 1.12.2 {@code doTargetedShot} + {@code shootRay}: one ray per scattershot level towards {@code aim}, scattered
      * by the turret's accuracy (more for small or far targets). The first damageable entity on the ray before the
-     * first solid block is hit. Energy and ammo are already consumed.
+     * first solid block is hit, with the range falloff at the point where the ray enters it. Energy and ammo are
+     * already consumed.
      *
      * @param targetHeight height of the target, for the scatter of small targets
      * @param renderOrigin where a hit is drawn from if the weapon {@linkplain RayWeapon#drawFromTip() draws from the
@@ -77,7 +78,11 @@ public final class RayWeapons {
             for (Entity entity : entitiesOnRay(world, start, end)) {
                 RayTraceResult intercept = box(entity).calculateIntercept(start, end);
                 double distance = intercept == null ? 0 : intercept.hitVec.distanceTo(start);
-                if (distance <= blockRange && hitEntity(world, turret, base, weapon, entity)) {
+                if (distance > blockRange) continue;
+                Vec3d hitPoint = intercept != null ? intercept.hitVec : entity.getPositionVector();
+                // the range falloff is measured from the turret (the ray's origin), not from where the ray is drawn
+                double falloff = logic.getDamageFactor(type, origin.distanceTo(hitPoint));
+                if (hitEntity(world, turret, base, weapon, entity, falloff)) {
                     ray(world, weapon, weapon.drawFromTip() ? renderOrigin : start, end);
                     hit = true;
                     break;
@@ -119,13 +124,17 @@ public final class RayWeapons {
         return result;
     }
 
-    /** 1.12.2 {@code onHitEntity}: damage, arc chain and hit sound if the entity may be damaged. */
+    /**
+     * 1.12.2 {@code onHitEntity}: damage, arc chain and hit sound if the entity may be damaged.
+     *
+     * @param falloff share of the damage left after the range falloff ({@link TurretBaseLogic#getDamageFactor})
+     */
     private static boolean hitEntity(WorldServer world, TurretTileEntity turret, TurretBase base, RayWeapon weapon,
-                                     Entity entity) {
+                                     Entity entity, double falloff) {
         if (!TurretDamage.canDamageEntity(entity, base)) return false;
-        damage(world, turret, base, weapon, entity, RayMath.damageModifier(weapon.profile(), armor(entity)));
+        damage(world, turret, base, weapon, entity, RayMath.damageModifier(weapon.profile(), armor(entity)), falloff);
         if (weapon.profile().arcChain()) {
-            shootArcChain(world, base, turret, weapon, entity, RayMath.ARC_HOPS, new ArrayList<>());
+            shootArcChain(world, base, turret, weapon, entity, RayMath.ARC_HOPS, new ArrayList<>(), falloff);
         }
         if (weapon.hitSound() != null) {
             world.playSound(null, entity.getPosition(), weapon.hitSound(), SoundCategory.AMBIENT,
@@ -141,10 +150,11 @@ public final class RayWeapons {
     /**
      * 1.12.2 {@code ArcTurretTileEntity.applyHitEffects}: each hit uses one hop; the arc jumps to the first damageable
      * living entity within {@link RayMath#arcJumpRange} that was not hit yet, which takes
-     * {@link RayMath#ARC_JUMP_FACTOR} of the damage.
+     * {@link RayMath#ARC_JUMP_FACTOR} of the damage. Every jump target takes the range falloff of the first hit
+     * ({@code falloff}), wherever it stands.
      */
     private static void shootArcChain(WorldServer world, TurretBase base, TurretTileEntity turret, RayWeapon weapon,
-                                      Entity from, int hops, List<Integer> hitIds) {
+                                      Entity from, int hops, List<Integer> hitIds, double falloff) {
         if (hops <= 0) return;
         hitIds.add(from.getEntityId());
         double range = RayMath.arcJumpRange(hops);
@@ -154,8 +164,8 @@ public final class RayWeapons {
         for (EntityLivingBase next : world.getEntitiesWithinAABB(EntityLivingBase.class, area)) {
             if (!hitIds.contains(next.getEntityId()) && TurretDamage.canDamageEntity(next, base)) {
                 // 1.12.2 order: the chain continues from the next target before it is damaged
-                shootArcChain(world, base, turret, weapon, next, remaining, hitIds);
-                damage(world, turret, base, weapon, next, RayMath.ARC_JUMP_FACTOR);
+                shootArcChain(world, base, turret, weapon, next, remaining, hitIds, falloff);
+                damage(world, turret, base, weapon, next, RayMath.ARC_JUMP_FACTOR, falloff);
                 double eye = from.getEyeHeight();
                 ray(world, weapon, from.getPositionVector().add(0, eye, 0),
                         next.getPositionVector().add(0, eye, 0));
@@ -165,17 +175,18 @@ public final class RayWeapons {
     }
 
     /**
-     * Deals {@link RayMath#damage}, split into a normal and an armor-piercing part ({@link RayMath#split}), then calls
-     * the weapon's {@linkplain RayWeapon#entityHit() entity hit handler}; as in 1.12.2 the hurt cooldown is reset so
-     * every ray of a scattershot hits.
+     * Deals {@link RayMath#damage} times the range falloff, split into a normal and an armor-piercing part
+     * ({@link RayMath#split}), then calls the weapon's {@linkplain RayWeapon#entityHit() entity hit handler}; as in
+     * 1.12.2 the hurt cooldown is reset so every ray of a scattershot hits.
      */
     private static void damage(WorldServer world, TurretTileEntity turret, TurretBase base, RayWeapon weapon,
-                               Entity entity, double modifier) {
+                               Entity entity, double modifier, double falloff) {
         TurretBaseLogic logic = base.getLogic();
         TurretType type = turret.getCoreType();
         float health = entity instanceof EntityLivingBase ? ((EntityLivingBase) entity).getHealth() : 0F;
         float damage = RayMath.damage(ConfigLogicSettings.INSTANCE.turret(type).baseDamage(), modifier,
                 logic.getDamageAmpBonus(type), health);
+        damage = (float) (damage * falloff);
         ProjectileMath.Split split = RayMath.split(weapon.profile(), damage);
         int fakeDrops = logic.getLootingLevel(3);
         String name = turret.getDamageTypeName();

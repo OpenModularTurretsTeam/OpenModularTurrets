@@ -4,11 +4,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import omtteam.omlib.reference.OMLibNames;
 import omtteam.omlib.util.player.PlayerUtil;
+import omtteam.openmodularturrets.config.ConfigLogicSettings;
+import omtteam.openmodularturrets.config.TurretSetting;
 import omtteam.openmodularturrets.core.base.TurretBaseLogic;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.reference.OMTNames;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 import omtteam.openmodularturrets.tileentity.base.TurretBaseOverlay;
+import omtteam.openmodularturrets.turret.TurretStatLines;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +23,10 @@ import static omtteam.openmodularturrets.tileentity.base.TurretBaseOverlay.white
 
 /**
  * The lines of the Hwyla and The One Probe overlays of a turret (1.20.1+ {@code TurretJadeProvider}): whether it is
- * active, its owner and, for players who may open the base's GUI, ammo, damage amp, inaccuracy and rate of fire. The
- * stats show what the base contains, so {@link #data} (on the server) only adds them for players with that
- * permission; a turret without a base has no data, a concealed turret shows nothing.
+ * active, its owner and, for players who may open the base's GUI, ammo, damage amp, inaccuracy, rate of fire, the
+ * range falloff (over the range with upgrades) and the turn rate. The stats show what the base contains, so
+ * {@link #data} (on the server) only adds them for players with that permission; a turret without a base has no data,
+ * a concealed turret shows nothing.
  */
 public final class TurretOverlay {
     // not keys the turret saves: Hwyla falls back to the client's tile entity data until the server's arrives
@@ -32,6 +36,10 @@ public final class TurretOverlay {
     private static final String DAMAGE_AMP = "overlayDamageAmp";
     private static final String INACCURACY = "overlayInaccuracy";
     private static final String RATE_OF_FIRE = "overlayRateOfFire";
+    private static final String RANGE = "overlayRange";
+    private static final String OPTIMAL_RANGE = "overlayOptimalRange";
+    private static final String FALLOFF_DAMAGE = "overlayFalloffDamage";
+    private static final String TURN_RATE = "overlayTurnRate";
 
     private TurretOverlay() {
     }
@@ -53,11 +61,22 @@ public final class TurretOverlay {
         data.setDouble(INACCURACY, Math.min(100.0D, logic.getAccuracyDeviation(type)));
         double cooldown = logic.getFireCooldownTicks(type);
         data.setDouble(RATE_OF_FIRE, cooldown > 0 ? 20.0D / cooldown : 0);
+        TurretSetting setting = ConfigLogicSettings.setting(type);
+        data.setInteger(RANGE, logic.getRange(type));
+        data.setDouble(OPTIMAL_RANGE, setting.optimalRange);
+        data.setDouble(FALLOFF_DAMAGE, setting.falloffDamage);
+        data.setDouble(TURN_RATE, setting.turnRate);
         return data;
     }
 
-    /** The overlay lines for the data of {@link #data}; a concealed turret shows nothing. */
-    public static List<String> lines(NBTTagCompound data, boolean concealed, Function<String, String> localize) {
+    /**
+     * The overlay lines for the data of {@link #data}; a concealed turret shows nothing.
+     *
+     * @param localize the labels' translation (Hwyla: on the client; The One Probe: its client-side markers)
+     * @param format   the translation of the range falloff and turn rate values, which have format arguments
+     */
+    public static List<String> lines(NBTTagCompound data, boolean concealed, Function<String, String> localize,
+                                     TurretStatLines.Localizer format) {
         List<String> lines = new ArrayList<>();
         if (concealed || !data.hasKey(ACTIVE)) return lines;
         lines.add(line(localize, OMLibNames.Localizations.GUI.ACTIVE,
@@ -71,6 +90,14 @@ public final class TurretOverlay {
         lines.add(line(localize, OMTNames.Localizations.GUI.INACCURACY, white(format(data.getDouble(INACCURACY)) + "%")));
         lines.add(line(localize, OMTNames.Localizations.GUI.RATE_OF_FIRE,
                 white(format(data.getDouble(RATE_OF_FIRE)) + "/s")));
+        if (data.hasKey(OPTIMAL_RANGE)) {
+            lines.add(line(localize, OMTNames.Localizations.GUI.OPTIMAL_RANGE, white(TurretStatLines.optimalRange(
+                    data.getDouble(OPTIMAL_RANGE), data.getDouble(FALLOFF_DAMAGE), data.getInteger(RANGE), format))));
+        }
+        if (data.hasKey(TURN_RATE)) {
+            lines.add(line(localize, OMTNames.Localizations.GUI.TURN_RATE,
+                    white(TurretStatLines.turnRate(data.getDouble(TURN_RATE), format))));
+        }
         return lines;
     }
 

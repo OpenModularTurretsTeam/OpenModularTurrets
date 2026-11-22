@@ -149,35 +149,53 @@ public class OMTConfig {
         @Config.RangeInt(min = 0)
         public int turretWarningDistance = 5;
 
+        @Config.Comment("Turrets with a turn rate (turnRate above 0) fire only once their aim is at most this many degrees off the target.")
+        @Config.RangeDouble(min = 0D, max = 180D)
+        public double aimTolerance = 5D;
+
         @Config.Name("Disposable Turret")
-        public TurretSetting disposable_turret = new TurretSetting(true, 10, 25, 2, 2, 50, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting disposable_turret = new TurretSetting(true, 10, 25, 2, 2, 50, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.5D, 0.5D, 10);
         @Config.Name("Potato Cannon Turret")
-        public TurretSetting potato_cannon_turret = new TurretSetting(true, 15, 35, 3, 10, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting potato_cannon_turret = new TurretSetting(true, 15, 35, 3, 10, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.5D, 0.5D, 10);
         @Config.Name("Machine Gun Turret")
-        public TurretSetting machine_gun_turret = new TurretSetting(true, 18, 8, 2, 100, 30, 4, 0.06D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting machine_gun_turret = new TurretSetting(true, 18, 8, 2, 100, 30, 4, 0.06D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.6D, 0.5D, 20);
         @Config.Name("Incendiary Turret")
-        public TurretSetting incendiary_turret = new TurretSetting(true, 12, 25, 2, 250, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting incendiary_turret = new TurretSetting(true, 12, 25, 2, 250, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.6D, 0.4D, 15);
         @Config.Name("Grenade Turret")
-        public TurretSetting grenade_turret = new TurretSetting(true, 18, 40, 8, 3000, 30, 3, 0.08D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting grenade_turret = new TurretSetting(true, 18, 40, 8, 3000, 30, 3, 0.08D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 8);
         /** The 3.x "Relativistic Turret" section is moved here once, see {@code ConfigMigration}. */
         @Config.Name("Slowing Turret")
-        public TurretSetting slowing_turret = new TurretSetting(true, 20, 25, 0, 5000, 0, 4, 0D, 0.1D, 2, 0, 0.08D, 0.1D, 0.05D);
+        public TurretSetting slowing_turret = new TurretSetting(true, 20, 25, 0, 5000, 0, 4, 0D, 0.1D, 2, 0, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 0);
         @Config.Name("Rocket Turret")
-        public TurretSetting rocket_turret = new TurretSetting(true, 30, 30, 10, 5000, 10, 3, 0.08D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting rocket_turret = new TurretSetting(true, 30, 30, 10, 5000, 10, 3, 0.08D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 8);
         @Config.Name("Teleporter Turret")
-        public TurretSetting teleporter_turret = new TurretSetting(true, 20, 100, 0, 15000, 0, 1, 0D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting teleporter_turret = new TurretSetting(true, 20, 100, 0, 15000, 0, 1, 0D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 0);
         @Config.Name("Laser Turret")
-        public TurretSetting laser_turret = new TurretSetting(true, 25, 10, 4, 8000, 10, 4, 0.06D, 0.125D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting laser_turret = new TurretSetting(true, 25, 10, 4, 8000, 10, 4, 0.06D, 0.125D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.5D, 0.5D, 15);
         @Config.Name("Railgun Turret")
-        public TurretSetting railgun_turret = new TurretSetting(true, 30, 100, 25, 25000, 3, 2, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting railgun_turret = new TurretSetting(true, 30, 100, 25, 25000, 3, 2, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 3);
         @Config.Name("Plasma Turret")
-        public TurretSetting plasma_turret = new TurretSetting(true, 20, 60, 20, 50000, 8, 1, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting plasma_turret = new TurretSetting(true, 20, 60, 20, 50000, 8, 1, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.7D, 0.5D, 6);
         @Config.Name("Melee Turret")
-        public TurretSetting melee_turret = new TurretSetting(true, 1, 20, 8, 2, 0, 4, 0.1D, 0.2D, 0, 0D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting melee_turret = new TurretSetting(true, 1, 20, 8, 2, 0, 4, 0.1D, 0.2D, 0, 0D, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 0);
         @Config.Name("Arc Turret")
-        public TurretSetting arc_turret = new TurretSetting(true, 15, 60, 14, 40000, 0, 1, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting arc_turret = new TurretSetting(true, 15, 60, 14, 40000, 0, 1, 0.1D, 0.2D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.5D, 0.3D, 0);
         @Config.Name("Crossbow Turret")
-        public TurretSetting crossbow_turret = new TurretSetting(true, 15, 30, 5, 20, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        public TurretSetting crossbow_turret = new TurretSetting(true, 15, 30, 5, 20, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
+                .realism(0.7D, 0.6D, 12);
     }
 
     public static class ConfigBases {

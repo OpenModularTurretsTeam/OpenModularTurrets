@@ -19,8 +19,10 @@ import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.base.TurretPlacement;
+import omtteam.openmodularturrets.core.settings.TurretStats;
 import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.turret.TurretRegistry;
+import omtteam.openmodularturrets.turret.TurretStatLines;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
@@ -66,7 +68,9 @@ public class ItemBlockTurret extends AbstractItemBlockBaseAddon {
 
     /**
      * Turret tooltip as in 1.20.1+: a note on turrets that ignore scattershot upgrades without shift, with shift what
-     * the turret does, the base tier it needs, its ammo and its energy per shot.
+     * the turret does, the base tier it needs, its ammo, its energy per shot, its range falloff (over the base range:
+     * an item has no base and so no range upgrades) and its turn rate. Uses the server's config values when connected
+     * to a server.
      */
     @Override
     @SideOnly(Side.CLIENT)
@@ -93,8 +97,11 @@ public class ItemBlockTurret extends AbstractItemBlockBaseAddon {
         tooltip.add("");
         tooltip.add(value("tier", String.valueOf(type.getRequiredBaseTier())));
         tooltip.add(value("ammo", safeLocalize(ammo)));
-        tooltip.add(value("energy", I18n.format(PREFIX + "energy.per_shot",
-                ConfigLogicSettings.INSTANCE.turret(type).powerUsage())));
+        TurretStats stats = ConfigLogicSettings.INSTANCE.turret(type);
+        tooltip.add(value("energy", I18n.format(PREFIX + "energy.per_shot", stats.powerUsage())));
+        tooltip.add(value("optimal_range", TurretStatLines.optimalRange(stats.optimalRange(), stats.falloffDamage(),
+                stats.baseRange(), I18n::format)));
+        tooltip.add(value("turn_rate", TurretStatLines.turnRate(stats.turnRate(), I18n::format)));
     }
 
     /** "Label: value" with a white value. */

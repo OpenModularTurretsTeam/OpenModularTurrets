@@ -4,6 +4,7 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaRegistrar;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -40,13 +41,14 @@ public class WailaTurretHandler implements IOMLibWailaDataProvider {
         register.registerBodyProvider(instance, TurretTileEntity.class);
     }
 
-    /** The lines of {@link TurretOverlay}; none for a concealed turret. */
+    /** The lines of {@link TurretOverlay}, localized on the client; none for a concealed turret. */
     @Nonnull
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         IBlockState state = accessor.getBlockState();
         boolean concealed = state.getBlock() instanceof BlockTurret && state.getValue(BlockTurret.CONCEALED);
-        currenttip.addAll(TurretOverlay.lines(accessor.getNBTData(), concealed, GeneralUtil::safeLocalize));
+        currenttip.addAll(TurretOverlay.lines(accessor.getNBTData(), concealed, GeneralUtil::safeLocalize,
+                I18n::format));
         return currenttip;
     }
 

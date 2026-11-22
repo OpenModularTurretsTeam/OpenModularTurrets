@@ -69,7 +69,7 @@ The base's trust list is OMLib's `TrustManager`, which `TurretBaseLogic` gets fr
 | `src/main/java` | all code; client code in the `client` package | yes |
 | `src/main/resources` | `assets/openmodularturrets` (models, blockstates, lang, textures, handwritten recipes), `mcmod.info` | yes |
 | `src/api/java` | the ComputerCraft API, its own source set, compiled against and not packed | no |
-| `src/test/java` | JUnit 5 tests of the game layer (config, NBT, computer commands, turret heads, damage) and the architecture rules (the core's tests are in OpenModularCore) | no |
+| `src/test/java` | JUnit 5 tests of the game layer (config, NBT, computer commands, turret heads, damage, the turret overlay and tooltip values) and the architecture rules (the core's tests are in OpenModularCore) | no |
 | `src/test/resources/archunit_store` | the frozen architecture violations (a ratchet) | no |
 
 Packages below `omtteam.openmodularturrets` (the `core` ones come from OpenModularCore):
@@ -78,14 +78,14 @@ Packages below `omtteam.openmodularturrets` (the `core` ones come from OpenModul
 | --- | --- |
 | (root) | `OpenModularTurrets` (the `@Mod`: start-up and the data fixers), `CommonProxy` |
 | `core.base` | `TurretBaseLogic`: targeting per face, ammo, energy, upgrades, addons, redstone modes; `BaseTier`; `AmmoDraw`; `TurretPlacement` (what may be attached and stay) |
-| `core.turret` | `TurretType` and `TurretTypes`, `AmmoType`, `TurretState` (cooldown, concealment, shot cost), aim and damage math (`TurretMath`, `RayMath`, `RayProfile`, `ProjectileMath`) |
+| `core.turret` | `TurretType` and `TurretTypes`, `AmmoType`, `TurretState` (cooldown, concealment, shot cost), aim and damage math (`TurretMath`, `RayMath`, `RayProfile`, `ProjectileMath`), including the turn rate (`TurretMath.turnTowards`, `aimError`) and the range falloff (`ProjectileMath.falloff`, `TurretBaseLogic.getDamageFactor`) |
 | `core.target` | `TargetSelector`: who is a valid target and the best one; `TargetEntity`, `EntityCategory`, `TargetingPriority` |
 | `core.security`, `core.card` | `DamageRules` (who turret damage may hit); `BaseCardRules` (the turret base part of a memory card: capturing and applying the base settings; the card data and the trust list part are OMLib's `core.card`, shared with the camouflage trap) |
 | `core.item`, `core.settings`, `core.world` | upgrade and addon types, the slot interface; stats and `LogicSettings`; the world interface, `Neighbour` (turrets and inventory expanders), `Vector3`, `Box` (`Face` and `BlockPosition` are in OMLib's `core.world`) |
 | `core.storage` | `SlotCapacity`: how many stacks a slot holds with the base tier's stacks and the attached inventory expanders; `AmmoSort`: the order of the base GUI's "Sort Ammo" button (`TurretBaseInventory.sortAmmo`) |
 | `core.generator` | `GeneratorLogic`: burning fuel, the energy multiplier upgrade |
 | `api`, `api.weapon`, `api.tileentity` | the public turret API (`OMTPlugin`, `TurretDefinition`, `TurretRegistrar`, `AmmoDefinition`, `OMTApi`) and its weapons (`ProjectileWeapon`, `RayWeapon`, `EffectWeapon`, `AreaWeapon`, `SelfTargetingWeapon`); the built-in turrets use it too; the 3.x interfaces `ITurretBase`, `ITurretHead`, `ITurretBaseAddonTileEntity` |
-| `turret` | `TurretRegistry`: turret and ammo definitions and the turret blocks, looked up by everything |
+| `turret` | `TurretRegistry`: turret and ammo definitions and the turret blocks, looked up by everything; `TurretStatLines`: the range falloff and turn rate values shown in the turret item tooltip, Hwyla and The One Probe (one text for all three) |
 | `registry` | registration: `ModBlocks`, `ModItems`, `ModEntities`, `ModularTurretsTab`, `BuiltinTurrets`, `TurretLoader` (fills the turret registry in pre-init), `ModContainerScope` (registers a block as its mod) |
 | `sound` | `ModSounds` (created before the turret definitions that use them) |
 | `block.base`, `block.turret`, `block.misc` | the base (`BlockTurretBase`, tier in the metadata), the turrets (one `BlockTurret` class per type under the 3.x ids), the generator and the lever |
@@ -143,12 +143,15 @@ The client draws the outline red or cyan (OMLib's `IDrawOutline.canPlace(…, En
 `TurretTileEntity.update`:
 
 1. A turret without a base, or one that `TurretPlacement.canStay` rejects, drops itself.
-2. Depending on the weapon of its definition: an `AreaWeapon` strikes what is in reach, a `SelfTargetingWeapon` picks its own targets, any other turns towards the target its base picked (`TurretMath`: yaw and pitch relative to the mounting face).
+2. Depending on the weapon of its definition: an `AreaWeapon` strikes what is in reach, a `SelfTargetingWeapon` picks its own targets, any other turns towards the target its base picked (`TurretMath`: yaw and pitch relative to the mounting face), at most its type's `turnRate` degrees per tick on each axis (`TurretMath.turnTowards`; 0 turns instantly).
+   While the aim is more than `turrets.aimTolerance` degrees off (`TurretMath.aimError`), it stops here: nothing is used, and the cooldown keeps running.
+   Computer control (`setYawPitch`, forced shots) and auto fire skip this: they set the aim at once and shoot along it.
 3. When the cooldown passed (`TurretState`), `beginShot` takes the base's energy and ammo.
 4. The weapon does the rest: `ProjectileWeapon` spawns projectiles (lead and scatter from `ProjectileMath`), `RayWeapon` traces rays (`RayWeapons`), `EffectWeapon` acts directly (`EffectWeapons`).
-5. Damage goes through `TurretDamage`, which applies the trust rules (`DamageRules`), kill counting and the fake drops addon.
+5. Projectile and ray damage is scaled by the range falloff (`ProjectileMath.falloff` with the type's `optimalRange` and `falloffDamage`): a projectile measures from its launch point (`TurretProjectile.setLaunch`) to where it touches the entity, or to where it explodes; a ray from the turret to where it enters the entity (`TurretBaseLogic.getDamageFactor`).
+6. Damage goes through `TurretDamage`, which applies the trust rules (`DamageRules`), kill counting and the fake drops addon.
 
-The aim is synced to clients sparingly (`MessageUpdateTurret`, only when it changed); `TurretRenderer` interpolates it and draws the 3.x models in the mounting face's frame.
+The aim is synced to clients sparingly (`MessageUpdateTurret`, only when it changed); `TurretRenderer` interpolates it (`TurretTileEntity.clientTick`: eased for turrets that turn instantly, at the turn rate with a catch-up for the others) and draws the 3.x models in the mounting face's frame.
 
 ### A click in a GUI
 
