@@ -361,6 +361,9 @@ Classes implement `OMTGameTests` and use its `EMPTY_STRUCTURE` (the mod's own 8Ã
 On Fabric (Loom `fabricApi.configureTests`) they are listed under the `fabric-gametest` entrypoint in `src/gametest/resources/fabric.mod.json`; on NeoForge they carry `@GameTestHolder(OMT.MOD_ID)` and `@PrefixGameTestTemplate(false)` behind `//? if neoforge` (the gametest source set is a second mod, `META-INF/neoforge.mods.toml`).
 The test mod's loader entrypoints (`gametest/platform/<loader>`) run its registration steps (`OMTGameTestMod`) and forward entity loads to `ProjectileTurretGameTests.onEntityLoad`.
 `check` (and so `build` / `chiseledBuild`) runs them on a dedicated test server: `runGameTest` on Fabric (`versions/<node>/build/run/gameTest`, the world is deleted before every run), `runGameTestServer` on NeoForge (`check` also requires the "All N required tests passed" line in its `run/logs/latest.log`).
+The test server turns mob spawning and the weather cycle off for the whole run (vanilla's `GameTestServer`, which both loaders start), so no mob spawns around the tests and it never rains.
+The day still passes: a test that needs daylight sets the time itself (`SolarPanelGameTests`).
+1.21.11's test server keeps the default game rules, so that branch sets these rules in every batch's test environment (`GameTestCases.batchEnvironment`); this branch needs nothing of the kind (checked 2026-11-22).
 
 - `TurretScene` builds a ready-to-fire base + turret (owner, always on, full energy, max range) and spawns targets (husks without AI).
   A base placed with `setBlock` has no owner: it stays, but does not fire until it has one (`bases.unownedBasesActive`).
