@@ -71,7 +71,7 @@ public class OwnershipWandGameTests implements OMTGameTests {
     private static final BlockPos UNOWNED = BASE.south();
     /**
      * Where a player stands to click into the air: a bottom corner of the test, looking at the opposite top corner, with
-     * more than the reach of air in between (the test sits underground on Forge, so there may be no sky).
+     * more than the reach of air in between (so it needs no sky; the Forge tests sat underground until 2026-11-22).
      */
     private static final BlockPos CORNER = new BlockPos(0, 1, 0);
     private static final Vec3 FAR_CORNER = new Vec3(7.5D, 7.5D, 7.5D);
